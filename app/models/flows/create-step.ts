@@ -9,14 +9,14 @@ import { DEFAULT_QUERY } from './contants'
 export async function createStep(
   brand: UUID,
   flow: UUID,
-  steps: IBrandFlowStepInput[],
+  step: IBrandFlowStepInput,
   query: object = DEFAULT_QUERY
 ): Promise<IBrandFlowStep[]> {
   try {
     const response = await new Fetch()
       .post(`/brands/${brand}/flows/${flow}/steps`)
       .query(query)
-      .send({ steps })
+      .send(step)
 
     return response.body.data
   } catch (error) {

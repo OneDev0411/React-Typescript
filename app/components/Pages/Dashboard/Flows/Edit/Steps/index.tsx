@@ -50,7 +50,11 @@ interface Props {
   onNewStepSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onStepDelete: (step: IBrandFlowStep) => Promise<any>
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
-  onStepMove: (sourceIndex: number, destinationIndex: number) => Promise<any>
+  onStepMove: (
+    stepId: UUID,
+    sourceIndex: number,
+    destinationIndex: number
+  ) => Promise<any>
   onNewEmailTemplateClick: () => void
 }
 
@@ -72,6 +76,7 @@ export default function Steps({
       <DragDropContext
         onDragEnd={result =>
           onStepMove(
+            result.draggableId,
             result.source.index,
             result.destination ? result.destination.index : result.source.index
           )

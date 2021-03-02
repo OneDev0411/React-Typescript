@@ -20,7 +20,7 @@ import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
-// import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
+import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
 import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
@@ -171,7 +171,7 @@ function Edit(props: WithRouterProps) {
         return
       }
 
-      await createStep(brand, flow.id, [step])
+      await createStep(brand, flow.id, step)
 
       loadFlowData(true)
     },
@@ -210,25 +210,22 @@ function Edit(props: WithRouterProps) {
     [brand, flow, loadFlowData]
   )
 
-  const stepMoveHandler = useCallback(async (source: number, destination) => {
-    console.log('stepMoveHandler', { source, destination })
+  const stepMoveHandler = useCallback(
+    async (id: UUID, source: number, destination: number) => {
+      console.log('stepMoveHandler', { id, source, destination })
 
-    // if (!flow || !brand || !flow.steps) {
-    //   return
-    // }
+      if (!flow || !id || source === destination) {
+        return
+      }
 
-    // if (source === destination) {
-    //   return
-    // }
+      setIsLoading(true)
 
-    // const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
+      await editBrandFlowStepOrder(brand, flow.id, id, destination)
 
-    // setIsLoading(true)
-
-    // await editBrandFlowSteps(brand, flow.id, newSteps)
-
-    // loadFlowData(true)
-  }, [])
+      loadFlowData(true)
+    },
+    [brand, flow, loadFlowData]
+  )
 
   const flowUpdateHandler = useCallback(
     async data => {
