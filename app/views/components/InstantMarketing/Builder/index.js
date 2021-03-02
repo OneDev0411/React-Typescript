@@ -978,7 +978,10 @@ class Builder extends React.Component {
   }
 
   getListingInfo = () => {
-    return this.props.templateData.listing || this.selectedTemplate.listings[0]
+    return (
+      this.props.templateData.listing ||
+      (this.selectedTemplate.listings ?? [])[0]
+    )
   }
 
   render() {
