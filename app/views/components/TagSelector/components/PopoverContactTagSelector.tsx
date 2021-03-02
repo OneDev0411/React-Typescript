@@ -143,7 +143,7 @@ export const PopoverContactTagSelector = ({
         {...popoverProps}
       >
         <Box className={classes.container}>
-          <Typography variant="caption" className={classes.label}>
+          <Typography variant="button" className={classes.label}>
             {label || 'Tags'}
           </Typography>
           <BaseTagSelector
@@ -153,6 +153,7 @@ export const PopoverContactTagSelector = ({
               size: 'small'
             }}
             textFiledProps={{
+              autoFocus: true,
               variant: 'outlined',
               className: classes.textField
             }}
