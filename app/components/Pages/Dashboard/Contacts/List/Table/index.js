@@ -120,6 +120,9 @@ const ContactsList = props => {
         <TagsString
           contact={contact}
           reloadContacts={props.reloadContacts}
+          hasAttributeFilters={
+            (props.filters?.attributeFilters || []).length > 0
+          }
           isParkTabActive={isParkTabActive}
         />
       )

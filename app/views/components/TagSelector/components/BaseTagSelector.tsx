@@ -74,6 +74,7 @@ export const BaseTagSelector = ({
       freeSolo
       clearOnBlur
       selectOnFocus
+      disableClearable
       handleHomeEndKeys
       filterSelectedOptions
       ChipProps={chipProps}
@@ -81,7 +82,7 @@ export const BaseTagSelector = ({
       value={selectedTags}
       id="multiple-crm-tags"
       renderOption={option => (
-        <Typography variant="body2">+ {option.title}</Typography>
+        <Typography variant="body2">{option.title}</Typography>
       )}
       renderInput={params => (
         <TextField
