@@ -21,6 +21,7 @@ const useStyles = makeStyles(
   () => ({
     card: {
       minHeight: 200,
+      height: '100%',
       justifyContent: 'center',
       display: 'flex',
       flexDirection: 'column',
@@ -28,7 +29,11 @@ const useStyles = makeStyles(
       textAlign: 'center'
     },
     cardContent: {
-      width: '100%'
+      width: '100%',
+      height: '100%'
+    },
+    contentContainer: {
+      height: '100%'
     }
   }),
   {
@@ -55,29 +60,40 @@ export default function CalendarEventCard({ event }: Props) {
   return (
     <Card variant="outlined" className={classes.card}>
       <CardContent className={classes.cardContent}>
-        <Grid container direction="column">
-          {contact && (
-            <Grid container item justify="center">
-              <Link noStyle to={`/dashboard/contacts/${contact.id}`}>
-                <Box pb={1}>
-                  <Tooltip placement="top" title={contact.display_name}>
-                    <div>
-                      <Avatar disableLazyLoad size="xlarge" contact={contact} />
-                    </div>
-                  </Tooltip>
-                </Box>
-              </Link>
+        <Grid
+          container
+          direction="column"
+          justify="space-between"
+          className={classes.contentContainer}
+        >
+          <Grid container item direction="column">
+            {contact && (
+              <Grid container item justify="center">
+                <Link noStyle to={`/dashboard/contacts/${contact.id}`}>
+                  <Box pb={1}>
+                    <Tooltip placement="top" title={contact.display_name}>
+                      <div>
+                        <Avatar
+                          disableLazyLoad
+                          size="xlarge"
+                          contact={contact}
+                        />
+                      </div>
+                    </Tooltip>
+                  </Box>
+                </Link>
+              </Grid>
+            )}
+            <Grid item>
+              <Typography variant="body2">{event.title}</Typography>
             </Grid>
-          )}
-          <Grid item>
-            <Typography variant="body2">{event.title}</Typography>
-          </Grid>
-          <Grid item>
-            <Box pb={2}>
-              <Typography variant="body2" color="textSecondary">
-                {timeago().format(event.next_occurence)}
-              </Typography>
-            </Box>
+            <Grid item>
+              <Box pb={2}>
+                <Typography variant="body2" color="textSecondary">
+                  {timeago().format(event.next_occurence)}
+                </Typography>
+              </Box>
+            </Grid>
           </Grid>
           {cardTemplateTypes && (
             <Grid container item>
