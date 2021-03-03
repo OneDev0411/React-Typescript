@@ -23,6 +23,9 @@ const useStyles = makeStyles(
     },
     subtitle: {
       color: theme.palette.warning.ultralight
+    },
+    image: {
+      maxWidth: '100%'
     }
   }),
   {
@@ -37,6 +40,7 @@ export default function NewsletterBannerSection() {
     <Grid
       container
       alignItems="center"
+      justify="space-around"
       direction="row"
       className={classes.container}
     >
@@ -44,23 +48,22 @@ export default function NewsletterBannerSection() {
         <img
           alt="newsletter"
           src="/static/images/marketing/overview/newsletter.png"
+          className={classes.image}
         />
       </Grid>
       <Grid item xs={4}>
-        <Box pl={6}>
-          <Typography variant="h4" className={classes.title}>
-            Make A Newsletter
-          </Typography>
-          <Typography variant="h5" className={classes.subtitle}>
-            Using our powerful yet easy to use block editor.
-          </Typography>
-          <Box pt={2}>
-            <Link noStyle to="/dashboard/marketing/Newsletter">
-              <Button color="primary" variant="outlined">
-                Start Here
-              </Button>
-            </Link>
-          </Box>
+        <Typography variant="h4" className={classes.title}>
+          Make A Newsletter
+        </Typography>
+        <Typography variant="h5" className={classes.subtitle}>
+          Using our powerful yet easy to use block editor.
+        </Typography>
+        <Box pt={2}>
+          <Link noStyle to="/dashboard/marketing/Newsletter">
+            <Button color="primary" size="large" variant="contained">
+              Start Here
+            </Button>
+          </Link>
         </Box>
       </Grid>
     </Grid>
