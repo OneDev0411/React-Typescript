@@ -26,7 +26,7 @@ ssh "dokku@$REVIEW_HOST" apps:create $APP || true
 
 # Read the configuration from source Heroku app into a file
 ssh "dokku@$REVIEW_HOST" config:get $APP 'REVIEW_SOURCE_APP' << 'EOF'
-SOURCE_APP=%y
+SOURCE_APP=$(%y)
 echo "------- Source App -------"
 echo $SOURCE_APP
 echo "--------------"
