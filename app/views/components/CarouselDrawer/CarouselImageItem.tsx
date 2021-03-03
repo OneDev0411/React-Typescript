@@ -4,6 +4,8 @@ import { makeStyles, fade } from '@material-ui/core'
 
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 
+import useSafeDispatch from 'hooks/use-safe-dispatch'
+
 import { CAROUSEL_IMAGE_ITEM_TYPE } from './constants'
 import { CarouselImageItemEdge, ImageDragObject } from './types'
 import CarouselImage from './CarouselImage'
@@ -80,10 +82,12 @@ function CarouselImageItem({
   const classes = useStyles()
   const [isDragging, setIsDragging] = useState(false)
 
+  const endDrag = useSafeDispatch(() => setIsDragging(false))
+
   const [, dragRef] = useDrag({
     item: { type: CAROUSEL_IMAGE_ITEM_TYPE, src },
     begin: () => setIsDragging(true),
-    end: () => setIsDragging(false)
+    end: endDrag
   })
 
   const [{ isOver }, blockRef] = useDrop(propSharedParams)
