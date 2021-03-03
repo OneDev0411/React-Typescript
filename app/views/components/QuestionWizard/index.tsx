@@ -21,7 +21,6 @@ export function QuestionWizard({
 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
   const loadingRef = useRef<SVGSVGElement>(null)
-
   const theme = useTheme<Theme>()
 
   const [currentStep, setCurrentStep] = useState(defaultStep)
@@ -39,7 +38,7 @@ export function QuestionWizard({
     setCurrentStep(step)
   }
 
-  const gotoNext = async (delay: number = 0) => {
+  const gotoNext = async () => {
     if (currentStep + 1 > sections.length) {
       onFinish()
 
@@ -55,6 +54,11 @@ export function QuestionWizard({
     setCurrentStep(Math.max(currentStep - 1, 1))
   }
 
+  const setStep = (step: number) => {
+    setCurrentStep(step)
+    setLastVisitedStep(step)
+  }
+
   useEffect(() => {
     setLastVisitedStep(Math.max(currentStep, lastVisitedStep))
   }, [currentStep, lastVisitedStep])
@@ -64,9 +68,20 @@ export function QuestionWizard({
   }, [currentStep, onStepChange])
 
   useEffect(() => {
-    refs.current[currentStep]?.scrollIntoView({
-      block: 'center',
-      inline: 'center',
+    if (currentStep === 1) {
+      refs.current[currentStep]?.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      })
+
+      return
+    }
+
+    window.scrollTo({
+      top:
+        refs.current[currentStep].getBoundingClientRect().top +
+        window.pageYOffset -
+        50,
       behavior: 'smooth'
     })
   }, [currentStep, lastVisitedStep])
@@ -84,6 +99,7 @@ export function QuestionWizard({
       value={{
         currentStep,
         lastVisitedStep,
+        setStep,
         totalSteps: sections.length,
         goto: gotoStep,
         next: gotoNext,
@@ -94,7 +110,11 @@ export function QuestionWizard({
         last: () => gotoStep(sections.length)
       }}
     >
-      <div>
+      <div
+        style={{
+          paddingBottom: '50%'
+        }}
+      >
         {sections
           .filter(section => {
             return !!section
@@ -106,7 +126,6 @@ export function QuestionWizard({
               <div
                 key={step}
                 ref={el => (refs.current[step] = el as HTMLDivElement)}
-                onClick={() => gotoStep(step)}
               >
                 <SectionContext.Provider
                   value={{
@@ -118,27 +137,24 @@ export function QuestionWizard({
               </div>
             )
           })}
-      </div>
 
-      {showLoading && (
-        <Box
-          style={{
-            marginBottom: theme.spacing(4)
-          }}
-        >
-          <Loading
-            ref={loadingRef}
-            width={60}
-            fill={theme.palette.secondary.main}
-          />
-        </Box>
-      )}
+        {showLoading && (
+          <Box
+            style={{
+              margin: theme.spacing(2)
+            }}
+          >
+            <Loading
+              ref={loadingRef}
+              width={60}
+              fill={theme.palette.secondary.main}
+            />
+          </Box>
+        )}
+      </div>
     </WizardContext.Provider>
   )
 }
-
-const wait = (delay: number) =>
-  new Promise(resolve => setTimeout(resolve, delay))
 
 export * from './QuestionSection'
 export * from './QuestionForm'

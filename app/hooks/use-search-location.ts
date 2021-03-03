@@ -1,18 +1,30 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import addressParser from 'parse-address'
 
 import { searchListings } from 'models/listings/search/search-listings'
 
 import { useGoogleMapsPlaces } from './use-google-maps-places'
 
+interface Address {
+  city: string
+  number: string
+  state: string
+  street: string
+  type: string
+  zip: string
+  unit: string
+}
+
 export function useSearchLocation(
   criteria: string
 ): {
+  isSearching: boolean
+  isEmptyState: boolean
   places: google.maps.places.AutocompletePrediction[]
   listings: ICompactListing[]
   getParsedPlace: (
     place: google.maps.places.AutocompletePrediction
-  ) => Promise<unknown>
+  ) => Promise<Address>
 } {
   useGoogleMapsPlaces()
 
@@ -20,47 +32,60 @@ export function useSearchLocation(
     google.maps.places.AutocompletePrediction[]
   >([])
   const [listings, setListings] = useState<ICompactListing[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [isEmptyState, setIsEmptyState] = useState(false)
 
   useEffect(() => {
-    const searchPlaces = () => {
-      const { google } = window
+    const searchPlaces = (): Promise<typeof places> => {
+      return new Promise(resolve => {
+        const { google } = window
 
-      const service = new google.maps.places.AutocompleteService()
+        const service = new google.maps.places.AutocompleteService()
 
-      let request = {
-        input: criteria,
-        componentRestrictions: { country: 'us' }
-      }
-
-      service.getPlacePredictions(request, (results, status) => {
-        if (status != google.maps.places.PlacesServiceStatus.OK) {
-          setPlaces([])
-        } else {
-          setPlaces(results)
+        let request = {
+          input: criteria,
+          componentRestrictions: { country: 'us' }
         }
+
+        service.getPlacePredictions(request, (results, status) => {
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            resolve([])
+          } else {
+            resolve(results)
+          }
+        })
       })
     }
 
     const searchMls = async () => {
       const listings = await searchListings(criteria, { limit: 5 })
 
-      setListings(listings.data)
+      return listings.data
     }
 
     const search = async () => {
-      if (criteria.length === 0) {
+      if (criteria.length < 3) {
         setPlaces([])
         setListings([])
+        setIsEmptyState(false)
 
         return
       }
 
-      if (criteria.length <= 3) {
-        return
-      }
+      setIsSearching(true)
 
-      searchPlaces()
-      searchMls()
+      const [places, listings] = await Promise.all([
+        searchPlaces(),
+        searchMls()
+      ])
+
+      setIsSearching(false)
+      setPlaces(places)
+      setListings(listings)
+
+      if (places.length === 0 && listings.length === 0) {
+        setIsEmptyState(true)
+      }
     }
 
     search()
@@ -97,6 +122,8 @@ export function useSearchLocation(
   }
 
   return {
+    isSearching,
+    isEmptyState,
     places,
     listings,
     getParsedPlace

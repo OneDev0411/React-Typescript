@@ -59,7 +59,12 @@ export default function TeamAgents({
       {children({
         isLoading,
         isEmptyState,
-        teams: normalizeTeams(user, teamAgents, flattenTeams, criteria)
+        teams: normalizeTeams(
+          user,
+          teamAgents,
+          flattenTeams,
+          criteria
+        ) as NormalizedBrand[]
       })}
     </>
   )

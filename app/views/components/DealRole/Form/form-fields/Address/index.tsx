@@ -59,6 +59,7 @@ export function Address({ name, label, isVisible, input }: Props) {
           <TextField
             {...inputProps}
             fullWidth
+            size="small"
             name={input.name}
             label={label}
             variant="outlined"

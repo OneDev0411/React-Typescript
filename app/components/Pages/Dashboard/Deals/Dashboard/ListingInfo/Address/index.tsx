@@ -43,7 +43,7 @@ export function Address(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const cancleEdit = () => setIsEditingAddress(false)
+  const cancelEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
   const fullAddress = getField(props.deal, 'full_address')
 
@@ -53,7 +53,7 @@ export function Address(props: Props) {
     try {
       await dispatch(upsertContexts(props.deal.id, contexts))
 
-      cancleEdit()
+      cancelEdit()
     } catch (e) {
       console.log(e)
     }
@@ -65,7 +65,7 @@ export function Address(props: Props) {
         <div className={classes.container}>
           <InlineAddressField
             address={fullAddress}
-            handleCancel={cancleEdit}
+            handleCancel={cancelEdit}
             handleSubmit={handleSave}
             style={{
               width: '18rem'
@@ -82,7 +82,7 @@ export function Address(props: Props) {
             )}
           />
 
-          <Button onClick={cancleEdit}>Cancel</Button>
+          <Button onClick={cancelEdit}>Cancel</Button>
         </div>
       ) : (
         <Tooltip

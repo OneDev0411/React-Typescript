@@ -14,4 +14,4 @@ export * from './get-deal'
 
 export * from './search-deals'
 
-export * from './eject-draft-mode'
+export * from './publish'

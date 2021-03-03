@@ -17,3 +17,5 @@ export type IDealFormRole = IDealRole & {
   contact?: IContact
   current_address: Address | string | null
 }
+
+export type IDealSide = 'Selling' | 'Buying' | 'Both'

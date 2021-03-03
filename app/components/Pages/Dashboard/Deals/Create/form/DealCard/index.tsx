@@ -1,44 +1,62 @@
 import React from 'react'
-import { Box, Typography, Button, Dialog } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
 
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
+import {
+  QuestionSection,
+  QuestionTitle,
+  QuestionForm
+} from 'components/QuestionWizard'
+
 import { useCreationContext } from '../../context/use-creation-context'
 
-export function DealCard() {
+import type { IDealSide } from '../../types'
+
+interface Props {
+  dealSide: IDealSide
+}
+
+export function DealCard({ dealSide }: Props) {
   const { deal } = useCreationContext()
   const { step } = useSectionContext()
   const wizard = useWizardContext()
 
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
+  const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/offer`)
 
-  if (!deal) {
+  if (wizard.currentStep !== step || !deal) {
     return null
   }
 
   return (
-    <Dialog open={wizard.currentStep === step} fullWidth maxWidth="xs">
-      <Box textAlign="center" p={2}>
-        <Typography variant="h6">
-          Congratulation!{' '}
-          <span role="img" aria-label="congrats">
-            🎉
-          </span>
-        </Typography>
+    <QuestionSection>
+      <QuestionTitle>
+        <div>Congratulation! 🎉</div>I am done create the deal for you
+      </QuestionTitle>
 
-        <Typography variant="subtitle1">
-          Your deal has been created successfuly
-        </Typography>
+      <QuestionForm>
+        <Box display="flex" justifyContent="flex-end">
+          {dealSide == 'Both' && (
+            <Box mr={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={createOffer}
+              >
+                Create Offer
+              </Button>
+            </Box>
+          )}
 
-        <Box mt={2}>
           <Button variant="contained" color="secondary" onClick={openDeal}>
-            Open Deal
+            View Deal
           </Button>
         </Box>
-      </Box>
-    </Dialog>
+      </QuestionForm>
+    </QuestionSection>
   )
 }

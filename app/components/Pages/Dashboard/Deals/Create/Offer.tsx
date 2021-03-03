@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   CircularProgress,
@@ -35,6 +35,7 @@ import { DealPrimaryAgent } from './form/DealPrimaryAgent'
 import { DealCoAgent } from './form/DealCoAgent'
 import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
+import { Header } from './components/Header'
 
 import { getStatusList } from './helpers/get-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
@@ -45,6 +46,7 @@ const useStyles = makeStyles(
   () => ({
     root: {
       width: '80%',
+      maxWidth: '800px',
       margin: '15% auto'
     }
   }),
@@ -73,6 +75,11 @@ export default function CreateOffer({ params }: Props) {
     selectDealById(deals.list, params.id)
   )
 
+  useEffect(() => {
+    deal?.has_active_offer && goTo(`/dashboard/deals/${deal.id}`)
+  }, [deal?.has_active_offer, deal?.id])
+
+  const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
   const statusList = getStatusList(deal, 'Offer')
 
@@ -149,12 +156,6 @@ export default function CreateOffer({ params }: Props) {
     }
   }
 
-  if (deal?.has_active_offer) {
-    goTo(`/dashboard/deals/${deal.id}`)
-
-    return null
-  }
-
   if (isCreatingOffer || !isFetchingCompleted) {
     return (
       <Box
@@ -183,6 +184,11 @@ export default function CreateOffer({ params }: Props) {
         user
       }}
     >
+      <Header
+        confirmationMessage="Cancel offer creation?"
+        onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
+      />
+
       <Box className={classes.root}>
         <QuestionWizard onFinish={createOfferChecklist}>
           <Controller
@@ -191,8 +197,11 @@ export default function CreateOffer({ params }: Props) {
             render={({ value = [], onChange }) => (
               <DealClient
                 side="Buying"
-                title="Enter buyer information as shown on offer"
-                roles={roles.concat(value)}
+                title={`Enter ${
+                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                } information as shown on offer`}
+                predefinedRoles={roles}
+                roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
                 }
@@ -213,7 +222,11 @@ export default function CreateOffer({ params }: Props) {
               <DealPrimaryAgent
                 side="Buying"
                 isCommissionRequired={isDoubleEnded}
-                title="Enter Buyer Primary Agent’s information"
+                isDoubleEnded={isDoubleEnded}
+                dealType="Buying"
+                title={`Who is the ${
+                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                } agent?`}
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -229,7 +242,9 @@ export default function CreateOffer({ params }: Props) {
               <DealCoAgent
                 side="Buying"
                 isCommissionRequired={isDoubleEnded}
-                title="Enter Buyer Co-Agent’s information"
+                title={`Who is the ${
+                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                } co agent?`}
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))

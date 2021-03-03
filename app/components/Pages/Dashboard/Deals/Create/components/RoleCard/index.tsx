@@ -42,15 +42,15 @@ const useStyles = makeStyles(
 interface Props {
   role: IDealFormRole | IDealRole
   readonly?: boolean
-  onClickEdit: () => void
-  onClickRemove: (() => void) | (() => Promise<void>)
+  onClickEdit?: () => void
+  onClickRemove?: (() => void) | (() => Promise<void>)
 }
 
 export function RoleCard({
   role,
   readonly = false,
-  onClickEdit,
-  onClickRemove
+  onClickEdit = () => {},
+  onClickRemove = () => {}
 }: Props) {
   const classes = useStyles()
   const [isRemoving, setIsRemoving] = useState(false)
@@ -90,17 +90,24 @@ export function RoleCard({
       </Box>
 
       <Box display="flex" flex={2}>
-        <Box pl={2}>
-          <IconButton size="medium" disabled={readonly} onClick={onClickEdit}>
-            <SvgIcon path={mdiAccountEditOutline} size={muiIconSizes.medium} />
-          </IconButton>
-        </Box>
+        {!readonly && (
+          <>
+            <Box pl={2}>
+              <IconButton size="medium" onClick={onClickEdit}>
+                <SvgIcon
+                  path={mdiAccountEditOutline}
+                  size={muiIconSizes.medium}
+                />
+              </IconButton>
+            </Box>
 
-        <Box>
-          <IconButton size="medium" disabled={readonly} onClick={handleRemove}>
-            <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
-          </IconButton>
-        </Box>
+            <Box>
+              <IconButton size="medium" onClick={handleRemove}>
+                <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
+              </IconButton>
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   )

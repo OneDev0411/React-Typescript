@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useTheme, Theme } from '@material-ui/core'
+import { Tabs } from '@material-ui/core'
 import { Field } from 'react-final-form'
 
-import { RadioGroup } from 'components/RadioGroup'
+import { Tab } from 'components/PageTabs/Tab'
 
 import { TYPE_PERSON, TYPE_COMPANY } from '../../../constants/role-types'
 
@@ -14,34 +14,20 @@ interface Props {
 }
 
 export function TypeInput(props: Props) {
-  const theme = useTheme<Theme>()
-
   return (
     <Field
       name={props.name}
       render={({ input }) => (
-        <RadioGroup
-          defaultValue={TYPE_PERSON}
-          options={[
-            {
-              label: 'Person',
-              value: TYPE_PERSON
-            },
-            {
-              label: 'Company / Trust',
-              value: TYPE_COMPANY
-            }
-          ]}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}
-          groupStyle={{
-            width: `calc(50% - ${theme.spacing(1)}px)`
-          }}
-          onChange={input.onChange}
-          {...props}
-        />
+        <Tabs
+          value={input.value || TYPE_PERSON}
+          indicatorColor="primary"
+          textColor="primary"
+          onChange={(_, value) => input.onChange(value)}
+          aria-label="disabled tabs example"
+        >
+          <Tab label="Person" value={TYPE_PERSON} />
+          <Tab label="Company / Trust" value={TYPE_COMPANY} />
+        </Tabs>
       )}
     />
   )

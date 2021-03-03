@@ -44,8 +44,13 @@ export function DealEnderType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection hidden={!!deal}>
-      <QuestionTitle>Who are you repersenting?</QuestionTitle>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You need to discard the form to be able edit the side"
+    >
+      <QuestionTitle>
+        Is another agent from your office on the other side of this deal?
+      </QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealType"
@@ -55,12 +60,7 @@ export function DealEnderType({ onChange }: Props) {
               value: null
             },
             {
-              label: 'Yes, I represent both sides',
-              value: 'AgentDoubleEnder'
-            },
-            {
-              label:
-                'Yes, another agent from my office is on the other side of this deal',
+              label: 'Yes',
               value: 'OfficeDoubleEnder'
             }
           ]}

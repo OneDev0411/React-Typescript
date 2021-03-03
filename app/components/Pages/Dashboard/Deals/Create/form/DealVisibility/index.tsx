@@ -31,7 +31,7 @@ export function DealVisibility({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection hidden={!!deal}>
+    <QuestionSection disabled={!!deal}>
       <QuestionTitle>What is the stage of this deal?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

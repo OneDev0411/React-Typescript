@@ -1,72 +1,79 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 
-import { Box, TextField, Theme, useTheme } from '@material-ui/core'
-
-import { RadioGroup } from 'components/RadioGroup'
+import {
+  Grid,
+  Box,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel
+} from '@material-ui/core'
 
 interface Props {
   isVisible: boolean
   isRequired: boolean
+  compact: boolean
 }
 
-export function CommissionInput({ isVisible, isRequired }: Props) {
-  const theme = useTheme<Theme>()
-
+export function CommissionInput({ isVisible, isRequired, compact }: Props) {
   if (!isVisible) {
     return null
   }
 
   return (
-    <Box display="flex">
-      <Field
-        name="commission_type"
-        render={({ input }) => (
-          <RadioGroup
-            name="CommissionType"
-            defaultValue={input.value}
-            options={[
-              {
-                value: 'commission_percentage',
-                label: '%'
-              },
-              {
-                value: 'commission_dollar',
-                label: '$'
-              }
-            ]}
-            onChange={value => input.onChange(value)}
-            style={{
-              display: 'flex',
-              flex: 5
-            }}
-            groupStyle={{
-              width: `calc(50% - ${theme.spacing(1)}px`,
-              height: theme.spacing(7),
-              marginRight: theme.spacing(1)
-            }}
-          />
-        )}
-      />
+    <>
+      <Grid item xs={12} md={compact ? 12 : true}>
+        <Field
+          name="commission"
+          parse={value => (!value ? value : value.replace(/[^0-9.]/g, ''))}
+          render={({ input, meta }) => (
+            <TextField
+              {...input}
+              fullWidth
+              size="small"
+              error={meta.error || (isRequired && !input.value)}
+              label={`Commission${isRequired ? ' *' : ''}`}
+              variant="outlined"
+              autoComplete="off"
+              placeholder="Enter agent commission"
+              inputProps={{
+                maxLength: 8
+              }}
+              style={{
+                flex: 5
+              }}
+            />
+          )}
+        />
+      </Grid>
 
-      <Field
-        name="commission"
-        parse={value => (!value ? value : value.replace(/[^0-9.]/g, ''))}
-        render={({ input, meta }) => (
-          <TextField
-            {...input}
-            error={meta.submitFailed && meta.error}
-            helperText={meta.error}
-            label={`Commission${isRequired ? ' *' : ''}`}
-            variant="outlined"
-            autoComplete="off"
-            placeholder="Enter agent commission"
-            style={{
-              flex: 5
-            }}
-          />
-        )}
-      />
-    </Box>
+      <Grid item xs={12} md={compact ? 12 : true}>
+        <Field
+          name="commission_type"
+          render={({ input }) => (
+            <RadioGroup
+              aria-label="commission"
+              name="commission"
+              value={input.value}
+              onChange={(_, value) => input.onChange(value)}
+            >
+              <Box display="flex">
+                <FormControlLabel
+                  value="commission_percentage"
+                  control={<Radio color="primary" />}
+                  label="% Percentage"
+                />
+                <FormControlLabel
+                  value="commission_dollar"
+                  control={<Radio color="primary" />}
+                  label="$ Dollars"
+                />
+              </Box>
+            </RadioGroup>
+          )}
+        />
+      </Grid>
+    </>
   )
 }

@@ -49,13 +49,13 @@ const useStyles = makeStyles(
 export function RadioGroup({
   name,
   options,
-  defaultValue = null,
+  defaultValue,
   style = {},
   groupStyle = {},
   onChange
 }: Props) {
   const classes = useStyles()
-  const [value, setValue] = useState<string | null>(defaultValue)
+  const [value, setValue] = useState(defaultValue)
   const theme = useTheme<Theme>()
 
   const handleChange = (value: string | null) => {
@@ -73,13 +73,13 @@ export function RadioGroup({
             key={index}
             className={classes.group}
             style={{
-              ...groupStyle,
               borderColor: isChecked
                 ? theme.palette.primary.main
                 : theme.palette.divider,
               background: isChecked
                 ? theme.palette.success.ultralight
-                : 'inherit'
+                : 'inherit',
+              ...groupStyle
             }}
           >
             <Box

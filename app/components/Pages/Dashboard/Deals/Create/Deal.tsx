@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Box, makeStyles, Theme } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
+import { browserHistory } from 'react-router'
 
 import { useForm, Controller } from 'react-hook-form'
 
@@ -11,13 +12,17 @@ import {
   createDeal,
   createRoles,
   getContextsByDeal,
-  createChecklist
+  createChecklist,
+  updateListing,
+  upsertContexts,
+  deleteDeal
 } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -25,12 +30,11 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
-import { DealVisibility } from './form/DealVisibility'
+import { CreateDealIntro } from './form/Intro'
 import { DealType } from './form/DealType'
 import { DealPropertyType } from './form/DealPropertyType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
-import { DealCoAgent } from './form/DealCoAgent'
-import { DealAddress } from './form/DealAddress'
+import { DealAddress, PropertyAddress } from './form/DealAddress'
 import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
 import { DealEnderType } from './form/DealEnderType'
@@ -38,7 +42,13 @@ import { DealCard } from './form/DealCard'
 
 import { useDealRoles } from './hooks/use-deal-roles'
 
+import { createAddressContext } from '../utils/create-address-context'
+
 import { Context } from './context'
+
+import { Header } from './components/Header'
+
+import type { IDealSide } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -61,7 +71,7 @@ export default function CreateDeal() {
 
   const [dealId, setDealId] = useState<UUID | null>(null)
 
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
@@ -69,8 +79,8 @@ export default function CreateDeal() {
 
   const roles = useDealRoles(deal)
 
-  const visibility = watch('visibility')
-  const dealType = watch('deal_type')
+  const dealSide = watch('deal_side') as IDealSide
+  const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
   const propertyType = watch('property_type')
   const enderType = watch('ender_type')
 
@@ -83,9 +93,9 @@ export default function CreateDeal() {
   const dealContexts = getDealContexts(user, dealType, propertyType)
   const brandPropertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
 
-  const isDoubleEnded = ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
-    enderType || ''
-  )
+  const isAgentDoubleEnded = dealSide === 'Both'
+  const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
+  const isDoubleEnded = isAgentDoubleEnded || isOfficeDoubleEnded
 
   /**
    * Creates the initial deal as soon as possible and updates
@@ -99,20 +109,21 @@ export default function CreateDeal() {
     }
 
     const values = control.getValues()
+
     const agents = [].concat(
       values.buying_primary_agent || [],
       values.selling_primary_agent || []
     ) as IDealRole[]
 
-    const primaryAgent = agents.find(agent =>
-      ['SellerAgent', 'BuyerAgent'].includes(agent.role)
+    const primaryAgent = agents.find(
+      agent => ['SellerAgent', 'BuyerAgent'].includes(agent.role) && agent.brand
     )!
 
     const newDeal: IDeal = await Deal.create(user, {
       brand: primaryAgent.brand,
       property_type: propertyType,
       deal_type: dealType,
-      is_draft: visibility === 'draft'
+      is_draft: true
     })
 
     dispatch(createDeal(newDeal))
@@ -124,7 +135,7 @@ export default function CreateDeal() {
       contact: undefined
     }))
 
-    await Promise.all([
+    const [, checklist] = await Promise.all([
       dispatch(createRoles(newDeal.id, primaryAgents)),
       dispatch(
         createChecklist(newDeal.id, {
@@ -135,6 +146,33 @@ export default function CreateDeal() {
         })
       )
     ])
+
+    newDeal.checklists = [checklist.id]
+
+    savePropertyAddress(newDeal, values.property_address)
+  }
+
+  const savePropertyAddress = async (
+    deal: IDeal,
+    property: PropertyAddress
+  ) => {
+    if (property.type === 'Place') {
+      const contexts = createAddressContext(deal, property.address)
+
+      dispatch(upsertContexts(deal.id, contexts))
+    }
+
+    if (property.type === 'Listing') {
+      dispatch(updateListing(deal.id, property.address))
+    }
+  }
+
+  const handleCancel = async () => {
+    if (deal) {
+      dispatch(deleteDeal(deal.id))
+    }
+
+    browserHistory.goBack()
   }
 
   return (
@@ -145,12 +183,19 @@ export default function CreateDeal() {
         propertyTypes: brandPropertyTypes
       }}
     >
+      <Header
+        confirmationMessage="Cancel deal creation?"
+        onClose={handleCancel}
+      />
+
       <Box className={classes.root}>
         <QuestionWizard>
+          <CreateDealIntro />
+
           <Controller
-            name="visibility"
+            name="property_address"
             control={control}
-            render={({ onChange }) => <DealVisibility onChange={onChange} />}
+            render={({ onChange }) => <DealAddress onChange={onChange} />}
           />
 
           <Controller
@@ -160,7 +205,8 @@ export default function CreateDeal() {
           />
 
           <Controller
-            name="deal_type"
+            key="deal_side"
+            name="deal_side"
             control={control}
             render={({ onChange }) => (
               <DealType propertyTypeId={propertyType} onChange={onChange} />
@@ -169,6 +215,7 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
+              key="ender_type"
               name="ender_type"
               control={control}
               render={({ onChange }) => <DealEnderType onChange={onChange} />}
@@ -177,13 +224,18 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
+              key="buying_primary_agent"
               name="buying_primary_agent"
               control={control}
               render={({ value = [], onChange }) => (
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired={isDoubleEnded}
-                  title="Enter Buyer Primary Agent’s information"
+                  isDoubleEnded={isDoubleEnded}
+                  dealType={dealType}
+                  title={`Who is the ${
+                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  } agent?`}
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -199,8 +251,12 @@ export default function CreateDeal() {
             render={({ value = [], onChange }) => (
               <DealPrimaryAgent
                 isCommissionRequired
+                isDoubleEnded={isDoubleEnded}
+                dealType={dealType}
                 side="Selling"
-                title="Enter Listing Primary Agent’s information"
+                title={`Who is the ${
+                  propertyType?.includes('Lease') ? 'landlord' : 'seller'
+                } agent?`}
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -210,39 +266,27 @@ export default function CreateDeal() {
             )}
           />
 
-          <DealAddress />
-
-          {dealType === 'Buying' && (
-            <DealCoAgent
-              side="Buying"
-              isCommissionRequired={isDoubleEnded}
-              roles={roles}
-              title="Enter Buyer Co-Agent’s information"
-            />
-          )}
-
-          {dealType && (
-            <DealCoAgent
-              isCommissionRequired
-              side="Selling"
-              title="Enter Listing Co-Agent’s information"
-              roles={roles}
-            />
-          )}
-
           {dealType === 'Buying' && (
             <DealClient
+              key="deal-client-buying"
               side="Buying"
-              title="Enter buyer information as shown on offer"
+              title={`What's the ${
+                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+              }'s legal name?`}
               roles={roles}
+              skippable
             />
           )}
 
           {dealType === 'Selling' && (
             <DealClient
+              key="deal-client-selling"
               side="Selling"
-              title="Enter the seller’s legal information"
+              title={`What's the ${
+                propertyType?.includes('Lease') ? 'landlord' : 'seller'
+              }'s legal name?`}
               roles={roles}
+              skippable
             />
           )}
 
@@ -251,7 +295,7 @@ export default function CreateDeal() {
               <DealContext key={context.id} context={context} />
             ))}
 
-          <DealCard />
+          <DealCard dealSide={dealSide} />
         </QuestionWizard>
       </Box>
     </Context.Provider>

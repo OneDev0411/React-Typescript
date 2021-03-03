@@ -13,3 +13,7 @@ export interface NormalizedBrand {
   subtitle?: string
   users: IUser[]
 }
+
+export type BrandedUser = IUser & {
+  brand_id?: UUID | null
+}

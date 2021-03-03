@@ -29,12 +29,17 @@ export function DealType({ propertyTypeId, onChange }: Props) {
 
     if (wizard.currentStep === step) {
       wizard.next()
+    } else {
+      wizard.setStep(step + 1)
     }
   }
 
   return (
-    <QuestionSection hidden={!!deal}>
-      <QuestionTitle>Who are you repersenting?</QuestionTitle>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You need to discard the form to be able edit the side"
+    >
+      <QuestionTitle>Which side are you representing?</QuestionTitle>
       <QuestionForm>
         <RadioGroup
           name="DealType"
@@ -46,6 +51,10 @@ export function DealType({ propertyTypeId, onChange }: Props) {
             {
               label: propertyType?.is_lease ? 'Landlord' : 'Seller',
               value: 'Selling'
+            },
+            {
+              label: 'Both',
+              value: 'Both'
             }
           ]}
           onChange={handleChange}

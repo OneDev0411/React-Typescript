@@ -41,9 +41,11 @@ export default class DatePicker extends React.Component {
   dayPickerRef = React.createRef()
 
   handleDateChange = (name, value) => {
+    const currentDate = this.Date || new Date()
+
     const date = {
-      year: this.Date.getFullYear(),
-      month: this.Date.getMonth(),
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth(),
       day: 1,
       [name]: value
     }
@@ -59,7 +61,7 @@ export default class DatePicker extends React.Component {
   setDate({ selectedDate }) {
     const { currentDate } = this.state
 
-    if (selectedDate && selectedDate.toString() !== currentDate.toString()) {
+    if (selectedDate && selectedDate.toString() !== currentDate?.toString()) {
       this.setState(
         {
           currentDate: selectedDate
@@ -90,7 +92,7 @@ export default class DatePicker extends React.Component {
   addMonths = count =>
     this.setState(
       {
-        currentDate: DateUtils.addMonths(this.Date, count)
+        currentDate: DateUtils.addMonths(this.Date || new Date(), count)
       },
       () => this.onChange('month')
     )
@@ -109,8 +111,8 @@ export default class DatePicker extends React.Component {
           captionElement={({ date, localeUtils }) => (
             <Toolbar
               date={date}
-              year={this.Date?.getFullYear()}
-              month={this.Date?.getMonth()}
+              year={(this.Date || new Date()).getFullYear()}
+              month={(this.Date || new Date()).getMonth()}
               localeUtils={localeUtils}
               onDateChange={this.handleDateChange}
               onPreviousClick={this.handlePreviousMonth}

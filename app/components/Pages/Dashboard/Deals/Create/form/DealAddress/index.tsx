@@ -6,10 +6,10 @@ import {
   Avatar,
   Typography,
   Theme,
-  makeStyles
+  makeStyles,
+  CircularProgress
 } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
-import cn from 'classnames'
+import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
 
 import ListingCard from 'components/ListingCards/ListingCard'
@@ -22,15 +22,18 @@ import {
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { Callout } from 'components/Callout'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { updateListing, upsertContexts } from 'actions/deals'
 
 import { useSearchLocation } from 'hooks/use-search-location'
 
 import { useCreationContext } from '../../context/use-creation-context'
-import { createAddressContext } from '../../../utils/create-address-context'
+
+export interface PropertyAddress {
+  type: 'Place' | 'Listing'
+  address: string | unknown
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -57,9 +60,6 @@ const useStyles = makeStyles(
       margin: theme.spacing(2, 1),
       color: theme.palette.grey[500]
     },
-    searchInput: {
-      padding: theme.spacing(1.5)
-    },
     place: {
       border: `1px solid ${theme.palette.divider}`,
       padding: theme.spacing(1),
@@ -71,15 +71,16 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealAddress() {
+interface Props {
+  onChange: (address: PropertyAddress) => void
+}
+
+export function DealAddress({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-
   const { deal } = useCreationContext()
 
   const classes = useStyles()
-
-  const dispatch = useDispatch()
 
   const [place, setPlace] = useState<
     Nullable<google.maps.places.AutocompletePrediction>
@@ -87,7 +88,29 @@ export function DealAddress() {
   const [listing, setListing] = useState<Nullable<ICompactListing>>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const { listings, places, getParsedPlace } = useSearchLocation(searchCriteria)
+  const [
+    debouncedSearchCriteria,
+    setDebouncedSearchCriteria
+  ] = useState<string>('')
+
+  /**
+   * debounce search criteria to don't search contacts on input change
+   */
+  useDebounce(
+    () => {
+      setDebouncedSearchCriteria(searchCriteria)
+    },
+    700,
+    [searchCriteria]
+  )
+
+  const {
+    isEmptyState,
+    isSearching,
+    listings,
+    places,
+    getParsedPlace
+  } = useSearchLocation(debouncedSearchCriteria)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -101,24 +124,42 @@ export function DealAddress() {
     setSearchCriteria('')
   }
 
-  const handleSubmit = async () => {
-    if (!deal) {
-      return
-    }
+  const handleSelectPlace = async (
+    place: google.maps.places.AutocompletePrediction
+  ) => {
+    setPlace(place)
 
-    if (place) {
-      const address = await getParsedPlace(place!)
-      const contexts = createAddressContext(deal, address)
+    const address = await getParsedPlace(place!)
 
-      dispatch(upsertContexts(deal.id, contexts))
-    }
+    onChange({
+      type: 'Place',
+      address: {
+        city: address.city,
+        postal_code: address.zip,
+        state: address.state,
+        street_name: address.street,
+        street_number: address.number,
+        unit_number: address.unit
+      }
+    })
 
-    if (listing) {
-      dispatch(updateListing(deal.id, listing.id))
-    }
+    goNext()
+  }
 
+  const handleSelectListing = (listing: ICompactListing) => {
+    setListing(listing)
+
+    onChange({
+      type: 'Listing',
+      address: listing.id
+    })
+
+    goNext()
+  }
+
+  const goNext = () => {
     if (wizard.currentStep === step) {
-      wizard.next()
+      setTimeout(() => wizard.next(), 700)
     }
   }
 
@@ -127,27 +168,31 @@ export function DealAddress() {
   }
 
   return (
-    <QuestionSection>
-      <QuestionTitle>
-        What is the address of the subject property?
-      </QuestionTitle>
+    <QuestionSection
+      disabled={!!deal}
+      disableMessage="You will be able to edit the address inside the deal"
+    >
+      <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
-          <Box
-            className={cn(classes.root, {
-              'has-border': listings.length > 0 || places.length > 0
-            })}
-          >
+          <Box className={classes.root}>
             <Box mb={3}>
               <TextField
                 fullWidth
+                variant="outlined"
+                size="small"
                 autoComplete="no"
                 placeholder="Enter MLS# or Address"
                 value={searchCriteria}
-                className={classes.searchInput}
                 onChange={handleChange}
               />
             </Box>
+
+            {isSearching && (
+              <Box my={1}>
+                <CircularProgress />
+              </Box>
+            )}
 
             <Box>
               {listings.length > 0 && (
@@ -160,13 +205,16 @@ export function DealAddress() {
                 <Box
                   key={listing.mls_number}
                   display="flex"
+                  alignItems="center"
                   className={classes.resultItem}
-                  onClick={() => setListing(listing)}
+                  onClick={() => handleSelectListing(listing)}
                 >
-                  <Avatar
-                    src={listing.cover_image_url}
-                    alt={listing.mls_number}
-                  />
+                  <Box width="32px" mr={1}>
+                    <Avatar
+                      src={listing.cover_image_url}
+                      alt={listing.mls_number}
+                    />
+                  </Box>
 
                   <div className={classes.resultItemContent}>
                     <Typography variant="body2">
@@ -191,24 +239,48 @@ export function DealAddress() {
                 <Box
                   key={place.id || index}
                   display="flex"
+                  alignItems="center"
                   className={classes.resultItem}
-                  onClick={() => setPlace(place)}
+                  onClick={() => handleSelectPlace(place)}
                 >
-                  <SvgIcon path={mdiMapMarker} />
-                  <Typography
-                    variant="body2"
-                    className={classes.resultItemContent}
+                  <Box
+                    width="32px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    mr={1}
                   >
-                    <strong>{place.structured_formatting.main_text}</strong>{' '}
-                    <span className={classes.lightText}>
-                      {place.structured_formatting.secondary_text.replace(
-                        ', USA',
-                        ''
-                      )}
-                    </span>
-                  </Typography>
+                    <SvgIcon path={mdiMapMarker} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      className={classes.resultItemContent}
+                    >
+                      <div>
+                        <strong>{place.structured_formatting.main_text}</strong>
+                      </div>
+                      <span className={classes.lightText}>
+                        {place.structured_formatting.secondary_text.replace(
+                          ', USA',
+                          ''
+                        )}
+                      </span>
+                    </Typography>
+                  </Box>
                 </Box>
               ))}
+
+              {isEmptyState && (
+                <Callout
+                  type="error"
+                  style={{
+                    margin: 0
+                  }}
+                >
+                  Nothing found
+                </Callout>
+              )}
             </Box>
           </Box>
         )}
@@ -241,17 +313,7 @@ export function DealAddress() {
             justifyContent="flex-end"
             mt={2}
           >
-            <Box mr={1}>
-              <Button onClick={handleRemove}>Change Property</Button>
-            </Box>
-
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit}
-            >
-              Continue
-            </Button>
+            <Button onClick={handleRemove}>Change Property</Button>
           </Box>
         )}
       </QuestionForm>

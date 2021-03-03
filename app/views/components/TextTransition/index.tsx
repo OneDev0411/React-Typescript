@@ -5,7 +5,7 @@ import './animations.css'
 
 const useStyles = makeStyles(
   () => ({
-    container: ({ animation }: { animation: Animation }) => {
+    container: ({ animation }: { animation: Animation | null }) => {
       return animation
         ? {
             ...animation

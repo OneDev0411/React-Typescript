@@ -32,7 +32,7 @@ function RemoveDraft(props: Props & WithRouterProps) {
           size="small"
           variant="outlined"
           onClick={() =>
-            props.router.push(`/dashboard/deals/create/${props.deal.id}`)
+            props.router.push(`/dashboard/deals/${props.deal.id}/publish`)
           }
         >
           Make visible to admin
