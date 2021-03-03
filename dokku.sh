@@ -30,7 +30,7 @@ DOKKU_SOURCE_APP=`ssh "dokku@$REVIEW_HOST" config:get $APP 'REVIEW_SOURCE_APP'`
 
 # Read the configuration from source Heroku app into a file
 
-curl "https://api.heroku.com/apps/$CONFIGURATION/config-vars" -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/configs
+curl "https://api.heroku.com/apps/$REVIEW_SOURCE_APP/config-vars" -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/configs
 KEYS=$(cat /tmp/configs | jq '. | keys[]')
 
 # We need to copy the configuration fro msource heroku application
