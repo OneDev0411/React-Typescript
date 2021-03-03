@@ -21,7 +21,7 @@ function Website({ params }: WebsiteProps) {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Website Builder" />
+      <PageLayout.Header title="Websites" />
       <PageLayout.Main>
         <WebsiteTabs type={type} />
         {type === websiteTabs.MyWebsites ? (
