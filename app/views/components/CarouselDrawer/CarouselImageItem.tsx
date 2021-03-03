@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import classNames from 'classnames'
-import { Box, makeStyles, fade, Grid } from '@material-ui/core'
+import { makeStyles, fade, Grid } from '@material-ui/core'
 
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 
@@ -9,13 +9,12 @@ import { CarouselImageItemEdge, ImageDragObject } from './types'
 
 const useStyles = makeStyles(
   theme => ({
-    root: { margin: theme.spacing(1) },
+    root: { position: 'relative' },
     wrapper: {
-      transition: theme.transitions.create('border-color'),
       display: 'block',
-      width: '100%',
-      '&:hover $name': { opacity: 1 },
-      position: 'relative'
+      margin: theme.spacing(1),
+      position: 'relative',
+      '&:hover $name': { opacity: 1 }
     },
     space: {
       paddingTop: '100%',
@@ -51,16 +50,16 @@ const useStyles = makeStyles(
       zIndex: 1
     },
     edgeLeft: {
-      left: 0,
-      borderLeft: '4px solid transparent'
+      left: -1,
+      borderLeft: '2px solid transparent'
     },
     edgeRight: {
-      right: 0,
-      borderRight: '4px solid transparent'
+      right: -1,
+      borderRight: '2px solid transparent'
     },
     edgeLeftOver: { borderLeftColor: theme.palette.primary.main },
     edgeRightOver: { borderRightColor: theme.palette.primary.main },
-    dragging: { opacity: 0.5 }
+    dragging: { opacity: 0.4 }
   }),
   { name: 'CarouselImageItem' }
 )
@@ -113,43 +112,42 @@ function CarouselImageItem({
     <Grid
       item
       xs={3}
-      className={isDragging ? classes.dragging : undefined}
+      className={classNames(classes.root, isDragging && classes.dragging)}
       innerRef={blockRef}
     >
-      <div className={classes.root} ref={dragRef}>
-        <Box
-          className={classNames(classes.wrapper, onClick && classes.button)}
-          onClick={onClick}
-        >
-          <div className={classes.space} />
-          <img
-            className={classNames(classes.item, classes.image)}
-            src={src}
-            alt=""
-          />
-          <div className={classNames(classes.item, classes.name)}>{label}</div>
-          {droppable && !isDragging && isOver && (
-            <>
-              <div
-                className={classNames(
-                  classes.edge,
-                  classes.edgeLeft,
-                  isEdgeLeftOver && classes.edgeLeftOver
-                )}
-                ref={dropBeforeRef}
-              />
-              <div
-                className={classNames(
-                  classes.edge,
-                  classes.edgeRight,
-                  isEdgeRightOver && classes.edgeRightOver
-                )}
-                ref={dropAfterRef}
-              />
-            </>
-          )}
-        </Box>
+      <div
+        ref={dragRef}
+        className={classNames(classes.wrapper, onClick && classes.button)}
+        onClick={onClick}
+      >
+        <div className={classes.space} />
+        <img
+          className={classNames(classes.item, classes.image)}
+          src={src}
+          alt=""
+        />
+        <div className={classNames(classes.item, classes.name)}>{label}</div>
       </div>
+      {droppable && !isDragging && isOver && (
+        <>
+          <div
+            className={classNames(
+              classes.edge,
+              classes.edgeLeft,
+              isEdgeLeftOver && classes.edgeLeftOver
+            )}
+            ref={dropBeforeRef}
+          />
+          <div
+            className={classNames(
+              classes.edge,
+              classes.edgeRight,
+              isEdgeRightOver && classes.edgeRightOver
+            )}
+            ref={dropAfterRef}
+          />
+        </>
+      )}
     </Grid>
   )
 }
