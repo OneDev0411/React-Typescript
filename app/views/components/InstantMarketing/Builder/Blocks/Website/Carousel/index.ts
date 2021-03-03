@@ -64,7 +64,7 @@ export default function registerCarouselBlock(
         droppable: false,
         script,
         'script-props': ['heightRatio'],
-        heightRatio: 0.4
+        heightRatio: 0.5
       },
       initialize(...args: any[]) {
         const attrs = this.getAttributes()
