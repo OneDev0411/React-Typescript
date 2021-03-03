@@ -198,7 +198,7 @@ export default function CreateOffer({ params }: Props) {
               <DealClient
                 side="Buying"
                 title={`Enter ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  propertyType?.is_lease ? 'tenant' : 'buyer'
                 } information as shown on offer`}
                 predefinedRoles={roles}
                 roles={value}
@@ -225,7 +225,7 @@ export default function CreateOffer({ params }: Props) {
                 isDoubleEnded={isDoubleEnded}
                 dealType="Buying"
                 title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  propertyType?.is_lease ? 'tenant' : 'buyer'
                 } agent?`}
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
@@ -243,7 +243,7 @@ export default function CreateOffer({ params }: Props) {
                 side="Buying"
                 isCommissionRequired={isDoubleEnded}
                 title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  propertyType?.is_lease ? 'tenant' : 'buyer'
                 } co agent?`}
                 roles={roles.concat(value)}
                 onChange={(role, type) =>

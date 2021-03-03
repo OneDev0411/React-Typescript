@@ -13,7 +13,7 @@ interface Props {
   isBackOffice: boolean
 }
 
-function ChecklistType(props: Props) {
+export function PropertyType(props: Props) {
   const dispatch = useDispatch()
 
   const handleChange = async (value: string) => {
@@ -49,5 +49,3 @@ function ChecklistType(props: Props) {
     />
   )
 }
-
-export default ChecklistType

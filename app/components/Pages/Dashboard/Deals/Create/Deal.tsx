@@ -78,11 +78,15 @@ export default function CreateDeal() {
   )
 
   const roles = useDealRoles(deal)
+  const brandPropertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
 
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
-  const propertyType = watch('property_type')
+  const propertyTypeId = watch('property_type')
   const enderType = watch('ender_type')
+  const propertyType = brandPropertyTypes
+    ? brandPropertyTypes.find(({ id }) => id === propertyTypeId)
+    : propertyTypeId
 
   useEffect(() => {
     if (dealId) {
@@ -91,7 +95,6 @@ export default function CreateDeal() {
   }, [dealId, dispatch])
 
   const dealContexts = getDealContexts(user, dealType, propertyType)
-  const brandPropertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
 
   const isAgentDoubleEnded = dealSide === 'Both'
   const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
@@ -209,7 +212,7 @@ export default function CreateDeal() {
             name="deal_side"
             control={control}
             render={({ onChange }) => (
-              <DealType propertyTypeId={propertyType} onChange={onChange} />
+              <DealType propertyType={propertyType} onChange={onChange} />
             )}
           />
 
@@ -234,7 +237,7 @@ export default function CreateDeal() {
                   isDoubleEnded={isDoubleEnded}
                   dealType={dealType}
                   title={`Who is the ${
-                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                    propertyType?.is_lease ? 'tenant' : 'buyer'
                   } agent?`}
                   roles={value}
                   onChange={(role, type) =>
@@ -255,7 +258,7 @@ export default function CreateDeal() {
                 dealType={dealType}
                 side="Selling"
                 title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'landlord' : 'seller'
+                  propertyType?.is_lease ? 'landlord' : 'seller'
                 } agent?`}
                 roles={value}
                 onChange={(role, type) =>
@@ -271,7 +274,7 @@ export default function CreateDeal() {
               key="deal-client-buying"
               side="Buying"
               title={`What's the ${
-                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                propertyType?.is_lease ? 'tenant' : 'buyer'
               }'s legal name?`}
               roles={roles}
               skippable
@@ -283,7 +286,7 @@ export default function CreateDeal() {
               key="deal-client-selling"
               side="Selling"
               title={`What's the ${
-                propertyType?.includes('Lease') ? 'landlord' : 'seller'
+                propertyType?.is_lease ? 'landlord' : 'seller'
               }'s legal name?`}
               roles={roles}
               skippable

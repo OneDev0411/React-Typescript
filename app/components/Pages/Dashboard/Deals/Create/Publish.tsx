@@ -143,7 +143,7 @@ export default function Publish({ params }: Props) {
           <DealClient
             side="Buying"
             title={`What's the ${
-              propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+              propertyType?.is_lease ? 'tenant' : 'buyer'
             }'s legal name?`}
             submitButtonLabel="Looks Good"
             roles={roles}
@@ -152,7 +152,7 @@ export default function Publish({ params }: Props) {
           <DealClient
             side="Selling"
             title={`What's the ${
-              propertyType?.includes('Lease') ? 'landlord' : 'seller'
+              propertyType?.is_lease ? 'landlord' : 'seller'
             }'s legal name?`}
             submitButtonLabel="Looks Good"
             roles={roles}
