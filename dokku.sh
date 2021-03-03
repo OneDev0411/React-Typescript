@@ -25,17 +25,20 @@ echo $APP
 ssh "dokku@$REVIEW_HOST" apps:create $APP || true
 
 # Read the configuration from source Heroku app into a file
-ssh "dokku@$REVIEW_HOST" config:get $APP REVIEW_SOURCE_APP << 'EOF'
+ssh "dokku@$REVIEW_HOST" config:get $APP 'REVIEW_SOURCE_APP' << 'EOF'
 SOURCE_APP=%y
 echo "------- Source App -------"
 echo $SOURCE_APP
 echo "--------------"
 EOF
-# echo "------- Source App -------"
-# echo $SOURCE_APP
-# echo "--------------"
+echo "------- Source App -------"
+echo $SOURCE_APP
+echo "--------------"
+echo "------- End Source App -------"
+
+echo "------- REVIEW_SOURCE_APP -------"
 echo $REVIEW_SOURCE_APP
-# echo "------- End Source App -------"
+echo "------- End REVIEW_SOURCE_APP -------"
 CONFIGURATION = $SOURCE_APP || $REVIEW_SOURCE_APP
 curl "https://api.heroku.com/apps/$CONFIGURATION/config-vars" -H "Accept: application/vnd.heroku+json; version=3" -H "Authorization: Bearer $HEROKU_API_KEY" > /tmp/configs
 KEYS=$(cat /tmp/configs | jq '. | keys[]')
