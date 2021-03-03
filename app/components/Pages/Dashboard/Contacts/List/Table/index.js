@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import cn from 'classnames'
 import { makeStyles, useTheme } from '@material-ui/core'
@@ -15,7 +15,6 @@ import { goTo } from 'utils/go-to'
 
 import { TableActions } from './Actions'
 
-import TagsOverlay from '../../components/TagsOverlay'
 import NoSearchResults from '../../../../../Partials/no-search-results'
 
 import { LoadingComponent } from './components/LoadingComponent'
@@ -57,7 +56,6 @@ const ContactsList = props => {
   const [state, dispatch] = useGridContext()
   const gridClasses = useGridStyles()
   const customGridClasses = useCustomGridStyles()
-  const [selectedTagContact, setSelectedTagContact] = useState([])
   const theme = useTheme()
   const isParkTabActive = props.activeSegment?.id === PARKED_CONTACTS_LIST_ID
   const resetSelectedRow = () => {
@@ -73,10 +71,6 @@ const ContactsList = props => {
       dispatch(resetRows())
     }
   }
-  const onSelectTagContact = selectedTagContact =>
-    setSelectedTagContact([selectedTagContact])
-
-  const closeTagsOverlay = () => setSelectedTagContact([])
 
   const columns = [
     {
@@ -123,7 +117,14 @@ const ContactsList = props => {
       width: !isParkTabActive ? '34%' : '22%',
       class: 'opaque tags',
       render: ({ row: contact }) => (
-        <TagsString contact={contact} onSelectTagContact={onSelectTagContact} />
+        <TagsString
+          contact={contact}
+          reloadContacts={props.reloadContacts}
+          hasAttributeFilters={
+            (props.filters?.attributeFilters || []).length > 0
+          }
+          isParkTabActive={isParkTabActive}
+        />
       )
     },
     {
@@ -234,13 +235,6 @@ const ContactsList = props => {
         EmptyStateComponent={() => (
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
-      />
-
-      <TagsOverlay
-        closeOverlay={closeTagsOverlay}
-        isOpen={selectedTagContact.length > 0}
-        selectedContactsIds={selectedTagContact}
-        handleChangeContactsAttributes={props.handleChangeContactsAttributes}
       />
     </>
   )

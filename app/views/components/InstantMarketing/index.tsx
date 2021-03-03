@@ -22,10 +22,7 @@ interface Props {
   isTemplatesColumnHiddenDefault?: boolean
   bareMode?: boolean
   saveButtonText?: string
-  handleSocialSharing?: (
-    template: IBrandMarketingTemplateWithResult,
-    socialNetworkName: string
-  ) => void
+  handleSocialSharing?: (template: IBrandMarketingTemplateWithResult) => void
   handleSave: (
     template: IBrandMarketingTemplateWithResult,
     owner: IUser

@@ -38,14 +38,17 @@ export function MarketingLayout({ render, ...props }) {
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
+  const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
+
   const currentMedium = params.medium
   const currentPageItems = templates.filter(item => {
     const mediumMatches = currentMedium
       ? item.template.medium === currentMedium
       : true
-    const typeMatches = templateTypes
-      ? templateTypes.includes(item.template.template_type)
-      : true
+    const typeMatches =
+      splittedTemplateTypes.length > 0
+        ? splittedTemplateTypes.includes(item.template.template_type)
+        : true
 
     return mediumMatches && typeMatches
   })
