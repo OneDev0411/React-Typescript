@@ -78,7 +78,7 @@ export default function BasicEmailForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting, values, pristine }) => {
+      render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout
             index={index}
@@ -95,7 +95,7 @@ export default function BasicEmailForm({
               <Title />
             </Box>
             <Box mb={2}>
-              <Description />
+              <Description enabled={!!values.description} />
             </Box>
             <Box mb={2}>
               <EmailTemplate

@@ -5,8 +5,12 @@ import { Button } from '@material-ui/core'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
-export const Description = () => {
-  const [isEnable, setIsEnable] = useState<boolean>(false)
+interface Props {
+  enabled?: boolean
+}
+
+export const Description = ({ enabled = false }: Props) => {
+  const [isEnable, setIsEnable] = useState<boolean>(enabled)
 
   const handleEnableDescription = () => setIsEnable(true)
 

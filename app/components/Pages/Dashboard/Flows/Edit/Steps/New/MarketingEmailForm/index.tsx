@@ -70,7 +70,7 @@ export default function MarketingEmailForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting, pristine }) => {
+      render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout
             index={index}
@@ -87,7 +87,7 @@ export default function MarketingEmailForm({
               <Title />
             </Box>
             <Box mb={2}>
-              <Description />
+              <Description enabled={!!values.description} />
             </Box>
             <Box mb={2}>
               <TemplateInctance

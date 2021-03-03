@@ -75,7 +75,7 @@ export default function EventForm({
         return onSubmit(newStep)
       }}
       initialValues={getInitialValues(step)}
-      render={({ handleSubmit, submitting, pristine }) => {
+      render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout
             index={index}
@@ -95,7 +95,7 @@ export default function EventForm({
               <Title />
             </Box>
             <Box mb={2}>
-              <Description />
+              <Description enabled={!!values.description} />
             </Box>
           </BaseFormLayout>
         )
