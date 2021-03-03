@@ -25,8 +25,10 @@ echo $APP
 ssh "dokku@$REVIEW_HOST" apps:create $APP || true
 
 # See which app should we copy configs from
-DOKKU_SOURCE_APP=`ssh "dokku@$REVIEW_HOST" config:get $APP 'REVIEW_SOURCE_APP'`
-[ -n "$DOKKU_SOURCE_APP" ] || REVIEW_SOURCE_APP=$DOKKU_SOURCE_APP
+DOKKU_SOURCE_APP=`ssh "dokku@$REVIEW_HOST" config:get $APP REVIEW_SOURCE_APP`
+[ -n $DOKKU_SOURCE_APP ] || REVIEW_SOURCE_APP=$DOKKU_SOURCE_APP
+
+echo "Source App: $REVIEW_SOURCE_APP"
 
 # Read the configuration from source Heroku app into a file
 
