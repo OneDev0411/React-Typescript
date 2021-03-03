@@ -39,7 +39,7 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
       )}
       {!isLoading &&
         events.slice(0, 4).map(event => (
-          <Grid key={event.id} item md={3}>
+          <Grid key={event.id} item xs={6} sm={6} md={3}>
             <CalendarEventCard event={event} />
           </Grid>
         ))}

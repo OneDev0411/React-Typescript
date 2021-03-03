@@ -44,7 +44,7 @@ export default function SentEmailsSection() {
             ?.filter(campaign => !!campaign.template && !!campaign.executed_at)
             .slice(0, 2)
             .map(campaign => (
-              <Grid key={campaign.id} item xs sm={6}>
+              <Grid key={campaign.id} item xs={12} sm={6}>
                 <Link
                   noStyle
                   to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}

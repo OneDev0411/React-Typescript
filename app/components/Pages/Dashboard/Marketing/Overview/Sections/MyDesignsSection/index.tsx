@@ -69,7 +69,7 @@ export default function MyDesignsSection() {
               <Grid
                 key={template.id}
                 item
-                xs
+                xs={12}
                 sm={6}
                 className={classes.cardContainer}
               >

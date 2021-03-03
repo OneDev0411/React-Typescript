@@ -57,7 +57,7 @@ export default function PromoteListingsSection() {
       )}
       {!isLoading &&
         listings?.slice(0, 4).map(listing => (
-          <Grid key={listing.id} item md={3}>
+          <Grid key={listing.id} item xs={12} sm={6} md={3}>
             <ListingCard
               hideFeatures
               listing={listing}

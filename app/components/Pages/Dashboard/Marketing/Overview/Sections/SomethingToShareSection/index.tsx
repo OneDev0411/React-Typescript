@@ -105,8 +105,9 @@ export default function SomethingToShareSection() {
                 key={template.id}
                 className={classes.templateCardContainer}
                 item
-                xs
-                sm={3}
+                xs={12}
+                sm={6}
+                md={3}
               >
                 <MarketingTemplateCard
                   template={template}
