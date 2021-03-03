@@ -41,12 +41,6 @@ import Header from './Header'
 import Steps from './Steps'
 import Contacts from './Contacts'
 
-// import {
-//   shouldUpdateNextSteps,
-//   updateStepsDue,
-//   getUpdatedStepsOnMove
-// } from './helpers'
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     headerContainer: {
