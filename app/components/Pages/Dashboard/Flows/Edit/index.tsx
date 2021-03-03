@@ -58,7 +58,7 @@ const useStyles = makeStyles(
       background: theme.palette.grey[50]
     },
     warnContainer: {
-      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       color: theme.palette.warning.contrastText,
       ...theme.typography.body2
     },

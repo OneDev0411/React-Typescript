@@ -43,7 +43,19 @@ export const useStyles = makeStyles(
     commonFields: {
       display: 'flex',
       alignItems: 'flex-start',
-      flexWrap: 'wrap'
+      flexWrap: 'nowrap',
+      [theme.breakpoints.down('sm')]: {
+        flexWrap: 'wrap'
+      }
+    },
+    commonField: {
+      [theme.breakpoints.down('sm')]: {
+        width: '100%',
+        padding: 0,
+        '&:not(:last-child)': {
+          marginBottom: theme.spacing(2)
+        }
+      }
     },
     otherFieldsContainer: {
       padding: theme.spacing(2.5, 5)

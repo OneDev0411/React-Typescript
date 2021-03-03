@@ -9,6 +9,7 @@ export const Time = () => {
   return (
     <Field
       required
+      fullWidth
       name="time"
       label="Time"
       type="time"

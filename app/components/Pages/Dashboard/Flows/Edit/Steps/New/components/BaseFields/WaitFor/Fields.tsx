@@ -95,7 +95,7 @@ export const WaitForFields = ({
 
   return (
     <Box className={classes.container}>
-      <Box width={70}>
+      <Box flexGrow={1} maxWidth={65}>
         <OutlinedInput
           id="value"
           type="number"
@@ -110,7 +110,7 @@ export const WaitForFields = ({
           onChange={handleValueChange}
         />
       </Box>
-      <Box width={120} px={0.75}>
+      <Box flexGrow={1} px={0.75}>
         <Select
           fullWidth
           labelId="event-unit"

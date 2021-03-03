@@ -136,13 +136,13 @@ const Layout = ({
             When is this reminder for?
           </Typography>
           <Box className={classes.commonFields}>
-            <Box width={240}>
+            <Box className={classes.commonField} width={270}>
               <WaitFor />
             </Box>
-            <Box flexGrow={1} px={0.75}>
+            <Box className={classes.commonField} flexGrow={1} px={0.75}>
               <EventType />
             </Box>
-            <Box width={140}>
+            <Box className={classes.commonField} flexGrow={0}>
               <Time />
             </Box>
           </Box>

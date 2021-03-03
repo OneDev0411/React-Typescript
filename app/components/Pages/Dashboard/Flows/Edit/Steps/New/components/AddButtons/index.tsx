@@ -25,7 +25,10 @@ export const useStyles = makeStyles(
     buttonContainer: {
       display: 'flex',
       alignItems: 'flex-start',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      [theme.breakpoints.down('sm')]: {
+        flexWrap: 'wrap'
+      }
     },
     button: {
       padding: theme.spacing(2),
@@ -36,6 +39,15 @@ export const useStyles = makeStyles(
       flexGrow: 1,
       '&:hover': {
         background: theme.palette.action.hover
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: '100%',
+        padding: theme.spacing(1.5),
+        marginRight: 0,
+        marginLeft: 0,
+        '&:not(:last-child)': {
+          marginBottom: theme.spacing(2)
+        }
       }
     },
     buttonIcon: {
