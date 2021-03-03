@@ -12,8 +12,7 @@ import {
 import timeago from 'timeago.js'
 
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
-
-import { MEDIUM_LABEL_MAP } from '../../../components/Pages/Dashboard/Marketing/constants'
+import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -55,6 +54,10 @@ export default function TemplateInstanceCard({
 }: Props) {
   const classes = useStyles()
 
+  const templateMediumLabel = getTemplateMediumLabel(
+    templateInstance.template.medium
+  )
+
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
@@ -65,15 +68,14 @@ export default function TemplateInstanceCard({
         />
       </CardActionArea>
       <CardContent>
-        <Typography variant="body2">[Template Name]</Typography>
+        <Typography variant="body2">{templateMediumLabel} Template</Typography>
         <Typography variant="body2" color="textSecondary">
           Created {timeago().format(templateInstance.created_at * 1000)}
         </Typography>
         <Box pt={6}>
           <Typography variant="body2" color="textSecondary">
             {getTemplateTypeLabel(templateInstance.template.template_type)} &gt;{' '}
-            {MEDIUM_LABEL_MAP[templateInstance.template.medium] ??
-              templateInstance.template.medium}
+            {templateMediumLabel}
           </Typography>
         </Box>
       </CardContent>

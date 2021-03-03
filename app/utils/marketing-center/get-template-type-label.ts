@@ -1,4 +1,3 @@
-
 const TEMPLATE_TYPE_LABEL_MAP: {
   [key in IMarketingTemplateType]: string
 } = {
