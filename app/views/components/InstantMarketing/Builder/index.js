@@ -984,6 +984,13 @@ class Builder extends React.Component {
     )
   }
 
+  uploadFile = async file => {
+    const templateId = this.selectedTemplate.id
+    const uploadedAsset = await uploadAsset(file, templateId)
+
+    return uploadedAsset.file.url
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1046,12 +1053,7 @@ class Builder extends React.Component {
 
                 this.setState({ isImageSelectDialogOpen: false })
               }}
-              onUpload={async file => {
-                const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(file, templateId)
-
-                return uploadedAsset.file.url
-              }}
+              onUpload={this.uploadFile}
             />
           )}
           {this.state.imageToEdit && (
@@ -1152,6 +1154,7 @@ class Builder extends React.Component {
               this.setState({ carouselToEdit: null })
             }}
             suggestedImages={this.getListingInfo()?.gallery_image_urls}
+            onImageUpload={this.uploadFile}
           />
           <Header>
             {this.isTemplatesListEnabled() && (

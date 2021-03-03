@@ -11,11 +11,14 @@ import { createChildContext } from 'react-dnd/lib/cjs/DragDropContext'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import CarouselSelectedImageList from './CarouselSelectedImageList'
+import CarouselSelectedImageList, {
+  CarouselSelectedImageListProps
+} from './CarouselSelectedImageList'
 import CarouselSuggestedImageList from './CarouselSuggestedImageList'
 import { CarouselImageItemEdge } from './types'
 
-export interface CarouselDrawerProps {
+export interface CarouselDrawerProps
+  extends Pick<CarouselSelectedImageListProps, 'onImageUpload'> {
   isOpen: boolean
   carousel: Model | null
   onClose?: () => void
@@ -30,7 +33,8 @@ function CarouselDrawer({
   carousel,
   onClose,
   onSelect,
-  suggestedImages
+  suggestedImages,
+  onImageUpload
 }: CarouselDrawerProps) {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
 
@@ -100,6 +104,10 @@ function CarouselDrawer({
     })
   }
 
+  const handleImageAdd = (src: string) => {
+    setSelectedImages(images => [...images, src])
+  }
+
   return (
     <OverlayDrawer open={isOpen} onClose={handleClose}>
       <OverlayDrawer.Header title="Manage Carousel" />
@@ -110,6 +118,8 @@ function CarouselDrawer({
               images={selectedImages}
               onRemove={handleRemove}
               onImageDrop={handleImageDrop}
+              onImageAdd={handleImageAdd}
+              onImageUpload={onImageUpload}
             />
             {!!remainingImages.length && (
               <CarouselSuggestedImageList

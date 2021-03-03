@@ -6,16 +6,22 @@ import { H3 } from 'components/Typography/headings'
 import CarouselSelectedImageItem, {
   CarouselSelectedImageItemProps
 } from './CarouselSelectedImageItem'
+import CarouselImageAddButton, {
+  CarouselImageAddButtonProps
+} from './CarouselImageAddButton'
 
-interface CarouselSelectedImageListProps
+export interface CarouselSelectedImageListProps
   extends Required<
-    Pick<CarouselSelectedImageItemProps, 'onRemove' | 'onImageDrop'>
-  > {
+      Pick<CarouselSelectedImageItemProps, 'onRemove' | 'onImageDrop'>
+    >,
+    Pick<CarouselImageAddButtonProps, 'onImageAdd' | 'onImageUpload'> {
   images: string[]
 }
 
 function CarouselSelectedImageList({
   images,
+  onImageAdd,
+  onImageUpload,
   ...otherProps
 }: CarouselSelectedImageListProps) {
   return (
@@ -25,6 +31,10 @@ function CarouselSelectedImageList({
         {images.map(image => (
           <CarouselSelectedImageItem key={image} src={image} {...otherProps} />
         ))}
+        <CarouselImageAddButton
+          onImageAdd={onImageAdd}
+          onImageUpload={onImageUpload}
+        />
       </Grid>
     </Box>
   )
