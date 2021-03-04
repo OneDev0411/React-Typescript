@@ -159,7 +159,16 @@ export default function registerCarouselBlock(
           this.splideInstance = event.detail.splide
         })
 
+        this.el.addEventListener('lightbox:show', this.hideToolbar)
+        this.el.addEventListener('lightbox:hide', this.showToolbar)
+
         this.listenTo(this.model, 'change:images', this.handleImagesChange)
+      },
+      hideToolbar() {
+        editor.Canvas.getToolbarEl().style.display = 'none'
+      },
+      showToolbar() {
+        editor.Canvas.getToolbarEl().style.display = 'block'
       },
       handleImagesChange() {
         if (!this.splideInstance) {

@@ -36,7 +36,7 @@ function script({ heightRatio }) {
     function createButton(
       className: string,
       label: string,
-      onClick: () => void
+      onClick: (e: MouseEvent) => void
     ) {
       const buttonEl = document.createElement('button')
 
@@ -101,15 +101,24 @@ function script({ heightRatio }) {
         <path d="m34.446 344.456h-34.446v120.56c0 9.52 7.703 17.223 17.223 17.223h120.56v-34.446h-103.337z"/>
       </svg>
       `,
-      () => {
+      e => {
+        e.stopPropagation()
+
         const imagesEl = splide.Components.Elements.getSlides().map(slide =>
           slide.slide.querySelector('img')
         )
 
         if (typeof SimpleLightbox !== 'undefined') {
-          const gallery = new SimpleLightbox(imagesEl, {
+          let gallery = new SimpleLightbox(imagesEl, {
             sourceAttr: 'src',
             history: false
+          })
+
+          gallery.on('show.simplelightbox', () => {
+            element.dispatchEvent(new CustomEvent('lightbox:show'))
+          })
+          gallery.on('closed.simplelightbox', () => {
+            element.dispatchEvent(new CustomEvent('lightbox:hide'))
           })
 
           gallery.open(imagesEl[splide.index])

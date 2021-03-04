@@ -192,6 +192,7 @@ declare module 'grapesjs' {
       el: HTMLElement | object,
       opts?: boolean | GrapesScrollIntoViewOptions
     ): void
+    getToolbarEl(): HTMLElement
   }
 
   export interface GrapesScrollIntoViewOptions extends ScrollIntoViewOptions {
