@@ -87,17 +87,15 @@ const Layout = ({
               </Typography>
             </Grid>
             <Grid container xs={6} justify="flex-end">
-              {!pristine && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  disabled={submitting}
-                  type="submit"
-                  size="small"
-                >
-                  {submitting ? 'Saving' : 'Save'}
-                </Button>
-              )}
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={submitting || pristine}
+                type="submit"
+                size="small"
+              >
+                {submitting ? 'Saving' : 'Save'}
+              </Button>
 
               {step && onDelete && (
                 <Box ml={1}>
