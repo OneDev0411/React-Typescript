@@ -14,7 +14,8 @@ import { mdiEyeOutline } from '@mdi/js'
 
 import { selectUser } from 'selectors/user'
 
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
+
 import { IAppState } from 'reducers'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
@@ -119,7 +120,9 @@ export const TemplateSelector = ({
     [selectedBrandTemplate, selectedTemplateInstance]
   )
 
-  const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
+  const handleSelectTemplate = async (
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+  ) => {
     try {
       setIsTemplatePickerOpen(false)
       setIsLoading(true)
@@ -128,13 +131,24 @@ export const TemplateSelector = ({
         return
       }
 
-      if (selectedTemplateInstance) {
-        setSelectedTemplateInstace(null)
+      const isTemplateInstance = template.type === 'template_instance'
+
+      if (isTemplateInstance) {
+        if (selectedBrandTemplate) {
+          setSelectedBrandTemplate(null)
+        }
+
+        setSelectedTemplateInstace(template as IMarketingTemplateInstance)
+      } else {
+        if (selectedTemplateInstance) {
+          setSelectedTemplateInstace(null)
+        }
+
+        setSelectedBrandTemplate(template as IBrandMarketingTemplate)
       }
 
-      setSelectedBrandTemplate(template)
       onChange({
-        isInstance: false,
+        isInstance: isTemplateInstance,
         id: template.id
       })
     } catch (error) {
@@ -148,7 +162,7 @@ export const TemplateSelector = ({
     try {
       const templateId = selectedBrandTemplate
         ? selectedBrandTemplate.template?.id
-        : selectedTemplateInstance?.id
+        : selectedTemplateInstance?.template?.id
 
       if (!templateId) {
         return
@@ -277,11 +291,17 @@ export const TemplateSelector = ({
         </Box>
       </Box>
       {isTemplatePickerOpen && (
-        <MarketingTemplatePickerModal
+        <MarketingTemplateAndTemplateInstancePickerModal
           title="Select Template"
           user={user}
           mediums={['Email']}
-          templateTypes={[]}
+          templateTypes={[
+            'OpenHouse',
+            'JustSold',
+            'ComingSoon',
+            'JustListed',
+            'PriceImprovement'
+          ]}
           onSelect={handleSelectTemplate}
           onClose={() => handleShowTemplatePicker(false)}
         />
