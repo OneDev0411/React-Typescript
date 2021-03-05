@@ -154,7 +154,9 @@ export default function registerCarouselBlock(
         }
       },
       ...baseView(carouselClassNames),
-      init() {
+      init(...args) {
+        baseView(carouselClassNames).init.apply(this, args)
+
         this.el.addEventListener('splide:init', (event: CustomEvent) => {
           this.splideInstance = event.detail.splide
         })

@@ -1,6 +1,5 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
-import mapboxgl, { Map, Marker } from 'mapbox-gl'
 import { debounce } from 'underscore'
 
 import config from 'config'
@@ -17,7 +16,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
 import template from './template.njk'
-import script from './script'
+import script, { MapInitEventType } from './script'
 
 export const typeEmbedMap = 'embed-map'
 export const embedMapBlockName = typeEmbedMap
@@ -45,7 +44,7 @@ export default function registerMapBlock(
     isComponent: isComponent(typeEmbedMap),
     model: {
       defaults: {
-        'script-export': script,
+        script,
         'script-props': attrKeys,
         resizable: {
           tl: 0,
@@ -95,58 +94,60 @@ export default function registerMapBlock(
         }
       },
       ...baseView(embedMapClassNames),
-      onRender() {
-        mapboxgl.accessToken = config.mapbox.access_token
+      init(...args) {
+        baseView(embedMapClassNames).init.apply(this, args)
 
-        const center: [number, number] = [
-          this.model.get('longitude'),
-          this.model.get('latitude')
-        ]
+        this.el.addEventListener(
+          'map:init',
+          (event: CustomEvent<MapInitEventType>) => {
+            const map = event.detail.map
+            const marker = event.detail.marker
+            const navigationControl = event.detail.navigationControl
 
-        const map = new Map({
-          container: this.el,
-          style: `mapbox://styles/${this.model.get('theme')}`,
-          center,
-          zoom: this.model.get('zoom'),
-          doubleClickZoom: false
-        })
+            map.scrollZoom.enable()
+            map.doubleClickZoom.disable()
+            map.removeControl(navigationControl)
 
-        const marker = new Marker().setLngLat(center).addTo(map)
+            map.on('move', event => {
+              marker.setLngLat(event.target.getCenter())
+            })
 
-        map.on('move', event => {
-          marker.setLngLat(event.target.getCenter())
-        })
+            map.on('moveend', event => {
+              const center = event.target.getCenter()
 
-        map.on('moveend', event => {
-          const center = event.target.getCenter()
+              this.model.set(
+                {
+                  longitude: center.lng,
+                  latitude: center.lat
+                },
+                { silent: true }
+              )
+            })
 
-          this.model.set(
-            {
-              longitude: center.lng,
-              latitude: center.lat
-            },
-            { silent: true }
-          )
-        })
+            map.on('zoomend', event => {
+              this.model.set('zoom', event.target.getZoom(), { silent: true })
+            })
 
-        map.on('zoomend', event => {
-          this.model.set('zoom', event.target.getZoom(), { silent: true })
-        })
+            map.on('load', map.resize)
 
-        map.on('load', map.resize)
+            // TODO: Optimize this by finding a better event because
+            // this event calls the callback for unrelated height changes too
+            this.listenTo(
+              this.em,
+              'styleable:change:height',
+              this.handleChangeHeight
+            )
 
-        // TODO: Optimize this by finding a better event because now the callback
-        // call for all height change
-        this.listenTo(
-          this.em,
-          'styleable:change:height',
-          this.handleChangeHeight
+            this.listenTo(
+              this.model,
+              'change:map:info',
+              this.handleChangeMapProps
+            )
+
+            this.mapInstance = map
+            this.markerInstance = marker
+          }
         )
-
-        this.listenTo(this.model, 'change:map:info', this.handleChangeMapProps)
-
-        this.mapInstance = map
-        this.markerInstance = marker
       },
       handleChangeHeight: debounce(function handleChangeHeight() {
         this.mapInstance.resize()
