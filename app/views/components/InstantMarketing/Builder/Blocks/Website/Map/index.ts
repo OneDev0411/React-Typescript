@@ -104,7 +104,11 @@ export default function registerMapBlock(
             const marker = event.detail.marker
             const navigationControl = event.detail.navigationControl
 
-            map.scrollZoom.enable()
+            // The method argument is available in JS implementation, but it
+            // does not exist in TS type definition, so I call the enable method
+            // with .call() to avoid the typescript signature problem.
+            map.scrollZoom.enable.call(map.scrollZoom, { around: 'center' })
+
             map.doubleClickZoom.disable()
             map.removeControl(navigationControl)
 
