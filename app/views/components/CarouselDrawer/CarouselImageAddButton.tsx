@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, makeStyles } from '@material-ui/core'
-import { Add } from '@material-ui/icons'
+import { AddPhotoAlternateOutlined } from '@material-ui/icons'
 
 import ImageSelectDialog from 'components/ImageSelectDialog'
 
@@ -19,6 +19,14 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     '& svg': { fontSize: theme.spacing(4) }
+  },
+  label: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  labelText: {
+    fontSize: 12,
+    marginTop: theme.spacing(1)
   }
 }))
 
@@ -55,8 +63,10 @@ function CarouselImageAddButton({
           variant="outlined"
           color="primary"
           onClick={openDialog}
+          classes={{ label: classes.label }}
         >
-          <Add />
+          <AddPhotoAlternateOutlined />
+          <div className={classes.labelText}>Add Other Photos</div>
         </Button>
       </CarouselImage>
       {open && (
