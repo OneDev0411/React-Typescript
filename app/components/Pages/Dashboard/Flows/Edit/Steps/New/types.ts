@@ -12,7 +12,7 @@ export interface BaseFormProps {
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
 }
 
-interface BaseFormData
+export interface BaseFormData
   extends Pick<
     IBrandFlowStepInput,
     'title' | 'description' | 'time' | 'event_type'

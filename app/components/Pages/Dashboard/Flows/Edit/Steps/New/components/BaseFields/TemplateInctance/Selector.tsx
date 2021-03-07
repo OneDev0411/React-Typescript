@@ -296,6 +296,9 @@ export const TemplateSelector = ({
           user={user}
           mediums={['Email']}
           templateTypes={[
+            'Birthday',
+            'WeddingAnniversary',
+            'HomeAnniversary',
             'OpenHouse',
             'JustSold',
             'ComingSoon',

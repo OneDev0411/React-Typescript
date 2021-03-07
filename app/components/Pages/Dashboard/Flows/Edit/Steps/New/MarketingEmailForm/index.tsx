@@ -9,12 +9,8 @@ import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { TemplateInctance } from '../components/BaseFields/TemplateInctance'
-import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
-import {
-  convertToWebInput,
-  convertToServerInput
-} from '../components/BaseFields/WaitFor/helpers'
-import { getInitialTemplateValue } from './helpers'
+import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
+import { getMarketingEmailInitialValues } from '../helpers/get-initial-values'
 
 export default function MarketingEmailForm({
   index,
@@ -23,27 +19,6 @@ export default function MarketingEmailForm({
   onSubmit,
   onDelete
 }: BaseFormProps) {
-  function getInitialValues(stepData?: IBrandFlowStep): MarketingEmailFormData {
-    if (!stepData) {
-      return {
-        template: null,
-        title: '',
-        wait_for: defaultWaitForValue,
-        time: '08:00',
-        event_type: ''
-      }
-    }
-
-    return {
-      template: getInitialTemplateValue(stepData),
-      title: stepData.title,
-      description: stepData.description,
-      wait_for: convertToWebInput(stepData.wait_for),
-      event_type: stepData.event_type,
-      time: stepData.time
-    }
-  }
-
   return (
     <Form
       onSubmit={(data: MarketingEmailFormData) => {
@@ -69,7 +44,7 @@ export default function MarketingEmailForm({
         // Create step
         return onSubmit(newStep)
       }}
-      initialValues={getInitialValues(step)}
+      initialValues={getMarketingEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout

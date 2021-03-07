@@ -9,11 +9,8 @@ import { BaseFormProps, EventFormData } from '../types'
 import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
-import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
-import {
-  convertToWebInput,
-  convertToServerInput
-} from '../components/BaseFields/WaitFor/helpers'
+import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
+import { getEventInitialValues } from '../helpers/get-initial-values'
 
 export default function EventForm({
   index,
@@ -22,33 +19,6 @@ export default function EventForm({
   onSubmit,
   onDelete
 }: BaseFormProps) {
-  function getInitialValues(stepData?: IBrandFlowStep): EventFormData {
-    if (!stepData || !stepData.event) {
-      return {
-        task_type: {
-          value: 'Call',
-          title: 'Call'
-        },
-        title: '',
-        event_type: '',
-        wait_for: defaultWaitForValue,
-        time: '08:00'
-      }
-    }
-
-    return {
-      task_type: {
-        value: stepData.event.task_type,
-        title: stepData.event.task_type
-      },
-      title: stepData.title,
-      description: stepData.description,
-      time: stepData.time,
-      event_type: stepData.event_type,
-      wait_for: convertToWebInput(stepData.wait_for)
-    }
-  }
-
   return (
     <Form
       onSubmit={(data: EventFormData) => {
@@ -74,7 +44,7 @@ export default function EventForm({
         // Create step
         return onSubmit(newStep)
       }}
-      initialValues={getInitialValues(step)}
+      initialValues={getEventInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout

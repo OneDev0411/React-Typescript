@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
 
@@ -9,11 +9,8 @@ import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
-import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
-import {
-  convertToWebInput,
-  convertToServerInput
-} from '../components/BaseFields/WaitFor/helpers'
+import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
+import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
 
 interface Props extends BaseFormProps {
   defaultSelectedTemplate?: UUID
@@ -31,30 +28,10 @@ export default function BasicEmailForm({
   onDelete,
   onNewTemplateClick
 }: Props) {
-  function getInitialValues(stepData?: IBrandFlowStep): BasicEmailFormData {
-    if (!stepData || !stepData.email) {
-      return {
-        email_template:
-          (templates.find(({ id }) => id === defaultSelectedTemplate) || {})
-            .id || '',
-        title: '',
-        wait_for: defaultWaitForValue,
-        time: '08:00',
-        event_type: ''
-      }
-    }
-
-    return {
-      email_template:
-        (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id ||
-        stepData.email.id,
-      title: stepData.title,
-      description: stepData.description,
-      wait_for: convertToWebInput(stepData.wait_for),
-      event_type: stepData.event_type,
-      time: stepData.time
-    }
-  }
+  const defaultTemplate = useMemo(
+    () => (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id,
+    [defaultSelectedTemplate, templates]
+  )
 
   return (
     <Form
@@ -77,7 +54,7 @@ export default function BasicEmailForm({
         // Create step
         return onSubmit(newStep)
       }}
-      initialValues={getInitialValues(step)}
+      initialValues={getBasicEmailInitialValues(step, defaultTemplate)}
       render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout
