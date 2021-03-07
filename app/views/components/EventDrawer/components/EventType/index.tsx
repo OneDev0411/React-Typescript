@@ -3,11 +3,15 @@ import { Field } from 'react-final-form'
 
 import { Selector } from './Selector'
 
-export function EventType() {
+interface Props {
+  disabled?: boolean
+}
+
+export function EventType({ disabled = false }: Props) {
   return (
     <Field
       name="task_type"
-      render={({ input }) => <Selector input={input} />}
+      render={({ input }) => <Selector input={input} disabled={disabled} />}
     />
   )
 }

@@ -1,11 +1,17 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 
+import { TextFieldProps } from '@material-ui/core'
+
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { validateTimeInput } from '../../../../../helpers'
 
-export const Time = () => {
+interface Props {
+  textFieldProps?: TextFieldProps
+}
+
+export const Time = ({ textFieldProps = {} }: Props) => {
   return (
     <Field
       required
@@ -18,6 +24,7 @@ export const Time = () => {
       variant="outlined"
       autoComplete="off"
       InputLabelProps={{ shrink: true }}
+      {...textFieldProps}
       validate={validateTimeInput}
       component={MUITextInput}
     />

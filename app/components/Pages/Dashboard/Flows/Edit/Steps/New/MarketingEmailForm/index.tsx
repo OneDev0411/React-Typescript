@@ -59,13 +59,17 @@ export default function MarketingEmailForm({
             onDelete={onDelete}
           >
             <Box mb={2}>
-              <Title />
+              <Title textFieldProps={{ disabled: disableEdit }} />
             </Box>
             <Box mb={2}>
-              <Description enabled={!!values.description} />
+              <Description
+                enabled={!!values.description}
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <TemplateInctance
+                disabled={disableEdit}
                 currentBrandTemplate={step?.template || null}
                 currentTemplateInstance={step?.template_instance || null}
               />

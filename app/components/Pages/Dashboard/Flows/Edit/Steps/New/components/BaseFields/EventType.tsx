@@ -14,7 +14,11 @@ import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 import { IAppState } from 'reducers'
 
-export const EventType = props => {
+interface Props {
+  disabled?: boolean
+}
+
+export const EventType = ({ disabled = false }: Props) => {
   const dateAttributes = useSelector(({ contacts }: IAppState) =>
     selectDefsBySection(contacts.attributeDefs, 'Dates')
   )
@@ -78,6 +82,7 @@ export const EventType = props => {
               labelId="event_type"
               id="event_type-select"
               name={name}
+              disabled={disabled}
               value={getSelectedItem(value).value}
               onChange={(event: ChangeEvent<{ value: string | number }>) => {
                 const value = event.target.value

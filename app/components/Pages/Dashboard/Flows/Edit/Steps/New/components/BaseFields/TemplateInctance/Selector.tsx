@@ -208,7 +208,7 @@ export const TemplateSelector = ({
       )
     }
 
-    if (disabled || !currentTemplate) {
+    if (!currentTemplate) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -248,9 +248,11 @@ export const TemplateSelector = ({
       <Box className={cn(classes.container, { [classes.disabled]: disabled })}>
         <Box
           className={classes.container}
-          onClick={() => !currentTemplate && handleShowTemplatePicker(true)}
+          onClick={() =>
+            !currentTemplate && !disabled && handleShowTemplatePicker(true)
+          }
         >
-          {!isLoading && currentTemplate && (
+          {!isLoading && currentTemplate && !disabled && (
             <Box className={classes.containerPreview}>
               <Box>
                 <Box className={classes.containerPreviewTitle}>

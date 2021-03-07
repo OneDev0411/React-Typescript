@@ -95,7 +95,13 @@ export default function Steps({
 
                   return (
                     <>
-                      <Box mb={draggableSnapshot.isDraggingOver ? 3 : 0}>
+                      <Box
+                        mb={
+                          draggableSnapshot.isDraggingOver || disableEdit
+                            ? 3
+                            : 0
+                        }
+                      >
                         <Item
                           index={stepOrder}
                           disableEdit={disableEdit}
@@ -110,20 +116,22 @@ export default function Steps({
                           onNewEmailTemplateClick={onNewEmailTemplateClick}
                         />
                       </Box>
-                      {!isLastItem && !draggableSnapshot.isDraggingOver && (
-                        <Box width="100%" my={3}>
-                          <NewStep
-                            miniMode
-                            index={stepOrder + 1}
-                            emailTemplates={emailTemplates}
-                            defaultSelectedEmailTemplate={
-                              defaultSelectedEmailTemplate
-                            }
-                            onSubmit={onNewStepSubmit}
-                            onNewEmailTemplateClick={onNewEmailTemplateClick}
-                          />
-                        </Box>
-                      )}
+                      {!isLastItem &&
+                        !disableEdit &&
+                        !draggableSnapshot.isDraggingOver && (
+                          <Box width="100%" my={3}>
+                            <NewStep
+                              miniMode
+                              index={stepOrder + 1}
+                              emailTemplates={emailTemplates}
+                              defaultSelectedEmailTemplate={
+                                defaultSelectedEmailTemplate
+                              }
+                              onSubmit={onNewStepSubmit}
+                              onNewEmailTemplateClick={onNewEmailTemplateClick}
+                            />
+                          </Box>
+                        )}
                     </>
                   )
                 })}

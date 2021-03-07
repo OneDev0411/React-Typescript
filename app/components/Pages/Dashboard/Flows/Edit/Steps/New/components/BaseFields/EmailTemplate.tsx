@@ -125,6 +125,7 @@ export const EmailTemplate = ({
                   id="email_template-select"
                   name={name}
                   value={selectedItem.value}
+                  disabled={disabled}
                   onChange={(
                     event: ChangeEvent<{ value: string | number }>
                   ) => {

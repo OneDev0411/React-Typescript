@@ -69,16 +69,19 @@ export default function BasicEmailForm({
             onDelete={onDelete}
           >
             <Box mb={2}>
-              <Title />
+              <Title textFieldProps={{ disabled: disableEdit }} />
             </Box>
             <Box mb={2}>
-              <Description enabled={!!values.description} />
+              <Description
+                enabled={!!values.description}
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <EmailTemplate
                 templates={templates}
                 currentTemplateId={values.email_template}
-                disabled={submitting}
+                disabled={submitting || disableEdit}
                 onNewTemplateClick={onNewTemplateClick}
               />
             </Box>

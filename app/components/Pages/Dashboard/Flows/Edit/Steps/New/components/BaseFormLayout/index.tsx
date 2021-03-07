@@ -87,17 +87,19 @@ const Layout = ({
               </Typography>
             </Grid>
             <Grid container xs={6} justify="flex-end">
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={submitting || pristine}
-                type="submit"
-                size="small"
-              >
-                {submitting ? 'Saving' : 'Save'}
-              </Button>
+              {!disableEdit && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disabled={submitting || pristine}
+                  type="submit"
+                  size="small"
+                >
+                  {submitting ? 'Saving' : 'Save'}
+                </Button>
+              )}
 
-              {step && onDelete && (
+              {step && !disableEdit && onDelete && (
                 <Box ml={1}>
                   <BaseDropdown
                     PopperProps={{
@@ -135,13 +137,17 @@ const Layout = ({
           </Typography>
           <Box className={classes.commonFields}>
             <Box className={classes.commonField} width={270}>
-              <WaitFor />
+              <WaitFor disabled={disableEdit} />
             </Box>
             <Box className={classes.commonField} flexGrow={1} px={0.75}>
-              <EventType />
+              <EventType disabled={disableEdit} />
             </Box>
             <Box className={classes.commonField} flexGrow={0}>
-              <Time />
+              <Time
+                textFieldProps={{
+                  disabled: disableEdit
+                }}
+              />
             </Box>
           </Box>
         </Box>

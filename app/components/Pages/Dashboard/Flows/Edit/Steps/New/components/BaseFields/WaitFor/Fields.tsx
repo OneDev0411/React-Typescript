@@ -54,12 +54,14 @@ export const defaultWaitForValue: RawWaitFor = {
 }
 
 interface Props {
+  disabled: boolean
   value: RawWaitFor
   onChange: (value: RawWaitFor) => void
 }
 
 export const WaitForFields = ({
   value: baseValue = defaultWaitForValue,
+  disabled,
   onChange
 }: Props) => {
   const classes = useStyles()
@@ -101,6 +103,7 @@ export const WaitForFields = ({
           type="number"
           labelWidth={0}
           defaultValue={value}
+          disabled={disabled}
           inputProps={{
             min: '1'
           }}
@@ -117,11 +120,12 @@ export const WaitForFields = ({
           id="event-unit-select"
           variant="outlined"
           color="secondary"
+          value={unit}
+          disabled={disabled}
+          onChange={handleUnitChange}
           classes={{
             outlined: classes.outlinedPadding
           }}
-          value={unit}
-          onChange={handleUnitChange}
         >
           {unitOptions.map(option => (
             <MenuItem key={option.value} value={option.value}>
@@ -138,10 +142,11 @@ export const WaitForFields = ({
           variant="outlined"
           color="secondary"
           value={triggerAt}
+          disabled={disabled}
+          onChange={handleTriggerAtChange}
           classes={{
             outlined: classes.outlinedPadding
           }}
-          onChange={handleTriggerAtChange}
         >
           <MenuItem value="after">After</MenuItem>
           <MenuItem value="before">Before</MenuItem>

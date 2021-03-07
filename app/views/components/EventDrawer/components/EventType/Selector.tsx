@@ -73,9 +73,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
 
 interface Props {
   input: FieldInputProps<any>
+  disabled: boolean
 }
 
-export function Selector({ input }: Props) {
+export function Selector({ input, disabled }: Props) {
   const classes = useStyles()
   const [value, setValue] = useState<FieldInputProps<any>>(input.value || null)
   const [moreEl, setMoreEl] = useState<HTMLButtonElement | null>(null)
@@ -112,6 +113,7 @@ export function Selector({ input }: Props) {
           <Button
             variant="outlined"
             size="small"
+            disabled={disabled}
             key={type.value}
             startIcon={eventTypesIcons[type.title].icon({
               size: muiIconSizes.small
@@ -127,6 +129,7 @@ export function Selector({ input }: Props) {
         <Button
           variant="outlined"
           size="small"
+          disabled={disabled}
           startIcon={
             isMoreActive ? (
               eventTypesIcons[value.title].icon({

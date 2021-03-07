@@ -1,13 +1,19 @@
 import React from 'react'
 import { Field } from 'react-final-form'
 
+import { TextFieldProps } from '@material-ui/core'
+
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { MAX_STEP_TITLE_LENGTH } from '../../../../../constants'
 
 import { validateStringInput } from '../../../../../helpers'
 
-export const Title = () => {
+interface Props {
+  textFieldProps?: TextFieldProps
+}
+
+export const Title = ({ textFieldProps = {} }: Props) => {
   return (
     <Field
       required
@@ -23,8 +29,13 @@ export const Title = () => {
       FormHelperTextProps={{
         variant: 'standard'
       }}
+      {...textFieldProps}
       validate={value =>
-        validateStringInput(value, 'event title', MAX_STEP_TITLE_LENGTH)
+        validateStringInput(
+          value as string,
+          'event title',
+          MAX_STEP_TITLE_LENGTH
+        )
       }
     />
   )

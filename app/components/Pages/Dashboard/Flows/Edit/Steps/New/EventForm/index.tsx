@@ -59,13 +59,16 @@ export default function EventForm({
             onDelete={onDelete}
           >
             <Box mb={2.5}>
-              <EventType />
+              <EventType disabled={disableEdit} />
             </Box>
             <Box mb={2}>
-              <Title />
+              <Title textFieldProps={{ disabled: disableEdit }} />
             </Box>
             <Box mb={2}>
-              <Description enabled={!!values.description} />
+              <Description
+                enabled={!!values.description}
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
           </BaseFormLayout>
         )
