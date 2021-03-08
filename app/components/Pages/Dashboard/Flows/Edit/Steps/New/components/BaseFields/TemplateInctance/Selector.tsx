@@ -36,6 +36,55 @@ interface Props {
   onChange: (value: MarketingEmailFormData['template']) => void
 }
 
+const allMarketingTemplateType: IMarketingTemplateType[] = [
+  'Birthday',
+  'HomeAnniversary',
+  'WeddingAnniversary',
+  'AsSeenIn',
+  'BackToSchool',
+  'Brand',
+  'ChineseNewYear',
+  'Christmas',
+  'ColumbusDay',
+  'ComingSoon',
+  'Contact',
+  'CrmOpenHouse',
+  'DaylightSaving',
+  'Diwali',
+  'Easter',
+  'FathersDay',
+  'FourthOfJuly',
+  'Halloween',
+  'Hanukkah',
+  'IndependenceDay',
+  'JustListed',
+  'JustSold',
+  'Kwanzaa',
+  'LaborDay',
+  'Layout',
+  'Listing',
+  'ListingLayout',
+  'Listings',
+  'MLKDay',
+  'MemorialDay',
+  'MothersDay',
+  'NewAgent',
+  'NewYear',
+  'Newsletter',
+  'OpenHouse',
+  'OtherHoliday',
+  'Passover',
+  'PatriotsDay',
+  'PriceImprovement',
+  'RoshHashanah',
+  'StPatrick',
+  'Thanksgiving',
+  'UnderContract',
+  'Valentines',
+  'VeteransDay',
+  'WomansDay'
+]
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -297,16 +346,7 @@ export const TemplateSelector = ({
           title="Select Template"
           user={user}
           mediums={['Email']}
-          templateTypes={[
-            'Birthday',
-            'WeddingAnniversary',
-            'HomeAnniversary',
-            'OpenHouse',
-            'JustSold',
-            'ComingSoon',
-            'JustListed',
-            'PriceImprovement'
-          ]}
+          templateTypes={allMarketingTemplateType}
           onSelect={handleSelectTemplate}
           onClose={() => handleShowTemplatePicker(false)}
         />

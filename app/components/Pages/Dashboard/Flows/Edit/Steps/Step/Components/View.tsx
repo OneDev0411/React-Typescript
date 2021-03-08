@@ -96,13 +96,9 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
 
                 return setIsEditing(true)
               }}
-              className={cn(
-                // commonClasses.itemContent,
-                classes.viewStepContainer,
-                {
-                  [classes.raised]: draggableSnapshot.isDragging
-                }
-              )}
+              className={cn(classes.viewStepContainer, {
+                [classes.raised]: draggableSnapshot.isDragging
+              })}
             >
               <Box
                 className={classes.dragBtn}
