@@ -74,7 +74,7 @@ export default function SomethingToShareSection() {
         title="Something To Share Now"
         actionNode={
           <LinkSectionAction
-            title="View all brand templates"
+            title="View all"
             url={`/dashboard/marketing/${BRANDING_TEMPLATE_TYPES.join(',')}`}
           />
         }

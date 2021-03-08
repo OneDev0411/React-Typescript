@@ -15,10 +15,7 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
     <SectionLayout
       title="Upcoming Birthdays and Anniversaries"
       actionNode={
-        <LinkSectionAction
-          title="View all birthdays and anniversaries"
-          url="/dashboard/calendar"
-        />
+        <LinkSectionAction title="View all" url="/dashboard/calendar" />
       }
     >
       {isLoading && (

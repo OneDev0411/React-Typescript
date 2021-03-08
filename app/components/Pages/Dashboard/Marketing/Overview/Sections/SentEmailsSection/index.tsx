@@ -16,10 +16,7 @@ export default function SentEmailsSection() {
     <SectionLayout
       title="Sent Emails"
       actionNode={
-        <LinkSectionAction
-          title="View email insights"
-          url="/dashboard/insights"
-        />
+        <LinkSectionAction title="View all" url="/dashboard/insights" />
       }
       gridProps={{
         sm: 6

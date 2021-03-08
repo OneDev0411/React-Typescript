@@ -42,7 +42,7 @@ export default function MyDesignsSection() {
         title="My Designs"
         actionNode={
           <LinkSectionAction
-            title="View all my designs"
+            title="View all"
             url="/dashboard/marketing/designs"
           />
         }
