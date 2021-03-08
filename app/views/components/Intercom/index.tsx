@@ -25,7 +25,7 @@ export default function Intercom() {
       : {}
 
   return (
-    <div>
+    <>
       <GlobalIntercomStyles />
       {(window as any).INTERCOM_ID && (
         <IntercomSDK
@@ -46,6 +46,6 @@ export default function Intercom() {
       >
         <IconClose />
       </Button>
-    </div>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 import {
   createTemplateInstance,
-  CreateTemplateInstanceData
+  TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
 
 import updateWebsite, { UpdateWebsiteData } from './update-website'
@@ -8,7 +8,7 @@ import updateWebsite, { UpdateWebsiteData } from './update-website'
 async function updateWebsiteTemplate(
   websiteId: UUID,
   templateId: UUID,
-  instanceData: CreateTemplateInstanceData,
+  instanceData: TemplateInstanceInputData,
   websiteData: Omit<UpdateWebsiteData, 'template_instance'>
 ) {
   const instance = await createTemplateInstance(templateId, instanceData)

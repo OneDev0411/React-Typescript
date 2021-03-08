@@ -4,7 +4,7 @@ import useAsync from 'hooks/use-async'
 import { addNotification as notify } from 'components/notification'
 import type { IBrandMarketingTemplateWithResult } from 'components/InstantMarketing'
 import type { CreateWebsiteData } from 'models/website/create-website'
-import type { CreateTemplateInstanceData } from 'models/instant-marketing/create-template-instance'
+import type { TemplateInstanceInputData } from 'models/instant-marketing/create-template-instance'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import createWebsiteTemplate from 'models/website/create-website-template'
 import updateWebsiteTemplate from 'models/website/update-website-template'
@@ -27,7 +27,7 @@ function usePublishWebsite(
   const publishWebsite = (
     websiteId: UUID | undefined,
     brandTemplate: IBrandMarketingTemplateWithResult,
-    instanceData: CreateTemplateInstanceData,
+    instanceData: TemplateInstanceInputData,
     websiteData: Omit<CreateWebsiteData, 'template_instance' | 'user'>
   ) => {
     const template = getTemplateObject(brandTemplate)

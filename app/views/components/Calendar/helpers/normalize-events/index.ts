@@ -138,10 +138,14 @@ function getEventIndex(event: ICalendarEvent, range: NumberRange) {
   }
 
   const year =
-    from.getUTCFullYear() === to.getUTCFullYear() ||
+    from.getUTCFullYear() === to.getUTCFullYear() &&
     eventTime.getUTCMonth() >= from.getUTCMonth()
       ? from.getUTCFullYear()
       : to.getUTCFullYear()
+  const month = isAllDayEvent
+    ? eventTime.getMonth() + 1
+    : eventTime.getUTCMonth() + 1
+  const day = isAllDayEvent ? eventTime.getDate() : eventTime.getUTCDate()
 
-  return `${year}/${eventTime.getUTCMonth() + 1}/${eventTime.getUTCDate()}`
+  return `${year}/${month}/${day}`
 }

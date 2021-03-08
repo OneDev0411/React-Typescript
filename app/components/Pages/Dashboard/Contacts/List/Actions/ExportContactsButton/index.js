@@ -19,6 +19,7 @@ class ExportContacts extends React.Component {
       user,
       users,
       searchText,
+      parked,
       conditionOperator: filter_type
     } = this.props
     const activeBrand = getActiveTeamId(user)
@@ -48,6 +49,8 @@ class ExportContacts extends React.Component {
 
       if (cleanedSearchText.length > 0) {
         params.query = cleanedSearchText
+      } else {
+        params.parked = parked
       }
 
       if (Array.isArray(excludedRows) && excludedRows.length > 0) {

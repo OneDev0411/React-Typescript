@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import Email from '../../Actions/Email'
 import MergeContacts from '../../Actions/MergeContacts'
 import ExportContacts from '../../Actions/ExportContactsButton'
-import TagContacts from '../../Actions/TagContacts'
+import { TagContacts } from '../../Actions/TagContacts'
 import CreateEvent from '../../Actions/CreateEvent'
 import AddToFlowAction from '../../Actions/AddToFlow'
 import { UnparkContacts } from '../../Actions/UnparkContacts'
@@ -76,7 +76,7 @@ interface Props {
   handleChangeContactsAttributes: any
 }
 
-export function TableActions({
+const RawTableActions = ({
   filters,
   isFetching,
   activeSegmentId,
@@ -84,7 +84,7 @@ export function TableActions({
   reloadContacts,
   onRequestDelete,
   handleChangeContactsAttributes
-}: Props) {
+}: Props) => {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
 
@@ -107,30 +107,29 @@ export function TableActions({
   const isMergeDisable = !(!isAllRowsSelected
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
+  const isParkedActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
+
   const getSummeryInfo = () => {
-    let selectedCount
+    const selectedCount = isEntireRowsSelected
+      ? totalRowsCount - excludedRows.length
+      : selectedRowIds.length
 
-    if (isEntireRowsSelected) {
-      selectedCount = totalRowsCount - excludedRows.length
-    } else if (selectedRowIds.length > 0) {
-      selectedCount = selectedRowIds.length
+    if (selectedCount === 0) {
+      return null
     }
 
-    if (selectedCount) {
-      return (
-        <Box className={classes.summery}>
-          <Typography variant="subtitle2" className={classes.selectedCount}>
-            {selectedCount}
-          </Typography>
-          <Typography variant="body2">
-            {pluralize('Contact', selectedCount)} selected
-          </Typography>
-        </Box>
-      )
-    }
-
-    return null
+    return (
+      <Box className={classes.summery}>
+        <Typography variant="subtitle2" className={classes.selectedCount}>
+          {selectedCount}
+        </Typography>
+        <Typography variant="body2">
+          {pluralize('Contact', selectedCount)} selected
+        </Typography>
+      </Box>
+    )
   }
+
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
     deselectRows()
@@ -140,7 +139,7 @@ export function TableActions({
   return (
     <div className={classes.container}>
       {getSummeryInfo()}
-      {activeSegmentId === PARKED_CONTACTS_LIST_ID && (
+      {isParkedActive && (
         <ActionWrapper
           atLeast="one"
           bulkMode={isEntireRowsSelected}
@@ -163,13 +162,15 @@ export function TableActions({
         <TagContacts
           disabled={isAllDisable}
           entireMode={isEntireRowsSelected}
-          totalRowsCount={totalRowsCount}
+          isParkedActive={isParkedActive}
           excludedRows={excludedRows}
           selectedRows={selectedRowIds}
-          filters={filters.attributeFilters}
-          searchText={filters.query}
-          conditionOperator={filters.filter_type}
-          users={filters.users}
+          attributeFilters={filters?.attributeFilters}
+          searchText={filters?.text}
+          conditionOperator={filters?.filter_type}
+          users={filters?.users}
+          crm_tasks={filters?.crm_tasks}
+          flows={filters?.flows}
           resetSelectedRows={deselectRows}
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />
@@ -178,45 +179,52 @@ export function TableActions({
         entireMode={isEntireRowsSelected}
         excludedRows={excludedRows}
         selectedRows={selectedRowIds}
+        parked={isParkedActive}
         filters={filters}
         resetSelectedRows={deselectRows}
         reloadContacts={reloadContacts}
       />
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="sending an email"
-        disabled={isEntireModeDisable}
-      >
-        <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
-      </ActionWrapper>
-
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="marketing"
-        disabled={isEntireModeDisable}
-      >
-        <SendMlsListingCard
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="sending an email"
           disabled={isEntireModeDisable}
-          selectedRows={selectedRowIds}
         >
-          Marketing
-        </SendMlsListingCard>
-      </ActionWrapper>
+          <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
+        </ActionWrapper>
+      )}
 
-      <ActionWrapper
-        atLeast="one"
-        bulkMode={isEntireRowsSelected}
-        action="creating an event"
-        disabled={isEntireModeDisable}
-      >
-        <CreateEvent
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="marketing"
           disabled={isEntireModeDisable}
-          selectedRows={selectedRowIds}
-          submitCallback={deselectAndReload}
-        />
-      </ActionWrapper>
+        >
+          <SendMlsListingCard
+            disabled={isEntireModeDisable}
+            selectedRows={selectedRowIds}
+          >
+            Marketing
+          </SendMlsListingCard>
+        </ActionWrapper>
+      )}
+
+      {!isParkedActive && (
+        <ActionWrapper
+          atLeast="one"
+          bulkMode={isEntireRowsSelected}
+          action="creating an event"
+          disabled={isEntireModeDisable}
+        >
+          <CreateEvent
+            disabled={isEntireModeDisable}
+            selectedRows={selectedRowIds}
+            submitCallback={deselectAndReload}
+          />
+        </ActionWrapper>
+      )}
 
       <ExportContacts
         excludedRows={excludedRows}
@@ -227,6 +235,7 @@ export function TableActions({
         searchText={filters.text}
         conditionOperator={filters.filter_type}
         users={filters.users}
+        parked={isParkedActive}
         disabled={isFetching}
       />
       <MergeContacts
@@ -253,3 +262,5 @@ export function TableActions({
     </div>
   )
 }
+
+export const TableActions = memo(RawTableActions)

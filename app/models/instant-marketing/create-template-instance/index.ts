@@ -8,7 +8,7 @@ const DEFAULT_QUERY = {
   'associations[]': ['template_instance.template']
 }
 
-export interface CreateTemplateInstanceData {
+export interface TemplateInstanceInputData {
   html: string
   deals?: UUID[]
   listings?: UUID[]
@@ -17,7 +17,7 @@ export interface CreateTemplateInstanceData {
 
 export async function createTemplateInstance(
   templateId: UUID,
-  data: CreateTemplateInstanceData,
+  data: TemplateInstanceInputData,
   query: object = DEFAULT_QUERY
 ): Promise<IMarketingTemplateInstance> {
   try {

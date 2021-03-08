@@ -31,7 +31,7 @@ export function SuggestionsPopover({
         open={isOpen}
         anchorEl={isOpen ? containerRef && containerRef.current : null}
         placement="bottom-start"
-        style={{ zIndex: 1002 }}
+        style={{ zIndex: 1004 }}
       >
         <Suggestions
           items={places}
