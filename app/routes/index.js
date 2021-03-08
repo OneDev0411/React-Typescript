@@ -670,15 +670,6 @@ const AsyncChecklists = withAcl.admin(
   })
 )
 
-const AsyncWebsite = withAcl.marketing(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
-      )
-  })
-)
-
 const AsyncMobile = Load({
   loader: () =>
     import('../components/Pages/Mobile' /* webpackChunkName: "mobile" */)
@@ -896,9 +887,6 @@ export default (
         >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
-
-        {/* TODO: Remove this after implementing new the website builder */}
-        <Route path="website" component={AsyncWebsite} />
       </Route>
     </Route>
 
