@@ -15,7 +15,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
 import { StepTypeIcon } from './StepTypeIcon'
-// import { useCommonStyles } from '../styles'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -83,9 +82,8 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
           <div
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
-            // className={commonClasses.stepContainer}
           >
-            <Box /* className={commonClasses.stepIndex} */>{index + 1}</Box>
+            <Box>{index + 1}</Box>
             <Box
               onMouseOver={raise}
               onFocus={raise}
@@ -146,20 +144,6 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                       </Typography>
                     </Box>
                   </Grid>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  alignItems="flex-start"
-                  direction="column"
-                  xs={4}
-                >
-                  {/* <Typography variant="subtitle1" color="textSecondary">
-                    {step.wait_days === 0 && 'The same day'}
-                    {step.wait_days > 0 && `Wait for ${step.wait_days} `}
-                    {step.wait_days === 1 && 'day'}
-                    {step.wait_days > 1 && 'days'}
-              </Typography> */}
                 </Grid>
               </Grid>
             </Box>

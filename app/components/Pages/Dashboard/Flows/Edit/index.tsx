@@ -206,9 +206,13 @@ function Edit(props: WithRouterProps) {
 
   const stepMoveHandler = useCallback(
     async (id: UUID, source: number, destination: number) => {
-      console.log('stepMoveHandler', { id, source, destination })
-
-      if (!flow || !id || source === destination) {
+      if (
+        !flow ||
+        !id ||
+        source === destination ||
+        destination < 1 ||
+        destination > (flow.steps || []).length
+      ) {
         return
       }
 

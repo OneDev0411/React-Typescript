@@ -17,7 +17,9 @@ export default function EventForm({
   step,
   disableEdit = false,
   onSubmit,
-  onDelete
+  onDelete,
+  onMoveUpStep,
+  onMoveDownStep
 }: BaseFormProps) {
   return (
     <Form
@@ -57,6 +59,8 @@ export default function EventForm({
             pristine={pristine}
             onSubmit={handleSubmit}
             onDelete={onDelete}
+            onMoveUpStep={onMoveUpStep}
+            onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2.5}>
               <EventType disabled={disableEdit} />

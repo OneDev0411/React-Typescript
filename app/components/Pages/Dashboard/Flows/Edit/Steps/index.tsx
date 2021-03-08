@@ -2,9 +2,8 @@ import React from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import Item from './Item'
+import { Step } from './Step'
 import { NewStep } from './New'
-// import { getNextStepStartFrom } from '../helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -91,7 +90,7 @@ export default function Steps({
               >
                 {items.map((item, index) => {
                   const stepOrder = index + 1
-                  const isLastItem = stepOrder === items.length
+                  const isLastStep = stepOrder === items.length
 
                   return (
                     <>
@@ -102,11 +101,13 @@ export default function Steps({
                             : 0
                         }
                       >
-                        <Item
+                        <Step
                           index={stepOrder}
                           disableEdit={disableEdit}
+                          isLastStep={isLastStep}
                           onUpdate={onStepUpdate}
                           onDelete={onStepDelete}
+                          onStepMove={onStepMove}
                           key={item.id}
                           step={item}
                           emailTemplates={emailTemplates}
@@ -116,7 +117,7 @@ export default function Steps({
                           onNewEmailTemplateClick={onNewEmailTemplateClick}
                         />
                       </Box>
-                      {!isLastItem &&
+                      {!isLastStep &&
                         !disableEdit &&
                         !draggableSnapshot.isDraggingOver && (
                           <Box width="100%" my={3}>

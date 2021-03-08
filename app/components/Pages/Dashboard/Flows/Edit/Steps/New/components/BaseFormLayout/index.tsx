@@ -22,31 +22,31 @@ import { WaitFor } from '../BaseFields/WaitFor'
 import { EventType } from '../BaseFields/EventType'
 import { Time } from '../BaseFields/Time'
 import { useStyles } from './styles'
+import { BaseFormProps } from '../../types'
 
-interface Props {
+interface Props extends Omit<BaseFormProps, 'onSubmit'> {
   index: number
   title: string
   stepIcon: string
-  step?: Nullable<IBrandFlowStep>
-  disableEdit: boolean
   pristine: boolean
   submitting: boolean
   children: ReactNode
   onSubmit: () => void
-  onDelete?: (data: IBrandFlowStep) => Promise<any>
 }
 
 const Layout = ({
-  index,
   step,
+  index,
   title,
   children,
   stepIcon,
   pristine,
   submitting,
-  disableEdit,
+  disableEdit = false,
   onSubmit,
-  onDelete
+  onDelete,
+  onMoveUpStep,
+  onMoveDownStep
 }: Props) => {
   const classes = useStyles()
   const { raise, stopRaise } = useRaisedMuiCard()
@@ -99,7 +99,7 @@ const Layout = ({
                 </Button>
               )}
 
-              {step && !disableEdit && onDelete && (
+              {step && !disableEdit && (
                 <Box ml={1}>
                   <BaseDropdown
                     PopperProps={{
@@ -116,9 +116,28 @@ const Layout = ({
                     renderMenu={({ close }) => (
                       <div>
                         <MenuItem
+                          disabled={!onMoveUpStep}
                           onClick={e => {
                             close()
-                            onDelete(step)
+                            onMoveUpStep && onMoveUpStep()
+                          }}
+                        >
+                          <Typography>Move Up</Typography>
+                        </MenuItem>
+                        <MenuItem
+                          disabled={!onMoveDownStep}
+                          onClick={e => {
+                            close()
+                            onMoveDownStep && onMoveDownStep()
+                          }}
+                        >
+                          <Typography>Move Down</Typography>
+                        </MenuItem>
+                        <MenuItem
+                          disabled={!onDelete}
+                          onClick={e => {
+                            close()
+                            onDelete && onDelete(step)
                           }}
                         >
                           <Typography color="error">Delete</Typography>

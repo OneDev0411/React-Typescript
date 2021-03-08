@@ -6,27 +6,58 @@ import BasicEmailForm from '../New/BasicEmailForm'
 import MarketingEmailForm from '../New/MarketingEmailForm'
 
 interface Props {
-  disableEdit: boolean
   index: number
   step: IBrandFlowStep
+  disableEdit: boolean
+  isLastStep: boolean
   emailTemplates: IBrandEmailTemplate[]
   defaultSelectedEmailTemplate?: UUID
   onDelete: (step: IBrandFlowStep) => Promise<any>
   onUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
+  onStepMove: (
+    stepId: UUID,
+    sourceIndex: number,
+    destinationIndex: number
+  ) => Promise<any>
   onNewEmailTemplateClick: () => void
 }
 
-export default function Item({
-  disableEdit,
-  index,
+export function Step({
   step,
+  index,
+  isLastStep,
+  disableEdit,
   emailTemplates,
   defaultSelectedEmailTemplate,
   onDelete,
   onUpdate,
+  onStepMove,
   onNewEmailTemplateClick
 }: Props) {
-  const renderEditForm = () => {
+  const handleMoveUpStep = () => {
+    if (index <= 1 || step.order <= 1) {
+      return
+    }
+
+    const destination = step.order - 1
+
+    onStepMove(step.id, step.order, destination)
+  }
+
+  const handleMoveDownStep = () => {
+    if (isLastStep) {
+      return
+    }
+
+    const destination = step.order + 1
+
+    onStepMove(step.id, step.order, destination)
+  }
+
+  const onMoveUpStep = index > 1 ? handleMoveUpStep : undefined
+  const onMoveDownStep = !isLastStep ? handleMoveDownStep : undefined
+
+  const renderForm = () => {
     if (!step) {
       return null
     }
@@ -39,6 +70,8 @@ export default function Item({
           disableEdit={disableEdit}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
+          onMoveUpStep={onMoveUpStep}
+          onMoveDownStep={onMoveDownStep}
         />
       )
     }
@@ -52,6 +85,8 @@ export default function Item({
           templates={emailTemplates}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
+          onMoveUpStep={onMoveUpStep}
+          onMoveDownStep={onMoveDownStep}
           defaultSelectedTemplate={defaultSelectedEmailTemplate}
           onNewTemplateClick={onNewEmailTemplateClick}
         />
@@ -66,10 +101,12 @@ export default function Item({
           disableEdit={disableEdit}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
+          onMoveUpStep={onMoveUpStep}
+          onMoveDownStep={onMoveDownStep}
         />
       )
     }
   }
 
-  return <>{renderEditForm()}</>
+  return <>{renderForm()}</>
 }

@@ -26,6 +26,8 @@ export default function BasicEmailForm({
   defaultSelectedTemplate,
   onSubmit,
   onDelete,
+  onMoveUpStep,
+  onMoveDownStep,
   onNewTemplateClick
 }: Props) {
   const defaultTemplate = useMemo(
@@ -67,6 +69,8 @@ export default function BasicEmailForm({
             pristine={pristine}
             onSubmit={handleSubmit}
             onDelete={onDelete}
+            onMoveUpStep={onMoveUpStep}
+            onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
               <Title textFieldProps={{ disabled: disableEdit }} />

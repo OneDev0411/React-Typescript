@@ -12,7 +12,9 @@ import { getInitialTemplateValue } from '../MarketingEmailForm/helpers'
  * return the basic initial value of form
  * @param {IBrandFlowStep} step - current step
  */
-const getBasicInitialValues = (step?: IBrandFlowStep): BaseFormData => {
+const getBasicInitialValues = (
+  step?: Nullable<IBrandFlowStep>
+): BaseFormData => {
   if (!step) {
     return {
       title: '',
@@ -35,7 +37,9 @@ const getBasicInitialValues = (step?: IBrandFlowStep): BaseFormData => {
  * return the initial value of event step form
  * @param {IBrandFlowStep} step - current step
  */
-export const getEventInitialValues = (step?: IBrandFlowStep): EventFormData => {
+export const getEventInitialValues = (
+  step?: Nullable<IBrandFlowStep>
+): EventFormData => {
   const baseFields = getBasicInitialValues(step)
   const specificFields =
     step && step.event
@@ -64,7 +68,7 @@ export const getEventInitialValues = (step?: IBrandFlowStep): EventFormData => {
  * @param {IBrandFlowStep} step - current step
  */
 export const getMarketingEmailInitialValues = (
-  step?: IBrandFlowStep
+  step?: Nullable<IBrandFlowStep>
 ): MarketingEmailFormData => {
   const baseFields = getBasicInitialValues(step)
   const specificFields = step
@@ -84,7 +88,7 @@ export const getMarketingEmailInitialValues = (
  * @param {IBrandFlowStep} step - current step
  */
 export const getBasicEmailInitialValues = (
-  step?: IBrandFlowStep,
+  step?: Nullable<IBrandFlowStep>,
   defaultTemplate?: UUID
 ): BasicEmailFormData => {
   const baseFields = getBasicInitialValues(step)

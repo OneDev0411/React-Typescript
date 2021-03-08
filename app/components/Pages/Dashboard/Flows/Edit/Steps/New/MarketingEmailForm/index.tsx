@@ -17,7 +17,9 @@ export default function MarketingEmailForm({
   step,
   disableEdit = false,
   onSubmit,
-  onDelete
+  onDelete,
+  onMoveUpStep,
+  onMoveDownStep
 }: BaseFormProps) {
   return (
     <Form
@@ -57,6 +59,8 @@ export default function MarketingEmailForm({
             pristine={pristine}
             onSubmit={handleSubmit}
             onDelete={onDelete}
+            onMoveUpStep={onMoveUpStep}
+            onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
               <Title textFieldProps={{ disabled: disableEdit }} />

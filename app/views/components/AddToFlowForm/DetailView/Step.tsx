@@ -5,7 +5,7 @@ import { Box, Typography, makeStyles } from '@material-ui/core'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/Components/StepTypeIcon/icons'
+import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Step/Components/StepTypeIcon/icons'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { StepContainer } from './styled'
 
