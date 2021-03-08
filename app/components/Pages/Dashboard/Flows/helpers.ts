@@ -66,7 +66,7 @@ export function validateInput(
 }
 
 export function validateTimeInput(value?: string) {
-  if (value === undefined) {
+  if (value === undefined || !value.match(/^\d{2,}:\d{2}:\d{2}$/)) {
     return 'Invalid time'
   }
 
