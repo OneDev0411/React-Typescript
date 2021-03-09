@@ -35,13 +35,13 @@ export function Step({
   onNewEmailTemplateClick
 }: Props) {
   const handleMoveUpStep = () => {
-    if (index <= 1 || step.order <= 1) {
+    if (index <= 1) {
       return
     }
 
-    const destination = step.order - 1
+    const destination = index - 1
 
-    onStepMove(step.id, step.order, destination)
+    onStepMove(step.id, index, destination)
   }
 
   const handleMoveDownStep = () => {
@@ -49,9 +49,9 @@ export function Step({
       return
     }
 
-    const destination = step.order + 1
+    const destination = index + 1
 
-    onStepMove(step.id, step.order, destination)
+    onStepMove(step.id, index, destination)
   }
 
   const onMoveUpStep = index > 1 ? handleMoveUpStep : undefined

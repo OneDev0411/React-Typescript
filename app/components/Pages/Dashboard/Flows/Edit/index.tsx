@@ -1,4 +1,10 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo
+} from 'react'
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -92,6 +98,12 @@ function Edit(props: WithRouterProps) {
   )
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<string | null>(null)
+
+  const indexToOrderMap: number[] = useMemo(
+    () => (flow?.steps || []).map(step => step.order),
+    [flow?.steps]
+  )
+
   const modal = useContext(ConfirmationModalContext)
 
   const getFlow = useCallback(
@@ -206,6 +218,16 @@ function Edit(props: WithRouterProps) {
 
   const stepMoveHandler = useCallback(
     async (id: UUID, source: number, destination: number) => {
+      // TODO: remove this when the procces is done
+      // console.log({
+      //   id,
+      //   indexToOrderMap,
+      //   source,
+      //   destination,
+      //   down: indexToOrderMap[destination - 1] + 1,
+      //   up: indexToOrderMap[destination - 1] - 1
+      // })
+
       if (
         !flow ||
         !id ||
@@ -216,13 +238,17 @@ function Edit(props: WithRouterProps) {
         return
       }
 
+      const destinationOrder = indexToOrderMap[destination - 1]
+      const nextDestination =
+        destination > source ? destinationOrder + 1 : destinationOrder - 1
+
       setIsLoading(true)
 
-      await editBrandFlowStepOrder(brand, flow.id, id, destination)
+      await editBrandFlowStepOrder(brand, flow.id, id, nextDestination)
 
       loadFlowData(true)
     },
-    [brand, flow, loadFlowData]
+    [brand, flow, indexToOrderMap, loadFlowData]
   )
 
   const flowUpdateHandler = useCallback(
