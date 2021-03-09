@@ -16,7 +16,7 @@ import addHostnameToWebsite from 'models/website/add-hostname-to-website'
 
 import purchaseDomain from 'models/domains/purchase-domain'
 
-import DomainStatus, { DomainStatusType } from './DomainStatus'
+import { DomainStatusType } from './DomainStatus'
 import DomainName from './DomainName'
 import DomainSearch from './DomainSearch'
 import DomainAgreement from './DomainAgreement'
@@ -39,18 +39,16 @@ function DomainManagementNewDomain({
   const theme = useTheme()
   const { isLoading: isWorking, run } = useAsync()
 
-  const [domainStatus, setDomainStatus] = useState<DomainStatusType>(
-    DomainStatusType.Existing
-  )
+  const [domainStatus] = useState<DomainStatusType>(DomainStatusType.New)
   const [domainName, setDomainName] = useState('')
   const [domainPrice, setDomainPrice] = useState('')
 
   const [domainAgreementKeys, setDomainAgreementKeys] = useState<string[]>([])
 
-  const handleDomainStatusChange = (domainStatus: DomainStatusType) => {
-    setDomainStatus(domainStatus)
-    setDomainName('')
-  }
+  // const handleDomainStatusChange = (domainStatus: DomainStatusType) => {
+  //   setDomainStatus(domainStatus)
+  //   setDomainName('')
+  // }
 
   const handleAddDomain = (domainName: string, isDefault: boolean) => {
     onDomainAdd(domainName, isDefault)
@@ -126,10 +124,10 @@ function DomainManagementNewDomain({
       </Box>
       <Box marginLeft={2}>
         <QuestionWizard defaultStep={0}>
-          <DomainStatus
+          {/* <DomainStatus
             onChange={handleDomainStatusChange}
             disabled={isWorking}
-          />
+          /> */}
           {isNew ? (
             <DomainSearch
               domainName={domainName}
