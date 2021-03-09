@@ -13,6 +13,9 @@ import timeago from 'timeago.js'
 
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
+import { getFileType } from 'utils/file-utils/get-file-type'
+
+import { PdfThumbnail } from 'components/PdfThumbnail'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,6 +39,10 @@ const useStyles = makeStyles(
       '&:hover': {
         animation: '8s linear infinite alternate $scrollPositionAnimation'
       }
+    },
+    pdfThumbnailWrapper: {
+      maxHeight: 200,
+      overflow: 'hidden'
     }
   }),
   {
@@ -58,14 +65,22 @@ export default function TemplateInstanceCard({
     templateInstance.template.medium
   )
 
+  const isPdf = getFileType(templateInstance.file) === 'pdf'
+
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          className={classes.media}
-          src={templateInstance.file.preview_url}
-        />
+        {isPdf ? (
+          <Box className={classes.pdfThumbnailWrapper}>
+            <PdfThumbnail url={templateInstance.file.url} />
+          </Box>
+        ) : (
+          <CardMedia
+            component="img"
+            className={classes.media}
+            src={templateInstance.file.preview_url}
+          />
+        )}
       </CardActionArea>
       <CardContent>
         <Typography variant="body2">{templateMediumLabel} Template</Typography>
