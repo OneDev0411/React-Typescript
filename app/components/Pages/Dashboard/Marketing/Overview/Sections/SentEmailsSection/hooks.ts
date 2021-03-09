@@ -25,7 +25,11 @@ export function useEmailCampaigns(): UseEmailCampaigns {
         emailCampaignEmailsAssociation: ['email']
       })
 
-      setCampaigns(emailCampaigns)
+      setCampaigns(
+        emailCampaigns.filter(
+          campaign => !!campaign.template && !!campaign.executed_at
+        )
+      )
     }
 
     fetchEmailCampaigns()

@@ -44,19 +44,16 @@ export default function SentEmailsSection() {
           </Grid>
         )}
         {!isLoading &&
-          campaigns
-            ?.filter(campaign => !!campaign.template && !!campaign.executed_at)
-            .slice(0, 2)
-            .map(campaign => (
-              <Grid key={campaign.id} item xs={12} sm={6}>
-                <Link
-                  noStyle
-                  to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
-                >
-                  <EmailInsightCard campaign={campaign} />
-                </Link>
-              </Grid>
-            ))}
+          campaigns?.slice(0, 2).map(campaign => (
+            <Grid key={campaign.id} item xs={12} sm={6}>
+              <Link
+                noStyle
+                to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
+              >
+                <EmailInsightCard campaign={campaign} />
+              </Link>
+            </Grid>
+          ))}
       </>
     </SectionLayout>
   )
