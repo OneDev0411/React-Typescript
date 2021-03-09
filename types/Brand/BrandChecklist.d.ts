@@ -2,6 +2,7 @@ declare interface IBrandChecklist extends IModel<'brand_checklist'> {
   brand: UUID
   title: string
   checklist_type: 'Buying' | 'Selling' | 'Offer'
+  title: 'Listing' | 'Contract' | 'Offer'
   is_deactivatable: boolean
   is_terminatable: boolean
   order: number

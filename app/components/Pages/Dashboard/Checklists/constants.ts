@@ -1,18 +1,19 @@
-export const sellingPropertyTypes = [
-  'Commercial Sale',
-  'Commercial Lease',
-  'New Home',
-  'Lot / Land',
-  'Resale',
-  'Residential Lease'
-]
-export const buyingPropertyTypes = [
-  'Commercial Sale',
-  'Commercial Lease',
-  'New Home',
-  'Lot / Land',
-  'Resale',
-  'Residential Lease'
+export const TabNames: {
+  type: IBrandChecklist['checklist_type']
+  title: IBrandChecklist['title']
+}[] = [
+  {
+    type: 'Selling',
+    title: 'Listing'
+  },
+  {
+    type: 'Buying',
+    title: 'Contract'
+  },
+  {
+    type: 'Offer',
+    title: 'Offer'
+  }
 ]
 
 export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {

@@ -1,6 +1,6 @@
 export function getChecklistPageLink(
   propertyType: string,
-  dealType: IBrandChecklist['deal_type']
+  type: IBrandChecklist['checklist_type']
 ) {
-  return `/dashboard/checklists?property_type=${propertyType}&deal_type=${dealType}`
+  return `/dashboard/checklists?property=${propertyType}&checklist_type=${type}`
 }
