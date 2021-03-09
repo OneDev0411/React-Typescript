@@ -31,6 +31,9 @@ declare type ICalendarEvent<
   timestamp_midday: string
   timestamp_readable: string
   title: string
+  // TODO: This `type` field is not string
+  // and it's wrong! It should be 'calendar_event'
+  // but setting it would break a lot of things
   type: string
   type_label: string
   thread_key: string | null

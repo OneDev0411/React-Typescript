@@ -24,8 +24,9 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-export function MarketingLayout({ params, render }) {
+export function MarketingLayout({ render, ...props }) {
   const classes = useStyles()
+  const { params, router } = props
   const sections = useMarketingCenterSections(params)
   const user = useSelector(({ user }) => user)
 
@@ -75,6 +76,12 @@ export function MarketingLayout({ params, render }) {
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}
+            isOverviewActive={
+              router.location.pathname === '/dashboard/marketing'
+            }
+            isMyDesignsActive={
+              router.location.pathname === '/dashboard/marketing/designs'
+            }
           />
           {render &&
             render({

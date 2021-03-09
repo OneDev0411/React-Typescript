@@ -1,4 +1,4 @@
-export const MEDIUM_LABEL_MAP: {
+const MEDIUM_LABEL_MAP: {
   [key in IMarketingTemplateMedium]: string
 } = {
   Email: 'Email',
@@ -7,4 +7,8 @@ export const MEDIUM_LABEL_MAP: {
   FacebookCover: 'Facebook Covers',
   InstagramStory: 'Instagram Stories',
   LinkedInCover: 'LinkedIn Covers'
+}
+
+export function getTemplateMediumLabel(medium: IMarketingTemplateMedium): string {
+  return MEDIUM_LABEL_MAP[medium] ?? medium
 }

@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
-
+import fileSaver from 'file-saver'
 import {
   makeStyles,
+  useMediaQuery,
   Theme,
   AppBar,
   Toolbar,
+  Tooltip,
   Grid,
   Paper,
   Box,
   Typography,
-  Hidden,
-  Button,
-  CircularProgress
+  CircularProgress,
+  IconButton
 } from '@material-ui/core'
 
 import { mdiPencilOutline } from '@mdi/js'
@@ -45,6 +46,7 @@ import { useTemplates } from '../hooks/use-templates'
 import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
 import EditVariablesDialog from './EditVariablesDialog'
+import PreviewAndDownloadModal from './PreviewAndDownloadModal'
 import PreviewDrawer from './PreviewDrawer'
 import DownloadDrawer from './DownloadDrawer'
 import { getEditableVariables } from './helpers'
@@ -82,6 +84,7 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
 
   useGoogleMapsPlaces()
 
@@ -233,7 +236,14 @@ function MarketingWizard(props: WithRouterProps) {
       )
 
       handleClosePreviewDrawer()
-      handleOpenDownloadDrawer(templateInstance.file)
+
+      if (isMobile) {
+        handleOpenDownloadDrawer(templateInstance.file)
+
+        return
+      }
+
+      fileSaver.saveAs(templateInstance.file.url, templateInstance.file.name)
     } catch (err) {
       dispatch(
         addNotification({
@@ -265,8 +275,8 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   return (
-    <PageLayout gutter={0} className={classes.container}>
-      <Hidden smUp implementation="css">
+    <PageLayout gutter={isMobile ? 0 : undefined} className={classes.container}>
+      {isMobile && (
         <AppBar
           position="static"
           color="transparent"
@@ -282,9 +292,9 @@ function MarketingWizard(props: WithRouterProps) {
             >
               Browse Templates
             </Typography>
-            <Button onClick={handleOpenEditVariablesDialog}>
+            <IconButton onClick={handleOpenEditVariablesDialog}>
               <SvgIcon path={mdiPencilOutline} />
-            </Button>
+            </IconButton>
           </Toolbar>
           <CategoriesTabs
             types={templateTypes}
@@ -295,9 +305,34 @@ function MarketingWizard(props: WithRouterProps) {
             }}
           />
         </AppBar>
-      </Hidden>
+      )}
+      {!isMobile && (
+        <PageLayout.Header title="Browse Templates">
+          <div>
+            <Tooltip title="Edit Info">
+              <IconButton onClick={handleOpenEditVariablesDialog}>
+                <SvgIcon path={mdiPencilOutline} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </PageLayout.Header>
+      )}
       <PageLayout.Main mt={1}>
         <Grid container spacing={2} className={classes.container}>
+          {!isMobile && (
+            <Grid container item>
+              <Box mt={2}>
+                <CategoriesTabs
+                  types={templateTypes}
+                  selectedType={selectedTemplateType}
+                  onChange={selected => {
+                    setTemplatesLimit(TEMPLATES_PAGE_SIZE)
+                    setSelectedTemplateType(selected)
+                  }}
+                />
+              </Box>
+            </Grid>
+          )}
           <Grid container item>
             {currentTabTemplates.slice(0, templatesLimit).map(template => (
               <Grid
@@ -306,9 +341,9 @@ function MarketingWizard(props: WithRouterProps) {
                 item
                 justify="center"
                 xs={6}
-                lg={4}
+                lg={3}
               >
-                <Box my={2} mx={1}>
+                <Box p={2} width="100%">
                   <Paper variant="outlined" className={classes.thumbnailPaper}>
                     <Thumbnail
                       user={user}
@@ -324,15 +359,25 @@ function MarketingWizard(props: WithRouterProps) {
         </Grid>
       </PageLayout.Main>
 
-      {listing && selectedTemplate && (
-        <PreviewDrawer
-          template={selectedTemplate}
-          listing={listing}
-          user={user}
-          onClose={handleClosePreviewDrawer}
-          onPrepareClick={() => handlePrepareClick(selectedTemplate)}
-        />
-      )}
+      {listing &&
+        selectedTemplate &&
+        (isMobile ? (
+          <PreviewDrawer
+            template={selectedTemplate}
+            listing={listing}
+            user={user}
+            onClose={handleClosePreviewDrawer}
+            onPrepareClick={() => handlePrepareClick(selectedTemplate)}
+          />
+        ) : (
+          <PreviewAndDownloadModal
+            template={selectedTemplate}
+            listing={listing}
+            user={user}
+            onClose={handleClosePreviewDrawer}
+            onPrepareClick={() => handlePrepareClick(selectedTemplate)}
+          />
+        ))}
       {isEditVariablesDialogOpen && (
         <EditVariablesDialog
           variables={editableVariables}
@@ -341,7 +386,7 @@ function MarketingWizard(props: WithRouterProps) {
           onSave={handleSaveVariables}
         />
       )}
-      {generatedTemplateFile && (
+      {generatedTemplateFile && isMobile && (
         <DownloadDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}

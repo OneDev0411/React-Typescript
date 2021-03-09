@@ -4,13 +4,13 @@ import { withRouter } from 'react-router'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { useLoadingEntities } from 'hooks/use-loading'
+import { useBrandListings, useDealsListings } from 'hooks/use-listings'
 import { selectUser } from 'selectors/user'
 
 import Layout from './Layout'
 import Info from './Sections/Info'
 import Listings from './Sections/Listings'
 import { openListingPage, openSearchResultPage } from './helpers'
-import { useBrandListings, useDealsListings } from './hooks'
 
 export function AgentNetwork() {
   const user = useSelector(selectUser)
