@@ -15,7 +15,9 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
     <SectionLayout
       title="Upcoming Birthdays and Anniversaries"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/calendar" />
+        events.length ? (
+          <LinkSectionAction title="View all" url="/dashboard/calendar" />
+        ) : null
       }
     >
       {isLoading && (
