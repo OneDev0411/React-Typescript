@@ -145,7 +145,7 @@ export default function Steps({
         <Box className={classes.NewStepContainer}>
           <NewStep
             index={items.length + 1}
-            shouldShowDefaultForm={items.length === 0}
+            shouldShowDefaultForm={false}
             emailTemplates={emailTemplates}
             defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
             onSubmit={onNewStepSubmit}
