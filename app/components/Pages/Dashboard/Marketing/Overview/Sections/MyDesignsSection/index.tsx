@@ -41,10 +41,12 @@ export default function MyDesignsSection() {
       <SectionLayout
         title="My Designs"
         actionNode={
-          <LinkSectionAction
-            title="View all"
-            url="/dashboard/marketing/designs"
-          />
+          templates.length ? (
+            <LinkSectionAction
+              title="View all"
+              url="/dashboard/marketing/designs"
+            />
+          ) : null
         }
         gridProps={{
           sm: 6
@@ -62,7 +64,11 @@ export default function MyDesignsSection() {
             </>
           )}
           {!isLoading && templates.length === 0 && (
-            <Typography variant="h6">No designs to show</Typography>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="textSecondary">
+                Your past designs will be here.
+              </Typography>
+            </Grid>
           )}
           {!isLoading &&
             templates?.slice(0, 2).map(template => (

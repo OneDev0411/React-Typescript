@@ -16,7 +16,9 @@ export default function SentEmailsSection() {
     <SectionLayout
       title="Sent Emails"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/insights" />
+        campaigns?.length ? (
+          <LinkSectionAction title="View all" url="/dashboard/insights" />
+        ) : null
       }
       gridProps={{
         sm: 6
@@ -33,8 +35,13 @@ export default function SentEmailsSection() {
             </Grid>
           </>
         )}
-        {!isLoading && !campaigns && (
-          <Typography variant="h6">No campaigns to show</Typography>
+        {!isLoading && (!campaigns || campaigns.length === 0) && (
+          <Grid item xs={12}>
+            <Typography variant="body1" color="textSecondary">
+              Send an eBlast and you'll be able to see who opens, and clicks on
+              them.
+            </Typography>
+          </Grid>
         )}
         {!isLoading &&
           campaigns
