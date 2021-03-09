@@ -30,19 +30,19 @@ function DomainStatus({ onChange, disabled, step }: DomainStatusProps) {
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>What do you want to do?</QuestionTitle>
+      <QuestionTitle>What would you like to do?</QuestionTitle>
       <QuestionForm>
         <RadioGroup aria-label="Domain Status" onChange={handleChange}>
           <FormControlLabel
             value={DomainStatusType.New}
             control={<Radio />}
-            label="I need to buy a domain."
+            label="I’d like to buy a new domain"
             disabled={disabled}
           />
           <FormControlLabel
             value={DomainStatusType.Existing}
             control={<Radio />}
-            label="I have an existing domain."
+            label="I have an existing domain I’d like to use"
             disabled={disabled}
           />
         </RadioGroup>

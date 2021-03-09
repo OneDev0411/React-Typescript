@@ -67,7 +67,9 @@ function DomainAgreement({
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>Domain Registration Agreement</QuestionTitle>
+      <QuestionTitle>
+        Read and accept the domain registration agreement from GoDaddy
+      </QuestionTitle>
       <QuestionForm>
         {isLoading ? (
           <DomainLoading />

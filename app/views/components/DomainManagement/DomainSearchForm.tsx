@@ -1,4 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+  useRef,
+  useEffect
+} from 'react'
 
 import { Box, TextField, Button, makeStyles } from '@material-ui/core'
 
@@ -22,6 +28,7 @@ function DomainSearchForm({
 }: DomainSearchFormProps) {
   const classes = useStyles()
   const [search, setSearch] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
@@ -31,6 +38,12 @@ function DomainSearchForm({
     event.preventDefault()
     onSubmit(search)
   }
+
+  useEffect(() => {
+    if (!disabled) {
+      inputRef.current?.focus()
+    }
+  }, [disabled])
 
   return (
     <form onSubmit={handleSearch}>
@@ -47,6 +60,7 @@ function DomainSearchForm({
           size="medium"
           name="domain"
           autoFocus
+          inputRef={inputRef}
         />
         <Box marginLeft={1}>
           <Button

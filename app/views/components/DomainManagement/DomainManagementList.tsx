@@ -40,7 +40,7 @@ function DomainManagementList({
     <div className={className}>
       {websiteTitle && <DomainManagementTitle title={websiteTitle} />}
       <Box marginBottom={2}>
-        <H4>Domain List:</H4>
+        <H4>Domains for This Site:</H4>
         <ul className={classes.ul}>
           {websiteHostnames.map(hostname => (
             <DomainManagementListItem
@@ -59,7 +59,7 @@ function DomainManagementList({
         size="large"
         onClick={onNewDomainClick}
       >
-        Add New Domain
+        Add Another Domain
       </Button>
     </div>
   )

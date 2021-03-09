@@ -17,7 +17,7 @@ function DomainManagementDrawer({
 }: DomainManagementDrawerProps) {
   return (
     <Drawer open={open} onClose={onClose}>
-      <Drawer.Header title="Domain Management" />
+      <Drawer.Header title="Manage Domains" />
       <Drawer.Body>
         <Box marginTop={3} marginBottom={3}>
           <DomainManagement {...otherProps} />

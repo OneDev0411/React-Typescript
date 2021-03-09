@@ -51,10 +51,7 @@ function PublishWebsite({
     publishButtonLabel
   } = usePublishWebsite(result => {
     setWebsiteData(result.website)
-
-    if (!websiteData) {
-      openDomainManagement()
-    }
+    openDomainManagement()
   })
 
   const handleCloseBuilder = () => {
@@ -132,16 +129,14 @@ function PublishWebsite({
           saveButtonText={publishButtonLabel}
           actionButtonsDisabled={isPublishing}
           customActions={
-            !!websiteData && (
-              <Button
-                type="button"
-                variant="outlined"
-                disabled={isPublishing}
-                onClick={openDomainManagement}
-              >
-                Manage Domains
-              </Button>
-            )
+            <Button
+              type="button"
+              variant="outlined"
+              disabled={isPublishing || !websiteData}
+              onClick={openDomainManagement}
+            >
+              Manage Domains
+            </Button>
           }
         />
       )}

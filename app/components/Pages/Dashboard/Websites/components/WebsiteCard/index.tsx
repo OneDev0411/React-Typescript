@@ -61,18 +61,26 @@ function WebsiteCard({
 
   const closeEditor = () => setIsEditorOpen(false)
 
+  const openDomainManagement = () => {
+    setIsDomainManagementOpen(true)
+  }
+
+  const closeDomainManagement = () => setIsDomainManagementOpen(false)
+
   const {
     publishWebsite,
     isPublishing,
     publishButtonLabel
-  } = usePublishWebsite(result =>
+  } = usePublishWebsite(result => {
     updateItem(id, {
       template_instance: {
         ...result.instance,
         template: template_instance.template
       }
     })
-  )
+
+    openDomainManagement()
+  })
 
   const handleSave = html => {
     const newInstance = {
@@ -91,12 +99,6 @@ function WebsiteCard({
   }
 
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
-
-  const openDomainManagement = () => {
-    setIsDomainManagementOpen(true)
-  }
-
-  const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
   const handleDomainAdd = (domainName: string, isDefault: boolean) => {
     updateItem(id, {

@@ -45,7 +45,7 @@ function DomainSearch({
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>Search for a domain name</QuestionTitle>
+      <QuestionTitle>Great, search for a domain</QuestionTitle>
       <QuestionForm>
         <DomainSearchForm
           disabled={disabled || isLoading}

@@ -63,7 +63,7 @@ function DomainPayment({
 
   return (
     <QuestionSection step={step}>
-      <QuestionTitle>Payment Information</QuestionTitle>
+      <QuestionTitle>Please add your payment information</QuestionTitle>
       <QuestionForm>
         {isLoadingCustomers ? (
           <DomainLoading />
