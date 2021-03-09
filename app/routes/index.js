@@ -5,6 +5,8 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
+import { showingTabs } from '../components/Pages/Dashboard/Showings/constants'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -637,6 +639,19 @@ const AsyncWebsitesList = withAcl.store(
 )
 
 /* ==================================== */
+//  Showings
+/* ==================================== */
+
+const AsyncShowingsList = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/ShowingList' /* webpackChunkName: "showings_list" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -905,6 +920,12 @@ export default (
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
         <Route path="website" component={AsyncWebsite} />
+
+        <Route
+          path={`showings(/type/:type(${Object.keys(showingTabs).join('|')}))`}
+        >
+          <IndexRoute component={AsyncShowingsList} />
+        </Route>
       </Route>
     </Route>
 
