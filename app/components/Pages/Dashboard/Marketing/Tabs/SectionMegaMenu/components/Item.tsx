@@ -2,10 +2,9 @@ import React from 'react'
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
+import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 
 import { SectionItem } from 'components/PageSideNav/types'
-
-import { MEDIUM_LABEL_MAP } from '../../../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,7 +67,7 @@ function Item({ data, mediums, onClose }: Props) {
 
           return (
             <li key={medium} onClick={e => navigateTo(e, url)}>
-              {MEDIUM_LABEL_MAP[medium] || medium}
+              {getTemplateMediumLabel(medium)}
             </li>
           )
         })}

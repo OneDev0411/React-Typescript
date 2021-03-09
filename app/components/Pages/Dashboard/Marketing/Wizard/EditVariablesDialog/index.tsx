@@ -8,10 +8,10 @@ import {
   Tabs,
   Tab,
   Button,
-  useTheme,
-  useMediaQuery,
   makeStyles,
-  Theme
+  useMediaQuery,
+  Theme,
+  Box
 } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
@@ -48,8 +48,7 @@ export default function EditVariablesDialog({
   onSave
 }: Props) {
   const classes = useStyles()
-  const theme = useTheme()
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
 
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const [updatedVariables, setUpdatedVariables] = useState<
@@ -80,7 +79,13 @@ export default function EditVariablesDialog({
   }
 
   return (
-    <Dialog open scroll="paper" fullScreen={fullScreen} onClose={onClose}>
+    <Dialog
+      open
+      fullWidth
+      fullScreen={isMobile}
+      maxWidth="sm"
+      onClose={onClose}
+    >
       <DialogTitle>
         <Grid container direction="column">
           <Grid container item alignItems="center" justify="space-between">
@@ -91,7 +96,7 @@ export default function EditVariablesDialog({
             </Grid>
             <Grid item>Edit Info</Grid>
             <Grid item>
-              <Button variant="text" color="primary" onClick={handleSave}>
+              <Button variant="contained" color="primary" onClick={handleSave}>
                 Save
               </Button>
             </Grid>
@@ -122,23 +127,25 @@ export default function EditVariablesDialog({
         >
           {sections.map(section => (
             <Grid key={section} container direction="column">
-              {variables
-                .filter(item => item.section === section)
-                .map(variable => {
-                  const possiblyUpdatedVariable =
-                    updatedVariables.find(
-                      item => item.name === variable.name
-                    ) ?? variable
+              <Box overflow="hidden">
+                {variables
+                  .filter(item => item.section === section)
+                  .map(variable => {
+                    const possiblyUpdatedVariable =
+                      updatedVariables.find(
+                        item => item.name === variable.name
+                      ) ?? variable
 
-                  return (
-                    <Field
-                      key={variable.name}
-                      variable={possiblyUpdatedVariable}
-                      onUpload={onUpload}
-                      onChange={handleChangeVariableValue}
-                    />
-                  )
-                })}
+                    return (
+                      <Field
+                        key={variable.name}
+                        variable={possiblyUpdatedVariable}
+                        onUpload={onUpload}
+                        onChange={handleChangeVariableValue}
+                      />
+                    )
+                  })}
+              </Box>
             </Grid>
           ))}
         </SwipeableViews>
