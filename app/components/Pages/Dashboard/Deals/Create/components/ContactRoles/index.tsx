@@ -122,6 +122,7 @@ export function ContactRoles({ onSelectRole }: Props) {
     <Box className={classes.root}>
       <TextField
         fullWidth
+        autoComplete="no-autocomplete"
         variant="outlined"
         size="small"
         value={searchCriteria}
