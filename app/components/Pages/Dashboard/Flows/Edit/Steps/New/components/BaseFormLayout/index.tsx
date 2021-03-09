@@ -161,7 +161,7 @@ const Layout = ({
             <Box className={classes.commonField} flexGrow={1} px={0.75}>
               <EventType disabled={disableEdit} />
             </Box>
-            <Box className={classes.commonField} flexGrow={0}>
+            <Box className={classes.commonField} flexGrow={0} maxWidth={140}>
               <Time
                 textFieldProps={{
                   disabled: disableEdit
