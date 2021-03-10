@@ -91,6 +91,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "connect-timeout": "^1.9.0",
     "cookie-session": "^1.4.0",
+    "core-js": "^3.9.1",
     "cross-env": "^7.0.2",
     "css-loader": "^5.0.1",
     "cuid": "^2.1.6",
