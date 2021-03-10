@@ -140,14 +140,16 @@ export default function Publish({ params }: Props) {
 
       <Box className={classes.root}>
         <QuestionWizard onFinish={handlePublish}>
-          <DealClient
-            side="Buying"
-            title={`What's the ${
-              propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-            }'s legal name?`}
-            submitButtonLabel="Looks Good"
-            roles={roles}
-          />
+          {deal.deal_type === 'Buying' && (
+            <DealClient
+              side="Buying"
+              title={`What's the ${
+                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+              }'s legal name?`}
+              submitButtonLabel="Looks Good"
+              roles={roles}
+            />
+          )}
 
           <DealClient
             side="Selling"

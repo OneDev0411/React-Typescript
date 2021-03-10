@@ -1,12 +1,3 @@
-export interface IUserWithBrand extends IUser {
-  brand_id?: UUID
-}
-
-export interface AgentItem {
-  agent: IUserWithBrand
-  contacts: IContact[]
-}
-
 export interface NormalizedBrand {
   id?: UUID
   name?: string
@@ -16,4 +7,9 @@ export interface NormalizedBrand {
 
 export type BrandedUser = IUser & {
   brand_id?: UUID | null
+}
+
+export interface Agent {
+  agent: BrandedUser
+  contacts: IContact[]
 }

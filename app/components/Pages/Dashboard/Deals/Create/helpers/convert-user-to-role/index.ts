@@ -1,7 +1,11 @@
 import { IDealFormRole } from '../../types'
 
+type BrandedUser = IUser & {
+  brand_id?: UUID | null
+}
+
 export function convertUserAgentToRole(
-  user: IUser,
+  user: BrandedUser,
   isOfficeDoubleEnded: boolean
 ): Partial<IDealFormRole> {
   return {

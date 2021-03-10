@@ -192,10 +192,13 @@ export function DealCoAgent({
                           avatarUrl={agent.profile_image_url!}
                           onClick={() => {
                             setSelectedRole(
-                              convertUserAgentToRole({
-                                ...agent,
-                                brand_id: team.id
-                              })
+                              convertUserAgentToRole(
+                                {
+                                  ...agent,
+                                  brand_id: team.id
+                                },
+                                false
+                              )
                             )
                           }}
                         />
