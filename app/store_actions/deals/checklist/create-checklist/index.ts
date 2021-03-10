@@ -22,7 +22,7 @@ export function createChecklist(dealId: UUID, options: Options) {
 
     const { entities } = normalize(checklist, schema.checklistSchema)
     const { checklists, tasks } = entities
-    const checklistId = Object.keys(checklists)[0]
+    const checklistId = Object.keys(checklists || {})[0]
 
     batchActions([
       dispatch(setTasks(tasks)),
