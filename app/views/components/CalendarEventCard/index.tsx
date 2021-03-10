@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import {
   Card,
   Grid,
@@ -11,9 +12,12 @@ import {
 } from '@material-ui/core'
 import timeago from 'timeago.js'
 
+import { selectUser } from 'selectors/user'
+
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 
 import { getEventMarketingTemplateTypes } from './helpers'
 
@@ -47,6 +51,18 @@ interface Props {
 
 export default function CalendarEventCard({ event }: Props) {
   const classes = useStyles()
+  const user = useSelector(selectUser)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
+    false
+  )
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
+
+  const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
+    setSelectedTemplate(template)
+    setIsTemplatePickerOpen(false)
+  }
 
   const contact =
     event.people &&
@@ -97,22 +113,37 @@ export default function CalendarEventCard({ event }: Props) {
           </Grid>
           {cardTemplateTypes && (
             <Grid container item>
-              <SendContactCard
-                contact={contact}
-                mediums="Email"
-                types={cardTemplateTypes}
-                buttonRenderrer={({ disabled, onClick }) => (
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    color="secondary"
-                    disabled={disabled}
-                    onClick={onClick}
-                  >
-                    Send Gift Card
-                  </Button>
-                )}
-              />
+              <>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => setIsTemplatePickerOpen(true)}
+                >
+                  Send eCard
+                </Button>
+              </>
+              {isTemplatePickerOpen && (
+                <MarketingTemplatePickerModal
+                  title="Select Template"
+                  user={user}
+                  mediums={['Email']}
+                  templateTypes={cardTemplateTypes}
+                  onSelect={handleSelectTemplate}
+                  onClose={() => setIsTemplatePickerOpen(false)}
+                />
+              )}
+              {selectedTemplate && (
+                <SendContactCard
+                  isBuilderOpen
+                  selectedTemplate={selectedTemplate}
+                  contact={contact}
+                  types={cardTemplateTypes}
+                  mediums="Email"
+                  handleTrigger={() => setSelectedTemplate(null)}
+                  buttonRenderrer={() => null}
+                />
+              )}
             </Grid>
           )}
         </Grid>
