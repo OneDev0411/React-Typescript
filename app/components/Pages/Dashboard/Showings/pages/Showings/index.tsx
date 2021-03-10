@@ -11,10 +11,13 @@ import TabContentSwitch from 'components/TabContentSwitch'
 import ShowingTabs, { ShowingTabsProps } from '../../components/ShowingTabs'
 
 import { showingTabs } from '../../constants'
+import ShowingTabLive from '../../components/ShowingTabLive'
+import ShowingTabAll from '../../components/ShowingTabAll'
+import ShowingTabOffline from '../../components/ShowingTabOffline'
 
 type ShowingProps = RouteComponentProps<{ type?: ShowingTabsProps['type'] }, {}>
 
-function ShowingList({ params }: ShowingProps) {
+function Showings({ params }: ShowingProps) {
   useTitle('Showings | Rechat')
 
   const type = params.type || showingTabs.Live
@@ -26,13 +29,13 @@ function ShowingList({ params }: ShowingProps) {
         <ShowingTabs type={type} />
         <TabContentSwitch.Container value={type}>
           <TabContentSwitch.Item value={showingTabs.Live}>
-            Live showings
+            <ShowingTabLive />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item value={showingTabs.All}>
-            All showings
+            <ShowingTabAll />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item value={showingTabs.Offline}>
-            Offline showings
+            <ShowingTabOffline />
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
       </PageLayout.Main>
@@ -40,4 +43,4 @@ function ShowingList({ params }: ShowingProps) {
   )
 }
 
-export default memo(ShowingList)
+export default memo(Showings)

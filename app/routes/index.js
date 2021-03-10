@@ -642,11 +642,11 @@ const AsyncWebsitesList = withAcl.store(
 //  Showings
 /* ==================================== */
 
-const AsyncShowingsList = withAcl.marketing(
+const AsyncShowings = withAcl.marketing(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Showings/pages/ShowingList' /* webpackChunkName: "showings_list" */
+        '../components/Pages/Dashboard/Showings/pages/Showings' /* webpackChunkName: "showings" */
       )
   })
 )
@@ -924,7 +924,7 @@ export default (
         <Route
           path={`showings(/type/:type(${Object.keys(showingTabs).join('|')}))`}
         >
-          <IndexRoute component={AsyncShowingsList} />
+          <IndexRoute component={AsyncShowings} />
         </Route>
       </Route>
     </Route>
