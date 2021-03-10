@@ -87,10 +87,13 @@ export function AgentsList({ onSelectRole }: Props) {
                     avatarUrl={agent.profile_image_url!}
                     onClick={() =>
                       onSelectRole(
-                        convertUserAgentToRole({
-                          ...agent,
-                          brand_id: team.id
-                        })
+                        convertUserAgentToRole(
+                          {
+                            ...agent,
+                            brand_id: team.id
+                          },
+                          false
+                        )
                       )
                     }
                   />
