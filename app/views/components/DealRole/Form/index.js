@@ -159,7 +159,10 @@ export class DealRole extends React.Component {
           await this.createRole(form)
         ])
       } else {
-        await this.updateRole(form)
+        await Promise.all([
+          await this.upsertContact(form),
+          await this.updateRole(form)
+        ])
       }
     } catch (e) {
       this.props.notify({

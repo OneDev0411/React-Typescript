@@ -100,6 +100,7 @@ export function DealClient({
           <DealRoleForm
             isOpen
             compact
+            showSaveContactButton
             user={user}
             deal={deal}
             checklist={checklist}

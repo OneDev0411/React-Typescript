@@ -37,10 +37,15 @@ export function RoleForm(props) {
 
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
-  const showSaveContactButton =
+  const showNewContactButton =
     props.isNewRecord &&
     props.values.email !== props.userEmail &&
     !props.values.contact
+
+  const showUpdateContactButton =
+    props.values.email !== props.userEmail && props.values.contact
+
+  console.log(showNewContactButton, props)
 
   const selectedRole = props.values.role
   const roleType = props.values.role_type
@@ -270,14 +275,22 @@ export function RoleForm(props) {
               <>
                 <Button
                   ml={1}
-                  variant={showSaveContactButton ? 'outlined' : 'contained'}
-                  color={showSaveContactButton ? 'secondary' : 'primary'}
+                  variant={
+                    showNewContactButton || showUpdateContactButton
+                      ? 'outlined'
+                      : 'contained'
+                  }
+                  color={
+                    showNewContactButton || showUpdateContactButton
+                      ? 'secondary'
+                      : 'primary'
+                  }
                   onClick={() => props.onSubmit(props.form, false)}
                 >
                   Save
                 </Button>
 
-                {showSaveContactButton && (
+                {(showNewContactButton || showUpdateContactButton) && (
                   <Button
                     ml={1}
                     variant="contained"
