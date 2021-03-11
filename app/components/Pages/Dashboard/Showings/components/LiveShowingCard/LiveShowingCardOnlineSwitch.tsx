@@ -1,16 +1,17 @@
 import React from 'react'
 
-import { Tooltip } from '@material-ui/core'
+import LabeledSwitch, { LabeledSwitchProps } from 'components/LabeledSwitch'
 
-import LabeledSwitch from 'components/LabeledSwitch'
+const switchProps: LabeledSwitchProps['SwitchProps'] = {
+  color: 'primary',
+  tooltip: 'Remove all availability'
+}
 
 function LiveShowingCardOnlineSwitch() {
   return (
-    <Tooltip title="Remove all availability">
-      <LabeledSwitch SwitchProps={{ color: 'primary' }} labelMargin={1}>
-        Online
-      </LabeledSwitch>
-    </Tooltip>
+    <LabeledSwitch SwitchProps={switchProps} labelMargin={1}>
+      Online
+    </LabeledSwitch>
   )
 }
 
