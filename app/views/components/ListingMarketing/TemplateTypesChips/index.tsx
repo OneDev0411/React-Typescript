@@ -37,7 +37,7 @@ export default function TemplateTypesChips({
           <Grid item key={type}>
             <Box mr={1}>
               <Chip
-                variant="outlined"
+                variant="default"
                 label={label}
                 color={isActive ? 'primary' : 'default'}
                 onClick={() => onClick(type)}

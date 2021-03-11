@@ -41,7 +41,7 @@ export default function TemplatesRow({
       <Grid container item>
         {templates.map(template => (
           <Grid key={template.id} item xs={3}>
-            <Box p={1}>
+            <Box p={1} overflow="hidden">
               <MarketingTemplateCardThumbnail
                 user={user}
                 template={template}

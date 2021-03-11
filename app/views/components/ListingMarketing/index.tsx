@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Grid, makeStyles } from '@material-ui/core'
 
+import getListing from 'models/listings/listing/get-listing'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
-import getListing from 'models/listings/listing/get-listing'
 import { useLoadingEntities } from 'hooks/use-loading'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { useUniqueMediums } from 'hooks/use-unique-mediums'
-
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
+
+import LoadingContainer from 'components/LoadingContainer'
+import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
 import { LISTING_TEMPLATE_TYPES } from '../../../components/Pages/Dashboard/Marketing/Wizard/constants'
@@ -32,13 +34,15 @@ type Props = RequireOnlyOne<
   {
     listingId?: UUID
     listing?: IListing
+    defaultTemplateType?: IMarketingTemplateType
   },
   'listing' | 'listingId'
 >
 
 export default function ListingMarketing({
   listing: passedListing,
-  listingId
+  listingId,
+  defaultTemplateType
 }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
@@ -46,6 +50,10 @@ export default function ListingMarketing({
 
   const [selectedTemplateType, setSelectedTemplateType] = useState<
     Nullable<IMarketingTemplateType>
+  >(defaultTemplateType ?? null)
+
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
   >(null)
 
   const [listing, setListing] = useState<Nullable<IListing>>(null)
@@ -78,22 +86,8 @@ export default function ListingMarketing({
     fetchListing()
   }, [listingId, passedListing])
 
-  if (isLoadingListing) {
-    console.log('LOADING LISTINGS')
-
-    return null
-  }
-
-  if (isLoadingTemplates) {
-    console.log('LOADING TEMPLATES')
-
-    return null
-  }
-
-  if (!listing) {
-    console.log('NO LISTING')
-
-    return null
+  if (isLoadingListing || isLoadingTemplates || !listing) {
+    return <LoadingContainer noPaddings />
   }
 
   const currentTemplateTypeTemplates = templates.filter(
@@ -103,33 +97,47 @@ export default function ListingMarketing({
   )
 
   return (
-    <Grid container direction="row" className={classes.container}>
-      <TemplateTypesChips
-        activeType={selectedTemplateType ?? templateTypes[0]}
-        types={templateTypes}
-        onClick={setSelectedTemplateType}
-      />
-      {mediums.map(medium => {
-        const currentMediumTemplates = currentTemplateTypeTemplates
-          .filter(template => template.template.medium === medium)
-          .slice(0, 4)
+    <>
+      <Grid container direction="row" className={classes.container}>
+        <TemplateTypesChips
+          activeType={selectedTemplateType ?? templateTypes[0]}
+          types={templateTypes}
+          onClick={setSelectedTemplateType}
+        />
+        {mediums.map(medium => {
+          const currentMediumTemplates = currentTemplateTypeTemplates
+            .filter(template => template.template.medium === medium)
+            .slice(0, 4)
 
-        if (currentMediumTemplates.length === 0) {
-          return null
-        }
+          if (currentMediumTemplates.length === 0) {
+            return null
+          }
 
-        const mediumLabel = getTemplateMediumLabel(medium)
+          const mediumLabel = getTemplateMediumLabel(medium)
 
-        return (
-          <TemplatesRow
-            key={medium}
-            title={mediumLabel}
-            listing={listing}
-            templates={currentMediumTemplates}
-            onClick={console.log}
-          />
-        )
-      })}
-    </Grid>
+          return (
+            <TemplatesRow
+              key={medium}
+              title={mediumLabel}
+              listing={listing}
+              templates={currentMediumTemplates}
+              onClick={setSelectedTemplate}
+            />
+          )
+        })}
+      </Grid>
+      {selectedTemplate && (
+        <SendMlsListingCard
+          hasExternalTrigger
+          isTriggered
+          isTemplatesColumnHiddenDefault={false}
+          mediums={selectedTemplate.template.medium}
+          types={selectedTemplate.template.template_type}
+          listing={listing}
+          selectedTemplate={selectedTemplate}
+          handleTrigger={() => setSelectedTemplate(null)}
+        />
+      )}
+    </>
   )
 }
