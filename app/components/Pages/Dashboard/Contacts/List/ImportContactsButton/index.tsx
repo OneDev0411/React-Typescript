@@ -61,7 +61,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       onClick={google.connect}
       style={{ zIndex: 2 }}
       size="large"
-      renderMenu={() => (
+      RenderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>
             <Box paddingTop={1} paddingBottom={0.5}>
