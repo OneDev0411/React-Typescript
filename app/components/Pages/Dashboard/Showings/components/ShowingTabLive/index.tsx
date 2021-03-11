@@ -15,7 +15,7 @@ function ShowingTabLive() {
       <BoxWithTitle title="Today">
         <AppointmentList />
       </BoxWithTitle>
-      <BoxWithTitle title="Live Showings">
+      <BoxWithTitle title="Live Showings" hasTitleBullet>
         <LiveShowingList />
       </BoxWithTitle>
       <BoxWithTitle title="Create A New Showing">
