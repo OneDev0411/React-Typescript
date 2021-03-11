@@ -3,15 +3,24 @@ import React from 'react'
 import LiveShowingList from '../LiveShowingList'
 import CreateShowingList from '../CreateShowingList'
 
-import AppointmentListWithTitle from '../AppointmentListWithTitle'
+import AppointmentList from '../AppointmentList'
+import BoxWithTitle from '../BoxWithTitle'
 
 function ShowingTabLive() {
   return (
     <>
-      <AppointmentListWithTitle title="New Updates" />
-      <AppointmentListWithTitle title="Today" />
-      <LiveShowingList />
-      <CreateShowingList />
+      <BoxWithTitle title="New Updates">
+        <AppointmentList />
+      </BoxWithTitle>
+      <BoxWithTitle title="Today">
+        <AppointmentList />
+      </BoxWithTitle>
+      <BoxWithTitle title="Live Showings">
+        <LiveShowingList />
+      </BoxWithTitle>
+      <BoxWithTitle title="Create A New Showing">
+        <CreateShowingList />
+      </BoxWithTitle>
     </>
   )
 }
