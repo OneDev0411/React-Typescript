@@ -4,6 +4,8 @@ import { useTitle } from 'react-use'
 
 import { RouteComponentProps } from 'react-router'
 
+import { Box } from '@material-ui/core'
+
 import PageLayout from 'components/GlobalPageLayout'
 
 import TabContentSwitch from 'components/TabContentSwitch'
@@ -27,17 +29,19 @@ function Showings({ params }: ShowingProps) {
       <PageLayout.Header title="Showings" />
       <PageLayout.Main>
         <ShowingTabs type={type} />
-        <TabContentSwitch.Container value={type}>
-          <TabContentSwitch.Item value={showingTabs.Live}>
-            <ShowingTabLive />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingTabs.All}>
-            <ShowingTabAll />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingTabs.Offline}>
-            <ShowingTabOffline />
-          </TabContentSwitch.Item>
-        </TabContentSwitch.Container>
+        <Box my={3}>
+          <TabContentSwitch.Container value={type}>
+            <TabContentSwitch.Item value={showingTabs.Live}>
+              <ShowingTabLive />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingTabs.All}>
+              <ShowingTabAll />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingTabs.Offline}>
+              <ShowingTabOffline />
+            </TabContentSwitch.Item>
+          </TabContentSwitch.Container>
+        </Box>
       </PageLayout.Main>
     </PageLayout>
   )
