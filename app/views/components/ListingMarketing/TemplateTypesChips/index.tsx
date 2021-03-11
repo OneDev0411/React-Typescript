@@ -1,7 +1,18 @@
 import React from 'react'
-import { Box, Chip, Grid } from '@material-ui/core'
+import { Box, Chip, Grid, makeStyles, Theme } from '@material-ui/core'
 
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      marginBottom: theme.spacing(4)
+    }
+  }),
+  {
+    name: 'ListingMarketingTemplateTypesChips'
+  }
+)
 
 interface Props {
   types: IMarketingTemplateType[]
@@ -14,15 +25,17 @@ export default function TemplateTypesChips({
   activeType,
   onClick
 }: Props) {
+  const classes = useStyles()
+
   return (
-    <Grid container item>
+    <Grid container item className={classes.container}>
       {types.map(type => {
         const isActive = activeType === type
         const label = getTemplateTypeLabel(type)
 
         return (
           <Grid item key={type}>
-            <Box m={0.5}>
+            <Box mr={1}>
               <Chip
                 variant="outlined"
                 label={label}
