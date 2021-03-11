@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import {
   Card,
   CardActionArea,
@@ -143,6 +143,16 @@ interface Props {
    * The click handler of listing card
    */
   onClick?: () => void
+
+  /**
+   * A react node to render instead of listing status chip
+   */
+  customChip?: ReactNode
+
+  /**
+   * Render custom children
+   */
+  children?: ReactNode
 }
 
 export default function ListingCard({
@@ -153,7 +163,9 @@ export default function ListingCard({
   onToggleSelection = noop,
   liked = undefined,
   onLikeClick = noop,
-  onClick
+  onClick,
+  customChip,
+  children
 }: Props) {
   const classes = useStyles({ listing })
 
@@ -191,7 +203,7 @@ export default function ListingCard({
 
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
-      <CardActionArea>
+      <CardActionArea component="div">
         <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
             <Grid item>
@@ -259,22 +271,24 @@ export default function ListingCard({
               </Grid>
               <Grid item>
                 <Box m={1} textAlign="center">
-                  <Chip
-                    label={listing.status}
-                    size="small"
-                    variant="outlined"
-                    className={classes.statusChip}
-                    icon={
-                      <Box flex>
-                        <Badge
-                          variant="dot"
-                          classes={{
-                            dot: classes.statusBadgeDot
-                          }}
-                        />
-                      </Box>
-                    }
-                  />
+                  {customChip || (
+                    <Chip
+                      label={listing.status}
+                      size="small"
+                      variant="outlined"
+                      className={classes.statusChip}
+                      icon={
+                        <Box>
+                          <Badge
+                            variant="dot"
+                            classes={{
+                              dot: classes.statusBadgeDot
+                            }}
+                          />
+                        </Box>
+                      }
+                    />
+                  )}
                 </Box>
               </Grid>
             </Grid>
@@ -349,6 +363,7 @@ export default function ListingCard({
           </Grid>
         </CardContent>
       </CardActionArea>
+      {children}
     </Card>
   )
 }
