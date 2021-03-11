@@ -243,9 +243,12 @@ export function RoleForm(props) {
         <Divider />
       </Grid>
 
-      <Grid item xs={12} mt={1}>
-        <Box display="flex" justifyContent="space-between">
-          <Box display="flex">
+      <Grid container xs={12} my={1}>
+        <Grid md={compact ? 12 : 4} xs={12}>
+          <Box
+            display="flex"
+            justifyContent={compact ? 'flex-end' : 'flex-start'}
+          >
             {props.isRoleRemovable && (
               <DeleteRole
                 deal={props.deal}
@@ -253,7 +256,6 @@ export function RoleForm(props) {
                 onDeleteRole={props.onDeleteRole}
               />
             )}
-
             {props.values.contact && (
               <Button
                 href={`/dashboard/contacts/${props.values.contact.id}`}
@@ -263,8 +265,10 @@ export function RoleForm(props) {
               </Button>
             )}
           </Box>
+        </Grid>
 
-          <Box alignCenter textAlign="right">
+        <Grid md={compact ? 12 : 8} mt={compact ? 1 : 0} xs={12}>
+          <Box display="flex" justifyContent="flex-end">
             <Button onClick={props.onClose}>Cancel</Button>
 
             {props.isSubmitting ? (
@@ -304,7 +308,7 @@ export function RoleForm(props) {
               </>
             )}
           </Box>
-        </Box>
+        </Grid>
       </Grid>
     </Grid>
   )
