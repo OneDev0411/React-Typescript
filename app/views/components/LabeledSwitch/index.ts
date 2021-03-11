@@ -1,5 +1,3 @@
-import LabeledSwitch from './LabeledSwitch'
-
-export default LabeledSwitch
+export { default } from './LabeledSwitch'
 
 export * from './LabeledSwitch'

@@ -6,7 +6,8 @@ import {
   Switch,
   SwitchProps,
   Typography,
-  TypographyProps
+  TypographyProps,
+  Tooltip
 } from '@material-ui/core'
 import classNames from 'classnames'
 
@@ -40,7 +41,9 @@ export interface LabeledSwitchProps
     Omit<TypographyProps, TypographySettledProps | TypographyExposedProps>
   >
   SwitchProps?: Partial<
-    Omit<SwitchProps, SwitchSettledProps | SwitchExposedProps>
+    Omit<SwitchProps, SwitchSettledProps | SwitchExposedProps> & {
+      tooltip?: string
+    }
   >
 }
 
@@ -55,16 +58,26 @@ export default function LabeledSwitch({
 }: LabeledSwitchProps) {
   const classes = useStyles({ labelMargin })
 
+  const switchInput = (
+    <Switch
+      {...SwitchProps}
+      size="small"
+      checked={checked}
+      onChange={onChange}
+    />
+  )
+
   return (
     <FormControlLabel
       className={classes.root}
       control={
-        <Switch
-          {...SwitchProps}
-          size="small"
-          checked={checked}
-          onChange={onChange}
-        />
+        SwitchProps?.tooltip ? (
+          <Tooltip title={SwitchProps?.tooltip}>
+            <span>{switchInput}</span>
+          </Tooltip>
+        ) : (
+          switchInput
+        )
       }
       label={
         <Typography
