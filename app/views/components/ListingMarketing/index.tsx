@@ -113,6 +113,11 @@ export default function ListingMarketing({
         const currentMediumTemplates = currentTemplateTypeTemplates
           .filter(template => template.template.medium === medium)
           .slice(0, 4)
+
+        if (currentMediumTemplates.length === 0) {
+          return null
+        }
+
         const mediumLabel = getTemplateMediumLabel(medium)
 
         return (
