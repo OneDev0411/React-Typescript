@@ -1,4 +1,4 @@
-export interface IShowing extends IModel<'showing'> {
+declare interface IShowing extends IModel<'showing'> {
   brand: UUID
   aired_at?: number
   start_date: string
@@ -14,14 +14,14 @@ export interface IShowing extends IModel<'showing'> {
   appointments: IAppointment[]
 }
 
-export interface IAppointment extends IModel<'appointment'> {
+declare interface IAppointment extends IModel<'appointment'> {
   source: string
   time: string
   status: IAppointmentStatus
   contact: IContact
 }
 
-export interface IShowingRole extends IModel<'showing_role'> {
+declare interface IShowingRole extends IModel<'showing_role'> {
   role: IDealRole
   user: UUID
   brand: UUID
@@ -34,9 +34,9 @@ export interface IShowingRole extends IModel<'showing_role'> {
   phone_number: string
 }
 
-export type IAppointmentStatus =
+declare type IAppointmentStatus =
   | 'Pending'
-  | 'Active'
+  | 'Approved'
   | 'Rescheduled'
   | 'Cancelled'
   | 'Finished'
