@@ -6,7 +6,8 @@ import { getDealStatuses } from 'models/Deal/status/get-deal-statuses'
 
 export function useStatusList(deal: IDeal): IDealStatus[] {
   const [statuses, setStatuses] = useState<IDealStatus[]>([])
-  const dealId = deal.id
+
+  const dealId = deal?.id
 
   useAsync(async () => {
     if (!dealId) {

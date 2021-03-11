@@ -29,6 +29,7 @@ export function QuestionWizard({
   const [showLoading, setShowLoading] = useState(false)
 
   const sections = Array.isArray(children) ? children.flat() : [children]
+  const sectionsCount = sections.filter(section => !!section).length
 
   const gotoStep = (step: number) => {
     if (step === currentStep) {
@@ -39,13 +40,13 @@ export function QuestionWizard({
   }
 
   const gotoNext = async () => {
-    if (currentStep + 1 > sections.length) {
+    if (currentStep + 1 > sectionsCount) {
       onFinish()
 
       return
     }
 
-    const nextStep = Math.min(currentStep + 1, sections.length)
+    const nextStep = Math.min(currentStep + 1, sectionsCount)
 
     setCurrentStep(nextStep)
   }
@@ -79,7 +80,7 @@ export function QuestionWizard({
 
     window.scrollTo({
       top:
-        refs.current[currentStep].getBoundingClientRect().top +
+        refs.current[currentStep]?.getBoundingClientRect().top +
         window.pageYOffset -
         50,
       behavior: 'smooth'
@@ -100,14 +101,14 @@ export function QuestionWizard({
         currentStep,
         lastVisitedStep,
         setStep,
-        totalSteps: sections.length,
+        totalSteps: sectionsCount,
         goto: gotoStep,
         next: gotoNext,
         previous: gotoPrevious,
         isLoading: showLoading,
         setLoading: setShowLoading,
         first: () => gotoStep(1),
-        last: () => gotoStep(sections.length)
+        last: () => gotoStep(sectionsCount)
       }}
     >
       <div

@@ -15,14 +15,13 @@ import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { selectDealById } from 'reducers/deals/list'
 import { getField } from 'models/Deal/helpers/context'
-import { createOffer, createRoles } from 'actions/deals'
+import { createOffer, createRoles, upsertContexts } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 
 import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
-import { upsertContexts } from 'models/Deal/context'
 import Deal from 'models/Deal'
 import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
 
@@ -37,8 +36,8 @@ import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
 import { Header } from './components/Header'
 
-import { useDealRoles } from './hooks/use-deal-roles'
 import { useStatusList } from './hooks/use-status-list'
+import { useDealRoles } from './hooks/use-deal-roles'
 
 import { Context } from './context'
 
@@ -75,14 +74,14 @@ export default function CreateOffer({ params }: Props) {
     selectDealById(deals.list, params.id)
   )
 
+  const statusList = useStatusList(deal)
+
   useEffect(() => {
     deal?.has_active_offer && goTo(`/dashboard/deals/${deal.id}`)
   }, [deal?.has_active_offer, deal?.id])
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
-
-  const statusList = useStatusList(deal)
 
   const dealContexts = deal
     ? getDealContexts(user, 'Buying', deal.property_type, true)
@@ -148,7 +147,7 @@ export default function CreateOffer({ params }: Props) {
 
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
-        upsertContexts(deal.id, getContexts(values, deal, checklist))
+        dispatch(upsertContexts(deal.id, getContexts(values, deal, checklist)))
       ])
     } catch (e) {
       console.log(e)

@@ -45,8 +45,6 @@ export function RoleForm(props) {
   const showUpdateContactButton =
     props.values.email !== props.userEmail && props.values.contact
 
-  console.log(showNewContactButton, props)
-
   const selectedRole = props.values.role
   const roleType = props.values.role_type
   const compact = props.compact

@@ -28,7 +28,11 @@ import { getDealContexts } from './helpers/get-deal-contexts'
 
 import { DealContext } from './form/DealContext'
 import { DealClient } from './form/DealClient'
+import { DealStatus } from './form/DealStatus'
+
 import { Header } from './components/Header'
+
+import { useStatusList } from './hooks/use-status-list'
 
 import { Context } from './context'
 
@@ -64,6 +68,8 @@ export default function Publish({ params }: Props) {
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
   )
+
+  const statusList = useStatusList(deal)
 
   useEffect(() => {
     if (deal?.is_draft === false) {
@@ -129,7 +135,6 @@ export default function Publish({ params }: Props) {
   return (
     <Context.Provider
       value={{
-        deal,
         user
       }}
     >
@@ -160,9 +165,12 @@ export default function Publish({ params }: Props) {
             roles={roles}
           />
 
-          {contexts.map((context: IDealBrandContext) => (
-            <DealContext key={context.id} context={context} />
-          ))}
+          <DealStatus list={statusList} />
+
+          {contexts.length > 0 &&
+            contexts.map((context: IDealBrandContext) => (
+              <DealContext key={context.id} context={context} />
+            ))}
         </QuestionWizard>
       </Box>
     </Context.Provider>
