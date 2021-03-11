@@ -80,11 +80,7 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
 
   const contexts = useMemo(() => {
-    return deal
-      ? getDealContexts(user, deal.deal_type, deal.property_type).filter(
-          context => getField(deal, context.key) == null
-        )
-      : []
+    return deal ? getDealContexts(user, deal.deal_type, deal.property_type) : []
   }, [deal, user])
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
