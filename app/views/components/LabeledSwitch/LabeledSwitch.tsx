@@ -10,6 +10,10 @@ import {
 } from '@material-ui/core'
 import classNames from 'classnames'
 
+interface StyleProps {
+  labelMargin: number
+}
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -17,7 +21,7 @@ const useStyles = makeStyles(
       marginRight: 0
     },
     label: {
-      marginRight: theme.spacing(2)
+      marginRight: ({ labelMargin }: StyleProps) => theme.spacing(labelMargin)
     }
   }),
   { name: 'LabeledSwitch' }
@@ -30,7 +34,8 @@ type SwitchSettledProps = 'size'
 
 export interface LabeledSwitchProps
   extends Pick<TypographyProps, TypographyExposedProps>,
-    Pick<SwitchProps, SwitchExposedProps> {
+    Pick<SwitchProps, SwitchExposedProps>,
+    Partial<StyleProps> {
   TypographyProps?: Partial<
     Omit<TypographyProps, TypographySettledProps | TypographyExposedProps>
   >
@@ -45,9 +50,10 @@ export default function LabeledSwitch({
   TypographyProps,
   checked,
   onChange,
-  SwitchProps
+  SwitchProps,
+  labelMargin = 2
 }: LabeledSwitchProps) {
-  const classes = useStyles()
+  const classes = useStyles({ labelMargin })
 
   return (
     <FormControlLabel
