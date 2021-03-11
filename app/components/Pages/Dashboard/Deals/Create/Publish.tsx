@@ -135,7 +135,8 @@ export default function Publish({ params }: Props) {
   return (
     <Context.Provider
       value={{
-        user
+        user,
+        deal
       }}
     >
       <Header
