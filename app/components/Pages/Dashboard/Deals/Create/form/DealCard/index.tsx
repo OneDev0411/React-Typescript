@@ -35,7 +35,7 @@ export function DealCard({ dealSide }: Props) {
   return (
     <QuestionSection>
       <QuestionTitle>
-        <div>Congratulation! 🎉</div>I am done create the deal for you
+        <div>Congratulation! 🎉</div>I am done creating the deal for you
       </QuestionTitle>
 
       <QuestionForm>
