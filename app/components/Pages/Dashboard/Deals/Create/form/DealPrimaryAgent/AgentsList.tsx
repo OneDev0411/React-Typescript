@@ -45,10 +45,11 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  isDoubleEnded: boolean
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
 
-export function AgentsList({ onSelectRole }: Props) {
+export function AgentsList({ isDoubleEnded, onSelectRole }: Props) {
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
@@ -92,7 +93,7 @@ export function AgentsList({ onSelectRole }: Props) {
                             ...agent,
                             brand_id: team.id
                           },
-                          false
+                          isDoubleEnded
                         )
                       )
                     }
