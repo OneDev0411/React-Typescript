@@ -162,7 +162,7 @@ export default function Publish({ params }: Props) {
             roles={roles}
           />
 
-          <DealStatus list={statusList} />
+          {!deal.listing && <DealStatus list={statusList} />}
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (
