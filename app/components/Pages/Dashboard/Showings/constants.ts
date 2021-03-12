@@ -1,7 +1,7 @@
 import type { ShowingTabType } from './types'
 
 export const showingTabs: Record<ShowingTabType, ShowingTabType> = {
-  Live: 'Live',
+  Overview: 'Overview',
   All: 'All',
   Offline: 'Offline'
 }

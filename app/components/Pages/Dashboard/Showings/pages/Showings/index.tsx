@@ -13,7 +13,7 @@ import TabContentSwitch from 'components/TabContentSwitch'
 import ShowingTabs, { ShowingTabsProps } from '../../components/ShowingTabs'
 
 import { showingTabs } from '../../constants'
-import ShowingTabLive from '../../components/ShowingTabLive'
+import ShowingTabOverview from '../../components/ShowingTabOverview'
 import ShowingTabAll from '../../components/ShowingTabAll'
 import ShowingTabOffline from '../../components/ShowingTabOffline'
 
@@ -22,7 +22,7 @@ type ShowingProps = RouteComponentProps<{ type?: ShowingTabsProps['type'] }, {}>
 function Showings({ params }: ShowingProps) {
   useTitle('Showings | Rechat')
 
-  const type = params.type || showingTabs.Live
+  const type = params.type || showingTabs.Overview
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -31,8 +31,8 @@ function Showings({ params }: ShowingProps) {
         <ShowingTabs type={type} />
         <Box my={3}>
           <TabContentSwitch.Container value={type}>
-            <TabContentSwitch.Item value={showingTabs.Live}>
-              <ShowingTabLive />
+            <TabContentSwitch.Item value={showingTabs.Overview}>
+              <ShowingTabOverview />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingTabs.All}>
               <ShowingTabAll />

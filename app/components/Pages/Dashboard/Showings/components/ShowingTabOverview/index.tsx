@@ -6,7 +6,7 @@ import CreateShowingList from '../CreateShowingList'
 import AppointmentList from '../AppointmentList'
 import BoxWithTitle from '../BoxWithTitle'
 
-function ShowingTabLive() {
+function ShowingTabOverview() {
   return (
     <>
       <BoxWithTitle title="New Updates">
@@ -25,4 +25,4 @@ function ShowingTabLive() {
   )
 }
 
-export default ShowingTabLive
+export default ShowingTabOverview

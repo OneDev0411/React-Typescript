@@ -12,9 +12,9 @@ export interface ShowingTabsProps {
 const tabs = [
   <TabLink
     key={1}
-    value={showingTabs.Live}
+    value={showingTabs.Overview}
     to="/dashboard/showings"
-    label="Live Showings"
+    label="Overview"
   />,
   <TabLink
     key={2}

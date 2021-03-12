@@ -1,1 +1,1 @@
-export type ShowingTabType = 'Live' | 'All' | 'Offline'
+export type ShowingTabType = 'Overview' | 'All' | 'Offline'
