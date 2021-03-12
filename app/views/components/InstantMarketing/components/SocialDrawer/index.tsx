@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 
 import { getFileType } from 'utils/file-utils/get-file-type'
 import {
@@ -36,7 +37,7 @@ export default function SocialDrawer({
   >(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     async function makeTemplateInstance() {
       if (templateInstance) {
         return
