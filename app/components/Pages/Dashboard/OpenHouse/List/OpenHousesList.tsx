@@ -7,7 +7,6 @@ import { mdiClose } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
 import { ACL } from 'constants/acl'
-import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
 
@@ -73,8 +72,9 @@ function OpenHousesList() {
   const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) || ''
   const activeBrandSettings = getActiveTeamSettings(user, '', true)
-  const showNotifyOfficeBanner =
-    activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
+  const {
+    enable_open_house_requests: showNotifyOfficeBanner
+  } = activeBrandSettings
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAlertOpen, setAlertToOpen] = useState(true)

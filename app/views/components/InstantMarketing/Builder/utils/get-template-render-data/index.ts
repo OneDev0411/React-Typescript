@@ -2,7 +2,7 @@ import { getListingUrl, get } from '../../../helpers/nunjucks-functions'
 
 export interface TemplateRenderData {
   getListingUrl: (listing: IListing) => string
-  get: (name: BrandSettingsPaletteKey) => string
+  get: (name: BrandMarketingPaletteKey) => string
 }
 
 export function getTemplateRenderData(brand: IBrand): TemplateRenderData {

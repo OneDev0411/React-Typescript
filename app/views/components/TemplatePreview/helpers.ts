@@ -17,10 +17,10 @@ export async function renderMjml(mjml: string): Promise<Response> {
 }
 
 export function getTemplatePreviewRenderData(
-  palette: BrandSettingsPalette
+  palette: BrandMarketingPalette
 ): TemplateRenderData {
   return {
     getListingUrl: () => '',
-    get: (key: BrandSettingsPaletteKey) => _get(palette, key)
+    get: (key: BrandMarketingPaletteKey) => _get(palette, key)
   }
 }

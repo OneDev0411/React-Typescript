@@ -7,7 +7,6 @@ import { PopoverActions } from '@material-ui/core/Popover'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
-import { OPEN_HOUSE_REQUESTS_SETTINGS_KEY } from 'constants/user'
 
 import { createTaskComment } from 'deals/utils/create-task-comment'
 import {
@@ -53,7 +52,7 @@ function OpenHouses({
   const user = useSelector(selectUser)
 
   const activeBrandSettings = getActiveTeamSettings(user, '', true)
-  const showOpenHouse = activeBrandSettings[OPEN_HOUSE_REQUESTS_SETTINGS_KEY]
+  const { enable_open_house_requests: showOpenHouse } = activeBrandSettings
 
   const confirmation = useContext(ConfirmationModalContext)
 

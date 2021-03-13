@@ -37,9 +37,9 @@ export function BrandSettings() {
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const activeBrand = getActiveTeamId(user) as UUID
   const [defaultSettings, setDefaultSettings] = useState<
-    Nullable<BrandSettingsPalette>
+    Nullable<BrandMarketingPalette>
   >(null)
-  const [settings, setSettings] = useState<BrandSettingsPalette>(
+  const [settings, setSettings] = useState<BrandMarketingPalette>(
     getActiveTeamPalette(user)
   )
   const [preferredSideBarView, setPreferredSidebarView] = useState(
@@ -76,7 +76,7 @@ Are you sure?`,
     })
   }
 
-  const handleUpdateSettings = (newSettings: BrandSettingsPalette) => {
+  const handleUpdateSettings = (newSettings: BrandMarketingPalette) => {
     if (!defaultSettings) {
       if (!isEqual(newSettings, settings)) {
         setDefaultSettings(settings)

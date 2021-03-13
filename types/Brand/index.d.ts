@@ -16,7 +16,7 @@ declare type IPermission =
   | 'BetaFeatures'
   | 'AgentNetwork'
 
-declare type BrandSettingsPaletteKey =
+declare type BrandMarketingPaletteKey =
   | 'body-bg-color'
   | 'body-text-color'
   | 'body-font-family'
@@ -66,7 +66,7 @@ declare type BrandSettingsPaletteKey =
   | 'website'
   | 'name'
 
-declare type BrandSettingsPalette = Record<BrandSettingsPaletteKey, string>
+declare type BrandMarketingPalette = Record<BrandMarketingPalette, string>
 
 declare interface IBrand extends IModel<'brand'> {
   assets: any | null
@@ -75,20 +75,28 @@ declare interface IBrand extends IModel<'brand'> {
   hostnames: string[] | null
   member_count: number
   messages: Nullable<IBrandMessage>
-  settings:
-    | StringMap<any>
-    | {
-        palette?: {
-          palette?: BrandSettingsPalette // brand.palette.palette! :(
-        }
-      }
-    | null
+  settings: Nullable<IBrandSetting>
   name: string
   offices: string[]
   parent: IBrand | null
   children?: IBrand[]
   roles?: IBrandRole[]
   training: boolean
+}
+
+declare interface IBrandTheme {
+  navbar_logo: string
+  palette: Palette
+}
+
+declare interface IBrandSettings extends IModel<'brand_settings'> {
+  enable_open_house_requests: boolean | null
+  enable_yard_sign: boolean | null
+  enable_liveby: boolean | null
+  marketing_palette: {
+    BrandMarketingPalette
+  } | null
+  theme: IBrandTheme | null
 }
 
 declare interface IBrandMessage {

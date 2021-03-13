@@ -1,4 +1,4 @@
-export const DEFAULT_BRAND_PALETTE: BrandSettingsPalette = {
+export const DEFAULT_BRAND_PALETTE: BrandMarketingPalette = {
   'body-bg-color': '#f3f3f3',
   'body-text-color': '#7f7f7f',
   'body-font-family': 'Barlow',
