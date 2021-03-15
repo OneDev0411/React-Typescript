@@ -1241,6 +1241,7 @@ class Builder extends React.Component {
                   color="primary"
                   onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
+                  startIcon={this.props.saveButtonStartIcon}
                 >
                   Continue
                 </Button>
@@ -1255,6 +1256,7 @@ class Builder extends React.Component {
                   color="primary"
                   onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
+                  startIcon={this.props.saveButtonStartIcon}
                 >
                   {this.props.saveButtonText || 'Save'}
                 </Button>

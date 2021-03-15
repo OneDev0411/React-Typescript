@@ -23,6 +23,7 @@ export interface InstantMarketingProps {
   isTemplatesColumnHiddenDefault?: boolean
   bareMode?: boolean
   saveButtonText?: string
+  saveButtonStartIcon?: ReactNode
   handleSocialSharing?: (template: IBrandMarketingTemplateWithResult) => void
   handleSave: (
     template: IBrandMarketingTemplateWithResult,
@@ -46,6 +47,7 @@ export default function InstantMarketing({
   isTemplatesColumnHiddenDefault = true,
   bareMode = false,
   saveButtonText,
+  saveButtonStartIcon,
   handleSave,
   handleSocialSharing,
   onClose,
@@ -81,6 +83,7 @@ export default function InstantMarketing({
       isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
       bareMode={bareMode}
       saveButtonText={saveButtonText}
+      saveButtonStartIcon={saveButtonStartIcon}
       onClose={handleClose}
       onSave={handleSave}
       onSocialSharing={handleSocialSharing}

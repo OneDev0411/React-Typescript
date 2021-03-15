@@ -4,7 +4,13 @@ import classNames from 'classnames'
 
 import { Link } from 'react-router'
 
-import { Grid, Box, Typography, Button } from '@material-ui/core'
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  CircularProgress
+} from '@material-ui/core'
 
 import useAsync from 'hooks/use-async'
 
@@ -154,6 +160,9 @@ function WebsiteCard({
           onSave={handleSave}
           onClose={closeEditor}
           saveButtonText={publishButtonLabel}
+          saveButtonStartIcon={
+            isPublishing && <CircularProgress color="inherit" size={20} />
+          }
           actionButtonsDisabled={isPublishing}
           customActions={
             <Button

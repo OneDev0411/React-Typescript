@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
@@ -34,6 +34,11 @@ interface Props
   saveButtonText?: string
 
   /**
+   * The save button start icon
+   */
+  saveButtonStartIcon?: ReactNode
+
+  /**
    * Save button click handler
    *
    * It will pass the final edited template by user as a string to this function
@@ -50,6 +55,7 @@ export default function MarketingTemplateEditor({
   template,
   templateData = {},
   saveButtonText = 'Save',
+  saveButtonStartIcon,
   onSave,
   onClose,
   actionButtonsDisabled,
@@ -66,6 +72,7 @@ export default function MarketingTemplateEditor({
     <InstantMarketing
       bareMode
       saveButtonText={saveButtonText}
+      saveButtonStartIcon={saveButtonStartIcon}
       closeConfirmation={false}
       isTemplatesColumnHiddenDefault
       hideTemplatesColumn

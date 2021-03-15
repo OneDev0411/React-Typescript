@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Button, CircularProgress } from '@material-ui/core'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import InstantMarketing, {
@@ -127,6 +127,9 @@ function PublishWebsite({
           bareMode
           hideTemplatesColumn
           saveButtonText={publishButtonLabel}
+          saveButtonStartIcon={
+            isPublishing && <CircularProgress color="inherit" size={20} />
+          }
           actionButtonsDisabled={isPublishing}
           customActions={
             <Button
