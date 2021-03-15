@@ -8,6 +8,7 @@ import MarketingEmailForm from '../New/MarketingEmailForm'
 interface Props {
   index: number
   step: IBrandFlowStep
+  prevStep?: Nullable<IBrandFlowStep>
   disableEdit: boolean
   isLastStep: boolean
   emailTemplates: IBrandEmailTemplate[]
@@ -25,6 +26,7 @@ interface Props {
 export function Step({
   step,
   index,
+  prevStep,
   isLastStep,
   disableEdit,
   emailTemplates,
@@ -34,6 +36,8 @@ export function Step({
   onStepMove,
   onNewEmailTemplateClick
 }: Props) {
+  const prevStepOrder = prevStep ? prevStep.order : null
+
   const handleMoveUpStep = () => {
     if (index <= 1) {
       return
@@ -68,6 +72,7 @@ export function Step({
           index={index}
           step={step}
           disableEdit={disableEdit}
+          prevStepOrder={prevStepOrder}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
           onMoveUpStep={onMoveUpStep}
@@ -82,6 +87,7 @@ export function Step({
           index={index}
           step={step}
           disableEdit={disableEdit}
+          prevStepOrder={prevStepOrder}
           templates={emailTemplates}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
@@ -99,6 +105,7 @@ export function Step({
           index={index}
           step={step}
           disableEdit={disableEdit}
+          prevStepOrder={prevStepOrder}
           onSubmit={onUpdate}
           onDelete={() => onDelete(step)}
           onMoveUpStep={onMoveUpStep}

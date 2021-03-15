@@ -9,13 +9,14 @@ import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { TemplateInctance } from '../components/BaseFields/TemplateInctance'
-import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import { getMarketingEmailInitialValues } from '../helpers/get-initial-values'
+import { marketingEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 
 export default function MarketingEmailForm({
   index,
   step,
   disableEdit = false,
+  prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
@@ -24,19 +25,13 @@ export default function MarketingEmailForm({
   return (
     <Form
       onSubmit={(data: MarketingEmailFormData) => {
-        const template = data.template?.isInstance
-          ? { template_instance: data.template?.id }
-          : { template: data.template?.id }
+        const order = prevStepOrder ? prevStepOrder + 1 : index
 
-        const newStep: IBrandFlowStepInput = {
-          order: index,
-          title: data.title,
-          description: data.description,
-          time: data.time,
-          event_type: data.event_type,
-          wait_for: convertToServerInput(data.wait_for),
-          ...template
-        }
+        const newStep: IBrandFlowStepInput = marketingEmailFormPreSaveFormat(
+          order,
+          data,
+          step
+        )
 
         // Update step
         if (step) {

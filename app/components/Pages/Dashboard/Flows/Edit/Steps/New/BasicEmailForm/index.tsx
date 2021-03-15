@@ -9,8 +9,8 @@ import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
-import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
+import { basicEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 
 interface Props extends BaseFormProps {
   defaultSelectedTemplate?: UUID
@@ -22,6 +22,7 @@ export default function BasicEmailForm({
   index,
   step,
   disableEdit = false,
+  prevStepOrder,
   templates,
   defaultSelectedTemplate,
   onSubmit,
@@ -38,15 +39,13 @@ export default function BasicEmailForm({
   return (
     <Form
       onSubmit={(data: BasicEmailFormData) => {
-        const newStep: IBrandFlowStepInput = {
-          order: index,
-          title: data.title,
-          description: data.description,
-          email: data.email_template,
-          time: data.time,
-          event_type: data.event_type,
-          wait_for: convertToServerInput(data.wait_for)
-        }
+        const order = prevStepOrder ? prevStepOrder + 1 : index
+
+        const newStep: IBrandFlowStepInput = basicEmailFormPreSaveFormat(
+          order,
+          data,
+          step
+        )
 
         // Update step
         if (step) {

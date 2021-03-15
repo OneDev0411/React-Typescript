@@ -41,7 +41,7 @@ export const getEventInitialValues = (
   step?: Nullable<IBrandFlowStep>
 ): EventFormData => {
   const baseFields = getBasicInitialValues(step)
-  const specificFields =
+  const specificFields: Pick<EventFormData, 'task_type'> =
     step && step.event
       ? {
           task_type: {
@@ -56,7 +56,6 @@ export const getEventInitialValues = (
           }
         }
 
-  // @ts-ignore
   return {
     ...baseFields,
     ...specificFields

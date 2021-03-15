@@ -6,8 +6,9 @@ export type RawWaitFor = {
 
 export interface BaseFormProps {
   index: number
-  disableEdit?: boolean
   step?: Nullable<IBrandFlowStep>
+  disableEdit?: boolean
+  prevStepOrder?: Nullable<number>
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
   onDelete?: (data: IBrandFlowStep) => Promise<any>
   onMoveUpStep?: () => void

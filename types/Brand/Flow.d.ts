@@ -10,15 +10,12 @@ declare interface IBaseBrandFlowStep {
 declare interface IBrandFlowStep
   extends IModel<'brand_flow_step'>,
     IBaseBrandFlowStep {
-  // due_in: number
   flow: UUID
   event: Nullable<IBrandEvent>
   email: Nullable<IBrandEmailTemplate>
   is_automated: boolean
   template: Nullable<IBrandMarketingTemplate>
   template_instance: Nullable<IMarketingTemplateInstance>
-  // virtual (calculated) fields
-  // wait_days: number
 }
 
 declare interface IBrandFlowStepInput extends IBaseBrandFlowStep {

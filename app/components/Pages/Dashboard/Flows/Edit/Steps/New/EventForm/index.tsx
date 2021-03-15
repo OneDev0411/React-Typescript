@@ -9,13 +9,14 @@ import { BaseFormProps, EventFormData } from '../types'
 import { BaseFormLayout } from '../components/BaseFormLayout'
 import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
-import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import { getEventInitialValues } from '../helpers/get-initial-values'
+import { eventFormPreSaveFormat } from '../helpers/pre-save-format'
 
 export default function EventForm({
   index,
   step,
   disableEdit = false,
+  prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
@@ -24,19 +25,13 @@ export default function EventForm({
   return (
     <Form
       onSubmit={(data: EventFormData) => {
-        const newStep: IBrandFlowStepInput = {
-          order: index,
-          title: data.title,
-          description: data.description,
-          event_type: data.event_type,
-          event: {
-            title: data.title,
-            description: data.description,
-            task_type: data.task_type.value
-          },
-          time: data.time,
-          wait_for: convertToServerInput(data.wait_for)
-        }
+        const order = prevStepOrder ? prevStepOrder + 1 : index
+
+        const newStep: IBrandFlowStepInput = eventFormPreSaveFormat(
+          order,
+          data,
+          step
+        )
 
         // Update step
         if (step) {

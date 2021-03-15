@@ -90,6 +90,7 @@ export default function Steps({
               >
                 {items.map((item, index) => {
                   const stepOrder = index + 1
+                  const prevStep = index > 0 ? items[index - 1] : null
                   const isLastStep = stepOrder === items.length
 
                   return (
@@ -103,13 +104,14 @@ export default function Steps({
                       >
                         <Step
                           index={stepOrder}
+                          key={item.id}
+                          step={item}
+                          prevStep={prevStep}
                           disableEdit={disableEdit}
                           isLastStep={isLastStep}
                           onUpdate={onStepUpdate}
                           onDelete={onStepDelete}
                           onStepMove={onStepMove}
-                          key={item.id}
-                          step={item}
                           emailTemplates={emailTemplates}
                           defaultSelectedEmailTemplate={
                             defaultSelectedEmailTemplate
