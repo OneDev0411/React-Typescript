@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import Alert from '@material-ui/lab/Alert'
 
 import { noop } from 'utils/helpers'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -94,8 +95,10 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
         handleClose()
         callback()
       } catch (error) {
+        const errorMessage = error.response?.body?.message || error.message
+
         setIsAdding(false)
-        setError(error.message)
+        setError(errorMessage)
       }
     },
     [callback, contacts, handleClose, isAdding]
@@ -115,22 +118,27 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
   }
 
   return (
-    <Container depth={3} alignRight={props.alignFrom === 'right'}>
-      <ListView
-        error={error}
-        flows={templatesById}
-        isFetching={isFetching}
-        onSelect={onSelectTemplate}
-        selectedFlowId={selectedTemplateId}
-      />
-      <DetailView
-        error={error}
-        flow={templatesById[selectedTemplateId]}
-        handleAdd={addHandler}
-        handleClose={closeHandler}
-        isAdding={isAdding}
-      />
-    </Container>
+    <>
+      {error && (
+        <Alert severity="error" onClose={() => setError('')}>
+          {error}
+        </Alert>
+      )}
+      <Container depth={3} alignRight={props.alignFrom === 'right'}>
+        <ListView
+          flows={templatesById}
+          isFetching={isFetching}
+          onSelect={onSelectTemplate}
+          selectedFlowId={selectedTemplateId}
+        />
+        <DetailView
+          flow={templatesById[selectedTemplateId]}
+          handleAdd={addHandler}
+          handleClose={closeHandler}
+          isAdding={isAdding}
+        />
+      </Container>
+    </>
   )
 }
 

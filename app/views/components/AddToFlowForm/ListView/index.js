@@ -14,7 +14,6 @@ import FlowItem from '../FlowItem'
 import { List, Container, EmptyContainer, SettingLink } from './styled'
 
 ListView.propTypes = {
-  error: PropTypes.string.isRequired,
   flows: PropTypes.shape().isRequired,
   isFetching: PropTypes.bool.isRequired,
   onSelect: PropTypes.func.isRequired,
@@ -26,14 +25,6 @@ export default function ListView(props) {
     return (
       <EmptyContainer>
         <Spinner />
-      </EmptyContainer>
-    )
-  }
-
-  if (props.error) {
-    return (
-      <EmptyContainer style={{ color: '#F43B38' }}>
-        {props.error}
       </EmptyContainer>
     )
   }
