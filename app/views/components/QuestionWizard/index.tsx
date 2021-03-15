@@ -10,12 +10,14 @@ interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
   onFinish?: () => void
+  formWidth?: number | string
 }
 
 export function QuestionWizard({
   children,
   defaultStep = 0,
-  onFinish = () => {}
+  onFinish = () => {},
+  formWidth = '50%'
 }: Props) {
   const refs = useRef<HTMLDivElement[]>([])
   const loadingRef = useRef<SVGSVGElement>(null)
@@ -90,7 +92,8 @@ export function QuestionWizard({
         next: gotoNext,
         previous: gotoPrevious,
         first: () => gotoStep(0),
-        last: () => gotoStep(sections.length - 1)
+        last: () => gotoStep(sections.length - 1),
+        formWidth
       }}
     >
       <div>

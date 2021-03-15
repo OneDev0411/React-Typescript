@@ -15,7 +15,7 @@ export function QuestionForm({ children }: Props) {
 
   return (
     <Box mt={8} display="flex" flexDirection="column" alignItems="flex-end">
-      <Box width="50%">
+      <Box width={context.formWidth}>
         {typeof children === 'function'
           ? children({
               wizard: context

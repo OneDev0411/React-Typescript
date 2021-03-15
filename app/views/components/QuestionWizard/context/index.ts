@@ -10,6 +10,7 @@ export interface IContextState {
   first: () => void
   last: () => void
   setShowLoading: (state: boolean) => void
+  formWidth: number | string
 }
 
 export const Context = React.createContext<IContextState | undefined>(undefined)
