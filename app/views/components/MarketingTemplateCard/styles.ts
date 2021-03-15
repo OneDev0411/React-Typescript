@@ -51,6 +51,10 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
         transform: 'translateY(0)'
       }
     },
+    cardWebsite: {
+      display: 'block',
+      maxHeight: 450
+    },
     cardHasPreview: {
       cursor: 'zoom-in'
     },
