@@ -123,7 +123,7 @@ function DomainManagementNewDomain({
         </Button>
       </Box>
       <Box marginLeft={2}>
-        <QuestionWizard defaultStep={0}>
+        <QuestionWizard defaultStep={0} formWidth="65%">
           {/* <DomainStatus
             onChange={handleDomainStatusChange}
             disabled={isWorking}
