@@ -651,6 +651,15 @@ const AsyncShowings = withAcl.marketing(
   })
 )
 
+const AsyncCreateShowing = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
+      )
+  })
+)
+
 /* ==================================== */
 //  Other Pages
 /* ==================================== */
@@ -921,10 +930,13 @@ export default (
         </Route>
         <Route path="website" component={AsyncWebsite} />
 
-        <Route
-          path={`showings(/type/:type(${Object.keys(showingTabs).join('|')}))`}
-        >
+        <Route path="showings">
           <IndexRoute component={AsyncShowings} />
+          <Route
+            path={`type/:type(${Object.keys(showingTabs).join('|')})`}
+            component={AsyncShowings}
+          />
+          <Route path="create" component={AsyncCreateShowing} />
         </Route>
       </Route>
     </Route>

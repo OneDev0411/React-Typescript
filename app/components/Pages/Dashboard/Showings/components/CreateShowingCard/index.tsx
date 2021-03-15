@@ -1,22 +1,23 @@
 import React from 'react'
 
-import { CardActions, Button } from '@material-ui/core'
+import { CardActions } from '@material-ui/core'
 
 import ListingCard from 'components/ListingCards/ListingCard'
 import { listing } from 'fixtures/listing/listing'
 
-function CreateShowingCard() {
-  const handleClick = () => {
-    // TODO: implement this function
-    console.log('CreateShowingCard::click')
-  }
+import LinkButton from '../LinkButton'
 
+function CreateShowingCard() {
   return (
     <ListingCard listing={listing} hideFeatures>
       <CardActions>
-        <Button size="small" variant="outlined" onClick={handleClick}>
+        <LinkButton
+          size="small"
+          variant="outlined"
+          to="/dashboard/showings/create"
+        >
           Create Showing
-        </Button>
+        </LinkButton>
       </CardActions>
     </ListingCard>
   )
