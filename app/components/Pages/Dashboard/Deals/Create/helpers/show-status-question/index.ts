@@ -16,6 +16,10 @@ export function showStatusQuestion(
   const definition = searchContext(deal.id, contextName)
   const dealContext = getContext(deal, contextName)
 
+  if (!definition) {
+    return false
+  }
+
   const isRequired = filterByStatus(
     definition,
     dealType,

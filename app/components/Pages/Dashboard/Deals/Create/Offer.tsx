@@ -14,7 +14,6 @@ import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { selectDealById } from 'reducers/deals/list'
-import { getField } from 'models/Deal/helpers/context'
 import { createOffer, createRoles, upsertContexts } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
