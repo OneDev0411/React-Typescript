@@ -59,6 +59,9 @@ export function DealPrimaryAgent({
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
+  const shouldPickRoleFromContacts =
+    dealType === 'Buying' && side === 'Selling' && !isDoubleEnded
+
   useEffect(() => {
     if (
       agentRoles.length > 0 &&
@@ -113,7 +116,9 @@ export function DealPrimaryAgent({
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
-            isCommissionRequired={isCommissionRequired}
+            isCommissionRequired={
+              shouldPickRoleFromContacts ? false : isCommissionRequired
+            }
             onUpsertRole={handleUpsertRole}
             onDeleteRole={handleDeleteRole}
             onClose={() => setSelectedRole(null)}
@@ -137,7 +142,7 @@ export function DealPrimaryAgent({
             display: agentRoles.length === 0 && !selectedRole ? 'block' : 'none'
           }}
         >
-          {dealType === 'Buying' && side === 'Selling' && !isDoubleEnded ? (
+          {shouldPickRoleFromContacts ? (
             <ContactRoles onSelectRole={setSelectedRole} />
           ) : (
             <AgentsList onSelectRole={setSelectedRole} />

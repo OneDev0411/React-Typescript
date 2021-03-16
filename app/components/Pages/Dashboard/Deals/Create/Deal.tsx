@@ -251,7 +251,7 @@ export default function CreateDeal() {
               render={({ value = [], onChange }) => (
                 <DealPrimaryAgent
                   side="Buying"
-                  isCommissionRequired={isDoubleEnded}
+                  isCommissionRequired
                   isDoubleEnded={isDoubleEnded}
                   dealType={dealType}
                   title={`Who is the ${
