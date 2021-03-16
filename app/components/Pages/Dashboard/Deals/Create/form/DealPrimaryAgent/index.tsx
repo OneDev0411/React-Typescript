@@ -140,10 +140,7 @@ export function DealPrimaryAgent({
           {dealType === 'Buying' && side === 'Selling' && !isDoubleEnded ? (
             <ContactRoles onSelectRole={setSelectedRole} />
           ) : (
-            <AgentsList
-              isDoubleEnded={isDoubleEnded}
-              onSelectRole={setSelectedRole}
-            />
+            <AgentsList onSelectRole={setSelectedRole} />
           )}
         </Box>
       </QuestionForm>

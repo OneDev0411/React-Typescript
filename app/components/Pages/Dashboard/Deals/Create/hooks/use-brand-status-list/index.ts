@@ -13,15 +13,11 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
   const dealId = deal?.id
 
   useAsync(async () => {
-    console.log('>>>$$$>', dealId)
-
     if (!dealId) {
       return
     }
 
     const list = await getBrandStatuses(getActiveTeamId(user)!)
-
-    console.log('>>>>', list)
 
     setStatuses(list)
   }, [dealId])

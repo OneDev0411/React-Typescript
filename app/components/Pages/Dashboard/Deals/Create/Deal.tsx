@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import { browserHistory } from 'react-router'
@@ -49,7 +49,7 @@ import { Header } from './components/Header'
 import type { IDealSide } from './types'
 
 const useStyles = makeStyles(
-  (theme: Theme) => ({
+  () => ({
     root: {
       width: '80%',
       maxWidth: '800px',
@@ -113,12 +113,14 @@ export default function CreateDeal() {
       values.selling_primary_agent || []
     ) as IDealRole[]
 
-    const primaryAgent = agents.find(
-      agent => ['SellerAgent', 'BuyerAgent'].includes(agent.role) && agent.brand
-    )!
+    const agent = agents.find(agent => {
+      const primaryAgent = dealType === 'Buying' ? 'BuyerAgent' : 'SellerAgent'
+
+      return agent.role === primaryAgent
+    })
 
     const newDeal: IDeal = await Deal.create(user, {
-      brand: primaryAgent.brand,
+      brand: agent!.brand,
       property_type: propertyType,
       deal_type: dealType,
       is_draft: true

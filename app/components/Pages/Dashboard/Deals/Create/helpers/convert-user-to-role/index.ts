@@ -5,12 +5,11 @@ type BrandedUser = IUser & {
 }
 
 export function convertUserAgentToRole(
-  user: BrandedUser,
-  isOfficeDoubleEnded: boolean
+  user: BrandedUser
 ): Partial<IDealFormRole> {
   return {
     agent: user.agent,
-    brand: isOfficeDoubleEnded ? null : user.brand_id,
+    brand: user.brand_id,
     legal_first_name: user.first_name || '',
     legal_last_name: user.last_name || '',
     phone_number: user.phone_number || user.agent?.work_phone,
