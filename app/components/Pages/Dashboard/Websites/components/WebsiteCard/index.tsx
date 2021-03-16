@@ -12,6 +12,8 @@ import {
   CircularProgress
 } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
 import useAsync from 'hooks/use-async'
 
 import deleteWebsite from 'models/website/delete-website'
@@ -27,6 +29,8 @@ import {
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 
 import { generateWebsiteUrl } from 'utils/website'
+
+import { selectUser } from 'selectors/user'
 
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
@@ -49,6 +53,7 @@ function WebsiteCard({
 }: WebsiteCardProps) {
   const classes = useStyles()
   const [isEditorOpen, setIsEditorOpen] = useState(false)
+  const user = useSelector(selectUser)
 
   const { thumbnail } = getTemplateImage(template_instance)
 
@@ -157,6 +162,12 @@ function WebsiteCard({
       {isEditorOpen && (
         <MarketingTemplateEditor
           template={template_instance}
+          templateData={{
+            user,
+            listing: template_instance?.listings?.length
+              ? template_instance?.listings[0]
+              : undefined
+          }}
           onSave={handleSave}
           onClose={closeEditor}
           saveButtonText={publishButtonLabel}

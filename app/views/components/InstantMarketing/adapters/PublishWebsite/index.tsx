@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import { Button, CircularProgress } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
@@ -10,6 +12,8 @@ import InstantMarketing, {
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 
 import usePublishWebsite from 'hooks/use-publish-website'
+
+import { selectUser } from 'selectors/user'
 
 import useLoadListingsData from './use-load-listings-data'
 
@@ -32,6 +36,7 @@ function PublishWebsite({
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
   const [selectedListing, setSelectedListing] = useState<IListing[]>([])
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
+  const user = useSelector(selectUser)
 
   const isAgentTriggered = isTriggered && templateType === 'Agent'
   const isListingTriggered =
@@ -121,7 +126,7 @@ function PublishWebsite({
       {(isAgentTriggered || isBuilderOpen) && (
         <InstantMarketing
           defaultTemplate={selectedTemplate}
-          templateData={{ listing: selectedListing[0] }}
+          templateData={{ listing: selectedListing[0], user }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}
           bareMode

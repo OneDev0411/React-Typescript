@@ -702,8 +702,7 @@ class Builder extends React.Component {
   refreshEditor = selectedTemplate => {
     const config = this.editor.getConfig()
 
-    // TODO: ask Emil about the styling strategies
-    config.avoidInlineStyle = false //! this.isMjmlTemplate
+    config.avoidInlineStyle = false
     config.forceClass = !this.isMjmlTemplate
 
     const components = this.editor.DomComponents
@@ -979,13 +978,6 @@ class Builder extends React.Component {
     return this.isMjmlTemplate || this.isWebsiteTemplate
   }
 
-  getListingInfo = () => {
-    return (
-      this.props.templateData.listing ||
-      (this.selectedTemplate.listings ?? [])[0]
-    )
-  }
-
   uploadFile = async file => {
     const templateId = this.selectedTemplate.id
     const uploadedAsset = await uploadAsset(file, templateId)
@@ -1135,7 +1127,9 @@ class Builder extends React.Component {
           <MapDrawer
             isOpen={!!this.state.mapToEdit}
             map={this.state.mapToEdit}
-            initialCenter={this.getListingInfo()?.property.address.location}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
             onClose={() => {
               this.setState({ mapToEdit: null })
             }}
@@ -1147,7 +1141,9 @@ class Builder extends React.Component {
           <CarouselDrawer
             isOpen={!!this.state.carouselToEdit}
             carousel={this.state.carouselToEdit}
-            initialCenter={this.getListingInfo()?.property.address.location}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
             onClose={() => {
               this.setState({ carouselToEdit: null })
             }}
@@ -1155,7 +1151,9 @@ class Builder extends React.Component {
               this.blocks.carousel.selectHandler(...args)
               this.setState({ carouselToEdit: null })
             }}
-            suggestedImages={this.getListingInfo()?.gallery_image_urls}
+            suggestedImages={
+              this.props.templateData.listing?.gallery_image_urls
+            }
             onImageUpload={this.uploadFile}
           />
           <Header>
