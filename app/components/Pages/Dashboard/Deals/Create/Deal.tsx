@@ -23,6 +23,11 @@ import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
+import {
+  createUpsertObject,
+  getDefinitionId
+} from 'models/Deal/helpers/dynamic-context'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
@@ -150,6 +155,23 @@ export default function CreateDeal() {
     newDeal.checklists = [checklist.id]
 
     savePropertyAddress(newDeal, values.property_address)
+
+    if (newDeal.deal_type === 'Selling') {
+      const defaultStatus = newDeal.property_type.includes('Lease')
+        ? 'Lease'
+        : 'Active'
+
+      dispatch(
+        upsertContexts(newDeal.id, [
+          {
+            definition: getDefinitionId(newDeal.id, 'listing_status'),
+            checklist: checklist.id,
+            value: defaultStatus,
+            approved: true
+          }
+        ])
+      )
+    }
   }
 
   const savePropertyAddress = async (
@@ -289,7 +311,7 @@ export default function CreateDeal() {
             />
           )}
 
-          <DealStatus list={statusList} />
+          {/* <DealStatus list={statusList} /> */}
 
           {deal &&
             dealContexts.map((context: IDealBrandContext) => (
