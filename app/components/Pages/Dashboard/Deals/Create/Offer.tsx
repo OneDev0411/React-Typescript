@@ -38,6 +38,7 @@ import { Header } from './components/Header'
 
 import { useStatusList } from './hooks/use-deal-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
+import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Context } from './context'
 
@@ -62,7 +63,7 @@ interface Props {
 
 export default function CreateOffer({ params }: Props) {
   const classes = useStyles()
-  const { control } = useForm()
+  const { control, watch } = useForm()
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
 
   const [isCreatingOffer, setIsCreatingOffer] = useState(false)
@@ -87,11 +88,7 @@ export default function CreateOffer({ params }: Props) {
     ? getDealContexts(user, 'Buying', deal.property_type, true)
     : []
 
-  const isDoubleEnded = deal
-    ? ['AgentDoubleEnder', 'OfficeDoubleEnder'].includes(
-        getField(deal, 'ender_type')
-      )
-    : false
+  const isDoubleEnded = watch('context:ender_type') === 'OfficeDoubleEnder'
 
   const getContexts = (
     values: Record<string, unknown>,
@@ -253,13 +250,15 @@ export default function CreateOffer({ params }: Props) {
             )}
           />
 
-          <Controller
-            name="context:status"
-            control={control}
-            render={({ onChange }) => (
-              <DealStatus list={statusList} onChange={onChange} />
-            )}
-          />
+          {showStatusQuestion(deal, 'Buying', 'contract_status') && (
+            <Controller
+              name="context:status"
+              control={control}
+              render={({ onChange }) => (
+                <DealStatus list={statusList} onChange={onChange} />
+              )}
+            />
+          )}
 
           {dealContexts.map((context: IDealBrandContext) => (
             <Controller

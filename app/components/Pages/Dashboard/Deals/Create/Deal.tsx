@@ -23,10 +23,7 @@ import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
-import {
-  createUpsertObject,
-  getDefinitionId
-} from 'models/Deal/helpers/dynamic-context'
+import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
@@ -46,11 +43,11 @@ import { useDealRoles } from './hooks/use-deal-roles'
 import { useStatusList } from './hooks/use-brand-status-list'
 
 import { createAddressContext } from '../utils/create-address-context'
-
-import { Context } from './context'
+import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Header } from './components/Header'
 
+import { Context } from './context'
 import type { IDealSide } from './types'
 
 const useStyles = makeStyles(
@@ -311,7 +308,14 @@ export default function CreateDeal() {
             />
           )}
 
-          {/* <DealStatus list={statusList} /> */}
+          {deal &&
+            showStatusQuestion(
+              deal,
+              deal.deal_type,
+              deal.deal_type === 'Selling'
+                ? 'listing_status'
+                : 'contract_status'
+            ) && <DealStatus list={statusList} />}
 
           {deal &&
             dealContexts.map((context: IDealBrandContext) => (

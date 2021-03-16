@@ -1,4 +1,3 @@
-import { mdiVideoHighDefinition } from '@mdi/js'
 import moment from 'moment'
 import _ from 'underscore'
 

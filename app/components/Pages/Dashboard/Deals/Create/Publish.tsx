@@ -31,6 +31,7 @@ import { DealStatus } from './form/DealStatus'
 import { Header } from './components/Header'
 
 import { useStatusList } from './hooks/use-brand-status-list'
+import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Context } from './context'
 
@@ -160,7 +161,14 @@ export default function Publish({ params }: Props) {
             roles={roles}
           />
 
-          <DealStatus list={statusList} />
+          {deal &&
+            showStatusQuestion(
+              deal,
+              deal.deal_type,
+              deal.deal_type === 'Selling'
+                ? 'listing_status'
+                : 'contract_status'
+            ) && <DealStatus list={statusList} />}
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (
@@ -171,13 +179,3 @@ export default function Publish({ params }: Props) {
     </Context.Provider>
   )
 }
-
-// function showStatusQuestion(deal: IDeal): boolean {
-//   const listingContext = searchContext(deal.id, 'listing_status')
-
-//   const isMlsPreffered =
-//     listingContext?.preffered_source === 'Provided' &&
-//     getContext(deal, 'listing_status')?.source === 'MLS'
-
-//   return !deal.listing && !isMlsPreffered
-// }
