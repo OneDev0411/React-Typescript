@@ -128,6 +128,10 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(true)
 
+      if (selectedEmailTemplate) {
+        setSelectedEmailTemplate(null)
+      }
+
       const flowData = await getFlow(brand, props.params.id, reload)
 
       setFlow(flowData)
@@ -146,7 +150,7 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(false)
     },
-    [brand, getFlow, props.params.id]
+    [brand, getFlow, props.params.id, selectedEmailTemplate]
   )
   const fetchEmailTemplates = useCallback(async () => {
     if (!brand) {
@@ -210,16 +214,6 @@ function Edit(props: WithRouterProps) {
 
   const stepMoveHandler = useCallback(
     async (id: UUID, source: number, destination: number) => {
-      // TODO: remove this when the procces is done
-      // console.log({
-      //   id,
-      //   indexToOrderMap,
-      //   source,
-      //   destination,
-      //   down: indexToOrderMap[destination - 1] + 1,
-      //   up: indexToOrderMap[destination - 1] - 1
-      // })
-
       if (
         !flow ||
         !id ||
@@ -406,7 +400,11 @@ function Edit(props: WithRouterProps) {
           setIsEmailTemplateDrawerOpen(false)
         }}
         submitCallback={emailTemplate => {
-          fetchEmailTemplates()
+          const newTemplates = Array.isArray(emailTemplates)
+            ? [...emailTemplates, emailTemplate]
+            : [emailTemplate]
+
+          setEmailTemplates(newTemplates)
           setSelectedEmailTemplate(emailTemplate)
         }}
       />

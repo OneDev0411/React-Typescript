@@ -89,9 +89,9 @@ export default function Steps({
                 ref={droppableProvided.innerRef}
               >
                 {items.map((item, index) => {
-                  const stepOrder = index + 1
+                  const stepIndex = index + 1
                   const prevStep = index > 0 ? items[index - 1] : null
-                  const isLastStep = stepOrder === items.length
+                  const isLastStep = stepIndex === items.length
 
                   return (
                     <>
@@ -103,7 +103,7 @@ export default function Steps({
                         }
                       >
                         <Step
-                          index={stepOrder}
+                          index={stepIndex}
                           key={item.id}
                           step={item}
                           prevStep={prevStep}
@@ -125,7 +125,7 @@ export default function Steps({
                           <Box width="100%" my={3}>
                             <NewStep
                               miniMode
-                              index={stepOrder + 1}
+                              index={stepIndex + 1}
                               emailTemplates={emailTemplates}
                               defaultSelectedEmailTemplate={
                                 defaultSelectedEmailTemplate
@@ -146,7 +146,7 @@ export default function Steps({
       {!disableEdit && (
         <Box className={classes.NewStepContainer}>
           <NewStep
-            index={items.length + 1}
+            index={items.length > 0 ? items[items.length - 1].order + 1 : 1}
             shouldShowDefaultForm={false}
             emailTemplates={emailTemplates}
             defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}

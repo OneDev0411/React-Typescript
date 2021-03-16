@@ -62,7 +62,10 @@ export const EmailTemplate = ({
   )
 
   const selectedItem = useMemo(() => {
-    const defaultValue = emailTemplatesOptions[0]
+    const defaultValue = {
+      label: 'Select a Template',
+      value: 0
+    }
 
     if (currentTemplateId) {
       const template = emailTemplatesOptions.find(
