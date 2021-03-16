@@ -12,6 +12,8 @@ import {
 import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
 
+import { getStatusColorClass } from 'utils/listing'
+
 import ListingCard from 'components/ListingCards/ListingCard'
 
 import {
@@ -23,7 +25,6 @@ import {
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { Callout } from 'components/Callout'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
@@ -42,6 +43,12 @@ const useStyles = makeStyles(
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius
       }
+    },
+    status: {
+      color: '#fff',
+      marginTop: theme.spacing(0.5),
+      padding: theme.spacing(0.25, 0.5),
+      borderRadius: theme.shape.borderRadius
     },
     resultItem: {
       padding: theme.spacing(1),
@@ -213,7 +220,9 @@ export function DealAddress({ onChange }: Props) {
                     <Avatar
                       src={listing.cover_image_url}
                       alt={listing.mls_number}
-                    />
+                    >
+                      <SvgIcon path={mdiHome} />
+                    </Avatar>
                   </Box>
 
                   <div className={classes.resultItemContent}>
@@ -224,6 +233,16 @@ export function DealAddress({ onChange }: Props) {
                     <Typography variant="body2" className={classes.lightText}>
                       ${listing.price} . {listing.address.city},{' '}
                       {listing.address.state}, {listing.mls_number}
+                    </Typography>
+
+                    <Typography
+                      variant="caption"
+                      className={classes.status}
+                      style={{
+                        backgroundColor: getStatusColorClass(listing.status)
+                      }}
+                    >
+                      {listing.status}
                     </Typography>
                   </div>
                 </Box>
