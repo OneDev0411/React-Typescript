@@ -5,7 +5,7 @@ import { connect, useDispatch } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/styles'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
 
 import { addNotification as notify } from 'components/notification'
@@ -21,6 +21,8 @@ import { goTo } from 'utils/go-to'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
+
+import Layout from '../../Marketing'
 
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -232,47 +234,52 @@ function List(props: Props & WithRouterProps) {
   return (
     <>
       <Helmet>
-        <title>Flows | Rechat</title>
+        <title>Marketing | Flows</title>
       </Helmet>
+      <Layout
+        render={() => (
+          <Box mt={2}>
+            {isModalOpen && (
+              <New
+                onClose={() => {
+                  setIsModalOpen(false)
+                  setSelectedFlow(null)
+                }}
+                onSubmit={newFlowSubmitHandler}
+                flow={selectedFlow}
+              />
+            )}
 
-      {isModalOpen && (
-        <New
-          onClose={() => {
-            setIsModalOpen(false)
-            setSelectedFlow(null)
-          }}
-          onSubmit={newFlowSubmitHandler}
-          flow={selectedFlow}
-        />
-      )}
+            <CtaBar
+              label="Create new flow"
+              description="Create a custom flow for your specific needs – We’ll take care of the rest!"
+              onClick={() => setIsModalOpen(true)}
+            />
 
-      <CtaBar
-        label="Create new flow"
-        description="Create a custom flow for your specific needs – We’ll take care of the rest!"
-        onClick={() => setIsModalOpen(true)}
+            {error ? (
+              <h4>{error}</h4>
+            ) : isFetching ? (
+              <LoadingComponent />
+            ) : (
+              <Table
+                columns={columns}
+                rows={flows}
+                totalRows={(flows || []).length}
+                loading={isFetching ? 'middle' : null}
+                LoadingStateComponent={LoadingComponent}
+                getTdProps={({ column, row }) => ({
+                  onClick: () => {
+                    if (column.id !== 'actions') {
+                      props.router.push(`/dashboard/marketing/flows/${row.id}`)
+                    }
+                  }
+                })}
+                classes={{ row: classes.row }}
+              />
+            )}
+          </Box>
+        )}
       />
-
-      {error ? (
-        <h4>{error}</h4>
-      ) : isFetching ? (
-        <LoadingComponent />
-      ) : (
-        <Table
-          columns={columns}
-          rows={flows}
-          totalRows={(flows || []).length}
-          loading={isFetching ? 'middle' : null}
-          LoadingStateComponent={LoadingComponent}
-          getTdProps={({ column, row }) => ({
-            onClick: () => {
-              if (column.id !== 'actions') {
-                props.router.push(`/dashboard/account/flows/${row.id}`)
-              }
-            }
-          })}
-          classes={{ row: classes.row }}
-        />
-      )}
     </>
   )
 }

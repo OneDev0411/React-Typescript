@@ -11,6 +11,7 @@ interface Props {
   mediums: { [key: string]: IMarketingTemplateMedium[] }
   templateTypes: string
   isMyDesignsActive: boolean
+  isFlowsActive: boolean
   isOverviewActive: boolean
 }
 
@@ -20,6 +21,7 @@ const MarketingTabs = ({
   templateTypes,
   isMyDesignsActive,
   isOverviewActive,
+  isFlowsActive,
   ...props
 }: Props) => {
   const sectionsList = Object.keys(sections).map(
@@ -38,6 +40,12 @@ const MarketingTabs = ({
       return sectionsList.find(
         section =>
           section.type === SectionsEnum.Link && section.key === 'designs'
+      )?.key
+    }
+
+    if (isFlowsActive) {
+      return sectionsList.find(
+        section => section.type === SectionsEnum.Link && section.key === 'flows'
       )?.key
     }
 
