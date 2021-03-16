@@ -13,8 +13,6 @@ import { addNotification as notify } from 'components/notification'
 
 import { publishDeal } from 'actions/deals'
 
-import { getField } from 'models/Deal/helpers/context'
-
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
@@ -32,7 +30,7 @@ import { DealStatus } from './form/DealStatus'
 
 import { Header } from './components/Header'
 
-import { useStatusList } from './hooks/use-status-list'
+import { useStatusList } from './hooks/use-brand-status-list'
 
 import { Context } from './context'
 
@@ -162,7 +160,7 @@ export default function Publish({ params }: Props) {
             roles={roles}
           />
 
-          {!deal.listing && <DealStatus list={statusList} />}
+          <DealStatus list={statusList} />
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (
@@ -173,3 +171,13 @@ export default function Publish({ params }: Props) {
     </Context.Provider>
   )
 }
+
+// function showStatusQuestion(deal: IDeal): boolean {
+//   const listingContext = searchContext(deal.id, 'listing_status')
+
+//   const isMlsPreffered =
+//     listingContext?.preffered_source === 'Provided' &&
+//     getContext(deal, 'listing_status')?.source === 'MLS'
+
+//   return !deal.listing && !isMlsPreffered
+// }

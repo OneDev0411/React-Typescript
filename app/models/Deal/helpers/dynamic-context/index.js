@@ -1,3 +1,4 @@
+import { mdiVideoHighDefinition } from '@mdi/js'
 import moment from 'moment'
 import _ from 'underscore'
 
@@ -393,9 +394,13 @@ export function isAddressField(key) {
 }
 
 export function getDefinitionId(list_id, key) {
-  const definition = _.find(getList(list_id), { key })
+  const definition = getDefinition(list_id, key)
 
   return definition && definition.id
+}
+
+export function getDefinition(list_id, key) {
+  return _.find(getList(list_id), { key })
 }
 
 export function getChecklist(deal, fieldKey) {
@@ -478,6 +483,7 @@ export default {
   getItems,
   getRequiredItems,
   getOptionalItems,
+  getDefinition,
   getDefinitionId,
   getChecklist,
   query,

@@ -3,7 +3,6 @@ import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import { browserHistory } from 'react-router'
-
 import { useForm, Controller } from 'react-hook-form'
 
 import Deal from 'models/Deal'
@@ -36,8 +35,10 @@ import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
 import { DealEnderType } from './form/DealEnderType'
 import { DealCard } from './form/DealCard'
+import { DealStatus } from './form/DealStatus'
 
 import { useDealRoles } from './hooks/use-deal-roles'
+import { useStatusList } from './hooks/use-brand-status-list'
 
 import { createAddressContext } from '../utils/create-address-context'
 
@@ -88,6 +89,7 @@ export default function CreateDeal() {
   }, [dealId, dispatch])
 
   const dealContexts = getDealContexts(user, dealType, propertyType)
+  const statusList = useStatusList(deal)
 
   const isAgentDoubleEnded = dealSide === 'Both'
   const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
@@ -284,6 +286,8 @@ export default function CreateDeal() {
               skippable
             />
           )}
+
+          <DealStatus list={statusList} />
 
           {deal &&
             dealContexts.map((context: IDealBrandContext) => (

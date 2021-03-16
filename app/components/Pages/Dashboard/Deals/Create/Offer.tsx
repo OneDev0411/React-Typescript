@@ -36,7 +36,7 @@ import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
 import { Header } from './components/Header'
 
-import { useStatusList } from './hooks/use-status-list'
+import { useStatusList } from './hooks/use-deal-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
 
 import { Context } from './context'
