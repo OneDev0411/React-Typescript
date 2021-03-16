@@ -2,25 +2,30 @@ import React from 'react'
 
 import TemplatesList from 'components/TemplatesList'
 
-import useWebsiteTemplates from '../../hooks/use-website-templates'
-
 export interface WebsiteTemplatesProps {
   type: IWebsiteTemplateType
+  items: IBrandMarketingTemplate[]
+  isLoading: boolean
+  onDelete: (template: IBrandMarketingTemplate) => void
 }
 
-function WebsiteTemplates({ type }: WebsiteTemplatesProps) {
-  const { templates: items, isLoading } = useWebsiteTemplates(type)
-
-  // TODO: implement this
-  const handleDelete = () => console.log('on template delete')
+function WebsiteTemplates({
+  type,
+  items,
+  isLoading,
+  onDelete
+}: WebsiteTemplatesProps) {
+  const selectedItems = items.filter(
+    item => item.template.template_type === type
+  )
 
   return (
     <TemplatesList
-      items={items}
+      items={selectedItems}
       isLoading={isLoading}
       type={type}
       medium="Website"
-      onDelete={handleDelete}
+      onDelete={onDelete}
     />
   )
 }
