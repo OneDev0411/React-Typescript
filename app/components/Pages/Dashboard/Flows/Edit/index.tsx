@@ -163,7 +163,7 @@ function Edit(props: WithRouterProps) {
   }, [brand])
 
   useEffectOnce(() => {
-    loadFlowData()
+    loadFlowData(true)
     fetchEmailTemplates()
   })
 
