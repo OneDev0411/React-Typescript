@@ -2,7 +2,6 @@ import React, { useMemo, ChangeEvent } from 'react'
 import { Field } from 'react-final-form'
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   Select,
@@ -35,6 +34,12 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(1.5),
       paddingBottom: theme.spacing(1.5),
       borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    newTemplate: {
+      borderTopWidth: '1px',
+      borderBottomWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: theme.palette.divider
     }
   }),
   { name: 'FlowEmailTemplate' }
@@ -47,18 +52,14 @@ export const EmailTemplate = ({
   onNewTemplateClick
 }: Props) => {
   const classes = useStyles()
-  const emailTemplatesOptions = useMemo(() => {
-    return [
-      {
-        label: 'Select a template',
-        value: 0
-      },
-      ...templates.map(template => ({
+  const emailTemplatesOptions = useMemo(
+    () =>
+      templates.map(template => ({
         label: template.name,
         value: template.id
-      }))
-    ]
-  }, [templates])
+      })),
+    [templates]
+  )
 
   const selectedItem = useMemo(() => {
     const defaultValue = emailTemplatesOptions[0]
@@ -131,10 +132,24 @@ export const EmailTemplate = ({
                   ) => {
                     const value = event.target.value
 
+                    if (value === 'new') {
+                      return onNewTemplateClick()
+                    }
+
                     onChange(value)
                   }}
                   label="Template"
                 >
+                  <MenuItem key="default" value={0}>
+                    Select a Template
+                  </MenuItem>
+                  <MenuItem
+                    key="new"
+                    value="new"
+                    className={classes.newTemplate}
+                  >
+                    Create a New Template
+                  </MenuItem>
                   {emailTemplatesOptions.map(item => (
                     <MenuItem key={item.value} value={item.value}>
                       {item.label}
@@ -153,17 +168,6 @@ export const EmailTemplate = ({
                     <Typography variant="body2">
                       Subject: {reviewTemplateData.subject}
                     </Typography>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      disabled={disabled}
-                      onClick={event => {
-                        event.stopPropagation()
-                        onNewTemplateClick()
-                      }}
-                    >
-                      Create a New Template
-                    </Button>
                   </Box>
                   <Typography variant="body2">
                     {reviewTemplateData.text}

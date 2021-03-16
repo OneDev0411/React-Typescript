@@ -1,10 +1,6 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo
-} from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
+import { useEffectOnce } from 'react-use'
+
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -152,24 +148,20 @@ function Edit(props: WithRouterProps) {
     },
     [brand, getFlow, props.params.id]
   )
-
-  useEffect(() => {
-    loadFlowData()
-  }, [brand, getFlow, loadFlowData, props.location.state, props.params.id])
-
-  useEffect(() => {
-    async function fetchEmailTemplates() {
-      if (!brand) {
-        return
-      }
-
-      const fetchedTemplates = await getEmailTemplates(brand)
-
-      setEmailTemplates(fetchedTemplates)
+  const fetchEmailTemplates = useCallback(async () => {
+    if (!brand) {
+      return
     }
 
-    fetchEmailTemplates()
+    const fetchedTemplates = await getEmailTemplates(brand)
+
+    setEmailTemplates(fetchedTemplates)
   }, [brand])
+
+  useEffectOnce(() => {
+    loadFlowData()
+    fetchEmailTemplates()
+  })
 
   const newStepSubmitHandler = useCallback(
     async (step: IBrandFlowStepInput) => {
@@ -414,9 +406,9 @@ function Edit(props: WithRouterProps) {
           setIsEmailTemplateDrawerOpen(false)
         }}
         submitCallback={emailTemplate => {
+          fetchEmailTemplates()
           setSelectedEmailTemplate(emailTemplate)
         }}
-        emailTemplate={selectedEmailTemplate}
       />
     </>
   )
