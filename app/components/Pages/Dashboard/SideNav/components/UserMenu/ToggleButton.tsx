@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     wrapper: {
       display: 'flex',
       width: `calc(100% - ${theme.spacing(3)}px)`,
-      color: theme.palette.secondary.contrastText
+      color: theme.palette.navbar.contrastText
     },
     userDetails: {
       textAlign: 'left',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: `calc(100% - ${theme.spacing(6)}px)`
     },
     arrowIcon: {
-      color: theme.palette.common.white,
+      color: theme.palette.navbar.contrastText,
       transform: 'rotateX(180deg)'
     },
     arrowIconRotated: {

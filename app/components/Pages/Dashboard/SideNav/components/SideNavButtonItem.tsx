@@ -5,7 +5,7 @@ import { ButtonBaseProps } from '@material-ui/core/ButtonBase'
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
     paddingLeft: theme.spacing(3),
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.navbar.contrastText,
     fontSize: theme.typography.body1.fontSize,
     lineHeight: theme.typography.body1.lineHeight,
     opacity: 0.7,

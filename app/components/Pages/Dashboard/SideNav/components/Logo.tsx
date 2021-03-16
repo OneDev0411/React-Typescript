@@ -22,12 +22,7 @@ export default function Logo() {
     (state: IAppState) => state.brand
   )
   const logo = useMemo(
-    () =>
-      getBrandLogo(
-        brand,
-        'inverted-logo-wide',
-        '/static/images/logo--white--padded.svg'
-      ),
+    () => getBrandLogo(brand, '/static/images/logo--white--padded.svg'),
     [brand]
   )
 

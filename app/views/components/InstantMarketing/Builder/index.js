@@ -24,7 +24,6 @@ import {
   getActiveTeamSettings
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
-import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
 import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
@@ -369,11 +368,9 @@ class Builder extends React.Component {
       }
     }
 
-    const shouldShowNeighborhoodsBlocks = getActiveTeamSettings(
-      this.props.user,
-      ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY,
-      true
-    )
+    const activeTeamSettings = getActiveTeamSettings(this.props.user, true)
+
+    const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
     if (shouldShowNeighborhoodsBlocks) {
       emailBlocksOptions.neighborhoods = {

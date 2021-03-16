@@ -8,7 +8,7 @@ export function getBrandFontFamilies(brand: IBrand): string[] {
   }
 
   const brandPalette = flattedBrand.settings.palette
-    .palette as BrandSettingsPalette
+    .palette as BrandMarketingPalette
 
   const fontFamilyKeys = Object.keys(brandPalette).filter(key =>
     key.includes('font-family')

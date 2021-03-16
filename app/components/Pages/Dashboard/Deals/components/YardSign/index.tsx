@@ -6,7 +6,6 @@ import { PopoverActions } from '@material-ui/core/Popover'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
-import { YARD_SIGN_REQUESTS_SETTINGS_KEY } from 'constants/user'
 import { IAppState } from 'reducers'
 import { setSelectedTask } from 'actions/deals'
 
@@ -25,8 +24,11 @@ function YardSign({ deal, style }: Props) {
   const dispatch = useDispatch()
   const user = useSelector((store: IAppState) => store.user)
 
-  const activeBrandSettings = getActiveTeamSettings(user, '', true)
-  const showYardSign = activeBrandSettings[YARD_SIGN_REQUESTS_SETTINGS_KEY]
+  const { activeBrandSettings: showYardSign } = getActiveTeamSettings(
+    user,
+    '',
+    true
+  )
 
   useEffect(() => {
     if (popoverActions.current) {

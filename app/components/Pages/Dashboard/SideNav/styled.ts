@@ -3,7 +3,7 @@ import styled, { ThemeProps, css } from 'styled-components'
 import { Badge, Link } from '@material-ui/core'
 import { Theme, withStyles, fade } from '@material-ui/core/styles'
 
-import { appSidenavWidth, backgroundColor } from './variables'
+import { appSidenavWidth } from './variables'
 
 export const Sidenav = styled.aside`
   width: ${appSidenavWidth}px;
@@ -14,7 +14,8 @@ export const Sidenav = styled.aside`
   z-index: 100;
   display: flex;
   flex-direction: column;
-  background-color: ${backgroundColor};
+  background-color: ${(props: ThemeProps<Theme>) =>
+    props.theme.palette.navbar.background};
 `
 
 export const SidenavListGroup = styled.ul`
@@ -36,11 +37,11 @@ const itemStyle = css`
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
-    fade(props.theme.palette.primary.contrastText, 0.7)};
+    fade(props.theme.palette.navbar.contrastText, 0.7)};
   &:hover,
   &:focus {
     text-decoration: none;
-    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.light};
+    color: ${(props: ThemeProps<Theme>) => props.theme.palette.primary.main};
   }
 
   ${({ active }: ThemeProps<Theme> & { active: boolean }) =>

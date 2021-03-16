@@ -21,6 +21,11 @@ declare module '@material-ui/core/styles/createPalette' {
     warning: PaletteColor
     info: PaletteColor
     success: PaletteColor
+
+    navbar: {
+      background: CssObject
+      contrastText: CssObject
+    }
   }
 
   interface SimplePaletteColorOptions {
@@ -39,6 +44,10 @@ declare module '@material-ui/core/styles/createPalette' {
     warning?: PaletteColorOptions
     info?: PaletteColorOptions
     success?: PaletteColorOptions
+    navbar?: {
+      background?: CssObject
+      contrastText?: CssObject
+    }
   }
 }
 
