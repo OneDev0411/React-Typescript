@@ -23,11 +23,19 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
   }, [dealId])
 
   return deal
-    ? statuses.filter(
-        status =>
-          status.is_pending &&
-          status.deal_types.includes('Buying') &&
+    ? statuses.filter(status => {
+        if (deal.deal_type === 'Selling' && !status.is_active) {
+          return false
+        }
+
+        if (deal.deal_type === 'Buying' && !status.is_pending) {
+          return false
+        }
+
+        return (
+          status.deal_types.includes(deal.deal_type) &&
           status.property_types.includes(deal.property_type)
-      )
+        )
+      })
     : []
 }
