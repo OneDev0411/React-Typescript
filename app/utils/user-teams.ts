@@ -212,7 +212,7 @@ export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
   team => team.settings || {}
 )
 
-export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
+export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   const team = getActiveTeam(user)
 
   if (!team || !team.brand) {
@@ -223,13 +223,12 @@ export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
   if (
     !brand ||
     !brand.settings ||
-    !brand.settings.palette ||
-    !brand.settings.palette.palette
+    !brand.settings.marketing_palette
   ) {
     return DEFAULT_BRAND_PALETTE
   }
 
-  return brand.settings.palette.palette
+  return brand.settings.marketing_palette
 }
 
 export function viewAsEveryoneOnTeam(user: IUser | null): boolean {

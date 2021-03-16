@@ -329,7 +329,7 @@ export function getSidebarSections(): SidebarSection[] {
 }
 
 export function getPreferredSidebarView(
-  settings: BrandSettingsPalette
+  settings: BrandMarketingPalette
 ): 'simple' | 'full' {
   if (isEqual(settings, DEFAULT_BRAND_PALETTE)) {
     return 'simple'

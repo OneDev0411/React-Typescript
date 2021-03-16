@@ -6,12 +6,7 @@ declare type LogoType =
   | 'inverted-logo-wide'
   | 'inverted-logo-square'
 
-export const getBrandLogo = (brand: IBrand, type: LogoType, defaultValue:string = '/static/images/logo.svg'): string => {
-  if(!brand?.settings?.palette?.palette){
-    return defaultValue
-  }
-
-  const palette: BrandSettingsPalette = brand.settings.palette.palette
-
-  return palette[type] ?? defaultValue
+export const getBrandLogo = (brand: IBrand, defaultValue:string = '/static/images/logo.svg'): string => {
+  const logo = brand?.settings?.theme?.navbar_logo
+  return logo ? logo : defaultValue
 }
