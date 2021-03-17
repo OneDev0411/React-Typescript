@@ -315,7 +315,8 @@ export default function CreateDeal() {
               deal.deal_type === 'Selling'
                 ? 'listing_status'
                 : 'contract_status'
-            ) && <DealStatus list={statusList} />}
+            ) &&
+            statusList.length > 1 && <DealStatus list={statusList} />}
 
           {deal &&
             dealContexts.map((context: IDealBrandContext) => (

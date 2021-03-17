@@ -168,7 +168,8 @@ export default function Publish({ params }: Props) {
               deal.deal_type === 'Selling'
                 ? 'listing_status'
                 : 'contract_status'
-            ) && <DealStatus list={statusList} />}
+            ) &&
+            statusList.length > 1 && <DealStatus list={statusList} />}
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (
