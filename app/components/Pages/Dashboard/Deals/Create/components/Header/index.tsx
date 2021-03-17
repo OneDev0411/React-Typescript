@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, makeStyles, Theme } from '@material-ui/core'
+import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { mdiClose } from '@mdi/js'
@@ -15,9 +15,10 @@ const useStyles = makeStyles(
       top: 0,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       backgroundColor: '#fff',
-      padding: theme.spacing(1, 2)
+      padding: theme.spacing(1, 4),
+      zIndex: 1
     }
   }),
   {
@@ -26,11 +27,12 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  title: string
   onClose: () => void
   confirmationMessage: string
 }
 
-export function Header({ confirmationMessage, onClose }: Props) {
+export function Header({ title, confirmationMessage, onClose }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -48,6 +50,9 @@ export function Header({ confirmationMessage, onClose }: Props) {
 
   return (
     <div className={classes.root}>
+      <div>
+        <Typography variant="h6">{title}</Typography>
+      </div>
       <IconButton color="secondary" size="medium" onClick={handleClose}>
         <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
       </IconButton>

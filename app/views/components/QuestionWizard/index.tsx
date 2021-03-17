@@ -82,7 +82,7 @@ export function QuestionWizard({
       top:
         refs.current[currentStep]?.getBoundingClientRect().top +
         window.pageYOffset -
-        50,
+        80,
       behavior: 'smooth'
     })
   }, [currentStep, lastVisitedStep])
@@ -90,8 +90,8 @@ export function QuestionWizard({
   useEffect(() => {
     showLoading &&
       loadingRef.current?.scrollIntoView({
-        block: 'center',
-        inline: 'center'
+        block: 'nearest',
+        behavior: 'smooth'
       })
   }, [showLoading])
 

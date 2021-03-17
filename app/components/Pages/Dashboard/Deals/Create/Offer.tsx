@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  makeStyles
-} from '@material-ui/core'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
@@ -37,22 +32,10 @@ import { Header } from './components/Header'
 
 import { useStatusList } from './hooks/use-deal-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
+import { useStyles } from './hooks/use-styles'
 import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Context } from './context'
-
-const useStyles = makeStyles(
-  () => ({
-    root: {
-      width: '80%',
-      maxWidth: '800px',
-      margin: '15% auto'
-    }
-  }),
-  {
-    name: 'CreateDeal'
-  }
-)
 
 interface Props {
   params: {
@@ -136,10 +119,15 @@ export default function CreateOffer({ params }: Props) {
         })
       )
 
-      const roles = agents.concat(clients).map(role => ({
-        ...role,
-        checklist: checklist.id
-      }))
+      const roles = agents
+        .concat(clients)
+        .filter(({ role }) => !!role)
+        .map(role => ({
+          ...role,
+          id: undefined,
+          contact: undefined,
+          checklist: checklist.id
+        }))
 
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
@@ -181,6 +169,7 @@ export default function CreateOffer({ params }: Props) {
       }}
     >
       <Header
+        title="Create New Offer"
         confirmationMessage="Cancel offer creation?"
         onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
       />
