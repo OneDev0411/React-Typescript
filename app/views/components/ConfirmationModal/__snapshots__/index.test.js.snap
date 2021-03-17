@@ -20,7 +20,7 @@ exports[`ConfirmationModal component should render modal properly 1`] = `
     You are missing something important. Are you sure?
   </div>
   <div
-    class="cta styled__ActionBarContainer-sc-1w2c0cs-0 cSTkgI"
+    class="styled__ActionBarContainer-sc-1w2c0cs-0 cSTkgI cta"
   >
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-outlined"

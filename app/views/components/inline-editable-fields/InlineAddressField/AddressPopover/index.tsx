@@ -46,11 +46,11 @@ export function AddressPopover({
         anchorEl={isOpen ? containerRef && containerRef.current : null}
         onClose={onClose}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'left'
         }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left'
         }}
         style={{

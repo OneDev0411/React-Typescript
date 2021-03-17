@@ -25,8 +25,7 @@ import { DealContainer, PageWrapper } from './styled'
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')
   const { isFetchingDeal, isFetchingContexts } = useLoadFullDeal(
-    props.params.id,
-    props.deal
+    props.params.id
   )
 
   if (!props.deal) {

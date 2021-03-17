@@ -15,6 +15,7 @@ import {
 import { useSelector } from 'react-redux'
 import { mdiArrowDown } from '@mdi/js'
 
+import { selectUser } from 'selectors/user'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import { BaseDropdown, RenderToggleButtonProps } from 'components/BaseDropdown'
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export function ExportDeals(props) {
   const classes = useStyles()
 
-  const user = useSelector((state: IAppState) => state.user)
+  const user = useSelector((state: IAppState) => selectUser(state))
 
   const items = useMemo(() => {
     return [

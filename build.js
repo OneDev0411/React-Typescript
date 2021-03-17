@@ -28,6 +28,8 @@ function compile() {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
+        console.trace('Run error', err.stack)
+
         return reject(err)
       }
 
@@ -55,6 +57,6 @@ function compile() {
 }
 
 run().catch(e => {
-  console.error('error in build:', e)
+  console.trace('error in build:', e)
   process.exit(1)
 })

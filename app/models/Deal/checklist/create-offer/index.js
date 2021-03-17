@@ -3,27 +3,19 @@ import { createChecklist } from '../create-checklist'
 /**
  * create a new offer
  */
-export async function createOffer(
-  deal_id,
-  name,
-  order,
-  is_backup,
-  property_type
-) {
+export async function createOffer(deal, { name, order, is_deactivated }) {
   try {
-    const data = {
+    return createChecklist(deal.id, {
       checklist: {
         title: `Offer (${name})`,
-        is_deactivated: is_backup,
+        is_deactivated,
         order
       },
       conditions: {
         deal_type: 'Buying',
-        property_type
+        property_type: deal.property_type
       }
-    }
-
-    return await createChecklist(deal_id, data)
+    })
   } catch (e) {
     throw e
   }

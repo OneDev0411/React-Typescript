@@ -250,14 +250,21 @@ const AsyncDealsLayout = withAcl(
 const AsyncDealCreate = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/create/create-deal' /* webpackChunkName: "deal_c" */
+      '../components/Pages/Dashboard/Deals/Create/Deal' /* webpackChunkName: "deal_create" */
     )
 })
 
 const AsyncDealCreateOffer = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
+      '../components/Pages/Dashboard/Deals/Create/Offer' /* webpackChunkName: "deal_co" */
+    )
+})
+
+const AsyncDealPublish = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Deals/Create/Publish' /* webpackChunkName: "deal_publish" */
     )
 })
 
@@ -832,8 +839,12 @@ export default (
             component={AsyncDealFormEdit}
           />
           <Route
-            path="/dashboard/deals/:id/create-offer"
+            path="/dashboard/deals/:id/offer"
             component={AsyncDealCreateOffer}
+          />
+          <Route
+            path="/dashboard/deals/:id/publish"
+            component={AsyncDealPublish}
           />
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"

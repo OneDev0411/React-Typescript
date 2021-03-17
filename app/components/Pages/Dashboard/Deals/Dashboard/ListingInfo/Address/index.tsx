@@ -12,11 +12,9 @@ import {
 } from '@material-ui/core'
 
 import { getField } from 'models/Deal/helpers/context/get-field'
-import { getDealAddress } from 'deals/utils/get-deal-address'
+import { createAddressContext } from 'deals/utils/create-address-context'
 
 import { upsertContexts } from 'actions/deals'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
-import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -45,32 +43,17 @@ export function Address(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const cancleEdit = () => setIsEditingAddress(false)
+  const cancelEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
   const fullAddress = getField(props.deal, 'full_address')
 
   const handleSave = async address => {
-    const contexts = Object.entries(normalizeAddress(address)).reduce<
-      {
-        definition: any // TODO: needs typing for contact definitions
-        checklist: IDealChecklist
-        value: string | number
-        approved: boolean
-      }[]
-    >((list, [name, value]) => {
-      const context = createUpsertObject(props.deal, name, value, true)
-
-      if (context) {
-        list.push(context)
-      }
-
-      return list
-    }, [])
+    const contexts = createAddressContext(props.deal, address)
 
     try {
       await dispatch(upsertContexts(props.deal.id, contexts))
 
-      cancleEdit()
+      cancelEdit()
     } catch (e) {
       console.log(e)
     }
@@ -82,7 +65,7 @@ export function Address(props: Props) {
         <div className={classes.container}>
           <InlineAddressField
             address={fullAddress}
-            handleCancel={cancleEdit}
+            handleCancel={cancelEdit}
             handleSubmit={handleSave}
             style={{
               width: '18rem'
@@ -99,7 +82,7 @@ export function Address(props: Props) {
             )}
           />
 
-          <Button onClick={cancleEdit}>Cancel</Button>
+          <Button onClick={cancelEdit}>Cancel</Button>
         </div>
       ) : (
         <Tooltip
