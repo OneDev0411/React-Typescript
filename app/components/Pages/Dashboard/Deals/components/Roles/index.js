@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
 import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { Avatar } from 'components/Avatar'
 import { createRoles, deleteRole } from 'actions/deals'
@@ -19,7 +20,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 
 import DealRole from 'components/DealRole'
 
-import TeamAgents from 'components/TeamAgents'
+import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -244,7 +245,7 @@ class Roles extends React.Component {
         )}
 
         {this.state.isReplaceAgentDrawerOpen && (
-          <TeamAgents
+          <TeamAgentsDrawer
             isPrimaryAgent
             withRelatedContacts={false}
             user={this.props.user}

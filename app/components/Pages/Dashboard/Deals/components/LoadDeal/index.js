@@ -16,7 +16,7 @@ LoadDeal.defaultProps = {
 }
 
 function LoadDeal({ onLoad, ...props }) {
-  const { isFetchingCompleted, ...data } = useLoadFullDeal(props.id, props.deal)
+  const { isFetchingCompleted, ...data } = useLoadFullDeal(props.id)
 
   useEffect(() => {
     if (isFetchingCompleted) {

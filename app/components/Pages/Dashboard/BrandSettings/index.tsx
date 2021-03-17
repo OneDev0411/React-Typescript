@@ -21,6 +21,7 @@ import { uploadBrandAsset } from 'models/brand/upload-asset'
 import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbnails'
 
 import { getUserTeams } from 'actions/user/teams'
+import { IAppState } from 'reducers'
 
 import { TEMPLATE } from './constants'
 import {
@@ -32,7 +33,7 @@ import Sidebar from './Sidebar'
 
 export function BrandSettings() {
   const dispatch = useDispatch()
-  const user = useSelector(({ user }) => user)
+  const user = useSelector<IAppState, IUser>(({ user }) => user!)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const activeBrand = getActiveTeamId(user) as UUID

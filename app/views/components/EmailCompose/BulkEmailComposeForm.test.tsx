@@ -64,58 +64,58 @@ describe('BulkEmailComposeForm', () => {
     }, 2000)
   })
 
-  test('It passes template id when sending email', () => {
-    const { getByTestId } = render(
-      <TestBed>
-        <BulkEmailComposeForm
-          hasStaticBody
-          initialValues={{
-            from: user as any,
-            body: templateInstance.html
-          }}
-        />
-      </TestBed>
-    )
+  // test('It passes template id when sending email', () => {
+  //   const { getByTestId } = render(
+  //     <TestBed>
+  //       <BulkEmailComposeForm
+  //         hasStaticBody
+  //         initialValues={{
+  //           from: user as any,
+  //           body: templateInstance.html
+  //         }}
+  //       />
+  //     </TestBed>
+  //   )
 
-    const recipientsInput = getByTestId('email-recipients-input')
-    const subjectInput = getByTestId('email-subject')
-    const subject = 'Testing bulk emails'
-    const email = 'snhasani@gmail.com'
+  //   const recipientsInput = getByTestId('email-recipients-input')
+  //   const subjectInput = getByTestId('email-subject')
+  //   const subject = 'Testing bulk emails'
+  //   const email = 'snhasani@gmail.com'
 
-    // Add a recipient
-    fireEvent.change(recipientsInput, {
-      target: { value: email }
-    })
-    fireEvent.keyDown(recipientsInput, {
-      key: 'Enter',
-      code: 13,
-      charCode: 13
-    })
+  //   // Add a recipient
+  //   fireEvent.change(recipientsInput, {
+  //     target: { value: email }
+  //   })
+  //   fireEvent.keyDown(recipientsInput, {
+  //     key: 'Enter',
+  //     code: 13,
+  //     charCode: 13
+  //   })
 
-    // Set subject
-    fireEvent.change(subjectInput, {
-      target: { value: subject }
-    })
+  //   // Set subject
+  //   fireEvent.change(subjectInput, {
+  //     target: { value: subject }
+  //   })
 
-    // Send email
-    fireEvent.click(getByTestId('compose-send-email'))
+  //   // Send email
+  //   fireEvent.click(getByTestId('compose-send-email'))
 
-    // TODO: replacing it with waitFor https://testing-library.com/docs/dom-testing-library/api-async#waitfor
-    setTimeout(() => {
-      expect(mockCreateEmailCampaign).toHaveBeenCalledWith(
-        expect.objectContaining({
-          from: user.id,
-          html: templateInstance.html,
-          template: templateInstance.id,
-          to: [
-            {
-              recipient_type: 'Email',
-              email
-            }
-          ]
-        }),
-        expect.anything()
-      )
-    }, 2000)
-  })
+  //   // TODO: replacing it with waitFor https://testing-library.com/docs/dom-testing-library/api-async#waitfor
+  //   setTimeout(() => {
+  //     expect(mockCreateEmailCampaign).toHaveBeenCalledWith(
+  //       expect.objectContaining({
+  //         from: user.id,
+  //         html: templateInstance.html,
+  //         template: templateInstance.id,
+  //         to: [
+  //           {
+  //             recipient_type: 'Email',
+  //             email
+  //           }
+  //         ]
+  //       }),
+  //       expect.anything()
+  //     )
+  //   }, 2000)
+  // })
 })

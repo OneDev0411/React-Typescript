@@ -1,17 +1,13 @@
-import * as React from 'react'
-import * as FinalForm from 'react-final-form'
-import Flex from 'styled-flex-component'
+import React from 'react'
+import FinalForm from 'react-final-form'
 import idx from 'idx/lib/idx'
 
-import ActionButton from 'components/Button/ActionButton'
-import LinkButton from 'components/Button/LinkButton'
+import { Typography, Button, Box } from '@material-ui/core'
 
-import { TextInput } from 'components/Forms/TextInput'
-
+import { TextInput } from './form-fields/TextInput'
 import { Address } from './form-fields/Address'
 
 import Field from '../components/CustomField'
-import { Body, Footer, OfficeTitle } from '../styled'
 
 interface Props {
   initialValues: IDealRole
@@ -28,66 +24,72 @@ export function OfficeForm(props: Props) {
 
   return (
     <>
-      <Body>
-        <OfficeTitle>
+      <Box>
+        <Typography variant="h6">
           Office info for {props.values.legal_full_name}
-        </OfficeTitle>
+        </Typography>
 
-        <Flex>
-          <Field
-            label="Office Name"
-            name="office_name"
-            initialValue={props.values.office_name || office.name}
-            component={TextInput}
-            style={{ flex: 4, marginRight: '0.5rem' }}
-          />
+        <Box display="flex" my={2}>
+          <Box flex={4} mr={1}>
+            <Field
+              label="Office Name"
+              name="office_name"
+              initialValue={props.values.office_name || office.name}
+              component={TextInput}
+            />
+          </Box>
 
-          <Field
-            label="Office license Number"
-            name="office_license_number"
-            initialValue={
-              props.values.office_license_number || office.license_number
-            }
-            component={TextInput}
-            style={{ flex: 3, marginRight: '0.5rem' }}
-          />
+          <Box flex={3} mr={1}>
+            <Field
+              label="Office license Number"
+              name="office_license_number"
+              initialValue={
+                props.values.office_license_number || office.license_number
+              }
+              component={TextInput}
+            />
+          </Box>
 
-          <Field
-            label="Office MLS ID"
-            name="office_mls_id"
-            initialValue={props.values.office_mls_id || office.mls_id}
-            component={TextInput}
-            style={{ flex: 3 }}
-          />
-        </Flex>
+          <Box flex={3}>
+            <Field
+              label="Office MLS ID"
+              name="office_mls_id"
+              initialValue={props.values.office_mls_id || office.mls_id}
+              component={TextInput}
+            />
+          </Box>
+        </Box>
 
-        <Flex style={{ marginTop: '1rem' }}>
-          <Field
-            label="Office Email"
-            name="office_email"
-            initialValue={props.values.office_email || office.email}
-            component={TextInput}
-            style={{ flex: 4, marginRight: '0.5rem' }}
-          />
+        <Box display="flex" my={2}>
+          <Box flex={4} mr={1}>
+            <Field
+              label="Office Email"
+              name="office_email"
+              initialValue={props.values.office_email || office.email}
+              component={TextInput}
+            />
+          </Box>
 
-          <Field
-            label="Office Phone"
-            name="office_phone"
-            initialValue={props.values.office_phone || office.phone}
-            component={TextInput}
-            style={{ flex: 3, marginRight: '0.5rem' }}
-          />
+          <Box flex={3} mr={1}>
+            <Field
+              label="Office Phone"
+              name="office_phone"
+              initialValue={props.values.office_phone || office.phone}
+              component={TextInput}
+            />
+          </Box>
 
-          <Field
-            label="Office Fax"
-            name="office_fax"
-            initialValue={props.values.office_fax || office.fax}
-            component={TextInput}
-            style={{ flex: 3 }}
-          />
-        </Flex>
+          <Box flex={3}>
+            <Field
+              label="Office Fax"
+              name="office_fax"
+              initialValue={props.values.office_fax || office.fax}
+              component={TextInput}
+            />
+          </Box>
+        </Box>
 
-        <Flex style={{ marginTop: '1rem' }}>
+        <Box my={2}>
           <Field
             isVisible
             label="Office Address"
@@ -98,26 +100,24 @@ export function OfficeForm(props: Props) {
               }
             }
             component={Address}
-            style={{ flex: 1 }}
           />
-        </Flex>
-      </Body>
+        </Box>
+      </Box>
 
-      <Footer>
-        <Flex alignCenter justifyEnd style={{ flex: 1 }}>
-          <LinkButton type="button" onClick={props.onClose}>
-            Cancel
-          </LinkButton>
+      <Box textAlign="right">
+        <Button type="button" onClick={props.onClose}>
+          Cancel
+        </Button>
 
-          <ActionButton
-            size="small"
-            appearance="primary"
-            onClick={() => props.onSubmit(props.form, false)}
-          >
-            {props.isSubmitting ? 'Saving...' : 'Save'}
-          </ActionButton>
-        </Flex>
-      </Footer>
+        <Button
+          size="small"
+          color="secondary"
+          variant="contained"
+          onClick={() => props.onSubmit(props.form, false)}
+        >
+          {props.isSubmitting ? 'Saving...' : 'Save'}
+        </Button>
+      </Box>
     </>
   )
 }

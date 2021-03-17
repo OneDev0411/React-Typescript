@@ -8,6 +8,7 @@ import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getActiveTeamSettings } from 'utils/user-teams'
 import { IAppState } from 'reducers'
 import { setSelectedTask } from 'actions/deals'
+import { selectUser } from 'selectors/user'
 
 import Form from './Create'
 import List from './List'
@@ -22,7 +23,7 @@ function YardSign({ deal, style }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [showForm, setShowForm] = useState<boolean>(false)
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => store.user)
+  const user = useSelector((state: IAppState) => selectUser(state))
 
   const { activeBrandSettings: showYardSign } = getActiveTeamSettings(
     user,

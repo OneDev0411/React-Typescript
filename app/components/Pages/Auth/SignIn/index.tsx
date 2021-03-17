@@ -31,7 +31,7 @@ export default function Signin(props: Props) {
   const brand = useSelector((state: IAppState) => state.brand)
 
   const [username, setUsername] = useState<string>(
-    window.decodeURIComponent(props.location.query.username || '')
+    window.decodeURIComponent((props.location.query.username as string) || '')
   )
   const { siteLogo, siteTitle, siteColor } = getBrandInfo(brand)
 
