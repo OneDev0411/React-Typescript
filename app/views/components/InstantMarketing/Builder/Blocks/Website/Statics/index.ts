@@ -1,7 +1,7 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
-import { handleBlockDragStopEvent } from '../utils'
+import { handleBlockDragStopEvent } from '../../utils'
 
 import loadButton, { ButtonBlockOptions, buttonBlockTraits } from './button'
 import loadGrid, { GridBlockOptions } from './grid'

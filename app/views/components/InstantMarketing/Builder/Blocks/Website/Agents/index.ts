@@ -12,7 +12,8 @@ import registerBlock from '../../registerBlock'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
-import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
+import { handleBlockDragStopEvent } from '../../utils'
 import AgentLeft from './agent-left.njk'
 import AgentGrid from './agent-grid.njk'
 

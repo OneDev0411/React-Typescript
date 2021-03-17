@@ -17,7 +17,8 @@ import CarouselIcon from 'assets/images/marketing/editor/blocks/carousel.png'
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 import registerBlock from '../../registerBlock'
-import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
+import { handleBlockDragStopEvent } from '../../utils'
 import Carousel from './template.njk'
 
 import script from './script'

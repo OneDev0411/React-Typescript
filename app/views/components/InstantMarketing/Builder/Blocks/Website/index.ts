@@ -1,9 +1,8 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
-import { collapseBlockCategories } from '../Email/utils'
 
-import { reorderBlocks } from './utils'
+import { reorderBlocks, collapseBlockCategories } from '../utils'
 
 import registerStaticBlocks, {
   StaticBlocksOptions,

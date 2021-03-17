@@ -14,7 +14,8 @@ import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
-import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
+import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
 import script, { MapInitEventType } from './script'
 

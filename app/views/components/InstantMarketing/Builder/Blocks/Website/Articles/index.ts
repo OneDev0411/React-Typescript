@@ -11,7 +11,8 @@ import registerBlock from '../../registerBlock'
 import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
-import { baseView, handleBlockDragStopEvent, isComponent } from '../utils'
+import { baseView, isComponent } from '../utils'
+import { handleBlockDragStopEvent } from '../../utils'
 
 import ArticleTop from './article-top.njk'
 import ArticleLeft from './article-left.njk'
