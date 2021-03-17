@@ -1,12 +1,20 @@
 import { Editor } from 'grapesjs'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
+import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
+import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
+import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
+import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
+import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
+import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
+import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
+import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
+import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
-import adapt from '../../adapt'
 
 import Headline1 from './headline-1.mjml'
 import Headline2 from './headline-2.mjml'
@@ -18,6 +26,8 @@ import Text from './text.mjml'
 import Divider from './divider.mjml'
 import Spacer from './spacer.mjml'
 import SocialGroup from './social-group.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { adaptTemplates } from '../utils'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
@@ -52,6 +62,7 @@ export default function registerStaticBlocks(
 ): void {
   registerBlock(editor, {
     label: 'Headline 1',
+    icon: Headline1Icon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline1BlockName,
     template: templates[headline1BlockName],
@@ -60,6 +71,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Headline 2',
+    icon: Headline2Icon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: headline2BlockName,
     template: templates[headline2BlockName],
@@ -68,6 +80,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Button',
+    icon: ButtonIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: buttonBlockName,
     template: templates[buttonBlockName],
@@ -76,6 +89,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Social Group',
+    icon: ShareIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: socialGroupBlockName,
     template: templates[socialGroupBlockName],
@@ -84,6 +98,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: '1 Column',
+    icon: OneColIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: column1ElementBlockName,
     template: templates[column1ElementBlockName]
@@ -91,6 +106,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: '2 Columns',
+    icon: TwoColIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: column2ElementBlockName,
     template: templates[column2ElementBlockName]
@@ -98,6 +114,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: '3 Columns',
+    icon: ThreeColIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: column3ElementBlockName,
     template: templates[column3ElementBlockName]
@@ -105,6 +122,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Text',
+    icon: TextIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: textElementBlockName,
     template: templates[textElementBlockName],
@@ -113,6 +131,7 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Divider',
+    icon: DividerIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: dividerBlockName,
     template: templates[dividerBlockName],
@@ -121,32 +140,12 @@ export default function registerStaticBlocks(
 
   registerBlock(editor, {
     label: 'Spacer',
+    icon: SpacerIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName: spacerBlockName,
     template: templates[spacerBlockName],
     adaptive: true
   })
 
-  editor.on('block:drag:stop', (model: any, block: any) => {
-    if (!model) {
-      return
-    }
-
-    if (!templates[block.id]) {
-      return
-    }
-
-    const parent = model.parent()
-
-    const template = templates[model.attributes.attributes['data-block']]
-    const adapted = adapt(parent, template)
-
-    const mjml = nunjucks.renderString(adapted, {
-      ...renderData
-    })
-
-    parent.append(mjml, { at: model.opt.at })
-
-    model.remove()
-  })
+  handleBlockDragStopEvent(editor, adaptTemplates(templates), renderData)
 }

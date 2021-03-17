@@ -1,9 +1,12 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import { isLeaseProperty } from 'utils/listing'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
+import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import { isLeaseProperty } from 'utils/listing'
 
 import { LISTINGS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
@@ -14,6 +17,7 @@ import Right from './right.mjml'
 import Left from './left.mjml'
 import Grid from './grid.mjml'
 import GridTwo from './grid-two.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
 
 export const listingTopBlockName = 'rechat-listing-image-top'
 export const listingLeftBlockName = 'rechat-listing-image-left'
@@ -34,42 +38,17 @@ export interface Options {
 }
 
 interface ListingBlock {
-  selectHandler: (selectedListings?: IListing[]) => void
-}
-
-let modelHandle: any
-let renderData: TemplateRenderData
-
-const selectHandler = (listings?: (IListing & { is_lease?: boolean })[]) => {
-  if (!modelHandle) {
-    return
-  }
-
-  const template = templates[modelHandle.attributes.attributes['data-block']]
-
-  if (listings && listings.length) {
-    const mjml = nunjucks.renderString(template, {
-      ...renderData,
-      listings: listings.map(listing => ({
-        ...listing,
-        is_lease: isLeaseProperty(listing)
-      }))
-    })
-
-    modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
-  }
-
-  modelHandle.remove()
+  selectHandler: (listings?: (IListing & { is_lease?: boolean })[]) => void
 }
 
 export default function registerBlocks(
   editor: Editor,
-  _renderData: TemplateRenderData,
+  renderData: TemplateRenderData,
   { onDrop }: Options
 ): ListingBlock {
-  renderData = _renderData
   registerBlock(editor, {
     label: 'Image Top',
+    icon: ArticleImageTopIcon,
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingTopBlockName,
     template: templates[listingTopBlockName]
@@ -77,6 +56,7 @@ export default function registerBlocks(
 
   registerBlock(editor, {
     label: 'Grid',
+    icon: DualIcon,
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingGridBlockName,
     template: templates[listingGridBlockName]
@@ -84,6 +64,7 @@ export default function registerBlocks(
 
   registerBlock(editor, {
     label: 'Image Left',
+    icon: ArticleImageLeftIcon,
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingLeftBlockName,
     template: templates[listingLeftBlockName]
@@ -91,6 +72,7 @@ export default function registerBlocks(
 
   registerBlock(editor, {
     label: 'Aligned Grid',
+    icon: DualIcon,
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingGridTwoBlockName,
     template: templates[listingGridTwoBlockName]
@@ -98,23 +80,22 @@ export default function registerBlocks(
 
   registerBlock(editor, {
     label: 'Image Right',
+    icon: ArticleImageRightIcon,
     category: LISTINGS_BLOCK_CATEGORY,
     blockName: listingRightBlockName,
     template: templates[listingRightBlockName]
   })
 
-  editor.on('block:drag:stop', (model: Model, block) => {
-    if (!model) {
-      return
-    }
-
-    if (templates[block.id]) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+  return handleBlockDragStopEvent(
+    editor,
+    templates,
+    (listings: (IListing & { is_lease?: boolean })[]) => ({
+      ...renderData,
+      listings: listings.map(listing => ({
+        ...listing,
+        is_lease: isLeaseProperty(listing)
+      }))
+    }),
+    onDrop
+  )
 }

@@ -1,7 +1,10 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
+
 import { Metadata } from 'components/ArticleDrawer/types'
 
 import registerBlock from '../../registerBlock'
@@ -11,24 +14,17 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import ArticleTop from './templates/article-top.mjml'
 import ArticleLeft from './templates/article-left.mjml'
 import ArticleRight from './templates/article-right.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
 
-import {
-  articleTopBlockName,
-  articleLeftBlockName,
-  articleRightBlockName
-} from './constants'
+export const articleTopBlockName = 'rechat-article-image-top'
+export const articleLeftBlockName = 'rechat-article-image-left'
+export const articleRightBlockName = 'rechat-article-image-right'
 
 const templates = {}
 
 templates[articleTopBlockName] = ArticleTop
 templates[articleLeftBlockName] = ArticleLeft
 templates[articleRightBlockName] = ArticleRight
-
-const blocksName = [
-  articleTopBlockName,
-  articleLeftBlockName,
-  articleRightBlockName
-]
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -45,6 +41,7 @@ export default function registerArticleBlock(
 ): ArticleBlock {
   registerBlock(editor, {
     label: 'Image Top',
+    icon: ArticleImageTopIcon,
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleTopBlockName,
     template: templates[articleTopBlockName]
@@ -52,6 +49,7 @@ export default function registerArticleBlock(
 
   registerBlock(editor, {
     label: 'Image Left',
+    icon: ArticleImageLeftIcon,
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleLeftBlockName,
     template: templates[articleLeftBlockName]
@@ -59,47 +57,22 @@ export default function registerArticleBlock(
 
   registerBlock(editor, {
     label: 'Image Right',
+    icon: ArticleImageRightIcon,
     category: ARTICLES_BLOCK_CATEGORY,
     blockName: articleRightBlockName,
     template: templates[articleRightBlockName]
   })
 
-  let modelHandle: any
-
-  const selectHandler = (selectedArticle?: Metadata) => {
-    if (!modelHandle) {
-      return
-    }
-
-    const template = templates[modelHandle.attributes.attributes['data-block']]
-
-    if (selectedArticle) {
-      const mjml = nunjucks.renderString(template, {
-        ...renderData,
-        description: selectedArticle.description,
-        image: selectedArticle.image,
-        title: selectedArticle.title,
-        url: selectedArticle.url
-      })
-
-      modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
-    }
-
-    modelHandle.remove()
-  }
-
-  editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model) {
-      return
-    }
-
-    if (blocksName.includes(block.id)) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+  return handleBlockDragStopEvent(
+    editor,
+    templates,
+    (selectedArticle: Metadata) => ({
+      ...renderData,
+      description: selectedArticle?.description,
+      image: selectedArticle?.image,
+      title: selectedArticle?.title,
+      url: selectedArticle?.url
+    }),
+    onDrop
+  )
 }
