@@ -177,7 +177,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
             <Button
               variant="contained"
               color="secondary"
-              disabled={!inputValue}
+              disabled={!inputValue || !context.validate(context, inputValue)}
               className={classes.saveButton}
               onClick={() => handleSave()}
             >
