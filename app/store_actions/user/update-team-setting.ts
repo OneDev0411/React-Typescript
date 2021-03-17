@@ -1,5 +1,6 @@
-import { getActiveTeamId } from 'utils/user-teams'
 import { putTeamSetting } from 'models/brand/put-team-setting'
+
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getUserTeams } from './teams'
 
