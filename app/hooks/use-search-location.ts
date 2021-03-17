@@ -73,6 +73,7 @@ export function useSearchLocation(
       }
 
       setIsSearching(true)
+      setIsEmptyState(false)
 
       const [places, listings] = await Promise.all([
         searchPlaces(),
@@ -83,9 +84,7 @@ export function useSearchLocation(
       setPlaces(places)
       setListings(listings)
 
-      if (places.length === 0 && listings.length === 0) {
-        setIsEmptyState(true)
-      }
+      setIsEmptyState(places.length === 0 && listings.length === 0)
     }
 
     search()
