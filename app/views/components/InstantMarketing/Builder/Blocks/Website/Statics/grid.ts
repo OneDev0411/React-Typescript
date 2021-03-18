@@ -11,6 +11,8 @@ import { baseView, isComponent } from '../utils'
 import GridColumn1 from './grid-column-1.njk'
 import GridColumn2 from './grid-column-2.njk'
 import GridColumn3 from './grid-column-3.njk'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeGridRow = 'grid-row'
 const typeGridColumn = 'grid-column'
@@ -21,21 +23,13 @@ export const gridColumn3BlockName = `${typeGridColumn}-3`
 export interface GridBlockOptions {
   gridRowClassNames?: string
   gridColumnClassNames?: string
-  gridColumn1Block?: string
-  gridColumn2Block?: string
-  gridColumn3Block?: string
 }
 
-export default (
+export default function registerGridBlock(
   editor: Editor,
-  {
-    gridRowClassNames,
-    gridColumnClassNames,
-    gridColumn1Block,
-    gridColumn2Block,
-    gridColumn3Block
-  }: GridBlockOptions
-) => {
+  templateBlocks: TemplateBlocks,
+  { gridRowClassNames, gridColumnClassNames }: GridBlockOptions
+) {
   editor.DomComponents.addType(typeGridRow, {
     isComponent: isComponent(typeGridRow),
     model: {
@@ -59,34 +53,56 @@ export default (
   })
 
   const gridColumnBlocks = {
-    [gridColumn1BlockName]: gridColumn1Block || GridColumn1,
-    [gridColumn2BlockName]: gridColumn2Block || GridColumn2,
-    [gridColumn3BlockName]: gridColumn3Block || GridColumn3
+    [gridColumn1BlockName]:
+      templateBlocks[gridColumn1BlockName]?.template || GridColumn1,
+    [gridColumn2BlockName]:
+      templateBlocks[gridColumn2BlockName]?.template || GridColumn2,
+    [gridColumn3BlockName]:
+      templateBlocks[gridColumn3BlockName]?.template || GridColumn3
   }
 
-  registerBlock(editor, {
-    label: '1 Column',
-    icon: OneColIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: gridColumn1BlockName,
-    template: gridColumnBlocks[gridColumn1BlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: '1 Column',
+      icon: OneColIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: gridColumn1BlockName,
+      template: gridColumnBlocks[gridColumn1BlockName]
+    },
+    templateBlocks[gridColumn1BlockName]
+  )
 
-  registerBlock(editor, {
-    label: '2 Columns',
-    icon: TwoColIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: gridColumn2BlockName,
-    template: gridColumnBlocks[gridColumn2BlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: '2 Columns',
+      icon: TwoColIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: gridColumn2BlockName,
+      template: gridColumnBlocks[gridColumn2BlockName]
+    },
+    templateBlocks[gridColumn2BlockName]
+  )
 
-  registerBlock(editor, {
-    label: '3 Columns',
-    icon: ThreeColIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: gridColumn3BlockName,
-    template: gridColumnBlocks[gridColumn3BlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: '3 Columns',
+      icon: ThreeColIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: gridColumn3BlockName,
+      template: gridColumnBlocks[gridColumn3BlockName]
+    },
+    templateBlocks[gridColumn3BlockName]
+  )
 
-  return gridColumnBlocks
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Statics',
+    gridColumnBlocks,
+    templateBlocks
+  )
+
+  return allBlocks
 }

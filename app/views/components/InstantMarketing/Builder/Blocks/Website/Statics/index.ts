@@ -11,6 +11,7 @@ import loadSocialGroup, {
   SocialGroupBlockOptions,
   socialGroupBlockTraits
 } from './social-group'
+import { TemplateBlocks } from '../../types'
 
 export const staticBlocksTraits = {
   ...socialGroupBlockTraits,
@@ -27,14 +28,15 @@ export interface StaticBlocksOptions
 export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   blocksOptions: StaticBlocksOptions
 ): void {
   const templates = {
-    ...loadHeadline(editor, blocksOptions),
-    ...loadText(editor, blocksOptions),
-    ...loadButton(editor, blocksOptions),
-    ...loadGrid(editor, blocksOptions),
-    ...loadSocialGroup(editor, blocksOptions)
+    ...loadHeadline(editor, templateBlocks, blocksOptions),
+    ...loadText(editor, templateBlocks, blocksOptions),
+    ...loadButton(editor, templateBlocks, blocksOptions),
+    ...loadGrid(editor, templateBlocks, blocksOptions),
+    ...loadSocialGroup(editor, templateBlocks, blocksOptions)
   }
 
   handleBlockDragStopEvent(editor, templates, renderData)

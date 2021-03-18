@@ -11,6 +11,8 @@ import Headline1 from './headline1.njk'
 import Headline2 from './headline2.njk'
 
 import registerBlock from '../../registerBlock'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeHeadline = 'headline'
 export const headline1BlockName = `${typeHeadline}-1`
@@ -19,21 +21,15 @@ export const headline2BlockName = `${typeHeadline}-2`
 export interface HeadlineBlockOptions {
   headline1ClassNames?: string
   headline2ClassNames?: string
-  headline1Block?: string
-  headline2Block?: string
 }
 
 const headlineNumberRegex = /[^\d](\d)$/
 
-export default (
+export default function registerHeadlineBlock(
   editor: Editor,
-  {
-    headline1Block,
-    headline2Block,
-    headline1ClassNames,
-    headline2ClassNames
-  }: HeadlineBlockOptions
-) => {
+  templateBlocks: TemplateBlocks,
+  { headline1ClassNames, headline2ClassNames }: HeadlineBlockOptions
+) {
   editor.DomComponents.addType(typeHeadline, {
     isComponent: isComponent(typeHeadline),
     extend: 'text',
@@ -68,25 +64,42 @@ export default (
   })
 
   const headlineBlocks = {
-    [headline1BlockName]: headline1Block || Headline1,
-    [headline2BlockName]: headline2Block || Headline2
+    [headline1BlockName]:
+      templateBlocks[headline1BlockName]?.template || Headline1,
+    [headline2BlockName]:
+      templateBlocks[headline2BlockName]?.template || Headline2
   }
 
-  registerBlock(editor, {
-    label: 'Headline 1',
-    icon: Headline1Icon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: headline1BlockName,
-    template: headlineBlocks[headline1BlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Headline 1',
+      icon: Headline1Icon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: headline1BlockName,
+      template: headlineBlocks[headline1BlockName]
+    },
+    templateBlocks[headline1BlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Headline 2',
-    icon: Headline2Icon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: headline2BlockName,
-    template: headlineBlocks[headline2BlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Headline 2',
+      icon: Headline2Icon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: headline2BlockName,
+      template: headlineBlocks[headline2BlockName]
+    },
+    templateBlocks[headline2BlockName]
+  )
 
-  return headlineBlocks
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Statics',
+    headlineBlocks,
+    templateBlocks
+  )
+
+  return allBlocks
 }

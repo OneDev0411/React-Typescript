@@ -12,13 +12,14 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeImage = 'image'
 export const imageBlockName = typeImage
 
 export interface ImageBlockOptions {
   imageClassNames?: string
-  imageBlock?: string
   onImageDrop: (model: Model) => void
 }
 
@@ -29,7 +30,8 @@ interface ImageBlock {
 export default function registerImageBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  { imageClassNames, imageBlock, onImageDrop }: ImageBlockOptions
+  templateBlocks: TemplateBlocks,
+  { imageClassNames, onImageDrop }: ImageBlockOptions
 ): ImageBlock {
   editor.DomComponents.addType(typeImage, {
     isComponent: isComponent(typeImage),
@@ -52,20 +54,31 @@ export default function registerImageBlock(
   })
 
   const imageBlocks = {
-    [imageBlockName]: imageBlock || template
+    [imageBlockName]: templateBlocks[imageBlockName]?.template || template
   }
 
-  registerBlock(editor, {
-    label: 'Image/GIF',
-    icon: ImageIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: imageBlockName,
-    template: imageBlocks[imageBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Image/GIF',
+      icon: ImageIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: imageBlockName,
+      template: imageBlocks[imageBlockName]
+    },
+    templateBlocks[imageBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Image',
+    imageBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    imageBlocks,
+    allBlocks,
     (selectedImage: Image) => ({
       ...renderData,
       image: selectedImage

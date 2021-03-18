@@ -22,6 +22,8 @@ import { handleBlockDragStopEvent } from '../../utils'
 import Carousel from './template.njk'
 
 import script from './script'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const typeCarousel = 'carousel'
 const typeCarouselTrack = `${typeCarousel}-track`
@@ -33,7 +35,6 @@ export const carouselBlockName = typeCarousel
 
 export interface CarouselBlockOptions {
   carouselClassNames?: string
-  carouselBlock?: string
   onCarouselDoubleClick: (model: Model) => void
   onCarouselDrop: (model: Model) => void
 }
@@ -45,9 +46,9 @@ interface CarouselBlock {
 export default function registerCarouselBlock(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   {
     carouselClassNames,
-    carouselBlock,
     onCarouselDrop,
     onCarouselDoubleClick
   }: CarouselBlockOptions
@@ -224,20 +225,31 @@ export default function registerCarouselBlock(
   })
 
   const carouselBlocks = {
-    [carouselBlockName]: carouselBlock || Carousel
+    [carouselBlockName]: templateBlocks[carouselBlockName]?.template || Carousel
   }
 
-  registerBlock(editor, {
-    label: 'Carousel',
-    icon: CarouselIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: carouselBlockName,
-    template: carouselBlocks[carouselBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Carousel',
+      icon: CarouselIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: carouselBlockName,
+      template: carouselBlocks[carouselBlockName]
+    },
+    templateBlocks[carouselBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Carousel',
+    carouselBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    carouselBlocks,
+    allBlocks,
     (selectedImages: string[]) => ({
       ...renderData,
       images: selectedImages

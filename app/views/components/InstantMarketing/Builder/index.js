@@ -63,6 +63,7 @@ import { BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
+import { getTemplateBlocks } from './Blocks/templateBlocks'
 import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
@@ -433,7 +434,7 @@ class Builder extends React.Component {
     this.blocks = registerSocialBlocks(this.editor, renderData)
   }
 
-  registerWebsiteBlocks = () => {
+  async registerWebsiteBlocks() {
     // We should not re-register blocks if it's already done!
     if (this.websiteBlocksRegistered) {
       return
@@ -458,9 +459,16 @@ class Builder extends React.Component {
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
       onCarouselDoubleClick: this.openCarouselDrawer
-    } // TODO: read this from the template config
+    }
 
-    this.blocks = registerWebsiteBlocks(this.editor, renderData, blocksOptions)
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
+    this.blocks = registerWebsiteBlocks(
+      this.editor,
+      renderData,
+      blocksOptions,
+      templateBlocks
+    )
   }
 
   openCarouselDrawer = model => {

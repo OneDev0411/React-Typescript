@@ -1,4 +1,3 @@
-// General options for all custom blocks
 export interface BlockOptions {
   label: string
   icon?: string
@@ -7,3 +6,18 @@ export interface BlockOptions {
   template: string
   adaptive?: boolean
 }
+
+export interface TemplateBlockContent {
+  name: string
+  icon: string
+  category: string
+  label: string
+  adaptive?: boolean
+  type: string
+}
+
+export interface TemplateBlock extends TemplateBlockContent {
+  template: string
+}
+
+export type TemplateBlocks = Record<string, TemplateBlock>

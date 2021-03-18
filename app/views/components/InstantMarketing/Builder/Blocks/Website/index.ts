@@ -1,4 +1,4 @@
-import { Editor } from 'grapesjs'
+import type { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
 
@@ -42,6 +42,7 @@ import registerCarouselBlock, {
   CarouselBlockOptions,
   carouselBlockName
 } from './Carousel'
+import { TemplateBlock } from '../types'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -82,18 +83,49 @@ export const websiteBlocksTraits = {
 export function registerWebsiteBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  blocksOptions: BlocksOptions
+  blocksOptions: BlocksOptions,
+  templateBlocks: Record<string, TemplateBlock>
 ) {
-  registerStaticBlocks(editor, renderData, blocksOptions)
+  registerStaticBlocks(editor, renderData, templateBlocks, blocksOptions)
 
   const dynamicBlocks = {
-    agent: registerAgentBlocks(editor, renderData, blocksOptions),
-    image: registerImageBlock(editor, renderData, blocksOptions),
-    video: registerVideoBlock(editor, renderData, blocksOptions),
-    article: registerArticleBlocks(editor, renderData, blocksOptions),
-    matterport: registerMatterportBlock(editor, renderData, blocksOptions),
-    map: registerMapBlock(editor, renderData, blocksOptions),
-    carousel: registerCarouselBlock(editor, renderData, blocksOptions)
+    agent: registerAgentBlocks(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    ),
+    image: registerImageBlock(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    ),
+    video: registerVideoBlock(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    ),
+    article: registerArticleBlocks(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    ),
+    matterport: registerMatterportBlock(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    ),
+    map: registerMapBlock(editor, renderData, templateBlocks, blocksOptions),
+    carousel: registerCarouselBlock(
+      editor,
+      renderData,
+      templateBlocks,
+      blocksOptions
+    )
   }
 
   reorderBlocks(editor, BLOCK_BUTTONS_ORDER)

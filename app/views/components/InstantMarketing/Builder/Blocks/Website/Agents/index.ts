@@ -16,6 +16,8 @@ import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import AgentLeft from './agent-left.njk'
 import AgentGrid from './agent-grid.njk'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeAgentGroup = 'agent-group'
 const typeAgentList = 'agent-list'
@@ -28,8 +30,6 @@ export interface AgentBlocksOptions {
   agentGroupClassNames?: string
   agentListClassNames?: string
   agentItemClassNames?: string
-  agentLeftBlock?: string
-  agentGridBlock?: string
   onAgentDrop: (model: Model) => void
 }
 
@@ -40,12 +40,11 @@ interface AgentBlocks {
 export default function registerAgentBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   {
     agentGroupClassNames,
     agentListClassNames,
     agentItemClassNames,
-    agentLeftBlock,
-    agentGridBlock,
     onAgentDrop
   }: AgentBlocksOptions
 ): AgentBlocks {
@@ -76,29 +75,46 @@ export default function registerAgentBlocks(
   })
 
   const agentBlocks = {
-    [agentLeftBlockName]: agentLeftBlock || AgentLeft,
-    [agentGridBlockName]: agentGridBlock || AgentGrid
+    [agentLeftBlockName]:
+      templateBlocks[agentLeftBlockName]?.template || AgentLeft,
+    [agentGridBlockName]:
+      templateBlocks[agentGridBlockName]?.template || AgentGrid
   }
 
-  registerBlock(editor, {
-    label: 'Image Left',
-    icon: AgentLeftIcon,
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentLeftBlockName,
-    template: agentBlocks[agentLeftBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Image Left',
+      icon: AgentLeftIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentLeftBlockName,
+      template: agentBlocks[agentLeftBlockName]
+    },
+    templateBlocks[agentLeftBlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Grid',
-    icon: DualIcon,
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentGridBlockName,
-    template: agentBlocks[agentGridBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Grid',
+      icon: DualIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentGridBlockName,
+      template: agentBlocks[agentGridBlockName]
+    },
+    templateBlocks[agentGridBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Agents',
+    agentBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    agentBlocks,
+    allBlocks,
     (agents: AgentItem[]) => ({
       ...renderData,
       users: agents.map(item => {

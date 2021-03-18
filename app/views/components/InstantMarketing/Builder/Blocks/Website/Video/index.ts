@@ -13,6 +13,8 @@ import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
 import { generateEmbedVideoUrl } from './utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeEmbedVideo = 'embed-video'
 export const embedVideoBlockName = typeEmbedVideo
@@ -29,6 +31,7 @@ interface VideoBlock {
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { embedVideoClassNames, onVideoDrop }: VideoBlockOptions
 ): VideoBlock {
   const VideoComponent = editor.DomComponents.getType('video')!
@@ -69,20 +72,32 @@ export default function registerVideoBlock(
   })
 
   const videoBlocks = {
-    [embedVideoBlockName]: template
+    [embedVideoBlockName]:
+      templateBlocks[embedVideoBlockName]?.template || template
   }
 
-  registerBlock(editor, {
-    label: 'Video',
-    icon: VideoIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: embedVideoBlockName,
-    template: videoBlocks[embedVideoBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Video',
+      icon: VideoIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: embedVideoBlockName,
+      template: videoBlocks[embedVideoBlockName]
+    },
+    templateBlocks[embedVideoBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Video',
+    videoBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    videoBlocks,
+    allBlocks,
     (selectedVideo: Video) => ({
       ...renderData,
       url: generateEmbedVideoUrl(selectedVideo.url)

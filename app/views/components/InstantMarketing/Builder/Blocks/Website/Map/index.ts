@@ -18,6 +18,8 @@ import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
 import script, { MapInitEventType } from './script'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const typeEmbedMap = 'embed-map'
 export const embedMapBlockName = typeEmbedMap
@@ -35,6 +37,7 @@ interface MapBlock {
 export default function registerMapBlock(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { embedMapClassNames, onMapDrop, onMapDoubleClick }: MapBlockOptions
 ): MapBlock {
   const ComponentModel = editor.DomComponents.getType('default')!.model
@@ -185,20 +188,31 @@ export default function registerMapBlock(
   })
 
   const mapBlocks = {
-    [embedMapBlockName]: template
+    [embedMapBlockName]: templateBlocks[embedMapBlockName]?.template || template
   }
 
-  registerBlock(editor, {
-    label: 'Map',
-    icon: MapIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: embedMapBlockName,
-    template: mapBlocks[embedMapBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Map',
+      icon: MapIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: embedMapBlockName,
+      template: mapBlocks[embedMapBlockName]
+    },
+    templateBlocks[embedMapBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Map',
+    mapBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    mapBlocks,
+    allBlocks,
     (mapInfo: MapInfo) => ({
       ...renderData,
       longitude: mapInfo.center.longitude,

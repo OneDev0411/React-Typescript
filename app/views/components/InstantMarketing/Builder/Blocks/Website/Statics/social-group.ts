@@ -7,6 +7,8 @@ import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 import registerBlock from '../../registerBlock'
 import { baseView, isComponent } from '../utils'
 import SocialGroup from './social-group.njk'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeSocialGroup = 'social-group'
 const typeSocialLink = 'social-link'
@@ -42,18 +44,17 @@ export interface SocialGroupBlockOptions {
   socialGroupClassNames?: string
   socialLinkClassNames?: string
   socialIconClassNames?: string
-  socialGroupBlock?: string
 }
 
-export default (
+export default function registerSocialGroupBlock(
   editor: Editor,
+  templateBlocks: TemplateBlocks,
   {
     socialGroupClassNames,
     socialLinkClassNames,
-    socialIconClassNames,
-    socialGroupBlock
+    socialIconClassNames
   }: SocialGroupBlockOptions
-) => {
+) {
   editor.DomComponents.addType(typeSocialGroup, {
     isComponent: isComponent(typeSocialGroup),
     model: {
@@ -120,16 +121,28 @@ export default (
   })
 
   const socialGroupBlocks = {
-    [socialGroupBlockName]: socialGroupBlock || SocialGroup
+    [socialGroupBlockName]:
+      templateBlocks[socialGroupBlockName]?.template || SocialGroup
   }
 
-  registerBlock(editor, {
-    label: 'Social Group',
-    icon: ShareIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: socialGroupBlockName,
-    template: socialGroupBlocks[socialGroupBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Social Group',
+      icon: ShareIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: socialGroupBlockName,
+      template: socialGroupBlocks[socialGroupBlockName]
+    },
+    templateBlocks[socialGroupBlockName]
+  )
 
-  return socialGroupBlocks
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Statics',
+    socialGroupBlocks,
+    templateBlocks
+  )
+
+  return allBlocks
 }

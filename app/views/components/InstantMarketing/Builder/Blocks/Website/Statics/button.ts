@@ -8,13 +8,14 @@ import { baseView, isComponent } from '../utils'
 import registerBlock from '../../registerBlock'
 
 import Button from './button.njk'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeButton = 'button'
 export const buttonBlockName = typeButton
 
 export interface ButtonBlockOptions {
   buttonClassNames?: string
-  buttonBlock?: string
 }
 
 export const buttonBlockTraits = {
@@ -27,10 +28,11 @@ export const buttonBlockTraits = {
   ]
 }
 
-export default (
+export default function registerButtonBlock(
   editor: Editor,
-  { buttonClassNames, buttonBlock }: ButtonBlockOptions
-) => {
+  templateBlocks: TemplateBlocks,
+  { buttonClassNames }: ButtonBlockOptions
+) {
   editor.DomComponents.addType(typeButton, {
     isComponent: isComponent(typeButton),
     extend: 'link',
@@ -47,16 +49,27 @@ export default (
   })
 
   const buttonBlocks = {
-    [buttonBlockName]: buttonBlock || Button
+    [buttonBlockName]: templateBlocks[buttonBlockName]?.template || Button
   }
 
-  registerBlock(editor, {
-    label: 'Button',
-    icon: ButtonIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: buttonBlockName,
-    template: buttonBlocks[buttonBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Button',
+      icon: ButtonIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: buttonBlockName,
+      template: buttonBlocks[buttonBlockName]
+    },
+    templateBlocks[buttonBlockName]
+  )
 
-  return buttonBlocks
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Statics',
+    buttonBlocks,
+    templateBlocks
+  )
+
+  return allBlocks
 }

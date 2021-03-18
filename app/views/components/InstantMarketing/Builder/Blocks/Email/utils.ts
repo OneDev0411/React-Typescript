@@ -38,3 +38,13 @@ export function adaptTemplates(
         )
       : templates
 }
+
+export const isComponent = (
+  type: string,
+  returnFunc?: (el: HTMLElement) => object
+) => (el: HTMLElement) =>
+  el.tagName === type
+    ? returnFunc
+      ? { type, ...returnFunc(el) }
+      : true
+    : false
