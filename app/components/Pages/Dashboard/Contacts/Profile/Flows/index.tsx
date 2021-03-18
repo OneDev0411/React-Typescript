@@ -55,6 +55,14 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
       <Box px={3}>
         {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
         <AddToFlowButton
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
           activeFlows={[]}
           callback={addCallback}
           contacts={{ ids: [contactId] }}
