@@ -81,5 +81,5 @@ export function normalizeTeams(
     ]
   }
 
-  return filteredList
+  return filteredList.filter(team => team.users.length > 0)
 }
