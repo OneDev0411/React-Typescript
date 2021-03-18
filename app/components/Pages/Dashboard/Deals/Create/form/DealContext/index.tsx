@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { upsertContexts } from 'actions/deals'
+import { isBackOffice } from 'utils/user-teams'
 
 import {
   QuestionSection,
@@ -60,7 +61,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
 
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
+  const { deal, user } = useCreationContext()
 
   const defaultValue = deal ? getField(deal, context.key) : ''
 
@@ -112,7 +113,8 @@ export function DealContext({ context, onChange = () => {} }: Props) {
 
     if (deal) {
       try {
-        const data = createUpsertObject(deal, context.key, value, false)
+        const approved = isBackOffice(user) ? true : !context.needs_approval
+        const data = createUpsertObject(deal, context.key, value, approved)
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
