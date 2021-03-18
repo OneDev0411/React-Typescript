@@ -429,12 +429,14 @@ class Builder extends React.Component {
     )
   }
 
-  registerSocialBlocks = () => {
+  async registerSocialBlocks() {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
     removeUnusedBlocks(this.editor)
-    this.blocks = registerSocialBlocks(this.editor, renderData)
+    this.blocks = registerSocialBlocks(this.editor, renderData, templateBlocks)
   }
 
   async registerWebsiteBlocks() {
