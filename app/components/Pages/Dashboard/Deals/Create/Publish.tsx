@@ -1,10 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import {
-  Box,
-  makeStyles,
-  CircularProgress,
-  Typography
-} from '@material-ui/core'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { useTitle } from 'react-use'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -31,22 +26,10 @@ import { DealStatus } from './form/DealStatus'
 import { Header } from './components/Header'
 
 import { useStatusList } from './hooks/use-brand-status-list'
+import { useStyles } from './hooks/use-styles'
 import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Context } from './context'
-
-const useStyles = makeStyles(
-  () => ({
-    root: {
-      width: '80%',
-      maxWidth: '800px',
-      margin: '15% auto'
-    }
-  }),
-  {
-    name: 'PublishDraftDeal'
-  }
-)
 
 interface Props {
   params: {
@@ -135,6 +118,7 @@ export default function Publish({ params }: Props) {
       }}
     >
       <Header
+        title="Make Visible To Admin"
         confirmationMessage="Cancel deal publish?"
         onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
       />
@@ -168,7 +152,8 @@ export default function Publish({ params }: Props) {
               deal.deal_type === 'Selling'
                 ? 'listing_status'
                 : 'contract_status'
-            ) && <DealStatus list={statusList} />}
+            ) &&
+            statusList.length > 1 && <DealStatus list={statusList} />}
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (

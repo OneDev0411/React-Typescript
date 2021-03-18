@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import { browserHistory } from 'react-router'
@@ -41,6 +41,7 @@ import { DealStatus } from './form/DealStatus'
 
 import { useDealRoles } from './hooks/use-deal-roles'
 import { useStatusList } from './hooks/use-brand-status-list'
+import { useStyles } from './hooks/use-styles'
 
 import { createAddressContext } from '../utils/create-address-context'
 import { showStatusQuestion } from './helpers/show-status-question'
@@ -49,19 +50,6 @@ import { Header } from './components/Header'
 
 import { Context } from './context'
 import type { IDealSide } from './types'
-
-const useStyles = makeStyles(
-  () => ({
-    root: {
-      width: '80%',
-      maxWidth: '800px',
-      margin: '15% auto'
-    }
-  }),
-  {
-    name: 'CreateDeal'
-  }
-)
 
 export default function CreateDeal() {
   useTitle('Create New Deal | Deals | Rechat')
@@ -202,6 +190,7 @@ export default function CreateDeal() {
       }}
     >
       <Header
+        title="Create New Deal"
         confirmationMessage="Cancel deal creation?"
         onClose={handleCancel}
       />
@@ -315,7 +304,8 @@ export default function CreateDeal() {
               deal.deal_type === 'Selling'
                 ? 'listing_status'
                 : 'contract_status'
-            ) && <DealStatus list={statusList} />}
+            ) &&
+            statusList.length > 1 && <DealStatus list={statusList} />}
 
           {deal &&
             dealContexts.map((context: IDealBrandContext) => (

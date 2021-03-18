@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  makeStyles
-} from '@material-ui/core'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
@@ -37,22 +32,10 @@ import { Header } from './components/Header'
 
 import { useStatusList } from './hooks/use-deal-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
+import { useStyles } from './hooks/use-styles'
 import { showStatusQuestion } from './helpers/show-status-question'
 
 import { Context } from './context'
-
-const useStyles = makeStyles(
-  () => ({
-    root: {
-      width: '80%',
-      maxWidth: '800px',
-      margin: '15% auto'
-    }
-  }),
-  {
-    name: 'CreateDeal'
-  }
-)
 
 interface Props {
   params: {
@@ -77,8 +60,10 @@ export default function CreateOffer({ params }: Props) {
   const statusList = useStatusList(deal)
 
   useEffect(() => {
-    deal?.has_active_offer && goTo(`/dashboard/deals/${deal.id}`)
-  }, [deal?.has_active_offer, deal?.id])
+    deal?.has_active_offer &&
+      !isCreatingOffer &&
+      goTo(`/dashboard/deals/${deal.id}`)
+  }, [deal?.has_active_offer, deal?.id, isCreatingOffer])
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
@@ -120,7 +105,7 @@ export default function CreateOffer({ params }: Props) {
     const clients = values.clients as IDealRole[]
     const agents = [].concat(
       values.primary_agent,
-      values.co_agents
+      values.co_agents || []
     ) as IDealRole[]
 
     const checklistName = clients.map(role => getLegalFullName(role)).join(', ')
@@ -138,6 +123,8 @@ export default function CreateOffer({ params }: Props) {
 
       const roles = agents.concat(clients).map(role => ({
         ...role,
+        id: undefined,
+        contact: undefined,
         checklist: checklist.id
       }))
 
@@ -145,6 +132,8 @@ export default function CreateOffer({ params }: Props) {
         dispatch(createRoles(deal.id, roles)),
         dispatch(upsertContexts(deal.id, getContexts(values, deal, checklist)))
       ])
+
+      goTo(`/dashboard/deals/${deal.id}`)
     } catch (e) {
       console.log(e)
     } finally {
@@ -181,6 +170,7 @@ export default function CreateOffer({ params }: Props) {
       }}
     >
       <Header
+        title="Create New Offer"
         confirmationMessage="Cancel offer creation?"
         onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
       />

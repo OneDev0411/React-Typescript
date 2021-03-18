@@ -92,7 +92,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       return
     }
 
-    setInputValue(date)
+    setInputValue(date.getTime() / 1000)
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +107,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   const handleSave = () => {
     const value =
       contextType === 'Date'
-        ? fecha.format(inputValue, 'YYYY-MM-DD')
+        ? fecha.format(inputValue * 1000, 'YYYY-MM-DD')
         : inputValue
 
     if (deal) {
@@ -177,7 +177,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
             <Button
               variant="contained"
               color="secondary"
-              disabled={!inputValue}
+              disabled={!inputValue || !context.validate(context, inputValue)}
               className={classes.saveButton}
               onClick={() => handleSave()}
             >
