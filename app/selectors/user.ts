@@ -20,13 +20,13 @@ export const selectUserUnsafe = (state: IAppState) => state.user
  * @returns The user state
  */
 export function selectUser(state: IAppState) {
-  const user = selectUserUnsafe(state)
+  const user = selectUserUnsafe(state)!
 
-  if (!user) {
-    throw new Error(
-      'This selector must be called when the user is signed in before'
-    )
-  }
+  // if (!user) {
+  //   throw new Error(
+  //     'This selector must be called when the user is signed in before'
+  //   )
+  // }
 
   return user
 }
