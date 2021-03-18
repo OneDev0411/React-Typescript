@@ -156,86 +156,91 @@ export function DealCoAgent({
             isPrimaryAgent={false}
             criteria={searchCriteria}
           >
-            {({ teams, isLoading }) =>
-              isLoading ? (
-                <CircularProgress disableShrink />
-              ) : (
-                <div className={classes.root}>
-                  <Box className={classes.searchInputContainer}>
-                    <TextField
-                      fullWidth
-                      variant="outlined"
-                      onChange={e => setSearchCriteria(e.target.value)}
-                      placeholder="Search Agents"
-                      size="small"
-                    />
+            {({ teams, isLoading }) => (
+              <div>
+                {isLoading ? (
+                  <CircularProgress disableShrink />
+                ) : (
+                  <div className={classes.root}>
+                    <Box className={classes.searchInputContainer}>
+                      <TextField
+                        fullWidth
+                        variant="outlined"
+                        onChange={e => setSearchCriteria(e.target.value)}
+                        placeholder="Search Agents"
+                        size="small"
+                      />
+                    </Box>
+
+                    {teams.map((team, index) => (
+                      <div key={index}>
+                        {teams.length > 1 && (
+                          <Box ml={1} my={1}>
+                            <Typography variant="subtitle2">
+                              {team.name}
+                            </Typography>
+                            <Typography variant="caption">
+                              {team.subtitle}
+                            </Typography>
+                          </Box>
+                        )}
+
+                        {team.users.map(agent => (
+                          <UserRow
+                            key={agent.id}
+                            name={agent.display_name}
+                            email={agent.email}
+                            avatarUrl={agent.profile_image_url!}
+                            onClick={() => {
+                              setSelectedRole(
+                                convertUserAgentToRole({
+                                  ...agent,
+                                  brand_id: team.id
+                                })
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!selectedRole && (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                    mt={4}
+                  >
+                    {!isLoading && (
+                      <Button
+                        variant="outlined"
+                        disabled={agentRoles.length > 0}
+                        onClick={handleNext}
+                      >
+                        Skip
+                      </Button>
+                    )}
+
+                    {roles.length > 0 && (
+                      <Box ml={2}>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          disabled={isLoading}
+                          onClick={handleNext}
+                        >
+                          Continue
+                        </Button>
+                      </Box>
+                    )}
                   </Box>
-
-                  {teams.map((team, index) => (
-                    <div key={index}>
-                      {teams.length > 1 && (
-                        <Box ml={1} my={1}>
-                          <Typography variant="subtitle2">
-                            {team.name}
-                          </Typography>
-                          <Typography variant="caption">
-                            {team.subtitle}
-                          </Typography>
-                        </Box>
-                      )}
-
-                      {team.users.map(agent => (
-                        <UserRow
-                          key={agent.id}
-                          name={agent.display_name}
-                          email={agent.email}
-                          avatarUrl={agent.profile_image_url!}
-                          onClick={() => {
-                            setSelectedRole(
-                              convertUserAgentToRole({
-                                ...agent,
-                                brand_id: team.id
-                              })
-                            )
-                          }}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              )
-            }
+                )}
+              </div>
+            )}
           </TeamAgents>
         </Box>
-
-        {!selectedRole && (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-            mt={4}
-          >
-            <Button
-              variant="outlined"
-              disabled={agentRoles.length > 0}
-              onClick={handleNext}
-            >
-              Skip
-            </Button>
-
-            {roles.length > 0 && (
-              <Box ml={2}>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleNext}
-                >
-                  Continue
-                </Button>
-              </Box>
-            )}
-          </Box>
-        )}
       </QuestionForm>
     </QuestionSection>
   )

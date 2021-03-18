@@ -60,8 +60,10 @@ export default function CreateOffer({ params }: Props) {
   const statusList = useStatusList(deal)
 
   useEffect(() => {
-    deal?.has_active_offer && goTo(`/dashboard/deals/${deal.id}`)
-  }, [deal?.has_active_offer, deal?.id])
+    deal?.has_active_offer &&
+      !isCreatingOffer &&
+      goTo(`/dashboard/deals/${deal.id}`)
+  }, [deal?.has_active_offer, deal?.id, isCreatingOffer])
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
@@ -103,7 +105,7 @@ export default function CreateOffer({ params }: Props) {
     const clients = values.clients as IDealRole[]
     const agents = [].concat(
       values.primary_agent,
-      values.co_agents
+      values.co_agents || []
     ) as IDealRole[]
 
     const checklistName = clients.map(role => getLegalFullName(role)).join(', ')
@@ -119,15 +121,12 @@ export default function CreateOffer({ params }: Props) {
         })
       )
 
-      const roles = agents
-        .concat(clients)
-        .filter(({ role }) => !!role)
-        .map(role => ({
-          ...role,
-          id: undefined,
-          contact: undefined,
-          checklist: checklist.id
-        }))
+      const roles = agents.concat(clients).map(role => ({
+        ...role,
+        id: undefined,
+        contact: undefined,
+        checklist: checklist.id
+      }))
 
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
