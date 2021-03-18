@@ -133,6 +133,8 @@ export default function CreateOffer({ params }: Props) {
         dispatch(createRoles(deal.id, roles)),
         dispatch(upsertContexts(deal.id, getContexts(values, deal, checklist)))
       ])
+
+      goTo(`/dashboard/deals/${deal.id}`)
     } catch (e) {
       console.log(e)
     } finally {
