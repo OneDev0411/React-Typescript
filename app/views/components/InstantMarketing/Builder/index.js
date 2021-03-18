@@ -404,7 +404,7 @@ class Builder extends React.Component {
     return blocksOptions
   }
 
-  registerEmailBlocks = () => {
+  async registerEmailBlocks() {
     // We should not re-register blocks if it's already done!
     if (this.emailBlocksRegistered) {
       return
@@ -419,9 +419,12 @@ class Builder extends React.Component {
 
     const emailBlocksOptions = this.getBlocksOptions()
 
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
     this.blocks = registerEmailBlocks(
       this.editor,
       renderData,
+      templateBlocks,
       emailBlocksOptions
     )
   }
@@ -466,8 +469,8 @@ class Builder extends React.Component {
     this.blocks = registerWebsiteBlocks(
       this.editor,
       renderData,
-      blocksOptions,
-      templateBlocks
+      templateBlocks,
+      blocksOptions
     )
   }
 

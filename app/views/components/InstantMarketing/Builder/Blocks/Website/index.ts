@@ -42,7 +42,7 @@ import registerCarouselBlock, {
   CarouselBlockOptions,
   carouselBlockName
 } from './Carousel'
-import { TemplateBlock } from '../types'
+import { TemplateBlocks } from '../types'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -83,8 +83,8 @@ export const websiteBlocksTraits = {
 export function registerWebsiteBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  blocksOptions: BlocksOptions,
-  templateBlocks: Record<string, TemplateBlock>
+  templateBlocks: TemplateBlocks,
+  blocksOptions: BlocksOptions
 ) {
   registerStaticBlocks(editor, renderData, templateBlocks, blocksOptions)
 

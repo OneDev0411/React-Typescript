@@ -17,16 +17,12 @@ import Left from './left.mjml'
 import Grid from './grid.mjml'
 import Multi from './multi.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const agentLeftBlockName = 'rechat-agent-left'
 export const agentGridBlockName = 'rechat-agent-grid'
 export const agentMultiBlockName = 'rechat-agent-multi'
-
-const templates = {
-  [agentLeftBlockName]: Left,
-  [agentGridBlockName]: Grid,
-  [agentMultiBlockName]: Multi
-}
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -39,35 +35,62 @@ interface AgentBlock {
 export default function registerAgentBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onDrop }: Options
 ): AgentBlock {
-  registerBlock(editor, {
-    label: 'Image Left',
-    icon: AgentLeftIcon,
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentLeftBlockName,
-    template: templates[agentLeftBlockName]
-  })
+  const agentBlocks = {
+    [agentLeftBlockName]: templateBlocks[agentLeftBlockName]?.template || Left,
+    [agentGridBlockName]: templateBlocks[agentGridBlockName]?.template || Grid,
+    [agentMultiBlockName]:
+      templateBlocks[agentMultiBlockName]?.template || Multi
+  }
 
-  registerBlock(editor, {
-    label: 'Grid',
-    icon: DualIcon,
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentGridBlockName,
-    template: templates[agentGridBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Image Left',
+      icon: AgentLeftIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentLeftBlockName,
+      template: agentBlocks[agentLeftBlockName]
+    },
+    templateBlocks[agentLeftBlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Multi',
-    icon: AgentMultiIcon,
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentMultiBlockName,
-    template: templates[agentMultiBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Grid',
+      icon: DualIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentGridBlockName,
+      template: agentBlocks[agentGridBlockName]
+    },
+    templateBlocks[agentGridBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Multi',
+      icon: AgentMultiIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentMultiBlockName,
+      template: agentBlocks[agentMultiBlockName]
+    },
+    templateBlocks[agentMultiBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Agents',
+    agentBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    templates,
+    allBlocks,
     (agents: AgentItem[]) => ({
       ...renderData,
       users: agents.map(item => {

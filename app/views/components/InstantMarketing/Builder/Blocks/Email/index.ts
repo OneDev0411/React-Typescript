@@ -32,14 +32,14 @@ import registerArticleBlock, {
   articleTopBlockName,
   articleLeftBlockName,
   articleRightBlockName
-} from './Article'
+} from './Articles'
 import registerNeighborhoodsBlocks, {
   Options as NeighborhoodsOptions,
   neighborhoodsBlockName,
   neighborhoodsGraphsBlockName
 } from './Neighborhoods'
 import { collapseBlockCategories, reorderBlocks } from '../utils'
-import { BlockOptions } from '../types'
+import { BlockOptions, TemplateBlocks } from '../types'
 
 interface Options {
   listing: ListingOptions
@@ -85,6 +85,7 @@ const BLOCK_BUTTONS_ORDER = [
 export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { listing, agent, image, video, article, neighborhoods }: Options
 ) {
   const draggable =
@@ -100,7 +101,7 @@ export function registerEmailBlocks(
     }
   })
 
-  registerStaticBlocks(editor, renderData)
+  registerStaticBlocks(editor, renderData, templateBlocks)
 
   const dynamicBlocks: {
     listing: ReturnType<typeof registerListingBlocks>
@@ -110,17 +111,18 @@ export function registerEmailBlocks(
     article: ReturnType<typeof registerArticleBlock>
     neighborhoods?: ReturnType<typeof registerNeighborhoodsBlocks>
   } = {
-    listing: registerListingBlocks(editor, renderData, listing),
-    agent: registerAgentBlocks(editor, renderData, agent),
-    image: registerImageBlock(editor, renderData, image),
-    video: registerVideoBlock(editor, renderData, video),
-    article: registerArticleBlock(editor, renderData, article)
+    listing: registerListingBlocks(editor, renderData, templateBlocks, listing),
+    agent: registerAgentBlocks(editor, renderData, templateBlocks, agent),
+    image: registerImageBlock(editor, renderData, templateBlocks, image),
+    video: registerVideoBlock(editor, renderData, templateBlocks, video),
+    article: registerArticleBlock(editor, renderData, templateBlocks, article)
   }
 
   if (neighborhoods) {
     dynamicBlocks.neighborhoods = registerNeighborhoodsBlocks(
       editor,
       renderData,
+      templateBlocks,
       neighborhoods
     )
   }

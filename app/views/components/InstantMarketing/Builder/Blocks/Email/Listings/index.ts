@@ -18,20 +18,14 @@ import Left from './left.mjml'
 import Grid from './grid.mjml'
 import GridTwo from './grid-two.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const listingTopBlockName = 'rechat-listing-image-top'
 export const listingLeftBlockName = 'rechat-listing-image-left'
 export const listingRightBlockName = 'rechat-listing-image-right'
 export const listingGridBlockName = 'rechat-listing-grid'
 export const listingGridTwoBlockName = 'rechat-listing-grid-two'
-
-const templates = {}
-
-templates[listingTopBlockName] = Top
-templates[listingLeftBlockName] = Left
-templates[listingRightBlockName] = Right
-templates[listingGridBlockName] = Grid
-templates[listingGridTwoBlockName] = GridTwo
 
 export interface Options {
   onDrop: (model: Model) => void
@@ -44,51 +38,91 @@ interface ListingBlock {
 export default function registerBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onDrop }: Options
 ): ListingBlock {
-  registerBlock(editor, {
-    label: 'Image Top',
-    icon: ArticleImageTopIcon,
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingTopBlockName,
-    template: templates[listingTopBlockName]
-  })
+  const listingBlocks = {
+    [listingTopBlockName]: templateBlocks[listingTopBlockName]?.template || Top,
+    [listingLeftBlockName]:
+      templateBlocks[listingLeftBlockName]?.template || Left,
+    [listingRightBlockName]:
+      templateBlocks[listingRightBlockName]?.template || Right,
+    [listingGridBlockName]:
+      templateBlocks[listingGridBlockName]?.template || Grid,
+    [listingGridTwoBlockName]:
+      templateBlocks[listingGridTwoBlockName]?.template || GridTwo
+  }
 
-  registerBlock(editor, {
-    label: 'Grid',
-    icon: DualIcon,
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingGridBlockName,
-    template: templates[listingGridBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Image Top',
+      icon: ArticleImageTopIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingTopBlockName,
+      template: listingBlocks[listingTopBlockName]
+    },
+    templateBlocks[listingTopBlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Image Left',
-    icon: ArticleImageLeftIcon,
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingLeftBlockName,
-    template: templates[listingLeftBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Grid',
+      icon: DualIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingGridBlockName,
+      template: listingBlocks[listingGridBlockName]
+    },
+    templateBlocks[listingGridBlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Aligned Grid',
-    icon: DualIcon,
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingGridTwoBlockName,
-    template: templates[listingGridTwoBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Image Left',
+      icon: ArticleImageLeftIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingLeftBlockName,
+      template: listingBlocks[listingLeftBlockName]
+    },
+    templateBlocks[listingLeftBlockName]
+  )
 
-  registerBlock(editor, {
-    label: 'Image Right',
-    icon: ArticleImageRightIcon,
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingRightBlockName,
-    template: templates[listingRightBlockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Aligned Grid',
+      icon: DualIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingGridTwoBlockName,
+      template: listingBlocks[listingGridTwoBlockName]
+    },
+    templateBlocks[listingGridTwoBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Image Right',
+      icon: ArticleImageRightIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingRightBlockName,
+      template: listingBlocks[listingRightBlockName]
+    },
+    templateBlocks[listingRightBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Listings',
+    listingBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    templates,
+    allBlocks,
     (listings: (IListing & { is_lease?: boolean })[]) => ({
       ...renderData,
       listings: listings.map(listing => ({

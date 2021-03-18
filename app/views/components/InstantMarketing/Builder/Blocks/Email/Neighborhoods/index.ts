@@ -16,14 +16,11 @@ import neighborhoodsTemplates from './neighborhoods.mjml'
 import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
 import { adaptTemplates } from '../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const neighborhoodsBlockName = 'rechat-neighborhoods'
 export const neighborhoodsGraphsBlockName = 'rechat-neighborhoods-graphs'
-
-const templates = {
-  [neighborhoodsBlockName]: neighborhoodsTemplates,
-  [neighborhoodsGraphsBlockName]: neighborhoodsGraphsTemplates
-}
 
 export interface Options {
   onNeighborhoodsDrop: (model: Model) => void
@@ -115,29 +112,54 @@ function getNeighborhoodsGraphTemplateReport(
 export default function registerNeighborhoodsBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onNeighborhoodsDrop, onNeighborhoodsGraphsDrop }: Options
 ): NeighborhoodsBlocks {
-  registerBlock(editor, {
-    label: 'Neighborhoods',
-    icon: NeighborhoodsIcon,
-    category: MARKET_REPORTS_CATEGORY,
-    blockName: neighborhoodsBlockName,
-    template: templates[neighborhoodsBlockName],
-    adaptive: true
-  })
+  const neighborhoodBlocks = {
+    [neighborhoodsBlockName]:
+      templateBlocks[neighborhoodsBlockName]?.template ||
+      neighborhoodsTemplates,
+    [neighborhoodsGraphsBlockName]:
+      templateBlocks[neighborhoodsGraphsBlockName]?.template ||
+      neighborhoodsGraphsTemplates
+  }
 
-  registerBlock(editor, {
-    label: 'Neighborhoods Graphs',
-    icon: NeighborhoodsGraphsIcon,
-    category: MARKET_REPORTS_CATEGORY,
-    blockName: neighborhoodsGraphsBlockName,
-    template: templates[neighborhoodsGraphsBlockName],
-    adaptive: true
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Neighborhoods',
+      icon: NeighborhoodsIcon,
+      category: MARKET_REPORTS_CATEGORY,
+      blockName: neighborhoodsBlockName,
+      template: neighborhoodBlocks[neighborhoodsBlockName],
+      adaptive: true
+    },
+    templateBlocks[neighborhoodsBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Neighborhoods Graphs',
+      icon: NeighborhoodsGraphsIcon,
+      category: MARKET_REPORTS_CATEGORY,
+      blockName: neighborhoodsGraphsBlockName,
+      template: neighborhoodBlocks[neighborhoodsGraphsBlockName],
+      adaptive: true
+    },
+    templateBlocks[neighborhoodsGraphsBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Neighborhoods',
+    neighborhoodBlocks,
+    templateBlocks
+  )
 
   return handleBlockDragStopEvent(
     editor,
-    adaptTemplates(templates),
+    adaptTemplates(allBlocks),
     (selectedReport: NeighborhoodsReport, droppedBlockName: string) => ({
       ...renderData,
       report:

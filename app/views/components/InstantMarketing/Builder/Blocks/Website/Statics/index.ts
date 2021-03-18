@@ -3,11 +3,14 @@ import { Editor } from 'grapesjs'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { handleBlockDragStopEvent } from '../../utils'
 
-import loadButton, { ButtonBlockOptions, buttonBlockTraits } from './button'
-import loadGrid, { GridBlockOptions } from './grid'
-import loadText, { TextBlockOptions } from './text'
-import loadHeadline, { HeadlineBlockOptions } from './headline'
-import loadSocialGroup, {
+import registerButtonBlock, {
+  ButtonBlockOptions,
+  buttonBlockTraits
+} from './button'
+import registerGridBlock, { GridBlockOptions } from './grid'
+import registerTextBlock, { TextBlockOptions } from './text'
+import registerHeadlineBlock, { HeadlineBlockOptions } from './headline'
+import registerSocialGroupBlock, {
   SocialGroupBlockOptions,
   socialGroupBlockTraits
 } from './social-group'
@@ -32,11 +35,11 @@ export default function registerStaticBlocks(
   blocksOptions: StaticBlocksOptions
 ): void {
   const templates = {
-    ...loadHeadline(editor, templateBlocks, blocksOptions),
-    ...loadText(editor, templateBlocks, blocksOptions),
-    ...loadButton(editor, templateBlocks, blocksOptions),
-    ...loadGrid(editor, templateBlocks, blocksOptions),
-    ...loadSocialGroup(editor, templateBlocks, blocksOptions)
+    ...registerHeadlineBlock(editor, templateBlocks, blocksOptions),
+    ...registerTextBlock(editor, templateBlocks, blocksOptions),
+    ...registerButtonBlock(editor, templateBlocks, blocksOptions),
+    ...registerGridBlock(editor, templateBlocks, blocksOptions),
+    ...registerSocialGroupBlock(editor, templateBlocks, blocksOptions)
   }
 
   handleBlockDragStopEvent(editor, templates, renderData)
