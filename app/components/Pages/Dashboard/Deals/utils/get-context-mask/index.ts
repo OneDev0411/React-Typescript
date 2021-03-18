@@ -23,5 +23,5 @@ export function getContextInputMask(context: IDealBrandContext) {
     })
   }
 
-  return []
+  return null
 }
