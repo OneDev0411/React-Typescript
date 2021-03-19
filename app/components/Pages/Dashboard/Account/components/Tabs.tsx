@@ -32,7 +32,7 @@ export const ProfileTabs = ({ user }: Props) => (
       title="Connected Accounts"
     />
     <Acl.Crm>
-      <SideNavItem link="/dashboard/account/flows" title="Flows" />
+      <SideNavItem link="/dashboard/marketing/flows" title="Flows" />
     </Acl.Crm>
     <SideNavItem
       link="/dashboard/account/email-templates"

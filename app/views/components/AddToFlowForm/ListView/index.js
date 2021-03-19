@@ -50,7 +50,7 @@ export default function ListView(props) {
         </List>
       </ScrollableArea>
       <Box pl={1.5}>
-        <SettingLink to="/dashboard/account/flows">
+        <SettingLink to="/dashboard/marketing/flows">
           <SvgIcon path={mdiCog} size={muiIconSizes.small} />
           <span>Manage Flows</span>
         </SettingLink>

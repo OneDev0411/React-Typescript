@@ -49,7 +49,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
       title="Flows"
       setting={{
         tooltip: 'Manage Flows',
-        href: '/dashboard/account/flows'
+        href: '/dashboard/marketing/flows'
       }}
     >
       <Box px={3}>

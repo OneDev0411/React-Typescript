@@ -2,7 +2,7 @@ import { searchContacts } from 'models/contacts/search-contacts'
 import { createFlow as createNewFlow } from 'models/flows/create-flow'
 
 export function getFlowEditUrl(id: UUID) {
-  return `/dashboard/account/flows/${id}`
+  return `/dashboard/marketing/flows/${id}`
 }
 
 export async function createFlow(
