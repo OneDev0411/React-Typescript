@@ -231,7 +231,7 @@ export default function registerCarouselBlock(
   registerBlock(
     editor,
     {
-      label: 'Carousel',
+      label: 'Carousel Gallery',
       icon: CarouselIcon,
       category: BASICS_BLOCK_CATEGORY,
       blockName: carouselBlockName,
@@ -242,7 +242,7 @@ export default function registerCarouselBlock(
 
   const allBlocks = registerTemplateBlocks(
     editor,
-    'Carousel',
+    'Carousel Gallery',
     carouselBlocks,
     templateBlocks
   )
