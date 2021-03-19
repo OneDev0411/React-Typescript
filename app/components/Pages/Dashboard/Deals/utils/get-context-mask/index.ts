@@ -5,6 +5,16 @@ export function getContextInputMask(context: IDealBrandContext) {
     return context.properties.mask
   }
 
+  if (context.data_type === 'Number' && context.format !== 'Currency') {
+    return createNumberMask({
+      prefix: '',
+      includeThousandsSeparator: false,
+      allowNegative: true,
+      allowLeadingZeroes: false,
+      allowDecimal: false
+    })
+  }
+
   if (context.format === 'Currency') {
     return createNumberMask({
       prefix: '',
