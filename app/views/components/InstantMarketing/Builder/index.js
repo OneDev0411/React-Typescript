@@ -12,7 +12,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import TeamAgents from 'components/TeamAgents'
+import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
@@ -926,7 +926,7 @@ class Builder extends React.Component {
             />
           )}
           {this.state.isAgentDrawerOpen && (
-            <TeamAgents
+            <TeamAgentsDrawer
               multiSelection
               user={this.props.user}
               title="Select Agents"
