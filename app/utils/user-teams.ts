@@ -180,7 +180,6 @@ type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
-  key?: string,
   includesParents?: boolean
 ) => {
   const team = getActiveTeam(user)
@@ -189,9 +188,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
     return {}
   }
   
-  const settings = getSettings(team, includesParents)
-
-  return key ? settings[key] : settings
+  return getSettings(team, includesParents)
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(

@@ -28,4 +28,5 @@ declare interface IDealBrandContext {
     placeholder: string
     mask: string[]
   }
+  validate: (context: IDealBrandContext, value: unknown) => boolean
 }

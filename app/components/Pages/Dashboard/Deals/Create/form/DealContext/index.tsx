@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { upsertContexts } from 'actions/deals'
+import { isBackOffice } from 'utils/user-teams'
 
 import {
   QuestionSection,
@@ -60,7 +61,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
 
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
+  const { deal, user } = useCreationContext()
 
   const defaultValue = deal ? getField(deal, context.key) : ''
 
@@ -92,7 +93,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       return
     }
 
-    setInputValue(date)
+    setInputValue(date.getTime() / 1000)
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,12 +108,13 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   const handleSave = () => {
     const value =
       contextType === 'Date'
-        ? fecha.format(inputValue, 'YYYY-MM-DD')
+        ? fecha.format(inputValue * 1000, 'YYYY-MM-DD')
         : inputValue
 
     if (deal) {
       try {
-        const data = createUpsertObject(deal, context.key, value, false)
+        const approved = isBackOffice(user) ? true : !context.needs_approval
+        const data = createUpsertObject(deal, context.key, value, approved)
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
@@ -177,7 +179,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
             <Button
               variant="contained"
               color="secondary"
-              disabled={!inputValue}
+              disabled={!inputValue || !context.validate(context, inputValue)}
               className={classes.saveButton}
               onClick={() => handleSave()}
             >

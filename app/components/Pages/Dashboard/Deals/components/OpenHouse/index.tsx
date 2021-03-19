@@ -51,7 +51,7 @@ function OpenHouses({
   )
   const user = useSelector(selectUser)
 
-  const activeBrandSettings = getActiveTeamSettings(user, '', true)
+  const activeBrandSettings = getActiveTeamSettings(user, true)
   const { enable_open_house_requests: showOpenHouse } = activeBrandSettings
 
   const confirmation = useContext(ConfirmationModalContext)
