@@ -62,7 +62,7 @@ export default function registerCarouselBlock(
     })),
     model: {
       defaults: {
-        name: 'Carousel',
+        name: 'Image Slider',
         droppable: false,
         script,
         'script-props': ['heightRatio'],
@@ -233,7 +233,7 @@ export default function registerCarouselBlock(
   registerBlock(
     editor,
     {
-      label: 'Gallery',
+      label: 'Image Slider',
       icon: CarouselIcon,
       category: BASICS_BLOCK_CATEGORY,
       blockName: carouselBlockName,
@@ -244,7 +244,7 @@ export default function registerCarouselBlock(
 
   const allBlocks = registerTemplateBlocks(
     editor,
-    'Gallery',
+    'Carousel',
     carouselBlocks,
     templateBlocks
   )
