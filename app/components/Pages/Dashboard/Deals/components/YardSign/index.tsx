@@ -25,9 +25,8 @@ function YardSign({ deal, style }: Props) {
   const dispatch = useDispatch()
   const user = useSelector((state: IAppState) => selectUser(state))
 
-  const { activeBrandSettings: showYardSign } = getActiveTeamSettings(
+  const { enable_yard_sign_requests: showYardSign } = getActiveTeamSettings(
     user,
-    '',
     true
   )
 
