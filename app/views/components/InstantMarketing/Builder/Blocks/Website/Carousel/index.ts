@@ -151,8 +151,10 @@ export default function registerCarouselBlock(
     },
     view: {
       events: {
-        dblclick() {
-          onCarouselDoubleClick(this.model)
+        dblclick(event): void {
+          if (event.target.classList.contains('splide__image')) {
+            onCarouselDoubleClick(this.model)
+          }
         }
       },
       ...baseView(carouselClassNames),
