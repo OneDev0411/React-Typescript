@@ -21,7 +21,7 @@ export default function flattenBrand(brand: IBrand): IBrand | null {
      * The true argument is a feature of the merge package.
      * It clones the objects, thus, preventing any mutations.
      */
-    merge.recursive(true, merged, { ...brand_loop, parent: undefined })
+    merged = merge.recursive(true, merged, { ...brand_loop, parent: undefined })
   })
 
   return merged as IBrand
