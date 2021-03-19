@@ -17,7 +17,11 @@ export default function flattenBrand(brand: IBrand): IBrand | null {
   let merged = {}
 
   brands.forEach(brand_loop => {
-    merge.recursive(merged, { ...brand_loop, parent: undefined })
+    /*
+     * The true argument is a feature of the merge package.
+     * It clones the objects, thus, preventing any mutations.
+     */
+    merge.recursive(true, merged, { ...brand_loop, parent: undefined })
   })
 
   return merged as IBrand
