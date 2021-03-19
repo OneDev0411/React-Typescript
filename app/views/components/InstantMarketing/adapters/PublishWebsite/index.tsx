@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Button, CircularProgress } from '@material-ui/core'
+import { Button, CircularProgress, Tooltip } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
 
@@ -146,6 +146,14 @@ function PublishWebsite({
               Manage Domains
             </Button>
           }
+          saveButtonWrapper={saveButton => (
+            <Tooltip
+              open={isPublishing}
+              title="This might take a minute or two"
+            >
+              <span>{saveButton}</span>
+            </Tooltip>
+          )}
         />
       )}
       <SearchListingDrawer

@@ -998,6 +998,27 @@ class Builder extends React.Component {
     return uploadedAsset.file.url
   }
 
+  getSaveButton() {
+    const saveButton = (
+      <Button
+        style={{
+          marginLeft: '0.5rem'
+        }}
+        variant="contained"
+        color="primary"
+        onClick={this.handleSave}
+        disabled={this.props.actionButtonsDisabled}
+        startIcon={this.props.saveButtonStartIcon}
+      >
+        {this.isBareMode ? this.props.saveButtonText || 'Save' : 'Continue'}
+      </Button>
+    )
+
+    return this.props.saveButtonWrapper
+      ? this.props.saveButtonWrapper(saveButton)
+      : saveButton
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1243,35 +1264,8 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {this.shouldShowEmailActions && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSave}
-                  disabled={this.props.actionButtonsDisabled}
-                  startIcon={this.props.saveButtonStartIcon}
-                >
-                  Continue
-                </Button>
-              )}
-
-              {this.isBareMode && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSave}
-                  disabled={this.props.actionButtonsDisabled}
-                  startIcon={this.props.saveButtonStartIcon}
-                >
-                  {this.props.saveButtonText || 'Save'}
-                </Button>
-              )}
+              {(this.shouldShowEmailActions || this.isBareMode) &&
+                this.getSaveButton()}
 
               <IconButton
                 onClick={this.props.onClose}

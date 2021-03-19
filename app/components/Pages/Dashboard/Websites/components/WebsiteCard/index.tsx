@@ -9,7 +9,8 @@ import {
   Box,
   Typography,
   Button,
-  CircularProgress
+  CircularProgress,
+  Tooltip
 } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
@@ -185,6 +186,14 @@ function WebsiteCard({
               Manage Domains
             </Button>
           }
+          saveButtonWrapper={saveButton => (
+            <Tooltip
+              open={isPublishing}
+              title="This might take a minute or two"
+            >
+              <span>{saveButton}</span>
+            </Tooltip>
+          )}
         />
       )}
       <DomainManagementDrawer

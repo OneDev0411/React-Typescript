@@ -32,6 +32,7 @@ export interface InstantMarketingProps {
   onClose: () => void
   actionButtonsDisabled?: boolean
   customActions?: ReactNode
+  saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
 }
 
 export default function InstantMarketing({
@@ -52,7 +53,8 @@ export default function InstantMarketing({
   handleSocialSharing,
   onClose,
   actionButtonsDisabled = false,
-  customActions
+  customActions,
+  saveButtonWrapper
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -90,6 +92,7 @@ export default function InstantMarketing({
       onPrintableSharing={handleSocialSharing}
       actionButtonsDisabled={actionButtonsDisabled}
       customActions={customActions}
+      saveButtonWrapper={saveButtonWrapper}
     />
   )
 }

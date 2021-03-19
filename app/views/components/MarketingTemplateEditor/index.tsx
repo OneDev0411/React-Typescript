@@ -39,6 +39,11 @@ interface Props
   saveButtonStartIcon?: ReactNode
 
   /**
+   * A render prop to provide the wrapping save button capability
+   */
+  saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
+
+  /**
    * Save button click handler
    *
    * It will pass the final edited template by user as a string to this function
@@ -59,7 +64,8 @@ export default function MarketingTemplateEditor({
   onSave,
   onClose,
   actionButtonsDisabled,
-  customActions
+  customActions,
+  saveButtonWrapper
 }: Props) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -85,6 +91,7 @@ export default function MarketingTemplateEditor({
       onClose={onClose}
       actionButtonsDisabled={actionButtonsDisabled}
       customActions={customActions}
+      saveButtonWrapper={saveButtonWrapper}
     />
   )
 }
