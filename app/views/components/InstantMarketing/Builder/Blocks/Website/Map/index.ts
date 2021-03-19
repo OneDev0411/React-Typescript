@@ -93,8 +93,10 @@ export default function registerMapBlock(
     },
     view: {
       events: {
-        dblclick() {
-          onMapDoubleClick(this.model)
+        dblclick(event): void {
+          if (!event.target.classList.contains('mapboxgl-ctrl-icon')) {
+            onMapDoubleClick(this.model)
+          }
         }
       },
       ...baseView(embedMapClassNames),
@@ -106,7 +108,7 @@ export default function registerMapBlock(
           (event: CustomEvent<MapInitEventType>) => {
             const map = event.detail.map
             const marker = event.detail.marker
-            const navigationControl = event.detail.navigationControl
+            // const navigationControl = event.detail.navigationControl
 
             // The method argument is available in JS implementation, but it
             // does not exist in TS type definition, so I call the enable method
@@ -114,7 +116,7 @@ export default function registerMapBlock(
             map.scrollZoom.enable.call(map.scrollZoom, { around: 'center' })
 
             map.doubleClickZoom.disable()
-            map.removeControl(navigationControl)
+            // map.removeControl(navigationControl)
 
             map.on('move', event => {
               marker.setLngLat(event.target.getCenter())
