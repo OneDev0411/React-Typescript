@@ -62,7 +62,7 @@ export default function TemplatesRow({
     >
       <Grid container item direction="row" alignItems="center">
         <Grid item>
-          <Box mx={1}>
+          <Box mx={1} display="flex">
             <SvgIcon
               size={muiIconSizes.large}
               path={MEDIUM_ICONS[templates[0].template.medium]}
