@@ -29,6 +29,7 @@ interface Props {
   title: string
   side: IDealType
   isCommissionRequired: boolean
+  isOfficeDoubleEnded?: boolean
   isDoubleEnded: boolean
   dealType: IDealType
   roles?: IDealRole[]
@@ -44,6 +45,7 @@ export function DealPrimaryAgent({
   isCommissionRequired,
   onFinishStep,
   roles = [],
+  isOfficeDoubleEnded = false,
   onChange = () => {}
 }: Props) {
   const wizard = useWizardContext()
@@ -145,7 +147,10 @@ export function DealPrimaryAgent({
           {shouldPickRoleFromContacts ? (
             <ContactRoles onSelectRole={setSelectedRole} />
           ) : (
-            <AgentsList onSelectRole={setSelectedRole} />
+            <AgentsList
+              isOfficeDoubleEnded={isOfficeDoubleEnded}
+              onSelectRole={setSelectedRole}
+            />
           )}
         </Box>
       </QuestionForm>
