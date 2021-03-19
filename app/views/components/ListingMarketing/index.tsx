@@ -14,7 +14,10 @@ import LoadingContainer from 'components/LoadingContainer'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
 import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
-import { LISTING_TEMPLATE_TYPES } from '../../../components/Pages/Dashboard/Marketing/Wizard/constants'
+import {
+  ALL_MEDIUMS,
+  LISTING_TEMPLATE_TYPES
+} from '../../../components/Pages/Dashboard/Marketing/Wizard/constants'
 
 import TemplateTypesChips from './TemplateTypesChips'
 import TemplatesRow from './TemplatesRow'
@@ -66,7 +69,15 @@ export default function ListingMarketing({
   )
 
   const templateTypes = useUniqueTemplateTypes(templates)
+
+  templateTypes.sort(
+    (a, b) =>
+      LISTING_TEMPLATE_TYPES.indexOf(a) - LISTING_TEMPLATE_TYPES.indexOf(b)
+  )
+
   const mediums = useUniqueMediums(templates)
+
+  mediums.sort((a, b) => ALL_MEDIUMS.indexOf(a) - ALL_MEDIUMS.indexOf(b))
 
   useEffect(() => {
     async function fetchListing() {

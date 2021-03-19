@@ -2,11 +2,21 @@ import { TemplateVariable } from './types'
 
 export const LISTING_TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'OpenHouse',
-  'JustSold',
   'ComingSoon',
   'JustListed',
   'PriceImprovement',
+  'UnderContract',
+  'JustSold',
   'AsSeenIn'
+]
+
+export const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
+  'Email',
+  'Social',
+  'InstagramStory',
+  'LinkedInCover',
+  'FacebookCover',
+  'Letter'
 ]
 
 export const TEMPLATES_PAGE_SIZE = 8

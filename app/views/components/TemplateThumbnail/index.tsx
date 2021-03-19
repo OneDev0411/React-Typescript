@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
 import useDeepCompareEffect from 'use-deep-compare-effect'
-import { makeStyles } from '@material-ui/core'
+import { Box, Theme, fade, makeStyles } from '@material-ui/core'
+
+import { loadTemplateHtml } from 'models/instant-marketing'
 
 import CardSkeleton from 'components/CardSkeleton'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { renderMjml } from 'components/TemplatePreview/helpers'
-
 import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
+import { isTemplateInstance } from 'components/InstantMarketing/Builder/utils/helpers'
 
 const useStyles = makeStyles(
-  () => ({
+  (theme: Theme) => ({
     container: {
-      position: 'relative'
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      overflow: 'hidden'
     },
     loadingContainer: {
       position: 'absolute',
@@ -26,10 +30,19 @@ const useStyles = makeStyles(
       justifyContent: 'center'
     },
     iframe: {
+      zIndex: 0,
       transformOrigin: '0 0',
       height: 300,
       background: '#fff',
       opacity: 0
+    },
+    iframePlaceholder: {
+      zIndex: 1,
+      transition: '0.2s ease-in background-color',
+      cursor: 'pointer',
+      '&:hover': {
+        backgroundColor: fade(theme.palette.common.black, 0.1)
+      }
     }
   }),
   {
@@ -38,9 +51,8 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  template: string
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
   brand: IBrand
-  mjml?: boolean
   data?: {
     listing?: Nullable<IListing>
     user?: Nullable<IUser>
@@ -53,7 +65,6 @@ interface Props {
 export default function TemplateThumbnail({
   template,
   brand,
-  mjml = true,
   data,
   onClick
 }: Props) {
@@ -64,26 +75,34 @@ export default function TemplateThumbnail({
 
   useDeepCompareEffect(() => {
     async function loadTemplate() {
-      const renderData = getTemplateRenderData(brand)
+      try {
+        const markup = isTemplateInstance(template)
+          ? template.html
+          : await loadTemplateHtml(template)
 
-      const nunjucksRenderedTemplate = nunjucks.renderString(template, {
-        ...renderData,
-        ...data
-      })
+        const renderData = getTemplateRenderData(brand)
 
-      if (!mjml) {
-        setPreviewMarkup(nunjucksRenderedTemplate)
+        const nunjucksRenderedTemplate = nunjucks.renderString(markup, {
+          ...renderData,
+          ...data
+        })
 
-        return
+        if (!template.template.mjml) {
+          setPreviewMarkup(nunjucksRenderedTemplate)
+
+          return
+        }
+
+        const response = await renderMjml(nunjucksRenderedTemplate)
+
+        setPreviewMarkup(response.html)
+      } catch (err) {
+        console.error(err)
       }
-
-      const response = await renderMjml(nunjucksRenderedTemplate)
-
-      setPreviewMarkup(response.html)
     }
 
     loadTemplate()
-  }, [template, brand, mjml, data])
+  }, [template, brand, data])
 
   useEffect(() => {
     if (!ref.current || !previewMarkup) {
@@ -105,12 +124,6 @@ export default function TemplateThumbnail({
     ref.current.onload = () => {
       if (!ref.current?.contentDocument) {
         return
-      }
-
-      // Iframe onclick hack!
-      // More info: https://stackoverflow.com/questions/1609741/how-to-add-click-event-to-a-iframe-with-jquery
-      if (onClick) {
-        ref.current.contentDocument.body.onclick = onClick
       }
 
       const iframeWidth = ref.current.contentDocument.body.offsetWidth
@@ -135,10 +148,18 @@ export default function TemplateThumbnail({
 
   return (
     <div className={classes.container}>
-      {isLoadingPreview && (
+      {isLoadingPreview ? (
         <div className={classes.loadingContainer}>
           <CardSkeleton style={{ padding: '0 1rem', width: '100%' }} />
         </div>
+      ) : (
+        <Box
+          width="100%"
+          height="100%"
+          position="absolute"
+          className={classes.iframePlaceholder}
+          onClick={onClick}
+        />
       )}
       <iframe
         width="100%"

@@ -102,3 +102,15 @@ export function getImage(model: Model): string {
 
   return ''
 }
+
+export function isBrandTemplate(
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
+): template is IBrandMarketingTemplate {
+  return template.type === 'brand_template'
+}
+
+export function isTemplateInstance(
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
+): template is IMarketingTemplateInstance {
+  return template.type === 'template_instance'
+}

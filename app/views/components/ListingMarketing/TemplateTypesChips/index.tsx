@@ -35,7 +35,7 @@ export default function TemplateTypesChips({
 
         return (
           <Grid item key={type}>
-            <Box mr={1}>
+            <Box mr={1} mb={1}>
               <Chip
                 variant="default"
                 label={label}

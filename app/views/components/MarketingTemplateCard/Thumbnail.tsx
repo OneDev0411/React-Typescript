@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 
 import { getTemplateImage } from 'utils/marketing-center/helpers'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import { getActiveBrand } from 'utils/user-teams'
-import { loadTemplateHtml } from 'models/instant-marketing'
 
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { PdfThumbnail } from 'components/PdfThumbnail'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
-const useStyles = makeStyles(() => ({
-  image: {
-    width: '100%'
-  },
-  templateThumbnailWrapper: {
-    margin: '0 auto'
+const useStyles = makeStyles(
+  () => ({
+    image: {
+      width: '100%'
+    },
+    templateThumbnailWrapper: {
+      margin: '0 auto'
+    }
+  }),
+  {
+    name: 'MarketingTemplateCardThumbnail'
   }
-}))
+)
 
 interface Props {
   user: IUser
@@ -26,7 +30,7 @@ interface Props {
   listing?: IListing
   useStaticImage?: boolean
 
-  onClick?: React.ComponentProps<typeof TemplateThumbnail>['onClick']
+  onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
 export function Thumbnail({
@@ -38,27 +42,7 @@ export function Thumbnail({
 }: Props) {
   const classes = useStyles()
   const brand = getActiveBrand(user)
-  const [templateMarkup, setTemplateMarkup] = useState<string>('')
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
-
-  useEffect(() => {
-    async function fetchTemplateMarkup() {
-      if (template.type === 'template_instance') {
-        return
-      }
-
-      try {
-        const markup = await loadTemplateHtml(template)
-
-        setTemplateMarkup(markup)
-      } catch (err) {
-        console.error(err)
-        setTemplateMarkup('')
-      }
-    }
-
-    fetchTemplateMarkup()
-  }, [template])
 
   useEffect(() => {
     async function fetchListingIfNeeded() {
@@ -104,8 +88,7 @@ export function Thumbnail({
   return (
     <div className={classes.templateThumbnailWrapper}>
       <TemplateThumbnail
-        template={templateMarkup}
-        mjml={template.template.mjml}
+        template={template}
         brand={brand}
         data={{ listing, user }}
         onClick={onClick}
