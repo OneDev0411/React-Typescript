@@ -207,7 +207,7 @@ export const getActiveTeamSettings = getSettingsFromActiveTeam(
 
 export const getUserSettingsInActiveTeam = (user, key) => {
   return getSettingsFromActiveTeam(team => {
-    return team?.settings[key]
+    return team?.settings?.[key]
   })(user)
 }
 
