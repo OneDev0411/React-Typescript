@@ -238,7 +238,6 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired
-                  isDoubleEnded={isDoubleEnded}
                   dealType={dealType}
                   title={`Who is the ${
                     propertyType?.includes('Lease') ? 'tenant' : 'buyer'
@@ -259,9 +258,11 @@ export default function CreateDeal() {
               <DealPrimaryAgent
                 isCommissionRequired
                 isOfficeDoubleEnded={isOfficeDoubleEnded}
-                isDoubleEnded={isDoubleEnded}
                 dealType={dealType}
                 side="Selling"
+                shouldPickRoleFromContacts={
+                  dealType === 'Buying' && !isDoubleEnded
+                }
                 title={`Who is the ${
                   propertyType?.includes('Lease') ? 'landlord' : 'seller'
                 } agent?`}

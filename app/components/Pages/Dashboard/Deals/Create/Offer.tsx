@@ -207,8 +207,8 @@ export default function CreateOffer({ params }: Props) {
             render={({ value = [], onChange }) => (
               <DealPrimaryAgent
                 side="Buying"
+                shouldPickRoleFromContacts={!isDoubleEnded}
                 isCommissionRequired={isDoubleEnded}
-                isDoubleEnded={isDoubleEnded}
                 dealType="Buying"
                 title={`Who is the ${
                   propertyType?.includes('Lease') ? 'tenant' : 'buyer'
