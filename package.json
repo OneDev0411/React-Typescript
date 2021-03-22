@@ -115,7 +115,6 @@
     "draftjs-utils": "^0.9.4",
     "dropzone": "npm:react-dropzone@^11.0.3",
     "emojify.js": "^1.1.0",
-    "esbuild": "^0.8.39",
     "express": "^4.17.1",
     "express-sslify": "^1.2.0",
     "fecha": "^2.3.3",
