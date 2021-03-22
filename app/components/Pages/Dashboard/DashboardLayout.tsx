@@ -11,7 +11,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => ({
   main: {
     width: '100%',
-    height: '100vh',
+    minHeight: '100vh',
     flexGrow: 1,
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${appSidenavWidth}px)`

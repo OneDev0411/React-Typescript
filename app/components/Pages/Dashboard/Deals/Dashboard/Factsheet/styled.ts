@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Theme } from '@material-ui/core'
 
-import { H3 } from 'components/Typography/headings'
 import { borderColor } from 'views/utils/colors'
 
 export const FactsheetDivider = styled.div`
@@ -14,8 +13,8 @@ export const FactsheetDivider = styled.div`
 
 export const Container = styled.div``
 
-export const SectionTitle = styled(H3)`
-  ${({ theme }) => css`
+export const SectionTitle = styled.h3`
+  ${({ theme }) => `
     padding: ${theme.spacing(0, 3)};
     ${theme.typography.subtitle1};
   `}
@@ -77,7 +76,7 @@ export const Item = styled.div<{
   showBorder?: boolean
   isSaving?: boolean
 }>`
-  ${({ theme, isSaving }) => css`
+  ${({ theme, isSaving }) => `
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -99,12 +98,14 @@ export const Item = styled.div<{
       visibility: visible;
     }
 
-    ${isSaving &&
-    `
+    ${
+      isSaving &&
+      `
       background-color: ${theme.palette.action.hover};
       justify-content: center;
       cursor: auto !important;
-    `};
+    `
+    };
   `}
 `
 

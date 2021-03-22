@@ -8,6 +8,8 @@ declare type IDealPropertyType =
   | 'Commercial Lease'
   | 'Active Offer'
 
+declare type IDealVisibility = 'draft' | 'visible'
+declare type IDealEnderType = 'AgentDoubleEnder' | 'OfficeDoubleEnder' | null
 declare interface IDeal extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'
@@ -47,7 +49,7 @@ declare interface IDealRole {
   brokerwolf_contact_type: string | null
   brokerwolf_id: string | null
   brokerwolf_row_version: string | null
-  checklist: unknown
+  checklist: UUID
   commission_dollar: number | null
   commission_percentage: number | null
   company_title: string
@@ -55,6 +57,7 @@ declare interface IDealRole {
   created_by: UUID
   deal: UUID
   deleted_at: number | null
+  current_address: string | null
   email: string
   id: UUID
   legal_first_name: string
@@ -65,7 +68,7 @@ declare interface IDealRole {
   mlsid: string | null
   phone_number: string
   role: string
-  role_type: string
+  role_type: 'Person' | 'Company'
   type: string
   office_phone?: string | null
   office_email?: string | null
@@ -76,4 +79,5 @@ declare interface IDealRole {
   office_address?: string | null
   updated_at: number
   user: IUser
+  brand: UUID | null
 }

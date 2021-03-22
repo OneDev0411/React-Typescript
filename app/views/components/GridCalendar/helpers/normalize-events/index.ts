@@ -32,7 +32,8 @@ export function normalizeEvents(
 
     const isCelebration =
       filter.celebrationEvents &&
-      event.object_type === CELEBRATION_OBJECT_TYPE &&
+      (event.object_type === CELEBRATION_OBJECT_TYPE ||
+        event.object_type === DEAL_OBJECT_TYPE) &&
       CELEBRATION_EVENT_TYPES.includes(event.event_type)
 
     const isDeal =

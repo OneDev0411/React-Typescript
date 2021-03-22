@@ -9,15 +9,9 @@ import { setChecklists } from '../set-checklist'
 
 import * as schema from '../../schema'
 
-export function createOffer(dealId, name, order, isBackup, propertyType) {
+export function createOffer(deal, conditions) {
   return async dispatch => {
-    const checklist = await Deal.createOffer(
-      dealId,
-      name,
-      order,
-      isBackup,
-      propertyType
-    )
+    const checklist = await Deal.createOffer(deal, conditions)
 
     const { entities } = normalize(checklist, schema.checklistSchema)
     const { checklists, tasks } = entities
@@ -26,7 +20,7 @@ export function createOffer(dealId, name, order, isBackup, propertyType) {
     batchActions([
       dispatch(setTasks(tasks)),
       dispatch(setChecklists(checklists)),
-      dispatch(appendChecklist(dealId, checklistId))
+      dispatch(appendChecklist(deal.id, checklistId))
     ])
 
     return checklist

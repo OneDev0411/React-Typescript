@@ -12,7 +12,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Portal } from 'components/Portal'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import TeamAgents from 'components/TeamAgents'
+import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import VideoDrawer from 'components/VideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
@@ -24,7 +24,6 @@ import {
   getActiveTeamSettings
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
-import { ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY } from 'constants/user'
 
 import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
@@ -369,11 +368,9 @@ class Builder extends React.Component {
       }
     }
 
-    const shouldShowNeighborhoodsBlocks = getActiveTeamSettings(
-      this.props.user,
-      ENABLE_MC_LIVEBY_BLOCK_SETTINGS_KEY,
-      true
-    )
+    const activeTeamSettings = getActiveTeamSettings(this.props.user, true)
+
+    const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
     if (shouldShowNeighborhoodsBlocks) {
       emailBlocksOptions.neighborhoods = {
@@ -929,7 +926,7 @@ class Builder extends React.Component {
             />
           )}
           {this.state.isAgentDrawerOpen && (
-            <TeamAgents
+            <TeamAgentsDrawer
               multiSelection
               user={this.props.user}
               title="Select Agents"
