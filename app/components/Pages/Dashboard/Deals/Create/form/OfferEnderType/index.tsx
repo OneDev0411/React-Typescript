@@ -55,16 +55,16 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
           name="DealType"
           options={[
             {
+              label: 'Yes',
+              value: 'OfficeDoubleEnder'
+            },
+            {
               label: 'No',
               value: null
             },
             {
               label: `${getLegalFullName(sellerAgent)} represents both sides`,
               value: 'AgentDoubleEnder'
-            },
-            {
-              label: 'Yes',
-              value: 'OfficeDoubleEnder'
             }
           ]}
           onChange={handleChange}
