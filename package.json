@@ -185,7 +185,7 @@
     "react-dnd": "^7.0.2",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.8.1",
-    "react-dropzone-rechat": "^0.0.0-development",
+    "react-dropzone-rechat": "^1.0.0",
     "react-final-form": "^6.4.0",
     "react-final-form-arrays": "^3.1.1",
     "react-final-form-listeners": "^1.0.2",
