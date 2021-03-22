@@ -205,9 +205,11 @@ export const getActiveTeamSettings = getSettingsFromActiveTeam(
   }
 )
 
-export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
-  team => team.settings || {}
-)
+export const getUserSettingsInActiveTeam = (user, key) => {
+  return getSettingsFromActiveTeam(team => {
+    return team?.settings?.[key]
+  })(user)
+}
 
 export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   const team = getActiveTeam(user)

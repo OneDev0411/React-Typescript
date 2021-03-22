@@ -68,6 +68,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
+  const mask = getContextInputMask(context)
 
   useEffect(() => {
     if (defaultValue && !inputValue) {
@@ -97,6 +98,12 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!mask) {
+      setInputValue(e.target.value)
+
+      return
+    }
+
     const maskedValue = e.target.value
     const value = maskedValue
       ? parseFloat(maskedValue.replace('$', '').replace(/\,/gi, ''))
@@ -160,14 +167,14 @@ export function DealContext({ context, onChange = () => {} }: Props) {
                 label={context.label}
                 InputProps={{
                   inputProps: {
-                    mask: getContextInputMask(context)
+                    mask
                   },
                   startAdornment:
                     context.format === 'Currency' ? (
                       <InputAdornment position="start">$</InputAdornment>
                     ) : null,
                   placeholder: context.properties?.placeholder ?? '',
-                  inputComponent: MaskedInput,
+                  inputComponent: mask ? MaskedInput : undefined,
                   value: inputValue,
                   onChange: handleChangeInputValue
                 }}

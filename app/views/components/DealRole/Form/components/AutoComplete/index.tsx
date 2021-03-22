@@ -7,7 +7,7 @@ import Autocomplete, {
 
 import { useAsync, useDebounce } from 'react-use'
 
-export interface Option {
+export type Option = Record<string, any> & {
   label: string
   value: string
 }
@@ -95,7 +95,9 @@ export function AutoComplete({
       getOptionLabel={getOptionLabel}
       options={items}
       loading={isLoading}
-      groupBy={option => option.label.charAt(0).toLowerCase()}
+      groupBy={option =>
+        option.label ? option.label.charAt(0).toLowerCase() : ''
+      }
       noOptionsText={noOptionsText}
       inputValue={inputValue}
       onChange={handleChange}
