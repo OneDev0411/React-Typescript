@@ -13,6 +13,8 @@ import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
 
+import { selectUser } from 'selectors/user'
+
 import {
   getReplyAllRecipients,
   getReplyRecipients
@@ -58,7 +60,7 @@ export function EmailResponseComposeForm({
 }: Props) {
   const classes = useStyles()
 
-  const user = useSelector((state: IAppState) => state.user as IUser)
+  const user = useSelector((state: IAppState) => selectUser(state))
   const allConnectedAccounts = useSelector<IAppState, IOAuthAccount[]>(
     flow(state => state.contacts.oAuthAccounts, selectAllConnectedAccounts),
     shallowEqual

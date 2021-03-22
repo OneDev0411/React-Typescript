@@ -2,10 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import DealRole from 'components/DealRole'
+import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 
 import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
-
-import TeamAgents from 'components/TeamAgents'
 
 const initialState = {
   isAgentDrawerOpen: false,
@@ -154,11 +153,10 @@ export class RoleAgentIntegration extends React.Component {
     return (
       <>
         {this.state.isAgentDrawerOpen && (
-          <TeamAgents
-            user={this.props.user}
+          <TeamAgentsDrawer
             title={this.props.modalTitle}
             isPrimaryAgent={this.getIsPrimaryAgent()}
-            flattened={this.isOfficeDoubleEnded}
+            flattenTeams={this.isOfficeDoubleEnded}
             onClose={this.props.onClose}
             onSelectAgents={this.onSelectAgent}
           />

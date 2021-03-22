@@ -13,6 +13,7 @@ import {
 import { Alert } from '@material-ui/lab'
 import { mdiPlayCircleOutline } from '@mdi/js'
 
+import { selectUser } from 'selectors/user'
 import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 import { IAppState } from 'reducers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -66,7 +67,7 @@ export default function EmptyState() {
   const theme = useTheme()
   const isDesktop = useMediaQuery('(min-width:1440px)')
   const classes = useStyles({ isDesktop })
-  const user = useSelector(({ user }: IAppState) => user)
+  const user = useSelector((state: IAppState) => selectUser(state))
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
   return (

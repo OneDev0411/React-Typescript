@@ -64,16 +64,17 @@ export function ChecklistHeader({
   setDeactivatable,
   setTerminable
 }: Props) {
-  const [isDeactivatableChanging, setDeactivatableChanging] = useDictionary<
-    boolean
-  >()
+  const [
+    isDeactivatableChanging,
+    setDeactivatableChanging
+  ] = useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
 
   const classes = useChecklistHeaderStyles()
 
   const formSearchFuse = useMemo(
-    () => new Fuse<IDealForm>(forms || [], { keys: ['name'] }),
+    () => new Fuse<IDealForm, {}>(forms || [], { keys: ['name'] }),
     [forms]
   )
 

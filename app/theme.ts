@@ -79,6 +79,10 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         A400: '#303030',
         A700: '#616161'
       },
+      navbar: {
+        background: '#050E21',
+        contrastText: 'rgba(255, 255, 255, 0.7)'
+      },
       contrastThreshold: 3,
       tonalOffset: 0.2,
       text: {
@@ -213,7 +217,13 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
       sideNavDrawer: 100
     }
   }
-  const mergedValue: ThemeOptions = merge.recursive(defaultValue, brandTheme)
+
+  const mergedValue: ThemeOptions = merge.recursive(defaultValue, {
+    palette: {
+      ...brandTheme.palette,
+      type: 'light'
+    }
+  })
 
   const theme: Theme = createMuiTheme(mergedValue)
 

@@ -20,7 +20,8 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
   // End Date
   const endObject = new Date(Number(end_date || 0) * 1000)
 
-  // reset start and end time if is a all_dat event since server send us a utc time for all_day events
+  // reset start and end time if is a all_dat event since
+  // server send us a utc time for all_day events
   if (all_day) {
     const dummyStart = new Date(startObject)
 

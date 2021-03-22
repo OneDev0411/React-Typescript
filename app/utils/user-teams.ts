@@ -180,7 +180,6 @@ type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
-  key?: string,
   includesParents?: boolean
 ) => {
   const team = getActiveTeam(user)
@@ -189,9 +188,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
     return {}
   }
   
-  const settings = getSettings(team, includesParents)
-
-  return key ? settings[key] : settings
+  return getSettings(team, includesParents)
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
@@ -208,11 +205,13 @@ export const getActiveTeamSettings = getSettingsFromActiveTeam(
   }
 )
 
-export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
-  team => team.settings || {}
-)
+export const getUserSettingsInActiveTeam = (user, key) => {
+  return getSettingsFromActiveTeam(team => {
+    return team?.settings?.[key]
+  })(user)
+}
 
-export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
+export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   const team = getActiveTeam(user)
 
   if (!team || !team.brand) {
@@ -223,13 +222,12 @@ export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
   if (
     !brand ||
     !brand.settings ||
-    !brand.settings.palette ||
-    !brand.settings.palette.palette
+    !brand.settings.marketing_palette
   ) {
     return DEFAULT_BRAND_PALETTE
   }
 
-  return brand.settings.palette.palette
+  return brand.settings.marketing_palette
 }
 
 export function viewAsEveryoneOnTeam(user: IUser | null): boolean {

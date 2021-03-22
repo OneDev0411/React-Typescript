@@ -37,9 +37,9 @@ interface Props {
   children: React.ReactNode
   defaultExpandedPanels?: boolean
   sections: SidebarSection[]
-  settings: BrandSettingsPalette
+  settings: BrandMarketingPalette
   onImageUpload: ImageUploadHandler
-  onUpdate: (newSettings: BrandSettingsPalette) => void
+  onUpdate: (newSettings: BrandMarketingPalette) => void
 }
 
 export default function Sidebar({
@@ -53,7 +53,7 @@ export default function Sidebar({
   const classes = useStyles()
 
   const handleUpdateSettings = (
-    key: BrandSettingsPaletteKey | BrandSettingsPaletteKey[],
+    key: BrandMarketingPaletteKey | BrandMarketingPaletteKey[],
     value: string
   ) => {
     const keys = Array.isArray(key) ? key : [key]

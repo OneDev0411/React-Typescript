@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
 import CalendarEventCard from 'components/CalendarEventCard'
@@ -15,7 +15,9 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
     <SectionLayout
       title="Upcoming Birthdays and Anniversaries"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/calendar" />
+        events.length ? (
+          <LinkSectionAction title="View all" url="/dashboard/calendar" />
+        ) : null
       }
     >
       {isLoading && (
@@ -33,6 +35,13 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
             <CardSkeleton style={{ height: '200px' }} />
           </Grid>
         </>
+      )}
+      {!isLoading && events.length === 0 && (
+        <Grid item xs={12}>
+          <Typography variant="body1" color="textSecondary">
+            Upcoming birthdays and anniversaries will be here.
+          </Typography>
+        </Grid>
       )}
       {!isLoading &&
         events.slice(0, 4).map(event => (
