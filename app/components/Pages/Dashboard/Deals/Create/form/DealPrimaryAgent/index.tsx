@@ -30,7 +30,7 @@ interface Props {
   side: IDealType
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
-  isDoubleEnded: boolean
+  shouldPickRoleFromContacts?: boolean
   dealType: IDealType
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
@@ -41,11 +41,11 @@ export function DealPrimaryAgent({
   title,
   side,
   dealType,
-  isDoubleEnded,
   isCommissionRequired,
   onFinishStep,
   roles = [],
   isOfficeDoubleEnded = false,
+  shouldPickRoleFromContacts = false,
   onChange = () => {}
 }: Props) {
   const wizard = useWizardContext()
@@ -60,9 +60,6 @@ export function DealPrimaryAgent({
 
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
-
-  const shouldPickRoleFromContacts =
-    dealType === 'Buying' && side === 'Selling' && !isDoubleEnded
 
   useEffect(() => {
     if (

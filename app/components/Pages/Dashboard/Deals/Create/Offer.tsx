@@ -12,7 +12,7 @@ import { selectDealById } from 'reducers/deals/list'
 import { createOffer, createRoles, upsertContexts } from 'actions/deals'
 
 import { QuestionWizard } from 'components/QuestionWizard'
-
+import { normalizeForm as normalizeRole } from 'components/DealRole/helpers/normalize-form'
 import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
@@ -23,7 +23,7 @@ import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 
 import { DealClient } from './form/DealClient'
-import { DealEnderType } from './form/DealEnderType'
+import { OfferEnderType } from './form/OfferEnderType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
 import { DealCoAgent } from './form/DealCoAgent'
 import { DealStatus } from './form/DealStatus'
@@ -72,7 +72,12 @@ export default function CreateOffer({ params }: Props) {
     ? getDealContexts(user, 'Buying', deal.property_type, true)
     : []
 
-  const isDoubleEnded = watch('context:ender_type') === 'OfficeDoubleEnder'
+  const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
+  const isOfficeDoubleEnded =
+    watch('context:ender_type') === 'OfficeDoubleEnder'
+
+  const isDoubleEnded = isOfficeDoubleEnded || isAgentDoubleEnded
+  const sellerAgent = roles.find(item => item.role === 'SellerAgent')
 
   const getContexts = (
     values: Record<string, unknown>,
@@ -104,9 +109,16 @@ export default function CreateOffer({ params }: Props) {
 
     const clients = values.clients as IDealRole[]
     const agents = [].concat(
-      values.primary_agent,
+      values.primary_agent || [],
       values.co_agents || []
     ) as IDealRole[]
+
+    if (values['context:ender_type'] === 'AgentDoubleEnder') {
+      agents.push({
+        ...(normalizeRole(sellerAgent!) as IDealRole),
+        role: 'BuyerAgent'
+      })
+    }
 
     const checklistName = clients.map(role => getLegalFullName(role)).join(', ')
 
@@ -198,28 +210,33 @@ export default function CreateOffer({ params }: Props) {
           <Controller
             name="context:ender_type"
             control={control}
-            render={({ onChange }) => <DealEnderType onChange={onChange} />}
-          />
-
-          <Controller
-            name="primary_agent"
-            control={control}
-            render={({ value = [], onChange }) => (
-              <DealPrimaryAgent
-                side="Buying"
-                isCommissionRequired={isDoubleEnded}
-                isDoubleEnded={isDoubleEnded}
-                dealType="Buying"
-                title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                } agent?`}
-                roles={roles.concat(value)}
-                onChange={(role, type) =>
-                  onChange(getChangedRoles(value, role, type))
-                }
-              />
+            render={({ onChange }) => (
+              <OfferEnderType sellerAgent={sellerAgent} onChange={onChange} />
             )}
           />
+
+          {!isAgentDoubleEnded && (
+            <Controller
+              name="primary_agent"
+              control={control}
+              render={({ value = [], onChange }) => (
+                <DealPrimaryAgent
+                  side="Buying"
+                  shouldPickRoleFromContacts={!isDoubleEnded}
+                  isCommissionRequired={isOfficeDoubleEnded}
+                  isOfficeDoubleEnded={isOfficeDoubleEnded}
+                  dealType="Buying"
+                  title={`Who is the ${
+                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
+                  } agent?`}
+                  roles={roles.concat(value)}
+                  onChange={(role, type) =>
+                    onChange(getChangedRoles(value, role, type))
+                  }
+                />
+              )}
+            />
+          )}
 
           <Controller
             name="co_agents"
