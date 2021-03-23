@@ -8,7 +8,7 @@ import {
   useWizardContext
 } from 'components/QuestionWizard'
 
-function ShowingStepStart() {
+function ShowingStepIntro() {
   const wizard = useWizardContext()
 
   useEffectOnce(() => {
@@ -19,14 +19,9 @@ function ShowingStepStart() {
 
   return (
     <QuestionSection>
-      <QuestionTitle>
-        Let’s get started{' '}
-        <span role="img" aria-label="Let’s get started">
-          💪
-        </span>
-      </QuestionTitle>
+      <QuestionTitle>Let’s get started 💪</QuestionTitle>
     </QuestionSection>
   )
 }
 
-export default ShowingStepStart
+export default ShowingStepIntro

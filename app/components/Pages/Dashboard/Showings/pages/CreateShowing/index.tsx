@@ -3,7 +3,7 @@ import React from 'react'
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
 
-import ShowingStepStart from '../../components/ShowingStepStart'
+import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
 
 function CreateShowing() {
@@ -12,7 +12,7 @@ function CreateShowing() {
       <PageLayout.Header title="Create Showing" />
       <PageLayout.Main>
         <QuestionWizard>
-          <ShowingStepStart />
+          <ShowingStepIntro />
           <ShowingStepProperty />
         </QuestionWizard>
       </PageLayout.Main>

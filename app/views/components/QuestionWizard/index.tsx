@@ -160,3 +160,4 @@ export function QuestionWizard({
 export * from './QuestionSection'
 export * from './QuestionForm'
 export * from './QuestionTitle'
+export * from './hooks/use-wizard-context'
