@@ -29,8 +29,8 @@ export default function WeightField({
       variant="outlined"
       label={label}
       value={value}
-      TextFieldProps={{ value }}
       InputProps={{
+        value,
         endAdornment: (
           <InputAdornment position="end">
             <span
