@@ -77,7 +77,7 @@ export function RichTextFeature({
   const { richButtonsPlugin } = useEditorPlugins(() => {
     const linkPlugins: { [key: string]: DraftJsPlugin } = link
       ? {
-          anchorPlugin: createAnchorPlugin(),
+          anchorPlugin: createAnchorPlugin({}),
           pasteLinkPlugin: createPasteLinkPlugin(),
           // Can be extracted into a separate plugin file
           linkShortcutsPlugin: {

@@ -50,11 +50,17 @@ function byName(state: IByNameState = {}, action): IByNameState {
   }
 }
 
-function bySection(state: IBySectionState = {}, action): IBySectionState {
+function bySection(
+  state: IBySectionState = {},
+  action: {
+    definitions: IContactAttributeDef[]
+    type: keyof typeof actionTypes
+  }
+): IBySectionState {
   switch (action.type) {
     case actionTypes.FETCH_CONTACT_ATTR_DEFS_SUCCESS:
     case actionTypes.CREATE_CONTACT_ATTR_DEF_SUCCESS:
-      const groupBySection = _.groupBy<IContactAttributeDef>(
+      const groupBySection = _.groupBy<IContactAttributeDef[]>(
         action.definitions,
         'section'
       )

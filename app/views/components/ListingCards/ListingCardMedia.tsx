@@ -56,7 +56,7 @@ const useStyles = makeStyles(
       width: '100%',
       height: '100%'
     },
-    image: ({ listing }: Props) => ({
+    image: ({ listing }: Pick<Props, 'listing'>) => ({
       height: 200,
       width: '100%',
       objectFit: getListingImageObjectFit(listing),

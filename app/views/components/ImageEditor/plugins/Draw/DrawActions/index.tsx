@@ -9,7 +9,7 @@ import {
   IconButton,
   Tooltip
 } from '@material-ui/core'
-import { ColorResult } from 'react-color'
+import { ColorState } from 'react-color'
 
 import { mdiDraw, mdiVectorLine, mdiHand } from '@mdi/js'
 
@@ -131,7 +131,7 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
     }
   }
 
-  const onChangeBrushColor = (color: ColorResult) => {
+  const onChangeBrushColor = (color: ColorState) => {
     setBrushColor(color.hex)
 
     if (activeObject) {
