@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 
 import { Button } from '@material-ui/core'
 

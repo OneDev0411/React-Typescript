@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 import cn from 'classnames'
 
 import Deal from 'models/Deal'

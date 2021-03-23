@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useRef
 } from 'react'
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 import { EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
 import cn from 'classnames'
@@ -139,9 +139,9 @@ export const TextEditor = forwardRef(
 
     useEffect(() => {}, [])
 
-    const dropzoneProps: Partial<
-      ComponentType<typeof Dropzone>
-    > = getDropzoneProps({
+    const dropzoneProps: Partial<ComponentType<
+      typeof Dropzone
+    >> = getDropzoneProps({
       disabled: !onAttachmentDropped,
       accept: onAttachmentDropped ? '*/*' : undefined,
       onDrop: (files: File[]) => {

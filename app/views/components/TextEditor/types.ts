@@ -6,7 +6,7 @@ import {
   Ref,
   RefObject
 } from 'react'
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
 

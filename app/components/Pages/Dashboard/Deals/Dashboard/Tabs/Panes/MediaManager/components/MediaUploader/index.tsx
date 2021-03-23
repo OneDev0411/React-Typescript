@@ -1,7 +1,7 @@
 import React, { useState, useRef, useImperativeHandle } from 'react'
 import { Box, Typography } from '@material-ui/core'
 // @ts-ignore
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 
 import acceptedDocuments from '../../constants/acceptedDocuments'
 import { useStyles } from '../../styles'

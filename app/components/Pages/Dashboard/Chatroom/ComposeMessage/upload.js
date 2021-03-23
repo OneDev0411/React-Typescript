@@ -1,10 +1,8 @@
 import React from 'react'
-import Dropzone from 'react-dropzone-rechat'
+import Dropzone from 'react-dropzone'
 import { connect } from 'react-redux'
-
-import { mdiProgressUpload, mdiPlus } from '@mdi/js'
-
 import { addNotification as notify } from 'components/notification'
+import { mdiProgressUpload, mdiPlus } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
