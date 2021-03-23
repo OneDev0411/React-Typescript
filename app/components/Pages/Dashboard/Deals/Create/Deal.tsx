@@ -34,7 +34,6 @@ import { DealPropertyType } from './form/DealPropertyType'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
 import { DealAddress, PropertyAddress } from './form/DealAddress'
 import { DealClient } from './form/DealClient'
-import { DealContext } from './form/DealContext'
 import { DealEnderType } from './form/DealEnderType'
 import { DealCard } from './form/DealCard'
 import { DealStatus } from './form/DealStatus'
@@ -65,8 +64,6 @@ export default function CreateDeal() {
     dealId ? deals.list[dealId] : null
   )
 
-  const roles = useDealRoles(deal)
-
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
   const propertyType = watch('property_type')
@@ -78,7 +75,6 @@ export default function CreateDeal() {
     }
   }, [dealId, dispatch])
 
-  const dealContexts = getDealContexts(user, dealType, propertyType)
   const statusList = useStatusList(deal)
 
   const isAgentDoubleEnded = dealSide === 'Both'
@@ -91,7 +87,7 @@ export default function CreateDeal() {
    *
    * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
    */
-  const createInitialDeal = async () => {
+  const createDraftDeal = async () => {
     if (deal) {
       return
     }
@@ -182,6 +178,19 @@ export default function CreateDeal() {
     browserHistory.goBack()
   }
 
+  const getClientTitle = () => {
+    const type =
+      dealType === 'Selling'
+        ? propertyType?.includes('Lease')
+          ? 'landlord'
+          : 'seller'
+        : propertyType?.includes('Lease')
+        ? 'tenant'
+        : 'buyer'
+
+    return `What's the ${type}'s legal name?`
+  }
+
   return (
     <Context.Provider
       value={{
@@ -238,7 +247,6 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired
-                  dealType={dealType}
                   title={`Who is the ${
                     propertyType?.includes('Lease') ? 'tenant' : 'buyer'
                   } agent?`}
@@ -258,7 +266,6 @@ export default function CreateDeal() {
               <DealPrimaryAgent
                 isCommissionRequired
                 isOfficeDoubleEnded={isOfficeDoubleEnded}
-                dealType={dealType}
                 side="Selling"
                 shouldPickRoleFromContacts={
                   dealType === 'Buying' && !isDoubleEnded
@@ -270,34 +277,22 @@ export default function CreateDeal() {
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
                 }
-                onFinishStep={createInitialDeal}
               />
             )}
           />
 
-          {dealType === 'Buying' && (
-            <DealClient
-              key="deal-client-buying"
-              side="Buying"
-              title={`What's the ${
-                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-              }'s legal name?`}
-              roles={roles}
-              skippable
-            />
-          )}
-
-          {dealType === 'Selling' && (
-            <DealClient
-              key="deal-client-selling"
-              side="Selling"
-              title={`What's the ${
-                propertyType?.includes('Lease') ? 'landlord' : 'seller'
-              }'s legal name?`}
-              roles={roles}
-              skippable
-            />
-          )}
+          <Controller
+            name="clients"
+            control={control}
+            render={({ value = [], onChange }) => (
+              <DealClient
+                side={dealType}
+                title={getClientTitle()}
+                roles={value}
+                skippable
+              />
+            )}
+          />
 
           {deal &&
             showStatusQuestion(
@@ -307,12 +302,15 @@ export default function CreateDeal() {
                 ? 'listing_status'
                 : 'contract_status'
             ) &&
-            statusList.length > 1 && <DealStatus list={statusList} />}
-
-          {deal &&
-            dealContexts.map((context: IDealBrandContext) => (
-              <DealContext key={context.id} context={context} />
-            ))}
+            statusList.length > 1 && (
+              <Controller
+                name="status"
+                control={control}
+                render={({ value = [], onChange }) => (
+                  <DealStatus list={statusList} />
+                )}
+              />
+            )}
 
           <DealCard dealSide={dealSide} />
         </QuestionWizard>

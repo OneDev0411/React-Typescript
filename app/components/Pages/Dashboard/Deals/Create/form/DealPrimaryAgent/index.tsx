@@ -31,18 +31,14 @@ interface Props {
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
   shouldPickRoleFromContacts?: boolean
-  dealType: IDealType
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
-  onFinishStep?: () => Promise<void>
 }
 
 export function DealPrimaryAgent({
   title,
   side,
-  dealType,
   isCommissionRequired,
-  onFinishStep,
   roles = [],
   isOfficeDoubleEnded = false,
   shouldPickRoleFromContacts = false,
@@ -71,17 +67,8 @@ export function DealPrimaryAgent({
     }
   }, [step, wizard, agentRoles])
 
-  const handleUpsertRole = async (
-    role: IDealFormRole,
-    type: 'create' | 'update'
-  ) => {
-    wizard.setLoading(true)
-
+  const handleUpsertRole = (role: IDealFormRole, type: 'create' | 'update') => {
     onChange(role, type)
-
-    onFinishStep && (await onFinishStep())
-
-    wizard.setLoading(false)
   }
 
   const handleDeleteRole = (role: IDealFormRole) => {
@@ -99,10 +86,7 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to replace the agent inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
