@@ -30,6 +30,7 @@ export default function WeightField({
       label={label}
       value={value}
       InputProps={{
+        value,
         endAdornment: (
           <InputAdornment position="end">
             <span
