@@ -1,8 +1,8 @@
-function getYouTubeVideoId(url: string) {
+export function getYouTubeVideoId(url: string) {
   return new URL(url).searchParams.get('v')
 }
 
-function getVimeoVideoId(url: string) {
+export function getVimeoVideoId(url: string) {
   return url.split('/').pop()
 }
 

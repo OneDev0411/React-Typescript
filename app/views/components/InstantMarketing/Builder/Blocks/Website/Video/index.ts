@@ -12,7 +12,11 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
-import { generateEmbedVideoUrl } from './utils'
+import {
+  generateEmbedVideoUrl,
+  getVimeoVideoId,
+  getYouTubeVideoId
+} from './utils'
 import { TemplateBlocks } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
@@ -22,6 +26,7 @@ export const embedVideoBlockName = typeEmbedVideo
 export interface VideoBlockOptions {
   embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void
+  onVideoDoubleClick: (model: Model) => void
 }
 
 interface VideoBlock {
@@ -32,7 +37,7 @@ export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlocks: TemplateBlocks,
-  { embedVideoClassNames, onVideoDrop }: VideoBlockOptions
+  { embedVideoClassNames, onVideoDrop, onVideoDoubleClick }: VideoBlockOptions
 ): VideoBlock {
   const VideoComponent = editor.DomComponents.getType('video')!
   const VideoModel = VideoComponent.model
@@ -60,14 +65,58 @@ export default function registerVideoBlock(
             cl: 0,
             cr: 0
           }
-        }
+        },
+        init() {
+          this.listenTo(this, 'change:video:info', this.handleChangeVideoInfo)
+          this.listenTo(
+            this,
+            'change:videoId change:provider',
+            this.handleSrcUpdate
+          )
+        },
+        handleChangeVideoInfo({ url }) {
+          const yt = 'yt'
+          const vi = 'vi'
+          const ytnc = 'ytnc'
+          const so = 'so'
+
+          const src = generateEmbedVideoUrl(url)
+
+          const isYtProv = /youtube\.com\/embed/.test(src)
+          const isYtncProv = /youtube-nocookie\.com\/embed/.test(src)
+          const isViProv = /player\.vimeo\.com\/video/.test(src)
+
+          this.set({ src }, { silent: true })
+
+          if (isYtProv) {
+            this.set({ provider: yt, videoId: getYouTubeVideoId(url) })
+          } else if (isYtncProv) {
+            this.set({ provider: ytnc, videoId: getYouTubeVideoId(url) })
+          } else if (isViProv) {
+            this.set({ provider: vi, videoId: getVimeoVideoId(url) })
+          } else {
+            this.set({ provider: so })
+          }
+
+          this.parseFromSrc()
+        },
+        handleSrcUpdate() {
+          this.set('autoplay', 0)
+        },
+        // Override the updateTraits to prevent displaying the video traits
+        updateTraits() {}
       },
       {
         isComponent: isComponentVideo
       }
     ),
     view: VideoView.extend({
-      ...baseView(embedVideoClassNames)
+      ...baseView(embedVideoClassNames),
+      events: {
+        dblclick() {
+          onVideoDoubleClick(this.model)
+        }
+      }
     })
   })
 

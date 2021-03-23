@@ -84,13 +84,13 @@ class Builder extends React.Component {
       isAgentDrawerOpen: false,
       isImageSelectDialogOpen: false,
       imageToEdit: null,
-      isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
       isMatterportDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
       isNeighborhoodsGraphsReportDrawerOpen: false,
       mapToEdit: null,
-      carouselToEdit: null
+      carouselToEdit: null,
+      videoToEdit: null
     }
 
     this.emailBlocksRegistered = false
@@ -368,9 +368,7 @@ class Builder extends React.Component {
         }
       },
       video: {
-        onDrop: () => {
-          this.setState({ isVideoDrawerOpen: true })
-        }
+        onDrop: this.openVideoDrawer
       },
       article: {
         onDrop: () => {
@@ -463,7 +461,8 @@ class Builder extends React.Component {
       onMapDrop: this.openMapDrawer,
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
-      onCarouselDoubleClick: this.openCarouselDrawer
+      onCarouselDoubleClick: this.openCarouselDrawer,
+      onVideoDoubleClick: this.openVideoDrawer
     }
 
     const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
@@ -482,6 +481,10 @@ class Builder extends React.Component {
 
   openMapDrawer = model => {
     this.setState({ mapToEdit: model })
+  }
+
+  openVideoDrawer = model => {
+    this.setState({ videoToEdit: model })
   }
 
   disableAssetManager = () => {
@@ -1102,14 +1105,15 @@ class Builder extends React.Component {
             />
           )}
           <VideoDrawer
-            isOpen={this.state.isVideoDrawerOpen}
+            isOpen={!!this.state.videoToEdit}
+            video={this.state.videoToEdit}
             onClose={() => {
               this.blocks.video.selectHandler()
-              this.setState({ isVideoDrawerOpen: false })
+              this.setState({ videoToEdit: null })
             }}
             onSelect={video => {
               this.blocks.video.selectHandler(video)
-              this.setState({ isVideoDrawerOpen: false })
+              this.setState({ videoToEdit: null })
             }}
           />
           <ArticleDrawer
