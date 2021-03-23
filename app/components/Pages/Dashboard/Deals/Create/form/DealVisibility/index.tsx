@@ -11,8 +11,6 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
 interface Props {
   onChange: (value: 'draft' | 'live') => void
 }
@@ -20,7 +18,6 @@ interface Props {
 export function DealVisibility({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
 
   const handleChange = (value: 'draft' | 'live') => {
     onChange(value)
@@ -31,7 +28,7 @@ export function DealVisibility({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection disabled={!!deal}>
+    <QuestionSection>
       <QuestionTitle>What is the stage of this deal?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

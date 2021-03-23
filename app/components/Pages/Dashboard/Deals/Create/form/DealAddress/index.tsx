@@ -29,8 +29,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
 export interface PropertyAddress {
   type: 'Place' | 'Listing'
   address: string | unknown
@@ -85,7 +83,6 @@ interface Props {
 export function DealAddress({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
 
   const classes = useStyles()
 
@@ -175,24 +172,33 @@ export function DealAddress({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to edit the address inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
           <Box className={classes.root}>
             <Box mb={3}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
-                autoComplete="no"
-                placeholder="Enter MLS# or Address"
-                value={searchCriteria}
-                onChange={handleChange}
-              />
+              <Box>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  autoComplete="no"
+                  placeholder="Enter MLS# or Address"
+                  value={searchCriteria}
+                  onChange={handleChange}
+                />
+              </Box>
+
+              <Box mt={2} textAlign="right">
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => wizard.next()}
+                >
+                  Skip
+                </Button>
+              </Box>
             </Box>
 
             {isSearching && (

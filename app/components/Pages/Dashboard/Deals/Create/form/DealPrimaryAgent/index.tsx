@@ -79,6 +79,8 @@ export function DealPrimaryAgent({
     }
 
     onChange?.(role, 'delete')
+
+    wizard.setStep(step)
   }
 
   if (wizard.lastVisitedStep < step) {
