@@ -99,7 +99,13 @@ class SelectFile extends React.Component {
 
               <div>
                 {!file && <p>Or</p>}
-                <Button appearance="link" onClick={() => this.dropzone.open()}>
+                <Button
+                  appearance="link"
+                  onClick={() => {
+                    this.dropzone.open()
+                    this.dropzone.fileInputEl.click()
+                  }}
+                >
                   {file ? 'Change File' : 'Select a file'}
                 </Button>
               </div>

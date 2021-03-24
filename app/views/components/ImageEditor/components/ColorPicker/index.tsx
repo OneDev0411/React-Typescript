@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
-import { CirclePicker, ColorResult } from 'react-color'
+import { CirclePicker, ColorState } from 'react-color'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 interface Props {
   color?: string
   colors: string[]
-  onChange: (color: ColorResult) => void
+  onChange: (color: ColorState) => void
 }
 
 export function ColorPicker({ color = '#000', colors, onChange }: Props) {
@@ -49,7 +49,7 @@ export function ColorPicker({ color = '#000', colors, onChange }: Props) {
           <CirclePicker
             color={color}
             colors={colors}
-            onChange={(result: ColorResult) => {
+            onChange={(result: ColorState) => {
               close()
               onChange(result)
             }}

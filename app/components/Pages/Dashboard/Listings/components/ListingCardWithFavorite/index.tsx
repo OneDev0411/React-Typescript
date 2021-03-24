@@ -3,8 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { noop } from 'lodash'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
-import { getIsFavorite } from 'reducers/listings/favorites'
+import { IAppState } from 'reducers'
 import { selectUserUnsafe } from 'selectors/user'
+import { selectListingIsFavorited } from 'selectors/listings'
 
 import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
@@ -21,8 +22,9 @@ const ListingCardWithFavorite = ({
 }: Props) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUserUnsafe)
-  const favorites = useSelector(({ favorites }) => favorites)
-  const isFavorited = getIsFavorite(favorites.listings, listing.id)
+  const isFavorited = useSelector((state: IAppState) =>
+    selectListingIsFavorited(state, listing.id)
+  )
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
 
   const closeListing = () => {

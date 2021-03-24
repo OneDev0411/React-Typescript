@@ -1,7 +1,7 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import { AgentItem } from 'components/TeamAgents/types'
+import { Agent } from 'components/TeamAgents/types'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
@@ -30,13 +30,13 @@ export interface Options {
 }
 
 interface AgentBlock {
-  selectHandler: (selectedAgents?: AgentItem[]) => void
+  selectHandler: (selectedAgents?: Agent[]) => void
 }
 
 let modelHandle: any
 let renderData: TemplateRenderData
 
-const selectHandler = (agents?: AgentItem[]) => {
+const selectHandler = (agents?: Agent[]) => {
   if (!modelHandle) {
     return
   }
