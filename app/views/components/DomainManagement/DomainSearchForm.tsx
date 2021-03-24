@@ -31,7 +31,7 @@ function DomainSearchForm({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value)
+    setSearch(event.target.value.trim())
   }
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
