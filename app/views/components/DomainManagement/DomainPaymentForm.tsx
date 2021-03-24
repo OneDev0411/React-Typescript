@@ -18,7 +18,9 @@ import { useWizardForm } from 'components/QuestionWizard/use-context'
 import useSafeDispatch from 'hooks/use-safe-dispatch'
 
 import DomainPaymentActions from './DomainPaymentActions'
-import DomainPaymentFormCardField from './DomainPaymentFormCardField'
+import DomainPaymentFormCardField, {
+  DomainPaymentFormCardFieldProps
+} from './DomainPaymentFormCardField'
 
 interface DomainPaymentFormProps {
   domainPrice: string
@@ -45,6 +47,7 @@ function DomainPaymentForm({
   const [fieldDisabled, setFieldDisabled] = useState(false)
   const { run, data, setData, isLoading } = useAsync<CreateStripeToken>()
   const dispatch = useDispatch()
+  const [activeSubmit, setActiveSubmit] = useState(false)
 
   const setFieldDisabledSafe = useSafeDispatch(setFieldDisabled)
 
@@ -89,6 +92,10 @@ function DomainPaymentForm({
     )
   }
 
+  const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] = event => {
+    setActiveSubmit(event.complete)
+  }
+
   const fieldErrorText = data?.error?.message
 
   return (
@@ -98,10 +105,11 @@ function DomainPaymentForm({
         error={!!fieldErrorText}
         helperText={fieldErrorText}
         disabled={isLoading || disabled || fieldDisabled}
+        onChange={handleCardChange}
       />
 
       <DomainPaymentActions
-        disabled={!stripe || isLoading || disabled}
+        disabled={!stripe || isLoading || disabled || !activeSubmit}
         domainPrice={domainPrice}
       >
         {onCancelClick && (

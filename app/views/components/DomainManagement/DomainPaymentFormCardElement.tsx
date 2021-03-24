@@ -5,7 +5,7 @@ import {
   StripeCardElementChangeEvent
 } from '@stripe/stripe-js'
 
-interface DomainPaymentFormCardElement
+export interface DomainPaymentFormCardElementProps
   extends Omit<CardElementProps, 'options'> {
   disabled?: boolean
 }
@@ -15,7 +15,7 @@ function DomainPaymentFormCardElement({
   onChange,
   disabled,
   ...otherProps
-}: DomainPaymentFormCardElement) {
+}: DomainPaymentFormCardElementProps) {
   const inputRef = useRef<StripeCardElement | null>(null)
 
   const handleReady = (element: StripeCardElement) => {
