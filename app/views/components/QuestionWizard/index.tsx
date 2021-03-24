@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
 
+import { useAsync } from 'react-use'
+
 import { WizardContext, SectionContext } from './context'
 
 import Loading from './Loading'
@@ -68,7 +70,7 @@ export function QuestionWizard({
     onStepChange(currentStep)
   }, [currentStep, onStepChange])
 
-  useEffect(() => {
+  useAsync(async () => {
     if (currentStep === 1) {
       refs.current[currentStep]?.scrollIntoView({
         block: 'nearest',
@@ -77,6 +79,8 @@ export function QuestionWizard({
 
       return
     }
+
+    await delay(50)
 
     window.scrollTo({
       top:
@@ -155,6 +159,10 @@ export function QuestionWizard({
       </div>
     </WizardContext.Provider>
   )
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export * from './QuestionSection'
