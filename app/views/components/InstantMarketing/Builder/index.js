@@ -421,7 +421,10 @@ class Builder extends React.Component {
 
     this.blocks = registerEmailBlocks(
       this.editor,
-      renderData,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
       templateBlocks,
       emailBlocksOptions
     )
@@ -434,7 +437,14 @@ class Builder extends React.Component {
     const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
 
     removeUnusedBlocks(this.editor)
-    this.blocks = registerSocialBlocks(this.editor, renderData, templateBlocks)
+    this.blocks = registerSocialBlocks(
+      this.editor,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
+      templateBlocks
+    )
   }
 
   async registerWebsiteBlocks() {
@@ -469,7 +479,10 @@ class Builder extends React.Component {
 
     this.blocks = registerWebsiteBlocks(
       this.editor,
-      renderData,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
       templateBlocks,
       blocksOptions
     )
