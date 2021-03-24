@@ -203,7 +203,9 @@ export default function CreateDeal() {
           <Controller
             name="property_address"
             control={control}
-            render={({ onChange }) => <DealAddress onChange={onChange} />}
+            render={({ onChange }) => (
+              <DealAddress skippable onChange={onChange} />
+            )}
           />
 
           <Controller
