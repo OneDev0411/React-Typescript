@@ -21,6 +21,8 @@ import updateWebsite from 'models/website/update-website'
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import useWebsiteCardData from '../WebsiteCardProvider/use-website-card-data'
 
+const emptyTitle = 'Your Site Title'
+
 interface WebsiteCardTitleProps {
   title: string
   websiteId: UUID
@@ -30,7 +32,7 @@ function WebsiteCardTitle({
   title: initialTitle,
   websiteId
 }: WebsiteCardTitleProps) {
-  const [title, setTitle] = useState(initialTitle || 'No Title')
+  const [title, setTitle] = useState(initialTitle)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { updateItem } = useWebsiteListActions()
   const userId = useSelector(selectUserId)
@@ -45,19 +47,23 @@ function WebsiteCardTitle({
   }, [editable])
 
   const handleSave = () => {
-    if (initialTitle !== title) {
+    const trimmedTitle = title.trim()
+
+    if (initialTitle !== trimmedTitle) {
       run(async () =>
         updateWebsite(websiteId, {
           attributes: website.attributes,
           template: website.template,
           template_instance: website.template_instance.id,
-          title,
+          title: trimmedTitle,
           user: userId
         })
       ).then(() => {
-        updateItem(websiteId, { title })
+        updateItem(websiteId, { title: trimmedTitle })
       })
     }
+
+    setTitle(trimmedTitle)
 
     handleEditEnd()
   }
@@ -77,6 +83,7 @@ function WebsiteCardTitle({
         <TextField
           inputRef={inputRef}
           label="Site Title"
+          placeholder="Please enter a title"
           value={title}
           onBlur={handleSave}
           onKeyPress={handleKeyPress}
@@ -85,7 +92,7 @@ function WebsiteCardTitle({
         />
       ) : (
         <Typography variant="subtitle2" onClick={handleEditStart}>
-          {title}
+          {title || emptyTitle}
         </Typography>
       )}
     </Box>
