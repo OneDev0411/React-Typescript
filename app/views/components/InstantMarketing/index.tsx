@@ -10,13 +10,39 @@ export interface IBrandMarketingTemplateWithResult
   result: string
 }
 
+interface MarketingBaseAsset {
+  image: string
+}
+
+export interface MarketingListingAsset extends MarketingBaseAsset {
+  listing: UUID
+}
+
+export interface MarketingAvatarAsset extends MarketingBaseAsset {
+  avatar: boolean
+}
+
+export interface MarketingUserFileAsset extends MarketingBaseAsset {
+  userFile: boolean
+}
+export interface MarketingStaticAsset extends MarketingBaseAsset {
+  static: boolean
+}
+
+export type MarketingAsset =
+  | MarketingListingAsset
+  | MarketingAvatarAsset
+  | MarketingStaticAsset
+  | MarketingUserFileAsset
+  | MarketingStaticAsset
+
 export interface InstantMarketingProps {
   closeConfirmation?: boolean
   hideTemplatesColumn?: boolean
   templateData?: TemplateData
   templateTypes?: string[]
   mediums?: string
-  assets?: object[]
+  assets?: MarketingAsset[]
   defaultTemplate?: Nullable<IBrandMarketingTemplate>
   onShowEditListings?: () => void
   containerStyle?: React.CSSProperties

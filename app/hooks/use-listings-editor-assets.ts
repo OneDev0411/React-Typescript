@@ -1,35 +1,25 @@
 import { useMemo } from 'react'
 
-interface ListingAsset {
-  image: string
-  listing: string
-}
+import type { MarketingListingAsset } from 'components/InstantMarketing'
 
 function useListingsEditorAssets(
   listings: Nullable<IListing[]>
-): ListingAsset[] {
+): MarketingListingAsset[] {
   return useMemo(() => {
-    const assets: ListingAsset[] = []
-
-    if (listings && Array.isArray(listings)) {
-      listings.forEach(listing => {
-        if (
-          listing.gallery_image_urls &&
-          Array.isArray(listing.gallery_image_urls)
-        ) {
-          const uniqueAssets = [...new Set(listing.gallery_image_urls)]
-
-          uniqueAssets.forEach(image => {
-            assets.push({
-              listing: listing.id,
-              image
-            })
-          })
-        }
-      })
+    if (!listings) {
+      return []
     }
 
-    return assets
+    return listings.reduce(
+      (assets, listing) => [
+        ...assets,
+        ...[...new Set(listing.gallery_image_urls)].map(image => ({
+          listing: listing.id,
+          image
+        }))
+      ],
+      []
+    )
   }, [listings])
 }
 
