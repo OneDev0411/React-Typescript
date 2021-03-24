@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 
 export default makeStyles(
-  {
+  theme => ({
     image: {
       width: '100%',
       height: 'auto'
@@ -10,7 +10,7 @@ export default makeStyles(
       display: 'flex',
       justifyContent: 'center'
     },
-    searchInput: { margin: '1.5rem 0' }
-  },
+    bold: { fontWeight: theme.typography.fontWeightBold }
+  }),
   { name: 'MatterportDrawer' }
 )

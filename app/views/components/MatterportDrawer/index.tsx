@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, CircularProgress } from '@material-ui/core'
+import { Box, Button, CircularProgress } from '@material-ui/core'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
@@ -15,10 +15,13 @@ interface Props {
 function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
   const classes = useStyles()
   const [modelId, setModelId] = useState('')
+  const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleChange = (value: string) => {
     const input = value.trim()
+
+    setError(false)
 
     if (!input) {
       return
@@ -32,10 +35,17 @@ function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
 
       const targetModelId = url.searchParams.get('m')
 
-      if (url.host === 'my.matterport.com' && targetModelId) {
+      if (
+        input.indexOf('https://my.matterport.com/show/') === 0 &&
+        targetModelId
+      ) {
         setModelId(targetModelId)
+      } else {
+        setError(true)
+        setIsLoading(false)
       }
     } catch (e) {
+      setError(true)
       setIsLoading(false)
     }
   }
@@ -52,6 +62,7 @@ function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
   const handleImageError = () => {
     setIsLoading(false)
     setModelId('')
+    setError(true)
   }
 
   return (
@@ -64,18 +75,31 @@ function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
     >
       <OverlayDrawer.Header title="Insert a Matterport block" />
       <OverlayDrawer.Body>
-        <Search
-          onChange={handleChange}
-          placeholder="Paste your Matterport link here"
-          isSearching={isLoading}
-          debounceTime={500}
-          className={classes.searchInput}
-        />
+        <Box my={3}>
+          <Search
+            onChange={handleChange}
+            placeholder="Paste your Matterport link here"
+            isSearching={isLoading}
+            debounceTime={500}
+            errorMessage={
+              error && (
+                <>
+                  Please enter a valid matterport address in format:
+                  <br />
+                  <b className={classes.bold}>
+                    https://my.matterport.com/show/?m=xxxxxxxxxxx
+                  </b>
+                </>
+              )
+            }
+          />
+        </Box>
         {isLoading && (
           <div className={classes.loading}>
             <CircularProgress />
           </div>
         )}
+
         {modelId && (
           <img
             className={classes.image}
