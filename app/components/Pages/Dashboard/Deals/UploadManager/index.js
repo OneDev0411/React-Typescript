@@ -71,6 +71,7 @@ class UploadDocument extends React.Component {
    */
   openDialog = () => {
     this.dropzone.open()
+    this.dropzone.fileInputEl.click()
   }
 
   handleRef = ref => {
