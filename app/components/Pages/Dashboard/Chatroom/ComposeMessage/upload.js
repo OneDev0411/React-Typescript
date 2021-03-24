@@ -1,5 +1,5 @@
 import React from 'react'
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-rechat'
 import { connect } from 'react-redux'
 import { addNotification as notify } from 'components/notification'
 import { mdiProgressUpload, mdiPlus } from '@mdi/js'

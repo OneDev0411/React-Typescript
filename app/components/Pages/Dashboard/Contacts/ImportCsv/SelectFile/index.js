@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-rechat'
 import { batchActions } from 'redux-batched-actions'
 import cn from 'classnames'
 import Flex from 'styled-flex-component'
