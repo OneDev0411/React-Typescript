@@ -16,7 +16,7 @@ export interface InstantMarketingProps {
   templateData?: TemplateData
   templateTypes?: string[]
   mediums?: string
-  assets?: string[]
+  assets?: object[]
   defaultTemplate?: Nullable<IBrandMarketingTemplate>
   onShowEditListings?: () => void
   containerStyle?: React.CSSProperties

@@ -33,6 +33,8 @@ import { generateWebsiteUrl } from 'utils/website'
 
 import { selectUser } from 'selectors/user'
 
+import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
+
 import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardTitle from '../WebsiteCardTitle'
@@ -126,6 +128,8 @@ function WebsiteCard({
     })
   }
 
+  const assets = useListingsEditorAssets(template_instance?.listings)
+
   if (isSuccess) {
     return null
   }
@@ -169,6 +173,7 @@ function WebsiteCard({
               ? template_instance?.listings[0]
               : undefined
           }}
+          assets={assets}
           onSave={handleSave}
           onClose={closeEditor}
           saveButtonText={publishButtonLabel}

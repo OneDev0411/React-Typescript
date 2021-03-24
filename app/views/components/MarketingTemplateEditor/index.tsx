@@ -10,7 +10,7 @@ import InstantMarketing, {
 interface Props
   extends Pick<
     InstantMarketingProps,
-    'actionButtonsDisabled' | 'customActions'
+    'actionButtonsDisabled' | 'customActions' | 'assets'
   > {
   /**
    * The marketing template or template instance to render inside the template editor
@@ -65,7 +65,8 @@ export default function MarketingTemplateEditor({
   onClose,
   actionButtonsDisabled,
   customActions,
-  saveButtonWrapper
+  saveButtonWrapper,
+  assets = []
 }: Props) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -85,7 +86,7 @@ export default function MarketingTemplateEditor({
       templateData={templateData}
       templateTypes={[]}
       mediums=""
-      assets={[]}
+      assets={assets}
       defaultTemplate={brandMarketingTemplate}
       handleSave={template => onSave(template.result)}
       onClose={onClose}

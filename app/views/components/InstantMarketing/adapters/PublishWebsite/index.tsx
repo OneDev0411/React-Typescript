@@ -15,6 +15,8 @@ import usePublishWebsite from 'hooks/use-publish-website'
 
 import { selectUser } from 'selectors/user'
 
+import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
+
 import useLoadListingsData from './use-load-listings-data'
 
 interface PublishWebsiteProps {
@@ -121,6 +123,8 @@ function PublishWebsite({
     setIsBuilderOpen(true)
   }
 
+  const assets = useListingsEditorAssets(selectedListing)
+
   return (
     <>
       {(isAgentTriggered || isBuilderOpen) && (
@@ -135,6 +139,7 @@ function PublishWebsite({
           saveButtonStartIcon={
             isPublishing && <CircularProgress color="inherit" size={20} />
           }
+          assets={assets}
           actionButtonsDisabled={isPublishing}
           customActions={
             <Button
