@@ -5,20 +5,15 @@ interface SortSetting {
   ascending: boolean
 }
 
-export function parseSortSetting(user: IUser, key: string, defaultValue = ''): SortSetting {
-  const sortSetting =
-    getUserSettingsInActiveTeam(user, key) || defaultValue
+export function parseSortSetting(user: IUser, settingKey: string, defaultValue = ''): SortSetting {
+  const rawSortSetting: string =
+    getUserSettingsInActiveTeam(user, settingKey) || defaultValue
 
-  let id = sortSetting
-  let ascending = true
-
-  if (sortSetting.startsWith('-')) {
-    id = sortSetting.slice(1)
-    ascending = false
-  }
-
-  return {
-    id,
-    ascending
+  return rawSortSetting.startsWith('-') ? {
+    id: rawSortSetting.slice(1),
+    ascending: false
+  } : {
+    id: rawSortSetting,
+    ascending: true
   }
 }

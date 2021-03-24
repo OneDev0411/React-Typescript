@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { browserHistory } from 'react-router'
+
+import { addNotification as notify } from 'components/notification'
 
 import { getDeal } from 'actions/deals'
 

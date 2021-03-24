@@ -9,8 +9,9 @@ import {
   makeStyles,
   CircularProgress
 } from '@material-ui/core'
-import { useDebounce } from 'react-use'
+import { useEffectOnce, useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
 import { getStatusColorClass } from 'utils/listing'
 
@@ -28,6 +29,13 @@ import { Callout } from 'components/Callout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
+
+import { createAddressContext } from 'deals/utils/create-address-context'
+import { updateListing, upsertContexts } from 'actions/deals'
+
+import { getField } from 'models/Deal/helpers/context'
+
+import getListing from 'models/listings/listing/get-listing'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -79,20 +87,47 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  onChange: (address: PropertyAddress) => void
+  skippable: boolean
+  onChange?: (address: PropertyAddress | null) => void
 }
 
-export function DealAddress({ onChange }: Props) {
+export function DealAddress({ skippable, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
 
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const [place, setPlace] = useState<
-    Nullable<google.maps.places.AutocompletePrediction>
+    Nullable<Partial<google.maps.places.AutocompletePrediction>>
   >(null)
-  const [listing, setListing] = useState<Nullable<ICompactListing>>(null)
+  const [listing, setListing] = useState<Nullable<ICompactListing | IListing>>(
+    null
+  )
+
+  useEffectOnce(() => {
+    ;(async () => {
+      if (deal?.listing && !listing) {
+        const compactListing = await getListing(deal.listing)
+
+        setListing(compactListing)
+      } else if (getField(deal, 'full_address')) {
+        const streetNumber = getField(deal, 'street_number')
+        const streetName = getField(deal, 'street_name')
+        const state = getField(deal, 'state')
+        const city = getField(deal, 'city')
+
+        setPlace({
+          structured_formatting: {
+            main_text_matched_substrings: [],
+            main_text: `${streetNumber} ${streetName} Street`,
+            secondary_text: `${city}, ${state}, USA`
+          }
+        })
+      }
+    })()
+  })
 
   const [searchCriteria, setSearchCriteria] = useState('')
   const [
@@ -129,6 +164,12 @@ export function DealAddress({ onChange }: Props) {
     setPlace(null)
     setListing(null)
     setSearchCriteria('')
+
+    onChange?.(null)
+
+    if (deal) {
+      wizard.setStep(step)
+    }
   }
 
   const handleSelectPlace = async (
@@ -138,16 +179,23 @@ export function DealAddress({ onChange }: Props) {
 
     const address = await getParsedPlace(place!)
 
-    onChange({
+    const fields = {
+      city: address.city,
+      postal_code: address.zip,
+      state: address.state,
+      street_name: address.street,
+      street_number: address.number,
+      unit_number: address.unit
+    }
+
+    if (deal) {
+      dispatch(upsertContexts(deal.id, createAddressContext(deal, fields)))
+      deal.listing && dispatch(updateListing(deal.id, null))
+    }
+
+    onChange?.({
       type: 'Place',
-      address: {
-        city: address.city,
-        postal_code: address.zip,
-        state: address.state,
-        street_name: address.street,
-        street_number: address.number,
-        unit_number: address.unit
-      }
+      address: fields
     })
 
     goNext()
@@ -156,7 +204,11 @@ export function DealAddress({ onChange }: Props) {
   const handleSelectListing = (listing: ICompactListing) => {
     setListing(listing)
 
-    onChange({
+    if (deal) {
+      dispatch(updateListing(deal.id, listing.id))
+    }
+
+    onChange?.({
       type: 'Listing',
       address: listing.id
     })
@@ -175,24 +227,35 @@ export function DealAddress({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to edit the address inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
           <Box className={classes.root}>
             <Box mb={3}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                size="small"
-                autoComplete="no"
-                placeholder="Enter MLS# or Address"
-                value={searchCriteria}
-                onChange={handleChange}
-              />
+              <Box>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  autoComplete="no"
+                  placeholder="Enter MLS# or Address"
+                  value={searchCriteria}
+                  onChange={handleChange}
+                />
+              </Box>
+
+              {skippable && wizard.currentStep === step && (
+                <Box mt={2} textAlign="right">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => wizard.next()}
+                  >
+                    Skip
+                  </Button>
+                </Box>
+              )}
             </Box>
 
             {isSearching && (
@@ -325,16 +388,33 @@ export function DealAddress({ onChange }: Props) {
           </Box>
         )}
 
-        {(listing || place) && (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-            mt={2}
-          >
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          mt={2}
+        >
+          {(listing || place) && (
             <Button onClick={handleRemove}>Change Property</Button>
-          </Box>
-        )}
+          )}
+
+          {deal && (listing || place) && wizard.currentStep === step && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+              ml={1}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => wizard.next()}
+              >
+                Looks Good
+              </Button>
+            </Box>
+          )}
+        </Box>
       </QuestionForm>
     </QuestionSection>
   )

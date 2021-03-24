@@ -43,7 +43,7 @@ function SiteTitle(props: Props) {
     }, 100)
   }
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       setIsEditing(false)
     }

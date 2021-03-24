@@ -1,7 +1,6 @@
-import styled, { css } from 'styled-components'
+import { FunctionComponent } from 'react'
+import styled, { StyledComponent, css } from 'styled-components'
 import { FlexItem } from 'styled-flex-component'
-
-import { StyledSVGWithProps } from 'utils/ts-utils'
 
 import { primary, grey } from 'views/utils/colors'
 
@@ -69,7 +68,8 @@ interface TreeViewExpandArrowProps {
   expanded?: boolean
 }
 
-export const TreeViewExpandArrow: StyledSVGWithProps<
+export const TreeViewExpandArrow: StyledComponent<
+  FunctionComponent<TreeViewExpandArrowProps>,
   TreeViewExpandArrowProps
 > = styled(IconKeyboardArrowDown)`
   transition: transform 0.2s;
