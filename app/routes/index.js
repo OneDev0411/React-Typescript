@@ -645,6 +645,15 @@ const AsyncWebsitesList = withAcl.websites(
   })
 )
 
+const AsyncOldWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "old_website" */
+      )
+  })
+)
+
 /* ==================================== */
 //  Other Pages
 /* ==================================== */
@@ -911,6 +920,8 @@ export default (
         >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
+
+        <Route path="website" component={AsyncOldWebsite} />
       </Route>
     </Route>
 
