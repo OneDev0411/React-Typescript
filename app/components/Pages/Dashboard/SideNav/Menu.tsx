@@ -140,7 +140,7 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={ACL.MARKETING}>
+          <Acl access={ACL.WEBSITES}>
             <SideNavLinkItem to="/dashboard/websites">Websites</SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
