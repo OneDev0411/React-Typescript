@@ -1,9 +1,12 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import { isLeaseProperty } from 'utils/listing'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
+import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import { isLeaseProperty } from 'utils/listing'
 
 import { LISTINGS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
@@ -14,6 +17,9 @@ import Right from './right.mjml'
 import Left from './left.mjml'
 import Grid from './grid.mjml'
 import GridTwo from './grid-two.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const listingTopBlockName = 'rechat-listing-image-top'
 export const listingLeftBlockName = 'rechat-listing-image-left'
@@ -21,100 +27,109 @@ export const listingRightBlockName = 'rechat-listing-image-right'
 export const listingGridBlockName = 'rechat-listing-grid'
 export const listingGridTwoBlockName = 'rechat-listing-grid-two'
 
-const templates = {}
-
-templates[listingTopBlockName] = Top
-templates[listingLeftBlockName] = Left
-templates[listingRightBlockName] = Right
-templates[listingGridBlockName] = Grid
-templates[listingGridTwoBlockName] = GridTwo
-
 export interface Options {
   onDrop: (model: Model) => void
 }
 
 interface ListingBlock {
-  selectHandler: (selectedListings?: IListing[]) => void
+  selectHandler: (listings?: (IListing & { is_lease?: boolean })[]) => void
 }
 
-let modelHandle: any
-let renderData: TemplateRenderData
-
-const selectHandler = (listings?: (IListing & { is_lease?: boolean })[]) => {
-  if (!modelHandle) {
-    return
+export default function registerBlocks(
+  editor: Editor,
+  renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
+  { onDrop }: Options
+): ListingBlock {
+  const listingBlocks = {
+    [listingTopBlockName]: templateBlocks[listingTopBlockName]?.template || Top,
+    [listingLeftBlockName]:
+      templateBlocks[listingLeftBlockName]?.template || Left,
+    [listingRightBlockName]:
+      templateBlocks[listingRightBlockName]?.template || Right,
+    [listingGridBlockName]:
+      templateBlocks[listingGridBlockName]?.template || Grid,
+    [listingGridTwoBlockName]:
+      templateBlocks[listingGridTwoBlockName]?.template || GridTwo
   }
 
-  const template = templates[modelHandle.attributes.attributes['data-block']]
+  registerBlock(
+    editor,
+    {
+      label: 'Image Top',
+      icon: ArticleImageTopIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingTopBlockName,
+      template: listingBlocks[listingTopBlockName]
+    },
+    templateBlocks[listingTopBlockName]
+  )
 
-  if (listings && listings.length) {
-    const mjml = nunjucks.renderString(template, {
+  registerBlock(
+    editor,
+    {
+      label: 'Grid',
+      icon: DualIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingGridBlockName,
+      template: listingBlocks[listingGridBlockName]
+    },
+    templateBlocks[listingGridBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Image Left',
+      icon: ArticleImageLeftIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingLeftBlockName,
+      template: listingBlocks[listingLeftBlockName]
+    },
+    templateBlocks[listingLeftBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Aligned Grid',
+      icon: DualIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingGridTwoBlockName,
+      template: listingBlocks[listingGridTwoBlockName]
+    },
+    templateBlocks[listingGridTwoBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Image Right',
+      icon: ArticleImageRightIcon,
+      category: LISTINGS_BLOCK_CATEGORY,
+      blockName: listingRightBlockName,
+      template: listingBlocks[listingRightBlockName]
+    },
+    templateBlocks[listingRightBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Listings',
+    listingBlocks,
+    templateBlocks
+  )
+
+  return handleBlockDragStopEvent(
+    editor,
+    allBlocks,
+    (listings: (IListing & { is_lease?: boolean })[]) => ({
       ...renderData,
       listings: listings.map(listing => ({
         ...listing,
         is_lease: isLeaseProperty(listing)
       }))
-    })
-
-    modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
-  }
-
-  modelHandle.remove()
-}
-
-export default function registerBlocks(
-  editor: Editor,
-  _renderData: TemplateRenderData,
-  { onDrop }: Options
-): ListingBlock {
-  renderData = _renderData
-  registerBlock(editor, {
-    label: 'Image Top',
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingTopBlockName,
-    template: templates[listingTopBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Grid',
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingGridBlockName,
-    template: templates[listingGridBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Left',
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingLeftBlockName,
-    template: templates[listingLeftBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Aligned Grid',
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingGridTwoBlockName,
-    template: templates[listingGridTwoBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Image Right',
-    category: LISTINGS_BLOCK_CATEGORY,
-    blockName: listingRightBlockName,
-    template: templates[listingRightBlockName]
-  })
-
-  editor.on('block:drag:stop', (model: Model, block) => {
-    if (!model) {
-      return
-    }
-
-    if (templates[block.id]) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+    }),
+    onDrop
+  )
 }

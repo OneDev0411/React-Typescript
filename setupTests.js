@@ -78,3 +78,6 @@ global.getSelection = () => {
 
 // Using data-test instead of data-testId
 configure({ testIdAttribute: 'data-test' })
+
+// Fix mapbox-gl issue
+window.URL.createObjectURL = function () {}

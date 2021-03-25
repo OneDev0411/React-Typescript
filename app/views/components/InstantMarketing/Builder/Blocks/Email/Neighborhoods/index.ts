@@ -1,25 +1,26 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { NeighborhoodsReport } from 'components/NeighborhoodsReportDrawer/types'
 import getStaticImageChartUrl from 'utils/charts/get-static-image-chart-url'
 
+import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
+
+import NeighborhoodsGraphsIcon from 'assets/images/marketing/editor/blocks/neighborhoods-graphs.png'
+
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-import adapt from '../../adapt'
 import { MARKET_REPORTS_CATEGORY } from '../../../constants'
 
 import neighborhoodsTemplates from './neighborhoods.mjml'
 import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { adaptTemplates } from '../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const neighborhoodsBlockName = 'rechat-neighborhoods'
 export const neighborhoodsGraphsBlockName = 'rechat-neighborhoods-graphs'
-
-const templates = {
-  [neighborhoodsBlockName]: neighborhoodsTemplates,
-  [neighborhoodsGraphsBlockName]: neighborhoodsGraphsTemplates
-}
 
 export interface Options {
   onNeighborhoodsDrop: (model: Model) => void
@@ -111,74 +112,70 @@ function getNeighborhoodsGraphTemplateReport(
 export default function registerNeighborhoodsBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onNeighborhoodsDrop, onNeighborhoodsGraphsDrop }: Options
 ): NeighborhoodsBlocks {
-  registerBlock(editor, {
-    label: 'Neighborhoods',
-    category: MARKET_REPORTS_CATEGORY,
-    blockName: neighborhoodsBlockName,
-    template: templates[neighborhoodsBlockName],
-    adaptive: true
-  })
+  const neighborhoodBlocks = {
+    [neighborhoodsBlockName]:
+      templateBlocks[neighborhoodsBlockName]?.template ||
+      neighborhoodsTemplates,
+    [neighborhoodsGraphsBlockName]:
+      templateBlocks[neighborhoodsGraphsBlockName]?.template ||
+      neighborhoodsGraphsTemplates
+  }
 
-  registerBlock(editor, {
-    label: 'Neighborhoods Graphs',
-    category: MARKET_REPORTS_CATEGORY,
-    blockName: neighborhoodsGraphsBlockName,
-    template: templates[neighborhoodsGraphsBlockName],
-    adaptive: true
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Neighborhoods',
+      icon: NeighborhoodsIcon,
+      category: MARKET_REPORTS_CATEGORY,
+      blockName: neighborhoodsBlockName,
+      template: neighborhoodBlocks[neighborhoodsBlockName],
+      adaptive: true
+    },
+    templateBlocks[neighborhoodsBlockName]
+  )
 
-  let modelHandle: any
+  registerBlock(
+    editor,
+    {
+      label: 'Neighborhoods Graphs',
+      icon: NeighborhoodsGraphsIcon,
+      category: MARKET_REPORTS_CATEGORY,
+      blockName: neighborhoodsGraphsBlockName,
+      template: neighborhoodBlocks[neighborhoodsGraphsBlockName],
+      adaptive: true
+    },
+    templateBlocks[neighborhoodsGraphsBlockName]
+  )
 
-  const selectHandler = (selectedReport?: NeighborhoodsReport) => {
-    if (!modelHandle) {
-      return
-    }
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Neighborhoods',
+    neighborhoodBlocks,
+    templateBlocks
+  )
 
-    const parent = modelHandle.parent()
-
-    if (selectedReport) {
-      const droppedBlockName = modelHandle.attributes.attributes['data-block']
-
-      const report =
+  return handleBlockDragStopEvent(
+    editor,
+    adaptTemplates(allBlocks),
+    (selectedReport: NeighborhoodsReport, droppedBlockName: string) => ({
+      ...renderData,
+      report:
         droppedBlockName === neighborhoodsBlockName
           ? selectedReport
           : getNeighborhoodsGraphTemplateReport(
               selectedReport,
               renderData.get('inverted-container-bg-color')
             )
-
-      const template = templates[droppedBlockName]
-
-      const mjml = nunjucks.renderString(adapt(parent, template), {
-        ...renderData,
-        report
-      })
-
-      parent.append(mjml, { at: modelHandle.opt.at })
+    }),
+    (model: Model, blockId: string) => {
+      if (blockId === neighborhoodsBlockName) {
+        onNeighborhoodsDrop(model)
+      } else if (blockId === neighborhoodsGraphsBlockName) {
+        onNeighborhoodsGraphsDrop(model)
+      }
     }
-
-    modelHandle.remove()
-  }
-
-  editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model) {
-      return
-    }
-
-    if (block.id === neighborhoodsBlockName) {
-      modelHandle = model
-      onNeighborhoodsDrop(model)
-    }
-
-    if (block.id === neighborhoodsGraphsBlockName) {
-      modelHandle = model
-      onNeighborhoodsGraphsDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+  )
 }

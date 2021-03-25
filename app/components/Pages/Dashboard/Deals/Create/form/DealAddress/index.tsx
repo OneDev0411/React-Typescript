@@ -130,10 +130,9 @@ export function DealAddress({ skippable, onChange }: Props) {
   })
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const [
-    debouncedSearchCriteria,
-    setDebouncedSearchCriteria
-  ] = useState<string>('')
+  const [debouncedSearchCriteria, setDebouncedSearchCriteria] = useState<
+    string
+  >('')
 
   /**
    * debounce search criteria to don't search contacts on input change

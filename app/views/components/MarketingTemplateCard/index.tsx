@@ -54,7 +54,8 @@ function MarketingTemplateCard(
         className={classNames(classes.card, {
           [classes.cardHasPreview]:
             !template.template.video && props.handlePreview,
-          [classes.cardLoading]: props.isLoading
+          [classes.cardLoading]: props.isLoading,
+          [classes.cardWebsite]: props.template.template.medium === 'Website'
         })}
         onClick={handlePreview}
         data-card="true"
