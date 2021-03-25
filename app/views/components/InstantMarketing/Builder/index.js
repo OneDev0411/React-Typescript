@@ -273,6 +273,7 @@ class Builder extends React.Component {
   setupImageDoubleClickHandler = () => {
     const components = this.editor.DomComponents
     const image = components.getType('image')
+    const imageBg = components.getType('image-bg')
     const mjImage = components.getType('mj-image')
     const mjCarouselImage = components.getType('mj-carousel-image')
 
@@ -280,6 +281,10 @@ class Builder extends React.Component {
       {
         name: 'image',
         component: image
+      },
+      {
+        name: 'image-bg',
+        component: imageBg
       },
       {
         name: 'mj-image',
