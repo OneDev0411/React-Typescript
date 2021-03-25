@@ -39,12 +39,19 @@ function CarouselDrawer({
   const [selectedImages, setSelectedImages] = useState<string[]>([])
 
   useEffect(() => {
-    const defaultImages = suggestedImages?.slice(0, 5) ?? [
+    const defaultImages = suggestedImages?.slice(0, 12) ?? [
       'https://picsum.photos/seed/image1/1600/1200',
       'https://picsum.photos/seed/image2/1600/1200',
       'https://picsum.photos/seed/image3/1600/1200',
       'https://picsum.photos/seed/image4/1600/1200',
-      'https://picsum.photos/seed/image5/1600/1200'
+      'https://picsum.photos/seed/image5/1600/1200',
+      'https://picsum.photos/seed/image6/1600/1200',
+      'https://picsum.photos/seed/image7/1600/1200',
+      'https://picsum.photos/seed/image8/1600/1200',
+      'https://picsum.photos/seed/image9/1600/1200',
+      'https://picsum.photos/seed/image10/1600/1200',
+      'https://picsum.photos/seed/image11/1600/1200',
+      'https://picsum.photos/seed/image12/1600/1200'
     ]
     const images = carousel?.get('images') ?? defaultImages
 
