@@ -132,10 +132,13 @@ export default function registerMapBlock(
                 },
                 { silent: true }
               )
+
+              editor.select(this.model)
             })
 
             map.on('zoomend', event => {
               this.model.set('zoom', event.target.getZoom(), { silent: true })
+              editor.select(this.model)
             })
 
             map.on('load', map.resize)
