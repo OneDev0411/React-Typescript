@@ -74,14 +74,14 @@ function MatterportDrawer({
     setError(true)
   }
 
+  const handleClose = () => {
+    setModelId('')
+    onClose()
+    setError(false)
+  }
+
   return (
-    <OverlayDrawer
-      open={isOpen}
-      onClose={() => {
-        setModelId('')
-        onClose()
-      }}
-    >
+    <OverlayDrawer open={isOpen} onClose={handleClose}>
       <OverlayDrawer.Header title="Insert a Matterport block" />
       <OverlayDrawer.Body>
         <Box my={3}>
