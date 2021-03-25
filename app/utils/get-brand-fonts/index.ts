@@ -3,12 +3,11 @@ import flattenBrand from 'utils/flatten-brand'
 export function getBrandFontFamilies(brand: IBrand): string[] {
   const flattedBrand = flattenBrand(brand)
 
-  if (!flattedBrand?.settings?.palette?.palette) {
+  if (!flattedBrand?.settings?.marketing_palette) {
     return []
   }
 
-  const brandPalette = flattedBrand.settings.palette
-    .palette as BrandSettingsPalette
+  const brandPalette = flattedBrand.settings.marketing_palette as BrandMarketingPalette
 
   const fontFamilyKeys = Object.keys(brandPalette).filter(key =>
     key.includes('font-family')

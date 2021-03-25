@@ -9,9 +9,9 @@ import getStripeCustomers from 'models/payments/get-stripe-customers'
 
 import useAsync from 'hooks/use-async'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
-import { IContextState } from 'components/QuestionWizard/context'
+import { IWizardState } from 'components/QuestionWizard/context'
 
 import DomainPaymentForm from './DomainPaymentForm'
 import DomainPaymentLastCard from './DomainPaymentLastCard'
@@ -21,23 +21,21 @@ interface DomainPaymentProps {
   domainPrice: string
   onPayClick: (
     stripeCustomerId: string,
-    wizard: IContextState,
+    wizard: IWizardState,
     done?: () => void
   ) => void
   disabled: boolean
-  step?: number // TODO: Remove this
 }
 
 const defaultCustomers: IStripeCustomer[] = []
 
 function DomainPayment({
-  step,
   domainPrice,
   onPayClick,
   disabled
 }: DomainPaymentProps) {
   const [showForm, setShowForm] = useState(false)
-  const wizard = useWizardForm()
+  const wizard = useWizardContext()
 
   const { data: customers, run, isLoading: isLoadingCustomers } = useAsync({
     data: defaultCustomers
@@ -62,9 +60,9 @@ function DomainPayment({
     : undefined
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Please add your payment information</QuestionTitle>
-      <QuestionForm>
+      <QuestionForm width="85%">
         {isLoadingCustomers ? (
           <DomainLoading />
         ) : lastPayment && !showForm ? (

@@ -7,18 +7,17 @@ import {
   QuestionSection,
   QuestionTitle
 } from 'components/QuestionWizard'
-import { useWizardForm } from 'components/QuestionWizard/use-context'
-import { IContextState } from 'components/QuestionWizard/context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import { IWizardState } from 'components/QuestionWizard/context'
 
 interface DomainNameProps {
-  onChange: (value: string, wizard: IContextState) => void
+  onChange: (value: string, wizard: IWizardState) => void
   disabled: boolean
-  step?: number // TODO: Remove this
 }
 
-function DomainName({ onChange, disabled, step }: DomainNameProps) {
+function DomainName({ onChange, disabled }: DomainNameProps) {
   const [domainName, setDomainName] = useState('')
-  const wizard = useWizardForm()
+  const wizard = useWizardContext()
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDomainName(event.target.value)
@@ -30,9 +29,9 @@ function DomainName({ onChange, disabled, step }: DomainNameProps) {
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Please enter the domain name</QuestionTitle>
-      <QuestionForm>
+      <QuestionForm width="85%">
         <form onSubmit={handleSubmit}>
           <TextField
             aria-label="Domain Name"

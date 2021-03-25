@@ -10,7 +10,7 @@ import { addNotification as notify } from 'components/notification'
 import useAsync from 'hooks/use-async'
 import { QuestionWizard } from 'components/QuestionWizard'
 
-import { IContextState } from 'components/QuestionWizard/context'
+import { IWizardState } from 'components/QuestionWizard/context'
 
 import addHostnameToWebsite from 'models/website/add-hostname-to-website'
 
@@ -55,8 +55,8 @@ function DomainManagementNewDomain({
     onBack()
   }
 
-  const handleAddDomainToHost = (domainName: string, wizard: IContextState) => {
-    wizard.setShowLoading(true)
+  const handleAddDomainToHost = (domainName: string, wizard: IWizardState) => {
+    wizard.setLoading(true)
 
     run(async () =>
       addHostnameToWebsite(websiteId, {
@@ -80,7 +80,7 @@ function DomainManagementNewDomain({
             status: 'error'
           })
         )
-        wizard.setShowLoading(false)
+        wizard.setLoading(false)
       }
     )
   }
@@ -95,16 +95,16 @@ function DomainManagementNewDomain({
 
   const handlePurchase = (
     stripeCustomerId: string,
-    wizard: IContextState,
+    wizard: IWizardState,
     done?: () => void
   ) => {
-    wizard.setShowLoading(true)
+    wizard.setLoading(true)
     run(async () =>
       purchaseDomain(stripeCustomerId, domainName, domainAgreementKeys)
     )
       .then(
         () => handleAddDomainToHost(domainName, wizard),
-        () => wizard.setShowLoading(false)
+        () => wizard.setLoading(false)
       )
       .finally(() => done?.())
   }
@@ -123,7 +123,7 @@ function DomainManagementNewDomain({
         </Button>
       </Box>
       <Box marginLeft={2}>
-        <QuestionWizard defaultStep={0} formWidth="85%">
+        <QuestionWizard defaultStep={0}>
           {/* <DomainStatus
             onChange={handleDomainStatusChange}
             disabled={isWorking}

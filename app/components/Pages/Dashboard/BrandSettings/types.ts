@@ -8,7 +8,7 @@ export type FieldType =
   | 'border'
 
 export interface SidebarSectionField {
-  names: BrandSettingsPaletteKey[]
+  names: BrandMarketingPaletteKey[]
   type: FieldType
   label: string
 }

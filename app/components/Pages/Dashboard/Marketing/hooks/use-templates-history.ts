@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+import { useState, useEffect } from 'react'
 
 import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 import { getHistory } from 'models/instant-marketing/get-history'
@@ -34,7 +33,7 @@ export function useTemplatesHistory(
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     let didCancel = false
 
     async function loadData() {

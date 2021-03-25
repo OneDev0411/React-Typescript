@@ -11,7 +11,8 @@ interface Props {
 }
 
 function Authentication({ location, children }: Props) {
-  const data = useSelector(({ data }) => data)
+  // TODO: we must deprecate data object
+  const data = useSelector(({ data }: { data: any }) => data)
   const { user, isLoading: isLoadingUser } = useLoadUser()
 
   if (!user?.id && isLoadingUser) {

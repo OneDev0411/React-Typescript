@@ -6,7 +6,7 @@ import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 import FontFaceObserver from 'fontfaceobserver'
 
-import { ColorResult } from 'react-color'
+import { ColorState } from 'react-color'
 import { useSelector } from 'react-redux'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -155,7 +155,7 @@ export function TextActions({ editor }: Props) {
     })
   }
 
-  const setTextColor = (color: ColorResult) => {
+  const setTextColor = (color: ColorState) => {
     updateTextStyles({
       fill: color.hex
     })

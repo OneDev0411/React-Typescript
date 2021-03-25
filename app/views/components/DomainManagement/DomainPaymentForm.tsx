@@ -13,7 +13,7 @@ import createStripeToken, {
 } from 'models/payments/create-stripe-token'
 import useAsync from 'hooks/use-async'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import useSafeDispatch from 'hooks/use-safe-dispatch'
 
@@ -39,7 +39,7 @@ function DomainPaymentForm({
 }: DomainPaymentFormProps) {
   const stripe = useStripe()
   const elements = useElements()
-  const wizard = useWizardForm()
+  const wizard = useWizardContext()
   // Two requests needed to complete the buying process and the text field
   // blinks after the first request and before starting the next one.
   // So we need to have a disabled state and handle it manually to avoid
@@ -66,7 +66,7 @@ function DomainPaymentForm({
 
     setData(null)
 
-    wizard.setShowLoading(true)
+    wizard.setLoading(true)
 
     setFieldDisabled(true)
 
@@ -79,7 +79,7 @@ function DomainPaymentForm({
         }
       },
       () => {
-        wizard.setShowLoading(false)
+        wizard.setLoading(false)
         done()
         dispatch(
           notify({

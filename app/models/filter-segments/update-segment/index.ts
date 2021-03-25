@@ -4,7 +4,9 @@ async function updateSegment(namespace, segment: IContactList, query = {}) {
   try {
     const body = { ...segment, filters: segment.filters || [] }
 
+    // @ts-ignore
     delete body.flows
+    // @ts-ignore
     delete body.crm_tasks
 
     const response = await new Fetch()

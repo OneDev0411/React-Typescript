@@ -7,7 +7,7 @@ import {
   QuestionSection,
   QuestionTitle
 } from 'components/QuestionWizard'
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 export enum DomainStatusType {
   New = 'New',
@@ -17,11 +17,10 @@ export enum DomainStatusType {
 interface DomainStatusProps {
   onChange: (value: DomainStatusType) => void
   disabled: boolean
-  step?: number // TODO: Remove this
 }
 
-function DomainStatus({ onChange, disabled, step }: DomainStatusProps) {
-  const wizard = useWizardForm()
+function DomainStatus({ onChange, disabled }: DomainStatusProps) {
+  const wizard = useWizardContext()
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value as DomainStatusType)
@@ -29,9 +28,9 @@ function DomainStatus({ onChange, disabled, step }: DomainStatusProps) {
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>What would you like to do?</QuestionTitle>
-      <QuestionForm>
+      <QuestionForm width="85%">
         <RadioGroup aria-label="Domain Status" onChange={handleChange}>
           <FormControlLabel
             value={DomainStatusType.New}

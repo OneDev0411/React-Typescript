@@ -14,8 +14,8 @@ export function getListingUrl(activeBrand: IBrand, listing: IListing) {
     : `${config.app.url}/dashboard/mls/${listing.id}`
 }
 
-export function get(brand: IBrand, key: BrandSettingsPaletteKey): string {
+export function get(brand: IBrand, key: BrandMarketingPaletteKey): string {
   const defaultValue = _get(DEFAULT_BRAND_PALETTE, key)
 
-  return _get(brand, `settings.palette.palette.${key}`, defaultValue)
+  return _get(brand, `settings.marketing_palette.${key}`, defaultValue)
 }

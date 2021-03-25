@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Box, Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
 
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import {
   QuestionForm,
   QuestionSection,
@@ -32,19 +32,17 @@ interface DomainAgreementProps {
   domainName: string
   onNextClick: (agreementKeys: string[]) => void
   disabled: boolean
-  step?: number // TODO: Remove this
 }
 
 const defaultAgreementList: IDomainAgreement[] = []
 
 function DomainAgreement({
-  step,
   domainName,
   onNextClick,
   disabled
 }: DomainAgreementProps) {
   const classes = useStyles()
-  const wizard = useWizardForm()
+  const wizard = useWizardContext()
   const [checked, setChecked] = useState(false)
   const { run, data: agreements, isLoading } = useAsync({
     data: defaultAgreementList
@@ -66,11 +64,11 @@ function DomainAgreement({
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>
         Read and accept the domain registration agreement from GoDaddy
       </QuestionTitle>
-      <QuestionForm>
+      <QuestionForm width="85%">
         {isLoading ? (
           <DomainLoading />
         ) : (

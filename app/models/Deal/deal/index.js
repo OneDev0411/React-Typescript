@@ -1,6 +1,6 @@
 export * from './archive-deal'
 export * from './create-deal'
-export * from './eject-draft'
+export * from './publish'
 export * from './get-all'
 export * from './get-by-id'
 export * from './search-deals'

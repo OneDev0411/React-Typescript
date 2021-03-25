@@ -5,6 +5,7 @@ import { Tooltip, Button, createStyles, makeStyles } from '@material-ui/core'
 import ClickOutside from 'react-click-outside'
 
 import Input from 'components/Input'
+import { getContextInputMask } from 'deals/utils/get-context-mask'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 
@@ -107,7 +108,8 @@ export function TextField({
               autoFocus
               maxLength={15}
               value={fieldValue}
-              placeholder={field.label}
+              mask={getContextInputMask(field)}
+              placeholder={field.properties.placeholder || field.label}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
@@ -121,7 +123,6 @@ export function TextField({
                     : (e.target as HTMLInputElement).value
                 )
               }
-              {...field.properties}
             />
 
             <Button

@@ -7,10 +7,6 @@ export const Container = styled(Card)`
   @media screen and (min-width: 48em) {
     width: 36rem;
   }
-
-  @media screen and (min-width: 60em) {
-    width: 45rem;
-  }
 `
 
 export const Body = styled.div`

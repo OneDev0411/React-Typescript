@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
 import { composeDecorators } from 'draft-js-plugins-editor'
 import createImagePlugin from 'draft-js-image-plugin'
 import 'draft-js-image-plugin/lib/plugin.css'
@@ -10,11 +9,12 @@ import createResizeablePlugin from 'draft-js-resizeable-plugin'
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import createFocusPlugin from 'draft-js-focus-plugin'
 
-import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
+import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
+import { addNotification } from 'components/notification'
 import { removeBlock } from 'components/TextEditor/modifiers/remove-block'
 import { doesContainBlock } from 'components/TextEditor/utils/does-contain-block'
 
@@ -22,7 +22,6 @@ import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { withUploadingIndicator } from '../../block-decorators/with-uploading-indicator'
 import { resizableBugFixDecorator } from '../../block-decorators/resizable-bug-fix-decorator'
 import { atomicBlockLinkDecorator } from '../../block-decorators/atomic-block-link-decorator'
-import { resizablePluginOptions } from '../../config'
 import { getImageSizeOptions } from './utils/get-image-size-options'
 import { getImageDimensions } from './utils/get-image-dimensions'
 import { removeUnwantedEmptyLineBeforeAtomic } from '../../modifiers/remove-unwanted-empty-block-before-atomic'
@@ -52,7 +51,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
   const { editorState, setEditorState, editorRef } = useContext(EditorContext)
 
   const { imagePlugin } = useEditorPlugins(() => {
-    const resizeablePlugin = createResizeablePlugin(resizablePluginOptions)
+    const resizeablePlugin = createResizeablePlugin()
     const blockDndPlugin = createBlockDndPlugin()
     const alignmentPlugin = createAlignmentPlugin()
 

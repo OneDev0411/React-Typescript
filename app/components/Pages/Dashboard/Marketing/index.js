@@ -9,6 +9,7 @@ import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
 import { getActiveTeamId, hasUserAccessToBrandSettings } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
+import { selectUser } from 'selectors/user'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
@@ -24,10 +25,11 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-export function MarketingLayout({ params, render }) {
+export function MarketingLayout({ render, ...props }) {
   const classes = useStyles()
+  const { params, router } = props
   const sections = useMarketingCenterSections(params)
-  const user = useSelector(({ user }) => user)
+  const user = useSelector(state => selectUser(state))
 
   const templateTypes = params.types
 
@@ -75,6 +77,12 @@ export function MarketingLayout({ params, render }) {
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}
+            isOverviewActive={
+              router.location.pathname === '/dashboard/marketing'
+            }
+            isMyDesignsActive={
+              router.location.pathname === '/dashboard/marketing/designs'
+            }
           />
           {render &&
             render({

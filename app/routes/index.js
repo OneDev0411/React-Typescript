@@ -252,14 +252,21 @@ const AsyncDealsLayout = withAcl(
 const AsyncDealCreate = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/create/create-deal' /* webpackChunkName: "deal_c" */
+      '../components/Pages/Dashboard/Deals/Create/Deal' /* webpackChunkName: "deal_create" */
     )
 })
 
 const AsyncDealCreateOffer = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/create/create-offer' /* webpackChunkName: "deal_co" */
+      '../components/Pages/Dashboard/Deals/Create/Offer' /* webpackChunkName: "deal_co" */
+    )
+})
+
+const AsyncDealPublish = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Deals/Create/Publish' /* webpackChunkName: "deal_publish" */
     )
 })
 
@@ -395,6 +402,15 @@ const AsyncToursList = withAcl.crm(
 //  Marketing Center
 /* ==================================== */
 
+const AsyncMarketingOverview = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/Overview' /* webpackChunkName: "marketing_overview" */
+      )
+  })
+)
+
 const AsyncMarketingEditor = withAcl.marketing(
   Load({
     loader: () =>
@@ -413,11 +429,11 @@ const AsyncMarketingWizard = withAcl.marketing(
   })
 )
 
-const AsyncMarketing = withAcl.marketing(
+const AsyncMarketingTemplates = withAcl.marketing(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */
+        '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing_templates" */
       )
   })
 )
@@ -778,10 +794,14 @@ export default (
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
-        <Route path="marketing" component={AsyncMarketingHistory} />
+        <Route path="marketing" component={AsyncMarketingOverview} />
+        <Route path="marketing/designs" component={AsyncMarketingHistory} />
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
-        <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
+        <Route
+          path="marketing/:types(/:medium)"
+          component={AsyncMarketingTemplates}
+        />
 
         <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route
@@ -812,8 +832,12 @@ export default (
             component={AsyncDealFormEdit}
           />
           <Route
-            path="/dashboard/deals/:id/create-offer"
+            path="/dashboard/deals/:id/offer"
             component={AsyncDealCreateOffer}
+          />
+          <Route
+            path="/dashboard/deals/:id/publish"
+            component={AsyncDealPublish}
           />
           <Route
             path="/dashboard/deals/:id/view/:taskId(/:entityType/:entityId)"

@@ -4,7 +4,7 @@ import { Model } from 'backbone'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
-import { AgentItem } from 'components/TeamAgents/types'
+import { Agent } from 'components/TeamAgents/types'
 
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
@@ -34,7 +34,7 @@ export interface AgentBlocksOptions {
 }
 
 interface AgentBlocks {
-  selectHandler: (selectedAgents?: AgentItem[]) => void
+  selectHandler: (selectedAgents?: Agent[]) => void
 }
 
 export default function registerAgentBlocks(
@@ -115,7 +115,7 @@ export default function registerAgentBlocks(
   return handleBlockDragStopEvent(
     editor,
     allBlocks,
-    (agents: AgentItem[]) => ({
+    (agents: Agent[]) => ({
       ...renderData,
       users: agents.map(item => {
         const profileImageUrl =

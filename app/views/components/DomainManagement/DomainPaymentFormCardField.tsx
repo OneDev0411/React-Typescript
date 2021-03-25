@@ -25,7 +25,8 @@ function DomainPaymentFormCardField({
       {...props}
       // The callback type is invalid because of the change material-ui limitations
       onChange={(onChange as unknown) as TextFieldProps['onChange']}
-      InputProps={inputProps}
+      // TODO: Fix the below type after merge
+      InputProps={inputProps as any}
     />
   )
 }

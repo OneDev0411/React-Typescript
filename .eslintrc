@@ -8,8 +8,6 @@
   "extends": [
     "airbnb",
     "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/errors",
@@ -26,10 +24,22 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".json"
+        ]
       },
       "webpack": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"],
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".json"
+        ],
         "config": "./webpack/base"
       }
     }
@@ -57,7 +67,10 @@
           "external",
           // Built-in & external types are first
           "internal",
-          ["sibling", "parent"],
+          [
+            "sibling",
+            "parent"
+          ],
           // Then sibling and parent types. They can be mingled together
           "index"
           // Then the index file
@@ -66,7 +79,10 @@
       }
     ],
     "no-new": 0,
-    "curly": [2, "all"],
+    "curly": [
+      2,
+      "all"
+    ],
     "no-unused-expressions": [
       "error",
       {
@@ -80,10 +96,16 @@
         "ignorePattern": "^import [^,]+ from"
       }
     ],
-    "comma-dangle": ["error", "never"],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
     "jsx-a11y/click-events-have-key-events": 0,
     "jsx-a11y/label-has-associated-control": 0,
-    "semi": [2, "never"],
+    "semi": [
+      2,
+      "never"
+    ],
     "jsx-a11y/no-noninteractive-element-interactions": 0,
     "camelcase": 0,
     "new-cap": 0,
@@ -164,10 +186,21 @@
     "no-useless-constructor": 0,
     "import/prefer-default-export": 0,
     "react/destructuring-assignment": 0,
+    "import/no-cycle": [
+      "error",
+      {
+        "maxDepth": "∞"
+      }
+    ],
     "react/sort-comp": [
       1,
       {
-        "order": ["constructor", "lifecycle", "everything-else", "render"]
+        "order": [
+          "constructor",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
       }
     ],
     "prefer-destructuring": 0,
@@ -210,27 +243,63 @@
       {
         "blankLine": "always",
         "prev": "*",
-        "next": ["const", "let", "var", "export"]
+        "next": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ]
       },
       {
         "blankLine": "always",
-        "prev": ["const", "let", "var", "export"],
+        "prev": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ],
         "next": "*"
       },
       {
         "blankLine": "any",
-        "prev": ["const", "let", "var", "export"],
-        "next": ["const", "let", "var", "export"]
+        "prev": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ],
+        "next": [
+          "const",
+          "let",
+          "var",
+          "export"
+        ]
       },
       // Always require blank lines before and after class declaration, if, do/while, switch, try
       {
         "blankLine": "always",
         "prev": "*",
-        "next": ["if", "class", "for", "do", "while", "switch", "try"]
+        "next": [
+          "if",
+          "class",
+          "for",
+          "do",
+          "while",
+          "switch",
+          "try"
+        ]
       },
       {
         "blankLine": "always",
-        "prev": ["if", "class", "for", "do", "while", "switch", "try"],
+        "prev": [
+          "if",
+          "class",
+          "for",
+          "do",
+          "while",
+          "switch",
+          "try"
+        ],
         "next": "*"
       },
       // Always require blank lines before return statements
@@ -243,10 +312,17 @@
   },
   "overrides": [
     {
-      "files": ["**/*.ts", "**/*.tsx"],
+      "files": [
+        "**/*.ts",
+        "**/*.tsx"
+      ],
       "rules": {
-        "no-unused-vars": ["off"],
-        "no-undef": ["off"],
+        "no-unused-vars": [
+          "off"
+        ],
+        "no-undef": [
+          "off"
+        ],
         "@typescript-eslint/no-unused-vars": [
           2,
           {
@@ -256,7 +332,9 @@
       }
     },
     {
-      "files": ["**/*.d.ts"],
+      "files": [
+        "**/*.d.ts"
+      ],
       "rules": {
         /* seems it doesn't work!*/
         "react/jsx-no-duplicate-props": [
@@ -265,7 +343,9 @@
             "ignoreCase": false
           }
         ],
-        "react/no-multi-comp": ["off"]
+        "react/no-multi-comp": [
+          "off"
+        ]
       }
     }
   ]

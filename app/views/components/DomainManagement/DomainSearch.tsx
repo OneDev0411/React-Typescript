@@ -5,7 +5,7 @@ import {
   QuestionSection,
   QuestionTitle
 } from 'components/QuestionWizard'
-import { useWizardForm } from 'components/QuestionWizard/use-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import useAsync from 'hooks/use-async'
 import suggestDomainName from 'models/domains/suggest-domain-name'
 
@@ -16,7 +16,6 @@ interface DomainSearchProps {
   domainName: string
   onSelectDomainName: (domainName: string, price: string) => void
   disabled: boolean
-  step?: number // TODO: Remove this
 }
 
 const defaultSearchResult: IDomainSuggest[] = []
@@ -24,10 +23,9 @@ const defaultSearchResult: IDomainSuggest[] = []
 function DomainSearch({
   domainName,
   onSelectDomainName,
-  disabled,
-  step
+  disabled
 }: DomainSearchProps) {
-  const wizard = useWizardForm()
+  const wizard = useWizardContext()
 
   const { data: searchResults, run, isLoading } = useAsync({
     data: defaultSearchResult
@@ -44,9 +42,9 @@ function DomainSearch({
   }
 
   return (
-    <QuestionSection step={step}>
+    <QuestionSection>
       <QuestionTitle>Great, search for a domain</QuestionTitle>
-      <QuestionForm>
+      <QuestionForm width="85%">
         <DomainSearchForm
           disabled={disabled || isLoading}
           isLoading={isLoading}

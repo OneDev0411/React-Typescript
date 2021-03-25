@@ -2,6 +2,8 @@ import React from 'react'
 import IntercomSDK from 'react-intercom'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { selectUser } from 'selectors/user'
+
 import { IAppState } from '../../../reducers'
 import { inactiveIntercom } from '../../../store_actions/intercom'
 import IconClose from '../SvgIcons/Close/CloseIcon'
@@ -10,7 +12,7 @@ import { Button, GlobalIntercomStyles } from './styled'
 
 export default function Intercom() {
   const dispatch = useDispatch()
-  const user = useSelector((state: IAppState) => state.user)
+  const user = useSelector((state: IAppState) => selectUser(state))
   const { isActive: isIntercomActive } = useSelector(
     (state: IAppState) => state.intercom
   )

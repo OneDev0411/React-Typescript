@@ -16,6 +16,9 @@ function UploadPlaceholder(props: Props) {
 
   const dropzoneRef = useRef<{
     open(): void
+    fileInputEl: {
+      click: () => void
+    }
   } | null>(null)
 
   const handleCopyEmail = () => {
@@ -24,8 +27,12 @@ function UploadPlaceholder(props: Props) {
     setTimeout(() => setShowTooltip(false), 2000)
   }
 
-  const handleSelectFile = () =>
-    dropzoneRef.current && dropzoneRef.current.open()
+  const handleSelectFile = () => {
+    if (dropzoneRef.current) {
+      dropzoneRef.current.open()
+      dropzoneRef.current.fileInputEl.click()
+    }
+  }
 
   return (
     // @ts-ignore js component

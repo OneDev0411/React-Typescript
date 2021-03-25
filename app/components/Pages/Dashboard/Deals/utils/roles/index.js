@@ -111,6 +111,7 @@ export function convertContactToRole(contact) {
     )
 
   return {
+    contact,
     emails: values('email'),
     phone_numbers: values('phone_number'),
     companies: values('company'),

@@ -8,7 +8,7 @@ import { renderMjml, getTemplatePreviewRenderData } from './helpers'
 
 interface Props {
   template: string
-  palette: BrandSettingsPalette
+  palette: BrandMarketingPalette
   data?: {
     listing?: Nullable<IListing>
     user?: Nullable<IUser>
