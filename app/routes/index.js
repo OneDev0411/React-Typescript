@@ -636,7 +636,7 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = withAcl.marketing(
+const AsyncWebsitesList = withAcl.websites(
   Load({
     loader: () =>
       import(
