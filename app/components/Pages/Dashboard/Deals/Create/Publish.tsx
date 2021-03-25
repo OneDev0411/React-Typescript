@@ -125,7 +125,14 @@ export default function Publish({ params }: Props) {
       />
 
       <Box className={classes.root}>
-        <QuestionWizard onFinish={handlePublish}>
+        <QuestionWizard
+          questionPosition="Top"
+          questionPositionOffset={80}
+          styles={{
+            paddingBottom: '50%'
+          }}
+          onFinish={handlePublish}
+        >
           <DealAddress skippable={false} />
 
           {deal.deal_type === 'Buying' && (

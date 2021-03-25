@@ -188,7 +188,14 @@ export default function CreateOffer({ params }: Props) {
       />
 
       <Box className={classes.root}>
-        <QuestionWizard onFinish={createOfferChecklist}>
+        <QuestionWizard
+          questionPosition="Top"
+          questionPositionOffset={80}
+          styles={{
+            paddingBottom: '50%'
+          }}
+          onFinish={createOfferChecklist}
+        >
           <Controller
             name="clients"
             control={control}
