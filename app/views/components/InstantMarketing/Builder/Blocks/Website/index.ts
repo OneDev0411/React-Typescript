@@ -34,8 +34,7 @@ import registerArticleBlocks, {
 } from './Articles'
 import registerMatterportBlock, {
   MatterportBlockOptions,
-  embedMatterportBlockName,
-  matterportBlockTraits
+  embedMatterportBlockName
 } from './Matterport'
 import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
 import registerCarouselBlock, {
@@ -76,8 +75,7 @@ interface BlocksOptions
     CarouselBlockOptions {}
 
 export const websiteBlocksTraits = {
-  ...staticBlocksTraits,
-  ...matterportBlockTraits
+  ...staticBlocksTraits
 }
 
 export function registerWebsiteBlocks(

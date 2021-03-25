@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Box, Button, CircularProgress } from '@material-ui/core'
 
+import type { Model } from 'backbone'
+
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
 
@@ -8,11 +10,17 @@ import useStyles from './styles'
 
 interface Props {
   isOpen: boolean
+  matterport: Model | null
   onClose?: () => void
   onSelect: (modelId: string) => void
 }
 
-function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
+function MatterportDrawer({
+  isOpen,
+  onClose = () => {},
+  onSelect,
+  matterport
+}: Props) {
   const classes = useStyles()
   const [modelId, setModelId] = useState('')
   const [error, setError] = useState(false)
@@ -51,6 +59,7 @@ function MatterportDrawer({ isOpen, onClose = () => {}, onSelect }: Props) {
   }
 
   const handleConfirm = () => {
+    matterport?.set('modelId', modelId)
     onSelect(modelId)
     setModelId('')
   }

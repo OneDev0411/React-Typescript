@@ -16,21 +16,11 @@ import { registerTemplateBlocks } from '../../templateBlocks'
 const typeEmbedMatterport = 'embed-matterport'
 export const embedMatterportBlockName = typeEmbedMatterport
 
-export const matterportBlockTraits = {
-  [typeEmbedMatterport]: [
-    {
-      label: 'Model Id',
-      name: 'modelId',
-      changeProp: 1,
-      placeholder: 'eg. uRGXgoiYk9f'
-    }
-  ]
-}
-
 export interface MatterportBlockOptions {
   embedMatterportClassNames?: string
   onMatterportDrop: (model: Model) => void
-  onEmptyMatterportSelected: (model: Model) => void
+  onMatterportDoubleClick: (model: Model) => void
+  onEmptyMatterportClick: (model: Model) => void
 }
 
 interface MatterportBlock {
@@ -49,7 +39,8 @@ export default function registerMatterportBlock(
   {
     embedMatterportClassNames,
     onMatterportDrop,
-    onEmptyMatterportSelected
+    onMatterportDoubleClick,
+    onEmptyMatterportClick
   }: MatterportBlockOptions
 ): MatterportBlock {
   const ImageComponent = editor.DomComponents.getType('image')
@@ -157,7 +148,16 @@ export default function registerMatterportBlock(
     ),
     view: ImageView.extend({
       tagName: 'div',
-      events: {},
+      events: {
+        click(): void {
+          if (!this.model.get('modelId')) {
+            onEmptyMatterportClick(this.model)
+          }
+        },
+        dblclick(event): void {
+          onMatterportDoubleClick(this.model)
+        }
+      },
 
       initialize(...args: any[]) {
         BaseView.prototype.initialize.apply(this, args)
@@ -224,14 +224,6 @@ export default function registerMatterportBlock(
     matterportBlocks,
     templateBlocks
   )
-
-  editor.on('component:selected', model => {
-    if (model.get('type') !== typeEmbedMatterport || model.get('modelId')) {
-      return
-    }
-
-    onEmptyMatterportSelected(model)
-  })
 
   return handleBlockDragStopEvent(
     editor,

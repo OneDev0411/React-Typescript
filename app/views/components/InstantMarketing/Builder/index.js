@@ -85,12 +85,12 @@ class Builder extends React.Component {
       isImageSelectDialogOpen: false,
       imageToEdit: null,
       isArticleDrawerOpen: false,
-      isMatterportDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
       isNeighborhoodsGraphsReportDrawerOpen: false,
       mapToEdit: null,
       carouselToEdit: null,
-      videoToEdit: null
+      videoToEdit: null,
+      matterportToEdit: null
     }
 
     this.emailBlocksRegistered = false
@@ -374,11 +374,6 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
         }
-      },
-      matterport: {
-        onDrop: () => {
-          this.setState({ isMatterportDrawerOpen: true })
-        }
       }
     }
 
@@ -464,10 +459,9 @@ class Builder extends React.Component {
       onImageDrop: dynamicBlocksOptions.image.onDrop,
       onAgentDrop: dynamicBlocksOptions.agent.onDrop,
       onArticleDrop: dynamicBlocksOptions.article.onDrop,
-      onMatterportDrop: dynamicBlocksOptions.matterport.onDrop,
-      onEmptyMatterportSelected: () => {
-        this.setState({ isMatterportDrawerOpen: true })
-      },
+      onMatterportDrop: this.openMatterportDrawer,
+      onMatterportDoubleClick: this.openMatterportDrawer,
+      onEmptyMatterportClick: this.openMatterportDrawer,
       onMapDrop: this.openMapDrawer,
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
@@ -498,6 +492,10 @@ class Builder extends React.Component {
 
   openVideoDrawer = model => {
     this.setState({ videoToEdit: model })
+  }
+
+  openMatterportDrawer = model => {
+    this.setState({ matterportToEdit: model })
   }
 
   disableAssetManager = () => {
@@ -1165,14 +1163,15 @@ class Builder extends React.Component {
             />
           )}
           <MatterportDrawer
-            isOpen={this.state.isMatterportDrawerOpen}
+            isOpen={!!this.state.matterportToEdit}
+            matterport={this.state.matterportToEdit}
             onClose={() => {
               this.blocks.matterport.selectHandler()
-              this.setState({ isMatterportDrawerOpen: false })
+              this.setState({ matterportToEdit: null })
             }}
             onSelect={matterportModelId => {
               this.blocks.matterport.selectHandler(matterportModelId)
-              this.setState({ isMatterportDrawerOpen: false })
+              this.setState({ matterportToEdit: null })
             }}
           />
           <MapDrawer
