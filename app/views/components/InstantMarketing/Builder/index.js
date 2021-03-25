@@ -466,7 +466,8 @@ class Builder extends React.Component {
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
       onCarouselDoubleClick: this.openCarouselDrawer,
-      onVideoDoubleClick: this.openVideoDrawer
+      onVideoDoubleClick: this.openVideoDrawer,
+      onEmptyVideoClick: this.openVideoDrawer
     }
 
     const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)

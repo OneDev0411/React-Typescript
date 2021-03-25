@@ -27,6 +27,7 @@ export interface VideoBlockOptions {
   embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void
   onVideoDoubleClick: (model: Model) => void
+  onEmptyVideoClick: (model: Model) => void
 }
 
 interface VideoBlock {
@@ -37,7 +38,12 @@ export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlocks: TemplateBlocks,
-  { embedVideoClassNames, onVideoDrop, onVideoDoubleClick }: VideoBlockOptions
+  {
+    embedVideoClassNames,
+    onVideoDrop,
+    onVideoDoubleClick,
+    onEmptyVideoClick
+  }: VideoBlockOptions
 ): VideoBlock {
   const VideoComponent = editor.DomComponents.getType('video')!
   const VideoModel = VideoComponent.model
@@ -113,6 +119,13 @@ export default function registerVideoBlock(
     view: VideoView.extend({
       ...baseView(embedVideoClassNames),
       events: {
+        click(): void {
+          const src: string = this.model.get('src') || ''
+
+          if (src.trim().startsWith('<svg')) {
+            onEmptyVideoClick(this.model)
+          }
+        },
         dblclick() {
           onVideoDoubleClick(this.model)
         }
