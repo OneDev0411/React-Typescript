@@ -197,7 +197,13 @@ export default function CreateDeal() {
       />
 
       <Box className={classes.root}>
-        <QuestionWizard>
+        <QuestionWizard
+          questionPosition="Top"
+          questionPositionOffset={80}
+          styles={{
+            paddingBottom: '50%'
+          }}
+        >
           <CreateDealIntro />
 
           <Controller
