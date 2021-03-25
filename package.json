@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.1.1",
+  "version": "86.0.5",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -233,7 +233,7 @@
     "sanitize-html": "^2.3.3",
     "sass-loader": "^11.0.1",
     "shorti": "^1.2.6",
-    "simplebar": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/izadmehr/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
+    "simplebar": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/rechat/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "smoothscroll-polyfill": "^0.4.4",
     "socket.io-client": "^1.7.3",
     "style-loader": "^2.0.0",
