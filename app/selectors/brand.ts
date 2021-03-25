@@ -8,15 +8,16 @@ import { selectUser } from './user'
  * @param state The app state
  * @returns The current user active brand if available or null
  */
-export const selectActiveBrandUnsafe = (state: IAppState) =>
-  getActiveBrand(selectUser(state))
+export function selectActiveBrandUnsafe(state: IAppState): IBrand | null {
+  return getActiveBrand(selectUser(state))
+}
 
 /**
  * Returns the active brand or throws and error if it does not exist
  * @param state The app state
  * @returns The active brand for current user
  */
-export const selectActiveBrand = (state: IAppState) => {
+export function selectActiveBrand(state: IAppState): IBrand {
   const brand = selectActiveBrandUnsafe(state)
 
   if (!brand) {
@@ -31,5 +32,6 @@ export const selectActiveBrand = (state: IAppState) => {
  * @param state The app state
  * @returns The active brand id
  */
-export const selectActiveBrandId = (state: IAppState) =>
-  selectActiveBrand(state).id
+export function selectActiveBrandId(state: IAppState): UUID {
+  return selectActiveBrand(state).id
+}
