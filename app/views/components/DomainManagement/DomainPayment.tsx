@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionForm, QuestionTitle } from 'components/QuestionWizard'
 import getStripeCustomers from 'models/payments/get-stripe-customers'
 
 import useAsync from 'hooks/use-async'
@@ -60,7 +56,7 @@ function DomainPayment({
     : undefined
 
   return (
-    <QuestionSection>
+    <>
       <QuestionTitle>Please add your payment information</QuestionTitle>
       <QuestionForm width="85%">
         {isLoadingCustomers ? (
@@ -83,7 +79,7 @@ function DomainPayment({
           />
         )}
       </QuestionForm>
-    </QuestionSection>
+    </>
   )
 }
 

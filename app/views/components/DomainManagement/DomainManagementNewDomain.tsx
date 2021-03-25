@@ -8,7 +8,7 @@ import { ArrowBack } from '@material-ui/icons'
 import { addNotification as notify } from 'components/notification'
 
 import useAsync from 'hooks/use-async'
-import { QuestionWizard } from 'components/QuestionWizard'
+import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 
 import { IWizardState } from 'components/QuestionWizard/context'
 
@@ -137,20 +137,22 @@ function DomainManagementNewDomain({
           ) : (
             <DomainName onChange={handleAddDomainToHost} disabled={isWorking} />
           )}
-          {isNew && domainName && (
+          <QuestionSection hidden={!(isNew && !!domainName)}>
             <DomainAgreement
               domainName={domainName}
               onNextClick={setDomainAgreementKeys}
               disabled={isWorking}
             />
-          )}
-          {isNew && domainName && domainAgreementKeys.length && (
+          </QuestionSection>
+          <QuestionSection
+            hidden={!(isNew && !!domainName && !!domainAgreementKeys.length)}
+          >
             <DomainPayment
               domainPrice={domainPrice}
               onPayClick={handlePurchase}
               disabled={isWorking}
             />
-          )}
+          </QuestionSection>
         </QuestionWizard>
       </Box>
     </div>

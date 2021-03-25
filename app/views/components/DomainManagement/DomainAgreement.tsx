@@ -2,11 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Box, Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionForm, QuestionTitle } from 'components/QuestionWizard'
 import useAsync from 'hooks/use-async'
 import getDomainAgreements from 'models/domains/get-domain-agreements'
 
@@ -64,7 +60,7 @@ function DomainAgreement({
   }
 
   return (
-    <QuestionSection>
+    <>
       <QuestionTitle>
         Read and accept the domain registration agreement from GoDaddy
       </QuestionTitle>
@@ -92,7 +88,7 @@ function DomainAgreement({
           </>
         )}
       </QuestionForm>
-    </QuestionSection>
+    </>
   )
 }
 
