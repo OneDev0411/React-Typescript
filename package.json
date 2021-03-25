@@ -246,7 +246,7 @@
     "throng": "^5.0.0",
     "timeago.js": "^3.0.2",
     "ts-node": "^9.1.1",
-    "tui-image-editor": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/emilsedgh/tui.image-editor#62807f5a6015f4b62e453eb09672fc1ea7952a15",
+    "tui-image-editor": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/rechat/tui.image-editor",
     "underscore": "^1.12.1",
     "underscore.get": "^0.2.9",
     "unfurl.js": "^5.2.5",
