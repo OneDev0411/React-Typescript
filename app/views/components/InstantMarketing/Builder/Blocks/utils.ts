@@ -5,6 +5,13 @@ import type { Editor } from 'grapesjs'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../utils/get-template-render-data'
+import {
+  GetBlockTemplateFunc,
+  BlockTemplates,
+  TemplateRenderDataFunc,
+  BlockOnDropFunc,
+  BlockDragStopEventReturn
+} from './types'
 
 export function collapseBlockCategories(editor: Editor) {
   const categories = editor.BlockManager.getCategories() as any
@@ -21,40 +28,48 @@ export function collapseBlockCategories(editor: Editor) {
 
 export function handleBlockDragStopEvent(
   editor: Editor,
-  templates:
-    | Record<string, string>
-    | ((parent: HTMLElement | null) => Record<string, string>),
+  templates: BlockTemplates,
   renderData: TemplateRenderData
 ): void
+
+export function handleBlockDragStopEvent(
+  editor: Editor,
+  getTemplate: GetBlockTemplateFunc,
+  renderData: TemplateRenderData
+): void
+
 export function handleBlockDragStopEvent<T>(
   editor: Editor,
-  templates:
-    | Record<string, string>
-    | ((parent: HTMLElement | null) => Record<string, string>),
-  renderData:
-    | TemplateRenderData
-    | ((selectedItem: T, blockId: string) => TemplateRenderData),
-  onDrop: (model: Model, blockId: string) => void
-): { selectHandler: (selectedItem?: T) => void }
+  templates: BlockTemplates,
+  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
+  onDrop: BlockOnDropFunc
+): BlockDragStopEventReturn<T>
+
 export function handleBlockDragStopEvent<T>(
   editor: Editor,
-  templates:
-    | Record<string, string>
-    | ((parent: HTMLElement | null) => Record<string, string>),
-  renderData:
-    | TemplateRenderData
-    | ((selectedItem: T, blockId: string) => TemplateRenderData),
-  onDrop?: (model: Model, blockId: string) => void
-) {
-  function getTemplate(blockId: string, parent: HTMLElement | null = null) {
+  getTemplate: GetBlockTemplateFunc,
+  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
+  onDrop: BlockOnDropFunc
+): BlockDragStopEventReturn<T>
+
+export function handleBlockDragStopEvent<T>(
+  editor: Editor,
+  templates: BlockTemplates | GetBlockTemplateFunc,
+  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
+  onDrop?: BlockOnDropFunc
+): BlockDragStopEventReturn<T> {
+  function getBlockTemplate(
+    blockId: string,
+    parent: HTMLElement | null = null
+  ) {
     return typeof templates === 'function'
-      ? templates(parent)[blockId]
+      ? templates(parent, blockId)
       : templates[blockId]
   }
 
   function appendBlock(model: any, renderData: TemplateRenderData) {
     const parent = model.parent()
-    const template = getTemplate(
+    const template = getBlockTemplate(
       model.attributes.attributes['data-block'],
       parent
     )
@@ -95,7 +110,7 @@ export function handleBlockDragStopEvent<T>(
   }
 
   editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model || !getTemplate(block.id)) {
+    if (!model || !getBlockTemplate(block.id)) {
       return
     }
 
