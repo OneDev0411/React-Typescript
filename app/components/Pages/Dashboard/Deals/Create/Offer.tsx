@@ -225,7 +225,6 @@ export default function CreateOffer({ params }: Props) {
                   shouldPickRoleFromContacts={!isDoubleEnded}
                   isCommissionRequired={isOfficeDoubleEnded}
                   isOfficeDoubleEnded={isOfficeDoubleEnded}
-                  dealType="Buying"
                   title={`Who is the ${
                     propertyType?.includes('Lease') ? 'tenant' : 'buyer'
                   } agent?`}

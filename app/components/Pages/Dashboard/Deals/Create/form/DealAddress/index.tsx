@@ -130,9 +130,10 @@ export function DealAddress({ skippable, onChange }: Props) {
   })
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const [debouncedSearchCriteria, setDebouncedSearchCriteria] = useState<
-    string
-  >('')
+  const [
+    debouncedSearchCriteria,
+    setDebouncedSearchCriteria
+  ] = useState<string>('')
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -377,11 +378,11 @@ export function DealAddress({ skippable, onChange }: Props) {
             </Box>
             <Box>
               <Typography variant="subtitle1">
-                {place.structured_formatting.main_text}
+                {place.structured_formatting!.main_text}
               </Typography>
 
               <Typography variant="subtitle2" className={classes.lightText}>
-                {place.structured_formatting.secondary_text}
+                {place.structured_formatting!.secondary_text}
               </Typography>
             </Box>
           </Box>

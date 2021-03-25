@@ -115,9 +115,7 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   }
 
   const setupEditor = async () => {
-    const TuiImageEditor = (
-      await import('tui-image-editor-rechat/dist/tui-image-editor-rechat')
-    ).default
+    const TuiImageEditor = (await import('tui-image-editor')).default
 
     const editor = new TuiImageEditor(ref.current!, {
       usageStatistics: false,
