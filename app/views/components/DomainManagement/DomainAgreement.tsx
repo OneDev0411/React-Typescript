@@ -85,7 +85,7 @@ function DomainAgreement({
             <Box marginTop={3}>
               <FormControlLabel
                 control={<Checkbox />}
-                label="I agree to the agreements"
+                label="I agree"
                 disabled={disabled}
                 onChange={handleChange}
                 checked={checked}
