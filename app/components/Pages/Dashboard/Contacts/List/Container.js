@@ -105,7 +105,6 @@ class ContactsList extends React.Component {
       globalButtonDispatch({
         type: SET_CREATE_CALLBACK_HANDLER,
         handlers: {
-          onCreateContact: this.onCreateContact,
           onCreateAndAddNewContact: this.onCreateContact
         }
       })
