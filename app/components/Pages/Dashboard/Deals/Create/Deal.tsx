@@ -231,15 +231,6 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
-              key="ender_type"
-              name="ender_type"
-              control={control}
-              render={({ onChange }) => <DealEnderType onChange={onChange} />}
-            />
-          )}
-
-          {dealType === 'Buying' && (
-            <Controller
               key="buying_primary_agent"
               name="buying_primary_agent"
               control={control}
@@ -256,6 +247,15 @@ export default function CreateDeal() {
                   }
                 />
               )}
+            />
+          )}
+
+          {dealType === 'Buying' && (
+            <Controller
+              key="ender_type"
+              name="ender_type"
+              control={control}
+              render={({ onChange }) => <DealEnderType onChange={onChange} />}
             />
           )}
 
