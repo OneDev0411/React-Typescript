@@ -1101,6 +1101,14 @@ class Builder extends React.Component {
           {this.state.imageToEdit && (
             <EditorDialog
               file={this.state.imageToEdit}
+              dimensions={
+                this.editor.runCommand('get-el')
+                  ? [
+                      this.editor.runCommand('get-el').clientWidth * 2,
+                      this.editor.runCommand('get-el').clientHeight * 2
+                    ]
+                  : undefined
+              }
               onClose={() => {
                 this.setState({ imageToEdit: null })
               }}

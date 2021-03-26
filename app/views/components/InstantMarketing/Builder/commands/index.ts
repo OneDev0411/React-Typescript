@@ -30,6 +30,17 @@ export function registerCommands(editor: Editor) {
   )
 
   // @ts-ignore
+  editor.Commands.add('get-attribute', (ed, sender, { model, attribute }) => {
+    const targetModel = model || editor.getSelected()
+
+    if (!targetModel) {
+      return
+    }
+
+    return targetModel.get(attribute)
+  })
+
+  // @ts-ignore
   editor.Commands.add('set-image', (ed, sender, { model, value }) => {
     const targetModel = model || editor.getSelected()
 
@@ -52,13 +63,13 @@ export function registerCommands(editor: Editor) {
   })
 
   // @ts-ignore
-  editor.Commands.add('get-attribute', (ed, sender, { model, attribute }) => {
+  editor.Commands.add('get-el', (ed, sender, { model }) => {
     const targetModel = model || editor.getSelected()
 
     if (!targetModel) {
       return
     }
 
-    return targetModel.get(attribute)
+    return targetModel.getEl()
   })
 }
