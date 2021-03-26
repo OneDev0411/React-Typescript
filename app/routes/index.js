@@ -6,6 +6,7 @@ import withAcl from 'components/Acl/with-acl'
 import { ACL } from 'constants/acl'
 
 import { showingTabs } from '../components/Pages/Dashboard/Showings/constants'
+import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
 import GoToDashboard from '../views/components/GoToDashboard'
 
@@ -636,11 +637,20 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = withAcl.store(
+const AsyncWebsitesList = withAcl.websites(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
+        '../components/Pages/Dashboard/Websites/pages/Website' /* webpackChunkName: "websites_list" */
+      )
+  })
+)
+
+const AsyncOldWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "old_website" */
       )
   })
 )
@@ -704,15 +714,6 @@ const AsyncChecklists = withAcl.admin(
     loader: () =>
       import(
         '../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */
-      )
-  })
-)
-
-const AsyncWebsite = withAcl.store(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
       )
   })
 )
@@ -935,11 +936,13 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
-        <Route path="websites">
+        <Route
+          path={`websites(/templates/:type(${Object.keys(websiteTabs).join(
+            '|'
+          )}))`}
+        >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
-        <Route path="website" component={AsyncWebsite} />
 
         <Route path="showings">
           <IndexRoute component={AsyncShowings} />
@@ -949,6 +952,8 @@ export default (
           />
           <Route path="create" component={AsyncCreateShowing} />
         </Route>
+
+        <Route path="website" component={AsyncOldWebsite} />
       </Route>
     </Route>
 

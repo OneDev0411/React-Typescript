@@ -207,7 +207,10 @@ class ActionsButton extends React.Component<
   /**
    *
    */
-  handleUpload = () => this.dropzone?.open()
+  handleUpload = () => {
+    this.dropzone?.open()
+    this.dropzone?.fileInputEl?.click()
+  }
 
   /**
    *

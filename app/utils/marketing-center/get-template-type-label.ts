@@ -1,6 +1,7 @@
 const TEMPLATE_TYPE_LABEL_MAP: {
   [key in IMarketingTemplateType]: string
 } = {
+  Agent: 'Agent',
   AsSeenIn: 'As Seen In',
   BackToSchool: 'Back To School',
   Birthday: 'Birthday',
@@ -49,7 +50,8 @@ const TEMPLATE_TYPE_LABEL_MAP: {
   WomansDay: "International Women's Day"
 }
 
-
-export function getTemplateTypeLabel(templateType: IMarketingTemplateType): string {
+export function getTemplateTypeLabel(
+  templateType: IMarketingTemplateType
+): string {
   return TEMPLATE_TYPE_LABEL_MAP[templateType] ?? templateType
 }

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Link, LinkProps } from 'react-router'
+import { createStyles, makeStyles, Theme, TabProps } from '@material-ui/core'
 
 import { Tab } from '../Tab'
 
@@ -26,8 +26,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export const TabLink = props => {
-  const classes = useStyles()
+export type TabLinkProps = Omit<TabProps, 'className' | 'component'> &
+  Pick<LinkProps, 'to'>
 
-  return <Tab {...props} className={classes.root} component={Link} />
+export const TabLink = (props: TabLinkProps) => {
+  const classes = useStyles()
+  const otherProps = {
+    component: Link
+  }
+
+  return <Tab {...props} className={classes.root} {...otherProps} />
 }

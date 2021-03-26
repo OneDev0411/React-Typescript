@@ -1,12 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { unfurl } from 'unfurl.js'
 
-interface UrlResult {
-  title: string
-  description: string
-  open_graph: any
-}
-
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({
@@ -23,7 +17,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
  * @param url - string url
  */
 async function parseUrlMetadata(url: string) {
-  const result: UrlResult = await unfurl(url)
+  const result = await unfurl(url)
 
   const { title, description, open_graph } = result
 

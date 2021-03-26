@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-rechat'
 import cn from 'classnames'
 
 import Deal from 'models/Deal'
@@ -71,6 +71,7 @@ class UploadDocument extends React.Component {
    */
   openDialog = () => {
     this.dropzone.open()
+    this.dropzone.fileInputEl.click()
   }
 
   handleRef = ref => {

@@ -21,12 +21,9 @@ function normalizeAttribute(context) {
   const attributes = context.attributes || [context.attribute]
 
   const list = attributes.map(attribute => {
-    const text = attribute.split('.').map(fraction =>
-      fraction
-        .split('_')
-        .map(capitalize)
-        .join(' ')
-    )
+    const text = attribute
+      .split('.')
+      .map(fraction => fraction.split('_').map(capitalize).join(' '))
 
     return text.slice(-2).join(' ')
   })

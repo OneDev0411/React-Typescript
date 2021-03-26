@@ -192,14 +192,24 @@ declare module 'grapesjs' {
       el: HTMLElement | object,
       opts?: boolean | GrapesScrollIntoViewOptions
     ): void
+    getToolbarEl(): HTMLElement
   }
 
   export interface GrapesScrollIntoViewOptions extends ScrollIntoViewOptions {
     force?: boolean
   }
 
+  interface BackboneObject {
+    prototype: any
+    extend: Function
+  }
+
   export interface DomComponents {
     addType(type: string, methods: object): object
+    removeType(type: string): object
+    getType(
+      type: string
+    ): { model: BackboneObject; view: BackboneObject } | undefined
   }
 
   export interface AssetManager {
@@ -225,7 +235,7 @@ declare module 'grapesjs' {
     getConfig(): BlockManagerConfig | object
     onLoad(): void
     add(id: string, opts: BlockOptions): void
-    get(id: string): object
+    get(id: string): Backbone.Model | undefined
     getAll(): Array<object>
     getAllVisible(): Array<object>
     remove(id: string): object

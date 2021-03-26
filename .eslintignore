@@ -6,6 +6,7 @@ app/styles/vendor
 
 **/*.test.js
 **/*.mjml
+**/*.njk
 **/*.html
 **/*.ejs
 

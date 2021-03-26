@@ -18,6 +18,7 @@ export default function UploadPlaceholderItem({ uploaderRef }: Props) {
 
   const openBrowse = () => {
     uploaderRef.current.open()
+    uploaderRef.current.fileInputEl.click()
   }
 
   return (

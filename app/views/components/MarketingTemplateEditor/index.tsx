@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 
-import InstantMarketing from 'components/InstantMarketing'
+import InstantMarketing, {
+  InstantMarketingProps
+} from 'components/InstantMarketing'
 
-interface Props {
+interface Props
+  extends Pick<
+    InstantMarketingProps,
+    'actionButtonsDisabled' | 'customActions' | 'assets'
+  > {
   /**
    * The marketing template or template instance to render inside the template editor
    */
@@ -28,6 +34,16 @@ interface Props {
   saveButtonText?: string
 
   /**
+   * The save button start icon
+   */
+  saveButtonStartIcon?: ReactNode
+
+  /**
+   * A render prop to provide the wrapping save button capability
+   */
+  saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
+
+  /**
    * Save button click handler
    *
    * It will pass the final edited template by user as a string to this function
@@ -44,8 +60,13 @@ export default function MarketingTemplateEditor({
   template,
   templateData = {},
   saveButtonText = 'Save',
+  saveButtonStartIcon,
   onSave,
-  onClose
+  onClose,
+  actionButtonsDisabled,
+  customActions,
+  saveButtonWrapper,
+  assets = []
 }: Props) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -58,16 +79,20 @@ export default function MarketingTemplateEditor({
     <InstantMarketing
       bareMode
       saveButtonText={saveButtonText}
+      saveButtonStartIcon={saveButtonStartIcon}
       closeConfirmation={false}
       isTemplatesColumnHiddenDefault
       hideTemplatesColumn
       templateData={templateData}
       templateTypes={[]}
       mediums=""
-      assets={[]}
+      assets={assets}
       defaultTemplate={brandMarketingTemplate}
       handleSave={template => onSave(template.result)}
       onClose={onClose}
+      actionButtonsDisabled={actionButtonsDisabled}
+      customActions={customActions}
+      saveButtonWrapper={saveButtonWrapper}
     />
   )
 }

@@ -34,7 +34,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office Name"
               name="office_name"
-              initialValue={props.values.office_name || office.name}
+              value={props.values.office_name || office.name}
               component={TextInput}
             />
           </Box>
@@ -43,7 +43,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office license Number"
               name="office_license_number"
-              initialValue={
+              value={
                 props.values.office_license_number || office.license_number
               }
               component={TextInput}
@@ -54,7 +54,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office MLS ID"
               name="office_mls_id"
-              initialValue={props.values.office_mls_id || office.mls_id}
+              value={props.values.office_mls_id || office.mls_id}
               component={TextInput}
             />
           </Box>
@@ -65,7 +65,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office Email"
               name="office_email"
-              initialValue={props.values.office_email || office.email}
+              value={props.values.office_email || office.email}
               component={TextInput}
             />
           </Box>
@@ -74,7 +74,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office Phone"
               name="office_phone"
-              initialValue={props.values.office_phone || office.phone}
+              value={props.values.office_phone || office.phone}
               component={TextInput}
             />
           </Box>
@@ -83,7 +83,7 @@ export function OfficeForm(props: Props) {
             <Field
               label="Office Fax"
               name="office_fax"
-              initialValue={props.values.office_fax || office.fax}
+              value={props.values.office_fax || office.fax}
               component={TextInput}
             />
           </Box>
@@ -94,7 +94,7 @@ export function OfficeForm(props: Props) {
             isVisible
             label="Office Address"
             name="office_address"
-            initialValue={
+            value={
               props.values.office_address || {
                 full: office.address
               }

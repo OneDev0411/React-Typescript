@@ -1,48 +1,43 @@
 import { Editor } from 'grapesjs'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
 import Text from './text.html'
+import { TemplateBlocks } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const textBlockName = 'rechat-text'
 
-const templates = {}
-
-templates[textBlockName] = Text
-
 export default function registerStaticBlocks(
   editor: Editor,
-  renderData: TemplateRenderData
+  renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks
 ): void {
-  registerBlock(editor, {
-    label: 'Text',
-    category: BASICS_BLOCK_CATEGORY,
-    blockName: textBlockName,
-    template: templates[textBlockName]
-  })
+  const staticBlocks = {
+    [textBlockName]: templateBlocks[textBlockName]?.template || Text
+  }
 
-  editor.on('block:drag:stop', (model: any, block: any) => {
-    if (!model) {
-      return
-    }
+  registerBlock(
+    editor,
+    {
+      label: 'Text',
+      category: BASICS_BLOCK_CATEGORY,
+      blockName: textBlockName,
+      template: staticBlocks[textBlockName]
+    },
+    templateBlocks[textBlockName]
+  )
 
-    if (!templates[block.id]) {
-      return
-    }
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Statics',
+    staticBlocks,
+    templateBlocks
+  )
 
-    const template = templates[model.attributes.attributes['data-block']]
-
-    const html = nunjucks.renderString(template, {
-      ...renderData
-    })
-
-    model.parent().append(html, { at: model.opt.at })
-
-    model.remove()
-  })
+  handleBlockDragStopEvent(editor, allBlocks, renderData)
 }

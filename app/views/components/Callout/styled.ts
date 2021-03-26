@@ -70,6 +70,7 @@ export const CalloutCloseButton = styled(IconButton)<{
     fill: initial;
   }
   :hover {
-    background: ${({ theme }: Props) => theme.palette.info.contrastText};
+    background-color: ${({ theme }: Pick<Props, 'theme'>) =>
+      theme.palette.info.contrastText};
   }
 `

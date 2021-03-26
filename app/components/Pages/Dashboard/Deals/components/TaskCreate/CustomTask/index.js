@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-rechat'
 
 import { Button } from '@material-ui/core'
 
@@ -37,7 +37,10 @@ class CustomTask extends React.Component {
     return this.props.handleCreateTask(form)
   }
 
-  selectFiles = () => this.dropzone.open()
+  selectFiles = () => {
+    this.dropzone.open()
+    this.dropzone.fileInputEl.click()
+  }
 
   onDropFiles = async files => {
     if (files.length === 0) {
@@ -107,7 +110,4 @@ class CustomTask extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { setUploadFiles }
-)(CustomTask)
+export default connect(null, { setUploadFiles })(CustomTask)

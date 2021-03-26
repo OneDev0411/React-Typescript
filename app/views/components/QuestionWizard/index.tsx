@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
 
+import { useAsync } from 'react-use'
+
 import { WizardContext, SectionContext } from './context'
 
 import Loading from './Loading'
@@ -9,6 +11,9 @@ import Loading from './Loading'
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
+  questionPosition?: 'Top' | 'Auto'
+  questionPositionOffset?: number
+  styles?: React.CSSProperties
   onStepChange?: (step: number) => void
   onFinish?: () => void | Promise<void>
 }
@@ -16,6 +21,9 @@ interface Props {
 export function QuestionWizard({
   children,
   defaultStep = 1,
+  questionPosition = 'Auto',
+  questionPositionOffset = 80,
+  styles = {},
   onStepChange = () => {},
   onFinish = () => {}
 }: Props) {
@@ -68,7 +76,7 @@ export function QuestionWizard({
     onStepChange(currentStep)
   }, [currentStep, onStepChange])
 
-  useEffect(() => {
+  useAsync(async () => {
     if (currentStep === 1) {
       refs.current[currentStep]?.scrollIntoView({
         block: 'nearest',
@@ -78,13 +86,22 @@ export function QuestionWizard({
       return
     }
 
-    window.scrollTo({
-      top:
-        refs.current[currentStep]?.getBoundingClientRect().top +
-        window.pageYOffset -
-        80,
-      behavior: 'smooth'
-    })
+    if (questionPosition === 'Top') {
+      await delay(50)
+
+      window.scrollTo({
+        top:
+          refs.current[currentStep]?.getBoundingClientRect().top +
+          window.pageYOffset -
+          questionPositionOffset,
+        behavior: 'smooth'
+      })
+    } else {
+      refs.current[currentStep]?.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      })
+    }
   }, [currentStep, lastVisitedStep])
 
   useEffect(() => {
@@ -111,11 +128,7 @@ export function QuestionWizard({
         last: () => gotoStep(sectionsCount)
       }}
     >
-      <div
-        style={{
-          paddingBottom: '50%'
-        }}
-      >
+      <div style={styles}>
         {sections
           .filter(section => {
             return !!section
@@ -155,6 +168,10 @@ export function QuestionWizard({
       </div>
     </WizardContext.Provider>
   )
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export * from './QuestionSection'

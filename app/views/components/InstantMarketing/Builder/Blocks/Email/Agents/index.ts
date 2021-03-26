@@ -1,9 +1,10 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import { AgentItem } from 'components/TeamAgents/types'
-
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
+import AgentMultiIcon from 'assets/images/marketing/editor/blocks/multi-agent.png'
+import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
+import { Agent } from 'components/TeamAgents/types'
 
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
@@ -14,37 +15,82 @@ import registerBlock from '../../registerBlock'
 import Left from './left.mjml'
 import Grid from './grid.mjml'
 import Multi from './multi.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const agentLeftBlockName = 'rechat-agent-left'
 export const agentGridBlockName = 'rechat-agent-grid'
 export const agentMultiBlockName = 'rechat-agent-multi'
-
-const templates = {
-  [agentLeftBlockName]: Left,
-  [agentGridBlockName]: Grid,
-  [agentMultiBlockName]: Multi
-}
 
 export interface Options {
   onDrop: (model: Model) => void
 }
 
 interface AgentBlock {
-  selectHandler: (selectedAgents?: AgentItem[]) => void
+  selectHandler: (selectedAgents?: Agent[]) => void
 }
 
-let modelHandle: any
-let renderData: TemplateRenderData
-
-const selectHandler = (agents?: AgentItem[]) => {
-  if (!modelHandle) {
-    return
+export default function registerAgentBlocks(
+  editor: Editor,
+  renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
+  { onDrop }: Options
+): AgentBlock {
+  const agentBlocks = {
+    [agentLeftBlockName]: templateBlocks[agentLeftBlockName]?.template || Left,
+    [agentGridBlockName]: templateBlocks[agentGridBlockName]?.template || Grid,
+    [agentMultiBlockName]:
+      templateBlocks[agentMultiBlockName]?.template || Multi
   }
 
-  const template = templates[modelHandle.attributes.attributes['data-block']]
+  registerBlock(
+    editor,
+    {
+      label: 'Image Left',
+      icon: AgentLeftIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentLeftBlockName,
+      template: agentBlocks[agentLeftBlockName]
+    },
+    templateBlocks[agentLeftBlockName]
+  )
 
-  if (agents) {
-    const mjml = nunjucks.renderString(template, {
+  registerBlock(
+    editor,
+    {
+      label: 'Grid',
+      icon: DualIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentGridBlockName,
+      template: agentBlocks[agentGridBlockName]
+    },
+    templateBlocks[agentGridBlockName]
+  )
+
+  registerBlock(
+    editor,
+    {
+      label: 'Multi',
+      icon: AgentMultiIcon,
+      category: AGENTS_BLOCK_CATEGORY,
+      blockName: agentMultiBlockName,
+      template: agentBlocks[agentMultiBlockName]
+    },
+    templateBlocks[agentMultiBlockName]
+  )
+
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Agents',
+    agentBlocks,
+    templateBlocks
+  )
+
+  return handleBlockDragStopEvent(
+    editor,
+    allBlocks,
+    (agents: Agent[]) => ({
       ...renderData,
       users: agents.map(item => {
         const profileImageUrl =
@@ -56,53 +102,7 @@ const selectHandler = (agents?: AgentItem[]) => {
           profile_image_url: profileImageUrl
         }
       })
-    })
-
-    modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
-  }
-
-  modelHandle.remove()
-}
-
-export default function registerAgentBlocks(
-  editor: Editor,
-  _renderData: TemplateRenderData,
-  { onDrop }: Options
-): AgentBlock {
-  renderData = _renderData
-  registerBlock(editor, {
-    label: 'Image Left',
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentLeftBlockName,
-    template: templates[agentLeftBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Grid',
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentGridBlockName,
-    template: templates[agentGridBlockName]
-  })
-
-  registerBlock(editor, {
-    label: 'Multi',
-    category: AGENTS_BLOCK_CATEGORY,
-    blockName: agentMultiBlockName,
-    template: templates[agentMultiBlockName]
-  })
-
-  editor.on('block:drag:stop', (model: Model, block) => {
-    if (!model) {
-      return
-    }
-
-    if (templates[block.id]) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+    }),
+    onDrop
+  )
 }
