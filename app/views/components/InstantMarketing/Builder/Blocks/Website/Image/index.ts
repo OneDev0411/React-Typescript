@@ -16,6 +16,7 @@ import { TemplateBlocks } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeImage = 'image'
+const typeImageBg = 'image-bg'
 export const imageBlockName = typeImage
 
 export interface ImageBlockOptions {
@@ -33,21 +34,33 @@ export default function registerImageBlock(
   templateBlocks: TemplateBlocks,
   { imageClassNames, onImageDrop }: ImageBlockOptions
 ): ImageBlock {
+  const resizable = {
+    tl: 0,
+    tr: 0,
+    bl: 0,
+    br: 0,
+    cl: 0,
+    cr: 0
+  }
+
   editor.DomComponents.addType(typeImage, {
     isComponent: isComponent(typeImage),
     extend: 'image',
     extendView: 'image',
     model: {
       defaults: {
-        resizable: {
-          tl: 0,
-          tr: 0,
-          bl: 0,
-          br: 0,
-          cl: 0,
-          cr: 0
-        },
+        resizable,
         name: 'Image'
+      }
+    },
+    view: { ...baseView(imageClassNames) }
+  })
+
+  editor.DomComponents.addType(typeImageBg, {
+    isComponent: isComponent(typeImageBg),
+    model: {
+      defaults: {
+        resizable
       }
     },
     view: { ...baseView(imageClassNames) }

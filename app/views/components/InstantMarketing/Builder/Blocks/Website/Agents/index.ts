@@ -1,15 +1,15 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
-import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
+// import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
+// import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
 import { Agent } from 'components/TeamAgents/types'
 
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
-import registerBlock from '../../registerBlock'
-import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
+// import registerBlock from '../../registerBlock'
+// import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import { baseView, isComponent } from '../utils'
@@ -81,29 +81,29 @@ export default function registerAgentBlocks(
       templateBlocks[agentGridBlockName]?.template || AgentGrid
   }
 
-  registerBlock(
-    editor,
-    {
-      label: 'Image Left',
-      icon: AgentLeftIcon,
-      category: AGENTS_BLOCK_CATEGORY,
-      blockName: agentLeftBlockName,
-      template: agentBlocks[agentLeftBlockName]
-    },
-    templateBlocks[agentLeftBlockName]
-  )
+  // registerBlock(
+  //   editor,
+  //   {
+  //     label: 'Image Left',
+  //     icon: AgentLeftIcon,
+  //     category: AGENTS_BLOCK_CATEGORY,
+  //     blockName: agentLeftBlockName,
+  //     template: agentBlocks[agentLeftBlockName]
+  //   },
+  //   templateBlocks[agentLeftBlockName]
+  // )
 
-  registerBlock(
-    editor,
-    {
-      label: 'Grid',
-      icon: DualIcon,
-      category: AGENTS_BLOCK_CATEGORY,
-      blockName: agentGridBlockName,
-      template: agentBlocks[agentGridBlockName]
-    },
-    templateBlocks[agentGridBlockName]
-  )
+  // registerBlock(
+  //   editor,
+  //   {
+  //     label: 'Grid',
+  //     icon: DualIcon,
+  //     category: AGENTS_BLOCK_CATEGORY,
+  //     blockName: agentGridBlockName,
+  //     template: agentBlocks[agentGridBlockName]
+  //   },
+  //   templateBlocks[agentGridBlockName]
+  // )
 
   const allBlocks = registerTemplateBlocks(
     editor,

@@ -171,12 +171,6 @@ export class TourDrawer extends React.Component {
     }
   }
 
-  handleSubmit = () => {
-    document
-      .getElementById('tour-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
-  }
-
   showDescriptionField = () => {
     this.setState(() => ({
       shouldShowDescription: true
@@ -203,103 +197,98 @@ export class TourDrawer extends React.Component {
             save={this.save}
             validate={validate}
             render={formProps => {
-              const { values } = formProps
+              const { values, handleSubmit } = formProps
 
               return (
-                <div>
-                  <FormContainer
-                    id="tour-drawer-form"
-                    onSubmit={formProps.handleSubmit}
+                <FormContainer id="tour-drawer-form" onSubmit={handleSubmit}>
+                  <EventField
+                    title="title"
+                    iconProps={{
+                      path: mdiNoteTextOutline
+                    }}
                   >
-                    <EventField
-                      title="title"
-                      iconProps={{
-                        path: mdiNoteTextOutline
-                      }}
-                    >
-                      <Title fullWidth placeholder="Untitled tour" />
-                      <Box mt={1}>
-                        {shouldShowDescription || values?.description ? (
-                          <Description placeholder="Enter any general notes for your clients" />
-                        ) : (
-                          <Button
-                            color="secondary"
-                            onClick={this.showDescriptionField}
-                          >
-                            Add Description
-                          </Button>
-                        )}
-                      </Box>
-                    </EventField>
-                    <EventField
-                      title="date"
-                      iconProps={{
-                        path: mdiClockTimeFourOutline
-                      }}
-                    >
-                      <FieldContainer
-                        alignCenter
-                        justifyBetween
-                        style={{ marginBottom: '0.5em' }}
-                      >
-                        <DateTimeField
-                          name="dueDate"
-                          selectedDate={values.dueDate}
-                          datePickerModifiers={{
-                            disabled: {
-                              before: new Date()
-                            }
-                          }}
-                        />
-
-                        <EndTimeField dueDate={values.dueDate} />
-                      </FieldContainer>
-
-                      <FieldError
-                        name="endDate"
-                        style={{ fontSize: '1rem', marginBottom: '0.5em' }}
-                      />
-                    </EventField>
-                    <Reminder dueDate={values.dueDate} />
-
-                    <Box ml={4} mb={2}>
-                      <Locations
-                        locations={values.locations}
-                        handleDelete={this.handleDeleteAssociation}
-                      />
-                      <Box mt={0.5}>
-                        <AddAssociation
-                          showTitle
-                          isPrimary
-                          disabled={isDisabled}
-                          type="listing"
-                          name="locations"
-                          isMultipleSelected
-                        />
-                      </Box>
+                    <Title fullWidth placeholder="Untitled tour" />
+                    <Box mt={1}>
+                      {shouldShowDescription || values?.description ? (
+                        <Description placeholder="Enter any general notes for your clients" />
+                      ) : (
+                        <Button
+                          color="secondary"
+                          onClick={this.showDescriptionField}
+                        >
+                          Add Description
+                        </Button>
+                      )}
                     </Box>
-                    <EventField
-                      title="contact-associations"
-                      iconProps={{
-                        path: mdiAccountPlusOutline
-                      }}
+                  </EventField>
+                  <EventField
+                    title="date"
+                    iconProps={{
+                      path: mdiClockTimeFourOutline
+                    }}
+                  >
+                    <FieldContainer
+                      alignCenter
+                      justifyBetween
+                      style={{ marginBottom: '0.5em' }}
                     >
-                      <AssosiationContainer>
-                        <AssociationsList
-                          filterType="contact"
-                          name="clients"
-                          associations={values.clients}
-                        />
-                        <AddAssociation
-                          showTitle
-                          disabled={isDisabled}
-                          type="contact"
-                          name="clients"
-                        />
-                      </AssosiationContainer>
-                    </EventField>
-                    <ItemChangelog item={values} style={{ marginTop: '2em' }} />
-                  </FormContainer>
+                      <DateTimeField
+                        name="dueDate"
+                        selectedDate={values.dueDate}
+                        datePickerModifiers={{
+                          disabled: {
+                            before: new Date()
+                          }
+                        }}
+                      />
+
+                      <EndTimeField dueDate={values.dueDate} />
+                    </FieldContainer>
+
+                    <FieldError
+                      name="endDate"
+                      style={{ fontSize: '1rem', marginBottom: '0.5em' }}
+                    />
+                  </EventField>
+                  <Reminder dueDate={values.dueDate} />
+
+                  <Box ml={4} mb={2}>
+                    <Locations
+                      locations={values.locations}
+                      handleDelete={this.handleDeleteAssociation}
+                    />
+                    <Box mt={0.5}>
+                      <AddAssociation
+                        showTitle
+                        isPrimary
+                        disabled={isDisabled}
+                        type="listing"
+                        name="locations"
+                        isMultipleSelected
+                      />
+                    </Box>
+                  </Box>
+                  <EventField
+                    title="contact-associations"
+                    iconProps={{
+                      path: mdiAccountPlusOutline
+                    }}
+                  >
+                    <AssosiationContainer>
+                      <AssociationsList
+                        filterType="contact"
+                        name="clients"
+                        associations={values.clients}
+                      />
+                      <AddAssociation
+                        showTitle
+                        disabled={isDisabled}
+                        type="contact"
+                        name="clients"
+                      />
+                    </AssosiationContainer>
+                  </EventField>
+                  <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                   <Footer justifyBetween>
                     <Flex alignCenter>
                       {!this.isNew && (
@@ -341,17 +330,17 @@ export class TourDrawer extends React.Component {
                       </Tooltip>
                       <Button
                         variant="contained"
+                        type="submit"
                         color="secondary"
                         disableElevation
                         disabled={isDisabled}
-                        onClick={this.handleSubmit}
                         style={{ marginLeft: '0.5em' }}
                       >
                         {this.state.isSaving ? 'Saving...' : 'Save'}
                       </Button>
                     </Flex>
                   </Footer>
-                </div>
+                </FormContainer>
               )
             }}
           />

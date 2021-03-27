@@ -636,11 +636,20 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = withAcl.marketing(
+const AsyncWebsitesList = withAcl.websites(
   Load({
     loader: () =>
       import(
         '../components/Pages/Dashboard/Websites/pages/Website' /* webpackChunkName: "websites_list" */
+      )
+  })
+)
+
+const AsyncOldWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "old_website" */
       )
   })
 )
@@ -911,6 +920,8 @@ export default (
         >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
+
+        <Route path="website" component={AsyncOldWebsite} />
       </Route>
     </Route>
 
