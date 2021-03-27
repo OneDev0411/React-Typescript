@@ -8,8 +8,8 @@ import { StateContext } from '..'
 
 export const initialState: StateContext = {
   onCreateEvent: noop,
-  onCreateContact: noop,
-  onCreateAndAddNewContact: noop,
+  onCreateContact: undefined,
+  onCreateAndAddNewContact: undefined,
   onCreateEmail: noop,
   onCreateEmailFollowUp: noop,
   onCreateTour: noop,

@@ -4,8 +4,8 @@ import { initialState } from './reducers'
 
 export interface StateContext {
   onCreateEvent: (event: IEvent) => void
-  onCreateContact: (contact: IContact) => void
-  onCreateAndAddNewContact: (contact: IContact) => void
+  onCreateContact?: (contact: IContact) => void
+  onCreateAndAddNewContact?: (contact: IContact) => void
   onCreateEmail: (email: IEmailCampaign) => void
   onCreateEmailFollowUp: (email: IEvent) => void
   onCreateTour: (
