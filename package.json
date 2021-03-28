@@ -69,6 +69,7 @@
     "@types/react-window": "^1.8.0",
     "@visx/axis": "^1.7.0",
     "@visx/curve": "^1.7.0",
+    "@visx/group": "^1.7.0",
     "@visx/marker": "^1.7.0",
     "@visx/mock-data": "^1.7.0",
     "@visx/responsive": "^1.7.0",
