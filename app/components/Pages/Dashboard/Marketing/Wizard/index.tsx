@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
+import { isDesktop } from 'react-device-detect'
 import fileSaver from 'file-saver'
 import {
   makeStyles,
@@ -22,7 +23,10 @@ import { mdiPencilOutline } from '@mdi/js'
 
 import { addNotification } from 'components/notification'
 
-import { useListingById } from 'hooks/use-query-param-entities'
+import {
+  useListingById,
+  LISTING_ID_QUERY_KEY
+} from 'hooks/use-query-param-entities'
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
@@ -84,7 +88,17 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+  const isMobileView = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('xs')
+  )
+
+  useEffect(() => {
+    const listingId = props.location.query[LISTING_ID_QUERY_KEY]
+
+    if (isDesktop && listingId) {
+      props.router.replace(`/dashboard/mls/${listingId}/marketing`)
+    }
+  }, [props.location.query, props.router])
 
   useGoogleMapsPlaces()
 
@@ -113,9 +127,10 @@ function MarketingWizard(props: WithRouterProps) {
     TEMPLATES_PAGE_SIZE
   )
 
-  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] = useState<
-    boolean
-  >(false)
+  const [
+    isEditVariablesDialogOpen,
+    setIsEditVariablesDialogOpen
+  ] = useState<boolean>(false)
 
   const {
     templates,
@@ -237,7 +252,7 @@ function MarketingWizard(props: WithRouterProps) {
 
       handleClosePreviewDrawer()
 
-      if (isMobile) {
+      if (isMobileView) {
         handleOpenDownloadDrawer(templateInstance.file)
 
         return
@@ -275,8 +290,11 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   return (
-    <PageLayout gutter={isMobile ? 0 : undefined} className={classes.container}>
-      {isMobile && (
+    <PageLayout
+      gutter={isMobileView ? 0 : undefined}
+      className={classes.container}
+    >
+      {isMobileView && (
         <AppBar
           position="static"
           color="transparent"
@@ -306,7 +324,7 @@ function MarketingWizard(props: WithRouterProps) {
           />
         </AppBar>
       )}
-      {!isMobile && (
+      {!isMobileView && (
         <PageLayout.Header title="Browse Templates">
           <div>
             <Tooltip title="Edit Info">
@@ -319,7 +337,7 @@ function MarketingWizard(props: WithRouterProps) {
       )}
       <PageLayout.Main mt={1}>
         <Grid container spacing={2} className={classes.container}>
-          {!isMobile && (
+          {!isMobileView && (
             <Grid container item>
               <Box mt={2}>
                 <CategoriesTabs
@@ -361,7 +379,7 @@ function MarketingWizard(props: WithRouterProps) {
 
       {listing &&
         selectedTemplate &&
-        (isMobile ? (
+        (isMobileView ? (
           <PreviewDrawer
             template={selectedTemplate}
             listing={listing}
@@ -386,7 +404,7 @@ function MarketingWizard(props: WithRouterProps) {
           onSave={handleSaveVariables}
         />
       )}
-      {generatedTemplateFile && isMobile && (
+      {generatedTemplateFile && isMobileView && (
         <DownloadDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}

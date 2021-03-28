@@ -12,7 +12,7 @@ interface UseEntityById {
   error: Nullable<Error>
 }
 
-const LISTING_ID_QUERY_KEY = 'listingId'
+export const LISTING_ID_QUERY_KEY = 'listingId'
 const LISTING_IMAGES_QUERY_KEY = 'imageUrls'
 
 interface UseListingById extends UseEntityById {

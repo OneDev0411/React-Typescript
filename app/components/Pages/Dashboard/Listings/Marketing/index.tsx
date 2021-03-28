@@ -1,4 +1,3 @@
-import React from 'react'
 import { WithRouterProps } from 'react-router'
 
 import ListingMarketing from 'components/ListingMarketing'
