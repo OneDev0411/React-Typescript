@@ -71,6 +71,9 @@ module.exports = {
         collapseWhitespace: false
       }
     }),
+    new webpack.ProvidePlugin({
+      React: 'react'
+    }),
     new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {

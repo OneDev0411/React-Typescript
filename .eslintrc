@@ -47,6 +47,8 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
     "no-redeclare": "off",
     "@typescript-eslint/no-redeclare": ["error"],
     "import/no-unresolved": [
@@ -161,7 +163,6 @@
     "react/state-in-constructor": 0,
     "react/static-property-placement": 0,
     "react/jsx-no-undef": 1,
-    "react/jsx-uses-react": 1,
     "react/jsx-uses-vars": 1,
     "react/no-find-dom-node": 0,
     "global-require": 0,
