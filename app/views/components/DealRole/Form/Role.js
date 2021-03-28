@@ -4,6 +4,7 @@ import {
   Box,
   Grid as MuiGrid,
   Button as MuiButton,
+  Tooltip,
   Divider,
   Typography
 } from '@material-ui/core'
@@ -48,6 +49,16 @@ export function RoleForm(props) {
   const selectedRole = props.values.role
   const roleType = props.values.role_type
   const compact = props.compact
+
+  const getTooltip = () => {
+    if (Object.keys(props.errors).length === 0) {
+      return ''
+    }
+
+    return Object.values(props.errors).map((text, index) => (
+      <div key={index}>{text}</div>
+    ))
+  }
 
   return (
     <Grid
@@ -275,35 +286,39 @@ export function RoleForm(props) {
               <Button>{props.isNewRecord ? 'Saving...' : 'Updating...'}</Button>
             ) : (
               <>
-                <Button
-                  ml={1}
-                  variant={
-                    showNewContactButton || showUpdateContactButton
-                      ? 'outlined'
-                      : 'contained'
-                  }
-                  color={
-                    showNewContactButton || showUpdateContactButton
-                      ? 'secondary'
-                      : 'primary'
-                  }
-                  onClick={() => props.onSubmit(props.form, false)}
-                >
-                  Save
-                </Button>
-
-                {(showNewContactButton || showUpdateContactButton) && (
+                <Tooltip placement="top" title={getTooltip()}>
                   <Button
                     ml={1}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => props.onSubmit(props.form, true)}
+                    variant={
+                      showNewContactButton || showUpdateContactButton
+                        ? 'outlined'
+                        : 'contained'
+                    }
+                    color={
+                      showNewContactButton || showUpdateContactButton
+                        ? 'secondary'
+                        : 'primary'
+                    }
+                    onClick={() => props.onSubmit(props.form, false)}
                   >
-                    Save &{' '}
-                    {props.values.contact
-                      ? 'Update Contact'
-                      : 'Add to My Contacts'}
+                    Save
                   </Button>
+                </Tooltip>
+
+                {(showNewContactButton || showUpdateContactButton) && (
+                  <Tooltip placement="top" title={getTooltip()}>
+                    <Button
+                      ml={1}
+                      variant="contained"
+                      color="primary"
+                      onClick={() => props.onSubmit(props.form, true)}
+                    >
+                      Save &{' '}
+                      {props.values.contact
+                        ? 'Update Contact'
+                        : 'Add to My Contacts'}
+                    </Button>
+                  </Tooltip>
                 )}
               </>
             )}

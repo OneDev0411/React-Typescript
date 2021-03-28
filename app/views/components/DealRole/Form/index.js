@@ -250,7 +250,9 @@ export class DealRole extends React.Component {
       let value = values[fieldName]
 
       if (value === undefined || value === null || value.length === 0) {
-        errors[fieldName] = 'Required'
+        errors[fieldName] = `${
+          this.aliases[fieldName] || fieldName
+        } is Required`
       }
     })
 
@@ -303,6 +305,19 @@ export class DealRole extends React.Component {
       commission: 'Invalid Commission value',
       current_address: INVALID_ADDRESS,
       office_address: INVALID_ADDRESS
+    }
+  }
+
+  get aliases() {
+    return {
+      legal_first_name: 'First Name',
+      legal_last_name: 'Last Name',
+      email: 'Email',
+      mls_id: 'MLS Number',
+      company_title: 'Company Name',
+      phone_number: 'Phone Number',
+      commission: 'Commission',
+      current_address: 'Address'
     }
   }
 
