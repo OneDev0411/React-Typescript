@@ -40,6 +40,7 @@ export const load = async colors => {
     let backgroundColorPickerContainer
 
     const {
+      detectComponentByType,
       fontSizePicker: fontSizePickerOptions = {},
       fontWeightPicker: fontWeightPickerOptions = {},
       widthPicker: widthPickerOptions = {},
@@ -50,7 +51,14 @@ export const load = async colors => {
     } = options
 
     const isElementAllowed = (target, conditions) => {
-      if (!conditions.allowedTags.includes(target.attributes.tagName)) {
+      if (
+        (detectComponentByType ||
+          !conditions.allowedTags?.includes(target.attributes.tagName)) &&
+        (!detectComponentByType ||
+          !conditions.allowedTypes?.includes(
+            target.attributes.attributes['data-type']
+          ))
+      ) {
         return false
       }
 
@@ -307,11 +315,20 @@ export const load = async colors => {
         if (isElementAllowed(selected, widthPickerOptions.conditions)) {
           renderWithTheme(
             <WidthPicker
-              value={getMjmlAttr(selected, 'width')}
+              value={
+                isMjmlElement(selected)
+                  ? getMjmlAttr(selected, 'width')
+                  : getStyle(selected).width
+              }
               onChange={width => {
                 // in order to sync changed text and keep the changes
                 editor.getSelected().trigger('sync:content')
-                setMjmlAttr(selected, 'width', width)
+
+                if (isMjmlElement(selected)) {
+                  setMjmlAttr(selected, 'width', width)
+                } else {
+                  setStyle(selected, 'width', width)
+                }
               }}
             />,
             widthPickerContainer
@@ -323,10 +340,12 @@ export const load = async colors => {
         ReactDOM.unmountComponentAtNode(paddingPickerContainer)
 
         if (isElementAllowed(selected, paddingPickerOptions.conditions)) {
-          const { top, bottom } = getStructuredDirectionalMjmlAttr(
-            selected,
-            'padding'
-          )
+          const { top, bottom } = isMjmlElement(selected)
+            ? getStructuredDirectionalMjmlAttr(selected, 'padding')
+            : {
+                top: getStyle(selected).paddingTop,
+                bottom: getStyle(selected).paddingBottom
+              }
 
           renderWithTheme(
             <PaddingPicker
@@ -337,8 +356,14 @@ export const load = async colors => {
               onChange={padding => {
                 // in order to sync changed text and keep the changes
                 editor.getSelected().trigger('sync:content')
-                setMjmlAttr(selected, 'padding-top', padding.top)
-                setMjmlAttr(selected, 'padding-bottom', padding.bottom)
+
+                if (isMjmlElement(selected)) {
+                  setMjmlAttr(selected, 'padding-top', padding.top)
+                  setMjmlAttr(selected, 'padding-bottom', padding.bottom)
+                } else {
+                  setStyle(selected, 'padding-top', padding.top)
+                  setStyle(selected, 'padding-bottom', padding.bottom)
+                }
               }}
             />,
             paddingPickerContainer

@@ -1,12 +1,15 @@
 import styled, { ThemeProps } from 'styled-components'
 import { Theme } from '@material-ui/core/styles'
 
+import { Typography } from '@material-ui/core'
+
 import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 import IconButtonFlex from '../../Button/IconButton'
 
 interface StyleProp extends ThemeProps<Theme> {
   isFocused?: boolean
   isSearching?: boolean
+  hasError?: boolean
 }
 
 export const Container = styled.div<StyleProp>`
@@ -17,8 +20,14 @@ export const Container = styled.div<StyleProp>`
   background-color: ${({ isFocused, theme }) =>
     isFocused ? '#fff' : theme.palette.grey[50]};
   border: solid 1px
-    ${({ isFocused, theme }) =>
-      isFocused ? theme.palette.primary.main : theme.palette.grey[300]};
+    ${({ hasError, isFocused, theme }) =>
+      hasError
+        ? theme.palette.error.main
+        : isFocused
+        ? theme.palette.primary.main
+        : theme.palette.grey[300]};
+  color: ${({ hasError, theme }) =>
+    hasError ? theme.palette.error.main : 'inherit'}
   :hover {
     background-color: ${({ isFocused, theme }) =>
       isFocused ? '#fff' : theme.palette.grey[100]};
@@ -73,4 +82,9 @@ export const Icon = styled.div<StyleProp>`
 
 export const IconButton = styled(IconButtonFlex)`
   display: block;
+`
+
+export const ErrorMessage = styled(Typography)`
+  color: ${({ theme }) => theme.palette.error.main};
+  margin-top: ${({ theme }) => theme.spacing(1)}px;
 `

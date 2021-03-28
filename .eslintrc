@@ -8,8 +8,6 @@
   "extends": [
     "airbnb",
     "prettier",
-    "prettier/react",
-    "prettier/@typescript-eslint",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/errors",
@@ -49,6 +47,8 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "no-redeclare": "off",
+    "@typescript-eslint/no-redeclare": ["error"],
     "import/no-unresolved": [
       2,
       {

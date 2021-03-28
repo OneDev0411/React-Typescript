@@ -1,14 +1,19 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Image } from 'components/ImageDrawer/types'
 
-import registerBlock from '../../registerBlock'
-import adapt from '../../adapt'
-import { BASICS_BLOCK_CATEGORY } from '../../../constants'
+import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
 
+import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
+
+import registerBlock from '../../registerBlock'
+import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import template from './template.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { adaptTemplates } from '../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const blockName = 'rechat-image'
 
@@ -22,54 +27,41 @@ interface ImageBlock {
 
 export default function registerImageBlock(
   editor: Editor,
+  renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onDrop }: Options
 ): ImageBlock {
-  registerBlock(editor, {
-    label: 'Image/GIF',
-    category: BASICS_BLOCK_CATEGORY,
-    blockName,
-    template,
-    adaptive: true
-  })
-
-  let modelHandle: any
-
-  const selectHandler = (selectedImageUrl?: Image) => {
-    if (!modelHandle) {
-      return false
-    }
-
-    const parent = modelHandle.parent()
-
-    if (!parent) {
-      return false
-    }
-
-    if (selectedImageUrl) {
-      const mjml = nunjucks.renderString(adapt(parent, template), {
-        image: selectedImageUrl
-      })
-
-      parent.append(mjml, { at: modelHandle.opt.at })
-    }
-
-    modelHandle.remove()
-
-    return true
+  const imageBlocks = {
+    [blockName]: templateBlocks[blockName]?.template || template
   }
 
-  editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model) {
-      return
-    }
+  registerBlock(
+    editor,
+    {
+      label: 'Image/GIF',
+      icon: ImageIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName,
+      template,
+      adaptive: true
+    },
+    templateBlocks[blockName]
+  )
 
-    if (block.id === blockName) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Image',
+    imageBlocks,
+    templateBlocks
+  )
 
-  return {
-    selectHandler
-  }
+  return handleBlockDragStopEvent(
+    editor,
+    adaptTemplates(allBlocks),
+    (selectedImageUrl: Image) => ({
+      ...renderData,
+      image: selectedImageUrl
+    }),
+    onDrop
+  )
 }

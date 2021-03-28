@@ -31,6 +31,7 @@ export default function Header({
 
   const openBrowse = () => {
     uploaderRef.current.open()
+    uploaderRef.current.fileInputEl.click()
   }
 
   const handleSelectAll = (e: React.MouseEvent<HTMLElement>) => {

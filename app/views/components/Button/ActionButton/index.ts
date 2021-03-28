@@ -1,11 +1,12 @@
 import styled, { css } from 'styled-components'
+import { ButtonProps } from '@material-ui/core'
 
 import { HTMLProps } from 'react'
 
 import { ButtonAppearances } from '../styles/ButtonAppearances'
 
 export interface ActionButtonProps
-  extends Omit<HTMLProps<HTMLButtonElement>, 'size' | 'ref'> {
+  extends Omit<HTMLProps<HTMLButtonElement>, 'size' | 'ref' | 'type'> {
   /**
    * The appearance of the button.  {primary, outline, icon, link}
    */
@@ -36,6 +37,8 @@ export interface ActionButtonProps
    * The size of the button.
    */
   size?: 'small' | 'medium' | 'large' | 'XLarge'
+
+  type?: ButtonProps['type']
 
   /**
    * The brand color of active team.

@@ -1,8 +1,16 @@
 import { useContext } from 'react'
 
-import { StateContext, DispatchContext } from '../../context'
+import {
+  StateContext,
+  DispatchContext,
+  StateContextType,
+  DispatchContextType
+} from '../../context'
 
-export function useGlobalActionContext(): [StateContext, DispatchContext] {
+export function useGlobalActionContext(): [
+  StateContextType,
+  DispatchContextType
+] {
   const state = useContext(StateContext)
   const dispatch = useContext(DispatchContext)
 

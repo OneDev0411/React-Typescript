@@ -21,7 +21,7 @@ export default function PixelField({
     onChange(names, pxValue)
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault()
       handleChange(addPixelValue(value, 1))

@@ -1,6 +1,5 @@
 // @ts-nocheck
 const { merge } = require('webpack-merge')
-const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const Webpackbar = require('webpackbar')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
@@ -27,7 +26,6 @@ const config = {
       openAnalyzer: false
     }),
     new Webpackbar(),
-    new ForkTsCheckerNotifierWebpackPlugin({ alwaysNotify: false }),
     new ForkTsCheckerWebpackPlugin({
       /**
        * This is crucial in development, as it doesn't block webpack compilation

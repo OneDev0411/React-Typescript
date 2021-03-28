@@ -1,10 +1,15 @@
 import { Model } from 'backbone'
 
+import { typeEmbedMap } from '../Blocks/Website/Map'
+import { typeCarousel } from '../Blocks/Website/Carousel'
+
 import {
   IMAGE_TOOLBAR_BUTTONS_PREFIX,
   IMAGE_ELEMENT_TYPES,
   BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES,
-  BACKGROUND_URL_ALLOWED_ELEMENT_TYPES
+  BACKGROUND_URL_ALLOWED_ELEMENT_TYPES,
+  MAP_TOOLBAR_BUTTONS_PREFIX,
+  CAROUSEL_TOOLBAR_BUTTONS_PREFIX
 } from '../constants'
 
 export function isImage(model: Model): boolean {
@@ -25,12 +30,14 @@ export function isBackgroundUrlAllowed(model: Model): boolean {
   return BACKGROUND_URL_ALLOWED_ELEMENT_TYPES.includes(elementType)
 }
 
-export function hasToolbarImageButtons(model: Model): boolean {
+function hasToolbarButtons(model: Model, prefix: string): boolean {
   const toolbar: any[] = model.get('toolbar')
 
-  return toolbar.some(
-    item => item.name && item.name.startsWith(IMAGE_TOOLBAR_BUTTONS_PREFIX)
-  )
+  return toolbar.some(item => item.name && item.name.startsWith(prefix))
+}
+
+export function hasToolbarImageButtons(model: Model): boolean {
+  return hasToolbarButtons(model, IMAGE_TOOLBAR_BUTTONS_PREFIX)
 }
 
 export function setImage(model: Model, url: string): void {
@@ -113,4 +120,20 @@ export function isTemplateInstance(
   template: IBrandMarketingTemplate | IMarketingTemplateInstance
 ): template is IMarketingTemplateInstance {
   return template.type === 'template_instance'
+}
+
+export function isMap(model: Model): boolean {
+  return model.get('type') === typeEmbedMap
+}
+
+export function hasToolbarMapButtons(model: Model): boolean {
+  return hasToolbarButtons(model, MAP_TOOLBAR_BUTTONS_PREFIX)
+}
+
+export function isCarousel(model: Model): boolean {
+  return model.get('type') === typeCarousel
+}
+
+export function hasToolbarCarouselButtons(model: Model): boolean {
+  return hasToolbarButtons(model, CAROUSEL_TOOLBAR_BUTTONS_PREFIX)
 }

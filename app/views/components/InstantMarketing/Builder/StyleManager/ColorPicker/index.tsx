@@ -1,5 +1,10 @@
 import React from 'react'
-import { CirclePicker, ColorChangeHandler, Color } from 'react-color'
+import {
+  CirclePicker,
+  ColorChangeHandler,
+  Color,
+  ColorState
+} from 'react-color'
 
 import { ItemTitle } from '../styled'
 
@@ -9,7 +14,7 @@ interface Props {
   title?: string
   color?: Color
   colors?: string[]
-  onChange: ColorChangeHandler
+  onChange: ColorChangeHandler<ColorState>
 }
 
 export default function ColorPicker({

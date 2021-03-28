@@ -30,22 +30,18 @@ interface Props {
   side: IDealType
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
-  isDoubleEnded: boolean
-  dealType: IDealType
+  shouldPickRoleFromContacts?: boolean
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
-  onFinishStep?: () => Promise<void>
 }
 
 export function DealPrimaryAgent({
   title,
   side,
-  dealType,
-  isDoubleEnded,
   isCommissionRequired,
-  onFinishStep,
   roles = [],
   isOfficeDoubleEnded = false,
+  shouldPickRoleFromContacts = false,
   onChange = () => {}
 }: Props) {
   const wizard = useWizardContext()
@@ -61,9 +57,6 @@ export function DealPrimaryAgent({
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
-  const shouldPickRoleFromContacts =
-    dealType === 'Buying' && side === 'Selling' && !isDoubleEnded
-
   useEffect(() => {
     if (
       agentRoles.length > 0 &&
@@ -74,17 +67,8 @@ export function DealPrimaryAgent({
     }
   }, [step, wizard, agentRoles])
 
-  const handleUpsertRole = async (
-    role: IDealFormRole,
-    type: 'create' | 'update'
-  ) => {
-    wizard.setLoading(true)
-
+  const handleUpsertRole = (role: IDealFormRole, type: 'create' | 'update') => {
     onChange(role, type)
-
-    onFinishStep && (await onFinishStep())
-
-    wizard.setLoading(false)
   }
 
   const handleDeleteRole = (role: IDealFormRole) => {
@@ -95,6 +79,8 @@ export function DealPrimaryAgent({
     }
 
     onChange?.(role, 'delete')
+
+    wizard.setStep(step)
   }
 
   if (wizard.lastVisitedStep < step) {
@@ -102,10 +88,7 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to replace the agent inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
