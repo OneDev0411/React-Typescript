@@ -14,6 +14,7 @@ export type ItemType =
   | 'deal'
   | 'openhouse'
   | 'tour'
+  | 'showing'
 
 interface BaseItem<T extends ItemType> {
   title: string
@@ -45,6 +46,10 @@ interface TourItem extends BaseItem<'tour'> {
   render(props: ComponentProps<typeof TourDrawer>): ReactNode
 }
 
+interface ShowingItem extends BaseItem<'showing'> {
+  redirectTo(url: string): void
+}
+
 export type Item =
   | EmailItem
   | EventItem
@@ -52,3 +57,4 @@ export type Item =
   | DealItem
   | OpenHouseItem
   | TourItem
+  | ShowingItem

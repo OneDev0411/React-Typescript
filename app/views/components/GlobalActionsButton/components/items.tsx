@@ -72,6 +72,14 @@ const items: Item[] = [
     render: props => {
       return <TourDrawer {...props} />
     }
+  },
+  {
+    title: 'Showing',
+    type: 'showing',
+    Icon: mdiShoePrint,
+    redirectTo: url => {
+      goTo(url)
+    }
   }
 ]
 

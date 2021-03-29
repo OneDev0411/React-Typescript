@@ -121,6 +121,10 @@ export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.AGENT_NETWORK)
 }
 
+export function hasUserAccessToShowings(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.SHOWINGS)
+}
+
 export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
@@ -131,8 +135,8 @@ export function isAdmin(user: IUser | null): boolean {
 
 export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
   const brand = getActiveBrand(user)
-  
-  // Only brokerages should have brand settings 
+
+  // Only brokerages should have brand settings
   if (!brand || brand.brand_type !== 'Brokerage') {
     return false
   }
@@ -176,7 +180,10 @@ export function viewAs(
   return []
 }
 
-type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
+type GetSettings = (
+  team: IUserTeam,
+  includesParents?: boolean
+) => StringMap<any>
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
@@ -187,7 +194,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   if (!team) {
     return {}
   }
-  
+
   return getSettings(team, includesParents)
 }
 
@@ -219,11 +226,7 @@ export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   }
 
   const brand = flattenBrand(team.brand)
-  if (
-    !brand ||
-    !brand.settings ||
-    !brand.settings.marketing_palette
-  ) {
+  if (!brand || !brand.settings || !brand.settings.marketing_palette) {
     return DEFAULT_BRAND_PALETTE
   }
 

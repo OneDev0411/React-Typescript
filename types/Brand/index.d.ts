@@ -16,6 +16,7 @@ declare type IPermission =
   | 'BetaFeatures'
   | 'AgentNetwork'
   | 'Websites'
+  | 'Showings'
 
 declare type BrandMarketingPaletteKey =
   | 'body-bg-color'
