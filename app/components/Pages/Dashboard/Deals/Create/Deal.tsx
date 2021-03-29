@@ -61,7 +61,7 @@ export default function CreateDeal() {
 
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
-  const propertyType = watch('property_type')
+  const propertyType: IDealPropertyType = watch('property_type')
   const enderType = watch('ender_type')
 
   useEffect(() => {
@@ -178,13 +178,18 @@ export default function CreateDeal() {
     const type =
       dealType === 'Selling'
         ? propertyType?.includes('Lease')
-          ? 'landlord'
-          : 'seller'
+          ? 'Landlord'
+          : 'Seller'
         : propertyType?.includes('Lease')
-        ? 'tenant'
-        : 'buyer'
+        ? 'Tenant'
+        : 'Buyer'
 
-    return `What is the ${type}'s legal name?`
+    return (
+      <div>
+        What is the{' '}
+        <span className={classes.brandedTitle}>{type}'s Legal Name</span>?
+      </div>
+    )
   }
 
   return (
@@ -243,9 +248,16 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired
-                  title={`Who is the ${
-                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                  } agent?`}
+                  title={
+                    <div>
+                      Who is the{' '}
+                      <span className={classes.brandedTitle}>
+                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}{' '}
+                        Agent
+                      </span>
+                      ?
+                    </div>
+                  }
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -276,9 +288,18 @@ export default function CreateDeal() {
                 shouldPickRoleFromContacts={
                   dealType === 'Buying' && !isDoubleEnded
                 }
-                title={`Who is the ${
-                  propertyType?.includes('Lease') ? "landlord's" : "seller's"
-                } agent?`}
+                title={
+                  <div>
+                    Who is the{' '}
+                    <span className={classes.brandedTitle}>
+                      {propertyType?.includes('Lease')
+                        ? "Landlord's"
+                        : "Seller's"}{' '}
+                      Agent
+                    </span>
+                    ?
+                  </div>
+                }
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -293,6 +314,7 @@ export default function CreateDeal() {
             render={({ value = [], onChange }) => (
               <DealClient
                 side={dealType}
+                propertyType={propertyType}
                 title={getClientTitle()}
                 roles={value}
                 onChange={(role, type) =>

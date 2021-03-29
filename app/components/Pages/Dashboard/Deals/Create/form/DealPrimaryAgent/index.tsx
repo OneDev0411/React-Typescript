@@ -26,7 +26,7 @@ import { AgentsList } from './AgentsList'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
@@ -145,7 +145,7 @@ export function DealPrimaryAgent({
           )}
         </Box>
 
-        {skippable && (
+        {skippable && !selectedRole && step === wizard.currentStep && (
           <Box mt={2} textAlign="right">
             <Button color="secondary" variant="outlined" onClick={handleSkip}>
               Skip

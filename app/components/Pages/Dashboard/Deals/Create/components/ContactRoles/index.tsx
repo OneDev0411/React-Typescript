@@ -60,10 +60,11 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  placeholder: string
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
 
-export function ContactRoles({ onSelectRole }: Props) {
+export function ContactRoles({ placeholder, onSelectRole }: Props) {
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
@@ -111,9 +112,8 @@ export function ContactRoles({ onSelectRole }: Props) {
   }
 
   const handleSelectRole = (role: Partial<IDealFormRole>) => {
-    setContacts([])
     setSearchCriteria('')
-    setDebouncedSearchCriteria('')
+    setContacts([])
 
     onSelectRole(role)
   }
@@ -127,7 +127,7 @@ export function ContactRoles({ onSelectRole }: Props) {
         size="small"
         value={searchCriteria}
         onChange={e => setSearchCriteria(e.target.value)}
-        placeholder="Search contact name"
+        placeholder={placeholder}
         className={classes.searchInput}
       />
 

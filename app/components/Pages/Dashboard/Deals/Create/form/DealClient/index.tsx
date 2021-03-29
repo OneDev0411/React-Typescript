@@ -25,8 +25,9 @@ import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
+  propertyType: IDealPropertyType
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
@@ -38,6 +39,7 @@ export function DealClient({
   side,
   title,
   roles,
+  propertyType,
   predefinedRoles = [],
   skippable = false,
   submitButtonLabel = 'Continue',
@@ -62,6 +64,19 @@ export function DealClient({
   const [selectedRole, setSelectedRole] = useState<
     Nullable<Partial<IDealFormRole>>
   >(null)
+
+  const getSearchInputPlaceholder = () => {
+    const type =
+      side === 'Selling'
+        ? propertyType?.includes('Lease')
+          ? 'Landlord'
+          : 'Seller'
+        : propertyType?.includes('Lease')
+        ? 'Tenant'
+        : 'Buyer'
+
+    return `Type ${clientRoles.length > 0 ? 'Co-' : ''}${type} Name`
+  }
 
   const handleNext = () => {
     if (wizard.currentStep === step) {
@@ -133,7 +148,10 @@ export function DealClient({
             display: !selectedRole ? 'block' : 'none'
           }}
         >
-          <ContactRoles onSelectRole={setSelectedRole} />
+          <ContactRoles
+            placeholder={getSearchInputPlaceholder()}
+            onSelectRole={setSelectedRole}
+          />
         </Box>
 
         {!selectedRole && (
