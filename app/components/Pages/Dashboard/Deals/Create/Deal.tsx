@@ -81,6 +81,10 @@ export default function CreateDeal() {
    * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
    */
   const createDraftDeal = async () => {
+    if (deal || isCreatingDeal) {
+      return
+    }
+
     const values = control.getValues()
 
     const roles = [].concat(
@@ -180,7 +184,7 @@ export default function CreateDeal() {
         ? 'tenant'
         : 'buyer'
 
-    return `What's the ${type}'s legal name?`
+    return `What is the ${type}'s legal name?`
   }
 
   return (
@@ -200,6 +204,7 @@ export default function CreateDeal() {
         <QuestionWizard
           questionPosition="Top"
           questionPositionOffset={80}
+          onFinish={createDraftDeal}
           styles={{
             paddingBottom: '50%'
           }}
@@ -267,11 +272,12 @@ export default function CreateDeal() {
                 isCommissionRequired
                 isOfficeDoubleEnded={isOfficeDoubleEnded}
                 side="Selling"
+                skippable={dealType === 'Buying'}
                 shouldPickRoleFromContacts={
                   dealType === 'Buying' && !isDoubleEnded
                 }
                 title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'landlord' : 'seller'
+                  propertyType?.includes('Lease') ? "landlord's" : "seller's"
                 } agent?`}
                 roles={value}
                 onChange={(role, type) =>
@@ -297,11 +303,7 @@ export default function CreateDeal() {
             )}
           />
 
-          <DealCard
-            dealSide={dealSide}
-            isCreatingDeal={isCreatingDeal}
-            onCreateDeal={createDraftDeal}
-          />
+          <DealCard dealSide={dealSide} isCreatingDeal={isCreatingDeal} />
         </QuestionWizard>
       </Box>
     </Context.Provider>

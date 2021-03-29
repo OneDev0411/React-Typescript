@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -31,6 +31,7 @@ interface Props {
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
   shouldPickRoleFromContacts?: boolean
+  skippable?: boolean
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
 }
@@ -38,6 +39,7 @@ interface Props {
 export function DealPrimaryAgent({
   title,
   side,
+  skippable = false,
   isCommissionRequired,
   roles = [],
   isOfficeDoubleEnded = false,
@@ -81,6 +83,12 @@ export function DealPrimaryAgent({
     onChange?.(role, 'delete')
 
     wizard.setStep(step)
+  }
+
+  const handleSkip = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
   }
 
   if (wizard.lastVisitedStep < step) {
@@ -136,6 +144,14 @@ export function DealPrimaryAgent({
             />
           )}
         </Box>
+
+        {skippable && (
+          <Box mt={2} textAlign="right">
+            <Button color="secondary" variant="outlined" onClick={handleSkip}>
+              Skip
+            </Button>
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )
