@@ -8,8 +8,8 @@ declare interface IShowing extends IModel<'showing'> {
   feedback_template?: IMarketingTemplateInstance
   deal?: IDeal
   listing?: IListing
-  address?: Address
-  gallery?: Gallery
+  address?: IStdAddr
+  gallery?: IMediaGallery
   roles: IShowingRole[]
   appointments: IAppointment[]
 }
@@ -40,3 +40,27 @@ declare type IAppointmentStatus =
   | 'Rescheduled'
   | 'Cancelled'
   | 'Finished'
+
+declare interface IMediaItem {
+  id: UUID
+  src: string
+  name: string
+  order: number
+  selected?: boolean
+  uploadProgress?: number | undefined
+  isUploading?: boolean
+}
+
+declare type IMediaGallery = IMediaItem[]
+
+declare interface IStdAddr {
+  country: string
+  city: string
+  name: string
+  unit: string
+  state: string
+  predir: string
+  suftype: string
+  postcode: string
+  house_num: string
+}
