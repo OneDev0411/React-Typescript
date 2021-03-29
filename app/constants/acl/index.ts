@@ -7,7 +7,8 @@ export const ACL: Record<
   | 'STORE'
   | 'BETA'
   | 'AGENT_NETWORK'
-  | 'WEBSITES',
+  | 'WEBSITES'
+  | 'SHOWINGS',
   IPermission
 > = {
   CRM: 'CRM',
@@ -18,5 +19,6 @@ export const ACL: Record<
   STORE: 'STORE',
   BETA: 'BetaFeatures',
   AGENT_NETWORK: 'AgentNetwork',
-  WEBSITES: 'Websites'
+  WEBSITES: 'Websites',
+  SHOWINGS: 'Showings'
 }

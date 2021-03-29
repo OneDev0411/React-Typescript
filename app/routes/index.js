@@ -659,7 +659,7 @@ const AsyncOldWebsite = withAcl.store(
 //  Showings
 /* ==================================== */
 
-const AsyncShowings = withAcl.marketing(
+const AsyncShowings = withAcl.showings(
   Load({
     loader: () =>
       import(
@@ -668,7 +668,7 @@ const AsyncShowings = withAcl.marketing(
   })
 )
 
-const AsyncCreateShowing = withAcl.marketing(
+const AsyncCreateShowing = withAcl.showings(
   Load({
     loader: () =>
       import(
