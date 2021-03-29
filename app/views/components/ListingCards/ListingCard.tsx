@@ -89,7 +89,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+export interface Props {
   /**
    * The listing or compact listing object
    */

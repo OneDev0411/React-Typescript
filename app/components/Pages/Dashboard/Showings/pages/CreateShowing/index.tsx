@@ -1,19 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import PageLayout from 'components/GlobalPageLayout'
-import { QuestionWizard } from 'components/QuestionWizard'
+import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 
 import ShowingStepIntro from '../../components/ShowingStepIntro'
-import ShowingStepProperty from '../../components/ShowingStepProperty'
+import ShowingStepProperty, {
+  ShowingStepPropertyProps
+} from '../../components/ShowingStepProperty'
 
 function CreateShowing() {
+  const [property, setProperty] = useState<
+    ShowingStepPropertyProps['property']
+  >(null)
+
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing" />
       <PageLayout.Main>
         <QuestionWizard>
           <ShowingStepIntro />
-          <ShowingStepProperty />
+          <ShowingStepProperty
+            property={property}
+            onPropertyChange={setProperty}
+          />
+          <QuestionSection>Sample Next Section</QuestionSection>
         </QuestionWizard>
       </PageLayout.Main>
     </PageLayout>
