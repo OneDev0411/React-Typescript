@@ -158,7 +158,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
       const deal = option.deal
 
       return (
-        <ListItem dense disableGutters>
+        <ListItem dense disableGutters component="div">
           <ListItemAvatar>
             <Avatar>
               <SvgIcon path={mdiCurrencyUsdCircleOutline} />
@@ -173,7 +173,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
       const listing = option.listing
 
       return (
-        <ListItem dense disableGutters>
+        <ListItem dense disableGutters component="div">
           <ListItemAvatar>
             <Avatar src={listing.cover_image_url}>
               <SvgIcon path={mdiHomeOutline} />
@@ -192,7 +192,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
     const place = option.place
 
     return (
-      <ListItem dense disableGutters>
+      <ListItem dense disableGutters component="div">
         <ListItemAvatar>
           <Avatar>
             <SvgIcon path={mdiMapMarkerOutline} />
