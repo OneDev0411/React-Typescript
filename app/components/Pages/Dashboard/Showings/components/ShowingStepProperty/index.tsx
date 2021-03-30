@@ -6,9 +6,12 @@ import {
   QuestionForm,
   useWizardContext
 } from 'components/QuestionWizard'
-import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
-import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
+import {
+  SearchResult,
+  SearchResultType
+} from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 import { ShowingPropertyType } from '../../types'
 import {
@@ -19,11 +22,14 @@ import ShowingStepPropertyForm, {
   ShowingStepPropertyFormProps
 } from './ShowingStepPropertyForm'
 import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
+import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
 
 export interface ShowingStepPropertyProps {
   property: Nullable<ShowingPropertyType>
   onPropertyChange: (value: ShowingPropertyType) => void
 }
+
+const SEARCH_RESULT_TYPES: SearchResultType[] = ['deal', 'listing', 'place']
 
 function ShowingStepProperty({
   property,
@@ -34,8 +40,7 @@ function ShowingStepProperty({
   const [isEditMode, setIsEditMode] = useState(false)
 
   const handleSearchResultSelect = (result: SearchResult) => {
-    // TODO: add deal condition here
-    if (result.type === 'listing' /* || result.type === 'deal' */) {
+    if (result.type === 'listing' || result.type === 'deal') {
       onPropertyChange(result)
       wizard.next()
     } else if (result.type === 'place') {
@@ -79,12 +84,20 @@ function ShowingStepProperty({
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {isSearchMode ? (
-          <ListingsAndPlacesSearchInput
+          <DealsAndListingsAndPlacesSearchInput
             onSelect={handleSearchResultSelect}
             autoFocus
+            searchTypes={SEARCH_RESULT_TYPES}
           />
         ) : (
           <>
+            {property?.type === 'deal' && (
+              <ShowingStepPropertyDealListingCard
+                listing={property.deal.listing}
+                onChange={goToSearchMode}
+                changeLabel="Change Property"
+              />
+            )}
             {property?.type === 'listing' && (
               <ShowingStepPropertyListingCard
                 listing={property.listing}
