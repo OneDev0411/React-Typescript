@@ -31,7 +31,7 @@ interface Props {
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
-  submitButtonLabel?: string
+  concurrentMode?: boolean
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
@@ -39,10 +39,10 @@ export function DealClient({
   side,
   title,
   roles,
+  concurrentMode = false,
   propertyType,
   predefinedRoles = [],
   skippable = false,
-  submitButtonLabel = 'Continue',
   onChange
 }: Props) {
   const { deal, user, checklist } = useCreationContext()
@@ -85,6 +85,8 @@ export function DealClient({
   }
 
   const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
+    wizard.setStep(step)
+
     if (role.deal) {
       return
     }
@@ -154,7 +156,7 @@ export function DealClient({
           />
         </Box>
 
-        {!selectedRole && (
+        {!concurrentMode && !selectedRole && (
           <Box
             display="flex"
             alignItems="center"
@@ -180,7 +182,7 @@ export function DealClient({
               disabled={clientRoles.length === 0}
               onClick={handleNext}
             >
-              {clientRoles.length === 0 ? 'Continue ' : submitButtonLabel}
+              Continue
             </Button>
           </Box>
         )}

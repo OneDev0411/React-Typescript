@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { Box, CircularProgress, Typography } from '@material-ui/core'
+import { Box, Button, CircularProgress, Typography } from '@material-ui/core'
 import { useTitle } from 'react-use'
 import { useSelector, useDispatch } from 'react-redux'
+import { useForm, Controller } from 'react-hook-form'
 
 import { QuestionWizard } from 'components/QuestionWizard'
 import { addNotification as notify } from 'components/notification'
@@ -17,6 +18,8 @@ import { useLoadFullDeal } from 'hooks/use-load-deal'
 
 import { goTo } from 'utils/go-to'
 
+import { getField } from 'models/Deal/helpers/context'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 
 import { DealContext } from './form/DealContext'
@@ -29,6 +32,7 @@ import { Header } from './components/Header'
 import { useStatusList } from './hooks/use-brand-status-list'
 import { useStyles } from './hooks/use-styles'
 import { showStatusQuestion } from './helpers/show-status-question'
+import { getChangedRoles } from './helpers/get-changed-roles'
 
 import { Context } from './context'
 
@@ -39,9 +43,10 @@ interface Props {
 }
 
 export default function Publish({ params }: Props) {
-  const classes = useStyles()
-
   useTitle('Publish Draft Deal | Deals | Rechat')
+
+  const { control } = useForm()
+  const classes = useStyles()
 
   const dispatch = useDispatch()
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
@@ -61,6 +66,7 @@ export default function Publish({ params }: Props) {
   }, [deal])
 
   const propertyType = deal?.property_type
+  const hasAddress = deal?.listing || getField(deal, 'full_address')
 
   const contexts = useMemo(() => {
     return deal ? getDealContexts(user, deal.deal_type, deal.property_type) : []
@@ -71,23 +77,26 @@ export default function Publish({ params }: Props) {
   )
 
   const handlePublish = async () => {
-    try {
-      setIsPublishing(true)
-      await dispatch(publishDeal(deal.id))
+    const values = control.getValues()
 
-      dispatch(
-        notify({
-          status: 'success',
-          message: 'The deal is published.'
-        })
-      )
+    console.log(values)
+    // try {
+    //   setIsPublishing(true)
+    //   await dispatch(publishDeal(deal.id))
 
-      goTo(`/dashboard/deals/${deal.id}`)
-    } catch (e) {
-      console.log(e)
-    } finally {
-      setIsPublishing(false)
-    }
+    //   dispatch(
+    //     notify({
+    //       status: 'success',
+    //       message: 'The deal is published.'
+    //     })
+    //   )
+
+    //   goTo(`/dashboard/deals/${deal.id}`)
+    // } catch (e) {
+    //   console.log(e)
+    // } finally {
+    //   setIsPublishing(false)
+    // }
   }
 
   if (!isFetchingCompleted || isPublishing) {
@@ -114,8 +123,7 @@ export default function Publish({ params }: Props) {
   return (
     <Context.Provider
       value={{
-        user,
-        deal
+        user
       }}
     >
       <Header
@@ -126,33 +134,76 @@ export default function Publish({ params }: Props) {
 
       <Box className={classes.root}>
         <QuestionWizard
-          questionPosition="Top"
+          concurrent
+          useWindowScrollbar
           questionPositionOffset={80}
-          styles={{
-            paddingBottom: '50%'
-          }}
-          onFinish={handlePublish}
         >
-          <DealAddress skippable={false} />
-
-          {deal.deal_type === 'Buying' && (
-            <DealClient
-              side="Buying"
-              title={`What's the ${
-                propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-              }'s legal name?`}
-              submitButtonLabel="Looks Good"
-              roles={roles}
+          {!hasAddress && (
+            <Controller
+              name="address"
+              control={control}
+              render={({ onChange }) => (
+                <DealAddress
+                  concurrentMode
+                  skippable={false}
+                  onChange={onChange}
+                />
+              )}
             />
           )}
 
-          <DealClient
-            side="Selling"
-            title={`What's the ${
-              propertyType?.includes('Lease') ? 'landlord' : 'seller'
-            }'s legal name?`}
-            submitButtonLabel="Looks Good"
-            roles={roles}
+          {deal.deal_type === 'Buying' && (
+            <Controller
+              name="buying_clients"
+              control={control}
+              render={({ value = [], onChange }) => (
+                <DealClient
+                  concurrentMode
+                  side="Buying"
+                  propertyType={deal.property_type}
+                  title={
+                    <div>
+                      What's the{' '}
+                      <span className={classes.brandedTitle}>
+                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}'s
+                        Legal Name
+                      </span>
+                      ?
+                    </div>
+                  }
+                  roles={value}
+                  onChange={(role, type) =>
+                    onChange(getChangedRoles(value, role, type))
+                  }
+                />
+              )}
+            />
+          )}
+
+          <Controller
+            name="selling_clients"
+            control={control}
+            render={({ value = [], onChange }) => (
+              <DealClient
+                concurrentMode
+                side="Selling"
+                propertyType={deal.property_type}
+                title={
+                  <div>
+                    What's the{' '}
+                    <span className={classes.brandedTitle}>
+                      {propertyType?.includes('Lease') ? 'Landlord' : 'Seller'}
+                      's Legal Name
+                    </span>
+                    ?
+                  </div>
+                }
+                roles={value}
+                onChange={(role, type) =>
+                  onChange(getChangedRoles(value, role, type))
+                }
+              />
+            )}
           />
 
           {deal &&
@@ -163,13 +214,38 @@ export default function Publish({ params }: Props) {
                 ? 'listing_status'
                 : 'contract_status'
             ) &&
-            statusList.length > 1 && <DealStatus list={statusList} />}
+            statusList.length > 1 && (
+              <Controller
+                name="context:status"
+                control={control}
+                render={({ onChange }) => (
+                  <DealStatus list={statusList} onChange={onChange} />
+                )}
+              />
+            )}
 
           {contexts.length > 0 &&
             contexts.map((context: IDealBrandContext) => (
-              <DealContext key={context.id} context={context} />
+              <Controller
+                key={context.id}
+                name={`context:${context.key}`}
+                control={control}
+                render={({ onChange }) => (
+                  <DealContext
+                    concurrentMode
+                    context={context}
+                    onChange={onChange}
+                  />
+                )}
+              />
             ))}
         </QuestionWizard>
+
+        <Box textAlign="right" mt={8}>
+          <Button color="secondary" variant="contained" onClick={handlePublish}>
+            Make Visible to Admin
+          </Button>
+        </Box>
       </Box>
     </Context.Provider>
   )

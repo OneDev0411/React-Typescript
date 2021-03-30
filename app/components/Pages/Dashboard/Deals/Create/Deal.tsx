@@ -220,7 +220,7 @@ function CreateDeal({ router, route }: Props) {
 
       <Box className={classes.root}>
         <QuestionWizard
-          questionPosition="Top"
+          useWindowScrollbar
           questionPositionOffset={80}
           onFinish={createDraftDeal}
           styles={{

@@ -203,7 +203,7 @@ function CreateOffer({ router, route, params }: Props) {
 
       <Box className={classes.root}>
         <QuestionWizard
-          questionPosition="Top"
+          useWindowScrollbar
           questionPositionOffset={80}
           styles={{
             paddingBottom: '50%'

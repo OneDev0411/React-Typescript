@@ -32,6 +32,7 @@ import { getField } from 'models/Deal/helpers/context'
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
+  concurrentMode?: boolean
   context: IDealBrandContext
   onChange?: (value: string | number) => void
 }
@@ -55,7 +56,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealContext({ context, onChange = () => {} }: Props) {
+export function DealContext({
+  concurrentMode = false,
+  context,
+  onChange = () => {}
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -76,6 +81,14 @@ export function DealContext({ context, onChange = () => {} }: Props) {
     }
     // eslint-disable-next-line
   }, [defaultValue])
+
+  useEffect(() => {
+    if (inputValue && concurrentMode) {
+      handleSave()
+    }
+
+    // eslint-disable-next-line
+  }, [inputValue])
 
   const getContextDate = () => {
     if (!inputValue) {
@@ -148,7 +161,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       </QuestionTitle>
 
       <QuestionForm>
-        <Box>
+        <Box mb={4}>
           {contextType === 'Date' && (
             <Box className={classes.datePickerContainer}>
               <DatePicker
@@ -182,19 +195,21 @@ export function DealContext({ context, onChange = () => {} }: Props) {
             </Box>
           )}
 
-          <Box textAlign="right">
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={!inputValue || !context.validate(context, inputValue)}
-              className={classes.saveButton}
-              onClick={() => handleSave()}
-            >
-              {defaultValue && defaultValue === inputValue
-                ? 'Looks Good'
-                : 'Save'}
-            </Button>
-          </Box>
+          {!concurrentMode && (
+            <Box textAlign="right">
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={!inputValue || !context.validate(context, inputValue)}
+                className={classes.saveButton}
+                onClick={() => handleSave()}
+              >
+                {defaultValue && defaultValue === inputValue
+                  ? 'Looks Good'
+                  : 'Save'}
+              </Button>
+            </Box>
+          )}
         </Box>
       </QuestionForm>
     </QuestionSection>
