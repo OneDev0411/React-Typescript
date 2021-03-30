@@ -79,7 +79,10 @@ function ShowingStepProperty({
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {isSearchMode ? (
-          <ListingsAndPlacesSearchInput onSelect={handleSearchResultSelect} />
+          <ListingsAndPlacesSearchInput
+            onSelect={handleSearchResultSelect}
+            autoFocus
+          />
         ) : (
           <>
             {property?.type === 'listing' && (

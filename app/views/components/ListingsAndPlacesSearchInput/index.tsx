@@ -40,11 +40,13 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
 interface Props {
   placeholder?: string
   onSelect: (result: SearchResult) => void
+  autoFocus?: boolean
 }
 
 export default function ListingsAndPlacesSearchInput({
   placeholder = 'Search address or MLS#',
-  onSelect
+  onSelect,
+  autoFocus = false
 }: Props) {
   const [inputValue, setInputValue] = useState<string>('')
   const classes = useStyles({ inputValue })
@@ -169,6 +171,7 @@ export default function ListingsAndPlacesSearchInput({
             </InputAdornment>
           )
         }}
+        autoFocus={autoFocus}
       />
     )
   }
