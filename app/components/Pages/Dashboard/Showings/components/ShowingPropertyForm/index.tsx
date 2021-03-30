@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 
 import {
   Grid,
@@ -38,7 +38,7 @@ function ShowingPropertyForm({
   onSubmit,
   children
 }: ShowingPropertyFormProps) {
-  const { register, handleSubmit, errors } = useForm<FieldValues>()
+  const { register, handleSubmit, errors, control } = useForm<FieldValues>()
   const { address, gallery, price } = initialData
 
   const handleFormSubmit = (data: FieldValues) => {
@@ -72,21 +72,23 @@ function ShowingPropertyForm({
             />
           </Grid>
           <Grid item lg={3}>
-            <FormControl fullWidth>
-              <InputLabel>Dir</InputLabel>
-              <Select
-                name="predir"
-                inputRef={register}
-                displayEmpty
-                defaultValue={address.predir}
-              >
-                <MenuItem aria-label="None" value="" />
-                <MenuItem value="North">North</MenuItem>
-                <MenuItem value="South">South</MenuItem>
-                <MenuItem value="East">East</MenuItem>
-                <MenuItem value="West">West</MenuItem>
-              </Select>
-            </FormControl>
+            <Controller
+              name="predir"
+              control={control}
+              defaultValue={address.predir}
+              render={({ onChange, value }) => (
+                <FormControl fullWidth>
+                  <InputLabel>Dir</InputLabel>
+                  <Select displayEmpty onChange={onChange} value={value}>
+                    <MenuItem aria-label="None" value="" />
+                    <MenuItem value="North">North</MenuItem>
+                    <MenuItem value="South">South</MenuItem>
+                    <MenuItem value="East">East</MenuItem>
+                    <MenuItem value="West">West</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
           </Grid>
           <Grid item lg={4}>
             <TextField
