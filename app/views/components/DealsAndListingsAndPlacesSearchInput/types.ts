@@ -16,4 +16,4 @@ export interface DealResult extends BaseSearchResult<'deal'> {
   deal: IDeal
 }
 
-export type SearchResult = PlaceResult | ListingResult
+export type SearchResult = PlaceResult | ListingResult | DealResult

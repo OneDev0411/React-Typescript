@@ -14,14 +14,25 @@ import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
 import { useDebouncedCallback } from 'use-debounce'
-import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
+import {
+  mdiHomeOutline,
+  mdiMagnify,
+  mdiMapMarkerOutline,
+  mdiCurrencyUsdCircleOutline
+} from '@mdi/js'
+
+import { useSelector } from 'react-redux'
+
+import { selectDealsList } from 'selectors/deals'
 
 import { addressTitle } from 'utils/listing'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { searchListingsAndPlaces } from './helpers'
-import { SearchResult } from './types'
+import { IAppState } from 'reducers'
+
+import { searchDealsAndListingsAndPlaces } from './helpers'
+import { SearchResult, SearchResultType } from './types'
 
 const useStyles = makeStyles<Theme, { inputValue: string }>(
   () => ({
@@ -33,7 +44,7 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
     })
   }),
   {
-    name: 'ListingsAndPlacesSearchInput'
+    name: 'DealsAndListingsAndPlacesSearchInput'
   }
 )
 
@@ -41,20 +52,29 @@ interface Props {
   placeholder?: string
   onSelect: (result: SearchResult) => void
   autoFocus?: boolean
+  searchTypes?: SearchResultType[]
 }
 
-export default function ListingsAndPlacesSearchInput({
+const DEFAULT_SEARCH_TYPES: SearchResultType[] = ['listing', 'place']
+
+export default function DealsAndListingsAndPlacesSearchInput({
   placeholder = 'Search address or MLS#',
   onSelect,
-  autoFocus = false
+  autoFocus = false,
+  searchTypes = DEFAULT_SEARCH_TYPES
 }: Props) {
   const [inputValue, setInputValue] = useState<string>('')
   const classes = useStyles({ inputValue })
+  const hasDealSearchType = searchTypes.includes('deal')
 
   const [options, setOptions] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [value, setValue] = useState<Optional<SearchResult>>(undefined)
+
+  const deals = useSelector((state: IAppState) =>
+    hasDealSearchType ? selectDealsList(state) : undefined
+  )
 
   const [debouncedHandleInputChange] = useDebouncedCallback(
     (event: unknown, newInputValue: string) => {
@@ -85,7 +105,11 @@ export default function ListingsAndPlacesSearchInput({
       try {
         setIsLoading(true)
 
-        const fetchedOptions = await searchListingsAndPlaces(inputValue)
+        const fetchedOptions = await searchDealsAndListingsAndPlaces(
+          deals,
+          searchTypes,
+          inputValue
+        )
 
         setOptions(fetchedOptions)
       } catch (error) {
@@ -99,15 +123,25 @@ export default function ListingsAndPlacesSearchInput({
     }
 
     fetchListingsAndPlaces()
-  }, [inputValue])
+  }, [inputValue, deals, searchTypes])
 
   function getOptionLabel(option: SearchResult) {
-    return option.type === 'listing'
-      ? option.listing.address.street_address
-      : option.place.formatted_address
+    switch (option.type) {
+      case 'deal':
+        return option.deal.title
+      case 'listing':
+        return option.listing.address.street_address
+      case 'place':
+      default:
+        return option.place.formatted_address
+    }
   }
 
   function getOptionSelected(option: SearchResult) {
+    if (value?.type === 'deal' && option.type === 'deal') {
+      return value.deal.id === option.deal.id
+    }
+
     if (value?.type === 'listing' && option.type === 'listing') {
       return value.listing.id === option.listing.id
     }
@@ -120,6 +154,21 @@ export default function ListingsAndPlacesSearchInput({
   }
 
   function renderOption(option: SearchResult) {
+    if (option.type === 'deal') {
+      const deal = option.deal
+
+      return (
+        <ListItem dense disableGutters>
+          <ListItemAvatar>
+            <Avatar>
+              <SvgIcon path={mdiCurrencyUsdCircleOutline} />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={deal.title} />
+        </ListItem>
+      )
+    }
+
     if (option.type === 'listing') {
       const listing = option.listing
 
@@ -176,6 +225,18 @@ export default function ListingsAndPlacesSearchInput({
     )
   }
 
+  function groupBy(option: SearchResult) {
+    switch (option.type) {
+      case 'deal':
+        return 'Deals'
+      case 'listing':
+        return 'Listings'
+      case 'place':
+      default:
+        return 'Places'
+    }
+  }
+
   return (
     <Autocomplete<SearchResult, false, true>
       fullWidth
@@ -191,7 +252,7 @@ export default function ListingsAndPlacesSearchInput({
       options={options}
       getOptionLabel={getOptionLabel}
       getOptionSelected={getOptionSelected}
-      groupBy={option => (option.type === 'listing' ? 'Listings' : 'Places')}
+      groupBy={groupBy}
       value={value}
       filterOptions={option => option}
       ListboxComponent={List}

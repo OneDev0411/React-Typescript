@@ -10,4 +10,6 @@ export const selectDeals = (state: IAppState) => state.deals
  * Returns the deals list
  * @param state The app state
  */
-export const selectDealsList = (state: IAppState) => selectDeals(state).list
+export function selectDealsList(state: IAppState): Record<UUID, IDeal> {
+  return selectDeals(state).list
+}
