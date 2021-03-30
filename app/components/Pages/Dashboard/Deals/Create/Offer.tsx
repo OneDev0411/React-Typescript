@@ -3,6 +3,8 @@ import { Box, CircularProgress, Typography } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
+import { withRouter, Route, InjectedRouter } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { IAppState } from 'reducers'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
@@ -38,12 +40,16 @@ import { showStatusQuestion } from './helpers/show-status-question'
 import { Context } from './context'
 
 interface Props {
+  router: InjectedRouter
+  route: Route
   params: {
     id: UUID
   }
 }
 
-export default function CreateOffer({ params }: Props) {
+function CreateOffer({ router, route, params }: Props) {
+  useTitle('Create New Offer | Deals | Rechat')
+
   const classes = useStyles()
   const { control, watch } = useForm()
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
@@ -58,6 +64,14 @@ export default function CreateOffer({ params }: Props) {
   )
 
   const statusList = useStatusList(deal)
+
+  useEffect(() => {
+    router.setRouteLeaveHook(route, () => {
+      if (!deal.has_active_offer) {
+        return 'By canceling you will lose your work. Continue?'
+      }
+    })
+  }, [deal.has_active_offer, router, route])
 
   useEffect(() => {
     deal?.has_active_offer &&
@@ -202,9 +216,16 @@ export default function CreateOffer({ params }: Props) {
             render={({ value = [], onChange }) => (
               <DealClient
                 side="Buying"
-                title={`Enter ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                } information as shown on offer`}
+                propertyType={deal.property_type}
+                title={
+                  <div>
+                    Enter{' '}
+                    <span className={classes.brandedTitle}>
+                      {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}
+                    </span>{' '}
+                    information as shown on offer
+                  </div>
+                }
                 predefinedRoles={roles}
                 roles={value}
                 onChange={(role, type) =>
@@ -232,9 +253,16 @@ export default function CreateOffer({ params }: Props) {
                   shouldPickRoleFromContacts={!isDoubleEnded}
                   isCommissionRequired={isOfficeDoubleEnded}
                   isOfficeDoubleEnded={isOfficeDoubleEnded}
-                  title={`Who is the ${
-                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                  } agent?`}
+                  title={
+                    <div>
+                      Who is the{' '}
+                      <span className={classes.brandedTitle}>
+                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}{' '}
+                        Agent
+                      </span>
+                      ?
+                    </div>
+                  }
                   roles={roles.concat(value)}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
@@ -251,9 +279,16 @@ export default function CreateOffer({ params }: Props) {
               <DealCoAgent
                 side="Buying"
                 isCommissionRequired={isDoubleEnded}
-                title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                } co agent?`}
+                title={
+                  <div>
+                    Who is the{' '}
+                    <span className={classes.brandedTitle}>
+                      {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'} Co
+                      Agent
+                    </span>
+                    ?
+                  </div>
+                }
                 roles={roles.concat(value)}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -287,3 +322,5 @@ export default function CreateOffer({ params }: Props) {
     </Context.Provider>
   )
 }
+
+export default withRouter(CreateOffer)

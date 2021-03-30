@@ -136,7 +136,10 @@ export function DealPrimaryAgent({
           }}
         >
           {shouldPickRoleFromContacts ? (
-            <ContactRoles onSelectRole={setSelectedRole} />
+            <ContactRoles
+              placeholder="Type Agent Name"
+              onSelectRole={setSelectedRole}
+            />
           ) : (
             <AgentsList
               isOfficeDoubleEnded={isOfficeDoubleEnded}

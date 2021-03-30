@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
-import { browserHistory } from 'react-router'
 import { useForm, Controller } from 'react-hook-form'
+import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 
 import Deal from 'models/Deal'
 
@@ -44,7 +44,12 @@ import { Header } from './components/Header'
 import { Context } from './context'
 import type { IDealSide } from './types'
 
-export default function CreateDeal() {
+interface Props {
+  router: InjectedRouter
+  route: Route
+}
+
+function CreateDeal({ router, route }: Props) {
   useTitle('Create New Deal | Deals | Rechat')
 
   const classes = useStyles()
@@ -69,6 +74,14 @@ export default function CreateDeal() {
       dispatch(getContextsByDeal(dealId))
     }
   }, [dealId, dispatch])
+
+  useEffect(() => {
+    router.setRouteLeaveHook(route, () => {
+      if (!deal) {
+        return 'By canceling you will lose your work. Continue?'
+      }
+    })
+  }, [deal, router, route])
 
   const isAgentDoubleEnded = dealSide === 'Both'
   const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
@@ -331,3 +344,5 @@ export default function CreateDeal() {
     </Context.Provider>
   )
 }
+
+export default withRouter(CreateDeal)
