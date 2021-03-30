@@ -1,12 +1,15 @@
-import { ACTIVE_INTERCOM, INACTIVE_INTERCOM } from '../../constants/intercom'
+import {
+  ACTIVATE_INTERCOM,
+  DEACTIVATE_INTERCOM
+} from '../../constants/intercom'
 
 export const intercom = (state = { isActive: false }, action) => {
   switch (action.type) {
-    case ACTIVE_INTERCOM:
+    case ACTIVATE_INTERCOM:
       return {
         isActive: true
       }
-    case INACTIVE_INTERCOM:
+    case DEACTIVATE_INTERCOM:
       return {
         isActive: false
       }

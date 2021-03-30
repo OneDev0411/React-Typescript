@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectUser } from 'selectors/user'
 
 import { IAppState } from '../../../reducers'
-import { inactiveIntercom } from '../../../store_actions/intercom'
+import { deactivateIntercom } from '../../../store_actions/intercom'
 import IconClose from '../SvgIcons/Close/CloseIcon'
 
 import { Button, GlobalIntercomStyles } from './styled'
@@ -43,7 +43,7 @@ export default function Intercom() {
         title="Close"
         className="open_intercom"
         appearance="primary"
-        onClick={() => dispatch(inactiveIntercom(isIntercomActive))}
+        onClick={() => dispatch(deactivateIntercom(isIntercomActive))}
         isActive={isIntercomActive}
       >
         <IconClose />
