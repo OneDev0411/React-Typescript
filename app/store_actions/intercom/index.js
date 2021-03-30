@@ -8,11 +8,11 @@ export const activateIntercom = isActive => dispatch => {
     return Promise.resolve()
   }
 
-  window.Intercom('show')
-
   dispatch({
     type: ACTIVATE_INTERCOM
   })
+
+  window.Intercom('show')
 }
 
 export const deactivateIntercom = isActive => dispatch => {
@@ -20,9 +20,11 @@ export const deactivateIntercom = isActive => dispatch => {
     return Promise.resolve()
   }
 
-  window.Intercom('hide')
-
   dispatch({
     type: DEACTIVATE_INTERCOM
   })
+
+  setTimeout(() => {
+    window.Intercom('hide')
+  }, 500)
 }

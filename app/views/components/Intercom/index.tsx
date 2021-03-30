@@ -43,7 +43,7 @@ export default function Intercom() {
         title="Close"
         className="open_intercom"
         appearance="primary"
-        onClick={() => dispatch(deactivateIntercom(isIntercomActive))}
+        onClick={() => dispatch(deactivateIntercom(true))}
         isActive={isIntercomActive}
       >
         <IconClose />

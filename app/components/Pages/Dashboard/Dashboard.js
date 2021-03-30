@@ -46,11 +46,6 @@ class Dashboard extends Component {
     }
 
     if (typeof window !== 'undefined') {
-      if (window.Intercom) {
-        window.Intercom('hide')
-        window.Intercom('onShow', () => dispatch(activateIntercom()))
-      }
-
       if (!('WebkitAppearance' in document.documentElement.style)) {
         import('simplebar')
       }
@@ -64,7 +59,7 @@ class Dashboard extends Component {
   componentWillUnmount() {
     const { user, dispatch } = this.props
 
-    dispatch(deactivateIntercom())
+    dispatch(deactivateIntercom(true))
 
     if (user && hasUserAccess(user, 'CRM')) {
       window.removeEventListener('online', this.handleOnlineEvent)
