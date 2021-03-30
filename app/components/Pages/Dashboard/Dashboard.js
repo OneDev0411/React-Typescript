@@ -16,10 +16,7 @@ import NotificationSocket from '../../../services/socket/Notifications'
 
 import { selectListings } from '../../../reducers/listings'
 
-import {
-  deactivateIntercom,
-  activateIntercom
-} from '../../../store_actions/intercom'
+import { deactivateIntercom } from '../../../store_actions/intercom'
 import { getRooms } from '../../../store_actions/chatroom'
 import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
@@ -39,7 +36,7 @@ import { DashboardLayout } from './DashboardLayout'
 
 class Dashboard extends Component {
   UNSAFE_componentWillMount() {
-    const { user, dispatch } = this.props
+    const { user } = this.props
 
     if (user) {
       new ChatSocket(user)

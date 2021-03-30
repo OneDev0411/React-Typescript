@@ -1,5 +1,5 @@
 import React from 'react'
-import IntercomSDK from 'react-intercom'
+import { useIntercom } from 'react-use-intercom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { selectUser } from 'selectors/user'
@@ -26,19 +26,23 @@ export default function Intercom() {
         }
       : {}
 
+  const { boot } = useIntercom()
+
+  // Read https://github.com/devrnt/react-use-intercom#useintercom for more options
+  boot({
+    ...UserInfo,
+    customAttributes: {
+      custom_launcher_selector: '.open_intercom',
+      vertical_padding: 0,
+      horizontal_padding: 8,
+      alignment: 'left'
+    }
+  })
+
   return (
     <>
       <GlobalIntercomStyles />
-      {(window as any).INTERCOM_ID && (
-        <IntercomSDK
-          appID={(window as any).INTERCOM_ID}
-          alignment="left"
-          horizontal_padding={8}
-          vertical_padding={0}
-          custom_launcher_selector=".open_intercom"
-          {...UserInfo}
-        />
-      )}
+
       <Button
         title="Close"
         className="open_intercom"
