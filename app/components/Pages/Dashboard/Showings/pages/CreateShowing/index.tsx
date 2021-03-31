@@ -4,13 +4,14 @@ import PageLayout from 'components/GlobalPageLayout'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 
 import ShowingStepIntro from '../../components/ShowingStepIntro'
-import ShowingStepProperty, {
-  ShowingStepPropertyProps
-} from '../../components/ShowingStepProperty'
+import ShowingStepProperty from '../../components/ShowingStepProperty'
+import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
+import { ShowingPropertyType } from '../../types'
 
 function CreateShowing() {
-  const [property, setProperty] = useState<
-    ShowingStepPropertyProps['property']
+  const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
+  const [approvalType, setApprovalType] = useState<
+    Nullable<IShowingApprovalType>
   >(null)
 
   return (
@@ -22,6 +23,10 @@ function CreateShowing() {
           <ShowingStepProperty
             property={property}
             onPropertyChange={setProperty}
+          />
+          <ShowingStepApprovalType
+            approvalType={approvalType}
+            onApprovalTypeChange={setApprovalType}
           />
           <QuestionSection>Sample Next Section</QuestionSection>
         </QuestionWizard>
