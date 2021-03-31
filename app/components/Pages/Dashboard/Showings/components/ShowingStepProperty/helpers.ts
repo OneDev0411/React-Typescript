@@ -28,7 +28,17 @@ export function getStdAddrFromAddressComponents(
     suftype: '',
     postcode: '',
     house_num: '',
-    country: ''
+    country: '',
+    building: '',
+    qual: '',
+    pretype: '',
+    sufdir: '',
+    extra: '',
+    box: '',
+    ruralroute: '',
+    line1: '',
+    line2: '',
+    full: ''
   }
 
   const flatAddressComponentsObject = getFlatAddressComponentsObject(

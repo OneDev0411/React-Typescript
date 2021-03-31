@@ -46,9 +46,10 @@ function ShowingStepProperty({
     } else if (result.type === 'place') {
       onPropertyChange({
         type: 'place',
-        address: getStdAddrFromAddressComponents(
-          result.place.address_components
-        ),
+        address: {
+          ...getStdAddrFromAddressComponents(result.place.address_components),
+          full: result.place.formatted_address
+        },
         gallery: [],
         price: 0
       })

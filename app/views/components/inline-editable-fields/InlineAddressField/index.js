@@ -22,7 +22,8 @@ const propTypes = {
   showDeleteButton: PropTypes.bool,
   handleSubmit: PropTypes.func,
   preSaveFormat: PropTypes.func,
-  postLoadFormat: PropTypes.func
+  postLoadFormat: PropTypes.func,
+  closeAddressAndSuggestionOnSubmit: PropTypes.bool
 }
 
 const defaultProps = {
@@ -32,7 +33,8 @@ const defaultProps = {
   formStyle: {},
   handleDelete() {},
   handleInputChange() {},
-  showDeleteButton: false
+  showDeleteButton: false,
+  closeAddressAndSuggestionOnSubmit: false
 }
 
 export class InlineAddressField extends React.Component {
@@ -61,9 +63,7 @@ export class InlineAddressField extends React.Component {
       window.isLoadingGoogleApi = true
 
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          bootstrapURLKeys.key
-        }&libraries=places`
+        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=places`
       )
     }
   }
@@ -220,6 +220,14 @@ export class InlineAddressField extends React.Component {
     })
   }
 
+  handleAddressPopoverSubmit = value => {
+    this.props.handleSubmit(value)
+
+    if (this.props.closeAddressAndSuggestionOnSubmit) {
+      this.handleClose()
+    }
+  }
+
   render() {
     const address = this.state.address
 
@@ -252,7 +260,7 @@ export class InlineAddressField extends React.Component {
           preSaveFormat={this.props.preSaveFormat}
           postLoadFormat={this.props.postLoadFormat}
           onDelete={this.props.handleDelete}
-          onSubmit={this.props.handleSubmit}
+          onSubmit={this.handleAddressPopoverSubmit}
           onClose={this.handleClose}
         />
       </div>

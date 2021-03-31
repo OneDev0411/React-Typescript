@@ -1,4 +1,4 @@
-declare interface IStdAddr {
+declare interface IStdAddrBase {
   country: string
   city: string
   name: string
@@ -18,7 +18,7 @@ declare interface IStdAddr {
   unit: string
 }
 
-declare interface IStdAddrReadOnly extends IStdAddr {
+declare interface IStdAddr extends IStdAddrBase {
   line1: string
   line2: string
   full: string
