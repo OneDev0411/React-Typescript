@@ -137,6 +137,7 @@ export function DealPrimaryAgent({
         >
           {shouldPickRoleFromContacts ? (
             <ContactRoles
+              source="MLS"
               placeholder="Type Agent Name"
               onSelectRole={setSelectedRole}
             />

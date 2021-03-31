@@ -45,7 +45,7 @@ export function DealClient({
   skippable = false,
   onChange
 }: Props) {
-  const { deal, user, checklist } = useCreationContext()
+  const { user, checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
