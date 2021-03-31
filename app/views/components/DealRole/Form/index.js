@@ -286,7 +286,7 @@ export class DealRole extends React.Component {
    */
   get errorNames() {
     const INVALID_EMAIL = 'Invalid Email Address'
-    const INVALID_PHONE = 'Number is invalid (###)###-####'
+    const INVALID_PHONE = 'Number is invalid'
     const INVALID_ADDRESS = 'Invalid address'
     const INVALID_MLS = 'Invalid MLS ID'
 

@@ -52,7 +52,9 @@ export function DealClient({
   const dispatch = useDispatch()
 
   const allowedRoles = getRoles(side)
-  const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
+  const clientRoles = Array.isArray(roles)
+    ? roles.filter(client => allowedRoles.includes(client.role))
+    : []
   const predefinedClientRoles = predefinedRoles.filter(client =>
     allowedRoles.includes(client.role)
   )

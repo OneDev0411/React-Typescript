@@ -119,6 +119,10 @@ export default function Publish({ params }: Props) {
     const status =
       watch(`context:${statusContextKey}`) || getField(deal, statusContextKey)
 
+    if (!address) {
+      errors.address = 'Address is required'
+    }
+
     if (
       deal.deal_type === 'Buying' &&
       (!buyingClients || buyingClients.length === 0)
@@ -128,10 +132,6 @@ export default function Publish({ params }: Props) {
 
     if (!sellingClients || sellingClients.length === 0) {
       errors.selling_clients = 'Seller Legal Names is required'
-    }
-
-    if (!address) {
-      errors.address = 'Address is required'
     }
 
     if (isStatusVisible && !status) {
@@ -159,7 +159,7 @@ export default function Publish({ params }: Props) {
     ))
   }
 
-  const saveForm = async () => {
+  const saveForm = async (showNotification = true) => {
     const values = control.getValues() as FormValues
 
     const roles = ([] as IDealRole[]).concat(
@@ -180,12 +180,13 @@ export default function Publish({ params }: Props) {
 
       await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
 
-      dispatch(
-        notify({
-          status: 'success',
-          message: 'The form is saved.'
-        })
-      )
+      showNotification &&
+        dispatch(
+          notify({
+            status: 'success',
+            message: 'The form is saved.'
+          })
+        )
     } catch (e) {
       console.log(e)
     } finally {
@@ -217,7 +218,7 @@ export default function Publish({ params }: Props) {
       setIsPublishing(true)
 
       await Promise.all([
-        await saveForm(),
+        await saveForm(false),
         await dispatch(publishDeal(deal.id))
       ])
 
@@ -266,13 +267,14 @@ export default function Publish({ params }: Props) {
       <Header
         title="Make Visible To Admin"
         confirmationMessage="Cancel deal publish?"
+        disableClose={isSaving || isPublishing}
         actions={
           <>
             <Button
               color="secondary"
               variant="outlined"
               disabled={isSaving || isPublishing}
-              onClick={saveForm}
+              onClick={() => saveForm()}
             >
               {isSaving ? 'Saving...' : 'Save'}
             </Button>
@@ -359,7 +361,7 @@ export default function Publish({ params }: Props) {
             />
           )}
 
-          {isStatusVisible && (
+          {isStatusVisible && !getField(deal, statusContextKey) && (
             <Controller
               name={`context:${statusContextKey}`}
               control={control}
@@ -388,14 +390,18 @@ export default function Publish({ params }: Props) {
 
         <Box textAlign="right" mt={8}>
           <Tooltip placement="top" title={getButtonTooltip()}>
-            <Button
-              color="secondary"
-              variant="contained"
-              disabled={isPublishing || isSaving}
-              onClick={handlePublish}
-            >
-              {isPublishing ? 'Saving...' : 'Make Visible to Admin'}
-            </Button>
+            <span>
+              <Button
+                color="secondary"
+                variant="contained"
+                disabled={
+                  isPublishing || isSaving || Object.keys(validate()).length > 0
+                }
+                onClick={handlePublish}
+              >
+                {isPublishing ? 'Saving...' : 'Make Visible to Admin'}
+              </Button>
+            </span>
           </Tooltip>
         </Box>
       </Box>

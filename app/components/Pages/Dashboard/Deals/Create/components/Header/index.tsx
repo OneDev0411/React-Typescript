@@ -33,6 +33,7 @@ interface Props {
   title: string
   actions?: React.ReactNode
   confirmationMessage: string
+  disableClose?: boolean
   onClose: () => void
 }
 
@@ -40,6 +41,7 @@ export function Header({
   title,
   actions,
   confirmationMessage,
+  disableClose = false,
   onClose
 }: Props) {
   const classes = useStyles()
@@ -69,6 +71,7 @@ export function Header({
           color="secondary"
           size="medium"
           className={classes.closeButton}
+          disabled={disableClose}
           onClick={handleClose}
         >
           <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />

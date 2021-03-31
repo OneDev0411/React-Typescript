@@ -36,6 +36,7 @@ const Grid = styled(MuiGrid)(spacing)
 export function RoleForm(props) {
   const [showNameDetails, setShowNameDetails] = useState(false)
 
+  const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
   const showNewContactButton =
@@ -287,37 +288,43 @@ export function RoleForm(props) {
             ) : (
               <>
                 <Tooltip placement="top" title={getTooltip()}>
-                  <Button
-                    ml={1}
-                    variant={
-                      showNewContactButton || showUpdateContactButton
-                        ? 'outlined'
-                        : 'contained'
-                    }
-                    color={
-                      showNewContactButton || showUpdateContactButton
-                        ? 'secondary'
-                        : 'primary'
-                    }
-                    onClick={() => props.onSubmit(props.form, false)}
-                  >
-                    Save
-                  </Button>
+                  <span>
+                    <Button
+                      ml={1}
+                      variant={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      color={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'secondary'
+                          : 'primary'
+                      }
+                      disabled={hasErrors}
+                      onClick={() => props.onSubmit(props.form, false)}
+                    >
+                      Save
+                    </Button>
+                  </span>
                 </Tooltip>
 
                 {(showNewContactButton || showUpdateContactButton) && (
                   <Tooltip placement="top" title={getTooltip()}>
-                    <Button
-                      ml={1}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => props.onSubmit(props.form, true)}
-                    >
-                      Save &{' '}
-                      {props.values.contact
-                        ? 'Update Contact'
-                        : 'Add to My Contacts'}
-                    </Button>
+                    <span>
+                      <Button
+                        ml={1}
+                        variant="contained"
+                        color="primary"
+                        disabled={hasErrors}
+                        onClick={() => props.onSubmit(props.form, true)}
+                      >
+                        Save &{' '}
+                        {props.values.contact
+                          ? 'Update Contact'
+                          : 'Add to My Contacts'}
+                      </Button>
+                    </span>
                   </Tooltip>
                 )}
               </>
