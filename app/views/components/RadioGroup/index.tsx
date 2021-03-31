@@ -8,16 +8,16 @@ import {
   useTheme
 } from '@material-ui/core'
 
-export type RadioItem = {
-  value: string | null
+export type RadioItem<T extends string = string> = {
+  value: Nullable<T>
   label: string
   description?: string
 }
 
-export interface RadioGroupProps {
+export interface RadioGroupProps<T extends string = string> {
   name: string
   defaultValue?: string | null
-  options: RadioItem[]
+  options: RadioItem<T>[]
   style?: React.CSSProperties
   groupStyle?: React.CSSProperties
   onChange: (value: unknown) => void
