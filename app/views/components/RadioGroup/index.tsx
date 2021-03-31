@@ -8,13 +8,13 @@ import {
   useTheme
 } from '@material-ui/core'
 
-type RadioItem = {
+export type RadioItem = {
   value: string | null
   label: string
   description?: string
 }
 
-interface Props {
+export interface RadioGroupProps {
   name: string
   defaultValue?: string | null
   options: RadioItem[]
@@ -53,7 +53,7 @@ export function RadioGroup({
   style = {},
   groupStyle = {},
   onChange
-}: Props) {
+}: RadioGroupProps) {
   const classes = useStyles()
   const [value, setValue] = useState(defaultValue)
   const theme = useTheme<Theme>()
