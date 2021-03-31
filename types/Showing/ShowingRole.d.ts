@@ -1,5 +1,5 @@
 declare interface IShowingRole extends IModel<'showing_role'> {
-  role: IDealRole
+  role: IShowingRoleType
   user: UUID
   brand: UUID
   approval_required: boolean

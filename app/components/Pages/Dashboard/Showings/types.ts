@@ -24,3 +24,8 @@ export type ShowingPropertyType =
   | ShowingPropertyDeal
   | ShowingPropertyListing
   | ShowingPropertyPlace
+
+export type ShowingRolePerson = Pick<
+  IShowingRole,
+  'first_name' | 'last_name' | 'email' | 'phone_number'
+>

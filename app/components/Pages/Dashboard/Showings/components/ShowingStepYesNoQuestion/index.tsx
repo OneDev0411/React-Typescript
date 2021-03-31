@@ -3,7 +3,8 @@ import React from 'react'
 import {
   QuestionForm,
   QuestionSection,
-  QuestionTitle
+  QuestionTitle,
+  useWizardContext
 } from 'components/QuestionWizard'
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
 
@@ -31,6 +32,13 @@ function ShowingStepYesNoQuestion({
   value,
   onChange
 }: ShowingStepYesNoQuestionProps) {
+  const wizard = useWizardContext()
+
+  const handleChange = (value: YesNoAnswer) => {
+    onChange(value)
+    wizard.next()
+  }
+
   return (
     <QuestionSection>
       <QuestionTitle>{question}</QuestionTitle>
@@ -39,7 +47,7 @@ function ShowingStepYesNoQuestion({
           defaultValue={value}
           name="approvalType"
           options={yesNoOptions}
-          onChange={onChange}
+          onChange={handleChange}
         />
       </QuestionForm>
     </QuestionSection>
