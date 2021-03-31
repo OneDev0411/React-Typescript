@@ -59,7 +59,7 @@ const useStyles = makeStyles(
 export function DealContext({
   concurrentMode = false,
   context,
-  onChange = () => {}
+  onChange
 }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -83,7 +83,7 @@ export function DealContext({
   }, [defaultValue])
 
   useEffect(() => {
-    if (inputValue && concurrentMode) {
+    if (inputValue && concurrentMode && context.validate(context, inputValue)) {
       handleSave()
     }
 
@@ -131,7 +131,7 @@ export function DealContext({
         ? fecha.format(inputValue * 1000, 'YYYY-MM-DD')
         : inputValue
 
-    if (deal) {
+    if (deal && !onChange) {
       try {
         const approved = isBackOffice(user) ? true : !context.needs_approval
         const data = createUpsertObject(deal, context.key, value, approved)
@@ -141,7 +141,8 @@ export function DealContext({
         console.log(e)
       }
     } else {
-      onChange(value)
+      console.log(`Change ${context.key} To ${value}`)
+      onChange?.(value)
     }
 
     if (wizard.currentStep === step) {

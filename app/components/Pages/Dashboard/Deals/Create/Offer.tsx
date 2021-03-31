@@ -18,11 +18,12 @@ import { normalizeForm as normalizeRole } from 'components/DealRole/helpers/norm
 import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
-import Deal from 'models/Deal'
-import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
+
+import { getStatusField } from 'models/Deal/helpers/dynamic-context'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
+import { getFormContexts } from './helpers/get-form-contexts'
 
 import { DealClient } from './form/DealClient'
 import { OfferEnderType } from './form/OfferEnderType'
@@ -81,6 +82,7 @@ function CreateOffer({ router, route, params }: Props) {
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
+  const statusContextKey = getStatusField(deal)
 
   const dealContexts = deal
     ? getDealContexts(user, 'Buying', deal.property_type, true)
@@ -92,31 +94,6 @@ function CreateOffer({ router, route, params }: Props) {
 
   const isDoubleEnded = isOfficeDoubleEnded || isAgentDoubleEnded
   const sellerAgent = roles.find(item => item.role === 'SellerAgent')
-
-  const getContexts = (
-    values: Record<string, unknown>,
-    deal: IDeal,
-    checklist: IDealChecklist
-  ) => {
-    return Object.entries(values).reduce((acc, [key, value]) => {
-      if (key.includes('context') === false) {
-        return acc
-      }
-
-      const name = key.split(':')[1]
-      const context = Deal.get.context(deal, key)
-
-      return [
-        ...acc,
-        {
-          value,
-          definition: getDefinitionId(deal.id, name),
-          checklist: checklist.id,
-          approved: context ? context.needs_approval : false
-        }
-      ]
-    }, [])
-  }
 
   const createOfferChecklist = async () => {
     const values = control.getValues()
@@ -156,7 +133,9 @@ function CreateOffer({ router, route, params }: Props) {
 
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
-        dispatch(upsertContexts(deal.id, getContexts(values, deal, checklist)))
+        dispatch(
+          upsertContexts(deal.id, getFormContexts(values, deal, checklist))
+        )
       ])
 
       goTo(`/dashboard/deals/${deal.id}`)
@@ -299,7 +278,7 @@ function CreateOffer({ router, route, params }: Props) {
 
           {showStatusQuestion(deal, 'Buying', 'contract_status') && (
             <Controller
-              name="context:status"
+              name={`context:${statusContextKey}`}
               control={control}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />

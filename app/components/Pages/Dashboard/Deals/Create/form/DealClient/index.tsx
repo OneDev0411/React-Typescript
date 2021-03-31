@@ -96,7 +96,7 @@ export function DealClient({
 
   const handleDeleteRole = (role: IDealRole) => {
     if (role.deal) {
-      dispatch(deleteRole(deal!.id, role.id))
+      dispatch(deleteRole(role.deal, role.id))
 
       return
     }
@@ -119,7 +119,6 @@ export function DealClient({
             compact
             showSaveContactButton
             user={user}
-            deal={deal}
             checklist={checklist}
             dealSide={side}
             form={selectedRole}
