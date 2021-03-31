@@ -14,11 +14,7 @@ interface ShowingStepApprovalTypeProps {
   onApprovalTypeChange: (approvalType: IShowingApprovalType) => void
 }
 
-interface ShowingApprovalTypeItem extends Omit<RadioItem, 'value'> {
-  value: IShowingApprovalType
-}
-
-const approvalTypeOptions: ShowingApprovalTypeItem[] = [
+const approvalTypeOptions: RadioItem<IShowingApprovalType>[] = [
   {
     label: 'Appointments required, confirm with any',
     value: 'Any'

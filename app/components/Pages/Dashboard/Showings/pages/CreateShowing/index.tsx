@@ -7,11 +7,17 @@ import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
 import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
 import { ShowingPropertyType } from '../../types'
+import ShowingStepYesNoQuestion, {
+  YesNoAnswer
+} from '../../components/ShowingStepYesNoQuestion'
 
 function CreateShowing() {
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
   const [approvalType, setApprovalType] = useState<
     Nullable<IShowingApprovalType>
+  >(null)
+  const [isListingAgentAccompanied, setIsListingAgentAccompanied] = useState<
+    Nullable<YesNoAnswer>
   >(null)
 
   return (
@@ -27,6 +33,11 @@ function CreateShowing() {
           <ShowingStepApprovalType
             approvalType={approvalType}
             onApprovalTypeChange={setApprovalType}
+          />
+          <ShowingStepYesNoQuestion
+            question="Is this a listing agent accompanied showing?"
+            value={isListingAgentAccompanied}
+            onChange={setIsListingAgentAccompanied}
           />
           <QuestionSection>Sample Next Section</QuestionSection>
         </QuestionWizard>
