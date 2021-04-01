@@ -19,7 +19,8 @@ export const IMAGE_ELEMENT_TYPES: string[] = [
 export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
   'cell',
   'text',
-  'div'
+  'div',
+  'image-bg'
 ]
 
 export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = ['mj-hero']

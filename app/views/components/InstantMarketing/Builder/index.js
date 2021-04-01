@@ -354,10 +354,10 @@ class Builder extends React.Component {
     }
 
     if (this.isWebsiteTemplate) {
-      this.registerWebsiteBlocks()
+      this.registerWebsiteBlocks().then(this.setupImageDoubleClickHandler)
+    } else {
+      this.setupImageDoubleClickHandler()
     }
-
-    this.setupImageDoubleClickHandler()
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
