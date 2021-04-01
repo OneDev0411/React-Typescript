@@ -199,7 +199,7 @@ class Builder extends React.Component {
 
     this.initLoadedListingsAssets()
 
-    this.editor.on('load', this.setupGrapesJs.bind(this))
+    this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
   }
 
@@ -322,7 +322,7 @@ class Builder extends React.Component {
     })
   }
 
-  async setupGrapesJs() {
+  setupGrapesJs = async () => {
     registerCommands(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
