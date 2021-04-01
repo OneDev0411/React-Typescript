@@ -134,8 +134,8 @@ export function convertContactToRole(contact) {
 export function convertAgentToRole(agent) {
   return {
     agent,
-    emails: [agent.email],
-    phone_numbers: [agent.phone_number],
+    emails: [],
+    phone_numbers: [],
     companies: [],
     legal_first_name: agent.first_name,
     legal_middle_name: agent.middle_name,
