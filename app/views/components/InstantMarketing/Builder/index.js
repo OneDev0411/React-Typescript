@@ -199,7 +199,7 @@ class Builder extends React.Component {
 
     this.initLoadedListingsAssets()
 
-    this.editor.on('load', this.setupGrapesJs)
+    this.editor.on('load', this.setupGrapesJs.bind(this))
     this.editor.on('rte:enable', this.evaluateRte)
   }
 
@@ -322,7 +322,7 @@ class Builder extends React.Component {
     })
   }
 
-  setupGrapesJs = () => {
+  async setupGrapesJs() {
     registerCommands(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
@@ -354,10 +354,10 @@ class Builder extends React.Component {
     }
 
     if (this.isWebsiteTemplate) {
-      this.registerWebsiteBlocks().then(this.setupImageDoubleClickHandler)
-    } else {
-      this.setupImageDoubleClickHandler()
+      await this.registerWebsiteBlocks()
     }
+
+    this.setupImageDoubleClickHandler()
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
