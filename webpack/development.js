@@ -1,9 +1,7 @@
 // @ts-nocheck
 const { merge } = require('webpack-merge')
-const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const Webpackbar = require('webpackbar')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const common = require('./base')
 
@@ -26,26 +24,7 @@ const config = {
       analyzerMode: 'static',
       openAnalyzer: false
     }),
-    new Webpackbar(),
-    new ForkTsCheckerNotifierWebpackPlugin({ alwaysNotify: false }),
-    new ForkTsCheckerWebpackPlugin({
-      /**
-       * This is crucial in development, as it doesn't block webpack compilation
-       * while typechecking is in progress.
-       */
-      async: true,
-      /**
-       * Syntactic errors are checked by babel too, so we turn it off for a small
-       * performance gain.
-       */
-      typescript: {
-        useTypescriptIncrementalApi: true,
-
-        diagnosticOptions: {
-          syntactic: true
-        }
-      }
-    })
+    new Webpackbar()
   ],
   module: {
     rules: [
