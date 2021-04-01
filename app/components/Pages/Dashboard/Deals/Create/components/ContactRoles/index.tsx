@@ -61,7 +61,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  source: 'MLS' | 'CRM'
+  source?: 'MLS' | 'CRM'
   placeholder: string
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
