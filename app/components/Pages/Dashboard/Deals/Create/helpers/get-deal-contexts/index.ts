@@ -1,8 +1,7 @@
 import { getItems } from 'models/Deal/helpers/dynamic-context'
-import { getActiveTeamId } from 'utils/user-teams'
 
 export function getDealContexts(
-  user: IUser,
+  deal: IDeal,
   dealType?: IDealType,
   dealPropertyType?: IDealPropertyType,
   hasActiveOffer = false
@@ -11,9 +10,7 @@ export function getDealContexts(
     return []
   }
 
-  const id = getActiveTeamId(user)
-
-  return getItems(id, dealType, dealPropertyType, hasActiveOffer).filter(
+  return getItems(deal.id, dealType, dealPropertyType, hasActiveOffer).filter(
     (field: IDealBrandContext) => {
       if (!field.mandatory) {
         return false

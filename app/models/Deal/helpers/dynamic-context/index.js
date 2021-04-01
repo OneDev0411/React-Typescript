@@ -64,7 +64,7 @@ export function getFactsheetSection(listId, deal, section) {
     listId,
     deal.deal_type,
     deal.property_type,
-    getHasActiveOffer(deal)
+    deal.has_active_offer
   )
 
   const list = items.filter(item => item.section === section)
@@ -402,9 +402,11 @@ export function getDefinition(list_id, key) {
   return _.find(getList(list_id), { key })
 }
 
-export function getChecklist(deal, fieldKey) {
-  const dealContext = getContext(deal, fieldKey)
-  const field = query(deal, item => item.key === fieldKey)[0]
+export function getChecklist(deal, key) {
+  // debugger
+
+  const dealContext = getContext(deal, key)
+  const field = query(deal, item => item.key === key)[0]
 
   if (dealContext && dealContext.checklist) {
     return dealContext.checklist
@@ -414,7 +416,7 @@ export function getChecklist(deal, fieldKey) {
     field,
     deal.deal_type,
     deal.property_type,
-    getHasActiveOffer(deal),
+    deal.has_active_offer,
     'required'
   )
 
@@ -424,7 +426,7 @@ export function getChecklist(deal, fieldKey) {
   if (
     deal.deal_type === 'Selling' &&
     condition.includes('Active Offer') &&
-    getHasActiveOffer(deal)
+    deal.has_active_offer
   ) {
     return deal.checklists.find(
       id =>
