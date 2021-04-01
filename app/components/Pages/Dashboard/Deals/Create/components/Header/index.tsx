@@ -18,7 +18,7 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
       backgroundColor: '#fff',
       padding: theme.spacing(1, 4),
-      zIndex: 1
+      zIndex: theme.zIndex.appBar
     },
     closeButton: {
       marginLeft: theme.spacing(1)
