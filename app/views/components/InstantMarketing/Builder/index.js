@@ -200,19 +200,7 @@ class Builder extends React.Component {
     this.initLoadedListingsAssets()
 
     this.editor.on('load', this.setupGrapesJs)
-    this.editor.on('rte:enable', this.evaluateRte.bind(this))
-  }
-
-  evaluateRte(view, rte) {
-    let model = view.model
-
-    do {
-      if (model.attributes.attributes.rte === 'disable') {
-        this.editor.RichTextEditor.disable(view, rte)
-        break
-      }
-      // eslint-disable-next-line no-cond-assign
-    } while ((model = model.parent()))
+    this.editor.on('rte:enable', this.evaluateRte)
   }
 
   componentWillUnmount() {
@@ -223,6 +211,18 @@ class Builder extends React.Component {
     }
 
     unloadJS('ckeditor')
+  }
+
+  evaluateRte = (view, rte) => {
+    let model = view.model
+
+    do {
+      if (model.attributes.attributes.rte === 'disable') {
+        this.editor.RichTextEditor.disable(view, rte)
+        break
+      }
+      // eslint-disable-next-line no-cond-assign
+    } while ((model = model.parent()))
   }
 
   loadCKEditor = () => {
