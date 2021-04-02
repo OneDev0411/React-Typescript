@@ -148,24 +148,39 @@ function CreateDeal({ router, route }: Props) {
       savePropertyAddress(newDeal, values.property_address)
     }
 
-    if (newDeal.deal_type === 'Selling') {
-      const defaultStatus = newDeal.property_type.includes('Lease')
+    saveContexts(newDeal, checklist)
+
+    setIsCreatingDeal(false)
+  }
+
+  const saveContexts = (deal: IDeal, checklist: IDealChecklist) => {
+    const contexts: IDealContext[] = []
+
+    if (deal.deal_type === 'Selling') {
+      const defaultStatus = deal.property_type.includes('Lease')
         ? 'Lease'
         : 'Active'
 
-      dispatch(
-        upsertContexts(newDeal.id, [
-          {
-            definition: getDefinitionId(newDeal.id, 'listing_status'),
-            checklist: checklist.id,
-            value: defaultStatus,
-            approved: true
-          }
-        ])
-      )
+      contexts.push({
+        definition: getDefinitionId(deal.id, 'listing_status'),
+        checklist: checklist.id,
+        value: defaultStatus,
+        approved: true
+      })
     }
 
-    setIsCreatingDeal(false)
+    if (isDoubleEnded) {
+      contexts.push({
+        definition: getDefinitionId(deal.id, 'ender_type'),
+        checklist: checklist.id,
+        value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
+        approved: true
+      })
+    }
+
+    if (contexts.length > 0) {
+      dispatch(upsertContexts(deal.id, contexts))
+    }
   }
 
   const savePropertyAddress = async (
