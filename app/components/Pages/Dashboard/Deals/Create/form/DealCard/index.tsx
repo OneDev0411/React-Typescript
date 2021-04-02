@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
@@ -19,10 +19,9 @@ import type { IDealSide } from '../../types'
 interface Props {
   dealSide: IDealSide
   isCreatingDeal: boolean
-  onCreateDeal: () => void
 }
 
-export function DealCard({ dealSide, isCreatingDeal, onCreateDeal }: Props) {
+export function DealCard({ dealSide, isCreatingDeal }: Props) {
   const { deal } = useCreationContext()
   const { step } = useSectionContext()
   const wizard = useWizardContext()
@@ -30,52 +29,39 @@ export function DealCard({ dealSide, isCreatingDeal, onCreateDeal }: Props) {
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
   const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/offer`)
 
-  if (wizard.currentStep !== step) {
+  useEffect(() => {
+    if (step === wizard.currentStep) {
+      wizard.next()
+    }
+
+    wizard.setLoading(isCreatingDeal)
+  }, [wizard, step, isCreatingDeal])
+
+  if (!deal) {
     return null
   }
 
   return (
     <QuestionSection>
-      <QuestionTitle>
-        {deal ? (
-          <div>
-            <div>Congratulation! 🎉</div>I am done creating the deal for you
-          </div>
-        ) : (
-          <div>Everything is in place 🚀</div>
-        )}
-      </QuestionTitle>
+      <QuestionTitle>Congratulations! 🎉 Your deal is created</QuestionTitle>
 
       <QuestionForm>
         <Box display="flex" justifyContent="flex-end">
-          {deal ? (
-            <>
-              {dealSide == 'Both' && (
-                <Box mr={2}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={createOffer}
-                  >
-                    Create Offer
-                  </Button>
-                </Box>
-              )}
-
-              <Button variant="contained" color="secondary" onClick={openDeal}>
-                View Deal
+          {dealSide == 'Both' && (
+            <Box mr={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={createOffer}
+              >
+                Create Offer
               </Button>
-            </>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={isCreatingDeal}
-              onClick={onCreateDeal}
-            >
-              {isCreatingDeal ? 'Creating Deal...' : 'Create Deal'}
-            </Button>
+            </Box>
           )}
+
+          <Button variant="contained" color="secondary" onClick={openDeal}>
+            View Deal
+          </Button>
         </Box>
       </QuestionForm>
     </QuestionSection>

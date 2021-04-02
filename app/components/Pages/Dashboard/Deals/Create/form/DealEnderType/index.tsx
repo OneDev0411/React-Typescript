@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
+import { Box, Button } from '@material-ui/core'
+
 import {
   QuestionSection,
   QuestionTitle,
@@ -28,6 +30,12 @@ export function DealEnderType({ onChange }: Props) {
   const { deal } = useCreationContext()
 
   const dispatch = useDispatch()
+
+  const handleSkip = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+  }
 
   const handleChange = (value: IDealEnderType) => {
     if (deal) {
@@ -63,6 +71,12 @@ export function DealEnderType({ onChange }: Props) {
           ]}
           onChange={handleChange}
         />
+
+        <Box mt={2} textAlign="right" onClick={handleSkip}>
+          <Button color="secondary" variant="outlined">
+            Skip
+          </Button>
+        </Box>
       </QuestionForm>
     </QuestionSection>
   )

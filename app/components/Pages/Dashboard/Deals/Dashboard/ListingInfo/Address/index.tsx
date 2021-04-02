@@ -17,7 +17,6 @@ import { createAddressContext } from 'deals/utils/create-address-context'
 import { upsertContexts } from 'actions/deals'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,6 +29,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     addressInput: {
       width: '18rem'
+    },
+    addressSecondary: {
+      color: theme.palette.grey[500]
     }
   })
 )
@@ -46,6 +48,7 @@ export function Address(props: Props) {
   const cancelEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
   const fullAddress = getField(props.deal, 'full_address')
+  const addressTitle = (fullAddress || props.deal.title).split(',')
 
   const handleSave = async address => {
     const contexts = createAddressContext(props.deal, address)
@@ -99,12 +102,18 @@ export function Address(props: Props) {
           placement="bottom"
         >
           <div className={classes.container} onClick={editAddress}>
-            <Typography variant="subtitle1">
-              <TextMiddleTruncate
-                text={fullAddress || props.deal.title}
-                maxLength={35}
-              />
-            </Typography>
+            <div>
+              <Typography variant="subtitle1">{addressTitle[0]}</Typography>
+
+              {addressTitle.length > 1 && (
+                <Typography
+                  variant="subtitle2"
+                  className={classes.addressSecondary}
+                >
+                  {addressTitle.slice(1, addressTitle.length - 1).join(', ')}
+                </Typography>
+              )}
+            </div>
 
             {!props.deal.listing && (
               <Button
