@@ -15,7 +15,8 @@ interface RenderProps {
   isEmptyState: boolean
   teams: NormalizedBrand[]
 }
-interface Props {
+
+export interface TeamAgentsProps {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
   criteria?: string
@@ -27,7 +28,7 @@ export default function TeamAgents({
   isPrimaryAgent,
   criteria = '',
   flattenTeams = false
-}: Props) {
+}: TeamAgentsProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
 
