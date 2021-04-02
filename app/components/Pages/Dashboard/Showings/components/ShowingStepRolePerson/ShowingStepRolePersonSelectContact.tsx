@@ -1,6 +1,9 @@
 import React from 'react'
 
+import ContactSearchInput from 'components/ContactSearchInput'
+
 import { ShowingRolePerson } from '../../types'
+import { splitFullName } from './helpers'
 
 interface ShowingStepRolePersonSelectContactProps {
   onSelect: (person: ShowingRolePerson) => void
@@ -9,14 +12,23 @@ interface ShowingStepRolePersonSelectContactProps {
 function ShowingStepRolePersonSelectContact({
   onSelect
 }: ShowingStepRolePersonSelectContactProps) {
-  return (
-    <div>
-      select contact
-      <button type="submit" onClick={onSelect as any}>
-        select
-      </button>
-    </div>
-  )
+  const handleChange = (contact: IContact) => {
+    onSelect({
+      ...splitFullName(contact.display_name),
+      email: contact.email || '',
+      phone_number: contact.phone_number || ''
+    })
+  }
+
+  const handleNew = (fullName: string) => {
+    onSelect({
+      ...splitFullName(fullName),
+      email: '',
+      phone_number: ''
+    })
+  }
+
+  return <ContactSearchInput onChange={handleChange} onNew={handleNew} />
 }
 
 export default ShowingStepRolePersonSelectContact
