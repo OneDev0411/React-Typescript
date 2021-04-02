@@ -91,20 +91,20 @@ export function getItems(
   property_type,
   hasActiveOffer = false
 ) {
-  const requiredFields = getRequiredItems(
+  const optionalFields = getOptionalItems(
     list_id,
     deal_type,
     property_type,
     hasActiveOffer
   )
 
-  const optionalFields = getOptionalItems(
+  const requiredFields = getRequiredItems(
     list_id,
     deal_type,
     property_type,
     hasActiveOffer
   ).filter(
-    field => requiredFields.some(({ key }) => field.key === key) === false
+    field => optionalFields.some(({ key }) => field.key === key) === false
   )
 
   return _.sortBy([].concat(requiredFields, optionalFields), 'order')
