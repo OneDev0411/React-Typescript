@@ -322,7 +322,7 @@ class Builder extends React.Component {
     })
   }
 
-  setupGrapesJs = () => {
+  setupGrapesJs = async () => {
     registerCommands(this.editor)
     registerToolbarButtons(this.editor, {
       onChangeImageClick: () => {
@@ -354,7 +354,7 @@ class Builder extends React.Component {
     }
 
     if (this.isWebsiteTemplate) {
-      this.registerWebsiteBlocks()
+      await this.registerWebsiteBlocks()
     }
 
     this.setupImageDoubleClickHandler()
