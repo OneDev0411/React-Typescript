@@ -45,7 +45,7 @@ function ShowingStepRolePerson({
 
   const handleRemove = () => {
     onPersonChange(null)
-    setIsEditable(false)
+    setIsEditable(true)
   }
 
   return (

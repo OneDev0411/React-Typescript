@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
+import { upperFirst, kebabCase } from 'lodash'
 
 import { Form } from 'react-final-form'
 
@@ -28,7 +29,9 @@ function ShowingStepRolePersonEditForm({
         return (
           <form onSubmit={handleSubmit}>
             <Box mb={2}>
-              <Typography variant="h6">Listing {roleType} Info</Typography>
+              <Typography variant="h6">
+                Listing {upperFirst(kebabCase(roleType))} Info
+              </Typography>
             </Box>
 
             <FormTextField

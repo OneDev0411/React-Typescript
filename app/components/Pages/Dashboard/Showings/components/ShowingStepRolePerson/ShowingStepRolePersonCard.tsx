@@ -1,4 +1,5 @@
 import React from 'react'
+import { kebabCase, upperFirst } from 'lodash'
 
 import { Box, IconButton } from '@material-ui/core'
 
@@ -27,7 +28,7 @@ function ShowingStepRolePersonCard({
   return (
     <ShowingContactOverviewCard
       fullName={`${person.first_name} ${person.last_name}`}
-      subtitle={`Listing ${roleType}`}
+      subtitle={`Listing ${upperFirst(kebabCase(roleType))}`}
       actions={
         <>
           <Box pl={2}>

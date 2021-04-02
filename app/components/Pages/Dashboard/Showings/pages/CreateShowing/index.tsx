@@ -16,6 +16,7 @@ import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 
 function CreateShowing() {
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
+
   const [approvalType, setApprovalType] = useState<
     Nullable<IShowingApprovalType>
   >(null)
@@ -23,6 +24,13 @@ function CreateShowing() {
     null
   )
   const [listingAgentPerson, setListingAgentPerson] = useState<
+    Nullable<ShowingRolePerson>
+  >(null)
+
+  const [hasListingCoAgent, setHasListingCoAgent] = useState<
+    Nullable<YesNoAnswer>
+  >(null)
+  const [listingCoAgentPerson, setListingCoAgentPerson] = useState<
     Nullable<ShowingRolePerson>
   >(null)
 
@@ -52,6 +60,22 @@ function CreateShowing() {
               person={listingAgentPerson}
               onPersonChange={setListingAgentPerson}
             />
+            {/* Agent confirmation step */}
+            {/* Agent notification step */}
+            <ShowingStepYesNoQuestion
+              question="Is there a co-agent you’d like to add?"
+              value={hasListingCoAgent}
+              onChange={setHasListingCoAgent}
+            />
+            <ShowingStepRolePerson
+              hidden={!hasListingCoAgent || hasListingCoAgent === 'No'}
+              roleType="CoAgent"
+              person={listingCoAgentPerson}
+              onPersonChange={setListingCoAgentPerson}
+            />
+            {/* CoAgent confirmation step */}
+            {/* CoAgent notification step */}
+
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
         </Box>
