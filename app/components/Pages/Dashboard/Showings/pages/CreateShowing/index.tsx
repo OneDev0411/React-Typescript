@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { Box } from '@material-ui/core'
+
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 
@@ -28,29 +30,31 @@ function CreateShowing() {
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing" />
       <PageLayout.Main>
-        <QuestionWizard>
-          <ShowingStepIntro />
-          <ShowingStepProperty
-            property={property}
-            onPropertyChange={setProperty}
-          />
-          <ShowingStepApprovalType
-            approvalType={approvalType}
-            onApprovalTypeChange={setApprovalType}
-          />
-          <ShowingStepYesNoQuestion
-            question="Is this a listing agent accompanied showing?"
-            value={hasListingAgent}
-            onChange={setHasListingAgent}
-          />
-          <ShowingStepRolePerson
-            hidden={!hasListingAgent || hasListingAgent === 'No'}
-            roleType="Agent"
-            person={listingAgentPerson}
-            onPersonChange={setListingAgentPerson}
-          />
-          <QuestionSection>Sample Next Section</QuestionSection>
-        </QuestionWizard>
+        <Box maxWidth={848} margin="0 auto">
+          <QuestionWizard>
+            <ShowingStepIntro />
+            <ShowingStepProperty
+              property={property}
+              onPropertyChange={setProperty}
+            />
+            <ShowingStepApprovalType
+              approvalType={approvalType}
+              onApprovalTypeChange={setApprovalType}
+            />
+            <ShowingStepYesNoQuestion
+              question="Is this a listing agent accompanied showing?"
+              value={hasListingAgent}
+              onChange={setHasListingAgent}
+            />
+            <ShowingStepRolePerson
+              hidden={!hasListingAgent || hasListingAgent === 'No'}
+              roleType="Agent"
+              person={listingAgentPerson}
+              onPersonChange={setListingAgentPerson}
+            />
+            <QuestionSection>Sample Next Section</QuestionSection>
+          </QuestionWizard>
+        </Box>
       </PageLayout.Main>
     </PageLayout>
   )
