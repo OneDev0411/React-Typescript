@@ -99,12 +99,17 @@ function ContactSearchInput({
         </Box>
       )}
 
-      {isLoading && <CircularProgress disableShrink />}
+      {isLoading && (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress disableShrink />
+        </Box>
+      )}
 
       {contacts.map(contact => (
         <Box
           key={contact.id}
           display="flex"
+          alignItems="center"
           className={classes.row}
           onClick={() => handleChange(contact)}
         >

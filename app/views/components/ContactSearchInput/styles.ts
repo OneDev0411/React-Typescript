@@ -12,14 +12,15 @@ export default makeStyles(
     },
     row: {
       padding: theme.spacing(1),
+      transition: theme.transitions.create('background-color'),
       '&:hover': {
-        background: theme.palette.action.hover,
+        backgroundColor: theme.palette.action.hover,
         cursor: 'pointer'
       }
     },
     newClientAvatar: {
       border: `1px solid ${theme.palette.secondary.main}`,
-      backgroundColor: '#fff'
+      backgroundColor: theme.palette.common.white
     },
     newClient: {
       color: theme.palette.secondary.main
@@ -34,7 +35,5 @@ export default makeStyles(
       padding: theme.spacing(1, 0)
     }
   }),
-  {
-    name: 'ContactSearchInput'
-  }
+  { name: 'ContactSearchInput' }
 )
