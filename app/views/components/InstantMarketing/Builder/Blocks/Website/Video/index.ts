@@ -23,6 +23,14 @@ import { registerTemplateBlocks } from '../../templateBlocks'
 const typeEmbedVideo = 'embed-video'
 export const embedVideoBlockName = typeEmbedVideo
 
+const svgAttrs =
+  'xmlns="http://www.w3.org/2000/svg" width="80" viewBox="0 0 24 24" style="fill: rgba(0,0,0,0.15); transform: scale(0.75); margin: 0 auto"'
+
+const svgIcon = `<svg ${svgAttrs}>
+  <path d="M9 9l7.5 5.25-7.5 5.25v-10.5z"></path>
+  <path d="M21.511 5.369c-0.521-0.71-1.246-1.54-2.043-2.337s-1.627-1.523-2.337-2.043c-1.209-0.886-1.795-0.989-2.131-0.989h-11.625c-1.034 0-1.875 0.841-1.875 1.875v20.25c0 1.034 0.841 1.875 1.875 1.875h17.25c1.034 0 1.875-0.841 1.875-1.875v-14.625c0-0.336-0.102-0.922-0.989-2.131zM18.407 4.093c0.72 0.72 1.284 1.369 1.701 1.907h-3.608v-3.608c0.539 0.417 1.188 0.982 1.907 1.701zM21 22.125c0 0.203-0.172 0.375-0.375 0.375h-17.25c-0.203 0-0.375-0.172-0.375-0.375v-20.25c0-0.203 0.172-0.375 0.375-0.375 0 0 11.624-0 11.625 0v5.25c0 0.414 0.336 0.75 0.75 0.75h5.25v14.625z"></path>
+</svg>`
+
 export interface VideoBlockOptions {
   embedVideoClassNames?: string
   onVideoDrop: (model: Model) => void
@@ -70,7 +78,9 @@ export default function registerVideoBlock(
             br: 0,
             cl: 0,
             cr: 0
-          }
+          },
+          src: svgIcon,
+          fallback: svgIcon
         },
         init() {
           this.listenTo(this, 'change:video:info', this.handleChangeVideoInfo)
