@@ -1,5 +1,7 @@
 import React from 'react'
 
+import AgentSearchInput from 'components/AgentSearchInput'
+
 import { ShowingRolePerson } from '../../types'
 
 interface ShowingStepRolePersonSelectAgentProps {
@@ -9,13 +11,21 @@ interface ShowingStepRolePersonSelectAgentProps {
 function ShowingStepRolePersonSelectAgent({
   onSelect
 }: ShowingStepRolePersonSelectAgentProps) {
+  const handleChange = (agent: IUser) => {
+    onSelect({
+      first_name: agent.first_name || '',
+      last_name: agent.last_name || '',
+      email: agent.email,
+      phone_number: agent.phone_number || ''
+    })
+  }
+
   return (
-    <div>
-      select agent
-      <button type="submit" onClick={onSelect as any}>
-        select
-      </button>
-    </div>
+    <AgentSearchInput
+      flattenTeams
+      isPrimaryAgent={false}
+      onChange={handleChange}
+    />
   )
 }
 
