@@ -9,9 +9,8 @@ import {
   makeStyles,
   CircularProgress
 } from '@material-ui/core'
-import { useEffectOnce, useDebounce } from 'react-use'
+import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
-import { useDispatch } from 'react-redux'
 
 import { getStatusColorClass } from 'utils/listing'
 
@@ -29,15 +28,6 @@ import { Callout } from 'components/Callout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
-
-import { createAddressContext } from 'deals/utils/create-address-context'
-import { updateListing, upsertContexts } from 'actions/deals'
-
-import { getField } from 'models/Deal/helpers/context'
-
-import getListing from 'models/listings/listing/get-listing'
-
-import { useCreationContext } from '../../context/use-creation-context'
 
 export interface PropertyAddress {
   type: 'Place' | 'Listing'
@@ -88,16 +78,19 @@ const useStyles = makeStyles(
 
 interface Props {
   skippable: boolean
+  concurrentMode?: boolean
   onChange?: (address: PropertyAddress | null) => void
 }
 
-export function DealAddress({ skippable, onChange }: Props) {
+export function DealAddress({
+  concurrentMode = false,
+  skippable,
+  onChange
+}: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
 
   const classes = useStyles()
-  const dispatch = useDispatch()
 
   const [place, setPlace] = useState<
     Nullable<Partial<google.maps.places.AutocompletePrediction>>
@@ -105,29 +98,6 @@ export function DealAddress({ skippable, onChange }: Props) {
   const [listing, setListing] = useState<Nullable<ICompactListing | IListing>>(
     null
   )
-
-  useEffectOnce(() => {
-    ;(async () => {
-      if (deal?.listing && !listing) {
-        const compactListing = await getListing(deal.listing)
-
-        setListing(compactListing)
-      } else if (getField(deal, 'full_address')) {
-        const streetNumber = getField(deal, 'street_number')
-        const streetName = getField(deal, 'street_name')
-        const state = getField(deal, 'state')
-        const city = getField(deal, 'city')
-
-        setPlace({
-          structured_formatting: {
-            main_text_matched_substrings: [],
-            main_text: `${streetNumber} ${streetName} Street`,
-            secondary_text: `${city}, ${state}, USA`
-          }
-        })
-      }
-    })()
-  })
 
   const [searchCriteria, setSearchCriteria] = useState('')
   const [
@@ -166,10 +136,6 @@ export function DealAddress({ skippable, onChange }: Props) {
     setSearchCriteria('')
 
     onChange?.(null)
-
-    if (deal) {
-      wizard.setStep(step)
-    }
   }
 
   const handleSelectPlace = async (
@@ -188,11 +154,6 @@ export function DealAddress({ skippable, onChange }: Props) {
       unit_number: address.unit
     }
 
-    if (deal) {
-      dispatch(upsertContexts(deal.id, createAddressContext(deal, fields)))
-      deal.listing && dispatch(updateListing(deal.id, null))
-    }
-
     onChange?.({
       type: 'Place',
       address: fields
@@ -204,10 +165,6 @@ export function DealAddress({ skippable, onChange }: Props) {
   const handleSelectListing = (listing: ICompactListing) => {
     setListing(listing)
 
-    if (deal) {
-      dispatch(updateListing(deal.id, listing.id))
-    }
-
     onChange?.({
       type: 'Listing',
       address: listing.id
@@ -217,7 +174,11 @@ export function DealAddress({ skippable, onChange }: Props) {
   }
 
   const goNext = () => {
-    if (wizard.currentStep === step) {
+    if (concurrentMode) {
+      wizard.setStep(step)
+    }
+
+    if (!concurrentMode && wizard.currentStep === step) {
       setTimeout(() => wizard.next(), 700)
     }
   }
@@ -398,22 +359,24 @@ export function DealAddress({ skippable, onChange }: Props) {
             <Button onClick={handleRemove}>Change Property</Button>
           )}
 
-          {deal && (listing || place) && wizard.currentStep === step && (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-              ml={1}
-            >
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => wizard.next()}
+          {!concurrentMode &&
+            (listing || place) &&
+            wizard.currentStep === step && (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+                ml={1}
               >
-                Looks Good
-              </Button>
-            </Box>
-          )}
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => wizard.next()}
+                >
+                  Looks Good
+                </Button>
+              </Box>
+            )}
         </Box>
       </QuestionForm>
     </QuestionSection>

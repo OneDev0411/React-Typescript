@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
-import { browserHistory } from 'react-router'
 import { useForm, Controller } from 'react-hook-form'
+import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 
 import Deal from 'models/Deal'
 
@@ -44,7 +44,12 @@ import { Header } from './components/Header'
 import { Context } from './context'
 import type { IDealSide } from './types'
 
-export default function CreateDeal() {
+interface Props {
+  router: InjectedRouter
+  route: Route
+}
+
+function CreateDeal({ router, route }: Props) {
   useTitle('Create New Deal | Deals | Rechat')
 
   const classes = useStyles()
@@ -61,7 +66,7 @@ export default function CreateDeal() {
 
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
-  const propertyType = watch('property_type')
+  const propertyType: IDealPropertyType = watch('property_type')
   const enderType = watch('ender_type')
 
   useEffect(() => {
@@ -69,6 +74,14 @@ export default function CreateDeal() {
       dispatch(getContextsByDeal(dealId))
     }
   }, [dealId, dispatch])
+
+  useEffect(() => {
+    router.setRouteLeaveHook(route, () => {
+      if (!deal) {
+        return 'By canceling you will lose your work. Continue?'
+      }
+    })
+  }, [deal, router, route])
 
   const isAgentDoubleEnded = dealSide === 'Both'
   const isOfficeDoubleEnded = enderType === 'OfficeDoubleEnder'
@@ -81,6 +94,10 @@ export default function CreateDeal() {
    * @param agents - The list of primary agents [BuyerAgent, SellerAgent]
    */
   const createDraftDeal = async () => {
+    if (deal || isCreatingDeal) {
+      return
+    }
+
     const values = control.getValues()
 
     const roles = [].concat(
@@ -174,13 +191,18 @@ export default function CreateDeal() {
     const type =
       dealType === 'Selling'
         ? propertyType?.includes('Lease')
-          ? 'landlord'
-          : 'seller'
+          ? 'Landlord'
+          : 'Seller'
         : propertyType?.includes('Lease')
-        ? 'tenant'
-        : 'buyer'
+        ? 'Tenant'
+        : 'Buyer'
 
-    return `What's the ${type}'s legal name?`
+    return (
+      <div>
+        What is the{' '}
+        <span className={classes.brandedTitle}>{type}'s Legal Name</span>?
+      </div>
+    )
   }
 
   return (
@@ -198,8 +220,9 @@ export default function CreateDeal() {
 
       <Box className={classes.root}>
         <QuestionWizard
-          questionPosition="Top"
+          useWindowScrollbar
           questionPositionOffset={80}
+          onFinish={createDraftDeal}
           styles={{
             paddingBottom: '50%'
           }}
@@ -231,15 +254,6 @@ export default function CreateDeal() {
 
           {dealType === 'Buying' && (
             <Controller
-              key="ender_type"
-              name="ender_type"
-              control={control}
-              render={({ onChange }) => <DealEnderType onChange={onChange} />}
-            />
-          )}
-
-          {dealType === 'Buying' && (
-            <Controller
               key="buying_primary_agent"
               name="buying_primary_agent"
               control={control}
@@ -247,15 +261,31 @@ export default function CreateDeal() {
                 <DealPrimaryAgent
                   side="Buying"
                   isCommissionRequired
-                  title={`Who is the ${
-                    propertyType?.includes('Lease') ? 'tenant' : 'buyer'
-                  } agent?`}
+                  title={
+                    <div>
+                      Who is the{' '}
+                      <span className={classes.brandedTitle}>
+                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}{' '}
+                        Agent
+                      </span>
+                      ?
+                    </div>
+                  }
                   roles={value}
                   onChange={(role, type) =>
                     onChange(getChangedRoles(value, role, type))
                   }
                 />
               )}
+            />
+          )}
+
+          {dealType === 'Buying' && (
+            <Controller
+              key="ender_type"
+              name="ender_type"
+              control={control}
+              render={({ onChange }) => <DealEnderType onChange={onChange} />}
             />
           )}
 
@@ -267,12 +297,22 @@ export default function CreateDeal() {
                 isCommissionRequired
                 isOfficeDoubleEnded={isOfficeDoubleEnded}
                 side="Selling"
+                skippable={dealType === 'Buying'}
                 shouldPickRoleFromContacts={
                   dealType === 'Buying' && !isDoubleEnded
                 }
-                title={`Who is the ${
-                  propertyType?.includes('Lease') ? 'landlord' : 'seller'
-                } agent?`}
+                title={
+                  <div>
+                    Who is the{' '}
+                    <span className={classes.brandedTitle}>
+                      {propertyType?.includes('Lease')
+                        ? "Landlord's"
+                        : "Seller's"}{' '}
+                      Agent
+                    </span>
+                    ?
+                  </div>
+                }
                 roles={value}
                 onChange={(role, type) =>
                   onChange(getChangedRoles(value, role, type))
@@ -287,6 +327,7 @@ export default function CreateDeal() {
             render={({ value = [], onChange }) => (
               <DealClient
                 side={dealType}
+                propertyType={propertyType}
                 title={getClientTitle()}
                 roles={value}
                 onChange={(role, type) =>
@@ -297,13 +338,11 @@ export default function CreateDeal() {
             )}
           />
 
-          <DealCard
-            dealSide={dealSide}
-            isCreatingDeal={isCreatingDeal}
-            onCreateDeal={createDraftDeal}
-          />
+          <DealCard dealSide={dealSide} isCreatingDeal={isCreatingDeal} />
         </QuestionWizard>
       </Box>
     </Context.Provider>
   )
 }
+
+export default withRouter(CreateDeal)

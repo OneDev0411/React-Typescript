@@ -18,7 +18,10 @@ const useStyles = makeStyles(
       justifyContent: 'space-between',
       backgroundColor: '#fff',
       padding: theme.spacing(1, 4),
-      zIndex: 1
+      zIndex: theme.zIndex.appBar
+    },
+    closeButton: {
+      marginLeft: theme.spacing(1)
     }
   }),
   {
@@ -28,11 +31,19 @@ const useStyles = makeStyles(
 
 interface Props {
   title: string
-  onClose: () => void
+  actions?: React.ReactNode
   confirmationMessage: string
+  disableClose?: boolean
+  onClose: () => void
 }
 
-export function Header({ title, confirmationMessage, onClose }: Props) {
+export function Header({
+  title,
+  actions,
+  confirmationMessage,
+  disableClose = false,
+  onClose
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -53,9 +64,19 @@ export function Header({ title, confirmationMessage, onClose }: Props) {
       <div>
         <Typography variant="h6">{title}</Typography>
       </div>
-      <IconButton color="secondary" size="medium" onClick={handleClose}>
-        <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
-      </IconButton>
+
+      <div>
+        {actions}
+        <IconButton
+          color="secondary"
+          size="medium"
+          className={classes.closeButton}
+          disabled={disableClose}
+          onClick={handleClose}
+        >
+          <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
+        </IconButton>
+      </div>
     </div>
   )
 }

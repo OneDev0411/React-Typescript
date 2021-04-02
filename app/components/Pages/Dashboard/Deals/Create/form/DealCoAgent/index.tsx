@@ -57,7 +57,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
   roles: IDealRole[]
   isCommissionRequired: boolean

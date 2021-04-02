@@ -56,7 +56,7 @@ export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
 
   return (
     <TeamAgents
-      flattenTeams={false}
+      flattenTeams={isOfficeDoubleEnded}
       isPrimaryAgent={!isOfficeDoubleEnded}
       criteria={searchCriteria}
     >
@@ -94,7 +94,7 @@ export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
                       onSelectRole(
                         convertUserAgentToRole({
                           ...agent,
-                          brand_id: team.id
+                          brand_id: isOfficeDoubleEnded ? null : team.id
                         })
                       )
                     }
