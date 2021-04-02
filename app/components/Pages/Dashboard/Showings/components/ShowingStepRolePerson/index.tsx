@@ -9,19 +9,18 @@ import {
 } from 'components/QuestionWizard'
 
 import { ShowingRolePerson } from '../../types'
-import ShowingStepRolePersonSelectAgent from './ShowingStepRolePersonSelectAgent'
 import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
-import ShowingStepRolePersonSelectContact from './ShowingStepRolePersonSelectContact'
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
+import ShowingStepRolePersonSelect, {
+  ShowingStepRolePersonSelectProps
+} from './ShowingStepRolePersonSelect'
 
-export type RolePersonSelectType = 'Agent' | 'Contact'
-
-interface ShowingStepRolePersonProps {
+interface ShowingStepRolePersonProps
+  extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
   hidden: boolean
   roleType: IShowingRoleType
   person: Nullable<ShowingRolePerson>
   onPersonChange: (person: ShowingRolePerson) => void
-  selectType?: RolePersonSelectType
 }
 
 function ShowingStepRolePerson({
@@ -29,7 +28,7 @@ function ShowingStepRolePerson({
   roleType,
   person,
   onPersonChange,
-  selectType = 'Agent'
+  selectType
 }: ShowingStepRolePersonProps) {
   const wizard = useWizardContext()
   const [isEditable, setIsEditable] = useState(true)
@@ -44,11 +43,11 @@ function ShowingStepRolePerson({
     <QuestionSection hidden={hidden}>
       <QuestionTitle>Who is the listing {kebabCase(roleType)}?</QuestionTitle>
       <QuestionForm>
-        {!person && selectType === 'Agent' && (
-          <ShowingStepRolePersonSelectAgent onSelect={onPersonChange} />
-        )}
-        {!person && selectType === 'Contact' && (
-          <ShowingStepRolePersonSelectContact onSelect={onPersonChange} />
+        {!person && (
+          <ShowingStepRolePersonSelect
+            selectType={selectType}
+            onSelect={onPersonChange}
+          />
         )}
         {person && isEditable && (
           <ShowingStepRolePersonEditForm
