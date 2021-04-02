@@ -20,6 +20,7 @@ function CreateShowing() {
   const [approvalType, setApprovalType] = useState<
     Nullable<IShowingApprovalType>
   >(null)
+
   const [hasListingAgent, setHasListingAgent] = useState<Nullable<YesNoAnswer>>(
     null
   )
@@ -31,6 +32,13 @@ function CreateShowing() {
     Nullable<YesNoAnswer>
   >(null)
   const [listingCoAgentPerson, setListingCoAgentPerson] = useState<
+    Nullable<ShowingRolePerson>
+  >(null)
+
+  const [hasListingOccupant, setHasListingOccupant] = useState<
+    Nullable<YesNoAnswer>
+  >(null)
+  const [listingOccupantPerson, setListingOccupantPerson] = useState<
     Nullable<ShowingRolePerson>
   >(null)
 
@@ -75,7 +83,20 @@ function CreateShowing() {
             />
             {/* CoAgent confirmation step */}
             {/* CoAgent notification step */}
-
+            <ShowingStepYesNoQuestion
+              question="Is this property Occupied?"
+              value={hasListingOccupant}
+              onChange={setHasListingOccupant}
+            />
+            <ShowingStepRolePerson
+              hidden={!hasListingOccupant || hasListingOccupant === 'No'}
+              roleType="Occupant"
+              person={listingOccupantPerson}
+              onPersonChange={setListingOccupantPerson}
+              selectType="Contact"
+            />
+            {/* Occupant confirmation step */}
+            {/* Occupant notification step */}
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
         </Box>
