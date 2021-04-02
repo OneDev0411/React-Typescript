@@ -51,6 +51,7 @@ function ShowingStepRolePerson({
         )}
         {person && isEditable && (
           <ShowingStepRolePersonEditForm
+            roleType={roleType}
             initialData={person}
             onSubmit={handleSubmit}
           />
