@@ -20,7 +20,7 @@ interface ShowingStepRolePersonProps
   hidden: boolean
   roleType: IShowingRoleType
   person: Nullable<ShowingRolePerson>
-  onPersonChange: (person: ShowingRolePerson) => void
+  onPersonChange: (person: Nullable<ShowingRolePerson>) => void
 }
 
 function ShowingStepRolePerson({
@@ -37,6 +37,15 @@ function ShowingStepRolePerson({
     onPersonChange(person)
     setIsEditable(false)
     wizard.next()
+  }
+
+  const handleEdit = () => {
+    setIsEditable(true)
+  }
+
+  const handleRemove = () => {
+    onPersonChange(null)
+    setIsEditable(false)
   }
 
   return (
@@ -56,7 +65,14 @@ function ShowingStepRolePerson({
             onSubmit={handleSubmit}
           />
         )}
-        {person && !isEditable && <ShowingStepRolePersonCard person={person} />}
+        {person && !isEditable && (
+          <ShowingStepRolePersonCard
+            person={person}
+            roleType={roleType}
+            onEdit={handleEdit}
+            onRemove={handleRemove}
+          />
+        )}
       </QuestionForm>
     </QuestionSection>
   )
