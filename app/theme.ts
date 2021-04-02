@@ -227,6 +227,11 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
 
   const theme: Theme = createMuiTheme(mergedValue)
 
+  // Override the material-ui component's styles
+  theme.overrides = {
+    MuiInputLabel: { asterisk: { color: theme.palette.error.main } }
+  }
+
   theme.typography.subtitle3 = {
     ...theme.typography.subtitle2,
     fontSize: '0.8125rem',
@@ -241,7 +246,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
 
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
-    ; (window as any).theme = theme
+    ;(window as any).theme = theme
   }
 
   return theme
