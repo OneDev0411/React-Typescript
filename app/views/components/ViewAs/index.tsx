@@ -35,10 +35,10 @@ export const ViewAs = props => {
   const user: IUser = useSelector(selectUser)
   const team: IUserTeam | null = getActiveTeam(user)
   const teamMembers: IUser[] = getTeamAvailableMembers(team)
-  const initialSelectedMembers: UUID[] = useMemo(() => viewAs(user, team), [
-    user,
-    team
-  ])
+  const initialSelectedMembers: UUID[] = useMemo(
+    () => viewAs(user, true, team),
+    [team, user]
+  )
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
     initialSelectedMembers
   )

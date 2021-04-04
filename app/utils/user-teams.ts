@@ -163,7 +163,8 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 
 export function viewAs(
   user: IUser | null,
-  team: IUserTeam | null = getActiveTeam(user)
+  shouldReturnAll: boolean = false,
+  team: IUserTeam | null = getActiveTeam(user),
 ): UUID[] {
   if (
     team &&
@@ -173,7 +174,7 @@ export function viewAs(
     const allTeamMember = getTeamAvailableMembers(team)
     const selectedViewAsUsers = team.settings.user_filter || []
 
-    if(allTeamMember.length === selectedViewAsUsers.length){
+    if(!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length){
       return []
     }
       
@@ -242,7 +243,7 @@ export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
     return false
   }
 
-  const users = viewAs(user)
+  const users = viewAs(user,true)
 
   return (
     // It means all members of the team
