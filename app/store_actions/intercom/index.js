@@ -1,25 +1,30 @@
-import { ACTIVE_INTERCOM, INACTIVE_INTERCOM } from '../../constants/intercom'
+import {
+  ACTIVATE_INTERCOM,
+  DEACTIVATE_INTERCOM
+} from '../../constants/intercom'
 
-export const activeIntercom = isActive => dispatch => {
+export const activateIntercom = isActive => dispatch => {
   if (isActive || !window.Intercom) {
     return Promise.resolve()
   }
 
-  window.Intercom('show')
-
   dispatch({
-    type: ACTIVE_INTERCOM
+    type: ACTIVATE_INTERCOM
   })
+
+  window.Intercom('show')
 }
 
-export const inactiveIntercom = isActive => dispatch => {
+export const deactivateIntercom = isActive => dispatch => {
   if (!isActive || !window.Intercom) {
     return Promise.resolve()
   }
 
-  window.Intercom('hide')
-
   dispatch({
-    type: INACTIVE_INTERCOM
+    type: DEACTIVATE_INTERCOM
   })
+
+  setTimeout(() => {
+    window.Intercom('hide')
+  }, 500)
 }
