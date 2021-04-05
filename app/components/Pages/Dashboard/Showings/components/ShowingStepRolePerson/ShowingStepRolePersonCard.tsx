@@ -8,12 +8,10 @@ import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { ShowingRolePerson } from '../../types'
-
 import ShowingContactOverviewCard from '../ShowingContactOverviewCard'
 
 interface ShowingStepRolePersonCardProps {
-  person: ShowingRolePerson
+  person: IShowingRolePerson
   roleType: IShowingRoleType
   onEdit: () => void
   onRemove: () => void

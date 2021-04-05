@@ -2,10 +2,8 @@ import React from 'react'
 
 import AgentSearchInput from 'components/AgentSearchInput'
 
-import { ShowingRolePerson } from '../../types'
-
 interface ShowingStepRolePersonSelectAgentProps {
-  onSelect: (person: ShowingRolePerson) => void
+  onSelect: (person: IShowingRolePerson) => void
 }
 
 function ShowingStepRolePersonSelectAgent({

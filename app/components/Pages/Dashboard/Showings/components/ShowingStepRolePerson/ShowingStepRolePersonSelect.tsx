@@ -1,8 +1,6 @@
 import React from 'react'
 import { Box, Button } from '@material-ui/core'
 
-import { ShowingRolePerson } from '../../types'
-
 import ShowingStepRolePersonSelectAgent from './ShowingStepRolePersonSelectAgent'
 import ShowingStepRolePersonSelectContact from './ShowingStepRolePersonSelectContact'
 
@@ -10,7 +8,7 @@ export type RolePersonSelectType = 'Agent' | 'Contact'
 
 export interface ShowingStepRolePersonSelectProps {
   selectType?: RolePersonSelectType
-  onSelect: (person: ShowingRolePerson) => void
+  onSelect: (person: IShowingRolePerson) => void
 }
 
 function ShowingStepRolePersonSelect({

@@ -2,11 +2,10 @@ import React from 'react'
 
 import ContactSearchInput from 'components/ContactSearchInput'
 
-import { ShowingRolePerson } from '../../types'
 import { splitFullName } from './helpers'
 
 interface ShowingStepRolePersonSelectContactProps {
-  onSelect: (person: ShowingRolePerson) => void
+  onSelect: (person: IShowingRolePerson) => void
 }
 
 function ShowingStepRolePersonSelectContact({

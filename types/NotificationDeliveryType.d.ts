@@ -1,1 +1,1 @@
-export type INotificationDeliveryType = 'email' | 'push' | 'sms'
+declare type INotificationDeliveryType = 'email' | 'push' | 'sms'

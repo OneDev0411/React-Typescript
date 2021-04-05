@@ -6,12 +6,10 @@ import { Form } from 'react-final-form'
 
 import { FormTextField, FormPhoneField } from 'components/final-form-fields'
 
-import { ShowingRolePerson } from '../../types'
-
 interface ShowingStepRolePersonEditFormProps {
   roleType: IShowingRoleType
-  initialData: ShowingRolePerson
-  onSubmit: (data: ShowingRolePerson) => void
+  initialData: IShowingRolePerson
+  onSubmit: (data: IShowingRolePerson) => void
   submitLabel?: string
 }
 

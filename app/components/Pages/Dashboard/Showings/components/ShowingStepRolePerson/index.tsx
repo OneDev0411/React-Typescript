@@ -8,7 +8,6 @@ import {
   useWizardContext
 } from 'components/QuestionWizard'
 
-import { ShowingRolePerson } from '../../types'
 import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
 import ShowingStepRolePersonSelect, {
@@ -18,8 +17,8 @@ import ShowingStepRolePersonSelect, {
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
   roleType: IShowingRoleType
-  person: Nullable<ShowingRolePerson>
-  onPersonChange: (person: Nullable<ShowingRolePerson>) => void
+  person: Nullable<IShowingRolePerson>
+  onPersonChange: (person: Nullable<IShowingRolePerson>) => void
 }
 
 function ShowingStepRolePerson({
@@ -31,7 +30,7 @@ function ShowingStepRolePerson({
   const wizard = useWizardContext()
   const [isEditable, setIsEditable] = useState(true)
 
-  const handleSubmit = (person: ShowingRolePerson) => {
+  const handleSubmit = (person: IShowingRolePerson) => {
     onPersonChange(person)
     setIsEditable(false)
     wizard.next()
