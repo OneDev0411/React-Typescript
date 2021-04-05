@@ -186,10 +186,15 @@ export function activitiesFormatter(activities?: ProfileDateType[]) {
 
 export function formatDate(timestamp: number): string {
   const date = new Date(timestamp * 1000)
+  const year = date.getUTCFullYear()
+  const month = date.getUTCMonth()
+  const day = date.getUTCDate()
 
-  if (date.getFullYear() === 1800) {
-    return fecha.format(date, 'MMM DD')
+  const utcDate = new Date(year, month, day)
+
+  if (utcDate.getFullYear() === 1800) {
+    return fecha.format(utcDate, 'MMM DD')
   }
 
-  return fecha.format(date, 'MMM DD, YYYY')
+  return fecha.format(utcDate, 'MMM DD, YYYY')
 }
