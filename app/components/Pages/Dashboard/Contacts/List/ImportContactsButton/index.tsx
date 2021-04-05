@@ -1,9 +1,12 @@
 import React, { useEffect, Fragment } from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
+
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem, Box } from '@material-ui/core'
 import Flex from 'styled-flex-component'
 import { mdiFileDelimitedOutline } from '@mdi/js'
+
+import { addNotification as notify } from 'components/notification'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -37,9 +40,7 @@ interface Props {
  * @constructor
  */
 export function ImportContactsButton({ accounts, user }: Props) {
-  const syncing = accounts.some(account =>
-    (account.jobs || []).some(job => job.status !== 'success')
-  )
+  const dispatch = useDispatch()
 
   const isTooltipOpen =
     !getUserSettingsInActiveTeam(user, IMPORT_TOOLTIP_VISITED_SETTINGS_KEY) &&
@@ -54,11 +55,24 @@ export function ImportContactsButton({ accounts, user }: Props) {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
 
+  const handleGoogleConnect = () => {
+    if (google.connecting) {
+      return dispatch(
+        notify({
+          message:
+            'a sync process has already been requested, please wait till getting finishes.',
+          status: 'info'
+        })
+      )
+    }
+
+    google.connect()
+  }
+
   return (
     <SplitButton
       popperPlacement="bottom-end"
-      disabled={google.connecting || syncing}
-      onClick={google.connect}
+      onClick={handleGoogleConnect}
       style={{ zIndex: 2 }}
       size="large"
       renderMenu={() => (
@@ -127,7 +141,11 @@ export function ImportContactsButton({ accounts, user }: Props) {
       >
         <Flex alignCenter>
           <GoogleIcon size={iconSizes.small} />
-          <ButtonText>Sync with: Google</ButtonText>
+          <ButtonText>
+            {google.connecting
+              ? 'Syncing with Google ...'
+              : 'Sync with: Google'}
+          </ButtonText>
         </Flex>
       </PopOver>
     </SplitButton>

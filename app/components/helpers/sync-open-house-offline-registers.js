@@ -1,5 +1,6 @@
-import { addNotification as notify } from 'components/notification'
 import pluralize from 'pluralize'
+
+import { addNotification as notify } from 'components/notification'
 
 import openHouseStorage from '../../../server/app/routes/openhouse/registration/storage'
 import { onlineSubmitHandler as registerOpenHouse } from '../../../server/app/routes/openhouse/registration/handlers'
