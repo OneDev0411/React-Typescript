@@ -13,7 +13,8 @@ import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
 import ShowingStepRoleNotificationTypesMediums from './ShowingStepRoleNotificationTypesMediums'
 
-type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
+export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
+
 type NotificationTypeOption = 'No' | 'NoWithTypes' | 'Yes'
 
 interface ShowingStepRoleNotificationTypesProps {
