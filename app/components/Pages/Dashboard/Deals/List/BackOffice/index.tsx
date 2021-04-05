@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
@@ -84,6 +84,33 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     }
   }, [dispatch, searchQuery, statuses, user])
 
+  const brand = getActiveTeamId(user)
+
+  const [ analytics, setAnalytics ] = useState()
+
+  useEffect(async () => {
+    const data = new TextEncoder().encode(user.access_token)
+    const crypted = await crypto.subtle.digest('SHA-512', data)
+    const hash = Array.from(new Uint8Array(crypted))
+    const hex = hash.map(b => b.toString(16).padStart(2, '0')).join('')
+
+    const base = `https://metabase.rechat.com/public/dashboard/9964058b-c7c3-445a-95d1-b47eac657a87`
+
+    setAnalytics(`${base}?brand=${brand}&token=${hex}#hide_parameters=token,brand&titled=false`)
+  }, [user.access_token, brand])
+
+  const frame = useRef()
+
+  const analyticsLoaded = () => {
+    if (!frame.current.contentDocument)
+      return
+
+    const style = frame.current.contentDocument.createElement('style')
+    style.innerHTML = '.EmbedFrame-footer { display: none; }'
+
+    frame.current.contentDocument.body.appendChild(style)
+  }
+
   return (
     <PageLayout>
       <PageLayout.Header title="Deals Admin">
@@ -97,6 +124,17 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
         </div>
       </PageLayout.Header>
       <PageLayout.Main>
+        { analytics &&
+          <iframe
+            ref={frame}
+            onLoad={ analyticsLoaded }
+            src={analytics}
+            frameBorder="0"
+            width="100%"
+            height="700"
+            allowtransparency>
+          </iframe>
+        }
         <div className={classes.filtersContainer}>
           <TabFilters
             deals={deals}
