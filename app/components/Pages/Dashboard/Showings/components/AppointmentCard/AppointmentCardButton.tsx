@@ -13,7 +13,8 @@ const buttonLabels: Record<IAppointmentStatus, string> = {
   Finished: 'Request Feedback',
   Pending: 'Approve',
   Cancelled: '',
-  Rescheduled: ''
+  Rescheduled: '',
+  NeedsRescheduling: ''
 }
 
 function AppointmentCardButton({ status }: AppointmentCardButtonProps) {

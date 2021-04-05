@@ -9,7 +9,8 @@ const statusColors: Record<IAppointmentStatus, Required<ChipProps['color']>> = {
   Pending: 'orange',
   Cancelled: 'red',
   Finished: 'black',
-  Rescheduled: 'orange'
+  Rescheduled: 'orange',
+  NeedsRescheduling: 'black'
 }
 
 function AppointmentStatusChip({ status }: AppointmentStatusChipProps) {

@@ -25,12 +25,12 @@ const approvalTypeOptions: RadioItem<IShowingApprovalType>[] = [
   },
   {
     label: 'Go and Show',
-    value: 'GoAndShow'
-  },
-  {
-    label: 'View Instructions only',
-    value: 'ViewInstructionsOnly'
+    value: 'None'
   }
+  // {
+  //   label: 'View Instructions only',
+  //   value: 'None'
+  // }
 ]
 
 function ShowingStepApprovalType({
