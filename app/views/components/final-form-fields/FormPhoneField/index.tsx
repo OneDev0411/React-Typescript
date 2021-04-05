@@ -13,7 +13,7 @@ export interface FormPhoneFieldProps
 }
 
 const validate = async value => {
-  if (!(await isValidPhoneNumber(value))) {
+  if (await isValidPhoneNumber(value || '')) {
     return 'Invalid Phone Number'
   }
 }
