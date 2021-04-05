@@ -42,6 +42,30 @@ function CreateShowing() {
     Nullable<ShowingRolePerson>
   >(null)
 
+  const handleHasListingAgentChange = (value: YesNoAnswer) => {
+    setHasListingAgent(value)
+
+    if (value === 'No') {
+      setListingAgentPerson(null)
+    }
+  }
+
+  const handleHasListingCoAgentChange = (value: YesNoAnswer) => {
+    setHasListingCoAgent(value)
+
+    if (value === 'No') {
+      setListingCoAgentPerson(null)
+    }
+  }
+
+  const handleHasListingOccupantChange = (value: YesNoAnswer) => {
+    setHasListingOccupant(value)
+
+    if (value === 'No') {
+      setListingOccupantPerson(null)
+    }
+  }
+
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing" />
@@ -60,7 +84,7 @@ function CreateShowing() {
             <ShowingStepYesNoQuestion
               question="Is this a listing agent accompanied showing?"
               value={hasListingAgent}
-              onChange={setHasListingAgent}
+              onChange={handleHasListingAgentChange}
             />
             {hasListingAgent === 'Yes' && (
               <ShowingStepRolePerson
@@ -74,7 +98,7 @@ function CreateShowing() {
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
               value={hasListingCoAgent}
-              onChange={setHasListingCoAgent}
+              onChange={handleHasListingCoAgentChange}
             />
             {hasListingCoAgent === 'Yes' && (
               <ShowingStepRolePerson
@@ -88,7 +112,7 @@ function CreateShowing() {
             <ShowingStepYesNoQuestion
               question="Is this property Occupied?"
               value={hasListingOccupant}
-              onChange={setHasListingOccupant}
+              onChange={handleHasListingOccupantChange}
             />
             {hasListingOccupant === 'Yes' && (
               <ShowingStepRolePerson
