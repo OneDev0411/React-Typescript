@@ -72,7 +72,7 @@ function CreateOffer({ router, route, params }: Props) {
         return 'By canceling you will lose your work. Continue?'
       }
     })
-  }, [deal.has_active_offer, router, route])
+  }, [deal?.has_active_offer, router, route])
 
   useEffect(() => {
     deal?.has_active_offer &&

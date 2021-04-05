@@ -358,25 +358,6 @@ export function DealAddress({
           {(listing || place) && (
             <Button onClick={handleRemove}>Change Property</Button>
           )}
-
-          {!concurrentMode &&
-            (listing || place) &&
-            wizard.currentStep === step && (
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-end"
-                ml={1}
-              >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => wizard.next()}
-                >
-                  Looks Good
-                </Button>
-              </Box>
-            )}
         </Box>
       </QuestionForm>
     </QuestionSection>
