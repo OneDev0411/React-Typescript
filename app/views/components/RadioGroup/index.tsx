@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 import {
   makeStyles,
   Theme,
@@ -8,16 +8,18 @@ import {
   useTheme
 } from '@material-ui/core'
 
-export type RadioItem<T extends string = string> = {
+export interface RadioItem<T extends string = string> {
   value: Nullable<T>
   label: string
   description?: string
+  children?: ReactNode
 }
 
 export interface RadioGroupProps<T extends string = string> {
   name: string
   defaultValue?: string | null
-  options: RadioItem<T>[]
+  value?: T | null
+  options: (RadioItem<T> | false)[]
   style?: React.CSSProperties
   groupStyle?: React.CSSProperties
   onChange: (value: unknown) => void
@@ -42,31 +44,42 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'CreateDeal-RadioGroup'
+    name: 'RadioGroup'
   }
 )
 
-export function RadioGroup({
+export function RadioGroup<T extends string = string>({
   name,
   options,
   defaultValue,
   style = {},
   groupStyle = {},
-  onChange
-}: RadioGroupProps) {
+  onChange,
+  value: outValue
+}: RadioGroupProps<T>) {
   const classes = useStyles()
-  const [value, setValue] = useState(defaultValue)
   const theme = useTheme<Theme>()
+  const [value, setValue] = useState(defaultValue)
+  const finalValue = outValue !== undefined ? outValue : value
 
-  const handleChange = (value: string | null) => {
-    setValue(value)
-    onChange(value)
+  const handleChange = (newValue: string | null) => {
+    if (outValue === undefined) {
+      setValue(newValue)
+    }
+
+    if (newValue !== finalValue) {
+      onChange(newValue)
+    }
   }
 
   return (
     <div style={style}>
       {options.map((item, index) => {
-        const isChecked = item.value === value
+        if (!item) {
+          return null
+        }
+
+        const isChecked = item.value === finalValue
 
         return (
           <div
@@ -81,6 +94,7 @@ export function RadioGroup({
                 : 'inherit',
               ...groupStyle
             }}
+            onClick={() => handleChange(item.value)}
           >
             <Box
               display="flex"
@@ -93,7 +107,6 @@ export function RadioGroup({
                   value={item.value}
                   color={isChecked ? 'primary' : 'default'}
                   checked={isChecked}
-                  onClick={() => handleChange(item.value)}
                 />
               </Box>
               <Box
@@ -106,7 +119,6 @@ export function RadioGroup({
                     ? theme.palette.primary.main
                     : theme.palette.common.black
                 }}
-                onClick={() => handleChange(item.value)}
               >
                 <Typography variant="body1">{item.label}</Typography>
                 <Typography variant="body2" className={classes.description}>
@@ -114,6 +126,7 @@ export function RadioGroup({
                 </Typography>
               </Box>
             </Box>
+            {item.children}
           </div>
         )
       })}
