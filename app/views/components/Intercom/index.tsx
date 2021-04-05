@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useIntercom } from 'react-use-intercom'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -17,27 +17,26 @@ export default function Intercom() {
     (state: IAppState) => state.intercom
   )
 
-  const UserInfo =
-    user && user.id
-      ? {
-          user_id: user.id,
-          email: user.email,
-          name: `${user.first_name} ${user.last_name}`
-        }
-      : {}
-
   const { boot } = useIntercom()
 
   // Read https://github.com/devrnt/react-use-intercom#useintercom for more options
-  boot({
-    ...UserInfo,
-    customAttributes: {
-      custom_launcher_selector: '.open_intercom',
-      vertical_padding: 0,
-      horizontal_padding: 8,
-      alignment: 'left'
+  useEffect(() => {
+    if (!user) {
+      return
     }
-  })
+
+    boot({
+      userId: user.id,
+      email: user.email,
+      name: `${user.first_name} ${user.last_name}`,
+      customAttributes: {
+        custom_launcher_selector: '.open_intercom',
+        vertical_padding: 0,
+        horizontal_padding: 8,
+        alignment: 'left'
+      }
+    })
+  }, [boot, user])
 
   return (
     <>

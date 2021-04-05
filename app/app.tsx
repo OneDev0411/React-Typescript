@@ -53,7 +53,6 @@ const App = () => {
     <AppTheme>
       <IntercomProvider
         appId={config.intercom.app_id}
-        autoBoot
         onShow={() => dispatch(activateIntercom())}
       >
         <GlobalActionsProvider>
