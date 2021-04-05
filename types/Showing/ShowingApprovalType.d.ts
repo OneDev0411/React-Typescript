@@ -1,5 +1,1 @@
-declare type IShowingApprovalType =
-  | 'All'
-  | 'Any'
-  | 'GoAndShow'
-  | 'ViewInstructionsOnly'
+declare type IShowingApprovalType = 'All' | 'Any' | 'None'

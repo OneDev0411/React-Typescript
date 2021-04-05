@@ -5,6 +5,7 @@ declare interface IShowing extends IModel<'showing'> {
   end_date?: string
   duration: number
   notice_period?: number
+  approval_type: IShowingApprovalType
   feedback_template?: IMarketingTemplateInstance
   deal?: IDeal
   listing?: IListing
@@ -12,5 +13,5 @@ declare interface IShowing extends IModel<'showing'> {
   gallery?: IMediaGallery
   roles: IShowingRole[]
   appointments: IAppointment[]
-  approval_type: IShowingApprovalType
+  availabilities: ShowingAvailability[]
 }

@@ -1,6 +1,4 @@
-declare interface IShowingRole extends IModel<'showing_role'> {
-  showing: UUID
-  created_by: number
+declare interface ShowingRoleInput {
   role: IShowingRoleType
   user: UUID
   brand: UUID
