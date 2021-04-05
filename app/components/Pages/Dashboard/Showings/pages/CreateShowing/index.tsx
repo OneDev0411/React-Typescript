@@ -8,11 +8,20 @@ import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
 import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
-import { ShowingPropertyType, ShowingRolePerson } from '../../types'
+import { ShowingPropertyType } from '../../types'
 import ShowingStepYesNoQuestion, {
   YesNoAnswer
 } from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
+import ShowingStepRoleNotificationTypes from '../../components/ShowingStepRoleNotificationTypes'
+import useListingPersonOnChange from './use-listing-person-on-change'
+import useListingConfirmNotificationTypes from './use-listing-confirm-notification-types'
+
+const DEFAULT_NOTIFICATION_VALUE: IShowingRoleNotification = {
+  can_approve: false,
+  confirm_notification_type: [],
+  cancel_notification_type: []
+}
 
 function CreateShowing() {
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
@@ -25,46 +34,57 @@ function CreateShowing() {
     null
   )
   const [listingAgentPerson, setListingAgentPerson] = useState<
-    Nullable<ShowingRolePerson>
+    Nullable<IShowingRolePerson>
   >(null)
+  const [
+    listingAgentNotification,
+    setListingAgentNotification
+  ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
 
   const [hasListingCoAgent, setHasListingCoAgent] = useState<
     Nullable<YesNoAnswer>
   >(null)
   const [listingCoAgentPerson, setListingCoAgentPerson] = useState<
-    Nullable<ShowingRolePerson>
+    Nullable<IShowingRolePerson>
   >(null)
+  // const [
+  //   listingCoAgentNotification,
+  //   setListingCoAgentNotification
+  // ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
 
   const [hasListingOccupant, setHasListingOccupant] = useState<
     Nullable<YesNoAnswer>
   >(null)
   const [listingOccupantPerson, setListingOccupantPerson] = useState<
-    Nullable<ShowingRolePerson>
+    Nullable<IShowingRolePerson>
   >(null)
+  // const [
+  //   listingOccupantNotification,
+  //   setListingOccupantNotification
+  // ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
 
-  const handleHasListingAgentChange = (value: YesNoAnswer) => {
-    setHasListingAgent(value)
+  const handleHasListingAgentChange = useListingPersonOnChange(
+    setHasListingAgent,
+    setListingAgentPerson
+  )
 
-    if (value === 'No') {
-      setListingAgentPerson(null)
-    }
-  }
+  const handleHasListingCoAgentChange = useListingPersonOnChange(
+    setHasListingCoAgent,
+    setListingCoAgentPerson
+  )
 
-  const handleHasListingCoAgentChange = (value: YesNoAnswer) => {
-    setHasListingCoAgent(value)
+  const handleHasListingOccupantChange = useListingPersonOnChange(
+    setHasListingOccupant,
+    setListingOccupantPerson
+  )
 
-    if (value === 'No') {
-      setListingCoAgentPerson(null)
-    }
-  }
-
-  const handleHasListingOccupantChange = (value: YesNoAnswer) => {
-    setHasListingOccupant(value)
-
-    if (value === 'No') {
-      setListingOccupantPerson(null)
-    }
-  }
+  const [
+    listingAgentNotificationValue,
+    handleListingAgentNotificationChange
+  ] = useListingConfirmNotificationTypes(
+    listingAgentNotification,
+    setListingAgentNotification
+  )
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -93,7 +113,15 @@ function CreateShowing() {
                 onPersonChange={setListingAgentPerson}
               />
             )}
-            {/* Agent confirmation step */}
+            {hasListingAgent === 'Yes' && (
+              <ShowingStepRoleNotificationTypes
+                question="Does Ali need to confirm appointments?"
+                hasNoAnywaysOption
+                yesOptionLabel="Yes, Confirm by:"
+                value={listingAgentNotificationValue}
+                onChange={handleListingAgentNotificationChange}
+              />
+            )}
             {/* Agent notification step */}
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
