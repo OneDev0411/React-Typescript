@@ -17,14 +17,12 @@ import ShowingStepRolePersonSelect, {
 
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
-  hidden: boolean
   roleType: IShowingRoleType
   person: Nullable<ShowingRolePerson>
   onPersonChange: (person: Nullable<ShowingRolePerson>) => void
 }
 
 function ShowingStepRolePerson({
-  hidden,
   roleType,
   person,
   onPersonChange,
@@ -49,7 +47,7 @@ function ShowingStepRolePerson({
   }
 
   return (
-    <QuestionSection hidden={hidden}>
+    <QuestionSection>
       <QuestionTitle>Who is the listing {kebabCase(roleType)}?</QuestionTitle>
       <QuestionForm>
         {!person && (

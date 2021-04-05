@@ -62,12 +62,13 @@ function CreateShowing() {
               value={hasListingAgent}
               onChange={setHasListingAgent}
             />
-            <ShowingStepRolePerson
-              hidden={!hasListingAgent || hasListingAgent === 'No'}
-              roleType="Agent"
-              person={listingAgentPerson}
-              onPersonChange={setListingAgentPerson}
-            />
+            {hasListingAgent === 'Yes' && (
+              <ShowingStepRolePerson
+                roleType="Agent"
+                person={listingAgentPerson}
+                onPersonChange={setListingAgentPerson}
+              />
+            )}
             {/* Agent confirmation step */}
             {/* Agent notification step */}
             <ShowingStepYesNoQuestion
@@ -75,12 +76,13 @@ function CreateShowing() {
               value={hasListingCoAgent}
               onChange={setHasListingCoAgent}
             />
-            <ShowingStepRolePerson
-              hidden={!hasListingCoAgent || hasListingCoAgent === 'No'}
-              roleType="CoAgent"
-              person={listingCoAgentPerson}
-              onPersonChange={setListingCoAgentPerson}
-            />
+            {hasListingCoAgent === 'Yes' && (
+              <ShowingStepRolePerson
+                roleType="CoAgent"
+                person={listingCoAgentPerson}
+                onPersonChange={setListingCoAgentPerson}
+              />
+            )}
             {/* CoAgent confirmation step */}
             {/* CoAgent notification step */}
             <ShowingStepYesNoQuestion
@@ -88,13 +90,14 @@ function CreateShowing() {
               value={hasListingOccupant}
               onChange={setHasListingOccupant}
             />
-            <ShowingStepRolePerson
-              hidden={!hasListingOccupant || hasListingOccupant === 'No'}
-              roleType="Occupant"
-              person={listingOccupantPerson}
-              onPersonChange={setListingOccupantPerson}
-              selectType="Contact"
-            />
+            {hasListingOccupant === 'Yes' && (
+              <ShowingStepRolePerson
+                roleType="Occupant"
+                person={listingOccupantPerson}
+                onPersonChange={setListingOccupantPerson}
+                selectType="Contact"
+              />
+            )}
             {/* Occupant confirmation step */}
             {/* Occupant notification step */}
             <QuestionSection>Sample Next Section</QuestionSection>
