@@ -23,9 +23,6 @@ function CreateShowing() {
   >(null)
 
   const [
-    hasAgent,
-    setHasAgent,
-
     agentPerson,
     setAgentPerson,
 
@@ -37,9 +34,6 @@ function CreateShowing() {
   ] = useShowingRole()
 
   const [
-    hasCoAgent,
-    setHasCoAgent,
-
     coAgentPerson,
     setCoAgentPerson,
 
@@ -47,13 +41,13 @@ function CreateShowing() {
     setCoAgentConfirmNotificationTypesChange,
 
     coAgentCancelNotificationTypes,
-    setCoAgentCancelNotificationTypesChange
+    setCoAgentCancelNotificationTypesChange,
+
+    hasCoAgent,
+    setHasCoAgent
   ] = useShowingRole()
 
   const [
-    hasOccupant,
-    setHasOccupant,
-
     occupantPerson,
     setOccupantPerson,
 
@@ -61,7 +55,10 @@ function CreateShowing() {
     setOccupantConfirmNotificationTypesChange,
 
     occupantCancelNotificationTypes,
-    setOccupantCancelNotificationTypesChange
+    setOccupantCancelNotificationTypesChange,
+
+    hasOccupant,
+    setHasOccupant
   ] = useShowingRole()
 
   return (
@@ -81,26 +78,19 @@ function CreateShowing() {
             />
 
             {/* Listing Agent Steps - Start */}
-            <ShowingStepYesNoQuestion
-              question="Is this a listing agent accompanied showing?"
-              value={hasAgent}
-              onChange={setHasAgent}
+            <ShowingStepRolePerson
+              roleType="Agent"
+              person={agentPerson}
+              onPersonChange={setAgentPerson}
             />
-            {hasAgent === 'Yes' && (
-              <ShowingStepRolePerson
-                roleType="Agent"
-                person={agentPerson}
-                onPersonChange={setAgentPerson}
-              />
-            )}
-            {approvalType !== 'None' && hasAgent === 'Yes' && agentPerson && (
+            {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleConfirmNotificationTypes
                 firstName={agentPerson.first_name}
                 value={agentConfirmNotificationTypes}
                 onChange={setAgentConfirmNotificationTypesChange}
               />
             )}
-            {approvalType !== 'None' && hasAgent === 'Yes' && agentPerson && (
+            {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleCancelNotificationTypes
                 firstName={agentPerson.first_name}
                 value={agentCancelNotificationTypes}

@@ -14,14 +14,14 @@ const DEFAULT_NOTIFICATION_VALUE: IShowingRoleNotification = {
 }
 
 type UseShowingRoleReturn = [
-  Nullable<YesNoAnswer>,
-  Dispatch<SetStateAction<YesNoAnswer>>,
   Nullable<IShowingRolePerson>,
   Dispatch<SetStateAction<Nullable<IShowingRolePerson>>>,
   [boolean, INotificationDeliveryType[]],
   (value: NotificationTypeValue) => void,
   [boolean, INotificationDeliveryType[]],
-  (value: NotificationTypeValue) => void
+  (value: NotificationTypeValue) => void,
+  Nullable<YesNoAnswer>,
+  Dispatch<SetStateAction<YesNoAnswer>>
 ]
 
 function useShowingRole(): UseShowingRoleReturn {
@@ -52,15 +52,14 @@ function useShowingRole(): UseShowingRoleReturn {
   ] = useListingCancelNotificationTypes(roleNotification, setRoleNotification)
 
   return [
-    hasRole,
-    handleHasRoleChange,
     rolePerson,
     setRolePerson,
-
     roleConfirmNotificationTypes,
     handleRoleConfirmNotificationTypesChange,
     roleCancelNotificationTypes,
-    handleRoleCancelNotificationTypesChange
+    handleRoleCancelNotificationTypesChange,
+    hasRole,
+    handleHasRoleChange
   ]
 }
 
