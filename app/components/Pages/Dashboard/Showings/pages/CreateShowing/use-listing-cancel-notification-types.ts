@@ -1,6 +1,6 @@
 import type { SetStateAction, Dispatch } from 'react'
 
-import { NotificationTypeValue } from '../../components/ShowingStepRoleNotificationTypes'
+import type { NotificationTypeValue } from '../../components/ShowingRoleNotificationTypes'
 
 type UseListingCancelNotificationTypesReturn = [
   [boolean, INotificationDeliveryType[]],

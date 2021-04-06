@@ -13,19 +13,19 @@ const useStyles = makeStyles(
     label: { paddingLeft: theme.spacing(2) }
   }),
   {
-    name: 'ShowingStepRoleNotificationTypesMediums'
+    name: 'ShowingRoleNotificationTypesMediums'
   }
 )
 
-interface ShowingStepRoleNotificationTypesMediumsProps {
+interface ShowingRoleNotificationTypesMediumsProps {
   types: INotificationDeliveryType[]
   onTypesChange: (types: INotificationDeliveryType[]) => void
 }
 
-function ShowingStepRoleNotificationTypesMediums({
+function ShowingRoleNotificationTypesMediums({
   types,
   onTypesChange
-}: ShowingStepRoleNotificationTypesMediumsProps) {
+}: ShowingRoleNotificationTypesMediumsProps) {
   const classes = useStyles()
 
   const handleChange = (checked: boolean, type: INotificationDeliveryType) => {
@@ -73,4 +73,4 @@ function ShowingStepRoleNotificationTypesMediums({
   )
 }
 
-export default ShowingStepRoleNotificationTypesMediums
+export default ShowingRoleNotificationTypesMediums

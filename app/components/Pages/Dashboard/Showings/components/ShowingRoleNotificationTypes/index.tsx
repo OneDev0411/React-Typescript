@@ -11,13 +11,13 @@ import {
 
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
-import ShowingStepRoleNotificationTypesMediums from './ShowingStepRoleNotificationTypesMediums'
+import ShowingRoleNotificationTypesMediums from './ShowingRoleNotificationTypesMediums'
 
 export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 
 type NotificationTypeOption = 'No' | 'NoWithTypes' | 'Yes'
 
-interface ShowingStepRoleNotificationTypesProps {
+export interface ShowingRoleNotificationTypesProps {
   question: string
   value: NotificationTypeValue
   onChange: (value: NotificationTypeValue) => void
@@ -25,13 +25,13 @@ interface ShowingStepRoleNotificationTypesProps {
   yesOptionLabel: string
 }
 
-function ShowingStepRoleNotificationTypes({
+function ShowingRoleNotificationTypes({
   question,
   hasNoAnywaysOption = false,
   value,
   onChange,
   yesOptionLabel
-}: ShowingStepRoleNotificationTypesProps) {
+}: ShowingRoleNotificationTypesProps) {
   const wizard = useWizardContext()
   const [answer, types] = value
   const [radioValue, setRadioValue] = useState<
@@ -63,7 +63,7 @@ function ShowingStepRoleNotificationTypes({
       label: 'No, but send him a notification anyways.',
       value: 'NoWithTypes',
       children: radioValue === 'NoWithTypes' && (
-        <ShowingStepRoleNotificationTypesMediums
+        <ShowingRoleNotificationTypesMediums
           types={types}
           onTypesChange={handleChangeTypes}
         />
@@ -73,7 +73,7 @@ function ShowingStepRoleNotificationTypes({
       label: yesOptionLabel,
       value: 'Yes',
       children: (!radioValue || radioValue === 'Yes') && (
-        <ShowingStepRoleNotificationTypesMediums
+        <ShowingRoleNotificationTypesMediums
           types={types}
           onTypesChange={handleChangeTypes}
         />
@@ -107,4 +107,4 @@ function ShowingStepRoleNotificationTypes({
   )
 }
 
-export default ShowingStepRoleNotificationTypes
+export default ShowingRoleNotificationTypes

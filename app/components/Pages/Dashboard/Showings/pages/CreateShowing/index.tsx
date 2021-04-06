@@ -5,23 +5,15 @@ import { Box } from '@material-ui/core'
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
 
+import { ShowingPropertyType } from '../../types'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
 import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
-import { ShowingPropertyType } from '../../types'
-import ShowingStepYesNoQuestion, {
-  YesNoAnswer
-} from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
-import ShowingStepRoleNotificationTypes from '../../components/ShowingStepRoleNotificationTypes'
-import useListingPersonOnChange from './use-listing-person-on-change'
-import useListingConfirmNotificationTypes from './use-listing-confirm-notification-types'
-
-const DEFAULT_NOTIFICATION_VALUE: IShowingRoleNotification = {
-  can_approve: false,
-  confirm_notification_type: [],
-  cancel_notification_type: []
-}
+import ShowingStepRoleConfirmNotificationTypes from '../../components/ShowingStepRoleConfirmNotificationTypes'
+import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStepRoleCancelNotificationTypes'
+import ShowingStepYesNoQuestion from '../../components/ShowingStepYesNoQuestion'
+import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
@@ -30,61 +22,47 @@ function CreateShowing() {
     Nullable<IShowingApprovalType>
   >(null)
 
-  const [hasListingAgent, setHasListingAgent] = useState<Nullable<YesNoAnswer>>(
-    null
-  )
-  const [listingAgentPerson, setListingAgentPerson] = useState<
-    Nullable<IShowingRolePerson>
-  >(null)
   const [
-    listingAgentNotification,
-    setListingAgentNotification
-  ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
+    hasAgent,
+    setHasAgent,
 
-  const [hasListingCoAgent, setHasListingCoAgent] = useState<
-    Nullable<YesNoAnswer>
-  >(null)
-  const [listingCoAgentPerson, setListingCoAgentPerson] = useState<
-    Nullable<IShowingRolePerson>
-  >(null)
-  // const [
-  //   listingCoAgentNotification,
-  //   setListingCoAgentNotification
-  // ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
+    agentPerson,
+    setAgentPerson,
 
-  const [hasListingOccupant, setHasListingOccupant] = useState<
-    Nullable<YesNoAnswer>
-  >(null)
-  const [listingOccupantPerson, setListingOccupantPerson] = useState<
-    Nullable<IShowingRolePerson>
-  >(null)
-  // const [
-  //   listingOccupantNotification,
-  //   setListingOccupantNotification
-  // ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
+    agentConfirmNotificationTypes,
+    setAgentConfirmNotificationTypesChange,
 
-  const handleHasListingAgentChange = useListingPersonOnChange(
-    setHasListingAgent,
-    setListingAgentPerson
-  )
-
-  const handleHasListingCoAgentChange = useListingPersonOnChange(
-    setHasListingCoAgent,
-    setListingCoAgentPerson
-  )
-
-  const handleHasListingOccupantChange = useListingPersonOnChange(
-    setHasListingOccupant,
-    setListingOccupantPerson
-  )
+    agentCancelNotificationTypes,
+    setAgentCancelNotificationTypesChange
+  ] = useShowingRole()
 
   const [
-    listingAgentNotificationValue,
-    handleListingAgentNotificationChange
-  ] = useListingConfirmNotificationTypes(
-    listingAgentNotification,
-    setListingAgentNotification
-  )
+    hasCoAgent,
+    setHasCoAgent,
+
+    coAgentPerson,
+    setCoAgentPerson,
+
+    coAgentConfirmNotificationTypes,
+    setCoAgentConfirmNotificationTypesChange,
+
+    coAgentCancelNotificationTypes,
+    setCoAgentCancelNotificationTypesChange
+  ] = useShowingRole()
+
+  const [
+    hasOccupant,
+    setHasOccupant,
+
+    occupantPerson,
+    setOccupantPerson,
+
+    occupantConfirmNotificationTypes,
+    setOccupantConfirmNotificationTypesChange,
+
+    occupantCancelNotificationTypes,
+    setOccupantCancelNotificationTypesChange
+  ] = useShowingRole()
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -101,57 +79,103 @@ function CreateShowing() {
               approvalType={approvalType}
               onApprovalTypeChange={setApprovalType}
             />
+
+            {/* Listing Agent Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is this a listing agent accompanied showing?"
-              value={hasListingAgent}
-              onChange={handleHasListingAgentChange}
+              value={hasAgent}
+              onChange={setHasAgent}
             />
-            {hasListingAgent === 'Yes' && (
+            {hasAgent === 'Yes' && (
               <ShowingStepRolePerson
                 roleType="Agent"
-                person={listingAgentPerson}
-                onPersonChange={setListingAgentPerson}
+                person={agentPerson}
+                onPersonChange={setAgentPerson}
               />
             )}
-            {hasListingAgent === 'Yes' && (
-              <ShowingStepRoleNotificationTypes
-                question="Does Ali need to confirm appointments?"
-                hasNoAnywaysOption
-                yesOptionLabel="Yes, Confirm by:"
-                value={listingAgentNotificationValue}
-                onChange={handleListingAgentNotificationChange}
+            {approvalType !== 'None' && hasAgent === 'Yes' && agentPerson && (
+              <ShowingStepRoleConfirmNotificationTypes
+                firstName={agentPerson.first_name}
+                value={agentConfirmNotificationTypes}
+                onChange={setAgentConfirmNotificationTypesChange}
               />
             )}
-            {/* Agent notification step */}
+            {approvalType !== 'None' && hasAgent === 'Yes' && agentPerson && (
+              <ShowingStepRoleCancelNotificationTypes
+                firstName={agentPerson.first_name}
+                value={agentCancelNotificationTypes}
+                onChange={setAgentCancelNotificationTypesChange}
+              />
+            )}
+            {/* Listing Agent Steps - End */}
+
+            {/* Listing Co-agent Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
-              value={hasListingCoAgent}
-              onChange={handleHasListingCoAgentChange}
+              value={hasCoAgent}
+              onChange={setHasCoAgent}
             />
-            {hasListingCoAgent === 'Yes' && (
+            {hasCoAgent === 'Yes' && (
               <ShowingStepRolePerson
                 roleType="CoAgent"
-                person={listingCoAgentPerson}
-                onPersonChange={setListingCoAgentPerson}
+                person={coAgentPerson}
+                onPersonChange={setCoAgentPerson}
               />
             )}
-            {/* CoAgent confirmation step */}
-            {/* CoAgent notification step */}
+            {approvalType !== 'None' &&
+              hasCoAgent === 'Yes' &&
+              coAgentPerson && (
+                <ShowingStepRoleConfirmNotificationTypes
+                  firstName={coAgentPerson.first_name}
+                  value={coAgentConfirmNotificationTypes}
+                  onChange={setCoAgentConfirmNotificationTypesChange}
+                />
+              )}
+            {approvalType !== 'None' &&
+              hasCoAgent === 'Yes' &&
+              coAgentPerson && (
+                <ShowingStepRoleCancelNotificationTypes
+                  firstName={coAgentPerson.first_name}
+                  value={coAgentCancelNotificationTypes}
+                  onChange={setCoAgentCancelNotificationTypesChange}
+                />
+              )}
+            {/* Listing Co-agent Steps - End */}
+
+            {/* Listing Occupant Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is this property Occupied?"
-              value={hasListingOccupant}
-              onChange={handleHasListingOccupantChange}
+              value={hasOccupant}
+              onChange={setHasOccupant}
             />
-            {hasListingOccupant === 'Yes' && (
+            {hasOccupant === 'Yes' && (
               <ShowingStepRolePerson
                 roleType="Occupant"
-                person={listingOccupantPerson}
-                onPersonChange={setListingOccupantPerson}
+                person={occupantPerson}
+                onPersonChange={setOccupantPerson}
                 selectType="Contact"
               />
             )}
-            {/* Occupant confirmation step */}
-            {/* Occupant notification step */}
+            {approvalType !== 'None' &&
+              hasOccupant === 'Yes' &&
+              occupantPerson && (
+                <ShowingStepRoleConfirmNotificationTypes
+                  firstName={occupantPerson.first_name}
+                  value={occupantConfirmNotificationTypes}
+                  onChange={setOccupantConfirmNotificationTypesChange}
+                />
+              )}
+            {approvalType !== 'None' &&
+              hasOccupant === 'Yes' &&
+              occupantPerson && (
+                <ShowingStepRoleCancelNotificationTypes
+                  firstName={occupantPerson.first_name}
+                  value={occupantCancelNotificationTypes}
+                  onChange={setOccupantCancelNotificationTypesChange}
+                />
+              )}
+            {/* Listing Occupant Steps - End */}
+
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
         </Box>
