@@ -1,8 +1,19 @@
 import React from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { Form } from 'react-final-form'
 
 import { FormTextField } from 'components/final-form-fields'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      '& textarea': {
+        minHeight: theme.spacing(13)
+      }
+    }
+  }),
+  { name: 'ShowingStepAccessInformationForm' }
+)
 
 interface FormValues {
   info: string
@@ -17,6 +28,8 @@ function ShowingStepAccessInformationForm({
   value,
   onSubmit
 }: ShowingStepAccessInformationFormProps) {
+  const classes = useStyles()
+
   const handleSubmit = (data: FormValues) => {
     onSubmit(data.info)
   }
@@ -28,6 +41,7 @@ function ShowingStepAccessInformationForm({
           <form onSubmit={handleSubmit}>
             <FormTextField
               name="info"
+              className={classes.root}
               placeholder="enter information you’d like to provide"
               multiline
             />

@@ -4,8 +4,7 @@ import { kebabCase } from 'lodash'
 import {
   QuestionForm,
   QuestionSection,
-  QuestionTitle,
-  useWizardContext
+  QuestionTitle
 } from 'components/QuestionWizard'
 
 import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
@@ -13,6 +12,7 @@ import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
 import ShowingStepRolePersonSelect, {
   ShowingStepRolePersonSelectProps
 } from './ShowingStepRolePersonSelect'
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
@@ -27,13 +27,13 @@ function ShowingStepRolePerson({
   onPersonChange,
   selectType
 }: ShowingStepRolePersonProps) {
-  const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
   const [isEditable, setIsEditable] = useState(true)
 
   const handleSubmit = (person: IShowingRolePerson) => {
     onPersonChange(person)
     setIsEditable(false)
-    wizard.next()
+    nextStep()
   }
 
   const handleEdit = () => {

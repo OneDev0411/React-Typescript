@@ -5,13 +5,13 @@ import { Box, Button } from '@material-ui/core'
 import {
   QuestionForm,
   QuestionSection,
-  QuestionTitle,
-  useWizardContext
+  QuestionTitle
 } from 'components/QuestionWizard'
 
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
 import ShowingRoleNotificationTypesMediums from './ShowingRoleNotificationTypesMediums'
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 
@@ -32,7 +32,7 @@ function ShowingRoleNotificationTypes({
   onChange,
   yesOptionLabel
 }: ShowingRoleNotificationTypesProps) {
-  const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
   const [answer, types] = value
   const [radioValue, setRadioValue] = useState<
     Nullable<NotificationTypeOption>
@@ -51,7 +51,7 @@ function ShowingRoleNotificationTypes({
   }
 
   const handleContinue = () => {
-    wizard.next()
+    nextStep()
   }
 
   const options: RadioGroupProps<NotificationTypeOption>['options'] = [

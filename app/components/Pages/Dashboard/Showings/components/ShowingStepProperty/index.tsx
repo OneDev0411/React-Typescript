@@ -3,8 +3,7 @@ import React, { useState } from 'react'
 import {
   QuestionSection,
   QuestionTitle,
-  QuestionForm,
-  useWizardContext
+  QuestionForm
 } from 'components/QuestionWizard'
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
@@ -23,6 +22,7 @@ import ShowingStepPropertyForm, {
 } from './ShowingStepPropertyForm'
 import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
 import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 export interface ShowingStepPropertyProps {
   property: Nullable<ShowingPropertyType>
@@ -35,14 +35,14 @@ function ShowingStepProperty({
   property,
   onPropertyChange
 }: ShowingStepPropertyProps) {
-  const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
   const [isSearchMode, setIsSearchMode] = useState(!property)
   const [isEditMode, setIsEditMode] = useState(false)
 
   const handleSearchResultSelect = (result: SearchResult) => {
     if (result.type === 'listing' || result.type === 'deal') {
       onPropertyChange(result)
-      wizard.next()
+      nextStep()
     } else if (result.type === 'place') {
       onPropertyChange({
         type: 'place',
@@ -69,7 +69,7 @@ function ShowingStepProperty({
       ...formData
     })
     setIsEditMode(false)
-    wizard.next()
+    nextStep()
   }
 
   const handlePropertyFormCancel = () => {

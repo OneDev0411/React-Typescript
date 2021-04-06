@@ -3,11 +3,12 @@ import React from 'react'
 import {
   QuestionForm,
   QuestionSection,
-  QuestionTitle,
-  useWizardContext
+  QuestionTitle
 } from 'components/QuestionWizard'
 
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
+
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 interface ShowingStepApprovalTypeProps {
   approvalType: Nullable<IShowingApprovalType>
@@ -37,11 +38,11 @@ function ShowingStepApprovalType({
   approvalType,
   onApprovalTypeChange
 }: ShowingStepApprovalTypeProps) {
-  const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
 
   const handleChange = (approvalType: IShowingApprovalType) => {
     onApprovalTypeChange(approvalType)
-    wizard.next()
+    nextStep()
   }
 
   return (

@@ -3,10 +3,11 @@ import React from 'react'
 import {
   QuestionForm,
   QuestionSection,
-  QuestionTitle,
-  useWizardContext
+  QuestionTitle
 } from 'components/QuestionWizard'
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
+
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 export type YesNoAnswer = 'Yes' | 'No'
 
@@ -32,11 +33,11 @@ function ShowingStepYesNoQuestion({
   value,
   onChange
 }: ShowingStepYesNoQuestionProps) {
-  const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
 
   const handleChange = (value: YesNoAnswer) => {
     onChange(value)
-    wizard.next()
+    nextStep()
   }
 
   return (
