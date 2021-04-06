@@ -13,5 +13,5 @@ declare interface IShowing extends IModel<'showing'> {
   gallery?: IMediaGallery
   roles: IShowingRole[]
   appointments: IAppointment[]
-  availabilities: ShowingAvailability[]
+  availabilities: IShowingAvailability[]
 }

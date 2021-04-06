@@ -12,7 +12,9 @@ import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
 import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 import ShowingStepRoleConfirmNotificationTypes from '../../components/ShowingStepRoleConfirmNotificationTypes'
 import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStepRoleCancelNotificationTypes'
-import ShowingStepYesNoQuestion from '../../components/ShowingStepYesNoQuestion'
+import ShowingStepYesNoQuestion, {
+  YesNoAnswer
+} from '../../components/ShowingStepYesNoQuestion'
 import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
@@ -61,6 +63,15 @@ function CreateShowing() {
     setHasOccupant
   ] = useShowingRole()
 
+  const [
+    allowInspectionsAndWalkthrough,
+    setAllowInspectionsAndWalkthrough
+  ] = useState<Nullable<YesNoAnswer>>(null)
+
+  const [allowAppraisals, setAllowAppraisals] = useState<Nullable<YesNoAnswer>>(
+    null
+  )
+
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing" />
@@ -76,7 +87,6 @@ function CreateShowing() {
               approvalType={approvalType}
               onApprovalTypeChange={setApprovalType}
             />
-
             {/* Listing Agent Steps - Start */}
             <ShowingStepRolePerson
               roleType="Agent"
@@ -98,7 +108,6 @@ function CreateShowing() {
               />
             )}
             {/* Listing Agent Steps - End */}
-
             {/* Listing Co-agent Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
@@ -131,7 +140,6 @@ function CreateShowing() {
                 />
               )}
             {/* Listing Co-agent Steps - End */}
-
             {/* Listing Occupant Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is this property Occupied?"
@@ -166,6 +174,17 @@ function CreateShowing() {
               )}
             {/* Listing Occupant Steps - End */}
 
+            <ShowingStepYesNoQuestion
+              question="Do you want to allow inspections and walk-through?"
+              value={allowInspectionsAndWalkthrough}
+              onChange={setAllowInspectionsAndWalkthrough}
+            />
+
+            <ShowingStepYesNoQuestion
+              question="would you like to allow appraisals?"
+              value={allowAppraisals}
+              onChange={setAllowAppraisals}
+            />
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
         </Box>
