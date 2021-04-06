@@ -1,60 +1,59 @@
 import React, { useState } from 'react'
+import { Box, Button, TextField, makeStyles } from '@material-ui/core'
+
+import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
   QuestionForm,
   QuestionSection,
   QuestionTitle
 } from 'components/QuestionWizard'
-import { RadioGroup, RadioItem } from 'components/RadioGroup'
 
-import ShowingStepAccessInformationForm from './ShowingStepAccessInformationForm'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      '& textarea': {
+        minHeight: theme.spacing(13)
+      }
+    }
+  }),
+  { name: 'ShowingStepAccessInformation' }
+)
 
 interface ShowingStepAccessInformationProps {
   value: Nullable<string>
   onChange: (value: Nullable<string>) => void
 }
 
-type RadioValue = 'Yes' | 'No'
-
 function ShowingStepAccessInformation({
   value,
   onChange
 }: ShowingStepAccessInformationProps) {
+  const classes = useStyles()
   const nextStep = useQuestionWizardSmartNext()
+  const [fieldValue, setFieldValue] = useState(value || '')
 
-  const [radioValue, setRadioValue] = useState<Nullable<RadioValue>>(null)
+  const [handleDebouncedChange] = useDebouncedCallback((newValue: string) => {
+    onChange(newValue.trim())
+  }, 400)
 
-  const handleChange = (newValue: RadioValue) => {
-    if (newValue === 'No') {
-      onChange(null)
-      nextStep()
-    }
-
-    setRadioValue(newValue)
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFieldValue(event.target.value)
+    handleDebouncedChange(event.target.value)
   }
 
-  const handleSubmit = (value: string) => {
-    onChange(value)
+  const handleContinue = () => {
+    onChange(fieldValue.trim())
     nextStep()
   }
 
-  const options: RadioItem<RadioValue>[] = [
-    {
-      label: 'Yes',
-      value: 'Yes',
-      children: (radioValue === null || radioValue === 'Yes') && (
-        <ShowingStepAccessInformationForm
-          value={value || ''}
-          onSubmit={handleSubmit}
-        />
-      )
-    },
-    {
-      label: 'No',
-      value: 'No'
-    }
-  ]
+  const handleSkip = () => {
+    setFieldValue('')
+    onChange(null)
+    nextStep()
+  }
 
   return (
     <QuestionSection>
@@ -62,12 +61,32 @@ function ShowingStepAccessInformation({
         Are there any access information you’d like to provide?
       </QuestionTitle>
       <QuestionForm>
-        <RadioGroup
-          name="accessInfoStatus"
-          value={radioValue}
-          options={options}
+        <TextField
+          className={classes.root}
+          placeholder="Enter information you’d like to provide"
+          multiline
+          value={fieldValue}
           onChange={handleChange}
+          fullWidth
+          variant="outlined"
         />
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Box mr={1}>
+            <Button variant="outlined" size="small" onClick={handleSkip}>
+              Skip
+            </Button>
+          </Box>
+          <Button
+            type="button"
+            size="small"
+            variant="contained"
+            color="primary"
+            disabled={!fieldValue}
+            onClick={handleContinue}
+          >
+            Continue
+          </Button>
+        </Box>
       </QuestionForm>
     </QuestionSection>
   )
