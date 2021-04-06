@@ -20,7 +20,9 @@ import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
+import { getContactsCount } from 'models/contacts/get-contacts-count'
 
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
 import {
@@ -74,6 +76,7 @@ export default function EmailComposeForm<T>({
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
   const user = useSelector(selectUser)
+  const contactsInfo = useSelector((state: IAppState) => state.contacts.list)
 
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,
@@ -212,7 +215,7 @@ export default function EmailComposeForm<T>({
     onSent(result)
   }
 
-  const onSubmit = form => {
+  const handlePreSubmit = (form: EmailFormValues) => {
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
     const uploadingImage = bodyEditor.hasUploadingImage()
 
@@ -259,6 +262,34 @@ export default function EmailComposeForm<T>({
     }
 
     return handleSendEmail(form)
+  }
+
+  const onSubmit = async (form: EmailFormValues) => {
+    const isSendingToAllContacts = (form.bcc || []).find(
+      i => i.recipient_type === 'AllContacts'
+    )
+
+    if (isSendingToAllContacts) {
+      let contactsCount = contactsInfo.info?.total
+
+      if (contactsCount === 0) {
+        contactsCount = await getContactsCount([], false)
+      }
+
+      if (contactsCount > 0) {
+        return confirmationModal.setConfirmationModal({
+          message: 'Send to all your contacts?',
+          description: `You are about to send this email ${contactsCount} people in your contacts. Are you sure?`,
+          confirmLabel: 'Send it now',
+          cancelLabel: 'Edit',
+          onConfirm: () => {
+            handlePreSubmit(form)
+          }
+        })
+      }
+    }
+
+    return handlePreSubmit(form)
   }
 
   const scrollToEnd = () => {

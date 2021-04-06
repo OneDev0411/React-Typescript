@@ -39,9 +39,10 @@ export function EmailRecipientsFields({
   const fields = useRecipientFields()
   const [ccVisibility, setCcVisibility] = useState(false)
   const [bccVisibility, setBccVisibility] = useState(false)
-  const [lastFocusedSendType, setLastFocusedSendType] = useState<
-    IEmailRecipientSendType
-  >('To')
+  const [
+    lastFocusedSendType,
+    setLastFocusedSendType
+  ] = useState<IEmailRecipientSendType>('To')
 
   const isCcShown = ccVisibility || (values.cc || []).length > 0
   const isBccShown = bccVisibility || (values.bcc || []).length > 0
