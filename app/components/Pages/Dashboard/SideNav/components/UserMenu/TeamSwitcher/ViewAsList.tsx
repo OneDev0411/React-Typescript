@@ -35,7 +35,10 @@ export function ViewAsList({ disabled, team }: Props) {
   const user = useSelector(selectUser)
   const brandMembers = getTeamAvailableMembers(team)
   const allMembersId = brandMembers.map(m => m.id)
-  const initialSelectedMembers = useMemo(() => viewAs(user, team), [user, team])
+  const initialSelectedMembers = useMemo(() => viewAs(user, false, team), [
+    user,
+    team
+  ])
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
