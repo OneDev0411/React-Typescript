@@ -26,7 +26,7 @@ import {
   selectContactsInfo,
   selectContactsListFetching
 } from 'reducers/contacts/list'
-import { getUserSettingsInActiveTeam, viewAs } from 'utils/user-teams'
+import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
 import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
@@ -903,6 +903,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   const openHouseFilters = activeFilters.filter(
     filter => filter.id === OPEN_HOUSE_FILTER_ID
   )
+  const viewAsUsers = viewAs(user)
 
   return {
     tags: tags.byId,
@@ -918,12 +919,12 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
     list: contacts.list,
     listInfo,
     user,
+    viewAsUsers,
     activeSegment: selectActiveSavedSegment(
       filterSegments,
       'contacts',
       getPredefinedContactLists('Contacts', { user, contacts, ...restOfState })
-    ),
-    viewAsUsers: viewAs(user)
+    )
   }
 }
 
