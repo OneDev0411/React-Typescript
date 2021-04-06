@@ -15,6 +15,7 @@ import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStep
 import ShowingStepYesNoQuestion, {
   YesNoAnswer
 } from '../../components/ShowingStepYesNoQuestion'
+import ShowingStepAccessInformation from '../../components/ShowingStepAccessInformation'
 import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
@@ -63,6 +64,10 @@ function CreateShowing() {
     setHasOccupant
   ] = useShowingRole()
 
+  const [accessInformation, setAccessInformation] = useState<Nullable<string>>(
+    null
+  )
+
   const [
     allowInspectionsAndWalkthrough,
     setAllowInspectionsAndWalkthrough
@@ -87,6 +92,7 @@ function CreateShowing() {
               approvalType={approvalType}
               onApprovalTypeChange={setApprovalType}
             />
+
             {/* Listing Agent Steps - Start */}
             <ShowingStepRolePerson
               roleType="Agent"
@@ -174,14 +180,17 @@ function CreateShowing() {
               )}
             {/* Listing Occupant Steps - End */}
 
+            <ShowingStepAccessInformation
+              value={accessInformation}
+              onChange={setAccessInformation}
+            />
             <ShowingStepYesNoQuestion
               question="Do you want to allow inspections and walk-through?"
               value={allowInspectionsAndWalkthrough}
               onChange={setAllowInspectionsAndWalkthrough}
             />
-
             <ShowingStepYesNoQuestion
-              question="would you like to allow appraisals?"
+              question="Would you like to allow appraisals?"
               value={allowAppraisals}
               onChange={setAllowAppraisals}
             />
