@@ -24,7 +24,7 @@ export interface SelectFieldProps<T extends MenuItemProps['value'] = string>
   defaultValue?: T
   value?: T
   onChange?: (value: T) => void
-  options: SelectItem<T>[]
+  options: (SelectItem<T> | false)[]
   helperText?: ReactNode
 }
 
@@ -50,7 +50,7 @@ function SelectField<T extends MenuItemProps['value'] = string>({
     onChange?.(event.target.value)
 
     if (outValue === undefined) {
-      setValue(value)
+      setValue(event.target.value)
     }
   }
 
@@ -74,11 +74,14 @@ function SelectField<T extends MenuItemProps['value'] = string>({
             {placeholder}
           </MenuItem>
         )}
-        {options.map((option, index) => (
-          <MenuItem key={index} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
+        {options.map(
+          (option, index) =>
+            option && (
+              <MenuItem key={index} value={option.value}>
+                {option.label}
+              </MenuItem>
+            )
+        )}
       </Select>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
