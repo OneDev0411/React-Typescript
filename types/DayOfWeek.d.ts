@@ -1,4 +1,4 @@
-export type IDayOfWeek =
+declare type IDayOfWeek =
   | 'Monday'
   | 'Tuesday'
   | 'Wednesday'
