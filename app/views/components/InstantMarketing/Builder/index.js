@@ -214,11 +214,44 @@ class Builder extends React.Component {
   }
 
   evaluateRte = (view, rte) => {
+    /*
+     * Some clients (looking at you DE) want certain parts of their templates
+     * to be editable, but without the ckeditor. Only inline editing.
+     *
+     * So in our templates we added an optional tag: rte=disable in an element means
+     * we'll hide the rte for that element and its children
+     *
+     * The way we achive this is this: When rte gets enabled, rte:enable event
+     * will be fired. Then, we'll come and traverse the tree to see if we can find
+     * the rte=disable tag.
+     * If no, then all is good. If we find it, we need to hide the ckeditor.
+     *
+     * The way we can achieve that is by adding display: none to it's element.
+     * The only problem is that at the time thing function gets called, the
+     * rte instance may not be initialized yet. So there wont be any element
+     * to hide.
+     *
+     * In that case, we'll listen to instanceReady and hide the element once
+     * the instance becomes ready.
+     */
     let model = view.model
 
+    const hide = (rte) => {
+      const name = rte.name
+      const top = document.querySelector(`#cke_${name}`)
+      if (!top)
+        return false
+
+      top.style.display = 'none'
+      return true
+    }
     do {
       if (model.attributes.attributes.rte === 'disable') {
-        this.editor.RichTextEditor.disable(view, rte)
+
+        if (!hide(rte))
+          rte.once('instanceReady', event => {
+            hide(event.editor)
+          })
         break
       }
       // eslint-disable-next-line no-cond-assign
