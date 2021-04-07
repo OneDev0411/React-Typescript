@@ -19,18 +19,18 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { name: 'ShowingStepAccessInformation' }
+  { name: 'ShowingStepInstructions' }
 )
 
-interface ShowingStepAccessInformationProps {
+interface ShowingStepInstructionsProps {
   value: Nullable<string>
   onChange: (value: Nullable<string>) => void
 }
 
-function ShowingStepAccessInformation({
+function ShowingStepInstructions({
   value,
   onChange
-}: ShowingStepAccessInformationProps) {
+}: ShowingStepInstructionsProps) {
   const classes = useStyles()
   const nextStep = useQuestionWizardSmartNext()
   const [fieldValue, setFieldValue] = useState(value || '')
@@ -92,4 +92,4 @@ function ShowingStepAccessInformation({
   )
 }
 
-export default ShowingStepAccessInformation
+export default ShowingStepInstructions

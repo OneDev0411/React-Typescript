@@ -15,7 +15,7 @@ import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStep
 import ShowingStepYesNoQuestion, {
   YesNoAnswer
 } from '../../components/ShowingStepYesNoQuestion'
-import ShowingStepAccessInformation from '../../components/ShowingStepAccessInformation'
+import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
@@ -64,16 +64,13 @@ function CreateShowing() {
     setHasOccupant
   ] = useShowingRole()
 
-  const [accessInformation, setAccessInformation] = useState<Nullable<string>>(
+  const [instructions, setInstructions] = useState<Nullable<string>>(null)
+
+  const [allowInspection, setAllowInspection] = useState<Nullable<YesNoAnswer>>(
     null
   )
 
-  const [
-    allowInspectionsAndWalkthrough,
-    setAllowInspectionsAndWalkthrough
-  ] = useState<Nullable<YesNoAnswer>>(null)
-
-  const [allowAppraisals, setAllowAppraisals] = useState<Nullable<YesNoAnswer>>(
+  const [allowAppraisal, setAllowAppraisal] = useState<Nullable<YesNoAnswer>>(
     null
   )
 
@@ -180,19 +177,19 @@ function CreateShowing() {
               )}
             {/* Listing Occupant Steps - End */}
 
-            <ShowingStepAccessInformation
-              value={accessInformation}
-              onChange={setAccessInformation}
+            <ShowingStepInstructions
+              value={instructions}
+              onChange={setInstructions}
             />
             <ShowingStepYesNoQuestion
               question="Do you want to allow inspections and walk-through?"
-              value={allowInspectionsAndWalkthrough}
-              onChange={setAllowInspectionsAndWalkthrough}
+              value={allowInspection}
+              onChange={setAllowInspection}
             />
             <ShowingStepYesNoQuestion
               question="Would you like to allow appraisals?"
-              value={allowAppraisals}
-              onChange={setAllowAppraisals}
+              value={allowAppraisal}
+              onChange={setAllowAppraisal}
             />
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
