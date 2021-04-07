@@ -16,6 +16,7 @@ import ShowingStepYesNoQuestion, {
   YesNoAnswer
 } from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepInstructions from '../../components/ShowingStepInstructions'
+import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
@@ -73,6 +74,8 @@ function CreateShowing() {
   const [allowAppraisal, setAllowAppraisal] = useState<Nullable<YesNoAnswer>>(
     null
   )
+
+  const [advanceNotice, setAdvanceNotice] = useState<Nullable<number>>(null)
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -190,6 +193,11 @@ function CreateShowing() {
               question="Would you like to allow appraisals?"
               value={allowAppraisal}
               onChange={setAllowAppraisal}
+            />
+            {/* TODO: Need to handle not in the sameday logic */}
+            <ShowingStepAdvanceNotice
+              leadTime={advanceNotice}
+              onLeadTimeChange={setAdvanceNotice}
             />
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
