@@ -11,4 +11,7 @@ declare interface IShowingInput {
   gallery?: UUID
   roles: IShowingRoleInput[]
   availabilities: IShowingAvailabilityInput[]
+  allow_appraisal: boolean
+  allow_inspection: boolean
+  instructions?: string
 }

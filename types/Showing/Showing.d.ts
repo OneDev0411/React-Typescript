@@ -14,4 +14,7 @@ declare interface IShowing extends IModel<'showing'> {
   roles: IShowingRole[]
   appointments: IAppointment[]
   availabilities: IShowingAvailability[]
+  allow_appraisal: boolean
+  allow_inspection: boolean
+  instructions?: string
 }
