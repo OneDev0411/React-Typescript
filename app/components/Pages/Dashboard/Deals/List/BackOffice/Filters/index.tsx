@@ -120,6 +120,32 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               )}
             </DropdownTab>
           }
+        />,
+        <Tab
+          key={inboxTabs.length + 2}
+          value="analytics"
+          label={
+            <DropdownTab title='Analytics'>
+              {({ toggleMenu }) => (
+                <>
+                  <MenuItem
+                    key={0}
+                    selected={
+                      Boolean(props.params.dashboard)
+                    }
+                    onClick={() => {
+                      toggleMenu()
+                      props.router.push(
+                        '/dashboard/deals/analytics/production'
+                      )
+                    }}
+                  >
+                    Production & Volume
+                  </MenuItem>
+                </>
+              )}
+            </DropdownTab>
+          }
         />
       ]}
       actions={[
