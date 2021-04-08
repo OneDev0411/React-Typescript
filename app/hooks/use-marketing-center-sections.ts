@@ -34,17 +34,6 @@ const ALL_SECTIONS: SectionCollection = {
       }
     ]
   },
-  flows: {
-    type: SectionsEnum.Link,
-    key: 'flows',
-    title: 'Flows',
-    items: [
-      {
-        title: 'Flows',
-        link: urlGenerator('/flows')
-      }
-    ]
-  },
   designs: {
     type: SectionsEnum.Link,
     key: 'designs',
@@ -306,6 +295,17 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('ListingLayout'),
         value: 'ListingLayout',
         link: urlGenerator('/ListingLayout')
+      }
+    ]
+  },
+  flows: {
+    type: SectionsEnum.Link,
+    key: 'flows',
+    title: 'Flows',
+    items: [
+      {
+        title: 'Flows',
+        link: urlGenerator('/flows')
       }
     ]
   }
