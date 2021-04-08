@@ -6,7 +6,7 @@ import ActionButton from 'components/Button/ActionButton'
 import StarIcon from 'components/SvgIcons/Star/StarIcon'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
 
-import { Props as EditModeProps } from './InlineEditableField/EditMode'
+import type { Props as EditModeProps } from './InlineEditableField/EditMode'
 
 export const ViewModeContainer = styled.div<{
   theme: Theme

@@ -30,6 +30,12 @@ import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
 
+import MatterportDrawer from 'components/MatterportDrawer'
+
+import MapDrawer from 'components/MapDrawer'
+
+import CarouselDrawer from 'components/CarouselDrawer'
+
 import nunjucks from '../helpers/nunjucks'
 import getTemplateObject from '../helpers/get-template-object'
 
@@ -56,7 +62,9 @@ import { BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
+import { getTemplateBlocks } from './Blocks/templateBlocks'
 import { getTemplateRenderData } from './utils/get-template-render-data'
+import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { registerToolbarButtons } from './toolbar'
 
@@ -75,10 +83,13 @@ class Builder extends React.Component {
       isAgentDrawerOpen: false,
       isImageSelectDialogOpen: false,
       imageToEdit: null,
-      isVideoDrawerOpen: false,
       isArticleDrawerOpen: false,
       isNeighborhoodsReportDrawerOpen: false,
-      isNeighborhoodsGraphsReportDrawerOpen: false
+      isNeighborhoodsGraphsReportDrawerOpen: false,
+      mapToEdit: null,
+      carouselToEdit: null,
+      videoToEdit: null,
+      matterportToEdit: null
     }
 
     this.emailBlocksRegistered = false
@@ -145,7 +156,9 @@ class Builder extends React.Component {
           label: 'Link',
           name: 'href'
         }
-      ]
+      ],
+
+      ...websiteBlocksTraits
     }
   }
 
@@ -174,18 +187,20 @@ class Builder extends React.Component {
       assets: [...this.props.assets, ...this.userAssets],
       colors: brandColors,
       fontFamilies: brandFonts,
-      plugins: [GrapesjsMjml],
+      plugins: this.isWebsiteTemplate ? [] : [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
           columnsPadding: false,
           categoryLabel: BASICS_BLOCK_CATEGORY
         }
-      }
+      },
+      detectComponentByType: this.isWebsiteTemplate
     })
 
     this.initLoadedListingsAssets()
 
     this.editor.on('load', this.setupGrapesJs)
+    this.editor.on('rte:enable', this.evaluateRte)
   }
 
   componentWillUnmount() {
@@ -196,6 +211,51 @@ class Builder extends React.Component {
     }
 
     unloadJS('ckeditor')
+  }
+
+  evaluateRte = (view, rte) => {
+    /*
+     * Some clients (looking at you DE) want certain parts of their templates
+     * to be editable, but without the ckeditor. Only inline editing.
+     *
+     * So in our templates we added an optional tag: rte=disable in an element means
+     * we'll hide the rte for that element and its children
+     *
+     * The way we achive this is this: When rte gets enabled, rte:enable event
+     * will be fired. Then, we'll come and traverse the tree to see if we can find
+     * the rte=disable tag.
+     * If no, then all is good. If we find it, we need to hide the ckeditor.
+     *
+     * The way we can achieve that is by adding display: none to it's element.
+     * The only problem is that at the time thing function gets called, the
+     * rte instance may not be initialized yet. So there wont be any element
+     * to hide.
+     *
+     * In that case, we'll listen to instanceReady and hide the element once
+     * the instance becomes ready.
+     */
+    let model = view.model
+
+    const hide = (rte) => {
+      const name = rte.name
+      const top = document.querySelector(`#cke_${name}`)
+      if (!top)
+        return false
+
+      top.style.display = 'none'
+      return true
+    }
+    do {
+      if (model.attributes.attributes.rte === 'disable') {
+
+        if (!hide(rte))
+          rte.once('instanceReady', event => {
+            hide(event.editor)
+          })
+        break
+      }
+      // eslint-disable-next-line no-cond-assign
+    } while ((model = model.parent()))
   }
 
   loadCKEditor = () => {
@@ -259,6 +319,7 @@ class Builder extends React.Component {
   setupImageDoubleClickHandler = () => {
     const components = this.editor.DomComponents
     const image = components.getType('image')
+    const imageBg = components.getType('image-bg')
     const mjImage = components.getType('mj-image')
     const mjCarouselImage = components.getType('mj-carousel-image')
 
@@ -268,6 +329,10 @@ class Builder extends React.Component {
         component: image
       },
       {
+        name: 'image-bg',
+        component: imageBg
+      },
+      {
         name: 'mj-image',
         component: mjImage
       },
@@ -275,7 +340,7 @@ class Builder extends React.Component {
         name: 'mj-carousel-image',
         component: mjCarouselImage
       }
-    ]
+    ].filter(image => !!image.component)
 
     imageComponents.forEach(({ name, component }) => {
       components.addType(name, {
@@ -290,21 +355,22 @@ class Builder extends React.Component {
     })
   }
 
-  setupGrapesJs = () => {
+  setupGrapesJs = async () => {
     registerCommands(this.editor)
-    registerToolbarButtons(
-      this.editor,
-      () => {
+    registerToolbarButtons(this.editor, {
+      onChangeImageClick: () => {
         this.setState({ isImageSelectDialogOpen: true })
       },
-      () => {
+      onEditImageClick: () => {
         const imageToEdit = `/api/utils/cors/${btoa(
           this.editor.runCommand('get-image')
         )}`
 
         this.setState({ imageToEdit })
-      }
-    )
+      },
+      onChangeThemeClick: this.openMapDrawer,
+      onManageCarouselClick: this.openCarouselDrawer
+    })
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
@@ -320,6 +386,10 @@ class Builder extends React.Component {
       this.registerEmailBlocks()
     }
 
+    if (this.isWebsiteTemplate) {
+      await this.registerWebsiteBlocks()
+    }
+
     this.setupImageDoubleClickHandler()
 
     this.props.onBuilderLoad({
@@ -327,20 +397,8 @@ class Builder extends React.Component {
     })
   }
 
-  registerEmailBlocks = () => {
-    // We should not re-register blocks if it's already done!
-    if (this.emailBlocksRegistered) {
-      return
-    }
-
-    this.emailBlocksRegistered = true
-
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
-
-    removeUnusedBlocks(this.editor)
-
-    const emailBlocksOptions = {
+  getBlocksOptions() {
+    const blocksOptions = {
       listing: {
         onDrop: () => {
           this.setState({ isListingDrawerOpen: true })
@@ -357,9 +415,7 @@ class Builder extends React.Component {
         }
       },
       video: {
-        onDrop: () => {
-          this.setState({ isVideoDrawerOpen: true })
-        }
+        onDrop: this.openVideoDrawer
       },
       article: {
         onDrop: () => {
@@ -373,7 +429,7 @@ class Builder extends React.Component {
     const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
     if (shouldShowNeighborhoodsBlocks) {
-      emailBlocksOptions.neighborhoods = {
+      blocksOptions.neighborhoods = {
         onNeighborhoodsDrop: () => {
           this.setState({ isNeighborhoodsReportDrawerOpen: true })
         },
@@ -383,19 +439,109 @@ class Builder extends React.Component {
       }
     }
 
-    this.blocks = registerEmailBlocks(
-      this.editor,
-      renderData,
-      emailBlocksOptions
-    )
+    return blocksOptions
   }
 
-  registerSocialBlocks = () => {
+  async registerEmailBlocks() {
+    // We should not re-register blocks if it's already done!
+    if (this.emailBlocksRegistered) {
+      return
+    }
+
+    this.emailBlocksRegistered = true
+
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
     removeUnusedBlocks(this.editor)
-    this.blocks = registerSocialBlocks(this.editor, renderData)
+
+    const emailBlocksOptions = this.getBlocksOptions()
+
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
+    this.blocks = registerEmailBlocks(
+      this.editor,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
+      templateBlocks,
+      emailBlocksOptions
+    )
+  }
+
+  async registerSocialBlocks() {
+    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const renderData = getTemplateRenderData(brand)
+
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
+    removeUnusedBlocks(this.editor)
+    this.blocks = registerSocialBlocks(
+      this.editor,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
+      templateBlocks
+    )
+  }
+
+  async registerWebsiteBlocks() {
+    // We should not re-register blocks if it's already done!
+    if (this.websiteBlocksRegistered) {
+      return
+    }
+
+    this.websiteBlocksRegistered = true
+
+    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const renderData = getTemplateRenderData(brand)
+
+    const dynamicBlocksOptions = this.getBlocksOptions()
+    const blocksOptions = {
+      onVideoDrop: dynamicBlocksOptions.video.onDrop,
+      onImageDrop: dynamicBlocksOptions.image.onDrop,
+      onAgentDrop: dynamicBlocksOptions.agent.onDrop,
+      onArticleDrop: dynamicBlocksOptions.article.onDrop,
+      onMatterportDrop: this.openMatterportDrawer,
+      onMatterportDoubleClick: this.openMatterportDrawer,
+      onEmptyMatterportClick: this.openMatterportDrawer,
+      onMapDrop: this.openMapDrawer,
+      onMapDoubleClick: this.openMapDrawer,
+      onCarouselDrop: this.openCarouselDrawer,
+      onCarouselDoubleClick: this.openCarouselDrawer,
+      onVideoDoubleClick: this.openVideoDrawer,
+      onEmptyVideoClick: this.openVideoDrawer
+    }
+
+    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+
+    this.blocks = registerWebsiteBlocks(
+      this.editor,
+      {
+        ...this.props.templateData,
+        ...renderData
+      },
+      templateBlocks,
+      blocksOptions
+    )
+  }
+
+  openCarouselDrawer = model => {
+    this.setState({ carouselToEdit: model })
+  }
+
+  openMapDrawer = model => {
+    this.setState({ mapToEdit: model })
+  }
+
+  openVideoDrawer = model => {
+    this.setState({ videoToEdit: model })
+  }
+
+  openMatterportDrawer = model => {
+    this.setState({ matterportToEdit: model })
   }
 
   disableAssetManager = () => {
@@ -629,7 +775,7 @@ class Builder extends React.Component {
   refreshEditor = selectedTemplate => {
     const config = this.editor.getConfig()
 
-    config.avoidInlineStyle = !this.isMjmlTemplate
+    config.avoidInlineStyle = false
     config.forceClass = !this.isMjmlTemplate
 
     const components = this.editor.DomComponents
@@ -659,6 +805,8 @@ class Builder extends React.Component {
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
       this.registerEmailBlocks()
+    } else if (this.isWebsiteTemplate) {
+      this.registerWebsiteBlocks()
     }
   }
 
@@ -743,6 +891,10 @@ class Builder extends React.Component {
 
   get isMjmlTemplate() {
     return this.selectedTemplate && this.selectedTemplate.mjml
+  }
+
+  get isWebsiteTemplate() {
+    return this.selectedTemplate && this.selectedTemplate.medium === 'Website'
   }
 
   get isTemplateLoaded() {
@@ -895,6 +1047,38 @@ class Builder extends React.Component {
     return true
   }
 
+  get hasBlocks() {
+    return this.isMjmlTemplate || this.isWebsiteTemplate
+  }
+
+  uploadFile = async file => {
+    const templateId = this.selectedTemplate.id
+    const uploadedAsset = await uploadAsset(file, templateId)
+
+    return uploadedAsset.file.url
+  }
+
+  getSaveButton() {
+    const saveButton = (
+      <Button
+        style={{
+          marginLeft: '0.5rem'
+        }}
+        variant="contained"
+        color="primary"
+        onClick={this.handleSave}
+        disabled={this.props.actionButtonsDisabled}
+        startIcon={this.props.saveButtonStartIcon}
+      >
+        {this.isBareMode ? this.props.saveButtonText || 'Save' : 'Continue'}
+      </Button>
+    )
+
+    return this.props.saveButtonWrapper
+      ? this.props.saveButtonWrapper(saveButton)
+      : saveButton
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -903,7 +1087,7 @@ class Builder extends React.Component {
     return (
       <Portal root="marketing-center">
         <Container
-          hideBlocks={!this.isMjmlTemplate}
+          hideBlocks={!this.hasBlocks}
           className="template-builder"
           style={this.props.containerStyle}
         >
@@ -944,17 +1128,12 @@ class Builder extends React.Component {
           {this.state.isImageSelectDialogOpen && (
             <ImageSelectDialog
               onClose={() => {
-                this.blocks &&
-                  this.blocks.image &&
-                  this.blocks.image.selectHandler()
+                this.blocks?.image?.selectHandler()
+
                 this.setState({ isImageSelectDialogOpen: false })
               }}
               onSelect={imageUrl => {
-                if (
-                  !this.blocks ||
-                  !this.blocks.image ||
-                  !this.blocks.image.selectHandler(imageUrl)
-                ) {
+                if (!this.blocks?.image?.selectHandler(imageUrl)) {
                   this.editor.runCommand('set-image', {
                     value: imageUrl
                   })
@@ -962,17 +1141,20 @@ class Builder extends React.Component {
 
                 this.setState({ isImageSelectDialogOpen: false })
               }}
-              onUpload={async file => {
-                const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(file, templateId)
-
-                return uploadedAsset.file.url
-              }}
+              onUpload={this.uploadFile}
             />
           )}
           {this.state.imageToEdit && (
             <EditorDialog
               file={this.state.imageToEdit}
+              dimensions={
+                this.editor.runCommand('get-el')
+                  ? [
+                      this.editor.runCommand('get-el').clientWidth * 2,
+                      this.editor.runCommand('get-el').clientHeight * 2
+                    ]
+                  : undefined
+              }
               onClose={() => {
                 this.setState({ imageToEdit: null })
               }}
@@ -988,14 +1170,15 @@ class Builder extends React.Component {
             />
           )}
           <VideoDrawer
-            isOpen={this.state.isVideoDrawerOpen}
+            isOpen={!!this.state.videoToEdit}
+            video={this.state.videoToEdit}
             onClose={() => {
               this.blocks.video.selectHandler()
-              this.setState({ isVideoDrawerOpen: false })
+              this.setState({ videoToEdit: null })
             }}
             onSelect={video => {
               this.blocks.video.selectHandler(video)
-              this.setState({ isVideoDrawerOpen: false })
+              this.setState({ videoToEdit: null })
             }}
           />
           <ArticleDrawer
@@ -1033,6 +1216,50 @@ class Builder extends React.Component {
               }}
             />
           )}
+          <MatterportDrawer
+            isOpen={!!this.state.matterportToEdit}
+            matterport={this.state.matterportToEdit}
+            onClose={() => {
+              this.blocks.matterport.selectHandler()
+              this.setState({ matterportToEdit: null })
+            }}
+            onSelect={matterportModelId => {
+              this.blocks.matterport.selectHandler(matterportModelId)
+              this.setState({ matterportToEdit: null })
+            }}
+          />
+          <MapDrawer
+            isOpen={!!this.state.mapToEdit}
+            map={this.state.mapToEdit}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
+            onClose={() => {
+              this.setState({ mapToEdit: null })
+            }}
+            onSelect={(...args) => {
+              this.blocks.map.selectHandler(...args)
+              this.setState({ mapToEdit: null })
+            }}
+          />
+          <CarouselDrawer
+            isOpen={!!this.state.carouselToEdit}
+            carousel={this.state.carouselToEdit}
+            initialCenter={
+              this.props.templateData.listing?.property.address.location
+            }
+            onClose={() => {
+              this.setState({ carouselToEdit: null })
+            }}
+            onSelect={(...args) => {
+              this.blocks.carousel.selectHandler(...args)
+              this.setState({ carouselToEdit: null })
+            }}
+            suggestedImages={
+              this.props.templateData.listing?.gallery_image_urls
+            }
+            onImageUpload={this.uploadFile}
+          />
           <Header>
             {this.isTemplatesListEnabled() && (
               <>
@@ -1067,6 +1294,8 @@ class Builder extends React.Component {
             )}
 
             <Actions>
+              {this.props.customActions}
+
               {this.shouldShowSaveAsTemplateButton() && (
                 <AddToMarketingCenter
                   medium={this.selectedTemplate.medium}
@@ -1074,6 +1303,7 @@ class Builder extends React.Component {
                   mjml={this.selectedTemplate.mjml}
                   user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  disabled={this.props.actionButtonsDisabled}
                 />
               )}
 
@@ -1083,6 +1313,7 @@ class Builder extends React.Component {
                   variant="outlined"
                   color="secondary"
                   onClick={this.props.onShowEditListings}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   Edit Listings ({this.props.templateData.listings.length})
                 </Button>
@@ -1097,40 +1328,19 @@ class Builder extends React.Component {
                   variant="contained"
                   color="primary"
                   onClick={this.handleSocialSharing}
+                  disabled={this.props.actionButtonsDisabled}
                 >
                   Continue
                 </Button>
               )}
 
-              {this.shouldShowEmailActions && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSave}
-                >
-                  Continue
-                </Button>
-              )}
-
-              {this.isBareMode && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSave}
-                >
-                  {this.props.saveButtonText || 'Save'}
-                </Button>
-              )}
+              {(this.shouldShowEmailActions || this.isBareMode) &&
+                this.getSaveButton()}
 
               <IconButton
                 onClick={this.props.onClose}
                 style={{ marginLeft: '0.5rem' }}
+                disabled={this.props.actionButtonsDisabled}
               >
                 <SvgIcon path={mdiClose} />
               </IconButton>

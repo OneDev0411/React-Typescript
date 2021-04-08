@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import { Theme, useTheme } from '@material-ui/core/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
-import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks.ts'
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
 import Drawer from 'components/OverlayDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'

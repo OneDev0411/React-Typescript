@@ -9,6 +9,7 @@ module.exports = {
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
     '\\.mjml$': 'jest-raw-loader',
+    '\\.njk$': 'jest-raw-loader',
     '\\.html$': 'jest-raw-loader',
     '\\.png$': 'jest-raw-loader',
     '\\.svg$': 'jest-raw-loader'

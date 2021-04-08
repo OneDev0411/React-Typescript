@@ -1,0 +1,11 @@
+<div data-type="carousel" class="splide" rechat-editable="tree" data-height-ratio="0.5">
+  <div data-type="carousel-track" class="splide__track">
+    <ul data-type="carousel-list" class="splide__list">
+      {% for image in images %}
+        <li data-type="carousel-slide" class="splide__slide">
+          <img data-type="carousel-image" class="splide__image" src="{{image}}"/>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

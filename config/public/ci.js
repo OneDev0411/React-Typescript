@@ -32,5 +32,11 @@ export default {
   },
   dropbox: {
     api_key: process.env.DROPBOX_APP_KEY
+  },
+  stripe: {
+    public_key: process.env.STRIPE_PUBLIC_KEY
+  },
+  mapbox: {
+    access_token: process.env.MAPBOX_ACCESS_TOKEN
   }
 }

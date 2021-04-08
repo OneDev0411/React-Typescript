@@ -16,8 +16,10 @@ function getFontFamiliesCSSFiles(families: string[]): string[] {
 }
 
 const STYLE_MANAGER_TEXT_TAGS = ['div', 'section', 'a', 'mj-button']
+const STYLE_MANAGER_TEXT_TYPES = ['button']
 
 const STYLE_MANAGER_ALIGNABLE_TAGS = ['mj-social']
+const STYLE_MANAGER_ALIGNABLE_TYPES = ['social-group']
 
 const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-button',
@@ -25,10 +27,13 @@ const STYLE_MANAGER_BG_COLORABLE_TAGS = [
   'mj-section',
   'mj-wrapper'
 ]
+const STYLE_MANAGER_BG_COLORABLE_TYPES = ['button', 'grid-column', 'grid-row']
 
 const STYLE_MANAGER_WIDTH_ALLOWED_TAGS = ['mj-button']
+const STYLE_MANAGER_WIDTH_ALLOWED_TYPES = ['button']
 
 const STYLE_MANAGER_PADDING_ALLOWED_TAGS = ['mj-section', 'mj-wrapper']
+const STYLE_MANAGER_PADDING_ALLOWED_TYPES = ['grid-row']
 
 const CK_EDITOR_LINE_HEIGHT_VALUES = [
   '1',
@@ -44,7 +49,7 @@ const CK_EDITOR_LINE_HEIGHT_VALUES = [
 
 export function createGrapesInstance(
   Grapesjs: any,
-  { assets, colors, fontFamilies, plugins, pluginsOpts }
+  { assets, colors, fontFamilies, plugins, pluginsOpts, detectComponentByType }
 ): Editor {
   // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
   // @ts-ignore
@@ -135,15 +140,18 @@ export function createGrapesInstance(
         }
       },
       'style-manager': {
+        detectComponentByType,
         fontSizePicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTypes: STYLE_MANAGER_TEXT_TYPES,
             forbiddenStyles: ['background-image']
           }
         },
         fontWeightPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTypes: STYLE_MANAGER_TEXT_TYPES,
             forbiddenStyles: ['background-image']
           },
           disabled: true
@@ -154,30 +162,38 @@ export function createGrapesInstance(
               ...STYLE_MANAGER_TEXT_TAGS,
               ...STYLE_MANAGER_ALIGNABLE_TAGS
             ],
+            allowedTypes: [
+              ...STYLE_MANAGER_TEXT_TYPES,
+              ...STYLE_MANAGER_ALIGNABLE_TYPES
+            ],
             forbiddenStyles: ['background-image']
           }
         },
         colorPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_TEXT_TAGS,
+            allowedTypes: STYLE_MANAGER_TEXT_TYPES,
             forbiddenStyles: ['background-image']
           }
         },
         backgroundColorPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_BG_COLORABLE_TAGS,
+            allowedTypes: STYLE_MANAGER_BG_COLORABLE_TYPES,
             forbiddenStyles: ['background-image']
           }
         },
         widthPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_WIDTH_ALLOWED_TAGS,
+            allowedTypes: STYLE_MANAGER_WIDTH_ALLOWED_TYPES,
             forbiddenStyles: []
           }
         },
         paddingPicker: {
           conditions: {
             allowedTags: STYLE_MANAGER_PADDING_ALLOWED_TAGS,
+            allowedTypes: STYLE_MANAGER_PADDING_ALLOWED_TYPES,
             forbiddenStyles: []
           }
         }

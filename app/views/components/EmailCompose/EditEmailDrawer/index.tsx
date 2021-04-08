@@ -72,7 +72,7 @@ export function EditEmailDrawer({
             onConfirm: async () => {
               try {
                 await deleteAndClose()
-                resolve()
+                resolve(true)
               } catch (e) {
                 console.error(e)
                 reject(e)

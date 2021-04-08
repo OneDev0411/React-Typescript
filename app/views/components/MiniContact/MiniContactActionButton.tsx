@@ -65,9 +65,9 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
     }
 
     return (
+      // @ts-ignore
       <TextIconButton
         appearance="outline"
-        // @ts-ignore
         iconLeft={() => (
           <SvgIcon
             path={mdiCalendarOutline}

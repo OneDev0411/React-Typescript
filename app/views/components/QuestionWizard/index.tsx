@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
 
+import { useAsync } from 'react-use'
+
 import { WizardContext, SectionContext } from './context'
 
 import Loading from './Loading'
@@ -9,13 +11,21 @@ import Loading from './Loading'
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
+  concurrent?: boolean
+  useWindowScrollbar?: boolean
+  questionPositionOffset?: number
+  styles?: React.CSSProperties
   onStepChange?: (step: number) => void
   onFinish?: () => void | Promise<void>
 }
 
 export function QuestionWizard({
   children,
+  concurrent = false,
   defaultStep = 1,
+  useWindowScrollbar = false,
+  questionPositionOffset = 80,
+  styles = {},
   onStepChange = () => {},
   onFinish = () => {}
 }: Props) {
@@ -23,15 +33,23 @@ export function QuestionWizard({
   const loadingRef = useRef<SVGSVGElement>(null)
   const theme = useTheme<Theme>()
 
-  const [currentStep, setCurrentStep] = useState(defaultStep)
-  const [lastVisitedStep, setLastVisitedStep] = useState(defaultStep)
-
-  const [showLoading, setShowLoading] = useState(false)
-
   const sections = Array.isArray(children) ? children.flat() : [children]
   const sectionsCount = sections.filter(section => !!section).length
 
+  const [currentStep, setCurrentStep] = useState(
+    concurrent ? sections.length : defaultStep
+  )
+  const [lastVisitedStep, setLastVisitedStep] = useState(
+    concurrent ? sections.length : defaultStep
+  )
+
+  const [showLoading, setShowLoading] = useState(false)
+
   const gotoStep = (step: number) => {
+    if (concurrent) {
+      return
+    }
+
     if (step === currentStep) {
       return
     }
@@ -40,6 +58,10 @@ export function QuestionWizard({
   }
 
   const gotoNext = async () => {
+    if (concurrent) {
+      return
+    }
+
     if (currentStep + 1 > sectionsCount) {
       onFinish()
 
@@ -52,10 +74,23 @@ export function QuestionWizard({
   }
 
   const gotoPrevious = () => {
+    if (concurrent) {
+      return
+    }
+
     setCurrentStep(Math.max(currentStep - 1, 1))
   }
 
   const setStep = (step: number) => {
+    if (concurrent) {
+      refs.current[step]?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth'
+      })
+
+      return
+    }
+
     setCurrentStep(step)
     setLastVisitedStep(step)
   }
@@ -68,7 +103,11 @@ export function QuestionWizard({
     onStepChange(currentStep)
   }, [currentStep, onStepChange])
 
-  useEffect(() => {
+  useAsync(async () => {
+    if (concurrent) {
+      return
+    }
+
     if (currentStep === 1) {
       refs.current[currentStep]?.scrollIntoView({
         block: 'nearest',
@@ -78,13 +117,22 @@ export function QuestionWizard({
       return
     }
 
-    window.scrollTo({
-      top:
-        refs.current[currentStep]?.getBoundingClientRect().top +
-        window.pageYOffset -
-        80,
-      behavior: 'smooth'
-    })
+    if (useWindowScrollbar) {
+      await delay(50)
+
+      window.scrollTo({
+        top:
+          refs.current[currentStep]?.getBoundingClientRect().top +
+          window.pageYOffset -
+          questionPositionOffset,
+        behavior: 'smooth'
+      })
+    } else {
+      refs.current[currentStep]?.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      })
+    }
   }, [currentStep, lastVisitedStep])
 
   useEffect(() => {
@@ -101,9 +149,9 @@ export function QuestionWizard({
         currentStep,
         lastVisitedStep,
         setStep,
-        totalSteps: sectionsCount,
         goto: gotoStep,
         next: gotoNext,
+        totalSteps: sectionsCount,
         previous: gotoPrevious,
         isLoading: showLoading,
         setLoading: setShowLoading,
@@ -111,11 +159,7 @@ export function QuestionWizard({
         last: () => gotoStep(sectionsCount)
       }}
     >
-      <div
-        style={{
-          paddingBottom: '50%'
-        }}
-      >
+      <div style={styles}>
         {sections
           .filter(section => {
             return !!section
@@ -155,6 +199,10 @@ export function QuestionWizard({
       </div>
     </WizardContext.Provider>
   )
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export * from './QuestionSection'

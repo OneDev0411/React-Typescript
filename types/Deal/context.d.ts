@@ -30,3 +30,10 @@ declare interface IDealBrandContext {
   }
   validate: (context: IDealBrandContext, value: unknown) => boolean
 }
+
+declare interface IDealContext {
+  definition: UUID
+  checklist: UUID
+  value: unknown
+  approved: boolean
+}

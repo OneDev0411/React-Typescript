@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -26,23 +26,21 @@ import { AgentsList } from './AgentsList'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
   isCommissionRequired: boolean
   isOfficeDoubleEnded?: boolean
   shouldPickRoleFromContacts?: boolean
-  dealType: IDealType
+  skippable?: boolean
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
-  onFinishStep?: () => Promise<void>
 }
 
 export function DealPrimaryAgent({
   title,
   side,
-  dealType,
+  skippable = false,
   isCommissionRequired,
-  onFinishStep,
   roles = [],
   isOfficeDoubleEnded = false,
   shouldPickRoleFromContacts = false,
@@ -71,17 +69,8 @@ export function DealPrimaryAgent({
     }
   }, [step, wizard, agentRoles])
 
-  const handleUpsertRole = async (
-    role: IDealFormRole,
-    type: 'create' | 'update'
-  ) => {
-    wizard.setLoading(true)
-
+  const handleUpsertRole = (role: IDealFormRole, type: 'create' | 'update') => {
     onChange(role, type)
-
-    onFinishStep && (await onFinishStep())
-
-    wizard.setLoading(false)
   }
 
   const handleDeleteRole = (role: IDealFormRole) => {
@@ -92,6 +81,14 @@ export function DealPrimaryAgent({
     }
 
     onChange?.(role, 'delete')
+
+    wizard.setStep(step)
+  }
+
+  const handleSkip = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
   }
 
   if (wizard.lastVisitedStep < step) {
@@ -99,10 +96,7 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to replace the agent inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
@@ -142,7 +136,11 @@ export function DealPrimaryAgent({
           }}
         >
           {shouldPickRoleFromContacts ? (
-            <ContactRoles onSelectRole={setSelectedRole} />
+            <ContactRoles
+              source="MLS"
+              placeholder="Type Agent Name"
+              onSelectRole={setSelectedRole}
+            />
           ) : (
             <AgentsList
               isOfficeDoubleEnded={isOfficeDoubleEnded}
@@ -150,6 +148,14 @@ export function DealPrimaryAgent({
             />
           )}
         </Box>
+
+        {skippable && !selectedRole && step === wizard.currentStep && (
+          <Box mt={2} textAlign="right">
+            <Button color="secondary" variant="outlined" onClick={handleSkip}>
+              Skip
+            </Button>
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )

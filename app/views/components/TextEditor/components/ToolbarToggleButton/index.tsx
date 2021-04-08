@@ -5,7 +5,7 @@ import { Tooltip } from '@material-ui/core'
 
 import { ToolbarIconButton } from '../ToolbarIconButton'
 
-interface Props extends IconButtonProps {
+interface Props extends Omit<IconButtonProps, 'type'> {
   isBlockButton?: boolean
   toggleBlockType?: MouseEventHandler<'button'>
   toggleInlineStyle?: MouseEventHandler<'button'>
@@ -29,6 +29,7 @@ export function ToolbarToggleButton({
   // is used inside a form
   const btn = (
     <ToolbarIconButton
+      type="button"
       onClick={onClick}
       color={isActive ? 'secondary' : undefined}
       {...props}

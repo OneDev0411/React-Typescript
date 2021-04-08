@@ -1,14 +1,18 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Video } from 'components/VideoDrawer/types'
+
+import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
 
 import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import template from './template.mjml'
+import { handleBlockDragStopEvent } from '../../utils'
+import { TemplateBlocks } from '../../types'
+import { registerTemplateBlocks } from '../../templateBlocks'
 
 const blockName = 'rechat-video'
 
@@ -23,47 +27,36 @@ interface VideoBlock {
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
+  templateBlocks: TemplateBlocks,
   { onDrop }: Options
 ): VideoBlock {
+  const videoBlocks = {
+    [blockName]: templateBlocks[blockName]?.template || template
+  }
+
   registerBlock(editor, {
     label: 'Video',
+    icon: VideoIcon,
     category: BASICS_BLOCK_CATEGORY,
     blockName,
-    template
+    template: videoBlocks[blockName]
   })
 
-  let modelHandle: any
+  const allBlocks = registerTemplateBlocks(
+    editor,
+    'Video',
+    videoBlocks,
+    templateBlocks
+  )
 
-  const selectHandler = (selectedVideo?: Video) => {
-    if (!modelHandle) {
-      return
-    }
-
-    if (selectedVideo) {
-      const mjml = nunjucks.renderString(template, {
-        ...renderData,
-        url: selectedVideo.url,
-        image: selectedVideo.thumbnail
-      })
-
-      modelHandle.parent().append(mjml, { at: modelHandle.opt.at })
-    }
-
-    modelHandle.remove()
-  }
-
-  editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model) {
-      return
-    }
-
-    if (block.id === blockName) {
-      modelHandle = model
-      onDrop(model)
-    }
-  })
-
-  return {
-    selectHandler
-  }
+  return handleBlockDragStopEvent(
+    editor,
+    allBlocks,
+    (selectedVideo: Video) => ({
+      ...renderData,
+      url: selectedVideo.url,
+      image: selectedVideo.thumbnail
+    }),
+    onDrop
+  )
 }

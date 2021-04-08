@@ -133,7 +133,6 @@ export default function Signature({
       />
 
       <DocusignAuthentication
-        user={user}
         isOpen={isOpen && showDocusignBanner}
         onAuthorize={() => handleSubmit(formData!)}
       />

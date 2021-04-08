@@ -18,7 +18,7 @@ export function viewFile({
   const documentEnvelopes = getDocumentEnvelopes(envelopes, file)
   const envelope = documentEnvelopes.length > 0 ? documentEnvelopes[0] : null
 
-  if (!isBackOffice) {
+  if (!isBackOffice || !task) {
     const envelopeFile = envelope
       ? envelope.documents.find(doc => doc.file === file.id)
       : undefined

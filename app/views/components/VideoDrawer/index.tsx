@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { CircularProgress, Button } from '@material-ui/core'
 
+import type { Model } from 'backbone'
+
 import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
 
@@ -10,6 +12,7 @@ import { Thumbnail } from './styled'
 
 interface Props {
   isOpen: boolean
+  video: Model | null
   onClose?: () => void
   onSelect: (video?: Video) => void
 }
@@ -17,6 +20,7 @@ interface Props {
 export default function VideoDrawer({
   isOpen,
   onClose = () => {},
+  video: model,
   onSelect
 }: Props) {
   const [isLoading, setIsLoading] = useState(false)
@@ -47,6 +51,13 @@ export default function VideoDrawer({
 
     fetchThumbnail()
   }, [input])
+
+  const handleClick = () => {
+    onSelect(video)
+    model?.trigger('change:video:info', video)
+    setInput('')
+    setVideo(undefined)
+  }
 
   return (
     <OverlayDrawer
@@ -95,11 +106,7 @@ export default function VideoDrawer({
           disabled={isLoading || !video}
           color="primary"
           variant="contained"
-          onClick={() => {
-            onSelect(video)
-            setInput('')
-            setVideo(undefined)
-          }}
+          onClick={handleClick}
         >
           Insert Video
         </Button>

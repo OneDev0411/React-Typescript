@@ -2,13 +2,18 @@ import React from 'react'
 import { browserHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
+import { useDispatch } from 'react-redux'
 
 import { hot } from 'react-hot-loader/root'
+
+import { IntercomProvider } from 'react-use-intercom'
 
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 import { GlobalActionsProvider } from 'components/GlobalActionsButton/context/provider'
 // This is our new confirmation modal. use this please.
 import ConfirmationModal from 'components/ConfirmationModal'
+
+import { activateIntercom } from './store_actions/intercom'
 
 // This is a redux-based confirmation and will be deprecate asap.
 
@@ -41,23 +46,26 @@ if (typeof window !== 'undefined') {
   smoothscroll.polyfill()
 }
 
-if (window) {
-  window.INTERCOM_ID = config.intercom.app_id
-}
-
 const App = () => {
+  const dispatch = useDispatch()
+
   return (
     <AppTheme>
-      <GlobalActionsProvider>
-        <ConfirmationModalProvider>
-          <Router history={history}>{routes}</Router>
-          <ConfirmationModal />
-        </ConfirmationModalProvider>
+      <IntercomProvider
+        appId={config.intercom.app_id}
+        onShow={() => dispatch(activateIntercom())}
+      >
+        <GlobalActionsProvider>
+          <ConfirmationModalProvider>
+            <Router history={history}>{routes}</Router>
+            <ConfirmationModal />
+          </ConfirmationModalProvider>
 
-        <ReduxConfirmationModal />
+          <ReduxConfirmationModal />
 
-        <Notifications />
-      </GlobalActionsProvider>
+          <Notifications />
+        </GlobalActionsProvider>
+      </IntercomProvider>
     </AppTheme>
   )
 }

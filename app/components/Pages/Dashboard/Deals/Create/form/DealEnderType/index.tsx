@@ -1,6 +1,8 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 
+import { Box, Button } from '@material-ui/core'
+
 import {
   QuestionSection,
   QuestionTitle,
@@ -29,6 +31,12 @@ export function DealEnderType({ onChange }: Props) {
 
   const dispatch = useDispatch()
 
+  const handleSkip = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+  }
+
   const handleChange = (value: IDealEnderType) => {
     if (deal) {
       const data = createUpsertObject(deal, 'ender_type', value, false)
@@ -44,10 +52,7 @@ export function DealEnderType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You need to discard the form to be able edit the side"
-    >
+    <QuestionSection>
       <QuestionTitle>
         Is another agent from your office on the other side of this deal?
       </QuestionTitle>
@@ -66,6 +71,12 @@ export function DealEnderType({ onChange }: Props) {
           ]}
           onChange={handleChange}
         />
+
+        <Box mt={2} textAlign="right" onClick={handleSkip}>
+          <Button color="secondary" variant="outlined">
+            Skip
+          </Button>
+        </Box>
       </QuestionForm>
     </QuestionSection>
   )

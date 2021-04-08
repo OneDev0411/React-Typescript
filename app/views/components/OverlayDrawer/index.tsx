@@ -33,6 +33,8 @@ const useStyles = makeStyles(
   { name: 'OverlayDrawer' }
 )
 
+export type OverlayDrawerProps = DrawerProps & StyleProps
+
 const OverlayDrawer = ({
   children,
   open = false,
@@ -46,7 +48,7 @@ const OverlayDrawer = ({
   width = '38rem',
   zIndex,
   ...rest
-}: DrawerProps & StyleProps) => {
+}: OverlayDrawerProps) => {
   const classes = useStyles({ width, zIndex })
   const parentDrawerContext = useDrawerContext()
 

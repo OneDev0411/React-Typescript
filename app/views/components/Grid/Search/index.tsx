@@ -1,11 +1,18 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 
 import _ from 'underscore'
 
 import CircleSpinner from '../../SvgIcons/CircleSpinner/IconCircleSpinner'
 import IconClose from '../../SvgIcons/Close/CloseIcon'
 
-import { Container, Icon, IconButton, IconSearch, TextInput } from './styled'
+import {
+  Container,
+  ErrorMessage,
+  Icon,
+  IconButton,
+  IconSearch,
+  TextInput
+} from './styled'
 
 interface Props {
   onChange: (value) => any
@@ -20,6 +27,7 @@ interface Props {
   style?: CSSProperties
   onClearSearch?: (string) => any
   inputRef?: (ref: HTMLInputElement) => void
+  errorMessage?: ReactNode
 }
 
 interface State {
@@ -106,39 +114,46 @@ class Search extends React.Component<Props, State> {
       isSearching,
       disableOnSearch,
       showLoadingOnSearch,
-      showClearSearch
+      showClearSearch,
+      errorMessage
     } = this.props
 
     return (
-      <Container
-        style={style}
-        isFocused={this.state.isFocused}
-        className={this.props.className}
-      >
-        <Icon isSearching={isSearching}>
-          {isSearching && showLoadingOnSearch ? (
-            <CircleSpinner style={{ width: '24px', height: '24px' }} />
-          ) : (
-            <IconSearch />
+      <>
+        <Container
+          style={style}
+          isFocused={this.state.isFocused}
+          className={this.props.className}
+          hasError={!!errorMessage}
+        >
+          <Icon isSearching={isSearching}>
+            {isSearching && showLoadingOnSearch ? (
+              <CircleSpinner style={{ width: '24px', height: '24px' }} />
+            ) : (
+              <IconSearch hasError={!!errorMessage} />
+            )}
+          </Icon>
+
+          <TextInput
+            value={this.state.searchValue}
+            placeholder={placeholder}
+            onChange={this.handleChange}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
+            ref={this.onRef}
+            readOnly={disableOnSearch && isSearching}
+          />
+
+          {showClearSearch && this.state.searchValue.length > 0 && (
+            <IconButton onClick={this.handleClearSearch}>
+              <IconClose />
+            </IconButton>
           )}
-        </Icon>
-
-        <TextInput
-          value={this.state.searchValue}
-          placeholder={placeholder}
-          onChange={this.handleChange}
-          onBlur={this.onBlur}
-          onFocus={this.onFocus}
-          ref={this.onRef}
-          readOnly={disableOnSearch && isSearching}
-        />
-
-        {showClearSearch && this.state.searchValue.length > 0 && (
-          <IconButton onClick={this.handleClearSearch}>
-            <IconClose />
-          </IconButton>
+        </Container>
+        {errorMessage && (
+          <ErrorMessage variant="body1">{errorMessage}</ErrorMessage>
         )}
-      </Container>
+      </>
     )
   }
 }

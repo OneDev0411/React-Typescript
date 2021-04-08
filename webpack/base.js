@@ -71,6 +71,9 @@ module.exports = {
         collapseWhitespace: false
       }
     }),
+    new webpack.ProvidePlugin({
+      React: 'react'
+    }),
     new ESBuildPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
@@ -105,7 +108,9 @@ module.exports = {
         SENTRY_ENVIRONMENT: JSON.stringify(process.env.SENTRY_ENVIRONMENT),
         SOURCE_VERSION: JSON.stringify(
           process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION
-        )
+        ),
+        MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
+        STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY)
       },
       __DEV__,
       NODE_ENV: env,
@@ -220,6 +225,14 @@ module.exports = {
       },
       {
         test: /\.(mjml)$/,
+        use: [
+          {
+            loader: 'raw-loader'
+          }
+        ]
+      },
+      {
+        test: /\.(njk)$/,
         use: [
           {
             loader: 'raw-loader'
