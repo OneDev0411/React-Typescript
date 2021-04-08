@@ -1,3 +1,4 @@
+import { FieldState } from 'final-form'
 import React from 'react'
 
 import { formatPhoneNumber } from 'utils/format'
@@ -7,23 +8,34 @@ import { isValidPhoneNumber } from 'utils/helpers'
 import FormTextField, { FormTextFieldProps } from '../FormTextField'
 
 export interface FormPhoneFieldProps
-  extends Omit<FormTextFieldProps, 'validate' | 'format'> {
-  name: string
+  extends Omit<FormTextFieldProps, 'format'> {
   format?: boolean
 }
 
-const validate = async value => {
-  if (await isValidPhoneNumber(value || '')) {
-    return 'Invalid Phone Number'
-  }
-}
+function FormPhoneField({
+  format = true,
+  validate,
+  ...otherProps
+}: FormPhoneFieldProps) {
+  const validateFormat = async (
+    value: string,
+    allValues: object,
+    meta?: FieldState<string> | undefined
+  ) => {
+    if (!(await isValidPhoneNumber(value || ''))) {
+      return 'Invalid Phone Number'
+    }
 
-function FormPhoneField({ format = true, ...otherProps }: FormPhoneFieldProps) {
+    if (validate) {
+      return validate(value, allValues, meta)
+    }
+  }
+
   return (
     <FormTextField
       {...otherProps}
       format={format ? formatPhoneNumber : undefined}
-      validate={validate}
+      validate={validateFormat}
     />
   )
 }
