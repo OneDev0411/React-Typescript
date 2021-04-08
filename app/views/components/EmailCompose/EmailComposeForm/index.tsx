@@ -172,8 +172,6 @@ export default function EmailComposeForm<T>({
   }
 
   const handleSendEmail = async (formData: EmailFormValues) => {
-    console.log('handleSendEmail')
-
     const { successMessage, errorMessage } = getSendEmailResultMessages(
       !!formData.due_at
     )
@@ -217,6 +215,36 @@ export default function EmailComposeForm<T>({
     onSent(result)
   }
 
+  const handlePreSendAllContactWarning = async (form: EmailFormValues) => {
+    const { to = [], bcc = [], cc = [] } = form
+    const allRecipient = [...bcc, ...to, ...cc]
+    const isSendingToAllContacts = allRecipient.find(
+      i => i.recipient_type === 'AllContacts'
+    )
+
+    if (isSendingToAllContacts) {
+      let contactsCount = contactsInfo.info?.total
+
+      if (contactsCount === 0) {
+        contactsCount = await getContactsCount([], false)
+      }
+
+      if (contactsCount > 1) {
+        return confirmationModal.setConfirmationModal({
+          message: 'Send to all your contacts?',
+          description: `You are about to send this email to ${contactsCount} people in your contacts. Are you sure?`,
+          confirmLabel: 'Send it now',
+          cancelLabel: 'Edit',
+          onConfirm: () => {
+            handleSendEmail(form)
+          }
+        })
+      }
+    }
+
+    handleSendEmail(form)
+  }
+
   const onSubmit = async (form: EmailFormValues) => {
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
     const uploadingImage = bodyEditor.hasUploadingImage()
@@ -248,12 +276,6 @@ export default function EmailComposeForm<T>({
       })
     }
 
-    const { to = [], bcc = [], cc = [] } = form
-    const allRecipient = [...bcc, ...to, ...cc]
-    const isSendingToAllContacts = allRecipient.find(
-      i => i.recipient_type === 'AllContacts'
-    )
-
     if ((form.subject || '').trim() === '') {
       return new Promise((resolve, reject) => {
         confirmationModal.setConfirmationModal({
@@ -262,35 +284,14 @@ export default function EmailComposeForm<T>({
             'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
-          onConfirm: async () => {
-            if (isSendingToAllContacts) {
-              let contactsCount = contactsInfo.info?.total
-
-              if (contactsCount === 0) {
-                contactsCount = await getContactsCount([], false)
-              }
-
-              if (contactsCount > 1) {
-                confirmationModal.setConfirmationModal({
-                  message: 'Send to all your contacts?',
-                  description: `You are about to send this email to ${contactsCount} people in your contacts. Are you sure?`,
-                  confirmLabel: 'Send it now',
-                  cancelLabel: 'Edit',
-                  onConfirm: () => {
-                    handleSendEmail(form).then(resolve).catch(reject)
-                  },
-                  onCancel: reject
-                })
-              }
-            } else {
-              handleSendEmail(form).then(resolve).catch(reject)
-            }
+          onConfirm: () => {
+            handlePreSendAllContactWarning(form).then(resolve).catch(reject)
           }
         })
       })
     }
 
-    return handleSendEmail(form)
+    return handlePreSendAllContactWarning(form)
   }
 
   const scrollToEnd = () => {
