@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { useDispatch } from 'react-redux'
 
@@ -26,24 +26,24 @@ import { AgentsList } from './AgentsList'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
   isCommissionRequired: boolean
-  isDoubleEnded: boolean
-  dealType: IDealType
+  isOfficeDoubleEnded?: boolean
+  shouldPickRoleFromContacts?: boolean
+  skippable?: boolean
   roles?: IDealRole[]
   onChange: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
-  onFinishStep?: () => Promise<void>
 }
 
 export function DealPrimaryAgent({
   title,
   side,
-  dealType,
-  isDoubleEnded,
+  skippable = false,
   isCommissionRequired,
-  onFinishStep,
   roles = [],
+  isOfficeDoubleEnded = false,
+  shouldPickRoleFromContacts = false,
   onChange = () => {}
 }: Props) {
   const wizard = useWizardContext()
@@ -69,17 +69,8 @@ export function DealPrimaryAgent({
     }
   }, [step, wizard, agentRoles])
 
-  const handleUpsertRole = async (
-    role: IDealFormRole,
-    type: 'create' | 'update'
-  ) => {
-    wizard.setLoading(true)
-
+  const handleUpsertRole = (role: IDealFormRole, type: 'create' | 'update') => {
     onChange(role, type)
-
-    onFinishStep && (await onFinishStep())
-
-    wizard.setLoading(false)
   }
 
   const handleDeleteRole = (role: IDealFormRole) => {
@@ -90,6 +81,14 @@ export function DealPrimaryAgent({
     }
 
     onChange?.(role, 'delete')
+
+    wizard.setStep(step)
+  }
+
+  const handleSkip = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
   }
 
   if (wizard.lastVisitedStep < step) {
@@ -97,10 +96,7 @@ export function DealPrimaryAgent({
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You will be able to replace the agent inside the deal"
-    >
+    <QuestionSection>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>
@@ -113,7 +109,9 @@ export function DealPrimaryAgent({
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
-            isCommissionRequired={isCommissionRequired}
+            isCommissionRequired={
+              shouldPickRoleFromContacts ? false : isCommissionRequired
+            }
             onUpsertRole={handleUpsertRole}
             onDeleteRole={handleDeleteRole}
             onClose={() => setSelectedRole(null)}
@@ -137,12 +135,27 @@ export function DealPrimaryAgent({
             display: agentRoles.length === 0 && !selectedRole ? 'block' : 'none'
           }}
         >
-          {dealType === 'Buying' && side === 'Selling' && !isDoubleEnded ? (
-            <ContactRoles onSelectRole={setSelectedRole} />
+          {shouldPickRoleFromContacts ? (
+            <ContactRoles
+              source="MLS"
+              placeholder="Type Agent Name"
+              onSelectRole={setSelectedRole}
+            />
           ) : (
-            <AgentsList onSelectRole={setSelectedRole} />
+            <AgentsList
+              isOfficeDoubleEnded={isOfficeDoubleEnded}
+              onSelectRole={setSelectedRole}
+            />
           )}
         </Box>
+
+        {skippable && !selectedRole && step === wizard.currentStep && (
+          <Box mt={2} textAlign="right">
+            <Button color="secondary" variant="outlined" onClick={handleSkip}>
+              Skip
+            </Button>
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )

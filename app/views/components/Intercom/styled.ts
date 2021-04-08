@@ -5,15 +5,17 @@ import IconButton from '../Button/IconButton'
 const buttonVisibilityStyle = css`
   opacity: 1;
   transform: translateY(0);
+  display: block;
 `
 
 export const Button = styled(IconButton)`
   position: fixed;
+  display: none;
   left: 0.5rem;
   bottom: 0.5em;
   width: 48px;
   height: 48px;
-  z-index: 1002;
+  z-index: 1004;
   border-radius: 100%;
   opacity: 0;
   transform: translateY(1rem);

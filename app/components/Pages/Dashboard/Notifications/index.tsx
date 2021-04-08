@@ -15,6 +15,8 @@ import {
 import { IAppState } from 'reducers/index'
 import { markNotificationAsSeen } from 'actions/notifications'
 
+import { selectUser } from 'selectors/user'
+
 import List from './List'
 import EmptyState from './EmptyState'
 
@@ -23,7 +25,7 @@ import { CrmEvents } from './CrmEvents'
 
 function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => store.user)
+  const user = useSelector((store: IAppState) => selectUser(store))
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )

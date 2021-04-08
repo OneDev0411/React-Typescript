@@ -21,15 +21,16 @@ interface MiniContactPropsType {
   type: MiniContactType
   data: object
   children: React.ReactNode
-  as: string
+  as?: string
   onEventChange?(event: IEvent, type: string): void
 }
 
 function MiniContact(props: MiniContactPropsType) {
   // It should be here because after leaving out the mouse, it will be lost if it's inside the component
-  const [actionSettings, setActionSettings] = React.useState<
-    ActionSettingsType
-  >({})
+  const [
+    actionSettings,
+    setActionSettings
+  ] = React.useState<ActionSettingsType>({})
   const [anchorEl, setAnchorEl] = React.useState(null)
   const theme = useTheme()
 
@@ -51,7 +52,7 @@ function MiniContact(props: MiniContactPropsType) {
   return (
     <>
       <ComponentRenderer
-        as={props.as}
+        as={props.as || 'div'}
         onMouseEnter={e => debouncedHandleHovered(e.currentTarget)}
         onMouseLeave={closeMiniContact}
       >
@@ -93,10 +94,6 @@ function MiniContact(props: MiniContactPropsType) {
       )}
     </>
   )
-}
-
-MiniContact.defaultProps = {
-  as: 'div'
 }
 
 export default MiniContact

@@ -32,7 +32,7 @@ export function TeamsList({ user }: Props) {
       switchedTeamId: teamId
     })
 
-    await putUserSetting('user_filter', viewAs(user), teamId)
+    await putUserSetting('user_filter', viewAs(user, true), teamId)
 
     window.location.reload(true)
   }

@@ -66,6 +66,7 @@ if (isProduction) {
   app.use(
     '/',
     express.static(path.resolve(__dirname, '../dist'), {
+      index: false,
       maxAge: '7d'
     })
   )

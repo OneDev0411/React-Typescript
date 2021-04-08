@@ -28,7 +28,6 @@ const initialState = {
   isComposeEmailOpen: false,
   isSocialDrawerOpen: false,
   htmlTemplate: '',
-  socialNetworkName: '',
   emailBody: '',
   templateInstance: null,
   isGettingTemplateInstance: false,
@@ -75,11 +74,10 @@ class SendDealPromotion extends React.Component {
     })
   }
 
-  handleSocialSharing = (template, socialNetworkName) => {
+  handleSocialSharing = template => {
     this.setState({
       htmlTemplate: template,
-      isSocialDrawerOpen: true,
-      socialNetworkName
+      isSocialDrawerOpen: true
     })
   }
 
@@ -242,7 +240,6 @@ class SendDealPromotion extends React.Component {
           <SocialDrawer
             template={this.state.htmlTemplate}
             templateInstanceData={this.TemplateInstanceData}
-            socialNetworkName={this.state.socialNetworkName}
             onClose={this.closeSocialDrawer}
           />
         )}

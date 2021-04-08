@@ -15,15 +15,16 @@ import { mdiPlus } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { searchContacts } from 'models/contacts/search-contacts'
+import searchAgents from 'models/agent/search'
 
-import { convertContactToRole } from '../../../utils/roles'
+import { convertContactToRole, convertAgentToRole } from '../../../utils/roles'
 
 import { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      maxHeight: '40vh',
+      maxHeight: '60vh',
       overflow: 'auto',
       '&.has-border': {
         border: `1px solid ${theme.palette.divider}`,
@@ -60,10 +61,16 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  source?: 'MLS' | 'CRM'
+  placeholder: string
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
 
-export function ContactRoles({ onSelectRole }: Props) {
+export function ContactRoles({
+  placeholder,
+  source = 'CRM',
+  onSelectRole
+}: Props) {
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
@@ -73,6 +80,7 @@ export function ContactRoles({ onSelectRole }: Props) {
   ] = useState<string>('')
 
   const [contacts, setContacts] = useState<IContact[]>([])
+  const [agents, setAgents] = useState<IAgent[]>([])
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -93,9 +101,17 @@ export function ContactRoles({ onSelectRole }: Props) {
       return
     }
 
-    const { data: contacts } = await searchContacts(searchCriteria)
+    if (source === 'MLS') {
+      const agents = await searchAgents(searchCriteria, 'q')
 
-    setContacts(contacts)
+      setAgents(agents)
+    }
+
+    if (source === 'CRM') {
+      const { data: contacts } = await searchContacts(searchCriteria)
+
+      setContacts(contacts)
+    }
   }, [debouncedSearchCriteria])
 
   /**
@@ -111,9 +127,8 @@ export function ContactRoles({ onSelectRole }: Props) {
   }
 
   const handleSelectRole = (role: Partial<IDealFormRole>) => {
-    setContacts([])
     setSearchCriteria('')
-    setDebouncedSearchCriteria('')
+    setContacts([])
 
     onSelectRole(role)
   }
@@ -122,11 +137,12 @@ export function ContactRoles({ onSelectRole }: Props) {
     <Box className={classes.root}>
       <TextField
         fullWidth
+        autoComplete="no-autocomplete"
         variant="outlined"
         size="small"
         value={searchCriteria}
         onChange={e => setSearchCriteria(e.target.value)}
-        placeholder="Search contact name"
+        placeholder={placeholder}
         className={classes.searchInput}
       />
 
@@ -161,6 +177,25 @@ export function ContactRoles({ onSelectRole }: Props) {
 
             <Typography variant="body2" className={classes.email}>
               {contact.email}
+            </Typography>
+          </div>
+        </Box>
+      ))}
+
+      {agents.map(agent => (
+        <Box
+          key={agent.id}
+          display="flex"
+          className={classes.row}
+          onClick={() => handleSelectRole(convertAgentToRole(agent))}
+        >
+          <Avatar src={agent.profile_image_url!} />
+
+          <div className={classes.rowContent}>
+            <Typography variant="body2">{agent.full_name}</Typography>
+
+            <Typography variant="body2" className={classes.email}>
+              {agent.mlsid || agent.email}
             </Typography>
           </div>
         </Box>

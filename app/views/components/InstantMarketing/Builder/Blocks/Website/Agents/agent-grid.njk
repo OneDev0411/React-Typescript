@@ -1,0 +1,24 @@
+<div data-type="agent-group" data-agent="grid" rechat-editable="tree">
+  {% for usersBatch in users | batch(2) %}
+    <div data-type="agent-list">
+      <div data-type="grid-row" class="pure-g">
+        {% for user in usersBatch %}
+          <div data-type="grid-column" class="pure-u-1-2">
+            <div data-type="agent-item">
+              <img data-type="image" src="{{ user.profile_image_url }}" rechat-assets="avatar"/>
+              <h3 data-type="text">
+                {{ user.display_name }}
+              </h3>
+              <div data-type="text">
+                {{ user.phone_number | phone }}
+              </div>
+              <a data-type="text" href="mailto:{{ user.email }}">
+                {{ user.email }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

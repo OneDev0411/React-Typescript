@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, makeStyles, Theme } from '@material-ui/core'
+import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { mdiClose } from '@mdi/js'
@@ -15,9 +15,13 @@ const useStyles = makeStyles(
       top: 0,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       backgroundColor: '#fff',
-      padding: theme.spacing(1, 2)
+      padding: theme.spacing(1, 4),
+      zIndex: theme.zIndex.appBar
+    },
+    closeButton: {
+      marginLeft: theme.spacing(1)
     }
   }),
   {
@@ -26,11 +30,20 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  onClose: () => void
+  title: string
+  actions?: React.ReactNode
   confirmationMessage: string
+  disableClose?: boolean
+  onClose: () => void
 }
 
-export function Header({ confirmationMessage, onClose }: Props) {
+export function Header({
+  title,
+  actions,
+  confirmationMessage,
+  disableClose = false,
+  onClose
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -48,9 +61,22 @@ export function Header({ confirmationMessage, onClose }: Props) {
 
   return (
     <div className={classes.root}>
-      <IconButton color="secondary" size="medium" onClick={handleClose}>
-        <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
-      </IconButton>
+      <div>
+        <Typography variant="h6">{title}</Typography>
+      </div>
+
+      <div>
+        {actions}
+        <IconButton
+          color="secondary"
+          size="medium"
+          className={classes.closeButton}
+          disabled={disableClose}
+          onClick={handleClose}
+        >
+          <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
+        </IconButton>
+      </div>
     </div>
   )
 }

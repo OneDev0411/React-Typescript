@@ -9,6 +9,7 @@ import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
 import { getActiveTeamId, hasUserAccessToBrandSettings } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
+import { selectUser } from 'selectors/user'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
@@ -24,10 +25,11 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-export function MarketingLayout({ params, render }) {
+export function MarketingLayout({ render, ...props }) {
   const classes = useStyles()
+  const { params, router } = props
   const sections = useMarketingCenterSections(params)
-  const user = useSelector(({ user }) => user)
+  const user = useSelector(state => selectUser(state))
 
   const templateTypes = params.types
 
@@ -37,14 +39,17 @@ export function MarketingLayout({ params, render }) {
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
+  const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
+
   const currentMedium = params.medium
   const currentPageItems = templates.filter(item => {
     const mediumMatches = currentMedium
       ? item.template.medium === currentMedium
       : true
-    const typeMatches = templateTypes
-      ? templateTypes.includes(item.template.template_type)
-      : true
+    const typeMatches =
+      splittedTemplateTypes.length > 0
+        ? splittedTemplateTypes.includes(item.template.template_type)
+        : true
 
     return mediumMatches && typeMatches
   })
@@ -72,6 +77,12 @@ export function MarketingLayout({ params, render }) {
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}
+            isOverviewActive={
+              router.location.pathname === '/dashboard/marketing'
+            }
+            isMyDesignsActive={
+              router.location.pathname === '/dashboard/marketing/designs'
+            }
           />
           {render &&
             render({

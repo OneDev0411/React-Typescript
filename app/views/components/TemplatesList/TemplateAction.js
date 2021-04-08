@@ -5,6 +5,7 @@ import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import PublishWebsiteFlow from 'components/InstantMarketing/adapters/PublishWebsite'
 
 import {
   convertToTemplate,
@@ -55,6 +56,8 @@ const GENERAL_FLOW_TYPES = [
 ]
 
 const CONTACT_FLOW_TYPES = ['WeddingAnniversary']
+
+const WEBSITE_FLOW_TYPES = ['Listing', 'Agent']
 
 function TemplateAction(props) {
   const { isEdit } = props
@@ -120,6 +123,16 @@ function TemplateAction(props) {
         {...sharedProps}
         hasExternalTrigger
         types={templateType.split(',')}
+      />
+    )
+  }
+
+  if (WEBSITE_FLOW_TYPES.includes(templateType) && medium === 'Website') {
+    return (
+      <PublishWebsiteFlow
+        {...sharedProps}
+        templateType={templateType}
+        onFinish={sharedProps.handleTrigger}
       />
     )
   }

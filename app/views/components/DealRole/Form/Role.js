@@ -4,6 +4,7 @@ import {
   Box,
   Grid as MuiGrid,
   Button as MuiButton,
+  Tooltip,
   Divider,
   Typography
 } from '@material-ui/core'
@@ -35,16 +36,30 @@ const Grid = styled(MuiGrid)(spacing)
 export function RoleForm(props) {
   const [showNameDetails, setShowNameDetails] = useState(false)
 
+  const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
-  const showSaveContactButton =
+  const showNewContactButton =
     props.isNewRecord &&
     props.values.email !== props.userEmail &&
     !props.values.contact
 
+  const showUpdateContactButton =
+    props.values.email !== props.userEmail && props.values.contact
+
   const selectedRole = props.values.role
   const roleType = props.values.role_type
   const compact = props.compact
+
+  const getTooltip = () => {
+    if (Object.keys(props.errors).length === 0) {
+      return ''
+    }
+
+    return Object.values(props.errors).map((text, index) => (
+      <div key={index}>{text}</div>
+    ))
+  }
 
   return (
     <Grid
@@ -240,9 +255,12 @@ export function RoleForm(props) {
         <Divider />
       </Grid>
 
-      <Grid item xs={12} mt={1}>
-        <Box display="flex" justifyContent="space-between">
-          <Box display="flex">
+      <Grid container xs={12} my={1}>
+        <Grid md={compact ? 12 : 4} xs={12}>
+          <Box
+            display="flex"
+            justifyContent={compact ? 'flex-end' : 'flex-start'}
+          >
             {props.isRoleRemovable && (
               <DeleteRole
                 deal={props.deal}
@@ -250,7 +268,6 @@ export function RoleForm(props) {
                 onDeleteRole={props.onDeleteRole}
               />
             )}
-
             {props.values.contact && (
               <Button
                 href={`/dashboard/contacts/${props.values.contact.id}`}
@@ -260,40 +277,60 @@ export function RoleForm(props) {
               </Button>
             )}
           </Box>
+        </Grid>
 
-          <Box alignCenter textAlign="right">
+        <Grid md={compact ? 12 : 8} mt={compact ? 1 : 0} xs={12}>
+          <Box display="flex" justifyContent="flex-end">
             <Button onClick={props.onClose}>Cancel</Button>
 
             {props.isSubmitting ? (
               <Button>{props.isNewRecord ? 'Saving...' : 'Updating...'}</Button>
             ) : (
               <>
-                <Button
-                  ml={1}
-                  variant={showSaveContactButton ? 'outlined' : 'contained'}
-                  color={showSaveContactButton ? 'secondary' : 'primary'}
-                  onClick={() => props.onSubmit(props.form, false)}
-                >
-                  Save
-                </Button>
+                <Tooltip placement="top" title={getTooltip()}>
+                  <span>
+                    <Button
+                      ml={1}
+                      variant={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      color={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'secondary'
+                          : 'primary'
+                      }
+                      disabled={hasErrors}
+                      onClick={() => props.onSubmit(props.form, false)}
+                    >
+                      Save
+                    </Button>
+                  </span>
+                </Tooltip>
 
-                {showSaveContactButton && (
-                  <Button
-                    ml={1}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => props.onSubmit(props.form, true)}
-                  >
-                    Save &{' '}
-                    {props.values.contact
-                      ? 'Update Contact'
-                      : 'Add to My Contacts'}
-                  </Button>
+                {(showNewContactButton || showUpdateContactButton) && (
+                  <Tooltip placement="top" title={getTooltip()}>
+                    <span>
+                      <Button
+                        ml={1}
+                        variant="contained"
+                        color="primary"
+                        disabled={hasErrors}
+                        onClick={() => props.onSubmit(props.form, true)}
+                      >
+                        Save &{' '}
+                        {props.values.contact
+                          ? 'Update Contact'
+                          : 'Add to My Contacts'}
+                      </Button>
+                    </span>
+                  </Tooltip>
                 )}
               </>
             )}
           </Box>
-        </Box>
+        </Grid>
       </Grid>
     </Grid>
   )

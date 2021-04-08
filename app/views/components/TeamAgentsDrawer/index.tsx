@@ -7,7 +7,7 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Drawer from 'components/OverlayDrawer'
 import TeamAgents from 'components/TeamAgents'
-import { AgentItem, BrandedUser } from 'components/TeamAgents/types'
+import { Agent, BrandedUser } from 'components/TeamAgents/types'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
@@ -22,7 +22,7 @@ interface Props {
   isPrimaryAgent?: boolean
   isDrawerOpen?: boolean
   onClose: () => void
-  onSelectAgents(agents: AgentItem[]): void
+  onSelectAgents(agents: Agent[]): void
 }
 
 export function TeamAgentsDrawer({
@@ -44,7 +44,9 @@ export function TeamAgentsDrawer({
   )
 
   const handleMultiSelectAgents = () => {
-    onSelectAgents(selectedAgents.map(agent => ({ agent, contacts: [] })))
+    const agents = selectedAgents.map(agent => ({ agent, contacts: [] }))
+
+    onSelectAgents(agents)
   }
 
   const handleSelectAgent = async (user: BrandedUser) => {

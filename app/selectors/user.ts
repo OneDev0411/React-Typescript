@@ -20,13 +20,13 @@ export const selectUserUnsafe = (state: IAppState) => state.user
  * @returns The user state
  */
 export function selectUser(state: IAppState) {
-  const user = selectUserUnsafe(state)
+  const user = selectUserUnsafe(state)!
 
-  if (!user) {
-    throw new Error(
-      'This selector must be called when the user is signed in before'
-    )
-  }
+  // if (!user) {
+  //   throw new Error(
+  //     'This selector must be called when the user is signed in before'
+  //   )
+  // }
 
   return user
 }
@@ -37,7 +37,7 @@ export function selectUser(state: IAppState) {
  * @returns The current user phone number
  */
 export const selectUserPhoneNumber = (state: IAppState) =>
-  selectUser(state).phone_number
+  selectUser(state)?.phone_number
 
 /**
  * Returns the formatted phone number for the current user
@@ -52,7 +52,7 @@ export const selectUserFormattedPhoneNumber = createSelector(
 )
 
 export const selectUserDisplayName = (state: IAppState) =>
-  selectUser(state).display_name
+  selectUser(state)?.display_name
 
 /**
  * Returns the email signature for the current user
@@ -60,7 +60,7 @@ export const selectUserDisplayName = (state: IAppState) =>
  * @returns The email signature for the current user
  */
 export const selectUserEmailSignature = (state: IAppState) =>
-  selectUser(state).email_signature
+  selectUser(state)?.email_signature
 
 /**
  * Returns true if the user is signed in otherwise returns false
@@ -68,3 +68,10 @@ export const selectUserEmailSignature = (state: IAppState) =>
  */
 export const selectUserIsSignedIn = (state: IAppState) =>
   !!selectUserUnsafe(state)?.id
+
+/**
+ * Returns the user id
+ * @param state The app state
+ * @returns The current user id
+ */
+export const selectUserId = (state: IAppState) => selectUser(state).id

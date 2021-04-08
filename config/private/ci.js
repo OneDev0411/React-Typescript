@@ -33,5 +33,11 @@ export default {
     api_url: process.env.LIVE_BY_API_URL,
     api_client_id: process.env.LIVE_BY_API_CLIENT_ID,
     api_key: process.env.LIVE_BY_API_KEY
+  },
+  stripe: {
+    public_key: process.env.STRIPE_PUBLIC_KEY
+  },
+  mapbox: {
+    access_token: process.env.MAPBOX_ACCESS_TOKEN
   }
 }

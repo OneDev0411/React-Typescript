@@ -19,7 +19,7 @@
     // Import non-ES modules as default imports.
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     // Allow importing JSON files
     "resolveJsonModule": true,
     // Allow dynamic importing

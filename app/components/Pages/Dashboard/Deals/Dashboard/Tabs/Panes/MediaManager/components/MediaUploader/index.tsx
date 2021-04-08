@@ -1,7 +1,7 @@
 import React, { useState, useRef, useImperativeHandle } from 'react'
 import { Box, Typography } from '@material-ui/core'
 // @ts-ignore
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-rechat'
 
 import acceptedDocuments from '../../constants/acceptedDocuments'
 import { useStyles } from '../../styles'
@@ -15,6 +15,7 @@ interface Props {
 
 export interface DropzoneRef {
   open(): void
+  fileInputEl: HTMLInputElement | null
 }
 const Uploader = (props: Props) => {
   const classes = useStyles()
@@ -27,7 +28,9 @@ const Uploader = (props: Props) => {
   }
 
   useImperativeHandle(props.dropzoneRef, () => ({
-    open: () => handlerRef && handlerRef.current && handlerRef.current.open()
+    open: () => handlerRef && handlerRef.current && handlerRef.current.open(),
+    fileInputEl:
+      handlerRef && handlerRef.current && handlerRef.current.fileInputEl
   }))
 
   return (

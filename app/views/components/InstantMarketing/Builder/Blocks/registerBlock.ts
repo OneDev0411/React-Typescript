@@ -1,21 +1,42 @@
 import { Editor } from 'grapesjs'
 
-import { BlockOptions } from './types'
+import { BlockOptions, TemplateBlock } from './types'
 
 const domParser = new DOMParser()
 
-function registerBlock(
+export function registerBlock(
   editor: Editor,
-  { label, category, blockName, template, adaptive = false }: BlockOptions
+  {
+    label,
+    category,
+    blockName,
+    template,
+    icon,
+    adaptive = false
+  }: BlockOptions,
+  templateBlock?: TemplateBlock
 ): void {
-  const document = domParser.parseFromString(template, 'text/html')
+  const document = domParser.parseFromString(
+    templateBlock?.template || template,
+    'text/html'
+  )
   const { tagName } = document.body.children[0]
 
-  const elementName = adaptive ? 'mj-adaptive' : tagName
+  const elementName =
+    templateBlock?.adaptive || adaptive
+      ? 'mj-adaptive'
+      : tagName === 'IFRAME'
+      ? 'DIV'
+      : tagName
 
   editor.BlockManager.add(blockName, {
-    category,
-    label,
+    category: templateBlock?.category || category,
+    label:
+      templateBlock?.icon || icon
+        ? `<div style="background-image:url(${templateBlock?.icon || icon});">${
+            templateBlock?.label || label
+          }</div>`
+        : label,
     content: `<${elementName} data-block="${blockName}"></${elementName}>`
   })
 }

@@ -45,16 +45,21 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  isOfficeDoubleEnded: boolean
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
 
-export function AgentsList({ onSelectRole }: Props) {
+export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
   return (
-    <TeamAgents flattenTeams={false} isPrimaryAgent criteria={searchCriteria}>
+    <TeamAgents
+      flattenTeams={isOfficeDoubleEnded}
+      isPrimaryAgent={!isOfficeDoubleEnded}
+      criteria={searchCriteria}
+    >
       {({ teams, isLoading }) =>
         isLoading ? (
           <CircularProgress disableShrink />
@@ -89,7 +94,7 @@ export function AgentsList({ onSelectRole }: Props) {
                       onSelectRole(
                         convertUserAgentToRole({
                           ...agent,
-                          brand_id: team.id
+                          brand_id: isOfficeDoubleEnded ? null : team.id
                         })
                       )
                     }

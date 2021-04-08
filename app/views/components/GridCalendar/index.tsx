@@ -350,7 +350,7 @@ export const GridCalendarPresentation = ({
       setSelectedEvent(null)
       setSelectedDay(null)
     },
-    [rowEvents, updateEvents, viewAsUsers]
+    [rowEvents, updateEvents, viewAsUsers, viewAsUsers?.length]
   )
 
   /**

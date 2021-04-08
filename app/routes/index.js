@@ -5,6 +5,8 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
+import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -400,6 +402,15 @@ const AsyncToursList = withAcl.crm(
 //  Marketing Center
 /* ==================================== */
 
+const AsyncMarketingOverview = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/Overview' /* webpackChunkName: "marketing_overview" */
+      )
+  })
+)
+
 const AsyncMarketingEditor = withAcl.marketing(
   Load({
     loader: () =>
@@ -418,11 +429,11 @@ const AsyncMarketingWizard = withAcl.marketing(
   })
 )
 
-const AsyncMarketing = withAcl.marketing(
+const AsyncMarketingTemplates = withAcl.marketing(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing" */
+        '../components/Pages/Dashboard/Marketing/List' /* webpackChunkName: "marketing_templates" */
       )
   })
 )
@@ -625,11 +636,20 @@ const AsyncHeroSearchSectionWidget = Load({
 //  Websites
 /* ==================================== */
 
-const AsyncWebsitesList = withAcl.store(
+const AsyncWebsitesList = withAcl.websites(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Websites/List' /* webpackChunkName: "websites_list" */
+        '../components/Pages/Dashboard/Websites/pages/Website' /* webpackChunkName: "websites_list" */
+      )
+  })
+)
+
+const AsyncOldWebsite = withAcl.store(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Website' /* webpackChunkName: "old_website" */
       )
   })
 )
@@ -671,15 +691,6 @@ const AsyncChecklists = withAcl.admin(
     loader: () =>
       import(
         '../components/Pages/Dashboard/Checklists' /* webpackChunkName: "console_checklists" */
-      )
-  })
-)
-
-const AsyncWebsite = withAcl.store(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Website' /* webpackChunkName: "website" */
       )
   })
 )
@@ -792,10 +803,14 @@ export default (
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
-        <Route path="marketing" component={AsyncMarketingHistory} />
+        <Route path="marketing" component={AsyncMarketingOverview} />
+        <Route path="marketing/designs" component={AsyncMarketingHistory} />
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
-        <Route path="marketing/:types(/:medium)" component={AsyncMarketing} />
+        <Route
+          path="marketing/:types(/:medium)"
+          component={AsyncMarketingTemplates}
+        />
 
         <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route
@@ -898,11 +913,15 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        {/* TODO: Store for now but it is a part of Marketing so we have to fix it for the new website builder */}
-        <Route path="websites">
+        <Route
+          path={`websites(/templates/:type(${Object.keys(websiteTabs).join(
+            '|'
+          )}))`}
+        >
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
-        <Route path="website" component={AsyncWebsite} />
+
+        <Route path="website" component={AsyncOldWebsite} />
       </Route>
     </Route>
 

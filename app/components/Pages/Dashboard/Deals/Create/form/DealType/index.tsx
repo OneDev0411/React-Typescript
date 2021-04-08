@@ -11,8 +11,6 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
 interface Props {
   propertyType: IDealPropertyType
   onChange: (value: IDealType) => void
@@ -21,7 +19,6 @@ interface Props {
 export function DealType({ propertyType, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
 
   const handleChange = (value: IDealType) => {
     onChange(value)
@@ -34,10 +31,7 @@ export function DealType({ propertyType, onChange }: Props) {
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You need to discard the form to be able edit the side"
-    >
+    <QuestionSection>
       <QuestionTitle>Which side are you representing?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

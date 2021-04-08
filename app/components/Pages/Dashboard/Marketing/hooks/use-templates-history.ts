@@ -1,8 +1,16 @@
-import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+import { useState, useEffect } from 'react'
 
 import { deleteTemplateInstance } from 'models/instant-marketing/delete-template-instance'
 import { getHistory } from 'models/instant-marketing/get-history'
+
+const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
+  'Email',
+  'Social',
+  'Letter',
+  'LinkedInCover',
+  'FacebookCover',
+  'InstagramStory'
+]
 
 interface TemplatesHistory {
   templates: IMarketingTemplateInstance[]
@@ -16,15 +24,16 @@ interface TemplatesHistoryOptions {
   templateTypes?: IMarketingTemplateType[]
 }
 
-export function useTemplatesHistory({
-  mediums,
-  templateTypes
-}: TemplatesHistoryOptions = {}): TemplatesHistory {
+export function useTemplatesHistory(
+  { mediums, templateTypes }: TemplatesHistoryOptions = {
+    mediums: DEFAULT_TEMPLATE_MEDIUMS
+  }
+): TemplatesHistory {
   const [templates, setTemplates] = useState<IMarketingTemplateInstance[]>([])
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     let didCancel = false
 
     async function loadData() {

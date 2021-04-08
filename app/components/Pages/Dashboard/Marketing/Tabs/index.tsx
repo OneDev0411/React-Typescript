@@ -10,17 +10,35 @@ interface Props {
   sections: SectionCollection
   mediums: { [key: string]: IMarketingTemplateMedium[] }
   templateTypes: string
+  isMyDesignsActive: boolean
+  isOverviewActive: boolean
 }
 
-const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
+const MarketingTabs = ({
+  sections,
+  mediums,
+  templateTypes,
+  isMyDesignsActive,
+  isOverviewActive,
+  ...props
+}: Props) => {
   const sectionsList = Object.keys(sections).map(
     sectionKey => sections[sectionKey]
   )
 
   const getActiveTab = () => {
-    if (!templateTypes) {
-      return sectionsList.find(section => section.type === SectionsEnum.Link)
-        ?.key
+    if (isOverviewActive) {
+      return sectionsList.find(
+        section =>
+          section.type === SectionsEnum.Link && section.key === 'overview'
+      )?.key
+    }
+
+    if (isMyDesignsActive) {
+      return sectionsList.find(
+        section =>
+          section.type === SectionsEnum.Link && section.key === 'designs'
+      )?.key
     }
 
     return sectionsList.find(section => {
@@ -64,7 +82,7 @@ const MarketingTabs = ({ sections, mediums, templateTypes }: Props) => {
         if (section.type === SectionsEnum.Link) {
           return section.items.map(linkItem => (
             <TabLink
-              key={linkItem.value}
+              key={linkItem.value as string}
               to={linkItem.link}
               value={section.key}
               label={linkItem.title}

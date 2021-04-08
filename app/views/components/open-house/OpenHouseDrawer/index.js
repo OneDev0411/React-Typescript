@@ -328,12 +328,6 @@ class OpenHouseDrawerInternal extends React.Component {
     }
   }
 
-  handleSubmit = () => {
-    document
-      .getElementById('open-house-drawer-form')
-      .dispatchEvent(new Event('submit', { cancelable: true }))
-  }
-
   handleEditTemplateClick = () => {
     if (this.isNew) {
       return this.toggleTemplateBuilder()
@@ -455,104 +449,102 @@ class OpenHouseDrawerInternal extends React.Component {
             save={this.save}
             validate={validate}
             render={formProps => {
-              const { values } = formProps
+              const { values, handleSubmit } = formProps
 
               return (
                 <>
                   {error && error.status === 404 ? (
                     <Alert message={error.response.body.message} type="error" />
                   ) : (
-                    <div>
-                      <FormContainer
-                        id="open-house-drawer-form"
-                        onSubmit={formProps.handleSubmit}
+                    <FormContainer
+                      id="open-house-drawer-form"
+                      onSubmit={handleSubmit}
+                    >
+                      <EventField
+                        title="title"
+                        iconProps={{
+                          path: mdiNoteTextOutline
+                        }}
                       >
-                        <EventField
-                          title="title"
-                          iconProps={{
-                            path: mdiNoteTextOutline
-                          }}
-                        >
-                          <Title fullWidth placeholder="Untitled Open House" />
-                          <Box mt={1}>
-                            {shouldShowDescription || values?.description ? (
-                              <Description placeholder="Enter any general notes for your clients" />
-                            ) : (
-                              <Button
-                                color="secondary"
-                                onClick={this.showDescriptionField}
-                              >
-                                Add Description
-                              </Button>
-                            )}
-                          </Box>
-                        </EventField>
-                        <EventField
-                          title="date"
-                          iconProps={{
-                            path: mdiClockTimeFourOutline
-                          }}
-                        >
-                          <FieldContainer
-                            alignCenter
-                            justifyBetween
-                            style={{ marginBottom: '0.5em' }}
-                          >
-                            <DateTimeField
-                              name="dueDate"
-                              selectedDate={values.dueDate}
-                              datePickerModifiers={{
-                                disabled: {
-                                  before: new Date()
-                                }
-                              }}
-                            />
-
-                            <EndTimeField dueDate={values.dueDate} />
-                          </FieldContainer>
-
-                          <FieldError
-                            name="endDate"
-                            style={{ fontSize: '1rem', marginBottom: '0.5em' }}
-                          />
-                        </EventField>
-                        <Reminder dueDate={values.dueDate} />
-
-                        <Box ml={4} mb={1}>
-                          <Location
-                            location={values.location}
-                            handleDelete={this.handleDeleteAssociation}
-                          />
+                        <Title fullWidth placeholder="Untitled Open House" />
+                        <Box mt={1}>
+                          {shouldShowDescription || values?.description ? (
+                            <Description placeholder="Enter any general notes for your clients" />
+                          ) : (
+                            <Button
+                              color="secondary"
+                              onClick={this.showDescriptionField}
+                            >
+                              Add Description
+                            </Button>
+                          )}
                         </Box>
-
-                        <EventField
-                          title="contact-associations"
-                          iconProps={{
-                            path: mdiAccountPlusOutline
-                          }}
+                      </EventField>
+                      <EventField
+                        title="date"
+                        iconProps={{
+                          path: mdiClockTimeFourOutline
+                        }}
+                      >
+                        <FieldContainer
+                          alignCenter
+                          justifyBetween
+                          style={{ marginBottom: '0.5em' }}
                         >
-                          <AssosiationContainer>
-                            <AssociationsList
-                              filterType="contact"
-                              name="registrants"
-                              showDefaultAssociation
-                              associations={values.registrants}
-                            />
-                            <AddAssociation
-                              showTitle
-                              disabled={isDisabled}
-                              type="contact"
-                              name="registrants"
-                              caption="Attach Contact"
-                            />
-                          </AssosiationContainer>
-                        </EventField>
+                          <DateTimeField
+                            name="dueDate"
+                            selectedDate={values.dueDate}
+                            datePickerModifiers={{
+                              disabled: {
+                                before: new Date()
+                              }
+                            }}
+                          />
 
-                        <ItemChangelog
-                          item={values}
-                          style={{ marginTop: '2em' }}
+                          <EndTimeField dueDate={values.dueDate} />
+                        </FieldContainer>
+
+                        <FieldError
+                          name="endDate"
+                          style={{ fontSize: '1rem', marginBottom: '0.5em' }}
                         />
-                      </FormContainer>
+                      </EventField>
+                      <Reminder dueDate={values.dueDate} />
+
+                      <Box ml={4} mb={1}>
+                        <Location
+                          location={values.location}
+                          handleDelete={this.handleDeleteAssociation}
+                        />
+                      </Box>
+
+                      <EventField
+                        title="contact-associations"
+                        iconProps={{
+                          path: mdiAccountPlusOutline
+                        }}
+                      >
+                        <AssosiationContainer>
+                          <AssociationsList
+                            filterType="contact"
+                            name="registrants"
+                            showDefaultAssociation
+                            associations={values.registrants}
+                          />
+                          <AddAssociation
+                            showTitle
+                            disabled={isDisabled}
+                            type="contact"
+                            name="registrants"
+                            caption="Attach Contact"
+                          />
+                        </AssosiationContainer>
+                      </EventField>
+
+                      <ItemChangelog
+                        item={values}
+                        style={{ marginTop: '2em' }}
+                      />
                       <Footer justifyBetween>
                         <Flex alignCenter>
                           {!this.isNew && (
@@ -597,19 +589,19 @@ class OpenHouseDrawerInternal extends React.Component {
                           <Button
                             variant="contained"
                             color="secondary"
+                            type="submit"
                             disableElevation
                             disabled={
                               isDisabled ||
                               (!this.state.template && !this.state.rawTemplate)
                             }
-                            onClick={this.handleSubmit}
                             style={{ marginLeft: '0.5em' }}
                           >
                             {this.getSaveButtonText()}
                           </Button>
                         </Flex>
                       </Footer>
-                    </div>
+                    </FormContainer>
                   )}
 
                   {this.state.isTemplateBuilderOpen && (

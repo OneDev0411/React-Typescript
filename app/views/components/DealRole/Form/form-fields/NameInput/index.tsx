@@ -117,6 +117,7 @@ export function NameInput({
       value={input.value}
       error={meta.error || (isRequired && !input.value)}
       noOptionsText={getNoOptionsText()}
+      getOptionLabel={option => option.full_name || option.value}
       isLoading={isSearching}
       options={searchByName}
       onChange={handleSelectSuggestion}

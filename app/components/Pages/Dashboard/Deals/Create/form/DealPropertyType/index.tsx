@@ -20,7 +20,7 @@ interface Props {
 export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, propertyTypes } = useCreationContext()
+  const { propertyTypes } = useCreationContext()
 
   const handleChange = (value: UUID) => {
     onChange(value)
@@ -31,10 +31,7 @@ export function DealPropertyType({ onChange }: Props) {
   }
 
   return (
-    <QuestionSection
-      disabled={!!deal}
-      disableMessage="You need to discard the form to be able edit the property"
-    >
+    <QuestionSection>
       <QuestionTitle>What type of property is this?</QuestionTitle>
       <QuestionForm>
         <RadioGroup

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 import {
   Dialog,
   Theme,
@@ -118,7 +119,7 @@ interface Props {
   }
 }
 
-function Insight({ params: { id } }: Props) {
+function Insight({ location, params: { id } }: Props & WithRouterProps) {
   const [sortField, setSortField] = useState<SortFieldType>({
     label: 'Most Opened',
     value: 'opened',
@@ -264,7 +265,7 @@ function Insight({ params: { id } }: Props) {
       </Helmet>
       <div className={classes.pageContainer}>
         <Header
-          backUrl="/dashboard/insights"
+          backUrl={location.query?.backUrl ?? '/dashboard/insights'}
           title={item.subject}
           viewEmailDisabled={!item.emails}
           onViewEmail={openViewEmail}
@@ -364,4 +365,4 @@ function Insight({ params: { id } }: Props) {
   )
 }
 
-export default Insight
+export default withRouter(Insight)

@@ -159,7 +159,10 @@ export class DealRole extends React.Component {
           await this.createRole(form)
         ])
       } else {
-        await this.updateRole(form)
+        await Promise.all([
+          await this.upsertContact(form),
+          await this.updateRole(form)
+        ])
       }
     } catch (e) {
       this.props.notify({
@@ -247,7 +250,9 @@ export class DealRole extends React.Component {
       let value = values[fieldName]
 
       if (value === undefined || value === null || value.length === 0) {
-        errors[fieldName] = 'Required'
+        errors[fieldName] = `${
+          this.aliases[fieldName] || fieldName
+        } is Required`
       }
     })
 
@@ -281,7 +286,7 @@ export class DealRole extends React.Component {
    */
   get errorNames() {
     const INVALID_EMAIL = 'Invalid Email Address'
-    const INVALID_PHONE = 'Number is invalid (###)###-####'
+    const INVALID_PHONE = 'Number is invalid'
     const INVALID_ADDRESS = 'Invalid address'
     const INVALID_MLS = 'Invalid MLS ID'
 
@@ -300,6 +305,19 @@ export class DealRole extends React.Component {
       commission: 'Invalid Commission value',
       current_address: INVALID_ADDRESS,
       office_address: INVALID_ADDRESS
+    }
+  }
+
+  get aliases() {
+    return {
+      legal_first_name: 'First Name',
+      legal_last_name: 'Last Name',
+      email: 'Email',
+      mls_id: 'MLS Number',
+      company_title: 'Company Name',
+      phone_number: 'Phone Number',
+      commission: 'Commission',
+      current_address: 'Address'
     }
   }
 

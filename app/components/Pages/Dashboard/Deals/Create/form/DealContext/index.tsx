@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 
 import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
 import { upsertContexts } from 'actions/deals'
+import { isBackOffice } from 'utils/user-teams'
 
 import {
   QuestionSection,
@@ -31,6 +32,7 @@ import { getField } from 'models/Deal/helpers/context'
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
+  concurrentMode?: boolean
   context: IDealBrandContext
   onChange?: (value: string | number) => void
 }
@@ -54,19 +56,24 @@ const useStyles = makeStyles(
   }
 )
 
-export function DealContext({ context, onChange = () => {} }: Props) {
+export function DealContext({
+  concurrentMode = false,
+  context,
+  onChange
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
+  const { deal, user } = useCreationContext()
 
   const defaultValue = deal ? getField(deal, context.key) : ''
 
   const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
+  const mask = getContextInputMask(context)
 
   useEffect(() => {
     if (defaultValue && !inputValue) {
@@ -74,6 +81,14 @@ export function DealContext({ context, onChange = () => {} }: Props) {
     }
     // eslint-disable-next-line
   }, [defaultValue])
+
+  useEffect(() => {
+    if (inputValue && concurrentMode && context.validate(context, inputValue)) {
+      handleSave()
+    }
+
+    // eslint-disable-next-line
+  }, [inputValue])
 
   const getContextDate = () => {
     if (!inputValue) {
@@ -92,10 +107,16 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       return
     }
 
-    setInputValue(date)
+    setInputValue(date.getTime() / 1000)
   }
 
   const handleChangeInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!mask) {
+      setInputValue(e.target.value)
+
+      return
+    }
+
     const maskedValue = e.target.value
     const value = maskedValue
       ? parseFloat(maskedValue.replace('$', '').replace(/\,/gi, ''))
@@ -107,19 +128,21 @@ export function DealContext({ context, onChange = () => {} }: Props) {
   const handleSave = () => {
     const value =
       contextType === 'Date'
-        ? fecha.format(inputValue, 'YYYY-MM-DD')
+        ? fecha.format(inputValue * 1000, 'YYYY-MM-DD')
         : inputValue
 
-    if (deal) {
+    if (deal && !onChange) {
       try {
-        const data = createUpsertObject(deal, context.key, value, false)
+        const approved = isBackOffice(user) ? true : !context.needs_approval
+        const data = createUpsertObject(deal, context.key, value, approved)
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
         console.log(e)
       }
     } else {
-      onChange(value)
+      console.log(`Change ${context.key} To ${value}`)
+      onChange?.(value)
     }
 
     if (wizard.currentStep === step) {
@@ -139,7 +162,7 @@ export function DealContext({ context, onChange = () => {} }: Props) {
       </QuestionTitle>
 
       <QuestionForm>
-        <Box>
+        <Box mb={4}>
           {contextType === 'Date' && (
             <Box className={classes.datePickerContainer}>
               <DatePicker
@@ -158,14 +181,14 @@ export function DealContext({ context, onChange = () => {} }: Props) {
                 label={context.label}
                 InputProps={{
                   inputProps: {
-                    mask: getContextInputMask(context)
+                    mask
                   },
                   startAdornment:
                     context.format === 'Currency' ? (
                       <InputAdornment position="start">$</InputAdornment>
                     ) : null,
                   placeholder: context.properties?.placeholder ?? '',
-                  inputComponent: MaskedInput,
+                  inputComponent: mask ? MaskedInput : undefined,
                   value: inputValue,
                   onChange: handleChangeInputValue
                 }}
@@ -173,19 +196,21 @@ export function DealContext({ context, onChange = () => {} }: Props) {
             </Box>
           )}
 
-          <Box textAlign="right">
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={!inputValue}
-              className={classes.saveButton}
-              onClick={() => handleSave()}
-            >
-              {defaultValue && defaultValue === inputValue
-                ? 'Looks Good'
-                : 'Save'}
-            </Button>
-          </Box>
+          {!concurrentMode && (
+            <Box textAlign="right">
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={!inputValue || !context.validate(context, inputValue)}
+                className={classes.saveButton}
+                onClick={() => handleSave()}
+              >
+                {defaultValue && defaultValue === inputValue
+                  ? 'Looks Good'
+                  : 'Save'}
+              </Button>
+            </Box>
+          )}
         </Box>
       </QuestionForm>
     </QuestionSection>

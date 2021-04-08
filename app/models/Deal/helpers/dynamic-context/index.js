@@ -64,7 +64,7 @@ export function getFactsheetSection(listId, deal, section) {
     listId,
     deal.deal_type,
     deal.property_type,
-    getHasActiveOffer(deal)
+    deal.has_active_offer
   )
 
   const list = items.filter(item => item.section === section)
@@ -91,20 +91,20 @@ export function getItems(
   property_type,
   hasActiveOffer = false
 ) {
-  const requiredFields = getRequiredItems(
+  const optionalFields = getOptionalItems(
     list_id,
     deal_type,
     property_type,
     hasActiveOffer
   )
 
-  const optionalFields = getOptionalItems(
+  const requiredFields = getRequiredItems(
     list_id,
     deal_type,
     property_type,
     hasActiveOffer
   ).filter(
-    field => requiredFields.some(({ key }) => field.key === key) === false
+    field => optionalFields.some(({ key }) => field.key === key) === false
   )
 
   return _.sortBy([].concat(requiredFields, optionalFields), 'order')
@@ -393,14 +393,20 @@ export function isAddressField(key) {
 }
 
 export function getDefinitionId(list_id, key) {
-  const definition = _.find(getList(list_id), { key })
+  const definition = getDefinition(list_id, key)
 
   return definition && definition.id
 }
 
-export function getChecklist(deal, fieldKey) {
-  const dealContext = getContext(deal, fieldKey)
-  const field = query(deal, item => item.key === fieldKey)[0]
+export function getDefinition(list_id, key) {
+  return _.find(getList(list_id), { key })
+}
+
+export function getChecklist(deal, key) {
+  // debugger
+
+  const dealContext = getContext(deal, key)
+  const field = query(deal, item => item.key === key)[0]
 
   if (dealContext && dealContext.checklist) {
     return dealContext.checklist
@@ -410,7 +416,7 @@ export function getChecklist(deal, fieldKey) {
     field,
     deal.deal_type,
     deal.property_type,
-    getHasActiveOffer(deal),
+    deal.has_active_offer,
     'required'
   )
 
@@ -420,7 +426,7 @@ export function getChecklist(deal, fieldKey) {
   if (
     deal.deal_type === 'Selling' &&
     condition.includes('Active Offer') &&
-    getHasActiveOffer(deal)
+    deal.has_active_offer
   ) {
     return deal.checklists.find(
       id =>
@@ -478,6 +484,7 @@ export default {
   getItems,
   getRequiredItems,
   getOptionalItems,
+  getDefinition,
   getDefinitionId,
   getChecklist,
   query,

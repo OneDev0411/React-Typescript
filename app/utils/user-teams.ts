@@ -163,14 +163,22 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 
 export function viewAs(
   user: IUser | null,
-  activeTeam: IUserTeam | null = getActiveTeam(user)
+  shouldReturnAll: boolean = false,
+  team: IUserTeam | null = getActiveTeam(user),
 ): UUID[] {
   if (
-    activeTeam &&
-    !idx(activeTeam, t => t.acl.includes('BackOffice')) &&
-    idx(activeTeam, team => team.settings.user_filter[0])
+    team &&
+    !idx(team, t => t.acl.includes('BackOffice')) &&
+    idx(team, team => team.settings.user_filter[0])
   ) {
-    return activeTeam.settings.user_filter || []
+    const allTeamMember = getTeamAvailableMembers(team)
+    const selectedViewAsUsers = team.settings.user_filter || []
+
+    if(!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length){
+      return []
+    }
+      
+    return selectedViewAsUsers
   }
 
   return []
@@ -180,7 +188,6 @@ type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
-  key?: string,
   includesParents?: boolean
 ) => {
   const team = getActiveTeam(user)
@@ -189,9 +196,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
     return {}
   }
   
-  const settings = getSettings(team, includesParents)
-
-  return key ? settings[key] : settings
+  return getSettings(team, includesParents)
 }
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
@@ -208,11 +213,13 @@ export const getActiveTeamSettings = getSettingsFromActiveTeam(
   }
 )
 
-export const getUserSettingsInActiveTeam = getSettingsFromActiveTeam(
-  team => team.settings || {}
-)
+export const getUserSettingsInActiveTeam = (user: IUser, key: string): any => {
+  return getSettingsFromActiveTeam(team => {
+    return team?.settings?.[key]
+  })(user)
+}
 
-export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
+export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   const team = getActiveTeam(user)
 
   if (!team || !team.brand) {
@@ -223,13 +230,12 @@ export function getActiveTeamPalette(user: IUser): BrandSettingsPalette {
   if (
     !brand ||
     !brand.settings ||
-    !brand.settings.palette ||
-    !brand.settings.palette.palette
+    !brand.settings.marketing_palette
   ) {
     return DEFAULT_BRAND_PALETTE
   }
 
-  return brand.settings.palette.palette
+  return brand.settings.marketing_palette
 }
 
 export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
@@ -237,7 +243,7 @@ export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
     return false
   }
 
-  const users = viewAs(user)
+  const users = viewAs(user,true)
 
   return (
     // It means all members of the team

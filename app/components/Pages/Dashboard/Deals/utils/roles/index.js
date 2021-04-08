@@ -111,6 +111,7 @@ export function convertContactToRole(contact) {
     )
 
   return {
+    contact,
     emails: values('email'),
     phone_numbers: values('phone_number'),
     companies: values('company'),
@@ -122,6 +123,27 @@ export function convertContactToRole(contact) {
     phone_number: contact.phone_number,
     company: contact.company,
     company_title: contact.company
+  }
+}
+
+/**
+ * Converts an agent object to a role contact
+ * @param {Object} agent - The agent object
+ * @param {Object} attributeDefs - list of definitions
+ */
+export function convertAgentToRole(agent) {
+  return {
+    agent,
+    emails: [],
+    phone_numbers: [],
+    companies: [],
+    legal_first_name: agent.first_name,
+    legal_middle_name: agent.middle_name,
+    legal_last_name: agent.last_name,
+    email: agent.email,
+    phone_number: agent.phone_number,
+    company: agent.office.name,
+    company_title: agent.office.name
   }
 }
 

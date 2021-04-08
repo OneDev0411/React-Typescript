@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Button } from '@material-ui/core'
 
 import { goTo } from 'utils/go-to'
@@ -18,9 +18,10 @@ import type { IDealSide } from '../../types'
 
 interface Props {
   dealSide: IDealSide
+  isCreatingDeal: boolean
 }
 
-export function DealCard({ dealSide }: Props) {
+export function DealCard({ dealSide, isCreatingDeal }: Props) {
   const { deal } = useCreationContext()
   const { step } = useSectionContext()
   const wizard = useWizardContext()
@@ -28,15 +29,21 @@ export function DealCard({ dealSide }: Props) {
   const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
   const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/offer`)
 
-  if (wizard.currentStep !== step || !deal) {
+  useEffect(() => {
+    if (step === wizard.currentStep) {
+      wizard.next()
+    }
+
+    wizard.setLoading(isCreatingDeal)
+  }, [wizard, step, isCreatingDeal])
+
+  if (!deal) {
     return null
   }
 
   return (
     <QuestionSection>
-      <QuestionTitle>
-        <div>Congratulation! 🎉</div>I am done create the deal for you
-      </QuestionTitle>
+      <QuestionTitle>Congratulations! 🎉 Your deal is created</QuestionTitle>
 
       <QuestionForm>
         <Box display="flex" justifyContent="flex-end">

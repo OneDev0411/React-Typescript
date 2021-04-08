@@ -5,7 +5,7 @@ import { searchListings } from 'models/listings/search/search-listings'
 
 import { useGoogleMapsPlaces } from './use-google-maps-places'
 
-interface Address {
+interface GoogleLocation {
   city: string
   number: string
   state: string
@@ -24,7 +24,7 @@ export function useSearchLocation(
   listings: ICompactListing[]
   getParsedPlace: (
     place: google.maps.places.AutocompletePrediction
-  ) => Promise<Address>
+  ) => Promise<GoogleLocation>
 } {
   useGoogleMapsPlaces()
 
@@ -73,6 +73,7 @@ export function useSearchLocation(
       }
 
       setIsSearching(true)
+      setIsEmptyState(false)
 
       const [places, listings] = await Promise.all([
         searchPlaces(),
@@ -83,9 +84,7 @@ export function useSearchLocation(
       setPlaces(places)
       setListings(listings)
 
-      if (places.length === 0 && listings.length === 0) {
-        setIsEmptyState(true)
-      }
+      setIsEmptyState(places.length === 0 && listings.length === 0)
     }
 
     search()
@@ -95,7 +94,9 @@ export function useSearchLocation(
    *
    * @param place
    */
-  const getParsedPlace = (place: google.maps.places.AutocompletePrediction) => {
+  const getParsedPlace = (
+    place: google.maps.places.AutocompletePrediction
+  ): Promise<GoogleLocation> => {
     return new Promise((resolve, reject) => {
       const service = new window.google.maps.places.PlacesService(
         document.createElement('div')
