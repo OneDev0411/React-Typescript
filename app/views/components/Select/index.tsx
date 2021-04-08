@@ -6,21 +6,26 @@ import {
   InputLabel,
   MenuItem,
   MenuItemProps,
-  Select,
-  SelectProps
+  Select as MSelect,
+  SelectProps as MSelectProps
 } from '@material-ui/core'
 
-export interface SelectItem<T extends MenuItemProps['value'] = string> {
+export type SelectValue = MenuItemProps['value']
+
+export interface SelectItem<T extends SelectValue = string> {
   label: string
   value: T
 }
 
-export interface SelectFieldProps<T extends MenuItemProps['value'] = string>
+export interface SelectProps<T extends SelectValue = string>
   extends Pick<
       FormControlProps,
       'fullWidth' | 'size' | 'variant' | 'margin' | 'error'
     >,
-    Pick<SelectProps, 'placeholder' | 'label' | 'displayEmpty'> {
+    Pick<
+      MSelectProps,
+      'placeholder' | 'label' | 'displayEmpty' | 'inputProps'
+    > {
   defaultValue?: T
   value?: T
   onChange?: (value: T) => void
@@ -28,7 +33,7 @@ export interface SelectFieldProps<T extends MenuItemProps['value'] = string>
   helperText?: ReactNode
 }
 
-function SelectField<T extends MenuItemProps['value'] = string>({
+function Select<T extends SelectValue = string>({
   variant = 'outlined',
   size = 'small',
   fullWidth = true,
@@ -41,8 +46,9 @@ function SelectField<T extends MenuItemProps['value'] = string>({
   options,
   margin,
   helperText,
-  error
-}: SelectFieldProps<T>) {
+  error,
+  ...otherProps
+}: SelectProps<T>) {
   const [value, setValue] = useState<Optional<T>>(defaultValue)
   const finalValue = outValue !== undefined ? outValue : value
 
@@ -63,7 +69,8 @@ function SelectField<T extends MenuItemProps['value'] = string>({
       error={error}
     >
       {label && <InputLabel>{label}</InputLabel>}
-      <Select
+      <MSelect
+        {...otherProps}
         value={displayEmpty ? finalValue || '' : finalValue}
         onChange={handleChange}
         displayEmpty={displayEmpty}
@@ -82,10 +89,10 @@ function SelectField<T extends MenuItemProps['value'] = string>({
               </MenuItem>
             )
         )}
-      </Select>
+      </MSelect>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   )
 }
 
-export default SelectField
+export default Select

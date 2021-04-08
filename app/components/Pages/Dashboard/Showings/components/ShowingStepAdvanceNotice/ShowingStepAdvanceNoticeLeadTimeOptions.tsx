@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box } from '@material-ui/core'
 
-import SelectField, { SelectItem } from 'components/SelectField'
+import Select, { SelectItem } from 'components/Select'
 
 import { hourToSeconds } from '../../helpers'
 
@@ -26,7 +26,7 @@ function ShowingStepAdvanceNoticeLeadTimeOptions({
 }: ShowingStepAdvanceNoticeLeadTimeOptionsProps) {
   return (
     <Box mb={1.5} mt={2} mx={1}>
-      <SelectField<number>
+      <Select<number>
         options={hourOptions}
         onChange={onChange}
         value={value ?? undefined}
