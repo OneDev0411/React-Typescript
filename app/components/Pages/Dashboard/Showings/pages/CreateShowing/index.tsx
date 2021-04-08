@@ -17,6 +17,8 @@ import ShowingStepYesNoQuestion, {
 } from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
+import ShowingStepAvailabilities from '../../components/ShowingStepAvailabilities'
+import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import useShowingRole from './use-showing-role'
 
 function CreateShowing() {
@@ -76,6 +78,8 @@ function CreateShowing() {
   )
 
   const [advanceNotice, setAdvanceNotice] = useState<Nullable<number>>(null)
+
+  const [availabilities, setAvailabilities] = useShowingAvailabilitiesState()
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -198,6 +202,10 @@ function CreateShowing() {
             <ShowingStepAdvanceNotice
               leadTime={advanceNotice}
               onLeadTimeChange={setAdvanceNotice}
+            />
+            <ShowingStepAvailabilities
+              value={availabilities}
+              onChange={setAvailabilities}
             />
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
