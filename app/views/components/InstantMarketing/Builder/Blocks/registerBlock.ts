@@ -1,6 +1,7 @@
 import { Editor } from 'grapesjs'
 
-import { BlockOptions, TemplateBlock } from './types'
+import { BlockOptions, TemplateBlockOptions } from './types'
+import { isDefaultBlocksDisabled } from './utils'
 
 const domParser = new DOMParser()
 
@@ -14,12 +15,21 @@ export function registerBlock(
     icon,
     adaptive = false
   }: BlockOptions,
-  templateBlock?: TemplateBlock
+  templateBlockOptions?: TemplateBlockOptions
 ): void {
-  const document = domParser.parseFromString(
-    templateBlock?.template || template,
-    'text/html'
-  )
+  const templateBlock = templateBlockOptions?.blocks[blockName]
+  const blockCategory = templateBlock?.category || category
+
+  if (
+    templateBlockOptions &&
+    isDefaultBlocksDisabled(templateBlockOptions, blockCategory)
+  ) {
+    return
+  }
+
+  // I don't use templateBlock?.template || template because there is
+  // a similar logic on the block file
+  const document = domParser.parseFromString(template, 'text/html')
   const { tagName } = document.body.children[0]
 
   const elementName =
@@ -30,7 +40,7 @@ export function registerBlock(
       : tagName
 
   editor.BlockManager.add(blockName, {
-    category: templateBlock?.category || category,
+    category: blockCategory,
     label:
       templateBlock?.icon || icon
         ? `<div style="background-image:url(${templateBlock?.icon || icon});">${

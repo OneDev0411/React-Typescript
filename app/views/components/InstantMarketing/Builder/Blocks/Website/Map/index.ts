@@ -18,7 +18,7 @@ import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
 import script, { MapInitEventType } from './script'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const typeEmbedMap = 'embed-map'
@@ -37,7 +37,7 @@ interface MapBlock {
 export default function registerMapBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { embedMapClassNames, onMapDrop, onMapDoubleClick }: MapBlockOptions
 ): MapBlock {
   const ComponentModel = editor.DomComponents.getType('default')!.model
@@ -193,7 +193,8 @@ export default function registerMapBlock(
   })
 
   const mapBlocks = {
-    [embedMapBlockName]: templateBlocks[embedMapBlockName]?.template || template
+    [embedMapBlockName]:
+      templateBlockOptions.blocks[embedMapBlockName]?.template || template
   }
 
   registerBlock(
@@ -205,14 +206,14 @@ export default function registerMapBlock(
       blockName: embedMapBlockName,
       template: mapBlocks[embedMapBlockName]
     },
-    templateBlocks[embedMapBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Map',
     mapBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(
