@@ -75,10 +75,9 @@ export function ExportDeals(props) {
             ],
             project: {
               full_address: 'Address',
-              seller_agent: 'Agent',
+              agent: 'Agent',
               list_price: 'List Price',
-              office: 'Office',
-              sellers: 'Sellers'
+              office: 'Office'
             },
             order: 'list_date',
             title: 'New Listings',
