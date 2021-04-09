@@ -113,12 +113,10 @@ export function ExportDeals(props) {
             ],
             project: {
               title: 'Address',
-              buyer_agent: 'Buyer Agent',
+              agent: 'Agent',
               office: 'Office',
               sales_price: 'Sales Price',
               closing_date: 'Closing Date',
-              seller_agent: 'Seller Agent',
-              buyers: 'Buyers'
             },
             order: 'contract_date',
             title: 'New Offers',
