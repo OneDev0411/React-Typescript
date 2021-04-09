@@ -13,7 +13,14 @@
 // Here is the source which we took these: https://github.com/Rottohawkins/DefinitelyTyped/blob/feature/grapesjs/types/grapesjs/index.d.ts
 
 declare module 'grapesjs' {
-  import { Collection, Model } from 'backbone'
+  import { Collection } from 'backbone'
+
+  export interface Model extends Backbone.Model {
+    getAttributes(): any
+    components(): Model[]
+    find(query: string): Model[]
+    setStyle(style: object)
+  }
 
   export interface Editor {
     $: Function
@@ -45,7 +52,7 @@ declare module 'grapesjs' {
     getCss(opts: any): string
     getJs(opts: any): string
     getComponents(): Array<object>
-    getWrapper(): object
+    getWrapper(): Model
     setComponents(components: Array<object>): Editor
     addComponents(components: Array<object>): Array<object>
     getStyle(): object
