@@ -67,6 +67,11 @@ import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { registerToolbarButtons } from './toolbar'
+import {
+  makeParentDependentsHidden,
+  makeParentDependentsVisible,
+  removeDirectDependents
+} from './utils/dependent-components'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -236,22 +241,27 @@ class Builder extends React.Component {
      */
     let model = view.model
 
-    const hide = (rte) => {
+    const hide = rte => {
       const name = rte.name
       const top = document.querySelector(`#cke_${name}`)
-      if (!top)
+
+      if (!top) {
         return false
+      }
 
       top.style.display = 'none'
+
       return true
     }
+
     do {
       if (model.attributes.attributes.rte === 'disable') {
-
-        if (!hide(rte))
+        if (!hide(rte)) {
           rte.once('instanceReady', event => {
             hide(event.editor)
           })
+        }
+
         break
       }
       // eslint-disable-next-line no-cond-assign
@@ -392,6 +402,8 @@ class Builder extends React.Component {
 
     this.setupImageDoubleClickHandler()
 
+    this.setupDependentComponents()
+
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
     })
@@ -526,6 +538,37 @@ class Builder extends React.Component {
       templateBlocks,
       blocksOptions
     )
+  }
+
+  setupDependentComponents = () => {
+    this.editor.on('component:remove', model => {
+      // Remove the direct dependent models
+      removeDirectDependents(this.editor, model)
+
+      // Hide the parent dependents if this model is the last children
+      makeParentDependentsHidden(this.editor, model.parent())
+    })
+
+    this.editor.on('component:mount', model => {
+      makeParentDependentsVisible(this.editor, model.parent())
+    })
+
+    let dragStartParentModel = null
+
+    this.editor.on('component:drag:start', event => {
+      dragStartParentModel = event.parent
+    })
+
+    this.editor.on('component:drag:end', event => {
+      if (event.parent !== dragStartParentModel) {
+        makeParentDependentsHidden(this.editor, dragStartParentModel)
+
+        // We don't need the below line because the mount event happens on dropping
+        // makeParentDependentsVisible(this.editor, event.parent)
+      }
+
+      dragStartParentModel = null
+    })
   }
 
   openCarouselDrawer = model => {
