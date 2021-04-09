@@ -1,26 +1,26 @@
-import React from 'react'
 import { Field } from 'react-final-form'
 import { Grid, Box } from '@material-ui/core'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import uniq from 'lodash/uniq'
 
 interface Props {
   fieldTitle: string
   fieldName: string
+  brandPropertyTypes: IDealPropertyType[]
 }
 
-function AvailabilityFields({ fieldTitle, fieldName }: Props) {
-  const items = [
+function AvailabilityFields({
+  fieldTitle,
+  fieldName,
+  brandPropertyTypes
+}: Props) {
+  const items = uniq([
     'Buying',
     'Selling',
-    'Resale',
-    'New Home',
-    'Lot / Land',
-    'Residential Lease',
-    'Commercial Sale',
-    'Commercial Lease',
+    ...brandPropertyTypes.map(propertyType => propertyType.label),
     'Active Offer'
-  ]
+  ])
 
   return (
     <Grid container alignItems="flex-start" spacing={1}>
@@ -30,14 +30,15 @@ function AvailabilityFields({ fieldTitle, fieldName }: Props) {
       <Grid item xs={9}>
         <Grid container spacing={1}>
           <Grid container alignItems="center" item xs={12}>
-            {items.map(i => (
-              <Grid item xs={4} key={i}>
+            {items.map(label => (
+              <Grid item xs={4} key={label}>
                 <Field
                   name={fieldName}
                   type="checkbox"
-                  value={i}
+                  value={label}
                   render={({ input }) => (
                     <FormControlLabel
+                      label={label}
                       control={
                         <Checkbox
                           color="primary"
@@ -45,7 +46,6 @@ function AvailabilityFields({ fieldTitle, fieldName }: Props) {
                           onChange={input.onChange}
                         />
                       }
-                      label={i}
                     />
                   )}
                 />

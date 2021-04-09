@@ -11,6 +11,7 @@ import AvailabilityFields from './Fields/Availability'
 
 interface Props {
   isOpen: boolean
+  brandPropertyTypes: IDealPropertyType[]
   onClose: () => void
   onSubmit: (contextData: IDealBrandContext, contextId?: UUID) => Promise<any>
   context: IDealBrandContext | null
@@ -22,7 +23,8 @@ function NewContextModal({
   onClose,
   onSubmit,
   context,
-  section
+  section,
+  brandPropertyTypes
 }: Props) {
   const classes = useStyles()
   const baseInitialValues: object = {
@@ -64,6 +66,7 @@ function NewContextModal({
                 <AvailabilityFields
                   fieldTitle="Mandatory in ..."
                   fieldName="required"
+                  brandPropertyTypes={brandPropertyTypes}
                 />
                 <Box my={4}>
                   <Divider />
@@ -71,6 +74,7 @@ function NewContextModal({
                 <AvailabilityFields
                   fieldTitle="Optional in ..."
                   fieldName="optional"
+                  brandPropertyTypes={brandPropertyTypes}
                 />
               </Box>
               <Box className={classes.modalFooter}>

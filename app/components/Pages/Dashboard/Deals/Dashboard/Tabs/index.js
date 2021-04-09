@@ -5,7 +5,6 @@ import { Tooltip } from '@material-ui/core'
 import { Container, NavBar, NavItem, TabContent } from './styled'
 
 import FoldersPane from './Panes/Folders'
-import EventsPane from './Panes/Events'
 import MarketingPane from './Panes/Marketing'
 import MediaManagerPane from './Panes/MediaManager'
 
@@ -24,12 +23,6 @@ export default class Tabs extends React.Component {
       label: 'Photos',
       isDisabled: () => false,
       render: props => <MediaManagerPane {...props} />
-    },
-    {
-      id: 'events',
-      label: 'Events',
-      isDisabled: () => false,
-      render: props => <EventsPane {...props} />
     },
     {
       id: 'marketing',

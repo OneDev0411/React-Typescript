@@ -22,6 +22,7 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
     setStatuses(list)
   }, [dealId])
 
+
   return deal
     ? statuses.filter(status => {
         if (deal.deal_type === 'Selling' && !status.is_active) {

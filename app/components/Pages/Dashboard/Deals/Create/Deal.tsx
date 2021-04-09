@@ -72,9 +72,9 @@ function CreateDeal({ router, route }: Props) {
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
   const propertyTypeId = watch('property_type')
   const enderType = watch('ender_type')
-  const propertyType = brandPropertyTypes
-    ? brandPropertyTypes.find(({ id }) => id === propertyTypeId)
-    : propertyTypeId
+  const propertyType = brandPropertyTypes.find(
+    ({ id }) => id === propertyTypeId
+  )
 
   useEffect(() => {
     if (dealId) {
@@ -123,7 +123,7 @@ function CreateDeal({ router, route }: Props) {
 
     const newDeal: IDeal = await Deal.create(user, {
       brand: agent!.brand,
-      property_type: propertyType,
+      property_type: propertyType?.id,
       deal_type: dealType,
       is_draft: true
     })

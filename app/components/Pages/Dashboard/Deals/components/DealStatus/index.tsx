@@ -37,7 +37,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const classes = useStyles()
 
   const [isSaving, setIsSaving] = useState(false)
-  const statuses = useDealStatuses(deal.id)
+  const statuses = useDealStatuses(deal)
 
   const dispatch = useDispatch()
   const checklists = useSelector(({ deals }: IAppState) =>
@@ -75,14 +75,6 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     // set state
     setIsSaving(false)
-  }
-
-  const getDealType = (): IDealType => {
-    if (deal.has_active_offer) {
-      return 'Buying'
-    }
-
-    return deal.deal_type
   }
 
   /**
@@ -128,30 +120,24 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
       }}
       renderMenu={({ close }) => (
         <div>
-          {statuses
-            .filter(
-              status =>
-                status.deal_types.includes(getDealType()) &&
-                status.property_types.includes(deal.property_type)
-            )
-            .map((item, index) => (
-              <MenuItem
-                key={index}
-                value={index}
-                onClick={() => {
-                  close()
-                  updateStatus(item)
+          {statuses.map((item, index) => (
+            <MenuItem
+              key={index}
+              value={index}
+              onClick={() => {
+                close()
+                updateStatus(item)
+              }}
+            >
+              <span
+                className={classes.bullet}
+                style={{
+                  backgroundColor: getStatusColorClass(item.label)
                 }}
-              >
-                <span
-                  className={classes.bullet}
-                  style={{
-                    backgroundColor: getStatusColorClass(item.label)
-                  }}
-                />
-                {item.label}
-              </MenuItem>
-            ))}
+              />
+              {item.label}
+            </MenuItem>
+          ))}
         </div>
       )}
     />

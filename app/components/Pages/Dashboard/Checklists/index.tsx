@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
@@ -30,6 +30,8 @@ interface Props extends RouteComponentProps<any, {}> {
 export function ChecklistsPage({ location }: Props) {
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
+
+  const [isFormOpen, setIsFormOpen] = useState(false)
 
   const user = useSelector(selectUser)
 
@@ -66,15 +68,16 @@ export function ChecklistsPage({ location }: Props) {
     }
   }, [propertyTypeId, propertyTypes])
 
-  console.log(propertyTypes)
-
   return (
     <Acl.Admin fallbackUrl="/dashboard/mls">
       <Helmet>
         <title>Checklists</title>
       </Helmet>
       <Container isOpen>
-        <ChecklistsSidenav propertyTypes={propertyTypes} />
+        <ChecklistsSidenav
+          propertyTypes={propertyTypes}
+          onClickNewProperty={() => setIsFormOpen(true)}
+        />
         <Content isSideMenuOpen>
           <Box m={3}>
             <PageTabs
@@ -136,7 +139,10 @@ export function ChecklistsPage({ location }: Props) {
           </Box>
         </Content>
 
-        <PropertyTypeForm />
+        <PropertyTypeForm
+          isOpen={isFormOpen}
+          onClose={() => setIsFormOpen(false)}
+        />
       </Container>
     </Acl.Admin>
   )

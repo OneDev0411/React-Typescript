@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Dialog,
@@ -15,25 +15,52 @@ import {
   Checkbox,
   FormControlLabel
 } from '@material-ui/core'
-
+import { useForm, Controller } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { mdiClose } from '@mdi/js'
 
+import { selectUser } from 'selectors/user'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import {
+  createPropertyType,
+  PropertyTypeData
+} from 'models/property-types/create-property-type'
+import { getActiveTeamId } from 'utils/user-teams'
 
-export function PropertyTypeForm() {
+interface Props {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function PropertyTypeForm({ isOpen, onClose }: Props) {
   const [isSaving, setIsSaving] = useState(false)
+  const user = useSelector(selectUser)
 
-  const handleClose = () => {}
+  const { control } = useForm()
+
+  const handleClose = () => {
+    onClose()
+  }
 
   const handleSave = () => {
     setIsSaving(true)
+
+    try {
+      const data = control.getValues() as PropertyTypeData
+
+      createPropertyType(getActiveTeamId(user)!, data)
+    } catch (e) {
+      console.log(e)
+    }
+
+    setIsSaving(false)
   }
 
   return (
-    <Dialog open fullWidth maxWidth="sm" onClose={handleClose}>
+    <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={handleClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          Add New Property Type{' '}
+          Add New Property Type
           <IconButton onClick={handleClose}>
             <SvgIcon path={mdiClose} />
           </IconButton>
@@ -49,28 +76,57 @@ export function PropertyTypeForm() {
           spacing={2}
         >
           <Grid item xs={12}>
-            <TextField label="Property Name" variant="outlined" fullWidth />
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              render={({ onChange, value }) => (
+                <TextField
+                  fullWidth
+                  label="Property Name"
+                  variant="outlined"
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+            />
           </Grid>
 
           <Grid item xs={12}>
-            <Select
-              value="Selling"
-              fullWidth
-              variant="outlined"
-              onChange={() => {}}
-            >
-              <MenuItem value="Selling">Listing</MenuItem>
-              <MenuItem value="Buying">Contract</MenuItem>
-              <MenuItem value="Offer">Offer</MenuItem>
-            </Select>
+            <Controller
+              name="type"
+              control={control}
+              defaultValue="Selling"
+              render={({ onChange, value }) => (
+                <Select
+                  fullWidth
+                  value={value}
+                  variant="outlined"
+                  onChange={onChange}
+                >
+                  <MenuItem value="Selling">Listing</MenuItem>
+                  <MenuItem value="Buying">Contract</MenuItem>
+                  <MenuItem value="Offer">Offer</MenuItem>
+                </Select>
+              )}
+            />
           </Grid>
 
           <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox checked={false} onChange={() => {}} name="is_lease" />
-              }
-              label="Lease Property"
+            <Controller
+              name="is_lease"
+              control={control}
+              render={({ onChange, value = false }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={value}
+                      onChange={e => onChange(e.target.checked)}
+                    />
+                  }
+                  label="Lease Property"
+                />
+              )}
             />
           </Grid>
         </Grid>

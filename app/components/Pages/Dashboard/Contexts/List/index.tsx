@@ -14,6 +14,7 @@ import createNewContext from 'models/Deal/context/create-context'
 import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
 import { selectExactContextsByBrand } from 'reducers/deals/contexts'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
 import PageHeader from 'components/PageHeader'
@@ -42,6 +43,8 @@ function DealContext({ brandId, isFetching, list }: Props) {
   useEffect(() => {
     dispatch(getContextsByBrand(brandId))
   }, [brandId, dispatch])
+
+  const brandPropertyTypes = useBrandPropertyTypes(brandId)
 
   async function contextFormHandler(
     contextData: IDealBrandContext,
@@ -139,6 +142,8 @@ function DealContext({ brandId, isFetching, list }: Props) {
       ))
   }
 
+  console.log('>>>>', selectedContext, brandId)
+
   return (
     <>
       <Helmet>
@@ -154,6 +159,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
         isOpen={isModalOpen}
         section={selectedSection}
         context={selectedContext}
+        brandPropertyTypes={brandPropertyTypes}
         onClose={() => {
           setIsModalOpen(false)
           setSelectedContext(null)

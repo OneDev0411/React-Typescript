@@ -70,10 +70,10 @@ export function DealClient({
   const getSearchInputPlaceholder = () => {
     const type =
       side === 'Selling'
-        ? propertyType?.includes('Lease')
+        ? propertyType?.is_lease
           ? 'Landlord'
           : 'Seller'
-        : propertyType?.includes('Lease')
+        : propertyType?.is_lease
         ? 'Tenant'
         : 'Buyer'
 
