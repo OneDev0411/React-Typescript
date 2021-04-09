@@ -12,7 +12,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import template from './template.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
 import { adaptTemplates } from '../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const blockName = 'rechat-image'
@@ -28,11 +28,11 @@ interface ImageBlock {
 export default function registerImageBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
 ): ImageBlock {
   const imageBlocks = {
-    [blockName]: templateBlocks[blockName]?.template || template
+    [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }
 
   registerBlock(
@@ -45,14 +45,14 @@ export default function registerImageBlock(
       template,
       adaptive: true
     },
-    templateBlocks[blockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Image',
     imageBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

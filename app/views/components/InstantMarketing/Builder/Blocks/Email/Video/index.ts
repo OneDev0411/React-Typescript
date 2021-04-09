@@ -11,7 +11,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 
 import template from './template.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const blockName = 'rechat-video'
@@ -27,26 +27,30 @@ interface VideoBlock {
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
 ): VideoBlock {
   const videoBlocks = {
-    [blockName]: templateBlocks[blockName]?.template || template
+    [blockName]: templateBlockOptions.blocks[blockName]?.template || template
   }
 
-  registerBlock(editor, {
-    label: 'Video',
-    icon: VideoIcon,
-    category: BASICS_BLOCK_CATEGORY,
-    blockName,
-    template: videoBlocks[blockName]
-  })
+  registerBlock(
+    editor,
+    {
+      label: 'Video',
+      icon: VideoIcon,
+      category: BASICS_BLOCK_CATEGORY,
+      blockName,
+      template: videoBlocks[blockName]
+    },
+    templateBlockOptions
+  )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Video',
     videoBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(
