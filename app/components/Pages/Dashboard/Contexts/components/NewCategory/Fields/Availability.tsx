@@ -5,7 +5,8 @@ import {
   makeStyles,
   Theme,
   Typography,
-  ButtonProps
+  ButtonProps,
+  useTheme
 } from '@material-ui/core'
 import cn from 'classnames'
 import { Field } from 'react-final-form'
@@ -31,6 +32,7 @@ const useStyles = makeStyles(
 
 export function AvailabilityFields({ context, brandPropertyTypes }: Props) {
   const classes = useStyles()
+  const theme = useTheme<Theme>()
 
   const getNextState = (current: boolean | null | ''): boolean | null => {
     if (current === null || current === '') {
@@ -56,16 +58,16 @@ export function AvailabilityFields({ context, brandPropertyTypes }: Props) {
     return 'Not Applicable'
   }
 
-  const getButtonColor = (status: boolean | null): ButtonProps['color'] => {
+  const getButtonColor = (status: boolean | null): string => {
     if (status === true) {
-      return 'primary'
+      return theme.palette.error.main
     }
 
     if (status === false) {
-      return 'secondary'
+      return theme.palette.secondary.main
     }
 
-    return 'default'
+    return theme.palette.common.black
   }
 
   const getDefaultValue = (checklist: IBrandChecklist) => {
@@ -125,7 +127,9 @@ export function AvailabilityFields({ context, brandPropertyTypes }: Props) {
                   defaultValue={getDefaultValue(checklist)}
                   render={({ input }) => (
                     <Button
-                      color={getButtonColor(input.value)}
+                      style={{
+                        color: getButtonColor(input.value)
+                      }}
                       onClick={() => input.onChange(getNextState(input.value))}
                     >
                       {getButtonLabel(input.value)}
