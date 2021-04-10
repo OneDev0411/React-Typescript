@@ -80,6 +80,7 @@ export function ChecklistsPage({ location }: Props) {
           propertyTypes={propertyTypes}
           onClickNewProperty={() => setIsFormOpen(true)}
         />
+
         <Content isSideMenuOpen>
           <Box m={3}>
             <PageTabs
