@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getBrandStatuses } from 'models/Deal/status/get-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
 
 export function useStatusList(deal: IDeal | null): IDealStatus[] {
@@ -17,11 +16,10 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
       return
     }
 
-    const list = await getBrandStatuses(getActiveTeamId(user)!)
+    const list = [] // await getBrandStatuses(getActiveTeamId(user)!)
 
     setStatuses(list)
   }, [dealId])
-
 
   return deal
     ? statuses.filter(status => {

@@ -7,7 +7,7 @@ import { Modal, ModalHeader } from 'components/Modal'
 import useStyles from './styles'
 import DetailsFiels from './Fields/Details'
 import OptionFields from './Fields/Options'
-import AvailabilityFields from './Fields/Availability'
+import { AvailabilityFields } from './Fields/Availability'
 
 interface Props {
   isOpen: boolean
@@ -64,16 +64,7 @@ function NewContextModal({
                   <Divider />
                 </Box>
                 <AvailabilityFields
-                  fieldTitle="Mandatory in ..."
-                  fieldName="required"
-                  brandPropertyTypes={brandPropertyTypes}
-                />
-                <Box my={4}>
-                  <Divider />
-                </Box>
-                <AvailabilityFields
-                  fieldTitle="Optional in ..."
-                  fieldName="optional"
+                  context={context}
                   brandPropertyTypes={brandPropertyTypes}
                 />
               </Box>

@@ -28,7 +28,13 @@ declare interface IDealBrandContext {
     placeholder: string
     mask: string[]
   }
+  checklists: IDealBrandContextChecklist[]
   validate: (context: IDealBrandContext, value: unknown) => boolean
+}
+
+declare interface IDealBrandContextChecklist {
+  checklist: UUID
+  is_required: boolean | null
 }
 
 declare interface IDealContext {

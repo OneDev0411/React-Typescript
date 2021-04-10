@@ -10,7 +10,7 @@ export default async function editContext(
   data: IDealBrandContext
 ): Promise<IDealBrandContext> {
   if (!contextId) {
-    throw new Error('unvalid context id')
+    throw new Error('invalid context id')
   }
 
   const modifiedContext: IDealBrandContext = {

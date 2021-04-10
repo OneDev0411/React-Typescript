@@ -44,20 +44,38 @@ function DealContext({ brandId, isFetching, list }: Props) {
     dispatch(getContextsByBrand(brandId))
   }, [brandId, dispatch])
 
-  const brandPropertyTypes = useBrandPropertyTypes(brandId)
+  const {
+    propertyTypes: brandPropertyTypes,
+    reload: reloadBrandPropertyTypes
+  } = useBrandPropertyTypes(brandId)
 
   async function contextFormHandler(
-    contextData: IDealBrandContext,
+    contextData: IDealBrandContext & {
+      checklists: Record<UUID, boolean>
+    },
     contextId?: UUID
   ) {
     try {
       const editMode: boolean = !!(contextId && selectedContext)
       let context: IDealBrandContext
 
+      const checklists = Object.entries(contextData.checklists)
+        .filter(([_, is_required]) => is_required !== null)
+        .map(([checklist, is_required]) => ({
+          checklist,
+          is_required
+        }))
+
       if (editMode) {
-        context = await editContext(brandId, contextId, contextData)
+        context = await editContext(brandId, contextId, {
+          ...contextData,
+          checklists
+        })
       } else {
-        context = await createNewContext(brandId, contextData)
+        context = await createNewContext(brandId, {
+          ...contextData,
+          checklists
+        })
       }
 
       if (context) {
@@ -73,6 +91,8 @@ function DealContext({ brandId, isFetching, list }: Props) {
         if (editMode) {
           setSelectedContext(null)
         }
+
+        reloadBrandPropertyTypes()
       }
     } catch (err) {
       if (err.status === 409) {
@@ -141,8 +161,6 @@ function DealContext({ brandId, isFetching, list }: Props) {
         />
       ))
   }
-
-  console.log('>>>>', selectedContext, brandId)
 
   return (
     <>

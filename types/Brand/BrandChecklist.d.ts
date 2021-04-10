@@ -9,9 +9,9 @@ declare interface IBrandChecklist extends IModel<'brand_checklist'> {
   property_type: string // it's actually enum
   tab_name: string
   tasks: IBrandChecklistTask[] | null
-  optional_contexts: any // TODO
-  required_contexts: any // TODO
-  statuses: any // TODO
+  optional_contexts: IDealBrandContext[]
+  required_contexts: IDealBrandContext[]
+  statuses: IDealStatus[]
 }
 
 declare interface IBrandChecklistTask {

@@ -1,19 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { getBrandPropertyTypes } from 'models/brand/get-property-types'
 
-export function useBrandPropertyTypes(brandId: UUID): IDealPropertyType[] {
+export function useBrandPropertyTypes(
+  brandId: UUID
+): {
+  propertyTypes: IDealPropertyType[]
+  reload: () => void
+} {
   const [propertyTypes, setPropertyTypes] = useState<IDealPropertyType[]>([])
 
-  useEffect(() => {
-    const load = async () => {
-      const propertyTypes = await getBrandPropertyTypes(brandId)
+  const load = useCallback(async () => {
+    const propertyTypes = await getBrandPropertyTypes(brandId)
 
-      setPropertyTypes(propertyTypes)
-    }
-
-    load()
+    setPropertyTypes(propertyTypes)
   }, [brandId])
 
-  return propertyTypes
+  useEffect(() => {
+    load()
+  }, [brandId, load])
+
+  return {
+    propertyTypes,
+    reload: load
+  }
 }
