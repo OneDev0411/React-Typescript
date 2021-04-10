@@ -41,7 +41,7 @@ export function PropertyType(props: Props) {
               key={index}
               onClick={() => {
                 close()
-                handleChange(item.label)
+                handleChange(item.id)
               }}
             >
               {item.label}
