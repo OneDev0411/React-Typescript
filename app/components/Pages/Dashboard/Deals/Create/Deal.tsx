@@ -67,7 +67,7 @@ function CreateDeal({ router, route }: Props) {
     dealId ? deals.list[dealId] : null
   )
 
-  const brandPropertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
+  const { brandPropertyTypes } = useBrandPropertyTypes(getActiveTeamId(user)!)
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
   const propertyTypeId = watch('property_type')

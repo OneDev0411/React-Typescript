@@ -51,7 +51,9 @@ export function ChecklistsPage({ location }: Props) {
     reorderTasks
   } = useChecklistsPage(activeTeamId)
 
-  const propertyTypes = useBrandPropertyTypes(activeTeamId!)
+  const { propertyTypes, reload: reloadPropertyTypes } = useBrandPropertyTypes(
+    activeTeamId!
+  )
   const propertyType = propertyTypes.find(item => item.id === propertyTypeId)
 
   const filteredChecklists = propertyType?.checklists?.filter(
@@ -141,6 +143,10 @@ export function ChecklistsPage({ location }: Props) {
 
         <PropertyTypeForm
           isOpen={isFormOpen}
+          onCreate={() => {
+            reloadPropertyTypes()
+            setIsFormOpen(false)
+          }}
           onClose={() => setIsFormOpen(false)}
         />
       </Container>

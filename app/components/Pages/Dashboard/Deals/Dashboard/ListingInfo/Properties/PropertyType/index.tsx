@@ -17,7 +17,7 @@ export function PropertyType(props: Props) {
   const dispatch = useDispatch()
 
   const user = useSelector(selectUser)
-  const propertyTypes = useBrandPropertyTypes(getActiveTeamId(user)!)
+  const { propertyTypes } = useBrandPropertyTypes(getActiveTeamId(user)!)
 
   const handleChange = async (value: string) => {
     try {

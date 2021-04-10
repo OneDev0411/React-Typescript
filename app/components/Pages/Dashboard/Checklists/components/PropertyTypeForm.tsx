@@ -10,8 +10,6 @@ import {
   Box,
   Grid,
   TextField,
-  Select,
-  MenuItem,
   Checkbox,
   FormControlLabel
 } from '@material-ui/core'
@@ -29,10 +27,11 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {
   isOpen: boolean
+  onCreate: () => void
   onClose: () => void
 }
 
-export function PropertyTypeForm({ isOpen, onClose }: Props) {
+export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const user = useSelector(selectUser)
 
@@ -42,13 +41,15 @@ export function PropertyTypeForm({ isOpen, onClose }: Props) {
     onClose()
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true)
 
     try {
       const data = control.getValues() as PropertyTypeData
 
-      createPropertyType(getActiveTeamId(user)!, data)
+      await createPropertyType(getActiveTeamId(user)!, data)
+
+      onCreate()
     } catch (e) {
       console.log(e)
     }
@@ -77,9 +78,8 @@ export function PropertyTypeForm({ isOpen, onClose }: Props) {
         >
           <Grid item xs={12}>
             <Controller
-              name="name"
+              name="label"
               control={control}
-              defaultValue=""
               render={({ onChange, value }) => (
                 <TextField
                   fullWidth
@@ -88,26 +88,6 @@ export function PropertyTypeForm({ isOpen, onClose }: Props) {
                   onChange={onChange}
                   value={value}
                 />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Controller
-              name="type"
-              control={control}
-              defaultValue="Selling"
-              render={({ onChange, value }) => (
-                <Select
-                  fullWidth
-                  value={value}
-                  variant="outlined"
-                  onChange={onChange}
-                >
-                  <MenuItem value="Selling">Listing</MenuItem>
-                  <MenuItem value="Buying">Contract</MenuItem>
-                  <MenuItem value="Offer">Offer</MenuItem>
-                </Select>
               )}
             />
           </Grid>

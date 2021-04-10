@@ -1,8 +1,7 @@
 import Fetch from 'services/fetch'
 
 export interface PropertyTypeData {
-  name: string
-  type: IBrandChecklist['checklist_type']
+  label: string
   is_lease: boolean
 }
 
