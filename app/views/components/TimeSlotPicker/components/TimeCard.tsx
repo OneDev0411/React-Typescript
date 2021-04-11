@@ -80,7 +80,7 @@ export default function TimeCard({
             justify="center"
             className={classes.cardContentContainer}
           >
-            <Grid item>
+            <Grid item xs={12}>
               <Typography variant="body2">
                 {getFormattedTimeOfTheDayBySeconds(time)}
               </Typography>

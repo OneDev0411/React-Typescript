@@ -38,24 +38,6 @@ const useStyles = makeStyles(
     cardActionArea: {
       height: '100%',
       padding: theme.spacing(1, 0)
-    },
-    weekday: {
-      ...theme.typography.caption
-    },
-    weekdayActive: {
-      ...theme.typography.subtitle3
-    },
-    dateNumber: {
-      ...theme.typography.body1
-    },
-    dateNumberActive: {
-      ...theme.typography.h6
-    },
-    monthName: {
-      ...theme.typography.caption
-    },
-    monthNameActive: {
-      ...theme.typography.subtitle3
     }
   }),
   {
@@ -98,32 +80,14 @@ export default function DayCard({
             justify="space-between"
             className={classes.cardContentContainer}
           >
-            <Grid item>
-              <Typography
-                className={cn(classes.weekday, {
-                  [classes.weekdayActive]: isActive
-                })}
-              >
-                {getWeekdayName(date)}
-              </Typography>
+            <Grid item xs={12}>
+              <Typography variant="caption">{getWeekdayName(date)}</Typography>
             </Grid>
-            <Grid item>
-              <Typography
-                className={cn(classes.dateNumber, {
-                  [classes.dateNumberActive]: isActive
-                })}
-              >
-                {getDayNumber(date)}
-              </Typography>
+            <Grid item xs={12}>
+              <Typography variant="body1">{getDayNumber(date)}</Typography>
             </Grid>
-            <Grid item>
-              <Typography
-                className={cn(classes.monthName, {
-                  [classes.monthNameActive]: isActive
-                })}
-              >
-                {getMonthName(date)}
-              </Typography>
+            <Grid item xs={12}>
+              <Typography variant="caption">{getMonthName(date)}</Typography>
             </Grid>
           </Grid>
         </CardActionArea>
