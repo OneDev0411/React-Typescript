@@ -184,7 +184,10 @@ export default function Publish({ params }: Props) {
       }
 
       await dispatch(
-        upsertContexts(deal.id, getFormContexts(values, deal, checklists))
+        upsertContexts(
+          deal.id,
+          getFormContexts(values, deal, checklists, deal.deal_type)
+        )
       )
 
       showNotification &&

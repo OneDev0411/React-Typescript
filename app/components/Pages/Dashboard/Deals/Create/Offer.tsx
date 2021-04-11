@@ -21,6 +21,8 @@ import { getLegalFullName } from 'deals/utils/roles'
 
 import { getStatusField } from 'models/Deal/helpers/dynamic-context'
 
+import { getDealChecklists } from 'reducers/deals/checklists'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
@@ -86,6 +88,10 @@ function CreateOffer({ router, route, params }: Props) {
 
   const dealContexts = deal ? getDealContexts(deal, 'Offer') : []
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
   const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
   const isOfficeDoubleEnded =
     watch('context:ender_type') === 'OfficeDoubleEnder'
@@ -132,7 +138,10 @@ function CreateOffer({ router, route, params }: Props) {
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
         dispatch(
-          upsertContexts(deal.id, getFormContexts(values, deal, checklist))
+          upsertContexts(
+            deal.id,
+            getFormContexts(values, deal, checklists, 'Offer')
+          )
         )
       ])
 
