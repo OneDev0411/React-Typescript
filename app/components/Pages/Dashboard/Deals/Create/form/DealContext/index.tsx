@@ -28,6 +28,7 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { getContextInputMask } from 'deals/utils/get-context-mask'
 
 import { getField } from 'models/Deal/helpers/context'
+import { validate } from 'models/Deal/helpers/dynamic-context'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -83,7 +84,7 @@ export function DealContext({
   }, [defaultValue])
 
   useEffect(() => {
-    if (inputValue && concurrentMode && context.validate(context, inputValue)) {
+    if (inputValue && concurrentMode && validate(context, inputValue)) {
       handleSave()
     }
 
@@ -141,7 +142,6 @@ export function DealContext({
         console.log(e)
       }
     } else {
-      console.log(`Change ${context.key} To ${value}`)
       onChange?.(value)
     }
 
@@ -201,7 +201,7 @@ export function DealContext({
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!inputValue || !context.validate(context, inputValue)}
+                disabled={!inputValue || !validate(context, inputValue)}
                 className={classes.saveButton}
                 onClick={() => handleSave()}
               >

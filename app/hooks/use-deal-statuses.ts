@@ -14,6 +14,6 @@ export function useDealStatuses(deal: IDeal) {
       ({ id }) => id === origin
     )
 
-    return brandChecklist!.statuses || []
+    return brandChecklist?.statuses || []
   })
 }

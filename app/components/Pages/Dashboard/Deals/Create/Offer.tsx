@@ -84,9 +84,7 @@ function CreateOffer({ router, route, params }: Props) {
   const roles = useDealRoles(deal)
   const statusContextKey = getStatusField(deal)
 
-  const dealContexts = deal
-    ? getDealContexts(deal, 'Buying', deal.property_type, true)
-    : []
+  const dealContexts = deal ? getDealContexts(deal, 'Offer') : []
 
   const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
   const isOfficeDoubleEnded =

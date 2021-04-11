@@ -27,7 +27,7 @@ import type { IDealFormRole } from '../../types'
 interface Props {
   title: React.ReactNode
   side: IDealType
-  propertyType: IDealPropertyType
+  propertyType?: IDealPropertyType
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
