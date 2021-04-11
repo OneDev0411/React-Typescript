@@ -1,13 +1,13 @@
 export function getDealContexts(
   deal: IDeal,
-  dealType?: IDealType
+  checklistType?: IBrandChecklist['checklist_type']
 ): IDealBrandContext[] {
-  if (!deal || !dealType) {
+  if (!deal || !checklistType) {
     return []
   }
 
   const checklist = deal.property_type.checklists?.find(
-    checklist => checklist.checklist_type === dealType
+    checklist => checklist.checklist_type === checklistType
   )
 
   return checklist?.required_contexts || []

@@ -35,6 +35,8 @@ import { createAddressContext } from 'deals/utils/create-address-context'
 
 import { getStatusField } from 'models/Deal/helpers/dynamic-context'
 
+import { getDealChecklists } from 'reducers/deals/checklists'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
 
@@ -70,15 +72,18 @@ export default function Publish({ params }: Props) {
 
   const { control, watch } = useForm()
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const [isSaving, setIsSaving] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
-
-  const dispatch = useDispatch()
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
+
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
-  const deal = useSelector<IAppState, IDeal>(({ deals }) =>
+  const deal: IDeal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
+  )
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
   )
 
   const statusList = useStatusList(deal)
@@ -178,7 +183,9 @@ export default function Publish({ params }: Props) {
         await dispatch(createRoles(deal.id, roles))
       }
 
-      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
+      await dispatch(
+        upsertContexts(deal.id, getFormContexts(values, deal, checklists))
+      )
 
       showNotification &&
         dispatch(
