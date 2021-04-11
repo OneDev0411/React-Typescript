@@ -21,7 +21,7 @@ const useStyles = makeStyles(
       cursor: 'pointer'
     },
     cardActive: {
-      border: `2px solid ${theme.palette.primary.main}`
+      boxShadow: `0 0 0 2px ${theme.palette.primary.main}`
     },
     cardDisabled: {
       backgroundColor: theme.palette.action.hover,
@@ -80,7 +80,7 @@ export default function TimeCard({
             justify="center"
             className={classes.cardContentContainer}
           >
-            <Grid item xs={12}>
+            <Grid item>
               <Typography variant="body2">
                 {getFormattedTimeOfTheDayBySeconds(time)}
               </Typography>
