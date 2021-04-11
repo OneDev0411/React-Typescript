@@ -18,7 +18,7 @@ export default class DealSocket extends Socket {
       return true
     }
 
-    const usersFilter = viewAs(this.user)
+    const usersFilter = viewAs(this.user, true)
     const dealUsers = (deal.roles || [])
       .filter(role => role.user !== null)
       .map(role => role.user.id)

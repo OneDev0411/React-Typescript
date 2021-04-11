@@ -25,12 +25,13 @@ import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
-  title: string
+  title: React.ReactNode
   side: IDealType
+  propertyType: IDealPropertyType
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
-  submitButtonLabel?: string
+  concurrentMode?: boolean
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
@@ -38,19 +39,22 @@ export function DealClient({
   side,
   title,
   roles,
+  concurrentMode = false,
+  propertyType,
   predefinedRoles = [],
   skippable = false,
-  submitButtonLabel = 'Continue',
   onChange
 }: Props) {
-  const { deal, user, checklist } = useCreationContext()
+  const { user, checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
   const dispatch = useDispatch()
 
   const allowedRoles = getRoles(side)
-  const clientRoles = roles.filter(client => allowedRoles.includes(client.role))
+  const clientRoles = Array.isArray(roles)
+    ? roles.filter(client => allowedRoles.includes(client.role))
+    : []
   const predefinedClientRoles = predefinedRoles.filter(client =>
     allowedRoles.includes(client.role)
   )
@@ -63,6 +67,19 @@ export function DealClient({
     Nullable<Partial<IDealFormRole>>
   >(null)
 
+  const getSearchInputPlaceholder = () => {
+    const type =
+      side === 'Selling'
+        ? propertyType?.includes('Lease')
+          ? 'Landlord'
+          : 'Seller'
+        : propertyType?.includes('Lease')
+        ? 'Tenant'
+        : 'Buyer'
+
+    return `Type ${clientRoles.length > 0 ? 'Co-' : ''}${type} Name`
+  }
+
   const handleNext = () => {
     if (wizard.currentStep === step) {
       wizard.next()
@@ -70,6 +87,8 @@ export function DealClient({
   }
 
   const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
+    wizard.setStep(step)
+
     if (role.deal) {
       return
     }
@@ -79,7 +98,7 @@ export function DealClient({
 
   const handleDeleteRole = (role: IDealRole) => {
     if (role.deal) {
-      dispatch(deleteRole(deal!.id, role.id))
+      dispatch(deleteRole(role.deal, role.id))
 
       return
     }
@@ -102,7 +121,6 @@ export function DealClient({
             compact
             showSaveContactButton
             user={user}
-            deal={deal}
             checklist={checklist}
             dealSide={side}
             form={selectedRole}
@@ -133,10 +151,13 @@ export function DealClient({
             display: !selectedRole ? 'block' : 'none'
           }}
         >
-          <ContactRoles onSelectRole={setSelectedRole} />
+          <ContactRoles
+            placeholder={getSearchInputPlaceholder()}
+            onSelectRole={setSelectedRole}
+          />
         </Box>
 
-        {!selectedRole && (
+        {!concurrentMode && !selectedRole && (
           <Box
             display="flex"
             alignItems="center"
@@ -162,7 +183,7 @@ export function DealClient({
               disabled={clientRoles.length === 0}
               onClick={handleNext}
             >
-              {clientRoles.length === 0 ? 'Continue ' : submitButtonLabel}
+              Continue
             </Button>
           </Box>
         )}

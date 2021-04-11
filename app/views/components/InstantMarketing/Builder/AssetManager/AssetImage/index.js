@@ -51,6 +51,7 @@ export class AssetImage extends React.Component {
       'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
+      'image-bg': setBg,
       '': setBg
     }
 

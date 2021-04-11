@@ -169,12 +169,12 @@ function PublishWebsite({
         searchPlaceholder="Enter MLS# or an address"
         defaultLists={[
           {
-            title: 'Add from your MLS listings',
-            items: brandListings
-          },
-          {
             title: 'Add from your deals',
             items: dealsList
+          },
+          {
+            title: 'Add from your MLS listings',
+            items: brandListings
           }
         ]}
         onClose={handleListingDrawerClose}
