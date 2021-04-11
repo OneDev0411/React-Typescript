@@ -1,10 +1,7 @@
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
 import { TypographyStyle } from '@material-ui/core/styles/createTypography'
 
-import {
-  ColorPartial,
-  PaletteColorOptions
-} from '@material-ui/core/styles/createPalette'
+import { ColorPartial } from '@material-ui/core/styles/createPalette'
 
 declare module '@material-ui/core/styles/createPalette' {
   interface PaletteColor {

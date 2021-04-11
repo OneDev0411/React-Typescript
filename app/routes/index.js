@@ -85,6 +85,17 @@ const AsyncResetPassword = Load({
 })
 
 /* ==================================== */
+//  Showings Public
+/* ==================================== */
+
+const AsyncBookShowing = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Book' /* webpackChunkName: "book_showing" */
+    )
+})
+
+/* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
 
@@ -743,6 +754,8 @@ export default (
 
       <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
+
+      <Route path="showings/:token/book" component={AsyncBookShowing} />
 
       <Route path="mobile" component={AsyncMobile} />
 
