@@ -1,10 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PageLayout from 'components/GlobalPageLayout'
 import { getActiveTeamId } from 'utils/user-teams'
+import IframeResizer from 'iframe-resizer-react'
 
 const dashboards = {
-  production: '9964058b-c7c3-445a-95d1-b47eac657a87'
+  production: '4aa9824f-d0c5-4e74-8a83-dbe5079c3073',
+  agents: '0385fcae-5261-4154-b29a-93fd4cc29ef5'
 }
 
 export default function Analytics(props: WithRouterProps & StateProps) {
@@ -25,34 +27,22 @@ export default function Analytics(props: WithRouterProps & StateProps) {
     const hash = Array.from(new Uint8Array(crypted))
     const hex = hash.map(b => b.toString(16).padStart(2, '0')).join('')
 
-    const base = `https://metabase.rechat.com/public/dashboard/${dashboards[dashboard]}`
+    const base = `https://rechat.metabaseapp.com/public/dashboard/${dashboards[dashboard]}`
 
     setAnalytics(`${base}?brand=${brand}&token=${hex}#hide_parameters=token,brand&titled=false`)
   }, [user.access_token, brand])
-
-  const frame = useRef()
-
-  const analyticsLoaded = () => {
-    if (!frame.current.contentDocument)
-      return
-
-    // TODO: RESIZE FRAME
-  }
 
   return (
     <PageLayout>
       <PageLayout.Header title="Deals Analytics" />
       <PageLayout.Main>
         { analytics &&
-          <iframe
-            ref={frame}
-            onLoad={ analyticsLoaded }
+          <IframeResizer
             src={analytics}
             frameBorder="0"
             width="100%"
-            height="700"
             allowtransparency>
-          </iframe>
+          </IframeResizer>
         }
       </PageLayout.Main>
     </PageLayout>
