@@ -15,30 +15,39 @@ interface ShowingStepYesNoQuestionProps {
   question: string
   value: Nullable<YesNoAnswer>
   onChange: (value: YesNoAnswer) => void
+  goNext?: boolean
+  yesLabel?: string
+  noLabel?: string
 }
-
-const yesNoOptions: RadioItem<YesNoAnswer>[] = [
-  {
-    label: 'Yes',
-    value: 'Yes'
-  },
-  {
-    label: 'No',
-    value: 'No'
-  }
-]
 
 function ShowingStepYesNoQuestion({
   question,
   value,
-  onChange
+  onChange,
+  goNext = true,
+  yesLabel = 'Yes',
+  noLabel = 'No'
 }: ShowingStepYesNoQuestionProps) {
   const nextStep = useQuestionWizardSmartNext()
 
   const handleChange = (value: YesNoAnswer) => {
     onChange(value)
-    nextStep()
+
+    if (goNext) {
+      nextStep()
+    }
   }
+
+  const yesNoOptions: RadioItem<YesNoAnswer>[] = [
+    {
+      label: yesLabel,
+      value: 'Yes'
+    },
+    {
+      label: noLabel,
+      value: 'No'
+    }
+  ]
 
   return (
     <QuestionSection>
