@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Box, Button, Typography } from '@material-ui/core'
+import React, { useState, useMemo } from 'react'
+import { Box, Button, FormHelperText, Typography } from '@material-ui/core'
 
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
 import { hourToSeconds } from '../../helpers'
-import { findSlotIndexById } from './helpers'
+import { findSlotIndexById, findTimeConflicts } from './helpers'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 interface ShowingAvailabilitiesTimesProps {
@@ -65,23 +65,32 @@ function ShowingAvailabilitiesTimes({
     onChange(newValue)
   }
 
-  // TODO: we have to validate duplicated time slots. Also we need to check them
-  // for time conflicts
+  const timeConflicts = useMemo(() => findTimeConflicts(value), [value])
 
   return (
     <Box>
       <Typography variant="h6">{title}</Typography>
       <Box mt={3}>
-        {value.map(row => (
+        {value.map((row, idx) => (
           <ShowingAvailabilitiesTimesRow
             key={row.id}
             {...row}
             onDelete={handleDelete}
             onChange={handleChange}
             disableDelete={value.length < 2}
+            hasError={
+              timeConflicts &&
+              (idx === timeConflicts.slot1Index ||
+                idx === timeConflicts.slot2Index)
+            }
           />
         ))}
       </Box>
+      {timeConflicts && (
+        <Box mb={1}>
+          <FormHelperText error>The time slots has conflicts</FormHelperText>
+        </Box>
+      )}
       <Box display="flex" justifyContent="space-between" mt={5}>
         <Button variant="outlined" size="small" onClick={handleAdd}>
           + Add hour
@@ -90,7 +99,7 @@ function ShowingAvailabilitiesTimes({
           variant="contained"
           size="small"
           color="primary"
-          disabled={!value.length}
+          disabled={!value.length || !!timeConflicts}
           onClick={nextStep}
         >
           Continue

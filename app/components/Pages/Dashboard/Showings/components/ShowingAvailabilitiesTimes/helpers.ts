@@ -19,7 +19,9 @@ export function humanTimeToTimestamp(time: string): number {
   return parseInt(hours, 10) * 60 * 60 + parseInt(minutes, 10) * 60
 }
 
-export function hasAnyOverlap(slots: IShowingAvailabilitySlot[]) {
+export function findTimeConflicts(
+  slots: IShowingAvailabilitySlot[]
+): { slot1Index: number; slot2Index: number } | false {
   for (let i = 0; i < slots.length; i++) {
     for (let j = i + 1; j < slots.length; j++) {
       const slot1 = slots[i]
@@ -32,7 +34,10 @@ export function hasAnyOverlap(slots: IShowingAvailabilitySlot[]) {
           (slot2.availability[0] >= slot1.availability[0] &&
             slot2.availability[0] < slot1.availability[1])
         ) {
-          return true
+          return {
+            slot1Index: i,
+            slot2Index: j
+          }
         }
       }
     }
