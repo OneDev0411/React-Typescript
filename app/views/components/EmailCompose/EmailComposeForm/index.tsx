@@ -216,6 +216,9 @@ export default function EmailComposeForm<T>({
   }
 
   const handlePreSendAllContactWarning = async (form: EmailFormValues) => {
+    // TMP
+    console.log('handlePreSendAllContactWarning')
+
     const { to = [], bcc = [], cc = [] } = form
     const allRecipient = [...bcc, ...to, ...cc]
     const isSendingToAllContacts = allRecipient.find(
@@ -249,6 +252,9 @@ export default function EmailComposeForm<T>({
   }
 
   const onSubmit = async (form: EmailFormValues) => {
+    // TMP
+    console.log('onSubmit')
+
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
     const uploadingImage = bodyEditor.hasUploadingImage()
 
@@ -287,8 +293,11 @@ export default function EmailComposeForm<T>({
             'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
-          onConfirm: () =>
+          onConfirm: () => {
+            // TMP
+            console.log('no title')
             handlePreSendAllContactWarning(form).then(resolve).catch(reject)
+          }
         })
       })
     }
