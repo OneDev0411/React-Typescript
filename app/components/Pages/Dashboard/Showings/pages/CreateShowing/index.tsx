@@ -19,8 +19,8 @@ import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import ShowingStepAvailabilities from '../../components/ShowingStepAvailabilities'
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
+// import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 import useShowingRole from './use-showing-role'
-import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 
 function CreateShowing() {
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
@@ -82,9 +82,9 @@ function CreateShowing() {
 
   const [availabilities, setAvailabilities] = useShowingAvailabilitiesState()
 
-  const [feedbackTemplate, setFeedbackTemplate] = useState<
-    Nullable<IMarketingTemplateInstance>
-  >(null)
+  // const [feedbackTemplate, setFeedbackTemplate] = useState<
+  //   Nullable<IMarketingTemplateInstance>
+  // >(null)
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -214,10 +214,10 @@ function CreateShowing() {
               value={availabilities}
               onChange={setAvailabilities}
             />
-            <ShowingStepFeedbackTemplate
+            {/* <ShowingStepFeedbackTemplate
               value={feedbackTemplate}
               onChange={setFeedbackTemplate}
-            />
+            /> */}
             <QuestionSection>Sample Next Section</QuestionSection>
           </QuestionWizard>
         </Box>

@@ -77,6 +77,7 @@ function ShowingStepFeedbackTemplate({
           onClose={handleCloseTemplateDialog}
         />
       )}
+      {/* TODO: we need to provide editing email template here */}
     </>
   )
 }
