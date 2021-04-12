@@ -37,9 +37,19 @@ declare interface IDealBrandContextChecklist {
   is_required: boolean | null
 }
 
-declare interface IDealContext {
-  definition: UUID
+declare interface IDealContext extends IModel<'deal_context_item'> {
+  approved_at: string | null
+  approved_by: UUID | null
   checklist: UUID
-  value: unknown
-  approved: boolean
+  created_by: UUID
+  data_type: string // requires better typing
+  date: string | null
+  deal: UUID
+  definition: UUID
+  id: UUID
+  key: string
+  number: number
+  searchable: string
+  source: string
+  text: string
 }

@@ -6,6 +6,10 @@ import ClickOutside from 'react-click-outside'
 
 import Input from 'components/Input'
 import { getContextInputMask } from 'deals/utils/get-context-mask'
+import {
+  getFieldProperties,
+  getFormattedValue
+} from 'models/Deal/helpers/dynamic-context'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 
@@ -14,8 +18,6 @@ import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
 
 import { Loading } from '../components/Loading'
-
-import { ContextField } from '../types'
 
 import {
   Editable as Container,
@@ -28,12 +30,12 @@ import {
 
 interface Props {
   deal: IDeal
-  field: ContextField
+  field: IDealBrandContext
   value: unknown
   isBackOffice: boolean
-  onApprove(field: ContextField): void
-  onChange(field: ContextField, value: unknown): void
-  onDelete(field: ContextField): void
+  onApprove(field: IDealBrandContext): void
+  onChange(field: IDealBrandContext, value: unknown): void
+  onDelete(field: IDealBrandContext): void
 }
 
 const useStyles = makeStyles(() =>
@@ -59,6 +61,8 @@ export function TextField({
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [fieldValue, setFieldValue] = useState<unknown>(value)
   const classes = useStyles()
+
+  const properties = getFieldProperties(field)
 
   const toggleEditing = () => setIsEditing(!isEditing)
 
@@ -109,7 +113,7 @@ export function TextField({
               maxLength={15}
               value={fieldValue}
               mask={getContextInputMask(field)}
-              placeholder={field.properties.placeholder || field.label}
+              placeholder={properties.placeholder || field.label}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
@@ -151,7 +155,7 @@ export function TextField({
         <Item>
           <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
           <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
+            {getFormattedValue(field, value) || <EmptyValue>—</EmptyValue>}
           </ItemValue>
 
           <ItemActions>
@@ -168,7 +172,7 @@ export function TextField({
 
       <ApproveButton
         deal={deal}
-        field={field}
+        context={field}
         isBackOffice={isBackOffice}
         onClick={() => onApprove(field)}
       />

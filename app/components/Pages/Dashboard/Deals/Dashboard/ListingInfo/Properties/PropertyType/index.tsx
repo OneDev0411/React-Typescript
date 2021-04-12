@@ -28,12 +28,12 @@ export function PropertyType(props: Props) {
   }
 
   if (!props.isBackOffice) {
-    return <span>{props.deal.property_type.label}</span>
+    return <span>{props.deal.property_type?.label}</span>
   }
 
   return (
     <BaseDropdown
-      buttonLabel={props.deal.property_type.label}
+      buttonLabel={props.deal.property_type?.label}
       renderMenu={({ close }) => (
         <div>
           {propertyTypes.map((item, index) => (

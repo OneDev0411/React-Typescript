@@ -5,11 +5,9 @@ import { mdiTrashCanOutline } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { ContextField } from '../../types'
-
 interface Props {
   value: unknown
-  field: ContextField
+  field: IDealBrandContext
   deal: IDeal
   onClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void
 }

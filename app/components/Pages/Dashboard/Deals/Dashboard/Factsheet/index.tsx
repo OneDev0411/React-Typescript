@@ -1,19 +1,23 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { getValue } from 'models/Deal/helpers/dynamic-context'
 import { getContext } from 'models/Deal/helpers/context/get-context'
 
 import { upsertContexts, approveContext } from 'actions/deals'
 import {
-  getFactsheetSection,
+  validate,
   createUpsertObject
 } from 'models/Deal/helpers/dynamic-context'
 
+import { IAppState } from 'reducers'
+
+import { getDealChecklists } from 'reducers/deals/checklists'
+
+import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
+
 import { DateField } from './DateField'
 import { TextField } from './TextField'
-
-import { ContextField } from './types'
 
 import {
   Container,
@@ -25,7 +29,7 @@ import {
 
 interface Props {
   deal: IDeal
-  definitions?: unknown[]
+  definitions?: IDealBrandContext[]
   isBackOffice: boolean
   display?: boolean
   title?: string
@@ -33,40 +37,59 @@ interface Props {
   showDivider: boolean
 }
 
-export default function Factsheet(props: Props) {
+export default function Factsheet({
+  deal,
+  definitions,
+  isBackOffice,
+  display,
+  title,
+  section,
+  showDivider
+}: Props) {
   const dispatch = useDispatch()
 
-  const table =
-    props.definitions ||
-    getFactsheetSection(props.deal.id, props.deal, props.section)
+  const contexts = useFactsheetContexts(deal, section)
+  const table = definitions || contexts
 
-  if (table.length === 0 || props.display === false) {
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
+  if (table.length === 0 || display === false) {
     return null
   }
 
-  const saveContext = (field: ContextField, value: unknown) => {
+  const saveContext = (field: IDealBrandContext, value: unknown) => {
+    const checklistType = deal.has_active_offer ? 'Offer' : deal.deal_type
+
     try {
       const context = createUpsertObject(
-        props.deal,
+        deal,
+        checklists,
+        checklistType,
         field.key,
         value,
-        props.isBackOffice ? true : !field.needs_approval
+        isBackOffice ? true : !field.needs_approval
       )
 
-      dispatch(upsertContexts(props.deal.id, [context]))
+      dispatch(upsertContexts(deal.id, [context]))
     } catch (e) {
       console.log(e)
     }
   }
 
-  const handleDeleteContext = async (field: ContextField) =>
+  const handleDeleteContext = async (field: IDealBrandContext) => {
     saveContext(field, null)
+  }
 
-  const handleChangeContext = (field: ContextField, value: unknown): void => {
-    const currentValue = getFieldValue(getValue(props.deal, field))
+  const handleChangeContext = (
+    field: IDealBrandContext,
+    value: unknown
+  ): void => {
+    const currentValue = getFieldValue(getValue(deal, field))
 
     const isValueChanged = value !== currentValue
-    const isValid = value != null && field.validate(field, value)
+    const isValid = value != null && validate(field, value)
 
     if (!isValueChanged || !isValid) {
       return
@@ -75,15 +98,17 @@ export default function Factsheet(props: Props) {
     saveContext(field, value)
   }
 
-  const handleApproveField = async (field: ContextField): Promise<void> => {
-    if (!props.isBackOffice) {
+  const handleApproveField = async (
+    field: IDealBrandContext
+  ): Promise<void> => {
+    if (!isBackOffice) {
       return
     }
 
     try {
-      const context = getContext(props.deal, field.key)
+      const context = getContext(deal, field.key)
 
-      await dispatch(approveContext(props.deal.id, context.id))
+      await dispatch(approveContext(deal.id, context.id))
     } catch (e) {
       console.log(e)
     }
@@ -92,19 +117,19 @@ export default function Factsheet(props: Props) {
   return (
     <>
       <Container>
-        {props.title && <SectionTitle>{props.title}</SectionTitle>}
+        {title && <SectionTitle>{title}</SectionTitle>}
 
         <ItemsContainer>
-          {props.section === 'Dates' && <TimelineSplitter />}
+          {section === 'Dates' && <TimelineSplitter />}
 
-          {table.map(field => {
-            const value = getFieldValue(getValue(props.deal, field))
+          {table.map((field, index) => {
+            const value = getFieldValue(getValue(deal, field))
 
             const sharedProps = {
               field,
               value,
-              deal: props.deal,
-              isBackOffice: props.isBackOffice,
+              deal,
+              isBackOffice,
               onChange: handleChangeContext,
               onDelete: handleDeleteContext,
               onApprove: handleApproveField
@@ -119,7 +144,7 @@ export default function Factsheet(props: Props) {
         </ItemsContainer>
       </Container>
 
-      {props.showDivider && <FactsheetDivider />}
+      {showDivider && <FactsheetDivider />}
     </>
   )
 }

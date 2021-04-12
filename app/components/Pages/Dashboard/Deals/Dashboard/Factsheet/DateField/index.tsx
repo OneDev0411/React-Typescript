@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import { mdiCheck } from '@mdi/js'
@@ -7,6 +7,8 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { getFormattedValue } from 'models/Deal/helpers/dynamic-context'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 
@@ -25,16 +27,14 @@ import {
   CircleStatus
 } from '../styled'
 
-import { ContextField } from '../types'
-
 interface Props {
   deal: IDeal
-  field: ContextField
+  field: IDealBrandContext
   value: unknown
   isBackOffice: boolean
-  onApprove(field: ContextField): void
-  onChange(field: ContextField, value: unknown): void
-  onDelete(field: ContextField): void
+  onApprove(field: IDealBrandContext): void
+  onChange(field: IDealBrandContext, value: unknown): void
+  onDelete(field: IDealBrandContext): void
 }
 
 export function DateField({
@@ -88,7 +88,7 @@ export function DateField({
             {field.label}
           </ItemLabel>
           <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
+            {getFormattedValue(field, value) || <EmptyValue>—</EmptyValue>}
           </ItemValue>
 
           <ItemActions>
@@ -113,7 +113,7 @@ export function DateField({
 
       <ApproveButton
         deal={deal}
-        field={field}
+        context={field}
         isBackOffice={isBackOffice}
         onClick={() => onApprove(field)}
       />
@@ -121,7 +121,7 @@ export function DateField({
   )
 }
 
-function getInitialDate(deal: IDeal, field: ContextField): Date {
+function getInitialDate(deal: IDeal, field: IDealBrandContext): Date {
   const timestamp = getField(deal, field.key)
 
   if (!timestamp) {

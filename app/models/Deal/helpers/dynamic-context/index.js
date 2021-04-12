@@ -1,3 +1,5 @@
+// TODO: Deprecated
+
 import moment from 'moment'
 import _ from 'underscore'
 
@@ -443,16 +445,29 @@ export function getChecklist(deal, key) {
   )
 }
 
-export function createUpsertObject(deal, field, value, approved = false) {
-  const definition = getDefinitionId(deal.id, field)
+export function createUpsertObject(
+  deal,
+  checklists,
+  checklistType,
+  fieldKey,
+  value,
+  approved = false
+) {
+  const brandChecklist = deal.property_type.checklists?.find(
+    checklist => checklist.checklist_type === checklistType
+  )
 
-  if (!definition) {
-    return null
-  }
+  const definition = brandChecklist?.required_contexts
+    .concat(brandChecklist?.optional_contexts)
+    .find(item => item.key === fieldKey)
+
+  const checklist = checklists.find(
+    ({ origin }) => origin === brandChecklist?.id
+  )
 
   return {
-    definition,
-    checklist: getChecklist(deal, field),
+    definition: definition.id,
+    checklist: checklist.id,
     value,
     approved
   }
@@ -464,12 +479,12 @@ export function getStatusField(deal) {
     : 'listing_status'
 }
 
-function getFormattedValue(value) {
+export function getFormattedValue(context, value) {
   if (!value) {
     return value
   }
 
-  if (this.format === 'Currency') {
+  if (context.format === 'Currency') {
     return getFormattedPrice(parseFloat(value), 'currency', 0)
   }
 
@@ -501,5 +516,6 @@ export default {
   validateDate,
   validateList,
   isAddressField,
-  createUpsertObject
+  createUpsertObject,
+  getFormattedValue
 }

@@ -47,6 +47,12 @@ import { Header } from './components/Header'
 import { Context } from './context'
 import type { IDealSide } from './types'
 
+interface DealContext {
+  definition: UUID
+  checklist: UUID
+  value: string
+  approved: boolean
+}
 interface Props {
   router: InjectedRouter
   route: Route
@@ -163,7 +169,7 @@ function CreateDeal({ router, route }: Props) {
   }
 
   const saveContexts = (deal: IDeal, checklist: IDealChecklist) => {
-    const contexts: IDealContext[] = []
+    const contexts: DealContext[] = []
 
     if (deal.deal_type === 'Selling') {
       const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'

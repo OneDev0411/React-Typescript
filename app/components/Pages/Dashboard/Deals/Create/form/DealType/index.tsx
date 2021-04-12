@@ -12,7 +12,7 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { RadioGroup } from 'components/RadioGroup'
 
 interface Props {
-  propertyType: IDealPropertyType
+  propertyType?: IDealPropertyType
   onChange: (value: IDealType) => void
 }
 
