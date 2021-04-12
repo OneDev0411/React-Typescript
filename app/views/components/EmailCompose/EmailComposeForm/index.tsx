@@ -230,14 +230,17 @@ export default function EmailComposeForm<T>({
       }
 
       if (contactsCount > 1) {
-        return confirmationModal.setConfirmationModal({
-          message: 'Send to all your contacts?',
-          description: `You are about to send this email to ${contactsCount} people in your contacts. Are you sure?`,
-          confirmLabel: 'Send it now',
-          cancelLabel: 'Edit',
-          onConfirm: () => {
-            handleSendEmail(form)
-          }
+        return new Promise((resolve, reject) => {
+          confirmationModal.setConfirmationModal({
+            message: 'Send to all your contacts?',
+            description: `You are about to send this email to ${contactsCount} people in your contacts. Are you sure?`,
+            confirmLabel: 'Send it now',
+            cancelLabel: 'Edit',
+            onCancel: reject,
+            onConfirm: () => {
+              handleSendEmail(form).then(resolve).catch(reject)
+            }
+          })
         })
       }
     }
@@ -284,9 +287,8 @@ export default function EmailComposeForm<T>({
             'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
-          onConfirm: () => {
+          onConfirm: () =>
             handlePreSendAllContactWarning(form).then(resolve).catch(reject)
-          }
         })
       })
     }
