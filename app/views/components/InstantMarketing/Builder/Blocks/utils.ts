@@ -10,7 +10,8 @@ import {
   BlockTemplates,
   TemplateRenderDataFunc,
   BlockOnDropFunc,
-  BlockDragStopEventReturn
+  BlockDragStopEventReturn,
+  TemplateBlockOptions
 } from './types'
 
 export function collapseBlockCategories(editor: Editor) {
@@ -136,4 +137,14 @@ export function reorderBlocks(editor: Editor, blockNames: string[]) {
       editor.BlockManager.add(blockName, block.clone() as any)
     }
   })
+}
+
+export function isDefaultBlocksDisabled(
+  templateBlockOptions: TemplateBlockOptions,
+  category: string
+) {
+  return (
+    templateBlockOptions.disableDefault === true ||
+    templateBlockOptions.disableDefault?.includes(category)
+  )
 }
