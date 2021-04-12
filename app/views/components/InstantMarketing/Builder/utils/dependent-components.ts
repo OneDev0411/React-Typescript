@@ -14,11 +14,11 @@ export function makeParentDependentsHidden(
     return
   }
 
-  const hasNoChildren = !parent
+  const hasChildren = parent
     .components()
-    .find(item => item.get('type') !== 'comment')
+    .some(item => item.get('type') !== 'comment')
 
-  if (!hasNoChildren) {
+  if (!hasChildren) {
     return
   }
 
@@ -26,7 +26,10 @@ export function makeParentDependentsHidden(
     .getWrapper()
     .find(`[data-depends="${parentId}"]`)
     .forEach(dependModel => {
-      dependModel.setStyle({ display: 'none' })
+      dependModel.setStyle({
+        ...dependModel.attributes.style,
+        display: 'none'
+      })
     })
 }
 
