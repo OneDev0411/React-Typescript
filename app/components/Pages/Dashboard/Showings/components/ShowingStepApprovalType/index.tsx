@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import {
   QuestionForm,
@@ -62,4 +62,4 @@ function ShowingStepApprovalType({
   )
 }
 
-export default ShowingStepApprovalType
+export default memo(ShowingStepApprovalType)

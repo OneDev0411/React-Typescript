@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
@@ -22,4 +22,4 @@ function ShowingStepIntro() {
   )
 }
 
-export default ShowingStepIntro
+export default memo(ShowingStepIntro)

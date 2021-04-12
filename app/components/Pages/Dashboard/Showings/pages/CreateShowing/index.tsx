@@ -118,6 +118,7 @@ function CreateShowing() {
               />
             )}
             {/* Listing Agent Steps - End */}
+
             {/* Listing Co-agent Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
@@ -150,6 +151,7 @@ function CreateShowing() {
                 />
               )}
             {/* Listing Co-agent Steps - End */}
+
             {/* Listing Occupant Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is this property Occupied?"

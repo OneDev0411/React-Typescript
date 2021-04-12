@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import ShowingRoleNotificationTypes, {
   ShowingRoleNotificationTypesProps
@@ -26,4 +26,4 @@ function ShowingStepRoleConfirmNotificationTypes({
   )
 }
 
-export default ShowingStepRoleConfirmNotificationTypes
+export default memo(ShowingStepRoleConfirmNotificationTypes)

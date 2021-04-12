@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Box, Button, TextField, makeStyles } from '@material-ui/core'
 
 import { useDebouncedCallback } from 'use-debounce/lib'
@@ -92,4 +92,4 @@ function ShowingStepInstructions({
   )
 }
 
-export default ShowingStepInstructions
+export default memo(ShowingStepInstructions)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import {
   QuestionForm,
@@ -55,4 +55,4 @@ function ShowingStepYesNoQuestion({
   )
 }
 
-export default ShowingStepYesNoQuestion
+export default memo(ShowingStepYesNoQuestion)

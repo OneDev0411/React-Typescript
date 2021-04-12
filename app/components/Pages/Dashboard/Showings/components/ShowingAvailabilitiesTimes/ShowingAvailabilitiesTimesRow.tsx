@@ -7,6 +7,8 @@ import { Form, FormSpy } from 'react-final-form'
 
 import { FormState, FORM_ERROR } from 'final-form'
 
+import { useDebouncedCallback } from 'use-debounce/lib'
+
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
@@ -25,6 +27,7 @@ interface ShowingAvailabilitiesTimesRowProps extends IShowingAvailabilitySlot {
   onDelete: (id: UUID) => void
   onChange: (id: UUID, row: IShowingAvailabilitySlot) => void
   disableDelete?: boolean
+  hasError: boolean
 }
 
 function ShowingAvailabilitiesTimesRow({
@@ -33,25 +36,26 @@ function ShowingAvailabilitiesTimesRow({
   availability,
   onChange,
   onDelete,
-  disableDelete = false
+  disableDelete = false,
+  hasError
 }: ShowingAvailabilitiesTimesRowProps) {
   const handleDelete = () => {
     onDelete(id)
   }
 
-  const handleSubmit = (values: FormValues) => {
+  const [debouncedHandleSubmit] = useDebouncedCallback((values: FormValues) => {
     onChange(id, {
       id,
       weekday: values.weekday,
       availability: [
-        humanTimeToTimestamp(values.start),
-        humanTimeToTimestamp(values.end)
+        values.start ? humanTimeToTimestamp(values.start) : availability[0],
+        values.end ? humanTimeToTimestamp(values.end) : availability[1]
       ]
     })
-  }
+  }, 250)
 
   const handleChange = ({ values }: FormState<FormValues>) => {
-    handleSubmit(values)
+    debouncedHandleSubmit(values)
   }
 
   const validateForm = (values: FormValues) => {
@@ -69,7 +73,7 @@ function ShowingAvailabilitiesTimesRow({
 
   return (
     <Form<FormValues>
-      onSubmit={handleSubmit}
+      onSubmit={debouncedHandleSubmit}
       initialValues={{
         weekday,
         start: timestampToHumanTime(availability[0]),
@@ -92,7 +96,7 @@ function ShowingAvailabilitiesTimesRow({
                 <FormTimePicker
                   label="From"
                   name="start"
-                  error={!!formError}
+                  error={!!formError || hasError}
                   margin="dense"
                 />
               </Grid>
@@ -100,7 +104,7 @@ function ShowingAvailabilitiesTimesRow({
                 <FormTimePicker
                   label="To"
                   name="end"
-                  error={!!formError}
+                  error={!!formError || hasError}
                   margin="dense"
                 />
               </Grid>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import {
   QuestionForm,
@@ -27,4 +27,4 @@ function ShowingStepAvailabilities({
   )
 }
 
-export default ShowingStepAvailabilities
+export default memo(ShowingStepAvailabilities)

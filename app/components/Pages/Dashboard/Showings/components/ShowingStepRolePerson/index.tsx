@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { kebabCase } from 'lodash'
 
 import {
@@ -75,4 +75,4 @@ function ShowingStepRolePerson({
   )
 }
 
-export default ShowingStepRolePerson
+export default memo(ShowingStepRolePerson)
