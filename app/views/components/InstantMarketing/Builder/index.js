@@ -206,6 +206,8 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
+
+    this.makeAllComponentsUndraggable()
   }
 
   componentWillUnmount() {
@@ -574,6 +576,17 @@ class Builder extends React.Component {
       }
 
       dragStartParentModel = null
+    })
+  }
+
+  makeAllComponentsUndraggable() {
+    // We have to make the components un-draggable in two modes:
+    // 1. Template initialize phase
+    // 2. On dropping new blocks and creating new components
+    //
+    // The below solution works for both scenarios:
+    this.editor.on('component:mount', model => {
+      model.set({ draggable: false })
     })
   }
 
