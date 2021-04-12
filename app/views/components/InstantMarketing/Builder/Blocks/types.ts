@@ -11,7 +11,7 @@ export interface BlockOptions {
   adaptive?: boolean
 }
 
-export interface TemplateBlockContent {
+export interface TemplateBlockBase {
   name: string
   icon: string
   category: string
@@ -20,11 +20,21 @@ export interface TemplateBlockContent {
   type: string
 }
 
-export interface TemplateBlock extends TemplateBlockContent {
+export interface TemplateBlockBaseOptions {
+  blocks: TemplateBlockBase[]
+  disableDefault?: string[] | true
+}
+
+export interface TemplateBlock extends TemplateBlockBase {
   template: string
 }
 
 export type TemplateBlocks = Record<string, TemplateBlock>
+
+export interface TemplateBlockOptions {
+  blocks: TemplateBlocks
+  disableDefault?: string[] | true
+}
 
 export type BlockTemplates = Record<string, string>
 
