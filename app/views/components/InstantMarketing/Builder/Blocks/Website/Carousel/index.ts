@@ -22,7 +22,7 @@ import { handleBlockDragStopEvent } from '../../utils'
 import Carousel from './template.njk'
 
 import script from './script'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const typeCarousel = 'carousel'
@@ -46,7 +46,7 @@ interface CarouselBlock {
 export default function registerCarouselBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   {
     carouselClassNames,
     onCarouselDrop,
@@ -227,7 +227,8 @@ export default function registerCarouselBlock(
   })
 
   const carouselBlocks = {
-    [carouselBlockName]: templateBlocks[carouselBlockName]?.template || Carousel
+    [carouselBlockName]:
+      templateBlockOptions.blocks[carouselBlockName]?.template || Carousel
   }
 
   registerBlock(
@@ -239,14 +240,14 @@ export default function registerCarouselBlock(
       blockName: carouselBlockName,
       template: carouselBlocks[carouselBlockName]
     },
-    templateBlocks[carouselBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Carousel',
     carouselBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.12",
+  "version": "86.0.14",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -136,7 +136,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.16.44",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#e776cd2",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#dda9eae4b3b5f9cbe71f4db5ed13fac4df9ea555",
     "grapesjs-plugin-mjml-ckeditor": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-plugin-mjml-ckeditor.git#b3d1972",
     "history": "^3.3.0",
     "idx": "^2.5.2",
@@ -200,7 +200,6 @@
     "react-image-gallery": "^1.0.9",
     "react-images": "^0.5.11",
     "react-input-mask": "^1.1.0",
-    "react-intercom": "^1.0.15",
     "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.1.13",
     "react-loadable": "^5.4.0",
@@ -220,6 +219,7 @@
     "react-textarea-autosize": "^5.2.1",
     "react-use": "^14.2.0",
     "react-use-controllable-state": "0.0.7",
+    "react-use-intercom": "^1.1.9",
     "react-use-promise": "^0.3.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.5",

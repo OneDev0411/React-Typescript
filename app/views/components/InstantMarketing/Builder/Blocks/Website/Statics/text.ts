@@ -7,7 +7,7 @@ import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/const
 import { baseView, isComponent } from '../utils'
 import Text from './text.njk'
 import registerBlock from '../../registerBlock'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeText = 'text'
@@ -19,7 +19,7 @@ export interface TextBlockOptions {
 
 export default function registerTextBlock(
   editor: Editor,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { textClassNames }: TextBlockOptions
 ) {
   editor.DomComponents.addType(typeText, {
@@ -28,7 +28,8 @@ export default function registerTextBlock(
   })
 
   const textBlocks = {
-    [textBlockName]: templateBlocks[textBlockName]?.template || Text
+    [textBlockName]:
+      templateBlockOptions.blocks[textBlockName]?.template || Text
   }
 
   registerBlock(
@@ -40,14 +41,14 @@ export default function registerTextBlock(
       blockName: textBlockName,
       template: textBlocks[textBlockName]
     },
-    templateBlocks[textBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     textBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return allBlocks

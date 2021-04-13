@@ -17,7 +17,7 @@ import { handleBlockDragStopEvent } from '../../utils'
 import ArticleTop from './article-top.njk'
 import ArticleLeft from './article-left.njk'
 import ArticleRight from './article-right.njk'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeArticle = 'article'
@@ -38,7 +38,7 @@ interface ArticleBlocks {
 export default function registerArticleBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { articleClassNames, onArticleDrop }: ArticleBlocksOptions
 ): ArticleBlocks {
   editor.DomComponents.addType(typeArticle, {
@@ -48,11 +48,13 @@ export default function registerArticleBlocks(
 
   const articleBlocks = {
     [articleTopBlockName]:
-      templateBlocks[articleTopBlockName]?.template || ArticleTop,
+      templateBlockOptions.blocks[articleTopBlockName]?.template || ArticleTop,
     [articleLeftBlockName]:
-      templateBlocks[articleLeftBlockName]?.template || ArticleLeft,
+      templateBlockOptions.blocks[articleLeftBlockName]?.template ||
+      ArticleLeft,
     [articleRightBlockName]:
-      templateBlocks[articleRightBlockName]?.template || ArticleRight
+      templateBlockOptions.blocks[articleRightBlockName]?.template ||
+      ArticleRight
   }
 
   registerBlock(
@@ -64,7 +66,7 @@ export default function registerArticleBlocks(
       blockName: articleTopBlockName,
       template: articleBlocks[articleTopBlockName]
     },
-    templateBlocks[articleTopBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -76,7 +78,7 @@ export default function registerArticleBlocks(
       blockName: articleLeftBlockName,
       template: articleBlocks[articleLeftBlockName]
     },
-    templateBlocks[articleLeftBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -88,14 +90,14 @@ export default function registerArticleBlocks(
       blockName: articleRightBlockName,
       template: articleBlocks[articleRightBlockName]
     },
-    templateBlocks[articleRightBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Articles',
     articleBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { IAppState } from '../../../reducers'
-import { activeIntercom } from '../../../store_actions/intercom'
+import { activateIntercom } from '../../../store_actions/intercom'
 
 interface RenderProps {
-  activeIntercom: ThunkDispatch<any, any, AnyAction>
+  activateIntercom: ThunkDispatch<any, any, AnyAction>
   isIntercomActive: boolean
 }
 
@@ -25,7 +25,7 @@ export function IntercomTrigger(props: Props) {
     <span>
       {props.render({
         isIntercomActive,
-        activeIntercom: () => dispatch(activeIntercom(isIntercomActive))
+        activateIntercom: () => dispatch(activateIntercom(isIntercomActive))
       })}
     </span>
   )

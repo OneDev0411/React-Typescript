@@ -370,9 +370,7 @@
       }
 
       .fa-arrows {
-        &::after {
-          content: 'Move';
-        }
+        display: none;
       }
 
       .fa-clone {

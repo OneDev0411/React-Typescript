@@ -8,8 +8,8 @@ import SideNavButtonItem from './SideNavButtonItem'
 export default function SupportTrigger() {
   return (
     <IntercomTrigger
-      render={({ activeIntercom, isIntercomActive }) => {
-        const onClick = isIntercomActive ? () => false : activeIntercom
+      render={({ activateIntercom, isIntercomActive }) => {
+        const onClick = isIntercomActive ? () => false : activateIntercom
 
         return (
           <SideNavItem>
