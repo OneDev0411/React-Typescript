@@ -70,7 +70,7 @@ export default function InfoSection({ showing }: Props) {
   const listingImage = showing.listing?.gallery_image_urls?.[0] ?? null
 
   return (
-    <Grid item xs={12} sm={6} md={6} className={classes.container}>
+    <Grid item xs={12} sm={6} md={5} className={classes.container}>
       <Hidden smUp>
         <Grid container item justify="center">
           <Grid item xs={4}>

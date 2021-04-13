@@ -151,7 +151,7 @@ export default function BookSection({ token, showing, onBook }: Props) {
   }
 
   return (
-    <Grid item xs={12} sm={6} md={6} className={classes.container}>
+    <Grid item xs={12} sm={6} md={7} className={classes.container}>
       <form onSubmit={handleSubmit(handleSubmitBookForm)}>
         <Hidden xsDown>
           <Grid item xs={4} sm={2}>

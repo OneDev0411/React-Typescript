@@ -38,7 +38,6 @@ export default function AgentCard({ agent }: Props) {
               {/* TODO: Remove the following line complaining about `contact` is required */}
               {/* @ts-ignore */}
               <Avatar
-                disableLazyLoad
                 alt={agent.full_name}
                 size="xlarge"
                 url={agent.profile_image_url ?? undefined}
