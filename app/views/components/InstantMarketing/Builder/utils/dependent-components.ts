@@ -18,7 +18,7 @@ export function makeParentDependentsHidden(
     .components()
     .some(item => item.get('type') !== 'comment')
 
-  if (!hasChildren) {
+  if (hasChildren) {
     return
   }
 
