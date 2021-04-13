@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import validator from 'validator'
+import isEmail from 'validator/es/lib/isEmail'
 import _ from 'underscore'
 
 import { searchContacts } from 'models/contacts/search-contacts'
@@ -137,7 +137,7 @@ class Compose extends React.Component {
   async createNewEntry() {
     const id = this.criteria
 
-    if (validator.isEmail(id)) {
+    if (isEmail(id)) {
       return {
         [id]: this.createListItem('email', { id, email: id })
       }

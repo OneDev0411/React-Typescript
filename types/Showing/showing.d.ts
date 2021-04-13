@@ -55,4 +55,5 @@ declare interface IPublicShowing
   extends IModel<'public_showing'>,
     IBaseShowing {
   unavailable_times: string[] | null
+  agent: IAgent
 }

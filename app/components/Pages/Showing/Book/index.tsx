@@ -60,7 +60,7 @@ export default function BookShowing({ params }: WithRouterProps<RouteParams>) {
     <Container className={classes.pageContainer}>
       <Grid container direction="row" className={classes.container}>
         <InfoSection showing={showing} />
-        <BookSection showing={showing} onBook={console.log} />
+        <BookSection token={token} showing={showing} onBook={console.log} />
       </Grid>
     </Container>
   )

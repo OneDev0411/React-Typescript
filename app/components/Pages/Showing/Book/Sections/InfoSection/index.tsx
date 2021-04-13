@@ -1,12 +1,16 @@
 import {
   Grid,
   Box,
+  Card,
+  CardContent,
   Typography,
   Tooltip,
   Hidden,
   makeStyles,
   Theme
 } from '@material-ui/core'
+
+import AgentCard from 'components/AgentCard'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import { isLeaseProperty } from 'utils/listing'
@@ -33,9 +37,6 @@ const useStyles = makeStyles(
         left: 0,
         zIndex: -1
       }
-    },
-    listingInfoContainer: {
-      background: theme.palette.common.white
     },
     listingAddress: {
       [theme.breakpoints.down('xs')]: {
@@ -91,30 +92,38 @@ export default function InfoSection({ showing }: Props) {
         <Grid container item>
           <Grid item xs={12}>
             <Tooltip title={showing.listing.property.address.full_address}>
-              <Box
-                pt={1}
-                pb={2}
-                px={2}
-                className={classes.listingInfoContainer}
-              >
-                <Typography
-                  variant="subtitle2"
-                  color="primary"
-                  className={classes.listingPrice}
-                >
-                  {getFormattedPrice(showing.listing.price, 'currency', 0)}
-                  {isLeaseProperty(showing.listing) ? '/mo' : ''}
-                </Typography>
-                <Box pt={1}>
+              <Card>
+                <CardContent>
                   <Typography
-                    noWrap
-                    variant="body1"
-                    className={classes.listingAddress}
+                    variant="subtitle2"
+                    color="primary"
+                    className={classes.listingPrice}
                   >
-                    {showing.listing.property.address.street_address}
+                    {getFormattedPrice(showing.listing.price, 'currency', 0)}
+                    {isLeaseProperty(showing.listing) ? '/mo' : ''}
                   </Typography>
-                </Box>
-              </Box>
+                  <Box pt={1}>
+                    <Hidden smUp>
+                      <Typography
+                        noWrap
+                        variant="body1"
+                        className={classes.listingAddress}
+                      >
+                        {showing.listing.property.address.full_address}
+                      </Typography>
+                    </Hidden>
+                    <Hidden xsDown>
+                      <Typography
+                        noWrap
+                        variant="body1"
+                        className={classes.listingAddress}
+                      >
+                        {showing.listing.property.address.street_address}
+                      </Typography>
+                    </Hidden>
+                  </Box>
+                </CardContent>
+              </Card>
             </Tooltip>
           </Grid>
         </Grid>
@@ -122,7 +131,7 @@ export default function InfoSection({ showing }: Props) {
 
       <Hidden xsDown>
         <Grid container item>
-          <div>Agent info will be here</div>
+          <AgentCard agent={showing.agent} />
         </Grid>
       </Hidden>
     </Grid>
