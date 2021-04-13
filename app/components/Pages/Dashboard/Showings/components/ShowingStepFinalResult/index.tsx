@@ -8,6 +8,8 @@ import {
   useWizardContext
 } from 'components/QuestionWizard'
 
+import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+
 interface ShowingStepFinalResultProps {
   isLoading: boolean
   showingId?: UUID
@@ -18,10 +20,13 @@ function ShowingStepFinalResult({
   showingId
 }: ShowingStepFinalResultProps) {
   const wizard = useWizardContext()
+  const nextStep = useQuestionWizardSmartNext()
 
   useEffect(() => {
+    nextStep()
+
     wizard.setLoading(isLoading)
-  }, [wizard, isLoading])
+  }, [wizard, isLoading, nextStep])
 
   if (!showingId) {
     return null

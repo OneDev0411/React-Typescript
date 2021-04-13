@@ -1,4 +1,5 @@
 declare interface IShowingInput {
+  aired_at?: string
   start_date: string
   end_date?: string
   duration: number
@@ -14,4 +15,5 @@ declare interface IShowingInput {
   allow_appraisal: boolean
   allow_inspection: boolean
   instructions?: string
+  brand: UUID
 }

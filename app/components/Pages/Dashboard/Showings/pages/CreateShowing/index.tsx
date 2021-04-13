@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 
 import { Box } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
+import { InjectedRouter, Route } from 'react-router'
+
 import PageLayout from 'components/GlobalPageLayout'
-import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
+import { QuestionWizard } from 'components/QuestionWizard'
+
+import useAsync from 'hooks/use-async'
+
+import createShowing from 'models/showing/create-showing'
+
+import { selectActiveTeamId } from 'selectors/team'
 
 import { ShowingPropertyType } from '../../types'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
@@ -20,9 +30,16 @@ import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import ShowingStepAvailabilities from '../../components/ShowingStepAvailabilities'
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 // import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
+import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import useShowingRole from './use-showing-role'
 
-function CreateShowing() {
+interface CreateShowingProps {
+  router: InjectedRouter
+  route: Route
+}
+
+function CreateShowing({ router, route }: CreateShowingProps) {
+  const teamId = useSelector(selectActiveTeamId)
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
 
   const [approvalType, setApprovalType] = useState<
@@ -86,12 +103,83 @@ function CreateShowing() {
   //   Nullable<IMarketingTemplateInstance>
   // >(null)
 
+  const { isLoading, data: showing, run } = useAsync<IShowing>()
+
+  useEffect(() => {
+    router.setRouteLeaveHook(route, () => {
+      if (!showing) {
+        return 'By canceling you will lose your work. Continue?'
+      }
+    })
+  }, [showing, router, route])
+
+  const handleFinish = () => {
+    if (showing || isLoading) {
+      return
+    }
+
+    run(async () => {
+      const roles: IShowingRoleInput[] = [
+        {
+          can_approve: agentConfirmNotificationTypes[0],
+          role: 'SellerAgent',
+          cancel_notification_type: agentCancelNotificationTypes[1],
+          confirm_notification_type: agentConfirmNotificationTypes[1],
+          ...agentPerson!
+        }
+      ]
+
+      if (coAgentPerson) {
+        roles.push({
+          can_approve: coAgentConfirmNotificationTypes[0],
+          role: 'CoSellerAgent',
+          cancel_notification_type: coAgentCancelNotificationTypes[1],
+          confirm_notification_type: coAgentConfirmNotificationTypes[1],
+          ...coAgentPerson!
+        })
+      }
+
+      if (occupantPerson) {
+        roles.push({
+          can_approve: occupantConfirmNotificationTypes[0],
+          role: 'Tenant',
+          cancel_notification_type: occupantCancelNotificationTypes[1],
+          confirm_notification_type: occupantConfirmNotificationTypes[1],
+          ...occupantPerson!
+        })
+      }
+
+      return createShowing({
+        approval_type: approvalType!,
+        aired_at: new Date().toISOString(), // TODO: use the real value later
+        duration: 900, // TODO: This field is missed in the design
+        roles,
+        availabilities,
+        notice_period: advanceNotice!,
+        allow_appraisal: allowAppraisal === 'Yes',
+        allow_inspection: allowInspection === 'Yes',
+        start_date: '2021-03-29T13:55:17.134Z', // TODO:: use real start date
+        listing: property?.type === 'listing' ? property.listing.id : undefined,
+        deal: property?.type === 'deal' ? property.deal.id : undefined,
+        address: property?.type === 'place' ? property.address : undefined,
+        instructions: instructions!,
+        // gallery?: IMediaGallery // TODO: use this field to pass gallery id
+        brand: teamId
+      })
+    })
+  }
+
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing" />
       <PageLayout.Main>
         <Box maxWidth={848} margin="0 auto">
-          <QuestionWizard>
+          <QuestionWizard
+            useWindowScrollbar
+            questionPositionOffset={80}
+            onFinish={handleFinish}
+            styles={{ paddingBottom: '50%' }}
+          >
             <ShowingStepIntro />
             <ShowingStepProperty
               property={property}
@@ -104,9 +192,11 @@ function CreateShowing() {
 
             {/* Listing Agent Steps - Start */}
             <ShowingStepRolePerson
-              roleType="Agent"
+              roleType="SellerAgent"
+              personTitle="Agent"
               person={agentPerson}
               onPersonChange={setAgentPerson}
+              skippable={false}
             />
             {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleConfirmNotificationTypes
@@ -132,7 +222,8 @@ function CreateShowing() {
             />
             {hasCoAgent === 'Yes' && (
               <ShowingStepRolePerson
-                roleType="CoAgent"
+                roleType="CoSellerAgent"
+                personTitle="CoAgent"
                 person={coAgentPerson}
                 onPersonChange={setCoAgentPerson}
               />
@@ -165,7 +256,8 @@ function CreateShowing() {
             />
             {hasOccupant === 'Yes' && (
               <ShowingStepRolePerson
-                roleType="Occupant"
+                roleType="Tenant"
+                personTitle="Occupant"
                 person={occupantPerson}
                 onPersonChange={setOccupantPerson}
                 selectType="Contact"
@@ -205,7 +297,7 @@ function CreateShowing() {
               value={allowAppraisal}
               onChange={setAllowAppraisal}
             />
-            {/* TODO: Need to handle not in the sameday logic */}
+            {/* TODO: Need to handle not in the SameDay logic */}
             <ShowingStepAdvanceNotice
               leadTime={advanceNotice}
               onLeadTimeChange={setAdvanceNotice}
@@ -218,7 +310,10 @@ function CreateShowing() {
               value={feedbackTemplate}
               onChange={setFeedbackTemplate}
             /> */}
-            <QuestionSection>Sample Next Section</QuestionSection>
+            <ShowingStepFinalResult
+              isLoading={isLoading}
+              showingId={showing?.id}
+            />
           </QuestionWizard>
         </Box>
       </PageLayout.Main>
@@ -226,4 +321,4 @@ function CreateShowing() {
   )
 }
 
-export default CreateShowing
+export default memo(CreateShowing)

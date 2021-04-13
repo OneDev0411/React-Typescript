@@ -5,17 +5,20 @@ import ContactSearchInput from 'components/ContactSearchInput'
 import { splitFullName } from './helpers'
 
 interface ShowingStepRolePersonSelectContactProps {
-  onSelect: (person: IShowingRolePerson) => void
+  onSelect: (person: IShowingRoleInputPerson) => void
 }
 
 function ShowingStepRolePersonSelectContact({
   onSelect
 }: ShowingStepRolePersonSelectContactProps) {
   const handleChange = (contact: IContact) => {
+    console.log('contact', contact)
     onSelect({
       ...splitFullName(contact.display_name),
       email: contact.email || '',
-      phone_number: contact.phone_number || ''
+      phone_number: contact.phone_number || '',
+      user: contact.user as string, // TODO: user or id?
+      brand: contact.brand || '' // TODO: Where is brand?
     })
   }
 
@@ -23,7 +26,9 @@ function ShowingStepRolePersonSelectContact({
     onSelect({
       ...splitFullName(fullName),
       email: '',
-      phone_number: ''
+      phone_number: '',
+      user: '',
+      brand: ''
     })
   }
 
