@@ -155,7 +155,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                       )
                     }}
                   >
-                    Agents
+                    Offices
                   </MenuItem>
 
                   <MenuItem
