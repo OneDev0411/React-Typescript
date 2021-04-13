@@ -8,8 +8,10 @@ type UseListingCancelNotificationTypesReturn = [
 ]
 
 function useListingCancelNotificationTypes(
-  listingNotification: IShowingRoleNotification,
-  setListingNotification: Dispatch<SetStateAction<IShowingRoleNotification>>
+  listingNotification: IShowingRoleInputNotification,
+  setListingNotification: Dispatch<
+    SetStateAction<IShowingRoleInputNotification>
+  >
 ): UseListingCancelNotificationTypesReturn {
   const value: [boolean, INotificationDeliveryType[]] = [
     false,

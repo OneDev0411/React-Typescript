@@ -7,15 +7,15 @@ import useListingCancelNotificationTypes from './use-listing-cancel-notification
 import useListingConfirmNotificationTypes from './use-listing-confirm-notification-types'
 import useListingPersonOnChange from './use-listing-person-on-change'
 
-const DEFAULT_NOTIFICATION_VALUE: IShowingRoleNotification = {
+const DEFAULT_NOTIFICATION_VALUE: IShowingRoleInputNotification = {
   can_approve: false,
   confirm_notification_type: [],
   cancel_notification_type: []
 }
 
 type UseShowingRoleReturn = [
-  Nullable<IShowingRolePerson>,
-  Dispatch<SetStateAction<Nullable<IShowingRolePerson>>>,
+  Nullable<IShowingRoleInputPerson>,
+  Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>,
   [boolean, INotificationDeliveryType[]],
   (value: NotificationTypeValue) => void,
   [boolean, INotificationDeliveryType[]],
@@ -27,9 +27,9 @@ type UseShowingRoleReturn = [
 function useShowingRole(): UseShowingRoleReturn {
   const [hasRole, setHasRole] = useState<Nullable<YesNoAnswer>>(null)
 
-  const [rolePerson, setRolePerson] = useState<Nullable<IShowingRolePerson>>(
-    null
-  )
+  const [rolePerson, setRolePerson] = useState<
+    Nullable<IShowingRoleInputPerson>
+  >(null)
 
   const handleHasRoleChange = useListingPersonOnChange(
     setHasRole,
@@ -39,7 +39,7 @@ function useShowingRole(): UseShowingRoleReturn {
   const [
     roleNotification,
     setRoleNotification
-  ] = useState<IShowingRoleNotification>(DEFAULT_NOTIFICATION_VALUE)
+  ] = useState<IShowingRoleInputNotification>(DEFAULT_NOTIFICATION_VALUE)
 
   const [
     roleConfirmNotificationTypes,

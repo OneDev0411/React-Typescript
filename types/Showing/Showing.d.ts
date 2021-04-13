@@ -1,6 +1,6 @@
 declare interface IShowing extends IModel<'showing'> {
   brand: UUID
-  aired_at?: number
+  aired_at?: string
   start_date: string
   end_date?: string
   duration: number

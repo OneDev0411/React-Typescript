@@ -8,8 +8,10 @@ type UseListingConfirmNotificationTypesReturn = [
 ]
 
 function useListingConfirmNotificationTypes(
-  listingNotification: IShowingRoleNotification,
-  setListingNotification: Dispatch<SetStateAction<IShowingRoleNotification>>
+  listingNotification: IShowingRoleInputNotification,
+  setListingNotification: Dispatch<
+    SetStateAction<IShowingRoleInputNotification>
+  >
 ): UseListingConfirmNotificationTypesReturn {
   const value: [boolean, INotificationDeliveryType[]] = [
     listingNotification.can_approve,
