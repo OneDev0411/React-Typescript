@@ -1,6 +1,7 @@
 import { OAuthProvider } from 'constants/contacts'
 
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
 
@@ -8,11 +9,14 @@ import { useOnRestoredFromPersistedState } from 'hooks/use-on-restored-from-pers
 
 import { startImportingOAuthContacts } from 'utils/oauth-provider'
 
+import { addNotification } from 'components/notification'
+
 export function useConnectOAuthAccount(
   provider: OAuthProvider,
   scopes?: IGoogleScope[]
 ) {
   const [connecting, setConnecting] = useState(false)
+  const dispatch = useDispatch()
 
   // This is for safari. See this: https://gitlab.com/rechat/web/issues/3578
   useOnRestoredFromPersistedState(() => {
@@ -26,18 +30,28 @@ export function useConnectOAuthAccount(
       return
     }
 
-    const redirectionInfo = await connectOAuthAccount(
-      provider,
-      undefined,
-      scopes
-    )
-    const url = redirectionInfo.url
+    try {
+      const redirectionInfo = await connectOAuthAccount(
+        provider,
+        undefined,
+        scopes
+      )
 
-    setConnecting(true)
+      const url = redirectionInfo.url
 
-    startImportingOAuthContacts(provider)
+      setConnecting(true)
 
-    window.location.href = url
+      startImportingOAuthContacts(provider)
+
+      window.location.href = url
+    } catch(e) {
+      dispatch(
+        addNotification({
+          status: 'error',
+          message: e?.response?.body?.message || e.message
+        })
+      )
+    }
   }
 
   return { connect, connecting }

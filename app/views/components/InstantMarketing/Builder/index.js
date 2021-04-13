@@ -207,6 +207,8 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
+
+    this.makeAllComponentsUndraggable()
   }
 
   componentWillUnmount() {

@@ -13,9 +13,10 @@ const BrandConsole = {
 export default BrandConsole
 
 export const BrandTypes: { [key: string]: IBrandType } = {
-  Team: 'Team',
   Brokerage: 'Brokerage',
+  Region: 'Region',
   Office: 'Office',
+  Team: 'Team',
   Personal: 'Personal',
   Other: 'Other'
 }
