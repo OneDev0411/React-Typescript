@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { hourToSeconds } from '../../helpers'
 
 type UseShowingAvailabilitiesStateReturn = [
-  IShowingAvailabilitySlot[],
-  Dispatch<SetStateAction<IShowingAvailabilitySlot[]>>
+  IShowingAvailabilityInput[],
+  Dispatch<SetStateAction<IShowingAvailabilityInput[]>>
 ]
 
 const defaultAvailability: [number, number] = [
@@ -12,7 +12,7 @@ const defaultAvailability: [number, number] = [
   hourToSeconds(17)
 ]
 
-const defaultSlots: IShowingAvailabilitySlot[] = [
+const defaultSlots: IShowingAvailabilityInput[] = [
   {
     id: 'init-1',
     weekday: 'Monday',
@@ -41,7 +41,7 @@ const defaultSlots: IShowingAvailabilitySlot[] = [
 ]
 
 function useShowingAvailabilitiesState(): UseShowingAvailabilitiesStateReturn {
-  return useState<IShowingAvailabilitySlot[]>(defaultSlots)
+  return useState<IShowingAvailabilityInput[]>(defaultSlots)
 }
 
 export default useShowingAvailabilitiesState

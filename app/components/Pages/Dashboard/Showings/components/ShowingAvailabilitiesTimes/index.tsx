@@ -8,8 +8,8 @@ import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 interface ShowingAvailabilitiesTimesProps {
   title?: string
-  value: IShowingAvailabilitySlot[]
-  onChange: (value: IShowingAvailabilitySlot[]) => void
+  value: IShowingAvailabilityInput[]
+  onChange: (value: IShowingAvailabilityInput[]) => void
 }
 
 function ShowingAvailabilitiesTimes({
@@ -37,7 +37,7 @@ function ShowingAvailabilitiesTimes({
     ])
   }
 
-  const handleChange = (id: UUID, row: IShowingAvailabilitySlot) => {
+  const handleChange = (id: UUID, row: IShowingAvailabilityInput) => {
     const index = findSlotIndexById(value, id)
 
     if (index === -1) {

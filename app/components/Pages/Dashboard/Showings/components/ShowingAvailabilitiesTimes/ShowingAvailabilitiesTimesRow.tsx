@@ -23,9 +23,9 @@ interface FormValues {
   weekday: IDayOfWeek
 }
 
-interface ShowingAvailabilitiesTimesRowProps extends IShowingAvailabilitySlot {
+interface ShowingAvailabilitiesTimesRowProps extends IShowingAvailabilityInput {
   onDelete: (id: UUID) => void
-  onChange: (id: UUID, row: IShowingAvailabilitySlot) => void
+  onChange: (id: UUID, row: IShowingAvailabilityInput) => void
   disableDelete?: boolean
   hasError: boolean
 }

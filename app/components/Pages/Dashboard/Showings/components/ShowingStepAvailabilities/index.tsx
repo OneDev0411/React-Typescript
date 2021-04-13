@@ -9,8 +9,8 @@ import {
 import ShowingAvailabilitiesTimes from '../ShowingAvailabilitiesTimes'
 
 interface ShowingStepAvailabilitiesProps {
-  value: IShowingAvailabilitySlot[]
-  onChange: (value: IShowingAvailabilitySlot[]) => void
+  value: IShowingAvailabilityInput[]
+  onChange: (value: IShowingAvailabilityInput[]) => void
 }
 
 function ShowingStepAvailabilities({

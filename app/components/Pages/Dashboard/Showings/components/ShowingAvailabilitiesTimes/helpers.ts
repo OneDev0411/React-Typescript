@@ -1,4 +1,7 @@
-export function findSlotIndexById(slots: IShowingAvailabilitySlot[], id: UUID) {
+export function findSlotIndexById(
+  slots: IShowingAvailabilityInput[],
+  id: UUID
+) {
   return slots.findIndex(slot => slot.id === id)
 }
 
@@ -20,7 +23,7 @@ export function humanTimeToTimestamp(time: string): number {
 }
 
 export function findTimeConflicts(
-  slots: IShowingAvailabilitySlot[]
+  slots: IShowingAvailabilityInput[]
 ): { slot1Index: number; slot2Index: number } | false {
   for (let i = 0; i < slots.length; i++) {
     for (let j = i + 1; j < slots.length; j++) {
