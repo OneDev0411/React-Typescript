@@ -67,7 +67,7 @@ declare interface IDealRole {
   legal_prefix: string
   mlsid: string | null
   phone_number: string
-  role: string
+  role: IDealRoleType
   role_type: 'Person' | 'Company'
   type: string
   office_phone?: string | null

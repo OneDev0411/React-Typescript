@@ -32,6 +32,7 @@ import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 // import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import useShowingRole from './use-showing-role'
+import useFillPersonStatesWithDealRoles from './use-fill-person-states-with-deal-roles'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -102,6 +103,13 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   // const [feedbackTemplate, setFeedbackTemplate] = useState<
   //   Nullable<IMarketingTemplateInstance>
   // >(null)
+
+  useFillPersonStatesWithDealRoles(
+    property,
+    setAgentPerson,
+    setCoAgentPerson,
+    setOccupantPerson
+  )
 
   const { isLoading, data: showing, run } = useAsync<IShowing>()
 
