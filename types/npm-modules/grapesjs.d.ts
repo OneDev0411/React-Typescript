@@ -16,10 +16,14 @@ declare module 'grapesjs' {
   import { Collection } from 'backbone'
 
   export interface Model extends Backbone.Model {
+    opt: any
     getAttributes(): any
     components(): Model[]
     find(query: string): Model[]
     setStyle(style: object)
+    parent(): Model | undefined
+    append(model: Model | string, opts?: object): Model[]
+    remove(): Model
   }
 
   export interface Editor {
