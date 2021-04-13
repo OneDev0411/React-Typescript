@@ -19,7 +19,7 @@ export const selectUserUnsafe = (state: IAppState) => state.user
  * @param state The app state
  * @returns The user state
  */
-export function selectUser(state: IAppState) {
+export function selectUser(state: IAppState): IUser {
   const user = selectUserUnsafe(state)!
 
   // if (!user) {
