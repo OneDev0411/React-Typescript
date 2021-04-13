@@ -163,7 +163,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         duration: 900, // TODO: This field is missed in the design
         roles,
         availabilities,
-        notice_period: advanceNotice!,
+        notice_period: advanceNotice ?? undefined,
         allow_appraisal: allowAppraisal === 'Yes',
         allow_inspection: allowInspection === 'Yes',
         start_date: '2021-03-29T13:55:17.134Z', // TODO:: use real start date
