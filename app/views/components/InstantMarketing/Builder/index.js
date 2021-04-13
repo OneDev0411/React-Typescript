@@ -72,6 +72,7 @@ import {
   makeParentDependentsVisible,
   removeDirectDependents
 } from './utils/dependent-components'
+import { makeModelUndraggable } from './utils/models'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -386,6 +387,7 @@ class Builder extends React.Component {
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
+    this.makeAllComponentsUndraggable()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
     this.disableAssetManager()
@@ -579,15 +581,9 @@ class Builder extends React.Component {
     })
   }
 
-  makeAllComponentsUndraggable() {
-    // We have to make the components un-draggable in two modes:
-    // 1. Template initialize phase
-    // 2. On dropping new blocks and creating new components
-    //
-    // The below solution works for both scenarios:
-    this.editor.on('component:mount', model => {
-      model.set({ draggable: false })
-    })
+  makeAllComponentsUndraggable = () => {
+    // Make all the models undraggable on template initialize phase
+    makeModelUndraggable(this.editor.DomComponents.getWrapper())
   }
 
   openCarouselDrawer = model => {
@@ -862,6 +858,7 @@ class Builder extends React.Component {
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
     this.lockIn()
+    this.makeAllComponentsUndraggable()
     this.deselectAll()
     this.resize()
 

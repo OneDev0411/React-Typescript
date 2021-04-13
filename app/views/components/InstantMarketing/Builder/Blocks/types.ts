@@ -39,7 +39,7 @@ export interface TemplateBlockOptions {
 export type BlockTemplates = Record<string, string>
 
 export type GetBlockTemplateFunc = (
-  parent: HTMLElement | null,
+  parent: Model | null,
   blockId: string
 ) => string
 
