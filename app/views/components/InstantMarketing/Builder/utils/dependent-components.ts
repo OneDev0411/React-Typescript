@@ -64,8 +64,6 @@ export function makeParentDependentsVisible(
 export function removeDirectDependents(editor: Editor, model: Model) {
   const modelId = model.getAttributes().id
 
-  console.log('modelId', modelId)
-
   if (modelId) {
     this.editor
       .getWrapper()
