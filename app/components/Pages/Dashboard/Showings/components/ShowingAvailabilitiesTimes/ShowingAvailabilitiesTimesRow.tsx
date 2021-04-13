@@ -89,10 +89,10 @@ function ShowingAvailabilitiesTimesRow({
         return (
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12} lg={5}>
+              <Grid item xs={12} sm={12} md={5}>
                 <FormDayOfWeekSelect name="weekday" margin="dense" />
               </Grid>
-              <Grid item xs={5} lg={3}>
+              <Grid item xs={5} sm={5} md={3}>
                 <FormTimePicker
                   label="From"
                   name="start"
@@ -100,7 +100,7 @@ function ShowingAvailabilitiesTimesRow({
                   margin="dense"
                 />
               </Grid>
-              <Grid item xs={5} lg={3}>
+              <Grid item xs={5} sm={5} md={3}>
                 <FormTimePicker
                   label="To"
                   name="end"
@@ -108,7 +108,7 @@ function ShowingAvailabilitiesTimesRow({
                   margin="dense"
                 />
               </Grid>
-              <Grid item lg="auto">
+              <Grid item md="auto">
                 <Box display="flex" height="100%" alignItems="center">
                   <IconButton
                     size="small"

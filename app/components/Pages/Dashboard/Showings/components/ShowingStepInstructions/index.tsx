@@ -3,13 +3,10 @@ import { Box, Button, TextField, makeStyles } from '@material-ui/core'
 
 import { useDebouncedCallback } from 'use-debounce/lib'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 const useStyles = makeStyles(
   theme => ({
@@ -60,7 +57,7 @@ function ShowingStepInstructions({
       <QuestionTitle>
         Are there any access information you’d like to provide?
       </QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         <TextField
           className={classes.root}
           placeholder="Enter information you’d like to provide"
@@ -87,7 +84,7 @@ function ShowingStepInstructions({
             Continue
           </Button>
         </Box>
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

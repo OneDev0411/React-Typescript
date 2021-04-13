@@ -1,13 +1,10 @@
 import React, { memo } from 'react'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
 
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 export type YesNoAnswer = 'Yes' | 'No'
 
@@ -52,14 +49,14 @@ function ShowingStepYesNoQuestion({
   return (
     <QuestionSection>
       <QuestionTitle>{question}</QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         <RadioGroup
           defaultValue={value}
           name="approvalType"
           options={yesNoOptions}
           onChange={handleChange}
         />
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

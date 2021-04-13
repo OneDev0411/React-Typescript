@@ -1,11 +1,7 @@
 import React, { memo, useState } from 'react'
 import { kebabCase } from 'lodash'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
@@ -13,6 +9,7 @@ import ShowingStepRolePersonSelect, {
   ShowingStepRolePersonSelectProps
 } from './ShowingStepRolePersonSelect'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
@@ -54,7 +51,7 @@ function ShowingStepRolePerson({
       <QuestionTitle>
         Who is the listing {kebabCase(personTitle)}?
       </QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         {!person && (
           <ShowingStepRolePersonSelect
             selectType={selectType}
@@ -78,7 +75,7 @@ function ShowingStepRolePerson({
             onRemove={handleRemove}
           />
         )}
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

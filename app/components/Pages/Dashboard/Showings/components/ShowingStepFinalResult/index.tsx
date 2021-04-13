@@ -2,13 +2,13 @@ import { memo, useEffect } from 'react'
 import { Box, Button } from '@material-ui/core'
 
 import {
-  QuestionForm,
   QuestionSection,
   QuestionTitle,
   useWizardContext
 } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 interface ShowingStepFinalResultProps {
   isLoading: boolean
@@ -36,13 +36,13 @@ function ShowingStepFinalResult({
     <QuestionSection>
       <QuestionTitle>Congratulations! 🎉 Your showing is created</QuestionTitle>
 
-      <QuestionForm>
+      <SmartQuestionForm>
         <Box display="flex" justifyContent="flex-end">
           <Button variant="contained" color="secondary">
             View Showing
           </Button>
         </Box>
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

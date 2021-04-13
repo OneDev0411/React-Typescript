@@ -1,14 +1,11 @@
 import React, { memo, useState } from 'react'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
 import ShowingStepAdvanceNoticeLeadTimeOptions from './ShowingStepAdvanceNoticeLeadTimeOptions'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 type AdvanceNoticeValue = 'NoNeed' | 'NoSameDay' | 'LeadTime'
 
@@ -64,14 +61,14 @@ function ShowingStepAdvanceNotice({
   return (
     <QuestionSection>
       <QuestionTitle>Is there a need for advance notice?</QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         <RadioGroup<AdvanceNoticeValue>
           name="advanceNotice"
           options={options}
           value={radioValue}
           onChange={handleChange}
         />
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

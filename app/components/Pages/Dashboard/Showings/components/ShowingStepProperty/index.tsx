@@ -1,10 +1,6 @@
 import React, { memo, useState } from 'react'
 
-import {
-  QuestionSection,
-  QuestionTitle,
-  QuestionForm
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
 import {
@@ -23,6 +19,7 @@ import ShowingStepPropertyForm, {
 import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
 import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 export interface ShowingStepPropertyProps {
   property: Nullable<ShowingPropertyType>
@@ -83,7 +80,7 @@ function ShowingStepProperty({
   return (
     <QuestionSection>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         {isSearchMode ? (
           <DealsAndListingsAndPlacesSearchInput
             onSelect={handleSearchResultSelect}
@@ -141,7 +138,7 @@ function ShowingStepProperty({
             )}
           </>
         )}
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

@@ -2,16 +2,13 @@ import React, { useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
 import ShowingRoleNotificationTypesMediums from './ShowingRoleNotificationTypesMediums'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 
@@ -84,7 +81,7 @@ function ShowingRoleNotificationTypes({
   return (
     <QuestionSection>
       <QuestionTitle>{question}</QuestionTitle>
-      <QuestionForm>
+      <SmartQuestionForm>
         <RadioGroup<NotificationTypeOption>
           name="notificationTypes"
           options={options}
@@ -102,7 +99,7 @@ function ShowingRoleNotificationTypes({
             Continue
           </Button>
         </Box>
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }

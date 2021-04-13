@@ -1,12 +1,9 @@
 import React, { memo } from 'react'
 
-import {
-  QuestionForm,
-  QuestionSection,
-  QuestionTitle
-} from 'components/QuestionWizard'
+import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import ShowingAvailabilitiesTimes from '../ShowingAvailabilitiesTimes'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 interface ShowingStepAvailabilitiesProps {
   value: IShowingAvailabilityInput[]
@@ -20,9 +17,9 @@ function ShowingStepAvailabilities({
   return (
     <QuestionSection>
       <QuestionTitle>When you’re available for this showing?</QuestionTitle>
-      <QuestionForm width="70%">
+      <SmartQuestionForm width="70%">
         <ShowingAvailabilitiesTimes value={value} onChange={onChange} />
-      </QuestionForm>
+      </SmartQuestionForm>
     </QuestionSection>
   )
 }
