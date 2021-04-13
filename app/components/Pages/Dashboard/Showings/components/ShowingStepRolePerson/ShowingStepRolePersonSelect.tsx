@@ -8,19 +8,23 @@ export type RolePersonSelectType = 'Agent' | 'Contact'
 
 export interface ShowingStepRolePersonSelectProps {
   selectType?: RolePersonSelectType
-  onSelect: (person: IShowingRolePerson) => void
+  onSelect: (person: IShowingRoleInputPerson) => void
+  skippable: boolean
 }
 
 function ShowingStepRolePersonSelect({
   selectType = 'Agent',
-  onSelect
+  onSelect,
+  skippable
 }: ShowingStepRolePersonSelectProps) {
   const handleSkip = () => {
     onSelect({
       first_name: '',
       last_name: '',
       email: '',
-      phone_number: ''
+      phone_number: '',
+      brand: '',
+      user: ''
     })
   }
 
@@ -31,11 +35,13 @@ function ShowingStepRolePersonSelect({
       ) : (
         <ShowingStepRolePersonSelectContact onSelect={onSelect} />
       )}
-      <Box mt={3} display="flex" justifyContent="flex-end">
-        <Button variant="outlined" size="small" onClick={handleSkip}>
-          Skip
-        </Button>
-      </Box>
+      {skippable && (
+        <Box mt={3} display="flex" justifyContent="flex-end">
+          <Button variant="outlined" size="small" onClick={handleSkip}>
+            Skip
+          </Button>
+        </Box>
+      )}
     </>
   )
 }

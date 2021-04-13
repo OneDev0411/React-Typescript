@@ -11,8 +11,8 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import ShowingContactOverviewCard from '../ShowingContactOverviewCard'
 
 interface ShowingStepRolePersonCardProps {
-  person: IShowingRolePerson
-  roleType: IShowingRoleType
+  person: IShowingRoleInputPerson
+  personTitle: string
   onEdit: () => void
   onRemove: () => void
 }
@@ -21,12 +21,12 @@ function ShowingStepRolePersonCard({
   person,
   onEdit,
   onRemove,
-  roleType
+  personTitle
 }: ShowingStepRolePersonCardProps) {
   return (
     <ShowingContactOverviewCard
       fullName={`${person.first_name} ${person.last_name}`}
-      subtitle={`Listing ${upperFirst(kebabCase(roleType))}`}
+      subtitle={`Listing ${upperFirst(kebabCase(personTitle))}`}
       actions={
         <>
           <Box pl={2}>

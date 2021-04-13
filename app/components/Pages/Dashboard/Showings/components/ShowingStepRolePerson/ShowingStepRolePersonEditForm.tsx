@@ -7,14 +7,16 @@ import { Form } from 'react-final-form'
 import { FormTextField, FormPhoneField } from 'components/final-form-fields'
 
 interface ShowingStepRolePersonEditFormProps {
-  roleType: IShowingRoleType
-  initialData: IShowingRolePerson
-  onSubmit: (data: IShowingRolePerson) => void
+  roleType: IDealRoleType
+  personTitle: string
+  initialData: IShowingRoleInputPerson
+  onSubmit: (data: IShowingRoleInputPerson) => void
   submitLabel?: string
 }
 
 function ShowingStepRolePersonEditForm({
   roleType,
+  personTitle,
   initialData,
   onSubmit,
   submitLabel = 'Next'
@@ -28,7 +30,7 @@ function ShowingStepRolePersonEditForm({
           <form onSubmit={handleSubmit}>
             <Box mb={2}>
               <Typography variant="h6">
-                Listing {upperFirst(kebabCase(roleType))} Info
+                Listing {upperFirst(kebabCase(personTitle))} Info
               </Typography>
             </Box>
 

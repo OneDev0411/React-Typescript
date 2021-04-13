@@ -16,24 +16,28 @@ import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
-  roleType: IShowingRoleType
-  person: Nullable<IShowingRolePerson>
-  onPersonChange: (person: Nullable<IShowingRolePerson>) => void
+  roleType: IDealRoleType
+  personTitle: string
+  person: Nullable<IShowingRoleInputPerson>
+  onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
+  skippable?: boolean
 }
 
 function ShowingStepRolePerson({
   roleType,
+  personTitle,
   person,
   onPersonChange,
-  selectType
+  selectType,
+  skippable = true
 }: ShowingStepRolePersonProps) {
   const nextStep = useQuestionWizardSmartNext()
   const [isEditable, setIsEditable] = useState(true)
 
-  const handleSubmit = (person: IShowingRolePerson) => {
+  const handleSubmit = (person: IShowingRoleInputPerson) => {
     onPersonChange(person)
     setIsEditable(false)
-    nextStep()
+    nextStep(400)
   }
 
   const handleEdit = () => {
@@ -47,17 +51,21 @@ function ShowingStepRolePerson({
 
   return (
     <QuestionSection>
-      <QuestionTitle>Who is the listing {kebabCase(roleType)}?</QuestionTitle>
+      <QuestionTitle>
+        Who is the listing {kebabCase(personTitle)}?
+      </QuestionTitle>
       <QuestionForm>
         {!person && (
           <ShowingStepRolePersonSelect
             selectType={selectType}
             onSelect={onPersonChange}
+            skippable={skippable}
           />
         )}
         {person && isEditable && (
           <ShowingStepRolePersonEditForm
             roleType={roleType}
+            personTitle={personTitle}
             initialData={person}
             onSubmit={handleSubmit}
           />
@@ -65,7 +73,7 @@ function ShowingStepRolePerson({
         {person && !isEditable && (
           <ShowingStepRolePersonCard
             person={person}
-            roleType={roleType}
+            personTitle={personTitle}
             onEdit={handleEdit}
             onRemove={handleRemove}
           />
