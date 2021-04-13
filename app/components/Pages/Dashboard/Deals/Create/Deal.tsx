@@ -5,6 +5,8 @@ import { useTitle } from 'react-use'
 import { useForm, Controller } from 'react-hook-form'
 import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 
+import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
+
 import Deal from 'models/Deal'
 
 import {
@@ -25,7 +27,7 @@ import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getChangedRoles } from './helpers/get-changed-roles'
 
@@ -71,6 +73,10 @@ function CreateDeal({ router, route }: Props) {
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
+  )
+
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
   )
 
   const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
@@ -175,7 +181,7 @@ function CreateDeal({ router, route }: Props) {
       const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'
 
       contexts.push({
-        definition: getDefinitionId(deal.id, 'listing_status'),
+        definition: getDefinitionId(deal, 'listing_status'),
         checklist: checklist.id,
         value: defaultStatus,
         approved: true
@@ -184,7 +190,7 @@ function CreateDeal({ router, route }: Props) {
 
     if (isDoubleEnded) {
       contexts.push({
-        definition: getDefinitionId(deal.id, 'ender_type'),
+        definition: getDefinitionId(deal, 'ender_type'),
         checklist: checklist.id,
         value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
         approved: true
@@ -201,7 +207,7 @@ function CreateDeal({ router, route }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, property.address)
+      const contexts = createAddressContext(deal, checklists, property.address)
 
       dispatch(upsertContexts(deal.id, contexts))
     }

@@ -4,11 +4,9 @@ declare type IContextDataType = 'Text' | 'Date' | 'Number' | null
 declare type IContextFormat = 'Currency' | null
 declare type IContextCondition = IDealType | IDealPropertyType
 
-declare interface IDealBrandContext {
-  id: UUID
+declare interface IDealBrandContext extends IModel<'brand_context'> {
   brand: UUID
   key: string
-  type: 'brand_context'
   label: string
   mandatory: boolean
   short_label: string | null
@@ -23,13 +21,6 @@ declare interface IDealBrandContext {
   optional: Array<IContextCondition> | null
   triggers_brokerwolf: boolean
   order: number
-  deleted_at?: number | null
-  properties: {
-    placeholder: string
-    mask: string[]
-  }
-  checklists: IDealBrandContextChecklist[]
-  validate: (context: IDealBrandContext, value: unknown) => boolean
 }
 
 declare interface IDealBrandContextChecklist {

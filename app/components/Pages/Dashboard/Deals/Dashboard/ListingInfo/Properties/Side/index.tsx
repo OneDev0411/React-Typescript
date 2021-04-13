@@ -1,11 +1,14 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem } from '@material-ui/core'
 
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
 import Deal from 'models/Deal'
 import { upsertContexts } from 'actions/deals'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getEnderType } from 'models/Deal/helpers/context'
 
 import { BaseDropdown } from 'components/BaseDropdown'
@@ -17,6 +20,9 @@ interface Props {
 
 function DealSide(props: Props) {
   const dispatch = useDispatch()
+  const checklists = useSelector<IAppState, IDealChecklist[]>(({ deals }) =>
+    getDealChecklists(props.deal, deals.checklists)
+  )
 
   const options = [
     {
@@ -43,7 +49,14 @@ function DealSide(props: Props) {
 
     dispatch(
       upsertContexts(props.deal.id, [
-        createUpsertObject(props.deal, 'ender_type', value, true)
+        createContextObject(
+          props.deal,
+          checklists,
+          props.deal.has_active_offer ? 'Offer' : props.deal.deal_type,
+          'ender_type',
+          value,
+          true
+        )
       ])
     )
   }

@@ -1,14 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getValue } from 'models/Deal/helpers/dynamic-context'
-import { getContext } from 'models/Deal/helpers/context/get-context'
-
 import { upsertContexts, approveContext } from 'actions/deals'
-import {
-  validate,
-  createUpsertObject
-} from 'models/Deal/helpers/dynamic-context'
+
+import { getContext } from 'models/Deal/helpers/context/get-context'
+import { getContextValue } from 'models/Deal/helpers/context/get-context-value'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { validateContext } from 'models/Deal/helpers/context/validate-context'
 
 import { IAppState } from 'reducers'
 
@@ -63,10 +61,10 @@ export default function Factsheet({
     const checklistType = deal.has_active_offer ? 'Offer' : deal.deal_type
 
     try {
-      const context = createUpsertObject(
+      const context = createContextObject(
         deal,
         checklists,
-        checklistType,
+        deal.has_active_offer ? 'Offer' : checklistType,
         field.key,
         value,
         isBackOffice ? true : !field.needs_approval
@@ -86,10 +84,10 @@ export default function Factsheet({
     field: IDealBrandContext,
     value: unknown
   ): void => {
-    const currentValue = getFieldValue(getValue(deal, field))
+    const currentValue = getFieldValue(getContextValue(deal, field))
 
     const isValueChanged = value !== currentValue
-    const isValid = value != null && validate(field, value)
+    const isValid = value != null && validateContext(field, value)
 
     if (!isValueChanged || !isValid) {
       return
@@ -123,7 +121,7 @@ export default function Factsheet({
           {section === 'Dates' && <TimelineSplitter />}
 
           {table.map((field, index) => {
-            const value = getFieldValue(getValue(deal, field))
+            const value = getFieldValue(getContextValue(deal, field))
 
             const sharedProps = {
               field,

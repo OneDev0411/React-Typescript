@@ -19,8 +19,6 @@ import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
 
-import { getStatusField } from 'models/Deal/helpers/dynamic-context'
-
 import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
@@ -84,7 +82,6 @@ function CreateOffer({ router, route, params }: Props) {
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
-  const statusContextKey = getStatusField(deal)
 
   const dealContexts = deal ? getDealContexts(deal, 'Offer') : []
 
@@ -283,7 +280,7 @@ function CreateOffer({ router, route, params }: Props) {
 
           {showStatusQuestion(deal, 'Buying', 'contract_status') && (
             <Controller
-              name={`context:${statusContextKey}`}
+              name="context:contract_status"
               control={control}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />

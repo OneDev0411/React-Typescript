@@ -1,21 +1,28 @@
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
-export function createAddressContext(deal: IDeal, address: unknown) {
+export function createAddressContext(
+  deal: IDeal,
+  checklists: IDealChecklist[],
+  address: unknown
+) {
   return Object.entries(normalizeAddress(address)).reduce<
     {
-      definition: any // TODO: needs typing for contact definitions
-      checklist: IDealChecklist
-      value: string | number
+      definition: UUID
+      checklist: UUID
+      value: unknown
       approved: boolean
     }[]
   >((acc, [name, value]) => {
-    const context = createUpsertObject(deal, name, value, true)
+    const context = createContextObject(
+      deal,
+      checklists,
+      deal.has_active_offer ? 'Offer' : deal.deal_type,
+      name,
+      value,
+      true
+    )
 
-    if (context) {
-      acc.push(context)
-    }
-
-    return acc
+    return context ? [...acc, context] : acc
   }, [])
 }

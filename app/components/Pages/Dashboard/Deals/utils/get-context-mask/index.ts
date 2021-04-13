@@ -1,6 +1,6 @@
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
-import { getFieldProperties } from 'models/Deal/helpers/dynamic-context'
+import { getFieldProperties } from 'models/Deal/helpers/brand-context/get-field-properties'
 
 export function getContextInputMask(context: IDealBrandContext) {
   const properties = getFieldProperties(context.key)

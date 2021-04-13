@@ -85,9 +85,10 @@ function OpenHouseForm(props: Props) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isVirtual, setIsVirtual] = useState(false)
   const [virtualUrl, setVirtualUrl] = useState('')
-  const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] = useState<
-    boolean
-  >(false)
+  const [
+    showOHRegistrationDrawer,
+    setShowOHRegistrationDrawer
+  ] = useState<boolean>(false)
 
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate

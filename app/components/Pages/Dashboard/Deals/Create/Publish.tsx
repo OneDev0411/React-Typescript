@@ -209,7 +209,7 @@ export default function Publish({ params }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, property.address)
+      const contexts = createAddressContext(deal, checklists, property.address)
 
       dispatch(upsertContexts(deal.id, contexts))
     }

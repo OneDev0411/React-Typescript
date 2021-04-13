@@ -8,9 +8,9 @@ import {
   Theme
 } from '@material-ui/core'
 import fecha from 'fecha'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { upsertContexts } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
 
@@ -28,7 +28,10 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { getContextInputMask } from 'deals/utils/get-context-mask'
 
 import { getField } from 'models/Deal/helpers/context'
-import { validate } from 'models/Deal/helpers/dynamic-context'
+import { validateContext } from 'models/Deal/helpers/context/validate-context'
+
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -69,6 +72,10 @@ export function DealContext({
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
   const defaultValue = deal ? getField(deal, context.key) : ''
 
   const [inputValue, setInputValue] = useState(defaultValue)
@@ -84,7 +91,7 @@ export function DealContext({
   }, [defaultValue])
 
   useEffect(() => {
-    if (inputValue && concurrentMode && validate(context, inputValue)) {
+    if (inputValue && concurrentMode && validateContext(context, inputValue)) {
       handleSave()
     }
 
@@ -135,7 +142,14 @@ export function DealContext({
     if (deal && !onChange) {
       try {
         const approved = isBackOffice(user) ? true : !context.needs_approval
-        const data = createUpsertObject(deal, context.key, value, approved)
+        const data = createContextObject(
+          deal,
+          checklists,
+          deal.has_active_offer ? 'Offer' : deal.deal_type,
+          context.key,
+          value,
+          approved
+        )
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
@@ -201,7 +215,7 @@ export function DealContext({
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!inputValue || !validate(context, inputValue)}
+                disabled={!inputValue || !validateContext(context, inputValue)}
                 className={classes.saveButton}
                 onClick={() => handleSave()}
               >
