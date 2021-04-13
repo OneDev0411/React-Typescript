@@ -65,6 +65,10 @@ function ShowingAvailabilitiesTimes({
     onChange(newValue)
   }
 
+  const handleContinue = () => {
+    nextStep()
+  }
+
   const timeConflicts = useMemo(() => findTimeConflicts(value), [value])
 
   return (
@@ -100,7 +104,7 @@ function ShowingAvailabilitiesTimes({
           size="small"
           color="primary"
           disabled={!value.length || !!timeConflicts}
-          onClick={nextStep}
+          onClick={handleContinue}
         >
           Continue
         </Button>

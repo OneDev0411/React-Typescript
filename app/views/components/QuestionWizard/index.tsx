@@ -57,9 +57,13 @@ export function QuestionWizard({
     setCurrentStep(step)
   }
 
-  const gotoNext = async () => {
+  const gotoNext = async (delayNum?: number) => {
     if (concurrent) {
       return
+    }
+
+    if (delayNum) {
+      await delay(delayNum)
     }
 
     if (currentStep + 1 > sectionsCount) {

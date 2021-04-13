@@ -1,14 +1,14 @@
 import { useWizardContext, useSectionContext } from 'components/QuestionWizard'
 
-type UseQuestionWizardSmartNextReturn = () => void
+type UseQuestionWizardSmartNextReturn = (delay?: number) => void
 
 function useQuestionWizardSmartNext(): UseQuestionWizardSmartNextReturn {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
-  return () => {
+  return (delay?: number) => {
     if (step === wizard.currentStep) {
-      wizard.next()
+      wizard.next(delay)
     }
   }
 }
