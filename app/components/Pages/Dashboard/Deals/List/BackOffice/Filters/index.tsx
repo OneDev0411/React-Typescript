@@ -142,6 +142,22 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                   >
                     Production & Volume
                   </MenuItem>
+
+                  <MenuItem
+                    key={0}
+                    selected={
+                      Boolean(props.params.dashboard)
+                    }
+                    onClick={() => {
+                      toggleMenu()
+                      props.router.push(
+                        '/dashboard/deals/analytics/offices'
+                      )
+                    }}
+                  >
+                    Agents
+                  </MenuItem>
+
                   <MenuItem
                     key={0}
                     selected={

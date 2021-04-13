@@ -6,7 +6,8 @@ import IframeResizer from 'iframe-resizer-react'
 
 const dashboards = {
   production: '4aa9824f-d0c5-4e74-8a83-dbe5079c3073',
-  agents: '0385fcae-5261-4154-b29a-93fd4cc29ef5'
+  agents: '0385fcae-5261-4154-b29a-93fd4cc29ef5',
+  offices: '6eb0ab32-584b-4bea-ac4e-2aedd0f5daed'
 }
 
 export default function Analytics(props: WithRouterProps & StateProps) {
