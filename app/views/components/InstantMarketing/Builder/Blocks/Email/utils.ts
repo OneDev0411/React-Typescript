@@ -1,4 +1,4 @@
-import type { Editor } from 'grapesjs'
+import type { Editor, Model } from 'grapesjs'
 
 import adapt from '../adapt'
 import type { BlockTemplates, GetBlockTemplateFunc } from '../types'
@@ -28,7 +28,7 @@ export function removeUnusedBlocks(editor: Editor) {
 export function adaptTemplates(
   templates: BlockTemplates
 ): GetBlockTemplateFunc {
-  return (parent: HTMLElement | null, blockId: string) =>
+  return (parent: Model | null, blockId: string) =>
     parent && templates[blockId]
       ? adapt(parent, templates[blockId])
       : templates[blockId]
