@@ -753,12 +753,13 @@ class ContactsList extends React.Component {
     const { props, state } = this
     const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
     const contacts = selectContacts(list)
-
+    const isParkedTabActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
     const syncing = Object.values(this.props.oAuthAccounts)
       .flat()
       .some(account => account.sync_status !== 'success')
 
     const isZeroState =
+      !isParkedTabActive &&
       !isFetchingContacts &&
       contacts.length === 0 &&
       props.filters.length === 0 &&
