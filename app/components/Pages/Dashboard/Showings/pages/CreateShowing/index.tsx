@@ -96,7 +96,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     null
   )
 
-  const [advanceNotice, setAdvanceNotice] = useState<Nullable<number>>(null)
+  const [noticePeriod, setNoticePeriod] = useState<Nullable<number>>(null)
+
+  const [sameDayAllowed, setSameDayAllowed] = useState<boolean>(true)
 
   const [availabilities, setAvailabilities] = useShowingAvailabilitiesState()
 
@@ -163,7 +165,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         duration: 900, // TODO: This field is missed in the design
         roles,
         availabilities,
-        notice_period: advanceNotice ?? undefined,
+        notice_period: noticePeriod ?? undefined,
+        same_day_allowed: sameDayAllowed,
         allow_appraisal: allowAppraisal === 'Yes',
         allow_inspection: allowInspection === 'Yes',
         start_date: '2021-03-29T13:55:17.134Z', // TODO:: use real start date
@@ -307,8 +310,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             {/* TODO: Need to handle not in the SameDay logic */}
             <ShowingStepAdvanceNotice
-              leadTime={advanceNotice}
-              onLeadTimeChange={setAdvanceNotice}
+              noticePeriod={noticePeriod}
+              onNoticePeriodChange={setNoticePeriod}
+              sameDayAllowed={sameDayAllowed}
+              onSameDayAllowedChange={setSameDayAllowed}
             />
             <ShowingStepAvailabilities
               value={availabilities}

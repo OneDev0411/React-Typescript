@@ -1,39 +1,61 @@
 import React, { memo, useState } from 'react'
 
-import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
+import {
+  QuestionSection,
+  QuestionTitle,
+  useSectionContext,
+  useWizardContext
+} from 'components/QuestionWizard'
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
-import ShowingStepAdvanceNoticeLeadTimeOptions from './ShowingStepAdvanceNoticeLeadTimeOptions'
+import ShowingStepAdvanceNoticeLeadTimeOptions, {
+  hourOptions
+} from './ShowingStepAdvanceNoticeLeadTimeOptions'
 import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 type AdvanceNoticeValue = 'NoNeed' | 'NoSameDay' | 'LeadTime'
 
 interface ShowingStepAdvanceNoticeProps {
-  leadTime: Nullable<number>
-  onLeadTimeChange: (leadTime: Nullable<number>) => void
+  noticePeriod: Nullable<number>
+  onNoticePeriodChange: (noticePeriod: Nullable<number>) => void
+  sameDayAllowed: boolean
+  onSameDayAllowedChange: (sameDayAllowed: boolean) => void
 }
 
 function ShowingStepAdvanceNotice({
-  leadTime,
-  onLeadTimeChange
+  noticePeriod,
+  sameDayAllowed,
+  onNoticePeriodChange,
+  onSameDayAllowedChange
 }: ShowingStepAdvanceNoticeProps) {
   const nextStep = useQuestionWizardSmartNext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
   const [radioValue, setRadioValue] = useState<Nullable<AdvanceNoticeValue>>(
-    null
+    !sameDayAllowed ? 'NoSameDay' : noticePeriod ? 'LeadTime' : null
   )
 
   const handleChange = (value: AdvanceNoticeValue) => {
+    onSameDayAllowedChange(value !== 'NoSameDay')
+
     if (value !== 'LeadTime') {
-      onLeadTimeChange(null)
+      onNoticePeriodChange(value === 'NoNeed' ? 0 : null)
       nextStep()
+    }
+
+    // Try to have a period notice when the selected option is lead time
+    // the user passed this step before
+    if (value === 'LeadTime' && step !== wizard.currentStep) {
+      onNoticePeriodChange(hourOptions[0].value)
     }
 
     setRadioValue(value)
   }
 
-  const handleLeadTimeChange = (leadTime: number) => {
-    onLeadTimeChange(leadTime)
+  const handleLeadTimeChange = (noticePeriod: number) => {
+    onSameDayAllowedChange(true)
+    onNoticePeriodChange(noticePeriod)
     nextStep()
   }
 
@@ -51,7 +73,7 @@ function ShowingStepAdvanceNotice({
       value: 'LeadTime',
       children: (!radioValue || radioValue === 'LeadTime') && (
         <ShowingStepAdvanceNoticeLeadTimeOptions
-          value={leadTime}
+          value={noticePeriod}
           onChange={handleLeadTimeChange}
         />
       )

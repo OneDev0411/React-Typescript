@@ -6,7 +6,7 @@ import Select, { SelectItem } from 'components/Select'
 
 import { hourToSeconds } from '../../helpers'
 
-const hourOptions: SelectItem<number>[] = new Array(12)
+export const hourOptions: SelectItem<number>[] = new Array(12)
   .fill(null)
   .map((a, index) => ({
     label: `${index + 1} Hour${index > 0 ? 's' : ''}`,
