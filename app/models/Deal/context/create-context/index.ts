@@ -6,9 +6,14 @@ import Fetch from '../../../../services/fetch'
 
 export default async function createContext(
   brand: UUID,
-  data: IDealBrandContext
+  data: Partial<IDealBrandContext> & {
+    checklists: {
+      checklist: UUID
+      is_required: boolean
+    }[]
+  }
 ): Promise<IDealBrandContext> {
-  const newContext: IDealBrandContext = {
+  const newContext = {
     ...data,
     preffered_source: data.preffered_source ? 'MLS' : 'Provided',
     triggers_brokerwolf: false,

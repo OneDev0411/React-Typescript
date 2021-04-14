@@ -7,13 +7,18 @@ import Fetch from '../../../../services/fetch'
 export default async function editContext(
   brand: UUID,
   contextId: UUID | undefined,
-  data: IDealBrandContext
+  data: Partial<IDealBrandContext> & {
+    checklists: {
+      checklist: UUID
+      is_required: boolean
+    }[]
+  }
 ): Promise<IDealBrandContext> {
   if (!contextId) {
     throw new Error('invalid context id')
   }
 
-  const modifiedContext: IDealBrandContext = {
+  const modifiedContext = {
     ...data,
     preffered_source: data.preffered_source ? 'MLS' : 'Provided',
     triggers_brokerwolf: false,

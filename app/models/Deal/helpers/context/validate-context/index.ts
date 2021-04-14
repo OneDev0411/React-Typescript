@@ -5,12 +5,13 @@ import moment from 'moment'
  */
 export function validateContext(context: IDealBrandContext, value: string) {
   const isNumericField = ['Number', 'Numeric'].includes(context.data_type!)
+  const mandatory = context.mandatory
 
   if (
     isNumericField === false &&
     (value === undefined || value === null || value.length === 0)
   ) {
-    return !context.mandatory
+    return !mandatory
   }
 
   switch (context.data_type) {
@@ -18,7 +19,7 @@ export function validateContext(context: IDealBrandContext, value: string) {
       return value === undefined ||
         value === null ||
         (typeof value === 'string' && value.length === 0)
-        ? !context.mandatory
+        ? !mandatory
         : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
 
     case 'Text':

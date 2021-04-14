@@ -4,6 +4,7 @@ import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 
 interface Props {
   value: unknown
@@ -12,18 +13,18 @@ interface Props {
   onClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void
 }
 
-export function DeleteButton(props: Props) {
+export function DeleteButton({ value, field, deal, onClick }: Props) {
   const theme = useTheme<Theme>()
 
-  const hasValue = props.value || props.value === 0
-  const isRequired = props.field.mandatory && !props.deal.is_draft
+  const hasValue = value || value === 0
+  const isRequired = isRequiredContext(deal, field.key) && !deal.is_draft
 
   if (isRequired || !hasValue) {
     return null
   }
 
   return (
-    <IconButton size="small" onClick={props.onClick}>
+    <IconButton size="small" onClick={onClick}>
       <SvgIcon
         path={mdiTrashCanOutline}
         color={theme.palette.error.main}

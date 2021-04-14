@@ -4,7 +4,6 @@ import { Paper } from '@material-ui/core'
 
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
-import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import FactsheetSection from '../../../../Dashboard/Factsheet'
@@ -22,11 +21,12 @@ export default function CriticalDate({ deal, user }: Props) {
 
   const activeTeamId = getActiveTeamId(user)
 
-  const definitions = DealContext.getFactsheetSection(
-    activeTeamId,
-    deal,
-    'Dates'
-  )
+  // const definitions = DealContext.getFactsheetSection(
+  //   activeTeamId,
+  //   deal,
+  //   'Dates'
+  // )
+  const definitions = []
 
   // get next critical date
   const nextDate = getNextDate(deal, activeTeamId)

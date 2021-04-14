@@ -17,15 +17,6 @@ export default (
         }
       }
 
-    case actionTypes.GET_DEAL_CONTEXTS:
-      return {
-        ...state,
-        byDeal: {
-          ...state.dealId,
-          [action.dealId]: action.contexts
-        }
-      }
-
     default:
       return state
   }

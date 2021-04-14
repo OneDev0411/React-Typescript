@@ -6,21 +6,18 @@ declare type IContextCondition = IDealType | IDealPropertyType
 
 declare interface IDealBrandContext extends IModel<'brand_context'> {
   brand: UUID
+  data_type: 'Number' | 'Date' | 'Text'
+  default_value: Nullable<string | number>
+  exports: boolean
+  format: Nullable<string>
   key: string
   label: string
-  mandatory: boolean
-  short_label: string | null
-  section: IContextSection
-  needs_approval: boolean | null
-  exports: boolean | null
-  preffered_source: IContextSource
-  default_value: string | null
-  data_type: IContextDataType
-  format: IContextFormat
-  required: Array<IContextCondition> | null
-  optional: Array<IContextCondition> | null
-  triggers_brokerwolf: boolean
+  needs_approval: boolean
   order: number
+  preffered_source: 'Provided' | 'MLS' | null
+  section: string
+  short_label: string
+  triggers_brokerwolf: boolean
 }
 
 declare interface IDealBrandContextChecklist {

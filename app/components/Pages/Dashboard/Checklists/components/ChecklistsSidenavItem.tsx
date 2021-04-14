@@ -64,7 +64,7 @@ export function ChecklistsSidenavItem({ propertyType }: Props) {
   return (
     <SideNavItem
       title={propertyType.label}
-      link={getChecklistPageLink(propertyType.id)}
+      link={getChecklistPageLink(propertyType.id, 'Offer')}
       onDelete={() => requestDelete(propertyType)}
     />
   )
