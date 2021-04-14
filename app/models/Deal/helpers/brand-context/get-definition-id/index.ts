@@ -1,7 +1,7 @@
-export function getDefinitionId(deal: IDeal, key: string) {
-  // const definition = getDefinition(list_id, key)
+import { searchContext } from '../search-context'
 
-  // return definition && definition.id
+export function getDefinitionId(deal: IDeal, key: string): UUID {
+  const context = searchContext(deal, key)
 
-  return ''
+  return context!.id
 }
