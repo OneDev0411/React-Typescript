@@ -21,7 +21,7 @@ import { forcePushReminderNotificationSettings } from 'models/reminder-notificat
 import { getContextsByBrand } from 'actions/deals'
 
 import { IAppState } from 'reducers'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'partials/Loading'
@@ -109,7 +109,7 @@ export default function ReminderNotifications() {
           | undefined {
           const { deals } = store.getState()
 
-          return selectContextsByBrand(deals.contexts, getActiveTeamId(user))
+          return selectBrandContexts(deals.contexts, getActiveTeamId(user))
         }
       }
     }

@@ -3,7 +3,7 @@ export function getContextsChecklist(deal: IDeal) {
     ? 'Offer'
     : deal.deal_type
 
-  return deal.property_type.checklists?.find(
+  return deal.property_type?.checklists?.find(
     checklist => checklist.checklist_type === checklistType
   )
 }

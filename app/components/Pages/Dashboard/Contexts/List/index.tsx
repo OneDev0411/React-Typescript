@@ -13,7 +13,7 @@ import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
 import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
-import { selectExactContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -192,7 +192,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
 
 const mapStateToProps = ({ deals, user }: IAppState) => {
   const brandId = getActiveTeamId(user)
-  const exactContexts = selectExactContextsByBrand(deals.contexts, brandId)
+  const exactContexts = selectBrandContexts(deals.contexts, brandId)
 
   return {
     brandId,

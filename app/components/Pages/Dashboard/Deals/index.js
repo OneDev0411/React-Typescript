@@ -11,7 +11,7 @@ import {
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 
 function DealsContainer(props) {
   useEffectOnce(() => {
@@ -57,7 +57,7 @@ function mapStateToProps({ deals, user }) {
   return {
     error: deals.properties.error,
     deals: deals.list,
-    brandContexts: selectContextsByBrand(deals.contexts, brandId),
+    brandContexts: selectBrandContexts(deals.contexts, brandId),
     isFetchingDeals: deals.properties.isFetchingDeals,
     brandId,
     user

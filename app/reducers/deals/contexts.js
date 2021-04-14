@@ -1,20 +1,11 @@
 import * as actionTypes from '../../constants/deals'
 
-export default (
-  state = {
-    byBrand: {},
-    byDeal: {}
-  },
-  action
-) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case actionTypes.GET_BRAND_CONTEXTS:
       return {
-        ...state,
-        byBrand: {
-          ...state.brandId,
-          [action.brandId]: action.contexts
-        }
+        ...state.brandId,
+        [action.brandId]: action.contexts
       }
 
     default:
@@ -22,10 +13,4 @@ export default (
   }
 }
 
-export const selectContextsByBrand = (state, brandId) => state.byBrand[brandId]
-export const selectContextsByDeal = (state, dealId) => state.byDeal[dealId]
-export const selectExactContextsByBrand = (state, brandId) => {
-  const contexts = state.byBrand[brandId]
-
-  return contexts ? contexts.filter(context => context.brand === brandId) : []
-}
+export const selectBrandContexts = (state, brandId) => state[brandId]
