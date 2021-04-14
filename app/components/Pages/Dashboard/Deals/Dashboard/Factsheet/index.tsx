@@ -91,7 +91,7 @@ export default function Factsheet({
       validateContext(
         field,
         value as string,
-        isRequiredContext(deal, field.key)
+        isRequiredContext(deal, field.key)!
       )
 
     if (!isValueChanged || !isValid) {

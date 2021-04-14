@@ -94,7 +94,11 @@ export function DealContext({
   }, [defaultValue])
 
   useEffect(() => {
-    if (inputValue && concurrentMode && validateContext(context, inputValue)) {
+    if (
+      inputValue &&
+      concurrentMode &&
+      validateContext(context, inputValue, true)
+    ) {
       handleSave()
     }
 
