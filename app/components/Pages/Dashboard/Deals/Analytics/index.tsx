@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import PageLayout from 'components/GlobalPageLayout'
-import { getActiveTeamId } from 'utils/user-teams'
+import { getActiveTeam } from 'utils/user-teams'
 import IframeResizer from 'iframe-resizer-react'
+import dashboards from './dashboards'
+import { browserHistory, WithRouterProps } from 'react-router'
 
-const dashboards = {
-  production: '4aa9824f-d0c5-4e74-8a83-dbe5079c3073',
-  agents: '0385fcae-5261-4154-b29a-93fd4cc29ef5',
-  offices: '6eb0ab32-584b-4bea-ac4e-2aedd0f5daed'
-}
 
 export default function Analytics(props: WithRouterProps & StateProps) {
-  const { dashboard } = props.params
+  const { dashboard: key } = props.params
 
   const { user, deals } = useSelector(({ user, deals }: IAppState) => ({
     user,
     deals: deals.list
   }))
 
-  const brand = getActiveTeamId(user)
+  const { brand } = getActiveTeam(user)
+
+  const dashboard = dashboards?.[brand.brand_type]?.[key]
 
   const [ analytics, setAnalytics ] = useState()
 
@@ -28,14 +27,18 @@ export default function Analytics(props: WithRouterProps & StateProps) {
     const hash = Array.from(new Uint8Array(crypted))
     const hex = hash.map(b => b.toString(16).padStart(2, '0')).join('')
 
-    const base = `https://rechat.metabaseapp.com/public/dashboard/${dashboards[dashboard]}`
+    const base = `https://rechat.metabaseapp.com/public/dashboard/${dashboard.id}`
 
-    setAnalytics(`${base}?brand=${brand}&token=${hex}#hide_parameters=token,brand&titled=false`)
-  }, [user.access_token, brand])
+    setAnalytics(`${base}?brand=${brand.id}&token=${hex}#hide_parameters=token,brand&titled=false`)
+  }, [user.access_token, brand.id])
+
+  if (!dashboard) {
+    return browserHistory.push('/oops')
+  }
 
   return (
     <PageLayout>
-      <PageLayout.Header title="Deals Analytics" />
+      <PageLayout.Header title={`Deals Analytics: ${dashboard.label}`} />
       <PageLayout.Main>
         { analytics &&
           <IframeResizer

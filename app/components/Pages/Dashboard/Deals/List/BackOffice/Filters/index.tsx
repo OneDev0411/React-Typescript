@@ -6,6 +6,7 @@ import _ from 'underscore'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
+import { getActiveTeam } from 'utils/user-teams'
 import { getActiveSort } from 'deals/List/helpers/sorting'
 
 import { SortableColumn } from 'components/Grid/Table/types'
@@ -21,6 +22,8 @@ import {
 import { getGridSortLabel } from '../../helpers/sorting'
 
 import { SearchQuery } from '../types'
+
+import dashboards from '../../../Analytics/dashboards'
 
 interface Props {
   deals: IDeal[]
@@ -64,6 +67,11 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     props.location.query.type === 'query'
       ? `All ${props.params.filter} deals`
       : 'All Deals'
+
+
+  const team = getActiveTeam(user)
+
+  const availDashboards = dashboards[team.brand?.brand_type]
 
   return (
     <PageTabs
@@ -121,62 +129,32 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
             </DropdownTab>
           }
         />,
-        <Tab
-          key={inboxTabs.length + 2}
-          value="analytics"
-          label={
-            <DropdownTab title='Analytics'>
-              {({ toggleMenu }) => (
-                <>
-                  <MenuItem
-                    key={0}
-                    selected={
-                      Boolean(props.params.dashboard)
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/analytics/production'
-                      )
-                    }}
-                  >
-                    Production & Volume
-                  </MenuItem>
-
-                  <MenuItem
-                    key={0}
-                    selected={
-                      Boolean(props.params.dashboard)
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/analytics/offices'
-                      )
-                    }}
-                  >
-                    Offices
-                  </MenuItem>
-
-                  <MenuItem
-                    key={0}
-                    selected={
-                      Boolean(props.params.dashboard)
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/analytics/agents'
-                      )
-                    }}
-                  >
-                    Agents
-                  </MenuItem>
-                </>
-              )}
-            </DropdownTab>
-          }
-        />
+        Object.keys(availDashboards).length &&
+          <Tab
+            key={inboxTabs.length + 2}
+            value="analytics"
+            label={
+              <DropdownTab title='Analytics'>
+                {({ toggleMenu }) => (
+                  <>
+                    {...Object.keys(availDashboards).map((key, index) =>
+                      <MenuItem
+                        key={index}
+                        onClick={() => {
+                          toggleMenu()
+                          props.router.push(
+                            `/dashboard/deals/analytics/${key}`
+                          )
+                        }}
+                      >
+                        {availDashboards[key].label}
+                      </MenuItem>
+                    )}
+                  </>
+                )}
+              </DropdownTab>
+            }
+          />
       ]}
       actions={[
         <Tab
