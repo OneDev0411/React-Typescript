@@ -12,10 +12,11 @@ import { confirmation } from 'actions/confirmation'
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 
 interface Props {
+  checklistType: IDealChecklistType
   propertyType: IDealPropertyType
 }
 
-export function ChecklistsSidenavItem({ propertyType }: Props) {
+export function ChecklistsSidenavItem({ checklistType, propertyType }: Props) {
   const [isDeleted, setIsDeleted] = useState(false)
 
   const user = useSelector(selectUser)
@@ -64,7 +65,7 @@ export function ChecklistsSidenavItem({ propertyType }: Props) {
   return (
     <SideNavItem
       title={propertyType.label}
-      link={getChecklistPageLink(propertyType.id, 'Offer')}
+      link={getChecklistPageLink(propertyType.id, checklistType)}
       onDelete={() => requestDelete(propertyType)}
     />
   )

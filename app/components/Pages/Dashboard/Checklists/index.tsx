@@ -78,12 +78,14 @@ export function ChecklistsPage({ location }: Props) {
       <Container isOpen>
         <ChecklistsSidenav
           propertyTypes={propertyTypes}
+          checklistType={checklistType}
           onClickNewProperty={() => setIsFormOpen(true)}
         />
 
         <Content isSideMenuOpen>
           <Box m={3}>
             <PageTabs
+              defaultValue={checklistType || TabNames[0].type}
               tabs={TabNames.map((tab, index) => (
                 <TabLink
                   key={index}

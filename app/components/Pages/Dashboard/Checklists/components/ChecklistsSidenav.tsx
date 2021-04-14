@@ -7,11 +7,13 @@ import { ChecklistsSidenavItem } from './ChecklistsSidenavItem'
 
 interface Props {
   propertyTypes: IDealPropertyType[]
+  checklistType: IDealChecklistType
   onClickNewProperty: () => void
 }
 
 export function ChecklistsSidenav({
   propertyTypes,
+  checklistType,
   onClickNewProperty
 }: Props) {
   return (
@@ -22,6 +24,7 @@ export function ChecklistsSidenav({
           {propertyTypes.map(propertyType => (
             <ChecklistsSidenavItem
               key={propertyType.id}
+              checklistType={checklistType}
               propertyType={propertyType}
             />
           ))}
