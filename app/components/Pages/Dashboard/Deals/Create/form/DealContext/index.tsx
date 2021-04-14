@@ -33,6 +33,8 @@ import { validateContext } from 'models/Deal/helpers/context/validate-context'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
+
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
@@ -81,6 +83,7 @@ export function DealContext({
   const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
+  const properties = getContextProperties(context.key)
   const mask = getContextInputMask(context)
 
   useEffect(() => {
@@ -201,7 +204,7 @@ export function DealContext({
                     context.format === 'Currency' ? (
                       <InputAdornment position="start">$</InputAdornment>
                     ) : null,
-                  placeholder: context.properties?.placeholder ?? '',
+                  placeholder: properties?.placeholder ?? '',
                   inputComponent: mask ? MaskedInput : undefined,
                   value: inputValue,
                   onChange: handleChangeInputValue

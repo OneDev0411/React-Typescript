@@ -1,6 +1,5 @@
-import React from 'react'
 import { CircularProgress } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   QuestionSection,
@@ -14,13 +13,16 @@ import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-con
 
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import DealContext from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 
 import { useCreationContext } from 'deals/Create/context/use-creation-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
 import { getStatus } from 'models/Deal/helpers/context'
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 
 interface Props {
   list: IDealStatus[]
@@ -33,6 +35,10 @@ export function DealStatus({ list, onChange }: Props) {
   const { deal } = useCreationContext()
   const status = deal ? getStatus(deal) : null
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
   const dispatch = useDispatch()
 
   const handleChange = (value: string) => {
@@ -43,9 +49,11 @@ export function DealStatus({ list, onChange }: Props) {
     if (deal && !onChange) {
       dispatch(
         upsertContexts(deal.id, [
-          DealContext.createUpsertObject(
+          createContextObject(
             deal,
-            DealContext.getStatusField(deal),
+            checklists,
+            deal.has_active_offer ? 'Offer' : deal.deal_type,
+            getStatusContextKey(deal),
             value,
             true
           )

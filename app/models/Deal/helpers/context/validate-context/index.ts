@@ -3,26 +3,24 @@ import moment from 'moment'
 /**
  * validate a context
  */
-export function validateContext(ctx: IDealBrandContext, value: string) {
-  const isNumericField = ['Number', 'Numeric'].includes(ctx.data_type)
+export function validateContext(context: IDealBrandContext, value: string) {
+  const isNumericField = ['Number', 'Numeric'].includes(context.data_type!)
 
   if (
     isNumericField === false &&
     (value === undefined || value === null || value.length === 0)
   ) {
-    return !ctx.mandatory
+    return !context.mandatory
   }
 
-  switch (ctx.data_type) {
+  switch (context.data_type) {
     case 'Number':
-    case 'Numeric':
-      return _.isUndefined(value) ||
+      return value === undefined ||
         value === null ||
         (typeof value === 'string' && value.length === 0)
-        ? !ctx.mandatory
+        ? !context.mandatory
         : !Number.isNaN(parseFloat(value)) && /^\d*\.?\d*$/.test(value)
 
-    case 'String':
     case 'Text':
       return value.length > 0
 

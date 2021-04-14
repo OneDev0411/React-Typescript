@@ -6,7 +6,7 @@ import ClickOutside from 'react-click-outside'
 
 import Input from 'components/Input'
 import { getContextInputMask } from 'deals/utils/get-context-mask'
-import { getFieldProperties } from 'models/Deal/helpers/brand-context/get-field-properties'
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
 import { isContextApproved } from '../helpers/is-context-approved'
@@ -60,7 +60,7 @@ export function TextField({
   const [fieldValue, setFieldValue] = useState<unknown>(value)
   const classes = useStyles()
 
-  const properties = getFieldProperties(field.key)
+  const properties = getContextProperties(field.key)
 
   const toggleEditing = () => setIsEditing(!isEditing)
 

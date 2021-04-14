@@ -1,4 +1,4 @@
-export function getFieldProperties(key: string) {
+export function getContextProperties(key: string) {
   return (
     {
       year_built: {

@@ -8,7 +8,7 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { getFormattedValue } from 'models/Deal/helpers/dynamic-context'
+import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 

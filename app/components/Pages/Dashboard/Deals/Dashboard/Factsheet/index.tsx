@@ -87,7 +87,7 @@ export default function Factsheet({
     const currentValue = getFieldValue(getContextValue(deal, field))
 
     const isValueChanged = value !== currentValue
-    const isValid = value != null && validateContext(field, value)
+    const isValid = value != null && validateContext(field, value as string)
 
     if (!isValueChanged || !isValid) {
       return
