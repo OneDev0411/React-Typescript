@@ -4,6 +4,8 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import smoothscroll from 'smoothscroll-polyfill'
 import { useDispatch } from 'react-redux'
 
+import { IntercomProvider } from 'react-use-intercom'
+
 import { hot } from 'react-hot-loader/root'
 
 import { useAppcues } from 'services/appcues/use-appcues'
@@ -48,7 +50,8 @@ if (typeof window !== 'undefined') {
 
 const App = () => {
   const dispatch = useDispatch()
-	useAppcues()
+
+  useAppcues()
 
   return (
     <AppTheme>
