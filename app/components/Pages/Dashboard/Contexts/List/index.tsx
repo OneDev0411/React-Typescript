@@ -196,7 +196,7 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
 
   return {
     brandId,
-    isFetching: isEmpty(deals.contexts.byBrand),
+    isFetching: isEmpty(deals.contexts),
     list: !isEmpty(exactContexts)
       ? groupBy(exactContexts, 'section')
       : { isEmpty: true }
