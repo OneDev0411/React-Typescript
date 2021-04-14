@@ -170,6 +170,8 @@ export default function Publish({ params }: Props) {
     try {
       setIsSaving(true)
 
+      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
+
       if (values.address) {
         await savePropertyAddress(deal, values.address)
       }
@@ -177,8 +179,6 @@ export default function Publish({ params }: Props) {
       if (roles.length > 0) {
         await dispatch(createRoles(deal.id, roles))
       }
-
-      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
 
       showNotification &&
         dispatch(
@@ -291,6 +291,7 @@ export default function Publish({ params }: Props) {
         >
           {!hasAddress && (
             <Controller
+              key="address"
               name="address"
               control={control}
               render={({ onChange }) => (
@@ -305,6 +306,7 @@ export default function Publish({ params }: Props) {
 
           {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
             <Controller
+              key="buyers"
               name="buying_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -333,6 +335,7 @@ export default function Publish({ params }: Props) {
 
           {sellerRoles.length === 0 && (
             <Controller
+              key="sellers"
               name="selling_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -363,8 +366,10 @@ export default function Publish({ params }: Props) {
 
           {isStatusVisible && !getField(deal, statusContextKey) && (
             <Controller
+              key="status"
               name={`context:${statusContextKey}`}
               control={control}
+              defaultValue={getField(deal, statusContextKey)}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />
               )}
