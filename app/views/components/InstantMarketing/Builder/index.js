@@ -62,11 +62,17 @@ import { BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import { getTemplateBlocks } from './Blocks/templateBlocks'
+import { getTemplateBlockOptions } from './Blocks/templateBlocks'
 import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { registerToolbarButtons } from './toolbar'
+import {
+  makeParentDependentsHidden,
+  makeParentDependentsVisible,
+  removeDirectDependents
+} from './utils/dependent-components'
+import { makeModelUndraggable } from './utils/models'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -201,6 +207,8 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
+
+    this.makeAllComponentsUndraggable()
   }
 
   componentWillUnmount() {
@@ -236,22 +244,27 @@ class Builder extends React.Component {
      */
     let model = view.model
 
-    const hide = (rte) => {
+    const hide = rte => {
       const name = rte.name
       const top = document.querySelector(`#cke_${name}`)
-      if (!top)
+
+      if (!top) {
         return false
+      }
 
       top.style.display = 'none'
+
       return true
     }
+
     do {
       if (model.attributes.attributes.rte === 'disable') {
-
-        if (!hide(rte))
+        if (!hide(rte)) {
           rte.once('instanceReady', event => {
             hide(event.editor)
           })
+        }
+
         break
       }
       // eslint-disable-next-line no-cond-assign
@@ -374,6 +387,7 @@ class Builder extends React.Component {
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
+    this.makeAllComponentsUndraggable()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
     this.disableAssetManager()
@@ -391,6 +405,8 @@ class Builder extends React.Component {
     }
 
     this.setupImageDoubleClickHandler()
+
+    this.setupDependentComponents()
 
     this.props.onBuilderLoad({
       regenerateTemplate: this.regenerateTemplate
@@ -457,7 +473,9 @@ class Builder extends React.Component {
 
     const emailBlocksOptions = this.getBlocksOptions()
 
-    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+    const templateBlockOptions = await getTemplateBlockOptions(
+      this.selectedTemplate.url
+    )
 
     this.blocks = registerEmailBlocks(
       this.editor,
@@ -465,7 +483,7 @@ class Builder extends React.Component {
         ...this.props.templateData,
         ...renderData
       },
-      templateBlocks,
+      templateBlockOptions,
       emailBlocksOptions
     )
   }
@@ -474,7 +492,9 @@ class Builder extends React.Component {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
-    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+    const templateBlockOptions = await getTemplateBlockOptions(
+      this.selectedTemplate.url
+    )
 
     removeUnusedBlocks(this.editor)
     this.blocks = registerSocialBlocks(
@@ -483,7 +503,7 @@ class Builder extends React.Component {
         ...this.props.templateData,
         ...renderData
       },
-      templateBlocks
+      templateBlockOptions
     )
   }
 
@@ -515,7 +535,9 @@ class Builder extends React.Component {
       onEmptyVideoClick: this.openVideoDrawer
     }
 
-    const templateBlocks = await getTemplateBlocks(this.selectedTemplate.url)
+    const templateBlockOptions = await getTemplateBlockOptions(
+      this.selectedTemplate.url
+    )
 
     this.blocks = registerWebsiteBlocks(
       this.editor,
@@ -523,9 +545,45 @@ class Builder extends React.Component {
         ...this.props.templateData,
         ...renderData
       },
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     )
+  }
+
+  setupDependentComponents = () => {
+    this.editor.on('component:remove', model => {
+      // Remove the direct dependent models
+      removeDirectDependents(this.editor, model)
+
+      // Hide the parent dependents if this model is the last children
+      makeParentDependentsHidden(this.editor, model.parent())
+    })
+
+    this.editor.on('component:mount', model => {
+      makeParentDependentsVisible(this.editor, model.parent())
+    })
+
+    let dragStartParentModel = null
+
+    this.editor.on('component:drag:start', event => {
+      dragStartParentModel = event.parent
+    })
+
+    this.editor.on('component:drag:end', event => {
+      if (event.parent !== dragStartParentModel) {
+        makeParentDependentsHidden(this.editor, dragStartParentModel)
+
+        // We don't need the below line because the mount event happens on dropping
+        // makeParentDependentsVisible(this.editor, event.parent)
+      }
+
+      dragStartParentModel = null
+    })
+  }
+
+  makeAllComponentsUndraggable = () => {
+    // Make all the models undraggable on template initialize phase
+    makeModelUndraggable(this.editor.DomComponents.getWrapper())
   }
 
   openCarouselDrawer = model => {
@@ -800,6 +858,7 @@ class Builder extends React.Component {
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
     this.lockIn()
+    this.makeAllComponentsUndraggable()
     this.deselectAll()
     this.resize()
 

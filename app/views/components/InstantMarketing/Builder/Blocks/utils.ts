@@ -1,6 +1,4 @@
-import type { Model } from 'backbone'
-
-import type { Editor } from 'grapesjs'
+import type { Editor, Model } from 'grapesjs'
 
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
@@ -10,8 +8,10 @@ import {
   BlockTemplates,
   TemplateRenderDataFunc,
   BlockOnDropFunc,
-  BlockDragStopEventReturn
+  BlockDragStopEventReturn,
+  TemplateBlockOptions
 } from './types'
+import { makeModelUndraggable } from '../utils/models'
 
 export function collapseBlockCategories(editor: Editor) {
   const categories = editor.BlockManager.getCategories() as any
@@ -58,17 +58,19 @@ export function handleBlockDragStopEvent<T>(
   renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
   onDrop?: BlockOnDropFunc
 ): BlockDragStopEventReturn<T> {
-  function getBlockTemplate(
-    blockId: string,
-    parent: HTMLElement | null = null
-  ) {
+  function getBlockTemplate(blockId: string, parent: Model | null = null) {
     return typeof templates === 'function'
       ? templates(parent, blockId)
       : templates[blockId]
   }
 
-  function appendBlock(model: any, renderData: TemplateRenderData) {
+  function appendBlock(model: Model, renderData: TemplateRenderData) {
     const parent = model.parent()
+
+    if (!parent) {
+      return
+    }
+
     const template = getBlockTemplate(
       model.attributes.attributes['data-block'],
       parent
@@ -77,7 +79,10 @@ export function handleBlockDragStopEvent<T>(
     if (template) {
       const html = nunjucks.renderString(template, renderData)
 
-      parent.append(html, { at: model.opt.at })
+      const models = parent.append(html, { at: model.opt.at })
+
+      // Make the models undraggable on dropping new blocks into canvas
+      models.forEach(model => makeModelUndraggable(model))
     }
 
     model.remove()
@@ -136,4 +141,14 @@ export function reorderBlocks(editor: Editor, blockNames: string[]) {
       editor.BlockManager.add(blockName, block.clone() as any)
     }
   })
+}
+
+export function isDefaultBlocksDisabled(
+  templateBlockOptions: TemplateBlockOptions,
+  category: string
+) {
+  return (
+    templateBlockOptions.disableDefault === true ||
+    templateBlockOptions.disableDefault?.includes(category)
+  )
 }

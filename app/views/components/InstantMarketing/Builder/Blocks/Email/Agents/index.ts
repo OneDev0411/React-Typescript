@@ -16,7 +16,7 @@ import Left from './left.mjml'
 import Grid from './grid.mjml'
 import Multi from './multi.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const agentLeftBlockName = 'rechat-agent-left'
@@ -34,14 +34,16 @@ interface AgentBlock {
 export default function registerAgentBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
 ): AgentBlock {
   const agentBlocks = {
-    [agentLeftBlockName]: templateBlocks[agentLeftBlockName]?.template || Left,
-    [agentGridBlockName]: templateBlocks[agentGridBlockName]?.template || Grid,
+    [agentLeftBlockName]:
+      templateBlockOptions.blocks[agentLeftBlockName]?.template || Left,
+    [agentGridBlockName]:
+      templateBlockOptions.blocks[agentGridBlockName]?.template || Grid,
     [agentMultiBlockName]:
-      templateBlocks[agentMultiBlockName]?.template || Multi
+      templateBlockOptions.blocks[agentMultiBlockName]?.template || Multi
   }
 
   registerBlock(
@@ -53,7 +55,7 @@ export default function registerAgentBlocks(
       blockName: agentLeftBlockName,
       template: agentBlocks[agentLeftBlockName]
     },
-    templateBlocks[agentLeftBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -65,7 +67,7 @@ export default function registerAgentBlocks(
       blockName: agentGridBlockName,
       template: agentBlocks[agentGridBlockName]
     },
-    templateBlocks[agentGridBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -77,14 +79,14 @@ export default function registerAgentBlocks(
       blockName: agentMultiBlockName,
       template: agentBlocks[agentMultiBlockName]
     },
-    templateBlocks[agentMultiBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Agents',
     agentBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

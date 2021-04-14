@@ -41,7 +41,7 @@ import registerCarouselBlock, {
   CarouselBlockOptions,
   carouselBlockName
 } from './Carousel'
-import { TemplateBlocks } from '../types'
+import { TemplateBlockOptions } from '../types'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,
@@ -81,47 +81,52 @@ export const websiteBlocksTraits = {
 export function registerWebsiteBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   blocksOptions: BlocksOptions
 ) {
-  registerStaticBlocks(editor, renderData, templateBlocks, blocksOptions)
+  registerStaticBlocks(editor, renderData, templateBlockOptions, blocksOptions)
 
   const dynamicBlocks = {
     agent: registerAgentBlocks(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     ),
     image: registerImageBlock(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     ),
     video: registerVideoBlock(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     ),
     article: registerArticleBlocks(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     ),
     matterport: registerMatterportBlock(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     ),
-    map: registerMapBlock(editor, renderData, templateBlocks, blocksOptions),
+    map: registerMapBlock(
+      editor,
+      renderData,
+      templateBlockOptions,
+      blocksOptions
+    ),
     carousel: registerCarouselBlock(
       editor,
       renderData,
-      templateBlocks,
+      templateBlockOptions,
       blocksOptions
     )
   }
