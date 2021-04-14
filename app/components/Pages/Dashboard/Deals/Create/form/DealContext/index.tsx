@@ -218,7 +218,9 @@ export function DealContext({
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!inputValue || !validateContext(context, inputValue)}
+                disabled={
+                  !inputValue || !validateContext(context, inputValue, true)
+                }
                 className={classes.saveButton}
                 onClick={() => handleSave()}
               >

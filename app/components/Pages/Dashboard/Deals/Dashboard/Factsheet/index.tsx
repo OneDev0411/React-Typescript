@@ -12,6 +12,8 @@ import { IAppState } from 'reducers'
 
 import { getDealChecklists } from 'reducers/deals/checklists'
 
+import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
+
 import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
 
 import { DateField } from './DateField'
@@ -87,7 +89,13 @@ export default function Factsheet({
     const currentValue = getFieldValue(getContextValue(deal, field))
 
     const isValueChanged = value !== currentValue
-    const isValid = value != null && validateContext(field, value as string)
+    const isValid =
+      value != null &&
+      validateContext(
+        field,
+        value as string,
+        isRequiredContext(deal, field.key)
+      )
 
     if (!isValueChanged || !isValid) {
       return

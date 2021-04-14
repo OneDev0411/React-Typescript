@@ -12,7 +12,6 @@ import Deal from 'models/Deal'
 import {
   createDeal,
   createRoles,
-  getContextsByDeal,
   createChecklist,
   updateListing,
   upsertContexts
@@ -89,12 +88,6 @@ function CreateDeal({ router, route }: Props) {
   const propertyType = brandPropertyTypes.find(
     ({ id }) => id === propertyTypeId
   )
-
-  useEffect(() => {
-    if (dealId) {
-      dispatch(getContextsByDeal(dealId))
-    }
-  }, [dealId, dispatch])
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
