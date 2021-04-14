@@ -7,7 +7,7 @@ import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 import registerBlock from '../../registerBlock'
 import { baseView, isComponent } from '../utils'
 import SocialGroup from './social-group.njk'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeSocialGroup = 'social-group'
@@ -48,7 +48,7 @@ export interface SocialGroupBlockOptions {
 
 export default function registerSocialGroupBlock(
   editor: Editor,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   {
     socialGroupClassNames,
     socialLinkClassNames,
@@ -122,7 +122,7 @@ export default function registerSocialGroupBlock(
 
   const socialGroupBlocks = {
     [socialGroupBlockName]:
-      templateBlocks[socialGroupBlockName]?.template || SocialGroup
+      templateBlockOptions.blocks[socialGroupBlockName]?.template || SocialGroup
   }
 
   registerBlock(
@@ -134,14 +134,14 @@ export default function registerSocialGroupBlock(
       blockName: socialGroupBlockName,
       template: socialGroupBlocks[socialGroupBlockName]
     },
-    templateBlocks[socialGroupBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     socialGroupBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return allBlocks

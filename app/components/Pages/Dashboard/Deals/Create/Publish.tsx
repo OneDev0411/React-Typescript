@@ -82,11 +82,11 @@ export default function Publish({ params }: Props) {
   )
 
   const statusList = useStatusList(deal)
-  const statusContextKey = getStatusField(deal)
+  const statusContextKey =
+    deal?.deal_type === 'Buying' ? 'contract_status' : 'listing_status'
+
   const isStatusVisible =
-    deal &&
-    showStatusQuestion(deal, deal.deal_type, statusContextKey) &&
-    statusList.length > 1
+    deal && showStatusQuestion(deal, deal?.deal_type, statusContextKey)
 
   useEffect(() => {
     if (deal?.is_draft === false) {

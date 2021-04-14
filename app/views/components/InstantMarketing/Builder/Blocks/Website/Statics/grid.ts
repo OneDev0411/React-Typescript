@@ -11,7 +11,7 @@ import { baseView, isComponent } from '../utils'
 import GridColumn1 from './grid-column-1.njk'
 import GridColumn2 from './grid-column-2.njk'
 import GridColumn3 from './grid-column-3.njk'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeGridRow = 'grid-row'
@@ -27,7 +27,7 @@ export interface GridBlockOptions {
 
 export default function registerGridBlock(
   editor: Editor,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { gridRowClassNames, gridColumnClassNames }: GridBlockOptions
 ) {
   editor.DomComponents.addType(typeGridRow, {
@@ -54,11 +54,13 @@ export default function registerGridBlock(
 
   const gridColumnBlocks = {
     [gridColumn1BlockName]:
-      templateBlocks[gridColumn1BlockName]?.template || GridColumn1,
+      templateBlockOptions.blocks[gridColumn1BlockName]?.template ||
+      GridColumn1,
     [gridColumn2BlockName]:
-      templateBlocks[gridColumn2BlockName]?.template || GridColumn2,
+      templateBlockOptions.blocks[gridColumn2BlockName]?.template ||
+      GridColumn2,
     [gridColumn3BlockName]:
-      templateBlocks[gridColumn3BlockName]?.template || GridColumn3
+      templateBlockOptions.blocks[gridColumn3BlockName]?.template || GridColumn3
   }
 
   registerBlock(
@@ -70,7 +72,7 @@ export default function registerGridBlock(
       blockName: gridColumn1BlockName,
       template: gridColumnBlocks[gridColumn1BlockName]
     },
-    templateBlocks[gridColumn1BlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -82,7 +84,7 @@ export default function registerGridBlock(
       blockName: gridColumn2BlockName,
       template: gridColumnBlocks[gridColumn2BlockName]
     },
-    templateBlocks[gridColumn2BlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -94,14 +96,14 @@ export default function registerGridBlock(
       blockName: gridColumn3BlockName,
       template: gridColumnBlocks[gridColumn3BlockName]
     },
-    templateBlocks[gridColumn3BlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     gridColumnBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return allBlocks
