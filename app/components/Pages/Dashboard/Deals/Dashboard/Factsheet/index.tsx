@@ -60,13 +60,10 @@ export default function Factsheet({
   }
 
   const saveContext = (field: IDealBrandContext, value: unknown) => {
-    const checklistType = deal.has_active_offer ? 'Offer' : deal.deal_type
-
     try {
       const context = createContextObject(
         deal,
         checklists,
-        deal.has_active_offer ? 'Offer' : checklistType,
         field.key,
         value,
         isBackOffice ? true : !field.needs_approval

@@ -43,7 +43,6 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
       const data = createContextObject(
         deal,
         checklists,
-        deal.has_active_offer ? 'Offer' : deal.deal_type,
         'ender_type',
         value,
         false

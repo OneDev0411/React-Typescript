@@ -14,14 +14,7 @@ export function createAddressContext(
       approved: boolean
     }[]
   >((acc, [name, value]) => {
-    const context = createContextObject(
-      deal,
-      checklists,
-      deal.has_active_offer ? 'Offer' : deal.deal_type,
-      name,
-      value,
-      true
-    )
+    const context = createContextObject(deal, checklists, name, value, true)
 
     return context ? [...acc, context] : acc
   }, [])

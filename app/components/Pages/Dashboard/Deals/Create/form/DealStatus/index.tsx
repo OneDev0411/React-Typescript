@@ -52,7 +52,6 @@ export function DealStatus({ list, onChange }: Props) {
           createContextObject(
             deal,
             checklists,
-            deal.has_active_offer ? 'Offer' : deal.deal_type,
             getStatusContextKey(deal),
             value,
             true

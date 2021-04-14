@@ -1,14 +1,13 @@
+import { getContextsChecklist } from '../get-checklist'
+
 export function createContextObject(
   deal: IDeal,
   checklists: IDealChecklist[],
-  checklistType: IDealChecklistType,
   fieldKey: string,
   value: unknown,
   approved = false
 ) {
-  const brandChecklist = deal.property_type.checklists?.find(
-    checklist => checklist.checklist_type === checklistType
-  )
+  const brandChecklist = getContextsChecklist(deal)
 
   const definition = brandChecklist?.required_contexts
     .concat(brandChecklist?.optional_contexts)

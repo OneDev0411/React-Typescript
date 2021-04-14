@@ -148,7 +148,6 @@ export function DealContext({
         const data = createContextObject(
           deal,
           checklists,
-          deal.has_active_offer ? 'Offer' : deal.deal_type,
           context.key,
           value,
           approved
