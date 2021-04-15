@@ -140,18 +140,17 @@ const RawTableActions = ({
     <div className={classes.container}>
       {getSummeryInfo()}
       {isParkedActive && (
-        <ActionWrapper
-          atLeast="one"
-          bulkMode={isEntireRowsSelected}
-          action="Add Contacts"
-          disabled={isEntireModeDisable}
-        >
-          <UnparkContacts
-            contacts={selectedRowIds}
-            callback={deselectAndReload}
-            disabled={isEntireModeDisable}
-          />
-        </ActionWrapper>
+        <UnparkContacts
+          contacts={selectedRowIds}
+          excludedRows={excludedRows}
+          attributeFilters={filters?.attributeFilters}
+          searchText={filters?.text}
+          conditionOperator={filters?.filter_type}
+          users={filters?.users}
+          crm_tasks={filters?.crm_tasks}
+          flows={filters?.flows}
+          callback={deselectAndReload}
+        />
       )}
       <ActionWrapper
         bulkMode={isEntireRowsSelected}
