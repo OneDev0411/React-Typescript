@@ -12,7 +12,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeImage = 'image'
@@ -31,7 +31,7 @@ interface ImageBlock {
 export default function registerImageBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { imageClassNames, onImageDrop }: ImageBlockOptions
 ): ImageBlock {
   const resizable = {
@@ -67,7 +67,8 @@ export default function registerImageBlock(
   })
 
   const imageBlocks = {
-    [imageBlockName]: templateBlocks[imageBlockName]?.template || template
+    [imageBlockName]:
+      templateBlockOptions.blocks[imageBlockName]?.template || template
   }
 
   registerBlock(
@@ -79,14 +80,14 @@ export default function registerImageBlock(
       blockName: imageBlockName,
       template: imageBlocks[imageBlockName]
     },
-    templateBlocks[imageBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Image',
     imageBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

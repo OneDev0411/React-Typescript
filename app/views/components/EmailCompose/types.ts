@@ -20,6 +20,7 @@ export interface EmailFormValues {
   body: string | undefined
   templateInstance?: IMarketingTemplateInstance
   notifications_enabled?: boolean
+  uploadingAttachments?: unknown[]
 }
 
 export interface UrlBasedEmailAttachmentInput {

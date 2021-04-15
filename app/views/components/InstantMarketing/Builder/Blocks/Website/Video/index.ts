@@ -17,7 +17,7 @@ import {
   getVimeoVideoId,
   getYouTubeVideoId
 } from './utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeEmbedVideo = 'embed-video'
@@ -45,7 +45,7 @@ interface VideoBlock {
 export default function registerVideoBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   {
     embedVideoClassNames,
     onVideoDrop,
@@ -145,7 +145,7 @@ export default function registerVideoBlock(
 
   const videoBlocks = {
     [embedVideoBlockName]:
-      templateBlocks[embedVideoBlockName]?.template || template
+      templateBlockOptions.blocks[embedVideoBlockName]?.template || template
   }
 
   registerBlock(
@@ -157,14 +157,14 @@ export default function registerVideoBlock(
       blockName: embedVideoBlockName,
       template: videoBlocks[embedVideoBlockName]
     },
-    templateBlocks[embedVideoBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Video',
     videoBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(
