@@ -5,7 +5,7 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
-import { showingTabs } from '../components/Pages/Dashboard/Showings/constants'
+import { showingDetailTabs } from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
 import GoToDashboard from '../views/components/GoToDashboard'
@@ -668,6 +668,15 @@ const AsyncShowings = withAcl.showings(
   })
 )
 
+const AsyncShowingDetail = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/ShowingDetail' /* webpackChunkName: "showing_detail" */
+      )
+  })
+)
+
 const AsyncCreateShowing = withAcl.showings(
   Load({
     loader: () =>
@@ -947,9 +956,12 @@ export default (
         <Route path="showings">
           <IndexRoute component={AsyncShowings} />
           <Route
-            path={`type/:type(${Object.keys(showingTabs).join('|')})`}
-            component={AsyncShowings}
+            path={`:id/detail/:tab(${Object.keys(showingDetailTabs).join(
+              '|'
+            )})`}
+            component={AsyncShowingDetail}
           />
+          <Route path=":id/detail" component={AsyncShowingDetail} />
           <Route path="create" component={AsyncCreateShowing} />
         </Route>
 

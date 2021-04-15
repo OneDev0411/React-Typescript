@@ -1,46 +1,28 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { useTitle } from 'react-use'
-
-import { RouteComponentProps } from 'react-router'
 
 import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-import TabContentSwitch from 'components/TabContentSwitch'
+import BoxWithTitle from '../../components/BoxWithTitle'
+import ShowingAppointmentList from '../../components/ShowingAppointmentList'
 
-import ShowingTabs, { ShowingTabsProps } from '../../components/ShowingTabs'
-
-import { showingTabs } from '../../constants'
-import ShowingTabOverview from '../../components/ShowingTabOverview'
-import ShowingTabAll from '../../components/ShowingTabAll'
-import ShowingTabOffline from '../../components/ShowingTabOffline'
-
-type ShowingProps = RouteComponentProps<{ type?: ShowingTabsProps['type'] }, {}>
-
-function Showings({ params }: ShowingProps) {
+function Showings() {
   useTitle('Showings | Rechat')
-
-  const type = params.type || showingTabs.Overview
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Showings" />
       <PageLayout.Main>
-        <ShowingTabs type={type} />
         <Box my={3}>
-          <TabContentSwitch.Container value={type}>
-            <TabContentSwitch.Item value={showingTabs.Overview}>
-              <ShowingTabOverview />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingTabs.All}>
-              <ShowingTabAll />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingTabs.Offline}>
-              <ShowingTabOffline />
-            </TabContentSwitch.Item>
-          </TabContentSwitch.Container>
+          <BoxWithTitle
+            title="Upcoming Booking Appointment"
+            viewLink="/dashboard/showings/list"
+          >
+            <ShowingAppointmentList />
+          </BoxWithTitle>
         </Box>
       </PageLayout.Main>
     </PageLayout>

@@ -1,4 +1,8 @@
-export type ShowingTabType = 'Overview' | 'All' | 'Offline'
+export type ShowingDetailTabType =
+  | 'Overview'
+  | 'Booking'
+  | 'Visitors'
+  | 'Settings'
 
 export type GooglePlace = google.maps.GeocoderResult
 

@@ -1,7 +1,11 @@
-import type { ShowingTabType } from './types'
+import type { ShowingDetailTabType } from './types'
 
-export const showingTabs: Record<ShowingTabType, ShowingTabType> = {
+export const showingDetailTabs: Record<
+  ShowingDetailTabType,
+  ShowingDetailTabType
+> = {
   Overview: 'Overview',
-  All: 'All',
-  Offline: 'Offline'
+  Booking: 'Booking',
+  Visitors: 'Visitors',
+  Settings: 'Settings'
 }

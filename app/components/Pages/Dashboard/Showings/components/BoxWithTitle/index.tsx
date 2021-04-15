@@ -1,28 +1,42 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { Box, Typography } from '@material-ui/core'
+
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+
+import { Link } from 'react-router'
 
 import useStyles from './styles'
 
 interface BoxWithTitleProps {
   title: string
-  hasTitleBullet?: boolean
   children: ReactNode
+  viewLink?: string
+  viewTitle?: ReactNode
 }
 
 function BoxWithTitle({
   title,
   children,
-  hasTitleBullet = false
+  viewLink,
+  viewTitle
 }: BoxWithTitleProps) {
   const classes = useStyles()
 
   return (
     <Box mb={5}>
       <Box mb={2}>
-        <Typography variant="h5">
-          {hasTitleBullet && <span className={classes.bullet} />}
+        <Typography className={classes.title} variant="h5">
           {title}
         </Typography>
+        {viewLink && (
+          <Link className={classes.link} to={viewLink}>
+            {viewTitle || (
+              <>
+                View all <ArrowForwardIcon className={classes.icon} />
+              </>
+            )}
+          </Link>
+        )}
       </Box>
       {children}
     </Box>

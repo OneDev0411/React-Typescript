@@ -5,6 +5,7 @@ declare interface IShowing extends IModel<'showing'> {
   end_date?: string
   duration: number
   notice_period?: number
+  same_day_allowed: boolean
   approval_type: IShowingApprovalType
   feedback_template?: IMarketingTemplateInstance
   deal?: IDeal
