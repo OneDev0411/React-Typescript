@@ -1,11 +1,12 @@
 import Fetch from '../../../services/fetch'
 
-export async function getParkedContactsCount(
-  viewAsUser: UUID[] = []
+export async function getContactsCount(
+  viewAsUser: UUID[] = [],
+  justParked: boolean = true
 ): Promise<ApiResponseBody<any>> {
   try {
     const payload: any = {
-      parked: true
+      parked: justParked
     }
 
     if (viewAsUser.length > 0) {
