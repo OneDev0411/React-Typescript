@@ -19,8 +19,8 @@ const regions = {
 }
 
 const dashboards = {
-  'Brokerage': { production, regions, offices },
-  'Region': { production, offices },
+  'Brokerage': { production, regions, offices, agents },
+  'Region': { production, offices,agents },
   'Office': { production, agents },
   'Team': { production, agents },
   'Personal': { production }

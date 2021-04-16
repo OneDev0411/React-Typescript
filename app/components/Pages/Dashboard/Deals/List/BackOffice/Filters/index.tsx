@@ -15,6 +15,8 @@ import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 
 import { selectUser } from 'selectors/user'
 
+import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
+
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
@@ -22,8 +24,6 @@ import {
 import { getGridSortLabel } from '../../helpers/sorting'
 
 import { SearchQuery } from '../types'
-
-import dashboards from '../../../Analytics/dashboards'
 
 interface Props {
   deals: IDeal[]
@@ -70,8 +70,6 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
 
   const team = getActiveTeam(user)
-
-  const availDashboards = dashboards[team.brand?.brand_type]
 
   return (
     <PageTabs
@@ -129,32 +127,9 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
             </DropdownTab>
           }
         />,
-        Object.keys(availDashboards).length &&
-          <Tab
-            key={inboxTabs.length + 2}
-            value="analytics"
-            label={
-              <DropdownTab title='Analytics'>
-                {({ toggleMenu }) => (
-                  <>
-                    {...Object.keys(availDashboards).map((key, index) =>
-                      <MenuItem
-                        key={index}
-                        onClick={() => {
-                          toggleMenu()
-                          props.router.push(
-                            `/dashboard/deals/analytics/${key}`
-                          )
-                        }}
-                      >
-                        {availDashboards[key].label}
-                      </MenuItem>
-                    )}
-                  </>
-                )}
-              </DropdownTab>
-            }
-          />
+        <AnalyticsDropdownTab
+          brand_type={team?.brand.brand_type}
+        />
       ]}
       actions={[
         <Tab

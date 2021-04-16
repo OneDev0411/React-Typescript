@@ -5,6 +5,8 @@ import { getActiveTeam } from 'utils/user-teams'
 import IframeResizer from 'iframe-resizer-react'
 import dashboards from './dashboards'
 import { browserHistory, WithRouterProps } from 'react-router'
+import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+import AnalyticsDropdownTab from './DropdownTab'
 
 
 export default function Analytics(props: WithRouterProps & StateProps) {
@@ -40,6 +42,13 @@ export default function Analytics(props: WithRouterProps & StateProps) {
     <PageLayout>
       <PageLayout.Header title={`Deals Analytics: ${dashboard.label}`} />
       <PageLayout.Main>
+        <PageTabs
+          tabs={[
+            <AnalyticsDropdownTab
+              brand_type={brand.brand_type}
+            />
+          ]}
+        />
         { analytics &&
           <IframeResizer
             src={analytics}
