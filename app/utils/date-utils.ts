@@ -41,8 +41,20 @@ export function isToday(date: Date): boolean {
 }
 
 export function getSecondsSinceStartOfDay(date: Date = new Date()): number {
-  const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const startOfThatDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   
-  const diff = date.getTime() - today.getTime(); // ms difference
-  return Math.round(diff / 1000); // make seconds
+  const diff = date.getTime() - startOfThatDay.getTime(); // ms difference
+  return Math.floor(diff / 1000); // make seconds
+}
+
+
+/**
+ * returns true if the target date is after the origin date
+ * with optionally passed distance in seconds
+ */
+export function hasDistance(target: Date, origin: Date, distanceSeconds: number = 0): boolean {
+  const targetSeconds = Math.floor(target.getTime() / 1000)
+  const originSeconds = Math.floor(origin.getTime() / 1000)
+
+  return originSeconds + distanceSeconds < targetSeconds
 }

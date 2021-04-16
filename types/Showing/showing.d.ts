@@ -39,8 +39,11 @@ declare interface IBaseShowing {
   end_date: string | null
   duration: number
   availabilities: IShowingAvailability[]
-  notice_period: number | null
   listing: IListing | null
+  address: unknown // TODO: use std address
+  gallery: unknown // TODO: use gallery
+  notice_period: number | null
+  same_day_allowed: boolean
 }
 
 declare interface IShowing extends IModel<'showing'>, IBaseShowing {

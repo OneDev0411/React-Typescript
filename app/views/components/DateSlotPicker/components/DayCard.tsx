@@ -16,7 +16,7 @@ const useStyles = makeStyles(
     card: {
       width: theme.spacing(11),
       height: theme.spacing(11),
-      margin: theme.spacing(0.5, 0),
+      margin: theme.spacing(0.5, 0.25),
       border: `1px solid ${theme.palette.divider}`,
       cursor: 'pointer'
     },

@@ -1,5 +1,4 @@
-import { useDispatch } from 'react-redux'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, useWatch, Controller } from 'react-hook-form'
 import {
   Grid,
   Box,
@@ -14,14 +13,11 @@ import {
 import isMobilePhone from 'validator/es/lib/isMobilePhone'
 import isEmail from 'validator/es/lib/isEmail'
 
-import { addNotification } from 'components/notification'
 import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
 
 import { setTime } from 'utils/set-time'
-
-import { createAppointmentRequest } from 'models/showings/create-appointment-request'
 
 import { getBookableDateRange } from './utils'
 import { useBookTimeRange } from './hooks'
@@ -81,30 +77,41 @@ interface FormFields {
 interface Props {
   token: string
   showing: IPublicShowing
-  onBook: (appointmentData: IAppointmentInput) => void
+  onBook: (appointmentData: IShowingAppointmentInput) => Promise<void>
 }
 
 export default function BookSection({ token, showing, onBook }: Props) {
-  const dispatch = useDispatch()
   const classes = useStyles()
-  const {
-    handleSubmit,
-    errors,
-    control,
-    watch,
-    formState
-  } = useForm<FormFields>({
+
+  const { handleSubmit, errors, control, formState } = useForm<FormFields>({
     mode: 'onChange'
   })
-  const { startDate, endDate, unavailableDates } = getBookableDateRange(showing)
 
-  const selectedDate = watch<'date', Nullable<Date>>('date')
-  const { startTime, endTime, unavailableTimes } = useBookTimeRange(
-    showing,
-    selectedDate ?? undefined
-  )
+  const {
+    startDate,
+    endDate,
+    defaultSelectedDate,
+    unavailableDates
+  } = getBookableDateRange(showing)
+  const selectedDate = useWatch({
+    name: 'date',
+    control,
+    defaultValue: defaultSelectedDate
+  })
 
-  const handleSubmitBookForm = async ({
+  const {
+    startTime,
+    endTime,
+    defaultSelectedTimeRange,
+    unavailableTimes
+  } = useBookTimeRange(showing, selectedDate)
+  const selectedTimeRange = useWatch({
+    name: 'timeRange',
+    control,
+    defaultValue: defaultSelectedTimeRange
+  })
+
+  const handleSubmitBookForm = ({
     date,
     timeRange,
     firstName,
@@ -115,9 +122,7 @@ export default function BookSection({ token, showing, onBook }: Props) {
   }: FormFields) => {
     const appointmentTime = setTime(date, timeRange[0])
 
-    console.log({ appointmentTime })
-
-    const appointmentData: IAppointmentInput = {
+    const appointmentData: IShowingAppointmentInput = {
       source: 'Website',
       time: appointmentTime.toISOString(),
       contact: {
@@ -129,25 +134,7 @@ export default function BookSection({ token, showing, onBook }: Props) {
       }
     }
 
-    console.log({ appointmentData })
-
-    try {
-      await createAppointmentRequest(token, appointmentData)
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: 'Appointment request created successfully'
-        })
-      )
-    } catch (error) {
-      console.error(error)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Unable to create appointment request'
-        })
-      )
-    }
+    return onBook(appointmentData)
   }
 
   return (
@@ -179,183 +166,192 @@ export default function BookSection({ token, showing, onBook }: Props) {
             rules={{
               required: 'Required'
             }}
-            defaultValue={null}
-            render={({ onChange, value }) => (
-              <DateSlotPicker
-                start={startDate}
-                end={endDate}
-                active={value ?? undefined}
-                unavailableDates={unavailableDates}
-                onClick={onChange}
-              />
-            )}
+            defaultValue={selectedDate ?? null}
+            render={({ onChange, value }) => {
+              return (
+                <DateSlotPicker
+                  start={startDate}
+                  end={endDate}
+                  active={value}
+                  unavailableDates={unavailableDates}
+                  onClick={onChange}
+                />
+              )
+            }}
           />
         </Grid>
 
-        {selectedDate && (
+        <Grid item xs={12}>
+          <Box pt={5} pb={1.5} className={classes.sectionTitleContainer}>
+            <Typography variant="h6">Pick a time</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Controller
+            name="timeRange"
+            control={control}
+            rules={{
+              required: 'Required'
+            }}
+            defaultValue={selectedTimeRange ?? null}
+            render={({ onChange, value }) => {
+              return (
+                <TimeSlotPicker
+                  start={startTime}
+                  end={endTime}
+                  duration={showing.duration}
+                  active={value}
+                  unavailableTimes={unavailableTimes}
+                  onClick={onChange}
+                />
+              )
+            }}
+          />
+        </Grid>
+
+        {selectedDate && selectedTimeRange && (
           <>
             <Grid item xs={12}>
               <Box pt={5} pb={1.5} className={classes.sectionTitleContainer}>
-                <Typography variant="h6">Pick a time</Typography>
+                <Typography variant="h6">Enter your contact info</Typography>
               </Box>
             </Grid>
-            <Grid item xs={12}>
-              <Controller
-                name="timeRange"
-                control={control}
-                rules={{
-                  required: 'Required'
-                }}
-                defaultValue={null}
-                render={({ onChange, value }) => (
-                  <TimeSlotPicker
-                    start={startTime}
-                    end={endTime}
-                    duration={showing.duration}
-                    active={value ?? undefined}
-                    unavailableTimes={unavailableTimes}
-                    onClick={onChange}
+
+            <Grid
+              container
+              item
+              xs={12}
+              className={classes.contactInfoContainer}
+            >
+              <Grid item xs={12} md={6}>
+                <Box pb={2} className={classes.oddContactInfoFieldContainer}>
+                  <Controller
+                    name="firstName"
+                    control={control}
+                    rules={{
+                      required: 'Required'
+                    }}
+                    defaultValue=""
+                    as={
+                      <TextField
+                        fullWidth
+                        error={!!errors.firstName}
+                        helperText={errors.firstName?.message}
+                        size="small"
+                        variant="outlined"
+                        label="First Name"
+                      />
+                    }
                   />
-                )}
-              />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box pb={2}>
+                  <Controller
+                    name="lastName"
+                    control={control}
+                    rules={{
+                      required: 'Required'
+                    }}
+                    defaultValue=""
+                    as={
+                      <TextField
+                        fullWidth
+                        error={!!errors.lastName}
+                        helperText={errors.lastName?.message}
+                        size="small"
+                        variant="outlined"
+                        label="Last Name"
+                      />
+                    }
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box pb={2}>
+                  <Controller
+                    name="company"
+                    control={control}
+                    defaultValue=""
+                    as={
+                      <TextField
+                        fullWidth
+                        error={!!errors.company}
+                        helperText={errors.company?.message}
+                        size="small"
+                        variant="outlined"
+                        label="Brokerage"
+                      />
+                    }
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box pb={2} className={classes.oddContactInfoFieldContainer}>
+                  <Controller
+                    name="email"
+                    control={control}
+                    rules={{
+                      validate: (value: string) => {
+                        if (!value) {
+                          return true
+                        }
+
+                        if (isEmail(value)) {
+                          return true
+                        }
+
+                        return 'Invalid email address'
+                      }
+                    }}
+                    defaultValue=""
+                    as={
+                      <TextField
+                        fullWidth
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                        size="small"
+                        type="email"
+                        variant="outlined"
+                        label="Email"
+                      />
+                    }
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box>
+                  <Controller
+                    name="phoneNumber"
+                    control={control}
+                    rules={{
+                      required: 'Required',
+                      validate: (value: string) => {
+                        if (isMobilePhone(value)) {
+                          return true
+                        }
+
+                        return 'Invalid mobile phone number'
+                      }
+                    }}
+                    defaultValue=""
+                    as={
+                      <TextField
+                        fullWidth
+                        error={!!errors.phoneNumber}
+                        helperText={errors.phoneNumber?.message}
+                        size="small"
+                        type="tel"
+                        variant="outlined"
+                        label="Phone"
+                      />
+                    }
+                  />
+                </Box>
+              </Grid>
             </Grid>
           </>
         )}
-
-        <Grid item xs={12}>
-          <Box pt={5} pb={1.5} className={classes.sectionTitleContainer}>
-            <Typography variant="h6">Enter your contact info</Typography>
-          </Box>
-        </Grid>
-
-        <Grid container item xs={12} className={classes.contactInfoContainer}>
-          <Grid item xs={12} md={6}>
-            <Box pb={2} className={classes.oddContactInfoFieldContainer}>
-              <Controller
-                name="firstName"
-                control={control}
-                rules={{
-                  required: 'Required'
-                }}
-                defaultValue=""
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.firstName}
-                    helperText={errors.firstName?.message}
-                    size="small"
-                    variant="outlined"
-                    label="First Name"
-                  />
-                }
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box pb={2}>
-              <Controller
-                name="lastName"
-                control={control}
-                rules={{
-                  required: 'Required'
-                }}
-                defaultValue=""
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.lastName}
-                    helperText={errors.lastName?.message}
-                    size="small"
-                    variant="outlined"
-                    label="Last Name"
-                  />
-                }
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Box pb={2}>
-              <Controller
-                name="company"
-                control={control}
-                defaultValue=""
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.company}
-                    helperText={errors.company?.message}
-                    size="small"
-                    variant="outlined"
-                    label="Brokerage"
-                  />
-                }
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box pb={2} className={classes.oddContactInfoFieldContainer}>
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  validate: (value: string) => {
-                    if (!value) {
-                      return true
-                    }
-
-                    if (isEmail(value)) {
-                      return true
-                    }
-
-                    return 'Invalid email address'
-                  }
-                }}
-                defaultValue=""
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
-                    size="small"
-                    type="email"
-                    variant="outlined"
-                    label="Email"
-                  />
-                }
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box>
-              <Controller
-                name="phoneNumber"
-                control={control}
-                rules={{
-                  required: 'Required',
-                  validate: (value: string) => {
-                    if (isMobilePhone(value)) {
-                      return true
-                    }
-
-                    return 'Invalid mobile phone number'
-                  }
-                }}
-                defaultValue=""
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.phoneNumber}
-                    helperText={errors.phoneNumber?.message}
-                    size="small"
-                    type="tel"
-                    variant="outlined"
-                    label="Phone"
-                  />
-                }
-              />
-            </Box>
-          </Grid>
-        </Grid>
 
         <Grid container item xs={12}>
           <Box width="100%" pt={5}>
@@ -365,7 +361,7 @@ export default function BookSection({ token, showing, onBook }: Props) {
               variant="contained"
               color="primary"
               className={classes.bookButton}
-              disabled={!formState.isValid}
+              disabled={!formState.isValid || formState.isSubmitting}
             >
               Book This Showing
             </Button>

@@ -1,6 +1,5 @@
 import {
   Grid,
-  Box,
   Card,
   CardContent,
   Typography,
@@ -32,31 +31,45 @@ export default function AgentCard({ agent }: Props) {
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Grid container alignItems="center">
-          <Grid item xs={12} sm={4} md={3}>
-            <Box py={1} px={2}>
-              {/* TODO: Remove the following line complaining about `contact` is required */}
-              {/* @ts-ignore */}
-              <Avatar
-                alt={agent.full_name}
-                size="xlarge"
-                url={agent.profile_image_url ?? undefined}
-              >
-                {getNameInitials(agent.full_name)}
-              </Avatar>
-            </Box>
+        <Grid container alignItems="center" spacing={1}>
+          <Grid item>
+            {/* TODO: Remove the following line complaining about `contact` is required */}
+            {/* @ts-ignore */}
+            <Avatar
+              alt={agent.full_name}
+              size="xlarge"
+              url={agent.profile_image_url ?? undefined}
+            >
+              {getNameInitials(agent.full_name)}
+            </Avatar>
           </Grid>
-          <Grid item xs={12} sm={8} md={9}>
+          <Grid item>
             <Grid container item direction="column" justify="center">
-              <Grid item>
-                <Typography variant="subtitle1">{agent.full_name}</Typography>
-                <Typography variant="body2">{agent.office?.name}</Typography>
+              <Grid
+                container
+                item
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
+                <Grid item>
+                  <Typography variant="subtitle1">{agent.full_name}</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body2" color="textSecondary">
+                    {agent.office?.name}
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="body2">{agent.email}</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {agent.email}
+                </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2">{agent.phone_number}</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  {agent.phone_number}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>

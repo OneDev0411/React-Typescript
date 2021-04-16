@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, A11y } from 'swiper'
@@ -6,7 +7,6 @@ import SwiperCore, { Navigation, A11y } from 'swiper'
 import TimeCard from './components/TimeCard'
 
 import { getTimeSlotsInRange } from './utils'
-
 import { TimeRange } from './types'
 
 SwiperCore.use([Navigation, A11y])
@@ -42,6 +42,10 @@ export default function TimeSlotPicker({
   const classes = useStyles()
 
   const slots = getTimeSlotsInRange(start, end, duration)
+  const [initialSlide, setInitialSlide] = useState<number>(0)
+  const [controlledSwiper, setControlledSwiper] = useState<
+    Nullable<SwiperCore>
+  >(null)
 
   const isSlotDisabled = useCallback(
     (slot: TimeRange) => {
@@ -50,8 +54,46 @@ export default function TimeSlotPicker({
     [unavailableTimes]
   )
 
+  useDeepCompareEffect(() => {
+    if (!active || slots.length === 0) {
+      setInitialSlide(0)
+
+      return
+    }
+
+    const initialSlideIndex = slots.findIndex(
+      slot =>
+        slot[0] === active[0] && slot[1] === active[1] && !isSlotDisabled(slot)
+    )
+
+    if (initialSlideIndex === -1) {
+      setInitialSlide(0)
+
+      // TODO: change this hack in the future. :(
+      onClick(slots[0])
+
+      return
+    }
+
+    setInitialSlide(initialSlideIndex)
+  }, [slots, active])
+
+  useEffect(() => {
+    if (!controlledSwiper) {
+      return
+    }
+
+    controlledSwiper.slideTo(initialSlide)
+  }, [controlledSwiper, initialSlide])
+
   return (
-    <Swiper freeMode navigation slidesPerView="auto" spaceBetween={16}>
+    <Swiper
+      freeMode
+      navigation
+      onSwiper={setControlledSwiper}
+      slidesPerView="auto"
+      spaceBetween={16}
+    >
       {slots.map(slot => (
         <SwiperSlide key={slot[0]} className={classes.slide}>
           <TimeCard

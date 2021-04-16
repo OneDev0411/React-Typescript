@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { makeStyles } from '@material-ui/core'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, A11y } from 'swiper'
@@ -37,6 +38,32 @@ export default function DateSlotPicker({
 }: Props) {
   const classes = useStyles()
   const days = getDaysBetween(start, end)
+  const [initialSlide, setInitialSlide] = useState<number>(0)
+  const [controlledSwiper, setControlledSwiper] = useState<
+    Nullable<SwiperCore>
+  >(null)
+
+  useDeepCompareEffect(() => {
+    if (!active || days.length === 0) {
+      setInitialSlide(0)
+
+      return
+    }
+
+    const initialSlideIndex = days.findIndex(day =>
+      datesAreOnSameDay(day, active)
+    )
+
+    setInitialSlide(initialSlideIndex === -1 ? 0 : initialSlideIndex)
+  }, [days, active])
+
+  useEffect(() => {
+    if (!controlledSwiper) {
+      return
+    }
+
+    controlledSwiper.slideTo(initialSlide)
+  }, [controlledSwiper, initialSlide])
 
   const isDateDisabled = useCallback(
     (date: Date) => {
@@ -50,7 +77,13 @@ export default function DateSlotPicker({
   )
 
   return (
-    <Swiper freeMode navigation slidesPerView="auto" spaceBetween={16}>
+    <Swiper
+      freeMode
+      navigation
+      onSwiper={setControlledSwiper}
+      slidesPerView="auto"
+      spaceBetween={16}
+    >
       {days.map(day => (
         <SwiperSlide key={day.getTime()} className={classes.slide}>
           <DayCard

@@ -1,8 +1,10 @@
 import {
   datesAreOnSameDay,
   getDaysBetween,
-  getWeekdayName
+  getWeekdayName,
+  isToday
 } from 'utils/date-utils'
+
 import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
 
 function getEndDateFromStartDate(startDate: string, days: number = 30): Date {
@@ -36,6 +38,10 @@ export function isShowingBookable(showing: IPublicShowing): boolean {
 }
 
 export function isDayBookable(showing: IPublicShowing, date: Date): boolean {
+  if (!showing.same_day_allowed && isToday(date)) {
+    return false
+  }
+
   const dateWeekdayName = getWeekdayName(date)
   const weekdayAvailability = showing.availabilities.find(
     item => item.weekday === dateWeekdayName
@@ -75,6 +81,7 @@ export function isDayBookable(showing: IPublicShowing, date: Date): boolean {
 interface BookableDateRange {
   startDate: Date
   endDate: Date
+  defaultSelectedDate?: Date
   unavailableDates: Date[]
 }
 
@@ -89,9 +96,16 @@ export function getBookableDateRange(
     date => !isDayBookable(showing, date)
   )
 
+  const defaultSelectedDate = getDaysBetween(startDate, endDate).find(date =>
+    unavailableDates.every(
+      unavailableDate => !datesAreOnSameDay(date, unavailableDate)
+    )
+  )
+
   return {
     startDate,
     endDate,
+    defaultSelectedDate,
     unavailableDates
   }
 }
