@@ -39,6 +39,7 @@ function ShowingStepProperty({
   const handleSearchResultSelect = (result: SearchResult) => {
     if (result.type === 'listing' || result.type === 'deal') {
       onPropertyChange(result)
+      console.log('result', result)
       nextStep()
     } else if (result.type === 'place') {
       onPropertyChange({

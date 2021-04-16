@@ -206,6 +206,7 @@
     "react-modal": "^3.8.1",
     "react-motion": "^0.5.2",
     "react-progressive-image": "^0.6.0",
+    "react-rating-stars-component": "^2.2.0",
     "react-redux": "^7.2.3",
     "react-router": "^3.2.3",
     "react-router-redux": "^4.0.8",
