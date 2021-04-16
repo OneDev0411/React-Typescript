@@ -3,13 +3,14 @@ import { useSelector } from 'react-redux'
 import PageLayout from 'components/GlobalPageLayout'
 import { getActiveTeam } from 'utils/user-teams'
 import IframeResizer from 'iframe-resizer-react'
-import dashboards from './dashboards'
 import { browserHistory, WithRouterProps } from 'react-router'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+import { IAppState } from 'reducers'
+import dashboards from './dashboards'
 import AnalyticsDropdownTab from './DropdownTab'
 
 
-export default function Analytics(props: WithRouterProps & StateProps) {
+export default function Analytics(props: WithRouterProps) {
   const { dashboard: key } = props.params
 
   const { user, deals } = useSelector(({ user, deals }: IAppState) => ({

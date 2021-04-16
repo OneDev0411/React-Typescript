@@ -2,11 +2,16 @@ import { Tab, DropdownTab } from 'components/PageTabs'
 import { MenuItem } from '@material-ui/core'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useSelector } from 'react-redux'
+import { IAppState } from 'reducers'
 
 import { hasUserAccess } from '../../../../../../utils/user-teams'
 import { ACL } from '../../../../../../constants/acl'
 
 import dashboards from '../dashboards'
+
+interface Props {
+  brand_type: IBrandType
+}
 
 const AnalyticsDropdown = withRouter((props: Props & WithRouterProps) => {
   const { brand_type } = props
