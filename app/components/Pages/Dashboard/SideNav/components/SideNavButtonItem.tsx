@@ -9,6 +9,7 @@ const useStyles = makeStyles(
       color: theme.palette.navbar.contrastText,
       fontSize: theme.typography.body1.fontSize,
       lineHeight: theme.typography.body1.lineHeight,
+      opacity: 1,
 
       '&:hover': {
         color: theme.palette.primary.main
