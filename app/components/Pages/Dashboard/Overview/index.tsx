@@ -39,12 +39,12 @@ function OverviewDashboard() {
           <Box className={classes.forceShowChecklist}>
             {/* The following link is a direct call to show our appcuses checklist
             The id can be found in url while checklist is being edited.  */}
-            <Link
+            {/* <Link
               href="#"
               onClick={window.Appcues.show('-MTiikrxqIJB4mjqucN8')}
             >
               Show Exercises
-            </Link>
+            </Link> */}
           </Box>
         </Box>
         <Welcome />
