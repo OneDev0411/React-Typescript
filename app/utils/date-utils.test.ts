@@ -45,7 +45,16 @@ describe('utils/date-utils', () => {
     const seventhDayOfJuly = new Date('2010-07-07T16:00:00.633Z')
 
     const firstWeekOfJuly = getDaysBetween(firstDayOfJuly, seventhDayOfJuly)
+
     expect(firstWeekOfJuly).toHaveLength(7)
+
+    firstWeekOfJuly.forEach((day, index) => {
+      expect(day.getHours()).toBe(0)
+      expect(day.getMinutes()).toBe(0)
+      expect(day.getSeconds()).toBe(0)
+      expect(day.getMilliseconds()).toBe(0)
+      expect(day.getDate()).toBe(index + 1)
+    })
   })
 
   it('datesAreOnSameDay', () => {
