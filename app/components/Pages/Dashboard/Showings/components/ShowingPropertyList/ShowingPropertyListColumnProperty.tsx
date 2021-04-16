@@ -5,7 +5,7 @@ import { getField } from 'models/Deal/helpers/context'
 
 import Deal from 'models/Deal'
 
-type ShowingPropertyListColumnPropertyProps = Pick<
+export type ShowingPropertyListColumnPropertyProps = Pick<
   IShowing,
   'deal' | 'listing' | 'address'
 >
