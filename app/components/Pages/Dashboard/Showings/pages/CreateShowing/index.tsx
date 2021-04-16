@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect } from 'react'
 
 import { Box } from '@material-ui/core'
 
@@ -113,7 +113,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setOccupantPerson
   )
 
-  const { isLoading, data: showing, run } = useAsync<IShowing>()
+  const { isLoading, data: showing, run, error } = useAsync<IShowing>()
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
@@ -124,7 +124,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   }, [showing, router, route])
 
   const handleFinish = () => {
-    if (showing || isLoading) {
+    if (showing || isLoading || error) {
       return
     }
 
