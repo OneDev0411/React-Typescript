@@ -4,8 +4,8 @@ export const showingDetailTabs: Record<
   ShowingDetailTabType,
   ShowingDetailTabType
 > = {
-  Overview: 'Overview',
-  Booking: 'Booking',
+  Bookings: 'Bookings',
   Visitors: 'Visitors',
+  Feedback: 'Feedback',
   Settings: 'Settings'
 }

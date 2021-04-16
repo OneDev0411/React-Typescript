@@ -19,9 +19,9 @@ import ShowingDetailTabs, {
 } from '../../components/ShowingDetailTabs'
 
 import { showingDetailTabs } from '../../constants'
-import ShowingDetailTabOverview from '../../components/ShowingDetailTabOverview'
-import ShowingDetailTabBooking from '../../components/ShowingDetailTabBooking'
+import ShowingDetailTabBookings from '../../components/ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
+import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
 
@@ -44,11 +44,11 @@ function ShowingDetail({ params }: ShowingDetailProps) {
     if (!error) {
       run(async () => getShowing(showingId))
     }
-  }, [run, showingId])
+  }, [run, showingId, error])
 
   console.log('showing', showing)
 
-  const tab = params.tab || showingDetailTabs.Overview
+  const tab = params.tab || showingDetailTabs.Bookings
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -59,17 +59,17 @@ function ShowingDetail({ params }: ShowingDetailProps) {
       />
       {/* <PageLayout.Header>listing info</PageLayout.Header> */}
       <PageLayout.Main>
-        <ShowingDetailTabs value={tab} id="12" />
+        <ShowingDetailTabs value={tab} id={showingId} />
         <Box my={3}>
           <TabContentSwitch.Container value={tab}>
-            <TabContentSwitch.Item value={showingDetailTabs.Overview}>
-              <ShowingDetailTabOverview />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingDetailTabs.Booking}>
-              <ShowingDetailTabBooking />
+            <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
+              <ShowingDetailTabBookings />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
               <ShowingDetailTabVisitors />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
+              <ShowingDetailTabFeedback />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>
               <ShowingDetailTabSettings />

@@ -14,21 +14,21 @@ function ShowingDetailTabs({ value, id }: ShowingDetailTabsProps) {
   const tabs = [
     <TabLink
       key={1}
-      value={showingDetailTabs.Overview}
-      to={`/dashboard/showings/${id}/detail`}
-      label="Overview"
+      value={showingDetailTabs.Bookings}
+      to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Bookings}`}
+      label="Bookings"
     />,
     <TabLink
       key={2}
-      value={showingDetailTabs.Booking}
-      to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Booking}`}
-      label="Booking"
-    />,
-    <TabLink
-      key={3}
       value={showingDetailTabs.Visitors}
       to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Visitors}`}
       label="Visitors"
+    />,
+    <TabLink
+      key={3}
+      value={showingDetailTabs.Feedback}
+      to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Feedback}`}
+      label="Feedback"
     />,
     <TabLink
       key={4}

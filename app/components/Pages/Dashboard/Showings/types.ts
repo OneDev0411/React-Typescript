@@ -1,7 +1,7 @@
 export type ShowingDetailTabType =
-  | 'Overview'
-  | 'Booking'
+  | 'Bookings'
   | 'Visitors'
+  | 'Feedback'
   | 'Settings'
 
 export type GooglePlace = google.maps.GeocoderResult
