@@ -63,6 +63,7 @@ function ShowingAppointmentCardStack({
               } as IShowingAppointment
             }
             onStatusChange={pop}
+            hideStatus
           />
         ))
       }

@@ -18,6 +18,7 @@ const useStyles = makeStyles(
 export interface ShowingAppointmentCardProps {
   className?: string
   hideImage?: boolean
+  hideStatus?: boolean
   appointment: IShowingAppointment
   onStatusChange?: () => void
 }
@@ -25,6 +26,7 @@ export interface ShowingAppointmentCardProps {
 function ShowingAppointmentCard({
   className,
   hideImage = false,
+  hideStatus = false,
   appointment,
   onStatusChange
 }: ShowingAppointmentCardProps) {
@@ -39,7 +41,9 @@ function ShowingAppointmentCard({
           classes={{ address: classes.address }}
         />
       )}
-      <ShowingAppointmentCardStatus status={appointment.status} />
+      {hideStatus && (
+        <ShowingAppointmentCardStatus status={appointment.status} />
+      )}
       showing appointment card {appointment.status}
       <Box my={1.5} mx={1}>
         <Button size="small" variant="outlined" onClick={onStatusChange}>
