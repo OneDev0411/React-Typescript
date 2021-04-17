@@ -6,10 +6,8 @@ import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
-// import BoxWithTitle from '../../components/BoxWithTitle'
-// import ShowingAppointmentList from '../../components/ShowingAppointmentList'
-
 import ShowingPropertyList from '../../components/ShowingPropertyList'
+import ShowingAppointmentUpdates from '../../components/ShowingAppointmentUpdates'
 
 function Showings() {
   useTitle('Showings | Rechat')
@@ -19,13 +17,10 @@ function Showings() {
       <PageLayout.Header title="Showings" />
       <PageLayout.Main>
         <Box my={3}>
+          <Box mb={5}>
+            <ShowingAppointmentUpdates />
+          </Box>
           <ShowingPropertyList />
-          {/* <BoxWithTitle
-            title="Upcoming Booking Appointment"
-            viewLink="/dashboard/showings/list"
-          >
-            <ShowingAppointmentList />
-          </BoxWithTitle> */}
         </Box>
       </PageLayout.Main>
     </PageLayout>

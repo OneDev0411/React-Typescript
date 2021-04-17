@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Card, makeStyles } from '@material-ui/core'
+import { Box, Button, Card, makeStyles } from '@material-ui/core'
 
 import ShowingAppointmentCardImage from './ShowingAppointmentCardImage'
 
@@ -19,12 +19,14 @@ export interface ShowingAppointmentCardProps {
   className?: string
   hideImage?: boolean
   appointment: IShowingAppointment
+  onStatusChange?: () => void
 }
 
 function ShowingAppointmentCard({
   className,
   hideImage = false,
-  appointment
+  appointment,
+  onStatusChange
 }: ShowingAppointmentCardProps) {
   const classes = useStyles()
 
@@ -39,6 +41,11 @@ function ShowingAppointmentCard({
       )}
       <ShowingAppointmentCardStatus status={appointment.status} />
       showing appointment card {appointment.status}
+      <Box my={1.5} mx={1}>
+        <Button size="small" variant="outlined" onClick={onStatusChange}>
+          Action
+        </Button>
+      </Box>
     </Card>
   )
 }
