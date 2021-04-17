@@ -9,7 +9,8 @@ export default makeStyles(
         left: 0,
         opacity: 1,
         transition: theme.transitions.create(['transform', 'opacity']),
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        width: '100%'
       },
       '&$fadeOut > :nth-child(1)': {
         transform: 'translateY(-16px) scale(1.058)',
