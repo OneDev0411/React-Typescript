@@ -21,13 +21,15 @@ export function ChecklistsSidenav({
       <PageSideNav width="13rem" isOpen>
         <Typography variant="subtitle1">Checklists</Typography>
         <SideNavSection>
-          {propertyTypes.map(propertyType => (
-            <ChecklistsSidenavItem
-              key={propertyType.id}
-              checklistType={checklistType}
-              propertyType={propertyType}
-            />
-          ))}
+          {propertyTypes
+            .sort((a, b) => a.created_at - b.created_at)
+            .map(propertyType => (
+              <ChecklistsSidenavItem
+                key={propertyType.id}
+                checklistType={checklistType}
+                propertyType={propertyType}
+              />
+            ))}
 
           <Box ml={1}>
             <Button

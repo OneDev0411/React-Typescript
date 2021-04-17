@@ -42,6 +42,7 @@ export function ChecklistsPage({ location }: Props) {
   const {
     forms,
     formsState,
+    checklists,
     addGenericTask,
     updateTask,
     updateChecklist,
@@ -54,11 +55,11 @@ export function ChecklistsPage({ location }: Props) {
   const { propertyTypes, reload: reloadPropertyTypes } = useBrandPropertyTypes(
     activeTeamId!
   )
-  const propertyType = propertyTypes.find(item => item.id === propertyTypeId)
 
-  const filteredChecklists = propertyType?.checklists?.filter(
+  const checklist = checklists?.find(
     checklist =>
       checklist.brand === activeTeamId &&
+      checklist.property_type === propertyTypeId &&
       checklist.checklist_type === checklistType
   )
 
@@ -83,21 +84,21 @@ export function ChecklistsPage({ location }: Props) {
         />
 
         <Content isSideMenuOpen>
-          <Box m={3}>
-            <PageTabs
-              defaultValue={checklistType || TabNames[0].type}
-              tabs={TabNames.map((tab, index) => (
-                <TabLink
-                  key={index}
-                  label={tab.title}
-                  value={tab.type}
-                  to={getChecklistPageLink(propertyTypeId, tab.type)}
-                />
-              ))}
-            />
+          {checklist && (
+            <Box m={3}>
+              <PageTabs
+                defaultValue={checklistType || TabNames[0].type}
+                tabs={TabNames.map((tab, index) => (
+                  <TabLink
+                    key={index}
+                    label={tab.title}
+                    value={tab.type}
+                    to={getChecklistPageLink(propertyTypeId, tab.type)}
+                  />
+                ))}
+              />
 
-            {filteredChecklists?.map(checklist => (
-              <Box mb={5} key={checklist.id}>
+              <Box mb={5}>
                 <ChecklistHeader
                   checklist={checklist}
                   forms={forms}
@@ -140,8 +141,8 @@ export function ChecklistsPage({ location }: Props) {
                   />
                 </Box>
               </Box>
-            ))}
-          </Box>
+            </Box>
+          )}
         </Content>
 
         <PropertyTypeForm
