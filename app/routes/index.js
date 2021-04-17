@@ -5,7 +5,10 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
-import { showingDetailTabs } from '../components/Pages/Dashboard/Showings/constants'
+import {
+  showingAppointmentStatuses,
+  showingDetailTabs
+} from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
 import GoToDashboard from '../views/components/GoToDashboard'
@@ -668,6 +671,15 @@ const AsyncShowings = withAcl.showings(
   })
 )
 
+const AsyncShowingAppointments = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/ShowingAppointments' /* webpackChunkName: "showing_appointments" */
+      )
+  })
+)
+
 const AsyncShowingDetail = withAcl.showings(
   Load({
     loader: () =>
@@ -955,6 +967,12 @@ export default (
 
         <Route path="showings">
           <IndexRoute component={AsyncShowings} />
+          <Route
+            path={`appointments/:status(${Object.keys(
+              showingAppointmentStatuses
+            ).join('|')})`}
+            component={AsyncShowingAppointments}
+          />
           <Route
             path={`:id/detail/:tab(${Object.keys(showingDetailTabs).join(
               '|'

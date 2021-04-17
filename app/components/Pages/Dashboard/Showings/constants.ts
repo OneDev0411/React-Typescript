@@ -9,3 +9,15 @@ export const showingDetailTabs: Record<
   Feedback: 'Feedback',
   Settings: 'Settings'
 }
+
+export const showingAppointmentStatuses: Record<
+  IAppointmentStatus,
+  IAppointmentStatus
+> = {
+  Pending: 'Pending',
+  Approved: 'Approved',
+  NeedsRescheduling: 'NeedsRescheduling',
+  Rescheduled: 'Rescheduled',
+  Cancelled: 'Cancelled',
+  Finished: 'Finished'
+}
