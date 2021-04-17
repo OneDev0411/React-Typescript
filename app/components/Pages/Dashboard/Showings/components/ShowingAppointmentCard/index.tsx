@@ -41,7 +41,7 @@ function ShowingAppointmentCard({
           classes={{ address: classes.address }}
         />
       )}
-      {hideStatus && (
+      {!hideStatus && (
         <ShowingAppointmentCardStatus status={appointment.status} />
       )}
       showing appointment card {appointment.status}
