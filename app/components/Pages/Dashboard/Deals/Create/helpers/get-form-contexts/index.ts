@@ -7,7 +7,7 @@ export function getFormContexts(
   checklistType: IBrandChecklist['checklist_type']
 ) {
   return Object.entries(values).reduce((acc, [key, value]) => {
-    if (value === undefined || key.includes('context') === false) {
+    if (value === undefined || !key.includes('context')) {
       return acc
     }
 

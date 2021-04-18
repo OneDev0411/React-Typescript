@@ -90,9 +90,7 @@ export default function Publish({ params }: Props) {
   const statusContextKey = getStatusContextKey(deal)
 
   const isStatusVisible =
-    deal &&
-    showStatusQuestion(deal, deal.deal_type, statusContextKey) &&
-    statusList.length > 1
+    deal && showStatusQuestion(deal, deal?.deal_type, statusContextKey)
 
   useEffect(() => {
     if (deal?.is_draft === false) {
@@ -302,6 +300,7 @@ export default function Publish({ params }: Props) {
         >
           {!hasAddress && (
             <Controller
+              key="address"
               name="address"
               control={control}
               render={({ onChange }) => (
@@ -316,6 +315,7 @@ export default function Publish({ params }: Props) {
 
           {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
             <Controller
+              key="buyers"
               name="buying_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -344,6 +344,7 @@ export default function Publish({ params }: Props) {
 
           {sellerRoles.length === 0 && (
             <Controller
+              key="sellers"
               name="selling_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -372,8 +373,10 @@ export default function Publish({ params }: Props) {
 
           {isStatusVisible && !getField(deal, statusContextKey) && (
             <Controller
+              key="status"
               name={`context:${statusContextKey}`}
               control={control}
+              defaultValue={getField(deal, statusContextKey)}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />
               )}

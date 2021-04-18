@@ -195,6 +195,11 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/PatriotsDay')
       },
       {
+        title: getTemplateTypeLabel('September11'),
+        value: 'September11',
+        link: urlGenerator('/September11')
+      },
+      {
         title: getTemplateTypeLabel('StPatrick'),
         value: 'StPatrick',
         link: urlGenerator('/StPatrick')

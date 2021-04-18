@@ -1,4 +1,10 @@
-declare type IBrandType = 'Team' | 'Brokerage' | 'Office' | 'Personal' | 'Other'
+declare type IBrandType =
+  | 'Team'
+  | 'Brokerage'
+  | 'Office'
+  | 'Personal'
+  | 'Other'
+  | 'Region'
 
 declare type IBrandRoleType = 'Admin' | 'Agent' | 'Other'
 
