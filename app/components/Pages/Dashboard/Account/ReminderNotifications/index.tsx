@@ -54,12 +54,38 @@ export default function ReminderNotifications() {
 
   const theme = useTheme<Theme>()
 
+  const handleReminderNotificationChange = async (
+    newSettings: readonly ReminderNotificationSetting[]
+  ): Promise<void> => {
+    try {
+      await updateReminderNotificationSettings(newSettings)
+    } catch (error) {
+      console.error(error)
+      dispatch(
+        addNotification({
+          status: 'error',
+          message: 'Unable to update reminder notifications.'
+        })
+      )
+    }
+  }
+
+  const setColumn = (newColumn: ColumnState): void => {
+    const newColumns = updateNewColumnInColumns(newColumn, columns)
+    const newSettings = getSettingsFromColumns(newColumns)
+
+    handleReminderNotificationChange(newSettings)
+    setColumns(newColumns)
+  }
+
   useEffectOnce(() => {
     initializeColumns()
 
     async function initializeColumns(): Promise<void> {
       try {
         const columns = await getColumns()
+
+        console.log({ columns })
 
         setColumns(columns)
       } catch (error) {
@@ -114,30 +140,6 @@ export default function ReminderNotifications() {
       }
     }
   })
-
-  function setColumn(newColumn: ColumnState): void {
-    const newColumns = updateNewColumnInColumns(newColumn, columns)
-    const newSettings = getSettingsFromColumns(columns)
-
-    updateReminderNotificationSettingsAndHandleException(newSettings)
-    setColumns(newColumns)
-
-    async function updateReminderNotificationSettingsAndHandleException(
-      newSettings: readonly ReminderNotificationSetting[]
-    ): Promise<void> {
-      try {
-        await updateReminderNotificationSettings(newSettings)
-      } catch (error) {
-        console.error(error)
-        dispatch(
-          addNotification({
-            status: 'error',
-            message: 'Unable to update reminder notifications.'
-          })
-        )
-      }
-    }
-  }
 
   return (
     <>
