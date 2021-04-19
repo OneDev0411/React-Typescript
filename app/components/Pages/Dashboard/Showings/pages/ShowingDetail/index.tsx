@@ -24,6 +24,8 @@ import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
+import useShowingImage from '../../components/use-showing-image'
+import useShowingAddress from '../../components/use-showing-address'
 
 type ShowingDetailProps = RouteComponentProps<
   {
@@ -53,9 +55,16 @@ function ShowingDetail({ params }: ShowingDetailProps) {
   return (
     <PageLayout position="relative" overflow="hidden">
       <ShowingDetailHeader
-        deal={showing?.deal}
-        listing={showing?.listing}
-        address={showing?.address}
+        image={useShowingImage({
+          deal: showing?.deal,
+          listing: showing?.listing
+        })}
+        address={useShowingAddress({
+          deal: showing?.deal,
+          listing: showing?.listing,
+          address: showing?.address
+        })}
+        link="https://rechat.com/showings/qwerty1234"
       />
       {/* <PageLayout.Header>listing info</PageLayout.Header> */}
       <PageLayout.Main>

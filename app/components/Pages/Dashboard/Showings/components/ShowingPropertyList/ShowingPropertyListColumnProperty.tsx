@@ -1,40 +1,24 @@
 import { Box, Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
-import { getField } from 'models/Deal/helpers/context'
 
-import Deal from 'models/Deal'
+import useShowingImage from '../use-showing-image'
+import useShowingAddress, {
+  UseShowingAddressProps
+} from '../use-showing-address'
 
-export type ShowingPropertyListColumnPropertyProps = Pick<
-  IShowing,
-  'deal' | 'listing' | 'address'
->
+export type ShowingPropertyListColumnPropertyProps = UseShowingAddressProps
 
-function ShowingPropertyListColumnProperty({
-  deal,
-  listing,
-  address
-}: ShowingPropertyListColumnPropertyProps) {
-  const placeholderImageUrl = '/static/images/deals/group-146.svg'
-
+function ShowingPropertyListColumnProperty(
+  props: ShowingPropertyListColumnPropertyProps
+) {
   return (
     <Box display="flex" alignItems="center">
       <Box flexShrink="0" flexGrow="0" mr={2}>
-        <Avatar
-          url={
-            Deal.get.field(deal, 'photo') ||
-            (listing?.gallery_image_urls?.length &&
-              listing?.gallery_image_urls[0]) ||
-            placeholderImageUrl
-          }
-          variant="circular"
-        />
+        <Avatar url={useShowingImage(props)} variant="circular" />
       </Box>
       <Typography noWrap variant="body2">
-        {getField(deal, 'full_address') ||
-          deal?.title ||
-          listing?.property.address.street_address ||
-          address?.full}
+        {useShowingAddress(props)}
       </Typography>
     </Box>
   )
