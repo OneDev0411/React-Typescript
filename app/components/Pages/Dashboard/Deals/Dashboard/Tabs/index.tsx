@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
@@ -36,18 +36,32 @@ const tabs = [
   }
 ]
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      backgroundColor: '#f9fafc' // TODO: use palette
+    }
+  }),
+  {
+    name: 'DealsDashboard-TabsContainer'
+  }
+)
+
 export default function Tabs(props: Props) {
+  const classes = useStyles()
   const tab = tabs.find(tab => tab.id === props.activeTab)
 
   return (
-    <Box mx={5}>
-      <Box mb={1}>
+    <Box>
+      <Box mx={5}>
         <PageTabs
-          defaultValue={props.activeTab}
           onChange={props.onChangeTab}
-          tabs={tabs.map(({ id, label }, i) => (
+          containerStyle={{
+            marginBottom: 0
+          }}
+          tabs={tabs.map(({ id, label }) => (
             <TabLink
-              key={i}
+              key={id}
               label={label}
               to={`/dashboard/deals/${props.deal.id}/${id}`}
               value={id}
@@ -58,7 +72,11 @@ export default function Tabs(props: Props) {
 
       <Notifications deal={props.deal} />
 
-      {tab && <Box display="flex">{tab.render(props)}</Box>}
+      {tab && (
+        <Box px={5} py={2} display="flex" className={classes.container}>
+          {tab.render(props)}
+        </Box>
+      )}
     </Box>
   )
 }
