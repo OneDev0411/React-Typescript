@@ -85,8 +85,6 @@ export default function ReminderNotifications() {
       try {
         const columns = await getColumns()
 
-        console.log({ columns })
-
         setColumns(columns)
       } catch (error) {
         console.error(error)
