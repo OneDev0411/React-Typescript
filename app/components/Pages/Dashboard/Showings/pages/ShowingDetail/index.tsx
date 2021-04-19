@@ -64,7 +64,11 @@ function ShowingDetail({ params }: ShowingDetailProps) {
           listing: showing?.listing,
           address: showing?.address
         })}
-        link="https://rechat.com/showings/qwerty1234"
+        link={
+          showing?.id
+            ? `https://rechat.com/dashboard/showings/${showing.id}/detail`
+            : ''
+        }
       />
       {/* <PageLayout.Header>listing info</PageLayout.Header> */}
       <PageLayout.Main>
