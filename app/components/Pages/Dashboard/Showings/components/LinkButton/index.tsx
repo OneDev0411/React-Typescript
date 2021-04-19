@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core'
+import { Button, ButtonProps } from '@material-ui/core'
 
-import withLinkButton from './with-link-button'
+import withLinkButton from '../with-link-button'
 
-export default withLinkButton(Button)
+export default withLinkButton<ButtonProps>(Button)
