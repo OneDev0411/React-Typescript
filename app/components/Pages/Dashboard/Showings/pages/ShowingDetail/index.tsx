@@ -48,9 +48,9 @@ function ShowingDetail({ params }: ShowingDetailProps) {
     }
   }, [run, showingId, error])
 
-  console.log('showing', showing)
-
   const tab = params.tab || showingDetailTabs.Bookings
+
+  console.log('showing', showing)
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -70,13 +70,12 @@ function ShowingDetail({ params }: ShowingDetailProps) {
             : ''
         }
       />
-      {/* <PageLayout.Header>listing info</PageLayout.Header> */}
       <PageLayout.Main>
         <ShowingDetailTabs value={tab} id={showingId} />
         <Box my={3}>
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-              <ShowingDetailTabBookings />
+              <ShowingDetailTabBookings appointments={showing?.appointments} />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
               <ShowingDetailTabVisitors />
