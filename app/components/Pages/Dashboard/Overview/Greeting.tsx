@@ -23,7 +23,7 @@ export default function Greeting() {
 
   return (
     <Box display="flex">
-      <Avatar size="xlarge" user={user} />
+      <Avatar size="xxlarge" user={user} />
       <Box
         ml={2}
         display="flex"

@@ -91,7 +91,7 @@ export default function CalendarEventCard({ event }: Props) {
                       <div>
                         <Avatar
                           disableLazyLoad
-                          size="xlarge"
+                          size="xxlarge"
                           contact={contact}
                         />
                       </div>
