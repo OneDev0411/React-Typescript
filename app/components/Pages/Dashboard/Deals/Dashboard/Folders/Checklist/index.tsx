@@ -11,7 +11,6 @@ import { IAppState } from 'reducers'
 
 import { ChecklistLabels } from './Labels'
 
-import MessageAdmin from './MessageAdmin'
 import { FolderOptionsMenu } from './Menu'
 
 import { TaskRow } from './TaskRow'
@@ -72,13 +71,6 @@ export const ChecklistFolder = React.memo(
 
           {checklist && (
             <Flex alignCenter>
-              <MessageAdmin
-                deal={deal}
-                checklist={checklist}
-                tasks={tasks}
-                checklistName={checklist.title}
-              />
-
               <FolderOptionsMenu
                 deal={deal}
                 checklist={checklist}
