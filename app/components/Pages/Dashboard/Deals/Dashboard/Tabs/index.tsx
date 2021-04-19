@@ -40,7 +40,7 @@ export default function Tabs(props: Props) {
   const tab = tabs.find(tab => tab.id === props.activeTab)
 
   return (
-    <Box mx={4}>
+    <Box mx={5}>
       <Box mb={1}>
         <PageTabs
           defaultValue={props.activeTab}
