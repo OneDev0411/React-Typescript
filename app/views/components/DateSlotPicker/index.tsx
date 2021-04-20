@@ -1,10 +1,9 @@
 import { useCallback, useState, useEffect } from 'react'
 import { useDeepCompareEffect } from 'react-use'
 import { makeStyles } from '@material-ui/core'
+import { eachDayOfInterval, isSameDay } from 'date-fns'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, A11y } from 'swiper'
-
-import { getDaysBetween, datesAreOnSameDay } from 'utils/date-utils'
 
 import DayCard from './components/DayCard'
 
@@ -37,7 +36,7 @@ export default function DateSlotPicker({
   onClick
 }: Props) {
   const classes = useStyles()
-  const days = getDaysBetween(start, end)
+  const days = eachDayOfInterval({ start, end })
   const [initialSlide, setInitialSlide] = useState<number>(0)
   const [controlledSwiper, setControlledSwiper] = useState<
     Nullable<SwiperCore>
@@ -50,9 +49,7 @@ export default function DateSlotPicker({
       return
     }
 
-    const initialSlideIndex = days.findIndex(day =>
-      datesAreOnSameDay(day, active)
-    )
+    const initialSlideIndex = days.findIndex(day => isSameDay(day, active))
 
     setInitialSlide(initialSlideIndex === -1 ? 0 : initialSlideIndex)
   }, [days, active])
@@ -71,7 +68,7 @@ export default function DateSlotPicker({
         return false
       }
 
-      return unavailableDates.some(item => datesAreOnSameDay(item, date))
+      return unavailableDates.some(item => isSameDay(item, date))
     },
     [unavailableDates]
   )
@@ -89,7 +86,7 @@ export default function DateSlotPicker({
           <DayCard
             date={day}
             disabled={isDateDisabled(day)}
-            isActive={active ? datesAreOnSameDay(day, active) : undefined}
+            isActive={active ? isSameDay(day, active) : undefined}
             onClick={() => onClick(day)}
           />
         </SwiperSlide>

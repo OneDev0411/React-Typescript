@@ -7,13 +7,6 @@ declare type Weekday =
   | 'Saturday'
   | 'Sunday'
 
-declare type IAppointmentStatus =
-  | 'Pending'
-  | 'Approved'
-  | 'Rescheduled'
-  | 'Cancelled'
-  | 'Finished'
-
 declare interface IShowingAvailability extends IModel<'showing_availability'> {
   showing: UUID
   weekday: Weekday
@@ -59,4 +52,6 @@ declare interface IPublicShowing
     IBaseShowing {
   unavailable_times: string[] | null
   agent: IAgent
+  timezone: string
+  timezone_offset: number
 }

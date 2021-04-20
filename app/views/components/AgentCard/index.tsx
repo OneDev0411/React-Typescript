@@ -29,7 +29,7 @@ export default function AgentCard({ agent }: Props) {
   const classes = useStyles()
 
   return (
-    <Card className={classes.card}>
+    <Card variant="outlined" className={classes.card}>
       <CardContent>
         <Grid container alignItems="center" spacing={1}>
           <Grid item>

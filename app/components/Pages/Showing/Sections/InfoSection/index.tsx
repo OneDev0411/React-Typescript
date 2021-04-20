@@ -92,7 +92,7 @@ export default function InfoSection({ showing }: Props) {
         <Grid container item>
           <Grid item xs={12}>
             <Tooltip title={showing.listing.property.address.full_address}>
-              <Card>
+              <Card variant="outlined">
                 <CardContent>
                   <Typography
                     variant="subtitle2"

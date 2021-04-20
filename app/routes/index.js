@@ -95,6 +95,13 @@ const AsyncBookShowing = Load({
     )
 })
 
+const AsyncShowingAppointment = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment' /* webpackChunkName: "showing_appointment" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -756,6 +763,10 @@ export default (
       <Route path="password/reset" component={AsyncResetPassword} />
 
       <Route path="showings/:token/book" component={AsyncBookShowing} />
+      <Route
+        path="showings/appointments/:appointmentId"
+        component={AsyncShowingAppointment}
+      />
 
       <Route path="mobile" component={AsyncMobile} />
 

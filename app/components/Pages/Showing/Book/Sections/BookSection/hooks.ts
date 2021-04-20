@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { useDeepCompareEffect } from 'react-use'
 
-import {
-  hasDistance,
-  getWeekdayName,
-  datesAreOnSameDay,
-  getSecondsSinceStartOfDay
-} from 'utils/date-utils'
-import { setTime } from 'utils/set-time'
+import { getSecondsSinceStartOfDay } from 'utils/date-utils'
 
 import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
 import { TimeRange } from 'components/TimeSlotPicker/types'
+
+import {
+  getBookedTimes,
+  getDateAvailability,
+  getDisabledSlotsByNoticePeriod,
+  getPastTimeSlots
+} from './utils'
 
 interface UseBookTimeRange {
   startTime: number
@@ -40,10 +41,7 @@ export function useBookTimeRange(
       return
     }
 
-    const weekdayName = getWeekdayName(date)
-    const weekdayAvailability = showing.availabilities.find(
-      item => item.weekday === weekdayName
-    )
+    const weekdayAvailability = getDateAvailability(showing, date)
 
     if (!weekdayAvailability) {
       setStartTime(0)
@@ -62,26 +60,15 @@ export function useBookTimeRange(
     setStartTime(availabilityStart)
     setEndTime(availabilityEnd)
 
-    const alreadyBookedSlots =
-      showing.unavailable_times
-        ?.map(timeString => new Date(timeString))
-        .filter(item => datesAreOnSameDay(date, item)) ?? []
-
     const timeSlots = getTimeSlotsInRange(
       availabilityStart,
       availabilityEnd,
       showing.duration
     )
-    const timeSlotsDates = timeSlots.map(item => setTime(date, item[0]))
 
-    const now = new Date()
-
-    const pastSlots = timeSlotsDates.filter(item => item < now)
-
-    // Slots not having enough time until notice period
-    const disabledSlotsByPolicies = timeSlotsDates.filter(item => {
-      return !hasDistance(item, now, showing.notice_period ?? 0)
-    })
+    const pastSlots = getPastTimeSlots(showing, date)
+    const alreadyBookedSlots = getBookedTimes(showing, date)
+    const disabledSlotsByPolicies = getDisabledSlotsByNoticePeriod(showing)
 
     const unavailableTimes = [
       ...new Set([
@@ -96,8 +83,6 @@ export function useBookTimeRange(
     const newDefaultSelectedTimeRange: Optional<TimeRange> = timeSlots.find(
       item => !unavailableTimes.includes(item[0])
     )
-
-    console.log({ newDefaultSelectedTimeRange })
 
     setDefaultSelectedTimeRange(newDefaultSelectedTimeRange)
   }, [date, showing.availabilities])

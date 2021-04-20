@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react'
 import { WithRouterProps } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
 
-import { getPublicShowing } from 'models/showings/get-public-showing'
 import { createAppointmentRequest } from 'models/showings/create-appointment-request'
 
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
 
-import InfoSection from './Sections/InfoSection'
+import InfoSection from '../Sections/InfoSection'
 import BookSection from './Sections/BookSection'
+import { usePublicShowing } from '../hooks'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -33,28 +32,14 @@ interface RouteParams {
   token: string
 }
 
-export default function BookShowing({ params }: WithRouterProps<RouteParams>) {
+export default function BookShowing({
+  params: { token }
+}: WithRouterProps<RouteParams>) {
   const dispatch = useDispatch()
   const classes = useStyles()
-  const [showing, setShowing] = useState<Nullable<IPublicShowing>>(null)
-  const token = params.token
+  const { showing, isLoading } = usePublicShowing(token)
 
-  useEffect(() => {
-    async function fetchShowing() {
-      if (!token) {
-        return
-      }
-
-      const fetchedShowing = await getPublicShowing(token)
-
-      setShowing(fetchedShowing)
-    }
-
-    fetchShowing()
-  }, [token])
-
-  if (!showing) {
-    // return <div>Getting showing with {token} token.</div>
+  if (isLoading || !showing) {
     return <LoadingContainer />
   }
 

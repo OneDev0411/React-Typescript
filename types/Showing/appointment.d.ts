@@ -1,14 +1,22 @@
 declare type IShowingSource = 'Website'
 
-type IShowingAppointmentAssociations = 'contact'
+declare type IShowingAppointmentStatus =
+  | 'Pending'
+  | 'Approved'
+  | 'NeedsRescheduling'
+  | 'Rescheduled'
+  | 'Cancelled'
+  | 'Finished'
+
+type IShowingAppointmentAssociations = 'showing'
 
 declare interface IShowingAppointment<
   A extends IShowingAppointmentAssociations = ''
 > extends IModel<'showing_appointment'>,
-    Association<'contact', IContact, A> {
+    Association<'showing', IPublicShowing, A> {
   source: IShowingSource
   time: string
-  status: IAppointmentStatus
+  status: IShowingAppointmentStatus
 }
 
 declare interface IShowingAppointmentInput {
@@ -21,4 +29,12 @@ declare interface IShowingAppointmentInput {
     email?: string
     company?: string
   }
+}
+
+declare interface IPublicShowingAppointment<
+  A extends IShowingAppointmentAssociations = ''
+> extends IModel<'showing_appointment_public'> {
+  status: IShowingAppointmentStatus
+  time: string
+  showing: A extends 'showing' ? IPublicShowing : never
 }
