@@ -32,6 +32,12 @@ export function attachCKEditor(
   colors: string[] = [],
   opts: any = {}
 ) {
+  const templateFonts: string[] = Array.from(
+    this.editor.Canvas.getDocument().fonts
+  ).map(({ family }) => family)
+
+  const fontNames = [...new Set(...templateFonts, ...fontFamilies)]
+
   let c = opts
 
   let defaults = {
@@ -44,7 +50,7 @@ export function attachCKEditor(
       colorButton_colors: colors.map(color => color.replace('#', '')).join(','),
       line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
       contentsCss: getFontFamiliesCSSFiles(fontFamilies),
-      font_names: fontFamilies.join(';'),
+      font_names: fontNames.join(';'),
       colorButton_enableMore: false,
       qtWidth: '100%',
       linkDefaultProtocol: 'https://',

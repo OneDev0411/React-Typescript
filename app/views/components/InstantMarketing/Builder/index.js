@@ -280,17 +280,8 @@ class Builder extends React.Component {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
     const brandFonts = getBrandFontFamilies(brand)
-    const templateFonts = [
-      ...new Set(
-        Array.from(this.editor.Canvas.getDocument().fonts).map(
-          ({ family }) => family
-        )
-      )
-    ]
 
-    console.log({ templateFonts, brandFonts })
-
-    attachCKEditor(this.editor, [...templateFonts, ...brandFonts], brandColors)
+    attachCKEditor(this.editor, brandFonts, brandColors)
   }
 
   static contextType = ConfirmationModalContext
