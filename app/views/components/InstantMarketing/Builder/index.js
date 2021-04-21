@@ -201,7 +201,7 @@ class Builder extends React.Component {
       detectComponentByType: this.isWebsiteTemplate
     })
 
-    this.loadCKEditorRTE()
+    await this.loadCKEditorRTE()
     this.initLoadedListingsAssets()
 
     this.editor.on('load', this.setupGrapesJs)
@@ -281,7 +281,7 @@ class Builder extends React.Component {
     const brandColors = getBrandColors(brand)
     const brandFonts = getBrandFontFamilies(brand)
 
-    attachCKEditor(this.editor, brandFonts, brandColors)
+    return attachCKEditor(this.editor, brandFonts, brandColors)
   }
 
   static contextType = ConfirmationModalContext

@@ -26,17 +26,21 @@ function getFontFamiliesCSSFiles(families: string[]): string[] {
 
 const stopPropagation = e => e.stopPropagation()
 
-export function attachCKEditor(
+export async function attachCKEditor(
   editor: Editor,
   fontFamilies: string[],
   colors: string[] = [],
   opts: any = {}
 ) {
+  // @ts-ignore
+  await editor.Canvas.getDocument().fonts.ready
+
   const templateFonts: string[] = Array.from(
-    this.editor.Canvas.getDocument().fonts
+    // @ts-ignore
+    editor.Canvas.getDocument().fonts
   ).map(({ family }) => family)
 
-  const fontNames = [...new Set(...templateFonts, ...fontFamilies)]
+  const fontNames = [...new Set([...templateFonts, ...fontFamilies])]
 
   let c = opts
 
