@@ -26,7 +26,8 @@ const useStyles = makeStyles(
     actions: {
       transition: theme.transitions.create('opacity'),
       opacity: 0
-    }
+    },
+    table: { backgroundColor: theme.palette.common.white }
   }),
   { name: 'ShowingPropertyList' }
 )
@@ -121,7 +122,10 @@ function ShowingPropertyList() {
           getTrProps={({ row }) => ({
             onClick: () => handleRowClick(row.id)
           })}
-          classes={{ row: classes.row }}
+          classes={{
+            row: classes.row,
+            tableContainer: classes.table
+          }}
           // TODO: enable header on this table
         />
       </Box>

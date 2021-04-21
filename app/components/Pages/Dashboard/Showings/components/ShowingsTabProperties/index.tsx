@@ -1,13 +1,13 @@
 import { Box } from '@material-ui/core'
 
 import ShowingPropertyList from '../ShowingPropertyList'
-import ShowingAppointmentUpdates from '../ShowingAppointmentUpdates'
+import ShowingStats from '../ShowingStats'
 
 function ShowingsTabProperties() {
   return (
     <>
-      <Box mb={5}>
-        <ShowingAppointmentUpdates />
+      <Box my={4}>
+        <ShowingStats />
       </Box>
       <ShowingPropertyList />
     </>
