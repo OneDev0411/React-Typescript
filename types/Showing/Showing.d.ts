@@ -20,4 +20,5 @@ declare interface IShowing extends IModel<'showing'> {
   instructions?: string
   confirmed: number
   visits: number
+  token: string
 }

@@ -1,6 +1,6 @@
 import { useEffectOnce } from 'react-use'
 
-function useBackgroundColor(color: string) {
+function useBodyBackgroundColor(color: string) {
   useEffectOnce(() => {
     const oldColor = document.body.style.backgroundColor
 
@@ -12,4 +12,4 @@ function useBackgroundColor(color: string) {
   })
 }
 
-export default useBackgroundColor
+export default useBodyBackgroundColor

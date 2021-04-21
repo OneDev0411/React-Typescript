@@ -14,7 +14,7 @@ import ShowingsTabs, { ShowingsTabsProps } from '../../components/ShowingsTabs'
 import { showingsTabs } from '../../constants'
 import ShowingsTabProperties from '../../components/ShowingsTabProperties'
 import ShowingsTabBookings from '../../components/ShowingsTabBookings'
-import useBackgroundColor from '../../components/use-background-color'
+import useBodyBackgroundColor from '../../components/use-body-background-color'
 
 const useStyles = makeStyles(
   theme => ({
@@ -36,7 +36,7 @@ function Showings({ params }: ShowingsProps) {
 
   useTitle('Showings | Rechat')
 
-  useBackgroundColor(theme.palette.grey[50])
+  useBodyBackgroundColor(theme.palette.grey[50])
 
   const tab = params.tab || showingsTabs.Properties
 
