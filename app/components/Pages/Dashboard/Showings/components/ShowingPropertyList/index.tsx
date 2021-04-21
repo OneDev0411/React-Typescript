@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Box, makeStyles, Typography } from '@material-ui/core'
+import { useEffect } from 'react'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { random } from 'underscore'
 
@@ -11,11 +11,12 @@ import getShowings from 'models/showing/get-showings'
 
 import { goTo } from 'utils/go-to'
 
-import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
-import BoxWithTitle from '../BoxWithTitle'
 import LinkButton from '../LinkButton'
+import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import ShowingPropertyListColumnFeedback from './ShowingPropertyListColumnFeedback'
+import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
+import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 
 const useStyles = makeStyles(
   theme => ({
@@ -48,9 +49,8 @@ function ShowingPropertyList() {
 
   const columns: TableColumn<IShowing>[] = [
     {
-      header: 'Property',
       id: 'property',
-      width: '30%',
+      width: '35%',
       primary: true,
       render: ({ row }) => (
         <ShowingPropertyListColumnProperty
@@ -61,44 +61,36 @@ function ShowingPropertyList() {
       )
     },
     {
-      header: 'Needs Confirmation',
-      id: 'needs-confirmation',
+      id: 'new',
       width: '10%',
       sortable: false,
-      render: ({ row }) => (
-        <Typography noWrap variant="body2">
-          0
-        </Typography>
-      )
+      // TODO: use the value from API response
+      render: ({ row }) => <ShowingPropertyListColumnNewChip count={3} />
     },
     {
-      header: 'Upcoming',
-      id: 'upcoming',
+      header: 'Approved',
+      id: 'approved',
       width: '10%',
       sortable: false,
       render: ({ row }) => (
-        <Typography noWrap variant="body2">
-          0
-        </Typography>
+        <ShowingPropertyListColumnCount value={row.confirmed} />
       )
     },
+
     {
       header: 'Total Visits',
       id: 'total-visits',
       width: '10%',
       sortable: false,
-      render: ({ row }) => (
-        <Typography noWrap variant="body2">
-          0
-        </Typography>
-      )
+      render: ({ row }) => <ShowingPropertyListColumnCount value={row.visits} />
     },
     {
       header: 'Feedback',
-      id: 'total-visits',
+      id: 'feedback',
       width: '15%',
       sortable: false,
       render: ({ row }) => (
+        // TODO: use the feedback rate from API response
         <ShowingPropertyListColumnFeedback value={random(5)} />
       )
     },
@@ -116,7 +108,7 @@ function ShowingPropertyList() {
   ]
 
   return (
-    <BoxWithTitle title="Properties">
+    <Box>
       <Box minHeight="320px">
         <Table
           rows={topRows}
@@ -130,6 +122,7 @@ function ShowingPropertyList() {
             onClick: () => handleRowClick(row.id)
           })}
           classes={{ row: classes.row }}
+          // TODO: enable header on this table
         />
       </Box>
       {archivedItemCount > 0 && (
@@ -140,7 +133,7 @@ function ShowingPropertyList() {
           </LinkButton>
         </Box>
       )}
-    </BoxWithTitle>
+    </Box>
   )
 }
 

@@ -18,4 +18,6 @@ declare interface IShowing extends IModel<'showing'> {
   allow_appraisal: boolean
   allow_inspection: boolean
   instructions?: string
+  confirmed: number
+  visits: number
 }
