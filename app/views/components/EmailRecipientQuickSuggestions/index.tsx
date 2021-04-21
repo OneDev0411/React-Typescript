@@ -134,18 +134,20 @@ export function EmailRecipientQuickSuggestions({
         allContactsCount = await getContactsCount([], false)
       }
 
-      confirmationModal.setConfirmationModal({
-        message: 'Send to all your contacts?',
-        description: `You are about to send this email to ${allContactsCount} in your contacts. Are you sure?`,
-        cancelLabel: 'No',
-        confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
-        onConfirm: () => {
-          onSelect(recipient, sendType)
-        }
-      })
-    } else {
-      onSelect(recipient, sendType)
+      if (allContactsCount > 1) {
+        return confirmationModal.setConfirmationModal({
+          message: 'Send to all your contacts?',
+          description: `You are about to send this email to ${allContactsCount} in your contacts. Are you sure?`,
+          cancelLabel: 'No',
+          confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
+          onConfirm: () => {
+            onSelect(recipient, sendType)
+          }
+        })
+      }
     }
+
+    onSelect(recipient, sendType)
   }
 
   useEffectOnce(() => {
