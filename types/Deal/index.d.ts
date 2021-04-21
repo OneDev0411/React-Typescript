@@ -16,7 +16,7 @@ declare interface IDeal extends IModel<'deal'> {
   checklists: IDealChecklist[]
   tasks: IDealTask[]
   roles: IDealRole[]
-  listing: UUID
+  listing: UUID | IListing
   files: IFile[] | null
   inboxes: string[] | null
   attention_requests: number
