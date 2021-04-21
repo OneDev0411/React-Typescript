@@ -4,6 +4,8 @@ export type ShowingDetailTabType =
   | 'Feedback'
   | 'Settings'
 
+export type ShowingsTabType = 'Properties' | 'Bookings'
+
 export type GooglePlace = google.maps.GeocoderResult
 
 export interface ShowingPropertyBase<T extends string> {

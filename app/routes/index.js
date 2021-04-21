@@ -7,7 +7,8 @@ import { ACL } from 'constants/acl'
 
 import {
   showingAppointmentStatuses,
-  showingDetailTabs
+  showingDetailTabs,
+  showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
@@ -967,6 +968,10 @@ export default (
 
         <Route path="showings">
           <IndexRoute component={AsyncShowings} />
+          <Route
+            path={`:tab(${Object.keys(showingsTabs).join('|')})`}
+            component={AsyncShowings}
+          />
           <Route
             path={`appointments/:status(${Object.keys(
               showingAppointmentStatuses

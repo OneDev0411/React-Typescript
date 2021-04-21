@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { PageTabs, TabLink } from 'components/PageTabs'
 
 import { showingDetailTabs } from '../../constants'
