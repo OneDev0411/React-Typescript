@@ -6,7 +6,8 @@ function preSearchFormat({
   flows,
   text,
   queryParams,
-  users
+  users,
+  showings
 }) {
   const payload = {}
   const query = removeSpecialCharacters(text)
@@ -26,6 +27,10 @@ function preSearchFormat({
 
   if (validArrayFilter(users)) {
     payload.users = users
+  }
+
+  if (validArrayFilter(showings)) {
+    payload.showings = showings
   }
 
   if (validArrayFilter(attributeFilters)) {
