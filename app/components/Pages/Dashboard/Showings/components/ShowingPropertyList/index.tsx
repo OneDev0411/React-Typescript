@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 
-import { random } from 'underscore'
+// import { random } from 'underscore'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -14,7 +14,7 @@ import { goTo } from 'utils/go-to'
 import LinkButton from '../LinkButton'
 import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-import ShowingPropertyListColumnFeedback from './ShowingPropertyListColumnFeedback'
+// import ShowingPropertyListColumnFeedback from './ShowingPropertyListColumnFeedback'
 import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 
@@ -50,7 +50,7 @@ function ShowingPropertyList() {
   const columns: TableColumn<IShowing>[] = [
     {
       id: 'property',
-      width: '35%',
+      width: '50%',
       primary: true,
       render: ({ row }) => (
         <ShowingPropertyListColumnProperty
@@ -84,16 +84,16 @@ function ShowingPropertyList() {
       sortable: false,
       render: ({ row }) => <ShowingPropertyListColumnCount value={row.visits} />
     },
-    {
-      header: 'Feedback',
-      id: 'feedback',
-      width: '15%',
-      sortable: false,
-      render: ({ row }) => (
-        // TODO: use the feedback rate from API response
-        <ShowingPropertyListColumnFeedback value={random(5)} />
-      )
-    },
+    // {
+    //   header: 'Feedback',
+    //   id: 'feedback',
+    //   width: '15%',
+    //   sortable: false,
+    //   render: ({ row }) => (
+    //     // TODO: use the feedback rate from API response
+    //     <ShowingPropertyListColumnFeedback value={random(5)} />
+    //   )
+    // },
     {
       header: 'Body',
       id: 'body-actions',

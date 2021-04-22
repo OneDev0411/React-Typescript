@@ -83,8 +83,6 @@ function ShowingDetailTabVisitors({
     }
   ]
 
-  console.log('contacts', contacts)
-
   const handleRowClick = (id: UUID) => {
     goTo(`/dashboard/contacts/${id}`)
   }
