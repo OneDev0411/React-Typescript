@@ -1,5 +1,7 @@
 import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
 
+import useIsMobile from 'hooks/use-is-mobile'
+
 import LinkButton from '../LinkButton'
 
 interface ShowingDetailHeaderBookingButtonProps {
@@ -11,6 +13,8 @@ function ShowingDetailHeaderBookingButton({
   className,
   bookingUrl
 }: ShowingDetailHeaderBookingButtonProps) {
+  const isMobile = useIsMobile('xs')
+
   return (
     <LinkButton
       className={className}
@@ -21,7 +25,7 @@ function ShowingDetailHeaderBookingButton({
       target="_blank"
       color="primary"
     >
-      Open Booking Page
+      {!isMobile && 'Open'} Booking Page
     </LinkButton>
   )
 }

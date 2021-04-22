@@ -19,7 +19,14 @@ const useStyles = makeStyles(
       fontSize: 16,
       marginRight: theme.spacing(1)
     },
-    close: { marginLeft: theme.spacing(0.5) }
+    close: { marginLeft: theme.spacing(0.5) },
+    header: {
+      [theme.breakpoints.up('sm')]: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }
+    }
   }),
   { name: 'ShowingDetailHeader' }
 )
@@ -45,13 +52,8 @@ function ShowingDetailHeader({
 
   return (
     <Box className={classes.root} px={4} pt={4}>
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        mb={2}
-      >
-        <Box display="flex" alignItems="center" mr={1}>
+      <Box className={classes.header}>
+        <Box display="flex" alignItems="center" mr={1} mb={2}>
           <Box flexShrink="0" flexGrow="0" mr={2}>
             <Avatar url={image} variant="circular" size="xlarge" />
           </Box>
@@ -71,15 +73,22 @@ function ShowingDetailHeader({
             )}
           </Box>
         </Box>
-        <Box>
-          {bookingUrl && (
-            <>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={1}
+        >
+          {bookingUrl ? (
+            <div>
               <ShowingDetailHeaderCopyButton
                 className={classes.button}
                 bookingUrl={bookingUrl}
               />
               <ShowingDetailHeaderBookingButton bookingUrl={bookingUrl} />
-            </>
+            </div>
+          ) : (
+            <div />
           )}
           <LinkIconButton className={classes.close} to="/dashboard/showings">
             <CloseIcon />
