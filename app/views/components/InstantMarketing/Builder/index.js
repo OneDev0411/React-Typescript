@@ -41,6 +41,7 @@ import getTemplateObject from '../helpers/get-template-object'
 
 import { loadGrapesjs } from './utils/load-grapes'
 import { createGrapesInstance } from './utils/create-grapes-instance'
+import { attachCKEditor } from './utils/ckeditor'
 
 import Templates from '../Templates'
 import AddToMarketingCenter from './AddToMarketingCenter'
@@ -178,7 +179,6 @@ class Builder extends React.Component {
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
-    const brandFonts = getBrandFontFamilies(brand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -191,8 +191,6 @@ class Builder extends React.Component {
 
     this.editor = createGrapesInstance(Grapesjs, {
       assets: [...this.props.assets, ...this.userAssets],
-      colors: brandColors,
-      fontFamilies: brandFonts,
       plugins: this.isWebsiteTemplate ? [] : [GrapesjsMjml],
       pluginsOpts: {
         [GrapesjsMjml]: {
@@ -203,6 +201,7 @@ class Builder extends React.Component {
       detectComponentByType: this.isWebsiteTemplate
     })
 
+    await this.loadCKEditorRTE()
     this.initLoadedListingsAssets()
 
     this.editor.on('load', this.setupGrapesJs)
@@ -229,13 +228,13 @@ class Builder extends React.Component {
      * So in our templates we added an optional tag: rte=disable in an element means
      * we'll hide the rte for that element and its children
      *
-     * The way we achive this is this: When rte gets enabled, rte:enable event
+     * The way we achieve this is this: When rte gets enabled, rte:enable event
      * will be fired. Then, we'll come and traverse the tree to see if we can find
      * the rte=disable tag.
      * If no, then all is good. If we find it, we need to hide the ckeditor.
      *
      * The way we can achieve that is by adding display: none to it's element.
-     * The only problem is that at the time thing function gets called, the
+     * The only problem is that at the time this function gets called, the
      * rte instance may not be initialized yet. So there wont be any element
      * to hide.
      *
@@ -246,13 +245,13 @@ class Builder extends React.Component {
 
     const hide = rte => {
       const name = rte.name
-      const top = document.querySelector(`#cke_${name}`)
+      const ckeditorElement = document.querySelector(`#cke_${name}`)
 
-      if (!top) {
+      if (!ckeditorElement) {
         return false
       }
 
-      top.style.display = 'none'
+      ckeditorElement.style.display = 'none'
 
       return true
     }
@@ -275,6 +274,14 @@ class Builder extends React.Component {
     return new Promise(resolve => {
       loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
     })
+  }
+
+  loadCKEditorRTE = () => {
+    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const brandColors = getBrandColors(brand)
+    const brandFonts = getBrandFontFamilies(brand)
+
+    return attachCKEditor(this.editor, brandFonts, brandColors)
   }
 
   static contextType = ConfirmationModalContext
