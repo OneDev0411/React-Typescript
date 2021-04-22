@@ -127,9 +127,10 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
   })
   const [isOpenViewEmail, setOpenViewEmail] = useState(false)
   const { item, isLoading, reload } = useItemData(id)
-  const [emailPreview, setEmailPreview] = useState<IEmail<
-    IEmailOptionalFields
-  > | null>(null)
+  const [
+    emailPreview,
+    setEmailPreview
+  ] = useState<IEmail<IEmailOptionalFields> | null>(null)
 
   const dispatch = useDispatch()
 

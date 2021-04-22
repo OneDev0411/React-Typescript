@@ -237,7 +237,7 @@ export function Footer({
               leftRounded
             >
               {textForSubmitButton({
-                isSubmitting: isSubmitDisabled || formState.submitting,
+                isSubmitting: formState.submitting,
                 isDateSet: isScheduled
               })}
             </ActionButton>
