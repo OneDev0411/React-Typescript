@@ -3,8 +3,8 @@ import {
   isSameDay,
   isToday,
   isPast,
-  isAfter,
-  addSeconds
+  isBefore,
+  subSeconds
 } from 'date-fns'
 
 import { setTime } from 'utils/set-time'
@@ -58,13 +58,9 @@ export function isDayBookable(showing: IPublicShowing, date: Date): boolean {
     return false
   }
 
-  // No appointments for any day
-  // It's a bookable day
-  if (!showing.unavailable_times) {
-    return true
-  }
+  const unavailableTimes = showing.unavailable_times ?? []
 
-  const passedDateUnavailableTime = showing.unavailable_times
+  const passedDateUnavailableTime = unavailableTimes
     .map(item => new Date(item))
     .filter(item => isSameDay(item, date))
 
@@ -167,7 +163,7 @@ export function getDisabledSlotsByNoticePeriod(
   }
 
   const timeSlots = getTimeSlots(showing, date)
-  const dateWithNoticePeriod = addSeconds(date, showing.notice_period * -1)
+  const dateWithNoticePeriod = subSeconds(date, showing.notice_period)
 
-  return timeSlots.filter(item => isAfter(item, dateWithNoticePeriod))
+  return timeSlots.filter(item => isBefore(item, dateWithNoticePeriod))
 }
