@@ -11,7 +11,7 @@ import {
   Theme
 } from '@material-ui/core'
 
-import ShowingAppointmentTimeline from './Timeline'
+import ShowingAppointmentStatusDetails from '../../Details'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -60,7 +60,7 @@ export default function ShowingAppointmentStatusSection({
         <Divider />
       </Grid>
       <Grid item xs={12}>
-        <ShowingAppointmentTimeline appointment={appointment} />
+        <ShowingAppointmentStatusDetails appointment={appointment} />
       </Grid>
     </Grid>
   )

@@ -2,7 +2,7 @@ const APPOINTMENT_STATUS_LABEL_MAP: Record<
   IShowingAppointmentStatus,
   string
 > = {
-  Pending: 'Requested',
+  Requested: 'Requested',
   Approved: 'Confirmed',
   NeedsRescheduling: 'Needs Rescheduling',
   Rescheduled: 'Rescheduled',

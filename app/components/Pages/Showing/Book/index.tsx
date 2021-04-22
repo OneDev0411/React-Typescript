@@ -1,6 +1,7 @@
 import { WithRouterProps } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
+import { browserHistory } from 'react-router'
 
 import { createAppointmentRequest } from 'models/showings/create-appointment-request'
 
@@ -47,13 +48,15 @@ export default function BookShowing({
     appointmentData: IShowingAppointmentInput
   ) => {
     try {
-      await createAppointmentRequest(token, appointmentData)
+      const appointment = await createAppointmentRequest(token, appointmentData)
+
       dispatch(
         addNotification({
           status: 'success',
           message: 'Appointment request created successfully'
         })
       )
+      browserHistory.push(`/showings/appointments/${appointment.id}`)
     } catch (error) {
       console.error(error)
       dispatch(
