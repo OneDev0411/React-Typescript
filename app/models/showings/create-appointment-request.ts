@@ -9,8 +9,6 @@ export async function createAppointmentRequest(
       .post(`/showings/public/${token}/appointments`)
       .send(data)
 
-    console.log({ body: response.body })
-
     return response.body.data
   } catch (error) {
     throw error
