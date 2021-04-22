@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDeepCompareEffect } from 'react-use'
+import { isToday } from 'date-fns'
 
 import { getSecondsSinceStartOfDay } from 'utils/date-utils'
 
@@ -68,7 +69,9 @@ export function useBookTimeRange(
 
     const pastSlots = getPastTimeSlots(showing, date)
     const alreadyBookedSlots = getBookedTimes(showing, date)
-    const disabledSlotsByPolicies = getDisabledSlotsByNoticePeriod(showing)
+    const disabledSlotsByPolicies = isToday(date)
+      ? getDisabledSlotsByNoticePeriod(showing)
+      : []
 
     const unavailableTimes = [
       ...new Set([
@@ -86,8 +89,6 @@ export function useBookTimeRange(
 
     setDefaultSelectedTimeRange(newDefaultSelectedTimeRange)
   }, [date, showing.availabilities])
-
-  console.log({ defaultSelectedTimeRange })
 
   return {
     startTime,

@@ -47,36 +47,21 @@ export function isDayBookable(showing: IPublicShowing, date: Date): boolean {
     return false
   }
 
-  const dateWeekdayName = getWeekdayName(date)
-  const weekdayAvailability = showing.availabilities.find(
-    item => item.weekday === dateWeekdayName
-  )
+  const allPossibleTimeSlotsLength = getTimeSlots(showing, date).length
 
-  // No availability for this day
-  // It's not a bookable day
-  if (!weekdayAvailability) {
-    return false
-  }
+  const pastSlots = isToday(date) ? getPastTimeSlots(showing, date) : []
+  const alreadyBookedSlots = getBookedTimes(showing, date)
+  const disabledSlotsByPolicies = isToday(date)
+    ? getDisabledSlotsByNoticePeriod(showing)
+    : []
 
-  const unavailableTimes = showing.unavailable_times ?? []
+  const disabledSlotsLength = new Set([
+    ...pastSlots.map(item => item.getTime()),
+    ...alreadyBookedSlots.map(item => item.getTime()),
+    ...disabledSlotsByPolicies.map(item => item.getTime())
+  ]).size
 
-  const passedDateUnavailableTime = unavailableTimes
-    .map(item => new Date(item))
-    .filter(item => isSameDay(item, date))
-
-  // No appointments for the passed day
-  // It's a bookable day
-  if (passedDateUnavailableTime.length === 0) {
-    return true
-  }
-
-  const allPossibleTimeSlots = getTimeSlotsInRange(
-    weekdayAvailability.availability[0],
-    weekdayAvailability.availability[1],
-    showing.duration
-  )
-
-  return allPossibleTimeSlots.length > passedDateUnavailableTime.length
+  return allPossibleTimeSlotsLength > disabledSlotsLength
 }
 
 interface BookableDateRange {
@@ -155,15 +140,16 @@ export function getPastTimeSlots(
 }
 
 export function getDisabledSlotsByNoticePeriod(
-  showing: IPublicShowing,
-  date: Date = new Date()
+  showing: IPublicShowing
 ): Date[] {
   if (!showing.notice_period) {
     return []
   }
 
-  const timeSlots = getTimeSlots(showing, date)
-  const dateWithNoticePeriod = addSeconds(date, showing.notice_period)
+  const now = new Date()
+
+  const timeSlots = getTimeSlots(showing, now)
+  const dateWithNoticePeriod = addSeconds(now, showing.notice_period)
 
   return timeSlots.filter(item => isBefore(item, dateWithNoticePeriod))
 }
