@@ -29,12 +29,11 @@ const useStyles = makeStyles(
 )
 
 const labels: Record<IAppointmentStatus, string> = {
-  Pending: 'Waiting for Confirmation',
-  Approved: 'Approved',
-  NeedsRescheduling: '',
-  Rescheduled: '',
-  Cancelled: 'Cancelled',
-  Finished: 'Finished'
+  Requested: 'Waiting for Confirmation',
+  Confirmed: 'Approved',
+  Rescheduled: 'Rescheduled',
+  Canceled: 'Canceled',
+  Completed: 'Finished'
 }
 
 interface ShowingAppointmentCardStatusProps {

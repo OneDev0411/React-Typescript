@@ -17,26 +17,26 @@ function ShowingAppointmentCardStack({
     { id: number; status: IAppointmentStatus }[]
   >(
     shuffle([
-      { id: 1, status: 'Pending' },
-      { id: 2, status: 'Pending' },
-      { id: 3, status: 'Approved' },
-      { id: 4, status: 'Cancelled' },
-      { id: 5, status: 'Finished' },
-      { id: 6, status: 'Pending' },
-      { id: 7, status: 'Pending' },
-      { id: 8, status: 'Approved' },
-      { id: 9, status: 'Cancelled' },
-      { id: 10, status: 'Finished' },
-      { id: 11, status: 'Pending' },
-      { id: 12, status: 'Pending' },
-      { id: 13, status: 'Approved' },
-      { id: 14, status: 'Cancelled' },
-      { id: 15, status: 'Finished' },
-      { id: 16, status: 'Pending' },
-      { id: 17, status: 'Pending' },
-      { id: 18, status: 'Approved' },
-      { id: 19, status: 'Cancelled' },
-      { id: 20, status: 'Finished' }
+      { id: 1, status: 'Requested' },
+      { id: 2, status: 'Requested' },
+      { id: 3, status: 'Confirmed' },
+      { id: 4, status: 'Canceled' },
+      { id: 5, status: 'Completed' },
+      { id: 6, status: 'Requested' },
+      { id: 7, status: 'Requested' },
+      { id: 8, status: 'Confirmed' },
+      { id: 9, status: 'Canceled' },
+      { id: 10, status: 'Completed' },
+      { id: 11, status: 'Requested' },
+      { id: 12, status: 'Requested' },
+      { id: 13, status: 'Confirmed' },
+      { id: 14, status: 'Canceled' },
+      { id: 15, status: 'Completed' },
+      { id: 16, status: 'Requested' },
+      { id: 17, status: 'Requested' },
+      { id: 18, status: 'Confirmed' },
+      { id: 19, status: 'Canceled' },
+      { id: 20, status: 'Completed' }
     ])
   )
 

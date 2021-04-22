@@ -16,35 +16,35 @@ function ShowingAppointmentList() {
       <Grid item xs={3}>
         <ShowingAppointmentCard
           appointment={
-            { ...sampleAppointment, status: 'Pending' } as IShowingAppointment
+            { ...sampleAppointment, status: 'Requested' } as IShowingAppointment
           }
         />
       </Grid>
       <Grid item xs={3}>
         <ShowingAppointmentCard
           appointment={
-            { ...sampleAppointment, status: 'Pending' } as IShowingAppointment
+            { ...sampleAppointment, status: 'Requested' } as IShowingAppointment
           }
         />
       </Grid>
       <Grid item xs={3}>
         <ShowingAppointmentCard
           appointment={
-            { ...sampleAppointment, status: 'Approved' } as IShowingAppointment
+            { ...sampleAppointment, status: 'Confirmed' } as IShowingAppointment
           }
         />
       </Grid>
       <Grid item xs={3}>
         <ShowingAppointmentCard
           appointment={
-            { ...sampleAppointment, status: 'Cancelled' } as IShowingAppointment
+            { ...sampleAppointment, status: 'Canceled' } as IShowingAppointment
           }
         />
       </Grid>
       <Grid item xs={3}>
         <ShowingAppointmentCard
           appointment={
-            { ...sampleAppointment, status: 'Finished' } as IShowingAppointment
+            { ...sampleAppointment, status: 'Completed' } as IShowingAppointment
           }
         />
       </Grid>

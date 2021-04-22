@@ -14,12 +14,11 @@ export const showingAppointmentStatuses: Record<
   IAppointmentStatus,
   IAppointmentStatus
 > = {
-  Pending: 'Pending',
-  Approved: 'Approved',
-  NeedsRescheduling: 'NeedsRescheduling',
+  Requested: 'Requested',
+  Confirmed: 'Confirmed',
   Rescheduled: 'Rescheduled',
-  Cancelled: 'Cancelled',
-  Finished: 'Finished'
+  Canceled: 'Canceled',
+  Completed: 'Completed'
 }
 
 export const showingsTabs: Record<ShowingsTabType, ShowingsTabType> = {

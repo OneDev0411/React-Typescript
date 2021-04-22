@@ -4,7 +4,7 @@ import { useTitle } from 'react-use'
 
 import { RouteComponentProps } from 'react-router'
 
-import { useTheme } from '@material-ui/core'
+import { Box, useTheme } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -13,6 +13,8 @@ import TabContentSwitch from 'components/TabContentSwitch'
 import useAsync from 'hooks/use-async'
 
 import getShowing from 'models/showing/get-showing'
+
+import LoadingContainer from 'components/LoadingContainer'
 
 import ShowingDetailTabs, {
   ShowingDetailTabsProps
@@ -45,7 +47,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
 
   const showingId = params.id
 
-  const { data: showing, run, error } = useAsync<IShowing>()
+  const { data: showing, run, error, isLoading } = useAsync<IShowing>()
 
   useEffect(() => {
     if (!error) {
@@ -76,20 +78,36 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         <ShowingDetailTabs value={tab} id={showingId} />
       </ShowingDetailHeader>
       <PageLayout.Main mt={0} px={4} pb={4} pt={3}>
-        <TabContentSwitch.Container value={tab}>
-          <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-            <ShowingDetailTabBookings appointments={showing?.appointments} />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-            <ShowingDetailTabVisitors showingId={showingId} />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
-            <ShowingDetailTabFeedback />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingDetailTabs.Settings}>
-            <ShowingDetailTabSettings />
-          </TabContentSwitch.Item>
-        </TabContentSwitch.Container>
+        {isLoading && !showing ? (
+          <Box height="600px">
+            <LoadingContainer
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                padding: 0
+              }}
+            />
+          </Box>
+        ) : (
+          <TabContentSwitch.Container value={tab}>
+            <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
+              <ShowingDetailTabBookings
+                appointments={showing?.appointments ?? []}
+              />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
+              <ShowingDetailTabVisitors showingId={showingId} />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
+              <ShowingDetailTabFeedback />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Settings}>
+              <ShowingDetailTabSettings />
+            </TabContentSwitch.Item>
+          </TabContentSwitch.Container>
+        )}
       </PageLayout.Main>
     </PageLayout>
   )

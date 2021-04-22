@@ -1,7 +1,6 @@
 declare type IAppointmentStatus =
-  | 'Pending'
-  | 'Approved'
-  | 'NeedsRescheduling'
+  | 'Requested'
+  | 'Confirmed'
   | 'Rescheduled'
-  | 'Cancelled'
-  | 'Finished'
+  | 'Canceled'
+  | 'Completed'
