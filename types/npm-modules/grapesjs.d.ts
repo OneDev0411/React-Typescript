@@ -46,7 +46,7 @@ declare module 'grapesjs' {
     Canvas: Canvas
     UndoManager: UndoManager
     DeviceManager: object
-    RichTextEditor: object
+    RichTextEditor: any
     Parser: object
     Utils: object
     Config: EditorConfig | object

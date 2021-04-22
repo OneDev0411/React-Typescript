@@ -137,7 +137,6 @@
     "google-maps": "^3.3.0",
     "grapesjs": "^0.16.44",
     "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#dda9eae4b3b5f9cbe71f4db5ed13fac4df9ea555",
-    "grapesjs-plugin-mjml-ckeditor": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-plugin-mjml-ckeditor.git#b3d1972",
     "history": "^3.3.0",
     "idx": "^2.5.2",
     "immer": "^5.3.2",
