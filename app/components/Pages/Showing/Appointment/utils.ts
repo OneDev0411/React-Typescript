@@ -3,7 +3,7 @@ const APPOINTMENT_STATUS_LABEL_MAP: Record<
   string
 > = {
   Requested: 'Requested',
-  Approved: 'Confirmed',
+  Confirmed: 'Confirmed',
   NeedsRescheduling: 'Needs Rescheduling',
   Rescheduled: 'Rescheduled',
   Cancelled: 'Cancelled',

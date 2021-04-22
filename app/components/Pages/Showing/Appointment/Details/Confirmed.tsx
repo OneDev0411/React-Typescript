@@ -27,9 +27,14 @@ export default function ShowingAppointmentApproved({ appointment }: Props) {
     <Stepper orientation="vertical" className={classes.stepper}>
       <Step>
         <StepLabel
-          className={cn(classes.stepLabel, classes.activeStepIconContainer)}
+          className={classes.stepLabel}
           StepIconComponent={() => (
-            <div className={classes.stepIconContainer}>
+            <div
+              className={cn(
+                classes.stepIconContainer,
+                classes.activeStepIconContainer
+              )}
+            >
               <SvgIcon color={theme.palette.common.white} path={mdiCheck} />
             </div>
           )}

@@ -2,7 +2,7 @@ declare type IShowingSource = 'Website'
 
 declare type IShowingAppointmentStatus =
   | 'Requested'
-  | 'Approved'
+  | 'Confirmed'
   | 'NeedsRescheduling'
   | 'Rescheduled'
   | 'Cancelled'

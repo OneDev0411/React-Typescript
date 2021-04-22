@@ -1,4 +1,4 @@
-import ApprovedStatusDetails from './Approved'
+import ConfirmedStatusDetails from './Confirmed'
 import RequestedStatusDetails from './Requested'
 
 interface Props {
@@ -8,8 +8,8 @@ interface Props {
 export default function ShowingAppointmentStatusDetails({
   appointment
 }: Props) {
-  if (appointment.status === 'Approved') {
-    return <ApprovedStatusDetails appointment={appointment} />
+  if (appointment.status === 'Confirmed') {
+    return <ConfirmedStatusDetails appointment={appointment} />
   }
 
   if (appointment.status === 'Requested') {
