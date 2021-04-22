@@ -3,10 +3,9 @@ declare type IShowingSource = 'Website'
 declare type IShowingAppointmentStatus =
   | 'Requested'
   | 'Confirmed'
-  | 'NeedsRescheduling'
   | 'Rescheduled'
-  | 'Cancelled'
-  | 'Finished'
+  | 'Canceled'
+  | 'Completed'
 
 type IShowingAppointmentAssociations = 'showing'
 

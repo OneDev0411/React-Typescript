@@ -4,10 +4,9 @@ const APPOINTMENT_STATUS_LABEL_MAP: Record<
 > = {
   Requested: 'Requested',
   Confirmed: 'Confirmed',
-  NeedsRescheduling: 'Needs Rescheduling',
   Rescheduled: 'Rescheduled',
-  Cancelled: 'Cancelled',
-  Finished: 'Completed'
+  Canceled: 'Canceled',
+  Completed: 'Completed'
 }
 
 export function getAppointmentStatusLabel(
