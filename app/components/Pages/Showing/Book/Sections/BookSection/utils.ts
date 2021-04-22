@@ -4,7 +4,7 @@ import {
   isToday,
   isPast,
   isBefore,
-  subSeconds
+  addSeconds
 } from 'date-fns'
 
 import { setTime } from 'utils/set-time'
@@ -163,7 +163,7 @@ export function getDisabledSlotsByNoticePeriod(
   }
 
   const timeSlots = getTimeSlots(showing, date)
-  const dateWithNoticePeriod = subSeconds(date, showing.notice_period)
+  const dateWithNoticePeriod = addSeconds(date, showing.notice_period)
 
   return timeSlots.filter(item => isBefore(item, dateWithNoticePeriod))
 }
