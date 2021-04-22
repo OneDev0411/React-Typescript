@@ -49,7 +49,7 @@ export function isDayBookable(showing: IPublicShowing, date: Date): boolean {
 
   const allPossibleTimeSlotsLength = getTimeSlots(showing, date).length
 
-  const pastSlots = isToday(date) ? getPastTimeSlots(showing, date) : []
+  const pastSlots = isToday(date) ? getPastTimeSlots(showing) : []
   const alreadyBookedSlots = getBookedTimes(showing, date)
   const disabledSlotsByPolicies = isToday(date)
     ? getDisabledSlotsByNoticePeriod(showing)
@@ -130,11 +130,9 @@ export function getTimeSlots(showing: IPublicShowing, date: Date): Date[] {
   ).map(item => setTime(date, item[0]))
 }
 
-export function getPastTimeSlots(
-  showing: IPublicShowing,
-  date: Date = new Date()
-): Date[] {
-  const timeSlots = getTimeSlots(showing, date)
+export function getPastTimeSlots(showing: IPublicShowing): Date[] {
+  const now = new Date()
+  const timeSlots = getTimeSlots(showing, now)
 
   return timeSlots.filter(isPast)
 }

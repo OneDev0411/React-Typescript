@@ -67,7 +67,7 @@ export function useBookTimeRange(
       showing.duration
     )
 
-    const pastSlots = getPastTimeSlots(showing, date)
+    const pastSlots = isToday(date) ? getPastTimeSlots(showing) : []
     const alreadyBookedSlots = getBookedTimes(showing, date)
     const disabledSlotsByPolicies = isToday(date)
       ? getDisabledSlotsByNoticePeriod(showing)
