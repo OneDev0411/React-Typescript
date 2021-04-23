@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 
-// import { random } from 'underscore'
-
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
@@ -12,9 +10,9 @@ import getShowings from 'models/showing/get-showings'
 import { goTo } from 'utils/go-to'
 
 import LinkButton from '../LinkButton'
+// import FeedbackStars from '../FeedbackStars'
 import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-// import ShowingPropertyListColumnFeedback from './ShowingPropertyListColumnFeedback'
 import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 
@@ -99,7 +97,7 @@ function ShowingPropertyList() {
     //   sortable: false,
     //   render: ({ row }) => (
     //     // TODO: use the feedback rate from API response
-    //     <ShowingPropertyListColumnFeedback value={random(5)} />
+    //     <FeedbackStars value={random(5)} />
     //   )
     // },
     {

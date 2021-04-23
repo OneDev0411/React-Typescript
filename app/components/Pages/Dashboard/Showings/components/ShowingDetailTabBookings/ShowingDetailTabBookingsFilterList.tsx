@@ -1,15 +1,9 @@
 import { Grid } from '@material-ui/core'
-import {
-  NewReleasesOutlined as NewReleasesOutlinedIcon,
-  CheckCircleOutlineOutlined as CheckCircleOutlineOutlinedIcon,
-  RotateRightOutlined as RotateRightOutlinedIcon,
-  HighlightOffOutlined as HighlightOffOutlinedIcon,
-  StarBorderOutlined as StarBorderOutlinedIcon
-} from '@material-ui/icons'
 
 import ShowingDetailTabBookingsFilterCard, {
   BookingFilterType
 } from './ShowingDetailTabBookingsFilterCard'
+import { appointmentStatusIconLabel } from './use-appointment-status-icon-label'
 import useCountAppointmentTypes from './use-count-appointment-types'
 
 interface ShowingDetailTabBookingsFilterListProps {
@@ -28,38 +22,33 @@ function ShowingDetailTabBookingsFilterList({
   const filters: BookingFilterType[] = [
     {
       type: 'Requested',
-      label: 'Requested',
+      ...appointmentStatusIconLabel.Requested,
       count: counters.Requested,
-      badge: 10,
-      icon: <NewReleasesOutlinedIcon />
+      badge: 10
     },
     {
       type: 'Confirmed',
-      label: 'Approved',
+      ...appointmentStatusIconLabel.Confirmed,
       count: counters.Confirmed,
-      badge: 0,
-      icon: <CheckCircleOutlineOutlinedIcon />
+      badge: 0
     },
     {
       type: 'Rescheduled',
-      label: 'Rescheduled',
+      ...appointmentStatusIconLabel.Rescheduled,
       count: counters.Rescheduled,
-      badge: 0,
-      icon: <RotateRightOutlinedIcon />
+      badge: 0
     },
     {
       type: 'Canceled',
-      label: 'Canceled',
+      ...appointmentStatusIconLabel.Canceled,
       count: counters.Canceled,
-      badge: 0,
-      icon: <HighlightOffOutlinedIcon />
+      badge: 0
     },
     {
       type: 'Completed',
-      label: 'Feedbacks',
+      ...appointmentStatusIconLabel.Completed,
       count: counters.Completed,
-      badge: 0,
-      icon: <StarBorderOutlinedIcon />
+      badge: 0
     }
   ]
 

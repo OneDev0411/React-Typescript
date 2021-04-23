@@ -1,29 +1,28 @@
 import ReactStars from 'react-rating-stars-component'
 import { Star, StarHalf, StarOutline } from '@material-ui/icons'
-import { makeStyles, useTheme } from '@material-ui/core'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
     star: { fontSize: theme.spacing(2) }
   }),
-  { name: 'ShowingPropertyListColumnFeedback' }
+  { name: 'FeedbackStars' }
 )
 
-interface ShowingPropertyListColumnFeedbackProps {
+interface FeedbackStarsProps {
+  className?: string
   value: number
 }
 
-function ShowingPropertyListColumnFeedback({
-  value
-}: ShowingPropertyListColumnFeedbackProps) {
+function FeedbackStars({ className, value }: FeedbackStarsProps) {
   const classes = useStyles()
   const theme = useTheme()
 
   return (
-    <div>
+    <Box className={className} display="inline-block">
       <ReactStars
         count={5}
-        value={2.5}
+        value={value}
         edit={false}
         color={theme.palette.warning.main}
         activeColor={theme.palette.warning.main}
@@ -33,8 +32,8 @@ function ShowingPropertyListColumnFeedback({
         halfIcon={<StarHalf className={classes.star} />}
         filledIcon={<Star className={classes.star} />}
       />
-    </div>
+    </Box>
   )
 }
 
-export default ShowingPropertyListColumnFeedback
+export default FeedbackStars

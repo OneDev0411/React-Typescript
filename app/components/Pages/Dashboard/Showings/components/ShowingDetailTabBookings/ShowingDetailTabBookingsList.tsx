@@ -4,8 +4,10 @@ import { TableColumn } from 'components/Grid/Table/types'
 import BoxWithTitle from '../BoxWithTitle'
 
 import { getAppointmentDateLabel, getAppointmentTimeLabel } from './helpers'
+import ShowingDetailTabBookingsListColumnActions from './ShowingDetailTabBookingsListColumnActions'
 import ShowingDetailTabBookingsListColumnBase from './ShowingDetailTabBookingsListColumnBase'
 import ShowingDetailTabBookingsListColumnPerson from './ShowingDetailTabBookingsListColumnPerson'
+import ShowingDetailTabBookingsListColumnStatus from './ShowingDetailTabBookingsListColumnStatus'
 
 interface ShowingDetailTabBookingsListProps {
   filter: IAppointmentStatus
@@ -43,7 +45,7 @@ function ShowingDetailTabBookingsList({
     },
     {
       id: 'agent',
-      width: '20%',
+      width: '15%',
       sortable: false,
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnPerson
@@ -55,14 +57,24 @@ function ShowingDetailTabBookingsList({
 
     {
       id: 'status',
-      width: '10%',
+      width: '20%',
       sortable: false,
-      render: ({ row }) => 'status'
+      render: ({ row }) => (
+        <ShowingDetailTabBookingsListColumnStatus
+          status={row.status}
+          feedbackRate={3} // TODO: use the value from the API response
+        />
+      )
     },
     {
       id: 'body-actions',
       sortable: false,
-      render: ({ row }) => 'actions'
+      render: ({ row }) => (
+        <ShowingDetailTabBookingsListColumnActions
+          status={row.status}
+          appointmentId={row.id}
+        />
+      )
     }
   ]
 

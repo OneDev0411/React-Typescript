@@ -1,5 +1,12 @@
 import { ReactNode } from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography, makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: { color: theme.palette.grey[900] }
+  }),
+  { name: 'ShowingDetailTabBookingsListColumnBase' }
+)
 
 interface ShowingDetailTabBookingsListColumnBaseProps {
   children: ReactNode
@@ -8,7 +15,13 @@ interface ShowingDetailTabBookingsListColumnBaseProps {
 function ShowingDetailTabBookingsListColumnBase({
   children
 }: ShowingDetailTabBookingsListColumnBaseProps) {
-  return <Typography variant="body2">{children}</Typography>
+  const classes = useStyles()
+
+  return (
+    <Typography className={classes.root} variant="body2">
+      {children}
+    </Typography>
+  )
 }
 
 export default ShowingDetailTabBookingsListColumnBase

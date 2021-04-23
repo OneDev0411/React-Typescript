@@ -14,16 +14,25 @@ function ShowingDetailTabBookings({
 }: ShowingDetailTabBookingsProps) {
   const [filter, setFilter] = useState<IAppointmentStatus>('Requested')
 
+  // TODO: remove this after finishing development
+  // const modifiedAppointments = appointments.map<IShowingAppointment>(
+  //   appointment => ({
+  //     ...appointment,
+  //     status: 'Completed'
+  //   })
+  // )
+  const modifiedAppointments = appointments
+
   return (
     <>
       <ShowingDetailTabBookingsFilterList
-        appointments={appointments}
+        appointments={modifiedAppointments}
         value={filter}
         onChange={setFilter}
       />
       <ShowingDetailTabBookingsList
         filter={filter}
-        appointments={appointments}
+        appointments={modifiedAppointments}
         duration={duration}
       />
     </>
