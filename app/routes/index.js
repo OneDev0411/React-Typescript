@@ -969,10 +969,6 @@ export default (
         <Route path="showings">
           <IndexRoute component={AsyncShowings} />
           <Route
-            path={`:tab(${Object.keys(showingsTabs).join('|')})`}
-            component={AsyncShowings}
-          />
-          <Route
             path={`appointments/:status(${Object.keys(
               showingAppointmentStatuses
             ).join('|')})`}
@@ -986,6 +982,10 @@ export default (
           />
           <Route path=":id/detail" component={AsyncShowingDetail} />
           <Route path="create" component={AsyncCreateShowing} />
+          <Route
+            path={`:tab(${Object.keys(showingsTabs).join('|')})`}
+            component={AsyncShowings}
+          />
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />
