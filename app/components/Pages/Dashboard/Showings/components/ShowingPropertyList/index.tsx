@@ -73,7 +73,10 @@ function ShowingPropertyList() {
       width: '10%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingPropertyListColumnCount value={row.confirmed} />
+        <ShowingPropertyListColumnCount
+          value={row.confirmed}
+          label="Approved"
+        />
       )
     },
 
@@ -82,7 +85,12 @@ function ShowingPropertyList() {
       id: 'total-visits',
       width: '10%',
       sortable: false,
-      render: ({ row }) => <ShowingPropertyListColumnCount value={row.visits} />
+      render: ({ row }) => (
+        <ShowingPropertyListColumnCount
+          value={row.visits}
+          label="Total Visits"
+        />
+      )
     },
     // {
     //   header: 'Feedback',
@@ -116,7 +124,7 @@ function ShowingPropertyList() {
           columns={columns}
           loading={isLoading ? 'middle' : null}
           LoadingStateComponent={() => (
-            <LoadingContainer style={{ padding: '20% 0' }} />
+            <LoadingContainer style={{ padding: '10% 0' }} />
           )}
           getTrProps={({ row }) => ({
             onClick: () => handleRowClick(row.id)
@@ -124,7 +132,6 @@ function ShowingPropertyList() {
           classes={{
             row: classes.row
           }}
-          // TODO: enable header on this table
         />
       </Box>
       {archivedItemCount > 0 && (
