@@ -1,3 +1,5 @@
+import { makeStyles } from '@material-ui/core'
+
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
@@ -8,6 +10,17 @@ import ShowingDetailTabBookingsListColumnActions from './ShowingDetailTabBooking
 import ShowingDetailTabBookingsListColumnBase from './ShowingDetailTabBookingsListColumnBase'
 import ShowingDetailTabBookingsListColumnPerson from './ShowingDetailTabBookingsListColumnPerson'
 import ShowingDetailTabBookingsListColumnStatus from './ShowingDetailTabBookingsListColumnStatus'
+
+const useStyles = makeStyles(
+  theme => ({
+    row: { '&:hover $actions': { opacity: 1 } },
+    actions: {
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
+    }
+  }),
+  { name: 'ShowingDetailTabBookingsList' }
+)
 
 interface ShowingDetailTabBookingsListProps {
   filter: IAppointmentStatus
@@ -20,12 +33,13 @@ function ShowingDetailTabBookingsList({
   appointments,
   duration
 }: ShowingDetailTabBookingsListProps) {
+  const classes = useStyles()
   const rows = appointments.filter(appointment => appointment.status === filter)
 
   const columns: TableColumn<IShowingAppointment>[] = [
     {
       id: 'date',
-      width: '15%',
+      width: '20%',
       primary: true,
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnBase>
@@ -35,7 +49,7 @@ function ShowingDetailTabBookingsList({
     },
     {
       id: 'time',
-      width: '15%',
+      width: '20%',
       sortable: false,
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnBase>
@@ -69,10 +83,13 @@ function ShowingDetailTabBookingsList({
     {
       id: 'body-actions',
       sortable: false,
+      align: 'right',
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnActions
+          className={classes.actions}
           status={row.status}
           appointmentId={row.id}
+          hasFeedback={false} // TODO: use this from the API response
         />
       )
     }
@@ -85,16 +102,7 @@ function ShowingDetailTabBookingsList({
         totalRows={rows.length}
         columns={columns}
         EmptyStateComponent={() => <>Empty State</>}
-        // loading={isLoading ? 'middle' : null}
-        // LoadingStateComponent={() => (
-        //   <LoadingContainer style={{ padding: '20% 0' }} />
-        // )}
-        // getTrProps={({ row }) => ({
-        //   onClick: () => handleRowClick(row.id)
-        // })}
-        // classes={{
-        //   row: classes.row
-        // }}
+        classes={{ row: classes.row }}
       />
     </BoxWithTitle>
   )

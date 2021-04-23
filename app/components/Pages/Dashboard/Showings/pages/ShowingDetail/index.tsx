@@ -21,6 +21,7 @@ import ShowingDetailTabs, {
 } from '../../components/ShowingDetailTabs'
 
 import { showingDetailTabs } from '../../constants'
+import ShowingDetailProvider from '../../components/ShowingDetailProvider'
 import ShowingDetailTabBookings from '../../components/ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
@@ -47,7 +48,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
 
   const showingId = params.id
 
-  const { data: showing, run, error, isLoading } = useAsync<IShowing>()
+  const { data: showing, run, error, isLoading, setData } = useAsync<IShowing>()
 
   useEffect(() => {
     if (!error) {
@@ -91,23 +92,25 @@ function ShowingDetail({ params }: ShowingDetailProps) {
             />
           </Box>
         ) : (
-          <TabContentSwitch.Container value={tab}>
-            <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-              <ShowingDetailTabBookings
-                appointments={showing.appointments ?? []}
-                duration={showing.duration}
-              />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-              <ShowingDetailTabVisitors showingId={showingId} />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
-              <ShowingDetailTabFeedback />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingDetailTabs.Settings}>
-              <ShowingDetailTabSettings />
-            </TabContentSwitch.Item>
-          </TabContentSwitch.Container>
+          <ShowingDetailProvider id={showingId} setData={setData}>
+            <TabContentSwitch.Container value={tab}>
+              <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
+                <ShowingDetailTabBookings
+                  appointments={showing.appointments ?? []}
+                  duration={showing.duration}
+                />
+              </TabContentSwitch.Item>
+              <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
+                <ShowingDetailTabVisitors showingId={showingId} />
+              </TabContentSwitch.Item>
+              <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
+                <ShowingDetailTabFeedback />
+              </TabContentSwitch.Item>
+              <TabContentSwitch.Item value={showingDetailTabs.Settings}>
+                <ShowingDetailTabSettings />
+              </TabContentSwitch.Item>
+            </TabContentSwitch.Container>
+          </ShowingDetailProvider>
         )}
       </PageLayout.Main>
     </PageLayout>
