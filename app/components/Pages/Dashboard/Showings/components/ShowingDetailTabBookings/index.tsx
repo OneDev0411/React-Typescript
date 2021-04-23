@@ -1,13 +1,16 @@
 import { useState } from 'react'
 
 import ShowingDetailTabBookingsFilterList from './ShowingDetailTabBookingsFilterList'
+import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
+  duration: number
 }
 
 function ShowingDetailTabBookings({
-  appointments
+  appointments,
+  duration
 }: ShowingDetailTabBookingsProps) {
   const [filter, setFilter] = useState<IAppointmentStatus>('Requested')
 
@@ -17,6 +20,11 @@ function ShowingDetailTabBookings({
         appointments={appointments}
         value={filter}
         onChange={setFilter}
+      />
+      <ShowingDetailTabBookingsList
+        filter={filter}
+        appointments={appointments}
+        duration={duration}
       />
     </>
   )

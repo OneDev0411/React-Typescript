@@ -90,6 +90,8 @@ declare interface IContact extends IContactBase {
   created_by?: IUser
   updated_by?: IUser
   type: string
+
+  company: Nullable<string>
 }
 
 declare interface INormalizedContact extends IContact {

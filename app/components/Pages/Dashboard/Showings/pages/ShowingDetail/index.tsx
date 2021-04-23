@@ -78,7 +78,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         <ShowingDetailTabs value={tab} id={showingId} />
       </ShowingDetailHeader>
       <PageLayout.Main mt={0} px={4} pb={4} pt={3}>
-        {isLoading && !showing ? (
+        {isLoading || !showing ? (
           <Box height="600px">
             <LoadingContainer
               style={{
@@ -94,7 +94,8 @@ function ShowingDetail({ params }: ShowingDetailProps) {
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
               <ShowingDetailTabBookings
-                appointments={showing?.appointments ?? []}
+                appointments={showing.appointments ?? []}
+                duration={showing.duration}
               />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>

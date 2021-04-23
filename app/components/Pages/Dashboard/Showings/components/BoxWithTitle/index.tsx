@@ -12,18 +12,22 @@ interface BoxWithTitleProps {
   children: ReactNode
   viewLink?: string
   viewTitle?: ReactNode
+  marginTop?: number
+  marginBottom?: number
 }
 
 function BoxWithTitle({
   title,
   children,
   viewLink,
-  viewTitle
+  viewTitle,
+  marginTop = 0,
+  marginBottom = 5
 }: BoxWithTitleProps) {
   const classes = useStyles()
 
   return (
-    <Box mb={5}>
+    <Box mt={marginTop} mb={marginBottom}>
       <Box mb={2}>
         <Typography className={classes.title} variant="h5">
           {title}

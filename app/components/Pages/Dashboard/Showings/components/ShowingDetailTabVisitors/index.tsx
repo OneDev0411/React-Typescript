@@ -88,7 +88,7 @@ function ShowingDetailTabVisitors({
   }
 
   return (
-    <Box>
+    <Box minHeight={300}>
       <Table
         rows={contacts}
         totalRows={contacts.length}

@@ -13,7 +13,7 @@ declare interface IShowing extends IModel<'showing'> {
   address?: IStdAddr
   gallery?: IMediaGallery
   roles: IShowingRole[]
-  appointments: IAppointment[]
+  appointments: IShowingAppointment[]
   availabilities: IShowingAvailability[]
   allow_appraisal: boolean
   allow_inspection: boolean
