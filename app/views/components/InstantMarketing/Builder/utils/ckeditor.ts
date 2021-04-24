@@ -152,6 +152,8 @@ export async function attachCKEditor(
       // The toolbar is not immediatly loaded so will be wrong positioned.
       // With this trick we trigger an event which updates the toolbar position
       rte.on('instanceReady', e => {
+        rte.ui.space('top')?.setStyle('width', '405px')
+
         let toolbar = rteToolbar.querySelector(`#cke_${rte.name}`)
 
         if (toolbar) {
