@@ -51,6 +51,8 @@ interface Props {
 }
 
 export default function CalendarEventCard({ event }: Props) {
+  console.log({ event })
+
   const classes = useStyles()
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
