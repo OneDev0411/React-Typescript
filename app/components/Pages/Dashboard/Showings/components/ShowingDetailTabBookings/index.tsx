@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 
 import ShowingDetailTabBookingsFilterList from './ShowingDetailTabBookingsFilterList'
 import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
@@ -14,6 +14,25 @@ function ShowingDetailTabBookings({
 }: ShowingDetailTabBookingsProps) {
   const [filter, setFilter] = useState<IAppointmentStatus>('Requested')
 
+  const sortedAppointments = useMemo(
+    () =>
+      [...appointments].sort((a, b) => {
+        const time1 = new Date(a.time)
+        const time2 = new Date(b.time)
+
+        if (time1 < time2) {
+          return -1
+        }
+
+        if (time1 > time2) {
+          return 1
+        }
+
+        return 0
+      }),
+    [appointments]
+  )
+
   // TODO: remove this after finishing development
   // const modifiedAppointments = appointments.map<IShowingAppointment>(
   //   appointment => ({
@@ -21,7 +40,7 @@ function ShowingDetailTabBookings({
   //     status: 'Completed'
   //   })
   // )
-  const modifiedAppointments = appointments
+  const modifiedAppointments = sortedAppointments
 
   return (
     <>
