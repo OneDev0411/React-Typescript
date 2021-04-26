@@ -75,6 +75,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       onClick={handleGoogleConnect}
       style={{ zIndex: 2 }}
       size="large"
+      tourId="connect-gmail-outlook"
       renderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>
@@ -139,7 +140,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
           </div>
         }
       >
-        <Flex data-tour-id="connect-gmail-outlook" alignCenter>
+        <Flex alignCenter>
           <GoogleIcon size={iconSizes.small} />
           <ButtonText>
             {google.connecting
