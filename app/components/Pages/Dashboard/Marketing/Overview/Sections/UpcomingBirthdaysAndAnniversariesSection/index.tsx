@@ -1,4 +1,4 @@
-import React from 'react'
+import { isToday, setYear } from 'date-fns'
 import { Grid, Typography } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
@@ -44,11 +44,27 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
         </Grid>
       )}
       {!isLoading &&
-        events.slice(0, 4).map(event => (
-          <Grid key={event.id} item xs={6} sm={6} md={3}>
-            <CalendarEventCard event={event} />
-          </Grid>
-        ))}
+        events.slice(0, 4).map(event => {
+          const eventNextOccurence = new Date(event.next_occurence)
+
+          const currentYear = new Date().getFullYear()
+          const nextOccurence = isToday(
+            setYear(eventNextOccurence, currentYear)
+          )
+            ? setYear(eventNextOccurence, currentYear)
+            : eventNextOccurence
+
+          return (
+            <Grid key={event.id} item xs={6} sm={6} md={3}>
+              <CalendarEventCard
+                event={{
+                  ...event,
+                  next_occurence: nextOccurence.toISOString()
+                }}
+              />
+            </Grid>
+          )
+        })}
     </SectionLayout>
   )
 }
