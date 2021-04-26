@@ -1,22 +1,32 @@
 import { ReactNode } from 'react'
 
-import { ShowingDetailIdContext, ShowingDetailSetDataContext } from './context'
+import {
+  ShowingDetailHasApprovalAccessContext,
+  ShowingDetailIdContext,
+  ShowingDetailSetDataContext
+} from './context'
 
 interface ShowingDetailProviderProps {
   id: UUID
   setData: (showing: IShowing) => void
+  hasApprovalAccess: boolean
   children: ReactNode
 }
 
 function ShowingDetailProvider({
   id,
   setData,
+  hasApprovalAccess,
   children
 }: ShowingDetailProviderProps) {
   return (
     <ShowingDetailIdContext.Provider value={id}>
       <ShowingDetailSetDataContext.Provider value={setData}>
-        {children}
+        <ShowingDetailHasApprovalAccessContext.Provider
+          value={hasApprovalAccess}
+        >
+          {children}
+        </ShowingDetailHasApprovalAccessContext.Provider>
       </ShowingDetailSetDataContext.Provider>
     </ShowingDetailIdContext.Provider>
   )

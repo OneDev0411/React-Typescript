@@ -30,6 +30,7 @@ import ShowingDetailHeader from '../../components/ShowingDetailHeader'
 import useShowingImage from '../../components/use-showing-image'
 import useShowingAddress from '../../components/use-showing-address'
 import useBodyBackgroundColor from '../../components/use-body-background-color'
+import useCheckApprovalAccess from './use-check-approval-access'
 
 type ShowingDetailProps = RouteComponentProps<
   {
@@ -57,6 +58,10 @@ function ShowingDetail({ params }: ShowingDetailProps) {
   }, [run, showingId, error])
 
   const tab = params.tab || showingDetailTabs.Bookings
+
+  const hasApprovalAccess = useCheckApprovalAccess(showing?.roles)
+
+  console.log('showing', showing)
 
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
@@ -92,7 +97,11 @@ function ShowingDetail({ params }: ShowingDetailProps) {
             />
           </Box>
         ) : (
-          <ShowingDetailProvider id={showingId} setData={setData}>
+          <ShowingDetailProvider
+            id={showingId}
+            setData={setData}
+            hasApprovalAccess={hasApprovalAccess}
+          >
             <TabContentSwitch.Container value={tab}>
               <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
                 <ShowingDetailTabBookings

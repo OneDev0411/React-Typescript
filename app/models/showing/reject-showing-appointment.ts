@@ -5,14 +5,12 @@ async function rejectShowingAppointment(
   appointmentId: UUID,
   comment?: string
 ) {
-  return (
-    await new Fetch()
-      .put(`/showings/${showingId}/appointments/${appointmentId}/approval`)
-      .send({
-        approved: false,
-        comment
-      })
-  ).body.data
+  await new Fetch()
+    .put(`/showings/${showingId}/appointments/${appointmentId}/approval`)
+    .send({
+      approved: false,
+      comment
+    })
 }
 
 export default rejectShowingAppointment

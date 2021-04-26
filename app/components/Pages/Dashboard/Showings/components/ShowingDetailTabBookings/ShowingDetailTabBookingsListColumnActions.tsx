@@ -3,14 +3,15 @@ import { Button, ButtonProps, makeStyles } from '@material-ui/core'
 
 import useAsync from 'hooks/use-async'
 
-// import approveShowingAppointment from 'models/showing/approve-showing-appointment'
+import approveShowingAppointment from 'models/showing/approve-showing-appointment'
 
-// import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
+import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
 import {
   useShowingDetailId,
   useShowingDetailSetData
 } from '../ShowingDetailProvider'
+import ShowingAppointmentApprovalButton from './ShowingAppointmentApprovalButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -34,11 +35,9 @@ function ShowingDetailTabBookingsListColumnActions({
   appointmentId
 }: ShowingDetailTabBookingsListColumnActionsProps) {
   const classes = useStyles()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const showingId = useShowingDetailId()
   const showingSetData = useShowingDetailSetData()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { run, isLoading } = useAsync()
 
   const updateAppointmentStatus = (status: IAppointmentStatus) => {
@@ -62,25 +61,22 @@ function ShowingDetailTabBookingsListColumnActions({
     })
   }
 
-  // TODO: call the real APIs here
   const handleApprove = () => {
-    // console.log('handleApprove')
-    updateAppointmentStatus('Confirmed')
-    // run(async () => approveShowingAppointment(showingId, appointmentId)).then(
-    //   res => {
-    //     console.log('approveShowingAppointment::response', res)
-    //   }
-    // )
+    run(async () => approveShowingAppointment(showingId, appointmentId)).then(
+      res => {
+        console.log('approveShowingAppointment::response', res)
+        updateAppointmentStatus('Confirmed') // TODO: use server returned status
+      }
+    )
   }
 
   const handleReject = () => {
-    // console.log('handleReject')
-    updateAppointmentStatus('Canceled')
-    // run(async () => rejectShowingAppointment(showingId, appointmentId)).then(
-    //   res => {
-    //     console.log('rejectShowingAppointment::response', res)
-    //   }
-    // )
+    run(async () => rejectShowingAppointment(showingId, appointmentId)).then(
+      res => {
+        console.log('rejectShowingAppointment::response', res)
+        updateAppointmentStatus('Canceled') // TODO: use server returned status
+      }
+    )
   }
 
   const sharedButtonProps: Partial<ButtonProps> = {
@@ -93,30 +89,30 @@ function ShowingDetailTabBookingsListColumnActions({
     <div className={classNames(classes.root, className)}>
       {(status === 'Requested' || status === 'Rescheduled') && (
         <>
-          <Button
+          <ShowingAppointmentApprovalButton
             {...sharedButtonProps}
             onClick={handleApprove}
             disabled={isLoading}
           >
             Approve
-          </Button>
-          <Button
+          </ShowingAppointmentApprovalButton>
+          <ShowingAppointmentApprovalButton
             {...sharedButtonProps}
             onClick={handleReject}
             disabled={isLoading}
           >
             Reject
-          </Button>
+          </ShowingAppointmentApprovalButton>
         </>
       )}
       {status === 'Confirmed' && (
-        <Button
+        <ShowingAppointmentApprovalButton
           {...sharedButtonProps}
           onClick={handleReject}
           disabled={isLoading}
         >
           Cancel
-        </Button>
+        </ShowingAppointmentApprovalButton>
       )}
       {status === 'Completed' && hasFeedback && (
         <Button {...sharedButtonProps}>View Feedback</Button>

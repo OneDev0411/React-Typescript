@@ -11,4 +11,5 @@ declare interface IShowingRole extends IModel<'showing_role'> {
   can_approve: boolean
   confirm_notification_type: INotificationDeliveryType[]
   cancel_notification_type: INotificationDeliveryType[]
+  user_id: string
 }
