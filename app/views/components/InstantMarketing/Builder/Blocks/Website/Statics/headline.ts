@@ -11,7 +11,7 @@ import Headline1 from './headline1.njk'
 import Headline2 from './headline2.njk'
 
 import registerBlock from '../../registerBlock'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeHeadline = 'headline'
@@ -27,7 +27,7 @@ const headlineNumberRegex = /[^\d](\d)$/
 
 export default function registerHeadlineBlock(
   editor: Editor,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { headline1ClassNames, headline2ClassNames }: HeadlineBlockOptions
 ) {
   editor.DomComponents.addType(typeHeadline, {
@@ -65,9 +65,9 @@ export default function registerHeadlineBlock(
 
   const headlineBlocks = {
     [headline1BlockName]:
-      templateBlocks[headline1BlockName]?.template || Headline1,
+      templateBlockOptions.blocks[headline1BlockName]?.template || Headline1,
     [headline2BlockName]:
-      templateBlocks[headline2BlockName]?.template || Headline2
+      templateBlockOptions.blocks[headline2BlockName]?.template || Headline2
   }
 
   registerBlock(
@@ -79,7 +79,7 @@ export default function registerHeadlineBlock(
       blockName: headline1BlockName,
       template: headlineBlocks[headline1BlockName]
     },
-    templateBlocks[headline1BlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -91,14 +91,14 @@ export default function registerHeadlineBlock(
       blockName: headline2BlockName,
       template: headlineBlocks[headline2BlockName]
     },
-    templateBlocks[headline2BlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     headlineBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return allBlocks

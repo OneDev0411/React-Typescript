@@ -72,7 +72,7 @@ export function MarketingLayout({ render, ...props }) {
             </div>
           )}
         </PageLayout.Header>
-        <PageLayout.Main>
+        <PageLayout.Main minHeight="100vh">
           <Tabs
             sections={sections}
             mediums={mediums}

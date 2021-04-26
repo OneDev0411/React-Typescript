@@ -34,7 +34,7 @@ import {
 import { goTo } from 'utils/go-to'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
-import { getParkedContactsCount as getParkedContactCountModel } from 'models/contacts/get-parked-contact-count'
+import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-contacts-count'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
@@ -237,7 +237,7 @@ class ContactsList extends React.Component {
 
   getParkedContactCount = async () => {
     const { viewAsUsers } = this.props
-    const parkedContactCount = await getParkedContactCountModel(viewAsUsers)
+    const parkedContactCount = await getParkedContactsCount(viewAsUsers)
 
     this.setState({ parkedContactCount })
   }
@@ -753,12 +753,14 @@ class ContactsList extends React.Component {
     const { props, state } = this
     const { list, viewAsUsers, isFetchingContacts, activeSegment } = this.props
     const contacts = selectContacts(list)
-
+    const isParkedTabActive =
+      activeSegment && activeSegment.id === PARKED_CONTACTS_LIST_ID
     const syncing = Object.values(this.props.oAuthAccounts)
       .flat()
       .some(account => account.sync_status !== 'success')
 
     const isZeroState =
+      !isParkedTabActive &&
       !isFetchingContacts &&
       contacts.length === 0 &&
       props.filters.length === 0 &&

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Box, List, ListItem, ListItemText } from '@material-ui/core'
 
@@ -18,12 +18,15 @@ import { BaseDropdown } from 'components/BaseDropdown'
 
 import { selectUser } from 'selectors/user'
 
+import { getContactsCount } from 'models/contacts/get-contacts-count'
+
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
 import extractMoreQuickSuggestions, {
   MoreQuickSuggestion
 } from './helpers/extract-more-quick-suggestions'
 import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
+import ConfirmationModalContext from '../ConfirmationModal/context'
 
 interface Props {
   deal?: IDeal
@@ -50,9 +53,15 @@ export function EmailRecipientQuickSuggestions({
   onSelect
 }: Props) {
   const user = useSelector(selectUser)
-  const dealRoles = useSelector<IAppState, IDealRole[]>(
-    ({ deals: { roles } }) => selectDealRoles(roles, deal)
-  )
+  const { dealRoles, contactsInfo } = useSelector<
+    IAppState,
+    { dealRoles: IDealRole[]; contactsInfo: any }
+  >(({ deals: { roles }, contacts }) => ({
+    dealRoles: selectDealRoles(roles, deal),
+    contactsInfo: contacts.list
+  }))
+
+  const confirmationModal = useContext(ConfirmationModalContext)
 
   const [brandTreeStatus, setBrandTreeStatus] = useState<
     'empty' | 'fetching' | 'error' | 'fetched'
@@ -75,12 +84,21 @@ export function EmailRecipientQuickSuggestions({
       !currentRecipients.find(areRecipientsEqual(suggestion.recipient))
   )
   const showQuickSuggestions = unusedQuickSuggestions.length > 0
+  const visibleMoreQuickSuggestions = useMemo<MoreQuickSuggestion[] | null>(
+    () =>
+      brandTreeStatus === 'fetched'
+        ? extractMoreQuickSuggestions(brandTree!, currentRecipients).filter(
+            ({ visible }) => visible
+          )
+        : null,
+    [brandTreeStatus, brandTree, currentRecipients]
+  )
+  const showMoreQuickSuggestions =
+    brandTreeStatus === 'fetching' ||
+    brandTreeStatus === 'error' ||
+    (visibleMoreQuickSuggestions && visibleMoreQuickSuggestions.length > 0)
 
-  useEffectOnce(() => {
-    fetchBrandTree()
-  })
-
-  async function fetchBrandTree() {
+  const fetchBrandTree = async () => {
     const rootBrand = getRootBrand(user)
 
     if (!rootBrand) {
@@ -106,19 +124,35 @@ export function EmailRecipientQuickSuggestions({
     }
   }
 
-  const visibleMoreQuickSuggestions = useMemo<MoreQuickSuggestion[] | null>(
-    () =>
-      brandTreeStatus === 'fetched'
-        ? extractMoreQuickSuggestions(brandTree!, currentRecipients).filter(
-            ({ visible }) => visible
-          )
-        : null,
-    [brandTreeStatus, brandTree, currentRecipients]
-  )
-  const showMoreQuickSuggestions =
-    brandTreeStatus === 'fetching' ||
-    brandTreeStatus === 'error' ||
-    (visibleMoreQuickSuggestions && visibleMoreQuickSuggestions.length > 0)
+  const handleSelectSuggestion = async (recipient, sendType) => {
+    const isSendingToAllContacts = recipient?.recipient_type === 'AllContacts'
+
+    if (isSendingToAllContacts) {
+      let allContactsCount = contactsInfo.info?.total ?? 0
+
+      if (allContactsCount === 0) {
+        allContactsCount = await getContactsCount([], false)
+      }
+
+      if (allContactsCount > 1) {
+        return confirmationModal.setConfirmationModal({
+          message: 'Send to all your contacts?',
+          description: `You are about to send this email to ${allContactsCount} in your contacts. Are you sure?`,
+          cancelLabel: 'No',
+          confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
+          onConfirm: () => {
+            onSelect(recipient, sendType)
+          }
+        })
+      }
+    }
+
+    onSelect(recipient, sendType)
+  }
+
+  useEffectOnce(() => {
+    fetchBrandTree()
+  })
 
   if (!showQuickSuggestions && !showMoreQuickSuggestions) {
     return null
@@ -139,7 +173,9 @@ export function EmailRecipientQuickSuggestions({
 
       <RecipientQuickSuggestions
         quickSuggestions={unusedQuickSuggestions}
-        onSelect={({ recipient, sendType }) => onSelect(recipient, sendType)}
+        onSelect={({ recipient, sendType }) =>
+          handleSelectSuggestion(recipient, sendType)
+        }
       />
 
       {showQuickSuggestions && showMoreQuickSuggestions && ','}

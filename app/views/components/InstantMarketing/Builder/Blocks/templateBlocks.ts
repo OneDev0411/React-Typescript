@@ -1,14 +1,20 @@
 import type { Editor } from 'grapesjs'
 
-import { TemplateBlock, TemplateBlocks, TemplateBlockContent } from './types'
+import {
+  TemplateBlock,
+  TemplateBlocks,
+  TemplateBlockBase,
+  TemplateBlockBaseOptions,
+  TemplateBlockOptions
+} from './types'
 
 import { isComponent as isComponentWebsite } from './Website/utils'
 import { isComponent as isComponentEmail } from './Email/utils'
 
 import registerBlock from './registerBlock'
 
-async function getTemplateBlockContent(
-  templateBlock: TemplateBlockContent,
+async function getTemplateBlockBase(
+  templateBlock: TemplateBlockBase,
   templateUrl: string
 ) {
   const response = await fetch(
@@ -24,38 +30,41 @@ async function getTemplateBlockContent(
   return template
 }
 
-export async function getTemplateBlocks(
+export async function getTemplateBlockOptions(
   templateUrl: string
-): Promise<Record<string, TemplateBlock>> {
+): Promise<TemplateBlockOptions> {
   const response = await fetch(`${templateUrl}/blocks.json`)
 
   try {
-    const templateBlocks = (await response.json()) as TemplateBlockContent[]
+    const blockOptions = (await response.json()) as TemplateBlockBaseOptions
 
-    const templateBlocks1 = await Promise.all(
-      templateBlocks.map(
+    const blocksWithTemplate = await Promise.all(
+      blockOptions.blocks.map(
         async templateBlock =>
           ({
             ...templateBlock,
             icon: `${templateUrl}/${templateBlock.icon}`,
             template:
-              (await getTemplateBlockContent(templateBlock, templateUrl)) ?? ''
+              (await getTemplateBlockBase(templateBlock, templateUrl)) ?? ''
           } as TemplateBlock)
       )
     )
 
-    return templateBlocks1
-      .filter(templateBlock => !!templateBlock.template)
-      .reduce(
-        (acc, templateBlock: TemplateBlock) => ({
-          ...acc,
-          [templateBlock.name]: templateBlock
-        }),
-        {}
-      )
+    return {
+      ...blockOptions,
+      blocks: blocksWithTemplate
+        .filter(templateBlock => !!templateBlock.template)
+        .reduce(
+          (acc, templateBlock: TemplateBlock) => ({
+            ...acc,
+            [templateBlock.name]: templateBlock
+          }),
+          {}
+        )
+    }
   } catch (e) {}
 
-  return {}
+  return { blocks: {} }
 }
 
 export function registerTemplateBlocks(
