@@ -1,7 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 
 import ShowingDetailTabBookingsFilterList from './ShowingDetailTabBookingsFilterList'
 import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
+import useAppointmentFilterInfo from './use-appointment-filter-info'
+import useFilterAppointments from './use-filter-appointments'
+import useSortAppointments from './use-sort-appointments'
+import { AppointmentFilter } from './types'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
@@ -12,46 +16,27 @@ function ShowingDetailTabBookings({
   appointments,
   duration
 }: ShowingDetailTabBookingsProps) {
-  const [filter, setFilter] = useState<IAppointmentStatus>('Requested')
+  const [filter, setFilter] = useState<AppointmentFilter>('All')
 
-  const sortedAppointments = useMemo(
-    () =>
-      [...appointments].sort((a, b) => {
-        const time1 = new Date(a.time)
-        const time2 = new Date(b.time)
+  const filterInfo = useAppointmentFilterInfo(filter)
 
-        if (time1 < time2) {
-          return -1
-        }
+  const sortedAppointments = useSortAppointments(appointments)
 
-        if (time1 > time2) {
-          return 1
-        }
-
-        return 0
-      }),
-    [appointments]
+  const filteredAppointments = useFilterAppointments(
+    sortedAppointments,
+    filterInfo
   )
-
-  // TODO: remove this after finishing development
-  // const modifiedAppointments = appointments.map<IShowingAppointment>(
-  //   appointment => ({
-  //     ...appointment,
-  //     status: 'Completed'
-  //   })
-  // )
-  const modifiedAppointments = sortedAppointments
 
   return (
     <>
       <ShowingDetailTabBookingsFilterList
-        appointments={modifiedAppointments}
+        appointments={appointments}
         value={filter}
         onChange={setFilter}
       />
       <ShowingDetailTabBookingsList
-        filter={filter}
-        appointments={modifiedAppointments}
+        title={filterInfo.label}
+        appointments={filteredAppointments}
         duration={duration}
       />
     </>

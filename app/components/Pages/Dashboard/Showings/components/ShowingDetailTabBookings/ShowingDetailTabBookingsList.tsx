@@ -23,18 +23,17 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabBookingsListProps {
-  filter: IAppointmentStatus
+  title: string
   appointments: IShowingAppointment[]
   duration: number
 }
 
 function ShowingDetailTabBookingsList({
-  filter,
-  appointments,
+  title,
+  appointments: rows,
   duration
 }: ShowingDetailTabBookingsListProps) {
   const classes = useStyles()
-  const rows = appointments.filter(appointment => appointment.status === filter)
 
   const columns: TableColumn<IShowingAppointment>[] = [
     {
@@ -96,7 +95,7 @@ function ShowingDetailTabBookingsList({
   ]
 
   return (
-    <BoxWithTitle title={filter} marginTop={6}>
+    <BoxWithTitle title={title} marginTop={6}>
       <Table
         rows={rows}
         totalRows={rows.length}

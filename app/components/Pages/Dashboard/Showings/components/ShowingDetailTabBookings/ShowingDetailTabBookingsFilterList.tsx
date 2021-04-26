@@ -3,12 +3,13 @@ import { Grid } from '@material-ui/core'
 import ShowingDetailTabBookingsFilterCard, {
   BookingFilterType
 } from './ShowingDetailTabBookingsFilterCard'
-import { appointmentStatusIconLabel } from './use-appointment-status-icon-label'
+import { AppointmentFilter } from './types'
+import { appointmentStatusInfo } from './use-appointment-filter-info'
 import useCountAppointmentTypes from './use-count-appointment-types'
 
 interface ShowingDetailTabBookingsFilterListProps {
-  value: IAppointmentStatus
-  onChange: (value: IAppointmentStatus) => void
+  value: AppointmentFilter
+  onChange: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]
 }
 
@@ -21,33 +22,39 @@ function ShowingDetailTabBookingsFilterList({
 
   const filters: BookingFilterType[] = [
     {
+      type: 'All',
+      ...appointmentStatusInfo.All,
+      count: counters.All,
+      badge: 0
+    },
+    {
       type: 'Requested',
-      ...appointmentStatusIconLabel.Requested,
+      ...appointmentStatusInfo.Requested,
       count: counters.Requested,
-      badge: 10
+      badge: 0
     },
     {
       type: 'Confirmed',
-      ...appointmentStatusIconLabel.Confirmed,
+      ...appointmentStatusInfo.Confirmed,
       count: counters.Confirmed,
       badge: 0
     },
     {
       type: 'Rescheduled',
-      ...appointmentStatusIconLabel.Rescheduled,
+      ...appointmentStatusInfo.Rescheduled,
       count: counters.Rescheduled,
       badge: 0
     },
     {
       type: 'Canceled',
-      ...appointmentStatusIconLabel.Canceled,
+      ...appointmentStatusInfo.Canceled,
       count: counters.Canceled,
       badge: 0
     },
     {
-      type: 'Completed',
-      ...appointmentStatusIconLabel.Completed,
-      count: counters.Completed,
+      type: 'Feedback',
+      ...appointmentStatusInfo.Feedback,
+      count: counters.Feedback,
       badge: 0
     }
   ]

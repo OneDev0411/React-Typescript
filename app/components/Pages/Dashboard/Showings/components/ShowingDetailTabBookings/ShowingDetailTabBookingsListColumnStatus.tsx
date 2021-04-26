@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import FeedbackStars from '../FeedbackStars'
 
-import useAppointmentStatusIconLabel from './use-appointment-status-icon-label'
+import useAppointmentFilterInfo from './use-appointment-filter-info'
 
 const useStyles = makeStyles(
   theme => ({
@@ -29,7 +29,7 @@ function ShowingDetailTabBookingsListColumnStatus({
   feedbackRate
 }: ShowingDetailTabBookingsListColumnStatusProps) {
   const classes = useStyles()
-  const { icon, label } = useAppointmentStatusIconLabel(status)
+  const { icon, label } = useAppointmentFilterInfo(status)
 
   return (
     <Box
