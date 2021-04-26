@@ -75,8 +75,11 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
+          <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
+            Dashboard
+          </SideNavLinkItem>
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">
+            <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
               <AppNavbarBadge
                 badgeContent={inboxNotificationNumber}
                 color="primary"
@@ -87,45 +90,58 @@ export function Menu() {
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/calendar" tourId="nav-calendar">
+              Calendar
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/contacts">Contacts</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/contacts" tourId="nav-contacts">
+              Contacts
+            </SideNavLinkItem>
           </Acl.Crm>
         </SidenavListGroup>
 
         <SidenavListGroup>
           <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/marketing">
+            <SideNavLinkItem to="/dashboard/marketing" tourId="nav-marketing">
               Marketing
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
+          <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
+            Properties
+          </SideNavLinkItem>
 
           <Acl.AgentNetwork>
-            <SideNavLinkItem to="/dashboard/agent-network">
+            <SideNavLinkItem
+              to="/dashboard/agent-network"
+              tourId="nav-agent-network"
+            >
               Agent Network
             </SideNavLinkItem>
           </Acl.AgentNetwork>
 
           <Acl access={insightAccess}>
-            <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
+              Insight
+            </SideNavLinkItem>
           </Acl>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
+              Tours
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl access={openHouseAccess}>
-            <SideNavLinkItem to="/dashboard/open-house">
+            <SideNavLinkItem to="/dashboard/open-house" tourId="nav-open-house">
               Open House
             </SideNavLinkItem>
           </Acl>
 
           <Acl access={dealsAccess}>
-            <SideNavLinkItem to="/dashboard/deals">
+            <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
               <AppNavbarBadge
                 badgeContent={dealsNotificationsNumber}
                 color="primary"
@@ -136,11 +152,15 @@ export function Menu() {
           </Acl>
 
           <Acl access={ACL.WEBSITES}>
-            <SideNavLinkItem to="/dashboard/websites">Websites</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
+              Websites
+            </SideNavLinkItem>
           </Acl>
 
           <Acl access={[ACL.STORE]}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
+              Store
+            </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
 
