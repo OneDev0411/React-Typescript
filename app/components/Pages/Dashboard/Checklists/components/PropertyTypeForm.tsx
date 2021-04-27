@@ -35,7 +35,12 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const user = useSelector(selectUser)
 
-  const { control } = useForm()
+  const {
+    control,
+    formState: { isValid }
+  } = useForm({
+    mode: 'all'
+  })
 
   const handleClose = () => {
     onClose()
@@ -81,13 +86,14 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
             <Controller
               name="label"
               control={control}
-              render={({ onChange, value }) => (
+              defaultValue=""
+              rules={{ required: true, minLength: 1 }}
+              render={field => (
                 <TextField
                   fullWidth
                   label="Property Name"
                   variant="outlined"
-                  onChange={onChange}
-                  value={value}
+                  {...field}
                 />
               )}
             />
@@ -117,7 +123,7 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
         <Button
           variant="contained"
           color="secondary"
-          disabled={isSaving}
+          disabled={isSaving || !isValid}
           onClick={handleSave}
         >
           {isSaving ? 'Saving...' : 'Save Property'}
