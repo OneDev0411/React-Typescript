@@ -40,8 +40,6 @@ function DealDetails(props) {
       : 'Show Deal | Deals | Rechat'
   }
 
-  console.log(props.deal)
-
   return (
     <DealContainer>
       <Helmet>

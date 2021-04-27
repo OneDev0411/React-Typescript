@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
@@ -173,22 +173,27 @@ function CreateDeal({ router, route }: Props) {
 
     if (deal.deal_type === 'Selling') {
       const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'
+      const definition = getDefinitionId(deal, 'listing_status')
 
-      contexts.push({
-        definition: getDefinitionId(deal, 'listing_status'),
-        checklist: checklist.id,
-        value: defaultStatus,
-        approved: true
-      })
+      definition &&
+        contexts.push({
+          definition,
+          checklist: checklist.id,
+          value: defaultStatus,
+          approved: true
+        })
     }
 
     if (isDoubleEnded) {
-      contexts.push({
-        definition: getDefinitionId(deal, 'ender_type'),
-        checklist: checklist.id,
-        value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
-        approved: true
-      })
+      const definition = getDefinitionId(deal, 'ender_type')
+
+      definition &&
+        contexts.push({
+          definition,
+          checklist: checklist.id,
+          value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
+          approved: true
+        })
     }
 
     if (contexts.length > 0) {

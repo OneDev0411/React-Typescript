@@ -74,7 +74,7 @@ export default function ChecklistsPage({ location }: Props) {
 
   const handleCreatePropertyType = (propertyType: IDealPropertyType) => {
     addPropertyTypes(propertyType)
-    addChecklists(propertyType.checklists)
+    addChecklists(propertyType.checklists || [])
     setIsFormOpen(false)
   }
 

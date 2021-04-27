@@ -16,8 +16,8 @@ export function useFactsheetContexts(deal: IDeal, section: string) {
   }
 
   const list = uniqBy(
-    checklist.optional_contexts
-      .concat(checklist.required_contexts)
+    (checklist.optional_contexts || [])
+      .concat(checklist.required_contexts || [])
       .filter(context => context.section === section),
     context => context.key
   )
