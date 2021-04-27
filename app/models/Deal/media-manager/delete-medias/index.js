@@ -1,8 +1,8 @@
-import Fetch from '../../../services/fetch'
+import Fetch from '../../../../services/fetch'
 
 export async function deleteMedias(dealId, mediaIds) {
   try {
-    const response = await new Fetch()
+    await new Fetch()
       .delete(`/deals/${dealId}/gallery/items`)
       .send({ items: mediaIds })
 

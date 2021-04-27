@@ -1,4 +1,4 @@
-import Fetch from '../../../services/fetch'
+import Fetch from '../../../../services/fetch'
 
 export async function uploadMedia(
   dealId,

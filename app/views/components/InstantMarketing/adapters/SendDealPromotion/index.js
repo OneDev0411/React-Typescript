@@ -16,7 +16,7 @@ import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-list
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
-import { getMediaGallery } from 'models/media-manager'
+import { getMediaGallery } from 'models/Deal/media-manager'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'

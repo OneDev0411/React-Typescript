@@ -10,11 +10,11 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
-import { downloadMedias } from 'models/media-manager'
+import { downloadMedias } from 'models/Deal/media-manager'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { deleteMedias } from 'models/media-manager'
+import { deleteMedias } from 'models/Deal/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
