@@ -1,13 +1,27 @@
-import React from 'react'
 import moment from 'moment'
-import Flex from 'styled-flex-component'
-import { Tooltip } from '@material-ui/core'
-import { mdiBellRingOutline, mdiAlertOutline, mdiCheck } from '@mdi/js'
+import { Box, Tooltip, makeStyles, Theme, useTheme } from '@material-ui/core'
+import { mdiCheckDecagram, mdiAlertCircle, mdiCloseCircle } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { Label } from './styled'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    required: {
+      color: theme.palette.error.light,
+      ...theme.typography.subtitle3,
+      lineHeight: 1
+    },
+    status: {
+      color: theme.palette.info.light,
+      ...theme.typography.subtitle3,
+      lineHeight: 1
+    }
+  }),
+  {
+    name: 'Deals-Checklists-Task-Label'
+  }
+)
 
 interface Props {
   deal: IDeal
@@ -16,6 +30,9 @@ interface Props {
 }
 
 export function TaskStatus({ deal, task, isBackOffice }: Props) {
+  const classes = useStyles()
+  const theme = useTheme<Theme>()
+
   if (!task) {
     return null
   }
@@ -48,45 +65,53 @@ export function TaskStatus({ deal, task, isBackOffice }: Props) {
     return null
   }
 
-  return (
-    <Flex>
-      {isRequired && <Label className="Required">Required</Label>}
+  const icon = getIcon(status, theme)
 
-      {status && (
+  return (
+    <Box display="flex" alignItems="center">
+      {isRequired && <div className={classes.required}>Required</div>}
+
+      {status && !icon && <div className={classes.status}>{status}</div>}
+
+      {status && icon && (
         <Tooltip title={tooltip} placement="bottom">
-          <Label className={status}>
-            {getIcon(status)} {status}
-          </Label>
+          <div style={{ lineHeight: 0 }}>{icon}</div>
         </Tooltip>
       )}
-    </Flex>
+    </Box>
   )
 }
 
-function getIcon(status: string) {
+function getIcon(status: string, theme: Theme) {
   switch (status) {
     case 'Pending':
     case 'Submitted':
     case 'Notified':
       return (
         <SvgIcon
-          rightMargined
-          path={mdiBellRingOutline}
-          size={muiIconSizes.xsmall}
+          color={theme.palette.warning.main}
+          path={mdiAlertCircle}
+          size={muiIconSizes.medium}
         />
       )
 
     case 'Declined':
       return (
         <SvgIcon
-          rightMargined
-          path={mdiAlertOutline}
-          size={muiIconSizes.small}
+          color={theme.palette.error.main}
+          path={mdiCloseCircle}
+          size={muiIconSizes.medium}
         />
       )
 
     case 'Approved':
-      return <SvgIcon rightMargined path={mdiCheck} size={muiIconSizes.small} />
+      return (
+        <SvgIcon
+          color={theme.palette.primary.main}
+          path={mdiCheckDecagram}
+          size={muiIconSizes.medium}
+        />
+      )
 
     default:
       return null

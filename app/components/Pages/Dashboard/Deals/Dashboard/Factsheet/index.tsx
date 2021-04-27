@@ -19,7 +19,6 @@ import {
   Container,
   ItemsContainer,
   SectionTitle,
-  FactsheetDivider,
   TimelineSplitter
 } from './styled'
 
@@ -30,7 +29,6 @@ interface Props {
   display?: boolean
   title?: string
   section: string
-  showDivider: boolean
 }
 
 export default function Factsheet(props: Props) {
@@ -92,7 +90,9 @@ export default function Factsheet(props: Props) {
   return (
     <>
       <Container>
-        {props.title && <SectionTitle>{props.title}</SectionTitle>}
+        {props.title && (
+          <SectionTitle variant="body2">{props.title}</SectionTitle>
+        )}
 
         <ItemsContainer>
           {props.section === 'Dates' && <TimelineSplitter />}
@@ -118,8 +118,6 @@ export default function Factsheet(props: Props) {
           })}
         </ItemsContainer>
       </Container>
-
-      {props.showDivider && <FactsheetDivider />}
     </>
   )
 }

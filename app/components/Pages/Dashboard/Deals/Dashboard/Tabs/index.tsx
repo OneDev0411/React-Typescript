@@ -55,6 +55,7 @@ export default function Tabs(props: Props) {
     <Box>
       <Box mx={5}>
         <PageTabs
+          defaultValue={tab?.id}
           onChange={props.onChangeTab}
           containerStyle={{
             marginBottom: 0
@@ -72,11 +73,20 @@ export default function Tabs(props: Props) {
 
       <Notifications deal={props.deal} />
 
-      {tab && (
-        <Box px={5} py={2} display="flex" className={classes.container}>
-          {tab.render(props)}
+      {tabs.map(item => (
+        <Box
+          key={item.id}
+          px={5}
+          py={2}
+          display="flex"
+          className={classes.container}
+          style={{
+            display: item.id === tab?.id ? 'block' : 'none'
+          }}
+        >
+          {item.render(props)}
         </Box>
-      )}
+      ))}
     </Box>
   )
 }

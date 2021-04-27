@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -54,7 +54,7 @@ function DealDetails(props) {
             deal={props.deal}
             user={props.user}
             activeTab={activeTab}
-            onChangeTab={tab => setActiveTab(tab.id)}
+            onChangeTab={setActiveTab}
             isBackOffice={props.isBackOffice}
             isFetchingChecklists={isFetchingDeal}
             isFetchingContexts={isFetchingContexts}

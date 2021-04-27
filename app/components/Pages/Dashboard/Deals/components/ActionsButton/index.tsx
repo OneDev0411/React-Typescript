@@ -80,10 +80,11 @@ import {
 
 interface Props {
   deal: IDeal
-  task: IDealTask
+  task: IDealTask | null
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
+  className?: string
 }
 
 interface ContextProps {
@@ -194,6 +195,10 @@ class ActionsButton extends React.Component<
     })
 
   getSplitterFiles = () => {
+    if (this.props.task === null) {
+      return []
+    }
+
     const files = getLastStates({
       deal: this.props.deal,
       task: this.props.task,
@@ -218,6 +223,10 @@ class ActionsButton extends React.Component<
   handleShowComments = () => this.props.setSelectedTask(this.props.task)
 
   emailFile = () => {
+    if (!this.props.task) {
+      return
+    }
+
     const attachments = getFileEmailAttachments(
       this.props.task,
       this.props.file!
@@ -227,12 +236,20 @@ class ActionsButton extends React.Component<
   }
 
   emailForm = () => {
+    if (!this.props.task) {
+      return
+    }
+
     const attachments = getFormEmailAttachments(this.props.task)
 
     this.updateEmailList(attachments)
   }
 
   emailEnvelope = () => {
+    if (!this.props.task) {
+      return
+    }
+
     const attachments = getEnvelopeEmailAttachments(
       this.props.task,
       this.props.envelope!
@@ -276,7 +293,7 @@ class ActionsButton extends React.Component<
 
   docusignEnvelope = () => {
     const attachments = getEnvelopeEsignAttachments(
-      this.props.task,
+      this.props.task!,
       this.props.envelope!
     )
 
@@ -284,14 +301,14 @@ class ActionsButton extends React.Component<
   }
 
   docusignForm = () => {
-    const attachments = getFormEsignAttachments(this.props.task)
+    const attachments = getFormEsignAttachments(this.props.task!)
 
     this.updateDocusignList(attachments)
   }
 
   docusignFile = () => {
     const attachments = getFileEsignAttachments(
-      this.props.task,
+      this.props.task!,
       this.props.file!
     )
 
@@ -364,7 +381,7 @@ class ActionsButton extends React.Component<
     const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
-      <div>
+      <div className={this.props.className}>
         <Downshift
           isOpen={this.state.isMenuOpen}
           onOuterClick={this.handleCloseMenu}

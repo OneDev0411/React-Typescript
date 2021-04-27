@@ -1,22 +1,13 @@
 import styled, { css } from 'styled-components'
 
-import { Theme } from '@material-ui/core'
-
-import { borderColor } from 'views/utils/colors'
-
-export const FactsheetDivider = styled.div`
-  width: 3.3rem;
-  height: 1px;
-  margin: 1.5rem;
-  background-color: ${borderColor};
-`
+import { Theme, Typography } from '@material-ui/core'
 
 export const Container = styled.div``
 
-export const SectionTitle = styled.h3`
+export const SectionTitle = styled(Typography)`
   ${({ theme }) => `
     padding: ${theme.spacing(0, 3)};
-    ${theme.typography.subtitle1};
+    color: ${theme.palette.grey['700']};
   `}
 `
 

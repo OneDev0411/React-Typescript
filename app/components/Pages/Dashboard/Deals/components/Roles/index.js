@@ -27,9 +27,10 @@ import { getAvatarTitle } from '../../utils/get-avatar-title'
 
 import AddRole from './AddRole'
 
+import { SectionTitle } from '../../Dashboard/Factsheet/styled'
+
 import {
   RolesContainer,
-  RolesTitle,
   RoleItem,
   RoleAvatar,
   RoleInfo,
@@ -158,7 +159,9 @@ class Roles extends React.Component {
   render() {
     return (
       <RolesContainer style={this.props.containerStyle}>
-        {this.props.showTitle && <RolesTitle>Contacts</RolesTitle>}
+        {this.props.showTitle && (
+          <SectionTitle variant="body2">Contacts</SectionTitle>
+        )}
 
         {this.props.roles
           .filter(

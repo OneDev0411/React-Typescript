@@ -1,4 +1,3 @@
-import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import Spinner from 'components/Spinner'
@@ -7,7 +6,6 @@ import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
 import DeleteDeal from '../DeleteDeal'
 import { Card } from './styled'
-import { FactsheetDivider } from '../Factsheet/styled'
 
 function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
@@ -19,7 +17,6 @@ function FactsheetsSideNav(props) {
       ) : (
         <>
           <FactsheetSection
-            showDivider={props.showCriticalDatesDivider}
             display={props.showCriticalDates}
             deal={deal}
             isFetchingContexts={props.isFetchingContexts}
@@ -28,15 +25,9 @@ function FactsheetsSideNav(props) {
             title="Critical Dates"
           />
 
-          {props.showContacts && (
-            <Fragment>
-              <Roles deal={deal} allowDeleteRole />
-              <FactsheetDivider />
-            </Fragment>
-          )}
+          {props.showContacts && <Roles deal={deal} allowDeleteRole />}
 
           <FactsheetSection
-            showDivider
             display={props.showCDAInformation}
             deal={deal}
             isFetchingContexts={props.isFetchingContexts}
@@ -55,17 +46,13 @@ function FactsheetsSideNav(props) {
           />
 
           {props.showDeleteDeal && (
-            <Fragment>
-              <FactsheetDivider />
-
-              <div
-                style={{
-                  margin: '0.5rem 1.5rem'
-                }}
-              >
-                <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
-              </div>
-            </Fragment>
+            <div
+              style={{
+                margin: '0.5rem 1.5rem'
+              }}
+            >
+              <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+            </div>
           )}
         </>
       )}

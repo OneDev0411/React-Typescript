@@ -16,10 +16,10 @@ export const PrimaryAction = styled.div`
     align-items: center;
     justify-content: center;
     height: 100%;
-    ${theme.typography.body2};
+    ${theme.typography.subtitle2};
 
     width: ${(props: PrimaryActionProps) =>
-      props.hasSecondaryActions ? '8rem' : '9.3rem'};
+      props.hasSecondaryActions ? '8.5rem' : '9.3rem'};
 
     :hover {
       color: ${theme.palette.secondary.main};
@@ -63,9 +63,9 @@ export const Container = styled.div<{
 }>`
   ${({ theme }) => css`
     display: flex;
-    height: 2.3rem;
-    opacity: 0.3;
-    border-radius: 3px;
+    height: ${theme.spacing(4)}px;
+    border-radius: ${theme.shape.borderRadius}px;
+    background-color: #fff;
     border: 1px solid ${theme.palette.divider};
     cursor: pointer;
 

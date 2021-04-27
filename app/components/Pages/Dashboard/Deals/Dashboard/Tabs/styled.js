@@ -23,8 +23,8 @@ export const FactsheetContainer = styled.div`
 `
 
 export const MainContainer = styled.div`
-  width: calc(100% - 20.5rem);
-  margin-left: 1.5rem;
+  flex-grow: 1;
+  margin-left: 1rem;
 `
 
 export const NavBar = styled.div`

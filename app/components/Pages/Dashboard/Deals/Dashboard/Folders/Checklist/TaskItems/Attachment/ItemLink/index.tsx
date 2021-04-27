@@ -1,12 +1,14 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import { Link } from 'react-router'
+
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 import { getFileType } from 'utils/file-utils/get-file-type'
 
-import { ItemLink as Link } from '../../styled'
+import { useStyles } from '../../styles'
 
 interface Props {
   deal: IDeal
@@ -23,6 +25,8 @@ export function ItemLink({
   isBackOffice,
   children
 }: Props) {
+  const classes = useStyles()
+
   const envelopes = useSelector<IAppState, IDealEnvelope[]>(({ deals }) =>
     selectDealEnvelopes(deal, deals.envelopes)
   )
@@ -47,7 +51,10 @@ export function ItemLink({
       : `attachment/${file.id}`
 
   return (
-    <Link to={`/dashboard/deals/${deal.id}/view/${taskId}/${link}`}>
+    <Link
+      className={classes.link}
+      to={`/dashboard/deals/${deal.id}/view/${taskId}/${link}`}
+    >
       {children}
     </Link>
   )

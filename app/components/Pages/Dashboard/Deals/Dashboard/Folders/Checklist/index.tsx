@@ -1,8 +1,5 @@
-import React from 'react'
+import { Grid, Box, Typography } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
-import Flex from 'styled-flex-component'
-
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { isChecklistExpanded } from 'reducers/deals/checklists'
 import { setExpandChecklist } from 'actions/deals'
@@ -10,13 +7,11 @@ import { setExpandChecklist } from 'actions/deals'
 import { IAppState } from 'reducers'
 
 import { ChecklistLabels } from './Labels'
-
 import { FolderOptionsMenu } from './Menu'
-
 import { TaskRow } from './TaskRow'
 import NewTaskRow from './NewTaskRow'
 
-import { FolderContainer, Header, HeaderTitle, ItemsContainer } from '../styled'
+import { useStyles } from './styles'
 
 interface Props {
   deal: IDeal
@@ -29,60 +24,67 @@ interface Props {
   onToggleExpand?(): void
 }
 
-export const ChecklistFolder = React.memo(
-  ({
-    deal,
-    tasks,
-    title,
-    isBackOffice,
-    checklist,
-    isFolderExpanded = false,
-    createNewTask = true,
-    onToggleExpand = () => {}
-  }: Props) => {
-    const dispatch = useDispatch()
-    const isExpanded = useSelector<IAppState, boolean>(({ deals }) => {
-      return checklist
-        ? isChecklistExpanded(deals.checklists, checklist.id)
-        : isFolderExpanded || false
-    })
+export function ChecklistFolder({
+  deal,
+  tasks,
+  title,
+  checklist,
+  isBackOffice,
+  isFolderExpanded = false,
+  createNewTask = true,
+  onToggleExpand
+}: Props) {
+  const classes = useStyles()
 
-    const toggleFolderOpen = () => {
-      if (checklist) {
-        dispatch(setExpandChecklist(checklist.id, !isExpanded))
-      }
+  const dispatch = useDispatch()
+  const isExpanded = useSelector<IAppState, boolean>(({ deals }) => {
+    return checklist
+      ? isChecklistExpanded(deals.checklists, checklist.id)
+      : isFolderExpanded || false
+  })
 
-      onToggleExpand()
+  const toggleFolderOpen = () => {
+    if (checklist) {
+      dispatch(setExpandChecklist(checklist.id, !isExpanded))
     }
 
-    return (
-      <FolderContainer>
-        <Header>
-          <Flex
-            alignCenter
-            style={{ cursor: 'pointer' }}
-            onClick={toggleFolderOpen}
-          >
-            <HeaderTitle>
-              <TextMiddleTruncate text={title} maxLength={100} />
-            </HeaderTitle>
+    onToggleExpand?.()
+  }
+
+  return (
+    <Grid container className={classes.container}>
+      <Grid container className={classes.header}>
+        <Grid
+          item
+          xs={10}
+          spacing={1}
+          className={classes.titleContainer}
+          onClick={toggleFolderOpen}
+        >
+          <Box display="flex" alignItems="center">
+            <Box mr={1}>
+              <Typography variant="subtitle1">{title}</Typography>
+            </Box>
             <ChecklistLabels checklist={checklist} />
-          </Flex>
+          </Box>
+        </Grid>
 
-          {checklist && (
-            <Flex alignCenter>
-              <FolderOptionsMenu
-                deal={deal}
-                checklist={checklist}
-                isBackOffice={isBackOffice}
-              />
-            </Flex>
-          )}
-        </Header>
+        <Grid item xs={2}>
+          <Box textAlign="right">
+            <FolderOptionsMenu
+              deal={deal}
+              checklist={checklist}
+              isBackOffice={isBackOffice}
+            />
+          </Box>
+        </Grid>
+      </Grid>
 
-        <ItemsContainer isOpen={isExpanded}>
-          {tasks.map(task => (
+      {isExpanded && (
+        <Grid container>
+          {tasks.map((task, index) => (
             <TaskRow
+              index={index}
               key={task.id}
               task={task}
               deal={deal}
@@ -91,8 +93,8 @@ export const ChecklistFolder = React.memo(
           ))}
 
           {createNewTask && <NewTaskRow deal={deal} checklist={checklist} />}
-        </ItemsContainer>
-      </FolderContainer>
-    )
-  }
-)
+        </Grid>
+      )}
+    </Grid>
+  )
+}

@@ -1,12 +1,14 @@
-import React from 'react'
-import Flex from 'styled-flex-component'
+import { Box } from '@material-ui/core'
+import { Link } from 'react-router'
+
+import { mdiFileOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../../components/ActionsButton'
-
 import { getFormActions } from '../helpers/get-form-actions'
 
-import { ItemContainer, ItemRow, ItemTitle, ItemLink } from '../styled'
-import { LabelItem } from '../../../styled'
+import { useStyles } from '../styles'
 
 interface Props {
   deal: IDeal
@@ -14,6 +16,8 @@ interface Props {
 }
 
 export function DigitalForm({ deal, task }: Props) {
+  const classes = useStyles()
+
   if (!task || !task.form) {
     return null
   }
@@ -21,25 +25,26 @@ export function DigitalForm({ deal, task }: Props) {
   const actions: ActionButtonId[] = getFormActions()
 
   return (
-    <ItemContainer>
-      <ItemRow>
-        <Flex alignCenter justifyBetween>
-          <ItemTitle>
-            <ItemLink
-              className="file-link"
-              to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
-            >
-              {task.title}
-            </ItemLink>
-          </ItemTitle>
+    <div className={classes.container}>
+      <div className={classes.row}>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <div className={classes.horizontalLine} />
+            <SvgIcon path={mdiFileOutline} />
+
+            <div className={classes.title}>
+              <Link
+                className={classes.link}
+                to={`/dashboard/deals/${deal.id}/form-edit/${task.id}`}
+              >
+                Digital Form
+              </Link>
+            </div>
+          </Box>
 
           <ActionsButton deal={deal} task={task} actions={actions} />
-        </Flex>
-
-        <Flex alignCenter>
-          <LabelItem>Digital Form</LabelItem>
-        </Flex>
-      </ItemRow>
-    </ItemContainer>
+        </Box>
+      </div>
+    </div>
   )
 }

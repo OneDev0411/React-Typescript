@@ -1,17 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { SectionTitle } from '../../Dashboard/Factsheet/styled'
-
 export const RolesContainer = styled.div`
   position: relative;
-`
-
-export const RolesTitle = styled(SectionTitle)`
-  ${({ theme }) => css`
-    padding: ${theme.spacing(0, 3)};
-    margin-bottom: ${theme.spacing(3)}px;
-    ${theme.typography.subtitle1};
-  `}
 `
 
 export const RoleActions = styled.div`

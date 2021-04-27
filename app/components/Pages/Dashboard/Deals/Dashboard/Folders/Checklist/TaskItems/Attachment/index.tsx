@@ -1,15 +1,16 @@
-import React from 'react'
-import Flex from 'styled-flex-component'
 import fecha from 'fecha'
+import { Box } from '@material-ui/core'
 
+import { mdiFileDocumentOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 
 import { ItemLink } from './ItemLink'
 
-import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
-import { LabelItem } from '../../../styled'
+import { useStyles } from '../styles'
 
 import { getFileActions } from '../helpers/get-file-actions'
 
@@ -22,13 +23,17 @@ interface Props {
 
 export function Attachment({ deal, task, file, isBackOffice }: Props) {
   const actions: ActionButtonId[] = getFileActions(file)
+  const classes = useStyles()
 
   return (
-    <ItemContainer>
-      <ItemRow>
-        <Flex alignCenter justifyBetween>
-          <Flex column>
-            <ItemTitle>
+    <div className={classes.container}>
+      <div className={classes.row}>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <div className={classes.horizontalLine} />
+            <SvgIcon path={mdiFileDocumentOutline} />
+
+            <div className={classes.title}>
               <ItemLink
                 file={file}
                 deal={deal}
@@ -37,20 +42,20 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
               >
                 <TextMiddleTruncate text={file.name} maxLength={75} />
               </ItemLink>
-            </ItemTitle>
+            </div>
 
-            <Flex>
-              <LabelItem>Uploaded File</LabelItem>
+            <div className={classes.subtitle}>Uploaded File</div>
+          </Box>
 
-              <ItemDate>
-                Uploaded at{' '}
-                {fecha.format(
-                  new Date(file.created_at * 1000),
-                  'MMM DD YYYY, h:mm A'
-                )}
-              </ItemDate>
-            </Flex>
-          </Flex>
+          <Box display="flex">
+            <div className={classes.date}>
+              Uploaded at{' '}
+              {fecha.format(
+                new Date(file.created_at * 1000),
+                'MMM DD YYYY, h:mm A'
+              )}
+            </div>
+          </Box>
 
           <ActionsButton
             deal={deal}
@@ -58,8 +63,8 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
             file={file}
             actions={actions}
           />
-        </Flex>
-      </ItemRow>
-    </ItemContainer>
+        </Box>
+      </div>
+    </div>
   )
 }
