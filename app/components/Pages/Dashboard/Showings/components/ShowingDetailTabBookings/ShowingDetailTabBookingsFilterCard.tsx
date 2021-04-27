@@ -1,8 +1,7 @@
-import { ReactNode } from 'react'
 import classNames from 'classnames'
 import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
 
-import { AppointmentFilter } from './types'
+import { AppointmentFilter, AppointmentFilterInfo } from './types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -29,18 +28,17 @@ const useStyles = makeStyles(
     icon: {
       display: 'inline-flex',
       verticalAlign: 'middle',
+      marginRight: theme.spacing(0.5),
       '& > svg': { fontSize: theme.spacing(2) }
     }
   }),
   { name: 'ShowingDetailTabBookingsFilterCard' }
 )
 
-export interface BookingFilterType {
+export interface BookingFilterType extends AppointmentFilterInfo {
   type: AppointmentFilter
-  label: string
   count: number
   badge: number
-  icon: ReactNode
 }
 
 interface ShowingDetailTabBookingsFilterCardProps extends BookingFilterType {
@@ -67,7 +65,8 @@ function ShowingDetailTabBookingsFilterCard({
       >
         <Typography variant="subtitle1">{count}</Typography>
         <Typography variant="body2">
-          <span className={classes.icon}>{icon}</span> {label}
+          {icon && <span className={classes.icon}>{icon}</span>}
+          {label}
         </Typography>
       </Card>
     </Badge>

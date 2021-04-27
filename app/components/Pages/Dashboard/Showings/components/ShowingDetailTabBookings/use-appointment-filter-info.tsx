@@ -17,8 +17,7 @@ export const appointmentStatusInfo: Record<
   AppointmentFilterInfo
 > = {
   All: {
-    label: 'All',
-    icon: <StarBorderOutlinedIcon /> // TODO: Ask Ali for an icon
+    label: 'All Bookings'
   },
   Requested: {
     label: 'Requested',
