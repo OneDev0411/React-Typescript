@@ -38,7 +38,7 @@ function ShowingDetailTabBookingsListColumnActions({
   const showingId = useShowingDetailId()
   const showingSetData = useShowingDetailSetData()
 
-  const { run, isLoading } = useAsync()
+  const { run, isLoading } = useAsync<IShowingAppointment>()
 
   const updateAppointmentStatus = (status: IAppointmentStatus) => {
     showingSetData(showing => {
@@ -63,18 +63,16 @@ function ShowingDetailTabBookingsListColumnActions({
 
   const handleApprove = () => {
     run(async () => approveShowingAppointment(showingId, appointmentId)).then(
-      res => {
-        console.log('approveShowingAppointment::response', res)
-        updateAppointmentStatus('Confirmed') // TODO: use server returned status
+      appointment => {
+        updateAppointmentStatus(appointment.status)
       }
     )
   }
 
   const handleReject = () => {
     run(async () => rejectShowingAppointment(showingId, appointmentId)).then(
-      res => {
-        console.log('rejectShowingAppointment::response', res)
-        updateAppointmentStatus('Canceled') // TODO: use server returned status
+      appointment => {
+        updateAppointmentStatus(appointment.status)
       }
     )
   }
