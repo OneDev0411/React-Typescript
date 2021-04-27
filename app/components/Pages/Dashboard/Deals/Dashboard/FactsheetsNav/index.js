@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { Box } from '@material-ui/core'
 
 import Spinner from 'components/Spinner'
 
@@ -16,43 +17,49 @@ function FactsheetsSideNav(props) {
         <Spinner />
       ) : (
         <>
-          <FactsheetSection
-            display={props.showCriticalDates}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="Dates"
-            title="Critical Dates"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showCriticalDates}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="Dates"
+              title="Critical Dates"
+            />
+          </Box>
 
-          {props.showContacts && <Roles deal={deal} allowDeleteRole />}
+          {props.showContacts && (
+            <Box mb={6}>
+              <Roles deal={deal} allowDeleteRole />
+            </Box>
+          )}
 
-          <FactsheetSection
-            display={props.showCDAInformation}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="CDA"
-            title="CDA Information"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showCDAInformation}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="CDA"
+              title="CDA Information"
+            />
+          </Box>
 
-          <FactsheetSection
-            display={props.showListingInformation}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="Listing"
-            title="Listing Information"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showListingInformation}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="Listing"
+              title="Listing Information"
+            />
+          </Box>
 
           {props.showDeleteDeal && (
-            <div
-              style={{
-                margin: '0.5rem 1.5rem'
-              }}
-            >
+            <Box mx={2}>
               <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
-            </div>
+            </Box>
           )}
         </>
       )}

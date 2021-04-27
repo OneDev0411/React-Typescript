@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import Flex from 'styled-flex-component'
 
-import { Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import { addNotification as notify } from 'components/notification'
 
@@ -157,83 +157,93 @@ class Roles extends React.Component {
   }
 
   render() {
+    const roles = this.props.roles.filter(
+      role =>
+        role &&
+        this.props.filter(role) &&
+        (!this.props.allowedRoles ||
+          this.props.allowedRoles.includes(role.role))
+    )
+
     return (
       <RolesContainer style={this.props.containerStyle}>
         {this.props.showTitle && (
-          <SectionTitle variant="body2">Contacts</SectionTitle>
+          <Box mb={1.5}>
+            <SectionTitle variant="body1">
+              Contacts ({roles.length})
+            </SectionTitle>
+          </Box>
         )}
 
-        {this.props.roles
-          .filter(
-            role =>
-              role &&
-              this.props.filter(role) &&
-              (!this.props.allowedRoles ||
-                this.props.allowedRoles.includes(role.role))
-          )
-          .map(role => {
-            const isRowRemovable = this.getIsRowRemovable(role.role)
+        {roles.map(role => {
+          const isRowRemovable = this.getIsRowRemovable(role.role)
 
-            return (
-              <RoleItem key={role.id} className="item">
-                <Flex alignCenter>
-                  <RoleAvatar>
-                    <Avatar alt={getAvatarTitle(role)} user={role.user}>
-                      {role.user
-                        ? getContactNameInitials(role.user)
-                        : getNameInitials(getLegalFullName(role), 1)}
-                    </Avatar>
-                  </RoleAvatar>
+          return (
+            <RoleItem key={role.id} className="item">
+              <Flex alignCenter>
+                <RoleAvatar>
+                  <Avatar
+                    alt={getAvatarTitle(role)}
+                    user={role.user}
+                    size="small"
+                  >
+                    {role.user
+                      ? getContactNameInitials(role.user)
+                      : getNameInitials(getLegalFullName(role), 1)}
+                  </Avatar>
+                </RoleAvatar>
 
-                  <RoleInfo onClick={() => this.onSelectRole(role)}>
-                    <RoleTitle>{getLegalFullName(role)}</RoleTitle>
-                    <RoleType>
-                      {roleName(role.role)}
-                      {this.props.showEmail &&
-                        role.user &&
-                        ` . ${role.user.email}`}
-                    </RoleType>
-                  </RoleInfo>
-                </Flex>
+                <RoleInfo onClick={() => this.onSelectRole(role)}>
+                  <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                  <RoleType>
+                    {roleName(role.role)}
+                    {this.props.showEmail &&
+                      role.user &&
+                      ` . ${role.user.email}`}
+                  </RoleType>
+                </RoleInfo>
+              </Flex>
 
-                {this.props.allowDeleteRole && (
-                  <RoleActions>
-                    {isRowRemovable ? (
-                      <DeleteRole
-                        deal={this.props.deal}
-                        role={role}
-                        style={{ padding: 0, marginLeft: '0.5rem' }}
-                      />
-                    ) : (
-                      <Button
-                        color="secondary"
-                        variant="outlined"
-                        size="small"
-                        onClick={() => this.toggleReplaceAgentDrawer(role)}
-                      >
-                        Replace
-                      </Button>
-                    )}
-                  </RoleActions>
-                )}
-
-                {this.state.isRoleFormOpen &&
-                  role.id === this.state.user.id && (
-                    <DealRole
-                      isOpen
+              {this.props.allowDeleteRole && (
+                <RoleActions>
+                  {isRowRemovable ? (
+                    <DeleteRole
                       deal={this.props.deal}
-                      form={this.state.user}
-                      isRoleRemovable={isRowRemovable}
-                      isEmailRequired={this.props.isEmailRequired}
-                      showBrokerageFields={this.props.showBrokerageFields}
-                      allowedRoles={this.props.allowedRoles}
-                      onUpsertRole={this.props.onUpsertRole}
-                      onClose={this.closeRoleForm}
+                      role={role}
+                      style={{ padding: 0, marginLeft: '0.5rem' }}
                     />
+                  ) : (
+                    <Button
+                      color="secondary"
+                      size="small"
+                      style={{
+                        padding: 0,
+                        margin: 0
+                      }}
+                      onClick={() => this.toggleReplaceAgentDrawer(role)}
+                    >
+                      Replace
+                    </Button>
                   )}
-              </RoleItem>
-            )
-          })}
+                </RoleActions>
+              )}
+
+              {this.state.isRoleFormOpen && role.id === this.state.user.id && (
+                <DealRole
+                  isOpen
+                  deal={this.props.deal}
+                  form={this.state.user}
+                  isRoleRemovable={isRowRemovable}
+                  isEmailRequired={this.props.isEmailRequired}
+                  showBrokerageFields={this.props.showBrokerageFields}
+                  allowedRoles={this.props.allowedRoles}
+                  onUpsertRole={this.props.onUpsertRole}
+                  onClose={this.closeRoleForm}
+                />
+              )}
+            </RoleItem>
+          )
+        })}
 
         {this.props.disableAddRole === false && (
           <AddRole

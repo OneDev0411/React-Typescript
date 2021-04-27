@@ -16,16 +16,15 @@ export const RoleAvatar = styled.div`
 `
 
 export const RoleInfo = styled.div`
-  text-align: left;
-  padding-left: 0.625rem;
+  display: flex;
 `
 
 export const RoleTitle = styled.div`
-  color: #263445;
+  margin: 0 0.5rem;
 `
 
 export const RoleType = styled.div`
-  color: #8696a4;
+  color: ${({ theme }) => theme.palette.grey['500']};
   text-decoration: none;
 `
 
@@ -34,17 +33,16 @@ export const RoleItem = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 3px;
-    margin-bottom: 1rem;
-    padding: 0 1.5rem;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0.25rem 1rem;
     cursor: pointer;
     position: relative;
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
     ${theme.typography.body2};
 
     :hover {
       background: ${props =>
-        props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
-      border-radius: 0;
+        props.noBackgroundHover ? 'transparent' : 'rgba(0, 0, 0, 0.08)'};
     }
 
     :hover ${RoleActions} {

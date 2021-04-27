@@ -2,8 +2,6 @@ import styled, { css } from 'styled-components'
 
 import { Theme, Typography } from '@material-ui/core'
 
-export const Container = styled.div``
-
 export const SectionTitle = styled(Typography)`
   ${({ theme }) => `
     padding: ${theme.spacing(0, 3)};
@@ -23,16 +21,13 @@ export const ItemsContainer = styled.div`
 export const ItemLabel = styled.span`
   display: flex;
   align-items: center;
-  color: #7f7f7f;
   font-weight: normal;
+  margin-right: ${({ theme }) => theme.spacing(1)}px;
 `
 
 export const ItemValue = styled.span`
-  font-weight: normal;
-`
-
-export const EmptyValue = styled.span`
   ${({ theme }) => css`
+    font-weight: normal;
     color: ${theme.palette.grey['500']};
   `}
 `
@@ -41,6 +36,7 @@ export const ItemActions = styled.div`
   ${({ theme }) => css`
     display: flex;
     position: absolute;
+    align-items: center;
     right: 0;
     visibility: hidden;
     padding-right: ${theme.spacing(1)}px;
@@ -70,7 +66,6 @@ export const Item = styled.div<{
   ${({ theme, isSaving }) => `
     position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin: 0 0.5rem;
     border-radius: 3px;

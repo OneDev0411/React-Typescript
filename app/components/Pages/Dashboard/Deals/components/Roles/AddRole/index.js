@@ -1,16 +1,23 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { mdiPlus } from '@mdi/js'
+
+import { Box, Typography } from '@material-ui/core'
+
+import { mdiAccountPlusOutline } from '@mdi/js'
 
 import Deal from 'models/Deal'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { BasicDropdown } from 'components/BasicDropdown'
+import { Avatar } from 'components/Avatar'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
 
 import RoleAgentIntegration from '../AgentIntegration'
 
-import { Container } from './styled'
+import { Container, RoleButton } from './styled'
 
 class AddRoleForm extends React.Component {
   state = {
@@ -92,12 +99,26 @@ class AddRoleForm extends React.Component {
             items={roleItems}
             itemToString={this.itemToString}
             onChange={this.handleSelectRole}
-            buttonIcon={() => {
-              // TODO: Remove/Refactor BaseDropdown
-              return <SvgIcon path={mdiPlus} rightMargined />
-            }}
-            buttonText="Add a new contact"
             disabled={roleItems.length === 0}
+            buttonRenderer={buttonProps => (
+              <RoleButton {...buttonProps}>
+                <Box mr={1}>
+                  <Avatar
+                    size="small"
+                    style={{
+                      backgroundColor: '#EAF4FC'
+                    }}
+                  >
+                    <SvgIcon
+                      path={mdiAccountPlusOutline}
+                      size={muiIconSizes.small}
+                      color="#0945EB" // TODO: use theme after component refactoring
+                    />
+                  </Avatar>
+                </Box>
+                <Typography variant="body2">Add a new contact</Typography>
+              </RoleButton>
+            )}
           />
         )}
 

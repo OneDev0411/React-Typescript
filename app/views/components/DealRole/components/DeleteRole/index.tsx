@@ -1,15 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
-import {
-  Tooltip,
-  IconButton,
-  IconButtonProps,
-  Theme,
-  useTheme
-} from '@material-ui/core'
+import { Tooltip, IconButton, IconButtonProps } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
+
+import { addNotification as notify } from 'components/notification'
 
 import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
@@ -18,6 +13,7 @@ import { getLegalFullName } from 'deals/utils/roles'
 
 import Spinner from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 interface Props {
   role: IDealRole
@@ -30,7 +26,6 @@ interface Props {
 export default function DeleteRole(props: Props) {
   const [isDeleting, setIsDeleting] = useState(false)
   const dispatch = useDispatch()
-  const theme = useTheme<Theme>()
 
   const handleRemoveRole = useCallback(() => {
     dispatch(
@@ -76,16 +71,8 @@ export default function DeleteRole(props: Props) {
         onClick={handleRemoveRole}
         {...props.buttonProps}
       >
-        <SvgIcon path={mdiTrashCanOutline} color={theme.palette.error.main} />
+        <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
       </IconButton>
     </Tooltip>
   )
-}
-
-DeleteRole.defaultProps = {
-  onDeleteRole: () => null,
-  tooltip: 'Delete Role',
-  style: {},
-  buttonStyle: {},
-  iconProps: {}
 }

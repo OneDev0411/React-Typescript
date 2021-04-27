@@ -15,12 +15,7 @@ import { TextField } from './TextField'
 
 import { ContextField } from './types'
 
-import {
-  Container,
-  ItemsContainer,
-  SectionTitle,
-  TimelineSplitter
-} from './styled'
+import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
 
 interface Props {
   deal: IDeal
@@ -88,37 +83,35 @@ export default function Factsheet(props: Props) {
   }
 
   return (
-    <>
-      <Container>
-        {props.title && (
-          <SectionTitle variant="body2">{props.title}</SectionTitle>
-        )}
+    <div>
+      {props.title && (
+        <SectionTitle variant="body1">{props.title}</SectionTitle>
+      )}
 
-        <ItemsContainer>
-          {props.section === 'Dates' && <TimelineSplitter />}
+      <ItemsContainer>
+        {props.section === 'Dates' && <TimelineSplitter />}
 
-          {table.map(field => {
-            const value = getFieldValue(getValue(props.deal, field))
+        {table.map(field => {
+          const value = getFieldValue(getValue(props.deal, field))
 
-            const sharedProps = {
-              field,
-              value,
-              deal: props.deal,
-              isBackOffice: props.isBackOffice,
-              onChange: handleChangeContext,
-              onDelete: handleDeleteContext,
-              onApprove: handleApproveField
-            }
+          const sharedProps = {
+            field,
+            value,
+            deal: props.deal,
+            isBackOffice: props.isBackOffice,
+            onChange: handleChangeContext,
+            onDelete: handleDeleteContext,
+            onApprove: handleApproveField
+          }
 
-            if (field.data_type === 'Date') {
-              return <DateField key={field.key} {...sharedProps} />
-            }
+          if (field.data_type === 'Date') {
+            return <DateField key={field.key} {...sharedProps} />
+          }
 
-            return <TextField key={field.key} {...sharedProps} />
-          })}
-        </ItemsContainer>
-      </Container>
-    </>
+          return <TextField key={field.key} {...sharedProps} />
+        })}
+      </ItemsContainer>
+    </div>
   )
 }
 

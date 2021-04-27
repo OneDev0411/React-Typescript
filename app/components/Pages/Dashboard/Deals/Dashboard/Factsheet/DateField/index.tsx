@@ -21,7 +21,6 @@ import {
   ItemLabel,
   ItemValue,
   ItemActions,
-  EmptyValue,
   CircleStatus
 } from '../styled'
 
@@ -87,9 +86,7 @@ export function DateField({
             </CircleStatus>{' '}
             {field.label}
           </ItemLabel>
-          <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
-          </ItemValue>
+          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
 
           <ItemActions>
             <DateTimePicker
@@ -107,16 +104,16 @@ export function DateField({
               value={value}
               onClick={handleDelete}
             />
+
+            <ApproveButton
+              deal={deal}
+              field={field}
+              isBackOffice={isBackOffice}
+              onClick={() => onApprove(field)}
+            />
           </ItemActions>
         </Item>
       </Tooltip>
-
-      <ApproveButton
-        deal={deal}
-        field={field}
-        isBackOffice={isBackOffice}
-        onClick={() => onApprove(field)}
-      />
     </>
   )
 }
