@@ -15,7 +15,6 @@ export interface ShowingPropertyBase<T extends string> {
 export interface ShowingPropertyPlace extends ShowingPropertyBase<'place'> {
   address: IStdAddr
   gallery: IMediaGallery
-  price: number
 }
 
 export interface ShowingPropertyListing extends ShowingPropertyBase<'listing'> {

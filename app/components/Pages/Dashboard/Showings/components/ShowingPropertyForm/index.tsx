@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 
-import { Grid, TextField, InputAdornment } from '@material-ui/core'
+import { Grid, TextField } from '@material-ui/core'
 
 import { normalizePostgressStdaddr } from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 
@@ -14,7 +14,6 @@ type ShowingPropertyFormData = Omit<ShowingPropertyPlace, 'type'>
 
 export interface ShowingPropertyFormProps {
   addressTitle?: string
-  priceTitle?: string
   photoTitle?: string
   initialData: ShowingPropertyFormData
   onSubmit: (data: ShowingPropertyFormData) => void
@@ -23,19 +22,17 @@ export interface ShowingPropertyFormProps {
 
 interface FieldValues {
   address: IStdAddr
-  price: number
 }
 
 function ShowingPropertyForm({
   addressTitle = 'Edit Address',
-  priceTitle = 'Add Price',
   photoTitle = 'Add Photo',
   initialData,
   onSubmit,
   children
 }: ShowingPropertyFormProps) {
-  const { register, handleSubmit, errors, control } = useForm<FieldValues>()
-  const { address, gallery, price } = initialData
+  const { handleSubmit, control } = useForm<FieldValues>()
+  const { address, gallery } = initialData
 
   const handleFormSubmit = (data: FieldValues) => {
     onSubmit({
@@ -43,8 +40,7 @@ function ShowingPropertyForm({
         ...address,
         ...data.address
       },
-      gallery,
-      price: data.price
+      gallery
     })
   }
 
@@ -74,25 +70,6 @@ function ShowingPropertyForm({
               />
             )}
           />
-        </ShowingPropertyFormSection>
-
-        <ShowingPropertyFormSection title={priceTitle} marginTop={5}>
-          <Grid item lg={3}>
-            <TextField
-              name="price"
-              label="Price"
-              fullWidth
-              defaultValue={price}
-              inputRef={register}
-              error={!!errors.price}
-              helperText={errors.price}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">$</InputAdornment>
-                )
-              }}
-            />
-          </Grid>
         </ShowingPropertyFormSection>
 
         <ShowingPropertyFormSection

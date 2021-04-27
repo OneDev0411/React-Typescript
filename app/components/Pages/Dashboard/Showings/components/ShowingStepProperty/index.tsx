@@ -47,8 +47,7 @@ function ShowingStepProperty({
           ...getStdAddrFromAddressComponents(result.place.address_components),
           full: result.place.formatted_address
         },
-        gallery: [],
-        price: 0
+        gallery: []
       })
       setIsEditMode(true)
     }
@@ -127,7 +126,7 @@ function ShowingStepProperty({
                       square_meters: 0,
                       lot_size_area: 0
                     },
-                    price: property.price
+                    price: 0
                   } as ICompactListing
                 }
                 hideFeatures
