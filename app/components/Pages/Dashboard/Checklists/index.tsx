@@ -27,7 +27,7 @@ interface Props extends RouteComponentProps<any, {}> {
   user: IUser
 }
 
-export function ChecklistsPage({ location }: Props) {
+export default function ChecklistsPage({ location }: Props) {
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
 
@@ -46,13 +46,14 @@ export function ChecklistsPage({ location }: Props) {
     addGenericTask,
     updateTask,
     updateChecklist,
+    addChecklists,
     addGeneralCommentTask,
     addFormTask,
     deleteTask,
     reorderTasks
   } = useChecklistsPage(activeTeamId)
 
-  const { propertyTypes, reload: reloadPropertyTypes } = useBrandPropertyTypes(
+  const { propertyTypes, addPropertyTypes } = useBrandPropertyTypes(
     activeTeamId!
   )
 
@@ -70,6 +71,12 @@ export function ChecklistsPage({ location }: Props) {
       )
     }
   }, [propertyTypeId, propertyTypes])
+
+  const handleCreatePropertyType = (propertyType: IDealPropertyType) => {
+    addPropertyTypes(propertyType)
+    addChecklists(propertyType.checklists)
+    setIsFormOpen(false)
+  }
 
   return (
     <Acl.Admin fallbackUrl="/dashboard/mls">
@@ -147,15 +154,10 @@ export function ChecklistsPage({ location }: Props) {
 
         <PropertyTypeForm
           isOpen={isFormOpen}
-          onCreate={() => {
-            reloadPropertyTypes()
-            setIsFormOpen(false)
-          }}
+          onCreate={handleCreatePropertyType}
           onClose={() => setIsFormOpen(false)}
         />
       </Container>
     </Acl.Admin>
   )
 }
-
-export default ChecklistsPage

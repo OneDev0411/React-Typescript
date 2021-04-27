@@ -27,7 +27,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {
   isOpen: boolean
-  onCreate: () => void
+  onCreate: (propertyType: IDealPropertyType) => void
   onClose: () => void
 }
 
@@ -45,11 +45,12 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
     setIsSaving(true)
 
     try {
-      const data = control.getValues() as PropertyTypeData
+      const propertyType = await createPropertyType(
+        getActiveTeamId(user)!,
+        control.getValues() as PropertyTypeData
+      )
 
-      await createPropertyType(getActiveTeamId(user)!, data)
-
-      onCreate()
+      onCreate(propertyType)
     } catch (e) {
       console.log(e)
     }
