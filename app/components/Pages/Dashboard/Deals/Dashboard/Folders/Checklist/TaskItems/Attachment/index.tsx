@@ -33,27 +33,31 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
             <div className={classes.horizontalLine} />
             <SvgIcon path={mdiFileDocumentOutline} />
 
-            <div className={classes.title}>
-              <ItemLink
-                file={file}
-                deal={deal}
-                taskId={task.id}
-                isBackOffice={isBackOffice}
-              >
-                <TextMiddleTruncate text={file.name} maxLength={75} />
-              </ItemLink>
-            </div>
+            <div>
+              <Box display="flex">
+                <div className={classes.title}>
+                  <ItemLink
+                    file={file}
+                    deal={deal}
+                    taskId={task.id}
+                    isBackOffice={isBackOffice}
+                  >
+                    <TextMiddleTruncate text={file.name} maxLength={75} />
+                  </ItemLink>
+                </div>
 
-            <div className={classes.subtitle}>Uploaded File</div>
-          </Box>
+                <div className={classes.subtitle}>Uploaded File</div>
+              </Box>
 
-          <Box display="flex">
-            <div className={classes.date}>
-              Uploaded at{' '}
-              {fecha.format(
-                new Date(file.created_at * 1000),
-                'MMM DD YYYY, h:mm A'
-              )}
+              <Box display="flex">
+                <div className={classes.date}>
+                  Uploaded at{' '}
+                  {fecha.format(
+                    new Date(file.created_at * 1000),
+                    'MMM DD YYYY, h:mm A'
+                  )}
+                </div>
+              </Box>
             </div>
           </Box>
 

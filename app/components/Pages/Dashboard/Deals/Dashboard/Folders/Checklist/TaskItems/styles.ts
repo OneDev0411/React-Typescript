@@ -31,7 +31,9 @@ export const useStyles = makeStyles(
     },
     date: {
       color: theme.palette.grey['700'],
-      marginLeft: theme.spacing(1)
+      marginTop: theme.spacing(0.5),
+      marginLeft: theme.spacing(1),
+      ...theme.typography.caption
     },
     link: {
       color: '#000'

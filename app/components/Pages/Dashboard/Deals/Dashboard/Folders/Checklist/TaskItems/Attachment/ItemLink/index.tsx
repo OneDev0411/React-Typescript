@@ -39,7 +39,7 @@ export function ItemLink({
     documentEnvelopes.length === 0
   ) {
     return (
-      <Link to={file.url} target="_blank">
+      <Link to={file.url} target="_blank" className={classes.link}>
         {children}
       </Link>
     )

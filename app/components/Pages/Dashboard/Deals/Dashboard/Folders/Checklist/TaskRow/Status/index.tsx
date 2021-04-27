@@ -10,12 +10,14 @@ const useStyles = makeStyles(
     required: {
       color: theme.palette.error.light,
       ...theme.typography.subtitle3,
-      lineHeight: 1
+      lineHeight: 1,
+      marginRight: theme.spacing(1)
     },
     status: {
       color: theme.palette.info.light,
       ...theme.typography.subtitle3,
-      lineHeight: 1
+      lineHeight: 1,
+      marginRight: theme.spacing(1)
     }
   }),
   {
