@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
 import { addNotification } from 'components/notification'
 
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
@@ -179,7 +180,4 @@ function mapStateToProps(state) {
 
 // This is using for testing
 export { Addresses }
-export default connect(
-  mapStateToProps,
-  { notify: addNotification }
-)(Addresses)
+export default connect(mapStateToProps, { notify: addNotification })(Addresses)
