@@ -4,18 +4,7 @@ import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
-import {
-  Box,
-  Button,
-  Dialog,
-  Typography,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  makeStyles,
-  useTheme
-} from '@material-ui/core'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
 
 import { addNotification } from 'components/notification'
@@ -31,9 +20,6 @@ import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
-import { getContactsCount } from 'models/contacts/get-contacts-count'
-
-import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
 import {
@@ -87,15 +73,6 @@ export default function EmailComposeForm<T>({
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
   const user = useSelector(selectUser)
-  const contactsInfo = useSelector((state: IAppState) => state.contacts.list)
-  const [allContactsCount, setAllContactsCount] = useState(
-    contactsInfo.info?.total ?? 0
-  )
-  const [
-    showAllContactsConfirmation,
-    setShowAllContactsConfirmation
-  ] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,
     from: props.initialValues?.from ?? user,
@@ -223,7 +200,6 @@ export default function EmailComposeForm<T>({
       )
     }
 
-    setIsSubmitting(false)
     dispatch(
       addNotification({
         status: 'success',
@@ -234,7 +210,7 @@ export default function EmailComposeForm<T>({
     onSent(result)
   }
 
-  const handlePreSendValidation = async (form: EmailFormValues) => {
+  const onSubmit = async (form: EmailFormValues) => {
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
     const uploadingImage = bodyEditor.hasUploadingImage()
 
@@ -247,10 +223,7 @@ export default function EmailComposeForm<T>({
           } are uploading, or remove them`,
           cancelLabel: 'Ok',
           needsConfirm: false,
-          onCancel: () => {
-            setIsSubmitting(false)
-            reject()
-          }
+          onCancel: reject
         })
       })
     }
@@ -263,10 +236,7 @@ export default function EmailComposeForm<T>({
             'Please wait while attachments are uploading, or remove them',
           cancelLabel: 'Ok',
           needsConfirm: false,
-          onCancel: () => {
-            setIsSubmitting(false)
-            reject()
-          }
+          onCancel: reject
         })
       })
     }
@@ -278,47 +248,13 @@ export default function EmailComposeForm<T>({
           description:
             'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
-          onCancel: () => {
-            setIsSubmitting(false)
-            reject()
-          },
-          onConfirm: () => {
-            handleSendEmail(form)
-              .then(resolve)
-              .catch(() => {
-                setIsSubmitting(false)
-                reject()
-              })
-          }
+          onCancel: reject,
+          onConfirm: () => handleSendEmail(form).then(resolve).catch(reject)
         })
       })
     }
 
     return handleSendEmail(form)
-  }
-
-  const onSubmit = async (form: EmailFormValues) => {
-    const { to = [], bcc = [], cc = [] } = form
-    const allRecipient = [...bcc, ...to, ...cc]
-    const isSendingToAllContacts = allRecipient.find(
-      i => i.recipient_type === 'AllContacts'
-    )
-
-    setIsSubmitting(true)
-
-    if (isSendingToAllContacts) {
-      if (allContactsCount === 0) {
-        const newFetchedCount = await getContactsCount([], false)
-
-        setAllContactsCount(newFetchedCount)
-      }
-
-      if (allContactsCount > 1) {
-        return setShowAllContactsConfirmation(true)
-      }
-    }
-
-    return handlePreSendValidation(form)
   }
 
   const scrollToEnd = () => {
@@ -346,52 +282,6 @@ export default function EmailComposeForm<T>({
     ]
   }, [])
 
-  const renderSendToAllConfirmation = (form: EmailFormValues) => {
-    if (!showAllContactsConfirmation) {
-      return null
-    }
-
-    return (
-      <Dialog
-        open={showAllContactsConfirmation}
-        maxWidth="md"
-        aria-labelledby="dialog-title"
-      >
-        <DialogTitle id="dialog-title">Send to all your contacts?</DialogTitle>
-        <DialogContent dividers>
-          <DialogContentText>
-            You are about to send this email to{' '}
-            <Typography color="error" component="span">
-              {allContactsCount} people
-            </Typography>{' '}
-            in your contacts. Are you sure?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            autoFocus
-            onClick={() => {
-              setShowAllContactsConfirmation(false)
-              handlePreSendValidation(form)
-            }}
-          >
-            Send it now
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              setIsSubmitting(false)
-              setShowAllContactsConfirmation(false)
-            }}
-          >
-            Edit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    )
-  }
-
   return (
     <Form
       validate={validate}
@@ -412,102 +302,103 @@ export default function EmailComposeForm<T>({
             : 'mailgun'
 
         return (
-          <>
-            {renderSendToAllConfirmation(values)}
-            <form
-              className={classes.root}
-              id="email-compose-form"
-              onSubmit={formProps.handleSubmit}
-            >
-              <div className={classes.container}>
-                <div className={classes.topFields}>
-                  {topFieldsCollapsed ? (
-                    <div onClick={() => setTopFieldsCollapsed(false)}>
-                      {props.renderCollapsedFields(values)}
-                    </div>
-                  ) : (
-                    props.renderFields(values)
-                  )}
-                </div>
-                <Field
-                  placeholder="Subject"
-                  name="subject"
-                  InputProps={{
-                    onFocus: () => setTopFieldsCollapsed(true),
-                    inputProps: {
-                      autoFocus: hasRecipients && !hasSubject,
-                      'data-test': 'email-subject'
-                    }
-                  }}
-                  fullWidth
-                  color="secondary"
-                  component={TextField}
-                />
-
-                <EmailBody
-                  editorRef={editorRef}
-                  DraftEditorProps={{
-                    onFocus: () => setTopFieldsCollapsed(true)
-                  }}
-                  autofocus={autofocusBody}
-                  hasSignatureByDefault={props.hasSignatureByDefault}
-                  hasStaticBody={!!marketingTemplate || props.hasStaticBody}
-                  hasTemplateVariables={props.hasTemplateVariables}
-                  content={
-                    marketingTemplate
-                      ? marketingTemplatePreviewHtml
-                      : initialValues.body
-                  }
-                  attachments={
-                    <Field name="attachments" component={AttachmentsList} />
-                  }
-                  uploadAttachment={uploadAttachment}
-                  uploadOrigin={uploadOrigin}
-                  editorState={editorState}
-                  onChangeEditor={setEditorState}
-                  stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
-                />
-                {marketingTemplate && !props.hasStaticBody && (
-                  <Callout dense>
-                    <Box display="flex" alignItems="center">
-                      <Box color={theme.palette.warning.contrastText} flex={1}>
-                        You are using a Marketing Center Template
-                      </Box>
-                      <DangerButton
-                        onClick={() => {
-                          selectMarketingTemplate(null, values)
-                        }}
-                      >
-                        Remove
-                      </DangerButton>
-                    </Box>
-                  </Callout>
+          <form
+            className={classes.root}
+            id="email-compose-form"
+            onSubmit={formProps.handleSubmit}
+          >
+            <div className={classes.container}>
+              <div className={classes.topFields}>
+                {topFieldsCollapsed ? (
+                  <div onClick={() => setTopFieldsCollapsed(false)}>
+                    {props.renderCollapsedFields(values)}
+                  </div>
+                ) : (
+                  props.renderFields(values)
                 )}
               </div>
+              <Field
+                placeholder="Subject"
+                name="subject"
+                InputProps={{
+                  onFocus: () => setTopFieldsCollapsed(true),
+                  inputProps: {
+                    autoFocus: hasRecipients && !hasSubject,
+                    'data-test': 'email-subject'
+                  }
+                }}
+                fullWidth
+                color="secondary"
+                component={TextField}
+              />
 
-              {children}
-
-              <Footer
-                isSubmitDisabled={isSubmitting}
+              <EmailBody
+                editorRef={editorRef}
+                DraftEditorProps={{
+                  onFocus: () => setTopFieldsCollapsed(true)
+                }}
+                autofocus={autofocusBody}
+                hasSignatureByDefault={props.hasSignatureByDefault}
+                hasStaticBody={!!marketingTemplate || props.hasStaticBody}
+                hasTemplateVariables={props.hasTemplateVariables}
+                content={
+                  marketingTemplate
+                    ? marketingTemplatePreviewHtml
+                    : initialValues.body
+                }
+                attachments={
+                  <Field name="attachments" component={AttachmentsList} />
+                }
                 uploadAttachment={uploadAttachment}
                 uploadOrigin={uploadOrigin}
-                deal={props.deal}
-                onCancel={onCancel}
-                onDelete={onDelete}
-                onChanged={scrollToEnd}
-                hasStaticBody={props.hasStaticBody}
-                className={classes.footer}
-                updateBody={bodyEditor.update}
-                disableMarketingTemplates={disableMarketingTemplates}
-                setMarketingTemplate={template =>
-                  selectMarketingTemplate(template, values)
-                }
-                onClickAddDealAttachments={() =>
-                  handleClickAddDealAttachments(values)
-                }
+                editorState={editorState}
+                onChangeEditor={setEditorState}
+                stateFromHtmlOptions={bodyEditor.stateFromHtmlOptions}
               />
-            </form>
-          </>
+              {marketingTemplate && !props.hasStaticBody && (
+                <Callout dense>
+                  <Box display="flex" alignItems="center">
+                    <Box color={theme.palette.warning.contrastText} flex={1}>
+                      You are using a Marketing Center Template
+                    </Box>
+                    <DangerButton
+                      onClick={() => {
+                        selectMarketingTemplate(null, values)
+                      }}
+                    >
+                      Remove
+                    </DangerButton>
+                  </Box>
+                </Callout>
+              )}
+            </div>
+
+            {children}
+
+            <Footer
+              isSubmitDisabled={
+                typeof isSubmitDisabled === 'function'
+                  ? isSubmitDisabled(values)
+                  : isSubmitDisabled
+              }
+              uploadAttachment={uploadAttachment}
+              uploadOrigin={uploadOrigin}
+              deal={props.deal}
+              onCancel={onCancel}
+              onDelete={onDelete}
+              onChanged={scrollToEnd}
+              hasStaticBody={props.hasStaticBody}
+              className={classes.footer}
+              updateBody={bodyEditor.update}
+              disableMarketingTemplates={disableMarketingTemplates}
+              setMarketingTemplate={template =>
+                selectMarketingTemplate(template, values)
+              }
+              onClickAddDealAttachments={() =>
+                handleClickAddDealAttachments(values)
+              }
+            />
+          </form>
         )
       }}
     />

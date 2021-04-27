@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { isToday } from 'date-fns'
 import {
   Card,
   Grid,
@@ -73,6 +74,11 @@ export default function CalendarEventCard({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
+  const eventTime = new Date(event.next_occurence)
+  const humanizedEventTime = isToday(eventTime)
+    ? 'Today'
+    : timeago().format(eventTime)
+
   return (
     <Card variant="outlined" className={classes.card}>
       <CardContent className={classes.cardContent}>
@@ -106,7 +112,7 @@ export default function CalendarEventCard({ event }: Props) {
             <Grid item>
               <Box pb={2}>
                 <Typography variant="body2" color="textSecondary">
-                  {timeago().format(event.next_occurence)}
+                  {humanizedEventTime}
                 </Typography>
               </Box>
             </Grid>

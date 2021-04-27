@@ -229,7 +229,7 @@ const redirectHandler = async (
             grant_type: 'refresh_token',
             client_id: branchData.refresh_token.client
           },
-          '/dashboard/',
+          branchData.uri || '/dashboard/',
           branchData.refresh_token.user
         )
       )

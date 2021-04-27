@@ -216,8 +216,8 @@ class SectionWithFields extends React.Component {
         message: `${attribute_def.label || attribute_def.name} updated.`
       })
 
-      this.setState(state => {
-        state.orderedAttributes.map(a =>
+      this.setState(prevState => ({
+        orderedAttributes: prevState.orderedAttributes.map(a =>
           a.id !== id
             ? a
             : {
@@ -226,7 +226,7 @@ class SectionWithFields extends React.Component {
                 order: a.order
               }
         )
-      })
+      }))
 
       this.updateContact(attribute_def)
     } catch (error) {
