@@ -31,9 +31,20 @@ function ShowingDetailTabBookings({
   const {
     hasNotifications,
     notificationsTitle,
+    notificationsEmptyMessage,
     hasBookings,
-    bookingsTitle
+    bookingsTitle,
+    bookingsEmptyMessage
   } = useAppointmentListInfo(filter)
+
+  // TODO: get the notification from server
+  const filteredNotifications = filteredAppointments
+
+  const isBothListEmpty =
+    hasNotifications &&
+    !filteredNotifications.length &&
+    hasBookings &&
+    !filteredAppointments.length
 
   return (
     <>
@@ -45,9 +56,11 @@ function ShowingDetailTabBookings({
       {hasNotifications && (
         <ShowingDetailTabBookingsList
           title={notificationsTitle}
-          rows={filteredAppointments}
+          rows={filteredNotifications}
           duration={duration}
           glowMode
+          emptyMessage={notificationsEmptyMessage}
+          hideEmptyMessage={isBothListEmpty || !!filteredAppointments.length}
         />
       )}
       {hasBookings && (
@@ -55,6 +68,7 @@ function ShowingDetailTabBookings({
           title={bookingsTitle}
           rows={filteredAppointments}
           duration={duration}
+          emptyMessage={bookingsEmptyMessage}
         />
       )}
     </>

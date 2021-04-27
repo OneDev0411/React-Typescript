@@ -11,6 +11,7 @@ import ShowingDetailTabBookingsListColumnActions from './ShowingDetailTabBooking
 import ShowingDetailTabBookingsListColumnBase from './ShowingDetailTabBookingsListColumnBase'
 import ShowingDetailTabBookingsListColumnPerson from './ShowingDetailTabBookingsListColumnPerson'
 import ShowingDetailTabBookingsListColumnStatus from './ShowingDetailTabBookingsListColumnStatus'
+import ShowingDetailTabBookingsListEmptyState from './ShowingDetailTabBookingsListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -34,6 +35,7 @@ interface ShowingDetailTabBookingsListProps {
   duration: number
   glowMode?: boolean
   emptyMessage?: string
+  hideEmptyMessage?: boolean
 }
 
 function ShowingDetailTabBookingsList({
@@ -41,7 +43,8 @@ function ShowingDetailTabBookingsList({
   rows,
   duration,
   glowMode = false,
-  emptyMessage
+  emptyMessage,
+  hideEmptyMessage = false
 }: ShowingDetailTabBookingsListProps) {
   const classes = useStyles()
 
@@ -104,7 +107,7 @@ function ShowingDetailTabBookingsList({
     }
   ]
 
-  if (!emptyMessage && !rows.length) {
+  if ((!emptyMessage || hideEmptyMessage) && !rows.length) {
     return null
   }
 
@@ -113,7 +116,9 @@ function ShowingDetailTabBookingsList({
       rows={rows}
       totalRows={rows.length}
       columns={columns}
-      EmptyStateComponent={() => <>Empty State</>}
+      EmptyStateComponent={() => (
+        <ShowingDetailTabBookingsListEmptyState message={emptyMessage || ''} />
+      )}
       classes={{
         row: classNames(
           classes.rowBase,
