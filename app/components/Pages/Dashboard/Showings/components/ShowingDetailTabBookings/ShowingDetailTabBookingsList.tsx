@@ -1,4 +1,5 @@
-import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -13,7 +14,12 @@ import ShowingDetailTabBookingsListColumnStatus from './ShowingDetailTabBookings
 
 const useStyles = makeStyles(
   theme => ({
+    rowBase: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1)
+    },
     row: { '&:hover $actions': { opacity: 1 } },
+    glowRow: { '&&': { backgroundColor: theme.palette.warning.ultralight } },
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -23,15 +29,19 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabBookingsListProps {
-  title: string
-  appointments: IShowingAppointment[]
+  title?: string
+  rows: IShowingAppointment[]
   duration: number
+  glowMode?: boolean
+  emptyMessage?: string
 }
 
 function ShowingDetailTabBookingsList({
   title,
-  appointments: rows,
-  duration
+  rows,
+  duration,
+  glowMode = false,
+  emptyMessage
 }: ShowingDetailTabBookingsListProps) {
   const classes = useStyles()
 
@@ -85,7 +95,7 @@ function ShowingDetailTabBookingsList({
       align: 'right',
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnActions
-          className={classes.actions}
+          className={!glowMode ? classes.actions : undefined}
           status={row.status}
           appointmentId={row.id}
           hasFeedback={false} // TODO: use this from the API response
@@ -94,16 +104,31 @@ function ShowingDetailTabBookingsList({
     }
   ]
 
-  return (
+  if (!emptyMessage && !rows.length) {
+    return null
+  }
+
+  const table = (
+    <Table
+      rows={rows}
+      totalRows={rows.length}
+      columns={columns}
+      EmptyStateComponent={() => <>Empty State</>}
+      classes={{
+        row: classNames(
+          classes.rowBase,
+          glowMode ? classes.glowRow : classes.row
+        )
+      }}
+    />
+  )
+
+  return title ? (
     <BoxWithTitle title={title} marginTop={6}>
-      <Table
-        rows={rows}
-        totalRows={rows.length}
-        columns={columns}
-        EmptyStateComponent={() => <>Empty State</>}
-        classes={{ row: classes.row }}
-      />
+      {table}
     </BoxWithTitle>
+  ) : (
+    <Box marginTop={6}>{table}</Box>
   )
 }
 

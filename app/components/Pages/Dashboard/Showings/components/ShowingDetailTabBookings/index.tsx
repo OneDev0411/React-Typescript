@@ -5,6 +5,7 @@ import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
 import useAppointmentFilterInfo from './use-appointment-filter-info'
 import useFilterAppointments from './use-filter-appointments'
 import useSortAppointments from './use-sort-appointments'
+import useAppointmentListInfo from './use-appointment-list-info'
 import { AppointmentFilter } from './types'
 
 interface ShowingDetailTabBookingsProps {
@@ -27,6 +28,13 @@ function ShowingDetailTabBookings({
     filterInfo
   )
 
+  const {
+    hasNotifications,
+    notificationsTitle,
+    hasBookings,
+    bookingsTitle
+  } = useAppointmentListInfo(filter)
+
   return (
     <>
       <ShowingDetailTabBookingsFilterList
@@ -34,11 +42,21 @@ function ShowingDetailTabBookings({
         value={filter}
         onChange={setFilter}
       />
-      <ShowingDetailTabBookingsList
-        title={filterInfo.label}
-        appointments={filteredAppointments}
-        duration={duration}
-      />
+      {hasNotifications && (
+        <ShowingDetailTabBookingsList
+          title={notificationsTitle}
+          rows={filteredAppointments}
+          duration={duration}
+          glowMode
+        />
+      )}
+      {hasBookings && (
+        <ShowingDetailTabBookingsList
+          title={bookingsTitle}
+          rows={filteredAppointments}
+          duration={duration}
+        />
+      )}
     </>
   )
 }
