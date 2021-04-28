@@ -172,7 +172,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         same_day_allowed: sameDayAllowed,
         allow_appraisal: allowAppraisal === 'Yes',
         allow_inspection: allowInspection === 'Yes',
-        start_date: '2021-03-29T13:55:17.134Z', // TODO:: use real start date
+        start_date: new Date().toISOString(), // TODO:: use real start date
         listing: property?.type === 'listing' ? property.listing.id : undefined,
         deal: property?.type === 'deal' ? property.deal.id : undefined,
         address: property?.type === 'place' ? property.address : undefined,
