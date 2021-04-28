@@ -135,7 +135,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           role: 'SellerAgent',
           cancel_notification_type: agentCancelNotificationTypes[1],
           confirm_notification_type: agentConfirmNotificationTypes[1],
-          ...agentPerson!
+          ...agentPerson!,
+          brand: agentPerson?.brand || teamId
         }
       ]
 
@@ -145,7 +146,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           role: 'CoSellerAgent',
           cancel_notification_type: coAgentCancelNotificationTypes[1],
           confirm_notification_type: coAgentConfirmNotificationTypes[1],
-          ...coAgentPerson!
+          ...coAgentPerson!,
+          brand: coAgentPerson?.brand || teamId
         })
       }
 
@@ -155,7 +157,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           role: 'Tenant',
           cancel_notification_type: occupantCancelNotificationTypes[1],
           confirm_notification_type: occupantConfirmNotificationTypes[1],
-          ...occupantPerson!
+          ...occupantPerson!,
+          brand: occupantPerson?.brand || teamId
         })
       }
 
