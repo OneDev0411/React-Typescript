@@ -39,12 +39,7 @@ const useStyles = makeStyles(
       }
     },
     listingAddress: {
-      [theme.breakpoints.down('xs')]: {
-        textAlign: 'center'
-      },
-      [theme.breakpoints.up('sm')]: {
-        ...theme.typography.h3
-      }
+      textAlign: 'center'
     },
     listingPrice: {
       [theme.breakpoints.down('xs')]: {
@@ -113,11 +108,7 @@ export default function InfoSection({ showing }: Props) {
                       </Typography>
                     </Hidden>
                     <Hidden xsDown>
-                      <Typography
-                        noWrap
-                        variant="body1"
-                        className={classes.listingAddress}
-                      >
+                      <Typography noWrap variant="h5">
                         {showing.listing.property.address.street_address}
                       </Typography>
                     </Hidden>
