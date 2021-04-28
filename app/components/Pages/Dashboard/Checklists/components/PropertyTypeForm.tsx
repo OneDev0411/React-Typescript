@@ -87,7 +87,11 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
               name="label"
               control={control}
               defaultValue=""
-              rules={{ required: true, minLength: 1 }}
+              rules={{
+                required: true,
+                validate: value => value.trim().length > 0
+              }}
+              valida
               render={field => (
                 <TextField
                   fullWidth
