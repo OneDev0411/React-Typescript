@@ -19,7 +19,7 @@ interface Props {
   appointment: IPublicShowingAppointment<'showing'>
 }
 
-export default function ShowingAppointmentApproved({ appointment }: Props) {
+export default function ShowingAppointmentConfirmed({ appointment }: Props) {
   const classes = useShowingAppointmentStatusDetailsStyles()
   const theme = useTheme()
 

@@ -1,6 +1,8 @@
 import { addSeconds } from 'date-fns'
 import fecha from 'fecha'
 
+import { convertShowingTimeToLocalTime } from '../../Book/Sections/BookSection/utils'
+
 export function getAppointmentRange(
   appointment: IPublicShowingAppointment<'showing'>
 ): [Date, Date] {
@@ -15,5 +17,11 @@ export function getFormattedAppointmentDateTime(
 ): string {
   const [start, end] = getAppointmentRange(appointment)
 
-  return `${fecha.format(start, 'MMMM D, h:mm')} - ${fecha.format(end, 'h:mm')}`
+  return `${fecha.format(
+    convertShowingTimeToLocalTime(appointment.showing, start),
+    'MMMM D, h:mm'
+  )} - ${fecha.format(
+    convertShowingTimeToLocalTime(appointment.showing, end),
+    'h:mm'
+  )}`
 }

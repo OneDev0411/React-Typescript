@@ -19,7 +19,7 @@ import { TimeRange } from 'components/TimeSlotPicker/types'
 
 import { setTime } from 'utils/set-time'
 
-import { getBookableDateRange } from './utils'
+import { getBookableDateRange, convertLocalTimeToShowingTime } from './utils'
 import { useBookTimeRange } from './hooks'
 
 const useStyles = makeStyles(
@@ -75,12 +75,11 @@ interface FormFields {
 }
 
 interface Props {
-  token: string
   showing: IPublicShowing
   onBook: (appointmentData: IShowingAppointmentInput) => Promise<void>
 }
 
-export default function BookSection({ token, showing, onBook }: Props) {
+export default function BookSection({ showing, onBook }: Props) {
   const classes = useStyles()
 
   const { handleSubmit, errors, control, formState } = useForm<FormFields>({
@@ -124,7 +123,10 @@ export default function BookSection({ token, showing, onBook }: Props) {
 
     const appointmentData: IShowingAppointmentInput = {
       source: 'Website',
-      time: appointmentTime.toISOString(),
+      time: convertLocalTimeToShowingTime(
+        showing,
+        appointmentTime
+      ).toISOString(),
       contact: {
         first_name: firstName,
         last_name: lastName,

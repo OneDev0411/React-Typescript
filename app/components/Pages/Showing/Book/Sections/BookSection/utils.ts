@@ -6,6 +6,8 @@ import {
   isBefore,
   addSeconds,
   addDays,
+  addMinutes,
+  subMinutes,
   endOfDay
 } from 'date-fns'
 
@@ -13,6 +15,30 @@ import { setTime } from 'utils/set-time'
 import { getWeekdayName } from 'utils/date-utils'
 
 import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
+
+export function convertLocalTimeToShowingTime(
+  showing: IPublicShowing,
+  localTime: Date
+): Date {
+  const sellingAgentTimezoneOffset = showing.timezone_offset
+  const currentUserTimezoneOffset = new Date().getTimezoneOffset()
+
+  const offsetDiff = sellingAgentTimezoneOffset - currentUserTimezoneOffset
+
+  return addMinutes(localTime, offsetDiff)
+}
+
+export function convertShowingTimeToLocalTime(
+  showing: IPublicShowing,
+  showingTime: Date
+): Date {
+  const sellingAgentTimezoneOffset = showing.timezone_offset
+  const currentUserTimezoneOffset = new Date().getTimezoneOffset()
+
+  const offsetDiff = sellingAgentTimezoneOffset - currentUserTimezoneOffset
+
+  return subMinutes(showingTime, offsetDiff)
+}
 
 function getBookableStartDate(showing: IPublicShowing): Date {
   const showingStartDate = new Date(showing.start_date)
@@ -94,7 +120,9 @@ export function getBookableDateRange(
 export function getBookedTimes(showing: IPublicShowing, date: Date): Date[] {
   return (
     showing.unavailable_times
-      ?.map(timeString => new Date(timeString))
+      ?.map(timeString =>
+        convertShowingTimeToLocalTime(showing, new Date(timeString))
+      )
       .filter(item => isSameDay(date, item)) ?? []
   )
 }
@@ -128,7 +156,9 @@ export function getPastTimeSlots(showing: IPublicShowing): Date[] {
   const now = new Date()
   const timeSlots = getTimeSlots(showing, now)
 
-  return timeSlots.filter(isPast)
+  return timeSlots
+    .map(slot => convertShowingTimeToLocalTime(showing, slot))
+    .filter(isPast)
 }
 
 export function getDisabledSlotsByNoticePeriod(
@@ -143,5 +173,7 @@ export function getDisabledSlotsByNoticePeriod(
   const timeSlots = getTimeSlots(showing, now)
   const dateWithNoticePeriod = addSeconds(now, showing.notice_period)
 
-  return timeSlots.filter(item => isBefore(item, dateWithNoticePeriod))
+  return timeSlots.filter(item =>
+    isBefore(convertShowingTimeToLocalTime(showing, item), dateWithNoticePeriod)
+  )
 }

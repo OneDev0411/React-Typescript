@@ -75,7 +75,6 @@ export default function BookShowing({
       <Grid container direction="row" className={classes.container}>
         <InfoSection showing={showing} />
         <BookSection
-          token={token}
           showing={showing}
           onBook={handleSubmitAppointmentRequest}
         />
