@@ -8,6 +8,7 @@ import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
 import { TimeRange } from 'components/TimeSlotPicker/types'
 
 import {
+  convertShowingTimeToLocalTime,
   getBookedTimes,
   getDateAvailability,
   getDisabledSlotsByNoticePeriod,
@@ -75,9 +76,21 @@ export function useBookTimeRange(
 
     const unavailableTimes = [
       ...new Set([
-        ...pastSlots.map(getSecondsSinceStartOfDay),
-        ...alreadyBookedSlots.map(getSecondsSinceStartOfDay),
-        ...disabledSlotsByPolicies.map(getSecondsSinceStartOfDay)
+        ...pastSlots.map(slot =>
+          getSecondsSinceStartOfDay(
+            convertShowingTimeToLocalTime(showing, slot)
+          )
+        ),
+        ...alreadyBookedSlots.map(slot =>
+          getSecondsSinceStartOfDay(
+            convertShowingTimeToLocalTime(showing, slot)
+          )
+        ),
+        ...disabledSlotsByPolicies.map(slot =>
+          getSecondsSinceStartOfDay(
+            convertShowingTimeToLocalTime(showing, slot)
+          )
+        )
       ])
     ]
 

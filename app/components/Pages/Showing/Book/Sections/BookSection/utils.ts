@@ -157,7 +157,7 @@ export function getPastTimeSlots(showing: IPublicShowing): Date[] {
   const timeSlots = getTimeSlots(showing, now)
 
   return timeSlots
-    .map(slot => convertShowingTimeToLocalTime(showing, slot))
+    .map(slot => convertLocalTimeToShowingTime(showing, slot))
     .filter(isPast)
 }
 
