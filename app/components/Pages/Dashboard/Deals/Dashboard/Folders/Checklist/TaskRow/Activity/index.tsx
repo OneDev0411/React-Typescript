@@ -2,7 +2,11 @@ import { useSelector } from 'react-redux'
 
 import { Button, makeStyles, Theme } from '@material-ui/core'
 
+import { mdiChatOutline } from '@mdi/js'
+
 import { IAppState } from 'reducers'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,6 +40,7 @@ export function Activity({ task, onClick }: Props) {
     <Button
       variant="outlined"
       className={classes.container}
+      startIcon={<SvgIcon path={mdiChatOutline} size={muiIconSizes.small} />}
       onClick={() => onClick(task)}
     >
       {new_notifications > 0 ? `${new_notifications} New Activity` : 'Activity'}

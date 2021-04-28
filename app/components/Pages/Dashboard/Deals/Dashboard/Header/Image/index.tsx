@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Theme, makeStyles, createStyles } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
@@ -12,8 +10,8 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     avatar: {
-      width: theme.spacing(7),
-      height: theme.spacing(7)
+      width: theme.spacing(6),
+      height: theme.spacing(6)
     }
   })
 )

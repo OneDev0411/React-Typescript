@@ -33,11 +33,11 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'block'
       }
     },
-    removeButton: {
-      display: 'none',
-      '&:hover svg path': {
-        fill: theme.palette.error.main
-      }
+    editButton: {
+      padding: theme.spacing(0, 1)
+    },
+    addButton: {
+      padding: theme.spacing(0)
     }
   })
 )
@@ -77,19 +77,22 @@ export function MlsConnect({ deal }: Props) {
   }
 
   if (isSaving) {
-    return <LoadingContainer size="2rem" noPaddings />
+    return <LoadingContainer size="1.5rem" noPaddings />
   }
 
   return (
     <>
       {deal.listing ? (
         <div className={classes.mls}>
-          <Button color="secondary" size="medium" onClick={toggleDrawer}>
+          <Button
+            size="small"
+            className={classes.editButton}
+            onClick={toggleDrawer}
+          >
             MLS# {getField(deal, 'mls_number')}
           </Button>
 
           <IconButton
-            color="secondary"
             size="small"
             target="_blank"
             href={`/dashboard/mls/${deal.listing}`}
@@ -105,7 +108,6 @@ export function MlsConnect({ deal }: Props) {
             color="default"
             size="small"
             onClick={removeMlsConnection}
-            className={classes.removeButton}
           >
             <SvgIcon
               path={mdiTrashCanOutline}
@@ -115,7 +117,11 @@ export function MlsConnect({ deal }: Props) {
           </IconButton>
         </div>
       ) : (
-        <Button color="secondary" size="medium" onClick={toggleDrawer}>
+        <Button
+          size="small"
+          className={classes.addButton}
+          onClick={toggleDrawer}
+        >
           Add MLS# number
         </Button>
       )}

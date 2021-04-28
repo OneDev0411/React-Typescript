@@ -37,7 +37,11 @@ export const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     link: {
-      color: '#000'
+      color: '#000',
+      '&:hover': {
+        cursor: 'pointer',
+        color: theme.palette.secondary.main
+      }
     },
     verticalGuideLine: {
       position: 'absolute',

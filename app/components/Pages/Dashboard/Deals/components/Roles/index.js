@@ -180,28 +180,29 @@ class Roles extends React.Component {
 
           return (
             <RoleItem key={role.id} className="item">
-              <Flex alignCenter>
-                <RoleAvatar>
-                  <Avatar
-                    alt={getAvatarTitle(role)}
-                    user={role.user}
-                    size="small"
-                  >
-                    {role.user
-                      ? getContactNameInitials(role.user)
-                      : getNameInitials(getLegalFullName(role), 1)}
-                  </Avatar>
-                </RoleAvatar>
+              <Flex alignCenter justifyBetween style={{ flexGrow: 1 }}>
+                <Flex alignCenter>
+                  <RoleAvatar>
+                    <Avatar
+                      alt={getAvatarTitle(role)}
+                      user={role.user}
+                      size="small"
+                    >
+                      {role.user
+                        ? getContactNameInitials(role.user)
+                        : getNameInitials(getLegalFullName(role), 1)}
+                    </Avatar>
+                  </RoleAvatar>
 
-                <RoleInfo onClick={() => this.onSelectRole(role)}>
-                  <RoleTitle>{getLegalFullName(role)}</RoleTitle>
-                  <RoleType>
-                    {roleName(role.role)}
-                    {this.props.showEmail &&
-                      role.user &&
-                      ` . ${role.user.email}`}
-                  </RoleType>
-                </RoleInfo>
+                  <RoleInfo onClick={() => this.onSelectRole(role)}>
+                    <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+                  </RoleInfo>
+                </Flex>
+
+                <RoleType>
+                  {roleName(role.role)}
+                  {this.props.showEmail && role.user && ` . ${role.user.email}`}
+                </RoleType>
               </Flex>
 
               {this.props.allowDeleteRole && (

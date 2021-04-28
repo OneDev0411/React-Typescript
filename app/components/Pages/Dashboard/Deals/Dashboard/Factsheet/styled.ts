@@ -29,6 +29,7 @@ export const ItemValue = styled.span`
   ${({ theme }) => css`
     font-weight: normal;
     color: ${theme.palette.grey['500']};
+    transition: 0.05s ease-out all;
   `}
 `
 
@@ -37,9 +38,10 @@ export const ItemActions = styled.div`
     display: flex;
     position: absolute;
     align-items: center;
+    height: 100%;
     right: 0;
     visibility: hidden;
-    padding-right: ${theme.spacing(1)}px;
+    padding: ${theme.spacing(0, 1)};
   `}
 `
 
@@ -60,13 +62,14 @@ export const Editable = styled.div`
 
 export const Item = styled.div<{
   theme: Theme
-  showBorder?: boolean
   isSaving?: boolean
+  disableHover?: boolean
 }>`
-  ${({ theme, isSaving }) => `
+  ${({ theme, isSaving, disableHover }) => `
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin: 0 0.5rem;
     border-radius: 3px;
     padding: ${theme.spacing(1, 2)};
@@ -76,12 +79,12 @@ export const Item = styled.div<{
       cursor: pointer;
     }
 
-    :hover ${ItemValue} {
-      display: none;
-    }
-
     :hover ${ItemActions} {
       visibility: visible;
+    }
+
+    :hover ${ItemValue} {
+      opacity: 0.15;
     }
 
     ${
@@ -89,6 +92,13 @@ export const Item = styled.div<{
       `
       background-color: ${theme.palette.action.hover};
       justify-content: center;
+      cursor: auto !important;
+    `
+    };
+
+    ${
+      disableHover &&
+      `
       cursor: auto !important;
     `
     };

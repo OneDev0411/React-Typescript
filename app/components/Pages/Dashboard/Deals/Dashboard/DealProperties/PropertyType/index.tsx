@@ -1,6 +1,5 @@
-import React from 'react'
 import { useDispatch } from 'react-redux'
-import { MenuItem } from '@material-ui/core'
+import { Button, MenuItem } from '@material-ui/core'
 
 import { updatePropertyType } from 'actions/deals'
 
@@ -13,7 +12,7 @@ interface Props {
   isBackOffice: boolean
 }
 
-function ChecklistType(props: Props) {
+export function PropertyType(props: Props) {
   const dispatch = useDispatch()
 
   const handleChange = async (value: string) => {
@@ -25,12 +24,23 @@ function ChecklistType(props: Props) {
   }
 
   if (!props.isBackOffice) {
-    return <span>{props.deal.property_type}</span>
+    return <>{props.deal.property_type}</>
   }
 
   return (
     <BaseDropdown
-      buttonLabel={props.deal.property_type}
+      renderDropdownButton={buttonProps => (
+        <Button
+          {...buttonProps}
+          size="small"
+          style={{
+            padding: 0,
+            minWidth: 'auto'
+          }}
+        >
+          {props.deal.property_type}
+        </Button>
+      )}
       renderMenu={({ close }) => (
         <div>
           {propertyTypes.map((value, index) => (
@@ -49,5 +59,3 @@ function ChecklistType(props: Props) {
     />
   )
 }
-
-export default ChecklistType

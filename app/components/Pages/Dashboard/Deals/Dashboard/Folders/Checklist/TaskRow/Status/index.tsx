@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { Box, Tooltip, makeStyles, Theme, useTheme } from '@material-ui/core'
 import { mdiCheckDecagram, mdiAlertCircle, mdiCloseCircle } from '@mdi/js'
+import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -14,10 +15,21 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     status: {
-      color: theme.palette.info.light,
       ...theme.typography.subtitle3,
       lineHeight: 1,
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
+      '&.Incomplete': {
+        display: 'none'
+      },
+      '&.Pending, &.ATTENTION, &.Submitted, &.Notified': {
+        color: '#f6a623'
+      },
+      '&.Declined': {
+        color: '#d0011b'
+      },
+      '&.Approved': {
+        color: '#35b863'
+      }
     }
   }),
   {
@@ -73,7 +85,9 @@ export function TaskStatus({ deal, task, isBackOffice }: Props) {
     <Box display="flex" alignItems="center">
       {isRequired && <div className={classes.required}>Required</div>}
 
-      {status && !icon && <div className={classes.status}>{status}</div>}
+      {status && !icon && (
+        <div className={cn(classes.status, status)}>{status}</div>
+      )}
 
       {status && icon && (
         <Tooltip title={tooltip} placement="bottom">

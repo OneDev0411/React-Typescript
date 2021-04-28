@@ -96,7 +96,7 @@ export function TextField({
 
   if (isEditing) {
     return (
-      <Item showBorder>
+      <Item>
         <ClickOutside
           onClickOutside={handleCancel}
           className={classes.editable}

@@ -1,7 +1,6 @@
-import React from 'react'
 import { useDispatch } from 'react-redux'
 
-import { MenuItem } from '@material-ui/core'
+import { Button, MenuItem } from '@material-ui/core'
 
 import Deal from 'models/Deal'
 import { upsertContexts } from 'actions/deals'
@@ -15,7 +14,7 @@ interface Props {
   isBackOffice: boolean
 }
 
-function DealSide(props: Props) {
+export function DealSide(props: Props) {
   const dispatch = useDispatch()
 
   const options = [
@@ -49,12 +48,23 @@ function DealSide(props: Props) {
   }
 
   if (props.isBackOffice === false) {
-    return <span>Side: {sideName}</span>
+    return <>{sideName}</>
   }
 
   return (
     <BaseDropdown
-      buttonLabel={sideName}
+      renderDropdownButton={buttonProps => (
+        <Button
+          {...buttonProps}
+          size="small"
+          style={{
+            padding: 0,
+            minWidth: 'auto'
+          }}
+        >
+          {sideName}
+        </Button>
+      )}
       renderMenu={({ close }) => (
         <div>
           {options.map((item, index) => (
@@ -73,5 +83,3 @@ function DealSide(props: Props) {
     />
   )
 }
-
-export default DealSide

@@ -5,6 +5,10 @@ export const RolesContainer = styled.div`
 `
 
 export const RoleActions = styled.div`
+  position: absolute;
+  right: ${({ theme }) => theme.spacing(2)}px;
+  top: 0;
+  height: 100%;
   opacity: 0;
   display: flex;
   justify-content: flex-end;
@@ -30,6 +34,7 @@ export const RoleType = styled.div`
 
 export const RoleItem = styled.div`
   ${({ theme }) => css`
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -52,6 +57,10 @@ export const RoleItem = styled.div`
     :hover ${RoleTitle} {
       color: ${({ theme }) => theme.palette.secondary.main};
       text-decoration: underline;
+    }
+
+    :hover ${RoleType} {
+      opacity: 0;
     }
   `}
 `

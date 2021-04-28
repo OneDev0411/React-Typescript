@@ -6,6 +6,8 @@ import Spinner from 'components/Spinner'
 import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
 import DeleteDeal from '../DeleteDeal'
+import { DealProperties } from '../DealProperties'
+
 import { Card } from './styled'
 
 function FactsheetsSideNav(props) {
@@ -24,8 +26,12 @@ function FactsheetsSideNav(props) {
               isFetchingContexts={props.isFetchingContexts}
               isBackOffice={isBackOffice}
               section="Dates"
-              title="Critical Dates"
+              title="Timeline"
             />
+          </Box>
+
+          <Box mb={6}>
+            <DealProperties deal={deal} isBackOffice={isBackOffice} />
           </Box>
 
           {props.showContacts && (

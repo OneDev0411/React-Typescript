@@ -3,6 +3,7 @@ import { Grid, Box, IconButton, Typography } from '@material-ui/core'
 import { mdiFolderOutline, mdiFolderOpenOutline } from '@mdi/js'
 
 import { useDispatch, useSelector } from 'react-redux'
+import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -111,7 +112,12 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
           </IconButton>{' '}
           <div>
             <Box display="flex" alignItems="center">
-              <span className={classes.title}>{task.title}</span>
+              <span
+                className={cn(classes.title, classes.link)}
+                onClick={toggleTaskOpen}
+              >
+                {task.title}
+              </span>
 
               <TaskStatus deal={deal} task={task} isBackOffice={isBackOffice} />
             </Box>

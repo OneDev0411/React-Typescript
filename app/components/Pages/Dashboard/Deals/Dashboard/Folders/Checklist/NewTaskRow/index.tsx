@@ -49,7 +49,7 @@ export default function NewTaskRow(props: Props) {
         onClick={toggleCreateTaskDrawer}
       >
         <SvgIcon path={mdiFolderPlusOutline} className={classes.buttonIcon} />
-        Add New Checklist Item
+        Add new folder
       </Button>
 
       <TaskCreate
