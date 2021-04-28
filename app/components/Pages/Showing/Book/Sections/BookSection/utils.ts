@@ -156,9 +156,9 @@ export function getPastTimeSlots(showing: IPublicShowing): Date[] {
   const now = new Date()
   const timeSlots = getTimeSlots(showing, now)
 
-  return timeSlots
-    .map(slot => convertLocalTimeToShowingTime(showing, slot))
-    .filter(isPast)
+  return timeSlots.filter(slot =>
+    isPast(convertLocalTimeToShowingTime(showing, slot))
+  )
 }
 
 export function getDisabledSlotsByNoticePeriod(
@@ -173,7 +173,7 @@ export function getDisabledSlotsByNoticePeriod(
   const timeSlots = getTimeSlots(showing, now)
   const dateWithNoticePeriod = addSeconds(now, showing.notice_period)
 
-  return timeSlots.filter(item =>
-    isBefore(convertShowingTimeToLocalTime(showing, item), dateWithNoticePeriod)
+  return timeSlots.filter(slot =>
+    isBefore(convertLocalTimeToShowingTime(showing, slot), dateWithNoticePeriod)
   )
 }
