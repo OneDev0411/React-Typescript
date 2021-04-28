@@ -136,3 +136,14 @@ export const TimelineSplitter = styled.div`
     top: ${theme.spacing(1.5)}px;
   `}
 `
+
+export const TimelineDateProgress = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    left: ${theme.spacing(3)}px;
+    top: ${theme.spacing(3)}px;
+    height: 100%;
+    width: 1px;
+    border: 1px solid ${theme.palette.primary.main};
+  `}
+`

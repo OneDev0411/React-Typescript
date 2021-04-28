@@ -21,7 +21,8 @@ import {
   ItemLabel,
   ItemValue,
   ItemActions,
-  CircleStatus
+  CircleStatus,
+  TimelineDateProgress
 } from '../styled'
 
 import { ContextField } from '../types'
@@ -112,6 +113,8 @@ export function DateField({
               onClick={() => onApprove(field)}
             />
           </ItemActions>
+
+          {value && <TimelineDateProgress />}
         </Item>
       </Tooltip>
     </>
