@@ -244,26 +244,18 @@ class Builder extends React.Component {
     let model = view.model
 
     const hide = rte => {
-      const name = rte.name
-      const ckeditorElement = document.querySelector(`#cke_${name}`)
+      rte.once('instanceReady', event => {
+        rte.ui.space('top')?.setStyle('display', 'none')
 
-      if (!ckeditorElement) {
-        return false
-      }
-
-      ckeditorElement.style.display = 'none'
-
-      return true
+        rte.once('focus', event => {
+          rte.ui.space('top')?.setStyle('display', 'none')
+        })
+      })
     }
 
     do {
       if (model.attributes.attributes.rte === 'disable') {
-        if (!hide(rte)) {
-          rte.once('instanceReady', event => {
-            hide(event.editor)
-          })
-        }
-
+        hide(rte)
         break
       }
       // eslint-disable-next-line no-cond-assign

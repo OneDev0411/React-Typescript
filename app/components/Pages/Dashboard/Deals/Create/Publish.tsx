@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -97,7 +97,9 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = getDealContexts(deal, deal.deal_type, deal.property_type)
+  const contexts = deal
+    ? getDealContexts(deal, deal.deal_type, deal.property_type)
+    : []
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
@@ -139,7 +141,11 @@ export default function Publish({ params }: Props) {
     }
 
     contexts
-      .filter(context => !watch(`context:${context.key}`))
+      .filter(context => {
+        const value = watch(`context:${context.key}`)
+
+        return value == null || value === ''
+      })
       .forEach(context => {
         errors[context.key] = `${context.label} is required`
       })
@@ -382,6 +388,7 @@ export default function Publish({ params }: Props) {
                 key={context.id}
                 name={`context:${context.key}`}
                 control={control}
+                defaultValue={getField(deal, context.key)}
                 render={({ onChange }) => (
                   <DealContext
                     concurrentMode
