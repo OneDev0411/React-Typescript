@@ -4,21 +4,15 @@ import {
   isToday,
   isPast,
   isBefore,
-  addSeconds
+  addSeconds,
+  addDays,
+  endOfDay
 } from 'date-fns'
 
 import { setTime } from 'utils/set-time'
 import { getWeekdayName } from 'utils/date-utils'
 
 import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
-
-function getEndDateFromStartDate(startDate: string, days: number = 30): Date {
-  const date = new Date(startDate)
-
-  date.setDate(date.getDate() + days)
-
-  return date
-}
 
 function getBookableStartDate(showing: IPublicShowing): Date {
   const showingStartDate = new Date(showing.start_date)
@@ -30,7 +24,7 @@ function getBookableStartDate(showing: IPublicShowing): Date {
 function getBookableEndDate(showing: IPublicShowing): Date {
   return showing.end_date
     ? new Date(showing.end_date)
-    : getEndDateFromStartDate(showing.start_date)
+    : addDays(endOfDay(new Date()), 30)
 }
 
 export function isShowingBookable(showing: IPublicShowing): boolean {
