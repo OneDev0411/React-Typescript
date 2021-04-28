@@ -29,6 +29,9 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
 
   return (
     <nav className={classes.drawer} aria-label="menu">
+      {/*
+        // Mamal said I should not remove this mobile view menu because we might
+        // get back to it in the future.
       <Hidden mdUp implementation="css">
         <Drawer
           container={document.body}
@@ -45,7 +48,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
         >
           <Menu />
         </Drawer>
-      </Hidden>
+      </Hidden> */}
 
       <Hidden smDown implementation="css">
         <Drawer
