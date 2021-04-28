@@ -69,7 +69,7 @@ export default function ShowingAppointmentApproved({ appointment }: Props) {
           <Typography variant="h6">Pending Agent Approval</Typography>
 
           <Typography variant="body1" color="textSecondary">
-            You’re request was sent to the agent, once he approves it, we will
+            Your request was sent to the agent, once he approves it, we will
             email and text you your confirmation.
           </Typography>
         </StepLabel>
