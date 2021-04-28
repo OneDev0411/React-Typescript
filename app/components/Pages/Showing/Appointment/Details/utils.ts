@@ -17,11 +17,16 @@ export function getFormattedAppointmentDateTime(
 ): string {
   const [start, end] = getAppointmentRange(appointment)
 
+  const timezoneName =
+    appointment.showing.timezone_offset === new Date().getTimezoneOffset()
+      ? ''
+      : `(${appointment.showing.timezone})`
+
   return `${fecha.format(
     convertShowingTimeToLocalTime(appointment.showing, start),
     'MMMM D, h:mm'
   )} - ${fecha.format(
     convertShowingTimeToLocalTime(appointment.showing, end),
     'h:mm'
-  )}`
+  )} ${timezoneName}`
 }
