@@ -640,6 +640,12 @@ class ContactsList extends React.Component {
     this.props.getContactsTags()
   }
 
+  handleResetShortcutFilter = () => {
+    this.setState(() => ({
+      selectedShortcutFilter: null
+    }))
+  }
+
   getActiveTag = () => {
     // all or segmented list
     if (!Array.isArray(this.state.selectedShortcutFilter)) {
@@ -689,6 +695,7 @@ class ContactsList extends React.Component {
                   PARKED_CONTACTS_LIST_ID
                 )
                 this.handleFilterChange({ parked: true }, true)
+                this.handleResetShortcutFilter()
               }}
             />
           </Box>
@@ -712,11 +719,7 @@ class ContactsList extends React.Component {
       <ContactsTabs
         handleFilterChange={this.handleFilterChange}
         handleChangeSavedSegment={this.handleChangeSavedSegment}
-        handleResetShortcutFilter={() => {
-          this.setState(() => ({
-            selectedShortcutFilter: null
-          }))
-        }}
+        handleResetShortcutFilter={this.handleResetShortcutFilter}
         filter={{
           show: this.shouldShowFilters()
         }}
