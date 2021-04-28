@@ -764,7 +764,7 @@ export default (
 
       <Route path="showings/:token/book" component={AsyncBookShowing} />
       <Route
-        path="showings/appointments/:appointmentId"
+        path="showings/appointments/:appointmentToken"
         component={AsyncShowingAppointment}
       />
 

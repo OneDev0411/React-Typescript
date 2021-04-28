@@ -7,7 +7,6 @@ import { usePublicShowingAppointment } from '../hooks'
 
 import InfoSection from '../Sections/InfoSection'
 import ShowingAppointmentStatusSection from './Sections/StatusSection'
-// import BookSection from './Sections/BookSection'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -27,15 +26,17 @@ const useStyles = makeStyles(
 )
 
 interface RouteParams {
-  appointmentId: UUID
+  appointmentToken: UUID
 }
 
 export default function ShowingAppointment({
-  params: { appointmentId }
+  params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
 
-  const { isLoading, appointment } = usePublicShowingAppointment(appointmentId)
+  const { isLoading, appointment } = usePublicShowingAppointment(
+    appointmentToken
+  )
 
   if (isLoading || !appointment) {
     return <LoadingContainer />

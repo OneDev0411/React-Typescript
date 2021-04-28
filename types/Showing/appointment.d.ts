@@ -35,5 +35,6 @@ declare interface IPublicShowingAppointment<
 > extends IModel<'showing_appointment_public'> {
   status: IShowingAppointmentStatus
   time: string
+  token: string
   showing: A extends 'showing' ? IPublicShowing : never
 }

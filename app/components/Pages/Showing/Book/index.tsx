@@ -56,7 +56,7 @@ export default function BookShowing({
           message: 'Appointment request created successfully'
         })
       )
-      browserHistory.push(`/showings/appointments/${appointment.id}`)
+      browserHistory.push(`/showings/appointments/${appointment.token}`)
     } catch (error) {
       console.error(error)
       dispatch(
