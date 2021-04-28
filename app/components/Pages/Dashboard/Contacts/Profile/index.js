@@ -44,11 +44,17 @@ import Timeline from './Timeline'
 import MergeDuplicates from './MergeDuplicates'
 
 class ContactProfile extends React.Component {
-  state = {
-    contact: null,
-    isDeleting: false,
-    isUpdatingOwner: false,
-    isDesktopScreen: true
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      contact: null,
+      isDeleting: false,
+      isUpdatingOwner: false,
+      isDesktopScreen: true,
+      isLoading:
+        !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
+    }
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -79,7 +85,7 @@ class ContactProfile extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.params.id !== prevProps.params.id) {
-      this.initializeContact()
+      this.initializeContact(true)
     }
   }
 
@@ -142,7 +148,11 @@ class ContactProfile extends React.Component {
     }
   }
 
-  fetchContact = async (callback = () => {}) => {
+  fetchContact = async (callback = () => {}, showFullScreenLoading = false) => {
+    if (showFullScreenLoading) {
+      this.setState({ isLoading: true })
+    }
+
     try {
       const response = await getContact(this.props.params.id, {
         associations: [
@@ -158,7 +168,10 @@ class ContactProfile extends React.Component {
         ]
       })
 
-      this.setState({ contact: normalizeContact(response.data) }, callback)
+      this.setState(
+        { contact: normalizeContact(response.data), isLoading: false },
+        callback
+      )
     } catch (error) {
       if (error.status === 404 || error.status === 400) {
         this.props.router.push('/dashboard/contacts')
@@ -166,12 +179,12 @@ class ContactProfile extends React.Component {
     }
   }
 
-  initializeContact() {
+  initializeContact(showFullScreenLoading = false) {
     this.fetchContact(() => {
       if (this.props.fetchTags) {
         this.props.getContactsTags()
       }
-    })
+    }, showFullScreenLoading)
   }
 
   /**
@@ -257,10 +270,10 @@ class ContactProfile extends React.Component {
   }
 
   render() {
-    const { contact } = this.state
+    const { contact, isLoading } = this.state
     const { user } = this.props
 
-    if (!isLoadedContactAttrDefs(this.props.attributeDefs) || !contact) {
+    if (isLoading) {
       return (
         <Container>
           <Loading />
