@@ -139,6 +139,11 @@ export default function BookSection({ showing, onBook }: Props) {
     return onBook(appointmentData)
   }
 
+  const showingTimezoneName =
+    new Date().getTimezoneOffset() === showing.timezone_offset
+      ? ''
+      : `(${showing.timezone})`
+
   return (
     <Grid item xs={12} sm={6} md={7} className={classes.container}>
       <form onSubmit={handleSubmit(handleSubmitBookForm)}>
@@ -185,7 +190,9 @@ export default function BookSection({ showing, onBook }: Props) {
 
         <Grid item xs={12}>
           <Box pt={5} pb={1.5} className={classes.sectionTitleContainer}>
-            <Typography variant="h6">Pick a time</Typography>
+            <Typography variant="h6">
+              Pick a time {showingTimezoneName}
+            </Typography>
           </Box>
         </Grid>
         <Grid item xs={12}>
