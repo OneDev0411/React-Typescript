@@ -22,13 +22,13 @@ export const ItemLabel = styled.span`
   display: flex;
   align-items: center;
   font-weight: normal;
+  color: ${({ theme }) => theme.palette.grey['500']};
   margin-right: ${({ theme }) => theme.spacing(1)}px;
 `
 
 export const ItemValue = styled.span`
   ${({ theme }) => css`
     font-weight: normal;
-    color: ${theme.palette.grey['500']};
     transition: 0.05s ease-out all;
   `}
 `

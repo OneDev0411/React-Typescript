@@ -91,12 +91,14 @@ export default function Factsheet(props: Props) {
       <ItemsContainer>
         {props.section === 'Dates' && <TimelineSplitter />}
 
-        {table.map(field => {
+        {table.map((field, index) => {
           const value = getFieldValue(getValue(props.deal, field))
 
           const sharedProps = {
             field,
             value,
+            index,
+            total: table.length,
             deal: props.deal,
             isBackOffice: props.isBackOffice,
             onChange: handleChangeContext,

@@ -129,9 +129,16 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
         </Box>
 
         <Box display="flex" alignItems="center" className={classes.actions}>
-          <div className="visible-on-hover">
-            <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center">
+            <div className="visible-on-hover">
               <Activity task={task} onClick={handleSelectTask} />
+            </div>
+
+            <div
+              className={cn({
+                'visible-on-hover': !isTaskExpanded
+              })}
+            >
               <ActionsButton
                 deal={deal}
                 task={task}
@@ -139,8 +146,8 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
                 file={file}
                 actions={actions}
               />
-            </Box>
-          </div>
+            </div>
+          </Box>
 
           <Box className="hide-on-hover">
             <TaskNotifications task={task} />

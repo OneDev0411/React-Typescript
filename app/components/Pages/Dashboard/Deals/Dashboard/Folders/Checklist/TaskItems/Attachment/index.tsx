@@ -1,7 +1,11 @@
 import fecha from 'fecha'
 import { Box } from '@material-ui/core'
 
-import { mdiFileDocumentOutline } from '@mdi/js'
+import {
+  mdiFileDocumentOutline,
+  mdiFileImageOutline,
+  mdiFilePdfOutline
+} from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -25,13 +29,25 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
   const actions: ActionButtonId[] = getFileActions(file)
   const classes = useStyles()
 
+  const getIcon = () => {
+    if (file.mime === 'application/pdf') {
+      return mdiFilePdfOutline
+    }
+
+    if (file.mime.includes('image')) {
+      return mdiFileImageOutline
+    }
+
+    return mdiFileDocumentOutline
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.row}>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
             <div className={classes.horizontalLine} />
-            <SvgIcon path={mdiFileDocumentOutline} />
+            <SvgIcon path={getIcon()} />
 
             <div>
               <Box display="flex">

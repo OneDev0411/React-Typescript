@@ -169,9 +169,7 @@ class Roles extends React.Component {
       <RolesContainer style={this.props.containerStyle}>
         {this.props.showTitle && (
           <Box mb={1.5}>
-            <SectionTitle variant="body1">
-              Contacts ({roles.length})
-            </SectionTitle>
+            <SectionTitle variant="body1">Contacts</SectionTitle>
           </Box>
         )}
 

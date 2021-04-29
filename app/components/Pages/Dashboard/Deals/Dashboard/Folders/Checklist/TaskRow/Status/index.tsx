@@ -21,7 +21,7 @@ const useStyles = makeStyles(
       '&.Incomplete': {
         display: 'none'
       },
-      '&.Pending, &.ATTENTION, &.Submitted, &.Notified': {
+      '&.Pending, &.Attention, &.Submitted, &.Notified': {
         color: '#f6a623'
       },
       '&.Declined': {
@@ -66,7 +66,7 @@ export function TaskStatus({ deal, task, isBackOffice }: Props) {
   }
 
   if (isBackOffice && (status === 'Submitted' || task.attention_requested)) {
-    status = 'NEEDS ATTENTION'
+    status = 'Needs Attention'
   }
 
   if (!isBackOffice && status !== 'Submitted' && task.attention_requested) {

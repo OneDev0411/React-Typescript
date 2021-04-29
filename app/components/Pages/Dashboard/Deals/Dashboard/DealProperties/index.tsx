@@ -17,7 +17,7 @@ interface Props {
 export function DealProperties({ deal, isBackOffice }: Props) {
   return (
     <>
-      <SectionTitle variant="body1">Deals Information</SectionTitle>
+      <SectionTitle variant="body1">Details</SectionTitle>
 
       <ItemsContainer>
         <Item disableHover>

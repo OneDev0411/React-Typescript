@@ -30,6 +30,8 @@ import { ContextField } from '../types'
 interface Props {
   deal: IDeal
   field: ContextField
+  index: number
+  total: number
   value: unknown
   isBackOffice: boolean
   onApprove(field: ContextField): void
@@ -38,6 +40,8 @@ interface Props {
 }
 
 export function DateField({
+  index,
+  total,
   deal,
   field,
   value,
@@ -114,7 +118,7 @@ export function DateField({
             />
           </ItemActions>
 
-          {value && <TimelineDateProgress />}
+          {value && index < total - 1 && <TimelineDateProgress />}
         </Item>
       </Tooltip>
     </>
