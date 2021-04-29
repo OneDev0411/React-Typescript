@@ -6,7 +6,7 @@ async function getShowing(showingId: UUID) {
       associations: [
         'showing.listing',
         'showing.deal',
-        'showing.deal.listing',
+        'showing_deal.listing',
         'showing.appointments',
         'showing_appointment.contact',
         'showing.roles',
