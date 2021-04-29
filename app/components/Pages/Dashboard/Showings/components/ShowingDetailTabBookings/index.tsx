@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
-import ShowingDetailTabBookingsFilterList from './ShowingDetailTabBookingsFilterList'
+import { AppointmentFilter } from '../../types'
+import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
 import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
-import useAppointmentFilterInfo from './use-appointment-filter-info'
+import useAppointmentFilterInfo from '../use-appointment-filter-info'
 import useFilterAppointments from './use-filter-appointments'
-import useSortAppointments from './use-sort-appointments'
+import useSortAppointments from '../use-sort-appointments'
 import useAppointmentListInfo from './use-appointment-list-info'
-import { AppointmentFilter } from './types'
-import useAppointmentNotificationLists from './use-appointment-notification-lists'
+import useAppointmentNotificationLists from '../use-appointment-notification-lists'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
@@ -48,7 +48,7 @@ function ShowingDetailTabBookings({
 
   return (
     <>
-      <ShowingDetailTabBookingsFilterList
+      <ShowingAppointmentFilters
         appointments={appointments}
         notifications={notifications}
         value={filter}

@@ -6,7 +6,7 @@ import {
   StarBorderOutlined as StarBorderOutlinedIcon
 } from '@material-ui/icons'
 
-import { AppointmentFilter, AppointmentFilterInfo } from './types'
+import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
 const createStatusFilter = (status: IAppointmentStatus) => (
   appointments: IShowingAppointment[]

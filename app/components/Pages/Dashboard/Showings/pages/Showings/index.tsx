@@ -15,6 +15,7 @@ import { showingsTabs } from '../../constants'
 import ShowingsTabProperties from '../../components/ShowingsTabProperties'
 import ShowingsTabBookings from '../../components/ShowingsTabBookings'
 import useBodyBackgroundColor from '../../components/use-body-background-color'
+import useGetShowings from './use-get-showings'
 
 const useStyles = makeStyles(
   theme => ({
@@ -40,18 +41,24 @@ function Showings({ params }: ShowingsProps) {
 
   const tab = params.tab || showingsTabs.Properties
 
+  const { isLoading, showings, appointments } = useGetShowings()
+
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
       <Box className={classes.header} px={4} pt={4}>
         <PageLayout.Header title="Showings" />
-        <Box mt={5}>
+        <Box mt={4}>
           <ShowingsTabs value={tab} />
         </Box>
       </Box>
       <PageLayout.Main mt={0} px={4} pb={4}>
         <TabContentSwitch.Container value={tab}>
           <TabContentSwitch.Item value={showingsTabs.Properties}>
-            <ShowingsTabProperties />
+            <ShowingsTabProperties
+              isLoading={isLoading}
+              showings={showings}
+              appointments={appointments}
+            />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item value={showingsTabs.Bookings}>
             <ShowingsTabBookings />

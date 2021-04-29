@@ -1,10 +1,8 @@
 import { useMemo } from 'react'
 
-import type { BookingFilterType } from './ShowingDetailTabBookingsFilterCard'
-
-import type { AppointmentFilter } from './types'
-
-import { appointmentStatusInfo } from './use-appointment-filter-info'
+import type { AppointmentFilter } from '../../types'
+import { appointmentStatusInfo } from '../use-appointment-filter-info'
+import type { BookingFilterType } from './ShowingAppointmentFilterCard'
 
 function useAppointmentFilters(
   filters: AppointmentFilter[],

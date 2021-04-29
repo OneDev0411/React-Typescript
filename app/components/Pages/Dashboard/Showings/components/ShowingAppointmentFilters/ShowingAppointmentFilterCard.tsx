@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
 
-import { AppointmentFilter, AppointmentFilterInfo } from './types'
+import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles(
       '& > svg': { fontSize: theme.spacing(2) }
     }
   }),
-  { name: 'ShowingDetailTabBookingsFilterCard' }
+  { name: 'ShowingAppointmentFilterCard' }
 )
 
 export interface BookingFilterType extends AppointmentFilterInfo {
@@ -41,19 +41,19 @@ export interface BookingFilterType extends AppointmentFilterInfo {
   badge: number
 }
 
-interface ShowingDetailTabBookingsFilterCardProps extends BookingFilterType {
+interface ShowingAppointmentFilterCardProps extends BookingFilterType {
   selected: boolean
   onClick: () => void
 }
 
-function ShowingDetailTabBookingsFilterCard({
+function ShowingAppointmentFilterCard({
   count,
   icon,
   label,
   onClick,
   selected,
   badge
-}: ShowingDetailTabBookingsFilterCardProps) {
+}: ShowingAppointmentFilterCardProps) {
   const classes = useStyles()
 
   return (
@@ -73,4 +73,4 @@ function ShowingDetailTabBookingsFilterCard({
   )
 }
 
-export default ShowingDetailTabBookingsFilterCard
+export default ShowingAppointmentFilterCard

@@ -1,4 +1,4 @@
-import { AppointmentFilter } from './types'
+import { AppointmentFilter } from '../../types'
 
 interface UseAppointmentListInfoReturn {
   hasNotifications: boolean

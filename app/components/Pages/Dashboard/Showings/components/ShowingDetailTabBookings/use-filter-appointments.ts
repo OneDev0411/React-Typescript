@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { AppointmentFilterInfo } from './types'
+import { AppointmentFilterInfo } from '../../types'
 
 function useFilterAppointments(
   appointments: IShowingAppointment[],

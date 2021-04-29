@@ -1,16 +1,34 @@
 import { Box } from '@material-ui/core'
 
-import ShowingPropertyList from '../ShowingPropertyList'
-import ShowingStats from '../ShowingStats'
+import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
+import useAppointmentNotificationLists from '../use-appointment-notification-lists'
 
-function ShowingsTabProperties() {
+import ShowingPropertyList from '../ShowingPropertyList'
+
+interface ShowingsTabPropertiesProps {
+  isLoading: boolean
+  showings: IShowing[]
+  appointments: IShowingAppointment[]
+}
+
+function ShowingsTabProperties({
+  appointments: allAppointments,
+  ...otherProps
+}: ShowingsTabPropertiesProps) {
+  const { appointments, notifications } = useAppointmentNotificationLists(
+    allAppointments
+  )
+
   return (
-    <>
-      <Box my={3}>
-        <ShowingStats />
+    <Box mt={4}>
+      <ShowingAppointmentFilters
+        appointments={appointments}
+        notifications={notifications}
+      />
+      <Box mt={6}>
+        <ShowingPropertyList {...otherProps} />
       </Box>
-      <ShowingPropertyList />
-    </>
+    </Box>
   )
 }
 

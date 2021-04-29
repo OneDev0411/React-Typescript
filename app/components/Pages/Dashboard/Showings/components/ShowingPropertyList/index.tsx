@@ -1,21 +1,18 @@
-import { useEffect } from 'react'
 import { Box, makeStyles } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-import useAsync from 'hooks/use-async'
-import getShowings from 'models/showing/get-showings'
 
 import { goTo } from 'utils/go-to'
 
-import LinkButton from '../LinkButton'
 // import FeedbackStars from '../FeedbackStars'
 import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
+import BoxWithTitle from '../BoxWithTitle'
 
 const useStyles = makeStyles(
   theme => ({
@@ -30,19 +27,18 @@ const useStyles = makeStyles(
   { name: 'ShowingPropertyList' }
 )
 
-function ShowingPropertyList() {
+interface ShowingPropertyListProps {
+  isLoading: boolean
+  showings: IShowing[]
+}
+
+function ShowingPropertyList({
+  isLoading,
+  showings: rows
+}: ShowingPropertyListProps) {
   const classes = useStyles()
 
-  const { data: rows, isLoading, run } = useAsync<IShowing[]>({ data: [] })
-
-  useEffect(() => {
-    run(getShowings)
-  }, [run])
-
-  const topRows = rows.slice(0, 5)
-  const archivedItemCount = rows.length - 5
-
-  const showingNotificationCount = useGetShowingNotificationCount(topRows)
+  const showingNotificationCount = useGetShowingNotificationCount(rows)
 
   const handleRowClick = (showingId: UUID) => {
     goTo(`/dashboard/showings/${showingId}/detail`)
@@ -120,11 +116,11 @@ function ShowingPropertyList() {
   ]
 
   return (
-    <Box>
+    <BoxWithTitle title="Properties">
       <Box minHeight="320px">
         <Table
-          rows={topRows}
-          totalRows={topRows.length}
+          rows={rows}
+          totalRows={rows.length}
           columns={columns}
           loading={isLoading ? 'middle' : null}
           LoadingStateComponent={() => (
@@ -133,20 +129,18 @@ function ShowingPropertyList() {
           getTrProps={({ row }) => ({
             onClick: () => handleRowClick(row.id)
           })}
-          classes={{
-            row: classes.row
-          }}
+          classes={{ row: classes.row }}
         />
       </Box>
-      {archivedItemCount > 0 && (
+      {/* archivedItemCount > 0 && (
         <Box mt={1}>
           <LinkButton color="secondary" size="small">
             {archivedItemCount} Archived Showing
             {archivedItemCount > 1 ? 's' : ''}
           </LinkButton>
         </Box>
-      )}
-    </Box>
+      ) */}
+    </BoxWithTitle>
   )
 }
 

@@ -1,12 +1,12 @@
 import { Grid } from '@material-ui/core'
 
-import ShowingDetailTabBookingsFilterCard from './ShowingDetailTabBookingsFilterCard'
-import { AppointmentFilter } from './types'
+import { AppointmentFilter } from '../../types'
 import useAppointmentFilters from './use-appointment-filters'
+import ShowingAppointmentFilterCard from './ShowingAppointmentFilterCard'
 
-interface ShowingDetailTabBookingsFilterListProps {
-  value: AppointmentFilter
-  onChange: (value: AppointmentFilter) => void
+interface ShowingAppointmentFiltersProps {
+  value?: AppointmentFilter
+  onChange?: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]
   notifications: IShowingAppointment[]
 }
@@ -20,12 +20,12 @@ const filterTypes: AppointmentFilter[] = [
   'Feedback'
 ]
 
-function ShowingDetailTabBookingsFilterList({
+function ShowingAppointmentFilters({
   value,
   onChange,
   appointments,
   notifications
-}: ShowingDetailTabBookingsFilterListProps) {
+}: ShowingAppointmentFiltersProps) {
   const filters = useAppointmentFilters(
     filterTypes,
     appointments,
@@ -38,10 +38,10 @@ function ShowingDetailTabBookingsFilterList({
         <Grid container spacing={2}>
           {filters.map(filter => (
             <Grid key={filter.type} item xs={6} sm={4} md={2}>
-              <ShowingDetailTabBookingsFilterCard
+              <ShowingAppointmentFilterCard
                 {...filter}
                 selected={filter.type === value}
-                onClick={() => onChange(filter.type)}
+                onClick={() => onChange?.(filter.type)}
               />
             </Grid>
           ))}
@@ -51,4 +51,4 @@ function ShowingDetailTabBookingsFilterList({
   )
 }
 
-export default ShowingDetailTabBookingsFilterList
+export default ShowingAppointmentFilters
