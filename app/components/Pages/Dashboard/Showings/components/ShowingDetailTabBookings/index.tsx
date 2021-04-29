@@ -7,6 +7,7 @@ import useFilterAppointments from './use-filter-appointments'
 import useSortAppointments from './use-sort-appointments'
 import useAppointmentListInfo from './use-appointment-list-info'
 import { AppointmentFilter } from './types'
+import useAppointmentNotificationLists from './use-appointment-notification-lists'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
@@ -14,19 +15,21 @@ interface ShowingDetailTabBookingsProps {
 }
 
 function ShowingDetailTabBookings({
-  appointments,
+  appointments: allAppointments,
   duration
 }: ShowingDetailTabBookingsProps) {
   const [filter, setFilter] = useState<AppointmentFilter>('All')
 
   const filterInfo = useAppointmentFilterInfo(filter)
 
-  const sortedAppointments = useSortAppointments(appointments)
+  const sortedAppointments = useSortAppointments(allAppointments)
 
-  const filteredAppointments = useFilterAppointments(
-    sortedAppointments,
-    filterInfo
+  const { appointments, notifications } = useAppointmentNotificationLists(
+    sortedAppointments
   )
+
+  const filteredAppointments = useFilterAppointments(appointments, filterInfo)
+  const filteredNotifications = useFilterAppointments(notifications, filterInfo)
 
   const {
     hasNotifications,
@@ -36,9 +39,6 @@ function ShowingDetailTabBookings({
     bookingsTitle,
     bookingsEmptyMessage
   } = useAppointmentListInfo(filter)
-
-  // TODO: get the notification from server
-  const filteredNotifications = filteredAppointments
 
   const isBothListEmpty =
     hasNotifications &&
@@ -50,6 +50,7 @@ function ShowingDetailTabBookings({
     <>
       <ShowingDetailTabBookingsFilterList
         appointments={appointments}
+        notifications={notifications}
         value={filter}
         onChange={setFilter}
       />

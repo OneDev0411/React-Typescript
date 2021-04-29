@@ -1,63 +1,36 @@
 import { Grid } from '@material-ui/core'
 
-import ShowingDetailTabBookingsFilterCard, {
-  BookingFilterType
-} from './ShowingDetailTabBookingsFilterCard'
+import ShowingDetailTabBookingsFilterCard from './ShowingDetailTabBookingsFilterCard'
 import { AppointmentFilter } from './types'
-import { appointmentStatusInfo } from './use-appointment-filter-info'
-import useCountAppointmentTypes from './use-count-appointment-types'
+import useAppointmentFilters from './use-appointment-filters'
 
 interface ShowingDetailTabBookingsFilterListProps {
   value: AppointmentFilter
   onChange: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]
+  notifications: IShowingAppointment[]
 }
+
+const filterTypes: AppointmentFilter[] = [
+  'All',
+  'Requested',
+  'Confirmed',
+  'Rescheduled',
+  'Canceled',
+  'Feedback'
+]
 
 function ShowingDetailTabBookingsFilterList({
   value,
   onChange,
-  appointments
+  appointments,
+  notifications
 }: ShowingDetailTabBookingsFilterListProps) {
-  const counters = useCountAppointmentTypes(appointments)
-
-  const filters: BookingFilterType[] = [
-    {
-      type: 'All',
-      ...appointmentStatusInfo.All,
-      count: counters.All,
-      badge: 0
-    },
-    {
-      type: 'Requested',
-      ...appointmentStatusInfo.Requested,
-      count: counters.Requested,
-      badge: 0
-    },
-    {
-      type: 'Confirmed',
-      ...appointmentStatusInfo.Confirmed,
-      count: counters.Confirmed,
-      badge: 0
-    },
-    {
-      type: 'Rescheduled',
-      ...appointmentStatusInfo.Rescheduled,
-      count: counters.Rescheduled,
-      badge: 0
-    },
-    {
-      type: 'Canceled',
-      ...appointmentStatusInfo.Canceled,
-      count: counters.Canceled,
-      badge: 0
-    },
-    {
-      type: 'Feedback',
-      ...appointmentStatusInfo.Feedback,
-      count: counters.Feedback,
-      badge: 0
-    }
-  ]
+  const filters = useAppointmentFilters(
+    filterTypes,
+    appointments,
+    notifications
+  )
 
   return (
     <Grid container>

@@ -52,12 +52,12 @@ function ShowingDetailTabBookingsFilterCard({
   label,
   onClick,
   selected,
-  badge // TODO: use this as badge content
+  badge
 }: ShowingDetailTabBookingsFilterCardProps) {
   const classes = useStyles()
 
   return (
-    <Badge className={classes.root} badgeContent={count} color="error">
+    <Badge className={classes.root} badgeContent={badge} color="error">
       <Card
         className={classNames(classes.card, selected && classes.selected)}
         variant="outlined"
