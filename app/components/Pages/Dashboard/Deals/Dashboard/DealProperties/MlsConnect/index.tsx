@@ -5,12 +5,11 @@ import {
   IconButton,
   Button,
   makeStyles,
-  createStyles,
   useTheme,
   Theme
 } from '@material-ui/core'
 
-import { mdiTrashCanOutline, mdiOpenInNew } from '@mdi/js'
+import { mdiTrashCanOutline, mdiOpenInNew, mdiPencil } from '@mdi/js'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { updateListing } from 'actions/deals'
@@ -20,27 +19,23 @@ import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
+import { ItemValue, ItemActions } from '../../Factsheet/styled'
+
 interface Props {
   deal: IDeal
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    mls: {
-      display: 'flex',
-      alignItems: 'center',
-      '&:hover $removeButton': {
-        display: 'block'
-      }
-    },
-    editButton: {
-      padding: theme.spacing(0, 1)
-    },
-    addButton: {
-      padding: theme.spacing(0)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  container: {
+    position: 'relative'
+  },
+  editButton: {
+    padding: theme.spacing(0, 1)
+  },
+  addButton: {
+    padding: theme.spacing(0)
+  }
+}))
 
 export function MlsConnect({ deal }: Props) {
   const [isSaving, setIsSaving] = useState(false)
@@ -82,49 +77,57 @@ export function MlsConnect({ deal }: Props) {
 
   return (
     <>
-      {deal.listing ? (
-        <div className={classes.mls}>
+      <ItemValue>
+        {deal.listing ? (
+          <span>MLS# {getField(deal, 'mls_number')}</span>
+        ) : (
           <Button
             size="small"
-            className={classes.editButton}
+            className={classes.addButton}
             onClick={toggleDrawer}
           >
-            MLS# {getField(deal, 'mls_number')}
+            Add MLS# Number
           </Button>
+        )}
+      </ItemValue>
 
-          <IconButton
-            size="small"
-            target="_blank"
-            href={`/dashboard/mls/${deal.listing}`}
-          >
-            <SvgIcon
-              path={mdiOpenInNew}
-              color={theme.palette.common.black}
-              size={muiIconSizes.small}
-            />
-          </IconButton>
+      <ItemActions>
+        {deal.listing && (
+          <>
+            <IconButton
+              size="small"
+              target="_blank"
+              href={`/dashboard/mls/${deal.listing}`}
+            >
+              <SvgIcon
+                path={mdiOpenInNew}
+                color={theme.palette.common.black}
+                size={muiIconSizes.small}
+              />
+            </IconButton>
 
-          <IconButton
-            color="default"
-            size="small"
-            onClick={removeMlsConnection}
-          >
-            <SvgIcon
-              path={mdiTrashCanOutline}
-              color={theme.palette.common.black}
-              size={muiIconSizes.small}
-            />
-          </IconButton>
-        </div>
-      ) : (
-        <Button
-          size="small"
-          className={classes.addButton}
-          onClick={toggleDrawer}
-        >
-          Add MLS# number
-        </Button>
-      )}
+            <IconButton onClick={toggleDrawer} size="small">
+              <SvgIcon
+                path={mdiPencil}
+                color={theme.palette.common.black}
+                size={muiIconSizes.small}
+              />
+            </IconButton>
+
+            <IconButton
+              color="default"
+              size="small"
+              onClick={removeMlsConnection}
+            >
+              <SvgIcon
+                path={mdiTrashCanOutline}
+                color={theme.palette.common.black}
+                size={muiIconSizes.small}
+              />
+            </IconButton>
+          </>
+        )}
+      </ItemActions>
 
       <SearchListingDrawer
         title="Connect Deal to MLS"

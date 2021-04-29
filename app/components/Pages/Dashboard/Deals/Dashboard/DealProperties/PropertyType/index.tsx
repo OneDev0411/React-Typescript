@@ -7,6 +7,8 @@ import { BaseDropdown } from 'components/BaseDropdown'
 
 import { propertyTypes } from 'deals/utils/property-types'
 
+import { ItemValue } from '../../Factsheet/styled'
+
 interface Props {
   deal: IDeal
   isBackOffice: boolean
@@ -24,7 +26,7 @@ export function PropertyType(props: Props) {
   }
 
   if (!props.isBackOffice) {
-    return <>{props.deal.property_type}</>
+    return <ItemValue>{props.deal.property_type}</ItemValue>
   }
 
   return (

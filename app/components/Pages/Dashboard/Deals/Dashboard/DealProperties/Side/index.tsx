@@ -9,6 +9,8 @@ import { getEnderType } from 'models/Deal/helpers/context'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 
+import { ItemValue } from '../../Factsheet/styled'
+
 interface Props {
   deal: IDeal
   isBackOffice: boolean
@@ -48,7 +50,7 @@ export function DealSide(props: Props) {
   }
 
   if (props.isBackOffice === false) {
-    return <>{sideName}</>
+    return <ItemValue>{sideName}</ItemValue>
   }
 
   return (

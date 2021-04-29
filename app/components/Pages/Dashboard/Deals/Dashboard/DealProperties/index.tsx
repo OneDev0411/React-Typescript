@@ -20,25 +20,19 @@ export function DealProperties({ deal, isBackOffice }: Props) {
       <SectionTitle variant="body1">Details</SectionTitle>
 
       <ItemsContainer>
-        <Item disableHover>
+        <Item>
           <ItemLabel>MLS#</ItemLabel>
-          <div>
-            <MlsConnect deal={deal} />
-          </div>
+          <MlsConnect deal={deal} />
         </Item>
 
-        <Item disableHover>
+        <Item disableHover={!isBackOffice}>
           <ItemLabel>Side</ItemLabel>
-          <div>
-            <DealSide deal={deal} isBackOffice={isBackOffice} />
-          </div>
+          <DealSide deal={deal} isBackOffice={isBackOffice} />
         </Item>
 
-        <Item disableHover>
+        <Item disableHover={!isBackOffice}>
           <ItemLabel>Type</ItemLabel>
-          <div>
-            <PropertyType deal={deal} isBackOffice={isBackOffice} />
-          </div>
+          <PropertyType deal={deal} isBackOffice={isBackOffice} />
         </Item>
       </ItemsContainer>
     </>

@@ -1,11 +1,8 @@
 import { useState } from 'react'
-import { Grid, Box, IconButton, Typography } from '@material-ui/core'
-import { mdiFolderOutline, mdiFolderOpenOutline } from '@mdi/js'
+import { Grid, Box, Typography } from '@material-ui/core'
 
 import { useDispatch, useSelector } from 'react-redux'
 import cn from 'classnames'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   setSelectedTask,
@@ -19,6 +16,8 @@ import { IAppState } from 'reducers'
 
 import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
+
 import { TaskItems } from '../TaskItems'
 import { EnvelopeStatus } from '../EnvelopeStatus'
 import { TaskNotifications } from '../Notification'
@@ -28,7 +27,7 @@ import ActionsButton from '../../../../components/ActionsButton'
 
 import { getTaskActions } from './get-task-actions'
 
-import { TaskStatus } from './Status'
+import { TaskIcon } from './TaskIcon'
 
 import { useStyles } from './styles'
 
@@ -45,6 +44,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
   })
 
   const dispatch = useDispatch()
+  const [checklistBulkActionsContext] = useChecklistActionsContext()
 
   const [isTaskExpanded, setIsTaskExpanded] = useState(
     task.is_expanded === true
@@ -59,6 +59,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
     envelope => !['Voided', 'Declined'].includes(envelope.status)
   )[0]
 
+  const isBulkMode = checklistBulkActionsContext.actions.length > 0
   const { attachments } = task.room
   const file = attachments ? attachments[0] : undefined
 
@@ -69,26 +70,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
     isBackOffice
   })
 
-  const getRowsCount = () => {
-    let count = 0
-
-    if (task.form) {
-      count++
-    }
-
-    count += (task.room.attachments || []).length
-    count += (getTaskEnvelopes(taskEnvelopes, task) || []).length
-
-    return count
-  }
-
-  const rowsCount = getRowsCount()
-
   const toggleTaskOpen = () => {
-    if (rowsCount === 0) {
-      return
-    }
-
     dispatch(setExpandTask(task.id, !isTaskExpanded))
     setIsTaskExpanded(state => !state)
   }
@@ -105,11 +87,13 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
     <Grid container className={classes.container}>
       <Grid container className={classes.row}>
         <Box display="flex" alignItems="center">
-          <IconButton disabled={rowsCount === 0} onClick={toggleTaskOpen}>
-            <SvgIcon
-              path={isTaskExpanded ? mdiFolderOpenOutline : mdiFolderOutline}
-            />
-          </IconButton>{' '}
+          <TaskIcon
+            deal={deal}
+            task={task}
+            isBackOffice={isBackOffice}
+            onClick={toggleTaskOpen}
+          />
+
           <div>
             <Box display="flex" alignItems="center">
               <span
@@ -118,8 +102,6 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
               >
                 {task.title}
               </span>
-
-              <TaskStatus deal={deal} task={task} isBackOffice={isBackOffice} />
             </Box>
 
             <Typography variant="caption" className={classes.caption}>
@@ -130,13 +112,15 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
 
         <Box display="flex" alignItems="center" className={classes.actions}>
           <Box display="flex" alignItems="center">
-            <div className="visible-on-hover">
-              <Activity task={task} onClick={handleSelectTask} />
-            </div>
+            {!isBulkMode && (
+              <div className="visible-on-hover">
+                <Activity task={task} onClick={handleSelectTask} />
+              </div>
+            )}
 
             <div
               className={cn({
-                'visible-on-hover': !isTaskExpanded
+                'visible-on-hover': !isTaskExpanded && !isBulkMode
               })}
             >
               <ActionsButton

@@ -1,50 +1,26 @@
 import moment from 'moment'
-import { Box, Tooltip, makeStyles, Theme, useTheme } from '@material-ui/core'
-import { mdiCheckDecagram, mdiAlertCircle, mdiCloseCircle } from '@mdi/js'
-import cn from 'classnames'
+
+import { IconButton, Theme, Tooltip, useTheme } from '@material-ui/core'
+
+import {
+  mdiFolderOutline,
+  mdiAlertCircle,
+  mdiCloseCircle,
+  mdiAsterisk,
+  mdiCheckboxMarkedCircle
+} from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    required: {
-      color: theme.palette.error.light,
-      ...theme.typography.subtitle3,
-      lineHeight: 1,
-      marginRight: theme.spacing(1)
-    },
-    status: {
-      ...theme.typography.subtitle3,
-      lineHeight: 1,
-      marginRight: theme.spacing(1),
-      '&.Incomplete': {
-        display: 'none'
-      },
-      '&.Pending, &.Attention, &.Submitted, &.Notified': {
-        color: '#f6a623'
-      },
-      '&.Declined': {
-        color: '#d0011b'
-      },
-      '&.Approved': {
-        color: '#35b863'
-      }
-    }
-  }),
-  {
-    name: 'Deals-Checklists-Task-Label'
-  }
-)
 
 interface Props {
   deal: IDeal
   task: IDealTask
   isBackOffice: boolean
+  onClick: () => void
 }
 
-export function TaskStatus({ deal, task, isBackOffice }: Props) {
-  const classes = useStyles()
+export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
   const theme = useTheme<Theme>()
 
   if (!task) {
@@ -66,43 +42,47 @@ export function TaskStatus({ deal, task, isBackOffice }: Props) {
   }
 
   if (isBackOffice && (status === 'Submitted' || task.attention_requested)) {
-    status = 'Needs Attention'
+    status = 'NEEDS ATTENTION'
   }
 
   if (!isBackOffice && status !== 'Submitted' && task.attention_requested) {
     status = deal.is_draft ? 'Pending' : 'Notified'
   }
 
-  const isRequired = status !== 'Approved' && task.required
-
-  if (!status && !isRequired) {
-    return null
+  if (status !== 'Approved' && task.required) {
+    status = 'Required'
   }
 
-  const icon = getIcon(status, theme)
+  if (!status) {
+    return (
+      <IconButton onClick={onClick}>
+        <SvgIcon path={mdiFolderOutline} size={muiIconSizes.medium} />
+      </IconButton>
+    )
+  }
 
   return (
-    <Box display="flex" alignItems="center">
-      {isRequired && <div className={classes.required}>Required</div>}
-
-      {status && !icon && (
-        <div className={cn(classes.status, status)}>{status}</div>
-      )}
-
-      {status && icon && (
-        <Tooltip title={tooltip} placement="bottom">
-          <div style={{ lineHeight: 0 }}>{icon}</div>
-        </Tooltip>
-      )}
-    </Box>
+    <Tooltip title={tooltip}>
+      <IconButton onClick={onClick}>{getIcon(status, theme)}</IconButton>
+    </Tooltip>
   )
 }
 
 function getIcon(status: string, theme: Theme) {
   switch (status) {
+    case 'Required':
+      return (
+        <SvgIcon
+          color={theme.palette.error.main}
+          path={mdiAsterisk}
+          size={muiIconSizes.medium}
+        />
+      )
+
     case 'Pending':
     case 'Submitted':
     case 'Notified':
+    case 'NEEDS ATTENTION':
       return (
         <SvgIcon
           color={theme.palette.warning.main}
@@ -124,7 +104,7 @@ function getIcon(status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.primary.main}
-          path={mdiCheckDecagram}
+          path={mdiCheckboxMarkedCircle}
           size={muiIconSizes.medium}
         />
       )

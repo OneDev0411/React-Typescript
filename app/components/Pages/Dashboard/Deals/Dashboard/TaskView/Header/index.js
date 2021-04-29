@@ -9,8 +9,6 @@ import IconButton from 'components/Button/IconButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
-import { TaskStatus } from '../../Folders/Checklist/TaskRow/Status'
-
 import { Container, Input, Toolbar, TitleContainer, Title } from './styled'
 
 class Header extends React.Component {
@@ -60,14 +58,6 @@ class Header extends React.Component {
     return (
       <Container>
         <Toolbar>
-          <div>
-            <TaskStatus
-              deal={this.props.deal}
-              task={this.props.task}
-              isBackOffice={this.props.isBackOffice}
-            />
-          </div>
-
           <div>
             {this.state.isSavingName === false && (
               <IconButton

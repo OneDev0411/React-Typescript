@@ -6,13 +6,13 @@ interface StyleProps {
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      position: 'relative'
-    },
-    row: ({ index }: StyleProps) => ({
+    container: ({ index }: StyleProps) => ({
+      position: 'relative',
+      backgroundColor: index % 2 === 0 ? theme.palette.grey['50'] : '#fff'
+    }),
+    row: {
       position: 'relative',
       minHeight: theme.spacing(8),
-      backgroundColor: index % 2 === 0 ? theme.palette.grey['50'] : '#fff',
       '& .visible-on-hover': {
         display: 'none'
       },
@@ -25,7 +25,7 @@ export const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.info.ultralight
       }
-    }),
+    },
     actions: {
       position: 'absolute',
       right: theme.spacing(2),

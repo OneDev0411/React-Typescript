@@ -22,15 +22,13 @@ export const ItemLabel = styled.span`
   display: flex;
   align-items: center;
   font-weight: normal;
-  color: ${({ theme }) => theme.palette.grey['500']};
   margin-right: ${({ theme }) => theme.spacing(1)}px;
 `
 
 export const ItemValue = styled.span`
-  ${({ theme }) => css`
-    font-weight: normal;
-    transition: 0.05s ease-out all;
-  `}
+  font-weight: normal;
+  transition: 0.05s ease-out all;
+  color: ${({ theme }) => theme.palette.grey['600']};
 `
 
 export const ItemActions = styled.div`
@@ -41,7 +39,7 @@ export const ItemActions = styled.div`
     height: 100%;
     right: 0;
     visibility: hidden;
-    padding: ${theme.spacing(0, 1)};
+    padding: ${theme.spacing(0, 1.5)};
   `}
 `
 
@@ -84,7 +82,7 @@ export const Item = styled.div<{
     }
 
     :hover ${ItemValue} {
-      opacity: 0.15;
+      opacity: 0.05;
     }
 
     ${
@@ -100,6 +98,10 @@ export const Item = styled.div<{
       disableHover &&
       `
       cursor: auto !important;
+
+      :hover ${ItemValue} {
+        opacity: 1;
+      }
     `
     };
   `}
