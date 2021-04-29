@@ -52,7 +52,7 @@ export function ExportButton({ disabled, onExportClick }: Props) {
     <BaseDropdown
       renderDropdownButton={({ ref, onClick }) => (
         <GridActionButton
-          ref={ref}
+          attachedElementRef={ref}
           label="Export"
           icon={mdiExportVariant}
           disabled={disabled}

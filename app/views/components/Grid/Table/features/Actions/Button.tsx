@@ -11,7 +11,7 @@ interface Props {
   textIcon?: ReactNode
   label: ReactNode
   disabled?: boolean
-  ref?: RefObject<any>
+  attachedElementRef?: RefObject<any>
   onClick?: (e: MouseEvent<HTMLElement>) => void
 }
 
@@ -48,16 +48,19 @@ const useStyles = makeStyles(
 export const GridActionButton = ({
   label,
   icon,
-  ref,
+  attachedElementRef,
   textIcon,
   onClick = noop
 }: Props) => {
   const classes = useStyles()
-  // const [state, dispatch] = useGridContext()
 
   return (
     <div className={classes.container}>
-      <div className={classes.button} onClick={onClick} ref={ref}>
+      <div
+        className={classes.button}
+        onClick={onClick}
+        ref={attachedElementRef}
+      >
         {icon && <SvgIcon path={icon} className={classes.icon} />}
         {textIcon && <div className={classes.textIcon}>{textIcon}</div>}
         <div className={classes.label}>{label}</div>

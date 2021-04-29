@@ -165,18 +165,20 @@ const RawTableActions = ({
           submitCallback={deselectAndReload}
         />
       </ActionWrapper>
-      <ExportContacts
-        excludedRows={excludedRows}
-        exportIds={selectedRowIds}
-        filters={filters.attributeFilters}
-        flows={filters.flows}
-        crmTasks={filters.crm_tasks}
-        searchText={filters.text}
-        conditionOperator={filters.filter_type}
-        users={filters.users}
-        parked={isParkedActive}
-        disabled={isFetching}
-      />
+      <ActionWrapper disabled={isFetching}>
+        <ExportContacts
+          excludedRows={excludedRows}
+          exportIds={selectedRowIds}
+          filters={filters.attributeFilters}
+          flows={filters.flows}
+          crmTasks={filters.crm_tasks}
+          searchText={filters.text}
+          conditionOperator={filters.filter_type}
+          users={filters.users}
+          parked={isParkedActive}
+          disabled={isFetching}
+        />
+      </ActionWrapper>
       <ActionWrapper disabled={isMergeDisable}>
         <MergeContacts
           isEntireMode={isEntireRowsSelected}
