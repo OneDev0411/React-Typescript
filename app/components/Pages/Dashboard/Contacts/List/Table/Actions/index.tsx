@@ -1,12 +1,10 @@
 import React, { memo } from 'react'
-// import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
-// import pluralize from 'pluralize'
 
-import { mdiTrashCanOutline } from '@mdi/js'
+import { mdiTrashCanOutline, mdiShoppingOutline } from '@mdi/js'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
-// import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
@@ -19,25 +17,6 @@ import AddToFlowAction from '../../Actions/AddToFlow'
 import { UnparkContacts } from '../../Actions/UnparkContacts'
 import { ActionWrapper } from '../components/ActionWrapper'
 import { PARKED_CONTACTS_LIST_ID } from '../../constants'
-
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     container: {},
-//     moreActionContainer: {
-//       background: theme.palette.background.paper,
-//       zIndex: 1100,
-//       borderRadius: theme.shape.borderRadius,
-//       boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
-//     },
-//     summery: {
-//       display: 'flex',
-//       alignItems: 'center'
-//     },
-//     selectedCount: {
-//       marginRight: theme.spacing(0.5)
-//     }
-//   })
-// )
 
 interface Props {
   activeSegmentId: string
@@ -81,27 +60,6 @@ const RawTableActions = ({
     ? isAllRowsSelected || isTwoSelected
     : isAllRowsSelected && isTwoSelected)
   const isParkedActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
-
-  // const getSummeryInfo = () => {
-  //   const selectedCount = isEntireRowsSelected
-  //     ? totalRowsCount - excludedRows.length
-  //     : selectedRowIds.length
-
-  //   if (selectedCount === 0) {
-  //     return null
-  //   }
-
-  //   return (
-  //     <Box className={classes.summery}>
-  //       <Typography variant="subtitle2" className={classes.selectedCount}>
-  //         {selectedCount}
-  //       </Typography>
-  //       <Typography variant="body2">
-  //         {pluralize('Contact', selectedCount)} selected
-  //       </Typography>
-  //     </Box>
-  //   )
-  // }
 
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
@@ -158,6 +116,22 @@ const RawTableActions = ({
       <ActionWrapper disabled={isEntireModeDisable || isParkedActive}>
         <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
       </ActionWrapper>
+
+      <ActionWrapper disabled={isEntireModeDisable || isParkedActive}>
+        <SendMlsListingCard
+          disabled={isEntireModeDisable}
+          selectedRows={selectedRowIds}
+          buttonRenderer={({ onClick, disabled }) => (
+            <GridActionButton
+              label="Marketing"
+              icon={mdiShoppingOutline}
+              disabled={disabled}
+              onClick={onClick}
+            />
+          )}
+        />
+      </ActionWrapper>
+
       <ActionWrapper disabled={isEntireModeDisable || isParkedActive}>
         <CreateEvent
           disabled={isEntireModeDisable}
