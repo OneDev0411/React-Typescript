@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
 
+import { mdiPlusCircleOutline } from '@mdi/js'
+
 import Checkbox from '../Selection/Checkbox'
 
 import { ToggleEntireRows } from '../Selection/ToggleEntireRows'
@@ -16,6 +18,7 @@ import { ToggleEntireRows } from '../Selection/ToggleEntireRows'
 import { useGridContext } from '../../hooks/use-grid-context'
 
 import { SELECTION__TOGGLE_ALL } from '../../context/constants'
+import { GridActionButton } from './Button'
 
 interface Props<Row> {
   rows: Row[]
@@ -24,45 +27,48 @@ interface Props<Row> {
   TableActions: React.ReactNode | null
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      position: 'sticky',
-      bottom: 0,
-      width: '100%',
-      height: theme.spacing(10),
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      padding: theme.spacing(0, 2),
-      background: theme.palette.grey[100],
-      border: `1px solid ${theme.palette.divider}`,
-      borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-      borderTopRightRadius: `${theme.shape.borderRadius}px`,
-      boxShadow: `0 ${theme.spacing(-0.5)}px ${theme.spacing(2)}px ${fade(
-        theme.palette.common.black,
-        0.08
-      )}`,
-      zIndex: theme.zIndex.gridAction
-    },
-    infoContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: theme.spacing(4)
-    },
-    actionsContainer: {
-      flexGrow: 1
-    },
-    toggleAll: {
-      padding: 0,
-      marginRight: theme.spacing(1)
-    },
-    summary: {
-      fontSize: theme.typography.body2.fontSize,
-      color: theme.palette.tertiary.main,
-      cursor: 'pointer'
-    }
-  })
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      container: {
+        position: 'sticky',
+        bottom: `${theme.spacing(3.5)}px`,
+        width: '100%',
+        height: theme.spacing(10),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        padding: theme.spacing(0, 2),
+        background: theme.palette.tertiary.main,
+        borderRadius: `${theme.spacing(2)}px`,
+        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
+          theme.palette.common.black,
+          0.4
+        )}`,
+        zIndex: theme.zIndex.gridAction
+      },
+      infoContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: theme.spacing(4)
+      },
+      actionsContainer: {
+        display: 'flex',
+        alignItems: 'center'
+      },
+      toggleAll: {
+        padding: 0,
+        marginRight: theme.spacing(1)
+      },
+      summary: {
+        fontSize: theme.typography.body2.fontSize,
+        color: theme.palette.tertiary.main,
+        cursor: 'pointer'
+      }
+    }),
+  {
+    name: 'GridAction'
+  }
 )
 
 export function Actions<Row>({
@@ -120,7 +126,11 @@ export function Actions<Row>({
   return (
     <Slide in direction="up">
       <div className={classes.container}>
-        {showSelectAll && (
+        <GridActionButton label="Merge" icon={mdiPlusCircleOutline} />
+        <GridActionButton label="Delete" icon={mdiPlusCircleOutline} />
+        <GridActionButton label="Export" icon={mdiPlusCircleOutline} />
+        <GridActionButton label="Flow" icon={mdiPlusCircleOutline} />
+        {/* showSelectAll && (
           <div className={classes.infoContainer}>
             <Tooltip title={tooltipTitle} placement="top">
               <Checkbox
@@ -137,11 +147,11 @@ export function Actions<Row>({
             </span>
             <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
           </div>
-        )}
+        ) */}
 
-        {TableActions && (
+        {/* TableActions && (
           <div className={classes.actionsContainer}>{TableActions}</div>
-        )}
+        ) */}
       </div>
     </Slide>
   )
