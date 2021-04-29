@@ -53,7 +53,7 @@ function Showings({ params }: ShowingsProps) {
           <TabContentSwitch.Item value={showingsTabs.Properties}>
             <ShowingsTabProperties />
           </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingsTabs.Properties}>
+          <TabContentSwitch.Item value={showingsTabs.Bookings}>
             <ShowingsTabBookings />
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>

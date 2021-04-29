@@ -15,6 +15,7 @@ import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProper
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
+import useGetShowingNotificationCount from './use-get-showing-notification-count'
 
 const useStyles = makeStyles(
   theme => ({
@@ -41,6 +42,8 @@ function ShowingPropertyList() {
   const topRows = rows.slice(0, 5)
   const archivedItemCount = rows.length - 5
 
+  const showingNotificationCount = useGetShowingNotificationCount(topRows)
+
   const handleRowClick = (showingId: UUID) => {
     goTo(`/dashboard/showings/${showingId}/detail`)
   }
@@ -62,8 +65,11 @@ function ShowingPropertyList() {
       id: 'new',
       width: '10%',
       sortable: false,
-      // TODO: use the value from API response
-      render: ({ row }) => <ShowingPropertyListColumnNewChip count={3} />
+      render: ({ row }) => (
+        <ShowingPropertyListColumnNewChip
+          count={showingNotificationCount[row.id]}
+        />
+      )
     },
     {
       header: 'Approved',

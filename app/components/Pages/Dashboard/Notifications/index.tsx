@@ -25,7 +25,7 @@ import { CrmEvents } from './CrmEvents'
 
 function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => selectUser(store))
+  const user = useSelector(selectUser)
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )
