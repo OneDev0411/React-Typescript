@@ -1,6 +1,18 @@
 import * as actionTypes from '../../constants/notifications'
 
-export const notifications = (state = { info: {}, data: [] }, action) => {
+export interface INotificationState {
+  info: Partial<{
+    count: number
+    total: number
+    new: number
+  }>
+  data: INotification[]
+}
+
+export const notifications = (
+  state: INotificationState = { info: {}, data: [] },
+  action
+) => {
   switch (action.type) {
     case actionTypes.FETCH_NOTIFICATIONS_REQUEST:
       return {
@@ -18,6 +30,7 @@ export const notifications = (state = { info: {}, data: [] }, action) => {
         // Only global notifications belong to the notification center
         return state
       }
+
       // Sometimes there is a duplicate socket
       if (
         !state.data.some(
@@ -28,9 +41,9 @@ export const notifications = (state = { info: {}, data: [] }, action) => {
           ...state,
           data: [action.notification, ...state.data],
           info: {
-            count: state.info.count + 1,
-            total: state.info.total + 1,
-            new: state.info.new + 1
+            count: (state.info.count || 0) + 1,
+            total: (state.info.total || 0) + 1,
+            new: (state.info.new || 0) + 1
           }
         }
       }

@@ -18,7 +18,10 @@ import widgets from './widgets'
 import confirmation from './confirmation'
 import { intercom } from './intercom'
 import { tasks } from './tasks'
-import { notifications as globalNotifications } from './notifications'
+import {
+  INotificationState,
+  notifications as globalNotifications
+} from './notifications'
 import { emailTemplates } from './email-templates'
 import { inbox } from './inbox'
 
@@ -56,12 +59,16 @@ const appReducer = combineReducers({
 // without any extra effort, but in v3.7.2 that we currently use, it doesn't work
 // So we can uncomment this line wen migrated to V4.x.x or higher.
 // export type IAppState = ReturnType<typeof appReducer>
-type IAppReducer = Omit<ReturnType<typeof appReducer>, 'user'>
+type IAppReducer = Omit<
+  ReturnType<typeof appReducer>,
+  'user' | 'globalNotifications'
+>
 
 // You have to explicit the reducer types because the above ReturnType can not
 // detect the types correctly.
 export interface IAppState extends IAppReducer {
   user: IUserState
+  globalNotifications: INotificationState
 }
 
 export default (state, action) => appReducer(state, action)
