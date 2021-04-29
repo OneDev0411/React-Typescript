@@ -2,8 +2,12 @@ import React from 'react'
 import { List, useTheme } from '@material-ui/core'
 import { mdiAt, mdiProgressDownload, mdiEmailOutline } from '@mdi/js'
 
+import { mdiExportVariant } from '@mdi/js'
+
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { Item } from './Item'
 import { DownloadType, ExportType } from './types'
@@ -46,7 +50,15 @@ export function ExportButton({ disabled, onExportClick }: Props) {
 
   return (
     <BaseDropdown
-      buttonLabel="Export"
+      renderDropdownButton={({ ref, onClick }) => (
+        <GridActionButton
+          ref={ref}
+          label="Export"
+          icon={mdiExportVariant}
+          disabled={disabled}
+          onClick={onClick}
+        />
+      )}
       DropdownToggleButtonProps={{
         disabled,
         size: 'small',

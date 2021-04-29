@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { Button } from '@material-ui/core'
+import { mdiAccountArrowLeftOutline } from '@mdi/js'
 
 import { addNotification as notify } from 'components/notification'
-
 import { unparkContact } from 'models/contacts/unparak-contact'
 import { generateContactFilters } from 'models/contacts/bulk-tag/utils/generate-contact-filters'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 interface Props {
   contacts: UUID[]
@@ -37,7 +37,7 @@ export const UnparkContacts = ({
   const [isUnParking, setIsUnParking] = useState(false)
   const dispatch = useDispatch()
 
-  const handleAddPending = async e => {
+  const handleAddPending = async () => {
     setIsUnParking(true)
 
     try {
@@ -69,13 +69,11 @@ export const UnparkContacts = ({
   }
 
   return (
-    <Button
-      variant="outlined"
-      size="small"
+    <GridActionButton
+      label={isUnParking ? 'Adding' : 'Add Contacts'}
+      icon={mdiAccountArrowLeftOutline}
+      disabled={isUnParking}
       onClick={handleAddPending}
-      disabled={disabled || isUnParking}
-    >
-      {isUnParking ? 'Adding' : 'Add Contacts'}
-    </Button>
+    />
   )
 }

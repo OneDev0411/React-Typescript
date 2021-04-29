@@ -1,17 +1,13 @@
 import React, { memo } from 'react'
-import {
-  Box,
-  Button,
-  Typography,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
-import pluralize from 'pluralize'
+// import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+// import pluralize from 'pluralize'
+
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+// import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
 import Email from '../../Actions/Email'
@@ -24,47 +20,24 @@ import { UnparkContacts } from '../../Actions/UnparkContacts'
 import { ActionWrapper } from '../components/ActionWrapper'
 import { PARKED_CONTACTS_LIST_ID } from '../../constants'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      '& > *:not(:last-child)': {
-        marginRight: theme.spacing(0.75)
-      },
-      /*
-      since we don't have button with white background in material,
-      instead of applying this style to all btn in this component,
-      I decided to handle it in this way.
-      */
-      '& .MuiButton-root': {
-        background: theme.palette.background.paper,
-        borderColor: theme.palette.grey[300],
-        '&:not(:disabled):first-of-type': {
-          background: theme.palette.secondary.main,
-          borderColor: theme.palette.secondary.main,
-          color: theme.palette.secondary.contrastText
-        }
-      },
-      '& $summery': {
-        marginRight: theme.spacing(2)
-      }
-    },
-    moreActionContainer: {
-      background: theme.palette.background.paper,
-      zIndex: 1100,
-      borderRadius: theme.shape.borderRadius,
-      boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
-    },
-    summery: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    selectedCount: {
-      marginRight: theme.spacing(0.5)
-    }
-  })
-)
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     container: {},
+//     moreActionContainer: {
+//       background: theme.palette.background.paper,
+//       zIndex: 1100,
+//       borderRadius: theme.shape.borderRadius,
+//       boxShadow: `0 0 5px 0 ${theme.palette.text.hint}`
+//     },
+//     summery: {
+//       display: 'flex',
+//       alignItems: 'center'
+//     },
+//     selectedCount: {
+//       marginRight: theme.spacing(0.5)
+//     }
+//   })
+// )
 
 interface Props {
   activeSegmentId: string
@@ -86,7 +59,7 @@ const RawTableActions = ({
   handleChangeContactsAttributes
 }: Props) => {
   const [state, dispatch] = useGridContext()
-  const classes = useStyles()
+  // const classes = useStyles()
 
   const {
     selection: {
@@ -109,26 +82,26 @@ const RawTableActions = ({
     : isAllRowsSelected && isTwoSelected)
   const isParkedActive = activeSegmentId === PARKED_CONTACTS_LIST_ID
 
-  const getSummeryInfo = () => {
-    const selectedCount = isEntireRowsSelected
-      ? totalRowsCount - excludedRows.length
-      : selectedRowIds.length
+  // const getSummeryInfo = () => {
+  //   const selectedCount = isEntireRowsSelected
+  //     ? totalRowsCount - excludedRows.length
+  //     : selectedRowIds.length
 
-    if (selectedCount === 0) {
-      return null
-    }
+  //   if (selectedCount === 0) {
+  //     return null
+  //   }
 
-    return (
-      <Box className={classes.summery}>
-        <Typography variant="subtitle2" className={classes.selectedCount}>
-          {selectedCount}
-        </Typography>
-        <Typography variant="body2">
-          {pluralize('Contact', selectedCount)} selected
-        </Typography>
-      </Box>
-    )
-  }
+  //   return (
+  //     <Box className={classes.summery}>
+  //       <Typography variant="subtitle2" className={classes.selectedCount}>
+  //         {selectedCount}
+  //       </Typography>
+  //       <Typography variant="body2">
+  //         {pluralize('Contact', selectedCount)} selected
+  //       </Typography>
+  //     </Box>
+  //   )
+  // }
 
   const deselectRows = () => dispatch(resetRows())
   const deselectAndReload = () => {
@@ -137,9 +110,8 @@ const RawTableActions = ({
   }
 
   return (
-    <div className={classes.container}>
-      {getSummeryInfo()}
-      {isParkedActive && (
+    <>
+      <ActionWrapper disabled={!isParkedActive}>
         <UnparkContacts
           contacts={selectedRowIds}
           excludedRows={excludedRows}
@@ -151,13 +123,8 @@ const RawTableActions = ({
           flows={filters?.flows}
           callback={deselectAndReload}
         />
-      )}
-      <ActionWrapper
-        bulkMode={isEntireRowsSelected}
-        atLeast="one"
-        action="tagging"
-        disabled={isAllDisable}
-      >
+      </ActionWrapper>
+      <ActionWrapper disabled={isAllDisable}>
         <TagContacts
           disabled={isAllDisable}
           entireMode={isEntireRowsSelected}
@@ -174,57 +141,30 @@ const RawTableActions = ({
           handleChangeContactsAttributes={handleChangeContactsAttributes}
         />
       </ActionWrapper>
-      <AddToFlowAction
-        entireMode={isEntireRowsSelected}
-        excludedRows={excludedRows}
-        selectedRows={selectedRowIds}
-        parked={isParkedActive}
-        filters={filters}
-        resetSelectedRows={deselectRows}
-        reloadContacts={reloadContacts}
-      />
-      {!isParkedActive && (
-        <ActionWrapper
-          atLeast="one"
-          bulkMode={isEntireRowsSelected}
-          action="sending an email"
+      <ActionWrapper
+        disabled={!isEntireRowsSelected && selectedRowIds.length === 0}
+      >
+        <AddToFlowAction
+          disabled={!isEntireRowsSelected && selectedRowIds.length === 0}
+          entireMode={isEntireRowsSelected}
+          excludedRows={excludedRows}
+          selectedRows={selectedRowIds}
+          parked={isParkedActive}
+          filters={filters}
+          resetSelectedRows={deselectRows}
+          reloadContacts={reloadContacts}
+        />
+      </ActionWrapper>
+      <ActionWrapper disabled={isEntireModeDisable || isParkedActive}>
+        <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
+      </ActionWrapper>
+      <ActionWrapper disabled={isEntireModeDisable || isParkedActive}>
+        <CreateEvent
           disabled={isEntireModeDisable}
-        >
-          <Email disabled={isEntireModeDisable} selectedRows={selectedRowIds} />
-        </ActionWrapper>
-      )}
-
-      {!isParkedActive && (
-        <ActionWrapper
-          atLeast="one"
-          bulkMode={isEntireRowsSelected}
-          action="marketing"
-          disabled={isEntireModeDisable}
-        >
-          <SendMlsListingCard
-            disabled={isEntireModeDisable}
-            selectedRows={selectedRowIds}
-          >
-            Marketing
-          </SendMlsListingCard>
-        </ActionWrapper>
-      )}
-
-      {!isParkedActive && (
-        <ActionWrapper
-          atLeast="one"
-          bulkMode={isEntireRowsSelected}
-          action="creating an event"
-          disabled={isEntireModeDisable}
-        >
-          <CreateEvent
-            disabled={isEntireModeDisable}
-            selectedRows={selectedRowIds}
-            submitCallback={deselectAndReload}
-          />
-        </ActionWrapper>
-      )}
-
+          selectedRows={selectedRowIds}
+          submitCallback={deselectAndReload}
+        />
+      </ActionWrapper>
       <ExportContacts
         excludedRows={excludedRows}
         exportIds={selectedRowIds}
@@ -237,28 +177,22 @@ const RawTableActions = ({
         parked={isParkedActive}
         disabled={isFetching}
       />
-      <MergeContacts
-        isEntireMode={isEntireRowsSelected}
-        disabled={isMergeDisable}
-        selectedRows={selectedRowIds}
-        submitCallback={deselectAndReload}
-      />
-      <ActionWrapper
-        bulkMode={isEntireRowsSelected}
-        atLeast="one"
-        action="delete"
-        disabled={isAllDisable}
-      >
-        <Button
-          variant="outlined"
-          size="small"
+      <ActionWrapper disabled={isMergeDisable}>
+        <MergeContacts
+          isEntireMode={isEntireRowsSelected}
+          selectedRows={selectedRowIds}
+          submitCallback={deselectAndReload}
+        />
+      </ActionWrapper>
+      <ActionWrapper disabled={isAllDisable}>
+        <GridActionButton
+          label="Delete"
+          icon={mdiTrashCanOutline}
           disabled={isAllDisable}
           onClick={onRequestDelete}
-        >
-          Delete
-        </Button>
+        />
       </ActionWrapper>
-    </div>
+    </>
   )
 }
 

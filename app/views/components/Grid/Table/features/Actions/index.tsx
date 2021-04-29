@@ -1,23 +1,14 @@
 import React from 'react'
 
-import {
-  Tooltip,
-  Slide,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
+import { Slide, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
 
-import { mdiPlusCircleOutline } from '@mdi/js'
-
-import Checkbox from '../Selection/Checkbox'
-
-import { ToggleEntireRows } from '../Selection/ToggleEntireRows'
+import { mdiClose } from '@mdi/js'
 
 import { useGridContext } from '../../hooks/use-grid-context'
 
-import { SELECTION__TOGGLE_ALL } from '../../context/constants'
+import { resetRows } from '../../context/actions/selection/reset-rows'
+
 import { GridActionButton } from './Button'
 
 interface Props<Row> {
@@ -61,9 +52,8 @@ const useStyles = makeStyles(
         marginRight: theme.spacing(1)
       },
       summary: {
-        fontSize: theme.typography.body2.fontSize,
-        color: theme.palette.tertiary.main,
-        cursor: 'pointer'
+        color: theme.palette.background.paper,
+        ...theme.typography.h6
       }
     }),
   {
@@ -101,23 +91,19 @@ export function Actions<Row>({
 
     return isAllRowsSelected ? rows.length : selectedRowIds.length
   }
-  const toggleAll = () =>
-    dispatch({
-      type: SELECTION__TOGGLE_ALL,
-      rows
-    })
+  const deselectAll = () => dispatch(resetRows())
 
-  const isAllSelected =
-    isAllRowsSelected ||
-    selectedRowIds.length === rows.length ||
-    (isEntireRowsSelected && excludedRows.length === 0)
+  // const isAllSelected =
+  //   isAllRowsSelected ||
+  //   selectedRowIds.length === rows.length ||
+  //   (isEntireRowsSelected && excludedRows.length === 0)
 
-  const isSomeRowsSelected =
-    (isAllRowsSelected === false &&
-      selectedRowIds.length > 0 &&
-      selectedRowIds.length < rows.length) ||
-    (isEntireRowsSelected && excludedRows.length > 0)
-  const tooltipTitle = isAllSelected ? 'Deselect All Rows' : 'Select All Rows'
+  // const isSomeRowsSelected =
+  //   (isAllRowsSelected === false &&
+  //     selectedRowIds.length > 0 &&
+  //     selectedRowIds.length < rows.length) ||
+  //   (isEntireRowsSelected && excludedRows.length > 0)
+  // const tooltipTitle = isAllSelected ? 'Deselect All Rows' : 'Select All Rows'
 
   if (rows.length === 0) {
     return null
@@ -126,10 +112,18 @@ export function Actions<Row>({
   return (
     <Slide in direction="up">
       <div className={classes.container}>
-        <GridActionButton label="Merge" icon={mdiPlusCircleOutline} />
-        <GridActionButton label="Delete" icon={mdiPlusCircleOutline} />
-        <GridActionButton label="Export" icon={mdiPlusCircleOutline} />
-        <GridActionButton label="Flow" icon={mdiPlusCircleOutline} />
+        <GridActionButton
+          label="Cancel"
+          icon={mdiClose}
+          onClick={deselectAll}
+        />
+        <GridActionButton
+          label="Selected"
+          textIcon={
+            <span className={classes.summary}>{getSelectedCount()}</span>
+          }
+        />
+        {TableActions || null}
         {/* showSelectAll && (
           <div className={classes.infoContainer}>
             <Tooltip title={tooltipTitle} placement="top">
