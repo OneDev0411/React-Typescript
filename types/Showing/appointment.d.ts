@@ -36,5 +36,6 @@ declare interface IPublicShowingAppointment<
   status: IShowingAppointmentStatus
   time: string
   token: string
+  cancel_token: string
   showing: A extends 'showing' ? IPublicShowing : never
 }

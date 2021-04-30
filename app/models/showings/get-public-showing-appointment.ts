@@ -1,10 +1,10 @@
 import Fetch from 'services/fetch'
 
 export async function getPublicShowingAppointment(
-  appointmentId: UUID
+  appointmentToken: UUID
 ): Promise<IPublicShowingAppointment<'showing'>> {
   const response = await new Fetch()
-    .get(`/showings/public/appointments/${appointmentId}`)
+    .get(`/showings/public/appointments/${appointmentToken}`)
     .query({
       'associations[]': ['showing_appointment_public.showing']
     })

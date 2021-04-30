@@ -2,11 +2,9 @@ import { useForm, useWatch, Controller } from 'react-hook-form'
 import {
   Grid,
   Box,
-  Divider,
   Typography,
   Button,
   TextField,
-  Hidden,
   makeStyles,
   Theme
 } from '@material-ui/core'
@@ -19,22 +17,12 @@ import { TimeRange } from 'components/TimeSlotPicker/types'
 
 import { setTime } from 'utils/set-time'
 
+import DetailsSection from '../../../Sections/DetailsSection'
 import { getBookableDateRange, convertLocalTimeToShowingTime } from './utils'
 import { useBookTimeRange } from './hooks'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      [theme.breakpoints.down('xs')]: {
-        padding: theme.spacing(0, 2, 8)
-      },
-      [theme.breakpoints.up('sm')]: {
-        padding: theme.spacing(3, 8)
-      }
-    },
-    logo: {
-      height: theme.spacing(3)
-    },
     sectionTitleContainer: {
       [theme.breakpoints.down('sm')]: {
         paddingTop: theme.spacing(3)
@@ -145,22 +133,8 @@ export default function BookSection({ showing, onBook }: Props) {
       : `(${showing.timezone})`
 
   return (
-    <Grid item xs={12} sm={6} md={7} className={classes.container}>
+    <DetailsSection>
       <form onSubmit={handleSubmit(handleSubmitBookForm)}>
-        <Hidden xsDown>
-          <Grid item xs={4} sm={2}>
-            <Box pb={2}>
-              <img
-                className={classes.logo}
-                alt="logo"
-                src="/static/images/logo.svg"
-              />
-            </Box>
-          </Grid>
-        </Hidden>
-        <Grid item xs={12}>
-          <Divider />
-        </Grid>
         <Grid item xs={12}>
           <Box pt={6} pb={1.5} className={classes.sectionTitleContainer}>
             <Typography variant="h6">Pick a date to visit</Typography>
@@ -377,6 +351,6 @@ export default function BookSection({ showing, onBook }: Props) {
           </Box>
         </Grid>
       </form>
-    </Grid>
+    </DetailsSection>
   )
 }

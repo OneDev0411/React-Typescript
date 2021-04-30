@@ -1,12 +1,12 @@
 import Fetch from '../../services/fetch'
 
 export async function cancelAppointmentRequest(
-  appointmentId: UUID,
+  appointmentToken: UUID,
   message?: string
 ): Promise<void> {
   try {
     await new Fetch()
-      .post(`/showings/public/appointments/${appointmentId}/cancel`)
+      .post(`/showings/public/appointments/${appointmentToken}/cancel`)
       .send(message ? { message } : {})
   } catch (error) {
     throw error

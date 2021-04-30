@@ -102,6 +102,13 @@ const AsyncShowingAppointment = Load({
     )
 })
 
+const AsyncShowingAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Cancel' /* webpackChunkName: "showing_appointment_cancel" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -766,6 +773,10 @@ export default (
       <Route
         path="showings/appointments/:appointmentToken"
         component={AsyncShowingAppointment}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/cancel"
+        component={AsyncShowingAppointmentCancel}
       />
 
       <Route path="mobile" component={AsyncMobile} />
