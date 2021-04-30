@@ -1,7 +1,8 @@
 import { Box } from '@material-ui/core'
 
+import { generateAppointmentFilterLink } from '../../helpers'
+
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
-import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
 import ShowingPropertyList from '../ShowingPropertyList'
 
@@ -9,21 +10,20 @@ interface ShowingsTabPropertiesProps {
   isLoading: boolean
   showings: IShowing[]
   appointments: IShowingAppointment[]
+  notifications: IShowingAppointment[]
 }
 
 function ShowingsTabProperties({
-  appointments: allAppointments,
+  appointments,
+  notifications,
   ...otherProps
 }: ShowingsTabPropertiesProps) {
-  const { appointments, notifications } = useAppointmentNotificationLists(
-    allAppointments
-  )
-
   return (
-    <Box mt={4}>
+    <Box>
       <ShowingAppointmentFilters
         appointments={appointments}
         notifications={notifications}
+        generateLink={generateAppointmentFilterLink}
       />
       <Box mt={6}>
         <ShowingPropertyList {...otherProps} />

@@ -8,6 +8,7 @@ import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 const useStyles = makeStyles(
   theme => ({
     root: { width: '100%' },
+    link: { '&:hover, &:focus': { textDecoration: 'none' } },
     card: {
       display: 'flex',
       flexDirection: 'column',
@@ -20,7 +21,8 @@ const useStyles = makeStyles(
         'border-color',
         'background-color',
         'color'
-      ])
+      ]),
+      '&:hover': { backgroundColor: theme.palette.success.ultralight }
     },
     selected: {
       borderColor: theme.palette.primary.main,
@@ -76,7 +78,13 @@ function ShowingAppointmentFilterCard({
     </Badge>
   )
 
-  return link ? <Link to={link}>{card}</Link> : card
+  return link ? (
+    <Link className={classes.link} to={link}>
+      {card}
+    </Link>
+  ) : (
+    card
+  )
 }
 
 export default ShowingAppointmentFilterCard

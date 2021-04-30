@@ -4,7 +4,7 @@ import { useTitle } from 'react-use'
 
 import { Box, useTheme, makeStyles } from '@material-ui/core'
 
-import { RouteComponentProps } from 'react-router'
+import { WithRouterProps } from 'react-router'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -16,6 +16,7 @@ import ShowingsTabProperties from '../../components/ShowingsTabProperties'
 import ShowingsTabBookings from '../../components/ShowingsTabBookings'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useGetShowings from './use-get-showings'
+import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
 const useStyles = makeStyles(
   theme => ({
@@ -24,12 +25,9 @@ const useStyles = makeStyles(
   { name: 'Showings' }
 )
 
-type ShowingsProps = RouteComponentProps<
-  {
-    tab?: ShowingsTabsProps['value']
-  },
-  {}
->
+type ShowingsProps = WithRouterProps<{
+  tab?: ShowingsTabsProps['value']
+}>
 
 function Showings({ params }: ShowingsProps) {
   const theme = useTheme()
@@ -41,7 +39,15 @@ function Showings({ params }: ShowingsProps) {
 
   const tab = params.tab || showingsTabs.Properties
 
-  const { isLoading, showings, appointments } = useGetShowings()
+  const {
+    isLoading,
+    showings,
+    appointments: allAppointments
+  } = useGetShowings()
+
+  const { appointments, notifications } = useAppointmentNotificationLists(
+    allAppointments
+  )
 
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
@@ -51,17 +57,22 @@ function Showings({ params }: ShowingsProps) {
           <ShowingsTabs value={tab} />
         </Box>
       </Box>
-      <PageLayout.Main mt={0} px={4} pb={4}>
+      <PageLayout.Main mt={0} px={4} pb={4} pt={4}>
         <TabContentSwitch.Container value={tab}>
           <TabContentSwitch.Item value={showingsTabs.Properties}>
             <ShowingsTabProperties
               isLoading={isLoading}
               showings={showings}
               appointments={appointments}
+              notifications={notifications}
             />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item value={showingsTabs.Bookings}>
-            <ShowingsTabBookings />
+            <ShowingsTabBookings
+              isLoading={isLoading}
+              appointments={appointments}
+              notifications={notifications}
+            />
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
       </PageLayout.Main>
