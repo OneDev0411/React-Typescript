@@ -62,19 +62,29 @@ function ShowingDetailTabBookingsListColumnActions({
   }
 
   const handleApprove = () => {
-    run(async () => approveShowingAppointment(showingId, appointmentId)).then(
-      appointment => {
-        updateAppointmentStatus(appointment.status)
-      }
-    )
+    run(async () => {
+      const appointment = await approveShowingAppointment(
+        showingId,
+        appointmentId
+      )
+
+      updateAppointmentStatus(appointment.status)
+
+      return appointment
+    })
   }
 
   const handleReject = () => {
-    run(async () => rejectShowingAppointment(showingId, appointmentId)).then(
-      appointment => {
-        updateAppointmentStatus(appointment.status)
-      }
-    )
+    run(async () => {
+      const appointment = await rejectShowingAppointment(
+        showingId,
+        appointmentId
+      )
+
+      updateAppointmentStatus(appointment.status)
+
+      return appointment
+    })
   }
 
   const sharedButtonProps: Partial<ButtonProps> = {
