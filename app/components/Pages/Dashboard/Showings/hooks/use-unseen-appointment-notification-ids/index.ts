@@ -3,16 +3,18 @@ import { useSelector } from 'react-redux'
 
 import { getGlobalNotificationsList } from 'selectors/globalNotifications'
 
-function useUnseenNotificationAppointmentIds(): Record<UUID, true> {
+type UseUnseenAppointmentNotificationIdsReturn = Record<UUID, UUID>
+
+function useUnseenAppointmentNotificationIds(): UseUnseenAppointmentNotificationIdsReturn {
   const notifications = useSelector(getGlobalNotificationsList)
 
   return useMemo(
     () =>
-      notifications.reduce(
+      notifications.reduce<UseUnseenAppointmentNotificationIdsReturn>(
         (items, notification) =>
           notification.object_class === 'ShowingAppointment' &&
           !notification.seen
-            ? { ...items, [notification.object]: true }
+            ? { ...items, [notification.object]: notification.id }
             : items,
         {}
       ),
@@ -20,4 +22,4 @@ function useUnseenNotificationAppointmentIds(): Record<UUID, true> {
   )
 }
 
-export default useUnseenNotificationAppointmentIds
+export default useUnseenAppointmentNotificationIds

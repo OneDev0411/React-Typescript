@@ -26,13 +26,15 @@ interface ShowingDetailTabBookingsListColumnActionsProps {
   appointmentId: UUID
   status: IAppointmentStatus
   hasFeedback: boolean
+  onApprovalAction?: (appointmentId: UUID) => void
 }
 
 function ShowingDetailTabBookingsListColumnActions({
   className,
   status,
   hasFeedback,
-  appointmentId
+  appointmentId,
+  onApprovalAction
 }: ShowingDetailTabBookingsListColumnActionsProps) {
   const classes = useStyles()
   const showingId = useShowingDetailId()
@@ -70,6 +72,8 @@ function ShowingDetailTabBookingsListColumnActions({
 
       updateAppointmentStatus(appointment.status)
 
+      onApprovalAction?.(appointmentId)
+
       return appointment
     })
   }
@@ -82,6 +86,8 @@ function ShowingDetailTabBookingsListColumnActions({
       )
 
       updateAppointmentStatus(appointment.status)
+
+      onApprovalAction?.(appointmentId)
 
       return appointment
     })

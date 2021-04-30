@@ -20,7 +20,9 @@ const useStyles = makeStyles(
       paddingRight: theme.spacing(1)
     },
     row: { '&:hover $actions': { opacity: 1 } },
-    glowRow: { '&&': { backgroundColor: theme.palette.warning.ultralight } },
+    notificationRow: {
+      '&&': { backgroundColor: theme.palette.warning.ultralight }
+    },
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -33,18 +35,20 @@ interface ShowingDetailTabBookingsListProps {
   title?: string
   rows: IShowingAppointment[]
   duration: number
-  glowMode?: boolean
+  notificationMode?: boolean
   emptyMessage?: string
   hideEmptyMessage?: boolean
+  onApprovalAction?: (appointmentId: UUID) => void
 }
 
 function ShowingDetailTabBookingsList({
   title,
   rows,
   duration,
-  glowMode = false,
+  notificationMode = false,
   emptyMessage,
-  hideEmptyMessage = false
+  hideEmptyMessage = false,
+  onApprovalAction
 }: ShowingDetailTabBookingsListProps) {
   const classes = useStyles()
 
@@ -98,10 +102,11 @@ function ShowingDetailTabBookingsList({
       align: 'right',
       render: ({ row }) => (
         <ShowingDetailTabBookingsListColumnActions
-          className={!glowMode ? classes.actions : undefined}
+          className={!notificationMode ? classes.actions : undefined}
           status={row.status}
           appointmentId={row.id}
           hasFeedback={false} // TODO: use this from the API response
+          onApprovalAction={onApprovalAction}
         />
       )
     }
@@ -122,7 +127,7 @@ function ShowingDetailTabBookingsList({
       classes={{
         row: classNames(
           classes.rowBase,
-          glowMode ? classes.glowRow : classes.row
+          notificationMode ? classes.notificationRow : classes.row
         )
       }}
     />

@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
 
-import useUnseenNotificationAppointmentIds from '../../hooks/use-unseen-notification-appointment-ids'
+import useUnseenAppointmentNotificationIds from '../../hooks/use-unseen-appointment-notification-ids'
 
 type UseGetShowingNotificationCountReturn = Record<UUID, number>
 
 function useGetShowingNotificationCount(
   showings: IShowing[]
 ): UseGetShowingNotificationCountReturn {
-  const unseenAppointmentId = useUnseenNotificationAppointmentIds()
+  const unseenAppointmentNotificationIds = useUnseenAppointmentNotificationIds()
 
   return useMemo(
     () =>
@@ -16,12 +16,14 @@ function useGetShowingNotificationCount(
           ...acc,
           [showing.id]: (showing.appointments ?? []).reduce(
             (count, appointment) =>
-              unseenAppointmentId[appointment.id] ? count + 1 : count,
+              unseenAppointmentNotificationIds[appointment.id]
+                ? count + 1
+                : count,
             0
           )
         }
       }, {}),
-    [unseenAppointmentId, showings]
+    [unseenAppointmentNotificationIds, showings]
   )
 }
 

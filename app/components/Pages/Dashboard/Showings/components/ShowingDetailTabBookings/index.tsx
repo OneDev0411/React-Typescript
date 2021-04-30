@@ -7,7 +7,8 @@ import useSortAppointments from '../../hooks/use-sort-appointments'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
 import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
-import useAppointmentListInfo from './use-appointment-list-info'
+import useAppointmentListInfo from '../../hooks/use-appointment-list-info'
+import useMarkAppointmentNotificationAsSeen from './use-mark-appointment-notification-as-seen'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
@@ -24,8 +25,14 @@ function ShowingDetailTabBookings({
 
   const sortedAppointments = useSortAppointments(allAppointments)
 
-  const { appointments, notifications } = useAppointmentNotificationLists(
-    sortedAppointments
+  const {
+    appointments,
+    notifications,
+    unseenAppointmentNotificationIds
+  } = useAppointmentNotificationLists(sortedAppointments)
+
+  const markAppointmentNotificationAsSeen = useMarkAppointmentNotificationAsSeen(
+    unseenAppointmentNotificationIds
   )
 
   const filteredAppointments = useFilterAppointments(appointments, filterInfo)
@@ -59,9 +66,10 @@ function ShowingDetailTabBookings({
           title={notificationsTitle}
           rows={filteredNotifications}
           duration={duration}
-          glowMode
+          notificationMode
           emptyMessage={notificationsEmptyMessage}
           hideEmptyMessage={isBothListEmpty || !!filteredAppointments.length}
+          onApprovalAction={markAppointmentNotificationAsSeen}
         />
       )}
       {hasBookings && (
