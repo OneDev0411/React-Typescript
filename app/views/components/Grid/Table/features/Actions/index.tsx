@@ -93,18 +93,6 @@ export function Actions<Row>({
   }
   const deselectAll = () => dispatch(resetRows())
 
-  // const isAllSelected =
-  //   isAllRowsSelected ||
-  //   selectedRowIds.length === rows.length ||
-  //   (isEntireRowsSelected && excludedRows.length === 0)
-
-  // const isSomeRowsSelected =
-  //   (isAllRowsSelected === false &&
-  //     selectedRowIds.length > 0 &&
-  //     selectedRowIds.length < rows.length) ||
-  //   (isEntireRowsSelected && excludedRows.length > 0)
-  // const tooltipTitle = isAllSelected ? 'Deselect All Rows' : 'Select All Rows'
-
   if (rows.length === 0) {
     return null
   }
@@ -124,28 +112,6 @@ export function Actions<Row>({
           }
         />
         {TableActions || null}
-        {/* showSelectAll && (
-          <div className={classes.infoContainer}>
-            <Tooltip title={tooltipTitle} placement="top">
-              <Checkbox
-                checked={isAllSelected}
-                tooltipTitle={tooltipTitle}
-                indeterminate={isSomeRowsSelected}
-                onChange={toggleAll}
-                className={classes.toggleAll}
-              />
-            </Tooltip>
-
-            <span className={classes.summary} onClick={toggleAll}>
-              {getSelectedCount()} of {totalRows} selected
-            </span>
-            <ToggleEntireRows<Row> rows={rows} totalRows={totalRows} />
-          </div>
-        ) */}
-
-        {/* TableActions && (
-          <div className={classes.actionsContainer}>{TableActions}</div>
-        ) */}
       </div>
     </Slide>
   )
