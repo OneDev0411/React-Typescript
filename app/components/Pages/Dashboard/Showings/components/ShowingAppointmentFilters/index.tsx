@@ -9,6 +9,7 @@ interface ShowingAppointmentFiltersProps {
   onChange?: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]
   notifications: IShowingAppointment[]
+  generateLink?: (filter: AppointmentFilter) => string
 }
 
 const filterTypes: AppointmentFilter[] = [
@@ -24,7 +25,8 @@ function ShowingAppointmentFilters({
   value,
   onChange,
   appointments,
-  notifications
+  notifications,
+  generateLink
 }: ShowingAppointmentFiltersProps) {
   const filters = useAppointmentFilters(
     filterTypes,
@@ -42,6 +44,7 @@ function ShowingAppointmentFilters({
                 {...filter}
                 selected={filter.type === value}
                 onClick={() => onChange?.(filter.type)}
+                link={generateLink?.(filter.type)}
               />
             </Grid>
           ))}

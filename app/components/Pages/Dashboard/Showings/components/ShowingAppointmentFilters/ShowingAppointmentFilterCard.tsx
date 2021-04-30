@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
 
+import { Link } from 'react-router'
+
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
 const useStyles = makeStyles(
@@ -44,6 +46,7 @@ export interface BookingFilterType extends AppointmentFilterInfo {
 interface ShowingAppointmentFilterCardProps extends BookingFilterType {
   selected: boolean
   onClick: () => void
+  link?: string
 }
 
 function ShowingAppointmentFilterCard({
@@ -52,11 +55,12 @@ function ShowingAppointmentFilterCard({
   label,
   onClick,
   selected,
-  badge
+  badge,
+  link
 }: ShowingAppointmentFilterCardProps) {
   const classes = useStyles()
 
-  return (
+  const card = (
     <Badge className={classes.root} badgeContent={badge} color="error">
       <Card
         className={classNames(classes.card, selected && classes.selected)}
@@ -71,6 +75,8 @@ function ShowingAppointmentFilterCard({
       </Card>
     </Badge>
   )
+
+  return link ? <Link to={link}>{card}</Link> : card
 }
 
 export default ShowingAppointmentFilterCard
