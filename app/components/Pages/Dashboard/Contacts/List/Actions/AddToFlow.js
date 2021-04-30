@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { mdiFlash } from '@mdi/js'
+import { mdiLightningBolt } from '@mdi/js'
 
 import preSearchFormat from 'models/contacts/helpers/pre-search-format'
 
@@ -54,7 +54,7 @@ function AddToFlow({ disabled, ...props }) {
       buttonRenderer={buttonProps => (
         <GridActionButton
           label="Add to Flow"
-          icon={mdiFlash}
+          icon={mdiLightningBolt}
           onClick={e => buttonProps?.onClick(e)}
         />
       )}

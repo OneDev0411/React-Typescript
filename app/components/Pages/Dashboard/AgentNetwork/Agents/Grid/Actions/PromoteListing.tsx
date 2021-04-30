@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { Button } from '@material-ui/core'
+
+import { mdiBullhornOutline } from '@mdi/js'
 
 import { convertToTemplate } from 'utils/marketing-center/helpers'
 
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { ListingWithProposedAgent } from '../../types'
 
@@ -57,9 +59,11 @@ export default function PromoteListing({ user, listing, agents }: Props) {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handlePromoteClick}>
-        Promote Listing
-      </Button>
+      <GridActionButton
+        label="eBlast"
+        icon={mdiBullhornOutline}
+        onClick={handlePromoteClick}
+      />
       {isPromoteClicked && (
         <MarketingTemplateAndTemplateInstancePickerModal
           user={user}
