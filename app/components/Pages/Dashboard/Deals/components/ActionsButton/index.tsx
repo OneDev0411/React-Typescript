@@ -388,9 +388,10 @@ class ActionsButton extends React.Component<
         >
           {({ isOpen }) => (
             <div style={{ position: 'relative' }}>
-              <Container>
+              <Container hasSecondaryActions={secondaryActions.length > 0}>
                 <PrimaryAction
                   hasSecondaryActions={secondaryActions.length > 0}
+                  className={this.getButtonLabel(primaryAction)}
                   onClick={() => this.handleSelectAction(primaryAction)}
                 >
                   {this.getButtonLabel(primaryAction)}

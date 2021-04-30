@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, makeStyles, createStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import { Menu } from './Menu'
 
@@ -11,16 +11,14 @@ interface Props {
   isBackOffice: boolean
 }
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
-    info: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      margin: theme.spacing(0, 0, 2, 0)
-    }
-  })
-})
+const useStyles = makeStyles((theme: Theme) => ({
+  info: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: theme.spacing(0, 0, 2, 0)
+  }
+}))
 
 export function PageHeader({ deal, isBackOffice }: Props) {
   const classes = useStyles()

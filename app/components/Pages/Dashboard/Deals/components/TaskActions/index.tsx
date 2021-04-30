@@ -11,7 +11,11 @@ import {
   MenuItem
 } from '@material-ui/core'
 import pluralize from 'pluralize'
-import { mdiHelpCircleOutline, mdiTrashCanOutline } from '@mdi/js'
+import {
+  mdiArrowRight,
+  mdiInformationOutline,
+  mdiTrashCanOutline
+} from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -49,14 +53,19 @@ const useStyles = makeStyles(
     root: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-start',
+      justifyContent: 'space-between',
       bottom: 0,
-      borderTop: `1px solid ${theme.palette.divider}`,
-      background: theme.palette.common.white,
+      border: `1px solid ${theme.palette.divider}`,
+      borderBottom: 'none',
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderTopRightRadius: theme.shape.borderRadius,
+      background: theme.palette.grey['100'],
       position: 'sticky',
       height: theme.spacing(10),
-      width: '100%',
-      padding: theme.spacing(0, 5),
+      width: `calc(100% - ${theme.spacing(10)}px)`,
+      margin: theme.spacing(0, 5),
+      padding: theme.spacing(0, 1),
+      boxShadow: '0px -4px 16px rgba(0, 0, 0, 0.08)',
       zIndex: theme.zIndex.gridAction,
       '& button': {
         marginRight: theme.spacing(1)
@@ -69,6 +78,9 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer'
+    },
+    infoIcon: {
+      color: theme.palette.secondary.main
     }
   }),
   {
@@ -125,40 +137,20 @@ export function TaskActions({ deal }: Props) {
       {state.actions.length > 0 && !state.isDrawerOpen && (
         <Slide in direction="up">
           <div className={classes.root}>
-            {state.actions.some(id =>
-              [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
-            ) && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleOpenDrawer}
-              >
-                Docusign
-              </Button>
-            )}
-
-            {state.actions.some(id =>
-              [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
-            ) && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleOpenDrawer}
-              >
-                Send Email
-              </Button>
-            )}
-
             <BaseDropdown
               renderDropdownButton={props => (
-                <Button {...props} disabled={state.attachments.length === 0}>
-                  <Typography variant="body1" className={classes.title}>
-                    {pluralize('file', state.attachments.length, true)} selected
-                    &nbsp;
+                <Button
+                  {...props}
+                  disabled={state.attachments.length === 0}
+                  endIcon={
                     <SvgIcon
-                      path={mdiHelpCircleOutline}
-                      size={muiIconSizes.small}
+                      path={mdiInformationOutline}
+                      className={classes.infoIcon}
                     />
+                  }
+                >
+                  <Typography variant="subtitle2" className={classes.title}>
+                    {pluralize('file', state.attachments.length, true)} selected
                   </Typography>
                 </Button>
               )}
@@ -188,7 +180,10 @@ export function TaskActions({ deal }: Props) {
                           className={iconClasses.leftMargin}
                           onClick={() => handleRemoveAttachment(attachment)}
                         >
-                          <SvgIcon path={mdiTrashCanOutline} />
+                          <SvgIcon
+                            path={mdiTrashCanOutline}
+                            size={muiIconSizes.small}
+                          />
                         </IconButton>
                       </Box>
                     </MenuItem>
@@ -197,9 +192,45 @@ export function TaskActions({ deal }: Props) {
               )}
             />
 
-            <Button color="secondary" onClick={handleCancel}>
-              Cancel
-            </Button>
+            <div>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={handleCancel}
+              >
+                Cancel
+              </Button>
+
+              {state.actions.some(id =>
+                [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
+              ) && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  endIcon={
+                    <SvgIcon path={mdiArrowRight} size={muiIconSizes.small} />
+                  }
+                  onClick={handleOpenDrawer}
+                >
+                  Next: Docusign
+                </Button>
+              )}
+
+              {state.actions.some(id =>
+                [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
+              ) && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  endIcon={
+                    <SvgIcon path={mdiArrowRight} size={muiIconSizes.small} />
+                  }
+                  onClick={handleOpenDrawer}
+                >
+                  Next: Send Email
+                </Button>
+              )}
+            </div>
           </div>
         </Slide>
       )}
