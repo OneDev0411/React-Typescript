@@ -27,9 +27,9 @@ import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
-import useShowingImage from '../../components/use-showing-image'
-import useShowingAddress from '../../components/use-showing-address'
-import useBodyBackgroundColor from '../../components/use-body-background-color'
+import useShowingImage from '../../hooks/use-showing-image'
+import useShowingAddress from '../../hooks/use-showing-address'
+import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useCheckApprovalAccess from './use-check-approval-access'
 
 type ShowingDetailProps = RouteComponentProps<

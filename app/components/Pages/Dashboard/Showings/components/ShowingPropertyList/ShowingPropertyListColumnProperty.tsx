@@ -2,10 +2,10 @@ import { Box, Typography } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
 
-import useShowingImage from '../use-showing-image'
+import useShowingImage from '../../hooks/use-showing-image'
 import useShowingAddress, {
   UseShowingAddressProps
-} from '../use-showing-address'
+} from '../../hooks/use-showing-address'
 
 export type ShowingPropertyListColumnPropertyProps = UseShowingAddressProps
 

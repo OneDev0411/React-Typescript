@@ -4,7 +4,7 @@ import { useEffectOnce } from 'react-use'
 
 import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 
 function ShowingStepIntro() {
   const nextStep = useQuestionWizardSmartNext()

@@ -9,7 +9,7 @@ import { selectUser } from 'selectors/user'
 import ShowingStepYesNoQuestion, {
   YesNoAnswer
 } from '../ShowingStepYesNoQuestion'
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 
 interface ShowingStepFeedbackTemplateProps {
   value: Nullable<IMarketingTemplateInstance>

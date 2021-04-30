@@ -4,7 +4,7 @@ import { Box, Button, FormHelperText, Typography } from '@material-ui/core'
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
 import { hourToSeconds } from '../../helpers'
 import { findSlotIndexById, findTimeConflicts } from './helpers'
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 
 interface ShowingAvailabilitiesTimesProps {
   title?: string

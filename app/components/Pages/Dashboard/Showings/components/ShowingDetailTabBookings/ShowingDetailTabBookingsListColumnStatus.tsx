@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 import FeedbackStars from '../FeedbackStars'
 
-import useAppointmentFilterInfo from '../use-appointment-filter-info'
+import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
 
 const useStyles = makeStyles(
   theme => ({

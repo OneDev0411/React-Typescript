@@ -18,7 +18,7 @@ import ShowingStepPropertyForm, {
 } from './ShowingStepPropertyForm'
 import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
 import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 export interface ShowingStepPropertyProps {

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import type { AppointmentFilter } from '../../types'
-import { appointmentStatusInfo } from '../use-appointment-filter-info'
+import { appointmentStatusInfo } from '../../hooks/use-appointment-filter-info'
 import type { BookingFilterType } from './ShowingAppointmentFilterCard'
 
 function useAppointmentFilters(

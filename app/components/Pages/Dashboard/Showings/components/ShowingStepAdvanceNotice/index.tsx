@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 import ShowingStepAdvanceNoticeLeadTimeOptions, {
   hourOptions
 } from './ShowingStepAdvanceNoticeLeadTimeOptions'
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 type AdvanceNoticeValue = 'NoNeed' | 'NoSameDay' | 'LeadTime'

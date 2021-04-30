@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
 
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 export type YesNoAnswer = 'Yes' | 'No'

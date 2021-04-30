@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import getShowings from 'models/showing/get-showings'
 import useAsync from 'hooks/use-async'
 
-import useSortAppointments from '../../components/use-sort-appointments'
+import useSortAppointments from '../../hooks/use-sort-appointments'
 
 interface UseGetShowingsReturn {
   isLoading: boolean

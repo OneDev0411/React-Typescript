@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core'
 
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
-import useAppointmentNotificationLists from '../use-appointment-notification-lists'
+import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
 import ShowingPropertyList from '../ShowingPropertyList'
 

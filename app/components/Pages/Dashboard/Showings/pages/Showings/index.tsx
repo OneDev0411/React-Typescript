@@ -14,7 +14,7 @@ import ShowingsTabs, { ShowingsTabsProps } from '../../components/ShowingsTabs'
 import { showingsTabs } from '../../constants'
 import ShowingsTabProperties from '../../components/ShowingsTabProperties'
 import ShowingsTabBookings from '../../components/ShowingsTabBookings'
-import useBodyBackgroundColor from '../../components/use-body-background-color'
+import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useGetShowings from './use-get-showings'
 
 const useStyles = makeStyles(

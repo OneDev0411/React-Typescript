@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import useUnseenNotificationAppointmentIds from '../use-unseen-notification-appointment-ids'
+import useUnseenNotificationAppointmentIds from '../../hooks/use-unseen-notification-appointment-ids'
 
 type UseGetShowingNotificationCountReturn = Record<UUID, number>
 

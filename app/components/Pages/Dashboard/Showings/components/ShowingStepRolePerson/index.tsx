@@ -8,7 +8,7 @@ import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
 import ShowingStepRolePersonSelect, {
   ShowingStepRolePersonSelectProps
 } from './ShowingStepRolePersonSelect'
-import useQuestionWizardSmartNext from '../use-question-wizard-smart-next'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 interface ShowingStepRolePersonProps

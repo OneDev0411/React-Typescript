@@ -1,13 +1,13 @@
 import { useState } from 'react'
 
 import { AppointmentFilter } from '../../types'
+import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
+import useFilterAppointments from './use-filter-appointments'
+import useSortAppointments from '../../hooks/use-sort-appointments'
+import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
 import ShowingDetailTabBookingsList from './ShowingDetailTabBookingsList'
-import useAppointmentFilterInfo from '../use-appointment-filter-info'
-import useFilterAppointments from './use-filter-appointments'
-import useSortAppointments from '../use-sort-appointments'
 import useAppointmentListInfo from './use-appointment-list-info'
-import useAppointmentNotificationLists from '../use-appointment-notification-lists'
 
 interface ShowingDetailTabBookingsProps {
   appointments: IShowingAppointment[]
