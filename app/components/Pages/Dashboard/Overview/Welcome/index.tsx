@@ -1,130 +1,44 @@
-import React, { useState } from 'react'
-
-import { Box, Typography } from '@material-ui/core'
-import { withStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import MuiAccordion from '@material-ui/core/Accordion'
-import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
-import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { Box } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import Greeting from './Greetings'
-import { HappyPaths } from './HappyPaths'
-import { ProgressBar } from '../components/ProgressBar'
-
-// Customizing MUI accordion styles
-const Accordion = withStyles((theme: Theme) => ({
-  root: {
-    border: `1px solid ${theme.palette.grey[300]}`,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: 'none'
-  }
-}))(MuiAccordion)
-
-// Customizing MUI accordion summary styles
-const AccordionSummary = withStyles((theme: Theme) => ({
-  root: {
-    borderBottom: `1px solid ${theme.palette.grey[300]}`
-  }
-}))(MuiAccordionSummary)
-
-// Customizing MUI accordion summary styles
-const AccordionDetails = withStyles((theme: Theme) => ({
-  root: {
-    padding: 0
-  }
-}))(MuiAccordionDetails)
+import DailyUpdates from './DailyUpdates'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     main: {
       display: 'flex',
-      width: '100%',
-      height: '84vh' // we need dashboard container to be the same height as screen and this is the only way
-    },
-    body: {
-      height: '100%',
-      flexFlow: 'column',
-      display: 'flex',
-      flexGrow: 1
-    },
-    content: {
+      height: '84vh', // dashboard container needs to be the same height as screen
+      border: `1px solid ${theme.palette.grey[300]}`,
+      borderRadius: theme.shape.borderRadius,
       background: 'url(/static/images/overview/dashboard-bg.png) no-repeat 0 0',
-      padding: theme.spacing(4),
-      flex: '1 1 auto',
+      flexDirection: 'column'
+    },
+    greeting: {
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
     },
-    banners: {
-      flex: '0 1 auto',
-      display: 'flex'
-    },
-    banner: {
-      flexGrow: 1
-    },
-    sidebar: {
-      background: theme.palette.grey[100],
-      borderLeft: `1px solid ${theme.palette.grey[300]}`,
-      // flexBasis: '50%',
-      overflow: 'scroll',
-      flexGrow: 1
+    stats: {
+      flex: 1
     }
   }),
-  { name: 'WelcomeBox' }
+  { name: 'Dai' }
 )
 
 function OverviewDashboard() {
   const classes = useStyles()
-  const [accordionExpanded, setAccordionExpanded] = useState<boolean>(true)
 
   return (
-    <Accordion expanded={accordionExpanded}>
-      {/* <AccordionSummary
-        onClick={() => setAccordionExpanded(!accordionExpanded)}
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="welcome-content"
-        id="welcome-header"
-      >
-        {!accordionExpanded && (
-          <Box display="flex" flexGrow={1}>
-            <Box mx={2}>
-              <Typography>Your onboarding progress:</Typography>
-            </Box>
-            <Box width={300} display="flex" alignItems="center" flexGrow={1}>
-              <ProgressBar value={14} determinate />
-            </Box>
-          </Box>
-        )}
-      </AccordionSummary> */}
-      <AccordionDetails>
-        <Box className={classes.main}>
-          <Box className={classes.body}>
-            <Box className={classes.content}>
-              <Greeting />
-            </Box>
-            {/* <Box className={classes.banners}>
-              <Box className={classes.banner}>
-                <img
-                  src="/static/images/overview/intro-video.jpg"
-                  alt="2 Minute Intro Video"
-                  height="200"
-                />
-              </Box>
-              <Box>
-                <img
-                  src="/static/images/overview/ios-app.jpg"
-                  alt="Download iOS App"
-                  height="200"
-                />
-              </Box>
-            </Box> */}
-          </Box>
-          {/* <Box className={classes.sidebar}>
-            <HappyPaths />
-          </Box> */}
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+    <Box className={classes.main}>
+      <Box className={classes.greeting}>
+        <Greeting />
+      </Box>
+      <Box className={classes.stats}>
+        <DailyUpdates />
+      </Box>
+    </Box>
   )
 }
 

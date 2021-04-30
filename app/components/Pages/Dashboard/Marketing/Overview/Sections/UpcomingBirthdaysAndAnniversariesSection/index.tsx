@@ -1,11 +1,12 @@
 import { Grid, Typography } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
-import CalendarEventCard from 'components/CalendarEventCard'
+import CalendarEventCard from 'components/CalendarEvent/Card'
+
+import { useBirthdaysAndAnniversaries } from 'hooks/use-birthdays-and-anniversaries'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
-import { useBirthdaysAndAnniversaries } from './hooks'
 
 export default function UpcomingBirthdaysAndAnniversariesSection() {
   const { isLoading, events } = useBirthdaysAndAnniversaries()

@@ -5,8 +5,8 @@ import { makeStyles, Theme } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     loading: {
-      background: theme.palette.grey[50],
-      height: '100vh',
+      minHeight: '100%',
+      height: '100%',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
