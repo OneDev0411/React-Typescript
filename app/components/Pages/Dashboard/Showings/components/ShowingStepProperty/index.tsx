@@ -26,7 +26,10 @@ export interface ShowingStepPropertyProps {
   onPropertyChange: (value: ShowingPropertyType) => void
 }
 
-const SEARCH_RESULT_TYPES: SearchResultType[] = ['deal', 'listing', 'place']
+const SEARCH_RESULT_TYPES: SearchResultType[] = [
+  'deal',
+  'listing' /* , 'place' */
+]
 
 function ShowingStepProperty({
   property,
