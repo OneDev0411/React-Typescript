@@ -113,7 +113,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setOccupantPerson
   )
 
-  const { isLoading, data: showing, run, error } = useAsync<IShowing>()
+  const { isLoading, data: showing, run, error, reset } = useAsync<IShowing>()
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
@@ -329,6 +329,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             <ShowingStepFinalResult
               isLoading={isLoading}
               showingId={showing?.id}
+              error={error as Error}
+              onRetry={reset}
             />
           </QuestionWizard>
         </Box>

@@ -9,15 +9,20 @@ import {
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import LinkButton from '../LinkButton'
 
 interface ShowingStepFinalResultProps {
   isLoading: boolean
   showingId?: UUID
+  error: Nullable<Error>
+  onRetry: () => void
 }
 
 function ShowingStepFinalResult({
   isLoading,
-  showingId
+  showingId,
+  error,
+  onRetry
 }: ShowingStepFinalResultProps) {
   const wizard = useWizardContext()
   const nextStep = useQuestionWizardSmartNext()
@@ -28,19 +33,34 @@ function ShowingStepFinalResult({
     wizard.setLoading(isLoading)
   }, [wizard, isLoading, nextStep])
 
-  if (!showingId) {
+  if (!showingId && !error) {
     return null
   }
 
   return (
     <QuestionSection>
-      <QuestionTitle>Congratulations! 🎉 Your showing is created</QuestionTitle>
+      <QuestionTitle>
+        {showingId
+          ? 'Congratulations! 🎉 Your showing is created'
+          : 'An Error Occurred'}
+      </QuestionTitle>
 
       <SmartQuestionForm>
+        {error && <Box>{error.toString()}</Box>}
         <Box display="flex" justifyContent="flex-end">
-          <Button variant="contained" color="secondary">
-            View Showing
-          </Button>
+          {showingId ? (
+            <LinkButton
+              variant="contained"
+              color="secondary"
+              to={`/dashboard/showings/${showingId}/detail`}
+            >
+              View Showing
+            </LinkButton>
+          ) : (
+            <Button variant="contained" color="primary" onClick={onRetry}>
+              Retry
+            </Button>
+          )}
         </Box>
       </SmartQuestionForm>
     </QuestionSection>
