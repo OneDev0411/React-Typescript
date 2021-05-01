@@ -115,7 +115,7 @@ export default function ShowingAppointmentCancel({
             </Grid>
             <Grid item xs={12}>
               <Box mt={4}>
-                <Typography variant="h6">Leave a message to agent</Typography>
+                <Typography variant="h6">Leave a message</Typography>
               </Box>
             </Grid>
             <Grid item xs={12}>
