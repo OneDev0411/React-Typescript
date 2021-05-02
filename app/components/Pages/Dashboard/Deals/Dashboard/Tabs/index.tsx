@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
@@ -7,6 +7,17 @@ import MarketingPane from './Panes/Marketing'
 import MediaManagerPane from './Panes/MediaManager'
 
 import Notifications from '../Notifications'
+
+const useStyles = makeStyles(
+  () => ({
+    tabs: {
+      backgroundColor: '#fff'
+    }
+  }),
+  {
+    name: 'Deal-DashboardTabs'
+  }
+)
 
 interface Props {
   deal: IDeal
@@ -37,11 +48,12 @@ const tabs = [
 ]
 
 export default function Tabs(props: Props) {
+  const classes = useStyles()
   const tab = tabs.find(tab => tab.id === props.activeTab)
 
   return (
     <Box>
-      <Box mx={5}>
+      <Box px={5} className={classes.tabs}>
         <PageTabs
           defaultValue={tab?.id}
           onChange={props.onChangeTab}

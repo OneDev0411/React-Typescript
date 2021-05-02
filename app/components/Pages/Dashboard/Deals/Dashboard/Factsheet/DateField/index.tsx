@@ -118,7 +118,7 @@ export function DateField({
             />
           </ItemActions>
 
-          {value && index < total - 1 && <TimelineDateProgress />}
+          {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
         </Item>
       </Tooltip>
     </>

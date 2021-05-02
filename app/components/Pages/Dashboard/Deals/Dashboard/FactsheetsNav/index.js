@@ -1,7 +1,13 @@
 import PropTypes from 'prop-types'
-import { Box } from '@material-ui/core'
+import { Box, IconButton } from '@material-ui/core'
+
+import { mdiBellOutline } from '@mdi/js'
 
 import Spinner from 'components/Spinner'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
@@ -26,7 +32,23 @@ function FactsheetsSideNav(props) {
               isFetchingContexts={props.isFetchingContexts}
               isBackOffice={isBackOffice}
               section="Dates"
-              title="Timeline"
+              title={
+                <Box display="flex" alignItems="center">
+                  Timeline
+                  <Box ml={0.25}>
+                    <IconButton
+                      size="small"
+                      href="/dashboard/account/reminder-notifications"
+                      target="_blank"
+                    >
+                      <SvgIcon
+                        path={mdiBellOutline}
+                        size={muiIconSizes.small}
+                      />
+                    </IconButton>
+                  </Box>
+                </Box>
+              }
             />
           </Box>
 

@@ -22,7 +22,7 @@ interface Props {
   definitions?: unknown[]
   isBackOffice: boolean
   display?: boolean
-  title?: string
+  title?: React.ReactText | React.ReactNode
   section: string
 }
 

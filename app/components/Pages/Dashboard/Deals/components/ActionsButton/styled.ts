@@ -21,7 +21,9 @@ export const PrimaryAction = styled.div<{
     ${theme.typography.subtitle2};
 
     width: ${(props: PrimaryActionProps) =>
-      props.hasSecondaryActions ? '8.5rem' : '9.3rem'};
+      props.hasSecondaryActions ? '8.5rem' : 'auto'};
+    padding: ${(props: PrimaryActionProps) =>
+      props.hasSecondaryActions ? 'auto' : '0 0.5rem'};
 
     :hover {
       color: ${theme.palette.secondary.main};

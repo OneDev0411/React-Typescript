@@ -6,7 +6,6 @@ import {
   mdiFolderOutline,
   mdiAlertCircle,
   mdiCloseCircle,
-  mdiAsterisk,
   mdiCheckboxMarkedCircle
 } from '@mdi/js'
 
@@ -42,7 +41,7 @@ export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
   }
 
   if (isBackOffice && (status === 'Submitted' || task.attention_requested)) {
-    status = 'NEEDS ATTENTION'
+    status = 'Needs Attention'
   }
 
   if (!isBackOffice && status !== 'Submitted' && task.attention_requested) {
@@ -62,7 +61,7 @@ export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
   }
 
   return (
-    <Tooltip title={tooltip}>
+    <Tooltip title={tooltip || status}>
       <IconButton onClick={onClick}>{getIcon(status, theme)}</IconButton>
     </Tooltip>
   )
@@ -74,7 +73,7 @@ function getIcon(status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.error.main}
-          path={mdiAsterisk}
+          path={mdiFolderOutline}
           size={muiIconSizes.medium}
         />
       )
@@ -82,7 +81,7 @@ function getIcon(status: string, theme: Theme) {
     case 'Pending':
     case 'Submitted':
     case 'Notified':
-    case 'NEEDS ATTENTION':
+    case 'Needs Attention':
       return (
         <SvgIcon
           color={theme.palette.warning.main}
