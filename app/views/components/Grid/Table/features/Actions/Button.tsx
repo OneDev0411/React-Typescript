@@ -46,6 +46,7 @@ const useStyles = makeStyles(
       },
       textIcon: {},
       label: {
+        display: 'inline-block',
         marginTop: theme.spacing(0.5),
         color: theme.palette.grey[300],
         opacity: (props: Props) => (!props.disabled ? 1 : 0.6),
