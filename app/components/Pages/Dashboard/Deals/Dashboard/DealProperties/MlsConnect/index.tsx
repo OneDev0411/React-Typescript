@@ -9,7 +9,7 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { mdiTrashCanOutline, mdiOpenInNew, mdiPencil } from '@mdi/js'
+import { mdiTrashCanOutline, mdiPencil, mdiOpenInNew } from '@mdi/js'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { updateListing } from 'actions/deals'
@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   addButton: {
     padding: theme.spacing(0)
+  },
+  viewButton: {
+    padding: theme.spacing(0, 0.5),
+    marginRight: theme.spacing(0.5)
   }
 }))
 
@@ -94,17 +98,18 @@ export function MlsConnect({ deal }: Props) {
       <ItemActions>
         {deal.listing && (
           <>
-            <IconButton
+            <Button
               size="small"
               target="_blank"
+              variant="outlined"
               href={`/dashboard/mls/${deal.listing}`}
+              startIcon={
+                <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
+              }
+              className={classes.viewButton}
             >
-              <SvgIcon
-                path={mdiOpenInNew}
-                color={theme.palette.common.black}
-                size={muiIconSizes.small}
-              />
-            </IconButton>
+              View Listing
+            </Button>
 
             <IconButton onClick={toggleDrawer} size="small">
               <SvgIcon
