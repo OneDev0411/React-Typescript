@@ -58,18 +58,7 @@ export function MarketingLayout({ render, ...props }) {
   const onSelectTemplate = template => {
     const newQuery = { ...location.query }
 
-    if (!template) {
-      delete newQuery.templateId
-
-      router.replace({
-        ...location,
-        query: newQuery
-      })
-
-      return
-    }
-
-    if (template && isTemplateInstance(template)) {
+    if (!template || (template && isTemplateInstance(template))) {
       delete newQuery.templateId
 
       router.replace({
