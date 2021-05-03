@@ -17,9 +17,6 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       container: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         flexGrow: 1,
         '&:not(:last-child)': {
           borderRight: `1px solid ${theme.palette.grey[700]}`
@@ -33,6 +30,12 @@ const useStyles = makeStyles(
           }
 
           return !props.disabled ? 'pointer' : 'not-allowed'
+        },
+        '&:hover': {
+          '& $icon, & $label': {
+            color: (props: Props) =>
+              !props.onClick ? '' : theme.palette.primary.main
+          }
         }
       },
       icon: {

@@ -17,6 +17,8 @@ import {
   mdiPencilOutline
 } from '@mdi/js'
 
+import pluralize from 'pluralize'
+
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -151,7 +153,7 @@ export function TaskActions({ deal }: Props) {
             <GridActionButton
               label={
                 <Box className={classes.summary}>
-                  <span>File Selected</span>
+                  <span>{pluralize('Document', state.attachments.length)}</span>
                   <BaseDropdown
                     renderDropdownButton={props => (
                       <span
