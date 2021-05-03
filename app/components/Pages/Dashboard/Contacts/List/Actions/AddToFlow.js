@@ -1,17 +1,14 @@
 import React from 'react'
 
-import { Button } from '@material-ui/core'
+import { mdiLightningBolt } from '@mdi/js'
 
 import preSearchFormat from 'models/contacts/helpers/pre-search-format'
 
 import AddToFlowButton from 'components/AddToFlowButton'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
-import { ActionWrapper } from '../Table/components/ActionWrapper'
-
-function AddToFlow(props) {
+function AddToFlow({ disabled, ...props }) {
   const { entireMode, selectedRows, filters, parked } = props
-
-  const disabled = !entireMode && selectedRows.length === 0
 
   const getData = () => {
     let data = {}
@@ -55,20 +52,11 @@ function AddToFlow(props) {
         await props.reloadContacts()
       }}
       buttonRenderer={buttonProps => (
-        <ActionWrapper
-          bulkMode={entireMode}
-          action="add to Flow"
-          disabled={disabled}
-        >
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={disabled}
-            {...buttonProps}
-          >
-            Add to Flow
-          </Button>
-        </ActionWrapper>
+        <GridActionButton
+          label="Add to Flow"
+          icon={mdiLightningBolt}
+          onClick={e => buttonProps?.onClick(e)}
+        />
       )}
     />
   )

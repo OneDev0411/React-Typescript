@@ -370,7 +370,7 @@ class SendMlsListingCard extends React.Component {
 
     return (
       <Fragment>
-        {!this.props.hasExternalTrigger && (
+        {!this.props.hasExternalTrigger && !this.props.buttonRenderer && (
           <Button
             variant="outlined"
             disabled={disabled}
@@ -380,6 +380,11 @@ class SendMlsListingCard extends React.Component {
             {this.props.children}
           </Button>
         )}
+        {this.props.buttonRenderer &&
+          this.props.buttonRenderer({
+            onClick: this.openListingModal,
+            disabled
+          })}
 
         <SearchListingDrawer
           mockListings

@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { addNotification, Notification } from 'components/notification'
+
 import { mdiClockOutline } from '@mdi/js'
+
+import { addNotification, Notification } from 'components/notification'
 
 import useInput from 'hooks/use-input'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

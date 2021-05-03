@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Button } from '@material-ui/core'
+import { mdiCallMerge } from '@mdi/js'
 
-import { ActionWrapper } from '../Table/components/ActionWrapper'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+
 import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
 
@@ -25,21 +26,11 @@ class MergeContacts extends React.Component {
 
   render() {
     return (
-      <ActionWrapper
-        bulkMode={this.props.isEntireMode}
-        action="merging"
-        atLeast="two"
-        disabled={this.props.disabled}
-      >
-        <Button
-          variant="outlined"
-          size="small"
-          disabled={this.props.disabled}
-          onClick={this.onClick}
-        >
-          Merge
-        </Button>
-      </ActionWrapper>
+      <GridActionButton
+        label="Merge"
+        icon={mdiCallMerge}
+        onClick={this.onClick}
+      />
     )
   }
 }
