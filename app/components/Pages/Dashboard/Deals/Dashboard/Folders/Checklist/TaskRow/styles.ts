@@ -46,7 +46,7 @@ export const useStyles = makeStyles(
     verticalGuideLine: {
       position: 'absolute',
       left: theme.spacing(3),
-      top: theme.spacing(5),
+      top: theme.spacing(6),
       bottom: theme.spacing(4),
       width: '1px',
       borderLeft: `1px dashed ${theme.palette.grey['500']}`

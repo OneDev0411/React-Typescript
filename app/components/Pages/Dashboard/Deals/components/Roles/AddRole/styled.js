@@ -10,3 +10,8 @@ export const RoleButton = styled.div`
   align-items: center;
   cursor: pointer;
 `
+
+export const MenuContainer = styled.div`
+  max-height: 30vh;
+  overflow: auto;
+`

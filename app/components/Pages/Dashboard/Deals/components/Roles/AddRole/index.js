@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography, MenuItem } from '@material-ui/core'
 
 import { mdiAccountPlusOutline } from '@mdi/js'
 
 import Deal from 'models/Deal'
-import { BasicDropdown } from 'components/BasicDropdown'
+import { BaseDropdown } from 'components/BaseDropdown'
 import { Avatar } from 'components/Avatar'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -17,7 +17,7 @@ import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
 
 import RoleAgentIntegration from '../AgentIntegration'
 
-import { Container, RoleButton } from './styled'
+import { Container, RoleButton, MenuContainer } from './styled'
 
 class AddRoleForm extends React.Component {
   state = {
@@ -93,14 +93,13 @@ class AddRoleForm extends React.Component {
             onClick: this.handleSelectRole
           })
         ) : (
-          <BasicDropdown
-            fullWidth
-            buttonSize={this.props.buttonSize}
-            items={roleItems}
-            itemToString={this.itemToString}
-            onChange={this.handleSelectRole}
-            disabled={roleItems.length === 0}
-            buttonRenderer={buttonProps => (
+          <BaseDropdown
+            PopperProps={{
+              style: {
+                width: '18rem'
+              }
+            }}
+            renderDropdownButton={buttonProps => (
               <RoleButton {...buttonProps}>
                 <Box mr={1}>
                   <Avatar
@@ -118,6 +117,21 @@ class AddRoleForm extends React.Component {
                 </Box>
                 <Typography variant="body2">Add a new contact</Typography>
               </RoleButton>
+            )}
+            renderMenu={({ close }) => (
+              <MenuContainer>
+                {roleItems.map((item, index) => (
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      close()
+                      this.handleSelectRole(item)
+                    }}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </MenuContainer>
             )}
           />
         )}
