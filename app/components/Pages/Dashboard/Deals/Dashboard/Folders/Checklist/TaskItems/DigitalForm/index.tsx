@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core'
 import { Link } from 'react-router'
 
-import { mdiFileOutline } from '@mdi/js'
+import { mdiFilePdfOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -30,7 +30,7 @@ export function DigitalForm({ deal, task }: Props) {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
             <div className={classes.horizontalLine} />
-            <SvgIcon path={mdiFileOutline} />
+            <SvgIcon path={mdiFilePdfOutline} />
 
             <div className={classes.title}>
               <Link
