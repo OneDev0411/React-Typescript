@@ -16,10 +16,11 @@ import { ItemValue } from '../../Factsheet/styled'
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
-    padding: theme.spacing(0, 0, 0, 0.25),
+    padding: 0,
     minWidth: 'auto',
     color: theme.palette.grey['600'],
     '&:hover': {
+      background: 'transparent',
       color: '#000'
     }
   }
