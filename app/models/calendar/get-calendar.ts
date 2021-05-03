@@ -6,6 +6,9 @@ type CalendarObjectType =
   | 'contact_attribute'
   | 'contact'
   | 'email_campaign'
+  | 'email_thread_recipient'
+  | 'crm_association'
+  | 'email_campaign_recipient'
 
 export interface FilterQuery {
   deal?: UUID

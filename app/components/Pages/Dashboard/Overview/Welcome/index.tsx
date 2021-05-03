@@ -24,7 +24,7 @@ const useStyles = makeStyles(
       flex: 1
     }
   }),
-  { name: 'Dai' }
+  { name: 'WelcomeBox' }
 )
 
 function OverviewDashboard() {
