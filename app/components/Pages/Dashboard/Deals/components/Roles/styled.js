@@ -21,6 +21,12 @@ export const RoleAvatar = styled.div`
 
 export const RoleInfo = styled.div`
   display: flex;
+  align-items: center;
+
+  svg {
+    display: none;
+    color: ${({ theme }) => theme.palette.secondary.main};
+  }
 `
 
 export const RoleTitle = styled.div`
@@ -57,6 +63,12 @@ export const RoleItem = styled.div`
     :hover ${RoleTitle} {
       color: ${({ theme }) => theme.palette.secondary.main};
       text-decoration: underline;
+    }
+
+    :hover ${RoleInfo} {
+      svg {
+        display: block;
+      }
     }
 
     :hover ${RoleType} {

@@ -6,6 +6,8 @@ import Flex from 'styled-flex-component'
 
 import { Box, Button } from '@material-ui/core'
 
+import { mdiPencilOutline } from '@mdi/js'
+
 import { addNotification as notify } from 'components/notification'
 
 import { Avatar } from 'components/Avatar'
@@ -21,6 +23,10 @@ import { selectDealRoles } from 'reducers/deals/roles'
 import DealRole from 'components/DealRole'
 
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
@@ -194,6 +200,11 @@ class Roles extends React.Component {
 
                   <RoleInfo onClick={() => this.onSelectRole(role)}>
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
+
+                    <SvgIcon
+                      path={mdiPencilOutline}
+                      size={muiIconSizes.small}
+                    />
                   </RoleInfo>
                 </Flex>
 
