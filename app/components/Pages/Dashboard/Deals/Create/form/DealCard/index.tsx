@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Box, Button } from '@material-ui/core'
 
-import { goTo } from 'utils/go-to'
+import { browserHistory } from 'react-router'
 
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
@@ -26,8 +26,9 @@ export function DealCard({ dealSide, isCreatingDeal }: Props) {
   const { step } = useSectionContext()
   const wizard = useWizardContext()
 
-  const openDeal = () => goTo(`/dashboard/deals/${deal!.id}`)
-  const createOffer = () => goTo(`/dashboard/deals/${deal!.id}/offer`)
+  const openDeal = () => browserHistory.push(`/dashboard/deals/${deal!.id}`)
+  const createOffer = () =>
+    browserHistory.push(`/dashboard/deals/${deal!.id}/offer`)
 
   useEffect(() => {
     if (step === wizard.currentStep) {
