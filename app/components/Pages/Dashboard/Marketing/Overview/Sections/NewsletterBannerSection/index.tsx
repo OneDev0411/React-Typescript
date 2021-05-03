@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Grid,
   Box,
@@ -13,19 +12,11 @@ import Link from 'components/ALink'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      backgroundColor: theme.palette.tertiary.main,
-      borderRadius: theme.shape.borderRadius,
       margin: theme.spacing(1, 1, 8),
       padding: theme.spacing(0, 4)
     },
-    title: {
-      color: theme.palette.common.white
-    },
-    subtitle: {
-      color: theme.palette.warning.ultralight
-    },
     image: {
-      maxWidth: '100%'
+      maxWidth: '90%'
     }
   }),
   {
@@ -42,25 +33,27 @@ export default function NewsletterBannerSection() {
       alignItems="center"
       justify="space-around"
       direction="row"
+      spacing={4}
       className={classes.container}
     >
-      <Grid item xs={8}>
+      <Grid item xs={12} sm={6}>
         <img
           alt="newsletter"
-          src="/static/images/marketing/overview/newsletter.png"
+          src="/static/images/marketing/overview/marketing.png"
           className={classes.image}
         />
       </Grid>
-      <Grid item xs={4}>
-        <Typography variant="h4" className={classes.title}>
-          Make A Newsletter
-        </Typography>
-        <Typography variant="h5" className={classes.subtitle}>
-          Using our powerful yet easy to use block editor.
-        </Typography>
+      <Grid item xs={12} sm={6}>
+        <Typography variant="h4">Make beautiful emails with blocks.</Typography>
+        <Box pt={1}>
+          <Typography variant="body1">
+            Drag and drop any article, videos, your listings and much more, to
+            make engaging email content for your audience.
+          </Typography>
+        </Box>
         <Box pt={2}>
           <Link noStyle to="/dashboard/marketing/Newsletter">
-            <Button color="primary" size="large" variant="contained">
+            <Button color="primary" size="large" variant="outlined">
               Start Here
             </Button>
           </Link>
