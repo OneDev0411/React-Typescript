@@ -184,7 +184,10 @@ function TemplatesList(props) {
           setPreviewModalOpen(false)
           props.onSelect(null)
         }}
-        setSelectedTemplate={setSelectedTemplate}
+        setSelectedTemplate={template => {
+          setSelectedTemplate(template)
+          props.onSelect(template)
+        }}
       />
 
       <TemplateAction
