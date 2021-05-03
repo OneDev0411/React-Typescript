@@ -52,14 +52,6 @@ export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
     status = 'Required'
   }
 
-  if (!status) {
-    return (
-      <IconButton onClick={onClick}>
-        <SvgIcon path={mdiFolderOutline} size={muiIconSizes.medium} />
-      </IconButton>
-    )
-  }
-
   return (
     <Tooltip title={tooltip || status}>
       <IconButton onClick={onClick}>{getIcon(status, theme)}</IconButton>
@@ -109,6 +101,6 @@ function getIcon(status: string, theme: Theme) {
       )
 
     default:
-      return null
+      return <SvgIcon path={mdiFolderOutline} size={muiIconSizes.medium} />
   }
 }
