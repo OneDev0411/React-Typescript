@@ -94,7 +94,7 @@ function getIcon(status: string, theme: Theme) {
     case 'Approved':
       return (
         <SvgIcon
-          color={theme.palette.primary.main}
+          color={theme.palette.success.main}
           path={mdiCheckboxMarkedCircle}
           size={muiIconSizes.medium}
         />
