@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { Box, IconButton } from '@material-ui/core'
 
-import { mdiBellOutline } from '@mdi/js'
+import { mdiCogOutline } from '@mdi/js'
 
 import Spinner from 'components/Spinner'
 
@@ -41,10 +41,7 @@ function FactsheetsSideNav(props) {
                       href="/dashboard/account/reminder-notifications"
                       target="_blank"
                     >
-                      <SvgIcon
-                        path={mdiBellOutline}
-                        size={muiIconSizes.small}
-                      />
+                      <SvgIcon path={mdiCogOutline} size={muiIconSizes.small} />
                     </IconButton>
                   </Box>
                 </Box>
