@@ -10,13 +10,13 @@ import PageLayout from 'components/GlobalPageLayout'
 
 import TabContentSwitch from 'components/TabContentSwitch'
 
-import ShowingsTabs, { ShowingsTabsProps } from '../../components/ShowingsTabs'
 import { showingsTabs } from '../../constants'
-import ShowingsTabProperties from '../../components/ShowingsTabProperties'
-import ShowingsTabBookings from '../../components/ShowingsTabBookings'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
-import useGetShowings from './use-get-showings'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
+import ShowingsTabProperties from './ShowingsTabProperties'
+import ShowingsTabs, { ShowingsTabsProps } from './ShowingsTabs'
+import ShowingsTabBookings from './ShowingsTabBookings'
+import useGetShowings from './use-get-showings'
 
 const useStyles = makeStyles(
   theme => ({
@@ -42,12 +42,15 @@ function Showings({ params }: ShowingsProps) {
   const {
     isLoading,
     showings,
-    appointments: allAppointments
+    appointments: allAppointments,
+    setShowings
   } = useGetShowings()
 
-  const { appointments, notifications } = useAppointmentNotificationLists(
-    allAppointments
-  )
+  const {
+    appointments,
+    notifications,
+    unseenAppointmentNotificationIds
+  } = useAppointmentNotificationLists(allAppointments)
 
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
@@ -72,6 +75,10 @@ function Showings({ params }: ShowingsProps) {
               isLoading={isLoading}
               appointments={appointments}
               notifications={notifications}
+              unseenAppointmentNotificationIds={
+                unseenAppointmentNotificationIds
+              }
+              setShowings={setShowings}
             />
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>

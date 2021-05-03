@@ -8,16 +8,16 @@ const useStyles = makeStyles(
       borderRadius: theme.spacing(0.5)
     }
   }),
-  { name: 'ShowingDetailTabBookingsListEmptyState' }
+  { name: 'ShowingBookingListEmptyState' }
 )
 
-interface ShowingDetailTabBookingsListEmptyStateProps {
+interface ShowingBookingListEmptyStateProps {
   message: string
 }
 
-function ShowingDetailTabBookingsListEmptyState({
+function ShowingBookingListEmptyState({
   message
-}: ShowingDetailTabBookingsListEmptyStateProps) {
+}: ShowingBookingListEmptyStateProps) {
   const classes = useStyles()
 
   return (
@@ -33,4 +33,4 @@ function ShowingDetailTabBookingsListEmptyState({
   )
 }
 
-export default ShowingDetailTabBookingsListEmptyState
+export default ShowingBookingListEmptyState

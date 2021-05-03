@@ -7,13 +7,11 @@ import useShowingAddress, {
   UseShowingAddressProps
 } from '../../hooks/use-showing-address'
 
-export type ShowingPropertyListColumnPropertyProps = UseShowingAddressProps
+export type ShowingColumnPropertyProps = UseShowingAddressProps
 
-function ShowingPropertyListColumnProperty(
-  props: ShowingPropertyListColumnPropertyProps
-) {
+function ShowingColumnProperty(props: ShowingColumnPropertyProps) {
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" mr={1}>
       <Box flexShrink="0" flexGrow="0" mr={2}>
         <Avatar url={useShowingImage(props)} variant="circular" />
       </Box>
@@ -24,4 +22,4 @@ function ShowingPropertyListColumnProperty(
   )
 }
 
-export default ShowingPropertyListColumnProperty
+export default ShowingColumnProperty

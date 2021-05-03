@@ -2,9 +2,8 @@ import { Box } from '@material-ui/core'
 
 import { generateAppointmentFilterLink } from '../../helpers'
 
-import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
-
-import ShowingPropertyList from '../ShowingPropertyList'
+import ShowingAppointmentFilters from '../../components/ShowingAppointmentFilters'
+import ShowingPropertyList from '../../components/ShowingPropertyList'
 
 interface ShowingsTabPropertiesProps {
   isLoading: boolean

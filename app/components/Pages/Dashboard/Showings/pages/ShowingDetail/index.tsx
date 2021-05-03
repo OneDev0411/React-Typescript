@@ -1,18 +1,14 @@
-import { memo, useEffect } from 'react'
+import { memo } from 'react'
 
 import { useTitle } from 'react-use'
 
-import { RouteComponentProps } from 'react-router'
+import { WithRouterProps } from 'react-router'
 
 import { Box, useTheme } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
 import TabContentSwitch from 'components/TabContentSwitch'
-
-import useAsync from 'hooks/use-async'
-
-import getShowing from 'models/showing/get-showing'
 
 import LoadingContainer from 'components/LoadingContainer'
 
@@ -21,7 +17,6 @@ import ShowingDetailTabs, {
 } from '../../components/ShowingDetailTabs'
 
 import { showingDetailTabs } from '../../constants'
-import ShowingDetailProvider from '../../components/ShowingDetailProvider'
 import ShowingDetailTabBookings from '../../components/ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
@@ -30,15 +25,12 @@ import ShowingDetailHeader from '../../components/ShowingDetailHeader'
 import useShowingImage from '../../hooks/use-showing-image'
 import useShowingAddress from '../../hooks/use-showing-address'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
-import useCheckApprovalAccess from './use-check-approval-access'
+import useGetShowing from './use-get-showing'
 
-type ShowingDetailProps = RouteComponentProps<
-  {
-    tab?: ShowingDetailTabsProps['value']
-    id: UUID
-  },
-  {}
->
+type ShowingDetailProps = WithRouterProps<{
+  tab?: ShowingDetailTabsProps['value']
+  id: UUID
+}>
 
 function ShowingDetail({ params }: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')
@@ -49,17 +41,9 @@ function ShowingDetail({ params }: ShowingDetailProps) {
 
   const showingId = params.id
 
-  const { data: showing, run, error, isLoading, setData } = useAsync<IShowing>()
-
-  useEffect(() => {
-    if (!error) {
-      run(async () => getShowing(showingId))
-    }
-  }, [run, showingId, error])
+  const { showing, isLoading, setShowing } = useGetShowing(showingId)
 
   const tab = params.tab || showingDetailTabs.Bookings
-
-  const hasApprovalAccess = useCheckApprovalAccess(showing?.roles)
 
   console.log('showing', showing)
 
@@ -97,29 +81,23 @@ function ShowingDetail({ params }: ShowingDetailProps) {
             />
           </Box>
         ) : (
-          <ShowingDetailProvider
-            id={showingId}
-            setData={setData}
-            hasApprovalAccess={hasApprovalAccess}
-          >
-            <TabContentSwitch.Container value={tab}>
-              <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-                <ShowingDetailTabBookings
-                  appointments={showing.appointments ?? []}
-                  duration={showing.duration}
-                />
-              </TabContentSwitch.Item>
-              <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-                <ShowingDetailTabVisitors showingId={showingId} />
-              </TabContentSwitch.Item>
-              <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
-                <ShowingDetailTabFeedback />
-              </TabContentSwitch.Item>
-              <TabContentSwitch.Item value={showingDetailTabs.Settings}>
-                <ShowingDetailTabSettings />
-              </TabContentSwitch.Item>
-            </TabContentSwitch.Container>
-          </ShowingDetailProvider>
+          <TabContentSwitch.Container value={tab}>
+            <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
+              <ShowingDetailTabBookings
+                appointments={showing.appointments ?? []}
+                setShowing={setShowing}
+              />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
+              <ShowingDetailTabVisitors showingId={showingId} />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
+              <ShowingDetailTabFeedback />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingDetailTabs.Settings}>
+              <ShowingDetailTabSettings />
+            </TabContentSwitch.Item>
+          </TabContentSwitch.Container>
         )}
       </PageLayout.Main>
     </PageLayout>

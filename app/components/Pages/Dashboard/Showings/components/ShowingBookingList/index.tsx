@@ -6,12 +6,14 @@ import { TableColumn } from 'components/Grid/Table/types'
 
 import BoxWithTitle from '../BoxWithTitle'
 
-import { getAppointmentDateLabel, getAppointmentTimeLabel } from './helpers'
-import ShowingDetailTabBookingsListColumnActions from './ShowingDetailTabBookingsListColumnActions'
-import ShowingDetailTabBookingsListColumnBase from './ShowingDetailTabBookingsListColumnBase'
-import ShowingDetailTabBookingsListColumnPerson from './ShowingDetailTabBookingsListColumnPerson'
-import ShowingDetailTabBookingsListColumnStatus from './ShowingDetailTabBookingsListColumnStatus'
-import ShowingDetailTabBookingsListEmptyState from './ShowingDetailTabBookingsListEmptyState'
+import ShowingColumnProperty from '../ShowingColumnProperty'
+import ShowingBookingListColumnActions, {
+  ShowingBookingListColumnActionsProps
+} from './ShowingBookingListColumnActions'
+import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
+import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
+import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
+import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 
 const useStyles = makeStyles(
   theme => ({
@@ -28,49 +30,67 @@ const useStyles = makeStyles(
       transition: theme.transitions.create('opacity')
     }
   }),
-  { name: 'ShowingDetailTabBookingsList' }
+  { name: 'ShowingBookingList' }
 )
 
-interface ShowingDetailTabBookingsListProps {
+export interface ShowingBookingListProps {
   title?: string
   rows: IShowingAppointment[]
-  duration: number
   notificationMode?: boolean
   emptyMessage?: string
   hideEmptyMessage?: boolean
-  onApprovalAction?: (appointmentId: UUID) => void
+  onApprovalAction?: ShowingBookingListColumnActionsProps['onApprovalAction']
+  hasPropertyColumn?: boolean
 }
 
-function ShowingDetailTabBookingsList({
+function ShowingBookingList({
   title,
   rows,
-  duration,
   notificationMode = false,
   emptyMessage,
   hideEmptyMessage = false,
-  onApprovalAction
-}: ShowingDetailTabBookingsListProps) {
+  onApprovalAction,
+  hasPropertyColumn = false
+}: ShowingBookingListProps) {
   const classes = useStyles()
 
   const columns: TableColumn<IShowingAppointment>[] = [
+    ...(hasPropertyColumn
+      ? [
+          {
+            id: 'property',
+            width: '30%',
+            primary: true,
+            render: ({ row }) => (
+              <ShowingColumnProperty
+                deal={row.showing.deal}
+                listing={row.showing.listing}
+                address={row.showing.address}
+              />
+            )
+          }
+        ]
+      : []),
     {
-      id: 'date',
-      width: '20%',
-      primary: true,
+      id: 'status',
+      width: '15%',
+      sortable: false,
       render: ({ row }) => (
-        <ShowingDetailTabBookingsListColumnBase>
-          {getAppointmentDateLabel(row.time)}
-        </ShowingDetailTabBookingsListColumnBase>
+        <ShowingBookingListColumnStatus
+          status={row.status}
+          feedbackRate={3} // TODO: use the value from the API response
+        />
       )
     },
     {
-      id: 'time',
-      width: '20%',
-      sortable: false,
+      id: 'date-time',
+      width: hasPropertyColumn ? '20%' : '25%',
+      primary: true,
       render: ({ row }) => (
-        <ShowingDetailTabBookingsListColumnBase>
-          {getAppointmentTimeLabel(row.time, duration)}
-        </ShowingDetailTabBookingsListColumnBase>
+        <ShowingBookingListColumnDateTime
+          time={row.time}
+          duration={(row.showing as IShowing).duration}
+        />
       )
     },
     {
@@ -78,21 +98,9 @@ function ShowingDetailTabBookingsList({
       width: '15%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingDetailTabBookingsListColumnPerson
+        <ShowingBookingListColumnPerson
           name={row.contact.display_name}
           company={row.contact.company}
-        />
-      )
-    },
-
-    {
-      id: 'status',
-      width: '20%',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingDetailTabBookingsListColumnStatus
-          status={row.status}
-          feedbackRate={3} // TODO: use the value from the API response
         />
       )
     },
@@ -101,12 +109,13 @@ function ShowingDetailTabBookingsList({
       sortable: false,
       align: 'right',
       render: ({ row }) => (
-        <ShowingDetailTabBookingsListColumnActions
+        <ShowingBookingListColumnActions
           className={!notificationMode ? classes.actions : undefined}
           status={row.status}
+          showing={row.showing as IShowing}
           appointmentId={row.id}
-          hasFeedback={false} // TODO: use this from the API response
           onApprovalAction={onApprovalAction}
+          hasFeedback={false} // TODO: use this from the API response
         />
       )
     }
@@ -122,7 +131,7 @@ function ShowingDetailTabBookingsList({
       totalRows={rows.length}
       columns={columns}
       EmptyStateComponent={() => (
-        <ShowingDetailTabBookingsListEmptyState message={emptyMessage || ''} />
+        <ShowingBookingListEmptyState message={emptyMessage || ''} />
       )}
       classes={{
         row: classNames(
@@ -142,4 +151,4 @@ function ShowingDetailTabBookingsList({
   )
 }
 
-export default ShowingDetailTabBookingsList
+export default ShowingBookingList

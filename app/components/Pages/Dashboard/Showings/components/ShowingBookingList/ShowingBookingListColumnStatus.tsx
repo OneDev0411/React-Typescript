@@ -16,18 +16,18 @@ const useStyles = makeStyles(
     completed: { color: theme.palette.warning.dark },
     stars: { marginLeft: theme.spacing(0.5) }
   }),
-  { name: 'ShowingDetailTabBookingsListColumnStatus' }
+  { name: 'ShowingBookingListColumnStatus' }
 )
 
-interface ShowingDetailTabBookingsListColumnStatusProps {
+interface ShowingBookingListColumnStatusProps {
   status: IAppointmentStatus
   feedbackRate?: number
 }
 
-function ShowingDetailTabBookingsListColumnStatus({
+function ShowingBookingListColumnStatus({
   status,
   feedbackRate
-}: ShowingDetailTabBookingsListColumnStatusProps) {
+}: ShowingBookingListColumnStatusProps) {
   const classes = useStyles()
   const { icon, label } = useAppointmentFilterInfo(status)
 
@@ -64,4 +64,4 @@ function ShowingDetailTabBookingsListColumnStatus({
   )
 }
 
-export default ShowingDetailTabBookingsListColumnStatus
+export default ShowingBookingListColumnStatus

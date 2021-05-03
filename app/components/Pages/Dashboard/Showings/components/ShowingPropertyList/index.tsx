@@ -7,7 +7,7 @@ import LoadingContainer from 'components/LoadingContainer'
 import { goTo } from 'utils/go-to'
 
 // import FeedbackStars from '../FeedbackStars'
-import ShowingPropertyListColumnProperty from './ShowingPropertyListColumnProperty'
+import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
@@ -50,7 +50,7 @@ function ShowingPropertyList({
       width: '50%',
       primary: true,
       render: ({ row }) => (
-        <ShowingPropertyListColumnProperty
+        <ShowingColumnProperty
           deal={row.deal}
           listing={row.listing}
           address={row.address}

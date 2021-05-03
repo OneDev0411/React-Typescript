@@ -7,72 +7,49 @@ import approveShowingAppointment from 'models/showing/approve-showing-appointmen
 
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
-import {
-  useShowingDetailId,
-  useShowingDetailSetData
-} from '../ShowingDetailProvider'
-import ShowingAppointmentApprovalButton from './ShowingAppointmentApprovalButton'
+import ShowingBookingListApprovalButton from './ShowingBookingListApprovalButton'
 
 const useStyles = makeStyles(
   theme => ({
     root: { paddingRight: theme.spacing(1) },
     button: { marginLeft: theme.spacing(1) }
   }),
-  { name: 'ShowingDetailTabBookingsListColumnActions' }
+  { name: 'ShowingBookingListColumnActions' }
 )
 
-interface ShowingDetailTabBookingsListColumnActionsProps {
+export interface ShowingBookingListColumnActionsProps {
   className?: string
+  showing: IShowing
   appointmentId: UUID
   status: IAppointmentStatus
   hasFeedback: boolean
-  onApprovalAction?: (appointmentId: UUID) => void
+  onApprovalAction?: (
+    appointmentId: UUID,
+    status: IAppointmentStatus,
+    showingId: UUID
+  ) => void
 }
 
-function ShowingDetailTabBookingsListColumnActions({
+function ShowingBookingListColumnActions({
   className,
   status,
   hasFeedback,
+  showing,
   appointmentId,
   onApprovalAction
-}: ShowingDetailTabBookingsListColumnActionsProps) {
+}: ShowingBookingListColumnActionsProps) {
   const classes = useStyles()
-  const showingId = useShowingDetailId()
-  const showingSetData = useShowingDetailSetData()
 
   const { run, isLoading } = useAsync<IShowingAppointment>()
-
-  const updateAppointmentStatus = (status: IAppointmentStatus) => {
-    showingSetData(showing => {
-      const appointments = [...showing.appointments]
-
-      const appointmentIndex = appointments.findIndex(
-        appointment => appointment.id === appointmentId
-      )
-
-      if (appointmentIndex === -1) {
-        return showing
-      }
-
-      appointments.splice(appointmentIndex, 1, {
-        ...appointments[appointmentIndex],
-        status
-      })
-
-      return { ...showing, appointments }
-    })
-  }
 
   const handleApprove = () => {
     run(async () => {
       const appointment = await approveShowingAppointment(
-        showingId,
+        showing.id,
         appointmentId
       )
 
-      updateAppointmentStatus(appointment.status)
-
-      onApprovalAction?.(appointmentId)
+      onApprovalAction?.(appointmentId, appointment.status, showing.id)
 
       return appointment
     })
@@ -81,13 +58,11 @@ function ShowingDetailTabBookingsListColumnActions({
   const handleReject = () => {
     run(async () => {
       const appointment = await rejectShowingAppointment(
-        showingId,
+        showing.id,
         appointmentId
       )
 
-      updateAppointmentStatus(appointment.status)
-
-      onApprovalAction?.(appointmentId)
+      onApprovalAction?.(appointmentId, appointment.status, showing.id)
 
       return appointment
     })
@@ -103,30 +78,33 @@ function ShowingDetailTabBookingsListColumnActions({
     <div className={classNames(classes.root, className)}>
       {(status === 'Requested' || status === 'Rescheduled') && (
         <>
-          <ShowingAppointmentApprovalButton
+          <ShowingBookingListApprovalButton
             {...sharedButtonProps}
+            showing={showing}
             onClick={handleApprove}
             disabled={isLoading}
           >
             Approve
-          </ShowingAppointmentApprovalButton>
-          <ShowingAppointmentApprovalButton
+          </ShowingBookingListApprovalButton>
+          <ShowingBookingListApprovalButton
             {...sharedButtonProps}
+            showing={showing}
             onClick={handleReject}
             disabled={isLoading}
           >
             Reject
-          </ShowingAppointmentApprovalButton>
+          </ShowingBookingListApprovalButton>
         </>
       )}
       {status === 'Confirmed' && (
-        <ShowingAppointmentApprovalButton
+        <ShowingBookingListApprovalButton
           {...sharedButtonProps}
+          showing={showing}
           onClick={handleReject}
           disabled={isLoading}
         >
           Cancel
-        </ShowingAppointmentApprovalButton>
+        </ShowingBookingListApprovalButton>
       )}
       {status === 'Completed' && hasFeedback && (
         <Button {...sharedButtonProps}>View Feedback</Button>
@@ -135,4 +113,4 @@ function ShowingDetailTabBookingsListColumnActions({
   )
 }
 
-export default ShowingDetailTabBookingsListColumnActions
+export default ShowingBookingListColumnActions

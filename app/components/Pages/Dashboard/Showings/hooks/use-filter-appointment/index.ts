@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { AppointmentFilterInfo } from '../../types'
 
-function useFilterAppointments(
+function useFilterAppointment(
   appointments: IShowingAppointment[],
   filterInfo: AppointmentFilterInfo
 ): IShowingAppointment[] {
@@ -12,4 +12,4 @@ function useFilterAppointments(
   )
 }
 
-export default useFilterAppointments
+export default useFilterAppointment

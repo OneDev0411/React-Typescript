@@ -3,7 +3,7 @@ declare interface IShowingAppointment extends IModel<'showing_appointment'> {
   source: string
   time: string
   status: IAppointmentStatus
-  showing: UUID
+  showing: UUID | IShowing
   contact: IContact
   approvals?: IShowingApproval[]
 }

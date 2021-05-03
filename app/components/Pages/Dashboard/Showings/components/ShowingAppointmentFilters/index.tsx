@@ -4,7 +4,7 @@ import { AppointmentFilter } from '../../types'
 import useAppointmentFilters from './use-appointment-filters'
 import ShowingAppointmentFilterCard from './ShowingAppointmentFilterCard'
 
-interface ShowingAppointmentFiltersProps {
+export interface ShowingAppointmentFiltersProps {
   value?: AppointmentFilter
   onChange?: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]

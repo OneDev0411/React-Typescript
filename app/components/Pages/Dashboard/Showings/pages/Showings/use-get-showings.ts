@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 
 import getShowings from 'models/showing/get-showings'
 import useAsync from 'hooks/use-async'
@@ -9,10 +9,13 @@ interface UseGetShowingsReturn {
   isLoading: boolean
   showings: IShowing[]
   appointments: IShowingAppointment[]
+  setShowings: Dispatch<SetStateAction<IShowing[]>>
 }
 
 function useGetShowings(): UseGetShowingsReturn {
-  const { data: rows, isLoading, run } = useAsync<IShowing[]>({ data: [] })
+  const { data: rows, isLoading, run, setData } = useAsync<IShowing[]>({
+    data: []
+  })
 
   useEffect(() => {
     run(getShowings)
@@ -21,8 +24,18 @@ function useGetShowings(): UseGetShowingsReturn {
   const appointments = useMemo(
     () =>
       rows.reduce<IShowingAppointment[]>(
-        (acc, value) =>
-          value.appointments ? acc.concat(value.appointments) : acc,
+        (acc, showing) =>
+          showing.appointments
+            ? acc.concat(
+                showing.appointments.map(appointment => ({
+                  ...appointment,
+                  showing: {
+                    ...showing,
+                    appointments: null
+                  }
+                }))
+              )
+            : acc,
         []
       ),
     [rows]
@@ -33,7 +46,8 @@ function useGetShowings(): UseGetShowingsReturn {
   return {
     isLoading,
     showings: rows,
-    appointments: sortedAppointments
+    appointments: sortedAppointments,
+    setShowings: setData
   }
 }
 

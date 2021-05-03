@@ -5,16 +5,16 @@ const useStyles = makeStyles(
   theme => ({
     root: { color: theme.palette.grey[900] }
   }),
-  { name: 'ShowingDetailTabBookingsListColumnBase' }
+  { name: 'ShowingBookingListColumnBase' }
 )
 
-interface ShowingDetailTabBookingsListColumnBaseProps {
+interface ShowingBookingListColumnBaseProps {
   children: ReactNode
 }
 
-function ShowingDetailTabBookingsListColumnBase({
+function ShowingBookingListColumnBase({
   children
-}: ShowingDetailTabBookingsListColumnBaseProps) {
+}: ShowingBookingListColumnBaseProps) {
   const classes = useStyles()
 
   return (
@@ -24,4 +24,4 @@ function ShowingDetailTabBookingsListColumnBase({
   )
 }
 
-export default ShowingDetailTabBookingsListColumnBase
+export default ShowingBookingListColumnBase
