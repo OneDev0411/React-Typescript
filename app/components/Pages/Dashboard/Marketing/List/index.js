@@ -1,4 +1,3 @@
-import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -28,7 +27,15 @@ export const MarketingList = () => {
         <title>Marketing | Rechat</title>
       </Helmet>
       <Layout
-        render={({ items, isLoading, types, medium, onDeleteTemplate }) => {
+        render={({
+          items,
+          isLoading,
+          types,
+          medium,
+          onSelectTemplate,
+          defaultSelectedTemplate,
+          onDeleteTemplate
+        }) => {
           return (
             <>
               {isGeneratingThumbnails(items) && (
@@ -47,6 +54,8 @@ export const MarketingList = () => {
                 isLoading={isLoading}
                 type={types}
                 medium={medium}
+                onSelect={onSelectTemplate}
+                defaultSelected={defaultSelectedTemplate}
                 onDelete={onDeleteTemplate}
               />
             </>

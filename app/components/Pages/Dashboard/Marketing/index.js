@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
@@ -15,6 +14,8 @@ import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { isTemplateInstance } from 'utils/marketing-center/helpers'
+
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 export function MarketingLayout({ render, ...props }) {
   const classes = useStyles()
-  const { params, router } = props
+  const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
   const user = useSelector(state => selectUser(state))
 
@@ -53,6 +54,40 @@ export function MarketingLayout({ render, ...props }) {
 
     return mediumMatches && typeMatches
   })
+
+  const onSelectTemplate = template => {
+    const newQuery = { ...location.query }
+
+    if (!template) {
+      delete newQuery.templateId
+
+      router.replace({
+        ...location,
+        query: newQuery
+      })
+
+      return
+    }
+
+    if (template && isTemplateInstance(template)) {
+      delete newQuery.templateId
+
+      router.replace({
+        ...location,
+        query: newQuery
+      })
+
+      return
+    }
+
+    router.replace({
+      ...location,
+      query: {
+        ...newQuery,
+        templateId: template.id
+      }
+    })
+  }
 
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
@@ -90,6 +125,8 @@ export function MarketingLayout({ render, ...props }) {
               isLoading,
               types: params.types,
               medium: params.medium,
+              onSelectTemplate,
+              defaultSelectedTemplate: location.query.templateId,
               onDeleteTemplate: deleteTemplate
             })}
         </PageLayout.Main>
