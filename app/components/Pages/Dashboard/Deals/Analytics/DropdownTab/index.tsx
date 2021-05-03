@@ -1,63 +1,52 @@
-import { Tab, DropdownTab } from 'components/PageTabs'
 import { MenuItem } from '@material-ui/core'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useSelector } from 'react-redux'
-import { IAppState } from 'reducers'
+import { browserHistory } from 'react-router'
 
-import { hasUserAccess } from '../../../../../../utils/user-teams'
-import { ACL } from '../../../../../../constants/acl'
+import { Tab, DropdownTab } from 'components/PageTabs'
 
-import dashboards from '../dashboards'
+import Acl from 'views/components/Acl'
+
+import dashboards from 'constants/metabase'
 
 interface Props {
-  brand_type: IBrandType
+  brandType: IBrandType
 }
 
-const AnalyticsDropdown = withRouter((props: Props & WithRouterProps) => {
-  const { brand_type } = props
+const AnalyticsDropdown = ({ brandType }: Props) => {
+  const availableDashboards = dashboards[brandType]
 
-  const availDashboards = dashboards[brand_type]
-
-  if (!availDashboards) {
-    return null
-  }
-
-  const { user } = useSelector(({ user }: IAppState) => ({
-    user
-  }))
-
-  const hasAccess = hasUserAccess(user, ACL.BETA)
-
-  if (!hasAccess) {
+  if (!availableDashboards) {
     return null
   }
 
   return (
-    <Tab
-      value="analytics"
-      label={
-        <DropdownTab title='Analytics'>
-          {({ toggleMenu }) => (
-            <>
-              {...Object.keys(availDashboards).map((key, index) =>
-                <MenuItem
-                  key={index}
-                  onClick={() => {
-                    toggleMenu()
-                    props.router.push(
-                      `/dashboard/deals/analytics/${key}`
-                    )
-                  }}
-                >
-                  {availDashboards[key].label}
-                </MenuItem>
+    <>
+      <Acl.Beta>
+        <Tab
+          value="analytics"
+          key="analytics"
+          label={
+            <DropdownTab title="Analytics">
+              {({ toggleMenu }) => (
+                <>
+                  {...Object.keys(availableDashboards).map((key, index) => (
+                    <MenuItem
+                      key={index}
+                      onClick={() => {
+                        toggleMenu()
+                        browserHistory.push(`/dashboard/deals/analytics/${key}`)
+                      }}
+                    >
+                      {availableDashboards[key].label}
+                    </MenuItem>
+                  ))}
+                </>
               )}
-            </>
-          )}
-        </DropdownTab>
-      }
-    />
+            </DropdownTab>
+          }
+        />
+      </Acl.Beta>
+    </>
   )
-})
+}
 
 export default AnalyticsDropdown

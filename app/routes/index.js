@@ -280,7 +280,7 @@ const AsyncDealsList = Load({
 const AsyncDealsAnalytics = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Deals/Analytics' /* webpackChunkName: "deal_l" */
+      '../components/Pages/Dashboard/Deals/Analytics' /* webpackChunkName: "deal_a" */
     )
 })
 

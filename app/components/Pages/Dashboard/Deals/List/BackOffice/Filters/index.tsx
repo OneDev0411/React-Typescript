@@ -6,7 +6,7 @@ import _ from 'underscore'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
-import { getActiveTeam } from 'utils/user-teams'
+import { getActiveBrand } from 'utils/user-teams'
 import { getActiveSort } from 'deals/List/helpers/sorting'
 
 import { SortableColumn } from 'components/Grid/Table/types'
@@ -68,8 +68,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
       ? `All ${props.params.filter} deals`
       : 'All Deals'
 
-
-  const team = getActiveTeam(user)
+  const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
@@ -128,7 +127,8 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           }
         />,
         <AnalyticsDropdownTab
-          brand_type={team?.brand.brand_type}
+          brandType={activeBrand?.brand_type!}
+          key="analytics"
         />
       ]}
       actions={[

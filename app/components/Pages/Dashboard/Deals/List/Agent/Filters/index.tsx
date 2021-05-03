@@ -6,7 +6,7 @@ import { MenuItem } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
-import { getActiveTeam } from 'utils/user-teams'
+import { getActiveBrand } from 'utils/user-teams'
 
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
@@ -71,27 +71,28 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     dispatch(getUserTeams(user))
   }
 
-  const team = getActiveTeam(user)
+  const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
       defaultValue={props.params.filter || 'all'}
       tabs={[
         ...TAB_ITEMS.map(({ label, link }, index: number) => {
-        const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
-        const urlWithQuery = `${url}${props.location.search}`
+          const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
+          const urlWithQuery = `${url}${props.location.search}`
 
-        return (
-          <TabLink
-            key={index}
-            value={link || 'all'}
-            label={<span>{label}</span>}
-            to={urlWithQuery}
-          />
-        )
+          return (
+            <TabLink
+              key={index}
+              value={link || 'all'}
+              label={<span>{label}</span>}
+              to={urlWithQuery}
+            />
+          )
         }),
         <AnalyticsDropdownTab
-          brand_type={team?.brand.brand_type}
+          brandType={activeBrand?.brand_type!}
+          key="analytics"
         />
       ]}
       actions={[
