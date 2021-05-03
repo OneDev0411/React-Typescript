@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, ReactNode, MouseEvent } from 'react'
 
 import { Button, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -12,7 +12,13 @@ import { useListSelection } from 'components/ListSelection/use-list-selection'
 
 import getListing from 'models/listings/listing/get-listing'
 
-export function CreateTourAction() {
+interface Props {
+  buttonRenderer?: (props: {
+    onClick: (e: MouseEvent<HTMLElement>) => void
+  }) => ReactNode
+}
+
+export function CreateTourAction({ buttonRenderer }: Props) {
   const { selections } = useListSelection()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isLoadingListings, setIsLoadingListings] = useState(false)
@@ -59,16 +65,20 @@ export function CreateTourAction() {
 
   return (
     <>
-      <Tooltip title="Create Tour">
-        <Button
-          size="small"
-          variant="outlined"
-          disabled={isLoadingListings}
-          onClick={handleOpen}
-        >
-          Tour
-        </Button>
-      </Tooltip>
+      {buttonRenderer ? (
+        buttonRenderer({ onClick: handleOpen })
+      ) : (
+        <Tooltip title="Create Tour">
+          <Button
+            size="small"
+            variant="outlined"
+            disabled={isLoadingListings}
+            onClick={handleOpen}
+          >
+            Tour
+          </Button>
+        </Tooltip>
+      )}
 
       <CreateTourDrawer
         isOpen={isDrawerOpen}

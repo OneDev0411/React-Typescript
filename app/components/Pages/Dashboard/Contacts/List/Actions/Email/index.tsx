@@ -1,8 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { mdiEmailOutline } from '@mdi/js'
+
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { selectContact } from 'reducers/contacts/list'
 
@@ -15,15 +18,18 @@ interface Props {
 
 export function Email({ contacts, disabled }: Props) {
   return (
-    // @ts-ignore
-    // TODO: refactor SendEmailButton with TS
     <SendEmailButton
       disabled={disabled}
       size="small"
       recipients={normalizeContactsForEmailCompose(contacts)}
-      style={{
-        fontSize: '0.875rem'
-      }}
+      render={({ onClick }) => (
+        <GridActionButton
+          label="Email"
+          icon={mdiEmailOutline}
+          disabled={disabled}
+          onClick={onClick}
+        />
+      )}
     />
   )
 }
