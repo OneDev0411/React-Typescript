@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.17",
+  "version": "86.0.19",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -99,6 +99,7 @@
     "cuid": "^2.1.6",
     "d3-array": "^2.12.0",
     "d3-time-format": "2.2.3",
+    "date-fns": "^2.21.1",
     "debounce": "^1.2.1",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",

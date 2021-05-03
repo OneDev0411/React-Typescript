@@ -106,7 +106,7 @@ export function TextField({
             <Input
               data-type={field.format || field.data_type}
               autoFocus
-              maxLength={15}
+              maxLength={40}
               value={fieldValue}
               mask={getContextInputMask(field)}
               placeholder={field.properties.placeholder || field.label}
