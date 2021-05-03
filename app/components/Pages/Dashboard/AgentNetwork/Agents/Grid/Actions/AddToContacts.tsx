@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 import pluralize from 'pluralize'
-import { Button, makeStyles, Theme } from '@material-ui/core'
+
+import { mdiAccountPlusOutline } from '@mdi/js'
 
 import { getAttributeDefs } from 'models/contacts/get-attribute-defs'
 import { createContacts } from 'models/contacts/create-contacts'
-
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { addNotification as notify } from 'components/notification'
 
 const SOURCE_TYPE_ATTRIBUTE_DEF_NAME = 'source_type'
@@ -21,23 +22,12 @@ const ATTR_DEF_NAME_TO_AGENT_PROP_MAP: StringMap<keyof IAgent> = {
 
 const NEEDED_ATTR_DEF_NAMES = Object.keys(ATTR_DEF_NAME_TO_AGENT_PROP_MAP)
 
-export const useStyles = makeStyles(
-  (theme: Theme) => ({
-    root: {
-      background: theme.palette.background.paper,
-      borderColor: theme.palette.grey[300]
-    }
-  }),
-  { name: 'AgentNetworkAddToContacts' }
-)
-
 interface Props {
   user: IUser
   agents: IAgent[]
 }
 
 export default function AddToContacts({ user, agents }: Props) {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const [attributeDefsMap, setAttributeDefsMap] = useState<
     Nullable<StringMap<IContactAttributeDef>>
@@ -125,13 +115,11 @@ export default function AddToContacts({ user, agents }: Props) {
   }
 
   return (
-    <Button
-      variant="outlined"
+    <GridActionButton
+      label="Add To Contacts"
+      icon={mdiAccountPlusOutline}
       disabled={!attributeDefsMap || isLoading}
-      className={classes.root}
       onClick={handleClick}
-    >
-      Add To Contacts
-    </Button>
+    />
   )
 }
