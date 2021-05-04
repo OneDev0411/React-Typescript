@@ -4,6 +4,7 @@ import { Button, ButtonProps, Tooltip } from '@material-ui/core'
 import { selectUserId } from 'selectors/user'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
+import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
 
 export interface ShowingBookingListApprovalButtonProps extends ButtonProps {
   showing: IShowing
@@ -22,15 +23,13 @@ function ShowingBookingListApprovalButton({
     approval => (approval.role as IShowingRole).user_id === userId
   )
 
+  const message = useAppointmentApprovalAccessMessage(
+    showing.roles,
+    hasApproved
+  )
+
   return (
-    <Tooltip
-      title={
-        hasApproved
-          ? 'Waiting for other roles to approve this'
-          : 'You do not have access to this action'
-      }
-      open={!hasApprovalAccess ? undefined : false}
-    >
+    <Tooltip title={message} open={!hasApprovalAccess ? undefined : false}>
       <span>
         <Button
           {...otherProps}

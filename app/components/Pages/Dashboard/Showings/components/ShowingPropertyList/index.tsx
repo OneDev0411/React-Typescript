@@ -121,6 +121,8 @@ function ShowingPropertyList({
     showingNotificationCount
   )
 
+  // TODO: implement the archived mode
+
   return (
     <BoxWithTitle title="Properties">
       <Box minHeight="320px">
