@@ -14,6 +14,7 @@ import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import BoxWithTitle from '../BoxWithTitle'
 import { getShowingImage } from '../../helpers'
+import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 
 const useStyles = makeStyles(
   theme => ({
@@ -115,12 +116,17 @@ function ShowingPropertyList({
     }
   ]
 
+  const sortedRows = useSortPropertiesByNotificationCount(
+    rows,
+    showingNotificationCount
+  )
+
   return (
     <BoxWithTitle title="Properties">
       <Box minHeight="320px">
         <Table
-          rows={rows}
-          totalRows={rows.length}
+          rows={sortedRows}
+          totalRows={sortedRows.length}
           columns={columns}
           loading={isLoading ? 'middle' : null}
           LoadingStateComponent={() => (
