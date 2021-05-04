@@ -10,7 +10,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     dropdownToggleButton: {
       maxWidth: '100%',
-      padding: theme.spacing(2, 2, 1.5),
+      padding: theme.spacing(2),
       justifyContent: 'space-between',
       borderTop: `1px solid ${theme.palette.grey[800]}`
     },
@@ -31,9 +31,6 @@ const useStyles = makeStyles(
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
-    },
-    userInfo: {
-      opacity: 0.7
     }
   }),
   {
