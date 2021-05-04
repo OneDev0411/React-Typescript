@@ -6,7 +6,7 @@ import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import registerBlock from '../../registerBlock'
 
 import Text from './text.html'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
@@ -15,10 +15,11 @@ export const textBlockName = 'rechat-text'
 export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks
+  templateBlockOptions: TemplateBlockOptions
 ): void {
   const staticBlocks = {
-    [textBlockName]: templateBlocks[textBlockName]?.template || Text
+    [textBlockName]:
+      templateBlockOptions.blocks[textBlockName]?.template || Text
   }
 
   registerBlock(
@@ -29,14 +30,14 @@ export default function registerStaticBlocks(
       blockName: textBlockName,
       template: staticBlocks[textBlockName]
     },
-    templateBlocks[textBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     staticBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   handleBlockDragStopEvent(editor, allBlocks, renderData)

@@ -127,6 +127,27 @@ export function convertContactToRole(contact) {
 }
 
 /**
+ * Converts an agent object to a role contact
+ * @param {Object} agent - The agent object
+ * @param {Object} attributeDefs - list of definitions
+ */
+export function convertAgentToRole(agent) {
+  return {
+    agent,
+    emails: [],
+    phone_numbers: [],
+    companies: [],
+    legal_first_name: agent.first_name,
+    legal_middle_name: agent.middle_name,
+    legal_last_name: agent.last_name,
+    email: agent.email,
+    phone_number: agent.phone_number,
+    company: agent.office.name,
+    company_title: agent.office.name
+  }
+}
+
+/**
  * returns list of contact fields (mapped to equivalent role fields)
  */
 function getContactFields() {

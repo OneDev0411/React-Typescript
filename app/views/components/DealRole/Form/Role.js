@@ -4,6 +4,7 @@ import {
   Box,
   Grid as MuiGrid,
   Button as MuiButton,
+  Tooltip,
   Divider,
   Typography
 } from '@material-ui/core'
@@ -35,6 +36,7 @@ const Grid = styled(MuiGrid)(spacing)
 export function RoleForm(props) {
   const [showNameDetails, setShowNameDetails] = useState(false)
 
+  const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)
   const isVisible = field => props.visibleFields.includes(field)
   const showNewContactButton =
@@ -48,6 +50,16 @@ export function RoleForm(props) {
   const selectedRole = props.values.role
   const roleType = props.values.role_type
   const compact = props.compact
+
+  const getTooltip = () => {
+    if (Object.keys(props.errors).length === 0) {
+      return ''
+    }
+
+    return Object.values(props.errors).map((text, index) => (
+      <div key={index}>{text}</div>
+    ))
+  }
 
   return (
     <Grid
@@ -275,35 +287,45 @@ export function RoleForm(props) {
               <Button>{props.isNewRecord ? 'Saving...' : 'Updating...'}</Button>
             ) : (
               <>
-                <Button
-                  ml={1}
-                  variant={
-                    showNewContactButton || showUpdateContactButton
-                      ? 'outlined'
-                      : 'contained'
-                  }
-                  color={
-                    showNewContactButton || showUpdateContactButton
-                      ? 'secondary'
-                      : 'primary'
-                  }
-                  onClick={() => props.onSubmit(props.form, false)}
-                >
-                  Save
-                </Button>
+                <Tooltip placement="top" title={getTooltip()}>
+                  <span>
+                    <Button
+                      ml={1}
+                      variant={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      color={
+                        showNewContactButton || showUpdateContactButton
+                          ? 'secondary'
+                          : 'primary'
+                      }
+                      disabled={hasErrors}
+                      onClick={() => props.onSubmit(props.form, false)}
+                    >
+                      Save
+                    </Button>
+                  </span>
+                </Tooltip>
 
                 {(showNewContactButton || showUpdateContactButton) && (
-                  <Button
-                    ml={1}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => props.onSubmit(props.form, true)}
-                  >
-                    Save &{' '}
-                    {props.values.contact
-                      ? 'Update Contact'
-                      : 'Add to My Contacts'}
-                  </Button>
+                  <Tooltip placement="top" title={getTooltip()}>
+                    <span>
+                      <Button
+                        ml={1}
+                        variant="contained"
+                        color="primary"
+                        disabled={hasErrors}
+                        onClick={() => props.onSubmit(props.form, true)}
+                      >
+                        Save &{' '}
+                        {props.values.contact
+                          ? 'Update Contact'
+                          : 'Add to My Contacts'}
+                      </Button>
+                    </span>
+                  </Tooltip>
                 )}
               </>
             )}

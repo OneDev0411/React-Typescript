@@ -10,7 +10,7 @@ import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { baseView, isComponent } from '../utils'
 import { handleBlockDragStopEvent } from '../../utils'
 import template from './template.njk'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeEmbedMatterport = 'embed-matterport'
@@ -35,7 +35,7 @@ const svgAttrs =
 export default function registerMatterportBlock(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   {
     embedMatterportClassNames,
     onMatterportDrop,
@@ -106,6 +106,8 @@ export default function registerMatterportBlock(
 
           if (query.m) {
             this.set({ modelId: query.m })
+          } else {
+            this.set('src', '')
           }
         },
         /**
@@ -133,6 +135,19 @@ export default function registerMatterportBlock(
             '&mls=2', // Make the model MLS friendly and remove the about panel
             '&nt=1' // Opens the model in a new browser tab on mobile devices
           ].join('')
+        },
+        getAttrToHTML(...args) {
+          const attr = ImageModel.prototype.getAttrToHTML.apply(this, args)
+
+          if (!attr.src) {
+            attr.src = this.get('fallback')
+
+            if (attr.src && attr.src.substr(0, 4) === '<svg') {
+              attr.src = `data:image/svg+xml;base64,${window.btoa(attr.src)}`
+            }
+          }
+
+          return attr
         }
       },
       {
@@ -203,7 +218,8 @@ export default function registerMatterportBlock(
 
   const matterportBlocks = {
     [embedMatterportBlockName]:
-      templateBlocks[embedMatterportBlockName]?.template || template
+      templateBlockOptions.blocks[embedMatterportBlockName]?.template ||
+      template
   }
 
   registerBlock(
@@ -215,14 +231,14 @@ export default function registerMatterportBlock(
       blockName: embedMatterportBlockName,
       template: matterportBlocks[embedMatterportBlockName]
     },
-    templateBlocks[embedMatterportBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Matterport',
     matterportBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

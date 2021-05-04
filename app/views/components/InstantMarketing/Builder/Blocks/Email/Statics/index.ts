@@ -28,7 +28,7 @@ import Spacer from './spacer.mjml'
 import SocialGroup from './social-group.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
 import { adaptTemplates } from '../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const headline1BlockName = 'headline-1'
@@ -45,26 +45,29 @@ export const socialGroupBlockName = 'mj-social-group'
 export default function registerStaticBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks
+  templateBlockOptions: TemplateBlockOptions
 ): void {
   const staticBlocks = {
     [headline1BlockName]:
-      templateBlocks[headline1BlockName]?.template || Headline1,
+      templateBlockOptions.blocks[headline1BlockName]?.template || Headline1,
     [headline2BlockName]:
-      templateBlocks[headline2BlockName]?.template || Headline2,
+      templateBlockOptions.blocks[headline2BlockName]?.template || Headline2,
     [column1ElementBlockName]:
-      templateBlocks[column1ElementBlockName]?.template || Column1,
+      templateBlockOptions.blocks[column1ElementBlockName]?.template || Column1,
     [column2ElementBlockName]:
-      templateBlocks[column2ElementBlockName]?.template || Column2,
+      templateBlockOptions.blocks[column2ElementBlockName]?.template || Column2,
     [column3ElementBlockName]:
-      templateBlocks[column3ElementBlockName]?.template || Column3,
+      templateBlockOptions.blocks[column3ElementBlockName]?.template || Column3,
     [textElementBlockName]:
-      templateBlocks[textElementBlockName]?.template || Text,
-    [dividerBlockName]: templateBlocks[dividerBlockName]?.template || Divider,
-    [spacerBlockName]: templateBlocks[spacerBlockName]?.template || Spacer,
-    [buttonBlockName]: templateBlocks[buttonBlockName]?.template || Button,
+      templateBlockOptions.blocks[textElementBlockName]?.template || Text,
+    [dividerBlockName]:
+      templateBlockOptions.blocks[dividerBlockName]?.template || Divider,
+    [spacerBlockName]:
+      templateBlockOptions.blocks[spacerBlockName]?.template || Spacer,
+    [buttonBlockName]:
+      templateBlockOptions.blocks[buttonBlockName]?.template || Button,
     [socialGroupBlockName]:
-      templateBlocks[socialGroupBlockName]?.template || SocialGroup
+      templateBlockOptions.blocks[socialGroupBlockName]?.template || SocialGroup
   }
 
   registerBlock(
@@ -77,7 +80,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[headline1BlockName],
       adaptive: true
     },
-    templateBlocks[headline1BlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -90,7 +93,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[headline2BlockName],
       adaptive: true
     },
-    templateBlocks[headline2BlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -103,7 +106,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[buttonBlockName],
       adaptive: true
     },
-    templateBlocks[buttonBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -116,7 +119,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[socialGroupBlockName],
       adaptive: true
     },
-    templateBlocks[socialGroupBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -128,7 +131,7 @@ export default function registerStaticBlocks(
       blockName: column1ElementBlockName,
       template: staticBlocks[column1ElementBlockName]
     },
-    templateBlocks[column1ElementBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -140,7 +143,7 @@ export default function registerStaticBlocks(
       blockName: column2ElementBlockName,
       template: staticBlocks[column2ElementBlockName]
     },
-    templateBlocks[column2ElementBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -152,7 +155,7 @@ export default function registerStaticBlocks(
       blockName: column3ElementBlockName,
       template: staticBlocks[column3ElementBlockName]
     },
-    templateBlocks[column3ElementBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -165,7 +168,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[textElementBlockName],
       adaptive: true
     },
-    templateBlocks[textElementBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -178,7 +181,7 @@ export default function registerStaticBlocks(
       template: staticBlocks[dividerBlockName],
       adaptive: true
     },
-    templateBlocks[dividerBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -191,14 +194,14 @@ export default function registerStaticBlocks(
       template: staticBlocks[spacerBlockName],
       adaptive: true
     },
-    templateBlocks[spacerBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Statics',
     staticBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   handleBlockDragStopEvent(editor, adaptTemplates(allBlocks), renderData)

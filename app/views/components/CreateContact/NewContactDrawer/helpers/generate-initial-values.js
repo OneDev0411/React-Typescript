@@ -20,7 +20,7 @@ export function generateInitialValues(initValues) {
 
     if (typeof email === 'string') {
       output.email = [
-        { label: { title: 'Personal', value: 'Personal' }, initialValue: email }
+        { label: { title: 'Personal', value: 'Personal' }, text: email }
       ]
     }
   }

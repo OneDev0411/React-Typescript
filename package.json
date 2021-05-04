@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.7",
+  "version": "86.0.19",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -43,7 +43,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "npm run types:check && lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
   },
@@ -99,6 +99,7 @@
     "cuid": "^2.1.6",
     "d3-array": "^2.12.0",
     "d3-time-format": "2.2.3",
+    "date-fns": "^2.21.1",
     "debounce": "^1.2.1",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",
@@ -136,10 +137,10 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.16.44",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#d12b5b09503e5cd8de48a4f17091b51fc682752e",
-    "grapesjs-plugin-mjml-ckeditor": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-plugin-mjml-ckeditor.git#b3d1972573ab7814f19db2463ecca84f0adeb0c7",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#dda9eae4b3b5f9cbe71f4db5ed13fac4df9ea555",
     "history": "^3.3.0",
     "idx": "^2.5.2",
+    "iframe-resizer-react": "^1.1.0",
     "immer": "^5.3.2",
     "immutable": "^3.8.2",
     "intersection-observer": "^0.5.1",
@@ -200,7 +201,6 @@
     "react-image-gallery": "^1.0.9",
     "react-images": "^0.5.11",
     "react-input-mask": "^1.1.0",
-    "react-intercom": "^1.0.15",
     "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.1.13",
     "react-loadable": "^5.4.0",
@@ -220,6 +220,7 @@
     "react-textarea-autosize": "^5.2.1",
     "react-use": "^14.2.0",
     "react-use-controllable-state": "0.0.7",
+    "react-use-intercom": "^1.1.9",
     "react-use-promise": "^0.3.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.5",
@@ -360,7 +361,6 @@
     "eslint-plugin-react": "^7.23.0",
     "eslint-plugin-react-hooks": "^4.0.2",
     "find": "^0.3.0",
-    "fork-ts-checker-webpack-plugin": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
     "husky": "^4.2.5",
     "jest": "^26.6.3",

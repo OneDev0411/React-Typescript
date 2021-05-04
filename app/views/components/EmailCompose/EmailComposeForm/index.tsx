@@ -20,7 +20,6 @@ import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
-
 import { selectUser } from 'selectors/user'
 
 import {
@@ -74,7 +73,6 @@ export default function EmailComposeForm<T>({
   ...props
 }: EmailComposeFormProps<T> & ClassesProps<typeof styles>) {
   const user = useSelector(selectUser)
-
   const initialValues: Partial<EmailFormValues> = {
     ...props.initialValues,
     from: props.initialValues?.from ?? user,
@@ -212,7 +210,7 @@ export default function EmailComposeForm<T>({
     onSent(result)
   }
 
-  const onSubmit = form => {
+  const onSubmit = async (form: EmailFormValues) => {
     const uploadingAttachment = (form.uploadingAttachments || []).length > 0
     const uploadingImage = bodyEditor.hasUploadingImage()
 
@@ -251,9 +249,7 @@ export default function EmailComposeForm<T>({
             'This email has no subject. Are you sure you want to send it?',
           confirmLabel: 'Send anyway',
           onCancel: reject,
-          onConfirm: () => {
-            handleSendEmail(form).then(resolve).catch(reject)
-          }
+          onConfirm: () => handleSendEmail(form).then(resolve).catch(reject)
         })
       })
     }

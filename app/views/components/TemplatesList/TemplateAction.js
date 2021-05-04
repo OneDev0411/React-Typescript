@@ -39,6 +39,7 @@ const HOLIDAY_TYPES = [
   'Passover',
   'PatriotsDay',
   'RoshHashanah',
+  'September11',
   'StPatrick',
   'Thanksgiving',
   'Valentines',

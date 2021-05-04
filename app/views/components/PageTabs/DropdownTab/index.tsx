@@ -27,29 +27,25 @@ interface Props {
   children: (renderProps: RenderProps) => React.ReactNode
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: (props: ThemeProps) => {
-      const styles = props.isOpen
-        ? {
-            color: theme.palette.primary.main,
-            ...theme.typography.body1,
-            fontWeight: 'normal' as React.CSSProperties['fontWeight']
-          }
-        : {
-            color: theme.palette.text.secondary,
-            ...theme.typography.subtitle1,
-            fontWeight: 'bold' as React.CSSProperties['fontWeight']
-          }
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      button: (props: ThemeProps) => {
+        const styles = {
+          ...theme.typography.body1,
+          color: theme.palette.common.black
+        }
 
-      return {
-        ...styles,
-        '&:hover': {
-          backgroundColor: 'transparent'
+        return {
+          ...styles,
+          '&:hover': {
+            color: theme.palette.primary.main,
+            backgroundColor: 'transparent'
+          }
         }
       }
-    }
-  })
+    }),
+  { name: 'DropdownTab' }
 )
 
 export function DropdownTab({

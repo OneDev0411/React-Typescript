@@ -48,9 +48,12 @@ export class AssetImage extends React.Component {
       image: setSrc,
       'mj-image': setSrc,
       'mj-hero': setBgUrl,
+      'mj-section': setBgUrl,
+      'mj-wrapper': setBgUrl,
       'mj-carousel-image': setCarouselImage,
       cell: setBg,
       text: setBg,
+      'image-bg': setBg,
       '': setBg
     }
 

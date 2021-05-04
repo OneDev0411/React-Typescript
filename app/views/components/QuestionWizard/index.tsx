@@ -11,7 +11,8 @@ import Loading from './Loading'
 interface Props {
   children: boolean | React.ReactNode | React.ReactNode
   defaultStep?: number
-  questionPosition?: 'Top' | 'Auto'
+  concurrent?: boolean
+  useWindowScrollbar?: boolean
   questionPositionOffset?: number
   styles?: React.CSSProperties
   onStepChange?: (step: number) => void
@@ -20,8 +21,9 @@ interface Props {
 
 export function QuestionWizard({
   children,
+  concurrent = false,
   defaultStep = 1,
-  questionPosition = 'Auto',
+  useWindowScrollbar = false,
   questionPositionOffset = 80,
   styles = {},
   onStepChange = () => {},
@@ -31,15 +33,23 @@ export function QuestionWizard({
   const loadingRef = useRef<SVGSVGElement>(null)
   const theme = useTheme<Theme>()
 
-  const [currentStep, setCurrentStep] = useState(defaultStep)
-  const [lastVisitedStep, setLastVisitedStep] = useState(defaultStep)
-
-  const [showLoading, setShowLoading] = useState(false)
-
   const sections = Array.isArray(children) ? children.flat() : [children]
   const sectionsCount = sections.filter(section => !!section).length
 
+  const [currentStep, setCurrentStep] = useState(
+    concurrent ? sections.length : defaultStep
+  )
+  const [lastVisitedStep, setLastVisitedStep] = useState(
+    concurrent ? sections.length : defaultStep
+  )
+
+  const [showLoading, setShowLoading] = useState(false)
+
   const gotoStep = (step: number) => {
+    if (concurrent) {
+      return
+    }
+
     if (step === currentStep) {
       return
     }
@@ -48,6 +58,10 @@ export function QuestionWizard({
   }
 
   const gotoNext = async () => {
+    if (concurrent) {
+      return
+    }
+
     if (currentStep + 1 > sectionsCount) {
       onFinish()
 
@@ -60,10 +74,23 @@ export function QuestionWizard({
   }
 
   const gotoPrevious = () => {
+    if (concurrent) {
+      return
+    }
+
     setCurrentStep(Math.max(currentStep - 1, 1))
   }
 
   const setStep = (step: number) => {
+    if (concurrent) {
+      refs.current[step]?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth'
+      })
+
+      return
+    }
+
     setCurrentStep(step)
     setLastVisitedStep(step)
   }
@@ -77,6 +104,10 @@ export function QuestionWizard({
   }, [currentStep, onStepChange])
 
   useAsync(async () => {
+    if (concurrent) {
+      return
+    }
+
     if (currentStep === 1) {
       refs.current[currentStep]?.scrollIntoView({
         block: 'nearest',
@@ -86,7 +117,7 @@ export function QuestionWizard({
       return
     }
 
-    if (questionPosition === 'Top') {
+    if (useWindowScrollbar) {
       await delay(50)
 
       window.scrollTo({
@@ -118,9 +149,9 @@ export function QuestionWizard({
         currentStep,
         lastVisitedStep,
         setStep,
-        totalSteps: sectionsCount,
         goto: gotoStep,
         next: gotoNext,
+        totalSteps: sectionsCount,
         previous: gotoPrevious,
         isLoading: showLoading,
         setLoading: setShowLoading,

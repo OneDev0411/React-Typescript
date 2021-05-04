@@ -18,7 +18,7 @@ import Left from './left.mjml'
 import Grid from './grid.mjml'
 import GridTwo from './grid-two.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const listingTopBlockName = 'rechat-listing-image-top'
@@ -38,19 +38,20 @@ interface ListingBlock {
 export default function registerBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { onDrop }: Options
 ): ListingBlock {
   const listingBlocks = {
-    [listingTopBlockName]: templateBlocks[listingTopBlockName]?.template || Top,
+    [listingTopBlockName]:
+      templateBlockOptions.blocks[listingTopBlockName]?.template || Top,
     [listingLeftBlockName]:
-      templateBlocks[listingLeftBlockName]?.template || Left,
+      templateBlockOptions.blocks[listingLeftBlockName]?.template || Left,
     [listingRightBlockName]:
-      templateBlocks[listingRightBlockName]?.template || Right,
+      templateBlockOptions.blocks[listingRightBlockName]?.template || Right,
     [listingGridBlockName]:
-      templateBlocks[listingGridBlockName]?.template || Grid,
+      templateBlockOptions.blocks[listingGridBlockName]?.template || Grid,
     [listingGridTwoBlockName]:
-      templateBlocks[listingGridTwoBlockName]?.template || GridTwo
+      templateBlockOptions.blocks[listingGridTwoBlockName]?.template || GridTwo
   }
 
   registerBlock(
@@ -62,7 +63,7 @@ export default function registerBlocks(
       blockName: listingTopBlockName,
       template: listingBlocks[listingTopBlockName]
     },
-    templateBlocks[listingTopBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -74,7 +75,7 @@ export default function registerBlocks(
       blockName: listingGridBlockName,
       template: listingBlocks[listingGridBlockName]
     },
-    templateBlocks[listingGridBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -86,7 +87,7 @@ export default function registerBlocks(
       blockName: listingLeftBlockName,
       template: listingBlocks[listingLeftBlockName]
     },
-    templateBlocks[listingLeftBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -98,7 +99,7 @@ export default function registerBlocks(
       blockName: listingGridTwoBlockName,
       template: listingBlocks[listingGridTwoBlockName]
     },
-    templateBlocks[listingGridTwoBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -110,14 +111,14 @@ export default function registerBlocks(
       blockName: listingRightBlockName,
       template: listingBlocks[listingRightBlockName]
     },
-    templateBlocks[listingRightBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Listings',
     listingBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

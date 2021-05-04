@@ -16,10 +16,7 @@ import NotificationSocket from '../../../services/socket/Notifications'
 
 import { selectListings } from '../../../reducers/listings'
 
-import {
-  inactiveIntercom,
-  activeIntercom
-} from '../../../store_actions/intercom'
+import { deactivateIntercom } from '../../../store_actions/intercom'
 import { getRooms } from '../../../store_actions/chatroom'
 import { getAttributeDefs } from '../../../store_actions/contacts'
 import { getDeals, searchDeals } from '../../../store_actions/deals'
@@ -39,18 +36,13 @@ import { DashboardLayout } from './DashboardLayout'
 
 class Dashboard extends Component {
   UNSAFE_componentWillMount() {
-    const { user, dispatch } = this.props
+    const { user } = this.props
 
     if (user) {
       new ChatSocket(user)
     }
 
     if (typeof window !== 'undefined') {
-      if (window.Intercom) {
-        window.Intercom('hide')
-        window.Intercom('onShow', () => dispatch(activeIntercom()))
-      }
-
       if (!('WebkitAppearance' in document.documentElement.style)) {
         import('simplebar')
       }
@@ -64,7 +56,7 @@ class Dashboard extends Component {
   componentWillUnmount() {
     const { user, dispatch } = this.props
 
-    dispatch(inactiveIntercom())
+    dispatch(deactivateIntercom(true))
 
     if (user && hasUserAccess(user, 'CRM')) {
       window.removeEventListener('online', this.handleOnlineEvent)

@@ -16,7 +16,7 @@ import neighborhoodsTemplates from './neighborhoods.mjml'
 import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
 import { adaptTemplates } from '../utils'
-import { TemplateBlocks } from '../../types'
+import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
 export const neighborhoodsBlockName = 'rechat-neighborhoods'
@@ -112,15 +112,15 @@ function getNeighborhoodsGraphTemplateReport(
 export default function registerNeighborhoodsBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
-  templateBlocks: TemplateBlocks,
+  templateBlockOptions: TemplateBlockOptions,
   { onNeighborhoodsDrop, onNeighborhoodsGraphsDrop }: Options
 ): NeighborhoodsBlocks {
   const neighborhoodBlocks = {
     [neighborhoodsBlockName]:
-      templateBlocks[neighborhoodsBlockName]?.template ||
+      templateBlockOptions.blocks[neighborhoodsBlockName]?.template ||
       neighborhoodsTemplates,
     [neighborhoodsGraphsBlockName]:
-      templateBlocks[neighborhoodsGraphsBlockName]?.template ||
+      templateBlockOptions.blocks[neighborhoodsGraphsBlockName]?.template ||
       neighborhoodsGraphsTemplates
   }
 
@@ -134,7 +134,7 @@ export default function registerNeighborhoodsBlocks(
       template: neighborhoodBlocks[neighborhoodsBlockName],
       adaptive: true
     },
-    templateBlocks[neighborhoodsBlockName]
+    templateBlockOptions
   )
 
   registerBlock(
@@ -147,14 +147,14 @@ export default function registerNeighborhoodsBlocks(
       template: neighborhoodBlocks[neighborhoodsGraphsBlockName],
       adaptive: true
     },
-    templateBlocks[neighborhoodsGraphsBlockName]
+    templateBlockOptions
   )
 
   const allBlocks = registerTemplateBlocks(
     editor,
     'Neighborhoods',
     neighborhoodBlocks,
-    templateBlocks
+    templateBlockOptions.blocks
   )
 
   return handleBlockDragStopEvent(

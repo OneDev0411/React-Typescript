@@ -13,7 +13,18 @@
 // Here is the source which we took these: https://github.com/Rottohawkins/DefinitelyTyped/blob/feature/grapesjs/types/grapesjs/index.d.ts
 
 declare module 'grapesjs' {
-  import { Collection, Model } from 'backbone'
+  import { Collection } from 'backbone'
+
+  export interface Model extends Backbone.Model {
+    opt: any
+    getAttributes(): any
+    components(): Model[]
+    find(query: string): Model[]
+    setStyle(style: object)
+    parent(): Model | undefined
+    append(model: Model | string, opts?: object): Model[]
+    remove(): Model
+  }
 
   export interface Editor {
     $: Function
@@ -35,7 +46,7 @@ declare module 'grapesjs' {
     Canvas: Canvas
     UndoManager: UndoManager
     DeviceManager: object
-    RichTextEditor: object
+    RichTextEditor: any
     Parser: object
     Utils: object
     Config: EditorConfig | object
@@ -45,7 +56,7 @@ declare module 'grapesjs' {
     getCss(opts: any): string
     getJs(opts: any): string
     getComponents(): Array<object>
-    getWrapper(): object
+    getWrapper(): Model
     setComponents(components: Array<object>): Editor
     addComponents(components: Array<object>): Array<object>
     getStyle(): object
