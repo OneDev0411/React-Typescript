@@ -7,12 +7,12 @@ import LinkButton from '../LinkButton'
 
 interface ShowingPropertyListColumnActionsProps {
   className: string
-  showingId: UUID
+  bookingUrl: string
 }
 
 function ShowingPropertyListColumnActions({
   className,
-  showingId
+  bookingUrl
 }: ShowingPropertyListColumnActionsProps) {
   const handleClick = (event: MouseEvent) => {
     event.stopPropagation()
@@ -32,7 +32,7 @@ function ShowingPropertyListColumnActions({
       <LinkButton
         size="small"
         variant="outlined"
-        to={`/showings/${showingId}/book`}
+        to={bookingUrl}
         target="_blank"
         startIcon={<InsertInvitationIcon />}
         color="default"

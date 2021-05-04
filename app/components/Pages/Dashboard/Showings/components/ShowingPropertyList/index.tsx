@@ -109,7 +109,7 @@ function ShowingPropertyList({
       render: ({ row }) => (
         <ShowingPropertyListColumnActions
           className={classes.actions}
-          showingId={row.id}
+          bookingUrl={`/showings/${row.slug}-${row.human_readable_id}/book`}
         />
       )
     }

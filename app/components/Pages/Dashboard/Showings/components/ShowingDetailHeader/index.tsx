@@ -36,7 +36,7 @@ interface ShowingDetailHeaderProps {
   image: string
   mlsNumber?: string
   children: ReactNode
-  token?: string
+  bookingUrl?: string
 }
 
 function ShowingDetailHeader({
@@ -44,11 +44,9 @@ function ShowingDetailHeader({
   address,
   mlsNumber,
   children,
-  token
+  bookingUrl
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
-
-  const bookingUrl = token ? `/showings/${token}/book` : undefined
 
   return (
     <Box className={classes.root} px={4} pt={4}>

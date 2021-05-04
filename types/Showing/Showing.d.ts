@@ -12,5 +12,5 @@ declare interface IShowing extends IModel<'showing'>, IBaseShowing {
   instructions?: string
   confirmed: number
   visits: number
-  token: string // TODO: remove token and create address like `${slug}-${human_readable_id}`
+  human_readable_id: number
 }
