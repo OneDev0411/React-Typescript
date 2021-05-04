@@ -5,12 +5,14 @@ import ShowingNotificationBookingLists, {
 } from '../../components/ShowingNotificationBookingLists'
 
 import { generateAppointmentFilterLink } from '../../helpers'
+import { ApprovalActionParams } from '../../types'
+import useShowingsMarkAppointmentNotificationsAsSeen from './use-showings-mark-appointment-notifications-as-seen'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
 interface ShowingsTabBookingsProps
   extends Pick<
     ShowingNotificationBookingListsProps,
-    'appointments' | 'notifications' | 'unseenAppointmentNotificationIds'
+    'appointments' | 'notifications'
   > {
   setShowings: Dispatch<SetStateAction<IShowing[]>>
 }
@@ -18,21 +20,28 @@ interface ShowingsTabBookingsProps
 function ShowingsTabBookings({
   appointments,
   notifications,
-  unseenAppointmentNotificationIds,
   setShowings
 }: ShowingsTabBookingsProps) {
   const updateAppointmentStatus = useShowingsUpdateAppointmentStatus(
     setShowings
   )
 
+  const markAppointmentNotificationsAsSeen = useShowingsMarkAppointmentNotificationsAsSeen(
+    setShowings
+  )
+
+  const handleApprovalAction = (params: ApprovalActionParams) => {
+    updateAppointmentStatus(params)
+    markAppointmentNotificationsAsSeen(params)
+  }
+
   return (
     <ShowingNotificationBookingLists
-      unseenAppointmentNotificationIds={unseenAppointmentNotificationIds}
       appointments={appointments}
       notifications={notifications}
       hasPropertyColumn
       generateLink={generateAppointmentFilterLink}
-      onApprovalAction={updateAppointmentStatus}
+      onApprovalAction={handleApprovalAction}
     />
   )
 }

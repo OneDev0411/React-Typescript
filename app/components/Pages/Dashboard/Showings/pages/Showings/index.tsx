@@ -48,11 +48,9 @@ function Showings({ params }: ShowingsProps) {
     setShowings
   } = useGetShowings()
 
-  const {
-    appointments,
-    notifications,
-    unseenAppointmentNotificationIds
-  } = useAppointmentNotificationLists(allAppointments)
+  const { appointments, notifications } = useAppointmentNotificationLists(
+    allAppointments
+  )
 
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
@@ -78,9 +76,6 @@ function Showings({ params }: ShowingsProps) {
               <ShowingsTabBookings
                 appointments={appointments}
                 notifications={notifications}
-                unseenAppointmentNotificationIds={
-                  unseenAppointmentNotificationIds
-                }
                 setShowings={setShowings}
               />
             </TabContentSwitch.Item>

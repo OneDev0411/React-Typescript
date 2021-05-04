@@ -39,3 +39,10 @@ export interface AppointmentFilterInfo {
   icon?: ReactNode
   filter?: (appointments: IShowingAppointment[]) => IShowingAppointment[]
 }
+
+export interface ApprovalActionParams {
+  appointmentId: UUID
+  status: IAppointmentStatus
+  showingId: UUID
+  notifications: Nullable<INotification[]>
+}

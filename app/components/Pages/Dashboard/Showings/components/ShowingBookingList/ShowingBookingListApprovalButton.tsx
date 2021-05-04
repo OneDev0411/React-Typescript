@@ -7,7 +7,7 @@ import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-ac
 
 export interface ShowingBookingListApprovalButtonProps extends ButtonProps {
   showing: IShowing
-  approvals?: IShowingApproval[]
+  approvals?: Nullable<IShowingApproval[]>
 }
 
 function ShowingBookingListApprovalButton({

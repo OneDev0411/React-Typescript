@@ -114,6 +114,8 @@ function ShowingBookingList({
           status={row.status}
           showing={row.showing as IShowing}
           appointmentId={row.id}
+          approvals={row.approvals}
+          notifications={row.notifications}
           onApprovalAction={onApprovalAction}
           hasFeedback={false} // TODO: use this from the API response
         />

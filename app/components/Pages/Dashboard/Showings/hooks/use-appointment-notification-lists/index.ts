@@ -1,28 +1,20 @@
 import { useMemo } from 'react'
 
-import useUnseenAppointmentNotificationIds from '../use-unseen-appointment-notification-ids'
-
 interface UseAppointmentNotificationListsReturn {
   appointments: IShowingAppointment[]
   notifications: IShowingAppointment[]
-  unseenAppointmentNotificationIds: Record<UUID, UUID>
 }
 
 function useAppointmentNotificationLists(
   allAppointments: IShowingAppointment[]
 ): UseAppointmentNotificationListsReturn {
-  const unseenAppointmentNotificationIds = useUnseenAppointmentNotificationIds()
-
   return useMemo(
     () =>
       allAppointments.reduce<UseAppointmentNotificationListsReturn>(
         (acc, appointment) => {
-          const hasNotification = !!unseenAppointmentNotificationIds[
-            appointment.id
-          ]
+          const hasNotification = !!appointment.notifications?.length
 
           return {
-            ...acc,
             appointments: !hasNotification
               ? [...acc.appointments, appointment]
               : acc.appointments,
@@ -33,11 +25,10 @@ function useAppointmentNotificationLists(
         },
         {
           appointments: [],
-          notifications: [],
-          unseenAppointmentNotificationIds
+          notifications: []
         }
       ),
-    [unseenAppointmentNotificationIds, allAppointments]
+    [allAppointments]
   )
 }
 

@@ -8,7 +8,6 @@ import ShowingBookingList, {
 import useAppointmentListInfo from '../../hooks/use-appointment-list-info'
 import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
 import useFilterAppointment from '../../hooks/use-filter-appointment'
-import useMarkAppointmentNotificationAsSeen from './use-mark-appointment-notification-as-seen'
 import { AppointmentFilter } from '../../types'
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
 import { getValidAppointmentFilter } from './helpers'
@@ -19,14 +18,12 @@ export interface ShowingNotificationBookingListsProps
       'onApprovalAction' | 'hasPropertyColumn'
     >,
     WithRouterProps {
-  unseenAppointmentNotificationIds: Record<UUID, UUID>
   appointments: IShowingAppointment[]
   notifications: IShowingAppointment[]
   generateLink: (filter: AppointmentFilter, location: Location) => string
 }
 
 function ShowingNotificationBookingLists({
-  unseenAppointmentNotificationIds,
   appointments,
   notifications,
   onApprovalAction,
@@ -38,9 +35,6 @@ function ShowingNotificationBookingLists({
     location.query.filter
   )
 
-  const markAppointmentNotificationAsSeen = useMarkAppointmentNotificationAsSeen(
-    unseenAppointmentNotificationIds
-  )
   const filterInfo = useAppointmentFilterInfo(filter)
 
   const filteredAppointments = useFilterAppointment(appointments, filterInfo)
@@ -54,15 +48,6 @@ function ShowingNotificationBookingLists({
     bookingsTitle,
     bookingsEmptyMessage
   } = useAppointmentListInfo(filter)
-
-  const handleNotificationApprovalAction = (
-    appointmentId: UUID,
-    status: IAppointmentStatus,
-    showingId: UUID
-  ) => {
-    markAppointmentNotificationAsSeen(appointmentId)
-    onApprovalAction?.(appointmentId, status, showingId)
-  }
 
   const generateLinkWithLocation = (filter: AppointmentFilter) =>
     generateLink(filter, location)
@@ -88,7 +73,7 @@ function ShowingNotificationBookingLists({
           notificationMode
           emptyMessage={notificationsEmptyMessage}
           hideEmptyMessage={isBothListEmpty || !!filteredAppointments.length}
-          onApprovalAction={handleNotificationApprovalAction}
+          onApprovalAction={onApprovalAction}
           hasPropertyColumn={hasPropertyColumn}
         />
       )}

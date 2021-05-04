@@ -11,7 +11,8 @@ async function getShowing(showingId: UUID) {
         'showing_appointment.contact',
         'showing_appointment.approvals',
         'showing_approval.role',
-        'showing.roles'
+        'showing.roles',
+        'showing_appointment.notifications'
       ]
     })
   ).body.data as IShowing

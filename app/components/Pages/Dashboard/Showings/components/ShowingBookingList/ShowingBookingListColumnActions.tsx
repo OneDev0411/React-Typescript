@@ -10,6 +10,7 @@ import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 import ShowingBookingListApprovalButton, {
   ShowingBookingListApprovalButtonProps
 } from './ShowingBookingListApprovalButton'
+import { ApprovalActionParams } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -25,11 +26,8 @@ export interface ShowingBookingListColumnActionsProps
   appointmentId: UUID
   status: IAppointmentStatus
   hasFeedback: boolean
-  onApprovalAction?: (
-    appointmentId: UUID,
-    status: IAppointmentStatus,
-    showingId: UUID
-  ) => void
+  notifications: Nullable<INotification[]>
+  onApprovalAction?: (params: ApprovalActionParams) => void
 }
 
 function ShowingBookingListColumnActions({
@@ -39,7 +37,8 @@ function ShowingBookingListColumnActions({
   showing,
   appointmentId,
   onApprovalAction,
-  approvals
+  approvals,
+  notifications
 }: ShowingBookingListColumnActionsProps) {
   const classes = useStyles()
 
@@ -52,7 +51,12 @@ function ShowingBookingListColumnActions({
         appointmentId
       )
 
-      onApprovalAction?.(appointmentId, appointment.status, showing.id)
+      onApprovalAction?.({
+        showingId: showing.id,
+        appointmentId,
+        status: appointment.status,
+        notifications
+      })
 
       return appointment
     })
@@ -65,7 +69,12 @@ function ShowingBookingListColumnActions({
         appointmentId
       )
 
-      onApprovalAction?.(appointmentId, appointment.status, showing.id)
+      onApprovalAction?.({
+        showingId: showing.id,
+        appointmentId,
+        status: appointment.status,
+        notifications
+      })
 
       return appointment
     })
