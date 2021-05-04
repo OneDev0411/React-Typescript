@@ -1,24 +1,14 @@
 import React, { useState } from 'react'
 
-import {
-  Slide,
-  Box,
-  Button,
-  Theme,
-  makeStyles,
-  Divider,
-  Avatar,
-  IconButton
-} from '@material-ui/core'
-import pluralize from 'pluralize'
+import { Slide, Box, Button, Theme, makeStyles, fade } from '@material-ui/core'
 
-import { mdiHomeCityOutline, mdiClose } from '@mdi/js'
+import { mdiClose, mdiShoePrint, mdiEmailOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
 import { TextTransition } from 'components/TextTransition'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { EmailAction } from './Email'
 import { CreateTourAction } from './Tour'
@@ -28,22 +18,31 @@ const useStyles = makeStyles(
     root: {
       zIndex: 3,
       position: 'sticky',
-      borderTop: `1px solid ${theme.palette.divider}`,
-      bottom: 0,
-      backgroundColor: theme.palette.common.white,
-      height: theme.spacing(8),
-      padding: theme.spacing(0, 4),
-      '& button': {
-        marginLeft: theme.spacing(1)
-      }
+      bottom: `${theme.spacing(3.5)}px`,
+      width: '95%',
+      height: theme.spacing(10),
+      margin: 'auto',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      padding: theme.spacing(0, 2),
+      background: theme.palette.tertiary.main,
+      borderRadius: `${theme.spacing(2)}px`,
+      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
+        theme.palette.common.black,
+        0.4
+      )}`
     },
-    divider: {
-      height: theme.spacing(5),
-      margin: theme.spacing(0, 2)
+    selectedCount: {
+      color: theme.palette.background.paper
     },
-    avatar: {
-      backgroundColor: theme.palette.grey['100'],
-      marginRight: theme.spacing(2)
+    summary: {
+      display: 'flex'
+    },
+    reviewSelection: {
+      marginLeft: theme.spacing(1),
+      color: theme.palette.secondary.main,
+      cursor: 'pointer'
     }
   }),
   {
@@ -81,44 +80,53 @@ export function ShareListings() {
   return (
     <>
       <Slide in direction="up">
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          className={classes.root}
-        >
-          <Box display="flex" alignItems="center">
-            <Avatar className={classes.avatar}>
-              <SvgIcon path={mdiHomeCityOutline} />
-            </Avatar>
-            <TextTransition
-              variant="button"
-              duration={0.75}
-              repeat={2}
-              text={`${selections.length} ${pluralize(
-                'Listing',
-                selections.length
-              )} Selected
-              `}
-            />
-
-            <Button
-              variant="text"
-              color="secondary"
-              onClick={() => setIsListingDrawerOpen(true)}
-            >
-              Edit/View
-            </Button>
-            <Divider orientation="vertical" className={classes.divider} />
-            <EmailAction />
-            <CreateTourAction />
-          </Box>
-
-          <div>
-            <IconButton onClick={clearSelections}>
-              <SvgIcon path={mdiClose} />
-            </IconButton>
-          </div>
+        <Box className={classes.root}>
+          <GridActionButton
+            label="Cancel"
+            icon={mdiClose}
+            onClick={clearSelections}
+          />
+          <GridActionButton
+            label={
+              <Box className={classes.summary}>
+                <span>Selected</span>
+                <span
+                  className={classes.reviewSelection}
+                  onClick={() => setIsListingDrawerOpen(true)}
+                >
+                  View
+                </span>
+              </Box>
+            }
+            textIcon={
+              <Box className={classes.selectedCount}>
+                <TextTransition
+                  variant="h6"
+                  duration={0.75}
+                  repeat={2}
+                  text={`${selections.length}`}
+                />
+              </Box>
+            }
+          />
+          <EmailAction
+            buttonRenderer={({ onClick }) => (
+              <GridActionButton
+                label="Email"
+                icon={mdiEmailOutline}
+                onClick={onClick}
+              />
+            )}
+          />
+          <CreateTourAction
+            buttonRenderer={({ onClick }) => (
+              <GridActionButton
+                label="Tour"
+                icon={mdiShoePrint}
+                onClick={onClick}
+              />
+            )}
+          />
         </Box>
       </Slide>
 

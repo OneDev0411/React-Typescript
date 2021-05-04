@@ -1,20 +1,27 @@
 import React from 'react'
 import {
-  Button,
+  Box,
+  fade,
+  Slide,
+  Theme,
+  MenuItem,
+  MenuList,
   IconButton,
   Typography,
-  Slide,
-  makeStyles,
-  Theme,
-  Box,
-  MenuList,
-  MenuItem
+  makeStyles
 } from '@material-ui/core'
+import {
+  mdiClose,
+  mdiEmailOutline,
+  mdiTrashCanOutline,
+  mdiPencilOutline
+} from '@mdi/js'
+
 import pluralize from 'pluralize'
-import { mdiHelpCircleOutline, mdiTrashCanOutline } from '@mdi/js'
+
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
@@ -49,18 +56,20 @@ const useStyles = makeStyles(
     root: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'flex-start',
-      bottom: 0,
-      borderTop: `1px solid ${theme.palette.divider}`,
-      background: theme.palette.common.white,
-      position: 'sticky',
+      justifyContent: 'space-around',
+      width: '95%',
       height: theme.spacing(10),
-      width: '100%',
-      padding: theme.spacing(0, 5),
-      zIndex: theme.zIndex.gridAction,
-      '& button': {
-        marginRight: theme.spacing(1)
-      }
+      margin: 'auto',
+      position: 'sticky',
+      bottom: `${theme.spacing(3)}px`,
+      padding: theme.spacing(0, 2),
+      background: theme.palette.tertiary.main,
+      borderRadius: `${theme.spacing(2)}px`,
+      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
+        theme.palette.common.black,
+        0.4
+      )}`,
+      zIndex: theme.zIndex.gridAction
     },
     divider: {
       margin: theme.spacing(0, 1)
@@ -68,6 +77,17 @@ const useStyles = makeStyles(
     title: {
       display: 'flex',
       alignItems: 'center',
+      cursor: 'pointer'
+    },
+    selectedCount: {
+      color: theme.palette.background.paper
+    },
+    summary: {
+      display: 'flex'
+    },
+    reviewSelection: {
+      marginLeft: theme.spacing(1),
+      color: theme.palette.secondary.main,
       cursor: 'pointer'
     }
   }),
@@ -124,83 +144,90 @@ export function TaskActions({ deal }: Props) {
     <>
       {state.actions.length > 0 && !state.isDrawerOpen && (
         <Slide in direction="up">
-          <div className={classes.root}>
+          <Box className={classes.root}>
+            <GridActionButton
+              label="Cancel"
+              icon={mdiClose}
+              onClick={handleCancel}
+            />
+            <GridActionButton
+              label={
+                <Box className={classes.summary}>
+                  <span>{pluralize('Document', state.attachments.length)}</span>
+                  <BaseDropdown
+                    renderDropdownButton={props => (
+                      <span
+                        ref={props.ref}
+                        onClick={props.onClick}
+                        className={classes.reviewSelection}
+                      >
+                        View
+                      </span>
+                    )}
+                    renderMenu={() => (
+                      <MenuList>
+                        {state.attachments.map((attachment, index) => (
+                          <MenuItem key={index}>
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="space-between"
+                              style={{ width: '100%' }}
+                            >
+                              <Box flex={9}>
+                                <a href={attachment.url} target="_blank">
+                                  <TextMiddleTruncate
+                                    text={attachment.name}
+                                    maxLength={50}
+                                  />
+                                </a>
+                              </Box>
+
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                size="small"
+                                className={iconClasses.leftMargin}
+                                onClick={() =>
+                                  handleRemoveAttachment(attachment)
+                                }
+                              >
+                                <SvgIcon path={mdiTrashCanOutline} />
+                              </IconButton>
+                            </Box>
+                          </MenuItem>
+                        ))}
+                      </MenuList>
+                    )}
+                  />
+                </Box>
+              }
+              textIcon={
+                <Typography variant="h6" className={classes.selectedCount}>
+                  {state.attachments.length}
+                </Typography>
+              }
+            />
             {state.actions.some(id =>
               [DOCUSIGN_FORM, DOCUSIGN_ENVELOPE, DOCUSIGN_FILE].includes(id)
             ) && (
-              <Button
-                variant="outlined"
-                color="secondary"
+              <GridActionButton
+                label="Docusign"
+                icon={mdiPencilOutline}
                 onClick={handleOpenDrawer}
-              >
-                Docusign
-              </Button>
+              />
             )}
 
             {state.actions.some(id =>
               [EMAIL_FILE, EMAIL_ENVELOPE, EMAIL_FORM].includes(id)
             ) && (
-              <Button
-                variant="outlined"
-                color="secondary"
+              <GridActionButton
+                label="Email"
+                icon={mdiEmailOutline}
                 onClick={handleOpenDrawer}
-              >
-                Send Email
-              </Button>
+              />
             )}
-
-            <BaseDropdown
-              renderDropdownButton={props => (
-                <Button {...props} disabled={state.attachments.length === 0}>
-                  <Typography variant="body1" className={classes.title}>
-                    {pluralize('file', state.attachments.length, true)} selected
-                    &nbsp;
-                    <SvgIcon
-                      path={mdiHelpCircleOutline}
-                      size={muiIconSizes.small}
-                    />
-                  </Typography>
-                </Button>
-              )}
-              renderMenu={() => (
-                <MenuList>
-                  {state.attachments.map((attachment, index) => (
-                    <MenuItem key={index}>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        style={{ width: '100%' }}
-                      >
-                        <Box flex={9}>
-                          <a href={attachment.url} target="_blank">
-                            <TextMiddleTruncate
-                              text={attachment.name}
-                              maxLength={50}
-                            />
-                          </a>
-                        </Box>
-
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          size="small"
-                          className={iconClasses.leftMargin}
-                          onClick={() => handleRemoveAttachment(attachment)}
-                        >
-                          <SvgIcon path={mdiTrashCanOutline} />
-                        </IconButton>
-                      </Box>
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              )}
-            />
-
-            <Button color="secondary" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </div>
+          </Box>
         </Slide>
       )}
 

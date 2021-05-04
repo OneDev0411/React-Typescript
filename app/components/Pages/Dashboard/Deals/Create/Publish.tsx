@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -97,7 +97,9 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = getDealContexts(deal, deal.deal_type, deal.property_type)
+  const contexts = deal
+    ? getDealContexts(deal, deal.deal_type, deal.property_type)
+    : []
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
@@ -139,7 +141,11 @@ export default function Publish({ params }: Props) {
     }
 
     contexts
-      .filter(context => !watch(`context:${context.key}`))
+      .filter(context => {
+        const value = watch(`context:${context.key}`)
+
+        return value == null || value === ''
+      })
       .forEach(context => {
         errors[context.key] = `${context.label} is required`
       })
@@ -170,6 +176,8 @@ export default function Publish({ params }: Props) {
     try {
       setIsSaving(true)
 
+      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
+
       if (values.address) {
         await savePropertyAddress(deal, values.address)
       }
@@ -177,8 +185,6 @@ export default function Publish({ params }: Props) {
       if (roles.length > 0) {
         await dispatch(createRoles(deal.id, roles))
       }
-
-      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
 
       showNotification &&
         dispatch(
@@ -291,6 +297,7 @@ export default function Publish({ params }: Props) {
         >
           {!hasAddress && (
             <Controller
+              key="address"
               name="address"
               control={control}
               render={({ onChange }) => (
@@ -305,6 +312,7 @@ export default function Publish({ params }: Props) {
 
           {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
             <Controller
+              key="buyers"
               name="buying_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -333,6 +341,7 @@ export default function Publish({ params }: Props) {
 
           {sellerRoles.length === 0 && (
             <Controller
+              key="sellers"
               name="selling_clients"
               control={control}
               render={({ value = [], onChange }) => (
@@ -363,8 +372,10 @@ export default function Publish({ params }: Props) {
 
           {isStatusVisible && !getField(deal, statusContextKey) && (
             <Controller
+              key="status"
               name={`context:${statusContextKey}`}
               control={control}
+              defaultValue={getField(deal, statusContextKey)}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />
               )}
@@ -377,6 +388,7 @@ export default function Publish({ params }: Props) {
                 key={context.id}
                 name={`context:${context.key}`}
                 control={control}
+                defaultValue={getField(deal, context.key)}
                 render={({ onChange }) => (
                   <DealContext
                     concurrentMode

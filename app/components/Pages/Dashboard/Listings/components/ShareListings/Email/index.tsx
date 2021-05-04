@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode, MouseEvent } from 'react'
 
-import { Button, Tooltip } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { selectUser } from 'selectors/user'
@@ -10,7 +10,13 @@ import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/Ma
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
-export function EmailAction() {
+interface Props {
+  buttonRenderer?: (props: {
+    onClick: (e: MouseEvent<HTMLElement>) => void
+  }) => ReactNode
+}
+
+export function EmailAction({ buttonRenderer }: Props) {
   const { selections } = useListSelection()
 
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
@@ -32,7 +38,7 @@ export function EmailAction() {
     setListings(listings)
     setTemplate(template)
   }
-
+  const handleOpenTemplateModal = e => setIsTemplatesModalOpen(true)
   const handleClose = () => {
     setTemplate(null)
     setListings([])
@@ -40,15 +46,17 @@ export function EmailAction() {
 
   return (
     <>
-      <Tooltip title="Send as Email">
+      {buttonRenderer ? (
+        buttonRenderer({ onClick: handleOpenTemplateModal })
+      ) : (
         <Button
           size="small"
           variant="outlined"
-          onClick={() => setIsTemplatesModalOpen(true)}
+          onClick={handleOpenTemplateModal}
         >
           Email
         </Button>
-      </Tooltip>
+      )}
 
       {isTemplatesModalOpen && (
         <MarketingTemplatePickerModal

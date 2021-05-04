@@ -90,6 +90,31 @@ const AsyncResetPassword = Load({
 })
 
 /* ==================================== */
+//  Showings Public
+/* ==================================== */
+
+const AsyncBookShowing = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Book' /* webpackChunkName: "book_showing" */
+    )
+})
+
+const AsyncShowingAppointment = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment' /* webpackChunkName: "showing_appointment" */
+    )
+})
+
+const AsyncShowingAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Cancel' /* webpackChunkName: "showing_appointment_cancel" */
+    )
+})
+
+/* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
 
@@ -788,6 +813,16 @@ export default (
 
       <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
+
+      <Route path="showings/:slugAndId/book" component={AsyncBookShowing} />
+      <Route
+        path="showings/appointments/:appointmentToken"
+        component={AsyncShowingAppointment}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/cancel"
+        component={AsyncShowingAppointmentCancel}
+      />
 
       <Route path="mobile" component={AsyncMobile} />
 

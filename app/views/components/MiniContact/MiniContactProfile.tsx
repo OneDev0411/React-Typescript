@@ -87,7 +87,11 @@ function MiniContact(props: MiniContactPropsType) {
         <EventDrawer {...actionSettings.data} isOpen />
       )}
       {actionSettings.type === ActionSettingsNamesType.CONTACT && (
-        <NewContactDrawer {...actionSettings.data} isOpen />
+        <NewContactDrawer
+          {...actionSettings.data}
+          isOpen
+          showAddAnother={false}
+        />
       )}
       {actionSettings.type === ActionSettingsNamesType.EMAIL && (
         <SingleEmailComposeDrawer {...actionSettings.data} isOpen />

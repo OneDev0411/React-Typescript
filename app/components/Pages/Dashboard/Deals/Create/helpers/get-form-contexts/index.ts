@@ -1,8 +1,8 @@
-import Deal from 'models/Deal'
 import {
   getChecklist,
   getDefinitionId
 } from 'models/Deal/helpers/dynamic-context'
+import { getContext } from 'models/Deal/helpers/context'
 
 export function getFormContexts(
   values: Record<string, unknown>,
@@ -10,12 +10,12 @@ export function getFormContexts(
   checklist?: IDealChecklist
 ) {
   return Object.entries(values).reduce((acc, [key, value]) => {
-    if (value === undefined || key.includes('context') === false) {
+    if (value === undefined || !key.includes('context')) {
       return acc
     }
 
     const [, name] = key.split(':')
-    const context = Deal.get.context(deal, name)
+    const context = getContext(deal, name)
 
     return [
       ...acc,
