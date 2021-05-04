@@ -5,5 +5,6 @@ declare interface IShowingAppointment extends IModel<'showing_appointment'> {
   status: IAppointmentStatus
   showing: UUID | IShowing
   contact: IContact
-  approvals?: IShowingApproval[]
+  approvals: Nullable<IShowingApproval[]>
+  notifications: Nullable<INotification[]>
 }

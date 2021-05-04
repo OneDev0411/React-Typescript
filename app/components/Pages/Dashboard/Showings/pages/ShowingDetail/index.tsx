@@ -12,12 +12,10 @@ import TabContentSwitch from 'components/TabContentSwitch'
 
 import LoadingContainer from 'components/LoadingContainer'
 
-import ShowingDetailTabs, {
-  ShowingDetailTabsProps
-} from '../../components/ShowingDetailTabs'
+import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
 
 import { showingDetailTabs } from '../../constants'
-import ShowingDetailTabBookings from '../../components/ShowingDetailTabBookings'
+import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'

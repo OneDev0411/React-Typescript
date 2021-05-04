@@ -5,8 +5,8 @@ import { Location } from 'history'
 import useSortAppointments from '../../hooks/use-sort-appointments'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
+import ShowingNotificationBookingLists from '../../components/ShowingNotificationBookingLists'
 import useUpdateAppointmentStatus from './use-update-appointment-status'
-import ShowingNotificationBookingLists from '../ShowingNotificationBookingLists'
 import { AppointmentFilter, ApprovalActionParams } from '../../types'
 import useMarkAppointmentNotificationsAsSeen from './use-mark-appointment-notifications-as-seen'
 
