@@ -1,24 +1,20 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { markNotificationAsSeen } from 'models/notifications'
+import { ackNotification } from 'models/notifications'
 
 import { ApprovalActionParams } from '../../types'
 
 import { updateAppointmentState } from './helpers'
 
-type UseMarkAppointmentNotificationsAsSeen = (
-  params: ApprovalActionParams
-) => void
+type UseAckAppointmentNotifications = (params: ApprovalActionParams) => void
 
-function useMarkAppointmentNotificationsAsSeen(
+function useAckAppointmentNotifications(
   setShowing: Dispatch<SetStateAction<IShowing>>
-): UseMarkAppointmentNotificationsAsSeen {
+): UseAckAppointmentNotifications {
   return async ({ appointmentId, notifications }: ApprovalActionParams) => {
     // mark all notifications as seen
     const promises =
-      notifications?.map(notification =>
-        markNotificationAsSeen(notification.id)
-      ) || []
+      notifications?.map(notification => ackNotification(notification.id)) || []
 
     await Promise.all(promises)
 
@@ -30,4 +26,4 @@ function useMarkAppointmentNotificationsAsSeen(
   }
 }
 
-export default useMarkAppointmentNotificationsAsSeen
+export default useAckAppointmentNotifications

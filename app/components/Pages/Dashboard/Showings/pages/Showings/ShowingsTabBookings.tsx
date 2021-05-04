@@ -6,7 +6,7 @@ import ShowingNotificationBookingLists, {
 
 import { generateAppointmentFilterLink } from '../../helpers'
 import { ApprovalActionParams } from '../../types'
-import useShowingsMarkAppointmentNotificationsAsSeen from './use-showings-mark-appointment-notifications-as-seen'
+import useShowingsAckAppointmentNotifications from './use-showings-ack-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
 interface ShowingsTabBookingsProps
@@ -26,13 +26,13 @@ function ShowingsTabBookings({
     setShowings
   )
 
-  const markAppointmentNotificationsAsSeen = useShowingsMarkAppointmentNotificationsAsSeen(
+  const ackAppointmentNotifications = useShowingsAckAppointmentNotifications(
     setShowings
   )
 
   const handleApprovalAction = (params: ApprovalActionParams) => {
     updateAppointmentStatus(params)
-    markAppointmentNotificationsAsSeen(params)
+    ackAppointmentNotifications(params)
   }
 
   return (

@@ -8,7 +8,7 @@ import useAppointmentNotificationLists from '../../hooks/use-appointment-notific
 import ShowingNotificationBookingLists from '../../components/ShowingNotificationBookingLists'
 import useUpdateAppointmentStatus from './use-update-appointment-status'
 import { AppointmentFilter, ApprovalActionParams } from '../../types'
-import useMarkAppointmentNotificationsAsSeen from './use-mark-appointment-notifications-as-seen'
+import useAckAppointmentNotifications from './use-ack-appointment-notifications'
 
 const generateAppointmentFilterLink = (
   filter: AppointmentFilter,
@@ -32,13 +32,11 @@ function ShowingDetailTabBookings({
 
   const updateAppointmentStatus = useUpdateAppointmentStatus(setShowing)
 
-  const markAppointmentNotificationsAsSeen = useMarkAppointmentNotificationsAsSeen(
-    setShowing
-  )
+  const ackAppointmentNotifications = useAckAppointmentNotifications(setShowing)
 
   const handleApprovalAction = (params: ApprovalActionParams) => {
     updateAppointmentStatus(params)
-    markAppointmentNotificationsAsSeen(params)
+    ackAppointmentNotifications(params)
   }
 
   return (
