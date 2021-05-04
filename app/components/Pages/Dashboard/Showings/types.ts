@@ -32,7 +32,7 @@ export type ShowingPropertyType =
   | ShowingPropertyListing
   | ShowingPropertyPlace
 
-export type AppointmentFilter = 'All' | IAppointmentStatus | 'Feedback'
+export type AppointmentFilter = 'All' | IShowingAppointmentStatus | 'Feedback'
 
 export interface AppointmentFilterInfo {
   label: string
@@ -42,7 +42,7 @@ export interface AppointmentFilterInfo {
 
 export interface ApprovalActionParams {
   appointmentId: UUID
-  status: IAppointmentStatus
+  status: IShowingAppointmentStatus
   showingId: UUID
   notifications: Nullable<INotification[]>
 }

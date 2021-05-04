@@ -24,7 +24,7 @@ export interface ShowingBookingListColumnActionsProps
   extends ShowingBookingListApprovalButtonProps {
   className?: string
   appointmentId: UUID
-  status: IAppointmentStatus
+  status: IShowingAppointmentStatus
   hasFeedback: boolean
   notifications: Nullable<INotification[]>
   onApprovalAction?: (params: ApprovalActionParams) => void

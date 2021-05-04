@@ -28,7 +28,7 @@ const useStyles = makeStyles(
   { name: 'ShowingAppointmentCardStatus' }
 )
 
-const labels: Record<IAppointmentStatus, string> = {
+const labels: Record<IShowingAppointmentStatus, string> = {
   Requested: 'Waiting for Confirmation',
   Confirmed: 'Approved',
   Rescheduled: 'Rescheduled',
@@ -37,7 +37,7 @@ const labels: Record<IAppointmentStatus, string> = {
 }
 
 interface ShowingAppointmentCardStatusProps {
-  status: IAppointmentStatus
+  status: IShowingAppointmentStatus
 }
 
 function ShowingAppointmentCardStatus({

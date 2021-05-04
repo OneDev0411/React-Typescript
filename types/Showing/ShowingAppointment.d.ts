@@ -1,9 +1,7 @@
-declare interface IShowingAppointment extends IModel<'showing_appointment'> {
-  // A simple string for now. later we wanna capture the lead source with this
-  source: string
-  time: string
-  status: IAppointmentStatus
-  showing: UUID | IShowing
+declare interface IShowingAppointment
+  extends IModel<'showing_appointment'>,
+    IBaseShowingAppointment {
+  showing: UUID | IShowing // TODO: make association like IPublicShowingAppointment
   contact: IContact
   approvals: Nullable<IShowingApproval[]>
   notifications: Nullable<INotification[]>

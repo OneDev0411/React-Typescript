@@ -20,7 +20,7 @@ const useStyles = makeStyles(
 )
 
 interface ShowingBookingListColumnStatusProps {
-  status: IAppointmentStatus
+  status: IShowingAppointmentStatus
   feedbackRate?: number
 }
 

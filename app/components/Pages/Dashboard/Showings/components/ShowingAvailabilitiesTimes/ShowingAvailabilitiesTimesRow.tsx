@@ -20,7 +20,7 @@ import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
 interface FormValues {
   start: string
   end: string
-  weekday: IDayOfWeek
+  weekday: Weekday
 }
 
 interface ShowingAvailabilitiesTimesRowProps extends IShowingAvailabilityInput {

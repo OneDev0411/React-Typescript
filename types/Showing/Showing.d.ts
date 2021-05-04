@@ -1,24 +1,16 @@
-declare interface IShowing extends IModel<'showing'> {
-  brand: UUID
+declare interface IShowing extends IModel<'showing'>, IBaseShowing {
   aired_at?: string
-  start_date: string
-  end_date?: string
-  duration: number
-  notice_period?: number
-  same_day_allowed: boolean
   approval_type: IShowingApprovalType
   feedback_template?: IMarketingTemplateInstance
   deal?: IDeal
-  listing?: IListing
   address?: IStdAddr
   gallery?: IMediaGallery
   roles: IShowingRole[]
   appointments: Nullable<IShowingAppointment[]>
-  availabilities: IShowingAvailability[]
   allow_appraisal: boolean
   allow_inspection: boolean
   instructions?: string
   confirmed: number
   visits: number
-  token: string
+  token: string // TODO: remove token and create address like `${slug}-${human_readable_id}`
 }

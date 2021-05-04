@@ -14,7 +14,7 @@ function ShowingAppointmentCardStack({
   title
 }: ShowingAppointmentCardStackProps) {
   const [items, setItems] = useState<
-    { id: number; status: IAppointmentStatus }[]
+    { id: number; status: IShowingAppointmentStatus }[]
   >(
     shuffle([
       { id: 1, status: 'Requested' },

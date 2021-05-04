@@ -1,4 +1,4 @@
-declare type IAppointmentStatus =
+declare type IShowingAppointmentStatus =
   | 'Requested'
   | 'Confirmed'
   | 'Rescheduled'

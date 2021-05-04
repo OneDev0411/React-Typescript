@@ -4,10 +4,10 @@ import { daysOfWeekOptions } from 'components/DayOfWeekSelect/constants'
 
 import FormSelect, { FormSelectProps } from '../FormSelect'
 
-type FormDayOfWeekSelectProps = Omit<FormSelectProps<IDayOfWeek>, 'options'>
+type FormDayOfWeekSelectProps = Omit<FormSelectProps<Weekday>, 'options'>
 
 function FormDayOfWeekSelect(props: FormDayOfWeekSelectProps) {
-  return <FormSelect<IDayOfWeek> {...props} options={daysOfWeekOptions} />
+  return <FormSelect<Weekday> {...props} options={daysOfWeekOptions} />
 }
 
 export default FormDayOfWeekSelect

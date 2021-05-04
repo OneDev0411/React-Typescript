@@ -12,7 +12,7 @@ import ShowingAppointmentList from '../../components/ShowingAppointmentList'
 
 type ShowingAppointmentsProps = RouteComponentProps<
   {
-    status?: IAppointmentStatus
+    status?: IShowingAppointmentStatus
   },
   {}
 >

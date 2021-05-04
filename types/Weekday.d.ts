@@ -1,4 +1,4 @@
-declare type IDayOfWeek =
+declare type Weekday =
   | 'Monday'
   | 'Tuesday'
   | 'Wednesday'

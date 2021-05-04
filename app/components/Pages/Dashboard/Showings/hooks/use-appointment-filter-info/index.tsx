@@ -8,7 +8,7 @@ import {
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
-const createStatusFilter = (status: IAppointmentStatus) => (
+const createStatusFilter = (status: IShowingAppointmentStatus) => (
   appointments: IShowingAppointment[]
 ) => appointments.filter(appointment => appointment.status === status)
 

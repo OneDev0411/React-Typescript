@@ -11,8 +11,8 @@ export const showingDetailTabs: Record<
 }
 
 export const showingAppointmentStatuses: Record<
-  IAppointmentStatus,
-  IAppointmentStatus
+  IShowingAppointmentStatus,
+  IShowingAppointmentStatus
 > = {
   Requested: 'Requested',
   Confirmed: 'Confirmed',

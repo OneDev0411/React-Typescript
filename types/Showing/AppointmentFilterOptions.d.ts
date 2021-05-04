@@ -1,4 +1,4 @@
 declare interface IAppointmentFilterOptions {
   brand: UUID
-  status?: IAppointmentStatus
+  status?: IShowingAppointmentStatus
 }

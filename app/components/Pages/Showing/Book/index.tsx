@@ -36,7 +36,7 @@ interface RouteParams {
 export default function BookShowing({
   params: { slugAndId }
 }: WithRouterProps<RouteParams>) {
-  const id = slugAndId.split('-').pop()
+  const id = Number(slugAndId.split('-').pop())
 
   const dispatch = useDispatch()
   const classes = useStyles()
