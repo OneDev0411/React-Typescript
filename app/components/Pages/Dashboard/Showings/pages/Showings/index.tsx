@@ -14,7 +14,6 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import { showingsTabs } from '../../constants'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
-import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 import ShowingsTabProperties from './ShowingsTabProperties'
 import ShowingsTabs, { ShowingsTabsProps } from './ShowingsTabs'
 import ShowingsTabBookings from './ShowingsTabBookings'
@@ -41,16 +40,7 @@ function Showings({ params }: ShowingsProps) {
 
   const tab = params.tab || showingsTabs.Properties
 
-  const {
-    isLoading,
-    showings,
-    appointments: allAppointments,
-    setShowings
-  } = useGetShowings()
-
-  const { appointments, notifications } = useAppointmentNotificationLists(
-    allAppointments
-  )
+  const { isLoading, showings, appointments, setShowings } = useGetShowings()
 
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
@@ -66,16 +56,11 @@ function Showings({ params }: ShowingsProps) {
         ) : (
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingsTabs.Properties}>
-              <ShowingsTabProperties
-                showings={showings}
-                appointments={appointments}
-                notifications={notifications}
-              />
+              <ShowingsTabProperties showings={showings} />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingsTabs.Bookings}>
               <ShowingsTabBookings
                 appointments={appointments}
-                notifications={notifications}
                 setShowings={setShowings}
               />
             </TabContentSwitch.Item>
