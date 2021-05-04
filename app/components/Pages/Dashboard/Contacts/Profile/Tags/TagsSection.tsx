@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { Box, Chip } from '@material-ui/core'
 
+import { mdiTagOutline } from '@mdi/js'
+
 import { PopoverContactTagSelector } from 'components/TagSelector'
 
-import { Section } from '../components/Section'
-
 import { Tag } from './Tag'
+import { SectionButton } from '../components/Section/Button'
 
 interface Props {
   contact: INormalizedContact
@@ -27,33 +28,35 @@ function Tags({ contact, onChange }: Props) {
   )
 
   return (
-    <Section
-      title="Tags"
-      setting={{
-        tooltip: 'Manage Tags',
-        href: '/dashboard/account/manage-tags'
-      }}
-    >
-      <Box px={3} display="flex" flexWrap="wrap">
-        {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
-        <PopoverContactTagSelector
-          label={`${contact.display_name}'s Tags`}
-          anchorRenderer={onClick => (
+    <Box px={3} display="flex" flexWrap="wrap">
+      {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
+      <PopoverContactTagSelector
+        showManageTags
+        label={`${contact.display_name}'s Tags`}
+        anchorRenderer={onClick =>
+          hasTags ? (
             <Chip
-              label={hasTags ? 'Edit' : 'Add Tag'}
+              label="Edit"
               variant="outlined"
               color="secondary"
+              size="small"
               onClick={onClick}
             />
-          )}
-          value={currentTags}
-          filter={{
-            selectedIds: [contact.id]
-          }}
-          callback={() => onChange()}
-        />
-      </Box>
-    </Section>
+          ) : (
+            <SectionButton
+              label="Add some tags"
+              icon={mdiTagOutline}
+              onClick={onClick}
+            />
+          )
+        }
+        value={currentTags}
+        filter={{
+          selectedIds: [contact.id]
+        }}
+        callback={() => onChange()}
+      />
+    </Box>
   )
 }
 

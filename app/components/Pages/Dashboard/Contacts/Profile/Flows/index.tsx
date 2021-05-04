@@ -1,48 +1,36 @@
 import React from 'react'
-import {
-  Box,
-  Tooltip,
-  Theme,
-  Button,
-  createStyles,
-  makeStyles
-} from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { mdiLightningBolt } from '@mdi/js'
 
 import AddToFlowButton from 'components/AddToFlowButton'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { Section } from '../components/Section'
 import List from './List/List'
+import { SectionButton } from '../components/Section/Button'
 
-const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      button: {
-        color: theme.palette.grey['500'],
-        marginLeft: 0,
-        '& svg': {
-          fill: theme.palette.grey['500'],
-          width: '0.8em',
-          height: '0.8em',
-          marginRight: '0.25rem'
-        }
-      }
-    }),
-  { name: 'AddFlow' }
-)
+// const useStyles = makeStyles(
+//   (theme: Theme) => ({
+//     button: {
+//       color: theme.palette.grey['500'],
+//       marginLeft: 0
+//     }
+//   }),
+//   { name: 'AddFlow' }
+// )
 
 interface Props {
   addCallback: () => void
-  contactId: UUID
+  contact: INormalizedContact
   flows: TBrandFlow<'steps'>[] | null
   onStop: (flowId: UUID) => Promise<void>
 }
 
-function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
-  const classes = useStyles()
+function FlowsList({ flows, contact, onStop, addCallback }: Props) {
+  // const classes = useStyles()
+  if (!contact) {
+    return null
+  }
 
   return (
     <Section
@@ -57,13 +45,13 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
         <AddToFlowButton
           activeFlows={[]}
           callback={addCallback}
-          contacts={{ ids: [contactId] }}
+          contacts={{ ids: [contact.id] }}
           buttonRenderer={buttonProps => (
-            <Tooltip title="Add to Flow">
-              <Button className={classes.button} {...buttonProps}>
-                <SvgIcon path={mdiLightningBolt} size={muiIconSizes.small} />+
-              </Button>
-            </Tooltip>
+            <SectionButton
+              label={`Add ${contact.display_name} to a flow`}
+              icon={mdiLightningBolt}
+              onClick={e => buttonProps?.onClick(e)}
+            />
           )}
         />
       </Box>

@@ -308,12 +308,10 @@ class ContactProfile extends React.Component {
               closeButtonQuery={this.props.location.state}
               addToFlowCallback={this.addToFlowCallback}
             />
-            <Divider />
             <Tags contact={contact} onChange={this.fetchContact} />
-            <Divider />
             <Flows
               flows={contact.flows}
-              contactId={contact.id}
+              contact={contact}
               onStop={this.stopFlow}
               addCallback={this.addToFlowCallback}
             />

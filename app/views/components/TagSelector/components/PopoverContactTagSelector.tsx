@@ -9,6 +9,7 @@ import {
   Theme
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router'
 
 import { bulkTag } from 'models/contacts/bulk-tag'
 import {
@@ -41,14 +42,20 @@ const useStyles = makeStyles(
         ...theme.typography.body2
       }
     },
-    actions: {
+    actionsContainer: {
       marginTop: theme.spacing(2),
       paddingTop: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'space-between',
       borderTop: `1px solid ${theme.palette.divider}`,
       direction: 'rtl'
-    }
+    },
+    actionButtons: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    manageTags: theme.typography.button
   }),
   { name: 'PopoverContactTagSelector' }
 )
@@ -57,15 +64,17 @@ interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   label?: string
   filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
+  showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
 }
 
 export const PopoverContactTagSelector = ({
-  anchorRenderer,
+  showManageTags = false,
   popoverProps = {},
-  value = [],
   callback = noop,
+  anchorRenderer,
+  value = [],
   filter,
   label,
   ...props
@@ -160,23 +169,35 @@ export const PopoverContactTagSelector = ({
             value={value}
             onChange={handleChange}
           />
-          <Box className={classes.actions}>
-            <Box>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="small"
-                disabled={!isDirty || isSaving}
-                onClick={handleSave}
-              >
-                {isSaving ? 'Saving' : 'Done'}
-              </Button>
+          <Box className={classes.actionsContainer}>
+            <Box className={classes.actionButtons}>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  disabled={!isDirty || isSaving}
+                  onClick={handleSave}
+                >
+                  {isSaving ? 'Saving' : 'Done'}
+                </Button>
+              </Box>
+              <Box mr={0.5}>
+                <Button variant="outlined" size="small" onClick={handleClose}>
+                  Cancel
+                </Button>
+              </Box>
             </Box>
-            <Box mr={0.5}>
-              <Button variant="outlined" size="small" onClick={handleClose}>
-                Cancel
-              </Button>
-            </Box>
+            {showManageTags && (
+              <Box>
+                <Link
+                  to="/dashboard/account/manage-tags"
+                  className={classes.manageTags}
+                >
+                  Manage Tags
+                </Link>
+              </Box>
+            )}
           </Box>
         </Box>
       </Popover>
