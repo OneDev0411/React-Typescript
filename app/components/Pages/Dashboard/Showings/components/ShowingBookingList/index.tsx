@@ -144,6 +144,7 @@ function ShowingBookingList({
           notificationMode ? classes.notificationRow : classes.row
         )
       }}
+      virtualize={false}
     />
   )
 
