@@ -48,18 +48,18 @@ function ShowingDetail({ params }: ShowingDetailProps) {
       <ShowingDetailHeader
         image={useShowingImage({
           deal: showing?.deal,
-          listing: showing?.listing
+          listing: showing?.listing ?? null
         })}
         address={useShowingAddress({
           deal: showing?.deal,
-          listing: showing?.listing,
+          listing: showing?.listing ?? null,
           address: showing?.address
         })}
         mlsNumber={
           showing?.listing?.mls_number ||
           (showing?.deal?.listing as IListing)?.mls_number
         }
-        token={showing?.token}
+        bookingUrl={`/showings/${showing?.slug}-${showing?.human_readable_id}/book`}
       >
         <ShowingDetailTabs value={tab} id={showingId} />
       </ShowingDetailHeader>
