@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useEffectOnce } from 'react-use'
+import { useDeepCompareEffect } from 'react-use'
 
 import { isToday, setYear, compareAsc } from 'date-fns'
 
@@ -22,7 +22,7 @@ export function useCalendarEvents(
 
   const [isLoading] = useLoadingEntities(events)
 
-  useEffectOnce(() => {
+  useDeepCompareEffect(() => {
     async function fetchEvents() {
       const range = getDateRange(new Date().getTime(), Format.Next)
       const calendarEvents = (await getCalendar({
@@ -59,7 +59,7 @@ export function useCalendarEvents(
     }
 
     fetchEvents()
-  })
+  }, [objectTypes])
 
   return {
     events: events || [],
