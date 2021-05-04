@@ -99,7 +99,7 @@ const validate = values => {
     `Must be at least ${length} characters.`
 
   const invalidCharactersError =
-    'Invalid character. You are allowed use alphabet characters and spaces in this field.'
+    'Invalid character. You only are allowed to use alphabet characters and spaces in this field.'
 
   const isValidName = name => name && name.trim().length > 0
 
