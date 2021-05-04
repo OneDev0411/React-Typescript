@@ -68,7 +68,7 @@ function ShowingBookingList({
                   listing: row.showing.listing,
                   deal: row.showing.deal
                 })}
-                address={row.title}
+                address={row.showing.title}
               />
             )
           }
