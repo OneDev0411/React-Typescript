@@ -10,6 +10,7 @@ async function getShowing(showingId: UUID) {
         'showing.appointments',
         'showing_appointment.contact',
         'showing_appointment.approvals',
+        'showing_approval.role',
         'showing.roles'
       ]
     })

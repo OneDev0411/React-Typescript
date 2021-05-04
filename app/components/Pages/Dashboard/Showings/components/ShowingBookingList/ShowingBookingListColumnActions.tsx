@@ -7,7 +7,9 @@ import approveShowingAppointment from 'models/showing/approve-showing-appointmen
 
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
-import ShowingBookingListApprovalButton from './ShowingBookingListApprovalButton'
+import ShowingBookingListApprovalButton, {
+  ShowingBookingListApprovalButtonProps
+} from './ShowingBookingListApprovalButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -17,9 +19,9 @@ const useStyles = makeStyles(
   { name: 'ShowingBookingListColumnActions' }
 )
 
-export interface ShowingBookingListColumnActionsProps {
+export interface ShowingBookingListColumnActionsProps
+  extends ShowingBookingListApprovalButtonProps {
   className?: string
-  showing: IShowing
   appointmentId: UUID
   status: IAppointmentStatus
   hasFeedback: boolean
@@ -36,7 +38,8 @@ function ShowingBookingListColumnActions({
   hasFeedback,
   showing,
   appointmentId,
-  onApprovalAction
+  onApprovalAction,
+  approvals
 }: ShowingBookingListColumnActionsProps) {
   const classes = useStyles()
 
@@ -83,6 +86,7 @@ function ShowingBookingListColumnActions({
             showing={showing}
             onClick={handleApprove}
             disabled={isLoading}
+            approvals={approvals}
           >
             Approve
           </ShowingBookingListApprovalButton>

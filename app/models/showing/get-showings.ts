@@ -9,7 +9,8 @@ async function getShowings() {
         'showing.roles',
         'showing.appointments',
         'showing_appointment.contact',
-        'showing_appointment.approvals'
+        'showing_appointment.approvals',
+        'showing_approval.role'
       ]
     })
   ).body.data as IShowing[]
