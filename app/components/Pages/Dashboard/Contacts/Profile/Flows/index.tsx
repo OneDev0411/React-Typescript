@@ -5,7 +5,6 @@ import { mdiLightningBolt } from '@mdi/js'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 
-import { Section } from '../components/Section'
 import List from './List/List'
 import { SectionButton } from '../components/Section/Button'
 
@@ -28,34 +27,23 @@ interface Props {
 
 function FlowsList({ flows, contact, onStop, addCallback }: Props) {
   // const classes = useStyles()
-  if (!contact) {
-    return null
-  }
 
   return (
-    <Section
-      title="Flows"
-      setting={{
-        tooltip: 'Manage Flows',
-        href: '/dashboard/account/flows'
-      }}
-    >
-      <Box px={3}>
-        {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
-        <AddToFlowButton
-          activeFlows={[]}
-          callback={addCallback}
-          contacts={{ ids: [contact.id] }}
-          buttonRenderer={buttonProps => (
-            <SectionButton
-              label={`Add ${contact.display_name} to a flow`}
-              icon={mdiLightningBolt}
-              onClick={e => buttonProps?.onClick(e)}
-            />
-          )}
-        />
-      </Box>
-    </Section>
+    <Box px={3}>
+      {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
+      <AddToFlowButton
+        activeFlows={[]}
+        callback={addCallback}
+        contacts={{ ids: [contact.id] }}
+        buttonRenderer={buttonProps => (
+          <SectionButton
+            label={`Add ${contact.display_name} to a flow`}
+            icon={mdiLightningBolt}
+            onClick={e => buttonProps?.onClick(e)}
+          />
+        )}
+      />
+    </Box>
   )
 }
 

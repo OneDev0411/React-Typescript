@@ -9,8 +9,9 @@ import Avatar from './Avatar'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
-      marginLeft: `${theme.spacing(1)}px`,
-      width: 'calc(100% - 64px)'
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: theme.spacing(1)
     },
     name: {
       wordBreak: 'break-all'
@@ -19,8 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1)
     },
     touch: {
-      paddingLeft: theme.spacing(1.5),
-      color: theme.palette.grey['900']
+      color: theme.palette.grey['500']
     }
   })
 )
@@ -34,25 +34,23 @@ export default function Catalog({ contact }: Props) {
 
   return (
     <Box mb={1}>
-      <Box display="flex" alignItems="center" mb={2}>
-        <Avatar contact={contact} />
-        <Box display="flex" alignItems="center" className={classes.title}>
-          <Typography variant="subtitle1" className={classes.name}>
-            {contact.display_name}
-          </Typography>
-          <Link
-            color="secondary"
-            href="#Details"
-            variant="caption"
-            className={classes.editButton}
-          >
-            Edit
-          </Link>
-        </Box>
+      <Avatar contact={contact} />
+      <Box className={classes.title}>
+        <Typography variant="subtitle1" className={classes.name}>
+          {contact.display_name}
+        </Typography>
+        <Link
+          color="secondary"
+          href="#Details"
+          variant="caption"
+          className={classes.editButton}
+        >
+          Edit
+        </Link>
       </Box>
-      <div className={classes.touch}>
+      <Box className={classes.touch}>
         <LastTouched contact={contact} />
-      </div>
+      </Box>
     </Box>
   )
 }
