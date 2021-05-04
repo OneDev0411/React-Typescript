@@ -1,19 +1,12 @@
-import {
-  Box,
-  Grid,
-  Divider,
-  Typography,
-  makeStyles,
-  fade
-} from '@material-ui/core'
+import { Box, Grid, Divider, Typography, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
     container: {
-      padding: theme.spacing(1.5, 2)
+      padding: theme.spacing(1.5, 3)
     },
     divider: {
-      backgroundColor: fade(theme.palette.common.white, 0.2)
+      backgroundColor: theme.palette.grey[800]
     },
     text: {
       color: theme.palette.grey[400]
