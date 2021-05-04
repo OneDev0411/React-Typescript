@@ -45,8 +45,6 @@ function ShowingDetail({ params }: ShowingDetailProps) {
 
   const tab = params.tab || showingDetailTabs.Bookings
 
-  console.log('showing', showing)
-
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
       <ShowingDetailHeader

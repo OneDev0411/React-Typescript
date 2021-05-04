@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Box } from '@material-ui/core'
 
 import ShowingNotificationBookingLists, {
   ShowingNotificationBookingListsProps
@@ -13,12 +12,10 @@ interface ShowingsTabBookingsProps
     ShowingNotificationBookingListsProps,
     'appointments' | 'notifications' | 'unseenAppointmentNotificationIds'
   > {
-  isLoading: boolean
   setShowings: Dispatch<SetStateAction<IShowing[]>>
 }
 
 function ShowingsTabBookings({
-  isLoading,
   appointments,
   notifications,
   unseenAppointmentNotificationIds,
@@ -29,16 +26,14 @@ function ShowingsTabBookings({
   )
 
   return (
-    <Box>
-      <ShowingNotificationBookingLists
-        unseenAppointmentNotificationIds={unseenAppointmentNotificationIds}
-        appointments={appointments}
-        notifications={notifications}
-        hasPropertyColumn
-        generateLink={generateAppointmentFilterLink}
-        onApprovalAction={updateAppointmentStatus}
-      />
-    </Box>
+    <ShowingNotificationBookingLists
+      unseenAppointmentNotificationIds={unseenAppointmentNotificationIds}
+      appointments={appointments}
+      notifications={notifications}
+      hasPropertyColumn
+      generateLink={generateAppointmentFilterLink}
+      onApprovalAction={updateAppointmentStatus}
+    />
   )
 }
 

@@ -28,7 +28,7 @@ const useStyles = makeStyles(
 )
 
 interface ShowingPropertyListProps {
-  isLoading: boolean
+  isLoading?: boolean
   showings: IShowing[]
 }
 

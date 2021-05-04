@@ -6,7 +6,6 @@ import ShowingAppointmentFilters from '../../components/ShowingAppointmentFilter
 import ShowingPropertyList from '../../components/ShowingPropertyList'
 
 interface ShowingsTabPropertiesProps {
-  isLoading: boolean
   showings: IShowing[]
   appointments: IShowingAppointment[]
   notifications: IShowingAppointment[]

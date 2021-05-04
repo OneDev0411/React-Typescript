@@ -10,6 +10,8 @@ import PageLayout from 'components/GlobalPageLayout'
 
 import TabContentSwitch from 'components/TabContentSwitch'
 
+import LoadingContainer from 'components/LoadingContainer'
+
 import { showingsTabs } from '../../constants'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
@@ -61,27 +63,29 @@ function Showings({ params }: ShowingsProps) {
         </Box>
       </Box>
       <PageLayout.Main mt={0} px={4} pb={4} pt={4}>
-        <TabContentSwitch.Container value={tab}>
-          <TabContentSwitch.Item value={showingsTabs.Properties}>
-            <ShowingsTabProperties
-              isLoading={isLoading}
-              showings={showings}
-              appointments={appointments}
-              notifications={notifications}
-            />
-          </TabContentSwitch.Item>
-          <TabContentSwitch.Item value={showingsTabs.Bookings}>
-            <ShowingsTabBookings
-              isLoading={isLoading}
-              appointments={appointments}
-              notifications={notifications}
-              unseenAppointmentNotificationIds={
-                unseenAppointmentNotificationIds
-              }
-              setShowings={setShowings}
-            />
-          </TabContentSwitch.Item>
-        </TabContentSwitch.Container>
+        {isLoading ? (
+          <LoadingContainer style={{ padding: '10% 0' }} />
+        ) : (
+          <TabContentSwitch.Container value={tab}>
+            <TabContentSwitch.Item value={showingsTabs.Properties}>
+              <ShowingsTabProperties
+                showings={showings}
+                appointments={appointments}
+                notifications={notifications}
+              />
+            </TabContentSwitch.Item>
+            <TabContentSwitch.Item value={showingsTabs.Bookings}>
+              <ShowingsTabBookings
+                appointments={appointments}
+                notifications={notifications}
+                unseenAppointmentNotificationIds={
+                  unseenAppointmentNotificationIds
+                }
+                setShowings={setShowings}
+              />
+            </TabContentSwitch.Item>
+          </TabContentSwitch.Container>
+        )}
       </PageLayout.Main>
     </PageLayout>
   )
