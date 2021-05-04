@@ -14,6 +14,7 @@ import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
 import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
 import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
+import { getShowingImage } from '../../helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -63,9 +64,11 @@ function ShowingBookingList({
             primary: true,
             render: ({ row }) => (
               <ShowingColumnProperty
-                deal={row.showing.deal}
-                listing={row.showing.listing}
-                address={row.showing.address}
+                image={getShowingImage({
+                  listing: row.showing.listing,
+                  deal: row.showing.deal
+                })}
+                address={row.title}
               />
             )
           }

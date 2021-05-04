@@ -20,10 +20,9 @@ import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
-import useShowingImage from '../../hooks/use-showing-image'
-import useShowingAddress from '../../hooks/use-showing-address'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useGetShowing from './use-get-showing'
+import { getShowingImage } from '../../helpers'
 
 type ShowingDetailProps = WithRouterProps<{
   tab?: ShowingDetailTabsProps['value']
@@ -46,15 +45,11 @@ function ShowingDetail({ params }: ShowingDetailProps) {
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
       <ShowingDetailHeader
-        image={useShowingImage({
+        image={getShowingImage({
           deal: showing?.deal,
           listing: showing?.listing ?? null
         })}
-        address={useShowingAddress({
-          deal: showing?.deal,
-          listing: showing?.listing ?? null,
-          address: showing?.address
-        })}
+        address={showing?.title || ''}
         mlsNumber={
           showing?.listing?.mls_number ||
           (showing?.deal?.listing as IListing)?.mls_number

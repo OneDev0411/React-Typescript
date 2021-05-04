@@ -13,6 +13,7 @@ import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import BoxWithTitle from '../BoxWithTitle'
+import { getShowingImage } from '../../helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -51,9 +52,8 @@ function ShowingPropertyList({
       primary: true,
       render: ({ row }) => (
         <ShowingColumnProperty
-          deal={row.deal}
-          listing={row.listing}
-          address={row.address}
+          image={getShowingImage({ listing: row.listing, deal: row.deal })}
+          address={row.title}
         />
       )
     },
