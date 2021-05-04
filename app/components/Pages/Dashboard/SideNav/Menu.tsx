@@ -23,6 +23,8 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import { IAppState } from 'reducers'
 
+import { InlineBadge } from 'components/InlineBadge'
+
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Logo from './components/Logo'
@@ -38,8 +40,7 @@ import {
   Sidenav,
   SidenavBlankLink,
   SideNavItem,
-  SidenavListGroup,
-  AppNavbarBadge
+  SidenavListGroup
 } from './styled'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
@@ -80,12 +81,12 @@ export function Menu() {
           </SideNavLinkItem>
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
-              <AppNavbarBadge
+              <InlineBadge
                 badgeContent={inboxNotificationNumber}
                 color="primary"
               >
                 Inbox
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl.Crm>
 
@@ -142,12 +143,12 @@ export function Menu() {
 
           <Acl access={dealsAccess}>
             <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
-              <AppNavbarBadge
+              <InlineBadge
                 badgeContent={dealsNotificationsNumber}
                 color="primary"
               >
                 Deals
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl>
 
@@ -167,20 +168,20 @@ export function Menu() {
         <SidenavListGroup>
           {user && (
             <SideNavItem>
-              <AppNavbarBadge
+              <InlineBadge
                 badgeContent={chatRoomsNotificationsNumber}
                 color="primary"
               >
                 <MessagesDrawerTrigger />
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavItem>
           )}
 
           {user && (
             <SideNavLinkItem to="/dashboard/notifications">
-              <AppNavbarBadge badgeContent={appNotifications} color="primary">
+              <InlineBadge badgeContent={appNotifications} color="primary">
                 Notifications
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           )}
         </SidenavListGroup>

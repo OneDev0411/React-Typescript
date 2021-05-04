@@ -1,10 +1,10 @@
 import Fetch from 'services/fetch'
 
-type CalendarObjectType =
-  | 'crm_task'
-  | 'deal_context'
-  | 'contact_attribute'
-  | 'contact'
+export type CalendarObjectType =
+  | 'crm_task' // Persoanl events added by agent
+  | 'deal_context' // home anniversaries manually added by agent
+  | 'contact_attribute' //  event_type = home_anniversary etc
+  | 'contact' // aka. Touch reminders. event_type = next_touch
   | 'email_campaign'
   | 'email_thread_recipient'
   | 'crm_association'
