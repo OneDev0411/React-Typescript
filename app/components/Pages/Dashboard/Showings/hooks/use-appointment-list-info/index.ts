@@ -29,16 +29,20 @@ export const appointmentListInfo: Partial<
     bookingsEmptyMessage: 'There is no request.'
   },
   Confirmed: {
-    hasNotifications: false,
+    hasNotifications: true,
+    notificationsTitle: 'New Approved',
+    notificationsEmptyMessage: 'There is no new booking.',
     hasBookings: true,
-    bookingsTitle: 'Approved',
+    bookingsTitle: 'All Approved',
     bookingsEmptyMessage: 'There is no booking.'
   },
   Rescheduled: {
     hasNotifications: true,
     notificationsTitle: 'New Requests',
     notificationsEmptyMessage: 'There is no new request.',
-    hasBookings: false
+    hasBookings: true,
+    bookingsTitle: 'All Rescheduled',
+    bookingsEmptyMessage: 'There is no booking.'
   },
   Canceled: {
     hasNotifications: true,
