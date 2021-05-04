@@ -104,12 +104,12 @@ export default function InfoSection({ showing }: Props) {
                         variant="body1"
                         className={classes.listingAddress}
                       >
-                        {showing.listing.property.address.full_address}
+                        {showing.title}
                       </Typography>
                     </Hidden>
                     <Hidden xsDown>
                       <Typography noWrap variant="h5">
-                        {showing.listing.property.address.street_address}
+                        {showing.title}
                       </Typography>
                     </Hidden>
                   </Box>

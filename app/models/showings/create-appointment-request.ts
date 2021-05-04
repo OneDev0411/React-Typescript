@@ -1,12 +1,12 @@
 import Fetch from '../../services/fetch'
 
 export async function createAppointmentRequest(
-  token: string,
+  numericId: number,
   data: IShowingAppointmentInput
 ): Promise<IPublicShowingAppointment> {
   try {
     const response = await new Fetch()
-      .post(`/showings/public/${token}/appointments`)
+      .post(`/showings/public/${numericId}/appointments`)
       .send(data)
 
     return response.body.data

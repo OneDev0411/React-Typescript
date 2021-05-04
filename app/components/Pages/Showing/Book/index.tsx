@@ -30,15 +30,19 @@ const useStyles = makeStyles(
 )
 
 interface RouteParams {
-  token: string
+  id: string
 }
 
 export default function BookShowing({
-  params: { token }
+  params: { id: rawId }
 }: WithRouterProps<RouteParams>) {
+  const id = Number(rawId)
+
+  console.log({ YYYYYYYYYY: id })
+
   const dispatch = useDispatch()
   const classes = useStyles()
-  const { showing, isLoading } = usePublicShowing(token)
+  const { showing, isLoading } = usePublicShowing(id)
 
   if (isLoading || !showing) {
     return <LoadingContainer />
@@ -48,7 +52,7 @@ export default function BookShowing({
     appointmentData: IShowingAppointmentInput
   ) => {
     try {
-      const appointment = await createAppointmentRequest(token, appointmentData)
+      const appointment = await createAppointmentRequest(id, appointmentData)
 
       dispatch(
         addNotification({

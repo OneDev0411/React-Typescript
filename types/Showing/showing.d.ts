@@ -32,6 +32,8 @@ declare interface IBaseShowing {
   end_date: string | null
   duration: number
   availabilities: IShowingAvailability[]
+  title: string
+  slug: string
   listing: IListing | null
   address: unknown // TODO: use std address
   gallery: unknown // TODO: use gallery
@@ -40,6 +42,7 @@ declare interface IBaseShowing {
 }
 
 declare interface IShowing extends IModel<'showing'>, IBaseShowing {
+  human_readable_id: number
   aired_at: number | null
   deal: IDeal | null
   address: Address | null
@@ -50,6 +53,7 @@ declare interface IShowing extends IModel<'showing'>, IBaseShowing {
 declare interface IPublicShowing
   extends IModel<'public_showing'>,
     IBaseShowing {
+  id: number
   unavailable_times: string[] | null
   agent: IAgent
   timezone: string

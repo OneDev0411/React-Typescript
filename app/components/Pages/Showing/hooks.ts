@@ -9,19 +9,19 @@ interface UsePublicShowing {
   showing: Nullable<IPublicShowing>
 }
 
-export function usePublicShowing(showingToken: string): UsePublicShowing {
+export function usePublicShowing(id: number): UsePublicShowing {
   const [showing, setShowing] = useState<Nullable<IPublicShowing>>(null)
   const [isLoading] = useLoadingEntities(showing)
 
   useEffect(() => {
     async function fetchShowing() {
-      const fetchedShowing = await getPublicShowing(showingToken)
+      const fetchedShowing = await getPublicShowing(id)
 
       setShowing(fetchedShowing)
     }
 
     fetchShowing()
-  }, [showingToken])
+  }, [id])
 
   return {
     isLoading,
@@ -35,7 +35,7 @@ interface UseShowingAppointment {
 }
 
 export function usePublicShowingAppointment(
-  appointmentId: string
+  appointmentToken: string
 ): UseShowingAppointment {
   const [appointment, setAppointment] = useState<
     Nullable<IPublicShowingAppointment<'showing'>>
@@ -45,14 +45,14 @@ export function usePublicShowingAppointment(
   useEffect(() => {
     async function fetchAppointment() {
       const fetchedAppointment = await getPublicShowingAppointment(
-        appointmentId
+        appointmentToken
       )
 
       setAppointment(fetchedAppointment)
     }
 
     fetchAppointment()
-  }, [appointmentId])
+  }, [appointmentToken])
 
   return {
     isLoading,
