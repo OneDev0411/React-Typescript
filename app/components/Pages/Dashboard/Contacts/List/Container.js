@@ -64,6 +64,8 @@ import { SyncSuccessfulModal } from './SyncSuccesfulModal'
 import { ZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
+import { Board } from '../Board'
+
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
 }
@@ -82,7 +84,8 @@ class ContactsList extends React.Component {
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
       duplicateClusterCount: 0,
-      parkedContactCount: 0
+      parkedContactCount: 0,
+      viewMode: 'table'
     }
 
     this.order = null
@@ -744,9 +747,11 @@ class ContactsList extends React.Component {
           onChange: this.handleChangeOrder,
           currentOrder: this.order
         }}
+        viewMode={this.state.viewMode}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
+        onChangeMode={viewMode => this.setState({ viewMode })}
         {...props}
       />
     )
@@ -847,37 +852,43 @@ class ContactsList extends React.Component {
             <>
               {this.renderOtherContactsBadge()}
               {this.renderTabs()}
-              <Box mt={2}>
-                <Table
-                  data={contacts}
-                  order={this.order}
-                  totalRows={props.listInfo.total || 0}
-                  listInfo={props.listInfo}
-                  activeSegment={activeSegment}
-                  isFetching={isFetchingContacts}
-                  isFetchingMore={state.isFetchingMoreContacts}
-                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                  isRowsUpdating={state.isRowsUpdating}
-                  onRequestLoadMore={this.handleLoadMore}
-                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                  rowsUpdating={this.rowsUpdating}
-                  onChangeSelectedRows={this.onChangeSelectedRows}
-                  onRequestDelete={this.handleOnDelete}
-                  tableContainerId={this.tableContainerId}
-                  reloadContacts={this.reloadContacts}
-                  handleChangeContactsAttributes={() =>
-                    this.handleFilterChange({}, true)
-                  }
-                  filters={{
-                    alphabet: state.firstLetter,
-                    attributeFilters: props.filters,
-                    crm_tasks: props.crmTasks,
-                    filter_type: props.conditionOperator,
-                    flows: props.flows,
-                    text: state.searchInputValue,
-                    users: viewAsUsers
-                  }}
-                />
+              <Box mt={2} flexGrow={1}>
+                {this.state.viewMode === 'table' && (
+                  <Table
+                    data={contacts}
+                    order={this.order}
+                    totalRows={props.listInfo.total || 0}
+                    listInfo={props.listInfo}
+                    activeSegment={activeSegment}
+                    isFetching={isFetchingContacts}
+                    isFetchingMore={state.isFetchingMoreContacts}
+                    isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                    isRowsUpdating={state.isRowsUpdating}
+                    onRequestLoadMore={this.handleLoadMore}
+                    onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                    rowsUpdating={this.rowsUpdating}
+                    onChangeSelectedRows={this.onChangeSelectedRows}
+                    onRequestDelete={this.handleOnDelete}
+                    tableContainerId={this.tableContainerId}
+                    reloadContacts={this.reloadContacts}
+                    handleChangeContactsAttributes={() =>
+                      this.handleFilterChange({}, true)
+                    }
+                    filters={{
+                      alphabet: state.firstLetter,
+                      attributeFilters: props.filters,
+                      crm_tasks: props.crmTasks,
+                      filter_type: props.conditionOperator,
+                      flows: props.flows,
+                      text: state.searchInputValue,
+                      users: viewAsUsers
+                    }}
+                  />
+                )}
+
+                {this.state.viewMode === 'board' && (
+                  <Board contacts={contacts} />
+                )}
               </Box>
             </>
           )}

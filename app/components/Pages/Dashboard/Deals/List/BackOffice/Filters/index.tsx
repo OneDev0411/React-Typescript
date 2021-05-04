@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { MenuItem } from '@material-ui/core'
@@ -75,14 +75,16 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
       value={props.location.query.type === 'query' ? 'all-deals' : null}
       defaultValue={props.params.filter}
       tabs={[
-        ...inboxTabs.map((name, index) => (
-          <TabLink
-            key={index}
-            value={name}
-            label={<span>{name}</span>}
-            to={`/dashboard/deals/filter/${name}?type=inbox`}
-          />
-        )),
+        ...inboxTabs
+          .filter(name => !!name)
+          .map((name, index) => (
+            <TabLink
+              key={index}
+              value={name}
+              label={<span>{name}</span>}
+              to={`/dashboard/deals/filter/${name}?type=inbox`}
+            />
+          )),
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"
@@ -125,15 +127,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               )}
             </DropdownTab>
           }
-        />,
-        <AnalyticsDropdownTab
-          brandType={activeBrand?.brand_type!}
-          key="analytics"
         />
       ]}
       actions={[
+        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
         <Tab
-          key={0}
+          key={1}
           label={
             <DropdownTab
               title={getGridSortLabel(
