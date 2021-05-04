@@ -21,7 +21,7 @@ declare interface IShowingAppointment<
 declare interface IShowingAppointmentInput {
   source: IShowingSource
   time: string // "2021-04-05T09:00:00+00:00"
-  contact: Partial<IContact> & {
+  contact: {
     first_name: string
     last_name: string
     phone_number: string

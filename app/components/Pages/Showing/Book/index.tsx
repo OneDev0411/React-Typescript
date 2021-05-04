@@ -30,15 +30,13 @@ const useStyles = makeStyles(
 )
 
 interface RouteParams {
-  id: string
+  slugAndId: string
 }
 
 export default function BookShowing({
-  params: { id: rawId }
+  params: { slugAndId }
 }: WithRouterProps<RouteParams>) {
-  const id = Number(rawId)
-
-  console.log({ YYYYYYYYYY: id })
+  const id = slugAndId.split('-').pop()
 
   const dispatch = useDispatch()
   const classes = useStyles()
