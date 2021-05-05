@@ -1,4 +1,4 @@
-import { Box, Typography, List, Link } from '@material-ui/core'
+import { Box, Typography, List } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import { mdiGiftOutline } from '@mdi/js'
@@ -10,8 +10,6 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
-
-const NUMBER_OF_EVENTS_TO_SHOW = 4
 
 interface Props {
   isLoading: boolean
@@ -33,10 +31,11 @@ const useStyles = makeStyles(
     },
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
-      padding: theme.spacing(2),
-      height: '350px',
+      padding: theme.spacing(1),
+      height: '315px',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper
+      backgroundColor: theme.palette.background.paper,
+      overflowY: 'scroll'
     },
     boxFooter: {
       textAlign: 'right',
@@ -90,15 +89,13 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
         )}
         {!isLoading && (
           <List>
-            {celebrationEvents.slice(0, NUMBER_OF_EVENTS_TO_SHOW).map(event => (
+            {celebrationEvents.map(event => (
               <CalendarEventListItem event={event} key={event.id} />
             ))}
           </List>
         )}
       </Box>
-      <Box className={classes.boxFooter}>
-        <Link href="#">View All</Link>
-      </Box>
+      <Box className={classes.boxFooter} />
     </Box>
   )
 }

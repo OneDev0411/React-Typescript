@@ -6,8 +6,12 @@ import {
   Button,
   ListItem,
   ListItemText,
+  Link,
   ListItemAvatar,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Avatar as MuiAvatar,
+  withStyles,
+  Theme
 } from '@material-ui/core'
 
 import timeago from 'timeago.js'
@@ -17,6 +21,7 @@ import { selectUser } from 'selectors/user'
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
 
@@ -24,7 +29,16 @@ interface Props {
   event: ICalendarEvent
 }
 
+// Customizing MUI Avatar backgroundColor
+const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
+  colorDefault: {
+    backgroundColor: theme.palette.grey['200']
+  }
+}))(MuiAvatar)
+
 export default function CalendarEventListItem({ event }: Props) {
+  let avatarIcon
+  let Icon
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
     false
@@ -47,21 +61,35 @@ export default function CalendarEventListItem({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
+  if (contact) {
+    avatarIcon = (
+      <Link href={`/dashboard/contacts/${contact.id}`}>
+        <Avatar disableLazyLoad size="medium" contact={contact} />
+      </Link>
+    )
+  } else {
+    Icon = eventTypesIcons[event.event_type].icon
+    avatarIcon = (
+      <CustomizedMuiAvatar>
+        <Icon />
+      </CustomizedMuiAvatar>
+    )
+  }
+
   return (
     <>
       <ListItem>
-        <ListItemAvatar>
-          {contact ? (
-            <Avatar disableLazyLoad size="large" contact={contact} />
-          ) : (
-            // This is the most aweful way of handling avatar in case contact obj
-            // is null. But avatar component has shortcomings and I don't have time
-            // to fix it.
-            <div />
-          )}
-        </ListItemAvatar>
+        <ListItemAvatar>{avatarIcon}</ListItemAvatar>
         <ListItemText
-          primary={event.title}
+          primary={
+            contact ? (
+              <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
+                {event.title}
+              </Link>
+            ) : (
+              event.title
+            )
+          }
           secondary={timeago().format(event.next_occurence)}
         />
         <ListItemSecondaryAction>

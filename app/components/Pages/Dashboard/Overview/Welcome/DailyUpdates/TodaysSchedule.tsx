@@ -33,8 +33,8 @@ const useStyles = makeStyles(
     },
     boxContainer: {
       border: `1px solid ${theme.palette.grey[300]}`,
-      padding: theme.spacing(2),
-      height: '350px',
+      padding: theme.spacing(1),
+      height: '315px',
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.background.paper
     },
@@ -83,7 +83,7 @@ export function TodaysSchedule({ isLoading, events }: Props) {
             height={1}
           >
             <Typography variant="body1">
-              You have no upcoming birthdays or anniversaries.
+              You're all caught up for today!
             </Typography>
           </Box>
         )}
@@ -96,7 +96,7 @@ export function TodaysSchedule({ isLoading, events }: Props) {
         )}
       </Box>
       <Box className={classes.boxFooter}>
-        <Link href="#">View Calendar</Link>
+        <Link href="/dashboard/calendar">View Calendar</Link>
       </Box>
     </Box>
   )
