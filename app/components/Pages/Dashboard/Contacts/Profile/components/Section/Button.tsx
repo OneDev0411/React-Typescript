@@ -7,15 +7,22 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
+      width: '100%',
+      padding: theme.spacing(0.5),
       display: 'flex',
       alignItems: 'center',
-      color: theme.palette.secondary.main,
+      color: theme.palette.grey[700],
+      borderRadius: theme.shape.borderRadius,
       cursor: (props: Props) => {
         if (!props.onClick) {
           return 'initial'
         }
 
         return !props.disabled ? 'pointer' : 'not-allowed'
+      },
+      '&:hover': {
+        color: theme.palette.secondary.main,
+        background: theme.palette.action.hover
       }
     },
     label: {

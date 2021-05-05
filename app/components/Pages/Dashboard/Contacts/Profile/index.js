@@ -311,7 +311,7 @@ class ContactProfile extends React.Component {
             <Tags contact={contact} onChange={this.fetchContact} />
             <Flows
               flows={contact.flows}
-              contact={contact}
+              contactId={contact.id}
               onStop={this.stopFlow}
               addCallback={this.addToFlowCallback}
             />

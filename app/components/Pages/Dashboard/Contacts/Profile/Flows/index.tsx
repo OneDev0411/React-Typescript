@@ -20,12 +20,12 @@ import { SectionButton } from '../components/Section/Button'
 
 interface Props {
   addCallback: () => void
-  contact: INormalizedContact
+  contactId: UUID
   flows: TBrandFlow<'steps'>[] | null
   onStop: (flowId: UUID) => Promise<void>
 }
 
-function FlowsList({ flows, contact, onStop, addCallback }: Props) {
+function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
   // const classes = useStyles()
 
   return (
@@ -34,10 +34,10 @@ function FlowsList({ flows, contact, onStop, addCallback }: Props) {
       <AddToFlowButton
         activeFlows={[]}
         callback={addCallback}
-        contacts={{ ids: [contact.id] }}
+        contacts={{ ids: [contactId] }}
         buttonRenderer={buttonProps => (
           <SectionButton
-            label={`Add ${contact.display_name} to a flow`}
+            label="Enroll To a Flow"
             icon={mdiLightningBolt}
             onClick={e => buttonProps?.onClick(e)}
           />

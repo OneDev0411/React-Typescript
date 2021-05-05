@@ -11,6 +11,10 @@ import {
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
+import { mdiCogOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { bulkTag } from 'models/contacts/bulk-tag'
 import {
   generateContactFilters,
@@ -43,19 +47,27 @@ const useStyles = makeStyles(
       }
     },
     actionsContainer: {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(1),
       paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      borderTop: `1px solid ${theme.palette.divider}`,
       direction: 'rtl'
     },
-    actionButtons: {
+    manageTags: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      padding: theme.spacing(1.25, 2),
+      background: theme.palette.grey[100],
+      color: theme.palette.tertiary.dark,
+      ...theme.typography.button,
+      '&:hover': {
+        textDecoration: 'none'
+      }
     },
-    manageTags: theme.typography.button
+    manageTagsIcon: {
+      marginRight: theme.spacing(0.5)
+    }
   }),
   { name: 'PopoverContactTagSelector' }
 )
@@ -170,36 +182,45 @@ export const PopoverContactTagSelector = ({
             onChange={handleChange}
           />
           <Box className={classes.actionsContainer}>
-            <Box className={classes.actionButtons}>
-              <Box>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="small"
-                  disabled={!isDirty || isSaving}
-                  onClick={handleSave}
-                >
-                  {isSaving ? 'Saving' : 'Done'}
-                </Button>
-              </Box>
-              <Box mr={0.5}>
-                <Button variant="outlined" size="small" onClick={handleClose}>
-                  Cancel
-                </Button>
-              </Box>
+            <Box flexGrow={1}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                size="small"
+                disabled={!isDirty || isSaving}
+                onClick={handleSave}
+              >
+                {isSaving ? 'Saving' : 'Done'}
+              </Button>
             </Box>
-            {showManageTags && (
-              <Box>
-                <Link
-                  to="/dashboard/account/manage-tags"
-                  className={classes.manageTags}
-                >
-                  Manage Tags
-                </Link>
-              </Box>
-            )}
+            <Box flexGrow={1} mr={0.5}>
+              <Button
+                fullWidth
+                variant="outlined"
+                size="small"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+            </Box>
           </Box>
         </Box>
+        {showManageTags && (
+          <Box>
+            <Link
+              to="/dashboard/account/manage-tags"
+              className={classes.manageTags}
+            >
+              <SvgIcon
+                path={mdiCogOutline}
+                size={muiIconSizes.small}
+                className={classes.manageTagsIcon}
+              />
+              Manage Tags
+            </Link>
+          </Box>
+        )}
       </Popover>
     </>
   )
