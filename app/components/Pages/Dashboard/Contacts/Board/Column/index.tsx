@@ -59,7 +59,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  id: number
+  id: string
   title: string
   droppable?: boolean
   list: IContact[]
@@ -93,7 +93,7 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
       </div>
 
       <Droppable
-        droppableId={id.toString()}
+        droppableId={id}
         type="column"
         direction="vertical"
         isDropDisabled={!droppable}
@@ -113,8 +113,9 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
 
               {list.map((contact, index) => (
                 <ColumnCard
-                  key={index}
-                  id={`${id}-${index}`}
+                  key={contact.id}
+                  columnId={id}
+                  rowId={index}
                   contact={contact}
                 />
               ))}

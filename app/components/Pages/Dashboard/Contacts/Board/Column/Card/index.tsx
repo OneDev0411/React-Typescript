@@ -36,8 +36,7 @@ const useStyles = makeStyles(
       }
     },
     name: {
-      marginLeft: theme.spacing(1),
-      ...theme.typography.body3
+      marginLeft: theme.spacing(1)
     },
     lightColor: {
       color: theme.palette.grey['500']
@@ -68,10 +67,11 @@ const useStyles = makeStyles(
 
 interface Props {
   contact: IContact
-  id: string
+  columnId: string
+  rowId: number
 }
 
-export function ColumnCard({ contact, id }: Props) {
+export function ColumnCard({ contact, columnId, rowId }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
 
@@ -81,8 +81,8 @@ export function ColumnCard({ contact, id }: Props) {
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
             <Avatar contact={contact} size="small" />
-            <Typography className={classes.name}>
-              <TextMiddleTruncate text={contact.display_name} maxLength={30} />
+            <Typography variant="body2" className={classes.name}>
+              <TextMiddleTruncate text={contact.display_name} maxLength={25} />
             </Typography>
           </Box>
 
@@ -123,7 +123,7 @@ export function ColumnCard({ contact, id }: Props) {
   )
 
   return (
-    <Draggable draggableId={id} index={parseInt(id, 10)}>
+    <Draggable draggableId={`${columnId}:${contact.id}`} index={rowId}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <>
           <div
