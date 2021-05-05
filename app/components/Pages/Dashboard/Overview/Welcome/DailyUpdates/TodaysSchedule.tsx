@@ -75,7 +75,7 @@ export function TodaysSchedule({ isLoading, events }: Props) {
             <AnimatedLoader />
           </>
         )}
-        {!isLoading && events.length === 0 && (
+        {!isLoading && filteredEvents.length === 0 && (
           <Box
             display="flex"
             alignItems="center"

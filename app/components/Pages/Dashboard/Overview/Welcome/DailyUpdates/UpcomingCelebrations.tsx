@@ -76,7 +76,7 @@ export function UpcomingCelebrations({ isLoading, events }: Props) {
             <AnimatedLoader />
           </>
         )}
-        {!isLoading && events.length === 0 && (
+        {!isLoading && celebrationEvents.length === 0 && (
           <Box
             display="flex"
             alignItems="center"
