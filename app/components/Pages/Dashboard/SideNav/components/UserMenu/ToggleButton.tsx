@@ -11,8 +11,7 @@ const useStyles = makeStyles(
     dropdownToggleButton: {
       maxWidth: '100%',
       padding: theme.spacing(1.5, 2, 1.5, 3),
-      justifyContent: 'space-between',
-      borderTop: `1px solid ${theme.palette.grey[800]}`
+      justifyContent: 'space-between'
     },
     wrapper: {
       display: 'flex',
