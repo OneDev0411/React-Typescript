@@ -48,14 +48,14 @@ const useStyles = makeStyles(
 
 interface Props {
   contact: IContact
-  index: number
+  id: string
 }
 
-export function ColumnCard({ contact, index }: Props) {
+export function ColumnCard({ contact, id }: Props) {
   const classes = useStyles()
 
   return (
-    <Draggable draggableId={contact.id} index={index}>
+    <Draggable draggableId={id} index={parseInt(id, 10)}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <div
           className={classes.root}

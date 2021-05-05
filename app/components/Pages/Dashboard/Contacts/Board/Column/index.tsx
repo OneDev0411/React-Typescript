@@ -48,11 +48,13 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  id: number
   title: string
+  droppable?: boolean
   list: IContact[]
 }
 
-export function BoardColumn({ title, list }: Props) {
+export function BoardColumn({ id, title, list, droppable = true }: Props) {
   const classes = useStyles()
 
   return (
@@ -69,7 +71,7 @@ export function BoardColumn({ title, list }: Props) {
           <Box display="flex" alignItems="center" mr={1}>
             <SvgIcon path={mdiCardsOutline} />
             <Box ml={0.5}>
-              <Typography variant="subtitle1">0</Typography>
+              <Typography variant="subtitle1">{list.length}</Typography>
             </Box>
           </Box>
 
@@ -80,9 +82,12 @@ export function BoardColumn({ title, list }: Props) {
       </div>
 
       <Droppable
-        droppableId={`board-${title}`}
+        droppableId={id.toString()}
         type="COLUMN"
         direction="horizontal"
+        isDropDisabled={!droppable}
+        ignoreContainerClipping
+        isCombineEnabled
       >
         {(provided: DroppableProvided) => (
           <div
@@ -91,7 +96,7 @@ export function BoardColumn({ title, list }: Props) {
             {...provided.droppableProps}
           >
             {list.map((contact, index) => (
-              <ColumnCard key={contact.id} contact={contact} index={index} />
+              <ColumnCard key={index} id={`${id}-${index}`} contact={contact} />
             ))}
             {provided.placeholder}
           </div>

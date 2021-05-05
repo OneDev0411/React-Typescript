@@ -23,6 +23,8 @@ const useStyles = makeStyles(
 
 import { BoardColumn } from './Column'
 
+const Columns = ['Warm List', 'Hot List', 'Passed List']
+
 interface Props {
   contacts: IContact[]
 }
@@ -36,11 +38,21 @@ export function Board({ contacts }: Props) {
     <div className={classes.root}>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className={classes.container}>
-          <BoardColumn title="All Contacts" list={contacts} />
-          <BoardColumn title="Warm List" list={[]} />
-          <BoardColumn title="Hot List" list={[]} />
-          <BoardColumn title="Passed List" list={[]} />
-          <BoardColumn title="Closed List" list={[]} />
+          <BoardColumn
+            id={0}
+            title="All Contacts"
+            list={contacts}
+            droppable={false}
+          />
+
+          {Columns.map((name, index) => (
+            <BoardColumn
+              key={index}
+              id={index + 1}
+              title={name}
+              list={contacts.filter(contact => contact.tags?.includes(name))}
+            />
+          ))}
         </div>
       </DragDropContext>
     </div>
