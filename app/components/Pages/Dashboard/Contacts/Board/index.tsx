@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -29,15 +30,19 @@ interface Props {
 export function Board({ contacts }: Props) {
   const classes = useStyles()
 
+  const onDragEnd = () => {}
+
   return (
     <div className={classes.root}>
-      <div className={classes.container}>
-        <BoardColumn title="All Contacts" list={contacts} />
-        <BoardColumn title="Warm List" list={[]} />
-        <BoardColumn title="Hot List" list={[]} />
-        <BoardColumn title="Passed List" list={[]} />
-        <BoardColumn title="Closed List" list={[]} />
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={classes.container}>
+          <BoardColumn title="All Contacts" list={contacts} />
+          <BoardColumn title="Warm List" list={[]} />
+          <BoardColumn title="Hot List" list={[]} />
+          <BoardColumn title="Passed List" list={[]} />
+          <BoardColumn title="Closed List" list={[]} />
+        </div>
+      </DragDropContext>
     </div>
   )
 }

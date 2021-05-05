@@ -6,14 +6,13 @@ import {
   Theme,
   Typography
 } from '@material-ui/core'
-import { mdiCalendar, mdiCardsOutline, mdiDotsVertical } from '@mdi/js'
-import cn from 'classnames'
+import { mdiCardsOutline, mdiDotsVertical } from '@mdi/js'
 
-import { Avatar } from 'components/Avatar'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Droppable, DroppableProvided } from 'react-beautiful-dnd'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+
+import { ColumnCard } from './Card'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -40,32 +39,6 @@ const useStyles = makeStyles(
     },
     body: {
       flexGrow: 1
-    },
-    item: {
-      backgroundColor: '#fff',
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(0.5),
-      padding: theme.spacing(1.5),
-      '&:hover': {
-        backgroundColor: theme.palette.grey['50'],
-        cursor: 'move'
-      }
-    },
-    name: {
-      marginLeft: theme.spacing(1),
-      ...theme.typography.body3
-    },
-    lightColor: {
-      color: theme.palette.grey['500']
-    },
-    tag: {
-      backgroundColor: '#fff',
-      border: `1px solid ${theme.palette.divider}`,
-      margin: theme.spacing(0, 1, 1, 0)
-    },
-    noTags: {
-      backgroundColor: '#fff'
     }
   }),
   {
@@ -105,57 +78,24 @@ export function BoardColumn({ title, list }: Props) {
         </Box>
       </div>
 
-      <Box className={classes.body}>
-        {list.map(contact => (
-          <Box key={contact.id} className={classes.item}>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Box display="flex" alignItems="center">
-                <Avatar contact={contact} size="small" />
-                <Typography className={classes.name}>
-                  <TextMiddleTruncate
-                    text={contact.display_name}
-                    maxLength={30}
-                  />
-                </Typography>
-              </Box>
-
-              <Box display="flex" alignItems="center">
-                <SvgIcon
-                  path={mdiCalendar}
-                  className={classes.lightColor}
-                  size={muiIconSizes.xsmall}
-                />
-                <Typography variant="caption" className={classes.lightColor}>
-                  12 hours ago
-                </Typography>
-              </Box>
-            </Box>
-
-            <Box mt={2}>
-              {(contact.tags || []).length > 0 ? (
-                contact.tags?.map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    size="small"
-                    className={classes.tag}
-                  />
-                ))
-              ) : (
-                <Chip
-                  className={cn(classes.noTags, classes.lightColor)}
-                  label="No Tags"
-                  size="small"
-                />
-              )}
-            </Box>
-          </Box>
-        ))}
-      </Box>
+      <Droppable
+        droppableId={`board-${title}`}
+        type="COLUMN"
+        direction="horizontal"
+      >
+        {(provided: DroppableProvided) => (
+          <div
+            className={classes.body}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {list.map((contact, index) => (
+              <ColumnCard key={contact.id} contact={contact} index={index} />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   )
 }
