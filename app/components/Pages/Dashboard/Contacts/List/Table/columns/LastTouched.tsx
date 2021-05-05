@@ -3,6 +3,7 @@ import timeago from 'timeago.js'
 import { makeStyles, createStyles, Theme, Tooltip } from '@material-ui/core'
 
 interface Props {
+  title?: string
   contact: IContact
 }
 
@@ -20,7 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function LastTouched({ contact }: Props) {
+export default function LastTouched({
+  contact,
+  title = 'Last Touch: '
+}: Props) {
   const classes = useStyles()
   const { last_touch: lastTouch, next_touch: nextTouch } = contact
 
@@ -43,13 +47,13 @@ export default function LastTouched({ contact }: Props) {
           }
         >
           <span className={classes.lastTouchLabel}>
-            Last Touch:{' '}
+            {title}
             <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
           </span>
         </Tooltip>
       ) : (
         <span className={classes.lastTouchLabel}>
-          Last Touch:{' '}
+          {title}
           <b className={classes.lastTouchValue}>{formattedLastTouch}</b>
         </span>
       )}

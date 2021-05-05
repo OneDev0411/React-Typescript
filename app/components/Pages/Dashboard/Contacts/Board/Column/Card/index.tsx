@@ -22,6 +22,8 @@ import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { Avatar } from 'components/Avatar'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
+import LastTouched from '../../../List/Table/columns/LastTouched'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -38,7 +40,7 @@ const useStyles = makeStyles(
     name: {
       marginLeft: theme.spacing(1)
     },
-    lightColor: {
+    grey: {
       color: theme.palette.grey['500']
     },
     tag: {
@@ -57,6 +59,14 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius,
       '& > div': {
         visibility: 'hidden'
+      }
+    },
+    lastTouch: {
+      marginLeft: theme.spacing(0.5),
+      color: theme.palette.grey['500'],
+      '& b': {
+        fontWeight: 'normal',
+        ...theme.typography.caption
       }
     }
   }),
@@ -89,11 +99,11 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
           <Box display="flex" alignItems="center">
             <SvgIcon
               path={mdiCalendar}
-              className={classes.lightColor}
+              className={classes.grey}
               size={muiIconSizes.xsmall}
             />
-            <Typography variant="caption" className={classes.lightColor}>
-              12 hours ago
+            <Typography variant="caption" className={classes.lastTouch}>
+              <LastTouched contact={contact} title="" />
             </Typography>
           </Box>
         </Box>
@@ -110,7 +120,7 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
             ))
           ) : (
             <Chip
-              className={cn(classes.noTags, classes.lightColor)}
+              className={cn(classes.noTags, classes.grey)}
               label="No Tags"
               size="small"
             />
