@@ -39,6 +39,8 @@ const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
+  let linkTitle
+
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
     false
@@ -67,6 +69,11 @@ export default function CalendarEventListItem({ event }: Props) {
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
     )
+    linkTitle = (
+      <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
+        {event.title}
+      </Link>
+    )
   } else {
     Icon = eventTypesIcons[event.event_type].icon
     avatarIcon = (
@@ -74,6 +81,7 @@ export default function CalendarEventListItem({ event }: Props) {
         <Icon />
       </CustomizedMuiAvatar>
     )
+    linkTitle = event.title
   }
 
   return (
@@ -81,15 +89,7 @@ export default function CalendarEventListItem({ event }: Props) {
       <ListItem>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
         <ListItemText
-          primary={
-            contact ? (
-              <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
-                {event.title}
-              </Link>
-            ) : (
-              event.title
-            )
-          }
+          primary={linkTitle}
           secondary={timeago().format(event.next_occurence)}
         />
         <ListItemSecondaryAction>

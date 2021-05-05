@@ -1,5 +1,6 @@
-import { Box, Typography, List, Link } from '@material-ui/core'
+import { Box, Typography, List, Button } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { browserHistory } from 'react-router'
 
 import { mdiCalendarToday } from '@mdi/js'
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles(
     },
     boxFooter: {
       textAlign: 'right',
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(1)
     }
   }),
   { name: 'TodaysSchedule' }
@@ -96,7 +97,13 @@ export function TodaysSchedule({ isLoading, events }: Props) {
         )}
       </Box>
       <Box className={classes.boxFooter}>
-        <Link href="/dashboard/calendar">View Calendar</Link>
+        <Button
+          variant="text"
+          color="primary"
+          onClick={() => browserHistory.push('/dashboard/calendar')}
+        >
+          View Calendar
+        </Button>
       </Box>
     </Box>
   )
