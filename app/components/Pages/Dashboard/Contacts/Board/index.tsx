@@ -44,17 +44,13 @@ export function Board({ contacts }: Props) {
   }, [contacts])
 
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return
-    }
-
     const [, contactId] = result.draggableId.split(':')
     const oldTag = Columns[result.source.droppableId]
-    const newTag = Columns[result.destination.droppableId]
+    const newTag = Columns[result.destination?.droppableId ?? -1]
 
     const contact = list.find(contact => contact.id === contactId)!
     const tags = uniq(
-      (contact.tags || []).filter(tag => tag !== oldTag).concat(newTag)
+      (contact.tags || []).filter(tag => tag !== oldTag).concat(newTag || [])
     )
 
     setList(
@@ -92,7 +88,6 @@ export function Board({ contacts }: Props) {
                   contact.tags?.every(tag => !Columns.includes(tag))
               )
             )}
-            droppable={false}
           />
 
           {Columns.map((name, index) => (
