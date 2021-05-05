@@ -8,7 +8,11 @@ import {
 } from '@material-ui/core'
 import { mdiCardsOutline, mdiDotsVertical } from '@mdi/js'
 
-import { Droppable, DroppableProvided } from 'react-beautiful-dnd'
+import {
+  Droppable,
+  DroppableProvided,
+  DroppableStateSnapshot
+} from 'react-beautiful-dnd'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -40,6 +44,13 @@ const useStyles = makeStyles(
     },
     body: {
       flexGrow: 1
+    },
+    placeholder: {
+      margin: theme.spacing(0.5),
+      backgroundColor: theme.palette.grey['100'],
+      border: `1px dashed ${theme.palette.action.disabled}`,
+      borderRadius: theme.shape.borderRadius,
+      height: theme.spacing(15)
     }
   }),
   {
@@ -83,22 +94,32 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
 
       <Droppable
         droppableId={id.toString()}
-        type="COLUMN"
-        direction="horizontal"
+        type="column"
+        direction="vertical"
         isDropDisabled={!droppable}
         ignoreContainerClipping
         isCombineEnabled
       >
-        {(provided: DroppableProvided) => (
+        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
           <div
             className={classes.body}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {list.map((contact, index) => (
-              <ColumnCard key={index} id={`${id}-${index}`} contact={contact} />
-            ))}
-            {provided.placeholder}
+            <div>
+              {snapshot.isDraggingOver && (
+                <div className={classes.placeholder} />
+              )}
+
+              {list.map((contact, index) => (
+                <ColumnCard
+                  key={index}
+                  id={`${id}-${index}`}
+                  contact={contact}
+                />
+              ))}
+              {provided.placeholder}
+            </div>
           </div>
         )}
       </Droppable>
