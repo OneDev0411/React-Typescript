@@ -6,6 +6,7 @@ import { mdiTagOutline } from '@mdi/js'
 import { PopoverContactTagSelector } from 'components/TagSelector'
 
 import { Tag } from './Tag'
+import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
 
 interface Props {
@@ -28,35 +29,37 @@ function Tags({ contact, onChange }: Props) {
   )
 
   return (
-    <Box px={3} display="flex" flexWrap="wrap">
-      {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
-      <PopoverContactTagSelector
-        showManageTags
-        label={`${contact.display_name}'s Tags`}
-        anchorRenderer={onClick =>
-          hasTags ? (
-            <Chip
-              label="Edit"
-              variant="outlined"
-              color="secondary"
-              size="small"
-              onClick={onClick}
-            />
-          ) : (
-            <SectionButton
-              label="Add some tags"
-              icon={mdiTagOutline}
-              onClick={onClick}
-            />
-          )
-        }
-        value={currentTags}
-        filter={{
-          selectedIds: [contact.id]
-        }}
-        callback={() => onChange()}
-      />
-    </Box>
+    <BasicSection>
+      <Box display="flex" flexWrap="wrap">
+        {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
+        <PopoverContactTagSelector
+          showManageTags
+          label={`${contact.display_name}'s Tags`}
+          anchorRenderer={onClick =>
+            hasTags ? (
+              <Chip
+                label="Edit"
+                variant="outlined"
+                color="secondary"
+                size="small"
+                onClick={onClick}
+              />
+            ) : (
+              <SectionButton
+                label="Add some tags"
+                icon={mdiTagOutline}
+                onClick={onClick}
+              />
+            )
+          }
+          value={currentTags}
+          filter={{
+            selectedIds: [contact.id]
+          }}
+          callback={() => onChange()}
+        />
+      </Box>
+    </BasicSection>
   )
 }
 

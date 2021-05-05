@@ -1,22 +1,12 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
 
 import { mdiLightningBolt } from '@mdi/js'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 
 import List from './List/List'
+import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
-
-// const useStyles = makeStyles(
-//   (theme: Theme) => ({
-//     button: {
-//       color: theme.palette.grey['500'],
-//       marginLeft: 0
-//     }
-//   }),
-//   { name: 'AddFlow' }
-// )
 
 interface Props {
   addCallback: () => void
@@ -26,10 +16,8 @@ interface Props {
 }
 
 function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
-  // const classes = useStyles()
-
   return (
-    <Box px={3}>
+    <BasicSection>
       {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
       <AddToFlowButton
         activeFlows={[]}
@@ -43,7 +31,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
           />
         )}
       />
-    </Box>
+    </BasicSection>
   )
 }
 

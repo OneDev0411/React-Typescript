@@ -49,7 +49,6 @@ const useStyles = makeStyles(
     actionsContainer: {
       marginTop: theme.spacing(1),
       paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
       direction: 'rtl'

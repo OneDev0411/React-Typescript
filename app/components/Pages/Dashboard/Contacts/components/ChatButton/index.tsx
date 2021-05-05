@@ -8,6 +8,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiChatProcessingOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { selectUser } from 'selectors/user'
 
@@ -19,6 +20,8 @@ import Chatroom from '../../../Chatroom/Util/chatroom'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     button: {
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
       '&[disabled] svg': {
         fill: theme.palette.action.disabled
       }
@@ -79,11 +82,12 @@ function ChatButton({ contact, render }: Props) {
 
   return (
     <IconButton
+      size="medium"
       className={classes.button}
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
     >
-      <SvgIcon path={mdiChatProcessingOutline} />
+      <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.small} />
     </IconButton>
   )
 }
