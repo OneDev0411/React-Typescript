@@ -26,7 +26,7 @@ const useStyles = makeStyles(
   { name: 'Greeting' }
 )
 
-export default function Greeting() {
+export function Greeting() {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
