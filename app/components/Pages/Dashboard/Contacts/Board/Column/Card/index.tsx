@@ -61,13 +61,18 @@ export function ColumnCard({ contact, index }: Props) {
           className={classes.root}
           ref={provided.innerRef}
           {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          style={{
+            ...provided.draggableProps.style,
+            ...(snapshot.isDragging
+              ? {
+                  borderColor: '#ccc',
+                  opacity: 0.8
+                }
+              : {})
+          }}
         >
-          <div
-            style={{
-              opacity: snapshot.isDragging ? 0.5 : 1
-            }}
-            {...provided.dragHandleProps}
-          >
+          <div>
             <Box
               display="flex"
               alignItems="center"

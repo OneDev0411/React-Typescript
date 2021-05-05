@@ -25,7 +25,8 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1.5),
       width: '360px',
       height: '100%',
-      overflow: 'auto'
+      overflowX: 'hidden',
+      overflowY: 'auto'
     },
     head: {
       position: 'sticky',
