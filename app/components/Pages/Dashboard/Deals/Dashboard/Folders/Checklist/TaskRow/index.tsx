@@ -90,6 +90,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
           <TaskIcon
             deal={deal}
             task={task}
+            isTaskExpanded={isTaskExpanded}
             isBackOffice={isBackOffice}
             onClick={toggleTaskOpen}
           />

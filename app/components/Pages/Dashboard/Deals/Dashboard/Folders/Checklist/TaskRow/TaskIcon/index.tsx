@@ -6,7 +6,8 @@ import {
   mdiFolderOutline,
   mdiAlertCircle,
   mdiCloseCircle,
-  mdiCheckboxMarkedCircle
+  mdiCheckboxMarkedCircle,
+  mdiFolderOpenOutline
 } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -15,11 +16,18 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 interface Props {
   deal: IDeal
   task: IDealTask
+  isTaskExpanded: boolean
   isBackOffice: boolean
   onClick: () => void
 }
 
-export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
+export function TaskIcon({
+  deal,
+  task,
+  isBackOffice,
+  isTaskExpanded,
+  onClick
+}: Props) {
   const theme = useTheme<Theme>()
 
   if (!task) {
@@ -54,12 +62,14 @@ export function TaskIcon({ deal, task, isBackOffice, onClick }: Props) {
 
   return (
     <Tooltip title={tooltip || status}>
-      <IconButton onClick={onClick}>{getIcon(status, theme)}</IconButton>
+      <IconButton onClick={onClick}>
+        {getIcon(isTaskExpanded, status, theme)}
+      </IconButton>
     </Tooltip>
   )
 }
 
-function getIcon(status: string, theme: Theme) {
+function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
   switch (status) {
     case 'Required':
       return (
@@ -101,6 +111,11 @@ function getIcon(status: string, theme: Theme) {
       )
 
     default:
-      return <SvgIcon path={mdiFolderOutline} size={muiIconSizes.medium} />
+      return (
+        <SvgIcon
+          path={isTaskExpanded ? mdiFolderOpenOutline : mdiFolderOutline}
+          size={muiIconSizes.medium}
+        />
+      )
   }
 }
