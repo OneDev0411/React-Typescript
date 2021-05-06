@@ -211,7 +211,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
             {/* Listing Agent Steps - Start */}
             <ShowingStepRolePerson
-              roleType="SellerAgent"
               personTitle="Agent"
               person={agentPerson}
               onPersonChange={setAgentPerson}
@@ -241,7 +240,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             {hasCoAgent === 'Yes' && (
               <ShowingStepRolePerson
-                roleType="CoSellerAgent"
                 personTitle="CoAgent"
                 person={coAgentPerson}
                 onPersonChange={setCoAgentPerson}
@@ -275,7 +273,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             {hasOccupant === 'Yes' && (
               <ShowingStepRolePerson
-                roleType="Tenant"
                 personTitle="Occupant"
                 person={occupantPerson}
                 onPersonChange={setOccupantPerson}

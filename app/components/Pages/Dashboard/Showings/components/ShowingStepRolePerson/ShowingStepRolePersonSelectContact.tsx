@@ -1,25 +1,33 @@
 import React from 'react'
 
+import { useSelector } from 'react-redux'
+
 import ContactSearchInput from 'components/ContactSearchInput'
+
+import { selectActiveTeamId } from 'selectors/team'
 
 import { splitFullName } from './helpers'
 
-interface ShowingStepRolePersonSelectContactProps {
-  onSelect: (person: IShowingRoleInputPerson) => void
+export interface ShowingStepRolePersonSelectContactProps {
+  onSelect: (person: IShowingRoleInputPerson, contact?: IContact) => void
 }
 
 function ShowingStepRolePersonSelectContact({
   onSelect
 }: ShowingStepRolePersonSelectContactProps) {
+  const teamId = useSelector(selectActiveTeamId)
+
   const handleChange = (contact: IContact) => {
-    console.log('contact', contact)
-    onSelect({
-      ...splitFullName(contact.display_name),
-      email: contact.email || '',
-      phone_number: contact.phone_number || '',
-      user: contact.user as string, // TODO: user or id?
-      brand: contact.brand || '' // TODO: Where is brand?
-    })
+    onSelect(
+      {
+        ...splitFullName(contact.display_name),
+        email: contact.email || '',
+        phone_number: contact.phone_number || '',
+        user: '',
+        brand: contact.brand || teamId
+      },
+      contact
+    )
   }
 
   const handleNew = (fullName: string) => {

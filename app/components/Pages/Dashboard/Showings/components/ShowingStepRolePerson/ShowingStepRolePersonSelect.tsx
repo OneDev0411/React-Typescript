@@ -2,13 +2,15 @@ import React from 'react'
 import { Box, Button } from '@material-ui/core'
 
 import ShowingStepRolePersonSelectAgent from './ShowingStepRolePersonSelectAgent'
-import ShowingStepRolePersonSelectContact from './ShowingStepRolePersonSelectContact'
+import ShowingStepRolePersonSelectContact, {
+  ShowingStepRolePersonSelectContactProps
+} from './ShowingStepRolePersonSelectContact'
 
 export type RolePersonSelectType = 'Agent' | 'Contact'
 
-export interface ShowingStepRolePersonSelectProps {
+export interface ShowingStepRolePersonSelectProps
+  extends ShowingStepRolePersonSelectContactProps {
   selectType?: RolePersonSelectType
-  onSelect: (person: IShowingRoleInputPerson) => void
   skippable: boolean
 }
 

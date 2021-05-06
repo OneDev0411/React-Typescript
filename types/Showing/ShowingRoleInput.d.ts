@@ -5,7 +5,7 @@ declare interface IShowingRoleInputNotification {
 }
 
 declare interface IShowingRoleInputPerson {
-  user: UUID
+  user: Optional<UUID>
   brand: UUID
   first_name: string
   last_name: string

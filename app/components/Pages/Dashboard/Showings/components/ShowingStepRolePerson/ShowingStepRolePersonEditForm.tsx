@@ -7,19 +7,19 @@ import { Form } from 'react-final-form'
 import { FormTextField, FormPhoneField } from 'components/final-form-fields'
 
 interface ShowingStepRolePersonEditFormProps {
-  roleType: IDealRoleType
   personTitle: string
   initialData: IShowingRoleInputPerson
   onSubmit: (data: IShowingRoleInputPerson) => void
   submitLabel?: string
+  submitDisabled?: boolean
 }
 
 function ShowingStepRolePersonEditForm({
-  roleType,
   personTitle,
   initialData,
   onSubmit,
-  submitLabel = 'Next'
+  submitLabel = 'Next',
+  submitDisabled = false
 }: ShowingStepRolePersonEditFormProps) {
   return (
     <Form
@@ -42,12 +42,17 @@ function ShowingStepRolePersonEditForm({
             />
             <FormTextField label="Last Name" name="last_name" required />
             <FormTextField label="Email" name="email" required />
-            <FormPhoneField label="Phone" name="phone_number" required />
+            <FormPhoneField
+              label="Phone"
+              name="phone_number"
+              required
+              format={false}
+            />
 
             <Box mt={4} display="flex" justifyContent="flex-end">
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || submitDisabled}
                 color="primary"
                 variant="contained"
               >

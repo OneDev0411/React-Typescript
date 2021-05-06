@@ -1,7 +1,11 @@
 import React, { memo, useState } from 'react'
 import { kebabCase } from 'lodash'
 
-import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
+import {
+  QuestionSection,
+  QuestionTitle,
+  useWizardContext
+} from 'components/QuestionWizard'
 
 import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
@@ -10,10 +14,11 @@ import ShowingStepRolePersonSelect, {
 } from './ShowingStepRolePersonSelect'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import useCreateContact from './use-create-contact'
+import useUpdateContact from './use-update-contact'
 
 interface ShowingStepRolePersonProps
   extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
-  roleType: IDealRoleType
   personTitle: string
   person: Nullable<IShowingRoleInputPerson>
   onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
@@ -21,7 +26,6 @@ interface ShowingStepRolePersonProps
 }
 
 function ShowingStepRolePerson({
-  roleType,
   personTitle,
   person,
   onPersonChange,
@@ -29,13 +33,11 @@ function ShowingStepRolePerson({
   skippable = true
 }: ShowingStepRolePersonProps) {
   const nextStep = useQuestionWizardSmartNext()
+  const { setLoading } = useWizardContext()
   const [isEditable, setIsEditable] = useState(true)
-
-  const handleSubmit = (person: IShowingRoleInputPerson) => {
-    onPersonChange(person)
-    setIsEditable(false)
-    nextStep(400)
-  }
+  const [contact, setContact] = useState<Nullable<IContact>>(null)
+  const { createContact, isCreatingContact } = useCreateContact()
+  const { updateContact, isUpdatingContact } = useUpdateContact()
 
   const handleEdit = () => {
     setIsEditable(true)
@@ -44,6 +46,33 @@ function ShowingStepRolePerson({
   const handleRemove = () => {
     onPersonChange(null)
     setIsEditable(true)
+    setContact(null)
+  }
+
+  const handleSelect = (
+    person: IShowingRoleInputPerson,
+    contact?: IContact
+  ) => {
+    onPersonChange(person)
+    setContact(contact ?? null)
+  }
+
+  const handleSubmit = async (person: IShowingRoleInputPerson) => {
+    if (selectType === 'Contact') {
+      setLoading(true)
+
+      if (!contact) {
+        setContact(await createContact(person))
+      } else {
+        setContact(await updateContact(contact, person))
+      }
+
+      setLoading(false)
+    }
+
+    onPersonChange(person)
+    setIsEditable(false)
+    nextStep(400)
   }
 
   return (
@@ -55,16 +84,23 @@ function ShowingStepRolePerson({
         {!person && (
           <ShowingStepRolePersonSelect
             selectType={selectType}
-            onSelect={onPersonChange}
+            onSelect={handleSelect}
             skippable={skippable}
           />
         )}
         {person && isEditable && (
           <ShowingStepRolePersonEditForm
-            roleType={roleType}
             personTitle={personTitle}
             initialData={person}
             onSubmit={handleSubmit}
+            submitLabel={
+              selectType === 'Contact'
+                ? contact
+                  ? 'Save'
+                  : 'Save & Add to Contacts'
+                : undefined
+            }
+            submitDisabled={isCreatingContact || isUpdatingContact}
           />
         )}
         {person && !isEditable && (
