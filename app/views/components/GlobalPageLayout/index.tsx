@@ -12,7 +12,16 @@ interface Props extends BoxProps {
 }
 
 const GlobalPageLayout = ({ gutter = 4, ...props }: Props) => {
-  return <Box p={gutter} {...props} />
+  return (
+    <Box
+      id="GlobalPageLayout"
+      p={gutter}
+      height="100%"
+      display="flex"
+      flexDirection="column"
+      {...props}
+    />
+  )
 }
 
 GlobalPageLayout.Header = (props: GlobalHeaderProps) => (
@@ -23,7 +32,7 @@ GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
 )
 
 GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (
-  <Box p={gutter} mt={5} {...props} />
+  <Box id="GlobalPageLayoutMain" p={gutter} mt={5} flexGrow={1} {...props} />
 )
 
 export default GlobalPageLayout
