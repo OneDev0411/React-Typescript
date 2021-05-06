@@ -5,7 +5,8 @@ interface Props {
   imageUrl: string
   title: string
   subTitle: string
-  cta: React.ReactNode
+  ctaNode: React.ReactNode
+  footerNode?: React.ReactNode
 }
 
 const useStyles = makeStyles(
@@ -36,14 +37,20 @@ const useStyles = makeStyles(
       justifyContent: 'center',
       flexBasis: '50%'
     },
-    extra: {
+    footer: {
       flexGrow: 1
     }
   }),
   { name: 'ZeroState' }
 )
 
-export function ZeroState({ imageUrl, title, subTitle, cta }: Props) {
+export function ZeroState({
+  imageUrl,
+  title,
+  subTitle,
+  ctaNode,
+  footerNode
+}: Props) {
   const theme = useTheme<Theme>()
   const classes = useStyles()
 
@@ -63,12 +70,12 @@ export function ZeroState({ imageUrl, title, subTitle, cta }: Props) {
                 justifyContent="space-between"
                 paddingY={theme.spacing(1)}
               >
-                {cta}
+                {ctaNode}
               </Box>
             </Box>
           </Box>
         </Box>
-        <Box className={classes.extra} />
+        <Box className={classes.footer}>{footerNode}</Box>
       </Box>
     </Box>
   )

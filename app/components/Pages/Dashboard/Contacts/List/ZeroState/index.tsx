@@ -12,7 +12,7 @@ import {
 
 import { OAuthProvider } from 'constants/contacts'
 
-import GoogleSigninButton from 'components/GoogleSigninButton'
+import { GoogleSignInButton } from 'components/GoogleSignInButton'
 
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
@@ -72,14 +72,12 @@ export function ZeroState() {
         your referral network in Rechat by importing or creating a contact now.
       </Typography>
 
-      <GoogleSigninButton
+      <GoogleSignInButton
         disabled={google.connecting}
         onClick={google.connect}
         style={{ marginBottom: '1rem' }}
         size="large"
-      >
-        Sign in with Google
-      </GoogleSigninButton>
+      />
 
       <Button
         disabled={outlook.connecting}
