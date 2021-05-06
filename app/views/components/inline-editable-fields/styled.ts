@@ -59,7 +59,7 @@ export const EditModeContainer = styled.div<
   background: ${({ hasError, theme }) =>
     hasError
       ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
-      : theme.palette.action.selected};
+      : theme.palette.action.hover};
 `
 
 export const Label = styled.div<{

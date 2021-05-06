@@ -1,6 +1,7 @@
 import React from 'react'
 import cuid from 'cuid'
 import { connect } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 import { addNotification as notify } from 'components/notification'
 
@@ -11,7 +12,8 @@ import { updateAttribute } from 'models/contacts/update-attribute'
 import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
-import { Section } from '../Section'
+import { BasicSection } from '../Section/Basic'
+// import { SectionButton } from '../Section/Button'
 import MasterField from '../ContactAttributeInlineEditableField'
 
 import {
@@ -28,6 +30,7 @@ function generateEmptyAttribute(attribute_def, is_partner, order) {
     cuid: cuid(),
     is_partner,
     isActive: false,
+    isEmpty: true,
     order,
     [attribute_def.data_type]: ''
   }
@@ -62,15 +65,21 @@ class SectionWithFields extends React.Component {
 
     this.sectionAttributesDef = sectionAttributesDef
 
-    const allAttributes = [
-      ...attributes,
-      ...getEmptyAttributes(attributes, sectionAttributesDef, props.isPartner)
-    ]
-
+    const emptyAttributes = getEmptyAttributes(
+      attributes,
+      sectionAttributesDef,
+      props.isPartner
+    )
+    const allAttributes = [...attributes, ...emptyAttributes]
+    const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
+    const toggleEmptyAttributes = false
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
     const triggers = getContactTriggers(props.contact)
 
+    console.log({ orderedAttributes })
     this.state = {
+      shouldToggleEmptyAttributes,
+      toggleEmptyAttributes,
       orderedAttributes,
       triggers
     }
@@ -370,29 +379,44 @@ class SectionWithFields extends React.Component {
     })
   }
 
-  render() {
-    const { triggers } = this.state
-    const { section } = this.props
+  toggleEmptyFields = () =>
+    this.setState(prevState => ({
+      toggleEmptyAttributes: !prevState.toggleEmptyAttributes
+    }))
+
+  renderField = attribute => {
+    const { toggleEmptyAttributes, triggers } = this.state
+
+    if (attribute.isEmpty && !toggleEmptyAttributes) {
+      return null
+    }
 
     return (
-      <Section title={this.props.title || section}>
-        <div style={{ padding: '0 1.5rem' }}>
-          {this.state.orderedAttributes.map(attribute => (
-            <MasterField
-              contact={this.props?.contact}
-              attribute={attribute}
-              trigger={triggers[attribute.attribute_def.name] || null}
-              handleAddNewInstance={this.addShadowAttribute}
-              handleDelete={this.deleteHandler}
-              handleSave={this.save}
-              handleToggleMode={this.toggleMode}
-              isActive={attribute.isActive}
-              key={attribute.cuid || attribute.id}
-            />
-          ))}
-          {this.props.children}
-        </div>
-      </Section>
+      <MasterField
+        contact={this.props?.contact}
+        attribute={attribute}
+        trigger={triggers[attribute.attribute_def.name] || null}
+        handleAddNewInstance={this.addShadowAttribute}
+        handleDelete={this.deleteHandler}
+        handleSave={this.save}
+        handleToggleMode={this.toggleMode}
+        isActive={attribute.isActive}
+        key={attribute.cuid || attribute.id}
+      />
+    )
+  }
+
+  render() {
+    const { orderedAttributes, shouldToggleEmptyAttributes } = this.state
+
+    return (
+      <BasicSection>
+        {(orderedAttributes || []).map(attr => this.renderField(attr))}
+        {shouldToggleEmptyAttributes && (
+          <Button onClick={this.toggleEmptyFields}>toggle</Button>
+        )}
+        {this.props.children}
+      </BasicSection>
     )
   }
 }

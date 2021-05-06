@@ -315,9 +315,8 @@ class ContactProfile extends React.Component {
               onStop={this.stopFlow}
               addCallback={this.addToFlowCallback}
             />
-            <Divider />
             <ContactInfo {..._props} />
-            <AddressesSection {..._props} />
+            {/* <AddressesSection {..._props} />
             <Dates {..._props} />
             <Deals contact={contact} />
             <Details {..._props} />
@@ -334,7 +333,7 @@ class ContactProfile extends React.Component {
             <Delete
               handleDelete={this.delete}
               isDeleting={this.state.isDeleting}
-            />
+            /> */}
           </SideColumn>
           <MainColumn>
             <MergeDuplicates

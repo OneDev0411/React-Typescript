@@ -482,11 +482,7 @@ class MasterField extends React.Component {
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
-      return (
-        <div style={{ margin: '0 -0.5em', padding: '0.5em' }}>
-          {this.renderViewMode()}
-        </div>
-      )
+      return <div style={{ padding: '0.5em' }}>{this.renderViewMode()}</div>
     }
 
     return (
@@ -507,7 +503,6 @@ class MasterField extends React.Component {
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
         showDelete
-        style={{ margin: '0 -0.5em' }}
         toggleMode={this.toggleMode}
         value={this.state.value}
       />

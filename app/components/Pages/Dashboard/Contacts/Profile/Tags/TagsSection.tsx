@@ -46,7 +46,7 @@ function Tags({ contact, onChange }: Props) {
               />
             ) : (
               <SectionButton
-                label="Add some tags"
+                label="Add Tags"
                 icon={mdiTagOutline}
                 onClick={onClick}
               />

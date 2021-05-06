@@ -48,12 +48,11 @@ export default function Menu({ contact }: Props) {
           recipients={normalizeContactsForEmailCompose([contact])}
           render={({ onClick, testId }) => (
             <IconButton
-              size="medium"
               onClick={onClick}
               data-test={testId}
               className={classes.button}
             >
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
             </IconButton>
           )}
         />
@@ -70,12 +69,11 @@ export default function Menu({ contact }: Props) {
           mediums="Email"
           buttonRenderrer={({ disabled, onClick }) => (
             <IconButton
-              size="medium"
               onClick={onClick}
               disabled={disabled}
               className={classes.button}
             >
-              <SvgIcon path={mdiGiftOutline} size={muiIconSizes.small} />
+              <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
             </IconButton>
           )}
         />

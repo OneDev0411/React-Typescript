@@ -82,12 +82,11 @@ function ChatButton({ contact, render }: Props) {
 
   return (
     <IconButton
-      size="medium"
       className={classes.button}
       disabled={!isChattable || isCreatingRoom}
       onClick={onClick}
     >
-      <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.small} />
+      <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.medium} />
     </IconButton>
   )
 }
