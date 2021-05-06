@@ -5,7 +5,7 @@ interface Props {
   imageUrl: string
   title: string
   subTitle: string
-  ctaNode: React.ReactNode
+  ctaNode?: React.ReactNode
   footerNode?: React.ReactNode
 }
 

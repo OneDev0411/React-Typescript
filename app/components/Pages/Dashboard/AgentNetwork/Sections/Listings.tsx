@@ -4,6 +4,8 @@ import { Grid, Box, Typography } from '@material-ui/core'
 import ListingCard from 'components/ListingCards/ListingCard'
 import LoadingContainer from 'components/LoadingContainer'
 
+import { AgentNetworksZeroState } from './ZeroState'
+
 interface Props {
   isLoading: boolean
   listings: Nullable<(ICompactListing | IListing)[]>
@@ -26,7 +28,7 @@ export default function Listings({
           </Grid>
         </Grid>
       </Grid>
-      <Box py={2}>
+      <Box py={2} display="flex" flexDirection="column">
         <Grid container spacing={3}>
           {isLoading && (
             <Grid container item xs alignItems="center" justify="center">
@@ -41,28 +43,8 @@ export default function Listings({
               />
             </Grid>
           ))}
-          {listings?.length === 0 && (
-            <Grid
-              container
-              item
-              direction="column"
-              alignItems="center"
-              justify="center"
-            >
-              <Box my={2}>
-                <img
-                  src="/static/images/contacts/zero-state.svg"
-                  alt="houston"
-                  style={{ marginBottom: '1rem' }}
-                />
-              </Box>
-              <Typography variant="h5" align="center">
-                You don't have any listings. <br />
-                You can try searching an address or a listing.
-              </Typography>
-            </Grid>
-          )}
         </Grid>
+        {listings?.length === 0 && <AgentNetworksZeroState />}
       </Box>
     </>
   )
