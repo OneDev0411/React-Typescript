@@ -1,6 +1,6 @@
 import type { SelectItem } from 'components/Select'
 
-export const daysOfWeekOptions: SelectItem<Weekday>[] = [
+export const weekDayOptions: SelectItem<Weekday>[] = [
   {
     label: 'Monday',
     value: 'Monday'

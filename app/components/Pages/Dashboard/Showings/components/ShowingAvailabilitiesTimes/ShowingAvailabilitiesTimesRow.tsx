@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Box, FormHelperText, Grid, IconButton } from '@material-ui/core'
 
 import { mdiDeleteOutline } from '@mdi/js'
@@ -12,7 +12,7 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import FormDayOfWeekSelect from 'components/final-form-fields/FormDayOfWeekSelect'
+import WeekdaySelect from 'components/final-form-fields/WeekdaySelect'
 import FormTimePicker from 'components/final-form-fields/FormTimePicker'
 
 import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
@@ -90,7 +90,7 @@ function ShowingAvailabilitiesTimesRow({
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={5}>
-                <FormDayOfWeekSelect name="weekday" margin="dense" />
+                <WeekdaySelect name="weekday" margin="dense" />
               </Grid>
               <Grid item xs={5} sm={5} md={3}>
                 <FormTimePicker
