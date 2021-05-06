@@ -8,16 +8,19 @@ interface Props {
   children: React.ReactNode
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  main: {
-    width: '100%',
-    minHeight: '100vh',
-    flexGrow: 1,
-    [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${appSidenavWidth}px)`
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    main: {
+      width: '100%',
+      minHeight: '100vh',
+      flexGrow: 1,
+      [theme.breakpoints.up('md')]: {
+        width: `calc(100% - ${appSidenavWidth}px)`
+      }
     }
-  }
-}))
+  }),
+  { name: 'MainWrapper' }
+)
 
 export const SideNavContext = createContext({
   toggle: () => {}
