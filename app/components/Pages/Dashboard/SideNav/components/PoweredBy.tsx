@@ -12,7 +12,11 @@ const useStyles = makeStyles(
       color: theme.palette.grey[400]
     },
     logo: {
-      width: theme.spacing(6)
+      opacity: 0.8,
+      width: theme.spacing(6),
+      '&:hover': {
+        opacity: 1
+      }
     }
   }),
   {
