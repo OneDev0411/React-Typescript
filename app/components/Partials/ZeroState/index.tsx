@@ -69,6 +69,7 @@ export function ZeroState({
                 display="flex"
                 justifyContent="space-between"
                 paddingY={theme.spacing(1)}
+                flexWrap="wrap"
               >
                 {ctaNode}
               </Box>

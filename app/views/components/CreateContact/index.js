@@ -24,7 +24,7 @@ export class CreateContact extends React.Component {
           onClick={this.toggleOpen}
           {...this.props.buttonProps}
         >
-          Create Contact
+          Create a new contact
         </Button>
 
         <NewContactDrawer

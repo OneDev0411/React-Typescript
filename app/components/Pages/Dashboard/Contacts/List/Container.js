@@ -67,7 +67,7 @@ import {
 } from './constants'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
-import { ZeroState } from './ZeroState'
+import { ContactsZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
 import { Board } from '../Board'
@@ -929,7 +929,7 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState />}
+          {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.state.viewMode === 'table' && (
