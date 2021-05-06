@@ -47,44 +47,49 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     Nullable<IShowingApprovalType>
   >(null)
 
-  const [
-    agentPerson,
-    setAgentPerson,
+  const {
+    rolePerson: agentPerson,
+    setRolePerson: setAgentPerson,
+    roleConfirmNotificationTypes: agentConfirmNotificationTypes,
+    setRoleConfirmNotificationTypesChange: setAgentConfirmNotificationTypesChange,
+    roleCancelNotificationTypes: agentCancelNotificationTypes,
+    setRoleCancelNotificationTypesChange: setAgentCancelNotificationTypesChange,
+    resetRoleNotification: resetAgentNotificationTypes
+  } = useShowingRole()
 
-    agentConfirmNotificationTypes,
-    setAgentConfirmNotificationTypesChange,
+  const {
+    rolePerson: coAgentPerson,
+    setRolePerson: setCoAgentPerson,
+    roleConfirmNotificationTypes: coAgentConfirmNotificationTypes,
+    setRoleConfirmNotificationTypesChange: setCoAgentConfirmNotificationTypesChange,
+    roleCancelNotificationTypes: coAgentCancelNotificationTypes,
+    setRoleCancelNotificationTypesChange: setCoAgentCancelNotificationTypesChange,
+    hasRole: hasCoAgent,
+    setHasRoleChange: setHasCoAgent,
+    resetRoleNotification: resetCoAgentNotificationTypes
+  } = useShowingRole()
 
-    agentCancelNotificationTypes,
-    setAgentCancelNotificationTypesChange
-  ] = useShowingRole()
+  const {
+    rolePerson: occupantPerson,
+    setRolePerson: setOccupantPerson,
+    roleConfirmNotificationTypes: occupantConfirmNotificationTypes,
+    setRoleConfirmNotificationTypesChange: setOccupantConfirmNotificationTypesChange,
+    roleCancelNotificationTypes: occupantCancelNotificationTypes,
+    setRoleCancelNotificationTypesChange: setOccupantCancelNotificationTypesChange,
+    hasRole: hasOccupant,
+    setHasRoleChange: setHasOccupant,
+    resetRoleNotification: resetOccupantNotificationTypes
+  } = useShowingRole()
 
-  const [
-    coAgentPerson,
-    setCoAgentPerson,
+  const handleSetApproval = (value: IShowingApprovalType) => {
+    setApprovalType(value)
 
-    coAgentConfirmNotificationTypes,
-    setCoAgentConfirmNotificationTypesChange,
-
-    coAgentCancelNotificationTypes,
-    setCoAgentCancelNotificationTypesChange,
-
-    hasCoAgent,
-    setHasCoAgent
-  ] = useShowingRole()
-
-  const [
-    occupantPerson,
-    setOccupantPerson,
-
-    occupantConfirmNotificationTypes,
-    setOccupantConfirmNotificationTypesChange,
-
-    occupantCancelNotificationTypes,
-    setOccupantCancelNotificationTypesChange,
-
-    hasOccupant,
-    setHasOccupant
-  ] = useShowingRole()
+    if (value === 'None') {
+      resetAgentNotificationTypes()
+      resetCoAgentNotificationTypes()
+      resetOccupantNotificationTypes()
+    }
+  }
 
   const [instructions, setInstructions] = useState<Nullable<string>>(null)
 
@@ -201,7 +206,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             <ShowingStepApprovalType
               approvalType={approvalType}
-              onApprovalTypeChange={setApprovalType}
+              onApprovalTypeChange={handleSetApproval}
             />
 
             {/* Listing Agent Steps - Start */}

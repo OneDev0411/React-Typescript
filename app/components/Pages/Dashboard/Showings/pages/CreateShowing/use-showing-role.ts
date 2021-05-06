@@ -8,21 +8,22 @@ import useListingConfirmNotificationTypes from './use-listing-confirm-notificati
 import useListingPersonOnChange from './use-listing-person-on-change'
 
 const DEFAULT_NOTIFICATION_VALUE: IShowingRoleInputNotification = {
-  can_approve: false,
+  can_approve: true,
   confirm_notification_type: [],
   cancel_notification_type: []
 }
 
-type UseShowingRoleReturn = [
-  Nullable<IShowingRoleInputPerson>,
-  Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>,
-  [boolean, INotificationDeliveryType[]],
-  (value: NotificationTypeValue) => void,
-  [boolean, INotificationDeliveryType[]],
-  (value: NotificationTypeValue) => void,
-  Nullable<YesNoAnswer>,
-  Dispatch<SetStateAction<YesNoAnswer>>
-]
+interface UseShowingRoleReturn {
+  rolePerson: Nullable<IShowingRoleInputPerson>
+  setRolePerson: Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>
+  roleConfirmNotificationTypes: [boolean, INotificationDeliveryType[]]
+  setRoleConfirmNotificationTypesChange: (value: NotificationTypeValue) => void
+  roleCancelNotificationTypes: [boolean, INotificationDeliveryType[]]
+  setRoleCancelNotificationTypesChange: (value: NotificationTypeValue) => void
+  hasRole: Nullable<YesNoAnswer>
+  setHasRoleChange: Dispatch<SetStateAction<YesNoAnswer>>
+  resetRoleNotification: () => void
+}
 
 function useShowingRole(): UseShowingRoleReturn {
   const [hasRole, setHasRole] = useState<Nullable<YesNoAnswer>>(null)
@@ -51,16 +52,21 @@ function useShowingRole(): UseShowingRoleReturn {
     handleRoleCancelNotificationTypesChange
   ] = useListingCancelNotificationTypes(roleNotification, setRoleNotification)
 
-  return [
+  const handleResetRoleNotification = () => {
+    setRoleNotification(DEFAULT_NOTIFICATION_VALUE)
+  }
+
+  return {
     rolePerson,
     setRolePerson,
     roleConfirmNotificationTypes,
-    handleRoleConfirmNotificationTypesChange,
+    setRoleConfirmNotificationTypesChange: handleRoleConfirmNotificationTypesChange,
     roleCancelNotificationTypes,
-    handleRoleCancelNotificationTypesChange,
+    setRoleCancelNotificationTypesChange: handleRoleCancelNotificationTypesChange,
     hasRole,
-    handleHasRoleChange
-  ]
+    setHasRoleChange: handleHasRoleChange,
+    resetRoleNotification: handleResetRoleNotification
+  }
 }
 
 export default useShowingRole
