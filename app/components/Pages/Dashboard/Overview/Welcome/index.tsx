@@ -21,7 +21,8 @@ const useStyles = makeStyles(
       justifyContent: 'center',
       width: '90%',
       maxWidth: '1200px',
-      margin: '0 auto'
+      margin: '0 auto',
+      padding: theme.spacing(3, 0)
     },
     greeting: {
       display: 'flex',

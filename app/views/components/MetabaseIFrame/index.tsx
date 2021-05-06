@@ -39,8 +39,10 @@ export default function MetabaseDashboard({ dashboardId }: Props) {
   return (
     <IframeResizer
       src={analyticsUrl}
-      style={{ width: '1px', minWidth: '100%', height: '1000px' }}
+      style={{ width: '1px', minWidth: '100%' }}
+      heightCalculationMethod="max"
       frameBorder="0"
+      checkOrigin={false}
     />
   )
 }
