@@ -1,18 +1,12 @@
 import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { ButtonGroup, Button, makeStyles, Theme } from '@material-ui/core'
-import { mdiFormatListText, mdiViewWeekOutline } from '@mdi/js'
-import cn from 'classnames'
-
 import { PageTabs, Tab } from 'components/PageTabs'
 import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
 import { IAppState } from 'reducers'
 import { selectActiveFilters } from 'reducers/filter-segments'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
@@ -22,7 +16,6 @@ import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
 import TagsList from '../TagsList'
 
-type ViewMode = 'board' | 'table'
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
   handleChangeSavedSegment: (savedSegment: object) => void
@@ -48,8 +41,6 @@ interface Props {
   activeSegment: any
   users: UUID[]
   syncedContacts: SyncedContactsTypes
-  viewMode: ViewMode
-  onChangeMode: (mode: ViewMode) => void
 }
 
 interface ReduxStateType {
@@ -77,32 +68,18 @@ const getActiveTab = ({
   return 'saved-list'
 }
 
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    viewModeActiveButton: {
-      backgroundColor: theme.palette.action.hover
-    }
-  }),
-  {
-    name: 'ContactsList-Tabs'
-  }
-)
-
 export const ContactsTabs = ({
   handleResetShortcutFilter,
   handleChangeSavedSegment,
   handleFilterChange,
-  onChangeMode,
   savedListProps,
   activeSegment,
   contactCount,
   tagListProps,
   sortProps,
-  viewMode,
   filter,
   users
 }: Props) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const { activeFilters }: Pick<ReduxStateType, 'activeFilters'> = useSelector(
     (state: IAppState) => ({
@@ -155,44 +132,15 @@ export const ContactsTabs = ({
             label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
-        actions={[
-          <Tab key={1} label={<SortFields {...sortProps} />} />,
-          <Tab
-            key={0}
-            label={
-              <ButtonGroup variant="outlined">
-                <Button
-                  size="small"
-                  className={cn({
-                    [classes.viewModeActiveButton]: viewMode === 'table'
-                  })}
-                  onClick={() => onChangeMode('table')}
-                >
-                  <SvgIcon path={mdiFormatListText} />
-                </Button>
-                <Button
-                  size="small"
-                  className={cn({
-                    [classes.viewModeActiveButton]: viewMode === 'board'
-                  })}
-                  onClick={() => onChangeMode('board')}
-                >
-                  <SvgIcon path={mdiViewWeekOutline} />
-                </Button>
-              </ButtonGroup>
-            }
-          />
-        ]}
+        actions={[<Tab key={1} label={<SortFields {...sortProps} />} />]}
       />
-      {viewMode === 'table' && (
-        <ContactFilters
-          show={filter?.show}
-          contactCount={contactCount}
-          activeSegment={activeSegment}
-          onFilterChange={() => handleFilterChange({}, true)}
-          users={users}
-        />
-      )}
+      <ContactFilters
+        show={filter?.show}
+        contactCount={contactCount}
+        activeSegment={activeSegment}
+        onFilterChange={() => handleFilterChange({}, true)}
+        users={users}
+      />
     </>
   )
 }

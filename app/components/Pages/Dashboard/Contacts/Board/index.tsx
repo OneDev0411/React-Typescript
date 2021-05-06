@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       display: 'flex',
       overflowX: 'scroll',
       overflowY: 'hidden',
-      height: '64vh'
+      height: '82vh'
     },
     container: {
       display: 'flex',
@@ -29,7 +29,7 @@ const useStyles = makeStyles(
 
 import { BoardColumn } from './Column'
 
-const Columns = ['Warm List', 'Hot List', 'Passed List']
+const Columns = ['Warm', 'Hot', 'Passed Client']
 
 interface Props {
   contacts: IContact[]

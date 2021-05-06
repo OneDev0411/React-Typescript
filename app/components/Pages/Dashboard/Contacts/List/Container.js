@@ -2,8 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { Box } from '@material-ui/core'
+import { ButtonGroup, Button, Box, Tooltip } from '@material-ui/core'
+import { mdiFormatListText, mdiViewWeekOutline } from '@mdi/js'
+
 import { mdiLoading } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -43,7 +47,6 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -747,11 +750,9 @@ class ContactsList extends React.Component {
           onChange: this.handleChangeOrder,
           currentOrder: this.order
         }}
-        viewMode={this.state.viewMode}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
-        onChangeMode={viewMode => this.setState({ viewMode })}
         {...props}
       />
     )
@@ -797,7 +798,7 @@ class ContactsList extends React.Component {
           }}
         >
           {!isZeroState && (
-            <Box ml={1}>
+            <Box display="flex" ml={1}>
               {activeSegment && activeSegment.is_editable && (
                 <TouchReminder
                   value={activeSegment.touch_freq}
@@ -811,6 +812,53 @@ class ContactsList extends React.Component {
                 />
               )}
               {showImportAction && <ImportContactsButton />}
+
+              <Box ml={1}>
+                <ButtonGroup
+                  variant="outlined"
+                  style={{
+                    height: props.theme.spacing(5.25)
+                  }}
+                >
+                  <Tooltip title="Switch to Table">
+                    <Button
+                      size="large"
+                      style={{
+                        background:
+                          this.state.viewMode === 'table'
+                            ? props.theme.palette.action.hover
+                            : '#fff'
+                      }}
+                      onClick={() =>
+                        this.setState({
+                          viewMode: 'table'
+                        })
+                      }
+                    >
+                      <SvgIcon path={mdiFormatListText} />
+                    </Button>
+                  </Tooltip>
+
+                  <Tooltip title="Switch to Board">
+                    <Button
+                      size="large"
+                      style={{
+                        background:
+                          this.state.viewMode === 'board'
+                            ? props.theme.palette.action.hover
+                            : '#fff'
+                      }}
+                      onClick={() =>
+                        this.setState({
+                          viewMode: 'board'
+                        })
+                      }
+                    >
+                      <SvgIcon path={mdiViewWeekOutline} />
+                    </Button>
+                  </Tooltip>
+                </ButtonGroup>
+              </Box>
             </Box>
           )}
           <Box ml={1.5}>
@@ -850,8 +898,13 @@ class ContactsList extends React.Component {
           {isZeroState && <ZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              {this.renderOtherContactsBadge()}
-              {this.renderTabs()}
+              {this.state.viewMode === 'table' && (
+                <>
+                  {this.renderOtherContactsBadge()}
+                  {this.renderTabs()}
+                </>
+              )}
+
               <Box mt={2} flexGrow={1}>
                 {this.state.viewMode === 'table' && (
                   <Table
