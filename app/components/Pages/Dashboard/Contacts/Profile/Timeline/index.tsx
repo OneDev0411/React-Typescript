@@ -23,7 +23,7 @@ export interface TimelineRef {
 interface Props {
   contact: IContact
   timelineRef?: RefObject<TimelineRef>
-  onChangeNote: (contact: IContact) => void
+  onChangeNote: (contact: IContact, fallback?: () => void) => void
 }
 
 const associations = ['calendar_event.full_thread']

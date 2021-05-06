@@ -18,7 +18,10 @@ const fieldsOrder = [
 
 interface Props {
   contact: INormalizedContact
-  submitCallback: () => {}
+  submitCallback: (
+    newContact: INormalizedContact,
+    fallback?: () => void
+  ) => void
 }
 
 export function Dates({ contact, submitCallback }: Props) {
