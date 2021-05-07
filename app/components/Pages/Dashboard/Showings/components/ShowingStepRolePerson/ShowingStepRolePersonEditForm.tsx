@@ -1,10 +1,11 @@
-import React from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
 import { upperFirst, kebabCase } from 'lodash'
 
 import { Form } from 'react-final-form'
 
 import { FormTextField, FormPhoneField } from 'components/final-form-fields'
+
+import { requiredTextValidator } from './helpers'
 
 interface ShowingStepRolePersonEditFormProps {
   personTitle: string
@@ -23,9 +24,19 @@ function ShowingStepRolePersonEditForm({
   submitDisabled = false,
   onCancel
 }: ShowingStepRolePersonEditFormProps) {
+  const handleSubmit = (data: IShowingRoleInputPerson) => {
+    onSubmit({
+      ...data,
+      first_name: data.first_name.trim(),
+      last_name: data.last_name.trim(),
+      phone_number: data.phone_number.trim(),
+      email: data.email.trim()
+    })
+  }
+
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       initialValues={initialData}
       render={({ handleSubmit, submitting }) => {
         return (
@@ -41,14 +52,26 @@ function ShowingStepRolePersonEditForm({
               name="first_name"
               required
               autoFocus
+              validate={requiredTextValidator}
             />
-            <FormTextField label="Last Name" name="last_name" required />
-            <FormTextField label="Email" name="email" required />
+            <FormTextField
+              label="Last Name"
+              name="last_name"
+              required
+              validate={requiredTextValidator}
+            />
+            <FormTextField
+              label="Email"
+              name="email"
+              required
+              validate={requiredTextValidator}
+            />
             <FormPhoneField
               label="Phone"
               name="phone_number"
               required
               format={false}
+              validate={requiredTextValidator}
             />
 
             <Box mt={4} display="flex" justifyContent="flex-end">

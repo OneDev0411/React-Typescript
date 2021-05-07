@@ -6,3 +6,6 @@ export const splitFullName = (fullName: string) => {
     last_name: parts[1]
   }
 }
+
+export const requiredTextValidator = (value: string) =>
+  value.trim() === '' ? 'This field is required' : undefined
