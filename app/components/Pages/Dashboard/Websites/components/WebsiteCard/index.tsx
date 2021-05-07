@@ -49,7 +49,7 @@ type WebsiteCardProps = IWebsite
 function WebsiteCard({
   id,
   title,
-  hostnames,
+  hostnames: websiteHostnames,
   template_instance,
   attributes,
   template
@@ -60,9 +60,10 @@ function WebsiteCard({
 
   const { thumbnail } = getTemplateImage(template_instance)
 
-  const hostname = hostnames[0]
+  const hostnames = websiteHostnames ?? []
+  const hostname = hostnames ? hostnames[0] : ''
 
-  const link = generateWebsiteUrl(hostname)
+  const link = hostname ? generateWebsiteUrl(hostname) : ''
 
   const { isLoading: isWorking, run, isSuccess } = useAsync()
   const { deleteItem, updateItem } = useWebsiteListActions()
@@ -157,11 +158,13 @@ function WebsiteCard({
             </WebsiteCardActions>
           </WebsiteCardImage>
           <WebsiteCardTitle websiteId={id} title={title} />
-          <Typography variant="subtitle2" noWrap className={classes.footer}>
-            <Link className={classes.link} to={link} target="_blank">
-              {hostname}
-            </Link>
-          </Typography>
+          {hostname && (
+            <Typography variant="subtitle2" noWrap className={classes.footer}>
+              <Link className={classes.link} to={link} target="_blank">
+                {hostname}
+              </Link>
+            </Typography>
+          )}
         </Box>
       </Grid>
       {isEditorOpen && (

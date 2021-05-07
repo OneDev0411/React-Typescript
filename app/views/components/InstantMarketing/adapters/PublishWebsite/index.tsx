@@ -95,9 +95,11 @@ function PublishWebsite({
       oldWebsiteData
         ? {
             ...oldWebsiteData,
-            hostnames: isDefault
-              ? [domainName, ...oldWebsiteData.hostnames]
-              : [...oldWebsiteData?.hostnames, domainName]
+            hostnames: oldWebsiteData.hostnames
+              ? isDefault
+                ? [domainName, ...oldWebsiteData.hostnames]
+                : [...oldWebsiteData?.hostnames, domainName]
+              : [domainName]
           }
         : null
     )
@@ -108,9 +110,10 @@ function PublishWebsite({
       oldWebsiteData
         ? {
             ...oldWebsiteData,
-            hostnames: oldWebsiteData.hostnames.filter(
-              hostname => hostname !== domainName
-            )
+            hostnames:
+              oldWebsiteData.hostnames?.filter(
+                hostname => hostname !== domainName
+              ) || []
           }
         : null
     )
