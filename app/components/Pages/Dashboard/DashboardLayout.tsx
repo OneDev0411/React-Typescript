@@ -1,7 +1,6 @@
 import React, { createContext, useState } from 'react'
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import { appSidenavWidth } from './SideNav/variables'
 import SideNav from './SideNav'
 
 interface Props {
@@ -13,10 +12,7 @@ const useStyles = makeStyles(
     main: {
       width: '100%',
       minHeight: '100vh',
-      flexGrow: 1,
-      [theme.breakpoints.up('md')]: {
-        width: `calc(100% - ${appSidenavWidth}px)`
-      }
+      flexGrow: 1
     }
   }),
   { name: 'MainWrapper' }
