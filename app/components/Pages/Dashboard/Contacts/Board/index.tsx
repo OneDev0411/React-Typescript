@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import uniq from 'lodash/uniq'
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { bulkTag } from 'models/contacts/bulk-tag'
 
@@ -39,7 +40,7 @@ export function Board({ contacts }: Props) {
   const classes = useStyles()
   const [list, setList] = useState(contacts)
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     setList(contacts)
   }, [contacts])
 
@@ -75,8 +76,8 @@ export function Board({ contacts }: Props) {
   }
 
   return (
-    <div className={classes.root}>
-      <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={classes.root}>
         <div className={classes.container}>
           <BoardColumn
             id={(-1).toString()}
@@ -99,7 +100,7 @@ export function Board({ contacts }: Props) {
             />
           ))}
         </div>
-      </DragDropContext>
-    </div>
+      </div>
+    </DragDropContext>
   )
 }

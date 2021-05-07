@@ -37,6 +37,7 @@ interface Props {
     onChange: (item) => void
     currentOrder: string
   }
+  viewMode: 'table' | 'board'
   contactCount: number
   activeSegment: any
   users: UUID[]
@@ -77,6 +78,7 @@ export const ContactsTabs = ({
   contactCount,
   tagListProps,
   sortProps,
+  viewMode,
   filter,
   users
 }: Props) => {
@@ -134,13 +136,15 @@ export const ContactsTabs = ({
         ]}
         actions={[<Tab key={1} label={<SortFields {...sortProps} />} />]}
       />
-      <ContactFilters
-        show={filter?.show}
-        contactCount={contactCount}
-        activeSegment={activeSegment}
-        onFilterChange={() => handleFilterChange({}, true)}
-        users={users}
-      />
+      {viewMode === 'table' && (
+        <ContactFilters
+          show={filter?.show}
+          contactCount={contactCount}
+          activeSegment={activeSegment}
+          onFilterChange={() => handleFilterChange({}, true)}
+          users={users}
+        />
+      )}
     </>
   )
 }

@@ -69,6 +69,8 @@ import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
 
 import { Board } from '../Board'
 
+import { ViewMode } from './styled'
+
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
 }
@@ -753,6 +755,7 @@ class ContactsList extends React.Component {
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
+        viewMode={this.state.viewMode}
         {...props}
       />
     )
@@ -899,14 +902,17 @@ class ContactsList extends React.Component {
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
               {this.state.viewMode === 'table' && (
-                <>
-                  {this.renderOtherContactsBadge()}
-                  {this.renderTabs()}
-                </>
+                <>{this.renderOtherContactsBadge()}</>
               )}
 
+              {this.renderTabs()}
+
               <Box mt={2} flexGrow={1}>
-                {this.state.viewMode === 'table' && (
+                <ViewMode enabled={this.state.viewMode === 'board'}>
+                  <Board contacts={contacts} />
+                </ViewMode>
+
+                <ViewMode enabled={this.state.viewMode === 'table'}>
                   <Table
                     data={contacts}
                     order={this.order}
@@ -937,11 +943,7 @@ class ContactsList extends React.Component {
                       users: viewAsUsers
                     }}
                   />
-                )}
-
-                {this.state.viewMode === 'board' && (
-                  <Board contacts={contacts} />
-                )}
+                </ViewMode>
               </Box>
             </>
           )}

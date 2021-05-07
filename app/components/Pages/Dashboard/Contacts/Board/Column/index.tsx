@@ -1,12 +1,5 @@
-import {
-  Box,
-  Chip,
-  IconButton,
-  makeStyles,
-  Theme,
-  Typography
-} from '@material-ui/core'
-import { mdiCardsOutline, mdiDotsVertical } from '@mdi/js'
+import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
+import { mdiCardsOutline } from '@mdi/js'
 
 import {
   Droppable,
@@ -85,10 +78,6 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
               <Typography variant="subtitle1">{list.length}</Typography>
             </Box>
           </Box>
-
-          <IconButton size="small">
-            <SvgIcon path={mdiDotsVertical} />
-          </IconButton>
         </Box>
       </div>
 
