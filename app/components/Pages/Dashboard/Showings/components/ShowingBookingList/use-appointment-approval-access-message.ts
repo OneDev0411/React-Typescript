@@ -24,9 +24,7 @@ function useAppointmentApprovalAccessMessage(
 
   return hasApproved
     ? `You approved this before. It is waiting for ${names} to approve this appointment`
-    : `You are not in this showing roles. ${names} ${
-        count > 1 ? 'have' : 'has'
-      } access to do this.`
+    : `${names} ${count > 1 ? 'have' : 'has'} access to do this.`
 }
 
 export default useAppointmentApprovalAccessMessage
