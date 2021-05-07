@@ -7,7 +7,7 @@ import ShowingNotificationBookingLists, {
 import { generateAppointmentFilterLink } from '../../helpers'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 import { ApprovalActionParams } from '../../types'
-import useShowingsAckAppointmentNotifications from './use-showings-ack-appointment-notifications'
+import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
 interface ShowingsTabBookingsProps
@@ -27,13 +27,13 @@ function ShowingsTabBookings({
     setShowings
   )
 
-  const ackAppointmentNotifications = useShowingsAckAppointmentNotifications(
+  const dismissAppointmentNotifications = useShowingsDismissAppointmentNotifications(
     setShowings
   )
 
   const handleApprovalAction = (params: ApprovalActionParams) => {
     updateAppointmentStatus(params)
-    ackAppointmentNotifications(params)
+    dismissAppointmentNotifications(params)
   }
 
   return (
@@ -43,6 +43,7 @@ function ShowingsTabBookings({
       hasPropertyColumn
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={handleApprovalAction}
+      onDismissAction={dismissAppointmentNotifications}
     />
   )
 }

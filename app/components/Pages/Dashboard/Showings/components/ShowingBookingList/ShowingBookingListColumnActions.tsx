@@ -7,10 +7,12 @@ import approveShowingAppointment from 'models/showing/approve-showing-appointmen
 
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
+import { ackNotifications } from 'models/notifications'
+
 import ShowingBookingListApprovalButton, {
   ShowingBookingListApprovalButtonProps
 } from './ShowingBookingListApprovalButton'
-import { ApprovalActionParams } from '../../types'
+import { ApprovalActionParams, DismissActionParams } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -27,7 +29,9 @@ export interface ShowingBookingListColumnActionsProps
   status: IShowingAppointmentStatus
   hasFeedback: boolean
   notifications: Nullable<INotification[]>
+  notificationMode?: boolean
   onApprovalAction?: (params: ApprovalActionParams) => void
+  onDismissAction?: (params: DismissActionParams) => void
 }
 
 function ShowingBookingListColumnActions({
@@ -38,11 +42,13 @@ function ShowingBookingListColumnActions({
   appointmentId,
   onApprovalAction,
   approvals,
-  notifications
+  notifications,
+  notificationMode,
+  onDismissAction
 }: ShowingBookingListColumnActionsProps) {
   const classes = useStyles()
 
-  const { run, isLoading } = useAsync<IShowingAppointment>()
+  const { run, isLoading } = useAsync<IShowingAppointment | null>()
 
   const handleApprove = () => {
     run(async () => {
@@ -51,11 +57,14 @@ function ShowingBookingListColumnActions({
         appointmentId
       )
 
+      await ackNotifications(
+        notifications?.map(notification => notification.id)
+      )
+
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status,
-        notifications
+        status: appointment.status
       })
 
       return appointment
@@ -69,14 +78,32 @@ function ShowingBookingListColumnActions({
         appointmentId
       )
 
+      await ackNotifications(
+        notifications?.map(notification => notification.id)
+      )
+
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status,
-        notifications
+        status: appointment.status
       })
 
       return appointment
+    })
+  }
+
+  const handleDismiss = async () => {
+    run(async () => {
+      await ackNotifications(
+        notifications?.map(notification => notification.id)
+      )
+
+      await onDismissAction?.({
+        showingId: showing.id,
+        appointmentId
+      })
+
+      return null
     })
   }
 
@@ -117,6 +144,16 @@ function ShowingBookingListColumnActions({
           disabled={isLoading}
         >
           Cancel
+        </ShowingBookingListApprovalButton>
+      )}
+      {notificationMode && status === 'Canceled' && (
+        <ShowingBookingListApprovalButton
+          {...sharedButtonProps}
+          showing={showing}
+          onClick={handleDismiss}
+          disabled={isLoading}
+        >
+          Dismiss
         </ShowingBookingListApprovalButton>
       )}
       {status === 'Completed' && hasFeedback && (

@@ -1,10 +1,8 @@
-import { useSelector } from 'react-redux'
 import { Button, ButtonProps, Tooltip } from '@material-ui/core'
-
-import { selectUserId } from 'selectors/user'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
 import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
+import useShowingHasAppointmentApproved from './use-showing-has-appointment-approved'
 
 export interface ShowingBookingListApprovalButtonProps extends ButtonProps {
   showing: IShowing
@@ -18,11 +16,7 @@ function ShowingBookingListApprovalButton({
   ...otherProps
 }: ShowingBookingListApprovalButtonProps) {
   const hasApprovalAccess = useShowingHasApprovalAccess(showing.roles)
-  const userId = useSelector(selectUserId)
-  const hasApproved = !!approvals?.some(
-    approval => (approval.role as IShowingRole).user_id === userId
-  )
-
+  const hasApproved = useShowingHasAppointmentApproved(approvals)
   const message = useAppointmentApprovalAccessMessage(
     showing.roles,
     hasApproved

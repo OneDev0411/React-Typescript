@@ -15,7 +15,7 @@ import { getValidAppointmentFilter } from './helpers'
 export interface ShowingNotificationBookingListsProps
   extends Pick<
       ShowingBookingListProps,
-      'onApprovalAction' | 'hasPropertyColumn'
+      'onApprovalAction' | 'onDismissAction' | 'hasPropertyColumn'
     >,
     WithRouterProps {
   appointments: IShowingAppointment[]
@@ -27,6 +27,7 @@ function ShowingNotificationBookingLists({
   appointments,
   notifications,
   onApprovalAction,
+  onDismissAction,
   hasPropertyColumn,
   location,
   generateLink
@@ -75,6 +76,7 @@ function ShowingNotificationBookingLists({
           hideEmptyMessage={isBothListEmpty || !!filteredAppointments.length}
           onApprovalAction={onApprovalAction}
           hasPropertyColumn={hasPropertyColumn}
+          onDismissAction={onDismissAction}
         />
       )}
       {hasBookings && (

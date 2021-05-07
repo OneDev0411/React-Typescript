@@ -40,9 +40,10 @@ export interface AppointmentFilterInfo {
   filter?: (appointments: IShowingAppointment[]) => IShowingAppointment[]
 }
 
-export interface ApprovalActionParams {
+export interface DismissActionParams {
   appointmentId: UUID
-  status: IShowingAppointmentStatus
   showingId: UUID
-  notifications: Nullable<INotification[]>
+}
+export interface ApprovalActionParams extends DismissActionParams {
+  status: IShowingAppointmentStatus
 }

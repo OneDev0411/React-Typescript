@@ -34,13 +34,15 @@ const useStyles = makeStyles(
   { name: 'ShowingBookingList' }
 )
 
-export interface ShowingBookingListProps {
+export interface ShowingBookingListProps
+  extends Pick<
+    ShowingBookingListColumnActionsProps,
+    'onApprovalAction' | 'onDismissAction' | 'notificationMode'
+  > {
   title?: string
   rows: IShowingAppointment[]
-  notificationMode?: boolean
   emptyMessage?: string
   hideEmptyMessage?: boolean
-  onApprovalAction?: ShowingBookingListColumnActionsProps['onApprovalAction']
   hasPropertyColumn?: boolean
 }
 
@@ -51,7 +53,8 @@ function ShowingBookingList({
   emptyMessage,
   hideEmptyMessage = false,
   onApprovalAction,
-  hasPropertyColumn = false
+  hasPropertyColumn = false,
+  onDismissAction
 }: ShowingBookingListProps) {
   const classes = useStyles()
 
@@ -121,6 +124,8 @@ function ShowingBookingList({
           notifications={row.notifications}
           onApprovalAction={onApprovalAction}
           hasFeedback={false} // TODO: use this from the API response
+          notificationMode={notificationMode}
+          onDismissAction={onDismissAction}
         />
       )
     }
