@@ -136,6 +136,7 @@ function ShowingPropertyList({
             <LoadingContainer style={{ padding: '10% 0' }} />
           )}
           EmptyStateComponent={() => (
+            // TODO: finalize this empty state or move the component to the global scope
             <ShowingBookingListEmptyState message="There is no property." />
           )}
           getTrProps={({ row }) => ({
