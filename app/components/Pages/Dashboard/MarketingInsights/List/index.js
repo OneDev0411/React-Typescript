@@ -7,9 +7,9 @@ import classNames from 'classnames'
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
-import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
+import { EmailInsightsZeroState } from './ZeroState'
 
-import NoSearchResults from '../../../../Partials/no-search-results'
+import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import Layout from './Layout'
 import Actions from './MarketingInsightsActions'
@@ -205,9 +205,7 @@ function List(props) {
     }
 
     if (hasError) {
-      return (
-        <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
-      )
+      return <EmailInsightsZeroState />
     }
 
     return (
@@ -215,9 +213,7 @@ function List(props) {
         rows={list}
         totalRows={list.length}
         columns={columns}
-        EmptyStateComponent={() => (
-          <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
-        )}
+        EmptyStateComponent={() => <EmailInsightsZeroState />}
         sorting={{
           sortBy: {
             value: sortBy.value,

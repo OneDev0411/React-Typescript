@@ -29,7 +29,8 @@ const useStyles = makeStyles(
       flexDirection: 'row'
     },
     image: {
-      flexBasis: '50%'
+      flexBasis: '50%',
+      paddingRight: theme.spacing(3)
     },
     message: {
       display: 'flex',
