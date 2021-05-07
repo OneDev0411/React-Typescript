@@ -21,7 +21,7 @@ export interface TimelineRef {
 }
 
 interface Props {
-  contact: IContact
+  contact: INormalizedContact
   timelineRef?: RefObject<TimelineRef>
   onChangeNote: (contact: IContact, fallback?: () => void) => void
 }
@@ -73,11 +73,6 @@ function Timeline(props: Props) {
     setActiveFilter(value)
   }
 
-  const handleCreateNote = (contact: IContact) => {
-    props.onChangeNote(contact)
-    setActiveFilter(Filters.Notes)
-  }
-
   const getFilter = () => {
     if (activeFilter === Filters.Notes) {
       return {
@@ -113,7 +108,6 @@ function Timeline(props: Props) {
           activeTab={activeFilter}
           contact={props.contact}
           onChangeFilter={handleChangeFilter}
-          onCreateNote={handleCreateNote}
         />
       </div>
 

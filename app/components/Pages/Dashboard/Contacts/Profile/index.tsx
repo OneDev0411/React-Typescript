@@ -2,8 +2,10 @@ import React, { useState, useEffect, RefObject } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { useEffectOnce } from 'react-use'
-
+import { Box, Tab, Tabs, makeStyles, Theme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
+
+import PageLayout from 'components/GlobalPageLayout'
 
 import { goTo } from 'utils/go-to'
 import { viewAs } from 'utils/user-teams'
@@ -33,19 +35,47 @@ import { Dates } from './Dates'
 import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
-import Tags from './Tags/TagsSection'
 import { ContactInfo } from './ContactInfo'
 import AddressesSection from './Addresses'
 import { Owner } from './Owner'
 import Delete from './Delete'
-import { PageContainer, SideColumn, MainColumn, PageWrapper } from './styled'
 
-import Header from './Header/Header'
+import { Header } from './Header'
 import Divider from './Divider'
 import Timeline, { TimelineRef } from './Timeline'
 import MergeDuplicates from './MergeDuplicates'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    headerContainer: {
+      padding: theme.spacing(2, 4, 0)
+    },
+    tabContainer: {
+      marginTop: theme.spacing(2),
+      borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    contentContainer: {
+      width: '100%',
+      height: 'auto',
+      minHeight: '100vh',
+      padding: theme.spacing(4),
+      background: theme.palette.grey[50]
+    },
+    warnContainer: {
+      marginBottom: theme.spacing(2),
+      color: theme.palette.warning.contrastText,
+      ...theme.typography.body2
+    },
+    chip: {
+      marginLeft: theme.spacing(1)
+    },
+    tab: theme.typography.body1
+  }),
+  { name: 'ContactProfile' }
+)
+
 const ContactProfile = props => {
+  const classes = useStyles()
   const [contact, setContact] = useState<Nullable<INormalizedContact>>(null)
   const [currentContactId, setCurrentContactId] = useState<string | undefined>(
     props.params?.id
@@ -141,9 +171,19 @@ const ContactProfile = props => {
     }, showFullScreenLoading)
   }
 
-  const setNewContact = (newContact, fallback) => {
+  const setNewContact = (
+    newContact: INormalizedContact,
+    fallback?: () => void
+  ) => {
     setContact({ ...contact, ...newContact })
-    fallback()
+
+    if (fallback) {
+      fallback()
+    }
+  }
+
+  const handleCreateNote = (contact: INormalizedContact) => {
+    setNewContact(contact)
   }
 
   const detectScreenSize = () => {
@@ -304,52 +344,71 @@ const ContactProfile = props => {
   }
 
   return (
-    <PageWrapper>
+    <>
       <Helmet>
         <title>{documentTitle()}</title>
       </Helmet>
-      <PageContainer className="u-scrollbar--thinner">
-        <SideColumn>
+      <PageLayout gutter={0}>
+        <Box className={classes.headerContainer}>
           <Header
             contact={contact}
-            // closeButtonQuery={props.location.state}
-            // addToFlowCallback={addToFlowCallback}
+            onTagChange={fetchContact}
+            handleCreateNote={handleCreateNote}
           />
-          <Tags contact={contact} onChange={fetchContact} />
-          <Flows
-            // @ts-ignore
-            flows={contact?.flows || null}
-            contactId={contact.id}
-            onStop={handleStopFlow}
-            addCallback={addToFlowCallback}
-          />
-          <ContactInfo {..._props} />
-          <AddressesSection {..._props} />
-          <Dates {..._props} />
-          <Deals contact={contact} />
-          <Details {..._props} />
-          <Partner {..._props} />
-          <Divider />
-          <Owner
-            onSelect={onChangeOwner}
-            owner={contact.user}
-            user={props.user}
-            contact={contact}
-            disabled={isUpdatingOwner}
-          />
-          <Divider />
-          <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
-        </SideColumn>
-        <MainColumn>
-          <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
-          <Timeline
-            ref={timelineRef}
-            contact={contact}
-            onChangeNote={setNewContact}
-          />
-        </MainColumn>
-      </PageContainer>
-    </PageWrapper>
+          <Box className={classes.tabContainer}>
+            <Tabs
+              // value={selectedTabIndex}
+              // onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
+              textColor="primary"
+              indicatorColor="primary"
+            >
+              <Tab
+                disabled={isLoading}
+                className={classes.tab}
+                label="Events"
+              />
+              <Tab disabled={isLoading} className={classes.tab} label="Notes" />
+            </Tabs>
+          </Box>
+        </Box>
+
+        <PageLayout.Main mt={0} className={classes.contentContainer}>
+          <Box>
+            <Flows
+              // @ts-ignore
+              flows={contact?.flows || null}
+              contactId={contact.id}
+              onStop={handleStopFlow}
+              addCallback={addToFlowCallback}
+            />
+            <ContactInfo {..._props} />
+            <AddressesSection {..._props} />
+            <Dates {..._props} />
+            <Deals contact={contact} />
+            <Details {..._props} />
+            <Partner {..._props} />
+            <Divider />
+            <Owner
+              onSelect={onChangeOwner}
+              owner={contact.user}
+              user={props.user}
+              contact={contact}
+              disabled={isUpdatingOwner}
+            />
+            <Divider />
+            <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+          </Box>
+          <Box>
+            <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
+            <Timeline
+              ref={timelineRef}
+              contact={contact}
+              onChangeNote={setNewContact}
+            />
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
+    </>
   )
 }
 

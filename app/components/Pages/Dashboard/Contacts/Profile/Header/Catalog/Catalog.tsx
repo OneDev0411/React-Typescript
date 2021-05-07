@@ -2,16 +2,21 @@ import React from 'react'
 import { Box, Link, Typography } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
-import { LastTouched } from 'components/LastTouched'
+import Tags from '../../Tags/TagsSection'
 
 import Avatar from './Avatar'
 
+import { Props } from '..'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      display: 'flex',
+      alignItems: 'center'
+    },
     title: {
       display: 'flex',
-      alignItems: 'center',
-      marginTop: theme.spacing(1)
+      alignItems: 'center'
     },
     name: {
       wordBreak: 'break-all'
@@ -19,37 +24,38 @@ const useStyles = makeStyles((theme: Theme) =>
     editButton: {
       marginLeft: theme.spacing(1)
     },
-    touch: {
+    tags: {
       color: theme.palette.grey['500']
     }
   })
 )
 
-interface Props {
-  contact: IContact
-}
-
-export default function Catalog({ contact }: Props) {
+export default function Catalog({
+  contact,
+  onTagChange
+}: Omit<Props, 'handleCreateNote'>) {
   const classes = useStyles()
 
   return (
-    <Box mb={1}>
+    <Box className={classes.container}>
       <Avatar contact={contact} />
-      <Box className={classes.title}>
-        <Typography variant="subtitle1" className={classes.name}>
-          {contact.display_name}
-        </Typography>
-        <Link
-          color="secondary"
-          href="#Details"
-          variant="caption"
-          className={classes.editButton}
-        >
-          Edit
-        </Link>
-      </Box>
-      <Box className={classes.touch}>
-        <LastTouched contact={contact} />
+      <Box pl={1}>
+        <Box className={classes.title}>
+          <Typography variant="subtitle1" className={classes.name}>
+            {contact.display_name}
+          </Typography>
+          <Link
+            color="secondary"
+            href="#Details"
+            variant="caption"
+            className={classes.editButton}
+          >
+            Edit
+          </Link>
+        </Box>
+        <Box className={classes.tags}>
+          <Tags contact={contact} onChange={onTagChange} />
+        </Box>
       </Box>
     </Box>
   )

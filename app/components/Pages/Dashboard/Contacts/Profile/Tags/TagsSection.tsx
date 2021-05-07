@@ -1,13 +1,33 @@
 import React, { useMemo } from 'react'
-import { Box, Chip } from '@material-ui/core'
+import { Box, Chip, Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { mdiTagOutline } from '@mdi/js'
 
 import { PopoverContactTagSelector } from 'components/TagSelector'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
 import { Tag } from './Tag'
-import { BasicSection } from '../components/Section/Basic'
-import { SectionButton } from '../components/Section/Button'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700],
+      cursor: 'pointer',
+      '&:hover': {
+        color: theme.palette.secondary.main
+      }
+    },
+    label: {
+      marginLeft: theme.spacing(0.5)
+    }
+  }),
+  { name: 'ContactProfileTags' }
+)
 
 interface Props {
   contact: INormalizedContact
@@ -15,7 +35,8 @@ interface Props {
 }
 
 function Tags({ contact, onChange }: Props) {
-  const tags = contact.tags || []
+  const classes = useStyles()
+  const tags = useMemo(() => contact.tags || [], [contact.tags])
   const hasTags = tags.length > 0
   const currentTags = useMemo(
     () =>
@@ -29,37 +50,36 @@ function Tags({ contact, onChange }: Props) {
   )
 
   return (
-    <BasicSection>
-      <Box display="flex" flexWrap="wrap">
-        {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
-        <PopoverContactTagSelector
-          showManageTags
-          label={`${contact.display_name}'s Tags`}
-          anchorRenderer={onClick =>
-            hasTags ? (
-              <Chip
-                label="Edit"
-                variant="outlined"
-                color="secondary"
-                size="small"
-                onClick={onClick}
-              />
-            ) : (
-              <SectionButton
-                label="Add Tags"
-                icon={mdiTagOutline}
-                onClick={onClick}
-              />
-            )
-          }
-          value={currentTags}
-          filter={{
-            selectedIds: [contact.id]
-          }}
-          callback={() => onChange()}
-        />
-      </Box>
-    </BasicSection>
+    <Box display="flex" flexWrap="wrap">
+      {hasTags && tags.map(tag => <Tag key={tag} text={tag} />)}
+      <PopoverContactTagSelector
+        showManageTags
+        label={`${contact.display_name}'s Tags`}
+        anchorRenderer={onClick =>
+          hasTags ? (
+            <Chip
+              label="Edit"
+              variant="outlined"
+              color="secondary"
+              size="small"
+              onClick={onClick}
+            />
+          ) : (
+            <Box className={classes.container} onClick={onClick}>
+              <SvgIcon path={mdiTagOutline} size={muiIconSizes.small} />
+              <Typography variant="body2" className={classes.label}>
+                Add Tags
+              </Typography>
+            </Box>
+          )
+        }
+        value={currentTags}
+        filter={{
+          selectedIds: [contact.id]
+        }}
+        callback={() => onChange()}
+      />
+    </Box>
   )
 }
 

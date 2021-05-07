@@ -4,9 +4,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { getNotes } from 'models/contacts/helpers/get-notes'
 import { PageTabs, Tab } from 'components/PageTabs'
 
-import AddEvent from '../AddEvent'
-import AddNote from '../AddNote'
-
 export enum Filters {
   Events = 'events',
   Notes = 'notes'
@@ -14,8 +11,7 @@ export enum Filters {
 
 interface Props {
   activeTab: Filters
-  contact: IContact
-  onCreateNote(contact: IContact): void
+  contact: INormalizedContact
   onChangeFilter(value: string): void
 }
 
@@ -26,17 +22,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     filters: {
       flex: 5
-    },
-    actions: {
-      flex: 5,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      marginBottom: theme.spacing(1),
-      '& button': {
-        marginLeft: theme.spacing(1)
-      }
     }
   })
 )
@@ -61,14 +46,6 @@ export function TabsFilter(props: Props) {
             />
           ]}
         />
-      </div>
-
-      <div className={classes.actions}>
-        <AddNote
-          contactId={props.contact.id}
-          onCreateNote={props.onCreateNote}
-        />
-        <AddEvent contact={props.contact} />
       </div>
     </div>
   )
