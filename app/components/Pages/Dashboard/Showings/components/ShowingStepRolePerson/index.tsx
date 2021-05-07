@@ -93,6 +93,7 @@ function ShowingStepRolePerson({
             personTitle={personTitle}
             initialData={person}
             onSubmit={handleSubmit}
+            onCancel={handleRemove}
             submitLabel={
               selectType === 'Contact'
                 ? contact
