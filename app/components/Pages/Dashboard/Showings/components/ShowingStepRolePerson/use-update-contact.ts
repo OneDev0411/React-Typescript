@@ -21,8 +21,6 @@ function useUpdateContact(): UpdateContactReturn {
   const attributeDefs = useSelector(selectContactAttributeDefs)
   const { isLoading, run, data } = useAsync<IContact>()
 
-  console.log('data', data)
-
   return {
     updateContact: async (
       contact: IContact,

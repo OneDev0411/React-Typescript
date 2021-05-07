@@ -19,13 +19,7 @@ function ShowingStepRolePersonSelectAgent({
       brand: agent.brand as string
     })
 
-  return (
-    <AgentSearchInput
-      flattenTeams
-      isPrimaryAgent={false}
-      onChange={handleChange}
-    />
-  )
+  return <AgentSearchInput isPrimaryAgent={false} onChange={handleChange} />
 }
 
 export default ShowingStepRolePersonSelectAgent
