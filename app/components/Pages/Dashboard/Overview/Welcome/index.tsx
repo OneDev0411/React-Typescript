@@ -3,6 +3,8 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import MetabaseDashboard from 'components/MetabaseIFrame'
 
+import Acl from 'views/components/Acl'
+
 import { Greeting } from './Greetings'
 import { Dailies } from './Dailies'
 
@@ -45,14 +47,18 @@ function OverviewDashboard() {
       <Box className={classes.greeting}>
         <Greeting />
       </Box>
-      <Box className={classes.dailies}>
-        <Box className={classes.centeredContainer}>
-          <Dailies />
+      <Acl.Crm>
+        <Box className={classes.dailies}>
+          <Box className={classes.centeredContainer}>
+            <Dailies />
+          </Box>
         </Box>
-      </Box>
-      <Box className={classes.centeredContainer}>
-        <MetabaseDashboard dashboardId="bc5561e9-7755-4ed8-a312-5cced96000f7" />
-      </Box>
+      </Acl.Crm>
+      <Acl.Deals>
+        <Box className={classes.centeredContainer}>
+          <MetabaseDashboard dashboardId="bc5561e9-7755-4ed8-a312-5cced96000f7" />
+        </Box>
+      </Acl.Deals>
     </Box>
   )
 }

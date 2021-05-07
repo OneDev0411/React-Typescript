@@ -46,6 +46,7 @@ import {
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
+const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
@@ -76,9 +77,11 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
-          <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
-            Dashboard
-          </SideNavLinkItem>
+          <Acl access={dashboardAccess}>
+            <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
+              Dashboard
+            </SideNavLinkItem>
+          </Acl>
           <Acl.Crm>
             <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
               <InlineBadge
