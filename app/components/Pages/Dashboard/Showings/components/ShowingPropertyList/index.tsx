@@ -128,7 +128,7 @@ function ShowingPropertyList({
     <BoxWithTitle title="Properties">
       <Box minHeight="320px">
         <Table
-          rows={[]}
+          rows={sortedRows}
           totalRows={sortedRows.length}
           columns={columns}
           loading={isLoading ? 'middle' : null}
