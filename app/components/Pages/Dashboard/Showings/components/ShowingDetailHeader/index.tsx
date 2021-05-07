@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Box, Typography, makeStyles, Button } from '@material-ui/core'
+import { Box, Typography, makeStyles } from '@material-ui/core'
 import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
 
 import { Avatar } from 'components/Avatar'
@@ -7,6 +7,7 @@ import { Avatar } from 'components/Avatar'
 import ShowingCloseButton from '../ShowingCloseButton'
 import ShowingDetailHeaderBookingButton from './ShowingDetailHeaderBookingButton'
 import ShowingDetailHeaderCopyButton from './ShowingDetailHeaderCopyButton'
+import LinkButton from '../LinkButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -31,7 +32,7 @@ const useStyles = makeStyles(
 interface ShowingDetailHeaderProps {
   address: string
   image: string
-  mlsNumber?: string
+  listing?: IListing
   children: ReactNode
   bookingUrl?: string
 }
@@ -39,7 +40,7 @@ interface ShowingDetailHeaderProps {
 function ShowingDetailHeader({
   image,
   address,
-  mlsNumber,
+  listing,
   children,
   bookingUrl
 }: ShowingDetailHeaderProps) {
@@ -56,15 +57,17 @@ function ShowingDetailHeader({
             <Typography noWrap variant="subtitle1">
               {address}
             </Typography>
-            {mlsNumber && (
-              <Button
+            {listing && (
+              <LinkButton
                 color="secondary"
                 size="small"
                 variant="text"
                 endIcon={<OpenInNewOutlinedIcon />}
+                to={`/dashboard/mls/${listing.id}`}
+                target="_blank"
               >
-                MLS# {mlsNumber}
-              </Button>
+                MLS# {listing.mls_number}
+              </LinkButton>
             )}
           </Box>
         </Box>

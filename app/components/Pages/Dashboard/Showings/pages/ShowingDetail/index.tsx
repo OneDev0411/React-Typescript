@@ -50,10 +50,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
           listing: showing?.listing ?? null
         })}
         address={showing?.title || ''}
-        mlsNumber={
-          showing?.listing?.mls_number ||
-          (showing?.deal?.listing as IListing)?.mls_number
-        }
+        listing={showing?.listing || (showing?.deal?.listing as IListing)}
         bookingUrl={`/showings/${showing?.slug}-${showing?.human_readable_id}/book`}
       >
         <ShowingDetailTabs value={tab} id={showingId} />
