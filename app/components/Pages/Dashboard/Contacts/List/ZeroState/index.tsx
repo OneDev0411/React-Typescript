@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core'
+import { browserHistory } from 'react-router'
 
 import { ZeroState } from 'partials/ZeroState'
 
@@ -44,7 +45,9 @@ export function ContactsZeroState() {
           <Button
             size="large"
             variant="outlined"
-            href="/dashboard/contacts/import/csv"
+            onClick={() =>
+              browserHistory.push('/dashboard/contacts/import/csv')
+            }
           >
             Import from CSV file
           </Button>
