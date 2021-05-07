@@ -15,6 +15,7 @@ import useGetShowingNotificationCount from './use-get-showing-notification-count
 import BoxWithTitle from '../BoxWithTitle'
 import { getShowingImage } from '../../helpers'
 import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
+import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -127,12 +128,15 @@ function ShowingPropertyList({
     <BoxWithTitle title="Properties">
       <Box minHeight="320px">
         <Table
-          rows={sortedRows}
+          rows={[]}
           totalRows={sortedRows.length}
           columns={columns}
           loading={isLoading ? 'middle' : null}
           LoadingStateComponent={() => (
             <LoadingContainer style={{ padding: '10% 0' }} />
+          )}
+          EmptyStateComponent={() => (
+            <ShowingBookingListEmptyState message="There is no property." />
           )}
           getTrProps={({ row }) => ({
             onClick: () => handleRowClick(row.id)
