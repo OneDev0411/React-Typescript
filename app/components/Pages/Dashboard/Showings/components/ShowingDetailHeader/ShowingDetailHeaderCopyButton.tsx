@@ -6,8 +6,6 @@ import { useDispatch } from 'react-redux'
 import { addNotification } from 'components/notification'
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
 
-import config from 'config'
-
 interface ShowingDetailHeaderCopyButtonProps {
   className?: string
   bookingUrl: string
@@ -20,7 +18,7 @@ function ShowingDetailHeaderCopyButton({
   const dispatch = useDispatch()
 
   const handleClick = () => {
-    copyTextToClipboard(config.app.url + bookingUrl)
+    copyTextToClipboard(window.location.origin + bookingUrl)
     dispatch(addNotification({ status: 'success', message: 'Copied!' }))
   }
 
