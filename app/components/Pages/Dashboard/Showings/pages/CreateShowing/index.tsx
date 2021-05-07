@@ -33,6 +33,7 @@ import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import useShowingRole from './use-showing-role'
 import useFillPersonStatesWithDealRoles from './use-fill-person-states-with-deal-roles'
+import ShowingCloseButton from '../../components/ShowingCloseButton'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -190,7 +191,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Create Showing" />
+      <PageLayout.Header title="Create Showing">
+        <ShowingCloseButton />
+      </PageLayout.Header>
       <PageLayout.Main>
         <Box maxWidth={848} margin="0 auto">
           <QuestionWizard

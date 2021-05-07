@@ -1,13 +1,10 @@
 import { ReactNode } from 'react'
 import { Box, Typography, makeStyles, Button } from '@material-ui/core'
-import {
-  Close as CloseIcon,
-  OpenInNewOutlined as OpenInNewOutlinedIcon
-} from '@material-ui/icons'
+import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
 
 import { Avatar } from 'components/Avatar'
 
-import LinkIconButton from '../LinkIconButton'
+import ShowingCloseButton from '../ShowingCloseButton'
 import ShowingDetailHeaderBookingButton from './ShowingDetailHeaderBookingButton'
 import ShowingDetailHeaderCopyButton from './ShowingDetailHeaderCopyButton'
 
@@ -19,7 +16,7 @@ const useStyles = makeStyles(
       fontSize: 16,
       marginRight: theme.spacing(1)
     },
-    close: { marginLeft: theme.spacing(0.5) },
+
     header: {
       [theme.breakpoints.up('sm')]: {
         display: 'flex',
@@ -88,9 +85,7 @@ function ShowingDetailHeader({
           ) : (
             <div />
           )}
-          <LinkIconButton className={classes.close} to="/dashboard/showings">
-            <CloseIcon />
-          </LinkIconButton>
+          <ShowingCloseButton />
         </Box>
       </Box>
       {children}
