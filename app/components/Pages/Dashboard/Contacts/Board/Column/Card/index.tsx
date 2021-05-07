@@ -1,5 +1,6 @@
 import {
   Box,
+  Avatar,
   Typography,
   Chip,
   makeStyles,
@@ -19,7 +20,6 @@ import { useMemo } from 'react'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { Avatar } from 'components/Avatar'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import LastTouched from '../../../List/Table/columns/LastTouched'
@@ -36,6 +36,10 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.grey['50']
       }
+    },
+    avatar: {
+      width: theme.spacing(3),
+      height: theme.spacing(3)
     },
     name: {
       marginLeft: theme.spacing(1)
@@ -90,7 +94,11 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
       <>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
-            <Avatar contact={contact} size="small" />
+            <Avatar
+              className={classes.avatar}
+              src={contact.profile_image_url!}
+              alt={contact.display_name}
+            />
             <Typography variant="body2" className={classes.name}>
               <TextMiddleTruncate text={contact.display_name} maxLength={25} />
             </Typography>

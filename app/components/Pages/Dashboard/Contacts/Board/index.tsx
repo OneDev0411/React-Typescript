@@ -12,9 +12,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       display: 'flex',
-      overflowX: 'scroll',
       overflowY: 'hidden',
-      height: '82vh'
+      overflowX: 'scroll'
     },
     container: {
       display: 'flex',

@@ -14,29 +14,32 @@ import { ColumnCard } from './Card'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      display: 'flex',
-      flexDirection: 'column',
       backgroundColor: theme.palette.grey['50'],
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
       marginRight: theme.spacing(1.5),
       width: '360px',
-      height: '100%',
-      overflowX: 'hidden',
-      overflowY: 'auto'
+      maxHeight: '100%'
     },
     head: {
-      position: 'sticky',
-      top: 0,
       backgroundColor: theme.palette.grey['50'],
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: theme.spacing(2),
+      height: theme.spacing(6),
+      boxSizing: 'border-box',
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderTopRightRadius: theme.shape.borderRadius,
       zIndex: 1
     },
     body: {
-      flexGrow: 1
+      // https://github.com/atlassian/react-beautiful-dnd/issues/1640
+      height: `calc(100% - ${theme.spacing(6)}px)`
+    },
+    innerBody: {
+      height: '100%',
+      overflowY: 'auto'
     },
     placeholder: {
       margin: theme.spacing(0.5),
@@ -87,7 +90,7 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
         direction="vertical"
         isDropDisabled={!droppable}
         ignoreContainerClipping
-        isCombineEnabled
+        isCombineEnabled={false}
       >
         {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
           <div
@@ -95,7 +98,7 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <div>
+            <div className={classes.innerBody}>
               {snapshot.isDraggingOver && (
                 <div className={classes.placeholder} />
               )}
@@ -108,8 +111,9 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
                   contact={contact}
                 />
               ))}
-              {provided.placeholder}
             </div>
+
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
