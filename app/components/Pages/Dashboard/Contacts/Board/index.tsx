@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
+
 import uniq from 'lodash/uniq'
 
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
@@ -13,13 +14,15 @@ const useStyles = makeStyles(
     root: {
       display: 'flex',
       overflowY: 'hidden',
-      overflowX: 'scroll'
+      overflowX: 'scroll',
+      height: '100%'
     },
     container: {
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'nowrap',
-      marginBottom: theme.spacing(1)
+      height: '100%',
+      paddingBottom: theme.spacing(1)
     }
   }),
   {
@@ -33,9 +36,10 @@ const Columns = ['Warm', 'Hot', 'Passed Client']
 
 interface Props {
   contacts: IContact[]
+  isLoading: boolean
 }
 
-export function Board({ contacts }: Props) {
+export function Board({ contacts, isLoading }: Props) {
   const classes = useStyles()
   const [list, setList] = useState(contacts)
 
@@ -79,6 +83,7 @@ export function Board({ contacts }: Props) {
       <div className={classes.root}>
         <div className={classes.container}>
           <BoardColumn
+            isLoading={isLoading}
             id={(-1).toString()}
             title="All Contacts"
             list={sort(
@@ -93,6 +98,7 @@ export function Board({ contacts }: Props) {
           {Columns.map((name, index) => (
             <BoardColumn
               key={index}
+              isLoading={isLoading}
               id={index.toString()}
               title={name}
               list={sort(list.filter(contact => contact.tags?.includes(name)))}

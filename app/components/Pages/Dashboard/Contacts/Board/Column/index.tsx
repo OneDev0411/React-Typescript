@@ -1,11 +1,14 @@
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import { mdiCardsOutline } from '@mdi/js'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
+
+import { useMemo } from 'react'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -47,6 +50,17 @@ const useStyles = makeStyles(
       border: `1px dashed ${theme.palette.action.disabled}`,
       borderRadius: theme.shape.borderRadius,
       height: theme.spacing(15)
+    },
+    skeleton: {
+      margin: theme.spacing(0.5),
+      borderRadius: theme.shape.borderRadius,
+      height: theme.spacing(10),
+      transform: 'none'
+    },
+    titleSkeleton: {
+      width: theme.spacing(6),
+      height: theme.spacing(3),
+      borderRadius: theme.shape.borderRadius
     }
   }),
   {
@@ -58,16 +72,29 @@ interface Props {
   id: string
   title: string
   droppable?: boolean
+  isLoading: boolean
   list: IContact[]
 }
 
-export function BoardColumn({ id, title, list, droppable = true }: Props) {
+export function BoardColumn({
+  id,
+  title,
+  list,
+  isLoading,
+  droppable = true
+}: Props) {
   const classes = useStyles()
+
+  const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
 
   return (
     <div className={classes.root}>
       <div className={classes.head}>
-        <Chip label={title} size="small" />
+        {isLoading ? (
+          <Skeleton animation="wave" className={classes.titleSkeleton} />
+        ) : (
+          <Chip label={title} size="small" />
+        )}
 
         <Box
           display="flex"
@@ -78,7 +105,11 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
           <Box display="flex" alignItems="center" mr={1}>
             <SvgIcon path={mdiCardsOutline} />
             <Box ml={0.5}>
-              <Typography variant="subtitle1">{list.length}</Typography>
+              {isLoading ? (
+                <Skeleton animation="wave" width="16px" />
+              ) : (
+                <Typography variant="subtitle1">{list.length}</Typography>
+              )}
             </Box>
           </Box>
         </Box>
@@ -103,14 +134,24 @@ export function BoardColumn({ id, title, list, droppable = true }: Props) {
                 <div className={classes.placeholder} />
               )}
 
-              {list.map((contact, index) => (
-                <ColumnCard
-                  key={contact.id}
-                  columnId={id}
-                  rowId={index}
-                  contact={contact}
-                />
-              ))}
+              {isLoading
+                ? new Array(randomNumber)
+                    .fill(null)
+                    .map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        animation="wave"
+                        className={classes.skeleton}
+                      />
+                    ))
+                : list.map((contact, index) => (
+                    <ColumnCard
+                      key={contact.id}
+                      columnId={id}
+                      rowId={index}
+                      contact={contact}
+                    />
+                  ))}
             </div>
 
             {provided.placeholder}

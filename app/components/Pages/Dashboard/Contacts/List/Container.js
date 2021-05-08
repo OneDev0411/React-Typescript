@@ -48,6 +48,8 @@ import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 
+import { putUserSetting } from 'models/user/put-user-setting'
+
 import ContactsTabs from './Tabs'
 import Table from './Table'
 import ImportContactsButton from './ImportContactsButton'
@@ -60,7 +62,8 @@ import {
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
   PARKED_CONTACTS_LIST_ID,
-  DUPLICATE_CONTACTS_LIST_ID
+  DUPLICATE_CONTACTS_LIST_ID,
+  VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
@@ -108,6 +111,12 @@ class ContactsList extends React.Component {
     fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
+
+    this.setState({
+      viewMode:
+        getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
+        'table'
+    })
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
@@ -719,6 +728,14 @@ class ContactsList extends React.Component {
     )
   }
 
+  changeViewMode = mode => {
+    this.setState({
+      viewMode: mode
+    })
+
+    putUserSetting(VIEW_MODE_FIELD_SETTING_KEY, mode)
+  }
+
   renderTabs = (props = {}) => {
     const { selectedShortcutFilter } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
@@ -791,8 +808,15 @@ class ContactsList extends React.Component {
     const activeTag = this.getActiveTag()
 
     return (
-      <PageLayout>
+      <PageLayout
+        display="flex"
+        flexDirection="column"
+        height={this.state.viewMode === 'table' ? 'unset' : '100vh'}
+        overflow={this.state.viewMode === 'table' ? 'auto' : 'hidden'}
+        pb={this.state.viewMode === 'table' ? 4 : 1}
+      >
         <PageLayout.HeaderWithSearch
+          flex="0 1 auto"
           title={title}
           onSearch={this.handleSearch}
           SearchInputProps={{
@@ -832,11 +856,7 @@ class ContactsList extends React.Component {
                             ? props.theme.palette.action.hover
                             : '#fff'
                       }}
-                      onClick={() =>
-                        this.setState({
-                          viewMode: 'table'
-                        })
-                      }
+                      onClick={() => this.changeViewMode('table')}
                     >
                       <SvgIcon path={mdiFormatListText} />
                     </Button>
@@ -851,11 +871,7 @@ class ContactsList extends React.Component {
                             ? props.theme.palette.action.hover
                             : '#fff'
                       }}
-                      onClick={() =>
-                        this.setState({
-                          viewMode: 'board'
-                        })
-                      }
+                      onClick={() => this.changeViewMode('board')}
                     >
                       <SvgIcon path={mdiViewWeekOutline} />
                     </Button>
@@ -868,7 +884,12 @@ class ContactsList extends React.Component {
             <ViewAs />
           </Box>
         </PageLayout.HeaderWithSearch>
-        <PageLayout.Main>
+        <PageLayout.Main
+          display="flex"
+          flexDirection="column"
+          flex="1 1 auto"
+          overflow="hidden"
+        >
           {this.state.syncStatus === 'pending' && (
             <Callout
               type="info"
@@ -907,9 +928,9 @@ class ContactsList extends React.Component {
 
               {this.renderTabs()}
 
-              <Box mt={2} flexGrow={1}>
+              <Box mt={2} flexGrow={1} overflow="hidden">
                 <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board contacts={contacts} />
+                  <Board contacts={contacts} isLoading={isFetchingContacts} />
                 </ViewMode>
 
                 <ViewMode enabled={this.state.viewMode === 'table'}>

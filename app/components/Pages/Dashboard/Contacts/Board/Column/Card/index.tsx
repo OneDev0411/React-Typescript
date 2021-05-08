@@ -18,6 +18,9 @@ import cn from 'classnames'
 
 import { useMemo } from 'react'
 
+import { Link } from 'react-router'
+
+import MiniContact from 'components/MiniContact'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -39,10 +42,11 @@ const useStyles = makeStyles(
     },
     avatar: {
       width: theme.spacing(3),
-      height: theme.spacing(3)
+      height: theme.spacing(3),
+      marginRight: theme.spacing(1)
     },
     name: {
-      marginLeft: theme.spacing(1)
+      color: theme.palette.common.black
     },
     grey: {
       color: theme.palette.grey['500']
@@ -99,9 +103,19 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
               src={contact.profile_image_url!}
               alt={contact.display_name}
             />
-            <Typography variant="body2" className={classes.name}>
-              <TextMiddleTruncate text={contact.display_name} maxLength={25} />
-            </Typography>
+            <MiniContact type="contact" data={contact}>
+              <Link
+                to={`/dashboard/contacts/${contact.id}`}
+                className={classes.name}
+              >
+                <Typography variant="body2">
+                  <TextMiddleTruncate
+                    text={contact.display_name}
+                    maxLength={25}
+                  />
+                </Typography>
+              </Link>
+            </MiniContact>
           </Box>
 
           <Box display="flex" alignItems="center">
