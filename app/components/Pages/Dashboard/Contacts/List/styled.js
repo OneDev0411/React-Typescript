@@ -6,6 +6,7 @@ export const Container = styled.div`
 
 export const ViewMode = styled.div`
   display: ${props => (props.enabled ? 'block' : 'none')};
+  min-height: 50vh;
   height: 100%;
 
   /* 
