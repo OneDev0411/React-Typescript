@@ -729,6 +729,15 @@ class ContactsList extends React.Component {
   }
 
   changeViewMode = mode => {
+    if (mode === this.state.viewMode) {
+      return
+    }
+
+    // reload tags when switching back to table view
+    if (mode === 'table') {
+      this.reloadContacts()
+    }
+
     this.setState({
       viewMode: mode
     })

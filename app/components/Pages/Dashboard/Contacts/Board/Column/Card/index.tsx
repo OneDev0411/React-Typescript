@@ -1,6 +1,5 @@
 import {
   Box,
-  Avatar,
   Typography,
   Chip,
   makeStyles,
@@ -24,6 +23,7 @@ import MiniContact from 'components/MiniContact'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Avatar } from 'components/Avatar'
 
 import LastTouched from '../../../List/Table/columns/LastTouched'
 
@@ -98,11 +98,7 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
       <>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
-            <Avatar
-              className={classes.avatar}
-              src={contact.profile_image_url!}
-              alt={contact.display_name}
-            />
+            <Avatar className={classes.avatar} contact={contact} />
             <MiniContact type="contact" data={contact}>
               <Link
                 to={`/dashboard/contacts/${contact.id}`}
