@@ -9,10 +9,11 @@ const useStyles = makeStyles(
     container: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      padding: theme.spacing(3.5, 0)
     }
   }),
-  { name: 'ContactProfile' }
+  { name: 'ContactProfileHeader' }
 )
 
 export interface Props {

@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(1)
     },
     tags: {
-      color: theme.palette.grey['500']
+      marginTop: theme.spacing(0.5)
     }
   })
 )
@@ -41,7 +41,7 @@ export default function Catalog({
       <Avatar contact={contact} />
       <Box pl={1}>
         <Box className={classes.title}>
-          <Typography variant="subtitle1" className={classes.name}>
+          <Typography variant="h6" className={classes.name}>
             {contact.display_name}
           </Typography>
           <Link

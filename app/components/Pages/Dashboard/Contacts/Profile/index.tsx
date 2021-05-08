@@ -5,6 +5,8 @@ import { useEffectOnce } from 'react-use'
 import { Box, Tab, Tabs, makeStyles, Theme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
+import cn from 'classnames'
+
 import PageLayout from 'components/GlobalPageLayout'
 
 import { goTo } from 'utils/go-to'
@@ -47,19 +49,33 @@ import MergeDuplicates from './MergeDuplicates'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    headerContainer: {
-      padding: theme.spacing(2, 4, 0)
+    header: {
+      padding: theme.spacing(0, 4)
     },
     tabContainer: {
       marginTop: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
-    contentContainer: {
+    container: {
+      display: 'flex',
+      alignItems: 'flex-start',
       width: '100%',
       height: 'auto',
-      minHeight: '100vh',
-      padding: theme.spacing(4),
+      padding: theme.spacing(2, 4, 4),
       background: theme.palette.grey[50]
+    },
+    contentContainer: {
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
+      borderRadius: `${theme.spacing(1)}px`
+    },
+    sidenavContainer: {
+      width: '350px',
+      padding: theme.spacing(1),
+      marginRight: theme.spacing(2)
+    },
+    timelineContainer: {
+      flexGrow: 1
     },
     warnContainer: {
       marginBottom: theme.spacing(2),
@@ -349,7 +365,7 @@ const ContactProfile = props => {
         <title>{documentTitle()}</title>
       </Helmet>
       <PageLayout gutter={0}>
-        <Box className={classes.headerContainer}>
+        <Box className={classes.header}>
           <Header
             contact={contact}
             onTagChange={fetchContact}
@@ -357,12 +373,13 @@ const ContactProfile = props => {
           />
           <Box className={classes.tabContainer}>
             <Tabs
-              // value={selectedTabIndex}
+              value="event"
               // onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
               textColor="primary"
               indicatorColor="primary"
             >
               <Tab
+                value="event"
                 disabled={isLoading}
                 className={classes.tab}
                 label="Events"
@@ -372,8 +389,10 @@ const ContactProfile = props => {
           </Box>
         </Box>
 
-        <PageLayout.Main mt={0} className={classes.contentContainer}>
-          <Box>
+        <PageLayout.Main mt={0} className={classes.container}>
+          <Box
+            className={cn(classes.contentContainer, classes.sidenavContainer)}
+          >
             <Flows
               // @ts-ignore
               flows={contact?.flows || null}
@@ -398,7 +417,9 @@ const ContactProfile = props => {
             <Divider />
             <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
           </Box>
-          <Box>
+          <Box
+            className={cn(classes.contentContainer, classes.timelineContainer)}
+          >
             <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
             <Timeline
               ref={timelineRef}
