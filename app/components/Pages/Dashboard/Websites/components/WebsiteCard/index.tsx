@@ -61,7 +61,7 @@ function WebsiteCard({
   const { thumbnail } = getTemplateImage(template_instance)
 
   const hostnames = websiteHostnames ?? []
-  const hostname = hostnames ? hostnames[0] : ''
+  const hostname = hostnames.length > 0 ? hostnames[0] : ''
 
   const link = hostname ? generateWebsiteUrl(hostname) : ''
 

@@ -91,18 +91,20 @@ function PublishWebsite({
   }
 
   const handleDomainAdd = (domainName: string, isDefault: boolean) => {
-    setWebsiteData(oldWebsiteData =>
-      oldWebsiteData
-        ? {
-            ...oldWebsiteData,
-            hostnames: oldWebsiteData.hostnames
-              ? isDefault
-                ? [domainName, ...oldWebsiteData.hostnames]
-                : [...oldWebsiteData?.hostnames, domainName]
-              : [domainName]
-          }
-        : null
-    )
+    setWebsiteData(oldWebsiteData => {
+      if (!oldWebsiteData) {
+        return null
+      }
+
+      const websiteHostnames = oldWebsiteData.hostnames ?? []
+
+      return {
+        ...oldWebsiteData,
+        hostnames: isDefault
+          ? [domainName, ...websiteHostnames]
+          : [...websiteHostnames, domainName]
+      }
+    })
   }
 
   const handleDomainDelete = (domainName: string) => {
