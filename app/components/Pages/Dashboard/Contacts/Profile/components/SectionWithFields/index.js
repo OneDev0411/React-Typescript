@@ -1,7 +1,8 @@
 import React from 'react'
 import cuid from 'cuid'
 import { connect } from 'react-redux'
-import { Button } from '@material-ui/core'
+
+import { mdiPlus, mdiChevronUp } from '@mdi/js'
 
 import { addNotification as notify } from 'components/notification'
 
@@ -13,7 +14,8 @@ import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 
 import { BasicSection } from '../Section/Basic'
-// import { SectionButton } from '../Section/Button'
+import { SectionButton } from '../Section/Button'
+
 import MasterField from '../ContactAttributeInlineEditableField'
 
 import {
@@ -407,13 +409,26 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { orderedAttributes, shouldToggleEmptyAttributes } = this.state
+    const {
+      title,
+      expandButtonLabel = 'More Fields',
+      expandButtonIcon = mdiPlus
+    } = this.props
+    const {
+      orderedAttributes,
+      shouldToggleEmptyAttributes,
+      toggleEmptyAttributes
+    } = this.state
 
     return (
-      <BasicSection>
+      <BasicSection title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
         {shouldToggleEmptyAttributes && (
-          <Button onClick={this.toggleEmptyFields}>toggle</Button>
+          <SectionButton
+            label={expandButtonLabel}
+            icon={!toggleEmptyAttributes ? expandButtonIcon : mdiChevronUp}
+            onClick={this.toggleEmptyFields}
+          />
         )}
         {this.props.children}
       </BasicSection>

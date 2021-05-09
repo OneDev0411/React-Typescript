@@ -17,7 +17,7 @@ interface Props {
 
 function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
   return (
-    <BasicSection>
+    <BasicSection title="Flows">
       {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
       <AddToFlowButton
         activeFlows={[]}

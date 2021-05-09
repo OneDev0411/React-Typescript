@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 
 import { List } from './List'
-import { Section } from '../components/Section'
+import { BasicSection } from '../components/Section/Basic'
 
 interface Props {
   contact: IContact
@@ -10,7 +10,7 @@ interface Props {
 
 function DealsList({ contact }: Props) {
   return (
-    <Section title="Deals" style={{ padding: '0 1.5rem' }}>
+    <BasicSection title="Deals">
       {Array.isArray(contact.deals) && contact.deals.length > 0 ? (
         <List contact={contact} deals={contact.deals} />
       ) : (
@@ -18,7 +18,7 @@ function DealsList({ contact }: Props) {
           No deals connected to this contact.
         </Typography>
       )}
-    </Section>
+    </BasicSection>
   )
 }
 

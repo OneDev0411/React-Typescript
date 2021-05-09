@@ -16,9 +16,10 @@ const fieldsOrder = [
 export function Details(props) {
   return (
     <SectionWithFields
+      title="Details"
+      section="Details"
       contact={props.contact}
       fieldsOrder={fieldsOrder}
-      section="Details"
       submitCallback={props.submitCallback}
     />
   )

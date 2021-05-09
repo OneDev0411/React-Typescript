@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { mdiAccountEditOutline } from '@mdi/js'
+
 import SectionWithFields from '../components/SectionWithFields'
 
 const fieldsOrder = [
@@ -17,9 +19,12 @@ const fieldsOrder = [
 export function ContactInfo(props) {
   return (
     <SectionWithFields
+      title="Contact Info"
+      section="Contact Info"
+      expandButtonLabel="Edit Other Contact Info"
+      expandButtonIcon={mdiAccountEditOutline}
       contact={props.contact}
       fieldsOrder={fieldsOrder}
-      section="Contact Info"
       submitCallback={props.submitCallback}
     />
   )

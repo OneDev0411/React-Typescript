@@ -71,7 +71,7 @@ const useStyles = makeStyles(
     },
     sidenavContainer: {
       width: '350px',
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
       marginRight: theme.spacing(2)
     },
     timelineContainer: {
@@ -393,6 +393,7 @@ const ContactProfile = props => {
           <Box
             className={cn(classes.contentContainer, classes.sidenavContainer)}
           >
+            <ContactInfo {..._props} />
             <Flows
               // @ts-ignore
               flows={contact?.flows || null}
@@ -400,7 +401,6 @@ const ContactProfile = props => {
               onStop={handleStopFlow}
               addCallback={addToFlowCallback}
             />
-            <ContactInfo {..._props} />
             <AddressesSection {..._props} />
             <Dates {..._props} />
             <Deals contact={contact} />
