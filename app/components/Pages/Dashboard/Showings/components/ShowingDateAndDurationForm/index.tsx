@@ -84,7 +84,7 @@ function ShowingDateAndDurationForm({
           />
           <FormControlLabel
             label="Has end time"
-            control={<Checkbox />}
+            control={<Checkbox color="primary" />}
             onChange={(event: ChangeEvent, checked: boolean) => {
               setHasEndTime(checked)
 
