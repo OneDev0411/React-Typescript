@@ -89,15 +89,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               to={urlWithQuery}
             />
           )
-        }),
-        <AnalyticsDropdownTab
-          brandType={activeBrand?.brand_type!}
-          key="analytics"
-        />
+        })
       ]}
       actions={[
+        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
         <Tab
-          key={0}
+          key={1}
           label={
             <DropdownTab
               title={getGridSortLabel(
