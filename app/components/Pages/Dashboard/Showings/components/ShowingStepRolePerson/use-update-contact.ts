@@ -49,11 +49,12 @@ function useUpdateContact(): UpdateContactReturn {
           const attributeDef = attributeDefs.byId[attributeDefId]
 
           if (
+            !attrDefIdToAttrData[attributeDefId] ||
             attributes[attribute] !==
-            attrDefIdToAttrData[attributeDefId][attributeDef.data_type]
+              attrDefIdToAttrData[attributeDefId][attributeDef.data_type]
           ) {
             upsertedAttributes.push({
-              id: attrDefIdToAttrData[attributeDefId].id,
+              id: attrDefIdToAttrData[attributeDefId]?.id,
               attribute_def: attributeDef,
               [attributeDef.data_type]: attributes[attribute]
             })
