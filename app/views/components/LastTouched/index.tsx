@@ -6,8 +6,11 @@ import { makeStyles, createStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     wrapper: {
-      fontSize: theme.typography.body2.fontSize,
-      fontWeight: theme.typography.body2.fontWeight
+      color: theme.palette.grey[900],
+      ...theme.typography.body2
+    },
+    label: {
+      color: theme.palette.grey[900]
     }
   })
 )
@@ -22,7 +25,7 @@ export function LastTouched(props: Props) {
 
   if (!lastTouch) {
     return (
-      <Typography variant="body2">
+      <Typography variant="body2" className={classes.label}>
         You have not added any touches for this contact.
       </Typography>
     )

@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import { Box, Backdrop } from '@material-ui/core'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
+import { Theme, makeStyles } from '@material-ui/core/styles'
 
 import { DangerButton } from 'components/Button/DangerButton'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     root: {
       zIndex: theme.zIndex.modal
     },
@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.h2.fontSize,
       fontWeight: theme.typography.fontWeightBold
     }
-  })
+  }),
+  { name: 'ContactProfileDelete' }
 )
 
 interface Props {
@@ -46,10 +47,8 @@ export default function Delete(props: Props) {
   }
 
   return (
-    <Box p={3}>
-      <DangerButton fullWidth variant="outlined" onClick={onClick}>
-        Delete Contact
-      </DangerButton>
-    </Box>
+    <DangerButton variant="outlined" onClick={onClick}>
+      Delete
+    </DangerButton>
   )
 }

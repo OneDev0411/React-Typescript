@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useEffect, RefObject } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  RefObject
+} from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { useEffectOnce } from 'react-use'
@@ -30,7 +36,6 @@ import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import Loading from '../../../../Partials/Loading'
 
 import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-change-event'
-
 import { Container } from '../components/Container'
 import Flows from './Flows'
 import { Dates } from './Dates'
@@ -38,13 +43,13 @@ import Deals from './Deals'
 import { Details } from './Details'
 import { Partner } from './Partner'
 import { ContactInfo } from './ContactInfo'
+import { LastTouch } from './LastTouch'
 import AddressesSection from './Addresses'
 import { Owner } from './Owner'
 import Delete from './Delete'
 
 import { Header } from './Header'
 import { Filters, Tabs } from './Tabs'
-import Divider from './Divider'
 import Timeline, { TimelineRef } from './Timeline'
 import MergeDuplicates from './MergeDuplicates'
 
@@ -221,16 +226,12 @@ const ContactProfile = props => {
   }, [isDesktopScreen])
 
   // creates a ref to the timeline
-  const timelineRef: RefObject<TimelineRef> = React.createRef()
+  const timelineRef: RefObject<TimelineRef> = useRef(null)
   /**
    * refreshes timeline
    */
   const fetchTimeline = useCallback(() => {
-    console.log('fetchTimeline')
-
     if (!timelineRef) {
-      console.log('fetchTimeline2')
-
       return
     }
 
@@ -331,9 +332,9 @@ const ContactProfile = props => {
     }
 
     socket.on('contact:touch', updateContact)
-    socket.on('crm_task:create', fetchTimeline)
-    socket.on('email_campaign:create', fetchTimeline)
-    socket.on('email_campaign:send', fetchTimeline)
+    socket.on('crm_task:create', () => fetchTimeline())
+    socket.on('email_campaign:create', () => fetchTimeline())
+    socket.on('email_campaign:send', () => fetchTimeline())
     socket.on('email_thread:update', handleEmailThreadChangeEvent)
     socket.on('email_thread:delete', handleEmailThreadChangeEvent)
   })
@@ -409,6 +410,7 @@ const ContactProfile = props => {
           <Box
             className={cn(classes.contentContainer, classes.sidenavContainer)}
           >
+            <LastTouch contact={contact} />
             <ContactInfo {..._props} />
             <Flows
               // @ts-ignore
@@ -422,7 +424,6 @@ const ContactProfile = props => {
             <Deals contact={contact} />
             <Details {..._props} />
             <Partner {..._props} />
-            <Divider />
             <Owner
               onSelect={onChangeOwner}
               owner={contact.user}
@@ -430,7 +431,6 @@ const ContactProfile = props => {
               contact={contact}
               disabled={isUpdatingOwner}
             />
-            <Divider />
             <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
           </Box>
           <Box
