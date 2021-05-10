@@ -18,7 +18,7 @@ function ShowingBookingListColumnBase({
   const classes = useStyles()
 
   return (
-    <Typography className={classes.root} variant="body2">
+    <Typography className={classes.root} variant="body2" component="div">
       {children}
     </Typography>
   )
