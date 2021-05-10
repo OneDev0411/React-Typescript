@@ -20,6 +20,8 @@ import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
 import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import ListingHipPocketCard from '../ListingHipPocketCard'
+import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
 
 export interface ShowingStepPropertyProps {
   property: Nullable<ShowingPropertyType>
@@ -91,18 +93,23 @@ function ShowingStepProperty({
           />
         ) : (
           <>
-            {property?.type === 'deal' && (
+            {property?.type === 'deal' && property.deal.listing && (
               <ShowingStepPropertyDealListingCard
                 listing={property.deal.listing as UUID}
                 onChange={goToSearchMode}
                 changeLabel="Change Property"
               />
             )}
+            {property?.type === 'deal' && !property.deal.listing && (
+              <>
+                <ListingHipPocketCard title={property.deal.title} />
+                <ShowingStepPropertyChangeButton onClick={goToSearchMode} />
+              </>
+            )}
             {property?.type === 'listing' && (
               <ShowingStepPropertyListingCard
                 listing={property.listing}
                 onChange={goToSearchMode}
-                changeLabel="Change Property"
               />
             )}
             {property?.type === 'place' && isEditMode && (

@@ -1,17 +1,19 @@
-import React from 'react'
-
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
 import ListingCard, {
   Props as ListingCardProps
 } from 'components/ListingCards/ListingCard'
 
+import ShowingStepPropertyChangeButton, {
+  ShowingStepPropertyChangeButtonProps
+} from './ShowingStepPropertyChangeButton'
+
 export interface ShowingStepPropertyListingCardProps
   extends Omit<ListingCardProps, 'listing'> {
-  onChange: () => void
-  changeLabel: string
   listing: Nullable<ListingCardProps['listing']>
+  onChange: ShowingStepPropertyChangeButtonProps['onClick']
+  changeLabel?: ShowingStepPropertyChangeButtonProps['label']
 }
 
 function ShowingStepPropertyListingCard({
@@ -29,11 +31,7 @@ function ShowingStepPropertyListingCard({
           <CardSkeleton />
         )}
       </Box>
-      <Box mt={2} display="flex" justifyContent="flex-end">
-        <Button variant="outlined" size="small" onClick={onChange}>
-          {changeLabel}
-        </Button>
-      </Box>
+      <ShowingStepPropertyChangeButton onClick={onChange} label={changeLabel} />
     </>
   )
 }
