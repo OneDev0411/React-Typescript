@@ -30,6 +30,7 @@ import { UserMenu } from './components/UserMenu'
 import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import SupportTrigger from './components/SupportTrigger'
+import PoweredBy from './components/PoweredBy'
 
 import { scrollableAreaShadowColor } from './variables'
 
@@ -179,6 +180,7 @@ export function Menu() {
       </ScrollableArea>
 
       <UserMenu user={user} />
+      <PoweredBy />
     </Sidenav>
   )
 }
