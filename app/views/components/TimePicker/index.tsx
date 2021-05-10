@@ -1,7 +1,4 @@
-import React from 'react'
 import { TextField, TextFieldProps } from '@material-ui/core'
-
-import useStyles from './styles'
 
 export interface TimePickerProps
   extends Omit<
@@ -24,12 +21,9 @@ function TimePicker({
   variant = 'outlined',
   ...otherProps
 }: TimePickerProps) {
-  const classes = useStyles()
-
   return (
     <TextField
       {...otherProps}
-      className={classes.input}
       type="time"
       autoComplete="off"
       InputLabelProps={{
