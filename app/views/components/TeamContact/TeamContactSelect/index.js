@@ -94,6 +94,8 @@ export class TeamContactSelect extends React.Component {
 
           const title = buttonProps.selectedItem.label
 
+          return <span onClick={buttonProps.onClick}>{title}</span>
+
           return (
             <ActionButton
               {...buttonProps}

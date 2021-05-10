@@ -78,7 +78,6 @@ class SectionWithFields extends React.Component {
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
     const triggers = getContactTriggers(props.contact)
 
-    console.log({ orderedAttributes })
     this.state = {
       shouldToggleEmptyAttributes,
       toggleEmptyAttributes,

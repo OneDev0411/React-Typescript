@@ -5,8 +5,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     middle: {
-      marginLeft: theme.spacing(3),
-      marginRight: theme.spacing(3)
+      // marginLeft: theme.spacing(3),
+      // marginRight: theme.spacing(3)
     }
   })
 )

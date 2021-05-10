@@ -29,10 +29,13 @@ export const styles = (theme: Theme) =>
     header: {
       display: 'flex',
       alignItems: 'flex-end',
-      height: theme.spacing(8),
-      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       color: theme.palette.grey[700],
-      ...theme.typography.body1
+      ...theme.typography.body1,
+      '&:first-of-type': {
+        marginTop: 0
+      }
     },
     row: {
       display: 'flex',

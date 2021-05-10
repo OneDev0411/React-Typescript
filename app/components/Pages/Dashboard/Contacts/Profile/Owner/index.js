@@ -4,7 +4,7 @@ import { TeamContactSelect } from '../../../../../../views/components/TeamContac
 import { ItemChangelog } from '../../../../../../views/components/TeamContact/ItemChangelog'
 import { isSoloActiveTeam } from '../../../../../../utils/user-teams'
 
-import { Section } from '../components/Section'
+import { BasicSection } from '../components/Section/Basic'
 
 export function Owner(props) {
   if (props.user && isSoloActiveTeam(props.user)) {
@@ -12,7 +12,7 @@ export function Owner(props) {
   }
 
   return (
-    <Section title="Contact Owner" style={{ padding: '0 1.5rem' }}>
+    <BasicSection>
       <TeamContactSelect
         {...props}
         upsideDown
@@ -20,6 +20,6 @@ export function Owner(props) {
         style={{ marginBottom: '1em' }}
       />
       <ItemChangelog item={props.contact} />
-    </Section>
+    </BasicSection>
   )
 }

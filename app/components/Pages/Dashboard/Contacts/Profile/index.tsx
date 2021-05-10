@@ -1,8 +1,8 @@
-import React, { useState, useEffect, RefObject } from 'react'
+import React, { useState, useCallback, useEffect, RefObject } from 'react'
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { useEffectOnce } from 'react-use'
-import { Box, Tab, Tabs, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
 import cn from 'classnames'
@@ -43,6 +43,7 @@ import { Owner } from './Owner'
 import Delete from './Delete'
 
 import { Header } from './Header'
+import { Filters, Tabs } from './Tabs'
 import Divider from './Divider'
 import Timeline, { TimelineRef } from './Timeline'
 import MergeDuplicates from './MergeDuplicates'
@@ -51,10 +52,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     header: {
       padding: theme.spacing(0, 4)
-    },
-    tabContainer: {
-      marginTop: theme.spacing(2),
-      borderBottom: `1px solid ${theme.palette.divider}`
     },
     container: {
       display: 'flex',
@@ -81,14 +78,17 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(2),
       color: theme.palette.warning.contrastText,
       ...theme.typography.body2
-    },
-    chip: {
-      marginLeft: theme.spacing(1)
-    },
-    tab: theme.typography.body1
+    }
   }),
   { name: 'ContactProfile' }
 )
+
+/*
+  Note:
+  This component needs many improvements but due to the limit time
+  I don't have the chance to handle it, I just convert itto TS
+  in hopes of taking care of the other improvements in future
+*/
 
 const ContactProfile = props => {
   const classes = useStyles()
@@ -102,6 +102,7 @@ const ContactProfile = props => {
   const [isLoading, setIsLoading] = useState(
     !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
   )
+  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
 
   // static getDerivedStateFromProps(props, state) {
   //   if (!props.contact) {
@@ -115,40 +116,40 @@ const ContactProfile = props => {
   //   return state
   // }
 
-  const fetchContact = async (
-    callback = () => {},
-    showFullScreenLoading = false
-  ) => {
-    if (showFullScreenLoading) {
-      setIsLoading(true)
-    }
-
-    try {
-      const response = await getContact(props.params.id, {
-        associations: [
-          ...updateContactQuery.associations,
-          'contact.deals',
-          'contact.flows',
-          'flow_step.email',
-          'contact.triggers',
-          'trigger.campaign',
-          'flow_step.crm_task',
-          'email_campaign.template',
-          'template_instance.template'
-        ]
-      })
-
-      setContact(normalizeContact(response.data))
-      setIsLoading(false)
-      callback()
-    } catch (error) {
-      if (error.status === 404 || error.status === 400) {
-        props.router.push('/dashboard/contacts')
+  const fetchContact = useCallback(
+    async (callback = () => {}, showFullScreenLoading = false) => {
+      if (showFullScreenLoading) {
+        setIsLoading(true)
       }
-    }
-  }
 
-  const updateContact = async () => {
+      try {
+        const response = await getContact(props.params.id, {
+          associations: [
+            ...updateContactQuery.associations,
+            'contact.deals',
+            'contact.flows',
+            'flow_step.email',
+            'contact.triggers',
+            'trigger.campaign',
+            'flow_step.crm_task',
+            'email_campaign.template',
+            'template_instance.template'
+          ]
+        })
+
+        setContact(normalizeContact(response.data))
+        setIsLoading(false)
+        callback()
+      } catch (error) {
+        if (error.status === 404 || error.status === 400) {
+          props.router.push('/dashboard/contacts')
+        }
+      }
+    },
+    [props.params.id, props.router]
+  )
+
+  const updateContact = useCallback(async () => {
     try {
       const response = await getContact(props.params.id, updateContactQuery)
       const normalizedContact = normalizeContact(response.data)
@@ -165,7 +166,7 @@ const ContactProfile = props => {
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [contact, props.params.id])
 
   const handleDelete = async () => {
     try {
@@ -179,13 +180,16 @@ const ContactProfile = props => {
     }
   }
 
-  const initializeContact = (showFullScreenLoading = false) => {
-    fetchContact(() => {
-      if (props.fetchTags) {
-        props.getContactsTags()
-      }
-    }, showFullScreenLoading)
-  }
+  const initializeContact = useCallback(
+    (showFullScreenLoading = false) => {
+      fetchContact(() => {
+        if (props.fetchTags) {
+          props.getContactsTags()
+        }
+      }, showFullScreenLoading)
+    },
+    [fetchContact, props]
+  )
 
   const setNewContact = (
     newContact: INormalizedContact,
@@ -200,9 +204,13 @@ const ContactProfile = props => {
 
   const handleCreateNote = (contact: INormalizedContact) => {
     setNewContact(contact)
+
+    if (activeFilter !== Filters.Notes) {
+      setActiveFilter(Filters.Notes)
+    }
   }
 
-  const detectScreenSize = () => {
+  const detectScreenSize = useCallback(() => {
     if (window.innerWidth < 1681 && isDesktopScreen) {
       setIsDesktopScreen(false)
     }
@@ -210,31 +218,38 @@ const ContactProfile = props => {
     if (window.innerWidth >= 1681 && !isDesktopScreen) {
       setIsDesktopScreen(true)
     }
-  }
+  }, [isDesktopScreen])
 
   // creates a ref to the timeline
   const timelineRef: RefObject<TimelineRef> = React.createRef()
   /**
    * refreshes timeline
    */
-  const fetchTimeline = () => {
+  const fetchTimeline = useCallback(() => {
+    console.log('fetchTimeline')
+
     if (!timelineRef) {
+      console.log('fetchTimeline2')
+
       return
     }
 
     return setTimeout(timelineRef.current?.refresh, 500)
-  }
+  }, [timelineRef])
 
-  const handleEmailThreadChangeEvent = event => {
-    if (
-      !timelineRef ||
-      skipEmailThreadChangeEvent(event, props.allConnectedAccounts)
-    ) {
-      return
-    }
+  const handleEmailThreadChangeEvent = useCallback(
+    event => {
+      if (
+        !timelineRef ||
+        skipEmailThreadChangeEvent(event, props.allConnectedAccounts)
+      ) {
+        return
+      }
 
-    timelineRef.current?.refresh()
-  }
+      timelineRef.current?.refresh()
+    },
+    [props.allConnectedAccounts, timelineRef]
+  )
 
   /**
    * Web page (document) title
@@ -293,6 +308,10 @@ const ContactProfile = props => {
     goTo(`/dashboard/contacts/${masterContactId}`)
   }
 
+  const handleChangeFilter = (value: Filters) => {
+    setActiveFilter(value)
+  }
+
   // const handleUpdateContactInfo = attribute => {
   //   if (attribute.name === 'email') {
   //     fetchTimeline()
@@ -340,7 +359,15 @@ const ContactProfile = props => {
       socket.off('email_thread:update', handleEmailThreadChangeEvent)
       socket.off('email_thread:delete', handleEmailThreadChangeEvent)
     }
-  }, [props.params])
+  }, [
+    props.params,
+    currentContactId,
+    detectScreenSize,
+    fetchTimeline,
+    handleEmailThreadChangeEvent,
+    initializeContact,
+    updateContact
+  ])
 
   if (isLoading) {
     return (
@@ -371,22 +398,11 @@ const ContactProfile = props => {
             onTagChange={fetchContact}
             handleCreateNote={handleCreateNote}
           />
-          <Box className={classes.tabContainer}>
-            <Tabs
-              value="event"
-              // onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
-              textColor="primary"
-              indicatorColor="primary"
-            >
-              <Tab
-                value="event"
-                disabled={isLoading}
-                className={classes.tab}
-                label="Events"
-              />
-              <Tab disabled={isLoading} className={classes.tab} label="Notes" />
-            </Tabs>
-          </Box>
+          <Tabs
+            contact={contact}
+            activeFilter={activeFilter}
+            onChangeFilter={handleChangeFilter}
+          />
         </Box>
 
         <PageLayout.Main mt={0} className={classes.container}>
@@ -422,6 +438,7 @@ const ContactProfile = props => {
           >
             <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
             <Timeline
+              activeFilter={activeFilter}
               ref={timelineRef}
               contact={contact}
               onChangeNote={setNewContact}

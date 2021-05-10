@@ -2,8 +2,7 @@ import React, {
   forwardRef,
   RefObject,
   useImperativeHandle,
-  useRef,
-  useState
+  useRef
 } from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
 
@@ -14,7 +13,7 @@ import { getTimelineInitialRange } from './helpers/get-timeline-range'
 
 import { Notes } from './Notes'
 
-import { Filters, TabsFilter } from './Tabs'
+import { Filters } from '../Tabs'
 
 export interface TimelineRef {
   refresh(): void
@@ -22,6 +21,7 @@ export interface TimelineRef {
 
 interface Props {
   contact: INormalizedContact
+  activeFilter: Filters
   timelineRef?: RefObject<TimelineRef>
   onChangeNote: (contact: IContact, fallback?: () => void) => void
 }
@@ -38,14 +38,8 @@ export const useStyles = makeStyles(
       overflow: 'hidden',
       padding: theme.spacing(0, 2)
     },
-    header: {
-      flex: '0 1 auto'
-    },
-    list: {
-      flex: '1 1 auto',
-      marginBottom: theme.spacing(2)
-    },
     notes: {
+      padding: theme.spacing(2, 0),
       position: 'absolute',
       width: '100%',
       height: '100%',
@@ -57,20 +51,14 @@ export const useStyles = makeStyles(
   }
 )
 
-function Timeline(props: Props) {
+function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
   const classes = useStyles()
-  const timelineRef = useRef<CalendarRef>(null)
-
-  const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
+  const localTimelineRef = useRef<CalendarRef>(null)
 
   const handleReload = (filter = activeFilter) => {
     if (filter === Filters.Events) {
-      timelineRef.current!.refresh(new Date(), getTimelineInitialRange())
+      localTimelineRef.current!.refresh(new Date(), getTimelineInitialRange())
     }
-  }
-
-  const handleChangeFilter = (value: Filters) => {
-    setActiveFilter(value)
   }
 
   const getFilter = () => {
@@ -81,7 +69,7 @@ function Timeline(props: Props) {
     }
 
     return {
-      contact: props.contact.id,
+      contact: contact.id,
       object_types: [
         'email_thread_recipient',
         'crm_association',
@@ -93,43 +81,33 @@ function Timeline(props: Props) {
     }
   }
 
-  useImperativeHandle(props.timelineRef, () => ({
+  useImperativeHandle(timelineRef, () => ({
     refresh: handleReload
   }))
 
-  if (!props.contact) {
+  if (!contact) {
     return null
   }
 
   return (
     <div className={classes.container}>
-      <div className={classes.header}>
-        <TabsFilter
-          activeTab={activeFilter}
-          contact={props.contact}
-          onChangeFilter={handleChangeFilter}
+      {activeFilter === Filters.Events && (
+        <List
+          contrariwise
+          ref={localTimelineRef}
+          contact={contact}
+          filter={getFilter()}
+          initialRange={getTimelineInitialRange()}
+          associations={associations}
+          placeholders={[]}
         />
-      </div>
+      )}
 
-      <div className={classes.list}>
-        {activeFilter === Filters.Events && (
-          <List
-            contrariwise
-            ref={timelineRef}
-            contact={props.contact}
-            filter={getFilter()}
-            initialRange={getTimelineInitialRange()}
-            associations={associations}
-            placeholders={[]}
-          />
-        )}
-
-        {activeFilter === Filters.Notes && (
-          <div className={classes.notes}>
-            <Notes contact={props.contact} onChange={props.onChangeNote} />
-          </div>
-        )}
-      </div>
+      {activeFilter === Filters.Notes && (
+        <div className={classes.notes}>
+          <Notes contact={contact} onChange={onChangeNote} />
+        </div>
+      )}
     </div>
   )
 }
