@@ -20,7 +20,7 @@ export function ContactsZeroState() {
 
   return (
     <ZeroState
-      imageUrl="/static/images/zero-state/contacts.jpg"
+      imageUrl="/static/images/zero-state/contacts.png"
       title="No contacts! Import now with one click."
       subTitle="People and relationships are central to your business. Start building
       your referral network in Rechat by importing or creating a contact now."

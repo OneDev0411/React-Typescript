@@ -6,7 +6,7 @@ import { ZeroState } from 'partials/ZeroState'
 export default function EmptyState() {
   return (
     <ZeroState
-      imageUrl="/static/images/zero-state/deals.jpg"
+      imageUrl="/static/images/zero-state/deals.png"
       title="You don’t have any deals, yet."
       subTitle="Get started by creating a new listing or making an offer."
       ctaNode={

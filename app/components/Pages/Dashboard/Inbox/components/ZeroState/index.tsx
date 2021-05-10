@@ -14,7 +14,7 @@ export default function InboxZeroState() {
 
   return (
     <ZeroState
-      imageUrl="/static/images/zero-state/inbox.jpg"
+      imageUrl="/static/images/zero-state/inbox.png"
       title="See your emails here!"
       subTitle="Connect your Google or Outlook account and see your emails here.
     Rechat helps you to be on top of your customers."
