@@ -12,6 +12,7 @@ import { goTo } from 'utils/go-to'
 import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColumnPerson'
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
 import ShowingDetailTabVisitorsColumnActions from './ShowingDetailTabVisitorsColumnActions'
+import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -78,6 +79,7 @@ function ShowingDetailTabVisitors({
       width: '50%',
       sortable: false,
       render: ({ row }) => (
+        // TODO: use the server response here
         <ShowingDetailTabVisitorsColumnTotalVisit count={0} />
       )
     }
@@ -96,6 +98,10 @@ function ShowingDetailTabVisitors({
         loading={isLoading ? 'middle' : null}
         LoadingStateComponent={() => (
           <LoadingContainer style={{ padding: '20% 0' }} />
+        )}
+        EmptyStateComponent={() => (
+          // TODO: finalize this empty state or move the component to the global scope
+          <ShowingBookingListEmptyState message="There is no visitor." />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)
