@@ -64,7 +64,6 @@ function ShowingBookingList({
           {
             id: 'property',
             width: '30%',
-            primary: true,
             render: ({ row }) => (
               <ShowingColumnProperty
                 image={getShowingImage({
@@ -91,7 +90,6 @@ function ShowingBookingList({
     {
       id: 'date-time',
       width: hasPropertyColumn ? '20%' : '25%',
-      primary: true,
       render: ({ row }) => (
         <ShowingBookingListColumnDateTime
           time={row.time}
