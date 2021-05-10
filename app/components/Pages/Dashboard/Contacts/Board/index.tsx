@@ -48,6 +48,10 @@ export function Board({ contacts, isLoading }: Props) {
   }, [contacts])
 
   const onDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return
+    }
+
     const [, contactId] = result.draggableId.split(':')
     const oldTag = Columns[result.source.droppableId]
     const newTag = Columns[result.destination?.droppableId ?? -1]

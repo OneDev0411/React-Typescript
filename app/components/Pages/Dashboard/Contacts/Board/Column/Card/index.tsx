@@ -163,8 +163,7 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
               ...provided.draggableProps.style,
               ...(snapshot.isDragging
                 ? {
-                    borderColor: theme.palette.success.main,
-                    transform: `${provided.draggableProps.style?.transform} rotateZ(3deg)`
+                    borderColor: theme.palette.success.main
                   }
                 : {})
             }}
