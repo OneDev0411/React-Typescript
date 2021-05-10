@@ -815,11 +815,13 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
-        display="flex"
-        flexDirection="column"
-        height={this.state.viewMode === 'table' ? 'unset' : '100vh'}
-        overflow={this.state.viewMode === 'table' ? 'auto' : 'hidden'}
-        pb={this.state.viewMode === 'table' ? 4 : 1}
+        {...(this.state.viewMode === 'board' && {
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          oferflow: 'hidden',
+          pb: 1
+        })}
       >
         <PageLayout.HeaderWithSearch
           flex="0 1 auto"
@@ -891,10 +893,12 @@ class ContactsList extends React.Component {
           </Box>
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
-          display="flex"
-          flexDirection="column"
-          flex="1 1 auto"
-          overflow="hidden"
+          {...(this.state.viewMode === 'board' && {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 auto',
+            overflow: 'hidden'
+          })}
         >
           {this.state.syncStatus === 'pending' && (
             <Callout
@@ -934,7 +938,13 @@ class ContactsList extends React.Component {
 
               {this.renderTabs()}
 
-              <Box mt={2} flexGrow={1} overflow="hidden">
+              <Box
+                mt={2}
+                {...(this.state.viewMode === 'board' && {
+                  flexGrow: 1,
+                  overflow: 'hidden'
+                })}
+              >
                 <ViewMode enabled={this.state.viewMode === 'board'}>
                   <Board contacts={contacts} isLoading={isFetchingContacts} />
                 </ViewMode>
