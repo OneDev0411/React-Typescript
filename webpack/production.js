@@ -5,7 +5,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const S3Plugin = require('webpack-s3-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
-// const SentryCliPlugin = require('@sentry/webpack-plugin')
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const moment = require('moment')
 
@@ -51,12 +51,12 @@ const config = {
       threshold: 0, // S3 plugin expects all js assets to be gzipped
       minRatio: 1 // Therefore it adds a content-encoding to them all
     }),
-    // new SentryCliPlugin({
-    //   release:
-    //     process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION || '',
-    //   include: 'dist/sourcemaps/',
-    //   urlPrefix: `${process.env.ASSETS_BASEURL}sourcemaps/`
-    // }),
+    new SentryCliPlugin({
+      release:
+        process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION || '',
+      include: 'dist/sourcemaps/',
+      urlPrefix: `${process.env.ASSETS_BASEURL}sourcemaps/`
+    }),
     new S3Plugin({
       progress: false, // Messes the terminal up
       exclude: /\.(html|map)$/,
