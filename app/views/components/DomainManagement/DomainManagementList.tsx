@@ -42,7 +42,7 @@ function DomainManagementList({
       <Box marginBottom={2}>
         <H4>Domains for This Site:</H4>
         <ul className={classes.ul}>
-          {websiteHostnames.map(hostname => (
+          {websiteHostnames?.map(hostname => (
             <DomainManagementListItem
               key={hostname}
               hostname={hostname}
