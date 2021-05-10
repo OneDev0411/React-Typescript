@@ -101,7 +101,7 @@ function ShowingDetailTabVisitors({
         )}
         EmptyStateComponent={() => (
           // TODO: finalize this empty state or move the component to the global scope
-          <ShowingBookingListEmptyState message="There is no contact." />
+          <ShowingBookingListEmptyState message="There is no visitor." />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)
