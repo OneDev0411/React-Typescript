@@ -34,6 +34,7 @@ import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import useShowingRole from './use-showing-role'
 import useFillPersonStatesWithDealRoles from './use-fill-person-states-with-deal-roles'
 import ShowingCloseButton from '../../components/ShowingCloseButton'
+import ShowingStepDateAndDuration from '../../components/ShowingStepDateAndDuration'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -108,6 +109,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   const [availabilities, setAvailabilities] = useShowingAvailabilitiesState()
 
+  const [dateDuration, setDateDuration] = useState<
+    Nullable<IShowingDateDurationInput>
+  >(null)
+
   // const [feedbackTemplate, setFeedbackTemplate] = useState<
   //   Nullable<IMarketingTemplateInstance>
   // >(null)
@@ -171,20 +176,19 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       return createShowing({
         approval_type: approvalType!,
         aired_at: new Date().toISOString(), // TODO: use the real value later
-        duration: 900, // TODO: This field is missed in the design
         roles,
         availabilities,
         notice_period: noticePeriod ?? undefined,
         same_day_allowed: sameDayAllowed,
         allow_appraisal: allowAppraisal === 'Yes',
         allow_inspection: allowInspection === 'Yes',
-        start_date: new Date().toISOString(), // TODO:: use real start date
         listing: property?.type === 'listing' ? property.listing.id : undefined,
         deal: property?.type === 'deal' ? property.deal.id : undefined,
         address: property?.type === 'place' ? property.address : undefined,
         instructions: instructions!,
-        // gallery?: IMediaGallery // TODO: use this field to pass gallery id
+        ...dateDuration!,
         brand: teamId
+        // gallery?: IMediaGallery // TODO: use this field to pass gallery id
       })
     })
   }
@@ -326,6 +330,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             <ShowingStepAvailabilities
               value={availabilities}
               onChange={setAvailabilities}
+            />
+            <ShowingStepDateAndDuration
+              value={dateDuration}
+              onChange={setDateDuration}
             />
             {/* <ShowingStepFeedbackTemplate
               value={feedbackTemplate}

@@ -1,8 +1,5 @@
-declare interface IShowingInput {
+declare interface IShowingInput extends IShowingDateDurationInput {
   aired_at?: string
-  start_date: string
-  end_date?: string
-  duration: number
   notice_period?: number
   same_day_allowed: boolean
   approval_type: IShowingApprovalType

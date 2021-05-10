@@ -12,8 +12,7 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import WeekdaySelect from 'components/final-form-fields/WeekdaySelect'
-import FormTimePicker from 'components/final-form-fields/FormTimePicker'
+import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
 
 import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
 
