@@ -14,12 +14,7 @@ import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
 import { useDebouncedCallback } from 'use-debounce'
-import {
-  mdiHomeOutline,
-  mdiMagnify,
-  mdiMapMarkerOutline,
-  mdiCurrencyUsdCircleOutline
-} from '@mdi/js'
+import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
 
 import { useSelector } from 'react-redux'
 
@@ -161,7 +156,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
         <ListItem dense disableGutters component="div">
           <ListItemAvatar>
             <Avatar>
-              <SvgIcon path={mdiCurrencyUsdCircleOutline} />
+              <SvgIcon path={mdiHomeOutline} />
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={deal.title} />
