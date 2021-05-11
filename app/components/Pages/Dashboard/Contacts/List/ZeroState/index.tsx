@@ -7,7 +7,7 @@ import { OAuthProvider } from 'constants/contacts'
 
 import { OutlookSignInButton } from 'components/OutlookSignInButton'
 
-import { GoogleSignInButton } from 'components/GoogleSignIn'
+import { GoogleSignInButton } from 'components/GoogleSignInButton'
 
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
