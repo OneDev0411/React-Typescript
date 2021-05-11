@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -22,6 +20,8 @@ import Acl from 'views/components/Acl'
 import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import { IAppState } from 'reducers'
+
+import { selectShowingsTotalNotificationCount } from 'selectors/showings'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
@@ -55,6 +55,10 @@ export function Menu() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
+
+  const showingsTotalNotificationCount = useSelector(
+    selectShowingsTotalNotificationCount
+  )
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
@@ -143,7 +147,14 @@ export function Menu() {
           </Acl>
 
           <Acl access={ACL.SHOWINGS}>
-            <SideNavLinkItem to="/dashboard/showings">Showings</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/showings">
+              <AppNavbarBadge
+                badgeContent={showingsTotalNotificationCount}
+                color="primary"
+              >
+                Showings
+              </AppNavbarBadge>
+            </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
 

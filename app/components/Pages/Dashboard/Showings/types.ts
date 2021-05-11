@@ -43,6 +43,7 @@ export interface AppointmentFilterInfo {
 export interface DismissActionParams {
   appointmentId: UUID
   showingId: UUID
+  notificationCount: number
 }
 export interface ApprovalActionParams extends DismissActionParams {
   status: IShowingAppointmentStatus

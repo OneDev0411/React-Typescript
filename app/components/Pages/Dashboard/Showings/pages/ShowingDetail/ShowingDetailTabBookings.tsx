@@ -6,9 +6,9 @@ import useSortAppointments from '../../hooks/use-sort-appointments'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
 import ShowingNotificationBookingLists from '../../components/ShowingNotificationBookingLists'
-import useUpdateAppointmentStatus from './use-update-appointment-status'
 import { AppointmentFilter, ApprovalActionParams } from '../../types'
-import useDismissAppointmentNotifications from './use-dismiss-appointment-notifications'
+import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
+import useShowingDismissAppointmentNotifications from './use-showing-dismiss-appointment-notifications'
 
 const generateAppointmentFilterLink = (
   filter: AppointmentFilter,
@@ -30,15 +30,17 @@ function ShowingDetailTabBookings({
     sortedAppointments
   )
 
-  const updateAppointmentStatus = useUpdateAppointmentStatus(setShowing)
+  const updateShowingAppointmentStatus = useShowingUpdateAppointmentStatus(
+    setShowing
+  )
 
-  const dismissAppointmentNotifications = useDismissAppointmentNotifications(
+  const dismissShowingAppointmentNotifications = useShowingDismissAppointmentNotifications(
     setShowing
   )
 
   const handleApprovalAction = (params: ApprovalActionParams) => {
-    updateAppointmentStatus(params)
-    dismissAppointmentNotifications(params)
+    updateShowingAppointmentStatus(params)
+    dismissShowingAppointmentNotifications(params)
   }
 
   return (
@@ -47,7 +49,7 @@ function ShowingDetailTabBookings({
       notifications={notifications}
       onApprovalAction={handleApprovalAction}
       generateLink={generateAppointmentFilterLink}
-      onDismissAction={dismissAppointmentNotifications}
+      onDismissAction={dismissShowingAppointmentNotifications}
     />
   )
 }

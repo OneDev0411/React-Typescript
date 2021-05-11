@@ -64,7 +64,8 @@ function ShowingBookingListColumnActions({
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status
+        status: appointment.status,
+        notificationCount: notifications?.length ?? 0
       })
 
       return appointment
@@ -85,7 +86,8 @@ function ShowingBookingListColumnActions({
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status
+        status: appointment.status,
+        notificationCount: notifications?.length ?? 0
       })
 
       return appointment
@@ -100,7 +102,8 @@ function ShowingBookingListColumnActions({
 
       await onDismissAction?.({
         showingId: showing.id,
-        appointmentId
+        appointmentId,
+        notificationCount: notifications?.length ?? 0
       })
 
       return null

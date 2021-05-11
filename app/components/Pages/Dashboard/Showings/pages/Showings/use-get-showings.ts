@@ -4,6 +4,7 @@ import getShowings from 'models/showing/get-showings'
 import useAsync from 'hooks/use-async'
 
 import useSortAppointments from '../../hooks/use-sort-appointments'
+import useShowingsUpdateAppointmentNotifications from './use-showings-update-appointment-notifications'
 
 interface UseGetShowingsReturn {
   isLoading: boolean
@@ -42,6 +43,8 @@ function useGetShowings(): UseGetShowingsReturn {
   )
 
   const sortedAppointments = useSortAppointments(appointments)
+
+  useShowingsUpdateAppointmentNotifications(setData)
 
   return {
     isLoading,

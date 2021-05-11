@@ -24,6 +24,7 @@ import {
 } from './notifications'
 import { emailTemplates } from './email-templates'
 import { inbox } from './inbox'
+import showings, { IShowingsState } from './showings'
 
 const appReducer = combineReducers({
   socket,
@@ -49,6 +50,9 @@ const appReducer = combineReducers({
   alerts,
   favorites,
 
+  /* showings reducers */
+  showings,
+
   /* third party reducers */
   notifications: notificationsReducer(),
   form: reduxFormReducer,
@@ -61,7 +65,7 @@ const appReducer = combineReducers({
 // export type IAppState = ReturnType<typeof appReducer>
 type IAppReducer = Omit<
   ReturnType<typeof appReducer>,
-  'user' | 'globalNotifications'
+  'user' | 'globalNotifications' | 'showings'
 >
 
 // You have to explicit the reducer types because the above ReturnType can not
@@ -69,6 +73,7 @@ type IAppReducer = Omit<
 export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
+  showings: IShowingsState
 }
 
 export default (state, action) => appReducer(state, action)

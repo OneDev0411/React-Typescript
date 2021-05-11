@@ -4,11 +4,13 @@ import { ApprovalActionParams } from '../../types'
 
 import { updateAppointmentState } from './helpers'
 
-type UseUpdateAppointmentStatusReturn = (params: ApprovalActionParams) => void
+type UseShowingUpdateAppointmentStatusReturn = (
+  params: ApprovalActionParams
+) => void
 
 function useUpdateAppointmentStatus(
   setShowing: Dispatch<SetStateAction<IShowing>>
-): UseUpdateAppointmentStatusReturn {
+): UseShowingUpdateAppointmentStatusReturn {
   return ({ appointmentId, status }: ApprovalActionParams) => {
     updateAppointmentState(setShowing, appointmentId, appointment => ({
       ...appointment,

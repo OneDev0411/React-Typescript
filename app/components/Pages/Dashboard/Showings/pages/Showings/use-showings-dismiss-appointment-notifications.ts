@@ -1,4 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { decreaseShowingTotalNotificationCount } from 'actions/showings'
 
 import { DismissActionParams } from '../../types'
 import { updateShowingsAppointmentState } from './helpers'
@@ -10,13 +13,20 @@ type UseShowingsDismissAppointmentNotifications = (
 function useShowingsDismissAppointmentNotifications(
   setShowings: Dispatch<SetStateAction<IShowing[]>>
 ): UseShowingsDismissAppointmentNotifications {
-  return ({ appointmentId, showingId }: DismissActionParams) => {
+  const dispatch = useDispatch()
+
+  return ({
+    appointmentId,
+    showingId,
+    notificationCount
+  }: DismissActionParams) => {
     updateShowingsAppointmentState(
       setShowings,
       showingId,
       appointmentId,
       appointment => ({ ...appointment, notifications: null })
     )
+    dispatch(decreaseShowingTotalNotificationCount(notificationCount))
   }
 }
 

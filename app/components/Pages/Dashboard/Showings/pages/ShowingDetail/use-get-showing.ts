@@ -4,6 +4,8 @@ import useAsync from 'hooks/use-async'
 
 import getShowing from 'models/showing/get-showing'
 
+import useShowingUpdateAppointmentNotifications from './use-showing-update-appointment-notifications'
+
 interface UseGetShowingReturn {
   showing: Nullable<IShowing>
   isLoading: boolean
@@ -36,6 +38,8 @@ function useGetShowing(showingId: UUID): UseGetShowingReturn {
         : data,
     [data]
   )
+
+  useShowingUpdateAppointmentNotifications(setData)
 
   return {
     showing,

@@ -23,17 +23,17 @@ function ShowingsTabBookings({
     allAppointments
   )
 
-  const updateAppointmentStatus = useShowingsUpdateAppointmentStatus(
+  const updateShowingsAppointmentStatus = useShowingsUpdateAppointmentStatus(
     setShowings
   )
 
-  const dismissAppointmentNotifications = useShowingsDismissAppointmentNotifications(
+  const dismissShowingsAppointmentNotifications = useShowingsDismissAppointmentNotifications(
     setShowings
   )
 
   const handleApprovalAction = (params: ApprovalActionParams) => {
-    updateAppointmentStatus(params)
-    dismissAppointmentNotifications(params)
+    updateShowingsAppointmentStatus(params)
+    dismissShowingsAppointmentNotifications(params)
   }
 
   return (
@@ -43,7 +43,7 @@ function ShowingsTabBookings({
       hasPropertyColumn
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={handleApprovalAction}
-      onDismissAction={dismissAppointmentNotifications}
+      onDismissAction={dismissShowingsAppointmentNotifications}
     />
   )
 }
