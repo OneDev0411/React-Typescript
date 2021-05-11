@@ -18,8 +18,14 @@ import { TimeRange } from 'components/TimeSlotPicker/types'
 import { setTime } from 'utils/set-time'
 
 import DetailsSection from '../../../Sections/DetailsSection'
-import { getBookableDateRange, convertLocalTimeToShowingTime } from './utils'
+import {
+  getBookableDateRange,
+  convertLocalTimeToShowingTime,
+  validateRequiredField
+} from './utils'
 import { useBookTimeRange } from './hooks'
+
+const REQUIRED_VALIDATION_ERROR = 'This field is required'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -145,7 +151,7 @@ export default function BookSection({ showing, onBook }: Props) {
             name="date"
             control={control}
             rules={{
-              required: 'Required'
+              required: REQUIRED_VALIDATION_ERROR
             }}
             defaultValue={selectedDate ?? null}
             render={({ onChange, value }) => {
@@ -174,7 +180,7 @@ export default function BookSection({ showing, onBook }: Props) {
             name="timeRange"
             control={control}
             rules={{
-              required: 'Required'
+              required: REQUIRED_VALIDATION_ERROR
             }}
             defaultValue={selectedTimeRange ?? null}
             render={({ onChange, value }) => {
@@ -212,12 +218,14 @@ export default function BookSection({ showing, onBook }: Props) {
                     name="firstName"
                     control={control}
                     rules={{
-                      required: 'Required'
+                      required: REQUIRED_VALIDATION_ERROR,
+                      validate: validateRequiredField
                     }}
                     defaultValue=""
                     as={
                       <TextField
                         fullWidth
+                        required
                         error={!!errors.firstName}
                         helperText={errors.firstName?.message}
                         size="small"
@@ -234,12 +242,14 @@ export default function BookSection({ showing, onBook }: Props) {
                     name="lastName"
                     control={control}
                     rules={{
-                      required: 'Required'
+                      required: REQUIRED_VALIDATION_ERROR,
+                      validate: validateRequiredField
                     }}
                     defaultValue=""
                     as={
                       <TextField
                         fullWidth
+                        required
                         error={!!errors.lastName}
                         helperText={errors.lastName?.message}
                         size="small"
@@ -276,7 +286,7 @@ export default function BookSection({ showing, onBook }: Props) {
                     control={control}
                     rules={{
                       validate: (value: string) => {
-                        if (!value) {
+                        if (value === '') {
                           return true
                         }
 
@@ -308,7 +318,7 @@ export default function BookSection({ showing, onBook }: Props) {
                     name="phoneNumber"
                     control={control}
                     rules={{
-                      required: 'Required',
+                      required: REQUIRED_VALIDATION_ERROR,
                       validate: (value: string) => {
                         if (isMobilePhone(value)) {
                           return true
@@ -321,6 +331,7 @@ export default function BookSection({ showing, onBook }: Props) {
                     as={
                       <TextField
                         fullWidth
+                        required
                         error={!!errors.phoneNumber}
                         helperText={errors.phoneNumber?.message}
                         size="small"
