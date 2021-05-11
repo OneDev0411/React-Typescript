@@ -6,6 +6,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
+import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
 
 import { getNameInitials } from 'utils/helpers'
@@ -63,12 +64,16 @@ export default function AgentCard({ agent }: Props) {
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="textSecondary">
-                  {agent.email}
+                  <Link noStyle href={`mailto:${agent.email}`}>
+                    {agent.email}
+                  </Link>
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography variant="body2" color="textSecondary">
-                  {agent.phone_number}
+                  <Link noStyle href={`tel:${agent.phone_number}`}>
+                    {agent.phone_number}
+                  </Link>
                 </Typography>
               </Grid>
             </Grid>

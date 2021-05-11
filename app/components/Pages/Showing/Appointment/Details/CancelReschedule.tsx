@@ -22,9 +22,16 @@ export default function ShowingAppointmentCancelReschedule({
             </Link>
           </Button>
         </Grid>
-        {/* <Grid item>
-          <Button variant="outlined">Reschedule</Button>
-        </Grid> */}
+        <Grid item>
+          <Button variant="outlined">
+            <Link
+              noStyle
+              to={`/showings/appointments/${appointment.cancel_token}/reschedule`}
+            >
+              Reschedule
+            </Link>
+          </Button>
+        </Grid>
       </Grid>
     </Box>
   )

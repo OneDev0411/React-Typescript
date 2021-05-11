@@ -77,7 +77,12 @@ export default function ShowingAppointmentCancel({
           message: 'Appointment request canceled successfully'
         })
       )
-      browserHistory.push(`/showings/appointments/${appointmentToken}`)
+
+      if (appointment) {
+        browserHistory.push(
+          `/showings/appointments/${appointment.showing.slug}-${appointment.showing.id}`
+        )
+      }
     } catch (error) {
       console.error(error)
       dispatch(
