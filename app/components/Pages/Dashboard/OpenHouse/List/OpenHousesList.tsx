@@ -237,7 +237,7 @@ function OpenHousesList() {
       <PageLayout>
         <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
-          <Box>
+          <Box height="100%">
             {showNotifyOfficeBanner && (
               <Acl access={ACL.DEALS}>
                 {isAlertOpen && (
