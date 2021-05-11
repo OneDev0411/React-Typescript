@@ -1,6 +1,6 @@
 import { OutlookSignInButton } from 'components/OutlookSignInButton'
 
-import { GoogleSignInButton } from 'components/GoogleSignInButton'
+import { GoogleSignInButton } from 'components/GoogleSignIn'
 
 import { OAuthProvider } from 'constants/contacts'
 
