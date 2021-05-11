@@ -32,7 +32,15 @@ GlobalPageLayout.HeaderWithSearch = (props: GlobalHeaderWithSearchProps) => (
 )
 
 GlobalPageLayout.Main = ({ gutter = 0, ...props }: Props) => (
-  <Box id="GlobalPageLayoutMain" p={gutter} mt={5} flexGrow={1} {...props} />
+  <Box
+    id="GlobalPageLayoutMain"
+    p={gutter}
+    mt={5}
+    display="flex"
+    flexDirection="column"
+    flexGrow={1}
+    {...props}
+  />
 )
 
 export default GlobalPageLayout

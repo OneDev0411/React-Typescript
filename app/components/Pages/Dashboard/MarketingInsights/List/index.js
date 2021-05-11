@@ -17,7 +17,6 @@ import ThumbnailColumn from './Column/Thumbnail'
 import TitleColumn from './Column/Title'
 import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
-import { InsightContainer } from './styled'
 import useListData from './useListData'
 import { InsightFilterType } from './types'
 import { valueAndPercent, hasPixelTracking } from './helpers'
@@ -233,9 +232,7 @@ function List(props) {
       sentCount={counts.sent}
       scheduledCount={counts.scheduled}
       onCreateEmail={reloadList}
-      renderContent={props => (
-        <InsightContainer>{renderContent(props)}</InsightContainer>
-      )}
+      renderContent={props => renderContent(props)}
     />
   )
 }
