@@ -12,7 +12,8 @@ const useStyles = makeStyles(
     main: {
       width: '100%',
       minHeight: '100vh',
-      flexGrow: 1
+      flexGrow: 1,
+      overflow: 'hidden'
     }
   }),
   { name: 'MainWrapper' }
