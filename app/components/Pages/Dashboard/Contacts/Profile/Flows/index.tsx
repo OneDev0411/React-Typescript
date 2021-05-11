@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { mdiLightningBolt } from '@mdi/js'
 
@@ -16,9 +16,11 @@ interface Props {
 }
 
 function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
+  const list = useMemo(() => (Array.isArray(flows) ? flows : []), [flows])
+
   return (
-    <BasicSection title="Flows">
-      {Array.isArray(flows) && <List items={flows} onStop={onStop} />}
+    <BasicSection title={list.length > 0 ? 'Flows' : undefined}>
+      {list.length > 0 && <List items={list} onStop={onStop} />}
       <AddToFlowButton
         activeFlows={[]}
         callback={addCallback}

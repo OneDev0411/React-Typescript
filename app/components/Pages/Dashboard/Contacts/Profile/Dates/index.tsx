@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { mdiCakeVariant } from '@mdi/js'
+
 import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 
@@ -54,29 +56,27 @@ export function Dates({ contact, submitCallback }: Props) {
   }, [contact.id])
 
   return (
-    <>
-      {/*
-        // @ts-ignore */}
-      <SectionWithFields
-        contact={contact}
-        fieldsOrder={fieldsOrder}
-        section="Dates"
-        submitCallback={submitCallback}
-        title="Touch Dates"
-      >
-        {isLoading ? (
-          <Loading />
-        ) : (
-          otherFields.map(field => (
-            <DealContextField
-              deal={field.deal || ''}
-              key={field.id}
-              title={field.title}
-              value={field.timestamp}
-            />
-          ))
-        )}
-      </SectionWithFields>
-    </>
+    <SectionWithFields
+      contact={contact}
+      fieldsOrder={fieldsOrder}
+      section="Dates"
+      submitCallback={submitCallback}
+      title="Touch Dates"
+      expandButtonLabel="Add Birthdays & Anniversaries"
+      expandButtonIcon={mdiCakeVariant}
+    >
+      {isLoading ? (
+        <Loading />
+      ) : (
+        otherFields.map(field => (
+          <DealContextField
+            deal={field.deal || ''}
+            key={field.id}
+            title={field.title}
+            value={field.timestamp}
+          />
+        ))
+      )}
+    </SectionWithFields>
   )
 }

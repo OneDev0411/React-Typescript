@@ -72,16 +72,21 @@ class SectionWithFields extends React.Component {
       sectionAttributesDef,
       props.isPartner
     )
+
+    console.log('dddd', { attributes, emptyAttributes })
+
     const allAttributes = [...attributes, ...emptyAttributes]
     const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
     const toggleEmptyAttributes = false
     const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
+    const isAllFieldsEmpty = attributes.length === 0
     const triggers = getContactTriggers(props.contact)
 
     this.state = {
       shouldToggleEmptyAttributes,
       toggleEmptyAttributes,
       orderedAttributes,
+      isAllFieldsEmpty,
       triggers
     }
   }
@@ -385,6 +390,22 @@ class SectionWithFields extends React.Component {
       toggleEmptyAttributes: !prevState.toggleEmptyAttributes
     }))
 
+  renderToggleButton = () => {
+    const { toggleEmptyAttributes } = this.state
+    const {
+      expandButtonLabel = 'More Fields',
+      expandButtonIcon = mdiPlus
+    } = this.props
+
+    return (
+      <SectionButton
+        label={!toggleEmptyAttributes ? expandButtonLabel : 'Hide empty fields'}
+        icon={!toggleEmptyAttributes ? expandButtonIcon : mdiChevronUp}
+        onClick={this.toggleEmptyFields}
+      />
+    )
+  }
+
   renderField = attribute => {
     const { toggleEmptyAttributes, triggers } = this.state
 
@@ -408,27 +429,22 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
+    const { title } = this.props
     const {
-      title,
-      expandButtonLabel = 'More Fields',
-      expandButtonIcon = mdiPlus
-    } = this.props
-    const {
+      isAllFieldsEmpty,
       orderedAttributes,
-      shouldToggleEmptyAttributes,
-      toggleEmptyAttributes
+      toggleEmptyAttributes,
+      shouldToggleEmptyAttributes
     } = this.state
+
+    if (isAllFieldsEmpty && !toggleEmptyAttributes) {
+      return <BasicSection>{this.renderToggleButton()}</BasicSection>
+    }
 
     return (
       <BasicSection title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
-        {shouldToggleEmptyAttributes && (
-          <SectionButton
-            label={expandButtonLabel}
-            icon={!toggleEmptyAttributes ? expandButtonIcon : mdiChevronUp}
-            onClick={this.toggleEmptyFields}
-          />
-        )}
+        {shouldToggleEmptyAttributes && this.renderToggleButton()}
         {this.props.children}
       </BasicSection>
     )

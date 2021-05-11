@@ -412,6 +412,7 @@ const ContactProfile = props => {
           >
             <LastTouch contact={contact} />
             <ContactInfo {..._props} />
+            <Details {..._props} />
             <Flows
               // @ts-ignore
               flows={contact?.flows || null}
@@ -420,9 +421,8 @@ const ContactProfile = props => {
               addCallback={addToFlowCallback}
             />
             <AddressesSection {..._props} />
-            <Dates {..._props} />
             <Deals contact={contact} />
-            <Details {..._props} />
+            <Dates {..._props} />
             <Partner {..._props} />
             <Owner
               onSelect={onChangeOwner}

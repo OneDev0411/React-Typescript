@@ -4,11 +4,17 @@ import { Box, makeStyles, Theme } from '@material-ui/core'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      paddingBottom: theme.spacing(0.5)
+      marginBottom: (props: Props) => {
+        if (props.title) {
+          return theme.spacing(3)
+        }
+
+        return theme.spacing(1)
+      }
     },
     title: {
       display: 'inline-block',
-      marginBottom: theme.spacing(1.5),
+      marginBottom: theme.spacing(0.75),
       color: theme.palette.grey[700],
       ...theme.typography.body1
     }
@@ -22,7 +28,7 @@ interface Props {
 }
 
 export const BasicSection = ({ title, children }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({ title, children })
 
   return (
     <Box className={classes.container}>

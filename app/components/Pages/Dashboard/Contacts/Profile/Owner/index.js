@@ -8,6 +8,7 @@ import { isSoloActiveTeam } from '../../../../../../utils/user-teams'
 const useStyles = makeStyles(
   theme => ({
     container: {
+      marginTop: theme.spacing(2),
       padding: theme.spacing(2, 0, 2),
       borderTop: `1px solid ${theme.palette.action.disabledBackground}`
     },
