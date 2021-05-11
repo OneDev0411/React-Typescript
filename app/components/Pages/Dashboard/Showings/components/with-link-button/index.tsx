@@ -3,12 +3,12 @@ import classNames from 'classnames'
 
 import { Link, LinkProps } from 'react-router'
 
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, ButtonProps } from '@material-ui/core'
 
 const useStyles = makeStyles(
   {
-    root: {
-      // TODO: remove this when the bootstrap styles got removed
+    // TODO: remove this when the bootstrap styles got removed
+    override: {
       '&:hover, &:focus': { color: 'white' }
     }
   },
@@ -19,9 +19,16 @@ export type LinkButtonProps = Partial<
   Pick<LinkProps, 'to' | 'target' | 'rel' | 'href' | 'className'>
 >
 
-function withLinkButton<T>(Component: ComponentType<T>) {
+// TODO: There is a CSS conflict with bootstrap styles. This logic
+// tries to override the button color to overcome the problem.
+// Please remove this when the bootstrap style get removed
+type ButtonBaseProps = Pick<ButtonProps, 'color' | 'variant'>
+
+function withLinkButton<T extends ButtonBaseProps>(
+  Component: ComponentType<T>
+) {
   return forwardRef(function LinkButton(
-    { to, className, ...other }: T & LinkButtonProps,
+    { to, className, color, variant, ...other }: T & LinkButtonProps,
     ref: Ref<unknown>
   ) {
     const classes = useStyles()
@@ -33,12 +40,19 @@ function withLinkButton<T>(Component: ComponentType<T>) {
         }
       : {}
 
+    const overrideClassName =
+      (color === 'primary' || color === 'secondary') && variant === 'contained'
+        ? classes.override
+        : undefined
+
     return (
       <Component
         ref={ref}
         {...(other as T)}
         {...moreProps}
-        className={classNames(classes.root, className)}
+        color={color}
+        variant={variant}
+        className={classNames(overrideClassName, className)}
       />
     )
   })
