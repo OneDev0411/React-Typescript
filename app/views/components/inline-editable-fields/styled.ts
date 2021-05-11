@@ -28,17 +28,10 @@ export const ViewModeContainer = styled.div<{
 export const ViewModeActionBar = styled.div`
   position: absolute;
   top: 90%;
-  padding-top: 0.5em;
   right: 0;
   visibility: hidden;
   display: flex;
   z-index: 1;
-
-  & svg {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 0.5rem;
-  }
 `
 
 export const EditButton = styled(ActionButton as any)`

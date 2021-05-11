@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, ButtonGroup } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { Box, makeStyles } from '@material-ui/core'
 
 import {
   mdiPlusCircleOutline,
@@ -20,13 +19,33 @@ import {
   ViewModeActionBar
 } from '../../styled'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      backgroundColor: '#fff'
+const useStyles = makeStyles(theme => ({
+  actionContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    background: theme.palette.background.paper,
+    padding: theme.spacing(0.5),
+    borderRadius: `${theme.shape.borderRadius}px`,
+    boxShadow:
+      '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
+  },
+  button: {
+    padding: theme.spacing(0, 2),
+    background: theme.palette.background.paper,
+    borderRadius: `${theme.shape.borderRadius}px`,
+    textAlign: 'center',
+    '& svg': {
+      margin: 'auto'
+    },
+    '&:hover': {
+      background: theme.palette.action.hover
     }
-  })
-)
+  },
+  buttonLabel: {
+    display: 'block',
+    ...theme.typography.caption
+  }
+}))
 
 ViewMode.propTypes = {
   handleAddNew: PropTypes.func,
@@ -67,30 +86,26 @@ export function ViewMode(props) {
         renderBody({ label, value, toggleMode })
       )}
       <ViewModeActionBar className="action-bar">
-        <ButtonGroup
-          aria-label="small contained button group"
-          size="small"
-          variant="contained"
-        >
+        <Box className={classes.actionContainer}>
           {props.showDelete && (
-            <Button onClick={props.handleDelete} className={classes.button}>
-              <SvgIcon size={muiIconSizes.small} path={mdiTrashCanOutline} />
-              Delete
-            </Button>
+            <Box onClick={props.handleDelete} className={classes.button}>
+              <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+              <span className={classes.buttonLabel}>Delete</span>
+            </Box>
           )}
           {props.showEdit && (
-            <Button onClick={toggleMode} className={classes.button}>
-              <SvgIcon size={muiIconSizes.small} path={mdiPencilOutline} />
-              Edit
-            </Button>
+            <Box onClick={toggleMode} className={classes.button}>
+              <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
+              <span className={classes.buttonLabel}>Edit</span>
+            </Box>
           )}
           {props.showAdd && (
-            <Button onClick={props.handleAddNew} className={classes.button}>
-              <SvgIcon size={muiIconSizes.small} path={mdiPlusCircleOutline} />
-              Add
-            </Button>
+            <Box onClick={props.handleAddNew} className={classes.button}>
+              <SvgIcon path={mdiPlusCircleOutline} size={muiIconSizes.small} />
+              <span className={classes.buttonLabel}>Add</span>
+            </Box>
           )}
-        </ButtonGroup>
+        </Box>
       </ViewModeActionBar>
     </ViewModeContainer>
   )
