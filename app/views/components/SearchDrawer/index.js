@@ -165,7 +165,7 @@ class SearchDrawer extends React.Component {
     return (
       <Drawer open={this.props.isOpen} onClose={this.handleClose}>
         <Drawer.Header title={this.props.title} />
-        <Drawer.Body style={{ overflow: 'auto' }}>
+        <Drawer.Body style={{ overflowX: 'hidden' }}>
           <Downshift
             render={({ getItemProps }) => (
               <div style={{ position: 'relative' }}>
