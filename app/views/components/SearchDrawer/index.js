@@ -20,7 +20,7 @@ const initialState = {
 }
 
 /**
- * Motes and known issues:
+ * Notes and known issues:
  * - Doesn't clean up on drawer close and re-open, needs conditional rendering
  * which kills animation and is misleading also as we have an isOpen prop
  * - search filter is not sticky
@@ -178,6 +178,8 @@ class SearchDrawer extends React.Component {
                     {...this.props.searchInputOptions}
                   />
                 </Box>
+                {this.props.renderSearchNotices &&
+                  this.props.renderSearchNotices()}
                 {(isSearching || showLoadingIndicator) && <Loading />}
                 <SearchResultList
                   isLoading={this.props.showLoadingIndicator}

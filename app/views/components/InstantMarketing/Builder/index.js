@@ -1153,6 +1153,7 @@ class Builder extends React.Component {
             <SearchListingDrawer
               mockListings
               multipleSelection
+              withMlsDisclaimer
               isOpen
               title="Select Listing"
               onClose={() => {
