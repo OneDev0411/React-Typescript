@@ -35,21 +35,17 @@ function ShowingAppointmentFilters({
   )
 
   return (
-    <Grid container>
-      <Grid item xs={12} lg={9}>
-        <Grid container spacing={2}>
-          {filters.map(filter => (
-            <Grid key={filter.type} item xs={6} sm={4} md={2}>
-              <ShowingAppointmentFilterCard
-                {...filter}
-                selected={filter.type === value}
-                onClick={() => onChange?.(filter.type)}
-                link={generateLink?.(filter.type)}
-              />
-            </Grid>
-          ))}
+    <Grid container spacing={2}>
+      {filters.map(filter => (
+        <Grid key={filter.type} item xs={6} sm={4} md={2}>
+          <ShowingAppointmentFilterCard
+            {...filter}
+            selected={filter.type === value}
+            onClick={() => onChange?.(filter.type)}
+            link={generateLink?.(filter.type)}
+          />
         </Grid>
-      </Grid>
+      ))}
     </Grid>
   )
 }
