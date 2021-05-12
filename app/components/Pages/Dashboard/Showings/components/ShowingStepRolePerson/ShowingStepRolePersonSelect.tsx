@@ -1,7 +1,8 @@
-import React from 'react'
 import { Box, Button } from '@material-ui/core'
 
-import ShowingStepRolePersonSelectAgent from './ShowingStepRolePersonSelectAgent'
+import ShowingStepRolePersonSelectAgent, {
+  ShowingStepRolePersonSelectAgentProps
+} from './ShowingStepRolePersonSelectAgent'
 import ShowingStepRolePersonSelectContact, {
   ShowingStepRolePersonSelectContactProps
 } from './ShowingStepRolePersonSelectContact'
@@ -9,12 +10,14 @@ import ShowingStepRolePersonSelectContact, {
 export type RolePersonSelectType = 'Agent' | 'Contact'
 
 export interface ShowingStepRolePersonSelectProps
-  extends ShowingStepRolePersonSelectContactProps {
+  extends ShowingStepRolePersonSelectContactProps,
+    Pick<ShowingStepRolePersonSelectAgentProps, 'isPrimaryAgent'> {
   selectType?: RolePersonSelectType
   skippable: boolean
 }
 
 function ShowingStepRolePersonSelect({
+  isPrimaryAgent,
   selectType = 'Agent',
   onSelect,
   skippable
@@ -33,7 +36,10 @@ function ShowingStepRolePersonSelect({
   return (
     <>
       {selectType === 'Agent' ? (
-        <ShowingStepRolePersonSelectAgent onSelect={onSelect} />
+        <ShowingStepRolePersonSelectAgent
+          onSelect={onSelect}
+          isPrimaryAgent={isPrimaryAgent}
+        />
       ) : (
         <ShowingStepRolePersonSelectContact onSelect={onSelect} />
       )}

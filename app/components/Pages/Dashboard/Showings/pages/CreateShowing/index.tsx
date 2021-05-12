@@ -222,6 +222,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               person={agentPerson}
               onPersonChange={setAgentPerson}
               skippable={false}
+              isPrimaryAgent
             />
             {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleConfirmNotificationTypes
@@ -250,6 +251,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
                 personTitle="CoAgent"
                 person={coAgentPerson}
                 onPersonChange={setCoAgentPerson}
+                isPrimaryAgent={false}
               />
             )}
             {approvalType !== 'None' &&

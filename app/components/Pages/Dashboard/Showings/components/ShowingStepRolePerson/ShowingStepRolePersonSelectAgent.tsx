@@ -1,12 +1,12 @@
-import React from 'react'
-
 import AgentSearchInput from 'components/AgentSearchInput'
 
-interface ShowingStepRolePersonSelectAgentProps {
+export interface ShowingStepRolePersonSelectAgentProps {
+  isPrimaryAgent?: boolean
   onSelect: (person: IShowingRoleInputPerson) => void
 }
 
 function ShowingStepRolePersonSelectAgent({
+  isPrimaryAgent = false,
   onSelect
 }: ShowingStepRolePersonSelectAgentProps) {
   const handleChange = (agent: IUser) =>
@@ -19,7 +19,9 @@ function ShowingStepRolePersonSelectAgent({
       brand: agent.brand as string
     })
 
-  return <AgentSearchInput isPrimaryAgent={false} onChange={handleChange} />
+  return (
+    <AgentSearchInput isPrimaryAgent={isPrimaryAgent} onChange={handleChange} />
+  )
 }
 
 export default ShowingStepRolePersonSelectAgent

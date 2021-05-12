@@ -18,7 +18,10 @@ import useCreateContact from './use-create-contact'
 import useUpdateContact from './use-update-contact'
 
 interface ShowingStepRolePersonProps
-  extends Pick<ShowingStepRolePersonSelectProps, 'selectType'> {
+  extends Pick<
+    ShowingStepRolePersonSelectProps,
+    'selectType' | 'isPrimaryAgent'
+  > {
   personTitle: string
   person: Nullable<IShowingRoleInputPerson>
   onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
@@ -30,7 +33,8 @@ function ShowingStepRolePerson({
   person,
   onPersonChange,
   selectType,
-  skippable = true
+  skippable = true,
+  isPrimaryAgent
 }: ShowingStepRolePersonProps) {
   const nextStep = useQuestionWizardSmartNext()
   const { setLoading } = useWizardContext()
@@ -86,6 +90,7 @@ function ShowingStepRolePerson({
             selectType={selectType}
             onSelect={handleSelect}
             skippable={skippable}
+            isPrimaryAgent={isPrimaryAgent}
           />
         )}
         {person && isEditable && (
