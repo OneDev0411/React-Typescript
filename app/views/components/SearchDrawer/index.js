@@ -16,7 +16,8 @@ import Footer from './components/Footer'
 const initialState = {
   isSearching: false,
   searchResults: [],
-  error: null
+  error: null,
+  isSearchInputEverClicked: false
 }
 
 /**
@@ -116,6 +117,14 @@ class SearchDrawer extends React.Component {
     this.inputRef.current.clear()
   }
 
+  handleClickSearchInput = () => {
+    if (this.state.isSearchInputEverClicked) {
+      return
+    }
+
+    this.setState({ isSearchInputEverClicked: true })
+  }
+
   handleAddNewItem = item => {
     const normalized = this.props.normalizeSelectedItem(item)
 
@@ -173,12 +182,14 @@ class SearchDrawer extends React.Component {
                   <SearchInput
                     fullWidth
                     ref={this.inputRef}
+                    onClick={this.handleClickSearchInput}
                     onChange={this.handleSearch}
                     onClear={this.handleClear}
                     {...this.props.searchInputOptions}
                   />
                 </Box>
                 {this.props.renderSearchNotices &&
+                  this.state.isSearchInputEverClicked &&
                   this.props.renderSearchNotices()}
                 {(isSearching || showLoadingIndicator) && <Loading />}
                 <SearchResultList
