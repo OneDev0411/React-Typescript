@@ -4,6 +4,7 @@ import Flex from 'styled-flex-component'
 import {
   Button,
   Tooltip,
+  Box,
   Fade,
   Typography,
   withStyles
@@ -181,26 +182,32 @@ class SearchListingDrawer extends React.Component {
                   enter="up"
                   in={this.state.isMlsDisclaimerOpen}
                 >
-                  <Alert
-                    severity="warning"
-                    variant="outlined"
-                    classes={{
-                      action: this.props.classes.alertAction
-                    }}
-                    onClose={() => {
-                      this.setState({ isMlsDisclaimerOpen: false })
-                    }}
-                  >
-                    <AlertTitle>Important Note</AlertTitle>
-                    <Typography variant="subtitle2">
-                      Some MLS's do not allow agents to promote other agent's
-                      listings without their permission. Please make sure you{' '}
-                      <strong>
-                        only market listings that you have permission for
-                      </strong>
-                      .
-                    </Typography>
-                  </Alert>
+                  <Box mb={2}>
+                    <Alert
+                      severity="warning"
+                      variant="outlined"
+                      classes={{
+                        action: this.props.classes.alertAction
+                      }}
+                      onClose={() => {
+                        this.setState({ isMlsDisclaimerOpen: false })
+                      }}
+                    >
+                      <AlertTitle>
+                        <Typography variant="subtitle1">
+                          Important Note
+                        </Typography>
+                      </AlertTitle>
+                      <Typography variant="body2">
+                        Some MLS's do not allow agents to promote other agent's
+                        listings without their permission. Please make sure you{' '}
+                        <strong>
+                          only market listings that you have permission for
+                        </strong>
+                        .
+                      </Typography>
+                    </Alert>
+                  </Box>
                 </Fade>
               )
             : undefined
@@ -244,6 +251,7 @@ SearchListingDrawer.propTypes = {
   onClose: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   mockListings: PropTypes.bool,
+  multipleSelection: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   withMlsDisclaimer: PropTypes.bool,
   title: PropTypes.string,
@@ -263,7 +271,8 @@ SearchListingDrawer.defaultProps = {
   allowedStatuses: [],
   title: 'Select a Listing',
   defaultLists: [],
-  allowSkip: false
+  allowSkip: false,
+  multipleSelection: false
 }
 
 export default withStyles(styles)(SearchListingDrawer)
