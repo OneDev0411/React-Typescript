@@ -412,7 +412,7 @@ const ContactProfile = props => {
           >
             <LastTouch contact={contact} />
             <ContactInfo {..._props} />
-            {/* <Details {..._props} />
+            <Details {..._props} />
             <Flows
               // @ts-ignore
               flows={contact?.flows || null}
@@ -431,7 +431,7 @@ const ContactProfile = props => {
               contact={contact}
               disabled={isUpdatingOwner}
             />
-  <Delete handleDelete={handleDelete} isDeleting={isDeleting} /> */}
+            <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
           </Box>
           <Box
             className={cn(classes.contentContainer, classes.timelineContainer)}

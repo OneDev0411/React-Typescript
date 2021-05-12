@@ -1,15 +1,16 @@
 import React from 'react'
-import { Box, Link, Typography } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Box, Typography } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import Tags from '../../Tags/TagsSection'
 
 import Avatar from './Avatar'
+import { Social } from './Social'
 
 import { Props } from '..'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       display: 'flex',
       alignItems: 'center'
@@ -21,13 +22,11 @@ const useStyles = makeStyles((theme: Theme) =>
     name: {
       wordBreak: 'break-all'
     },
-    editButton: {
-      marginLeft: theme.spacing(1)
-    },
     tags: {
       marginTop: theme.spacing(0.5)
     }
-  })
+  }),
+  { name: 'ContactProfileHeaderCatalog' }
 )
 
 export default function Catalog({
@@ -44,15 +43,11 @@ export default function Catalog({
           <Typography variant="h6" className={classes.name}>
             {contact.display_name}
           </Typography>
-          <Link
-            color="secondary"
-            href="#Details"
-            variant="caption"
-            className={classes.editButton}
-          >
-            Edit
-          </Link>
+          <Box ml={1}>
+            <Social contact={contact} />
+          </Box>
         </Box>
+
         <Box className={classes.tags}>
           <Tags contact={contact} onChange={onTagChange} />
         </Box>

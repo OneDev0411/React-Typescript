@@ -51,12 +51,21 @@ function getEmptyAttributes(attributes, sectionAttributesDef, is_partner) {
     )
 }
 
-function orderAttributes(attributes, fieldsOrder) {
-  return orderFields(attributes, fieldsOrder).filter(
-    a =>
-      a.attribute_def.show ||
-      (a.attribute_def.editable && a[a.attribute_def.data_type])
-  )
+function orderAttributes(attributes, fieldsOrder, fieldsFilter) {
+  return orderFields(attributes, fieldsOrder).filter(attr => {
+    if (
+      fieldsFilter &&
+      Array.isArray(fieldsFilter) &&
+      !fieldsFilter.includes(attr.attribute_def.name)
+    ) {
+      return false
+    }
+
+    return (
+      attr.attribute_def.show ||
+      (attr.attribute_def.editable && attr[attr.attribute_def.data_type])
+    )
+  })
 }
 
 class SectionWithFields extends React.Component {
@@ -76,7 +85,11 @@ class SectionWithFields extends React.Component {
     const allAttributes = [...attributes, ...emptyAttributes]
     const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
     const toggleEmptyAttributes = false
-    const orderedAttributes = orderAttributes(allAttributes, props.fieldsOrder)
+    const orderedAttributes = orderAttributes(
+      allAttributes,
+      props.fieldsOrder,
+      props.fieldsFilter
+    )
     const isAllFieldsEmpty = attributes.length === 0
     const triggers = getContactTriggers(props.contact)
 
@@ -114,7 +127,7 @@ class SectionWithFields extends React.Component {
       return
     }
 
-    const { contact } = this.props
+    const { contact, submitCallback } = this.props
 
     try {
       const response = await getContact(contact.id, {
@@ -136,10 +149,12 @@ class SectionWithFields extends React.Component {
         }
       }))
 
-      this.props.submitCallback({
-        ...normalizeContact(response.data),
-        deals: contact.deals
-      })
+      if (submitCallback) {
+        submitCallback({
+          ...normalizeContact(response.data),
+          deals: contact.deals
+        })
+      }
     } catch (error) {
       console.log(error)
     }
@@ -427,13 +442,28 @@ class SectionWithFields extends React.Component {
   }
 
   render() {
-    const { title } = this.props
+    const { title, contact, renderer } = this.props
     const {
       isAllFieldsEmpty,
       orderedAttributes,
       toggleEmptyAttributes,
       shouldToggleEmptyAttributes
     } = this.state
+
+    if (renderer) {
+      return renderer({
+        contact,
+        isAllFieldsEmpty,
+        toggleEmptyAttributes,
+        shouldToggleEmptyAttributes,
+        attributes: orderedAttributes,
+        handleSave: this.save,
+        handleDelete: this.deleteHandler,
+        handleToggleMode: this.toggleMode,
+        handleAddNewInstance: this.addShadowAttribute,
+        handletoggleEmptyFields: this.toggleEmptyFields
+      })
+    }
 
     if (isAllFieldsEmpty && !toggleEmptyAttributes) {
       return <BasicSection>{this.renderToggleButton()}</BasicSection>
