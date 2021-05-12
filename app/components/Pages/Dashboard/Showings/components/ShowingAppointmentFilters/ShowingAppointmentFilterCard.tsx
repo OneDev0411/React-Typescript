@@ -32,8 +32,8 @@ const useStyles = makeStyles(
     icon: {
       display: 'inline-flex',
       verticalAlign: 'middle',
-      marginRight: theme.spacing(0.5),
-      '& > svg': { fontSize: theme.spacing(2) }
+      marginBottom: theme.spacing(0.5),
+      '& > svg': { fontSize: theme.spacing(3) }
     }
   }),
   { name: 'ShowingAppointmentFilterCard' }
@@ -69,9 +69,17 @@ function ShowingAppointmentFilterCard({
         variant="outlined"
         onClick={onClick}
       >
-        <Typography variant="subtitle1">{count}</Typography>
-        <Typography variant="body2">
-          {icon && <span className={classes.icon}>{icon}</span>}
+        {icon ? (
+          <span className={classes.icon}>{icon}</span>
+        ) : (
+          <Typography variant="subtitle1">{count}</Typography>
+        )}
+        <Typography variant="body2" component="div">
+          {icon && (
+            <Typography variant="subtitle2" component="span">
+              {count}{' '}
+            </Typography>
+          )}
           {label}
         </Typography>
       </Card>
