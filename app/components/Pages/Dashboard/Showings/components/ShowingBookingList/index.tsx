@@ -23,9 +23,7 @@ const useStyles = makeStyles(
       paddingRight: theme.spacing(1)
     },
     row: { '&:hover $actions': { opacity: 1 } },
-    notificationRow: {
-      '&&': { backgroundColor: theme.palette.warning.ultralight }
-    },
+    notificationRow: { borderLeft: `2px solid ${theme.palette.warning.light}` },
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -59,6 +57,17 @@ function ShowingBookingList({
   const classes = useStyles()
 
   const columns: TableColumn<IShowingAppointment>[] = [
+    {
+      id: 'status',
+      width: '15%',
+      sortable: false,
+      render: ({ row }) => (
+        <ShowingBookingListColumnStatus
+          status={row.status}
+          feedbackRate={3} // TODO: use the value from the API response
+        />
+      )
+    },
     ...(hasPropertyColumn
       ? [
           {
@@ -76,17 +85,6 @@ function ShowingBookingList({
           }
         ]
       : []),
-    {
-      id: 'status',
-      width: '15%',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingBookingListColumnStatus
-          status={row.status}
-          feedbackRate={3} // TODO: use the value from the API response
-        />
-      )
-    },
     {
       id: 'date-time',
       width: hasPropertyColumn ? '20%' : '25%',
