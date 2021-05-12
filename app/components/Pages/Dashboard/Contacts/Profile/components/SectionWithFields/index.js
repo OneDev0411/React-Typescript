@@ -73,8 +73,6 @@ class SectionWithFields extends React.Component {
       props.isPartner
     )
 
-    console.log('dddd', { attributes, emptyAttributes })
-
     const allAttributes = [...attributes, ...emptyAttributes]
     const shouldToggleEmptyAttributes = Boolean(emptyAttributes)
     const toggleEmptyAttributes = false
