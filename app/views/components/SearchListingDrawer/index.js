@@ -177,11 +177,7 @@ class SearchListingDrawer extends React.Component {
         renderSearchNotices={
           this.props.withMlsDisclaimer
             ? () => (
-                <Fade
-                  unmountOnExit
-                  enter="up"
-                  in={this.state.isMlsDisclaimerOpen}
-                >
+                <Fade unmountOnExit in={this.state.isMlsDisclaimerOpen}>
                   <Box mb={2}>
                     <Alert
                       severity="warning"
