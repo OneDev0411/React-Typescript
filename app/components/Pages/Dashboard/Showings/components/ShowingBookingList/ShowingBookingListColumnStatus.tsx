@@ -29,7 +29,7 @@ function ShowingBookingListColumnStatus({
   feedbackRate
 }: ShowingBookingListColumnStatusProps) {
   const classes = useStyles()
-  const { icon, label } = useAppointmentFilterInfo(status)
+  const { filledIcon, icon, label } = useAppointmentFilterInfo(status)
 
   return (
     <Box
@@ -39,7 +39,7 @@ function ShowingBookingListColumnStatus({
     >
       {status !== 'Completed' || !feedbackRate ? (
         <>
-          {icon}
+          {filledIcon || icon}
           <Typography
             className={classes.label}
             variant="body2"
