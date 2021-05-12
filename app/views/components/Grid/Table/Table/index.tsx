@@ -32,7 +32,6 @@ const useStyles = makeStyles(
       color: theme.palette.grey[700]
     },
     tableContainer: {
-      height: '100%',
       position: 'relative'
     },
     loading: ({ loading }: { loading: LoadingPosition }) => {
