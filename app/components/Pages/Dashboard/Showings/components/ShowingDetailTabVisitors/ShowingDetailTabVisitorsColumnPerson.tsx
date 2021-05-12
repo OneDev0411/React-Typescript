@@ -16,14 +16,14 @@ function ShowingDetailTabVisitorsColumnPerson({
       </Box>
       <Typography variant="body2">
         {contact.display_name}
-        {/* {brand && (
+        {contact.company && (
           <>
             ,{' '}
             <Box component="span" color="grey.500">
-              {TODO: add brand here}
+              {contact.company}
             </Box>
           </>
-        )} */}
+        )}
       </Typography>
     </Box>
   )
