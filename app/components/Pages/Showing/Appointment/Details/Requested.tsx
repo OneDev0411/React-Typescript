@@ -1,9 +1,11 @@
 import {
+  Box,
   Stepper,
   Step,
   StepLabel,
   Typography,
-  useTheme
+  useTheme,
+  useMediaQuery
 } from '@material-ui/core'
 import { mdiCheck, mdiDotsHorizontal } from '@mdi/js'
 import cn from 'classnames'
@@ -21,12 +23,13 @@ interface Props {
 export default function ShowingAppointmentRequested({ appointment }: Props) {
   const classes = useShowingAppointmentStatusDetailsStyles()
   const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Stepper
       orientation="vertical"
       className={classes.stepper}
-      connector={<StepConnector />}
+      connector={isSmallScreen ? <Box py={2} px={1} /> : <StepConnector />}
       activeStep={1}
     >
       <Step>

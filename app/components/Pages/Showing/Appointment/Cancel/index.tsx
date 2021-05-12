@@ -95,7 +95,7 @@ export default function ShowingAppointmentCancel({
   }
 
   if (isLoading || !appointment) {
-    return <LoadingContainer />
+    return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />
   }
 
   const appointmentTime = new Date(appointment.time)

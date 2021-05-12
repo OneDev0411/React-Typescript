@@ -39,7 +39,7 @@ export default function ShowingAppointment({
   )
 
   if (isLoading || !appointment) {
-    return <LoadingContainer />
+    return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />
   }
 
   return (

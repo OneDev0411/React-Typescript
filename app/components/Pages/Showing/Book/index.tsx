@@ -43,7 +43,7 @@ export default function BookShowing({
   const { showing, isLoading } = usePublicShowing(id)
 
   if (isLoading || !showing) {
-    return <LoadingContainer />
+    return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />
   }
 
   const handleSubmitAppointmentRequest = async (
