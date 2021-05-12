@@ -155,6 +155,7 @@ function ContactFilters(props) {
             checked={defaultSelectAllValue}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
+            data-tour-id="select-deselect-checkbox"
           />
         </Tooltip>
         <span

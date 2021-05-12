@@ -78,6 +78,7 @@ export const TagContacts = ({
           label="Tag"
           icon={mdiTagOutline}
           disabled={disabled}
+          tourId="tag-contacts"
           onClick={e => {
             if (!entireMode) {
               getCommonTags()

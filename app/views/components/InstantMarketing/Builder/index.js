@@ -1328,7 +1328,10 @@ class Builder extends React.Component {
                       : 'Hide Templates'
                   }
                 >
-                  <IconButton onClick={this.toggleTemplatesColumnVisibility}>
+                  <IconButton
+                    onClick={this.toggleTemplatesColumnVisibility}
+                    data-tour-id="change-template"
+                  >
                     <SvgIcon path={mdiMenu} />
                   </IconButton>
                 </Tooltip>

@@ -164,15 +164,12 @@ const AsyncOnboardingProfile = withSignedInUser(
 //  Overview Page
 /* ==================================== */
 
-const AsyncDashboardOverview = withAcl(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
-      )
-  }),
-  user => user.email === 'shayan@rechat.com'
-)
+const AsyncDashboardOverview = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+    )
+})
 
 /* ==================================== */
 //  MLS
@@ -805,8 +802,8 @@ export default (
 
         <Route path="calendar(/:id)" component={AsyncCalendar} />
 
-        <Route component={AsyncContacts} path="contacts" />
-        <Route component={AsyncDuplicateContacts} path="contacts/duplicates" />
+        <Route path="contacts" component={AsyncContacts} />
+        <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
