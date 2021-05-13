@@ -487,8 +487,13 @@ class MasterField extends React.Component {
 
     return (
       <InlineEditableField
-        error={error}
+        showDelete
+        isEditModeStatic
         cancelOnOutsideClick
+        error={error}
+        value={this.state.value}
+        label={label}
+        attributeName={this.attribute_def.name || ''}
         handleAddNew={this.addInstance}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
@@ -497,14 +502,10 @@ class MasterField extends React.Component {
         isDisabled={disabled || !isDirty}
         isEditing={this.props.isActive}
         isPopoverMode={this.isTriggerable}
-        isEditModeStatic
-        label={label}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
-        showDelete
         toggleMode={this.toggleMode}
-        value={this.state.value}
       />
     )
   }

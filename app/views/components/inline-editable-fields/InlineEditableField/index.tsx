@@ -27,6 +27,7 @@ interface Props {
   style?: object
   toggleMode: () => void
   value?: string
+  attributeName?: string
 }
 
 export const InlineEditableField = (props: Props) => {
@@ -48,6 +49,7 @@ export const InlineEditableField = (props: Props) => {
     showEdit = true,
     style = {},
     value = '',
+    attributeName = '',
     isEditing,
     error = '',
     renderEditMode
@@ -142,7 +144,8 @@ export const InlineEditableField = (props: Props) => {
       showDelete,
       style,
       toggleMode: handleToggleMode,
-      value
+      value,
+      attributeName
     }
   }
   const ViewModeRenderer = <ViewMode {...viewModeProps()} />
