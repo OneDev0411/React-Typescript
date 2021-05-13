@@ -129,7 +129,7 @@ export function TeamAgentsDrawer({
                 </Box>
               )}
 
-              {!isEmptyState && (
+              {!isEmptyState && !isLoading && (
                 <AgentsList
                   teams={teams}
                   searchCriteria={searchCriteria}
