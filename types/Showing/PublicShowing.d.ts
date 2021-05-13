@@ -3,7 +3,7 @@ declare interface IPublicShowing
     IBaseShowing {
   id: number
   unavailable_times: string[] | null
-  agent: IAgent
+  agent: IShowingAgent
   timezone: string
   timezone_offset: number
 }
