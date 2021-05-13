@@ -33,7 +33,7 @@ const useStyles = makeStyles(
       height: theme.spacing(2)
     },
     title: (props: Props) => ({
-      color: props.value ? theme.palette.text.primary : theme.palette.grey[500],
+      color: props.value ? theme.palette.grey[800] : theme.palette.grey[500],
       wordBreak: 'break-word'
     }),
     starIcon: {

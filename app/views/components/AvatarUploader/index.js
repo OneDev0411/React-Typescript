@@ -43,7 +43,7 @@ export class AvatarUploader extends Component {
 
     return (
       <Container size={avatar.size}>
-        <Avatar url={avatar.src} size="large">
+        <Avatar url={avatar.src} size="xlarge">
           {avatar.initials || getNameInitials(avatar.display_name) || ''}
         </Avatar>
         {this.props.showStatus && <Status isOnline={isOnline} />}
