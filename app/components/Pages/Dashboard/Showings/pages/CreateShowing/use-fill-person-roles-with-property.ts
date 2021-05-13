@@ -2,9 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { useSelector } from 'react-redux'
 
 import { selectDealRoles } from 'selectors/deals'
-import { selectActiveTeamId } from 'selectors/team'
-
-import { splitFullName } from '../../helpers'
+import { selectActiveTeamAvailableMembers } from 'selectors/team'
 
 import { ShowingPropertyType } from '../../types'
 
@@ -29,7 +27,7 @@ function useFillPersonRolesWithProperty(
   setOccupantPerson: Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>
 ): Dispatch<SetStateAction<Nullable<ShowingPropertyType>>> {
   const dealRoles = useSelector(selectDealRoles)
-  const teamId = useSelector(selectActiveTeamId)
+  const teamMembers = useSelector(selectActiveTeamAvailableMembers)
 
   return (property: Nullable<ShowingPropertyType>) => {
     setAgentEditable(true)
@@ -64,14 +62,14 @@ function useFillPersonRolesWithProperty(
         }
       })
     } else if (property?.type === 'listing') {
-      setAgentEditable(false)
-      setAgentPerson({
-        ...splitFullName(property.listing.list_agent_full_name),
-        email: property.listing.list_agent_email,
-        phone_number: property.listing.list_agent_direct_work_phone,
-        user: undefined,
-        brand: teamId
-      })
+      const user = teamMembers.find(
+        user => user.agent?.email === property.listing.list_agent_email
+      )
+
+      if (user) {
+        setAgentEditable(false)
+        setAgentPerson(getPersonFromUser(user))
+      }
     }
 
     setProperty(property)

@@ -1,5 +1,9 @@
 import { IAppState } from 'reducers'
-import { getActiveTeamId } from 'utils/user-teams'
+import {
+  getActiveTeam,
+  getActiveTeamId,
+  getTeamAvailableMembers
+} from 'utils/user-teams'
 
 import { selectUser } from './user'
 
@@ -24,4 +28,35 @@ export function selectActiveTeamId(state: IAppState): UUID {
   }
 
   return activeTeamId
+}
+
+/**
+ * Returns the active team for the current user if exists
+ * @param state The app state
+ */
+export function selectActiveTeamUnsafe(state: IAppState): Nullable<IUserTeam> {
+  return getActiveTeam(selectUser(state))
+}
+
+/**
+ * Returns the active team for the current user or throw an error
+ * if there is no active team
+ * @param state The app state
+ */
+export function selectActiveTeam(state: IAppState): IUserTeam {
+  const activeTeam = selectActiveTeamUnsafe(state)
+
+  if (!activeTeam) {
+    throw new Error('The current user does not have an active team')
+  }
+
+  return activeTeam
+}
+
+/**
+ * Returns the available members for the current active team
+ * @param state The app state
+ */
+export function selectActiveTeamAvailableMembers(state: IAppState): IUser[] {
+  return getTeamAvailableMembers(selectActiveTeamUnsafe(state))
 }
