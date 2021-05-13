@@ -10,7 +10,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: theme.spacing(3.5, 0)
+      padding: theme.spacing(3.5, 0, 1)
     }
   }),
   { name: 'ContactProfileHeader' }

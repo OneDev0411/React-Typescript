@@ -17,7 +17,6 @@ interface Props {
 export const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginTop: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.divider}`
     },
     tab: theme.typography.body1

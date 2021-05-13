@@ -8,7 +8,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       width: '100%',
-      padding: theme.spacing(0.5),
+      padding: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700],

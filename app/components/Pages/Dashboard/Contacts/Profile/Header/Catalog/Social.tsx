@@ -26,13 +26,8 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '24px',
-      height: '24px',
-      background: theme.palette.background.paper,
-      border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: '50%',
       '&:not(:last-child)': {
-        marginRight: theme.spacing(0.5)
+        marginRight: theme.spacing(0.75)
       }
     },
     icon: {

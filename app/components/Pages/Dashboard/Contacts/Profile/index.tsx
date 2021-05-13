@@ -69,7 +69,7 @@ const useStyles = makeStyles(
     contentContainer: {
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      borderRadius: `${theme.spacing(1)}px`
+      borderRadius: `${theme.shape.borderRadius}px`
     },
     sidenavContainer: {
       width: '350px',
