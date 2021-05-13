@@ -172,10 +172,13 @@ export function DealCoAgent({
                       />
                     </Box>
 
-                    {(searchCriteria ? teams : teams.slice(0, 15)).map(
-                      (team, index) => (
-                        <div key={index}>
-                          {teams.length > 1 && (
+                    {(searchCriteria.length >= 3
+                      ? teams
+                      : teams.slice(0, 15)
+                    ).map((team, index) => (
+                      <div key={index}>
+                        {searchCriteria ||
+                          (teams.length > 1 && (
                             <Box ml={1} my={1}>
                               <Typography variant="subtitle2">
                                 {team.name}
@@ -184,27 +187,26 @@ export function DealCoAgent({
                                 {team.subtitle}
                               </Typography>
                             </Box>
-                          )}
-
-                          {team.users.map(agent => (
-                            <UserRow
-                              key={agent.id}
-                              name={agent.display_name}
-                              email={agent.email}
-                              avatarUrl={agent.profile_image_url!}
-                              onClick={() => {
-                                setSelectedRole(
-                                  convertUserAgentToRole({
-                                    ...agent,
-                                    brand_id: team.id
-                                  })
-                                )
-                              }}
-                            />
                           ))}
-                        </div>
-                      )
-                    )}
+
+                        {team.users.map(agent => (
+                          <UserRow
+                            key={agent.id}
+                            name={agent.display_name}
+                            email={agent.email}
+                            avatarUrl={agent.profile_image_url!}
+                            onClick={() => {
+                              setSelectedRole(
+                                convertUserAgentToRole({
+                                  ...agent,
+                                  brand_id: team.id
+                                })
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 )}
 
