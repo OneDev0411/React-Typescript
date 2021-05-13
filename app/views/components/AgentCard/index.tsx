@@ -23,11 +23,14 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  agent: IAgent
+  agent: IAgent | IShowingAgent
 }
 
 export default function AgentCard({ agent }: Props) {
   const classes = useStyles()
+
+  const officeName =
+    (agent.type === 'agent' ? agent.office?.name : agent.office) ?? ''
 
   return (
     <Card variant="outlined" className={classes.card}>
@@ -37,7 +40,7 @@ export default function AgentCard({ agent }: Props) {
             {/* TODO: Remove the following line complaining about `contact` is required */}
             {/* @ts-ignore */}
             <Avatar
-              alt={agent.full_name}
+              alt={agent.full_name ?? 'agent name'}
               size="xlarge"
               url={agent.profile_image_url ?? undefined}
             >
@@ -58,7 +61,7 @@ export default function AgentCard({ agent }: Props) {
                 </Grid>
                 <Grid item>
                   <Typography variant="body2" color="textSecondary">
-                    {agent.office?.name}
+                    {officeName}
                   </Typography>
                 </Grid>
               </Grid>
