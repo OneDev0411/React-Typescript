@@ -22,3 +22,23 @@ export function getShowingImage({
     defaultShowingImageUrl
   )
 }
+
+export const splitFullName = (fullName: string) => {
+  const [first_name, ...others] = fullName.split(' ')
+
+  return {
+    first_name: first_name || '',
+    last_name: others.join(' ')
+  }
+}
+
+export function getFullAddressFromSrdAddr(stdAddr: IStdAddr): string {
+  return [
+    stdAddr.house_num,
+    stdAddr.name,
+    stdAddr.suftype,
+    stdAddr.city,
+    stdAddr.state,
+    stdAddr.postcode
+  ].join(' ')
+}

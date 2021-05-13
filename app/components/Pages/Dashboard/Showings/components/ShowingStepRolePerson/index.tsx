@@ -1,9 +1,10 @@
-import React, { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { kebabCase } from 'lodash'
 
 import {
   QuestionSection,
   QuestionTitle,
+  useSectionContext,
   useWizardContext
 } from 'components/QuestionWizard'
 
@@ -26,6 +27,8 @@ interface ShowingStepRolePersonProps
   person: Nullable<IShowingRoleInputPerson>
   onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
   skippable?: boolean
+  editable: boolean
+  required?: boolean
 }
 
 function ShowingStepRolePerson({
@@ -34,23 +37,39 @@ function ShowingStepRolePerson({
   onPersonChange,
   selectType,
   skippable = true,
-  isPrimaryAgent
+  isPrimaryAgent,
+  editable,
+  required = false
 }: ShowingStepRolePersonProps) {
+  type Step = 'search' | 'edit' | 'card'
+
   const nextStep = useQuestionWizardSmartNext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
+
   const { setLoading } = useWizardContext()
-  const [isEditable, setIsEditable] = useState(true)
+  const [localStep, setLocalStep] = useState<Step>(editable ? 'search' : 'card')
   const [contact, setContact] = useState<Nullable<IContact>>(null)
   const { createContact, isCreatingContact } = useCreateContact()
   const { updateContact, isUpdatingContact } = useUpdateContact()
 
+  useEffect(() => {
+    if (step === wizard.currentStep && !editable) {
+      nextStep(400)
+    }
+  }, [editable, nextStep, step, wizard.currentStep])
+
   const handleEdit = () => {
-    setIsEditable(true)
+    setLocalStep('edit')
   }
 
   const handleRemove = () => {
-    onPersonChange(null)
-    setIsEditable(true)
-    setContact(null)
+    if (!required) {
+      onPersonChange(null)
+      setContact(null)
+    }
+
+    setLocalStep('search')
   }
 
   const handleSelect = (
@@ -59,6 +78,7 @@ function ShowingStepRolePerson({
   ) => {
     onPersonChange(person)
     setContact(contact ?? null)
+    setLocalStep('edit')
   }
 
   const handleSubmit = async (person: IShowingRoleInputPerson) => {
@@ -75,7 +95,7 @@ function ShowingStepRolePerson({
     }
 
     onPersonChange(person)
-    setIsEditable(false)
+    setLocalStep('card')
     nextStep(400)
   }
 
@@ -85,7 +105,7 @@ function ShowingStepRolePerson({
         Who is the listing {kebabCase(personTitle)}?
       </QuestionTitle>
       <SmartQuestionForm>
-        {!person && (
+        {localStep === 'search' && (
           <ShowingStepRolePersonSelect
             selectType={selectType}
             onSelect={handleSelect}
@@ -93,7 +113,7 @@ function ShowingStepRolePerson({
             isPrimaryAgent={isPrimaryAgent}
           />
         )}
-        {person && isEditable && (
+        {localStep === 'edit' && person && (
           <ShowingStepRolePersonEditForm
             personTitle={personTitle}
             initialData={person}
@@ -109,12 +129,13 @@ function ShowingStepRolePerson({
             submitDisabled={isCreatingContact || isUpdatingContact}
           />
         )}
-        {person && !isEditable && (
+        {localStep === 'card' && person && (
           <ShowingStepRolePersonCard
             person={person}
             personTitle={personTitle}
             onEdit={handleEdit}
             onRemove={handleRemove}
+            editable={editable}
           />
         )}
       </SmartQuestionForm>

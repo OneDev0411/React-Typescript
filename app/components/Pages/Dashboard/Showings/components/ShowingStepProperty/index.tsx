@@ -9,10 +9,7 @@ import {
 } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 import { ShowingPropertyType } from '../../types'
-import {
-  getStdAddrFromAddressComponents,
-  getFullAddressFromSrdAddr
-} from './helpers'
+import { getStdAddrFromAddressComponents } from './helpers'
 import ShowingStepPropertyForm, {
   ShowingStepPropertyFormProps
 } from './ShowingStepPropertyForm'
@@ -22,6 +19,7 @@ import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-ne
 import SmartQuestionForm from '../SmartQuestionForm'
 import ListingHipPocketCard from '../ListingHipPocketCard'
 import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
+import { getFullAddressFromSrdAddr } from '../../helpers'
 
 export interface ShowingStepPropertyProps {
   property: Nullable<ShowingPropertyType>

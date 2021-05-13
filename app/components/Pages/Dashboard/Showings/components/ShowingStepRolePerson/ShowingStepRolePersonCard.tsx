@@ -1,4 +1,3 @@
-import React from 'react'
 import { kebabCase, upperFirst } from 'lodash'
 
 import { Box, IconButton } from '@material-ui/core'
@@ -15,35 +14,39 @@ interface ShowingStepRolePersonCardProps {
   personTitle: string
   onEdit: () => void
   onRemove: () => void
+  editable?: boolean
 }
 
 function ShowingStepRolePersonCard({
   person,
   onEdit,
   onRemove,
-  personTitle
+  personTitle,
+  editable = false
 }: ShowingStepRolePersonCardProps) {
   return (
     <ShowingContactOverviewCard
       fullName={`${person.first_name} ${person.last_name}`}
       subtitle={`Listing ${upperFirst(kebabCase(personTitle))}`}
       actions={
-        <>
-          <Box pl={2}>
-            <IconButton size="medium" onClick={onEdit}>
-              <SvgIcon
-                path={mdiAccountEditOutline}
-                size={muiIconSizes.medium}
-              />
-            </IconButton>
-          </Box>
+        editable && (
+          <>
+            <Box pl={2}>
+              <IconButton size="medium" onClick={onEdit}>
+                <SvgIcon
+                  path={mdiAccountEditOutline}
+                  size={muiIconSizes.medium}
+                />
+              </IconButton>
+            </Box>
 
-          <Box>
-            <IconButton size="medium" onClick={onRemove}>
-              <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
-            </IconButton>
-          </Box>
-        </>
+            <Box>
+              <IconButton size="medium" onClick={onRemove}>
+                <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
+              </IconButton>
+            </Box>
+          </>
+        )
       }
     />
   )

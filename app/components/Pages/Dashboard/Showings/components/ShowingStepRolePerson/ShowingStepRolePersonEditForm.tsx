@@ -75,16 +75,18 @@ function ShowingStepRolePersonEditForm({
             />
 
             <Box mt={4} display="flex" justifyContent="flex-end">
-              <Box mr={1}>
-                <Button
-                  type="button"
-                  disabled={submitting || submitDisabled}
-                  variant="outlined"
-                  onClick={onCancel}
-                >
-                  Cancel
-                </Button>
-              </Box>
+              {onCancel && (
+                <Box mr={1}>
+                  <Button
+                    type="button"
+                    disabled={submitting || submitDisabled}
+                    variant="outlined"
+                    onClick={onCancel}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              )}
               <Button
                 type="submit"
                 disabled={submitting || submitDisabled}

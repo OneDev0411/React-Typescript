@@ -6,7 +6,7 @@ import ContactSearchInput from 'components/ContactSearchInput'
 
 import { selectActiveTeamId } from 'selectors/team'
 
-import { splitFullName } from './helpers'
+import { splitFullName } from '../../helpers'
 
 export interface ShowingStepRolePersonSelectContactProps {
   onSelect: (person: IShowingRoleInputPerson, contact?: IContact) => void

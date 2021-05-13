@@ -23,6 +23,8 @@ interface UseShowingRoleReturn {
   hasRole: Nullable<YesNoAnswer>
   setHasRoleChange: Dispatch<SetStateAction<YesNoAnswer>>
   resetRoleNotification: () => void
+  editable: boolean
+  setEditable: Dispatch<SetStateAction<boolean>>
 }
 
 function useShowingRole(): UseShowingRoleReturn {
@@ -56,6 +58,8 @@ function useShowingRole(): UseShowingRoleReturn {
     setRoleNotification(DEFAULT_NOTIFICATION_VALUE)
   }
 
+  const [editable, setEditable] = useState(false)
+
   return {
     rolePerson,
     setRolePerson,
@@ -65,7 +69,9 @@ function useShowingRole(): UseShowingRoleReturn {
     setRoleCancelNotificationTypesChange: handleRoleCancelNotificationTypesChange,
     hasRole,
     setHasRoleChange: handleHasRoleChange,
-    resetRoleNotification: handleResetRoleNotification
+    resetRoleNotification: handleResetRoleNotification,
+    editable,
+    setEditable
   }
 }
 

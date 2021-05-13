@@ -31,10 +31,12 @@ import ShowingStepAvailabilities from '../../components/ShowingStepAvailabilitie
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 // import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
-import useShowingRole from './use-showing-role'
-import useFillPersonStatesWithDealRoles from './use-fill-person-states-with-deal-roles'
 import ShowingCloseButton from '../../components/ShowingCloseButton'
 import ShowingStepDateAndDuration from '../../components/ShowingStepDateAndDuration'
+
+import useShowingRole from './use-showing-role'
+import useFillPersonRolesWithProperty from './use-fill-person-roles-with-property'
+import useShowingPropertyId from './use-showing-property-id'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -43,7 +45,9 @@ interface CreateShowingProps {
 
 function CreateShowing({ router, route }: CreateShowingProps) {
   const teamId = useSelector(selectActiveTeamId)
+
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
+  const propertyId = useShowingPropertyId(property)
 
   const [approvalType, setApprovalType] = useState<
     Nullable<IShowingApprovalType>
@@ -56,7 +60,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setRoleConfirmNotificationTypesChange: setAgentConfirmNotificationTypesChange,
     roleCancelNotificationTypes: agentCancelNotificationTypes,
     setRoleCancelNotificationTypesChange: setAgentCancelNotificationTypesChange,
-    resetRoleNotification: resetAgentNotificationTypes
+    resetRoleNotification: resetAgentNotificationTypes,
+    editable: agentEditable,
+    setEditable: setAgentEditable
   } = useShowingRole()
 
   const {
@@ -68,7 +74,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setRoleCancelNotificationTypesChange: setCoAgentCancelNotificationTypesChange,
     hasRole: hasCoAgent,
     setHasRoleChange: setHasCoAgent,
-    resetRoleNotification: resetCoAgentNotificationTypes
+    resetRoleNotification: resetCoAgentNotificationTypes,
+    editable: coAgentEditable,
+    setEditable: setCoAgentEditable
   } = useShowingRole()
 
   const {
@@ -80,7 +88,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setRoleCancelNotificationTypesChange: setOccupantCancelNotificationTypesChange,
     hasRole: hasOccupant,
     setHasRoleChange: setHasOccupant,
-    resetRoleNotification: resetOccupantNotificationTypes
+    resetRoleNotification: resetOccupantNotificationTypes,
+    editable: occupantEditable,
+    setEditable: setOccupantEditable
   } = useShowingRole()
 
   const handleSetApproval = (value: IShowingApprovalType) => {
@@ -117,10 +127,13 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   //   Nullable<IMarketingTemplateInstance>
   // >(null)
 
-  useFillPersonStatesWithDealRoles(
-    property,
+  const handlePropertyChange = useFillPersonRolesWithProperty(
+    setProperty,
+    setAgentEditable,
     setAgentPerson,
+    setCoAgentEditable,
     setCoAgentPerson,
+    setOccupantEditable,
     setOccupantPerson
   )
 
@@ -209,7 +222,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             <ShowingStepIntro />
             <ShowingStepProperty
               property={property}
-              onPropertyChange={setProperty}
+              onPropertyChange={handlePropertyChange}
             />
             <ShowingStepApprovalType
               approvalType={approvalType}
@@ -218,11 +231,14 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
             {/* Listing Agent Steps - Start */}
             <ShowingStepRolePerson
+              key={propertyId}
               personTitle="Agent"
               person={agentPerson}
               onPersonChange={setAgentPerson}
               skippable={false}
+              editable={agentEditable}
               isPrimaryAgent
+              required
             />
             {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleConfirmNotificationTypes
@@ -248,10 +264,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             {hasCoAgent === 'Yes' && (
               <ShowingStepRolePerson
+                key={propertyId}
                 personTitle="CoAgent"
                 person={coAgentPerson}
                 onPersonChange={setCoAgentPerson}
                 isPrimaryAgent={false}
+                editable={coAgentEditable}
               />
             )}
             {approvalType !== 'None' &&
@@ -282,10 +300,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             {hasOccupant === 'Yes' && (
               <ShowingStepRolePerson
+                key={propertyId}
                 personTitle="Occupant"
                 person={occupantPerson}
                 onPersonChange={setOccupantPerson}
                 selectType="Contact"
+                editable={occupantEditable}
               />
             )}
             {approvalType !== 'None' &&

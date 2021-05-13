@@ -72,14 +72,3 @@ export function getStdAddrFromAddressComponents(
 
   return stdAddr
 }
-
-export function getFullAddressFromSrdAddr(stdAddr: IStdAddr) {
-  return [
-    stdAddr.house_num,
-    stdAddr.name,
-    stdAddr.suftype,
-    stdAddr.city,
-    stdAddr.state,
-    stdAddr.postcode
-  ].join(' ')
-}
