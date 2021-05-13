@@ -95,6 +95,7 @@ export function AgentsList({
         <AutoSizer>
           {({ width, height }) => (
             <VirtualList
+              key={searchCriteria}
               width={width}
               height={height}
               itemCount={rows.length}
