@@ -84,6 +84,17 @@ ViewMode.defaultProps = {
 }
 
 const linkableAttribute = ['website', 'facebook', 'instagram', 'linkedin']
+const copyAttribute = [
+  ...linkableAttribute,
+  'email',
+  'first_name',
+  'middle_name',
+  'last_name',
+  'nickname',
+  'job_title',
+  'company',
+  'marketing_name'
+]
 
 export function ViewMode({
   label,
@@ -139,10 +150,12 @@ export function ViewMode({
               <span className={classes.actionLabel}>Open</span>
             </Box>
           )}
-          <Box onClick={handleCopy} className={classes.action}>
-            <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
-            <span className={classes.actionLabel}>Copy</span>
-          </Box>
+          {copyAttribute.includes(attributeName) && (
+            <Box onClick={handleCopy} className={classes.action}>
+              <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
+              <span className={classes.actionLabel}>Copy</span>
+            </Box>
+          )}
           {showDelete && (
             <Box onClick={handleDelete} className={classes.action}>
               <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
