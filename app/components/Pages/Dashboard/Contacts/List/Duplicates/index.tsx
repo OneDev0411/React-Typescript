@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
+
 import {
   Button,
   Typography,
@@ -9,6 +9,8 @@ import {
   Theme
 } from '@material-ui/core'
 import pluralize from 'pluralize'
+
+import { addNotification } from 'components/notification'
 
 import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'

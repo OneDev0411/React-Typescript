@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Button } from '@material-ui/core'
+import { mdiCalendar } from '@mdi/js'
 
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { searchContacts } from 'actions/contacts'
 
 import { EventDrawer } from 'components/EventDrawer'
 import { selectContact } from 'reducers/contacts/list'
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 class CreateEvent extends Component {
   constructor(props) {
@@ -39,14 +40,12 @@ class CreateEvent extends Component {
 
     return (
       <>
-        <Button
+        <GridActionButton
+          label="Create Event"
+          icon={mdiCalendar}
           disabled={disabled}
-          variant="outlined"
-          size="small"
           onClick={this.openDrawer}
-        >
-          Create Event
-        </Button>
+        />
         {this.state.showDrawer && (
           <EventDrawer
             isOpen

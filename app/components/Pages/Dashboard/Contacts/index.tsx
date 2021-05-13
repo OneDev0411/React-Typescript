@@ -54,7 +54,7 @@ class Contacts extends React.Component<Props> {
         <Helmet>
           <title>Contacts | Rechat</title>
         </Helmet>
-        <div style={{ marginRight: 0, minHeight: '100vh' }}>
+        <div style={{ marginRight: 0, minHeight: '100vh', height: '100%' }}>
           <ContactsList />
         </div>
       </React.Fragment>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { PageTabs, Tab } from 'components/PageTabs'
@@ -37,6 +37,7 @@ interface Props {
     onChange: (item) => void
     currentOrder: string
   }
+  viewMode: 'table' | 'board'
   contactCount: number
   activeSegment: any
   users: UUID[]
@@ -77,6 +78,7 @@ export const ContactsTabs = ({
   contactCount,
   tagListProps,
   sortProps,
+  viewMode,
   filter,
   users
 }: Props) => {
@@ -117,6 +119,7 @@ export const ContactsTabs = ({
           <Tab
             key="all-contact"
             value="all-contact"
+            data-tour-id="all-contacts"
             label={
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
@@ -124,23 +127,27 @@ export const ContactsTabs = ({
           <Tab
             key="saved-list"
             value="saved-list"
+            data-tour-id="saved-list"
             label={<SavedSegments {...savedListProps} />}
           />,
           <Tab
             key="tag-list"
             value="tag-list"
+            data-tour-id="tags-list"
             label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
-        actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}
+        actions={[<Tab key={1} label={<SortFields {...sortProps} />} />]}
       />
-      <ContactFilters
-        show={filter?.show}
-        contactCount={contactCount}
-        activeSegment={activeSegment}
-        onFilterChange={() => handleFilterChange({}, true)}
-        users={users}
-      />
+      {viewMode === 'table' && (
+        <ContactFilters
+          show={filter?.show}
+          contactCount={contactCount}
+          activeSegment={activeSegment}
+          onFilterChange={() => handleFilterChange({}, true)}
+          users={users}
+        />
+      )}
     </>
   )
 }

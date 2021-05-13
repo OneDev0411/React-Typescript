@@ -1,23 +1,23 @@
 import React, { createContext, useState } from 'react'
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import { appSidenavWidth } from './SideNav/variables'
 import SideNav from './SideNav'
 
 interface Props {
   children: React.ReactNode
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  main: {
-    width: '100%',
-    minHeight: '100vh',
-    flexGrow: 1,
-    [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${appSidenavWidth}px)`
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    main: {
+      width: '100%',
+      minHeight: '100vh',
+      flexGrow: 1,
+      overflow: 'hidden'
     }
-  }
-}))
+  }),
+  { name: 'MainWrapper' }
+)
 
 export const SideNavContext = createContext({
   toggle: () => {}

@@ -75,6 +75,7 @@ export function ImportContactsButton({ accounts, user }: Props) {
       onClick={handleGoogleConnect}
       style={{ zIndex: 2 }}
       size="large"
+      tourId="connect-gmail-outlook"
       renderMenu={() => (
         <>
           <MenuItem onClick={outlook.connect} disabled={outlook.connecting}>
