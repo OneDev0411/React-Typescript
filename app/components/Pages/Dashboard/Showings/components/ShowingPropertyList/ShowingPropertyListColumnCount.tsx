@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 interface ShowingPropertyListColumnCountProps {
   label: string
@@ -10,9 +10,16 @@ function ShowingPropertyListColumnCount({
   value
 }: ShowingPropertyListColumnCountProps) {
   return (
-    <Typography noWrap variant="body2">
-      {label}: {value}
-    </Typography>
+    <>
+      <Typography noWrap variant="caption" component="span">
+        <Box color="grey.600" component="span">
+          {label}{' '}
+        </Box>
+      </Typography>
+      <Typography variant="body2" component="span">
+        {value}
+      </Typography>
+    </>
   )
 }
 
