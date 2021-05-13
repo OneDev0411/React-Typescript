@@ -177,17 +177,16 @@ export function DealCoAgent({
                       : teams.slice(0, 15)
                     ).map((team, index) => (
                       <div key={index}>
-                        {searchCriteria ||
-                          (teams.length > 1 && (
-                            <Box ml={1} my={1}>
-                              <Typography variant="subtitle2">
-                                {team.name}
-                              </Typography>
-                              <Typography variant="caption">
-                                {team.subtitle}
-                              </Typography>
-                            </Box>
-                          ))}
+                        {(searchCriteria || teams.length > 1) && (
+                          <Box ml={1} my={1}>
+                            <Typography variant="subtitle2">
+                              {team.name}
+                            </Typography>
+                            <Typography variant="caption">
+                              {team.subtitle}
+                            </Typography>
+                          </Box>
+                        )}
 
                         {team.users.map(agent => (
                           <UserRow
