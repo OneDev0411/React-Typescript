@@ -36,6 +36,8 @@ export const RoleTitle = styled.div`
 export const RoleType = styled.div`
   color: ${({ theme }) => theme.palette.grey['500']};
   text-decoration: none;
+  text-align: right;
+  font-size: ${({ theme }) => theme.typography.body3.fontSize};
 `
 
 export const RoleItem = styled.div`

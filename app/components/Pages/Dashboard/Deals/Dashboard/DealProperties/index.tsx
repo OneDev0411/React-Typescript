@@ -20,7 +20,7 @@ export function DealProperties({ deal, isBackOffice }: Props) {
       <SectionTitle variant="body1">Details</SectionTitle>
 
       <ItemsContainer>
-        <Item>
+        <Item disableHover={!deal.listing}>
           <ItemLabel>MLS#</ItemLabel>
           <MlsConnect deal={deal} />
         </Item>
