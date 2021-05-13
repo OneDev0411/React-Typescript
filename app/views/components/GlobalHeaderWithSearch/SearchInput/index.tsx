@@ -2,8 +2,8 @@ import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import {
   TextField,
   InputAdornment,
-  makeStyles,
   IconButton,
+  makeStyles,
   Theme
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
