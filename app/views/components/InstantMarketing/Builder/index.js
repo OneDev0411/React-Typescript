@@ -63,7 +63,10 @@ import { BASICS_BLOCK_CATEGORY } from './constants'
 import { registerEmailBlocks } from './Blocks/Email'
 import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
-import { getTemplateBlockOptions } from './Blocks/templateBlocks'
+import {
+  getTemplateBlockOptions,
+  getTemplateOptions
+} from './Blocks/templateBlocks'
 import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
@@ -99,6 +102,7 @@ class Builder extends React.Component {
       matterportToEdit: null
     }
 
+    this.selectedTemplateOptions = null
     this.emailBlocksRegistered = false
 
     this.keyframe = 0
@@ -244,10 +248,10 @@ class Builder extends React.Component {
     let model = view.model
 
     const hide = rte => {
-      rte.once('instanceReady', event => {
+      rte.once('instanceReady', () => {
         rte.ui.space('top')?.setStyle('display', 'none')
 
-        rte.once('focus', event => {
+        rte.once('focus', () => {
           rte.ui.space('top')?.setStyle('display', 'none')
         })
       })
@@ -262,6 +266,30 @@ class Builder extends React.Component {
     } while ((model = model.parent()))
   }
 
+  loadTemplateOptions = async () => {
+    if (!this.selectedTemplate) {
+      this.selectedTemplateOptions = null
+
+      return
+    }
+
+    this.selectedTemplateOptions = await getTemplateOptions(
+      this.selectedTemplate
+    )
+  }
+
+  get selectedTemplateFonts() {
+    if (
+      this.selectedTemplateOptions &&
+      this.selectedTemplateOptions.textEditor &&
+      this.selectedTemplateOptions.textEditor.extraFonts
+    ) {
+      return this.selectedTemplateOptions.textEditor.extraFonts
+    }
+
+    return []
+  }
+
   loadCKEditor = () => {
     return new Promise(resolve => {
       loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
@@ -273,7 +301,22 @@ class Builder extends React.Component {
     const brandColors = getBrandColors(brand)
     const brandFonts = getBrandFontFamilies(brand)
 
-    return attachCKEditor(this.editor, brandFonts, brandColors)
+    return attachCKEditor(
+      this.editor,
+      brandFonts,
+      brandColors,
+      undefined,
+      opts => {
+        const currentFonts = opts.font_names ? opts.font_names.split(';') : []
+        const allFonts = [
+          ...new Set([...this.selectedTemplateFonts, ...currentFonts])
+        ]
+
+        return {
+          font_names: allFonts.join(';')
+        }
+      }
+    )
   }
 
   static contextType = ConfirmationModalContext
@@ -358,7 +401,19 @@ class Builder extends React.Component {
       components.addType(name, {
         view: component.view.extend({
           events: {
-            dblclick: () => {
+            dblclick: event => {
+              const currentSelectedDOMElement = this.editor
+                .getSelected()
+                .getEl()
+              const eventTarget = event.target
+
+              // In order to make sure we're not changing another image element
+              // when we have a selectable image element selected
+              // and we're dbl clicking on an unselectable image
+              if (currentSelectedDOMElement !== eventTarget) {
+                return
+              }
+
               this.setState({ isImageSelectDialogOpen: true })
             }
           }
@@ -473,7 +528,8 @@ class Builder extends React.Component {
     const emailBlocksOptions = this.getBlocksOptions()
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate.url
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     this.blocks = registerEmailBlocks(
@@ -492,7 +548,8 @@ class Builder extends React.Component {
     const renderData = getTemplateRenderData(brand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate.url
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     removeUnusedBlocks(this.editor)
@@ -535,7 +592,8 @@ class Builder extends React.Component {
     }
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate.url
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     this.blocks = registerWebsiteBlocks(
@@ -1066,7 +1124,8 @@ class Builder extends React.Component {
           })
         }
       }),
-      () => {
+      async () => {
+        await this.loadTemplateOptions()
         this.refreshEditor(this.state.selectedTemplate)
       }
     )
