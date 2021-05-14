@@ -15,7 +15,7 @@ const useStyles = makeStyles(
     title: {
       display: 'inline-block',
       paddingLeft: theme.spacing(1),
-      marginBottom: theme.spacing(0.75),
+      marginBottom: theme.spacing(1),
       color: theme.palette.text.primary,
       ...theme.typography.body1
     }
