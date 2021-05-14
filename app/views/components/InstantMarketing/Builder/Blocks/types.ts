@@ -20,7 +20,7 @@ export interface TemplateBlockBase {
   type: string
 }
 
-export interface TemplateBlockBaseOptions {
+export interface TemplateOptions {
   blocks: TemplateBlockBase[]
   disableDefault?: string[] | true
   textEditor?: {

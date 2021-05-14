@@ -4,7 +4,7 @@ import {
   TemplateBlock,
   TemplateBlocks,
   TemplateBlockBase,
-  TemplateBlockBaseOptions,
+  TemplateOptions,
   TemplateBlockOptions
 } from './types'
 
@@ -12,6 +12,22 @@ import { isComponent as isComponentWebsite } from './Website/utils'
 import { isComponent as isComponentEmail } from './Email/utils'
 
 import registerBlock from './registerBlock'
+
+export async function getTemplateOptions(
+  template: IMarketingTemplate
+): Promise<Nullable<TemplateOptions>> {
+  try {
+    const response = await fetch(`${template.url}/blocks.json`)
+
+    if (response.status === 404) {
+      return null
+    }
+
+    return response.json()
+  } catch (e) {
+    return null
+  }
+}
 
 async function getTemplateBlockBase(
   templateBlock: TemplateBlockBase,
@@ -29,16 +45,18 @@ async function getTemplateBlockBase(
 }
 
 export async function getTemplateBlockOptions(
-  template: IMarketingTemplate
+  template: IMarketingTemplate,
+  templateOptions: Nullable<TemplateOptions>
 ): Promise<TemplateBlockOptions> {
+  if (!templateOptions) {
+    return { blocks: {} }
+  }
+
   const templateUrl = template.url
-  const response = await fetch(`${templateUrl}/blocks.json`)
 
   try {
-    const blockOptions = (await response.json()) as TemplateBlockBaseOptions
-
     const blocksWithTemplate = await Promise.all(
-      blockOptions.blocks.map(
+      templateOptions.blocks.map(
         async templateBlock =>
           ({
             ...templateBlock,
@@ -50,7 +68,7 @@ export async function getTemplateBlockOptions(
     )
 
     return {
-      ...blockOptions,
+      ...templateOptions,
       blocks: blocksWithTemplate
         .filter(templateBlock => !!templateBlock.template)
         .reduce(
@@ -100,19 +118,4 @@ export function registerTemplateBlocks(
         [blockName]: templateBlocks[blockName].template
       }
     }, registeredBlocks)
-}
-
-export async function getTemplateExtraTextEditorFonts(
-  template: IMarketingTemplate
-): Promise<string[]> {
-  const templateUrl = template.url
-  const response = await fetch(`${templateUrl}/blocks.json`)
-
-  try {
-    const blockOptions = (await response.json()) as TemplateBlockBaseOptions
-
-    return blockOptions.textEditor?.extraFonts ?? []
-  } catch (e) {
-    return []
-  }
 }

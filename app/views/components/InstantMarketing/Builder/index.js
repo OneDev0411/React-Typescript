@@ -65,7 +65,7 @@ import { registerSocialBlocks } from './Blocks/Social'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import {
   getTemplateBlockOptions,
-  getTemplateExtraTextEditorFonts
+  getTemplateOptions
 } from './Blocks/templateBlocks'
 import { getTemplateRenderData } from './utils/get-template-render-data'
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
@@ -85,7 +85,6 @@ class Builder extends React.Component {
     this.state = {
       originalTemplate: null,
       selectedTemplate: props.defaultTemplate,
-      extraTextEditorFonts: [],
       isLoading: true,
       isEditorLoaded: false,
       isTemplatesColumnHidden: props.isTemplatesColumnHiddenDefault,
@@ -103,6 +102,7 @@ class Builder extends React.Component {
       matterportToEdit: null
     }
 
+    this.selectedTemplateOptions = null
     this.emailBlocksRegistered = false
 
     this.keyframe = 0
@@ -266,18 +266,28 @@ class Builder extends React.Component {
     } while ((model = model.parent()))
   }
 
-  loadTemplateExtraTextEditorFonts = async () => {
+  loadTemplateOptions = async () => {
     if (!this.selectedTemplate) {
-      this.setState({ extraTextEditorFonts: [] })
+      this.selectedTemplateOptions = null
 
       return
     }
 
-    const extraTextEditorFonts = await getTemplateExtraTextEditorFonts(
-      this.selectedTemplate
-    )
+    const templateOptions = await getTemplateOptions(this.selectedTemplate)
 
-    this.setState({ extraTextEditorFonts })
+    this.selectedTemplateOptions = templateOptions
+  }
+
+  get selectedTemplateFonts() {
+    if (
+      this.selectedTemplateOptions &&
+      this.selectedTemplateOptions.textEditor &&
+      this.selectedTemplateOptions.textEditor.extraFonts
+    ) {
+      return this.selectedTemplateOptions.textEditor.extraFonts
+    }
+
+    return []
   }
 
   loadCKEditor = () => {
@@ -299,7 +309,7 @@ class Builder extends React.Component {
       opts => {
         const currentFonts = opts.font_names ? opts.font_names.split(';') : []
         const allFonts = [
-          ...new Set([...this.state.extraTextEditorFonts, ...currentFonts])
+          ...new Set([...this.selectedTemplateFonts, ...currentFonts])
         ]
 
         return {
@@ -518,7 +528,8 @@ class Builder extends React.Component {
     const emailBlocksOptions = this.getBlocksOptions()
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     this.blocks = registerEmailBlocks(
@@ -537,7 +548,8 @@ class Builder extends React.Component {
     const renderData = getTemplateRenderData(brand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     removeUnusedBlocks(this.editor)
@@ -580,7 +592,8 @@ class Builder extends React.Component {
     }
 
     const templateBlockOptions = await getTemplateBlockOptions(
-      this.selectedTemplate
+      this.selectedTemplate,
+      this.selectedTemplateOptions
     )
 
     this.blocks = registerWebsiteBlocks(
@@ -1112,8 +1125,8 @@ class Builder extends React.Component {
         }
       }),
       async () => {
+        await this.loadTemplateOptions()
         this.refreshEditor(this.state.selectedTemplate)
-        await this.loadTemplateExtraTextEditorFonts()
       }
     )
   }
