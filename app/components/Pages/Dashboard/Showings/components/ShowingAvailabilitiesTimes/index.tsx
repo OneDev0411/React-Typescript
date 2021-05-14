@@ -6,7 +6,7 @@ import { hourToSeconds } from '../../helpers'
 import { findSlotIndexById, findTimeConflicts } from './helpers'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 
-interface ShowingAvailabilitiesTimesProps {
+export interface ShowingAvailabilitiesTimesProps {
   title?: string
   value: IShowingAvailabilityInput[]
   onChange: (value: IShowingAvailabilityInput[]) => void
@@ -74,7 +74,7 @@ function ShowingAvailabilitiesTimes({
   return (
     <Box>
       <Typography variant="h6">{title}</Typography>
-      <Box mt={3}>
+      <Box mt={1}>
         {value.map((row, idx) => (
           <ShowingAvailabilitiesTimesRow
             key={row.id}

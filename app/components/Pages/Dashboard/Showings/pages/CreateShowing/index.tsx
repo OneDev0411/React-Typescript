@@ -27,16 +27,16 @@ import ShowingStepYesNoQuestion, {
 } from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
-import ShowingStepAvailabilities from '../../components/ShowingStepAvailabilities'
+import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 // import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import ShowingCloseButton from '../../components/ShowingCloseButton'
-import ShowingStepDateAndDuration from '../../components/ShowingStepDateAndDuration'
 
 import useShowingRole from './use-showing-role'
 import useFillPersonRolesWithProperty from './use-fill-person-roles-with-property'
 import useShowingPropertyId from './use-showing-property-id'
+import { showingDurationOptions } from '../../constants'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -119,9 +119,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   const [availabilities, setAvailabilities] = useShowingAvailabilitiesState()
 
-  const [dateDuration, setDateDuration] = useState<
-    Nullable<IShowingDateDurationInput>
-  >(null)
+  const [duration, setDuration] = useState<number>(
+    showingDurationOptions[0].value
+  )
 
   // const [feedbackTemplate, setFeedbackTemplate] = useState<
   //   Nullable<IMarketingTemplateInstance>
@@ -199,7 +199,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         deal: property?.type === 'deal' ? property.deal.id : undefined,
         address: property?.type === 'place' ? property.address : undefined,
         instructions: instructions!,
-        ...dateDuration!,
+        // TODO: Shayan thinks we don't need the start_date and end_date fields
+        // so please remove these fields after API
+        start_date: new Date().toISOString(),
+        duration,
         brand: teamId
         // gallery?: IMediaGallery // TODO: use this field to pass gallery id
       })
@@ -219,6 +222,13 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             onFinish={handleFinish}
             styles={{ paddingBottom: '50%' }}
           >
+            <ShowingStepDurationAndAvailabilities
+              duration={duration}
+              onDurationChange={setDuration}
+              availabilities={availabilities}
+              onAvailabilitiesChange={setAvailabilities}
+            />
+
             <ShowingStepIntro />
             <ShowingStepProperty
               property={property}
@@ -342,20 +352,17 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               value={allowAppraisal}
               onChange={setAllowAppraisal}
             />
-            {/* TODO: Need to handle not in the SameDay logic */}
             <ShowingStepAdvanceNotice
               noticePeriod={noticePeriod}
               onNoticePeriodChange={setNoticePeriod}
               sameDayAllowed={sameDayAllowed}
               onSameDayAllowedChange={setSameDayAllowed}
             />
-            <ShowingStepAvailabilities
-              value={availabilities}
-              onChange={setAvailabilities}
-            />
-            <ShowingStepDateAndDuration
-              value={dateDuration}
-              onChange={setDateDuration}
+            <ShowingStepDurationAndAvailabilities
+              duration={duration}
+              onDurationChange={setDuration}
+              availabilities={availabilities}
+              onAvailabilitiesChange={setAvailabilities}
             />
             {/* <ShowingStepFeedbackTemplate
               value={feedbackTemplate}
