@@ -23,7 +23,7 @@ const useStyles = makeStyles(
 )
 
 export interface ShowingBookingListColumnActionsProps
-  extends ShowingBookingListApprovalButtonProps {
+  extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'> {
   className?: string
   appointmentId: UUID
   status: IShowingAppointmentStatus
@@ -72,11 +72,12 @@ function ShowingBookingListColumnActions({
     })
   }
 
-  const handleReject = () => {
+  const handleReject = (comment?: string) => {
     run(async () => {
       const appointment = await rejectShowingAppointment(
         showing.id,
-        appointmentId
+        appointmentId,
+        comment
       )
 
       await ackNotifications(
@@ -126,17 +127,16 @@ function ShowingBookingListColumnActions({
             onClick={handleApprove}
             disabled={isLoading}
             approvals={approvals}
-          >
-            Approve
-          </ShowingBookingListApprovalButton>
+            label="Approve"
+          />
           <ShowingBookingListApprovalButton
             {...sharedButtonProps}
             showing={showing}
             onClick={handleReject}
             disabled={isLoading}
-          >
-            Reject
-          </ShowingBookingListApprovalButton>
+            label="Reject"
+            hasConfirmation
+          />
         </>
       )}
       {status === 'Confirmed' && (
@@ -145,9 +145,10 @@ function ShowingBookingListColumnActions({
           showing={showing}
           onClick={handleReject}
           disabled={isLoading}
-        >
-          Cancel
-        </ShowingBookingListApprovalButton>
+          label="Cancel"
+          hasConfirmation
+          confirmationAction="Cancel booking"
+        />
       )}
       {notificationMode && status === 'Canceled' && (
         <ShowingBookingListApprovalButton
@@ -155,9 +156,8 @@ function ShowingBookingListColumnActions({
           showing={showing}
           onClick={handleDismiss}
           disabled={isLoading}
-        >
-          Dismiss
-        </ShowingBookingListApprovalButton>
+          label="Dismiss"
+        />
       )}
       {status === 'Completed' && hasFeedback && (
         <Button {...sharedButtonProps}>View Feedback</Button>
