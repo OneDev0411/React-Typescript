@@ -391,7 +391,19 @@ class Builder extends React.Component {
       components.addType(name, {
         view: component.view.extend({
           events: {
-            dblclick: () => {
+            dblclick: event => {
+              const currentSelectedDOMElement = this.editor
+                .getSelected()
+                .getEl()
+              const eventTarget = event.target
+
+              // In order to make sure we're not changing another image element
+              // when we have a selectable image element selected
+              // and we're dbl clicking on an unselectable image
+              if (currentSelectedDOMElement !== eventTarget) {
+                return
+              }
+
               this.setState({ isImageSelectDialogOpen: true })
             }
           }
