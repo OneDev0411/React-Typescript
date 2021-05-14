@@ -2,16 +2,20 @@ import moment from 'moment'
 
 import { IconButton, Theme, Tooltip, useTheme } from '@material-ui/core'
 
-import {
-  mdiFolderOutline,
-  mdiAlertCircle,
-  mdiCloseCircle,
-  mdiCheckboxMarkedCircle,
-  mdiFolderOpenOutline
-} from '@mdi/js'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import {
+  dealApprovedFolder,
+  dealApprovedFolderOpen,
+  dealDeclinedFolderOpen,
+  dealDeclinedFolder,
+  dealDefaultFolder,
+  dealDefaultFolderOpen,
+  dealNotifiedFolder,
+  dealNotifiedFolderOpen,
+  dealRequiredFolder,
+  dealRequiredFolderOpen
+} from 'components/SvgIcons/icons'
 
 interface Props {
   deal: IDeal
@@ -49,10 +53,12 @@ export function TaskIcon({
   }
 
   if (isBackOffice && (status === 'Submitted' || task.attention_requested)) {
+    tooltip = ''
     status = 'Needs Attention'
   }
 
   if (!isBackOffice && status !== 'Submitted' && task.attention_requested) {
+    tooltip = ''
     status = deal.is_draft ? 'Pending' : 'Notified'
   }
 
@@ -61,7 +67,7 @@ export function TaskIcon({
   }
 
   return (
-    <Tooltip title={tooltip || status}>
+    <Tooltip title={tooltip || status} placement="left">
       <IconButton onClick={onClick}>
         {getIcon(isTaskExpanded, status, theme)}
       </IconButton>
@@ -75,7 +81,7 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.error.main}
-          path={mdiFolderOutline}
+          path={isTaskExpanded ? dealRequiredFolderOpen : dealRequiredFolder}
           size={muiIconSizes.medium}
         />
       )
@@ -87,7 +93,7 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.warning.main}
-          path={mdiAlertCircle}
+          path={isTaskExpanded ? dealNotifiedFolderOpen : dealNotifiedFolder}
           size={muiIconSizes.medium}
         />
       )
@@ -96,7 +102,7 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.error.main}
-          path={mdiCloseCircle}
+          path={isTaskExpanded ? dealDeclinedFolderOpen : dealDeclinedFolder}
           size={muiIconSizes.medium}
         />
       )
@@ -105,7 +111,7 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
       return (
         <SvgIcon
           color={theme.palette.success.main}
-          path={mdiCheckboxMarkedCircle}
+          path={isTaskExpanded ? dealApprovedFolderOpen : dealApprovedFolder}
           size={muiIconSizes.medium}
         />
       )
@@ -113,7 +119,7 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
     default:
       return (
         <SvgIcon
-          path={isTaskExpanded ? mdiFolderOpenOutline : mdiFolderOutline}
+          path={isTaskExpanded ? dealDefaultFolderOpen : dealDefaultFolder}
           size={muiIconSizes.medium}
         />
       )
