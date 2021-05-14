@@ -19,7 +19,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
   const list = useMemo(() => (Array.isArray(flows) ? flows : []), [flows])
 
   return (
-    <BasicSection title={list.length > 0 ? 'Flows' : undefined}>
+    <BasicSection title="Flows">
       {list.length > 0 && <List items={list} onStop={onStop} />}
       <AddToFlowButton
         activeFlows={[]}

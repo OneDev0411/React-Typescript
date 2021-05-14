@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import { mdiCakeVariant } from '@mdi/js'
-
 import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
 
@@ -63,7 +61,6 @@ export function Dates({ contact, submitCallback }: Props) {
       submitCallback={submitCallback}
       title="Touch Dates"
       expandButtonLabel="Add Birthdays & Anniversaries"
-      expandButtonIcon={mdiCakeVariant}
     >
       {isLoading ? (
         <Loading />
