@@ -3,6 +3,7 @@
 exports[`Contact profile last touched component renders 1`] = `
 <div
   class="MuiBox-root-2 MuiBox-root-3 makeStyles-wrapper-1"
+  data-tour-id="last-touch"
 >
   <span>
     Last Touch was 

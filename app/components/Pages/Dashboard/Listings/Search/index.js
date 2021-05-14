@@ -5,6 +5,10 @@ import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
 
+import { withStyles } from '@material-ui/core/styles'
+
+import GlobalPageLayout from 'components/GlobalPageLayout'
+
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -51,6 +55,16 @@ import CreateTourAction from './components/CreateTourAction'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
+
+const styles = () => ({
+  mlsContainer: {
+    display: 'flex',
+    height: '100vh',
+    flexDirection: 'column',
+    paddingTop: 0,
+    paddingBottom: 0
+  }
+})
 
 class Search extends React.Component {
   constructor(props) {
@@ -408,9 +422,10 @@ class Search extends React.Component {
 
   render() {
     const { user, isWidget } = this.props
+    const { classes } = this.props
 
     return (
-      <>
+      <GlobalPageLayout className={classes.mlsContainer}>
         <Header
           isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
@@ -435,7 +450,7 @@ class Search extends React.Component {
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={this.props.listings.info.proposed_title}
         />
-      </>
+      </GlobalPageLayout>
     )
   }
 }
@@ -457,6 +472,8 @@ const mapStateToProps = ({ user, search }) => {
   }
 }
 
-export default connect(mapStateToProps)(Search)
+export default withStyles(styles, { withTheme: true })(
+  connect(mapStateToProps)(Search)
+)
 
 // todo: refactor initmap when there is a querystring

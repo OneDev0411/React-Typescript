@@ -16,11 +16,12 @@ import Footer from './components/Footer'
 const initialState = {
   isSearching: false,
   searchResults: [],
-  error: null
+  error: null,
+  isSearchInputEverClicked: false
 }
 
 /**
- * Motes and known issues:
+ * Notes and known issues:
  * - Doesn't clean up on drawer close and re-open, needs conditional rendering
  * which kills animation and is misleading also as we have an isOpen prop
  * - search filter is not sticky
@@ -116,6 +117,14 @@ class SearchDrawer extends React.Component {
     this.inputRef.current.clear()
   }
 
+  handleClickSearchInput = () => {
+    if (this.state.isSearchInputEverClicked) {
+      return
+    }
+
+    this.setState({ isSearchInputEverClicked: true })
+  }
+
   handleAddNewItem = item => {
     const normalized = this.props.normalizeSelectedItem(item)
 
@@ -165,7 +174,7 @@ class SearchDrawer extends React.Component {
     return (
       <Drawer open={this.props.isOpen} onClose={this.handleClose}>
         <Drawer.Header title={this.props.title} />
-        <Drawer.Body style={{ overflow: 'auto' }}>
+        <Drawer.Body style={{ overflowX: 'hidden' }}>
           <Downshift
             render={({ getItemProps }) => (
               <div style={{ position: 'relative' }}>
@@ -173,11 +182,15 @@ class SearchDrawer extends React.Component {
                   <SearchInput
                     fullWidth
                     ref={this.inputRef}
+                    onClick={this.handleClickSearchInput}
                     onChange={this.handleSearch}
                     onClear={this.handleClear}
                     {...this.props.searchInputOptions}
                   />
                 </Box>
+                {this.props.renderSearchNotices &&
+                  this.state.isSearchInputEverClicked &&
+                  this.props.renderSearchNotices()}
                 {(isSearching || showLoadingIndicator) && <Loading />}
                 <SearchResultList
                   isLoading={this.props.showLoadingIndicator}

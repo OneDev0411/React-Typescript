@@ -102,7 +102,8 @@ class Body extends Component {
                   inputProps={{
                     ...getInputProps({
                       onChange: this.handleOnChange,
-                      placeholder: 'Search for a contact...'
+                      placeholder: 'Search for a contact...',
+                      'data-tour-id': 'search-contact'
                     })
                   }}
                 />

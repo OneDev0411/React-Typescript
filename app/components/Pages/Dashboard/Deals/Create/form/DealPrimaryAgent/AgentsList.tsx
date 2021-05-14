@@ -75,33 +75,35 @@ export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
               />
             </Box>
 
-            {teams.map((team, index) => (
-              <div key={index}>
-                {teams.length > 1 && (
-                  <Box ml={1} my={1}>
-                    <Typography variant="subtitle2">{team.name}</Typography>
-                    <Typography variant="caption">{team.subtitle}</Typography>
-                  </Box>
-                )}
+            {(searchCriteria.length >= 3 ? teams : teams.slice(0, 15)).map(
+              (team, index) => (
+                <div key={index}>
+                  {(searchCriteria || teams.length > 1) && (
+                    <Box ml={1} my={1}>
+                      <Typography variant="subtitle2">{team.name}</Typography>
+                      <Typography variant="caption">{team.subtitle}</Typography>
+                    </Box>
+                  )}
 
-                {team.users.map(agent => (
-                  <UserRow
-                    key={agent.id}
-                    name={agent.display_name}
-                    email={agent.email}
-                    avatarUrl={agent.profile_image_url!}
-                    onClick={() =>
-                      onSelectRole(
-                        convertUserAgentToRole({
-                          ...agent,
-                          brand_id: isOfficeDoubleEnded ? null : team.id
-                        })
-                      )
-                    }
-                  />
-                ))}
-              </div>
-            ))}
+                  {team.users.map(agent => (
+                    <UserRow
+                      key={agent.id}
+                      name={agent.display_name}
+                      email={agent.email}
+                      avatarUrl={agent.profile_image_url!}
+                      onClick={() =>
+                        onSelectRole(
+                          convertUserAgentToRole({
+                            ...agent,
+                            brand_id: isOfficeDoubleEnded ? null : team.id
+                          })
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+              )
+            )}
           </div>
         )
       }

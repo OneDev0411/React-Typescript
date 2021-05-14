@@ -119,6 +119,7 @@ export const ContactsTabs = ({
           <Tab
             key="all-contact"
             value="all-contact"
+            data-tour-id="all-contacts"
             label={
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
@@ -126,11 +127,13 @@ export const ContactsTabs = ({
           <Tab
             key="saved-list"
             value="saved-list"
+            data-tour-id="saved-list"
             label={<SavedSegments {...savedListProps} />}
           />,
           <Tab
             key="tag-list"
             value="tag-list"
+            data-tour-id="tags-list"
             label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
