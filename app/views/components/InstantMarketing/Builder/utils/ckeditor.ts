@@ -100,6 +100,9 @@ export async function attachCKEditor(
     throw new Error('CKEDITOR instance not found')
   }
 
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.a = 1
+
   editor.setCustomRte({
     enable(el, rte) {
       // If already exists I'll just focus on it
@@ -187,11 +190,8 @@ export async function attachCKEditor(
     disable(el, rte) {
       el.contentEditable = false
 
-      // if (rte && rte.focusManager) {
-      //   rte.focusManager.blur(true)
-      // }
-      if (rte && rte.status !== 'destroyed') {
-        rte.destroy()
+      if (rte && rte.focusManager) {
+        rte.focusManager.blur(true)
       }
     },
 
