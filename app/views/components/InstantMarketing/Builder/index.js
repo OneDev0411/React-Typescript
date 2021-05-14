@@ -273,9 +273,9 @@ class Builder extends React.Component {
       return
     }
 
-    const templateOptions = await getTemplateOptions(this.selectedTemplate)
-
-    this.selectedTemplateOptions = templateOptions
+    this.selectedTemplateOptions = await getTemplateOptions(
+      this.selectedTemplate
+    )
   }
 
   get selectedTemplateFonts() {
