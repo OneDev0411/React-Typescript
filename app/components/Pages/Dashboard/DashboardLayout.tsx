@@ -10,10 +10,10 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     main: {
-      width: '100%',
       minHeight: '100vh',
       flexGrow: 1,
-      overflow: 'hidden'
+      display: 'flex',
+      flexDirection: 'column'
     }
   }),
   { name: 'MainWrapper' }

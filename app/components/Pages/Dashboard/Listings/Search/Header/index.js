@@ -13,11 +13,10 @@ import Autocomplete from '../components/Autocomplete'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      paddingBottom: theme.spacing(3),
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
       [theme.breakpoints.up('md')]: {
-        display: 'flex',
-        paddingBottom: 0,
-        height: theme.spacing(14)
+        display: 'flex'
       }
     },
     body: {

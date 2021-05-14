@@ -32,12 +32,10 @@ import ListingCardMedia from './ListingCardMedia'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    card: {
-      width: '100%'
-    },
     labelChip: {
       backgroundColor: theme.palette.common.white,
-      marginLeft: theme.spacing(0.5)
+      paddingLeft: theme.spacing(1),
+      paddingTop: theme.spacing(1)
     },
     labelChipLabel: {
       lineHeight: 1
@@ -190,7 +188,7 @@ export default function ListingCard({
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
   return (
-    <Card variant="outlined" className={classes.card} onClick={onClick}>
+    <Card variant="outlined" onClick={onClick}>
       <CardActionArea>
         <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
@@ -265,7 +263,7 @@ export default function ListingCard({
                     variant="outlined"
                     className={classes.statusChip}
                     icon={
-                      <Box flex>
+                      <Box display="flex">
                         <Badge
                           variant="dot"
                           classes={{

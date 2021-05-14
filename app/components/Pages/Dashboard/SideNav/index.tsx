@@ -9,13 +9,13 @@ import { Menu } from './Menu'
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     [theme.breakpoints.up('md')]: {
-      width: appSidenavWidth,
+      flexBasis: appSidenavWidth,
       flexShrink: 0
     },
     zIndex: theme.zIndex.sideNavDrawer
   },
   drawerPaper: {
-    width: appSidenavWidth
+    flexBasis: appSidenavWidth
   }
 }))
 
