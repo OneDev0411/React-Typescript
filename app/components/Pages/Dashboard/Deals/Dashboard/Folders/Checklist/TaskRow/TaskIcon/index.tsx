@@ -46,10 +46,13 @@ export function TaskIcon({
 
     const reviewTime = moment.unix(task.review.created_at)
 
-    tooltip = 'Status: '
-    tooltip += reviewTime.isValid()
-      ? `(${status}, ${reviewTime.format('MMMM DD, YY [at] hh:mm A')})`
+    tooltip = reviewTime.isValid()
+      ? `${status}, ${reviewTime.format('MMMM DD, YY [at] hh:mm A')}`
       : `${status}`
+  }
+
+  if (['Approved', 'Declined'].includes(status) === false && task.required) {
+    status = 'Required'
   }
 
   if (isBackOffice && (status === 'Submitted' || task.attention_requested)) {
@@ -60,10 +63,6 @@ export function TaskIcon({
   if (!isBackOffice && status !== 'Submitted' && task.attention_requested) {
     tooltip = ''
     status = deal.is_draft ? 'Pending' : 'Notified'
-  }
-
-  if (status !== 'Approved' && task.required) {
-    status = 'Required'
   }
 
   return (
@@ -77,15 +76,6 @@ export function TaskIcon({
 
 function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
   switch (status) {
-    case 'Required':
-      return (
-        <SvgIcon
-          color={theme.palette.error.main}
-          path={isTaskExpanded ? dealRequiredFolderOpen : dealRequiredFolder}
-          size={muiIconSizes.medium}
-        />
-      )
-
     case 'Pending':
     case 'Submitted':
     case 'Notified':
@@ -112,6 +102,15 @@ function getIcon(isTaskExpanded: boolean, status: string, theme: Theme) {
         <SvgIcon
           color={theme.palette.success.main}
           path={isTaskExpanded ? dealApprovedFolderOpen : dealApprovedFolder}
+          size={muiIconSizes.medium}
+        />
+      )
+
+    case 'Required':
+      return (
+        <SvgIcon
+          color={theme.palette.error.main}
+          path={isTaskExpanded ? dealRequiredFolderOpen : dealRequiredFolder}
           size={muiIconSizes.medium}
         />
       )
