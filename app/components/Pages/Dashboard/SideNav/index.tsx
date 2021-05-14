@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Drawer, Hidden, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { appSidenavWidth } from './variables'
 
@@ -30,35 +30,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
 
   return (
     <nav className={classes.drawer} aria-label="menu">
-      <Hidden mdUp implementation="css">
-        <Drawer
-          container={document.body}
-          variant="temporary"
-          anchor="left"
-          open={isMenuOpen}
-          onClose={onDrawerToggle}
-          classes={{
-            paper: classes.drawerPaper
-          }}
-          ModalProps={{
-            keepMounted: true
-          }}
-        >
-          <Menu />
-        </Drawer>
-      </Hidden>
-
-      <Hidden smDown implementation="css">
-        <Drawer
-          classes={{
-            paper: classes.drawerPaper
-          }}
-          variant="permanent"
-          open
-        >
-          <Menu />
-        </Drawer>
-      </Hidden>
+      <Menu />
     </nav>
   )
 }
