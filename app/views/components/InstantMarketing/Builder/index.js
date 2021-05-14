@@ -298,7 +298,9 @@ class Builder extends React.Component {
       undefined,
       opts => {
         const currentFonts = opts.font_names ? opts.font_names.split(';') : []
-        const allFonts = [...currentFonts, ...this.state.extraTextEditorFonts]
+        const allFonts = [
+          ...new Set([...this.state.extraTextEditorFonts, ...currentFonts])
+        ]
 
         return {
           font_names: allFonts.join(';')
