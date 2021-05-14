@@ -1,19 +1,11 @@
-import getShowings from './get-showings'
+import Fetch from 'services/fetch'
 
 async function getShowingTotalNotificationCount(): Promise<number> {
-  // TODO: implement this request
-  const showings = await getShowings()
+  const response = await new Fetch()
+    .get('/showings/notifications')
+    .query({ limit: 1 })
 
-  return showings.reduce<number>(
-    (totalCount, showing) =>
-      totalCount +
-      (showing.appointments?.reduce<number>(
-        (count, appointment) =>
-          count + (appointment.notifications?.length ?? 0),
-        0
-      ) ?? 0),
-    0
-  )
+  return response.body?.info?.total || 0
 }
 
 export default getShowingTotalNotificationCount
