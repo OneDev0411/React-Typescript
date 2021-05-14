@@ -15,24 +15,23 @@ import registerBlock from './registerBlock'
 
 async function getTemplateBlockBase(
   templateBlock: TemplateBlockBase,
-  templateUrl: string
-) {
+  template: IMarketingTemplate
+): Promise<Nullable<string>> {
   const response = await fetch(
-    `${templateUrl}/blocks/${templateBlock.category}/${templateBlock.name}.html`
+    `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
   )
 
   if (response.status === 404) {
     return null
   }
 
-  const template = await response.text()
-
-  return template
+  return response.text()
 }
 
 export async function getTemplateBlockOptions(
-  templateUrl: string
+  template: IMarketingTemplate
 ): Promise<TemplateBlockOptions> {
+  const templateUrl = template.url
   const response = await fetch(`${templateUrl}/blocks.json`)
 
   try {
@@ -45,7 +44,7 @@ export async function getTemplateBlockOptions(
             ...templateBlock,
             icon: `${templateUrl}/${templateBlock.icon}`,
             template:
-              (await getTemplateBlockBase(templateBlock, templateUrl)) ?? ''
+              (await getTemplateBlockBase(templateBlock, template)) ?? ''
           } as TemplateBlock)
       )
     )
@@ -101,4 +100,19 @@ export function registerTemplateBlocks(
         [blockName]: templateBlocks[blockName].template
       }
     }, registeredBlocks)
+}
+
+export async function getTemplateExtraTextEditorFonts(
+  template: IMarketingTemplate
+): Promise<string[]> {
+  const templateUrl = template.url
+  const response = await fetch(`${templateUrl}/blocks.json`)
+
+  try {
+    const blockOptions = (await response.json()) as TemplateBlockBaseOptions
+
+    return blockOptions.textEditor?.extraFonts ?? []
+  } catch (e) {
+    return []
+  }
 }

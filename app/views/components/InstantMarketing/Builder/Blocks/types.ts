@@ -23,6 +23,9 @@ export interface TemplateBlockBase {
 export interface TemplateBlockBaseOptions {
   blocks: TemplateBlockBase[]
   disableDefault?: string[] | true
+  textEditor?: {
+    extraFonts?: string[]
+  }
 }
 
 export interface TemplateBlock extends TemplateBlockBase {
