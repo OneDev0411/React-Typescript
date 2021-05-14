@@ -4,6 +4,10 @@ import { browserHistory } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
 
+import { withStyles } from '@material-ui/core/styles'
+
+import GlobalPageLayout from 'components/GlobalPageLayout'
+
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
 
@@ -29,6 +33,16 @@ import Tabs from '../components/Tabs'
 import MapView from '../components/MapView'
 import ListView from '../components/ListView'
 import GridView from '../components/GridView'
+
+const styles = () => ({
+  mlsContainer: {
+    display: 'flex',
+    height: '100vh',
+    flexDirection: 'column',
+    paddingTop: 0,
+    paddingBottom: 0
+  }
+})
 
 class Favorites extends React.Component {
   constructor(props) {
@@ -131,20 +145,24 @@ class Favorites extends React.Component {
   }
 
   render() {
+    const { classes } = this.props
+
     return (
       <>
         <Helmet>
           <title>Favorites | Properties | Rechat</title>
         </Helmet>
-        <Header title="Favorites" />
-        <Tabs
-          onChangeView={this.onChangeView}
-          activeView={this.state.activeView}
-          onChangeSort={this.onChangeSort}
-          activeSort={this.state.activeSort}
-          user={this.props.user}
-        />
-        {this.renderMain()}
+        <GlobalPageLayout className={classes.mlsContainer}>
+          <Header title="Favorites" />
+          <Tabs
+            onChangeView={this.onChangeView}
+            activeView={this.state.activeView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
+            user={this.props.user}
+          />
+          {this.renderMain()}
+        </GlobalPageLayout>
       </>
     )
   }
@@ -163,7 +181,6 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { getFavorites, getUserTeams }
-)(Favorites)
+export default withStyles(styles, { withTheme: true })(
+  connect(mapStateToProps, { getFavorites, getUserTeams })(Favorites)
+)

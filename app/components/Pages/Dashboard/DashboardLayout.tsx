@@ -10,10 +10,15 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     main: {
-      width: '100%',
       minHeight: '100vh',
       flexGrow: 1,
-      overflow: 'hidden'
+      display: 'flex',
+      flexDirection: 'column',
+      // I hate using calc and it's totally wrong.
+      // I'm currently a release blocker and don't have time to
+      // properly fix it.
+      // TODO
+      width: 'calc(100% - 192px)'
     }
   }),
   { name: 'MainWrapper' }

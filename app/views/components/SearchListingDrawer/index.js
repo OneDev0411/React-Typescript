@@ -251,6 +251,9 @@ SearchListingDrawer.propTypes = {
   allowedStatuses: PropTypes.array,
   withMlsDisclaimer: PropTypes.bool,
   title: PropTypes.string,
+  onSelectListingsCallback: PropTypes.func,
+  onSelect: PropTypes.func,
+  renderAction: PropTypes.func,
   defaultLists: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
