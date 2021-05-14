@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   drawer: {
     [theme.breakpoints.up('md')]: {
       flexBasis: appSidenavWidth,
+      width: appSidenavWidth,
       flexShrink: 0
     },
     zIndex: theme.zIndex.sideNavDrawer
