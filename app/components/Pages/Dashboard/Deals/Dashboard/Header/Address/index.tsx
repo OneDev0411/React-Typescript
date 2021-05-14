@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import {
+  Box,
   TextField,
   Button,
   Tooltip,
@@ -25,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center'
     },
     editButton: {
-      marginLeft: theme.spacing(1)
+      padding: 0,
+      margin: 0
     },
     addressInput: {
       width: '18rem'
@@ -48,6 +50,7 @@ export function Address(props: Props) {
   const cancelEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
   const fullAddress = getField(props.deal, 'full_address')
+  const zipcode = getField(props.deal, 'postal_code')
   const addressTitle = (fullAddress || props.deal.title).split(',')
 
   const handleSave = async address => {
@@ -102,18 +105,23 @@ export function Address(props: Props) {
           placement="bottom"
         >
           <div className={classes.container} onClick={editAddress}>
-            <div>
+            <Box display="flex" alignItems="center">
               <Typography variant="subtitle1">{addressTitle[0]}</Typography>
 
-              {addressTitle.length > 1 && (
-                <Typography
-                  variant="subtitle2"
-                  className={classes.addressSecondary}
-                >
-                  {addressTitle.slice(1, addressTitle.length - 1).join(', ')}
-                </Typography>
-              )}
-            </div>
+              <Box ml={0.5}>
+                {addressTitle.length > 1 && (
+                  <Typography
+                    variant="subtitle2"
+                    className={classes.addressSecondary}
+                  >
+                    {addressTitle
+                      .slice(1, addressTitle.length - 1)
+                      .concat(zipcode)
+                      .join(', ')}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
 
             {!props.deal.listing && (
               <Button
