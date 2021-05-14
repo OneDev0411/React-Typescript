@@ -175,6 +175,7 @@ class Builder extends React.Component {
 
   async componentDidMount() {
     await this.loadCKEditor()
+    await this.loadTemplateOptions()
 
     const { Grapesjs, GrapesjsMjml } = await loadGrapesjs()
 
@@ -451,7 +452,7 @@ class Builder extends React.Component {
     this.scrollSidebarToTopOnComponentSelect()
 
     if (this.isEmailTemplate && this.isMjmlTemplate) {
-      this.registerEmailBlocks()
+      await this.registerEmailBlocks()
     }
 
     if (this.isWebsiteTemplate) {
@@ -969,7 +970,9 @@ class Builder extends React.Component {
         originalTemplate: templateItem,
         selectedTemplate: templateItem
       },
-      () => {
+      async () => {
+        await this.loadTemplateOptions()
+
         this.regenerateTemplate({
           user: this.props.templateData.user
         })
@@ -1125,7 +1128,6 @@ class Builder extends React.Component {
         }
       }),
       async () => {
-        await this.loadTemplateOptions()
         this.refreshEditor(this.state.selectedTemplate)
       }
     )
