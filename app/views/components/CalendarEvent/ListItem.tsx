@@ -61,6 +61,8 @@ export default function CalendarEventListItem({ event }: Props) {
       ? event.people[0]
       : null
 
+  linkTitle = event.title
+
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
 
   if (contact) {
@@ -71,17 +73,18 @@ export default function CalendarEventListItem({ event }: Props) {
     )
     linkTitle = (
       <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
-        {event.title}
+        {linkTitle}
       </Link>
     )
-  } else {
+  } else if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
     avatarIcon = (
       <CustomizedMuiAvatar>
         <Icon />
       </CustomizedMuiAvatar>
     )
-    linkTitle = event.title
+  } else {
+    avatarIcon = <CustomizedMuiAvatar />
   }
 
   return (
