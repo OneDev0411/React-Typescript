@@ -12,13 +12,10 @@ const useStyles = makeStyles(
     container: {
       marginBottom: theme.spacing(3)
     },
-    lastTouch: {
-      display: 'inline-flex',
-      alignItems: 'flex-start'
-    },
     icon: {
-      marginTop: '3px',
-      marginRight: theme.spacing(1),
+      position: 'relative',
+      top: theme.spacing(0.5),
+      marginLeft: theme.spacing(1),
       color: theme.palette.grey[900]
     }
   }),
@@ -34,16 +31,13 @@ export const LastTouch = ({ contact }: Props) => {
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.lastTouch}>
-        <Box width="1.5rem">
-          <SvgIcon
-            path={mdiInformationOutline}
-            size={muiIconSizes.small}
-            className={classes.icon}
-          />
-        </Box>
-        <LastTouched contact={contact} />
-      </Box>
+      <LastTouched contact={contact}>
+        <SvgIcon
+          path={mdiInformationOutline}
+          size={muiIconSizes.small}
+          className={classes.icon}
+        />
+      </LastTouched>
     </Box>
   )
 }

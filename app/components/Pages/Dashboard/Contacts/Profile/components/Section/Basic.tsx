@@ -6,7 +6,7 @@ const useStyles = makeStyles(
     container: {
       marginBottom: (props: Props) => {
         if (props.title) {
-          return theme.spacing(3)
+          return theme.spacing(3.5)
         }
 
         return theme.spacing(1)

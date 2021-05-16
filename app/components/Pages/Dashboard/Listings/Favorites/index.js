@@ -163,7 +163,6 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { getFavorites, getUserTeams }
-)(Favorites)
+export default connect(mapStateToProps, { getFavorites, getUserTeams })(
+  Favorites
+)

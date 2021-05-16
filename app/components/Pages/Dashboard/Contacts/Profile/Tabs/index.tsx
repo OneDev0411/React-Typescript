@@ -1,5 +1,7 @@
 import React from 'react'
-import { Box, Tab, Tabs as MUITabs, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
+
+import { PageTabs, Tab } from 'components/PageTabs'
 
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
@@ -30,19 +32,25 @@ export const Tabs = ({ contact, activeFilter, onChangeFilter }: Props) => {
 
   return (
     <Box className={classes.container}>
-      <MUITabs
+      <PageTabs
         value={activeFilter}
-        onChange={(e, value) => onChangeFilter(value)}
-        textColor="primary"
-        indicatorColor="primary"
-      >
-        <Tab value={Filters.Events} label="Events" className={classes.tab} />
-        <Tab
-          value={Filters.Notes}
-          label={`Notes (${notes.length})`}
-          className={classes.tab}
-        />
-      </MUITabs>
+        defaultValue={activeFilter}
+        tabs={[
+          <Tab
+            key="events"
+            value={Filters.Events}
+            label="Events"
+            className={classes.tab}
+          />,
+          <Tab
+            key="notes"
+            value={Filters.Notes}
+            label={`Notes (${notes.length})`}
+            className={classes.tab}
+          />
+        ]}
+        onChange={onChangeFilter}
+      />
     </Box>
   )
 }

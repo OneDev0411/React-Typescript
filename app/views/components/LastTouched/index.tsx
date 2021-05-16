@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import timeago from 'timeago.js'
 import { Typography, Box, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
@@ -17,11 +17,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   contact: IContact
+  children?: ReactNode
 }
 
-export function LastTouched(props: Props) {
+export function LastTouched({ contact, children }: Props) {
   const classes = useStyles()
-  const { last_touch: lastTouch, next_touch: nextTouch } = props.contact
+  const { last_touch: lastTouch, next_touch: nextTouch } = contact
 
   if (!lastTouch) {
     return (
@@ -43,6 +44,7 @@ export function LastTouched(props: Props) {
           <b>{Math.round((nextTouch - lastTouch) / 86400)}</b> days.
         </span>
       )}
+      {children}
     </Box>
   )
 }
