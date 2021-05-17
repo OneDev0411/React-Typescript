@@ -15,50 +15,50 @@ export const appointmentListInfo: Partial<
   All: {
     hasNotifications: true,
     notificationsTitle: 'New Alerts',
-    notificationsEmptyMessage: 'There is no new alert.',
+    notificationsEmptyMessage: 'There are no new alerts.',
     hasBookings: true,
     bookingsTitle: 'All Bookings',
-    bookingsEmptyMessage: 'There is no booking.'
+    bookingsEmptyMessage: 'There are no bookings.'
   },
   Requested: {
     hasNotifications: true,
     notificationsTitle: 'New Requests',
-    notificationsEmptyMessage: 'There is no new request.',
+    notificationsEmptyMessage: 'There are no new requests.',
     hasBookings: true,
     bookingsTitle: 'All Requests',
-    bookingsEmptyMessage: 'There is no request.'
+    bookingsEmptyMessage: 'There are no requests.'
   },
   Confirmed: {
     hasNotifications: true,
     notificationsTitle: 'New Approved',
-    notificationsEmptyMessage: 'There is no new booking.',
+    notificationsEmptyMessage: 'There are no new bookings.',
     hasBookings: true,
     bookingsTitle: 'All Approved',
-    bookingsEmptyMessage: 'There is no booking.'
+    bookingsEmptyMessage: 'There are no bookings.'
   },
   Rescheduled: {
     hasNotifications: true,
     notificationsTitle: 'New Requests',
-    notificationsEmptyMessage: 'There is no new request.',
+    notificationsEmptyMessage: 'There are no new requests.',
     hasBookings: true,
     bookingsTitle: 'All Rescheduled',
-    bookingsEmptyMessage: 'There is no booking.'
+    bookingsEmptyMessage: 'There are no bookings.'
   },
   Canceled: {
     hasNotifications: true,
     notificationsTitle: 'New Cancellation',
-    notificationsEmptyMessage: 'There is no new cancellation.',
+    notificationsEmptyMessage: 'There are no new cancellations.',
     hasBookings: true,
     bookingsTitle: 'Canceled',
-    bookingsEmptyMessage: 'There is no cancellation.'
+    bookingsEmptyMessage: 'There are no cancellations.'
   },
   Feedback: {
     hasNotifications: true,
     notificationsTitle: 'New Feedback',
-    notificationsEmptyMessage: 'There is no new feedback.',
+    notificationsEmptyMessage: 'There are no new feedbacks.',
     hasBookings: true,
     bookingsTitle: 'Feedback',
-    bookingsEmptyMessage: 'There is no feedback.'
+    bookingsEmptyMessage: 'There are no feedbacks.'
   }
 }
 
