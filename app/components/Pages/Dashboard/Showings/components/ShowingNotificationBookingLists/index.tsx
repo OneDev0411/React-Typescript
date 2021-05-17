@@ -86,6 +86,7 @@ function ShowingNotificationBookingLists({
           emptyMessage={bookingsEmptyMessage}
           onApprovalAction={onApprovalAction}
           hasPropertyColumn={hasPropertyColumn}
+          hasPastBookingsFilter
         />
       )}
     </>

@@ -1,5 +1,6 @@
+import { useState, useMemo } from 'react'
 import classNames from 'classnames'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -42,6 +43,7 @@ export interface ShowingBookingListProps
   emptyMessage?: string
   hideEmptyMessage?: boolean
   hasPropertyColumn?: boolean
+  hasPastBookingsFilter?: boolean
 }
 
 function ShowingBookingList({
@@ -52,9 +54,11 @@ function ShowingBookingList({
   hideEmptyMessage = false,
   onApprovalAction,
   hasPropertyColumn = false,
-  onDismissAction
+  onDismissAction,
+  hasPastBookingsFilter = false
 }: ShowingBookingListProps) {
   const classes = useStyles()
+  const [showPastBookings, setShowPastBookings] = useState(false)
 
   const columns: TableColumn<IShowingAppointment>[] = [
     {
@@ -129,26 +133,58 @@ function ShowingBookingList({
     }
   ]
 
+  const toggleShowPastBookings = () => {
+    setShowPastBookings(showPastBookings => !showPastBookings)
+  }
+
+  const visibleRows = useMemo<IShowingAppointment[]>(() => {
+    if (!hasPastBookingsFilter || showPastBookings) {
+      return rows
+    }
+
+    const time = new Date().toISOString()
+
+    return rows.filter(row => row.time >= time)
+  }, [hasPastBookingsFilter, rows, showPastBookings])
+
+  const hasAnyPastRows = useMemo<boolean>(() => {
+    if (!rows.length) {
+      return false
+    }
+
+    const time = new Date().toISOString()
+
+    // This works because the appointment list is sorted by time
+    return rows[0].time < time
+  }, [rows])
+
   if ((!emptyMessage || hideEmptyMessage) && !rows.length) {
     return null
   }
 
   const table = (
-    <Table
-      rows={rows}
-      totalRows={rows.length}
-      columns={columns}
-      EmptyStateComponent={() => (
-        <ShowingBookingListEmptyState message={emptyMessage || ''} />
+    <>
+      {hasPastBookingsFilter && hasAnyPastRows && (
+        <Button size="small" color="secondary" onClick={toggleShowPastBookings}>
+          {showPastBookings ? 'Hide' : 'Show'} Past Bookings
+        </Button>
       )}
-      classes={{
-        row: classNames(
-          classes.rowBase,
-          notificationMode ? classes.notificationRow : classes.row
-        )
-      }}
-      virtualize={false}
-    />
+      <Table
+        rows={visibleRows}
+        totalRows={visibleRows.length}
+        columns={columns}
+        EmptyStateComponent={() => (
+          <ShowingBookingListEmptyState message={emptyMessage || ''} />
+        )}
+        classes={{
+          row: classNames(
+            classes.rowBase,
+            notificationMode ? classes.notificationRow : classes.row
+          )
+        }}
+        virtualize={false}
+      />
+    </>
   )
 
   return title ? (
