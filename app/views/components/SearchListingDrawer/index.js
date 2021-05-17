@@ -120,11 +120,10 @@ class SearchListingDrawer extends React.Component {
 
   searchListing = async value => {
     let response = await searchListings(value)
-    let modifiedResponse
 
     // Search value consisting of 5-8 numbers represents an MLS#
     if (/^[0-9]{5,8}$/.test(value)) {
-      modifiedResponse = response.map(item => ({
+      const modifiedResponse = response.map(item => ({
         ...item.property,
         is_mls_search: true,
         id: item.id,
@@ -132,9 +131,11 @@ class SearchListingDrawer extends React.Component {
         status: item.status,
         cover_image_url: item.cover_image_url
       }))
+
+      response = modifiedResponse
     }
 
-    return modifiedResponse.filter(item => {
+    return response.filter(item => {
       if (item.is_mls_search || !this.props.allowedStatuses.length) {
         return true
       }
