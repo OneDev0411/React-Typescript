@@ -38,7 +38,7 @@ export default function ShowingAppointmentRescheduled({ appointment }: Props) {
           StepIconComponent={() => (
             <div className={cn(classes.stepIconContainer)}>
               <SvgIcon
-                color={theme.palette.common.white}
+                color={theme.palette.primary.main}
                 path={mdiDotsHorizontal}
               />
             </div>
