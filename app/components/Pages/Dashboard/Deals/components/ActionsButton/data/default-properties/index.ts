@@ -142,14 +142,7 @@ export const actionsDefaultProperties = {
       return task.attention_requested ? 'Cancel Notify' : 'Notify Office'
     },
     type: ({ task }) =>
-      task.attention_requested ? 'remove-task-notification' : 'notify-task',
-    condition: ({ is_backoffice, is_task_notified }) => {
-      if (is_backoffice && !is_task_notified) {
-        return false
-      }
-
-      return true
-    }
+      task.attention_requested ? 'remove-task-notification' : 'notify-task'
   },
   [REQUIRE_TASK]: {
     label: ({ task }) =>

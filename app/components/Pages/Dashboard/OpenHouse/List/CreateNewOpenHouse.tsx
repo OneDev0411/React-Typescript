@@ -18,7 +18,8 @@ function CreateNewOpenHouse(props: Props) {
     <>
       <Button
         size="large"
-        variant="outlined"
+        variant="contained"
+        color="primary"
         onClick={() => setIsSearchDrawerOpen(true)}
       >
         Create Registration Page

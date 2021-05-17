@@ -121,7 +121,7 @@ function TemplatesList(props) {
                 handlePreview={() => {
                   setPreviewModalOpen(true)
                   setSelectedTemplate(template)
-                  props.onSelect(template)
+                  props.onSelect && props.onSelect(template)
                 }}
                 actions={
                   isTemplateInstance(template) ? (
@@ -145,7 +145,7 @@ function TemplatesList(props) {
                         setActionTriggered(true)
                         setEditActionTriggered(false)
                         setSelectedTemplate(template)
-                        props.onSelect(template)
+                        props.onSelect && props.onSelect(template)
                       }}
                     />
                   )
@@ -182,11 +182,11 @@ function TemplatesList(props) {
         }
         onClose={() => {
           setPreviewModalOpen(false)
-          props.onSelect(null)
+          props.onSelect && props.onSelect(null)
         }}
         setSelectedTemplate={template => {
           setSelectedTemplate(template)
-          props.onSelect(template)
+          props.onSelect && props.onSelect(template)
         }}
       />
 
@@ -199,7 +199,7 @@ function TemplatesList(props) {
           setActionTriggered(value)
 
           setPreviewModalOpen(false)
-          props.onSelect(null)
+          props.onSelect && props.onSelect(null)
         }}
         setEditActionTriggered={setEditActionTriggered}
         selectedTemplate={selectedTemplate}

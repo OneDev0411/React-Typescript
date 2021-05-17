@@ -26,14 +26,18 @@ export function LastTouched({ contact, children }: Props) {
 
   if (!lastTouch) {
     return (
-      <Typography variant="body2" className={classes.label}>
+      <Typography
+        variant="body2"
+        className={classes.label}
+        data-tour-id="last-touch"
+      >
         You have not added any touches for this contact.
       </Typography>
     )
   }
 
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} data-tour-id="last-touch">
       <span>
         Last Touch was <b>{timeago().format(lastTouch * 1000)}</b>
         {!nextTouch && '.'}

@@ -133,9 +133,11 @@ export function ShareListings() {
       {isListingDrawerOpen && (
         <SearchListingDrawer
           isOpen
+          withMlsDisclaimer
           title="Manage Listings"
           allowSkip={false}
           multipleSelection
+          // @ts-ignore
           defaultSelectedItems={getDefaultSelectedItems()}
           onSelectListingsCallback={handleUpdateSelectedListings}
           renderAction={({ buttonProps }) => (

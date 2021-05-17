@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, CircularProgress, Box } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import Drawer from 'components/OverlayDrawer'
 import TeamAgents from 'components/TeamAgents'
 import { Agent, BrandedUser } from 'components/TeamAgents/types'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+
+import Drawer from 'components/OverlayDrawer'
 
 import { AgentsList } from './List'
 
@@ -128,7 +129,7 @@ export function TeamAgentsDrawer({
                 </Box>
               )}
 
-              {!isEmptyState && (
+              {!isEmptyState && !isLoading && (
                 <AgentsList
                   teams={teams}
                   searchCriteria={searchCriteria}

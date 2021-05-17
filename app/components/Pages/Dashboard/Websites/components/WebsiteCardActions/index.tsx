@@ -30,21 +30,22 @@ function WebsiteCardActions({
   return (
     <div className={cn(classes.root, className)}>
       <div>
-        <Button
-          color="primary"
-          variant="contained"
-          size="small"
-          className={cn(classes.button, classes.linkButton)}
-          href={link}
-          target="_blank"
-        >
-          <SiteLinkIcon
-            fillColor="#fff"
-            className={cn(iconClasses.small, iconClasses.rightMargin)}
-          />
-          Go To Site
-        </Button>
-
+        {link && (
+          <Button
+            color="primary"
+            variant="contained"
+            size="small"
+            className={cn(classes.button, classes.linkButton)}
+            href={link}
+            target="_blank"
+          >
+            <SiteLinkIcon
+              fillColor="#fff"
+              className={cn(iconClasses.small, iconClasses.rightMargin)}
+            />
+            Go To Site
+          </Button>
+        )}
         <Button
           color="secondary"
           variant="contained"

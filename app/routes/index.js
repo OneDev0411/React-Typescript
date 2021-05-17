@@ -171,7 +171,7 @@ const AsyncDashboardOverview = withAcl(
         '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
       )
   }),
-  user => user.email === 'shayan@rechat.com'
+  { oneOf: [ACL.DEALS, ACL.CRM] }
 )
 
 /* ==================================== */
@@ -805,8 +805,8 @@ export default (
 
         <Route path="calendar(/:id)" component={AsyncCalendar} />
 
-        <Route component={AsyncContacts} path="contacts" />
-        <Route component={AsyncDuplicateContacts} path="contacts/duplicates" />
+        <Route path="contacts" component={AsyncContacts} />
+        <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
