@@ -16,7 +16,7 @@ function useShowingDismissAppointmentNotifications(
 ): UseShowingDismissAppointmentNotifications {
   const dispatch = useDispatch()
 
-  return async ({ appointmentId, notificationCount }: DismissActionParams) => {
+  return ({ appointmentId, notificationCount }: DismissActionParams) => {
     updateAppointmentState(setShowing, appointmentId, appointment => ({
       ...appointment,
       notifications: null
