@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
 import uniq from 'lodash/uniq'
 
@@ -26,15 +27,13 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Board'
+    name: 'Board-Container'
   }
 )
 
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
 
 import { BoardColumn } from './Column'
-
-import { useDispatch } from 'react-redux'
 
 const Columns = ['Warm', 'Hot', 'Passed Client']
 

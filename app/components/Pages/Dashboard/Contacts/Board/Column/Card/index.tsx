@@ -88,7 +88,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Contacts-Board-Column'
+    name: 'Board-Column-Card'
   }
 )
 
