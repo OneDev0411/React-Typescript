@@ -5,4 +5,5 @@ declare interface IShowingAppointment
   contact: IContact
   approvals: Nullable<IShowingApproval[]>
   notifications: Nullable<INotification[]>
+  buyer_message: Nullable<string>
 }

@@ -122,6 +122,8 @@ function ShowingBookingList({
           hasFeedback={false} // TODO: use this from the API response
           notificationMode={notificationMode}
           onDismissAction={onDismissAction}
+          buyerName={row.contact.display_name}
+          buyerMessage={row.buyer_message}
         />
       )
     }

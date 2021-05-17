@@ -13,6 +13,9 @@ import ShowingBookingListApprovalButton, {
   ShowingBookingListApprovalButtonProps
 } from './ShowingBookingListApprovalButton'
 import { ApprovalActionParams, DismissActionParams } from '../../types'
+import ShowingBookingListRejectMessage, {
+  ShowingBookingListRejectMessageProps
+} from './ShowingBookingListRejectMessage'
 
 const useStyles = makeStyles(
   theme => ({
@@ -23,7 +26,8 @@ const useStyles = makeStyles(
 )
 
 export interface ShowingBookingListColumnActionsProps
-  extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'> {
+  extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'>,
+    Pick<ShowingBookingListRejectMessageProps, 'buyerName' | 'buyerMessage'> {
   className?: string
   appointmentId: UUID
   status: IShowingAppointmentStatus
@@ -44,7 +48,9 @@ function ShowingBookingListColumnActions({
   approvals,
   notifications,
   notificationMode,
-  onDismissAction
+  onDismissAction,
+  buyerMessage,
+  buyerName
 }: ShowingBookingListColumnActionsProps) {
   const classes = useStyles()
 
@@ -119,6 +125,13 @@ function ShowingBookingListColumnActions({
 
   return (
     <div className={classNames(classes.root, className)}>
+      {(status === 'Rescheduled' || status === 'Canceled') && (
+        <ShowingBookingListRejectMessage
+          approvals={approvals}
+          buyerName={buyerName}
+          buyerMessage={buyerMessage}
+        />
+      )}
       {(status === 'Requested' || status === 'Rescheduled') && (
         <>
           <ShowingBookingListApprovalButton
