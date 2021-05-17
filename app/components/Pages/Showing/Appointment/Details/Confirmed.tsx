@@ -2,9 +2,7 @@ import {
   Stepper,
   Step,
   StepLabel,
-  StepContent,
   Typography,
-  Button,
   useTheme
 } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
@@ -48,11 +46,6 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
             </span>
           </Typography>
         </StepLabel>
-        <StepContent className={classes.stepContent}>
-          <Button variant="outlined" size="small">
-            Add to calendar
-          </Button>
-        </StepContent>
       </Step>
     </Stepper>
   )
