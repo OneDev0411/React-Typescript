@@ -80,7 +80,7 @@ export default function ShowingAppointmentCancel({
 
       if (appointment) {
         browserHistory.push(
-          `/showings/appointments/${appointment.showing.slug}-${appointment.showing.id}`
+          `/showings/${appointment.showing.slug}-${appointment.showing.id}/book`
         )
       }
     } catch (error) {
@@ -128,6 +128,7 @@ export default function ShowingAppointmentCancel({
                 <Controller
                   name="message"
                   control={control}
+                  defaultValue=""
                   as={
                     <TextField
                       multiline
