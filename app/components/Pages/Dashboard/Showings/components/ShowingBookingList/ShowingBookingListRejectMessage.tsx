@@ -3,6 +3,7 @@ import { Button, Tooltip, makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
+    button: { '&:hover': { cursor: 'default' } },
     tooltip: { whiteSpace: 'pre-line' },
     message: { paddingLeft: theme.spacing(1) }
   }),
@@ -64,7 +65,12 @@ function ShowingBookingListRejectMessage({
       }
       classes={{ tooltip: classes.tooltip }}
     >
-      <Button size="small" variant="text" color="secondary">
+      <Button
+        className={classes.button}
+        size="small"
+        variant="text"
+        color="secondary"
+      >
         View Message
       </Button>
     </Tooltip>
