@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@material-ui/core'
-import { mdiCheck, mdiDotsHorizontal } from '@mdi/js'
+import { mdiDotsHorizontal } from '@mdi/js'
 import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -36,17 +36,17 @@ export default function ShowingAppointmentRescheduled({ appointment }: Props) {
         <StepLabel
           className={classes.stepLabel}
           StepIconComponent={() => (
-            <div
-              className={cn(
-                classes.stepIconContainer,
-                classes.activeStepIconContainer
-              )}
-            >
-              <SvgIcon color={theme.palette.common.white} path={mdiCheck} />
+            <div className={cn(classes.stepIconContainer)}>
+              <SvgIcon
+                color={theme.palette.common.white}
+                path={mdiDotsHorizontal}
+              />
             </div>
           )}
         >
-          <Typography variant="h6">Appointment Rescheduled!</Typography>
+          <Typography variant="h6">
+            Appointment Reschedule Requested!
+          </Typography>
 
           <Typography variant="body1" color="textSecondary">
             You've requested to reschedule your appointment for{' '}
