@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { useSelector } from 'react-redux'
 
 import moment from 'moment'
@@ -37,7 +37,7 @@ export function useAppcues() {
 
   const pathname = location ? location.pathname : null
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (!pathname) {
       return
     }
