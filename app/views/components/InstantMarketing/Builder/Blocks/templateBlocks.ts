@@ -19,7 +19,7 @@ export async function getTemplateOptions(
   try {
     const response = await fetch(`${template.url}/blocks.json`)
 
-    if (response.status === 404) {
+    if (response.status >= 400) {
       return null
     }
 
@@ -33,15 +33,19 @@ async function getTemplateBlockBase(
   templateBlock: TemplateBlockBase,
   template: IMarketingTemplate
 ): Promise<Nullable<string>> {
-  const response = await fetch(
-    `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
-  )
+  try {
+    const response = await fetch(
+      `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
+    )
 
-  if (response.status === 404) {
+    if (response.status >= 400) {
+      return null
+    }
+
+    return response.text()
+  } catch (e) {
     return null
   }
-
-  return response.text()
 }
 
 export async function getTemplateBlockOptions(
