@@ -4,7 +4,6 @@ import { Box, Link, makeStyles, Theme } from '@material-ui/core'
 import { mdiWeb, mdiFacebook, mdiInstagram, mdiLinkedin } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import SectionWithFields from '../../components/SectionWithFields'
 
@@ -68,7 +67,6 @@ export const Social = ({ contact }: Props) => {
               >
                 <SvgIcon
                   path={fieldsIcon[attr.attribute_def.name]}
-                  size={muiIconSizes.small}
                   className={classes.icon}
                 />
               </Link>

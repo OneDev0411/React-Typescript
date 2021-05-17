@@ -31,7 +31,6 @@ import { selectContact } from 'reducers/contacts/list'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
-// import { normalizeContact as associationNormalizer } from 'views/utils/association-normalizers'
 
 import Loading from '../../../../Partials/Loading'
 
@@ -108,18 +107,6 @@ const ContactProfile = props => {
     !isLoadedContactAttrDefs(props?.attributeDefs) || !props?.contact
   )
   const [activeFilter, setActiveFilter] = useState<Filters>(Filters.Events)
-
-  // static getDerivedStateFromProps(props, state) {
-  //   if (!props.contact) {
-  //     return state
-  //   }
-
-  //   if (!state.contact || props.contact.updated_at > state.contact.updated_at) {
-  //     return { contact: props.contact }
-  //   }
-
-  //   return state
-  // }
 
   const fetchContact = useCallback(
     async (callback = () => {}, showFullScreenLoading = false) => {
@@ -419,10 +406,10 @@ const ContactProfile = props => {
               onStop={handleStopFlow}
               addCallback={addToFlowCallback}
             />
+            <Dates {..._props} />
             <AddressesSection {..._props} />
             <Deals contact={contact} />
             <Details {..._props} />
-            <Dates {..._props} />
             <Partner {..._props} />
             <Owner
               onSelect={onChangeOwner}

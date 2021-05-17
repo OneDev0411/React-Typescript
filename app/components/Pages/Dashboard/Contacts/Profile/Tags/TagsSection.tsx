@@ -58,7 +58,7 @@ function Tags({ contact, onChange }: Props) {
         anchorRenderer={onClick =>
           hasTags ? (
             <Chip
-              label="Edit"
+              label="Edit Tags"
               variant="outlined"
               color="secondary"
               size="small"

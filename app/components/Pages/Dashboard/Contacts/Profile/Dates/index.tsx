@@ -55,6 +55,7 @@ export function Dates({ contact, submitCallback }: Props) {
 
   return (
     <SectionWithFields
+      showTitleAnyway
       contact={contact}
       fieldsOrder={fieldsOrder}
       section="Dates"

@@ -10,7 +10,8 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(0, 1)
     },
     icon: {
       position: 'relative',

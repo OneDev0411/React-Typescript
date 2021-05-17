@@ -13,7 +13,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      flexGrow: 1
     },
     title: {
       display: 'flex',
