@@ -16,6 +16,10 @@ interface CreateContactReturn {
   isCreatingContact: boolean
 }
 
+interface CreateAttribute extends Omit<IContactAttribute, 'attribute_def'> {
+  attribute_def: UUID
+}
+
 function useCreateContact(): CreateContactReturn {
   const attributeDefs = useSelector(selectContactAttributeDefs)
   const userId = useSelector(selectUserId)
@@ -26,7 +30,7 @@ function useCreateContact(): CreateContactReturn {
     createContact: (attributes: Partial<CreateContactInput>) => {
       const newContact: {
         user: UUID
-        attributes: Partial<IContactAttribute>[]
+        attributes: Partial<CreateAttribute>[]
       } = {
         user: userId,
         attributes: []
@@ -39,7 +43,7 @@ function useCreateContact(): CreateContactReturn {
           const attributeDef = attributeDefs.byId[attributeDefId]
 
           newContact.attributes.push({
-            attribute_def: attributeDef,
+            attribute_def: attributeDef.id,
             [attributeDef.data_type]: attributes[attribute]
           })
         }
