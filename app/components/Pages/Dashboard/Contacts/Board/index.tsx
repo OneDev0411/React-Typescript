@@ -30,7 +30,11 @@ const useStyles = makeStyles(
   }
 )
 
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
+
 import { BoardColumn } from './Column'
+
+import { useDispatch } from 'react-redux'
 
 const Columns = ['Warm', 'Hot', 'Passed Client']
 
@@ -42,6 +46,7 @@ interface Props {
 export function Board({ contacts, isLoading }: Props) {
   const classes = useStyles()
   const [list, setList] = useState(contacts)
+  const dispatch = useDispatch()
 
   useDeepCompareEffect(() => {
     setList(contacts)
@@ -76,6 +81,8 @@ export function Board({ contacts, isLoading }: Props) {
     bulkTag(tags, {
       ids: [contactId]
     })
+
+    dispatch(updateContactTags(contact.id, tags))
   }
 
   const sort = (contacts: IContact[]) => {
