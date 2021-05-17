@@ -119,28 +119,22 @@ class SearchListingDrawer extends React.Component {
   })
 
   searchListing = async value => {
-    // The search listing endpoint does not accept
-    // a value with a length of fewer than three characters
-    if (value.length < 3) {
-      return
-    }
-
     let response = await searchListings(value)
+    let modifiedResponse
 
+    // Search value consisting of 5-8 numbers represents an MLS#
     if (/^[0-9]{5,8}$/.test(value)) {
-      response = [
-        {
-          ...response.property,
-          is_mls_search: true,
-          id: response.id,
-          price: response.price,
-          status: response.status,
-          cover_image_url: response.cover_image_url
-        }
-      ]
+      modifiedResponse = response.map(item => ({
+        ...item.property,
+        is_mls_search: true,
+        id: item.id,
+        price: item.price,
+        status: item.status,
+        cover_image_url: item.cover_image_url
+      }))
     }
 
-    return response.filter(item => {
+    return modifiedResponse.filter(item => {
       if (item.is_mls_search || !this.props.allowedStatuses.length) {
         return true
       }
