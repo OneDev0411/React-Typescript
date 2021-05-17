@@ -77,6 +77,7 @@ function ShowingNotificationBookingLists({
           onApprovalAction={onApprovalAction}
           hasPropertyColumn={hasPropertyColumn}
           onDismissAction={onDismissAction}
+          key={filter}
         />
       )}
       {hasBookings && (
@@ -87,6 +88,7 @@ function ShowingNotificationBookingLists({
           onApprovalAction={onApprovalAction}
           hasPropertyColumn={hasPropertyColumn}
           hasPastBookingsFilter
+          key={filter}
         />
       )}
     </>
