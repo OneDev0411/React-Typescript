@@ -222,13 +222,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             onFinish={handleFinish}
             styles={{ paddingBottom: '50%' }}
           >
-            <ShowingStepDurationAndAvailabilities
-              duration={duration}
-              onDurationChange={setDuration}
-              availabilities={availabilities}
-              onAvailabilitiesChange={setAvailabilities}
-            />
-
             <ShowingStepIntro />
             <ShowingStepProperty
               property={property}
