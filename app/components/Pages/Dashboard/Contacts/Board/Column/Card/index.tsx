@@ -49,12 +49,12 @@ const useStyles = makeStyles(
         backgroundColor: theme.palette.grey['50']
       }
     },
-    avatar: {
+    cardAvatar: {
       width: theme.spacing(3),
       height: theme.spacing(3),
       marginRight: theme.spacing(1)
     },
-    name: {
+    cardName: {
       color: theme.palette.common.black
     },
     grey: {
@@ -117,13 +117,16 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
       <>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <Box display="flex" alignItems="center">
-            <Avatar className={classes.avatar} src={getAccountAvatar(contact)}>
+            <Avatar
+              className={classes.cardAvatar}
+              src={getAccountAvatar(contact)}
+            >
               {contact.display_name[0]}
             </Avatar>
 
             <Link
               to={`/dashboard/contacts/${contact.id}`}
-              className={classes.name}
+              className={classes.cardName}
             >
               <MiniContact type="contact" data={contact}>
                 <Typography variant="body2">
@@ -182,7 +185,7 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
       </>
     ),
     // eslint-disable-next-line
-    [contact]
+    []
   )
 
   return (
