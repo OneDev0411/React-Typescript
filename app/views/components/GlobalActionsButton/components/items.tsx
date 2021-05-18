@@ -17,7 +17,8 @@ import { TourDrawer } from 'components/tour/TourDrawer'
 
 import {
   meetingRoomOutlined,
-  permContactCalendarOutlined
+  permContactCalendarOutlined,
+  showingIcon
 } from '../../SvgIcons/icons'
 
 import CreateOpenHouse from './OpenHouse'
@@ -76,7 +77,7 @@ const items: Item[] = [
   {
     title: 'Showing',
     type: 'showing',
-    Icon: mdiShoePrint,
+    Icon: showingIcon,
     redirectTo: url => {
       goTo(url)
     }
