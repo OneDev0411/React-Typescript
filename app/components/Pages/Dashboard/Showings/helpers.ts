@@ -47,7 +47,7 @@ export function getFullAddressFromSrdAddr(stdAddr: IStdAddr): string {
 export function getShowingBookingPageUrl(
   showing: Pick<IShowing, 'slug' | 'human_readable_id'>
 ): string {
-  return `${config.showing?.booking_url || config.app.url}/showings/${
+  return `${config.showing?.booking_url || window.location.origin}/showings/${
     showing.slug
   }-${showing.human_readable_id}/book`
 }
