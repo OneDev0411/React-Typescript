@@ -29,6 +29,8 @@ type ShowingDetailProps = WithRouterProps<{
   id: UUID
 }>
 
+const defaultAppointments: IShowingAppointment[] = []
+
 function ShowingDetail({ params }: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')
 
@@ -72,12 +74,15 @@ function ShowingDetail({ params }: ShowingDetailProps) {
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
               <ShowingDetailTabBookings
-                appointments={showing.appointments ?? []}
+                appointments={showing.appointments ?? defaultAppointments}
                 setShowing={setShowing}
               />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-              <ShowingDetailTabVisitors showingId={showingId} />
+              <ShowingDetailTabVisitors
+                showingId={showingId}
+                appointments={showing.appointments ?? defaultAppointments}
+              />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
               <ShowingDetailTabFeedback />
