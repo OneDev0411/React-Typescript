@@ -22,7 +22,7 @@ import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useGetShowing from './use-get-showing'
-import { getShowingImage } from '../../helpers'
+import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 
 type ShowingDetailProps = WithRouterProps<{
   tab?: ShowingDetailTabsProps['value']
@@ -44,6 +44,8 @@ function ShowingDetail({ params }: ShowingDetailProps) {
 
   const tab = params.tab || showingDetailTabs.Bookings
 
+  const showingBookingUrl = showing ? getShowingBookingPageUrl(showing) : ''
+
   return (
     <PageLayout position="relative" overflow="hidden" gutter={0}>
       <ShowingDetailHeader
@@ -53,7 +55,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         })}
         address={showing?.title || ''}
         listing={showing?.listing || (showing?.deal?.listing as IListing)}
-        bookingUrl={`/showings/${showing?.slug}-${showing?.human_readable_id}/book`}
+        bookingUrl={showingBookingUrl}
       >
         <ShowingDetailTabs value={tab} id={showingId} />
       </ShowingDetailHeader>

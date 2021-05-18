@@ -18,7 +18,7 @@ function ShowingDetailHeaderCopyButton({
   const dispatch = useDispatch()
 
   const handleClick = () => {
-    copyTextToClipboard(window.location.origin + bookingUrl)
+    copyTextToClipboard(bookingUrl)
     dispatch(addNotification({ status: 'success', message: 'Copied!' }))
   }
 

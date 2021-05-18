@@ -1,4 +1,5 @@
 import Deal from 'models/Deal'
+import config from 'config'
 
 import { showingsTabs } from './constants'
 import { AppointmentFilter } from './types'
@@ -41,4 +42,12 @@ export function getFullAddressFromSrdAddr(stdAddr: IStdAddr): string {
     stdAddr.state,
     stdAddr.postcode
   ].join(' ')
+}
+
+export function getShowingBookingPageUrl(
+  showing: Pick<IShowing, 'slug' | 'human_readable_id'>
+): string {
+  return `${config.showing.booking_url || config.app_url}/showings/${
+    showing.slug
+  }-${showing.human_readable_id}/book`
 }

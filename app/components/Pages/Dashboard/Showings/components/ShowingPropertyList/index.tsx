@@ -13,7 +13,7 @@ import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import BoxWithTitle from '../BoxWithTitle'
-import { getShowingImage } from '../../helpers'
+import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 
@@ -111,7 +111,7 @@ function ShowingPropertyList({
       render: ({ row }) => (
         <ShowingPropertyListColumnActions
           className={classes.actions}
-          bookingUrl={`/showings/${row.slug}-${row.human_readable_id}/book`}
+          bookingUrl={getShowingBookingPageUrl(row)}
         />
       )
     }
