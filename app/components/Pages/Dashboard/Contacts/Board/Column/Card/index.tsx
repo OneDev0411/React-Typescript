@@ -85,6 +85,10 @@ const useStyles = makeStyles(
         fontWeight: 'normal',
         ...theme.typography.caption
       }
+    },
+    flexCenter: {
+      display: 'flex',
+      alignItems: 'center'
     }
   }),
   {
@@ -112,82 +116,6 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
     )
   }
 
-  const content = useMemo(
-    () => (
-      <>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box display="flex" alignItems="center">
-            <Avatar
-              className={classes.cardAvatar}
-              src={getAccountAvatar(contact)}
-            >
-              {contact.display_name[0]}
-            </Avatar>
-
-            <Link
-              to={`/dashboard/contacts/${contact.id}`}
-              className={classes.cardName}
-            >
-              <MiniContact type="contact" data={contact}>
-                <Typography variant="body2">
-                  <TextMiddleTruncate
-                    text={contact.display_name}
-                    maxLength={25}
-                  />
-                </Typography>
-              </MiniContact>
-            </Link>
-          </Box>
-
-          <Box display="flex" alignItems="center">
-            <SvgIcon
-              path={mdiCalendar}
-              className={classes.grey}
-              size={muiIconSizes.xsmall}
-            />
-            <Typography variant="caption" className={classes.lastTouch}>
-              <LastTouched contact={contact} title="" />
-            </Typography>
-          </Box>
-        </Box>
-
-        <PopoverContactTagSelector
-          label={`${contact.display_name}'s Tag`}
-          value={contact.tags?.map(tag => ({
-            title: tag,
-            value: tag
-          }))}
-          filter={{
-            selectedIds: [contact.id]
-          }}
-          callback={handleChangeTag}
-          anchorRenderer={onClick => (
-            <Box mt={2} onClick={onClick}>
-              {(contact.tags || []).length > 0 ? (
-                contact.tags?.map((tag, index) => (
-                  <Chip
-                    key={index}
-                    label={tag}
-                    size="small"
-                    className={classes.tag}
-                  />
-                ))
-              ) : (
-                <Chip
-                  className={cn(classes.noTags, classes.grey)}
-                  label="No Tags"
-                  size="small"
-                />
-              )}
-            </Box>
-          )}
-        />
-      </>
-    ),
-    // eslint-disable-next-line
-    []
-  )
-
   return (
     <Draggable draggableId={`${columnId}:${contact.id}`} index={rowId}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -206,12 +134,78 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
                 : {})
             }}
           >
-            {content}
-          </div>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <div className={classes.flexCenter}>
+                <Avatar
+                  className={classes.cardAvatar}
+                  src={getAccountAvatar(contact)}
+                >
+                  {contact.display_name[0]}
+                </Avatar>
 
-          {snapshot.isDragging && (
-            <div className={classes.placeholder}>{content}</div>
-          )}
+                <Link
+                  to={`/dashboard/contacts/${contact.id}`}
+                  className={classes.cardName}
+                >
+                  <MiniContact type="contact" data={contact}>
+                    <Typography variant="body2">
+                      <TextMiddleTruncate
+                        text={contact.display_name}
+                        maxLength={25}
+                      />
+                    </Typography>
+                  </MiniContact>
+                </Link>
+              </div>
+
+              <div className={classes.flexCenter}>
+                <SvgIcon
+                  path={mdiCalendar}
+                  className={classes.grey}
+                  size={muiIconSizes.xsmall}
+                />
+                <Typography variant="caption" className={classes.lastTouch}>
+                  <LastTouched contact={contact} title="" />
+                </Typography>
+              </div>
+            </Box>
+
+            <PopoverContactTagSelector
+              label={`${contact.display_name}'s Tag`}
+              value={contact.tags?.map(tag => ({
+                title: tag,
+                value: tag
+              }))}
+              filter={{
+                selectedIds: [contact.id]
+              }}
+              callback={handleChangeTag}
+              anchorRenderer={onClick => (
+                <Box mt={2} onClick={onClick}>
+                  {(contact.tags || []).length > 0 ? (
+                    contact.tags?.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={tag}
+                        size="small"
+                        className={classes.tag}
+                      />
+                    ))
+                  ) : (
+                    <Chip
+                      className={cn(classes.noTags, classes.grey)}
+                      label="No Tags"
+                      size="small"
+                    />
+                  )}
+                </Box>
+              )}
+            />
+          </div>
         </>
       )}
     </Draggable>
