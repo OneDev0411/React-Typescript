@@ -1,6 +1,12 @@
 import React from 'react'
-import { Box, IconButton } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import {
+  Box,
+  Tooltip,
+  IconButton,
+  makeStyles,
+  createStyles,
+  Theme
+} from '@material-ui/core'
 
 import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
 
@@ -55,34 +61,34 @@ export const Actions = ({
   return (
     <Box className={classes.container}>
       <Box className={classes.shortcutContainer}>
-        {/*
-       // @ts-ignore js component */}
         <SendEmailButton
           recipients={normalizeContactsForEmailCompose([contact])}
           render={({ onClick, testId }) => (
-            <IconButton
-              onClick={onClick}
-              data-test={testId}
-              className={classes.button}
-            >
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
-            </IconButton>
+            <Tooltip title="Send Email">
+              <IconButton
+                onClick={onClick}
+                data-test={testId}
+                className={classes.button}
+              >
+                <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
+              </IconButton>
+            </Tooltip>
           )}
         />
         <Chat contact={contact} />
-        {/*
-       // @ts-ignore js component */}
         <SendContactCard
           contact={contact}
           mediums="Email"
           buttonRenderrer={({ disabled, onClick }) => (
-            <IconButton
-              onClick={onClick}
-              disabled={disabled}
-              className={classes.button}
-            >
-              <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
-            </IconButton>
+            <Tooltip title="Send a Card">
+              <IconButton
+                onClick={onClick}
+                disabled={disabled}
+                className={classes.button}
+              >
+                <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
+              </IconButton>
+            </Tooltip>
           )}
         />
       </Box>

@@ -11,7 +11,10 @@ import {
   mdiPlusCircleOutline
 } from '@mdi/js'
 
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
+
 import { addNotification as notify } from 'components/notification'
+import SendEmailButton from 'components/SendEmailButton'
 
 import copy from 'utils/copy-text-to-clipboard'
 
@@ -67,6 +70,7 @@ ViewMode.propTypes = {
   showEdit: PropTypes.bool,
   showDelete: PropTypes.bool,
   style: PropTypes.shape(),
+  contact: PropTypes.shape(),
   toggleMode: PropTypes.func.isRequired,
   value: PropTypes.string,
   attributeName: PropTypes.string
@@ -100,6 +104,7 @@ export function ViewMode({
   label,
   style,
   value,
+  contact,
   showAdd,
   showEdit,
   showDelete,
@@ -111,8 +116,6 @@ export function ViewMode({
 }) {
   const dispatch = useDispatch()
   const classes = useStyles()
-
-  console.log({ ff: attributeName, value })
 
   const handleCopy = e => {
     e.stopPropagation()
@@ -132,6 +135,82 @@ export function ViewMode({
     window.open(value, '_blank')
   }
 
+  const renderActions = () => {
+    const actions = []
+
+    if (linkableAttribute.includes(attributeName)) {
+      actions.push(
+        <Box key="open" onClick={handleLink} className={classes.action}>
+          <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Open</span>
+        </Box>
+      )
+    }
+
+    if (attributeName === 'email' && value) {
+      actions.push(
+        <SendEmailButton
+          recipients={normalizeContactsForEmailCompose([contact])}
+          render={({ onClick }) => (
+            <Box
+              key="email"
+              onClick={e => {
+                e.stopPropagation()
+                onClick()
+              }}
+              className={classes.action}
+            >
+              <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
+              <span className={classes.actionLabel}>Email</span>
+            </Box>
+          )}
+        />
+      )
+    }
+
+    if (copyAttribute.includes(attributeName)) {
+      actions.push(
+        <Box key="copy" onClick={handleCopy} className={classes.action}>
+          <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Copy</span>
+        </Box>
+      )
+    }
+
+    if (showDelete) {
+      actions.push(
+        <Box
+          key="handleDelete"
+          onClick={handleDelete}
+          className={classes.action}
+        >
+          <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Delete</span>
+        </Box>
+      )
+    }
+
+    if (showEdit) {
+      actions.push(
+        <Box key="showEdit" onClick={toggleMode} className={classes.action}>
+          <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Edit</span>
+        </Box>
+      )
+    }
+
+    if (showAdd) {
+      actions.push(
+        <Box key="showEdit" onClick={handleAddNew} className={classes.action}>
+          <SvgIcon path={mdiPlusCircleOutline} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Add</span>
+        </Box>
+      )
+    }
+
+    return actions
+  }
+
   return (
     <ViewModeContainer onClick={toggleMode} style={style}>
       {renderBody() == null ? (
@@ -143,38 +222,7 @@ export function ViewMode({
         renderBody({ label, value, toggleMode })
       )}
       <ViewModeActionBar className="action-bar">
-        <Box className={classes.actionContainer}>
-          {linkableAttribute.includes(attributeName) && (
-            <Box onClick={handleLink} className={classes.action}>
-              <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Open</span>
-            </Box>
-          )}
-          {copyAttribute.includes(attributeName) && (
-            <Box onClick={handleCopy} className={classes.action}>
-              <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Copy</span>
-            </Box>
-          )}
-          {showDelete && (
-            <Box onClick={handleDelete} className={classes.action}>
-              <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Delete</span>
-            </Box>
-          )}
-          {showEdit && (
-            <Box onClick={toggleMode} className={classes.action}>
-              <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Edit</span>
-            </Box>
-          )}
-          {showAdd && (
-            <Box onClick={handleAddNew} className={classes.action}>
-              <SvgIcon path={mdiPlusCircleOutline} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Add</span>
-            </Box>
-          )}
-        </Box>
+        <Box className={classes.actionContainer}>{renderActions()}</Box>
       </ViewModeActionBar>
     </ViewModeContainer>
   )

@@ -300,12 +300,6 @@ const ContactProfile = props => {
     setActiveFilter(value)
   }
 
-  // const handleUpdateContactInfo = attribute => {
-  //   if (attribute.name === 'email') {
-  //     fetchTimeline()
-  //   }
-  // }
-
   useEffectOnce(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
@@ -393,7 +387,7 @@ const ContactProfile = props => {
           />
         </Box>
 
-        <PageLayout.Main mt={0} className={classes.container}>
+        <Box className={classes.container}>
           <Box
             className={cn(classes.contentContainer, classes.sidenavContainer)}
           >
@@ -431,7 +425,7 @@ const ContactProfile = props => {
               onChangeNote={setNewContact}
             />
           </Box>
-        </PageLayout.Main>
+        </Box>
       </PageLayout>
     </>
   )

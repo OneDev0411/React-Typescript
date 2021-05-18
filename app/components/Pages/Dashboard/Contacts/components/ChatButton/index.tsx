@@ -2,8 +2,7 @@ import React, { useState, useMemo, useCallback, ReactNode } from 'react'
 import { AnyAction } from 'redux'
 import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { IconButton } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
 import { mdiChatProcessingOutline } from '@mdi/js'
 
@@ -81,13 +80,15 @@ function ChatButton({ contact, render }: Props) {
   }
 
   return (
-    <IconButton
-      className={classes.button}
-      disabled={!isChattable || isCreatingRoom}
-      onClick={onClick}
-    >
-      <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.medium} />
-    </IconButton>
+    <Tooltip title="Chat">
+      <IconButton
+        className={classes.button}
+        disabled={!isChattable || isCreatingRoom}
+        onClick={onClick}
+      >
+        <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.medium} />
+      </IconButton>
+    </Tooltip>
   )
 }
 

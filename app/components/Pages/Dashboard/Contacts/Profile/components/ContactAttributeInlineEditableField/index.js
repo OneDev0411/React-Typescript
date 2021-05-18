@@ -479,6 +479,7 @@ class MasterField extends React.Component {
   }
 
   render() {
+    const { contact } = this.props
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
@@ -491,8 +492,9 @@ class MasterField extends React.Component {
         isEditModeStatic
         cancelOnOutsideClick
         error={error}
-        value={this.state.value}
+        contact={contact}
         label={label}
+        value={this.state.value}
         attributeName={this.attribute_def.name || ''}
         handleAddNew={this.addInstance}
         handleCancel={this.cancel}

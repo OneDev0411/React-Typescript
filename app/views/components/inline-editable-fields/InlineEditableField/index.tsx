@@ -8,51 +8,53 @@ import { EditMode, Props as EditModeProps } from './EditMode'
 
 interface Props {
   error?: string
-  cancelOnOutsideClick?: boolean
-  handleCancel?: () => void
-  handleOutsideClick?: () => void
-  handleDelete?: () => void
-  handleSave: (callback: () => void) => void
-  handleAddNew?: () => void
-  isDisabled?: boolean
-  isEditing: boolean
-  isEditModeStatic?: boolean
-  isPopoverMode?: boolean
+  value?: string
   label?: string
-  renderViewMode?: () => void
-  renderEditMode: (props: Pick<EditModeProps, 'error'>) => ReactNode
+  style?: object
   showAdd?: boolean
+  isEditing: boolean
   showEdit?: boolean
   showDelete?: boolean
-  style?: object
-  toggleMode: () => void
-  value?: string
+  isDisabled?: boolean
   attributeName?: string
+  isPopoverMode?: boolean
+  isEditModeStatic?: boolean
+  contact: INormalizedContact
+  cancelOnOutsideClick?: boolean
+  toggleMode: () => void
+  handleCancel?: () => void
+  handleDelete?: () => void
+  handleAddNew?: () => void
+  renderViewMode?: () => void
+  handleOutsideClick?: () => void
+  handleSave: (callback: () => void) => void
+  renderEditMode: (props: Pick<EditModeProps, 'error'>) => ReactNode
 }
 
 export const InlineEditableField = (props: Props) => {
   const {
-    handleOutsideClick: onOutsideClick,
-    handleDelete: onDelete = noop,
-    handleAddNew: onAddNew = noop,
-    toggleMode: onToggleMode,
-    handleCancel: onCancel,
-    renderViewMode = noop,
-    handleSave: onSave,
-    cancelOnOutsideClick = false,
-    isEditModeStatic = false,
-    isDisabled = false,
-    isPopoverMode = false,
+    contact,
+    isEditing,
+    value = '',
+    error = '',
+    style = {},
     label = 'Label',
     showAdd = false,
-    showDelete = true,
     showEdit = true,
-    style = {},
-    value = '',
+    showDelete = true,
     attributeName = '',
-    isEditing,
-    error = '',
-    renderEditMode
+    isDisabled = false,
+    isPopoverMode = false,
+    isEditModeStatic = false,
+    cancelOnOutsideClick = false,
+    renderEditMode,
+    handleSave: onSave,
+    renderViewMode = noop,
+    handleCancel: onCancel,
+    toggleMode: onToggleMode,
+    handleDelete: onDelete = noop,
+    handleAddNew: onAddNew = noop,
+    handleOutsideClick: onOutsideClick
   } = props
   const popoverEditContainerRef = useRef<Nullable<HTMLDivElement>>(null)
   const [ref, setRef] = useState<Nullable<HTMLElement>>(null)
@@ -115,37 +117,39 @@ export const InlineEditableField = (props: Props) => {
 
   const editModeProps = () => {
     return {
-      error,
-      handleCancel,
-      handleSave,
-      handleDelete: onDelete,
-      isDisabled,
-      isStatic: isEditModeStatic,
-      isPopoverMode,
-      showDelete,
       style,
-      isEditing,
+      error,
+      contact,
       isSaving,
+      isEditing,
+      handleSave,
+      isDisabled,
+      showDelete,
       viewRef: ref,
+      handleCancel,
+      isPopoverMode,
       render: renderEditMode,
-      popoverContainerRef: popoverEditContainerRef?.current,
-      onClosePopover: () => setRef(null)
+      handleDelete: onDelete,
+      isStatic: isEditModeStatic,
+      onClosePopover: () => setRef(null),
+      popoverContainerRef: popoverEditContainerRef?.current
     }
   }
 
   const viewModeProps = () => {
     return {
+      style,
+      value,
       label,
-      handleDelete,
-      handleAddNew,
-      renderBody: renderViewMode,
+      contact,
       showAdd,
       showEdit,
       showDelete,
-      style,
-      toggleMode: handleToggleMode,
-      value,
-      attributeName
+      attributeName,
+      handleDelete,
+      handleAddNew,
+      renderBody: renderViewMode,
+      toggleMode: handleToggleMode
     }
   }
   const ViewModeRenderer = <ViewMode {...viewModeProps()} />
