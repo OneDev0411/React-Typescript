@@ -29,7 +29,7 @@ export default function AppSideNav({ isMenuOpen, onDrawerToggle }: Props) {
   const classes = useStyles()
 
   return (
-    <Hidden smDown implementation="css">
+    <Hidden smDown>
       <nav className={classes.drawer} aria-label="menu">
         <Menu />
       </nav>
