@@ -297,22 +297,34 @@ class Builder extends React.Component {
     })
   }
 
+  getTemplateMarkupFonts = async () => {
+    try {
+      const document = this.editor.Canvas.getDocument()
+
+      await document.fonts.ready
+
+      return [
+        ...new Set(Array.from(document.fonts).map(({ family }) => family))
+      ]
+    } catch (e) {
+      return []
+    }
+  }
+
   loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
 
     return attachCKEditor(this.editor, [], brandColors, undefined, async () => {
-      const document = this.editor.Canvas.getDocument()
+      const templateFonts = this.selectedTemplateFonts
 
-      await document.fonts.ready
-
-      const markupFonts = Array.from(document.fonts).map(({ family }) => family)
-      const allFonts = [
-        ...new Set([...this.selectedTemplateFonts, ...markupFonts])
-      ]
+      const fonts =
+        templateFonts.length > 0
+          ? templateFonts
+          : await this.getTemplateMarkupFonts()
 
       return {
-        font_names: allFonts.join(';')
+        font_names: fonts.join(';')
       }
     })
   }
