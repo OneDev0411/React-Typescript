@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import {
   Box,
@@ -67,12 +68,20 @@ export default function CalendarEventListItem({ event }: Props) {
 
   if (contact) {
     avatarIcon = (
-      <Link href={`/dashboard/contacts/${contact.id}`}>
+      <Link
+        href="#"
+        onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
+      >
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
     )
     linkTitle = (
-      <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
+      <Link
+        href="#"
+        underline="none"
+        color="textPrimary"
+        onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
+      >
         {linkTitle}
       </Link>
     )
