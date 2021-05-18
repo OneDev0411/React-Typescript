@@ -28,7 +28,9 @@ export default function ShowingAppointmentCancelReschedule({
               noStyle
               to={`/showings/appointments/${appointment.cancel_token}/reschedule`}
             >
-              Reschedule
+              {appointment.status === 'Rescheduled'
+                ? 'Reschedule Again'
+                : 'Reschedule'}
             </Link>
           </Button>
         </Grid>

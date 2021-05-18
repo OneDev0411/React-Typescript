@@ -16,6 +16,9 @@ export const useShowingAppointmentStatusDetailsStyles = makeStyles(
       borderRadius: '50%',
       border: `1px solid ${theme.palette.primary.main}`
     },
+    warningStepIconContainer: {
+      border: `1px solid ${theme.palette.warning.main}`
+    },
     activeStepIconContainer: {
       backgroundColor: theme.palette.primary.main
     },
