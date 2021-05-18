@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { useEffectOnce } from 'react-use'
 
-import { Box } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 import { IAppState } from 'reducers/index'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
@@ -19,7 +19,7 @@ import { RenderProps } from 'components/Grid/Table/types'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 
-import EmptyState from './EmptyState'
+import { ZeroState } from 'partials/ZeroState'
 
 import DueDate from './columns/DueDate'
 import Title from './columns/Title'
@@ -151,7 +151,23 @@ function ToursList(props: { user: IUser }) {
     }
 
     if (list.length === 0) {
-      return <EmptyState onOpenDrawer={onOpenTourDrawer} />
+      return (
+        <ZeroState
+          imageUrl="/static/images/zero-state/tours.png"
+          title="No tours are scheduled, yet."
+          subTitle="Make touring homes easier on buyers and yourself with Tours. Pick the right properties for your client, and we do the rest of the work."
+          ctaNode={
+            <Button
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={onOpenTourDrawer}
+            >
+              Create a Toursheet
+            </Button>
+          }
+        />
+      )
     }
 
     return (
@@ -178,7 +194,7 @@ function ToursList(props: { user: IUser }) {
         <PageLayout.Header title="Tours" />
 
         <PageLayout.Main>
-          <Box>
+          <>
             {renderContent()}
 
             {isDrawerOpen && (
@@ -210,7 +226,7 @@ function ToursList(props: { user: IUser }) {
                 }
               />
             )}
-          </Box>
+          </>
         </PageLayout.Main>
       </PageLayout>
     </>

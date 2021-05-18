@@ -18,7 +18,7 @@ import {
   Align
 } from 'react-window'
 
-import Spinner from 'components/LoadingContainer'
+import { CircularProgress } from '@material-ui/core'
 
 import { Container, Loading } from './styled'
 
@@ -102,7 +102,7 @@ const VirtualList: React.FC<Props> = ({
     >
       {isLoading && (
         <Loading loadingPosition={loadingPosition}>
-          <Spinner style={{ padding: 0 }} />
+          <CircularProgress />
         </Loading>
       )}
 

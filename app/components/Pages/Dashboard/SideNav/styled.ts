@@ -1,7 +1,7 @@
 import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
-import { Badge, Link } from '@material-ui/core'
-import { Theme, withStyles, fade } from '@material-ui/core/styles'
+import { Link } from '@material-ui/core'
+import { Theme, fade } from '@material-ui/core/styles'
 
 import { appSidenavWidth } from './variables'
 
@@ -102,12 +102,3 @@ export const Divider = styled.div`
     props.theme.palette.divider};
 `
 export const ListItemDivider = Divider.withComponent('li')
-
-export const AppNavbarBadge = withStyles((theme: Theme) => ({
-  anchorOriginTopRightRectangle: {
-    top: theme.spacing(-1),
-    right: 'auto',
-    left: `calc(100% + ${theme.spacing(1)}px)`,
-    transform: 'scale(1) translateY(50%)'
-  }
-}))(Badge)

@@ -370,7 +370,7 @@ class SendMlsListingCard extends React.Component {
 
     return (
       <Fragment>
-        {!this.props.hasExternalTrigger && (
+        {!this.props.hasExternalTrigger && !this.props.buttonRenderer && (
           <Button
             variant="outlined"
             disabled={disabled}
@@ -380,6 +380,11 @@ class SendMlsListingCard extends React.Component {
             {this.props.children}
           </Button>
         )}
+        {this.props.buttonRenderer &&
+          this.props.buttonRenderer({
+            onClick: this.openListingModal,
+            disabled
+          })}
 
         <SearchListingDrawer
           mockListings
@@ -388,6 +393,7 @@ class SendMlsListingCard extends React.Component {
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit
           }
+          withMlsDisclaimer
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           defaultLists={[

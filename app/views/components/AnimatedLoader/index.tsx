@@ -4,27 +4,13 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    '@keyframes pulse': {
-      '0%': {
-        transform: 'scale(0.7)',
-        opacity: 0.9
-      },
-      '100%': {
-        transform: 'scale(1)',
-        opacity: 1
-      }
-    },
     loading: {
-      background: theme.palette.grey[50],
-      height: '100vh',
+      minHeight: '100%',
+      height: '100%',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      '& img': {
-        width: '25%',
-        animation: '$pulse 1s'
-      }
+      justifyContent: 'center'
     }
   }),
   {
@@ -35,9 +21,17 @@ const useStyles = makeStyles(
 export function AnimatedLoader() {
   const classes = useStyles()
 
+  // Animated SVG is made with https://loading.io/
+  // Config:
+  // color: #00b286
+  // Radius: 11
+  // Speed: 1.22
+  // Size: 58
+  // Transparent: On
+
   return (
     <div className={classes.loading}>
-      <img src="/static/images/logo.anim.svg" alt="Rechat Loading" />
+      <img src="/static/images/bouncing-ball.svg" alt="Loading" />
     </div>
   )
 }

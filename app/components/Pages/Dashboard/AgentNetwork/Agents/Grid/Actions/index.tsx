@@ -1,5 +1,4 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
 
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
@@ -31,21 +30,15 @@ export function TableActions({ user, listing, agents }: Props) {
   )
 
   return (
-    <Grid container justify="space-between">
-      <Grid item>
-        <Grid item>
-          <AddToContacts user={user} agents={selectedAgents} />
-        </Grid>
-      </Grid>
+    <>
+      <AddToContacts user={user} agents={selectedAgents} />
       {listing && (
-        <Grid item>
-          <PromoteListing
-            user={user}
-            listing={listing}
-            agents={selectedAgentsWithEmailAddress}
-          />
-        </Grid>
+        <PromoteListing
+          user={user}
+          listing={listing}
+          agents={selectedAgentsWithEmailAddress}
+        />
       )}
-    </Grid>
+    </>
   )
 }

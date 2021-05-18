@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import intersection from 'lodash/intersection'
 
-import { Button } from '@material-ui/core'
+import { mdiTagOutline } from '@mdi/js'
+
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { selectContact } from 'reducers/contacts/list'
 
@@ -72,10 +74,11 @@ export const TagContacts = ({
       label="Bulk Tagging"
       value={currentTags}
       anchorRenderer={onClick => (
-        <Button
+        <GridActionButton
+          label="Tag"
+          icon={mdiTagOutline}
           disabled={disabled}
-          variant="outlined"
-          size="small"
+          tourId="tag-contacts"
           onClick={e => {
             if (!entireMode) {
               getCommonTags()
@@ -83,9 +86,7 @@ export const TagContacts = ({
 
             onClick(e)
           }}
-        >
-          Tag
-        </Button>
+        />
       )}
       popoverProps={{
         anchorOrigin: {

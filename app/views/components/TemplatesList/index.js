@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react'
-
+import { useContext, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 import chunk from 'lodash/chunk'
@@ -23,6 +22,23 @@ function TemplatesList(props) {
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
+
+  useEffect(() => {
+    if (!props.defaultSelected || !props.items || props.items.length === 0) {
+      return
+    }
+
+    const defaultSelectedTemplate = props.items.find(
+      item => item.id === props.defaultSelected
+    )
+
+    if (!defaultSelectedTemplate) {
+      return
+    }
+
+    setSelectedTemplate(defaultSelectedTemplate)
+    setPreviewModalOpen(true)
+  }, [props.defaultSelected, props.items])
 
   const notifyDeleteError = () => {
     props.notify({
@@ -105,6 +121,7 @@ function TemplatesList(props) {
                 handlePreview={() => {
                   setPreviewModalOpen(true)
                   setSelectedTemplate(template)
+                  props.onSelect && props.onSelect(template)
                 }}
                 actions={
                   isTemplateInstance(template) ? (
@@ -128,6 +145,7 @@ function TemplatesList(props) {
                         setActionTriggered(true)
                         setEditActionTriggered(false)
                         setSelectedTemplate(template)
+                        props.onSelect && props.onSelect(template)
                       }}
                     />
                   )
@@ -141,7 +159,7 @@ function TemplatesList(props) {
       <MarketingTemplatePreviewModal
         type={props.type}
         medium={props.medium}
-        isOpen={isPreviewModalOpen}
+        isOpen={isPreviewModalOpen && !isActionTriggered}
         selectedTemplate={selectedTemplate}
         templates={props.items}
         actions={
@@ -162,8 +180,14 @@ function TemplatesList(props) {
               : 'Customize'}
           </Button>
         }
-        onClose={() => setPreviewModalOpen(false)}
-        setSelectedTemplate={setSelectedTemplate}
+        onClose={() => {
+          setPreviewModalOpen(false)
+          props.onSelect && props.onSelect(null)
+        }}
+        setSelectedTemplate={template => {
+          setSelectedTemplate(template)
+          props.onSelect && props.onSelect(template)
+        }}
       />
 
       <TemplateAction
@@ -171,7 +195,12 @@ function TemplatesList(props) {
         medium={props.medium}
         isEdit={isEditActionTriggered}
         isTriggered={isActionTriggered}
-        setTriggered={setActionTriggered}
+        setTriggered={value => {
+          setActionTriggered(value)
+
+          setPreviewModalOpen(false)
+          props.onSelect && props.onSelect(null)
+        }}
         setEditActionTriggered={setEditActionTriggered}
         selectedTemplate={selectedTemplate}
       />

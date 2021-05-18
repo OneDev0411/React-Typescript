@@ -1,7 +1,12 @@
-import React from 'react'
 import { connect } from 'react-redux'
 
-import { Checkbox, Tooltip, createStyles, makeStyles } from '@material-ui/core'
+import {
+  Box,
+  Checkbox,
+  Tooltip,
+  createStyles,
+  makeStyles
+} from '@material-ui/core'
 import cn from 'classnames'
 
 import { selectTags } from 'reducers/contacts/tags'
@@ -140,7 +145,7 @@ function ContactFilters(props) {
   const isSelectAllDisable = Number(props.contactCount) === 0
 
   return (
-    <>
+    <Box display="flex" alignItems="center">
       <div className={classes.infoContainer}>
         <Tooltip title={tooltipTitle}>
           <Checkbox
@@ -150,6 +155,7 @@ function ContactFilters(props) {
             checked={defaultSelectAllValue}
             indeterminate={isSomeRowsSelected}
             onChange={toggleAll}
+            data-tour-id="select-deselect-checkbox"
           />
         </Tooltip>
         <span
@@ -177,7 +183,7 @@ function ContactFilters(props) {
           />
         </Filters>
       )}
-    </>
+    </Box>
   )
 }
 

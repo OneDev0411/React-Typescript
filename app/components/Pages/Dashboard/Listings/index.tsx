@@ -1,6 +1,5 @@
-import React, { ReactElement, ReactChildren, cloneElement } from 'react'
+import { ReactElement, ReactChildren, cloneElement } from 'react'
 
-import { Box } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
 import { ListSelection } from 'components/ListSelection'
@@ -16,7 +15,7 @@ function Listings({ children, ...rest }: Props) {
 
   return (
     <ListSelection<IListing>>
-      <Box px={5}>{cloneElement(children, rest)}</Box>
+      <>{cloneElement(children, rest)}</>
       <ShareListings />
     </ListSelection>
   )

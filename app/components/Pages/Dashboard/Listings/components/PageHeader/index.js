@@ -7,8 +7,9 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 const useStyles = makeStyles(theme =>
   createStyles({
     container: {
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
       [theme.breakpoints.up('md')]: {
-        height: theme.spacing(15),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start'
@@ -29,8 +30,7 @@ export function Header(props) {
 
   return (
     <Box className={classes.container}>
-      <GlobalPageLayout.Header classes={{ content: classes.container }}>
-        <Typography variant="h4">{title}</Typography>
+      <GlobalPageLayout.Header title={title} isHiddenOnMobile={false}>
         <Typography variant="h6" className={classes.subtitle}>
           {subtitle}
         </Typography>
