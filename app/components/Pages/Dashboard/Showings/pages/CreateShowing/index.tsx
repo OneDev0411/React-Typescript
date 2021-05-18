@@ -300,7 +300,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
             {/* Listing Occupant Steps - Start */}
             <ShowingStepYesNoQuestion
-              question="Is this property Occupied?"
+              question="Is this property occupied?"
               value={hasOccupant}
               onChange={setHasOccupant}
             />

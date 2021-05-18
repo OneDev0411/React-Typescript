@@ -1,4 +1,6 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
+
+import ShowingGreenLabel from '../ShowingGreenLabel'
 
 import ShowingRoleNotificationTypes, {
   ShowingRoleNotificationTypesProps
@@ -19,7 +21,12 @@ function ShowingStepRoleCancelNotificationTypes({
   return (
     <ShowingRoleNotificationTypes
       {...otherProps}
-      question={`Should ${firstName} be notified in case of confirmation or cancellation of an appointment?`}
+      question={
+        <>
+          Should {firstName} be <ShowingGreenLabel>notified</ShowingGreenLabel>{' '}
+          in case of confirmation or cancellation of an appointment?
+        </>
+      }
       yesOptionLabel="Yes, notify confirmation or cancellation by:"
     />
   )

@@ -24,7 +24,7 @@ export const appointmentListInfo: Partial<
     hasNotifications: true,
     notificationsTitle: 'New Requests',
     notificationsEmptyMessage: 'There are no new requests.',
-    hasBookings: true,
+    hasBookings: false,
     bookingsTitle: 'All Requests',
     bookingsEmptyMessage: 'There are no requests.'
   },

@@ -1,4 +1,6 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
+
+import ShowingGreenLabel from '../ShowingGreenLabel'
 
 import ShowingRoleNotificationTypes, {
   ShowingRoleNotificationTypesProps
@@ -19,7 +21,12 @@ function ShowingStepRoleConfirmNotificationTypes({
   return (
     <ShowingRoleNotificationTypes
       {...otherProps}
-      question={`Does ${firstName} need to confirm appointments?`}
+      question={
+        <>
+          Does ${firstName} need to{' '}
+          <ShowingGreenLabel>confirm</ShowingGreenLabel> appointments?
+        </>
+      }
       hasNoAnywaysOption
       yesOptionLabel="Yes, Confirm by:"
     />

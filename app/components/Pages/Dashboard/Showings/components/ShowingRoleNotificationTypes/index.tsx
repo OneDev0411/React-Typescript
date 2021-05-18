@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ReactNode } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 
@@ -15,7 +15,7 @@ export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 type NotificationTypeOption = 'No' | 'NoWithTypes' | 'Yes'
 
 export interface ShowingRoleNotificationTypesProps {
-  question: string
+  question: ReactNode
   value: NotificationTypeValue
   onChange: (value: NotificationTypeValue) => void
   hasNoAnywaysOption?: boolean
