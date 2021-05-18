@@ -8,10 +8,7 @@ export * from './DropdownTab'
 export * from './TabSpacer'
 
 type SelectedTab = string | number | boolean | null
-type RenderMegaMenu = {
-  selectedTab: SelectedTab
-  close: () => void
-}
+
 interface Props {
   tabs: ReactNode[]
   actions?: ReactNode[]
@@ -20,6 +17,7 @@ interface Props {
   value?: SelectedTab
   actionValue?: SelectedTab
   hasMegaMenu?: boolean
+  containerStyle?: React.CSSProperties
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -30,7 +28,8 @@ const useStyles = makeStyles(
       position: 'relative',
       display: 'flex',
       width: '100%',
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
+      flex: '0 1 auto'
     },
     tabContainer: {
       width: '100%',
@@ -82,6 +81,7 @@ export function PageTabs({
   actionValue,
   tabs,
   hasMegaMenu,
+  containerStyle = {},
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -110,7 +110,7 @@ export function PageTabs({
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={containerStyle}>
       <Tabs
         value={value || activeTab || false}
         indicatorColor="primary"
