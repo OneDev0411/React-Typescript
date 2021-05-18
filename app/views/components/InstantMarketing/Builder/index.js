@@ -25,7 +25,7 @@ import {
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
 
-import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+// import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
@@ -300,24 +300,18 @@ class Builder extends React.Component {
   loadCKEditorRTE = () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
-    const brandFonts = getBrandFontFamilies(brand)
+    // const brandFonts = getBrandFontFamilies(brand)
 
-    return attachCKEditor(
-      this.editor,
-      brandFonts,
-      brandColors,
-      undefined,
-      opts => {
-        const currentFonts = opts.font_names ? opts.font_names.split(';') : []
-        const allFonts = [
-          ...new Set([...this.selectedTemplateFonts, ...currentFonts])
-        ]
+    return attachCKEditor(this.editor, [], brandColors, undefined, opts => {
+      const currentFonts = opts.font_names ? opts.font_names.split(';') : []
+      const allFonts = [
+        ...new Set([...this.selectedTemplateFonts, ...currentFonts])
+      ]
 
-        return {
-          font_names: allFonts.join(';')
-        }
+      return {
+        font_names: allFonts.join(';')
       }
-    )
+    })
   }
 
   static contextType = ConfirmationModalContext
