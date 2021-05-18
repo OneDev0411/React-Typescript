@@ -160,6 +160,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           cancel_notification_type: agentCancelNotificationTypes[1],
           confirm_notification_type: agentConfirmNotificationTypes[1],
           ...agentPerson!,
+          user: agentPerson?.user || undefined,
           brand: agentPerson?.brand || teamId
         }
       ]
@@ -171,6 +172,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           cancel_notification_type: coAgentCancelNotificationTypes[1],
           confirm_notification_type: coAgentConfirmNotificationTypes[1],
           ...coAgentPerson!,
+          user: coAgentPerson?.user || undefined,
           brand: coAgentPerson?.brand || teamId
         })
       }
@@ -182,6 +184,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           cancel_notification_type: occupantCancelNotificationTypes[1],
           confirm_notification_type: occupantConfirmNotificationTypes[1],
           ...occupantPerson!,
+          user: occupantPerson?.user || undefined,
           brand: occupantPerson?.brand || teamId
         })
       }
