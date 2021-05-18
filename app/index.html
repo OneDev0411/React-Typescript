@@ -22,7 +22,11 @@
   <meta name="msapplication-config" content="/static/images/favicons/browserconfig.xml?v=NmbgrbW8Na" />
   <meta name="theme-color" content="#ffffff" />
 
-  <script src="//fast.appcues.com/86812.js"></script>
+  <script>
+    (function() {if(!window.AppcuesReady) { window.AppcuesReady = function(callback) {callback && window.AppcuesReady.q.push(callback);if(window.Appcues){while(window.AppcuesReady.q.length) {cb = window.AppcuesReady.q.shift();if(typeof cb === 'function') cb();}}};window.AppcuesReady.q = [];}})()
+  </script>
+
+  <script src="//fast.appcues.com/86812.js" async defer onload="AppcuesReady()"></script>
   <script>
     window['_fs_debug'] = false;
     window['_fs_host'] = 'fullstory.com';
