@@ -23,7 +23,13 @@ function ShowingsTabs({ value }: ShowingsTabsProps) {
     />
   ]
 
-  return <PageTabs defaultValue={value} tabs={tabs} />
+  return (
+    <PageTabs
+      defaultValue={value}
+      tabs={tabs}
+      containerStyle={{ marginBottom: 0 }}
+    />
+  )
 }
 
 export default ShowingsTabs

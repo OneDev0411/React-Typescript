@@ -36,7 +36,14 @@ function ShowingDetailTabs({ value, id }: ShowingDetailTabsProps) {
     // />
   ]
 
-  return <PageTabs defaultValue={value} hasMegaMenu tabs={tabs} />
+  return (
+    <PageTabs
+      defaultValue={value}
+      hasMegaMenu
+      tabs={tabs}
+      containerStyle={{ marginBottom: 0 }}
+    />
+  )
 }
 
 export default ShowingDetailTabs
