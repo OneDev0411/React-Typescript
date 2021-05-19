@@ -96,9 +96,9 @@ export function Body<Row>({
   if (!virtualize) {
     return (
       <>
-        {rows.map((_, rowIndex) => (
+        {rows.map((row, rowIndex) => (
           <Row
-            key={rowIndex}
+            key={(row as any).id || rowIndex}
             index={rowIndex}
             style={{
               height: theme.spacing(8)
@@ -129,6 +129,10 @@ export function Body<Row>({
             width={width}
             height={windowHeight}
             overscanCount={8}
+            itemKey={(
+              index: number,
+              { rows }: ComponentProps<typeof Row>['data']
+            ) => rows[index].id || index}
             itemData={
               {
                 rows,
