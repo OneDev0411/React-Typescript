@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { browserHistory } from 'react-router'
+
 import SideNavItem from 'components/PageSideNav/SideNavItem'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
 import { selectUser } from 'selectors/user'
@@ -38,6 +40,8 @@ export function ChecklistsSidenavItem({ checklistType, propertyType }: Props) {
     try {
       setIsDeleted(true)
       await deletePropertyType(getActiveTeamId(user)!, id)
+
+      browserHistory.push('/dashboard/checklists')
 
       dispatch(
         notify({

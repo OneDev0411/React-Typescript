@@ -98,7 +98,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
       if (err.status === 409) {
         dispatch(
           notify({
-            message: 'Context id has already taken!',
+            message: 'There is already an existing context id!',
             status: 'error'
           })
         )
