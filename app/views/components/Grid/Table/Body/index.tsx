@@ -36,7 +36,7 @@ import Row from './Row'
 
 interface Props<Row> {
   columns: TableColumn<Row>[]
-  rows: (Row & { id?: string })[]
+  rows: (Row & { id?: UUID })[]
   classes: GridClasses
   virtualize: boolean
   infiniteScrolling: InfiniteScrollingOptions | null
