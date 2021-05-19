@@ -73,9 +73,7 @@ export default function CalendarEventListItem({ event }: Props) {
       </Link>
     )
     linkTitle = (
-      <Link color="textPrimary" to={`/dashboard/contacts/${contact.id}`}>
-        {linkTitle}
-      </Link>
+      <Link to={`/dashboard/contacts/${contact.id}`}>{linkTitle}</Link>
     )
   } else if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
