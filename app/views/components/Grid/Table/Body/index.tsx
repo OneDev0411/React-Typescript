@@ -36,7 +36,7 @@ import Row from './Row'
 
 interface Props<Row> {
   columns: TableColumn<Row>[]
-  rows: Row[]
+  rows: (Row & { id?: string })[]
   classes: GridClasses
   virtualize: boolean
   infiniteScrolling: InfiniteScrollingOptions | null
@@ -98,7 +98,7 @@ export function Body<Row>({
       <>
         {rows.map((row, rowIndex) => (
           <Row
-            key={(row as any).id || rowIndex}
+            key={row.id || rowIndex}
             index={rowIndex}
             style={{
               height: theme.spacing(8)
