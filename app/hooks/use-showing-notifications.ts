@@ -1,19 +1,38 @@
 import { useEffect } from 'react'
 
 interface UseShowingNotificationsProps {
-  onShowingAppointment?: (notification: INotification) => void
+  onShowingAppointmentCreated?: (notification: INotification) => void
+  onShowingAppointmentRescheduled?: (notification: INotification) => void
+  onShowingAppointmentCanceled?: (notification: INotification) => void
 }
 
 function useShowingNotifications({
-  onShowingAppointment
+  onShowingAppointmentCreated,
+  onShowingAppointmentRescheduled,
+  onShowingAppointmentCanceled
 }: UseShowingNotificationsProps) {
   const { socket } = window
 
   useEffect(() => {
     function handleNewNotification(notification) {
       if (notification.object_class === 'ShowingAppointment') {
-        onShowingAppointment?.(notification)
+        switch (notification.action) {
+          case 'Created':
+            onShowingAppointmentCreated?.(notification)
+
+            return
+          case 'Rescheduled':
+            onShowingAppointmentRescheduled?.(notification)
+
+            return
+          case 'Canceled':
+            onShowingAppointmentCanceled?.(notification)
+
+            return
+        }
       }
+
+      console.log('ShowingAppointment::notification', notification)
     }
 
     socket.on('Notification', handleNewNotification)
@@ -21,7 +40,12 @@ function useShowingNotifications({
     return () => {
       socket.off('Notification', handleNewNotification)
     }
-  }, [socket, onShowingAppointment])
+  }, [
+    socket,
+    onShowingAppointmentCreated,
+    onShowingAppointmentRescheduled,
+    onShowingAppointmentCanceled
+  ])
 }
 
 export default useShowingNotifications

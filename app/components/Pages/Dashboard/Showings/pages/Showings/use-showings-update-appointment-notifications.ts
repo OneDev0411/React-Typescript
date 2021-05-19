@@ -2,10 +2,12 @@ import { Dispatch, SetStateAction } from 'react'
 
 import useShowingNotifications from 'hooks/use-showing-notifications'
 
+import { updateShowingsAppointmentState } from './helpers'
+
 function useShowingsUpdateAppointmentNotifications(
   setShowings: Dispatch<SetStateAction<IShowing[]>>
 ): void {
-  const handleShowingAppointment = (notification: INotification) => {
+  const handleShowingAppointmentCreate = (notification: INotification) => {
     const showingId: UUID = notification.objects[0].showing_id
 
     setShowings(showings => {
@@ -39,7 +41,31 @@ function useShowingsUpdateAppointmentNotifications(
     })
   }
 
-  useShowingNotifications({ onShowingAppointment: handleShowingAppointment })
+  const handleShowingAppointmentRescheduleCancel = (
+    notification: INotification
+  ) => {
+    const appointment: IShowingAppointment = notification.objects[0]
+    const showingId: UUID = notification.objects[0].showing_id
+
+    updateShowingsAppointmentState(
+      setShowings,
+      showingId,
+      appointment.id,
+      oldAppointment => ({
+        ...oldAppointment,
+        ...appointment,
+        notifications: oldAppointment.notifications
+          ? [...oldAppointment.notifications, notification]
+          : [notification]
+      })
+    )
+  }
+
+  useShowingNotifications({
+    onShowingAppointmentCreated: handleShowingAppointmentCreate,
+    onShowingAppointmentRescheduled: handleShowingAppointmentRescheduleCancel,
+    onShowingAppointmentCanceled: handleShowingAppointmentRescheduleCancel
+  })
 }
 
 export default useShowingsUpdateAppointmentNotifications

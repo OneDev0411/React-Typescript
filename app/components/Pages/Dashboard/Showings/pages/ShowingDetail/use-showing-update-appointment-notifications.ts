@@ -2,10 +2,12 @@ import { Dispatch, SetStateAction } from 'react'
 
 import useShowingNotifications from 'hooks/use-showing-notifications'
 
+import { updateAppointmentState } from './helpers'
+
 function useShowingUpdateAppointmentNotifications(
   setShowing: Dispatch<SetStateAction<IShowing>>
 ): void {
-  const handleShowingAppointment = (notification: INotification) => {
+  const handleShowingAppointmentCreate = (notification: INotification) => {
     setShowing(showing => {
       if (!showing) {
         return showing
@@ -30,7 +32,25 @@ function useShowingUpdateAppointmentNotifications(
     })
   }
 
-  useShowingNotifications({ onShowingAppointment: handleShowingAppointment })
+  const handleShowingAppointmentRescheduleCancel = (
+    notification: INotification
+  ) => {
+    const appointment: IShowingAppointment = notification.objects[0]
+
+    updateAppointmentState(setShowing, appointment.id, oldAppointment => ({
+      ...oldAppointment,
+      ...appointment,
+      notifications: oldAppointment.notifications
+        ? [...oldAppointment.notifications, notification]
+        : [notification]
+    }))
+  }
+
+  useShowingNotifications({
+    onShowingAppointmentCreated: handleShowingAppointmentCreate,
+    onShowingAppointmentRescheduled: handleShowingAppointmentRescheduleCancel,
+    onShowingAppointmentCanceled: handleShowingAppointmentRescheduleCancel
+  })
 }
 
 export default useShowingUpdateAppointmentNotifications

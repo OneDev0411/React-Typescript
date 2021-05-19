@@ -90,8 +90,6 @@ function ShowingBookingListColumnActions({
         comment
       )
 
-      console.log('appointment', appointment)
-
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
