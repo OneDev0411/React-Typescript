@@ -25,7 +25,7 @@ import {
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
 
-import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+// import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
@@ -297,27 +297,36 @@ class Builder extends React.Component {
     })
   }
 
-  loadCKEditorRTE = () => {
+  getTemplateMarkupFonts = async () => {
+    try {
+      const document = this.editor.Canvas.getDocument()
+
+      await document.fonts.ready
+
+      return [
+        ...new Set(Array.from(document.fonts).map(({ family }) => family))
+      ]
+    } catch (e) {
+      return []
+    }
+  }
+
+  loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
-    const brandFonts = getBrandFontFamilies(brand)
 
-    return attachCKEditor(
-      this.editor,
-      brandFonts,
-      brandColors,
-      undefined,
-      opts => {
-        const currentFonts = opts.font_names ? opts.font_names.split(';') : []
-        const allFonts = [
-          ...new Set([...this.selectedTemplateFonts, ...currentFonts])
-        ]
+    return attachCKEditor(this.editor, [], brandColors, undefined, async () => {
+      const templateFonts = this.selectedTemplateFonts
 
-        return {
-          font_names: allFonts.join(';')
-        }
+      const fonts =
+        templateFonts.length > 0
+          ? templateFonts
+          : await this.getTemplateMarkupFonts()
+
+      return {
+        font_names: fonts.join(';')
       }
-    )
+    })
   }
 
   static contextType = ConfirmationModalContext

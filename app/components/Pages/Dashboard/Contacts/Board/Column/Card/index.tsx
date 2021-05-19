@@ -1,6 +1,7 @@
 import {
   Box,
   Typography,
+  Avatar,
   Chip,
   makeStyles,
   Theme,
@@ -19,11 +20,19 @@ import { useMemo } from 'react'
 
 import { Link } from 'react-router'
 
+import { useDispatch } from 'react-redux'
+
 import MiniContact from 'components/MiniContact'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { Avatar } from 'components/Avatar'
+import { PopoverContactTagSelector } from 'components/TagSelector'
+
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
+
+import type { SelectorOption } from 'components/TagSelector/type'
+
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
 
 import LastTouched from '../../../List/Table/columns/LastTouched'
 
@@ -40,12 +49,12 @@ const useStyles = makeStyles(
         backgroundColor: theme.palette.grey['50']
       }
     },
-    avatar: {
+    cardAvatar: {
       width: theme.spacing(3),
       height: theme.spacing(3),
       marginRight: theme.spacing(1)
     },
-    name: {
+    cardName: {
       color: theme.palette.common.black
     },
     grey: {
@@ -76,10 +85,14 @@ const useStyles = makeStyles(
         fontWeight: 'normal',
         ...theme.typography.caption
       }
+    },
+    flexCenter: {
+      display: 'flex',
+      alignItems: 'center'
     }
   }),
   {
-    name: 'Board-Column'
+    name: 'Board-Column-Card'
   }
 )
 
@@ -92,63 +105,16 @@ interface Props {
 export function ColumnCard({ contact, columnId, rowId }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
+  const dispatch = useDispatch()
 
-  const content = useMemo(
-    () => (
-      <>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box display="flex" alignItems="center">
-            <Avatar className={classes.avatar} contact={contact} />
-            <MiniContact type="contact" data={contact}>
-              <Link
-                to={`/dashboard/contacts/${contact.id}`}
-                className={classes.name}
-              >
-                <Typography variant="body2">
-                  <TextMiddleTruncate
-                    text={contact.display_name}
-                    maxLength={25}
-                  />
-                </Typography>
-              </Link>
-            </MiniContact>
-          </Box>
-
-          <Box display="flex" alignItems="center">
-            <SvgIcon
-              path={mdiCalendar}
-              className={classes.grey}
-              size={muiIconSizes.xsmall}
-            />
-            <Typography variant="caption" className={classes.lastTouch}>
-              <LastTouched contact={contact} title="" />
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box mt={2}>
-          {(contact.tags || []).length > 0 ? (
-            contact.tags?.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                size="small"
-                className={classes.tag}
-              />
-            ))
-          ) : (
-            <Chip
-              className={cn(classes.noTags, classes.grey)}
-              label="No Tags"
-              size="small"
-            />
-          )}
-        </Box>
-      </>
-    ),
-    // eslint-disable-next-line
-    [contact]
-  )
+  const handleChangeTag = (tags: SelectorOption[]) => {
+    dispatch(
+      updateContactTags(
+        contact.id,
+        tags.filter(tag => !!tag.value).map(tag => tag.value!)
+      )
+    )
+  }
 
   return (
     <Draggable draggableId={`${columnId}:${contact.id}`} index={rowId}>
@@ -168,12 +134,78 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
                 : {})
             }}
           >
-            {content}
-          </div>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <div className={classes.flexCenter}>
+                <Avatar
+                  className={classes.cardAvatar}
+                  src={getAccountAvatar(contact)}
+                >
+                  {contact.display_name[0]}
+                </Avatar>
 
-          {snapshot.isDragging && (
-            <div className={classes.placeholder}>{content}</div>
-          )}
+                <Link
+                  to={`/dashboard/contacts/${contact.id}`}
+                  className={classes.cardName}
+                >
+                  <MiniContact type="contact" data={contact}>
+                    <Typography variant="body2">
+                      <TextMiddleTruncate
+                        text={contact.display_name}
+                        maxLength={25}
+                      />
+                    </Typography>
+                  </MiniContact>
+                </Link>
+              </div>
+
+              <div className={classes.flexCenter}>
+                <SvgIcon
+                  path={mdiCalendar}
+                  className={classes.grey}
+                  size={muiIconSizes.xsmall}
+                />
+                <Typography variant="caption" className={classes.lastTouch}>
+                  <LastTouched contact={contact} title="" />
+                </Typography>
+              </div>
+            </Box>
+
+            <PopoverContactTagSelector
+              label={`${contact.display_name}'s Tag`}
+              value={contact.tags?.map(tag => ({
+                title: tag,
+                value: tag
+              }))}
+              filter={{
+                selectedIds: [contact.id]
+              }}
+              callback={handleChangeTag}
+              anchorRenderer={onClick => (
+                <Box mt={2} onClick={onClick}>
+                  {(contact.tags || []).length > 0 ? (
+                    contact.tags?.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={tag}
+                        size="small"
+                        className={classes.tag}
+                      />
+                    ))
+                  ) : (
+                    <Chip
+                      className={cn(classes.noTags, classes.grey)}
+                      label="No Tags"
+                      size="small"
+                    />
+                  )}
+                </Box>
+              )}
+            />
+          </div>
         </>
       )}
     </Draggable>

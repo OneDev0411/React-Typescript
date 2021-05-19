@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
 import uniq from 'lodash/uniq'
 
@@ -26,9 +27,11 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'Board'
+    name: 'Board-Container'
   }
 )
+
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
 
 import { BoardColumn } from './Column'
 
@@ -42,6 +45,7 @@ interface Props {
 export function Board({ contacts, isLoading }: Props) {
   const classes = useStyles()
   const [list, setList] = useState(contacts)
+  const dispatch = useDispatch()
 
   useDeepCompareEffect(() => {
     setList(contacts)
@@ -76,6 +80,8 @@ export function Board({ contacts, isLoading }: Props) {
     bulkTag(tags, {
       ids: [contactId]
     })
+
+    dispatch(updateContactTags(contact.id, tags))
   }
 
   const sort = (contacts: IContact[]) => {
