@@ -73,11 +73,7 @@ export default function CalendarEventListItem({ event }: Props) {
       </Link>
     )
     linkTitle = (
-      <Link
-        href="#"
-        color="textPrimary"
-        to={`/dashboard/contacts/${contact.id}`}
-      >
+      <Link color="textPrimary" to={`/dashboard/contacts/${contact.id}`}>
         {linkTitle}
       </Link>
     )
