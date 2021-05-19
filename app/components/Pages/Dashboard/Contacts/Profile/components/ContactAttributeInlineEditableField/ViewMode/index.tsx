@@ -33,7 +33,7 @@ const useStyles = makeStyles(
       height: theme.spacing(2)
     },
     title: (props: Props) => ({
-      color: props.value ? theme.palette.grey[800] : theme.palette.grey[500],
+      color: props.value ? theme.palette.text.primary : theme.palette.grey[500],
       wordBreak: 'break-word'
     }),
     starIcon: {
@@ -44,11 +44,11 @@ const useStyles = makeStyles(
         ? theme.palette.warning.main
         : theme.palette.grey[500]
     }),
-    value: (props: Props) => ({
+    value: {
       minWidth: theme.spacing(10.5),
       textAlign: 'right',
-      color: props.value ? theme.palette.text.primary : theme.palette.grey[500]
-    })
+      color: theme.palette.grey[500]
+    }
   }),
   { name: 'InlineEditFieldViewMode' }
 )

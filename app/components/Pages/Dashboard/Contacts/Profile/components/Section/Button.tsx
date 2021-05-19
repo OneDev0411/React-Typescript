@@ -12,7 +12,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      color: theme.palette.grey[700],
+      color: theme.palette.text.primary,
       borderRadius: theme.shape.borderRadius,
       cursor: (props: Props) => {
         if (!props.onClick) {

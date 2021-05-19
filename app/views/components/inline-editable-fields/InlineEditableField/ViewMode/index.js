@@ -147,7 +147,7 @@ export function ViewMode({
       )
     }
 
-    if (attributeName === 'email' && value) {
+    if (contact && attributeName === 'email' && value) {
       actions.push(
         <SendEmailButton
           recipients={normalizeContactsForEmailCompose([contact])}

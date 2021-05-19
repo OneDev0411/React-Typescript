@@ -19,7 +19,7 @@ interface Props {
   attributeName?: string
   isPopoverMode?: boolean
   isEditModeStatic?: boolean
-  contact: INormalizedContact
+  contact?: INormalizedContact
   cancelOnOutsideClick?: boolean
   toggleMode: () => void
   handleCancel?: () => void

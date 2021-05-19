@@ -6,7 +6,7 @@ const useStyles = makeStyles(
     container: {
       marginBottom: (props: Props) => {
         if (props.title) {
-          return theme.spacing(5)
+          return theme.spacing(6)
         }
 
         return theme.spacing(1)
@@ -16,7 +16,7 @@ const useStyles = makeStyles(
       display: 'inline-block',
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
-      color: theme.palette.text.primary,
+      color: theme.palette.grey[700],
       ...theme.typography.body1
     }
   }),
