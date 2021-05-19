@@ -58,19 +58,19 @@ function ShowingBookingListColumnActions({
 
   const handleApprove = () => {
     run(async () => {
+      await ackNotifications(
+        notifications?.map(notification => notification.id)
+      )
+
       const appointment = await approveShowingAppointment(
         showing.id,
         appointmentId
       )
 
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status,
+        appointment,
         notificationCount: notifications?.length ?? 0
       })
 
@@ -80,20 +80,22 @@ function ShowingBookingListColumnActions({
 
   const handleReject = (comment?: string) => {
     run(async () => {
+      await ackNotifications(
+        notifications?.map(notification => notification.id)
+      )
+
       const appointment = await rejectShowingAppointment(
         showing.id,
         appointmentId,
         comment
       )
 
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
+      console.log('appointment', appointment)
 
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        status: appointment.status,
+        appointment,
         notificationCount: notifications?.length ?? 0
       })
 

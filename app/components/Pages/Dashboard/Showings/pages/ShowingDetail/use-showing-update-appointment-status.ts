@@ -11,11 +11,8 @@ type UseShowingUpdateAppointmentStatusReturn = (
 function useUpdateAppointmentStatus(
   setShowing: Dispatch<SetStateAction<IShowing>>
 ): UseShowingUpdateAppointmentStatusReturn {
-  return ({ appointmentId, status }: ApprovalActionParams) => {
-    updateAppointmentState(setShowing, appointmentId, appointment => ({
-      ...appointment,
-      status
-    }))
+  return ({ appointmentId, appointment }: ApprovalActionParams) => {
+    updateAppointmentState(setShowing, appointmentId, () => appointment)
   }
 }
 

@@ -1,18 +1,11 @@
-import Fetch from 'services/fetch'
+import setShowingAppointmentApproval from './set-showing-appointment-approval'
 
 async function rejectShowingAppointment(
   showingId: UUID,
   appointmentId: UUID,
   comment?: string
 ): Promise<IShowingAppointment> {
-  return (
-    await new Fetch()
-      .put(`/showings/${showingId}/appointments/${appointmentId}/approval`)
-      .send({
-        approved: false,
-        comment
-      })
-  ).body.data
+  return setShowingAppointmentApproval(showingId, appointmentId, false, comment)
 }
 
 export default rejectShowingAppointment

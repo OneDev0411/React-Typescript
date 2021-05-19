@@ -6,7 +6,7 @@ import useSortAppointments from '../../hooks/use-sort-appointments'
 import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
 
 import ShowingNotificationBookingLists from '../../components/ShowingNotificationBookingLists'
-import { AppointmentFilter, ApprovalActionParams } from '../../types'
+import { AppointmentFilter } from '../../types'
 import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
 import useShowingDismissAppointmentNotifications from './use-showing-dismiss-appointment-notifications'
 
@@ -38,16 +38,11 @@ function ShowingDetailTabBookings({
     setShowing
   )
 
-  const handleApprovalAction = (params: ApprovalActionParams) => {
-    updateShowingAppointmentStatus(params)
-    dismissShowingAppointmentNotifications(params)
-  }
-
   return (
     <ShowingNotificationBookingLists
       appointments={appointments}
       notifications={notifications}
-      onApprovalAction={handleApprovalAction}
+      onApprovalAction={updateShowingAppointmentStatus}
       generateLink={generateAppointmentFilterLink}
       onDismissAction={dismissShowingAppointmentNotifications}
     />

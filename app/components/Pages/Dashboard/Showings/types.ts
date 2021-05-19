@@ -47,5 +47,5 @@ export interface DismissActionParams {
   notificationCount: number
 }
 export interface ApprovalActionParams extends DismissActionParams {
-  status: IShowingAppointmentStatus
+  appointment: IShowingAppointment
 }
