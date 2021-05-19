@@ -101,9 +101,7 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = deal
-    ? getDealContexts(deal, deal.deal_type, deal.property_type)
-    : []
+  const contexts = deal ? getDealContexts(deal, deal.deal_type) : []
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)

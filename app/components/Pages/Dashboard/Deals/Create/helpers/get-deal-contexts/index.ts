@@ -10,5 +10,11 @@ export function getDealContexts(
     checklist => checklist.checklist_type === checklistType
   )
 
-  return checklist?.required_contexts || []
+  return (checklist?.required_contexts || []).filter(context => {
+    if (context.key === 'listing_status' || context.key === 'contract_status') {
+      return false
+    }
+
+    return true
+  })
 }
