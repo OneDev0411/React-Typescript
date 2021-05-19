@@ -42,7 +42,8 @@ function useShowingUpdateAppointmentNotifications(
       ...appointment,
       notifications: oldAppointment.notifications
         ? [...oldAppointment.notifications, notification]
-        : [notification]
+        : [notification],
+      approvals: null
     }))
   }
 
