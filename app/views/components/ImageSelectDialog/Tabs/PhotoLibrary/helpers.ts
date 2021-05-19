@@ -32,20 +32,3 @@ export async function searchImages(
 
   return body.results.map(getImageFromResult)
 }
-
-export async function listImages(
-  pagination: Pagination = { page: 0, perPage: 30 },
-  orderBy: 'latest' | 'popular' | 'oldest' = 'popular'
-): Promise<Image[]> {
-  const { page = 0, perPage = 30 } = pagination
-
-  const result = await UNSPLASH_CLIENT.photos.listPhotos(page, perPage, orderBy)
-
-  if (result.status >= 400) {
-    return []
-  }
-
-  const body = await result.json()
-
-  return body.map(getImageFromResult)
-}
