@@ -31,7 +31,7 @@ export async function attachCKEditor(
   fontFamilies: string[],
   colors: string[] = [],
   opts: any = {},
-  getOpts: (currentOptions: any) => any = () => ({})
+  getOpts: (currentOptions: any) => Promise<any> = () => Promise.resolve({})
 ) {
   const fontNames = [...new Set([...fontFamilies])]
 
@@ -96,7 +96,7 @@ export async function attachCKEditor(
   CKEDITOR.dtd.$editable.a = 1
 
   editor.setCustomRte({
-    async enable(el, rte) {
+    enable(el, rte) {
       // If already exists I'll just focus on it
       if (rte && rte.status !== 'destroyed') {
         this.focus(el, rte)
@@ -134,49 +134,53 @@ export async function attachCKEditor(
       }
 
       // Get dynamic options
-      const dynamicOptions = await getOpts(c.options)
+      getOpts(c.options).then(dynamicOptions => {
+        // Init CkEditors
+        // @ts-ignore
+        rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
 
-      // Init CkEditors
-      // @ts-ignore
-      rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
+        // Make click event propagate
+        rte.on('contentDom', () => {
+          let editable = rte.editable()
 
-      // Make click event propagate
-      rte.on('contentDom', () => {
-        let editable = rte.editable()
-
-        editable.attachListener(editable, 'click', () => {
-          el.click()
+          editable.attachListener(editable, 'click', () => {
+            el.click()
+          })
         })
+
+        // The toolbar is not immediately loaded so will be wrong positioned.
+        // With this trick we trigger an event which updates the toolbar position
+        rte.on('instanceReady', e => {
+          rte.ui.space('top')?.setStyle('width', '405px')
+
+          let toolbar = rteToolbar.querySelector(`#cke_${rte.name}`)
+
+          if (toolbar) {
+            toolbar.style.display = 'block'
+          }
+
+          editor.trigger('canvasScroll')
+        })
+
+        // Prevent blur when some of CKEditor's element is clicked
+        rte.on('dialogShow', e => {
+          const editorEls = editor.$(
+            '.cke_dialog_background_cover, .cke_dialog'
+          )
+
+          ;['off', 'on'].forEach(m =>
+            editorEls[m]('mousedown', stopPropagation)
+          )
+        })
+
+        this.focus(el, rte)
+
+        editor.once('rendered', () => {
+          rte.destroy()
+        })
+
+        return rte
       })
-
-      // The toolbar is not immediately loaded so will be wrong positioned.
-      // With this trick we trigger an event which updates the toolbar position
-      rte.on('instanceReady', e => {
-        rte.ui.space('top')?.setStyle('width', '405px')
-
-        let toolbar = rteToolbar.querySelector(`#cke_${rte.name}`)
-
-        if (toolbar) {
-          toolbar.style.display = 'block'
-        }
-
-        editor.trigger('canvasScroll')
-      })
-
-      // Prevent blur when some of CKEditor's element is clicked
-      rte.on('dialogShow', e => {
-        const editorEls = editor.$('.cke_dialog_background_cover, .cke_dialog')
-
-        ;['off', 'on'].forEach(m => editorEls[m]('mousedown', stopPropagation))
-      })
-
-      this.focus(el, rte)
-
-      editor.once('rendered', () => {
-        rte.destroy()
-      })
-
-      return rte
     },
 
     disable(el, rte) {
