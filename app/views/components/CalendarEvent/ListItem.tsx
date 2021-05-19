@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import {
   Box,
   Button,
   ListItem,
   ListItemText,
-  Link,
   ListItemAvatar,
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
@@ -16,6 +14,8 @@ import {
 } from '@material-ui/core'
 
 import timeago from 'timeago.js'
+
+import Link from 'components/ALink'
 
 import { selectUser } from 'selectors/user'
 
@@ -68,19 +68,15 @@ export default function CalendarEventListItem({ event }: Props) {
 
   if (contact) {
     avatarIcon = (
-      <Link
-        href="#"
-        onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
-      >
+      <Link to={`/dashboard/contacts/${contact.id}`}>
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
     )
     linkTitle = (
       <Link
         href="#"
-        underline="none"
         color="textPrimary"
-        onClick={() => browserHistory.push(`/dashboard/contacts/${contact.id}`)}
+        to={`/dashboard/contacts/${contact.id}`}
       >
         {linkTitle}
       </Link>
