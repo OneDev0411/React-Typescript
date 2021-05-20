@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { Box, useTheme, makeStyles, Theme } from '@material-ui/core'
 
 import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { ShowMoreLess } from 'components/ShowMoreLess'
 
 import SectionWithFields from '../components/SectionWithFields'
 
@@ -16,6 +18,21 @@ const fieldsOrder = [
   'work_anniversary'
 ]
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    otherFields: {
+      paddingTop: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      borderTop: `1px solid ${theme.palette.divider}`
+    },
+    loadingContainer: {
+      padding: theme.spacing(0, 1),
+      textAlign: 'center'
+    }
+  }),
+  { name: 'ContactProfileDates' }
+)
+
 interface Props {
   contact: INormalizedContact
   submitCallback: (
@@ -25,6 +42,8 @@ interface Props {
 }
 
 export function Dates({ contact, submitCallback }: Props) {
+  const theme = useTheme()
+  const classes = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [otherFields, setOtherFields] = useState<ICalendarEvent[]>([])
 
@@ -64,16 +83,31 @@ export function Dates({ contact, submitCallback }: Props) {
       expandButtonLabel="Add Birthdays & Anniversaries"
     >
       {isLoading ? (
-        <Loading />
+        <Box className={classes.loadingContainer}>
+          <Loading />
+        </Box>
       ) : (
-        otherFields.map(field => (
-          <DealContextField
-            deal={field.deal || ''}
-            key={field.id}
-            title={field.title}
-            value={field.timestamp}
-          />
-        ))
+        <Box className={classes.otherFields}>
+          <ShowMoreLess
+            count={10}
+            moreText="Show more Anniversary"
+            textStyle={{
+              padding: theme.spacing(1),
+              color: theme.palette.grey[700],
+              justifyContent: 'space-between',
+              ...theme.typography.body2
+            }}
+          >
+            {otherFields.map(field => (
+              <DealContextField
+                deal={field.deal || ''}
+                key={field.id}
+                title={field.title}
+                value={field.timestamp}
+              />
+            ))}
+          </ShowMoreLess>
+        </Box>
       )}
     </SectionWithFields>
   )

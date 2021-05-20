@@ -6,6 +6,7 @@ import { Box, makeStyles } from '@material-ui/core'
 import {
   mdiOpenInNew,
   mdiContentCopy,
+  mdiEmailOutline,
   mdiPencilOutline,
   mdiTrashCanOutline,
   mdiPlusCircleOutline
@@ -160,7 +161,7 @@ export function ViewMode({
               }}
               className={classes.action}
             >
-              <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
+              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
               <span className={classes.actionLabel}>Email</span>
             </Box>
           )}
