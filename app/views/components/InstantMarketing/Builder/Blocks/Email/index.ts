@@ -4,6 +4,7 @@ import { TemplateRenderData } from '../../utils/get-template-render-data'
 
 import registerListingBlocks, {
   Options as ListingOptions,
+  listingImageBlockName,
   listingTopBlockName,
   listingGridBlockName,
   listingGridTwoBlockName,
@@ -52,6 +53,7 @@ interface Options {
 
 const BLOCK_BUTTONS_ORDER = [
   rechatImageBlockName,
+  listingImageBlockName,
   'rechat-video',
   'column-1',
   'column-2',
