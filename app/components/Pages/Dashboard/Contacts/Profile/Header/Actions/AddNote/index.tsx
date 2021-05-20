@@ -48,7 +48,6 @@ function AddNote({
     <>
       <Button
         variant="outlined"
-        size="small"
         onClick={toggleDrawer}
         data-tour-id="add-note-button"
       >

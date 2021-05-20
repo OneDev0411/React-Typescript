@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { mdiLightningBolt } from '@mdi/js'
+import { mdiPlus } from '@mdi/js'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 
@@ -28,7 +28,7 @@ function FlowsList({ flows, contactId, onStop, addCallback }: Props) {
         buttonRenderer={buttonProps => (
           <SectionButton
             label="Enroll To a Flow"
-            icon={mdiLightningBolt}
+            icon={mdiPlus}
             onClick={e => buttonProps?.onClick(e)}
           />
         )}

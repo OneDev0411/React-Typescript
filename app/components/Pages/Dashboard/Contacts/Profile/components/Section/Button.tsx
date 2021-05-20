@@ -8,11 +8,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       width: '100%',
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5, 1),
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      color: theme.palette.text.primary,
+      color: theme.palette.grey[600],
       borderRadius: theme.shape.borderRadius,
       cursor: (props: Props) => {
         if (!props.onClick) {
@@ -25,6 +24,9 @@ const useStyles = makeStyles(
         color: theme.palette.secondary.main,
         background: theme.palette.action.hover
       }
+    },
+    icon: {
+      marginLeft: theme.spacing(1)
     }
   }),
   { name: 'ContactProfileSectionButton' }
@@ -43,7 +45,7 @@ export const SectionButton = ({ label, icon, disabled, onClick }: Props) => {
   return (
     <Box className={classes.container} onClick={onClick}>
       <Typography variant="body2">{label}</Typography>
-      <SvgIcon path={icon} size={muiIconSizes.small} />
+      <SvgIcon path={icon} size={muiIconSizes.small} className={classes.icon} />
     </Box>
   )
 }

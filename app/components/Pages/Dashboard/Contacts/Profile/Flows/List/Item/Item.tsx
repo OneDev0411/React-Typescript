@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5, 1),
       color: theme.palette.text.primary,
       borderRadius: theme.shape.borderRadius,
       opacity: (props: { disabled: boolean }) => (props.disabled ? 0.5 : 1),

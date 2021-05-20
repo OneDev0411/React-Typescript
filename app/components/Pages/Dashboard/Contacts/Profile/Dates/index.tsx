@@ -9,6 +9,7 @@ import SectionWithFields from '../components/SectionWithFields'
 
 import { START_DATE, END_DATE } from './constants'
 import DealContextField from './DealContextField'
+import { BasicSection } from '../components/Section/Basic'
 
 const fieldsOrder = [
   'birthday',
@@ -20,11 +21,6 @@ const fieldsOrder = [
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    otherFields: {
-      paddingTop: theme.spacing(1),
-      marginTop: theme.spacing(1),
-      borderTop: `1px solid ${theme.palette.divider}`
-    },
     loadingContainer: {
       padding: theme.spacing(0, 1),
       textAlign: 'center'
@@ -73,21 +69,22 @@ export function Dates({ contact, submitCallback }: Props) {
   }, [contact.id])
 
   return (
-    <SectionWithFields
-      showTitleAnyway
-      contact={contact}
-      fieldsOrder={fieldsOrder}
-      section="Dates"
-      submitCallback={submitCallback}
-      title="Touch Dates"
-      expandButtonLabel="Add Birthdays & Anniversaries"
-    >
+    <>
+      <SectionWithFields
+        showTitleAnyway
+        contact={contact}
+        fieldsOrder={fieldsOrder}
+        section="Dates"
+        submitCallback={submitCallback}
+        title="Touch Dates"
+        expandButtonLabel="Add Birthdays & Anniversaries"
+      />
       {isLoading ? (
         <Box className={classes.loadingContainer}>
           <Loading />
         </Box>
       ) : (
-        <Box className={classes.otherFields}>
+        <BasicSection title="Other Touch Dates">
           <ShowMoreLess
             count={10}
             moreText="Show more Anniversary"
@@ -107,8 +104,8 @@ export function Dates({ contact, submitCallback }: Props) {
               />
             ))}
           </ShowMoreLess>
-        </Box>
+        </BasicSection>
       )}
-    </SectionWithFields>
+    </>
   )
 }

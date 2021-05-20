@@ -7,10 +7,11 @@ import { LastTouched } from 'components/LastTouched'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
+import { BasicSection } from '../components/Section/Basic'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      marginBottom: theme.spacing(3),
+    wrapper: {
       padding: theme.spacing(0, 1)
     },
     icon: {
@@ -31,14 +32,16 @@ export const LastTouch = ({ contact }: Props) => {
   const classes = useStyles()
 
   return (
-    <Box className={classes.container}>
-      <LastTouched contact={contact}>
-        <SvgIcon
-          path={mdiInformationOutline}
-          size={muiIconSizes.small}
-          className={classes.icon}
-        />
-      </LastTouched>
-    </Box>
+    <BasicSection title="Last Touch">
+      <Box className={classes.wrapper}>
+        <LastTouched contact={contact}>
+          <SvgIcon
+            path={mdiInformationOutline}
+            size={muiIconSizes.small}
+            className={classes.icon}
+          />
+        </LastTouched>
+      </Box>
+    </BasicSection>
   )
 }

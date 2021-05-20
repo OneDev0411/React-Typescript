@@ -13,11 +13,11 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       width: '100%',
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5, 1),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      color: theme.palette.text.primary,
+      color: theme.palette.grey[600],
       borderRadius: theme.shape.borderRadius,
       '&:hover': {
         textDecoration: 'none',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     value: {
-      color: theme.palette.grey[500],
+      color: theme.palette.grey[900],
       textAlign: 'right'
     }
   })

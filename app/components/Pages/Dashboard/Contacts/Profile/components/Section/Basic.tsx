@@ -16,7 +16,7 @@ const useStyles = makeStyles(
       display: 'inline-block',
       paddingLeft: theme.spacing(1),
       marginBottom: theme.spacing(0.5),
-      color: theme.palette.grey[700],
+      color: theme.palette.text.primary,
       ...theme.typography.body1
     }
   }),

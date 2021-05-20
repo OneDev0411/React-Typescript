@@ -28,7 +28,7 @@ const useStyles = makeStyles(
       container: {
         display: 'flex',
         alignItems: 'center',
-        minWidth: '360px'
+        minWidth: '371px'
       },
       shortcutContainer: {
         '& button:not(:last-child)': {
