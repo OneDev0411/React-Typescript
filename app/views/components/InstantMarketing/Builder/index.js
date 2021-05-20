@@ -21,11 +21,11 @@ import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 import {
   isAdmin,
   getBrandByType,
-  getActiveTeamSettings
+  getActiveTeamSettings,
+  getActiveBrand
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
 
-// import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
@@ -881,12 +881,14 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
+    const activeBrand = getActiveBrand(this.props.user)
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,
-      ...renderData
+      ...renderData,
+      brand: activeBrand
     })
   }
 
