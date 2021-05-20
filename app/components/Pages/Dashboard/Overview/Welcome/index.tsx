@@ -12,7 +12,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     main: {
       display: 'flex',
-      // height: '84vh', // dashboard container needs to be the same height as screen
       border: `1px solid ${theme.palette.grey[300]}`,
       borderRadius: theme.shape.borderRadius,
       background: 'url(/static/images/overview/dashboard-bg.png) no-repeat 0 0',
