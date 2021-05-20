@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 import { useWizardContext } from '../hooks/use-wizard-context'
 import { useSectionContext } from '../hooks/use-section-context'
+import { SectionErrorContext } from '../context'
 
 interface StyleProps {
   step: number
@@ -14,6 +15,7 @@ interface StyleProps {
 interface Props {
   children: React.ReactNode
   hidden?: boolean
+  error?: string
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   })
 }))
 
-export function QuestionSection({ children, hidden = false }: Props) {
+export function QuestionSection({ children, hidden = false, error }: Props) {
   const { currentStep, lastVisitedStep } = useWizardContext()
   const { step } = useSectionContext()
 
@@ -46,5 +48,13 @@ export function QuestionSection({ children, hidden = false }: Props) {
     return null
   }
 
-  return <div className={classes.root}>{children}</div>
+  return (
+    <div className={classes.root}>
+      <SectionErrorContext.Provider
+        value={!!error && currentStep > step ? error : undefined}
+      >
+        {children}
+      </SectionErrorContext.Provider>
+    </div>
+  )
 }
