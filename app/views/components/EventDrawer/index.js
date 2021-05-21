@@ -65,7 +65,7 @@ import {
   FormContainer,
   FieldContainer,
   Footer,
-  AssosiationContainer
+  AssociationContainer
 } from './styled'
 
 const propTypes = {
@@ -374,14 +374,14 @@ class EventDrawerContainer extends Component {
                         </Box>
                       </EventField>
                       <Reminder dueDate={values.dueDate} />
-                      {/* Assosiations Fields:Start */}
+                      {/* Associations Fields:Start */}
                       <EventField
                         title="contact-associations"
                         iconProps={{
                           path: mdiAccountPlusOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="contact"
                             name="associations"
@@ -394,7 +394,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="contact"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <EventField
                         title="listing-associations"
@@ -402,7 +402,7 @@ class EventDrawerContainer extends Component {
                           path: mdiHomeSearchOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="listing"
                             name="associations"
@@ -415,7 +415,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="listing"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <EventField
                         title="deal-associations"
@@ -423,7 +423,7 @@ class EventDrawerContainer extends Component {
                           path: mdiCashUsdOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="deal"
                             name="associations"
@@ -436,7 +436,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="deal"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <AssociationsList
                         filterType="email"
@@ -446,7 +446,7 @@ class EventDrawerContainer extends Component {
                         defaultAssociation={defaultAssociation}
                       />
 
-                      {/* Assosiations Fields:End */}
+                      {/* Associations Fields:End */}
                       <ItemChangelog
                         item={values}
                         style={{ marginTop: '2em' }}
