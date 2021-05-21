@@ -35,11 +35,9 @@ export const useStyles = makeStyles(
       flexFlow: 'column',
       height: '100vh',
       maxHeight: '100vh',
-      overflow: 'hidden',
-      padding: theme.spacing(0, 2)
+      overflow: 'hidden'
     },
     notes: {
-      padding: theme.spacing(2, 0),
       position: 'absolute',
       width: '100%',
       height: '100%',

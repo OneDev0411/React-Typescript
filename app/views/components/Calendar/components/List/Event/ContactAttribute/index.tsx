@@ -8,11 +8,10 @@ import { EventContainer } from '../components/EventContainer'
 import { SendBirthdayCard } from './actions/SendBirthdayCard'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
 }
 
-export function ContactAttribute({ style, event }: Props) {
+export function ContactAttribute({ event }: Props) {
   const icon = useMemo(() => {
     if (contactIcons[event.type_label]) {
       return contactIcons[event.type_label]
@@ -33,7 +32,6 @@ export function ContactAttribute({ style, event }: Props) {
 
   return (
     <EventContainer
-      style={style}
       event={event}
       Icon={icon.icon}
       editable={false}

@@ -7,11 +7,10 @@ import MiniContactProfile from 'components/MiniContact'
 import { EventContainer } from '../components/EventContainer'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
 }
 
-export function NextTouch({ style, event }: Props) {
+export function NextTouch({ event }: Props) {
   if (!event.people) {
     return null
   }
@@ -20,7 +19,6 @@ export function NextTouch({ style, event }: Props) {
 
   return (
     <EventContainer
-      style={style}
       event={event}
       Icon={eventIcons.TouchDate.icon}
       editable={false}

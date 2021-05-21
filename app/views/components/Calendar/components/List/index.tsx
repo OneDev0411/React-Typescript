@@ -1,30 +1,49 @@
-import React, { ComponentProps, forwardRef, RefObject, useState } from 'react'
+import { useState } from 'react'
 
-import { ListOnItemsRenderedProps } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import debounce from 'lodash/debounce'
-
-import VirtualList, {
-  LoadingPosition,
-  VirtualListRef
-} from 'components/VirtualList'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import { CrmEventType } from 'components/Calendar/types'
 
 import { ListContext } from './context'
-import { EmptyState } from './EmptyState'
+// import { EmptyState } from './EmptyState'
 
 import { EventController } from './EventController'
 
-import { Row } from './Row'
+import { Event } from './Event'
+import { EventHeader } from './EventHeader'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {},
+    header: {
+      width: theme.spacing(12)
+    },
+    section: {
+      borderBottom: '1px solid #ccc',
+      paddingLeft: theme.spacing(2)
+    },
+    events: {
+      '& $event:nth-child(even)': {
+        backgroundColor: theme.palette.grey['50']
+      }
+    },
+    event: {
+      backgroundColor: '#fff',
+      '&:hover': {
+        backgroundColor: theme.palette.grey['100']
+      }
+    }
+  }),
+  {
+    name: 'CalendarList'
+  }
+)
 
 interface Props {
   user: IUser
   contact: IContact | undefined
   rows: ICalendarListRow[]
   isLoading: boolean
-  loadingPosition: LoadingPosition
-  listRef?: RefObject<VirtualListRef>
   onReachStart?(): void
   onReachEnd?(): void
   onChangeActiveDate(date: Date): void
@@ -35,14 +54,9 @@ interface Props {
   ) => void
 }
 
-const defaultProps = {
-  onReachStart: () => {},
-  onReachEnd: () => {},
-  onVisibleRowChange: () => {}
-}
+export function CalendarList(props: Props) {
+  const classes = useStyles()
 
-const CalendarList: React.FC<Props> = props => {
-  const [activeDate, setActiveDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
   )
@@ -67,37 +81,6 @@ const CalendarList: React.FC<Props> = props => {
     setSelectedEvent(null)
   }
 
-  /**
-   * finds and the returns the first day header which is in view
-   * @param data - list data, see [[ ListOnItemsRenderedProps ]]
-   */
-  const getInViewDate = (data: ListOnItemsRenderedProps) => {
-    const index = new Array(data.visibleStopIndex - data.visibleStartIndex)
-      .fill(null)
-      .findIndex((_, index) =>
-        props.rows[index + data.visibleStartIndex].hasOwnProperty(
-          'isEventHeader'
-        )
-      )
-
-    const item = props.rows[index + data.visibleStartIndex]
-
-    if (!item) {
-      return
-    }
-
-    const date = new Date(item.date)
-
-    if (activeDate && date.getTime() === activeDate.getTime()) {
-      return
-    }
-
-    if (date instanceof Date && !Number.isNaN(date.getTime())) {
-      setActiveDate(date)
-      props.onChangeActiveDate(date)
-    }
-  }
-
   const { contact } = props
 
   return (
@@ -108,35 +91,23 @@ const CalendarList: React.FC<Props> = props => {
         setSelectedEvent
       }}
     >
-      {props.rows.length === 0 && !props.isLoading && <EmptyState />}
+      <Box className={classes.root}>
+        {props.rows.map((section, index) => (
+          <Box className={classes.section} display="flex" key={index}>
+            <Box className={classes.header}>
+              <EventHeader item={section.header} />
+            </Box>
 
-      <AutoSizer>
-        {({ width, height }) => (
-          <VirtualList
-            width={width}
-            height={height}
-            itemCount={props.rows.length}
-            itemData={
-              {
-                rows: props.rows,
-                activeDate,
-                onEventChange: handleEventChange
-              } as ComponentProps<typeof Row>['data']
-            }
-            onReachEnd={props.onReachEnd}
-            onReachStart={props.onReachStart}
-            threshold={2}
-            isLoading={props.isLoading}
-            loadingPosition={props.loadingPosition}
-            onVisibleRowChange={debounce(getInViewDate, 50)}
-            itemSize={index => getRowHeight(props.rows[index])}
-            overscanCount={3}
-            ref={props.listRef}
-          >
-            {Row}
-          </VirtualList>
-        )}
-      </AutoSizer>
+            <Box flexGrow={1} className={classes.events}>
+              {section.events.map((event, eventIndex) => (
+                <div key={eventIndex} className={classes.event}>
+                  <Event event={event} onEventChange={handleEventChange} />
+                </div>
+              ))}
+            </Box>
+          </Box>
+        ))}
+      </Box>
 
       <EventController
         user={props.user}
@@ -146,17 +117,3 @@ const CalendarList: React.FC<Props> = props => {
     </ListContext.Provider>
   )
 }
-
-function getRowHeight(row: ICalendarListRow): number {
-  if (row.hasOwnProperty('isEventHeader')) {
-    return 50
-  }
-
-  return 60
-}
-
-CalendarList.defaultProps = defaultProps
-
-export default forwardRef((props: Props, ref: RefObject<VirtualListRef>) => (
-  <CalendarList {...props} listRef={ref} />
-))

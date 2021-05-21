@@ -9,27 +9,19 @@ import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
 import { EmailThread } from './EmailThread'
 
-import emptyStateEvent from '../../../helpers/get-event-empty-state'
-
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
   onEventChange(event: IEvent, type: string): void
 }
 type EventsType = {
-  component({
-    event,
-    style,
-    onEventChange
-  }: Props): React.ReactElement<any> | null
+  component({ event, onEventChange }: Props): React.ReactElement<any> | null
   condition(event: ICalendarEvent): boolean
 }
 
 const events: EventsType[] = [
   {
     component: EmptyState,
-    condition: (event: ICalendarEvent) =>
-      event.event_type === emptyStateEvent.event_type
+    condition: (event: ICalendarEvent) => event.event_type === 'empty-state'
   },
   {
     component: CrmTask,
@@ -67,18 +59,12 @@ const events: EventsType[] = [
 /**
  * renders the given calendar event
  */
-export function Event({ event, style, onEventChange }: Props) {
+export function Event({ event, onEventChange }: Props) {
   const eventItem = events.find(item => item.condition(event) === true)
 
   if (!eventItem) {
     return null
   }
 
-  return (
-    <eventItem.component
-      style={style}
-      event={event}
-      onEventChange={onEventChange}
-    />
-  )
+  return <eventItem.component event={event} onEventChange={onEventChange} />
 }

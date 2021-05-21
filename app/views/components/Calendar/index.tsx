@@ -1,11 +1,9 @@
-import React, {
+import {
   useState,
   useEffect,
-  useRef,
   forwardRef,
   RefObject,
   ComponentProps,
-  useImperativeHandle,
   useCallback
 } from 'react'
 import { connect } from 'react-redux'
@@ -18,8 +16,6 @@ import { IAppState } from 'reducers/index'
 import { getCalendar } from 'models/calendar/get-calendar'
 
 import { viewAs } from 'utils/user-teams'
-
-import { LoadingPosition, VirtualListRef } from 'components/VirtualList'
 
 import { IUserState } from 'reducers/user'
 
@@ -37,9 +33,8 @@ import { createListRows } from './helpers/create-list-rows'
 import { upsertCrmEvents } from './helpers/upsert-crm-events'
 import { updateEmailCampaign } from './helpers/update-email-campaign'
 import { normalizeEvents } from './helpers/normalize-events'
-import { getRowIdByDate } from './helpers/get-row-by-date'
 
-import List from './components/List'
+import { CalendarList } from './components/List'
 
 interface Props {
   viewAsUsers?: UUID[]
@@ -82,9 +77,6 @@ export function Calendar({
 }: Props) {
   const previousProps = usePrevious<Partial<Props>>({ viewAsUsers, filter })
 
-  // reference to the Virtual List
-  const listRef = useRef<VirtualListRef>(null)
-
   // fetches events so far
   const [events, setEvents] = useState<ICalendarEvent[]>([])
 
@@ -93,11 +85,6 @@ export function Calendar({
 
   // check whether api is loading events or not
   const [isLoading, setIsLoading] = useState(false)
-
-  // current loading position of calendar
-  const [loadingPosition, setLoadingPosition] = useState<LoadingPosition>(
-    LoadingPosition.Middle
-  )
 
   // current active date
   const [activeDate, setActiveDate] = useState<Date>(new Date())
@@ -151,14 +138,7 @@ export function Calendar({
         setEvents(nextEvents)
 
         // updates virtual list rows
-        setListRows(
-          createListRows(
-            normalizedEvents,
-            activeDate,
-            placeholders,
-            contrariwise
-          )
-        )
+        setListRows(createListRows(normalizedEvents))
 
         onLoadEvents(normalizedEvents, range)
       } catch (e) {
@@ -191,48 +171,6 @@ export function Calendar({
   )
 
   /**
-   * jumps to the given date.
-   * @param date
-   */
-  const jumpToDate = (date: Date, recursive = true): void => {
-    const rowId = getRowIdByDate(date, listRows, calendarRange)
-
-    if (rowId === null && recursive) {
-      // try to jump to the date by fetching more data from server
-      handleLoadEvents(date)
-    }
-
-    /**
-     * https://gitlab.com/rechat/web/issues/3171
-     * if user selects a day on left side calendar that has no events,
-     * show the day on the right side, under it put No events, make one
-     * and make, make one to be in our blue link color and tapping on it
-     * should open the event dialog with the day set on it
-     */
-    if (rowId === -1 && placeholders.includes(Placeholder.Day)) {
-      const nextEvents = normalizeEvents(events, calendarRange)
-      const nextRows = createListRows(
-        nextEvents,
-        date,
-        placeholders,
-        contrariwise
-      )
-
-      setActiveDate(date)
-      setListRows(nextRows)
-    }
-
-    if (!rowId || rowId === -1) {
-      return
-    }
-
-    listRef.current!.scrollToItem(rowId, 'start')
-
-    // change active date
-    handleChangeActiveDate(date)
-  }
-
-  /**
    * handles updating ranges when given date is outside of current
    * calendar range
    * @param date
@@ -243,9 +181,6 @@ export function Calendar({
   ) => {
     const query: NumberRange =
       range || getDateRange(date.getTime(), Format.Middle)
-
-    // set loading position to center again
-    setLoadingPosition(LoadingPosition.Middle)
 
     // reset calendar range
     setCalendarRange(query)
@@ -313,9 +248,6 @@ export function Calendar({
 
     setCalendarRange(nextCalendarRange)
 
-    // the loading indicator will be shown at the bottom of list
-    setLoadingPosition(LoadingPosition.Bottom)
-
     fetchEvents(
       {
         range: query
@@ -338,9 +270,6 @@ export function Calendar({
 
     setCalendarRange(nextCalendarRange)
 
-    // the loading indicator will be shown at the top of list
-    setLoadingPosition(LoadingPosition.Top)
-
     fetchEvents(
       {
         range: query
@@ -360,9 +289,7 @@ export function Calendar({
       const normalizedEvents = normalizeEvents(events, calendarRange)
 
       setEvents(events)
-      setListRows(
-        createListRows(normalizedEvents, activeDate, placeholders, contrariwise)
-      )
+      setListRows(createListRows(normalizedEvents))
     },
     [activeDate, calendarRange, placeholders, contrariwise]
   )
@@ -408,56 +335,6 @@ export function Calendar({
     // eslint-disable-next-line
   }, [contrariwise])
 
-  /**
-   * calls when viewAsUsers prop changes
-   */
-  useEffect(() => {
-    if (
-      previousProps &&
-      previousProps.viewAsUsers!.join('') !== viewAsUsers!.join()
-    ) {
-      handleLoadEvents(activeDate)
-    }
-    // eslint-disable-next-line
-  }, [viewAsUsers])
-
-  /**
-   * calls when filter prop changes
-   */
-  useEffect(() => {
-    if (
-      previousProps &&
-      JSON.stringify(previousProps.filter) !== JSON.stringify(filter)
-    ) {
-      handleLoadEvents(new Date())
-    }
-    // eslint-disable-next-line
-  }, [filter])
-
-  /**
-   * calls when listRows changes
-   */
-  useEffect(() => {
-    if (listRows.length === 0) {
-      return
-    }
-
-    /*
-     * VariableSizeList caches offsets and measurements for each index
-     * for performance purposes. This method clears that cached data for
-     * all items after (and including) the specified index. It should
-     * be called whenever a item's size changes
-     * for calendar, this is necessary because height of rows aren't equal and
-     * also it's loading the data bidirectionally
-     */
-    listRef.current!.resetAfterIndex(0)
-
-    // go to active date
-    jumpToDate(activeDate, false)
-
-    // eslint-disable-next-line
-  }, [listRows])
-
   useEffect(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
@@ -479,12 +356,7 @@ export function Calendar({
 
       const normalizedEvents = normalizeEvents(nextEvents, calendarRange)
 
-      const nextRows = createListRows(
-        normalizedEvents,
-        activeDate,
-        placeholders,
-        contrariwise
-      )
+      const nextRows = createListRows(normalizedEvents)
 
       // update events list
       setEvents(nextEvents)
@@ -499,23 +371,12 @@ export function Calendar({
     }
   })
 
-  /**
-   * exposes below methods to be accessible outside of the component
-   */
-  useImperativeHandle(calendarRef, () => ({
-    jumpToDate,
-    refresh: handleLoadEvents,
-    updateCrmEvents: handleCrmEventChange
-  }))
-
   return (
-    <List
-      ref={listRef}
+    <CalendarList
       rows={listRows}
       user={user!}
       contact={contact}
       isLoading={isLoading}
-      loadingPosition={loadingPosition}
       onReachEnd={handleLoadNextEvents}
       onReachStart={handleLoadPreviousEvents}
       onChangeActiveDate={handleChangeActiveDate}

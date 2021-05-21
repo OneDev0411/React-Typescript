@@ -11,21 +11,17 @@ interface StyleProps extends ClassesProps<typeof styles> {
 export const styles = (theme: Theme) =>
   createStyles({
     root: {
+      position: 'relative',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
       justifyContent: 'center',
-      height: '100%',
-      overflow: 'hidden',
-      backgroundColor: (props: StyleProps) =>
-        props.evenRow ? theme.palette.grey[50] : theme.palette.common.white,
+      minHeight: theme.spacing(8),
       cursor: (props: StyleProps) => (props.clickable ? 'pointer' : 'auto'),
       '& button, a.MuiButtonBase-root': {
         display: 'none'
       },
       '&:hover': {
-        transition: '0.2s ease-in background-color',
-        backgroundColor: theme.palette.action.hover,
         '& button, a.MuiButtonBase-root': {
           display: 'block',
           border: 'none',

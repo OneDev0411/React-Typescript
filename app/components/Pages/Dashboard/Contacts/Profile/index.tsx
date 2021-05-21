@@ -59,7 +59,7 @@ const useStyles = makeStyles(
     },
     container: {
       display: 'flex',
-      alignItems: 'flex-start',
+      flexDirection: 'column',
       width: '100%',
       height: 'auto',
       padding: theme.spacing(2, 4, 4),
@@ -388,42 +388,48 @@ const ContactProfile = props => {
         </Box>
 
         <Box className={classes.container}>
-          <Box
-            className={cn(classes.contentContainer, classes.sidenavContainer)}
-          >
-            <LastTouch contact={contact} />
-            <ContactInfo {..._props} />
-            <Flows
-              // @ts-ignore
-              flows={contact?.flows || null}
-              contactId={contact.id}
-              onStop={handleStopFlow}
-              addCallback={addToFlowCallback}
-            />
-            <Dates {..._props} />
-            <AddressesSection {..._props} />
-            <Deals contact={contact} />
-            <Details {..._props} />
-            <Partner {..._props} />
-            <Owner
-              onSelect={onChangeOwner}
-              owner={contact.user}
-              user={props.user}
-              contact={contact}
-              disabled={isUpdatingOwner}
-            />
-            <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
-          </Box>
-          <Box
-            className={cn(classes.contentContainer, classes.timelineContainer)}
-          >
-            <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
-            <Timeline
-              activeFilter={activeFilter}
-              ref={timelineRef}
-              contact={contact}
-              onChangeNote={setNewContact}
-            />
+          <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
+
+          <Box display="flex">
+            <Box
+              className={cn(classes.contentContainer, classes.sidenavContainer)}
+            >
+              <LastTouch contact={contact} />
+              <ContactInfo {..._props} />
+              <Flows
+                // @ts-ignore
+                flows={contact?.flows || null}
+                contactId={contact.id}
+                onStop={handleStopFlow}
+                addCallback={addToFlowCallback}
+              />
+              <Dates {..._props} />
+              <AddressesSection {..._props} />
+              <Deals contact={contact} />
+              <Details {..._props} />
+              <Partner {..._props} />
+              <Owner
+                onSelect={onChangeOwner}
+                owner={contact.user}
+                user={props.user}
+                contact={contact}
+                disabled={isUpdatingOwner}
+              />
+              <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
+            </Box>
+            <Box
+              className={cn(
+                classes.contentContainer,
+                classes.timelineContainer
+              )}
+            >
+              <Timeline
+                activeFilter={activeFilter}
+                ref={timelineRef}
+                contact={contact}
+                onChangeNote={setNewContact}
+              />
+            </Box>
           </Box>
         </Box>
       </PageLayout>

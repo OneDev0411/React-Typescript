@@ -1,72 +1,38 @@
-import React from 'react'
-
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import fecha from 'fecha'
 
 interface IProps {
-  activeDate: Date | null
-  style: React.CSSProperties
   item: ICalendarEventHeader
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    flex: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    container: {
-      display: 'flex',
-      alignItems: 'flex-end',
-      padding: theme.spacing(0.5, 0),
-      borderRadius: theme.shape.borderRadius,
-      width: '100%',
-      height: '100%'
-    },
-    date: {
-      color: theme.palette.grey[600],
-      ...theme.typography.body1,
-      fontSize: theme.typography.h6.fontSize // Shayan is asked for it
-    },
-    dateAlias: {
-      color: theme.palette.common.black,
-      ...theme.typography.h6
-    },
-    splitter: {
-      width: '3px',
-      height: '3px',
-      borderRadius: '100%',
-      backgroundColor: theme.palette.grey[400],
-      margin: theme.spacing(0, 1)
-    }
+const useStyles = makeStyles((theme: Theme) => ({
+  root: ({ today }: { today: boolean }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: theme.spacing(8),
+    color: today ? theme.palette.secondary.main : '#000',
+    ...theme.typography.body2
   })
-)
+}))
 
 /**
  * renders the day header
  * @param props
  */
-export function EventHeader(props: IProps) {
-  const classes = useStyles()
+export function EventHeader({ item }: IProps) {
+  const classes = useStyles({
+    today: item.isToday
+  })
 
   return (
-    <div style={props.style}>
-      <div className={classes.container}>
-        <div className={classes.flex}>
-          {props.item.isToday && (
-            <>
-              <span className={classes.dateAlias}>Today</span>
-              <span className={classes.splitter} />
-            </>
-          )}
-          {props.item.isTomorrow && (
-            <>
-              <span className={classes.dateAlias}>Tomorrow</span>
-              <span className={classes.splitter} />
-            </>
-          )}
-          <span className={classes.date}>{props.item.title}</span>
-        </div>
-      </div>
+    <div className={classes.root}>
+      <>
+        {item.isToday && <div>Today</div>}
+        {item.isTomorrow && <div>Tomorrow</div>}
+      </>
+
+      <div>{fecha.format(new Date(item.date), 'D MMM, ddd')}</div>
     </div>
   )
 }

@@ -5,16 +5,14 @@ import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { EventContainer } from '../components/EventContainer'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
 }
 
-export function DealContext({ style, event }: Props) {
+export function DealContext({ event }: Props) {
   const icon = eventIcons['Task Critical']
 
   return (
     <EventContainer
-      style={style}
       event={event}
       Icon={icon.icon}
       editable={false}

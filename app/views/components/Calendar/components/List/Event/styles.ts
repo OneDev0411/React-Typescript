@@ -1,4 +1,4 @@
-import { createStyles, Theme, fade } from '@material-ui/core/styles'
+import { createStyles, Theme } from '@material-ui/core/styles'
 
 import { ClassesProps } from 'utils/ts-utils'
 
@@ -32,7 +32,7 @@ export const sharedStyles = (theme: Theme) =>
       }
     }),
     time: {
-      width: '5rem',
+      width: '8rem',
       flexShrink: 0,
       color: theme.palette.grey[500],
       ...theme.typography.caption
@@ -45,11 +45,10 @@ export const sharedStyles = (theme: Theme) =>
       flexShrink: 0,
       alignItems: 'center',
       justifyContent: 'center',
-      width: '2rem',
-      height: '2rem',
+      width: '1rem',
+      height: '1rem',
       borderRadius: '100%',
-      marginRight: '1rem',
-      backgroundColor: fade('#6A7589', 0.2)
+      marginRight: '1rem'
     },
     buttonContainer: {
       position: 'absolute !important' as 'absolute',
