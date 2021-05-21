@@ -1465,7 +1465,9 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {(this.shouldShowEmailActions || this.isBareMode) &&
+              {(this.isOpenHouseMedium ||
+                this.shouldShowEmailActions ||
+                this.isBareMode) &&
                 this.getSaveButton()}
 
               <IconButton
