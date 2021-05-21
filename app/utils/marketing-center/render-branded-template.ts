@@ -9,6 +9,10 @@ export interface TemplateData {
   contact?: IContact
   listing?: IListing
   listings?: IListing[]
+  crmopenhouse?: {
+    title: string,
+    due_date: string
+  }
 }
 
 export default async function renderBrandedTemplate(template: IBrandMarketingTemplate, brand: IBrand, data: TemplateData): Promise<string> {
