@@ -297,11 +297,9 @@ class Builder extends React.Component {
     })
   }
 
-  getTemplateMarkupFonts = async () => {
+  getTemplateMarkupFonts = () => {
     try {
       const document = this.editor.Canvas.getDocument()
-
-      await document.fonts.ready
 
       return [
         ...new Set(Array.from(document.fonts).map(({ family }) => family))
@@ -315,13 +313,11 @@ class Builder extends React.Component {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
 
-    return attachCKEditor(this.editor, [], brandColors, undefined, async () => {
+    return attachCKEditor(this.editor, [], brandColors, undefined, () => {
       const templateFonts = this.selectedTemplateFonts
 
       const fonts =
-        templateFonts.length > 0
-          ? templateFonts
-          : await this.getTemplateMarkupFonts()
+        templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
 
       return {
         font_names: fonts.join(';')
