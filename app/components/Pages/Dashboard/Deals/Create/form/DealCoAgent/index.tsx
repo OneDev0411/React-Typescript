@@ -24,6 +24,8 @@ import TeamAgents from 'components/TeamAgents'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
+import { NormalizedBrand } from 'components/TeamAgents/types'
+
 import { useCreationContext } from '../../context/use-creation-context'
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
@@ -109,6 +111,19 @@ export function DealCoAgent({
     }
   }
 
+  const getUsers = (teams: NormalizedBrand[]) => {
+    if (searchCriteria.length >= 3) {
+      return teams
+    }
+
+    return [
+      {
+        ...teams[0],
+        users: teams[0].users.slice(0, 20)
+      }
+    ]
+  }
+
   if (wizard.lastVisitedStep < step) {
     return null
   }
@@ -172,10 +187,7 @@ export function DealCoAgent({
                       />
                     </Box>
 
-                    {(searchCriteria.length >= 3
-                      ? teams
-                      : teams.slice(0, 15)
-                    ).map((team, index) => (
+                    {getUsers(teams).map((team, index) => (
                       <div key={index}>
                         {(searchCriteria || teams.length > 1) && (
                           <Box ml={1} my={1}>
