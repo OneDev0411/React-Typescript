@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import fecha from 'fecha'
 
-interface IProps {
+interface Props {
   item: ICalendarEventHeader
 }
 
@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     height: theme.spacing(8),
-    color: today ? theme.palette.secondary.main : '#000',
-    ...theme.typography.body2
+    color: today ? theme.palette.secondary.main : theme.palette.grey['900'],
+    ...theme.typography.caption
   })
 }))
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
  * renders the day header
  * @param props
  */
-export function EventHeader({ item }: IProps) {
+export function EventHeader({ item }: Props) {
   const classes = useStyles({
     today: item.isToday
   })

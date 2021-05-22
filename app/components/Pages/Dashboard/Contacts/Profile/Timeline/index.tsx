@@ -36,12 +36,6 @@ export const useStyles = makeStyles(
       height: '100vh',
       maxHeight: '100vh',
       overflow: 'hidden'
-    },
-    notes: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      overflow: 'auto'
     }
   }),
   {
@@ -102,9 +96,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
       )}
 
       {activeFilter === Filters.Notes && (
-        <div className={classes.notes}>
-          <Notes contact={contact} onChange={onChangeNote} />
-        </div>
+        <Notes contact={contact} onChange={onChangeNote} />
       )}
     </div>
   )

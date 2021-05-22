@@ -3,76 +3,50 @@ import { fade } from '@material-ui/core/styles'
 
 export const styles = (theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      justifyContent: 'center',
-      width: '100%',
-      minHeight: theme.spacing(8),
-      position: 'relative',
-      cursor: 'pointer',
-      '&:hover': {
-        backgroundColor: theme.palette.action.hover
-      },
-      '&:hover $actions': {
-        opacity: 1
-      },
-      '& a, & button, & svg': {
-        zIndex: 1,
-        position: 'relative'
-      }
-    },
-    dark: {
-      backgroundColor: theme.palette.grey[50]
+    section: {
+      paddingLeft: theme.spacing(2),
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
     },
     header: {
       display: 'flex',
-      alignItems: 'flex-end',
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      color: theme.palette.grey[700],
-      ...theme.typography.body1,
-      '&:first-of-type': {
-        marginTop: 0
+      flexDirection: 'column',
+      width: theme.spacing(12),
+      paddingTop: theme.spacing(2),
+      color: theme.palette.grey['900'],
+      ...theme.typography.caption,
+      lineHeight: 2
+    },
+    container: {
+      '& $row:nth-child(even)': {
+        backgroundColor: theme.palette.grey['50']
       }
     },
     row: {
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'space-between',
-      padding: theme.spacing(0, 2),
+      padding: theme.spacing(2, 2),
       transition: '0.1s ease-in background-color',
-      width: '100%'
-    },
-    container: {
-      display: 'flex',
-      alignItems: 'center',
-      overflow: 'hidden'
+      '&:hover $actions': {
+        opacity: 1
+      },
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: theme.palette.grey['100']
+      }
     },
     title: {
-      padding: theme.spacing(0.5, 0),
       color: '#1D1F26', // TODO: use palette
       ...theme.typography.body2
     },
     time: {
-      minWidth: '5rem',
+      width: '5rem',
       color: theme.palette.grey[500],
-      ...theme.typography.caption
+      ...theme.typography.caption,
+      lineHeight: 2
     },
     link: {
       cursor: 'pointer'
-    },
-    buttonContainer: {
-      position: 'absolute !important' as 'absolute',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      width: '100%',
-      height: '100%',
-      opacity: 0,
-      textIndent: '-11000px'
     },
     actions: {
       display: 'flex',

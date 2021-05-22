@@ -10,21 +10,24 @@ export function createListRows(
     'YYYY-MM-DD'
   )
 
-  return Object.values(events).flatMap(month => {
-    return Object.entries(month)
-      .filter(([_, events]) => events.length > 0)
-      .map(([day, events]) => {
-        return {
-          header: {
-            isToday: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
-            isTomorrow: fecha.format(new Date(day), 'YYYY-MM-DD') === tomorrow,
-            title: getDayTitle(new Date(day)),
-            date: day
-          },
-          events
-        }
-      })
-  })
+  return Object.values(events)
+    .flatMap(month => {
+      return Object.entries(month)
+        .filter(([_, events]) => events.length > 0)
+        .map(([day, events]) => {
+          return {
+            header: {
+              isToday: fecha.format(new Date(day), 'YYYY-MM-DD') === today,
+              isTomorrow:
+                fecha.format(new Date(day), 'YYYY-MM-DD') === tomorrow,
+              title: getDayTitle(new Date(day)),
+              date: day
+            },
+            events
+          }
+        })
+    })
+    .reverse()
 }
 
 /**

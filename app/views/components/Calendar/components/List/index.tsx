@@ -14,12 +14,12 @@ import { EventHeader } from './EventHeader'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    root: {},
     header: {
       width: theme.spacing(12)
     },
     section: {
-      borderBottom: '1px solid #ccc',
+      display: 'flex',
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
       paddingLeft: theme.spacing(2)
     },
     events: {
@@ -91,9 +91,9 @@ export function CalendarList(props: Props) {
         setSelectedEvent
       }}
     >
-      <Box className={classes.root}>
+      <Box>
         {props.rows.map((section, index) => (
-          <Box className={classes.section} display="flex" key={index}>
+          <Box className={classes.section} key={index}>
             <Box className={classes.header}>
               <EventHeader item={section.header} />
             </Box>

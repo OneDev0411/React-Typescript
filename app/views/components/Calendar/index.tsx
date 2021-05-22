@@ -147,16 +147,7 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [
-      viewAsUsers,
-      filter,
-      associations,
-      events,
-      contrariwise,
-      activeDate,
-      placeholders,
-      onLoadEvents
-    ]
+    [viewAsUsers, filter, associations, events, onLoadEvents]
   )
 
   /**
@@ -291,7 +282,7 @@ export function Calendar({
       setEvents(events)
       setListRows(createListRows(normalizedEvents))
     },
-    [activeDate, calendarRange, placeholders, contrariwise]
+    [calendarRange]
   )
 
   /**

@@ -22,19 +22,19 @@ export const sharedStyles = (theme: Theme) =>
     },
     title: (props: StyleProps) => ({
       color: props.pastEvent
-        ? theme.palette.grey[600]
+        ? theme.palette.grey[500]
         : theme.palette.common.black,
       ...theme.typography.body2,
       '& a': {
         color: props.pastEvent
-          ? `${theme.palette.grey[600]} !important`
+          ? `${theme.palette.grey[500]} !important`
           : 'inherit'
       }
     }),
     time: {
       width: '8rem',
       flexShrink: 0,
-      color: theme.palette.grey[500],
+      color: theme.palette.grey[700],
       ...theme.typography.caption
     },
     link: {
