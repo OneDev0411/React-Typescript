@@ -80,7 +80,7 @@ export function BaseDropdown({
   }
 
   const handleClose = event => {
-    if (anchorRef.current?.contains(event.target)) {
+    if (event && anchorRef.current?.contains(event.target)) {
       return
     }
 
