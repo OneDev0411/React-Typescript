@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useWindowScroll } from 'react-use'
 
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
 
 import { CrmEventType } from 'components/Calendar/types'
 
 import { ListContext } from './context'
-// import { EmptyState } from './EmptyState'
+import { EmptyState } from './EmptyState'
 
 import { EventController } from './EventController'
 
@@ -46,7 +47,6 @@ interface Props {
   isLoading: boolean
   onReachStart?(): void
   onReachEnd?(): void
-  onChangeActiveDate(date: Date): void
   onCrmEventChange: (event: IEvent, type: CrmEventType) => void
   onScheduledEmailChange: (
     event: ICalendarEvent,
@@ -54,8 +54,15 @@ interface Props {
   ) => void
 }
 
-export function CalendarList(props: Props) {
+export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
   const classes = useStyles()
+  const { y } = useWindowScroll()
+
+  useEffect(() => {
+    if (y > document.body.offsetHeight) {
+      onReachEnd?.()
+    }
+  }, [y, onReachStart, onReachEnd])
 
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
@@ -91,6 +98,8 @@ export function CalendarList(props: Props) {
         setSelectedEvent
       }}
     >
+      <EmptyState rowsCount={props.rows.length} isLoading={props.isLoading} />
+
       <Box>
         {props.rows.map((section, index) => (
           <Box className={classes.section} key={index}>
@@ -108,6 +117,12 @@ export function CalendarList(props: Props) {
           </Box>
         ))}
       </Box>
+
+      {props.rows.length > 0 && props.isLoading && (
+        <Box textAlign="center" py={4}>
+          <CircularProgress />
+        </Box>
+      )}
 
       <EventController
         user={props.user}

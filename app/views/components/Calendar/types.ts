@@ -18,14 +18,4 @@ export interface FetchOptions {
   calendarRange?: NumberRange
 }
 
-export enum Placeholder {
-  Day = 1,
-  Month = 2
-}
-
-export enum LoadingDirection {
-  Top = 1,
-  Bottom = 2
-}
-
 export type CrmEventType = 'created' | 'deleted' | 'updated'

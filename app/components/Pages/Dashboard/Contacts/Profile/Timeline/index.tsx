@@ -91,7 +91,6 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
           filter={getFilter()}
           initialRange={getTimelineInitialRange()}
           associations={associations}
-          placeholders={[]}
         />
       )}
 
