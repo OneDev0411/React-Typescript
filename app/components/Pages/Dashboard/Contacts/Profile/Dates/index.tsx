@@ -84,7 +84,7 @@ export function Dates({ contact, submitCallback }: Props) {
           <Loading />
         </Box>
       ) : (
-        <BasicSection title="Other Touch Dates">
+        <BasicSection title="Home Anniversary">
           <ShowMoreLess
             count={10}
             moreText="Show more Anniversary"

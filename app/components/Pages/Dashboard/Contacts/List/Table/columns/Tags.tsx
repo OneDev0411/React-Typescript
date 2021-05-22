@@ -78,6 +78,7 @@ const TagsString = ({
 
   return (
     <PopoverContactTagSelector
+      showManageTags
       label={`${contact.display_name}'s Tag`}
       anchorRenderer={onClick => (
         <Tooltip title="Click to edit">
