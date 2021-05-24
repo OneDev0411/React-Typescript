@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 
@@ -15,15 +15,20 @@ import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-ne
 import SmartQuestionForm from '../SmartQuestionForm'
 import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
 
-export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
-
 type NotificationTypeOption = 'No' | 'NoWithTypes' | 'Yes'
 
 export interface ShowingRoleNotificationTypesProps
   extends Pick<QuestionSectionProps, 'error'> {
   question: ReactNode
-  value: NotificationTypeValue
-  onChange: (value: NotificationTypeValue) => void
+
+  canApprove?: boolean
+  onCanApproveChange?: (canApprove: boolean) => void
+
+  notificationTypes: INotificationDeliveryType[]
+  onNotificationTypesChange: (
+    notificationTypes: INotificationDeliveryType[]
+  ) => void
+
   hasNoAnywaysOption?: boolean
   yesOptionLabel: string
 }
@@ -31,20 +36,23 @@ export interface ShowingRoleNotificationTypesProps
 function ShowingRoleNotificationTypes({
   question,
   hasNoAnywaysOption = false,
-  value,
-  onChange,
+  onCanApproveChange,
+  notificationTypes,
+  onNotificationTypesChange,
+
   yesOptionLabel,
   error
 }: ShowingRoleNotificationTypesProps) {
   const nextStep = useQuestionWizardSmartNext()
-  const [answer, types] = value
+  // const [answer, types] = value
   const [radioValue, setRadioValue] = useState<
     Nullable<NotificationTypeOption>
   >(null)
   const isCurrentStep = useIsQuestionWizardCurrentStep()
 
   const handleChangeTypes = (types: INotificationDeliveryType[]) => {
-    onChange([answer, types])
+    // onChange([answer, types])
+    onNotificationTypesChange(types)
   }
 
   const handleChange = (value: NotificationTypeOption) => {
@@ -52,7 +60,8 @@ function ShowingRoleNotificationTypes({
 
     const hasTypes = value !== 'No'
 
-    onChange([hasTypes, hasTypes ? ['sms', 'email'] : []])
+    onCanApproveChange?.(hasTypes)
+    onNotificationTypesChange(hasTypes ? ['sms', 'email'] : [])
   }
 
   const handleContinue = () => {
@@ -69,7 +78,7 @@ function ShowingRoleNotificationTypes({
       value: 'NoWithTypes',
       children: radioValue === 'NoWithTypes' && (
         <ShowingRoleNotificationTypesMediums
-          types={types}
+          types={notificationTypes}
           onTypesChange={handleChangeTypes}
         />
       )
@@ -79,7 +88,7 @@ function ShowingRoleNotificationTypes({
       value: 'Yes',
       children: (!radioValue || radioValue === 'Yes') && (
         <ShowingRoleNotificationTypesMediums
-          types={types}
+          types={notificationTypes}
           onTypesChange={handleChangeTypes}
         />
       )
@@ -103,7 +112,10 @@ function ShowingRoleNotificationTypes({
               color="primary"
               size="small"
               onClick={handleContinue}
-              disabled={!radioValue || (radioValue !== 'No' && !types.length)}
+              disabled={
+                !radioValue ||
+                (radioValue !== 'No' && !notificationTypes.length)
+              }
             >
               Continue
             </Button>

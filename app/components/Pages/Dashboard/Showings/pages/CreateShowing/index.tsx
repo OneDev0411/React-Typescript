@@ -46,10 +46,7 @@ export const goAndShowNotificationTypes: IShowingRoleInputNotification = {
   cancel_notification_type: []
 }
 
-const defaultNotificationTypesValue: [boolean, INotificationDeliveryType[]] = [
-  true,
-  []
-]
+const defaultNotificationTypes: INotificationDeliveryType[] = []
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -69,10 +66,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const {
     rolePerson: agentPerson,
     setRolePerson: setAgentPerson,
+    roleCanApprove: agentCanApprove,
+    setRoleCanApprove: setAgentCanApprove,
     roleConfirmNotificationTypes: agentConfirmNotificationTypes,
-    setRoleConfirmNotificationTypesChange: setAgentConfirmNotificationTypesChange,
+    setRoleConfirmNotificationTypes: setAgentConfirmNotificationTypes,
     roleCancelNotificationTypes: agentCancelNotificationTypes,
-    setRoleCancelNotificationTypesChange: setAgentCancelNotificationTypesChange,
+    setRoleCancelNotificationTypes: setAgentCancelNotificationTypes,
     resetRoleNotification: resetAgentNotificationTypes,
     editable: agentEditable,
     setEditable: setAgentEditable
@@ -81,10 +80,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const {
     rolePerson: coAgentPerson,
     setRolePerson: setCoAgentPerson,
+    roleCanApprove: coAgentCanApprove,
+    setRoleCanApprove: setCoAgentCanApprove,
     roleConfirmNotificationTypes: coAgentConfirmNotificationTypes,
-    setRoleConfirmNotificationTypesChange: setCoAgentConfirmNotificationTypesChange,
+    setRoleConfirmNotificationTypes: setCoAgentConfirmNotificationTypes,
     roleCancelNotificationTypes: coAgentCancelNotificationTypes,
-    setRoleCancelNotificationTypesChange: setCoAgentCancelNotificationTypesChange,
+    setRoleCancelNotificationTypes: setCoAgentCancelNotificationTypes,
     hasRole: hasCoAgent,
     setHasRoleChange: setHasCoAgent,
     resetRoleNotification: resetCoAgentNotificationTypes,
@@ -95,10 +96,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const {
     rolePerson: occupantPerson,
     setRolePerson: setOccupantPerson,
+    roleCanApprove: occupantCanApprove,
+    setRoleCanApprove: setOccupantCanApprove,
     roleConfirmNotificationTypes: occupantConfirmNotificationTypes,
-    setRoleConfirmNotificationTypesChange: setOccupantConfirmNotificationTypesChange,
+    setRoleConfirmNotificationTypes: setOccupantConfirmNotificationTypes,
     roleCancelNotificationTypes: occupantCancelNotificationTypes,
-    setRoleCancelNotificationTypesChange: setOccupantCancelNotificationTypesChange,
+    setRoleCancelNotificationTypes: setOccupantCancelNotificationTypes,
     hasRole: hasOccupant,
     setHasRoleChange: setHasOccupant,
     resetRoleNotification: resetOccupantNotificationTypes,
@@ -169,12 +172,14 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       errors.agent = 'Please select an agent for the agent role'
     }
 
-    if (!agentConfirmNotificationTypes) {
-      errors.agentConfirmNotification = 'This step is required'
-    }
+    if (approvalType && approvalType !== 'None') {
+      if (!agentConfirmNotificationTypes) {
+        errors.agentConfirmNotification = 'This step is required'
+      }
 
-    if (!agentCancelNotificationTypes) {
-      errors.agentCancelNotification = 'This step is required'
+      if (!agentCancelNotificationTypes) {
+        errors.agentCancelNotification = 'This step is required'
+      }
     }
 
     if (hasCoAgent === 'Yes') {
@@ -182,26 +187,30 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         errors.coAgent = 'Please select an agent for the co-agent role'
       }
 
-      if (!coAgentConfirmNotificationTypes) {
-        errors.coAgentConfirmNotification = 'This step is required'
-      }
+      if (approvalType && approvalType !== 'None') {
+        if (!coAgentConfirmNotificationTypes) {
+          errors.coAgentConfirmNotification = 'This step is required'
+        }
 
-      if (!coAgentCancelNotificationTypes) {
-        errors.coAgentCancelNotification = 'This step is required'
+        if (!coAgentCancelNotificationTypes) {
+          errors.coAgentCancelNotification = 'This step is required'
+        }
       }
     }
 
     if (hasOccupant === 'Yes') {
       if (!occupantPerson) {
-        errors.coAgent = 'Please select a contact for the occupant role'
+        errors.occupant = 'Please select a contact for the occupant role'
       }
 
-      if (!occupantConfirmNotificationTypes) {
-        errors.occupantConfirmNotification = 'This step is required'
-      }
+      if (approvalType && approvalType !== 'None') {
+        if (!occupantConfirmNotificationTypes) {
+          errors.occupantConfirmNotification = 'This step is required'
+        }
 
-      if (!occupantCancelNotificationTypes) {
-        errors.occupantCancelNotification = 'This step is required'
+        if (!occupantCancelNotificationTypes) {
+          errors.occupantCancelNotification = 'This step is required'
+        }
       }
     }
 
@@ -210,6 +219,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     agentCancelNotificationTypes,
     agentConfirmNotificationTypes,
     agentPerson,
+    approvalType,
     availabilities,
     coAgentCancelNotificationTypes,
     coAgentConfirmNotificationTypes,
@@ -236,16 +246,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     run(async () => {
       const roles: IShowingRoleInput[] = []
 
-      if (
-        agentPerson &&
-        agentConfirmNotificationTypes &&
-        agentCancelNotificationTypes
-      ) {
+      if (agentPerson) {
         roles.push({
           role: 'SellerAgent',
-          can_approve: agentConfirmNotificationTypes[0],
-          cancel_notification_type: agentCancelNotificationTypes[1],
-          confirm_notification_type: agentConfirmNotificationTypes[1],
+          can_approve: !!agentCanApprove,
+          cancel_notification_type: agentCancelNotificationTypes ?? [],
+          confirm_notification_type: agentConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
           ...agentPerson!,
           user: agentPerson?.user || undefined,
@@ -253,16 +259,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         })
       }
 
-      if (
-        coAgentPerson &&
-        coAgentConfirmNotificationTypes &&
-        coAgentCancelNotificationTypes
-      ) {
+      if (coAgentPerson) {
         roles.push({
           role: 'CoSellerAgent',
-          can_approve: coAgentConfirmNotificationTypes[0],
-          cancel_notification_type: coAgentCancelNotificationTypes[1],
-          confirm_notification_type: coAgentConfirmNotificationTypes[1],
+          can_approve: !!coAgentCanApprove,
+          cancel_notification_type: coAgentCancelNotificationTypes ?? [],
+          confirm_notification_type: coAgentConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
           ...coAgentPerson,
           user: coAgentPerson?.user || undefined,
@@ -270,16 +272,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         })
       }
 
-      if (
-        occupantPerson &&
-        occupantConfirmNotificationTypes &&
-        occupantCancelNotificationTypes
-      ) {
+      if (occupantPerson) {
         roles.push({
           role: 'Tenant',
-          can_approve: occupantConfirmNotificationTypes[0],
-          cancel_notification_type: occupantCancelNotificationTypes[1],
-          confirm_notification_type: occupantConfirmNotificationTypes[1],
+          can_approve: !!occupantCanApprove,
+          cancel_notification_type: occupantCancelNotificationTypes ?? [],
+          confirm_notification_type: occupantConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
           ...occupantPerson,
           user: occupantPerson?.user || undefined,
@@ -313,6 +311,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const validationError: Nullable<string> = showingValidationErrors
     ? 'You need to fix the validation errors to continue the process'
     : null
+
+  console.log('showingValidationErrors', showingValidationErrors)
 
   return (
     <PageLayout position="relative" overflow="hidden">
@@ -353,20 +353,22 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleConfirmNotificationTypes
                 firstName={agentPerson.first_name}
-                value={
-                  agentConfirmNotificationTypes || defaultNotificationTypesValue
+                canApprove={!!agentCanApprove}
+                onCanApproveChange={setAgentCanApprove}
+                notificationTypes={
+                  agentConfirmNotificationTypes || defaultNotificationTypes
                 }
-                onChange={setAgentConfirmNotificationTypesChange}
+                onNotificationTypesChange={setAgentConfirmNotificationTypes}
                 error={showingValidationErrors?.agentConfirmNotification}
               />
             )}
             {approvalType !== 'None' && agentPerson && (
               <ShowingStepRoleCancelNotificationTypes
                 firstName={agentPerson.first_name}
-                value={
-                  agentCancelNotificationTypes || defaultNotificationTypesValue
+                notificationTypes={
+                  agentCancelNotificationTypes || defaultNotificationTypes
                 }
-                onChange={setAgentCancelNotificationTypesChange}
+                onNotificationTypesChange={setAgentCancelNotificationTypes}
                 error={showingValidationErrors?.agentCancelNotification}
               />
             )}
@@ -394,11 +396,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               coAgentPerson && (
                 <ShowingStepRoleConfirmNotificationTypes
                   firstName={coAgentPerson.first_name}
-                  value={
-                    coAgentConfirmNotificationTypes ||
-                    defaultNotificationTypesValue
+                  canApprove={!!coAgentCanApprove}
+                  onCanApproveChange={setCoAgentCanApprove}
+                  notificationTypes={
+                    coAgentConfirmNotificationTypes || defaultNotificationTypes
                   }
-                  onChange={setCoAgentConfirmNotificationTypesChange}
+                  onNotificationTypesChange={setCoAgentConfirmNotificationTypes}
                   error={showingValidationErrors?.coAgentConfirmNotification}
                 />
               )}
@@ -407,11 +410,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               coAgentPerson && (
                 <ShowingStepRoleCancelNotificationTypes
                   firstName={coAgentPerson.first_name}
-                  value={
-                    coAgentCancelNotificationTypes ||
-                    defaultNotificationTypesValue
+                  notificationTypes={
+                    coAgentCancelNotificationTypes || defaultNotificationTypes
                   }
-                  onChange={setCoAgentCancelNotificationTypesChange}
+                  onNotificationTypesChange={setCoAgentCancelNotificationTypes}
                   error={showingValidationErrors?.coAgentCancelNotification}
                 />
               )}
@@ -439,11 +441,14 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               occupantPerson && (
                 <ShowingStepRoleConfirmNotificationTypes
                   firstName={occupantPerson.first_name}
-                  value={
-                    occupantConfirmNotificationTypes ||
-                    defaultNotificationTypesValue
+                  canApprove={!!occupantCanApprove}
+                  onCanApproveChange={setOccupantCanApprove}
+                  notificationTypes={
+                    occupantConfirmNotificationTypes || defaultNotificationTypes
                   }
-                  onChange={setOccupantConfirmNotificationTypesChange}
+                  onNotificationTypesChange={
+                    setOccupantConfirmNotificationTypes
+                  }
                   error={showingValidationErrors?.occupantConfirmNotification}
                 />
               )}
@@ -452,11 +457,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               occupantPerson && (
                 <ShowingStepRoleCancelNotificationTypes
                   firstName={occupantPerson.first_name}
-                  value={
-                    occupantCancelNotificationTypes ||
-                    defaultNotificationTypesValue
+                  notificationTypes={
+                    occupantCancelNotificationTypes || defaultNotificationTypes
                   }
-                  onChange={setOccupantCancelNotificationTypesChange}
+                  onNotificationTypesChange={setOccupantCancelNotificationTypes}
                   error={showingValidationErrors?.occupantCancelNotification}
                 />
               )}

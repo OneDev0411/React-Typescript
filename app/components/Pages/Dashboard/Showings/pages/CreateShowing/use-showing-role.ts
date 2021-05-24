@@ -1,19 +1,17 @@
 import { useState, Dispatch, SetStateAction } from 'react'
 
-import { NotificationTypeValue } from '../../components/ShowingRoleNotificationTypes'
-
 import { YesNoAnswer } from '../../components/ShowingStepYesNoQuestion'
-import useListingCancelNotificationTypes from './use-listing-cancel-notification-types'
-import useListingConfirmNotificationTypes from './use-listing-confirm-notification-types'
 import useListingPersonOnChange from './use-listing-person-on-change'
 
 interface UseShowingRoleReturn {
   rolePerson: Nullable<IShowingRoleInputPerson>
   setRolePerson: Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>
-  roleConfirmNotificationTypes: Nullable<[boolean, INotificationDeliveryType[]]>
-  setRoleConfirmNotificationTypesChange: (value: NotificationTypeValue) => void
-  roleCancelNotificationTypes: Nullable<[boolean, INotificationDeliveryType[]]>
-  setRoleCancelNotificationTypesChange: (value: NotificationTypeValue) => void
+  roleCanApprove: Nullable<boolean>
+  setRoleCanApprove: Dispatch<SetStateAction<boolean>>
+  roleConfirmNotificationTypes: Nullable<INotificationDeliveryType[]>
+  setRoleConfirmNotificationTypes: (value: INotificationDeliveryType[]) => void
+  roleCancelNotificationTypes: Nullable<INotificationDeliveryType[]>
+  setRoleCancelNotificationTypes: (value: INotificationDeliveryType[]) => void
   hasRole: Nullable<YesNoAnswer>
   setHasRoleChange: Dispatch<SetStateAction<YesNoAnswer>>
   resetRoleNotification: () => void
@@ -33,22 +31,22 @@ function useShowingRole(): UseShowingRoleReturn {
     setRolePerson
   )
 
-  const [roleNotification, setRoleNotification] = useState<
-    Nullable<IShowingRoleInputNotification>
-  >(null)
+  const [roleCanApprove, setRoleCanApprove] = useState<Nullable<boolean>>(null)
 
   const [
     roleConfirmNotificationTypes,
-    handleRoleConfirmNotificationTypesChange
-  ] = useListingConfirmNotificationTypes(roleNotification, setRoleNotification)
+    setRoleConfirmNotificationTypes
+  ] = useState<Nullable<INotificationDeliveryType[]>>(null)
 
   const [
     roleCancelNotificationTypes,
-    handleRoleCancelNotificationTypesChange
-  ] = useListingCancelNotificationTypes(roleNotification, setRoleNotification)
+    setRoleCancelNotificationTypes
+  ] = useState<Nullable<INotificationDeliveryType[]>>(null)
 
   const handleResetRoleNotification = () => {
-    setRoleNotification(null)
+    setRoleCanApprove(null)
+    setRoleConfirmNotificationTypes(null)
+    setRoleCancelNotificationTypes(null)
   }
 
   const [editable, setEditable] = useState(false)
@@ -56,10 +54,12 @@ function useShowingRole(): UseShowingRoleReturn {
   return {
     rolePerson,
     setRolePerson,
+    roleCanApprove,
+    setRoleCanApprove,
     roleConfirmNotificationTypes,
-    setRoleConfirmNotificationTypesChange: handleRoleConfirmNotificationTypesChange,
+    setRoleConfirmNotificationTypes,
     roleCancelNotificationTypes,
-    setRoleCancelNotificationTypesChange: handleRoleCancelNotificationTypesChange,
+    setRoleCancelNotificationTypes,
     hasRole,
     setHasRoleChange: handleHasRoleChange,
     resetRoleNotification: handleResetRoleNotification,
