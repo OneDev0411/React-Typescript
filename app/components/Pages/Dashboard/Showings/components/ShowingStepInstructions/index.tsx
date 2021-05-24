@@ -7,6 +7,7 @@ import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
 
 const useStyles = makeStyles(
   theme => ({
@@ -31,6 +32,7 @@ function ShowingStepInstructions({
   const classes = useStyles()
   const nextStep = useQuestionWizardSmartNext()
   const [fieldValue, setFieldValue] = useState(value || '')
+  const isCurrentStep = useIsQuestionWizardCurrentStep()
 
   const [handleDebouncedChange] = useDebouncedCallback((newValue: string) => {
     onChange(newValue.trim())
@@ -67,23 +69,25 @@ function ShowingStepInstructions({
           fullWidth
           variant="outlined"
         />
-        <Box display="flex" justifyContent="flex-end" mt={2}>
-          <Box mr={1}>
-            <Button variant="outlined" size="small" onClick={handleSkip}>
-              Skip
+        {isCurrentStep && (
+          <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Box mr={1}>
+              <Button variant="outlined" size="small" onClick={handleSkip}>
+                Skip
+              </Button>
+            </Box>
+            <Button
+              type="button"
+              size="small"
+              variant="contained"
+              color="primary"
+              disabled={!fieldValue}
+              onClick={handleContinue}
+            >
+              Continue
             </Button>
           </Box>
-          <Button
-            type="button"
-            size="small"
-            variant="contained"
-            color="primary"
-            disabled={!fieldValue}
-            onClick={handleContinue}
-          >
-            Continue
-          </Button>
-        </Box>
+        )}
       </SmartQuestionForm>
     </QuestionSection>
   )

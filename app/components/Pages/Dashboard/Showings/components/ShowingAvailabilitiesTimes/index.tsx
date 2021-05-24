@@ -101,15 +101,17 @@ function ShowingAvailabilitiesTimes({
         <Button variant="outlined" size="small" onClick={handleAdd}>
           + Add hour
         </Button>
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          disabled={!value.length || !!timeConflicts}
-          onClick={handleContinue}
-        >
-          Continue
-        </Button>
+        {isCurrentStep && (
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            disabled={!value.length || !!timeConflicts}
+            onClick={handleContinue}
+          >
+            Continue
+          </Button>
+        )}
       </Box>
     </Box>
   )

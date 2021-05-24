@@ -13,6 +13,7 @@ import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 import ShowingRoleNotificationTypesMediums from './ShowingRoleNotificationTypesMediums'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
 
 export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 
@@ -40,6 +41,7 @@ function ShowingRoleNotificationTypes({
   const [radioValue, setRadioValue] = useState<
     Nullable<NotificationTypeOption>
   >(null)
+  const isCurrentStep = useIsQuestionWizardCurrentStep()
 
   const handleChangeTypes = (types: INotificationDeliveryType[]) => {
     onChange([answer, types])
@@ -94,17 +96,19 @@ function ShowingRoleNotificationTypes({
           onChange={handleChange}
           value={radioValue}
         />
-        <Box display="flex" justifyContent="flex-end" mt={2}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={handleContinue}
-            disabled={!radioValue || (radioValue !== 'No' && !types.length)}
-          >
-            Continue
-          </Button>
-        </Box>
+        {isCurrentStep && (
+          <Box display="flex" justifyContent="flex-end" mt={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={handleContinue}
+              disabled={!radioValue || (radioValue !== 'No' && !types.length)}
+            >
+              Continue
+            </Button>
+          </Box>
+        )}
       </SmartQuestionForm>
     </QuestionSection>
   )
