@@ -41,7 +41,7 @@ export const RoleType = styled.div`
 `
 
 export const RoleItem = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, allowDeleteRole }) => css`
     position: relative;
     display: flex;
     align-items: center;
@@ -73,8 +73,11 @@ export const RoleItem = styled.div`
       }
     }
 
-    :hover ${RoleType} {
-      opacity: 0;
-    }
+    ${allowDeleteRole &&
+    `
+      :hover ${RoleType} {
+        opacity: 0;
+      }
+    `}
   `}
 `

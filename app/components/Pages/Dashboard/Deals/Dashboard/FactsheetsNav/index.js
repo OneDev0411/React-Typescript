@@ -55,7 +55,7 @@ function FactsheetsSideNav(props) {
 
           {props.showContacts && (
             <Box mb={6}>
-              <Roles deal={deal} allowDeleteRole />
+              <Roles deal={deal} allowDeleteRole allowEditRole />
             </Box>
           )}
 

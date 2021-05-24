@@ -52,6 +52,7 @@ const propTypes = {
   showEmail: PropTypes.bool,
   showTitle: PropTypes.bool,
   isEmailRequired: PropTypes.bool,
+  allowEditRole: PropTypes.bool,
   filter: PropTypes.func,
   containerStyle: PropTypes.object,
   addRoleActionRenderer: PropTypes.func,
@@ -67,6 +68,7 @@ const defaultProps = {
   disableAddRole: false,
   allowDeleteRole: true,
   isEmailRequired: false,
+  allowEditRole: false,
   showTitle: true,
   filter: () => true,
   containerStyle: {},
@@ -183,7 +185,11 @@ class Roles extends React.Component {
           const isRowRemovable = this.getIsRowRemovable(role.role)
 
           return (
-            <RoleItem key={role.id} className="item">
+            <RoleItem
+              key={role.id}
+              allowDeleteRole={this.props.allowDeleteRole}
+              className="item"
+            >
               <Flex alignCenter justifyBetween style={{ flexGrow: 1 }}>
                 <Flex alignCenter>
                   <RoleAvatar>
@@ -201,10 +207,12 @@ class Roles extends React.Component {
                   <RoleInfo onClick={() => this.onSelectRole(role)}>
                     <RoleTitle>{getLegalFullName(role)}</RoleTitle>
 
-                    <SvgIcon
-                      path={mdiPencilOutline}
-                      size={muiIconSizes.small}
-                    />
+                    {this.props.allowEditRole && (
+                      <SvgIcon
+                        path={mdiPencilOutline}
+                        size={muiIconSizes.small}
+                      />
+                    )}
                   </RoleInfo>
                 </Flex>
 
