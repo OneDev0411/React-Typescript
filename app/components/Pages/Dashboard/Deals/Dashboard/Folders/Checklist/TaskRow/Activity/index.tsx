@@ -16,7 +16,10 @@ const useStyles = makeStyles(
       lineHeight: 1,
       marginRight: theme.spacing(1),
       border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      borderRadius: theme.shape.borderRadius,
+      '&:hover': {
+        backgroundColor: theme.palette.grey['200']
+      }
     }
   }),
   {
