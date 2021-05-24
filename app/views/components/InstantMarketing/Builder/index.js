@@ -76,7 +76,6 @@ import {
   makeParentDependentsVisible,
   removeDirectDependents
 } from './utils/dependent-components'
-import { makeModelUndraggable } from './utils/models'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -211,8 +210,6 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
-
-    this.makeAllComponentsUndraggable()
   }
 
   componentWillUnmount() {
@@ -450,7 +447,6 @@ class Builder extends React.Component {
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
-    this.makeAllComponentsUndraggable()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
     this.disableAssetManager()
@@ -645,11 +641,6 @@ class Builder extends React.Component {
 
       dragStartParentModel = null
     })
-  }
-
-  makeAllComponentsUndraggable = () => {
-    // Make all the models undraggable on template initialize phase
-    makeModelUndraggable(this.editor.DomComponents.getWrapper())
   }
 
   openCarouselDrawer = model => {
@@ -926,7 +917,6 @@ class Builder extends React.Component {
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
     this.lockIn()
-    this.makeAllComponentsUndraggable()
     this.deselectAll()
     this.resize()
 
