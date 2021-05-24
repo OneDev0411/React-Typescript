@@ -76,7 +76,7 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(2)
     },
     timelineContainer: {
-      flexGrow: 1
+      width: 'calc(100% - 350px)' // flex-grow jamming when there is long note
     },
     warnContainer: {
       marginBottom: theme.spacing(2),

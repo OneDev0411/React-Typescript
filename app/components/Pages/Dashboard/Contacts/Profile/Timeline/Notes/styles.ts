@@ -10,7 +10,8 @@ export const styles = (theme: Theme) =>
     header: {
       display: 'flex',
       flexDirection: 'column',
-      width: theme.spacing(12),
+      minWidth: theme.spacing(12),
+      maxWidth: theme.spacing(12),
       paddingTop: theme.spacing(2),
       color: theme.palette.grey['900'],
       ...theme.typography.caption,
@@ -40,7 +41,7 @@ export const styles = (theme: Theme) =>
       ...theme.typography.body2
     },
     time: {
-      width: '5rem',
+      minWidth: '5rem',
       color: theme.palette.grey[500],
       ...theme.typography.caption,
       lineHeight: 2
