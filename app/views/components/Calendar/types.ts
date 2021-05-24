@@ -1,7 +1,6 @@
 import { FilterQuery } from 'models/calendar/get-calendar'
 
 export interface CalendarRef {
-  jumpToDate(date: Date): void
   refresh(date: Date, range: NumberRange | null): void
   updateCrmEvents(event: IEvent, type: string): void
 }
