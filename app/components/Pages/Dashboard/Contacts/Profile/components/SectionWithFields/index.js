@@ -476,8 +476,8 @@ class SectionWithFields extends React.Component {
     return (
       <BasicSection title={title}>
         {(orderedAttributes || []).map(attr => this.renderField(attr))}
-        {shouldToggleEmptyAttributes && this.renderToggleButton()}
         {this.props.children}
+        {shouldToggleEmptyAttributes && this.renderToggleButton()}
       </BasicSection>
     )
   }

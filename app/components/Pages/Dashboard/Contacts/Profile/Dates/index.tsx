@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Box, useTheme, makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
-import { ShowMoreLess } from 'components/ShowMoreLess'
 
 import SectionWithFields from '../components/SectionWithFields'
 
 import { START_DATE, END_DATE } from './constants'
 import DealContextField from './DealContextField'
-import { BasicSection } from '../components/Section/Basic'
 
 const fieldsOrder = [
   'birthday',
   'child_birthday',
   'wedding_anniversary',
-  'home_anniversary',
-  'work_anniversary'
+  'work_anniversary',
+  'home_anniversary'
 ]
 
 const useStyles = makeStyles(
@@ -38,7 +36,6 @@ interface Props {
 }
 
 export function Dates({ contact, submitCallback }: Props) {
-  const theme = useTheme()
   const classes = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [otherFields, setOtherFields] = useState<ICalendarEvent[]>([])
@@ -78,23 +75,13 @@ export function Dates({ contact, submitCallback }: Props) {
         submitCallback={submitCallback}
         title="Touch Dates"
         expandButtonLabel="Add Birthdays & Anniversaries"
-      />
-      {isLoading ? (
-        <Box className={classes.loadingContainer}>
-          <Loading />
-        </Box>
-      ) : (
-        <BasicSection title="Home Anniversary">
-          <ShowMoreLess
-            count={10}
-            moreText="Show more Anniversary"
-            textStyle={{
-              padding: theme.spacing(1),
-              color: theme.palette.grey[700],
-              justifyContent: 'space-between',
-              ...theme.typography.body2
-            }}
-          >
+      >
+        {isLoading ? (
+          <Box className={classes.loadingContainer}>
+            <Loading />
+          </Box>
+        ) : (
+          <Box>
             {otherFields.map(field => (
               <DealContextField
                 deal={field.deal || ''}
@@ -103,9 +90,9 @@ export function Dates({ contact, submitCallback }: Props) {
                 value={field.timestamp}
               />
             ))}
-          </ShowMoreLess>
-        </BasicSection>
-      )}
+          </Box>
+        )}
+      </SectionWithFields>
     </>
   )
 }
