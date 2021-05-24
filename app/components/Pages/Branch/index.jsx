@@ -25,6 +25,7 @@ const branchKey = publicConfig.branch.key
 const Branch = ({ location }) => {
   const [activeModal, setActiveModal] = useState(null)
   const [branchData, setBranchData] = useState(null)
+  const [content, setContent] = useState(<Loading />)
   const waitingForRedirect = Object.keys(location.query).includes(
     'waitingForRedirect'
   )
@@ -33,8 +34,6 @@ const Branch = ({ location }) => {
   const loggedInUser = useSelector(selectUser)
 
   const brand = getActiveBrand(loggedInUser)
-
-  let content = <Loading />
 
   useDeepCompareEffect(() => {
     if (activeModal) {
@@ -45,11 +44,11 @@ const Branch = ({ location }) => {
         case 'CONFLICT':
         case 'SHADOW_CONFLICT':
         case 'PROTECTED_RESOURCE':
-          content = <ConflictModal params={params} brandInfo={brandInfo} />
+          setContent(<ConflictModal params={params} brandInfo={brandInfo} />)
           break
         case 'VERIFIED':
         case 'VERIFYING_CONFLICT':
-          content = (
+          setContent(
             <VerifyRedirectModal
               type={name}
               params={params}
@@ -58,7 +57,9 @@ const Branch = ({ location }) => {
           )
           break
         case 'NEEDS_TO_LOGIN':
-          content = <NeedsToLoginModal params={params} brandInfo={brandInfo} />
+          setContent(
+            <NeedsToLoginModal params={params} brandInfo={brandInfo} />
+          )
           break
         default:
           break
@@ -141,7 +142,7 @@ const Branch = ({ location }) => {
         browserHistory.push('/oops')
       }
     }
-  }, [branchData])
+  }, [branchData, activeModal])
 
   return (
     <div
