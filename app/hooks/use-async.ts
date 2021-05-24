@@ -62,12 +62,12 @@ const defaultInitialState: ReducerState<any, any> = {
  * A helper hook to call and get data from async functions.
  * @param initialState
  */
-function useAsync<T = unknown, U = unknown>(): UseAsyncReturnTypeNullable<T, U>
-function useAsync<T = unknown, U = unknown>(
+function useAsync<T = unknown, U = Error>(): UseAsyncReturnTypeNullable<T, U>
+function useAsync<T = unknown, U = Error>(
   initialState: InitialReducerState<T, U>
 ): UseAsyncReturnType<T, U>
 
-function useAsync<T = unknown, U = unknown>(
+function useAsync<T = unknown, U = Error>(
   initialState?: InitialReducerState<T, U>
 ) {
   const initialStateRef = useRef<ReducerState<T, U>>({
