@@ -3,20 +3,24 @@ import type { SetStateAction, Dispatch } from 'react'
 import { NotificationTypeValue } from '../../components/ShowingRoleNotificationTypes'
 
 type UseListingConfirmNotificationTypesReturn = [
-  [boolean, INotificationDeliveryType[]],
+  Nullable<[boolean, INotificationDeliveryType[]]>,
   (value: NotificationTypeValue) => void
 ]
 
 function useListingConfirmNotificationTypes(
-  listingNotification: IShowingRoleInputNotification,
+  listingNotification: Nullable<IShowingRoleInputNotification>,
   setListingNotification: Dispatch<
     SetStateAction<IShowingRoleInputNotification>
   >
 ): UseListingConfirmNotificationTypesReturn {
-  const value: [boolean, INotificationDeliveryType[]] = [
-    listingNotification.can_approve,
-    listingNotification.confirm_notification_type
-  ]
+  const value: Nullable<
+    [boolean, INotificationDeliveryType[]]
+  > = listingNotification
+    ? [
+        listingNotification.can_approve,
+        listingNotification.confirm_notification_type
+      ]
+    : null
 
   const onChange = ([canApprove, types]: NotificationTypeValue) =>
     setListingNotification(oldValue => ({

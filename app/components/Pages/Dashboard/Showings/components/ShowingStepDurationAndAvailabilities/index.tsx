@@ -1,6 +1,10 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
-import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
+import {
+  QuestionSection,
+  QuestionSectionProps,
+  QuestionTitle
+} from 'components/QuestionWizard'
 
 import ShowingAvailabilitiesTimes, {
   ShowingAvailabilitiesTimesProps
@@ -8,7 +12,8 @@ import ShowingAvailabilitiesTimes, {
 import SmartQuestionForm from '../SmartQuestionForm'
 import ShowingDuration, { ShowingDurationProps } from '../ShowingDuration'
 
-interface ShowingStepDurationAndAvailabilitiesProps {
+interface ShowingStepDurationAndAvailabilitiesProps
+  extends Pick<QuestionSectionProps, 'error'> {
   availabilities: ShowingAvailabilitiesTimesProps['value']
   onAvailabilitiesChange: ShowingAvailabilitiesTimesProps['onChange']
   duration: ShowingDurationProps['value']
@@ -19,10 +24,11 @@ function ShowingStepDurationAndAvailabilities({
   duration,
   onDurationChange,
   availabilities,
-  onAvailabilitiesChange
+  onAvailabilitiesChange,
+  error
 }: ShowingStepDurationAndAvailabilitiesProps) {
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>When you’re available for this showing?</QuestionTitle>
       <SmartQuestionForm width="70%">
         <ShowingDuration

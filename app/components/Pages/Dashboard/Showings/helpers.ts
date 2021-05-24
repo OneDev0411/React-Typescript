@@ -51,3 +51,30 @@ export function getShowingBookingPageUrl(
     showing.slug
   }-${showing.human_readable_id}/book`
 }
+
+export function findTimeConflicts(
+  slots: IShowingAvailabilityInput[]
+): { slot1Index: number; slot2Index: number } | false {
+  for (let i = 0; i < slots.length; i++) {
+    for (let j = i + 1; j < slots.length; j++) {
+      const slot1 = slots[i]
+      const slot2 = slots[j]
+
+      if (slot1.weekday === slot2.weekday) {
+        if (
+          (slot1.availability[0] >= slot2.availability[0] &&
+            slot1.availability[0] < slot2.availability[1]) ||
+          (slot2.availability[0] >= slot1.availability[0] &&
+            slot2.availability[0] < slot1.availability[1])
+        ) {
+          return {
+            slot1Index: i,
+            slot2Index: j
+          }
+        }
+      }
+    }
+  }
+
+  return false
+}

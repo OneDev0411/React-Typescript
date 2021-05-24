@@ -12,7 +12,7 @@ interface StyleProps {
   lastVisitedStep: number
 }
 
-interface Props {
+export interface QuestionSectionProps {
   children: React.ReactNode
   hidden?: boolean
   error?: string
@@ -34,7 +34,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   })
 }))
 
-export function QuestionSection({ children, hidden = false, error }: Props) {
+export function QuestionSection({
+  children,
+  hidden = false,
+  error
+}: QuestionSectionProps) {
   const { currentStep, lastVisitedStep } = useWizardContext()
   const { step } = useSectionContext()
 

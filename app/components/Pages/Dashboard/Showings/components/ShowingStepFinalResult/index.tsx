@@ -14,7 +14,7 @@ import LinkButton from '../LinkButton'
 interface ShowingStepFinalResultProps {
   isLoading: boolean
   showingId?: UUID
-  error: Nullable<Error>
+  error: Nullable<Error> | string
   onRetry: () => void
 }
 
@@ -46,7 +46,7 @@ function ShowingStepFinalResult({
       </QuestionTitle>
 
       <SmartQuestionForm>
-        {error && <Box>{error.toString()}</Box>}
+        {error && <Box mb={2}>{error.toString()}</Box>}
         <Box display="flex" justifyContent="flex-end">
           {showingId ? (
             <LinkButton

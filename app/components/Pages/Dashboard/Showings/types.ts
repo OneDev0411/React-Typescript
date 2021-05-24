@@ -49,3 +49,20 @@ export interface DismissActionParams {
 export interface ApprovalActionParams extends DismissActionParams {
   appointment: IShowingAppointment
 }
+
+type CreateShowingErrorField =
+  | 'property'
+  | 'availabilities'
+  | 'agent'
+  | 'agentConfirmNotification'
+  | 'agentCancelNotification'
+  | 'coAgent'
+  | 'coAgentConfirmNotification'
+  | 'coAgentCancelNotification'
+  | 'occupantConfirmNotification'
+  | 'occupantCancelNotification'
+  | 'occupant'
+
+export type CreateShowingErrors = Partial<
+  Record<CreateShowingErrorField, string>
+>

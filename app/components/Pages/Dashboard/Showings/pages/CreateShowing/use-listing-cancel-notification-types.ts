@@ -3,20 +3,21 @@ import type { SetStateAction, Dispatch } from 'react'
 import type { NotificationTypeValue } from '../../components/ShowingRoleNotificationTypes'
 
 type UseListingCancelNotificationTypesReturn = [
-  [boolean, INotificationDeliveryType[]],
+  Nullable<[boolean, INotificationDeliveryType[]]>,
   (value: NotificationTypeValue) => void
 ]
 
 function useListingCancelNotificationTypes(
-  listingNotification: IShowingRoleInputNotification,
+  listingNotification: Nullable<IShowingRoleInputNotification>,
   setListingNotification: Dispatch<
     SetStateAction<IShowingRoleInputNotification>
   >
 ): UseListingCancelNotificationTypesReturn {
-  const value: [boolean, INotificationDeliveryType[]] = [
-    false,
-    listingNotification.cancel_notification_type
-  ]
+  const value: Nullable<
+    [boolean, INotificationDeliveryType[]]
+  > = listingNotification
+    ? [false, listingNotification.cancel_notification_type]
+    : null
 
   const onChange = ([, types]: NotificationTypeValue) => {
     setListingNotification(oldValue => ({

@@ -2,9 +2,10 @@ import React, { useState, useMemo } from 'react'
 import { Box, Button, FormHelperText, Typography } from '@material-ui/core'
 
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
-import { hourToSeconds } from '../../helpers'
-import { findSlotIndexById, findTimeConflicts } from './helpers'
+import { hourToSeconds, findTimeConflicts } from '../../helpers'
+import { findSlotIndexById } from './helpers'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
+import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
 
 export interface ShowingAvailabilitiesTimesProps {
   title?: string
@@ -18,6 +19,7 @@ function ShowingAvailabilitiesTimes({
   onChange
 }: ShowingAvailabilitiesTimesProps) {
   const nextStep = useQuestionWizardSmartNext()
+  const isCurrentStep = useIsQuestionWizardCurrentStep()
   const [nextId, setNextId] = useState(0)
 
   const getNextId = () => {
@@ -90,7 +92,7 @@ function ShowingAvailabilitiesTimes({
           />
         ))}
       </Box>
-      {timeConflicts && (
+      {timeConflicts && isCurrentStep && (
         <Box mb={1}>
           <FormHelperText error>The time slots has conflicts</FormHelperText>
         </Box>

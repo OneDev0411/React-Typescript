@@ -3,6 +3,7 @@ import { kebabCase } from 'lodash'
 
 import {
   QuestionSection,
+  QuestionSectionProps,
   QuestionTitle,
   useSectionContext,
   useWizardContext
@@ -20,9 +21,10 @@ import useUpdateContact from './use-update-contact'
 
 interface ShowingStepRolePersonProps
   extends Pick<
-    ShowingStepRolePersonSelectProps,
-    'selectType' | 'isPrimaryAgent'
-  > {
+      ShowingStepRolePersonSelectProps,
+      'selectType' | 'isPrimaryAgent'
+    >,
+    Pick<QuestionSectionProps, 'error'> {
   personTitle: string
   person: Nullable<IShowingRoleInputPerson>
   onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
@@ -39,7 +41,8 @@ function ShowingStepRolePerson({
   skippable = true,
   isPrimaryAgent,
   editable,
-  required = false
+  required = false,
+  error
 }: ShowingStepRolePersonProps) {
   type Step = 'search' | 'edit' | 'card'
 
@@ -99,8 +102,16 @@ function ShowingStepRolePerson({
     nextStep(400)
   }
 
+  function getSubmitLabel() {
+    if (selectType === 'Contact') {
+      return contact ? 'Save' : 'Save & Add to Contacts'
+    }
+
+    return step !== wizard.currentStep ? 'Save' : undefined
+  }
+
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>
         Who is the listing {kebabCase(personTitle)}?
       </QuestionTitle>
@@ -119,13 +130,7 @@ function ShowingStepRolePerson({
             initialData={person}
             onSubmit={handleSubmit}
             onCancel={handleRemove}
-            submitLabel={
-              selectType === 'Contact'
-                ? contact
-                  ? 'Save'
-                  : 'Save & Add to Contacts'
-                : undefined
-            }
+            submitLabel={getSubmitLabel()}
             submitDisabled={isCreatingContact || isUpdatingContact}
           />
         )}

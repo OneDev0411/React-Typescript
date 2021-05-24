@@ -7,18 +7,12 @@ import useListingCancelNotificationTypes from './use-listing-cancel-notification
 import useListingConfirmNotificationTypes from './use-listing-confirm-notification-types'
 import useListingPersonOnChange from './use-listing-person-on-change'
 
-const DEFAULT_NOTIFICATION_VALUE: IShowingRoleInputNotification = {
-  can_approve: true,
-  confirm_notification_type: [],
-  cancel_notification_type: []
-}
-
 interface UseShowingRoleReturn {
   rolePerson: Nullable<IShowingRoleInputPerson>
   setRolePerson: Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>
-  roleConfirmNotificationTypes: [boolean, INotificationDeliveryType[]]
+  roleConfirmNotificationTypes: Nullable<[boolean, INotificationDeliveryType[]]>
   setRoleConfirmNotificationTypesChange: (value: NotificationTypeValue) => void
-  roleCancelNotificationTypes: [boolean, INotificationDeliveryType[]]
+  roleCancelNotificationTypes: Nullable<[boolean, INotificationDeliveryType[]]>
   setRoleCancelNotificationTypesChange: (value: NotificationTypeValue) => void
   hasRole: Nullable<YesNoAnswer>
   setHasRoleChange: Dispatch<SetStateAction<YesNoAnswer>>
@@ -39,10 +33,9 @@ function useShowingRole(): UseShowingRoleReturn {
     setRolePerson
   )
 
-  const [
-    roleNotification,
-    setRoleNotification
-  ] = useState<IShowingRoleInputNotification>(DEFAULT_NOTIFICATION_VALUE)
+  const [roleNotification, setRoleNotification] = useState<
+    Nullable<IShowingRoleInputNotification>
+  >(null)
 
   const [
     roleConfirmNotificationTypes,
@@ -55,7 +48,7 @@ function useShowingRole(): UseShowingRoleReturn {
   ] = useListingCancelNotificationTypes(roleNotification, setRoleNotification)
 
   const handleResetRoleNotification = () => {
-    setRoleNotification(DEFAULT_NOTIFICATION_VALUE)
+    setRoleNotification(null)
   }
 
   const [editable, setEditable] = useState(false)

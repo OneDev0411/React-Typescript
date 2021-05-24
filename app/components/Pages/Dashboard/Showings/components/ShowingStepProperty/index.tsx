@@ -1,6 +1,10 @@
 import React, { memo, useState } from 'react'
 
-import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
+import {
+  QuestionSection,
+  QuestionSectionProps,
+  QuestionTitle
+} from 'components/QuestionWizard'
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
 import {
@@ -21,7 +25,8 @@ import ListingHipPocketCard from '../ListingHipPocketCard'
 import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
 import { getFullAddressFromSrdAddr } from '../../helpers'
 
-export interface ShowingStepPropertyProps {
+export interface ShowingStepPropertyProps
+  extends Pick<QuestionSectionProps, 'error'> {
   property: Nullable<ShowingPropertyType>
   onPropertyChange: (value: ShowingPropertyType) => void
 }
@@ -33,7 +38,8 @@ const SEARCH_RESULT_TYPES: SearchResultType[] = [
 
 function ShowingStepProperty({
   property,
-  onPropertyChange
+  onPropertyChange,
+  error
 }: ShowingStepPropertyProps) {
   const nextStep = useQuestionWizardSmartNext()
   const [isSearchMode, setIsSearchMode] = useState(!property)
@@ -80,7 +86,7 @@ function ShowingStepProperty({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <SmartQuestionForm>
         {isSearchMode ? (

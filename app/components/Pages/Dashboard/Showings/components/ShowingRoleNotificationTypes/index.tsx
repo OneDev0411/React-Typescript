@@ -2,7 +2,11 @@ import React, { useState, ReactNode } from 'react'
 
 import { Box, Button } from '@material-ui/core'
 
-import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
+import {
+  QuestionSection,
+  QuestionTitle,
+  QuestionSectionProps
+} from 'components/QuestionWizard'
 
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
@@ -14,7 +18,8 @@ export type NotificationTypeValue = [boolean, INotificationDeliveryType[]]
 
 type NotificationTypeOption = 'No' | 'NoWithTypes' | 'Yes'
 
-export interface ShowingRoleNotificationTypesProps {
+export interface ShowingRoleNotificationTypesProps
+  extends Pick<QuestionSectionProps, 'error'> {
   question: ReactNode
   value: NotificationTypeValue
   onChange: (value: NotificationTypeValue) => void
@@ -27,7 +32,8 @@ function ShowingRoleNotificationTypes({
   hasNoAnywaysOption = false,
   value,
   onChange,
-  yesOptionLabel
+  yesOptionLabel,
+  error
 }: ShowingRoleNotificationTypesProps) {
   const nextStep = useQuestionWizardSmartNext()
   const [answer, types] = value
@@ -79,7 +85,7 @@ function ShowingRoleNotificationTypes({
   ]
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>{question}</QuestionTitle>
       <SmartQuestionForm>
         <RadioGroup<NotificationTypeOption>
