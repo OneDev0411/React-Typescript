@@ -129,8 +129,8 @@ const redirectHandler = async (
       console.log('you logged with different user')
       queryParams.redirectFromSignout = redirect
       params.to = `/signout${createUrlSearch(queryParams)}`
-      params.messageText =
-        'You are currently logged in a different user. Please sign out and sign up your new account.'
+      params.messageText = `You are currently logged in as a different user.' 
+        'Please sign out and sign up your new account.`
       setActiveModal({ name: 'SHADOW_CONFLICT', params })
 
       return
