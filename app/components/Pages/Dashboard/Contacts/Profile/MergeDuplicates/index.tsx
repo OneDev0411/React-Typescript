@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { Button } from '@material-ui/core'
-import { useTheme } from '@material-ui/core/styles'
+import { Button, useTheme } from '@material-ui/core'
 
 import pluralize from 'pluralize'
 
@@ -173,7 +172,11 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
         dense
         type="info"
         closeButtonTooltip="Dismiss"
-        style={{ padding: '0.5rem 1rem', marginBottom: '1rem' }}
+        style={{
+          padding: theme.spacing(0.5, 2),
+          margin: theme.spacing(0, 0, 2, 0),
+          borderRadius: `${theme.shape.borderRadius}px`
+        }}
         onClose={() => {
           handleDismissMergeCallout(contact.id)
         }}

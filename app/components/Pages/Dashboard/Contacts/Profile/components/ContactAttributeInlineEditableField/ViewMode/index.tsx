@@ -37,7 +37,7 @@ const useStyles = makeStyles(
       wordBreak: 'break-word'
     },
     starIcon: {
-      color: theme.palette.text.primary
+      color: theme.palette.warning.main
     },
     triggerIcon: (props: Props) => ({
       color: props.isTriggerActive
@@ -77,22 +77,19 @@ export function ViewMode(props: Props) {
             />
           </Tooltip>
         )}
+        {props.isTriggerable && (
+          <SvgIcon
+            path={mdiLightningBoltOutline}
+            leftMargined
+            className={classes.triggerIcon}
+            size={muiIconSizes.small}
+          />
+        )}
       </Box>
       <Box className={classes.contentContainer}>
         <Box className={classes.value}>
           <Typography variant="body2">{props.value || '-'}</Typography>
         </Box>
-
-        {props.isTriggerable && (
-          <Box>
-            <SvgIcon
-              path={mdiLightningBoltOutline}
-              leftMargined
-              className={classes.triggerIcon}
-              size={muiIconSizes.small}
-            />
-          </Box>
-        )}
       </Box>
     </Box>
   )
