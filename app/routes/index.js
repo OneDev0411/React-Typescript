@@ -164,12 +164,15 @@ const AsyncOnboardingProfile = withSignedInUser(
 //  Overview Page
 /* ==================================== */
 
-const AsyncDashboardOverview = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
-    )
-})
+const AsyncDashboardOverview = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
+      )
+  }),
+  { oneOf: [ACL.DEALS, ACL.CRM] }
+)
 
 /* ==================================== */
 //  MLS

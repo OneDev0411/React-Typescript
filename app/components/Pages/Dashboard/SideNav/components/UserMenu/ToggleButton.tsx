@@ -65,7 +65,7 @@ export default function ToggleButton(props: Props) {
         iconPath={mdiDotsVertical}
       >
         <Box className={classes.wrapper}>
-          <Avatar user={props.user} />
+          {/* <Avatar user={props.user} /> */}
           <div className={classes.userDetails}>
             <Typography
               noWrap

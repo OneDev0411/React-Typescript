@@ -9,7 +9,6 @@ import {
   Grid,
   Chip,
   Box,
-  Badge,
   fade,
   Theme,
   makeStyles
@@ -40,17 +39,23 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(0.5)
     },
     labelChipLabel: {
-      lineHeight: 1
+      lineHeight: theme.spacing(1)
     },
     statusChip: {
       display: 'flex'
     },
-    statusBadgeDot: ({ listing }: Props) => ({
+    statusDot: ({ listing }: Props) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
-      transform: 'none',
-      position: 'static',
-      zIndex: 0
+      width: theme.spacing(1),
+      height: theme.spacing(1),
+      borderRadius: '50%',
+      display: 'inline-block'
     }),
+    iconSmall: {
+      // TODO: there should be better ways to handling this.
+      // https://stackoverflow.com/questions/63880835
+      marginLeft: `${theme.spacing(1)}px !important`
+    },
     cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.white, 0.7),
@@ -263,17 +268,10 @@ export default function ListingCard({
                     label={listing.status}
                     size="small"
                     variant="outlined"
-                    className={classes.statusChip}
-                    icon={
-                      <Box flex>
-                        <Badge
-                          variant="dot"
-                          classes={{
-                            dot: classes.statusBadgeDot
-                          }}
-                        />
-                      </Box>
-                    }
+                    classes={{
+                      iconSmall: classes.iconSmall
+                    }}
+                    icon={<Box className={classes.statusDot} />}
                   />
                 </Box>
               </Grid>

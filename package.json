@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.19",
+  "version": "86.0.20",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -137,7 +137,7 @@
     "google-map-react": "^1.1.2",
     "google-maps": "^3.3.0",
     "grapesjs": "^0.16.44",
-    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#7e0e43c",
+    "grapesjs-mjml": "git+https://oauth2:8WKTn--zJgyNE5Vytk_x@gitlab.com/rechat/grapesjs-mjml-improved.git#b4a6b31",
     "history": "^3.3.0",
     "idx": "^2.5.2",
     "iframe-resizer-react": "^1.1.0",

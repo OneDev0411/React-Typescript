@@ -226,6 +226,48 @@ export function DealAddress({
             )}
 
             <Box>
+              {places.length > 0 && (
+                <Typography variant="body1" className={classes.subtitle}>
+                  Places
+                </Typography>
+              )}
+
+              {places.map((place, index) => (
+                <Box
+                  key={place.id || index}
+                  display="flex"
+                  alignItems="center"
+                  className={classes.resultItem}
+                  onClick={() => handleSelectPlace(place)}
+                >
+                  <Box
+                    width="32px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    mr={1}
+                  >
+                    <SvgIcon path={mdiMapMarker} />
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      className={classes.resultItemContent}
+                    >
+                      <div>
+                        <strong>{place.structured_formatting.main_text}</strong>
+                      </div>
+                      <span className={classes.lightText}>
+                        {place.structured_formatting.secondary_text.replace(
+                          ', USA',
+                          ''
+                        )}
+                      </span>
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+
               {listings.length > 0 && (
                 <Typography variant="body1" className={classes.subtitle}>
                   Listings
@@ -269,48 +311,6 @@ export function DealAddress({
                       {listing.status}
                     </Typography>
                   </div>
-                </Box>
-              ))}
-
-              {places.length > 0 && (
-                <Typography variant="body1" className={classes.subtitle}>
-                  Places
-                </Typography>
-              )}
-
-              {places.map((place, index) => (
-                <Box
-                  key={place.id || index}
-                  display="flex"
-                  alignItems="center"
-                  className={classes.resultItem}
-                  onClick={() => handleSelectPlace(place)}
-                >
-                  <Box
-                    width="32px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    mr={1}
-                  >
-                    <SvgIcon path={mdiMapMarker} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      variant="body2"
-                      className={classes.resultItemContent}
-                    >
-                      <div>
-                        <strong>{place.structured_formatting.main_text}</strong>
-                      </div>
-                      <span className={classes.lightText}>
-                        {place.structured_formatting.secondary_text.replace(
-                          ', USA',
-                          ''
-                        )}
-                      </span>
-                    </Typography>
-                  </Box>
                 </Box>
               ))}
 

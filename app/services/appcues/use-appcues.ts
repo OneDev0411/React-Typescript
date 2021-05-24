@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { useSelector } from 'react-redux'
 
 import moment from 'moment'
@@ -37,7 +37,7 @@ export function useAppcues() {
 
   const pathname = location ? location.pathname : null
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (!pathname) {
       return
     }
@@ -67,7 +67,9 @@ export function useAppcues() {
         // Normally what we should be doing here is to call Appcues.Page(), but
         // behind the scenes, Appcues.identify() also invokes that function.
         // Reac more: https://docs.appcues.com/article/161-javascript-api
-        window.Appcues.identify(user.id, userData)
+        window.AppcuesReady(() => {
+          window.Appcues.identify(user.id, userData)
+        })
       }
     })()
   }, [pathname, user, accessList])

@@ -13,11 +13,10 @@ import Autocomplete from '../components/Autocomplete'
 const useStyles = makeStyles(
   theme => ({
     container: {
-      paddingBottom: theme.spacing(3),
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
       [theme.breakpoints.up('md')]: {
-        display: 'flex',
-        paddingBottom: 0,
-        height: theme.spacing(14)
+        display: 'flex'
       }
     },
     body: {
@@ -61,7 +60,16 @@ export function Header(props) {
               </Button>
             )}
             renderMenu={({ close }) => (
-              <Filters isSubmitting={isFetching} handleClose={close} />
+              // The <div> wrapper is required since we're putting this element
+              // inside a <ClickAwayListener /> component which needs its child
+              // component to to be able to hold a ref.
+              // Read more:
+              // https://material-ui.com/api/click-away-listener
+              // <BaseDropdown> component takes care of clickAwayClosing so we don't
+              // need to use close arg passed to renderMenu()
+              <div>
+                <Filters isSubmitting={isFetching} handleClose={close} />
+              </div>
             )}
           />
         </Box>
