@@ -38,7 +38,7 @@ import useFillPersonRolesWithProperty from './use-fill-person-roles-with-propert
 import useShowingPropertyId from './use-showing-property-id'
 import { showingDurationOptions } from '../../constants'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
-import { findTimeConflicts } from '../../helpers'
+import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 
 export const goAndShowNotificationTypes: IShowingRoleInputNotification = {
   can_approve: true,
@@ -166,6 +166,11 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
     if (findTimeConflicts(availabilities)) {
       errors.availabilities = 'The time slots has conflicts'
+    }
+
+    if (hasInvalidTimeRange(availabilities)) {
+      errors.availabilities =
+        'The "From" value must be earlier than the "To" value'
     }
 
     if (!agentPerson) {

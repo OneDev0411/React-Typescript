@@ -78,3 +78,9 @@ export function findTimeConflicts(
 
   return false
 }
+
+export function hasInvalidTimeRange(
+  slots: IShowingAvailabilityInput[]
+): boolean {
+  return !!slots.find(slot => slot.availability[1] <= slot.availability[0])
+}
