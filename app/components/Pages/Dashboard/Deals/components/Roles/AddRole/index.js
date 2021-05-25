@@ -96,7 +96,8 @@ class AddRoleForm extends React.Component {
           <BaseDropdown
             PopperProps={{
               style: {
-                width: '18rem'
+                width: '18rem',
+                zIndex: 1
               }
             }}
             renderDropdownButton={buttonProps => (
