@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
 import { Box, Typography } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
@@ -83,7 +85,7 @@ class ICalIntegration extends React.Component {
       console.log(e)
       dispatch(
         notify({
-          title: 'Could not get calender feed setting',
+          message: 'Could not get calender feed setting',
           status: 'error',
           dismissible: true
         })
