@@ -33,15 +33,7 @@ export async function attachCKEditor(
   opts: any = {},
   getOpts: (currentOptions: any) => any = () => ({})
 ) {
-  // @ts-ignore
-  await editor.Canvas.getDocument().fonts.ready
-
-  const templateFonts: string[] = Array.from(
-    // @ts-ignore
-    editor.Canvas.getDocument().fonts
-  ).map(({ family }) => family)
-
-  const fontNames = [...new Set([...templateFonts, ...fontFamilies])]
+  const fontNames = [...new Set([...fontFamilies])]
 
   let c = opts
 
@@ -100,6 +92,9 @@ export async function attachCKEditor(
     throw new Error('CKEDITOR instance not found')
   }
 
+  // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.span = 1
   // @ts-ignore
   CKEDITOR.dtd.$editable.a = 1
 
@@ -144,7 +139,7 @@ export async function attachCKEditor(
       // Get dynamic options
       const dynamicOptions = getOpts(c.options)
 
-      // Init CkEditors
+      // Init CKEditor
       // @ts-ignore
       rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
 

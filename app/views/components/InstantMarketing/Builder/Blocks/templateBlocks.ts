@@ -19,7 +19,7 @@ export async function getTemplateOptions(
   try {
     const response = await fetch(`${template.url}/blocks.json`)
 
-    if (response.status === 404) {
+    if (response.status >= 400) {
       return null
     }
 
@@ -33,15 +33,23 @@ async function getTemplateBlockBase(
   templateBlock: TemplateBlockBase,
   template: IMarketingTemplate
 ): Promise<Nullable<string>> {
-  const response = await fetch(
-    `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
-  )
-
-  if (response.status === 404) {
-    return null
+  if (!templateBlock.category || !templateBlock.name) {
+    return Promise.resolve(null)
   }
 
-  return response.text()
+  try {
+    const response = await fetch(
+      `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
+    )
+
+    if (response.status >= 400) {
+      return null
+    }
+
+    return response.text()
+  } catch (e) {
+    return null
+  }
 }
 
 export async function getTemplateBlockOptions(
@@ -60,7 +68,9 @@ export async function getTemplateBlockOptions(
         async templateBlock =>
           ({
             ...templateBlock,
-            icon: `${templateUrl}/${templateBlock.icon}`,
+            icon: templateBlock.icon
+              ? `${templateUrl}/${templateBlock.icon}`
+              : '',
             template:
               (await getTemplateBlockBase(templateBlock, template)) ?? ''
           } as TemplateBlock)
@@ -107,10 +117,10 @@ export function registerTemplateBlocks(
       registerBlock(editor, {
         blockName,
         icon: templateBlock.icon,
-        label: templateBlock.label,
-        category: templateBlock.category,
-        template: templateBlock.template,
-        adaptive: templateBlock.adaptive
+        label: templateBlock.label || '',
+        category: templateBlock.category || '',
+        template: templateBlock.template || '',
+        adaptive: !!templateBlock.adaptive
       })
 
       return {

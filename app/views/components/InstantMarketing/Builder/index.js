@@ -21,11 +21,11 @@ import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
 import {
   isAdmin,
   getBrandByType,
-  getActiveTeamSettings
+  getActiveTeamSettings,
+  getActiveBrand
 } from 'utils/user-teams'
 import { loadJS, unloadJS } from 'utils/load-js'
 
-import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
 
 import { EditorDialog } from 'components/ImageEditor'
@@ -76,7 +76,6 @@ import {
   makeParentDependentsVisible,
   removeDirectDependents
 } from './utils/dependent-components'
-import { makeModelUndraggable } from './utils/models'
 
 class Builder extends React.Component {
   constructor(props) {
@@ -211,8 +210,6 @@ class Builder extends React.Component {
 
     this.editor.on('load', this.setupGrapesJs)
     this.editor.on('rte:enable', this.evaluateRte)
-
-    this.makeAllComponentsUndraggable()
   }
 
   componentWillUnmount() {
@@ -297,27 +294,32 @@ class Builder extends React.Component {
     })
   }
 
-  loadCKEditorRTE = () => {
+  getTemplateMarkupFonts = () => {
+    try {
+      const document = this.editor.Canvas.getDocument()
+
+      return [
+        ...new Set(Array.from(document.fonts).map(({ family }) => family))
+      ]
+    } catch (e) {
+      return []
+    }
+  }
+
+  loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
-    const brandFonts = getBrandFontFamilies(brand)
 
-    return attachCKEditor(
-      this.editor,
-      brandFonts,
-      brandColors,
-      undefined,
-      opts => {
-        const currentFonts = opts.font_names ? opts.font_names.split(';') : []
-        const allFonts = [
-          ...new Set([...this.selectedTemplateFonts, ...currentFonts])
-        ]
+    return attachCKEditor(this.editor, [], brandColors, undefined, () => {
+      const templateFonts = this.selectedTemplateFonts
 
-        return {
-          font_names: allFonts.join(';')
-        }
+      const fonts =
+        templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
+
+      return {
+        font_names: fonts.join(';')
       }
-    )
+    })
   }
 
   static contextType = ConfirmationModalContext
@@ -445,7 +447,6 @@ class Builder extends React.Component {
     this.setState({ isEditorLoaded: true })
 
     this.lockIn()
-    this.makeAllComponentsUndraggable()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
     this.disableAssetManager()
@@ -640,11 +641,6 @@ class Builder extends React.Component {
 
       dragStartParentModel = null
     })
-  }
-
-  makeAllComponentsUndraggable = () => {
-    // Make all the models undraggable on template initialize phase
-    makeModelUndraggable(this.editor.DomComponents.getWrapper())
   }
 
   openCarouselDrawer = model => {
@@ -876,12 +872,14 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
+    const activeBrand = getActiveBrand(this.props.user)
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,
-      ...renderData
+      ...renderData,
+      brand: activeBrand
     })
   }
 
@@ -919,7 +917,6 @@ class Builder extends React.Component {
     this.setEditorTemplateId(getTemplateObject(selectedTemplate).id)
     this.editor.setComponents(html)
     this.lockIn()
-    this.makeAllComponentsUndraggable()
     this.deselectAll()
     this.resize()
 
@@ -1460,7 +1457,9 @@ class Builder extends React.Component {
                 </Button>
               )}
 
-              {(this.shouldShowEmailActions || this.isBareMode) &&
+              {(this.isOpenHouseMedium ||
+                this.shouldShowEmailActions ||
+                this.isBareMode) &&
                 this.getSaveButton()}
 
               <IconButton

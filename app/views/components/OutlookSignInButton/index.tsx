@@ -5,7 +5,7 @@ import IconOutlook from 'components/SvgIcons/Outlook/IconOutlook'
 export function OutlookSignInButton(props: ButtonProps) {
   return (
     <Button startIcon={<IconOutlook />} {...props}>
-      Sign in with Google
+      Sign in with Outlook
     </Button>
   )
 }

@@ -1,5 +1,6 @@
 import { Button } from '@material-ui/core'
 import { browserHistory } from 'react-router'
+import { Theme, makeStyles } from '@material-ui/core'
 
 import { ZeroState } from 'partials/ZeroState'
 
@@ -14,9 +15,19 @@ import { CreateContact } from 'components/CreateContact'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    wideButton: {
+      width: '45%'
+    }
+  }),
+  { name: 'ContactsZeroState' }
+)
+
 export function ContactsZeroState() {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
+  const classes = useStyles()
 
   return (
     <ZeroState
@@ -45,6 +56,7 @@ export function ContactsZeroState() {
           <Button
             size="large"
             variant="outlined"
+            className={classes.wideButton}
             onClick={() =>
               browserHistory.push('/dashboard/contacts/import/csv')
             }
@@ -54,7 +66,10 @@ export function ContactsZeroState() {
 
           <CreateContact
             showAddAnother={false}
-            buttonProps={{ size: 'large' }}
+            buttonProps={{
+              size: 'large',
+              classes: { root: classes.wideButton }
+            }}
           />
         </>
       }

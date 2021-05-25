@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
@@ -6,7 +6,6 @@ import {
   Button,
   ListItem,
   ListItemText,
-  Link,
   ListItemAvatar,
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
@@ -15,6 +14,8 @@ import {
 } from '@material-ui/core'
 
 import timeago from 'timeago.js'
+
+import Link from 'components/ALink'
 
 import { selectUser } from 'selectors/user'
 
@@ -67,14 +68,12 @@ export default function CalendarEventListItem({ event }: Props) {
 
   if (contact) {
     avatarIcon = (
-      <Link href={`/dashboard/contacts/${contact.id}`}>
+      <Link to={`/dashboard/contacts/${contact.id}`}>
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
     )
     linkTitle = (
-      <Link underline="none" href={`/dashboard/contacts/${contact.id}`}>
-        {linkTitle}
-      </Link>
+      <Link to={`/dashboard/contacts/${contact.id}`}>{linkTitle}</Link>
     )
   } else if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
