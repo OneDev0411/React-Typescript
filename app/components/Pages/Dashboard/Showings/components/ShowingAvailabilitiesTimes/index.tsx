@@ -2,7 +2,11 @@ import React, { useState, useMemo } from 'react'
 import { Box, Button, FormHelperText, Typography } from '@material-ui/core'
 
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
-import { hourToSeconds, findTimeConflicts } from '../../helpers'
+import {
+  hourToSeconds,
+  findTimeConflicts,
+  hasInvalidTimeRange
+} from '../../helpers'
 import { findSlotIndexById } from './helpers'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
@@ -72,6 +76,7 @@ function ShowingAvailabilitiesTimes({
   }
 
   const timeConflicts = useMemo(() => findTimeConflicts(value), [value])
+  const hasInvalidRange = useMemo(() => hasInvalidTimeRange(value), [value])
 
   return (
     <Box>
@@ -106,7 +111,7 @@ function ShowingAvailabilitiesTimes({
             variant="contained"
             size="small"
             color="primary"
-            disabled={!value.length || !!timeConflicts}
+            disabled={!value.length || !!timeConflicts || hasInvalidRange}
             onClick={handleContinue}
           >
             Continue
