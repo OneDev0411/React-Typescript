@@ -64,7 +64,9 @@ export async function getTemplateBlockOptions(
         async templateBlock =>
           ({
             ...templateBlock,
-            icon: `${templateUrl}/${templateBlock.icon}`,
+            icon: templateBlock.icon
+              ? `${templateUrl}/${templateBlock.icon}`
+              : '',
             template:
               (await getTemplateBlockBase(templateBlock, template)) ?? ''
           } as TemplateBlock)
@@ -111,10 +113,10 @@ export function registerTemplateBlocks(
       registerBlock(editor, {
         blockName,
         icon: templateBlock.icon,
-        label: templateBlock.label,
-        category: templateBlock.category,
-        template: templateBlock.template,
-        adaptive: templateBlock.adaptive
+        label: templateBlock.label || '',
+        category: templateBlock.category || '',
+        template: templateBlock.template || '',
+        adaptive: !!templateBlock.adaptive
       })
 
       return {
