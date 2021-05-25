@@ -33,6 +33,10 @@ async function getTemplateBlockBase(
   templateBlock: TemplateBlockBase,
   template: IMarketingTemplate
 ): Promise<Nullable<string>> {
+  if (!templateBlock.category || !templateBlock.name) {
+    return Promise.resolve(null)
+  }
+
   try {
     const response = await fetch(
       `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
