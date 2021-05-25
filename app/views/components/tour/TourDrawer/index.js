@@ -27,7 +27,7 @@ import { EventField } from '../../EventDrawer/components/EventField'
 import {
   FormContainer,
   FieldContainer,
-  AssosiationContainer
+  AssociationContainer
 } from '../../EventDrawer/styled'
 
 import AddAssociation from '../../AddAssociation'
@@ -274,7 +274,7 @@ export class TourDrawer extends React.Component {
                       path: mdiAccountPlusOutline
                     }}
                   >
-                    <AssosiationContainer>
+                    <AssociationContainer>
                       <AssociationsList
                         filterType="contact"
                         name="clients"
@@ -286,7 +286,7 @@ export class TourDrawer extends React.Component {
                         type="contact"
                         name="clients"
                       />
-                    </AssosiationContainer>
+                    </AssociationContainer>
                   </EventField>
                   <ItemChangelog item={values} style={{ marginTop: '2em' }} />
                   <Footer justifyBetween>

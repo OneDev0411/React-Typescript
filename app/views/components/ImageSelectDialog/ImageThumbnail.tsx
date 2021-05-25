@@ -1,5 +1,6 @@
-import React, { ImgHTMLAttributes } from 'react'
+import { MouseEvent, ImgHTMLAttributes, useState } from 'react'
 import { Box, Button, Theme, makeStyles } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 
 import { DangerButton } from 'components/Button/DangerButton'
 
@@ -15,7 +16,7 @@ const useStyles = makeStyles(
         background: theme.palette.grey[300],
 
         '& $actionsContainer': {
-          visibility: 'visible'
+          opacity: 1
         }
       }
     },
@@ -29,7 +30,8 @@ const useStyles = makeStyles(
       position: 'absolute',
       bottom: theme.spacing(2),
       left: 0,
-      visibility: 'hidden'
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
     },
     actionButton: {
       margin: theme.spacing(0, 0.5)
@@ -55,8 +57,9 @@ export default function ImageThumbnail({
   ...otherImgProps
 }: Props) {
   const classes = useStyles()
+  const [isLoading, setIsLoading] = useState(true)
 
-  const handleEdit = (e: React.MouseEvent) => {
+  const handleEdit = (e: MouseEvent) => {
     if (!onEditClick) {
       return
     }
@@ -65,7 +68,7 @@ export default function ImageThumbnail({
     onEditClick()
   }
 
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = (e: MouseEvent) => {
     if (!onDeleteClick) {
       return
     }
@@ -76,7 +79,19 @@ export default function ImageThumbnail({
 
   return (
     <Box m={1} p={1} className={classes.container} onClick={onClick}>
-      <img alt={alt} src={src} {...otherImgProps} className={classes.image} />
+      <img
+        alt={alt}
+        src={src}
+        {...otherImgProps}
+        className={classes.image}
+        onLoad={() => setIsLoading(false)}
+        style={{
+          display: isLoading ? 'none' : 'block'
+        }}
+      />
+      {isLoading && (
+        <Skeleton animation="wave" variant="rect" height={200} width="100%" />
+      )}
       <Box
         display="flex"
         flexDirection="row"
