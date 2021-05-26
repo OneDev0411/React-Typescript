@@ -20,7 +20,7 @@ interface Props {
   deal: IDeal
   tooltip?: string
   buttonProps?: IconButtonProps
-  onDeleteRole: (role: IDealRole) => void
+  onDeleteRole?: (role: IDealRole) => void
 }
 
 export default function DeleteRole(props: Props) {
@@ -36,7 +36,10 @@ export default function DeleteRole(props: Props) {
           try {
             setIsDeleting(true)
             await dispatch(deleteRole(props.deal.id, props.role.id))
-            props.onDeleteRole(props.role)
+
+            if (props.onDeleteRole) {
+              props.onDeleteRole(props.role)
+            }
 
             dispatch(
               notify({
