@@ -1,7 +1,9 @@
 import {
   useState,
+  useEffect,
   forwardRef,
   RefObject,
+  useImperativeHandle,
   ComponentProps,
   useCallback
 } from 'react'
@@ -35,10 +37,10 @@ interface Props {
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
 
-// interface SocketUpdate {
-//   upserted: ICalendarEvent[]
-//   deleted: UUID[]
-// }
+interface SocketUpdate {
+  upserted: ICalendarEvent[]
+  deleted: UUID[]
+}
 
 export function Calendar({
   calendarRef,
@@ -56,6 +58,7 @@ export function Calendar({
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
   )
+  const [isReachedEnd, setIsReachedEnd] = useState(false)
 
   const { user, viewAsUsers } = useSelector<
     IAppState,
@@ -91,6 +94,9 @@ export function Calendar({
           associations: ['calendar_event.people', ...associations],
           ...apiOptions
         })
+
+        setIsReachedEnd(fetchedEvents.length === 0)
+
         const nextEvents: ICalendarEvent[] = options.reset
           ? fetchedEvents
           : fetchedEvents.concat(events)
@@ -196,7 +202,7 @@ export function Calendar({
   )
 
   const handleLoadNextEvents = useCallback((): void => {
-    if (isLoading) {
+    if (isLoading || isReachedEnd) {
       return
     }
 
@@ -211,7 +217,7 @@ export function Calendar({
         calendarRange: nextCalendarRange
       }
     )
-  }, [createRanges, fetchEvents, isLoading])
+  }, [createRanges, fetchEvents, isLoading, isReachedEnd])
 
   const handleLoadPreviousEvents = useCallback((): void => {
     if (isLoading) {
@@ -230,6 +236,50 @@ export function Calendar({
       }
     )
   }, [createRanges, fetchEvents, isLoading])
+
+  /**
+   * exposes below methods to be accessible outside of the component
+   */
+  useImperativeHandle(calendarRef, () => ({
+    refresh: handleLoadEvents,
+    updateCrmEvents: handleCrmEventChange
+  }))
+
+  useEffect(() => {
+    const socket: SocketIOClient.Socket = (window as any).socket
+
+    if (!socket) {
+      return
+    }
+
+    function handleUpdate({ upserted, deleted }: SocketUpdate) {
+      if (upserted.length === 0 && deleted.length === 0) {
+        return
+      }
+
+      const currentEvents: ICalendarEvent[] =
+        deleted.length > 0
+          ? events.filter(e => !deleted.includes(e.id))
+          : events
+      const nextEvents =
+        upserted.length > 0 ? [...upserted, ...currentEvents] : currentEvents
+
+      const normalizedEvents = normalizeEvents(nextEvents, calendarRange)
+
+      const nextRows = createListRows(normalizedEvents)
+
+      // update events list
+      setEvents(nextEvents)
+
+      setListRows(nextRows)
+    }
+
+    socket.on('Calendar.Updated', handleUpdate)
+
+    return () => {
+      socket.off('Calendar.Updated', handleUpdate)
+    }
+  })
 
   return (
     <CalendarList
