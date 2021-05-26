@@ -59,7 +59,7 @@ const RADIUS = 1.61803398875 / 2
 const styles = () => ({
   mlsContainer: {
     display: 'flex',
-    height: '100vh',
+    minHeight: '100vh',
     flexDirection: 'column',
     paddingTop: 0,
     paddingBottom: 0

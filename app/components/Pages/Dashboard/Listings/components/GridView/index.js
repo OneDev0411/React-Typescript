@@ -1,5 +1,5 @@
 import React, { useState, memo } from 'react'
-import { Grid, Box, makeStyles } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
 import { useDeepCompareEffect } from 'react-use'
 
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
@@ -13,18 +13,8 @@ import ZeroState from '../ZeroState'
 
 const PAGE_SIZE = 12
 
-const useStyles = makeStyles(() => ({
-  container: {
-    position: 'relative'
-  },
-  gridContainer: {
-    position: 'absolute'
-  }
-}))
-
 function GridView({ isFetching, sortedListings }) {
   const { selections, toggleItem } = useListSelection()
-  const classes = useStyles()
 
   const [limit, setLimit] = useState(PAGE_SIZE)
   const loadNextPage = () => setLimit(limit => limit + PAGE_SIZE)
@@ -61,8 +51,8 @@ function GridView({ isFetching, sortedListings }) {
   }
 
   return (
-    <Box className={classes.container}>
-      <Grid container spacing={2} className={classes.gridContainer}>
+    <Box>
+      <Grid container spacing={2}>
         {renderContent()}
       </Grid>
     </Box>

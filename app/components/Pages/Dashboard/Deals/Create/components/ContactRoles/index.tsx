@@ -24,7 +24,7 @@ import { IDealFormRole } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      maxHeight: '60vh',
+      maxHeight: '30vh',
       overflow: 'auto',
       '&.has-border': {
         border: `1px solid ${theme.palette.divider}`,

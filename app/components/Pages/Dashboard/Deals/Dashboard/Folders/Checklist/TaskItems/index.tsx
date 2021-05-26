@@ -1,4 +1,5 @@
-import React from 'react'
+import { Box } from '@material-ui/core'
+
 import sortBy from 'lodash/sortBy'
 
 import { useSelector } from 'react-redux'
@@ -11,8 +12,6 @@ import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 import { DigitalForm } from './DigitalForm'
 import { Attachment } from './Attachment'
 import { Envelope } from './Envelope'
-
-import { Container } from './styled'
 
 interface Props {
   deal: IDeal
@@ -32,7 +31,7 @@ export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
     return null
   }
 
-  const getFiles = () => {
+  const getRows = () => {
     const list: (IFile | IDealTask | IDealEnvelope)[] = [
       ...(task.room.attachments || []),
       ...envelopes,
@@ -50,8 +49,8 @@ export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
   }
 
   return (
-    <Container>
-      {getFiles().map((item, index) => {
+    <Box display="flex" flexDirection="column" flexGrow={1}>
+      {getRows().map((item, index) => {
         if (item.type === 'task') {
           return <DigitalForm key={index} deal={deal} task={item} />
         }
@@ -72,6 +71,6 @@ export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
           />
         )
       })}
-    </Container>
+    </Box>
   )
 }

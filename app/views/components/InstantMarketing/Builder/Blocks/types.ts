@@ -13,11 +13,11 @@ export interface BlockOptions {
 
 export interface TemplateBlockBase {
   name: string
-  icon: string
-  category: string
-  label: string
+  icon?: string
+  category?: string
+  label?: string
   adaptive?: boolean
-  type: string
+  type?: string
 }
 
 export interface TemplateOptions {

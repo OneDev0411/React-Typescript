@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Flex from 'styled-flex-component'
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { isContextApproved } from '../../helpers/is-context-approved'
@@ -15,10 +14,6 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      paddingRight: theme.spacing(2),
-      marginBottom: theme.spacing(1)
-    },
     button: {
       padding: 0,
       margin: 0
@@ -27,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export function ApproveButton(props: Props) {
-  const { root, button } = useStyles()
+  const classes = useStyles()
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
   if (!props.isBackOffice || isContextApproved(props.deal, props.field)) {
@@ -43,17 +38,14 @@ export function ApproveButton(props: Props) {
   }
 
   return (
-    <Flex justifyEnd className={root}>
-      <Button
-        variant="text"
-        color="secondary"
-        size="small"
-        className={button}
-        disabled={isSaving}
-        onClick={handleSave}
-      >
-        Approve
-      </Button>
-    </Flex>
+    <Button
+      color="secondary"
+      size="small"
+      className={classes.button}
+      disabled={isSaving}
+      onClick={handleSave}
+    >
+      Approve
+    </Button>
   )
 }
