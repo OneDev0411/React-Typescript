@@ -11,8 +11,7 @@ export const useStyles = makeStyles(
       transition: '0.1s ease-in background-color',
 
       '&:hover': {
-        backgroundColor: theme.palette.info.ultralight,
-        cursor: 'pointer'
+        backgroundColor: theme.palette.info.ultralight
       }
     },
     row: {
