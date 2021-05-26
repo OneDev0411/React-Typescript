@@ -195,13 +195,9 @@ class ActionsButton extends React.Component<
     })
 
   getSplitterFiles = () => {
-    if (this.props.task === null) {
-      return []
-    }
-
     const files = getLastStates({
       deal: this.props.deal,
-      task: this.props.task,
+      task: this.props.task!,
       file: this.props.file,
       envelopes: this.props.envelopes
     })
