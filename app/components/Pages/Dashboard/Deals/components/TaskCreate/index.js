@@ -83,7 +83,7 @@ class TaskCreate extends React.Component {
           onClose={this.handleClose}
         >
           <OverlayDrawer.Header
-            title="Add New Checklist Item"
+            title="Add new folder"
             menu={this.renderDrawerHeaderMenu()}
           />
           <OverlayDrawer.Body>

@@ -1,7 +1,14 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
 
-import { Box, Typography, MenuList, MenuItem, Theme } from '@material-ui/core'
+import {
+  Box,
+  Typography,
+  MenuList,
+  MenuItem,
+  Theme,
+  Avatar
+} from '@material-ui/core'
 import { useField } from 'react-final-form'
 
 import { useSelector } from 'react-redux'
@@ -11,7 +18,6 @@ import { useTheme } from '@material-ui/styles'
 import { IAppState } from 'reducers'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-import { Avatar } from 'components/Avatar'
 import {
   InputContainer,
   InputLabel,
@@ -19,6 +25,7 @@ import {
 } from 'components/Forms/styled'
 import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 
 interface Props {
   deal: IDeal
@@ -79,14 +86,15 @@ export function From({ deal }: Props) {
                 >
                   <Box display="flex" alignItems="center">
                     <Avatar
-                      alt={user.display_name}
-                      user={user}
+                      src={getAccountAvatar(user)}
                       style={{
                         width: theme.spacing(5),
                         height: theme.spacing(5),
                         marginRight: theme.spacing(1)
                       }}
-                    />
+                    >
+                      {user.display_name[0]}
+                    </Avatar>
 
                     <div>
                       <Typography variant="body1">
