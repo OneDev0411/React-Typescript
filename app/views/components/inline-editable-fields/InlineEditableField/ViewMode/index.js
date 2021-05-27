@@ -139,7 +139,7 @@ export function ViewMode({
   const renderActions = () => {
     const actions = []
 
-    if (linkableAttribute.includes(attributeName)) {
+    if (value && linkableAttribute.includes(attributeName)) {
       actions.push(
         <Box key="open" onClick={handleLink} className={classes.action}>
           <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
@@ -148,7 +148,7 @@ export function ViewMode({
       )
     }
 
-    if (contact && attributeName === 'email' && value) {
+    if (value && contact && attributeName === 'email') {
       actions.push(
         <SendEmailButton
           recipients={normalizeContactsForEmailCompose([contact])}
@@ -169,7 +169,7 @@ export function ViewMode({
       )
     }
 
-    if (copyAttribute.includes(attributeName)) {
+    if (value && copyAttribute.includes(attributeName)) {
       actions.push(
         <Box key="copy" onClick={handleCopy} className={classes.action}>
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
