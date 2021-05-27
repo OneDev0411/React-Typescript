@@ -71,7 +71,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
   })
 
   const toggleTaskOpen = () => {
-    dispatch(setExpandTask(task.id, !isTaskExpanded))
+    // dispatch(setExpandTask(task.id, !isTaskExpanded))
     setIsTaskExpanded(state => !state)
   }
 
