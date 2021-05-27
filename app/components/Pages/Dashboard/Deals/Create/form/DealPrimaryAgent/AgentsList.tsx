@@ -22,7 +22,7 @@ import { IDealFormRole } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      maxHeight: '70vh',
+      maxHeight: '50vh',
       overflow: 'auto'
     },
     selectedAgent: {

@@ -1,5 +1,4 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 
@@ -16,24 +15,16 @@ interface Props {
   onChangeFilter(value: string): void
 }
 
-export const useStyles = makeStyles(
-  (theme: Theme) => ({
-    container: {
-      marginBottom: 0
-    }
-  }),
-  { name: 'ContactProfileTabs' }
-)
-
 export const Tabs = ({ contact, activeFilter, onChangeFilter }: Props) => {
-  const classes = useStyles()
   const notes = getNotes(contact)
 
   return (
     <PageTabs
       value={activeFilter}
       defaultValue={activeFilter}
-      containerCustomClass={classes.container}
+      containerStyle={{
+        marginBottom: 0
+      }}
       tabs={[
         <Tab key="events" value={Filters.Events} label="Events" />,
         <Tab

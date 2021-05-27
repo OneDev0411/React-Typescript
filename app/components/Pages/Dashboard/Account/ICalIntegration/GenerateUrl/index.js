@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import _ from 'underscore'
 import { mdiCalendarMonthOutline } from '@mdi/js'
+
+import { addNotification as notify } from 'components/notification'
 
 import copy from '../../../../../../utils/copy-text-to-clipboard'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
@@ -70,7 +72,7 @@ class GenerateUrl extends React.Component {
     } catch (e) {
       console.log(e)
       this.props.notify({
-        title: 'Could not get calender feed URL',
+        message: 'Could not get calender feed URL',
         status: 'error',
         dismissible: true
       })

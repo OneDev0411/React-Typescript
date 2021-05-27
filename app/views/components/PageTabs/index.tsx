@@ -1,8 +1,6 @@
 import React, { useState, ReactNode } from 'react'
 import { Tabs, makeStyles, Theme } from '@material-ui/core'
 
-import cn from 'classnames'
-
 export * from './Tab'
 export * from './TabLink'
 export * from './MegaTab'
@@ -10,10 +8,7 @@ export * from './DropdownTab'
 export * from './TabSpacer'
 
 type SelectedTab = string | number | boolean | null
-type RenderMegaMenu = {
-  selectedTab: SelectedTab
-  close: () => void
-}
+
 interface Props {
   tabs: ReactNode[]
   actions?: ReactNode[]
@@ -22,7 +17,7 @@ interface Props {
   value?: SelectedTab
   actionValue?: SelectedTab
   hasMegaMenu?: boolean
-  containerCustomClass?: string
+  containerStyle?: React.CSSProperties
   onChange?: (value: SelectedTab) => void
   onChangeAction?: (value: SelectedTab) => void
 }
@@ -86,7 +81,7 @@ export function PageTabs({
   actionValue,
   tabs,
   hasMegaMenu,
-  containerCustomClass = '',
+  containerStyle = {},
   onChange = () => {},
   onChangeAction = () => {}
 }: Props) {
@@ -115,7 +110,7 @@ export function PageTabs({
   }
 
   return (
-    <div className={cn(classes.container, containerCustomClass)}>
+    <div className={classes.container} style={containerStyle}>
       <Tabs
         value={value || activeTab || false}
         indicatorColor="primary"

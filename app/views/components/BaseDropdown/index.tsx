@@ -106,7 +106,6 @@ export function BaseDropdown({
         style={{ zIndex: theme.zIndex.modal }}
         transition
         placement="bottom-start"
-        disablePortal
         {...PopperProps}
       >
         {({ TransitionProps, placement }) => (

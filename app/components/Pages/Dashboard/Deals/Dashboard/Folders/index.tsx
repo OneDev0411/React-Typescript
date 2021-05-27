@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import _ from 'underscore'
-import Flex from 'styled-flex-component'
 
-import { Button, Theme } from '@material-ui/core'
+import { Box, Button, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
@@ -13,7 +12,6 @@ import { selectChecklistTasks } from 'reducers/deals/tasks'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
-import { Container } from './styled'
 import { ChecklistFolder } from './Checklist'
 
 import { UploadFolder } from './Uploads'
@@ -124,7 +122,7 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
   }, [checklists, deal, showDeactivatedFolders, showTerminatedFolders])
 
   return (
-    <Container>
+    <Box display="flex" flexDirection="column" mb={10}>
       {filteredChecklists.map((checklist: IDealChecklist) => (
         <ChecklistFolder
           key={checklist.id}
@@ -134,9 +132,8 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
           isBackOffice={isBackOffice}
           tasks={selectChecklistTasks(checklist, tasks).filter(
             (task: IDealTask) =>
-              ['GeneralComments', 'YardSign', 'OpenHouse', 'Media'].includes(
-                task.task_type
-              ) === false
+              ['YardSign', 'OpenHouse', 'Media'].includes(task.task_type) ===
+              false
           )}
         />
       ))}
@@ -144,7 +141,7 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
       <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
       <UploadFolder deal={deal} isBackOffice={isBackOffice} />
 
-      <Flex>
+      <Box display="flex">
         {terminatedChecklistsCount > 0 && (
           <Button
             onClick={toggleDisplayTerminatedChecklists}
@@ -167,7 +164,7 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
             {showDeactivatedFolders ? 'Hide' : 'Show'} Backed up
           </Button>
         )}
-      </Flex>
-    </Container>
+      </Box>
+    </Box>
   )
 }

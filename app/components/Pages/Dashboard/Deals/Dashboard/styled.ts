@@ -26,6 +26,10 @@ export const PageWrapper = styled.div`
   }
 `
 
+export const PageBody = styled.div`
+  background-color: #f9fafc; // TODO: use palette
+`
+
 export const DealContainer = styled.div`
   min-height: 100vh;
 `

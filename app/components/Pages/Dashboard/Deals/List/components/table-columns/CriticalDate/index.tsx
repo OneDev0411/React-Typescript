@@ -69,7 +69,6 @@ export default function CriticalDate({ deal, user }: Props) {
         >
           <FactsheetSection
             definitions={definitions}
-            showDivider={false}
             deal={deal}
             isBackOffice={false}
             section="Dates"

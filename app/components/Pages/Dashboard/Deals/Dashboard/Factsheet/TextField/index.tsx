@@ -22,8 +22,7 @@ import {
   Item,
   ItemLabel,
   ItemValue,
-  ItemActions,
-  EmptyValue
+  ItemActions
 } from '../styled'
 
 interface Props {
@@ -97,7 +96,7 @@ export function TextField({
 
   if (isEditing) {
     return (
-      <Item showBorder>
+      <Item>
         <ClickOutside
           onClickOutside={handleCancel}
           className={classes.editable}
@@ -150,9 +149,7 @@ export function TextField({
       >
         <Item>
           <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
-          <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
-          </ItemValue>
+          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
 
           <ItemActions>
             <EditButton onClick={toggleEditing} />
@@ -162,16 +159,15 @@ export function TextField({
               value={value}
               onClick={handleDelete}
             />
+            <ApproveButton
+              deal={deal}
+              field={field}
+              isBackOffice={isBackOffice}
+              onClick={() => onApprove(field)}
+            />
           </ItemActions>
         </Item>
       </Tooltip>
-
-      <ApproveButton
-        deal={deal}
-        field={field}
-        isBackOffice={isBackOffice}
-        onClick={() => onApprove(field)}
-      />
     </>
   )
 }

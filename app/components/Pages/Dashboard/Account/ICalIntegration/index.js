@@ -85,7 +85,7 @@ class ICalIntegration extends React.Component {
       console.log(e)
       dispatch(
         notify({
-          title: 'Could not get calender feed setting',
+          message: 'Could not get calender feed setting',
           status: 'error',
           dismissible: true
         })
