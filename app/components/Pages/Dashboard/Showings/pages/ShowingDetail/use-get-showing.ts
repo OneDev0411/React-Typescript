@@ -6,6 +6,8 @@ import getShowing from 'models/showing/get-showing'
 
 import useShowingUpdateAppointmentNotifications from './use-showing-update-appointment-notifications'
 
+import { sortAppointments } from '../../helpers'
+
 interface UseGetShowingReturn {
   showing: Nullable<IShowing>
   isLoading: boolean
@@ -26,14 +28,17 @@ function useGetShowing(showingId: UUID): UseGetShowingReturn {
       data
         ? {
             ...data,
-            appointments:
-              data.appointments?.map(appointment => ({
-                ...appointment,
-                showing: {
-                  ...data,
-                  appointments: null
-                }
-              })) ?? null
+            appointments: data.appointments
+              ? sortAppointments(
+                  data.appointments.map(appointment => ({
+                    ...appointment,
+                    showing: {
+                      ...data,
+                      appointments: null
+                    }
+                  }))
+                )
+              : null
           }
         : data,
     [data]

@@ -33,7 +33,6 @@ export interface ShowingBookingListColumnActionsProps
   status: IShowingAppointmentStatus
   hasFeedback: boolean
   notifications: Nullable<INotification[]>
-  notificationMode?: boolean
   onApprovalAction?: (params: ApprovalActionParams) => void
   onDismissAction?: (params: DismissActionParams) => void
 }
@@ -47,7 +46,6 @@ function ShowingBookingListColumnActions({
   onApprovalAction,
   approvals,
   notifications,
-  notificationMode,
   onDismissAction,
   buyerMessage,
   buyerName
@@ -163,7 +161,7 @@ function ShowingBookingListColumnActions({
           confirmationAction="Cancel booking"
         />
       )}
-      {notificationMode && status === 'Canceled' && (
+      {!!notifications?.length && status === 'Canceled' && (
         <ShowingBookingListApprovalButton
           {...sharedButtonProps}
           showing={showing}

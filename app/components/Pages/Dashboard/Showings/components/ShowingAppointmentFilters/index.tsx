@@ -8,7 +8,6 @@ export interface ShowingAppointmentFiltersProps {
   value?: AppointmentFilter
   onChange?: (value: AppointmentFilter) => void
   appointments: IShowingAppointment[]
-  notifications: IShowingAppointment[]
   generateLink?: (filter: AppointmentFilter) => string
 }
 
@@ -25,14 +24,9 @@ function ShowingAppointmentFilters({
   value,
   onChange,
   appointments,
-  notifications,
   generateLink
 }: ShowingAppointmentFiltersProps) {
-  const filters = useAppointmentFilters(
-    filterTypes,
-    appointments,
-    notifications
-  )
+  const filters = useAppointmentFilters(filterTypes, appointments)
 
   return (
     <Grid container spacing={2}>

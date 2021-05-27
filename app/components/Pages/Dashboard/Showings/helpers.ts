@@ -84,3 +84,22 @@ export function hasInvalidTimeRange(
 ): boolean {
   return !!slots.find(slot => slot.availability[1] <= slot.availability[0])
 }
+
+export function sortAppointments(
+  appointments: IShowingAppointment[]
+): IShowingAppointment[] {
+  return [...appointments].sort((a, b) => {
+    const time1 = new Date(a.time)
+    const time2 = new Date(b.time)
+
+    if (time1 > time2) {
+      return -1
+    }
+
+    if (time1 < time2) {
+      return 1
+    }
+
+    return 0
+  })
+}

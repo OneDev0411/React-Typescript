@@ -2,10 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 
 import { Location } from 'history'
 
-import useSortAppointments from '../../hooks/use-sort-appointments'
-import useAppointmentNotificationLists from '../../hooks/use-appointment-notification-lists'
-
-import ShowingNotificationBookingLists from '../../components/ShowingNotificationBookingLists'
+import ShowingFilteredBookingList from '../../components/ShowingFilteredBookingList'
 import { AppointmentFilter } from '../../types'
 import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
 import useShowingDismissAppointmentNotifications from './use-showing-dismiss-appointment-notifications'
@@ -21,15 +18,9 @@ interface ShowingDetailTabBookingsProps {
 }
 
 function ShowingDetailTabBookings({
-  appointments: allAppointments,
+  appointments,
   setShowing
 }: ShowingDetailTabBookingsProps) {
-  const sortedAppointments = useSortAppointments(allAppointments)
-
-  const { appointments, notifications } = useAppointmentNotificationLists(
-    sortedAppointments
-  )
-
   const updateShowingAppointmentStatus = useShowingUpdateAppointmentStatus(
     setShowing
   )
@@ -39,9 +30,8 @@ function ShowingDetailTabBookings({
   )
 
   return (
-    <ShowingNotificationBookingLists
+    <ShowingFilteredBookingList
       appointments={appointments}
-      notifications={notifications}
       onApprovalAction={updateShowingAppointmentStatus}
       generateLink={generateAppointmentFilterLink}
       onDismissAction={dismissShowingAppointmentNotifications}

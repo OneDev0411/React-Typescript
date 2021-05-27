@@ -36,12 +36,11 @@ const useStyles = makeStyles(
 export interface ShowingBookingListProps
   extends Pick<
     ShowingBookingListColumnActionsProps,
-    'onApprovalAction' | 'onDismissAction' | 'notificationMode'
+    'onApprovalAction' | 'onDismissAction'
   > {
   title?: string
   rows: IShowingAppointment[]
-  emptyMessage?: string
-  hideEmptyMessage?: boolean
+  emptyMessage: string
   hasPropertyColumn?: boolean
   hasPastBookingsFilter?: boolean
 }
@@ -49,9 +48,7 @@ export interface ShowingBookingListProps
 function ShowingBookingList({
   title,
   rows,
-  notificationMode = false,
   emptyMessage,
-  hideEmptyMessage = false,
   onApprovalAction,
   hasPropertyColumn = false,
   onDismissAction,
@@ -116,7 +113,7 @@ function ShowingBookingList({
       align: 'right',
       render: ({ row }) => (
         <ShowingBookingListColumnActions
-          className={!notificationMode ? classes.actions : undefined}
+          className={!row.notifications?.length ? classes.actions : undefined}
           status={row.status}
           showing={row.showing as IShowing}
           appointmentId={row.id}
@@ -124,7 +121,6 @@ function ShowingBookingList({
           notifications={row.notifications}
           onApprovalAction={onApprovalAction}
           hasFeedback={false} // TODO: use this from the API response
-          notificationMode={notificationMode}
           onDismissAction={onDismissAction}
           buyerName={row.contact.display_name}
           buyerMessage={row.buyer_message}
@@ -155,18 +151,19 @@ function ShowingBookingList({
     const time = new Date().toISOString()
 
     // This works because the appointment list is sorted by time
-    return rows[0].time < time
+    return rows[rows.length - 1].time < time
   }, [rows])
 
-  if ((!emptyMessage || hideEmptyMessage) && !rows.length) {
-    return null
-  }
+  const hiddenRowCount = rows.length - visibleRows.length
 
   const table = (
     <>
       {hasPastBookingsFilter && hasAnyPastRows && (
         <Button size="small" color="secondary" onClick={toggleShowPastBookings}>
           {showPastBookings ? 'Hide' : 'Show'} Past Bookings
+          {!showPastBookings &&
+            hiddenRowCount &&
+            ` (${hiddenRowCount} item${hiddenRowCount > 1 ? 's' : ''})`}
         </Button>
       )}
       <Table
@@ -176,13 +173,13 @@ function ShowingBookingList({
         EmptyStateComponent={() => (
           <ShowingBookingListEmptyState message={emptyMessage || ''} />
         )}
-        classes={{
-          row: classNames(
-            classes.rowBase,
-            notificationMode ? classes.notificationRow : classes.row
-          )
-        }}
         virtualize={false}
+        getTrProps={({ row }) => ({
+          className: classNames(
+            classes.rowBase,
+            row.notifications?.length ? classes.notificationRow : classes.row
+          )
+        })}
       />
     </>
   )
