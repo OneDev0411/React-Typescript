@@ -10,12 +10,13 @@ import { useStyles } from '../Checklist/styles'
 
 interface Props {
   deal: IDeal
-  isBackOffice: boolean
 }
 
-export function UploadFolder({ deal, isBackOffice }: Props) {
+export function UploadFolder({ deal }: Props) {
   const classes = useStyles()
-  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(true)
+  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(
+    (deal.files || []).length < 20
+  )
   const files = (deal.files || []).sort((a, b) => b.created_at - a.created_at)
 
   const hasStashFiles = (): boolean =>
@@ -69,11 +70,11 @@ export function UploadFolder({ deal, isBackOffice }: Props) {
       <UploadPlaceholder deal={deal} />
 
       {isFolderExpanded && (
-        <Grid container>
+        <>
           {files.map((file, index) => (
             <Files key={file.id} index={index} deal={deal} file={file} />
           ))}
-        </Grid>
+        </>
       )}
     </Grid>
   )
