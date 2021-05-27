@@ -213,12 +213,11 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
     zIndex: {
       // The max value zIndex can have is 2147483647.
       // Appcues' checklist beacon uses maxvalue - 100
+      // I contacted their support and they couldn't do
+      // anything about this.
       // We needed our modal to be rendered on top of that
-      // checklist, hence this stupid workaround. I deduced 2
-      // from that max value because I saw people using
-      // theme.zIndex.modal + 2 in some parts of our code base!
-      // The whole thing is stupid and I know it.
-      modal: 2147483645,
+      // checklist, hence this stupid workaround.
+      modal: 2147483647,
       gridAction: 100,
       sideNavDrawer: 100
     }
