@@ -20,7 +20,8 @@ const useStyles = makeStyles(
       '&&, &:focus, &:hover': {
         cursor: 'default',
         color: theme.palette.common.white,
-        backgroundColor: theme.palette.primary.main
+        backgroundColor: theme.palette.primary.main,
+        textDecoration: 'none'
       }
     }
   }),
