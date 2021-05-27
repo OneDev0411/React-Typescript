@@ -25,6 +25,8 @@ import { IAppState } from 'reducers'
 
 import { InlineBadge } from 'components/InlineBadge'
 
+import { getActiveTeamSettings } from 'utils/user-teams'
+
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Logo from './components/Logo'
@@ -64,6 +66,12 @@ export function Menu() {
   function handleEmailThreadEvent(): void {
     dispatch(fetchUnreadEmailThreadsCount())
   }
+
+  // This is initially implemented for DE because they're using a
+  // white-labeled version of help.rechat.com
+  const activeBrandSettings = getActiveTeamSettings(user, true)
+  const brandHelpCenterLink =
+    activeBrandSettings.help_center || 'https://help.rechat.com'
 
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
@@ -193,7 +201,7 @@ export function Menu() {
             <SidenavBlankLink
               target="_blank"
               rel="noopener noreferrer"
-              href="https://help.rechat.com"
+              href={brandHelpCenterLink}
             >
               Help Center
             </SidenavBlankLink>
