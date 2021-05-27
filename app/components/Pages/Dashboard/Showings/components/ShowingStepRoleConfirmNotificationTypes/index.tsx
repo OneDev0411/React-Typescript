@@ -23,7 +23,7 @@ function ShowingStepRoleConfirmNotificationTypes({
       {...otherProps}
       question={
         <>
-          Does ${firstName} need to{' '}
+          Does {firstName} need to{' '}
           <ShowingGreenLabel>confirm</ShowingGreenLabel> appointments?
         </>
       }
