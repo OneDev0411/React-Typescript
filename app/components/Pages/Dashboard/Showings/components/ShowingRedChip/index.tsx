@@ -15,16 +15,14 @@ const useStyles = makeStyles(
       justifyContent: 'center'
     }
   }),
-  { name: 'ShowingPropertyListColumnNewChip' }
+  { name: 'ShowingRedChip' }
 )
 
-interface ShowingPropertyListColumnNewChipProps {
+interface ShowingRedChipProps {
   count: number
 }
 
-function ShowingPropertyListColumnNewChip({
-  count
-}: ShowingPropertyListColumnNewChipProps) {
+function ShowingRedChip({ count }: ShowingRedChipProps) {
   const classes = useStyles()
 
   if (count < 1) {
@@ -38,4 +36,4 @@ function ShowingPropertyListColumnNewChip({
   )
 }
 
-export default ShowingPropertyListColumnNewChip
+export default ShowingRedChip

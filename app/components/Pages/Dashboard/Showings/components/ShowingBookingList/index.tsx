@@ -16,6 +16,7 @@ import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
 import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import { getShowingImage } from '../../helpers'
+import ShowingRedChip from '../ShowingRedChip'
 
 const useStyles = makeStyles(
   theme => ({
@@ -86,6 +87,14 @@ function ShowingBookingList({
           }
         ]
       : []),
+    {
+      id: 'new',
+      width: '48px',
+      sortable: false,
+      render: ({ row }) => (
+        <ShowingRedChip count={row.notifications?.length ? 1 : 0} />
+      )
+    },
     {
       id: 'date-time',
       width: hasPropertyColumn ? '20%' : '25%',

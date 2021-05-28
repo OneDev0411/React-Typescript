@@ -8,8 +8,8 @@ import { goTo } from 'utils/go-to'
 
 // import FeedbackStars from '../FeedbackStars'
 import ShowingColumnProperty from '../ShowingColumnProperty'
+import ShowingRedChip from '../ShowingRedChip'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-import ShowingPropertyListColumnNewChip from './ShowingPropertyListColumnNewChip'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import BoxWithTitle from '../BoxWithTitle'
@@ -64,9 +64,7 @@ function ShowingPropertyList({
       width: '10%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingPropertyListColumnNewChip
-          count={showingNotificationCount[row.id]}
-        />
+        <ShowingRedChip count={showingNotificationCount[row.id]} />
       )
     },
     {
