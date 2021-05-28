@@ -1,29 +1,28 @@
-import React, { useState, useMemo } from 'react'
-import { Box, Button, FormHelperText, Typography } from '@material-ui/core'
+import React, { useState, useMemo, memo } from 'react'
+import { Box, Button, Typography } from '@material-ui/core'
 
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
-import {
-  hourToSeconds,
-  findTimeConflicts,
-  hasInvalidTimeRange
-} from '../../helpers'
+import { hourToSeconds, findTimeConflicts } from '../../helpers'
 import { findSlotIndexById } from './helpers'
-import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
+import ShowingErrorText from '../ShowingErrorText'
 
 export interface ShowingAvailabilitiesTimesProps {
   title?: string
   value: IShowingAvailabilityInput[]
   onChange: (value: IShowingAvailabilityInput[]) => void
+  hasContinue?: boolean
+  onContinue?: () => void
+  error?: string
 }
 
 function ShowingAvailabilitiesTimes({
   title = 'Available Times',
   value,
-  onChange
+  onChange,
+  hasContinue = false,
+  onContinue,
+  error
 }: ShowingAvailabilitiesTimesProps) {
-  const nextStep = useQuestionWizardSmartNext()
-  const isCurrentStep = useIsQuestionWizardCurrentStep()
   const [nextId, setNextId] = useState(0)
 
   const getNextId = () => {
@@ -71,15 +70,10 @@ function ShowingAvailabilitiesTimes({
     onChange(newValue)
   }
 
-  const handleContinue = () => {
-    nextStep()
-  }
-
   const timeConflicts = useMemo(() => findTimeConflicts(value), [value])
-  const hasInvalidRange = useMemo(() => hasInvalidTimeRange(value), [value])
 
   return (
-    <Box>
+    <Box width="100%">
       <Typography variant="h6">{title}</Typography>
       <Box mt={1}>
         {value.map((row, idx) => (
@@ -97,22 +91,22 @@ function ShowingAvailabilitiesTimes({
           />
         ))}
       </Box>
-      {timeConflicts && isCurrentStep && (
-        <Box mb={1}>
-          <FormHelperText error>The time slots has conflicts</FormHelperText>
+      {error && (
+        <Box mt={1}>
+          <ShowingErrorText>{error}</ShowingErrorText>
         </Box>
       )}
       <Box display="flex" justifyContent="space-between" mt={5}>
         <Button variant="outlined" size="small" onClick={handleAdd}>
           + Add hour
         </Button>
-        {isCurrentStep && (
+        {hasContinue && (
           <Button
             variant="contained"
             size="small"
             color="primary"
-            disabled={!value.length || !!timeConflicts || hasInvalidRange}
-            onClick={handleContinue}
+            disabled={!value.length || !!timeConflicts || !!error}
+            onClick={onContinue}
           >
             Continue
           </Button>
@@ -122,4 +116,4 @@ function ShowingAvailabilitiesTimes({
   )
 }
 
-export default ShowingAvailabilitiesTimes
+export default memo(ShowingAvailabilitiesTimes)

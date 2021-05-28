@@ -11,6 +11,8 @@ import ShowingAvailabilitiesTimes, {
 } from '../ShowingAvailabilitiesTimes'
 import SmartQuestionForm from '../SmartQuestionForm'
 import ShowingDuration, { ShowingDurationProps } from '../ShowingDuration'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
+import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
 
 interface ShowingStepDurationAndAvailabilitiesProps
   extends Pick<QuestionSectionProps, 'error'> {
@@ -27,8 +29,11 @@ function ShowingStepDurationAndAvailabilities({
   onAvailabilitiesChange,
   error
 }: ShowingStepDurationAndAvailabilitiesProps) {
+  const isCurrentStep = useIsQuestionWizardCurrentStep()
+  const nextStep = useQuestionWizardSmartNext()
+
   return (
-    <QuestionSection error={error}>
+    <QuestionSection error={error} displayCurrentStepError>
       <QuestionTitle>When you’re available for this showing?</QuestionTitle>
       <SmartQuestionForm width="70%">
         <ShowingDuration
@@ -39,6 +44,8 @@ function ShowingStepDurationAndAvailabilities({
         <ShowingAvailabilitiesTimes
           value={availabilities}
           onChange={onAvailabilitiesChange}
+          hasContinue={isCurrentStep}
+          onContinue={nextStep}
         />
       </SmartQuestionForm>
     </QuestionSection>
