@@ -3,7 +3,7 @@ import React, { Children, ReactElement } from 'react'
 import type { ItemProps } from './Item'
 
 type Item<T> = ReactElement<ItemProps<T>>
-type ItemOrBoolean<T> = Item<T> | boolean
+type ItemOrBoolean<T> = Item<T> | boolean | undefined
 
 export interface ContainerProps<T = unknown> {
   value: T

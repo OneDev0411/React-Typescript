@@ -39,10 +39,10 @@ function ShowingDetailTabSettings({
     const errors: ShowingDetailTabSettingsErrors = {}
 
     if (showing.availabilities !== showingRef.current.availabilities) {
-      if (hasInvalidTimeRange(showing.availabilities)) {
-        errors.Availability = 'Invalid time range'
-      } else if (findTimeConflicts(showing.availabilities)) {
+      if (findTimeConflicts(showing.availabilities)) {
         errors.Availability = 'The time slots has conflicts'
+      } else if (hasInvalidTimeRange(showing.availabilities)) {
+        errors.Availability = 'Invalid time range'
       }
     }
 
@@ -71,10 +71,16 @@ function ShowingDetailTabSettings({
       duration
     })
 
+  console.log('showing.address', showing.address)
+
   return (
     <Box display="flex">
       <Box mr={4} width="100%" maxWidth={296}>
-        <ShowingDetailTabSettingsSubjectList tab={tab} errors={errors} />
+        <ShowingDetailTabSettingsSubjectList
+          tab={tab}
+          errors={errors}
+          hasListingInfo={!!showing.address}
+        />
       </Box>
       <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
         <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
@@ -91,9 +97,11 @@ function ShowingDetailTabSettings({
             />
           </Box>
         </TabContentSwitch.Item>
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ListingInfo">
-          ListingInfo
-        </TabContentSwitch.Item>
+        {showing.address && (
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ListingInfo">
+            ListingInfo
+          </TabContentSwitch.Item>
+        )}
         <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppointmentTypeAndParticipants">
           AppointmentTypeAndParticipants
         </TabContentSwitch.Item>

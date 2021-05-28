@@ -19,37 +19,42 @@ const useStyles = makeStyles(
   { name: 'ShowingDetailTabSettingsSubjectList' }
 )
 
-const tabs: ShowingDetailSettingsTabType[] = [
-  'Availability',
-  'ListingInfo',
-  'AppointmentTypeAndParticipants',
-  'AccessInformation',
-  'AppraisalsAndInspections',
-  'Feedback'
-]
-
 interface ShowingDetailTabSettingsSubjectListProps {
   tab: ShowingDetailSettingsTabType
   errors: ShowingDetailTabSettingsErrors
+  hasListingInfo: boolean
 }
 
 function ShowingDetailTabSettingsSubjectList({
   tab,
-  errors
+  errors,
+  hasListingInfo
 }: ShowingDetailTabSettingsSubjectListProps) {
   const classes = useStyles()
 
+  const tabs: Nullable<ShowingDetailSettingsTabType>[] = [
+    'Availability',
+    hasListingInfo ? 'ListingInfo' : null,
+    'AppointmentTypeAndParticipants',
+    'AccessInformation',
+    'AppraisalsAndInspections',
+    'Feedback'
+  ]
+
   return (
     <Box className={classes.root}>
-      {tabs.map(tabName => (
-        <ShowingDetailTabSettingsSubjectListItem
-          key={showingDetailSettingsTabs[tabName]}
-          label={showingDetailSettingsTabs[tabName]}
-          to={tabName}
-          selected={tabName === tab}
-          error={!!errors[tabName]}
-        />
-      ))}
+      {tabs.map(
+        tabName =>
+          tabName && (
+            <ShowingDetailTabSettingsSubjectListItem
+              key={showingDetailSettingsTabs[tabName]}
+              label={showingDetailSettingsTabs[tabName]}
+              to={tabName}
+              selected={tabName === tab}
+              error={!!errors[tabName]}
+            />
+          )
+      )}
     </Box>
   )
 }
