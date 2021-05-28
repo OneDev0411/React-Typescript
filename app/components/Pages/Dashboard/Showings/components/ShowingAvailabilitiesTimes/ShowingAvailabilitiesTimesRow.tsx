@@ -43,13 +43,23 @@ function ShowingAvailabilitiesTimesRow({
   }
 
   const [debouncedHandleSubmit] = useDebouncedCallback((values: FormValues) => {
+    const start = values.start
+      ? humanTimeToTimestamp(values.start)
+      : availability[0]
+    const end = values.end ? humanTimeToTimestamp(values.end) : availability[1]
+
+    if (
+      values.weekday === weekday &&
+      start === availability[0] &&
+      end === availability[1]
+    ) {
+      return
+    }
+
     onChange(id, {
       id,
       weekday: values.weekday,
-      availability: [
-        values.start ? humanTimeToTimestamp(values.start) : availability[0],
-        values.end ? humanTimeToTimestamp(values.end) : availability[1]
-      ]
+      availability: [start, end]
     })
   }, 250)
 
