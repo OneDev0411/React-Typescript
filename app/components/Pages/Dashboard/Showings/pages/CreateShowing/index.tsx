@@ -258,9 +258,9 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           cancel_notification_type: agentCancelNotificationTypes ?? [],
           confirm_notification_type: agentConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
-          ...agentPerson!,
-          user: agentPerson?.user || undefined,
-          brand: agentPerson?.brand || teamId
+          ...agentPerson,
+          user: agentPerson.user || undefined,
+          brand: agentPerson.brand || teamId
         })
       }
 
@@ -272,8 +272,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           confirm_notification_type: coAgentConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
           ...coAgentPerson,
-          user: coAgentPerson?.user || undefined,
-          brand: coAgentPerson?.brand || teamId
+          user: coAgentPerson.user || undefined,
+          brand: coAgentPerson.brand || teamId
         })
       }
 
@@ -285,8 +285,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
           confirm_notification_type: occupantConfirmNotificationTypes ?? [],
           ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
           ...occupantPerson,
-          user: occupantPerson?.user || undefined,
-          brand: occupantPerson?.brand || teamId
+          user: occupantPerson.user || undefined,
+          brand: occupantPerson.brand || teamId
         })
       }
 
