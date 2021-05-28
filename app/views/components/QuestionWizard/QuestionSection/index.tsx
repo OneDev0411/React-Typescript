@@ -16,6 +16,7 @@ export interface QuestionSectionProps {
   children: React.ReactNode
   hidden?: boolean
   error?: string
+  displayCurrentStepError?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -37,7 +38,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 export function QuestionSection({
   children,
   hidden = false,
-  error
+  error,
+  displayCurrentStepError = false
 }: QuestionSectionProps) {
   const { currentStep, lastVisitedStep } = useWizardContext()
   const { step } = useSectionContext()
@@ -55,7 +57,11 @@ export function QuestionSection({
   return (
     <div className={classes.root}>
       <SectionErrorContext.Provider
-        value={!!error && currentStep > step ? error : undefined}
+        value={
+          !!error && (displayCurrentStepError || currentStep > step)
+            ? error
+            : undefined
+        }
       >
         {children}
       </SectionErrorContext.Provider>
