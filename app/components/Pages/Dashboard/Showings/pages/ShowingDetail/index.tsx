@@ -90,7 +90,10 @@ function ShowingDetail({ params }: ShowingDetailProps) {
               <ShowingDetailTabFeedback />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>
-              <ShowingDetailTabSettings />
+              <ShowingDetailTabSettings
+                showing={showing}
+                setShowing={setShowing}
+              />
             </TabContentSwitch.Item>
           </TabContentSwitch.Container>
         )}

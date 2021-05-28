@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { makeStyles, Typography } from '@material-ui/core'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -9,8 +10,8 @@ const useStyles = makeStyles(
   theme => ({
     root: {
       padding: theme.spacing(1, 2),
-      display: 'block',
       borderRadius: 0,
+      justifyContent: 'flex-start',
       '&:focus, &:hover': {
         outline: 'none',
         color: theme.palette.primary.main
@@ -23,7 +24,8 @@ const useStyles = makeStyles(
         backgroundColor: theme.palette.primary.main,
         textDecoration: 'none'
       }
-    }
+    },
+    error: { color: theme.palette.error.main }
   }),
   { name: 'ShowingDetailTabSettingsSubjectListItem' }
 )
@@ -31,14 +33,16 @@ const useStyles = makeStyles(
 interface ShowingDetailTabSettingsSubjectListItemProps extends WithRouterProps {
   label: string
   to: string
-  selected?: boolean
+  selected: boolean
+  error: boolean
 }
 
 function ShowingDetailTabSettingsSubjectListItem({
   location,
-  selected = false,
+  selected,
   label,
-  to
+  to,
+  error
 }: ShowingDetailTabSettingsSubjectListItemProps) {
   const classes = useStyles()
 
@@ -47,8 +51,16 @@ function ShowingDetailTabSettingsSubjectListItem({
       className={classNames(classes.root, selected && classes.selected)}
       to={`${location.pathname}?tab=${to}`}
       color="primary"
+      endIcon={
+        error && (
+          <ErrorOutlineIcon className={!selected ? classes.error : undefined} />
+        )
+      }
+      fullWidth
     >
-      <Typography variant="body1">{label}</Typography>
+      <Typography variant="body1" component="span">
+        {label}
+      </Typography>
     </LinkButton>
   )
 }

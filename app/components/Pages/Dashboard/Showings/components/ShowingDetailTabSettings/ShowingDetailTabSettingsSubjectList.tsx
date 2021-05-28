@@ -3,7 +3,10 @@ import { Box, makeStyles } from '@material-ui/core'
 import { showingDetailSettingsTabs } from './constants'
 
 import ShowingDetailTabSettingsSubjectListItem from './ShowingDetailTabSettingsSubjectListItem'
-import { ShowingDetailSettingsTabType } from './types'
+import {
+  ShowingDetailSettingsTabType,
+  ShowingDetailTabSettingsErrors
+} from './types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -27,10 +30,12 @@ const tabs: ShowingDetailSettingsTabType[] = [
 
 interface ShowingDetailTabSettingsSubjectListProps {
   tab: ShowingDetailSettingsTabType
+  errors: ShowingDetailTabSettingsErrors
 }
 
 function ShowingDetailTabSettingsSubjectList({
-  tab
+  tab,
+  errors
 }: ShowingDetailTabSettingsSubjectListProps) {
   const classes = useStyles()
 
@@ -42,6 +47,7 @@ function ShowingDetailTabSettingsSubjectList({
           label={showingDetailSettingsTabs[tabName]}
           to={tabName}
           selected={tabName === tab}
+          error={!!errors[tabName]}
         />
       ))}
     </Box>

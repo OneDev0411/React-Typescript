@@ -2,7 +2,7 @@ import Fetch from 'services/fetch'
 
 async function getShowing(showingId: UUID) {
   return (
-    await new Fetch({ proxy: false }).get(`/showings/${showingId}`).query({
+    await new Fetch().get(`/showings/${showingId}`).query({
       associations: [
         'showing.listing',
         'showing.deal',
@@ -12,7 +12,8 @@ async function getShowing(showingId: UUID) {
         'showing_appointment.approvals',
         'showing_approval.role',
         'showing.roles',
-        'showing_appointment.notifications'
+        'showing_appointment.notifications',
+        'showing.availabilities'
       ]
     })
   ).body.data as IShowing
