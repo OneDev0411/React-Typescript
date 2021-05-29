@@ -10,16 +10,20 @@ interface MenuItemProps {
   theme: Theme
 }
 
-export const PrimaryAction = styled.div`
-  ${({ theme }) => css`
+export const PrimaryAction = styled.div<{
+  hasSecondaryActions: boolean
+}>`
+  ${({ theme, hasSecondaryActions }) => css`
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    ${theme.typography.body2};
+    ${theme.typography.subtitle2};
 
     width: ${(props: PrimaryActionProps) =>
-      props.hasSecondaryActions ? '8rem' : '9.3rem'};
+      props.hasSecondaryActions ? '8.5rem' : 'auto'};
+    padding: ${(props: PrimaryActionProps) =>
+      props.hasSecondaryActions ? 'auto' : '0 0.5rem'};
 
     :hover {
       color: ${theme.palette.secondary.main};
@@ -29,6 +33,32 @@ export const PrimaryAction = styled.div`
     :active {
       background-color: ${theme.palette.action.selected};
     }
+
+    ${!hasSecondaryActions &&
+    `
+      border-radius: ${theme.shape.borderRadius}px;
+
+      &.Add {
+        &:before {
+          content '+';
+          padding-right: 0.5rem;
+        }
+
+        color: #fff;
+        border: 1px solid ${theme.palette.secondary.main};
+        background-color: ${theme.palette.secondary.main};
+      }
+
+      &.Remove {
+        &:before {
+          content '× ';
+          padding-right: 0.5rem;
+        }
+
+        color: ${theme.palette.error.main};
+        border: 1px solid ${theme.palette.error.main};
+      }
+    `}
   `}
 `
 
@@ -60,14 +90,17 @@ export const MenuButton = styled.div`
 
 export const Container = styled.div<{
   theme: Theme
+  hasSecondaryActions?: boolean
 }>`
-  ${({ theme }) => css`
+  ${({ theme, hasSecondaryActions }) => css`
     display: flex;
-    height: 2.3rem;
-    opacity: 0.3;
-    border-radius: 3px;
-    border: 1px solid ${theme.palette.divider};
+    height: ${theme.spacing(4)}px;
+    border-radius: ${theme.shape.borderRadius}px;
+    background-color: #fff;
     cursor: pointer;
+    border: ${hasSecondaryActions
+      ? `1px solid ${theme.palette.divider}`
+      : 'none'};
 
     :hover {
       border-color: ${theme.palette.action.selected};

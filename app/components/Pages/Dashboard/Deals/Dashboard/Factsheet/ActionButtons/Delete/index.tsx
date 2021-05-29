@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Theme, useTheme } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -15,8 +15,6 @@ interface Props {
 }
 
 export function DeleteButton(props: Props) {
-  const theme = useTheme<Theme>()
-
   const hasValue = props.value || props.value === 0
   const isRequired = props.field.mandatory && !props.deal.is_draft
 
@@ -26,11 +24,7 @@ export function DeleteButton(props: Props) {
 
   return (
     <IconButton size="small" onClick={props.onClick}>
-      <SvgIcon
-        path={mdiTrashCanOutline}
-        color={theme.palette.error.main}
-        size={muiIconSizes.small}
-      />
+      <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
     </IconButton>
   )
 }

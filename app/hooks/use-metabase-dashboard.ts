@@ -25,7 +25,7 @@ export function useMetaBaseDashboard(key: string) {
       const hash = Array.from(new Uint8Array(crypted))
       const hex = hash.map(b => b.toString(16).padStart(2, '0')).join('')
 
-      const base = `https://rechat.metabaseapp.com/public/dashboard/${dashboard?.id}`
+      const base = `https://analytics.rechat.com/public/dashboard/${dashboard?.id}`
 
       setAnalyticsUrl(
         `${base}?brand=${activeBrandId}&` +

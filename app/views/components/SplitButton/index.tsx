@@ -34,6 +34,7 @@ interface Props {
   size?: 'small' | 'medium' | 'large'
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
+  tourId?: string
 }
 
 const styles = (theme: Theme) =>
@@ -75,6 +76,7 @@ export default function SplitButton(
         style={props.style}
         className={props.className}
         variant={props.variant}
+        data-tour-id={props.tourId}
       >
         <Button onClick={props.onClick} className={classes.mainButton}>
           {props.children}

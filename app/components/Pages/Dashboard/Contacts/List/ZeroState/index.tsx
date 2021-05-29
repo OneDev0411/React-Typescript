@@ -1,117 +1,78 @@
-import React from 'react'
-import cn from 'classnames'
-import {
-  Box,
-  Button,
-  Typography,
-  useTheme,
-  createStyles,
-  makeStyles,
-  Theme
-} from '@material-ui/core'
+import { Button } from '@material-ui/core'
+import { browserHistory } from 'react-router'
+import { Theme, makeStyles } from '@material-ui/core'
+
+import { ZeroState } from 'partials/ZeroState'
 
 import { OAuthProvider } from 'constants/contacts'
 
-import GoogleSigninButton from 'components/GoogleSigninButton'
+import { OutlookSignInButton } from 'components/OutlookSignInButton'
+
+import { GoogleSignInButton } from 'components/GoogleSignInButton'
 
 import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { outlookIcon, csvIcon } from 'components/SvgIcons/icons'
 
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      container: {
-        height: 'calc(100% - 120px)',
-        maxWidth: '560px',
-        margin: 'auto'
-      },
-      button: {
-        width: '15.6rem'
-      },
-      marginBottom: {
-        marginBottom: theme.spacing(2)
-      },
-      title: {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'
-      },
-      description: {
-        marginBottom: theme.spacing(4)
-      },
-      buttonText: {
-        marginLeft: theme.spacing(2)
-      }
-    }),
-  { name: 'zeroState' }
+  (theme: Theme) => ({
+    wideButton: {
+      width: '45%'
+    }
+  }),
+  { name: 'ContactsZeroState' }
 )
 
-export function ZeroState() {
-  const theme = useTheme<Theme>()
-  const classes = useStyles()
+export function ContactsZeroState() {
   const google = useConnectOAuthAccount(OAuthProvider.Google)
   const outlook = useConnectOAuthAccount(OAuthProvider.Outlook)
+  const classes = useStyles()
 
   return (
-    <Box
-      className={classes.container}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      flexDirection="column"
-    >
-      <img src="/static/images/contacts/zero-state.svg" alt="zero-state" />
-      <h2 className={classes.title}>
-        No contact! Import now with one click :)
-      </h2>
-      <Typography variant="body1" className={classes.description}>
-        People and relationships are central to your business. Start building
-        your referral network in Rechat by importing or creating a contact now.
-      </Typography>
+    <ZeroState
+      imageUrl="/static/images/zero-state/contacts.png"
+      title="No contacts! Import now with one click."
+      subTitle="People and relationships are central to your business. Start building
+      your referral network in Rechat by importing or creating a contact now."
+      ctaNode={
+        <>
+          <GoogleSignInButton
+            disabled={google.connecting}
+            onClick={google.connect}
+            variant="outlined"
+            size="large"
+            data-tour-id="gmail-import"
+          />
+          <OutlookSignInButton
+            disabled={outlook.connecting}
+            onClick={outlook.connect}
+            variant="outlined"
+            size="large"
+            data-tour-id="outlook-import"
+          />
+          <Divider text="OR" margin="2rem 0" />
 
-      <GoogleSigninButton
-        disabled={google.connecting}
-        onClick={google.connect}
-        style={{ marginBottom: '1rem' }}
-        size="large"
-      >
-        Sign in with Google
-      </GoogleSigninButton>
+          <Button
+            size="large"
+            variant="outlined"
+            className={classes.wideButton}
+            onClick={() =>
+              browserHistory.push('/dashboard/contacts/import/csv')
+            }
+          >
+            Import from CSV file
+          </Button>
 
-      <Button
-        disabled={outlook.connecting}
-        onClick={outlook.connect}
-        variant="outlined"
-        className={classes.button}
-        size="large"
-      >
-        <SvgIcon path={outlookIcon} color={theme.palette.info.main} />
-        <Typography variant="button" className={classes.buttonText}>
-          Sign in with Outlook
-        </Typography>
-      </Button>
-
-      <Divider text="OR" margin="2rem 0" />
-
-      <Button
-        size="large"
-        variant="outlined"
-        href="/dashboard/contacts/import/csv"
-        className={cn(classes.button, classes.marginBottom)}
-      >
-        <SvgIcon path={csvIcon} color={theme.palette.common.black} />
-        <Typography variant="button" className={classes.buttonText}>
-          Import CSV spreadsheet
-        </Typography>
-      </Button>
-
-      <CreateContact
-        showAddAnother={false}
-        buttonProps={{ className: classes.button, size: 'large' }}
-      />
-    </Box>
+          <CreateContact
+            showAddAnother={false}
+            buttonProps={{
+              size: 'large',
+              classes: { root: classes.wideButton }
+            }}
+          />
+        </>
+      }
+    />
   )
 }

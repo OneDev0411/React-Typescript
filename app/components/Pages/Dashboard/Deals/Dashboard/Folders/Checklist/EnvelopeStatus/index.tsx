@@ -1,8 +1,3 @@
-import React from 'react'
-import { Link } from 'react-router'
-
-import { Container } from './styled'
-
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -38,13 +33,5 @@ export function EnvelopeStatus({ deal, task, envelope }: Props) {
     return null
   }
 
-  return (
-    <Container>
-      <Link
-        to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
-      >
-        {getTitle(envelope)}
-      </Link>
-    </Container>
-  )
+  return <>{getTitle(envelope)}</>
 }

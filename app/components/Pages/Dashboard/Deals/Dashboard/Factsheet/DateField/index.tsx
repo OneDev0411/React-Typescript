@@ -21,8 +21,8 @@ import {
   ItemLabel,
   ItemValue,
   ItemActions,
-  EmptyValue,
-  CircleStatus
+  CircleStatus,
+  TimelineDateProgress
 } from '../styled'
 
 import { ContextField } from '../types'
@@ -30,6 +30,8 @@ import { ContextField } from '../types'
 interface Props {
   deal: IDeal
   field: ContextField
+  index: number
+  total: number
   value: unknown
   isBackOffice: boolean
   onApprove(field: ContextField): void
@@ -38,6 +40,8 @@ interface Props {
 }
 
 export function DateField({
+  index,
+  total,
   deal,
   field,
   value,
@@ -87,9 +91,7 @@ export function DateField({
             </CircleStatus>{' '}
             {field.label}
           </ItemLabel>
-          <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
-          </ItemValue>
+          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
 
           <ItemActions>
             <DateTimePicker
@@ -107,16 +109,18 @@ export function DateField({
               value={value}
               onClick={handleDelete}
             />
+
+            <ApproveButton
+              deal={deal}
+              field={field}
+              isBackOffice={isBackOffice}
+              onClick={() => onApprove(field)}
+            />
           </ItemActions>
+
+          {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
         </Item>
       </Tooltip>
-
-      <ApproveButton
-        deal={deal}
-        field={field}
-        isBackOffice={isBackOffice}
-        onClick={() => onApprove(field)}
-      />
     </>
   )
 }

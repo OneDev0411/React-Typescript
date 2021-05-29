@@ -1,20 +1,14 @@
 import styled, { css } from 'styled-components'
 
-import { SectionTitle } from '../../Dashboard/Factsheet/styled'
-
 export const RolesContainer = styled.div`
   position: relative;
 `
 
-export const RolesTitle = styled(SectionTitle)`
-  ${({ theme }) => css`
-    padding: ${theme.spacing(0, 3)};
-    margin-bottom: ${theme.spacing(3)}px;
-    ${theme.typography.subtitle1};
-  `}
-`
-
 export const RoleActions = styled.div`
+  position: absolute;
+  right: ${({ theme }) => theme.spacing(2)}px;
+  top: 0;
+  height: 100%;
   opacity: 0;
   display: flex;
   justify-content: flex-end;
@@ -26,35 +20,42 @@ export const RoleAvatar = styled.div`
 `
 
 export const RoleInfo = styled.div`
-  text-align: left;
-  padding-left: 0.625rem;
+  display: flex;
+  align-items: center;
+
+  svg {
+    display: none;
+    color: ${({ theme }) => theme.palette.secondary.main};
+  }
 `
 
 export const RoleTitle = styled.div`
-  color: #263445;
+  margin: 0 0.5rem;
 `
 
 export const RoleType = styled.div`
-  color: #8696a4;
+  color: ${({ theme }) => theme.palette.grey['500']};
   text-decoration: none;
+  text-align: right;
+  font-size: ${({ theme }) => theme.typography.body3.fontSize};
 `
 
 export const RoleItem = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, allowDeleteRole }) => css`
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 3px;
-    margin-bottom: 1rem;
-    padding: 0 1.5rem;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0.25rem 1rem;
     cursor: pointer;
     position: relative;
+    border-radius: ${({ theme }) => theme.shape.borderRadius}px;
     ${theme.typography.body2};
 
     :hover {
       background: ${props =>
-        props.noBackgroundHover ? 'transparent' : '#f0f4f7'};
-      border-radius: 0;
+        props.noBackgroundHover ? 'transparent' : 'rgba(0, 0, 0, 0.08)'};
     }
 
     :hover ${RoleActions} {
@@ -65,5 +66,18 @@ export const RoleItem = styled.div`
       color: ${({ theme }) => theme.palette.secondary.main};
       text-decoration: underline;
     }
+
+    :hover ${RoleInfo} {
+      svg {
+        display: block;
+      }
+    }
+
+    ${allowDeleteRole &&
+    `
+      :hover ${RoleType} {
+        opacity: 0;
+      }
+    `}
   `}
 `

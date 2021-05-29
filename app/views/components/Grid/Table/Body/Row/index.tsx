@@ -47,6 +47,7 @@ function Row<T>({
       selected={isRowSelected}
       className={classes.row}
       style={style}
+      data-tour-id={`row-${rowIndex}`}
       {...getTrProps({
         rowIndex,
         row,

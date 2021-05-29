@@ -393,6 +393,7 @@ class SendMlsListingCard extends React.Component {
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit
           }
+          withMlsDisclaimer
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           defaultLists={[

@@ -51,7 +51,7 @@ function GridView({ isFetching, sortedListings }) {
   }
 
   return (
-    <Box py={1}>
+    <Box>
       <Grid container spacing={2}>
         {renderContent()}
       </Grid>

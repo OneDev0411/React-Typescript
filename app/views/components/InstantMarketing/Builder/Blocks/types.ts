@@ -13,16 +13,19 @@ export interface BlockOptions {
 
 export interface TemplateBlockBase {
   name: string
-  icon: string
-  category: string
-  label: string
+  icon?: string
+  category?: string
+  label?: string
   adaptive?: boolean
-  type: string
+  type?: string
 }
 
-export interface TemplateBlockBaseOptions {
+export interface TemplateOptions {
   blocks: TemplateBlockBase[]
   disableDefault?: string[] | true
+  textEditor?: {
+    extraFonts?: string[]
+  }
 }
 
 export interface TemplateBlock extends TemplateBlockBase {

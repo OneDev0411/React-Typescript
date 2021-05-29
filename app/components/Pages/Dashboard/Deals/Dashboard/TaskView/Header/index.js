@@ -1,15 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { mdiClose, mdiPencilOutline } from '@mdi/js'
+import { IconButton } from '@material-ui/core'
 
 import { updateTask } from 'actions/deals'
 
 import Spinner from 'components/Spinner'
-import IconButton from 'components/Button/IconButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
-import { TaskStatus } from '../../Folders/Checklist/TaskRow/Status'
 
 import { Container, Input, Toolbar, TitleContainer, Title } from './styled'
 
@@ -60,38 +58,16 @@ class Header extends React.Component {
     return (
       <Container>
         <Toolbar>
-          <div>
-            <TaskStatus
-              deal={this.props.deal}
-              task={this.props.task}
-              isBackOffice={this.props.isBackOffice}
-            />
-          </div>
+          <IconButton
+            disabled={this.state.isSavingName}
+            onClick={this.toggleEditName}
+          >
+            <SvgIcon path={mdiPencilOutline} />
+          </IconButton>
 
-          <div>
-            {this.state.isSavingName === false && (
-              <IconButton
-                isFit
-                iconSize="large"
-                inverse
-                onClick={this.toggleEditName}
-              >
-                <SvgIcon path={mdiPencilOutline} />
-              </IconButton>
-            )}
-
-            <IconButton
-              isFit
-              iconSize="large"
-              inverse
-              style={{
-                marginLeft: '1.5rem'
-              }}
-              onClick={this.props.onClose}
-            >
-              <SvgIcon path={mdiClose} />
-            </IconButton>
-          </div>
+          <IconButton onClick={this.props.onClose}>
+            <SvgIcon path={mdiClose} />
+          </IconButton>
         </Toolbar>
 
         <TitleContainer>

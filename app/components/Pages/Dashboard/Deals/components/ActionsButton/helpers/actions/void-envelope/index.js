@@ -21,7 +21,7 @@ async function handleVoidEnvelope({ envelope, deal }) {
 
     store.dispatch(
       notify({
-        title: 'e-Signature is voided',
+        message: 'e-Signature is voided',
         status: 'success'
       })
     )

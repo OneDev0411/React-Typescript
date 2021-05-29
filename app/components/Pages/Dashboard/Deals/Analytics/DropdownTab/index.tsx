@@ -3,8 +3,6 @@ import { browserHistory } from 'react-router'
 
 import { Tab, DropdownTab } from 'components/PageTabs'
 
-import Acl from 'views/components/Acl'
-
 import dashboards from 'constants/metabase'
 
 interface Props {
@@ -19,33 +17,29 @@ const AnalyticsDropdown = ({ brandType }: Props) => {
   }
 
   return (
-    <>
-      <Acl.Beta>
-        <Tab
-          value="analytics"
-          key="analytics"
-          label={
-            <DropdownTab title="Analytics">
-              {({ toggleMenu }) => (
-                <>
-                  {...Object.keys(availableDashboards).map((key, index) => (
-                    <MenuItem
-                      key={index}
-                      onClick={() => {
-                        toggleMenu()
-                        browserHistory.push(`/dashboard/deals/analytics/${key}`)
-                      }}
-                    >
-                      {availableDashboards[key].label}
-                    </MenuItem>
-                  ))}
-                </>
-              )}
-            </DropdownTab>
-          }
-        />
-      </Acl.Beta>
-    </>
+    <Tab
+      value="analytics"
+      key="analytics"
+      label={
+        <DropdownTab title="Analytics">
+          {({ toggleMenu }) => (
+            <>
+              {...Object.keys(availableDashboards).map((key, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={() => {
+                    toggleMenu()
+                    browserHistory.push(`/dashboard/deals/analytics/${key}`)
+                  }}
+                >
+                  {availableDashboards[key].label}
+                </MenuItem>
+              ))}
+            </>
+          )}
+        </DropdownTab>
+      }
+    />
   )
 }
 

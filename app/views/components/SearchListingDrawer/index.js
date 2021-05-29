@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import { Button, Tooltip } from '@material-ui/core'
+import {
+  Button,
+  Tooltip,
+  Box,
+  Fade,
+  Typography,
+  withStyles
+} from '@material-ui/core'
+import { Alert, AlertTitle } from '@material-ui/lab'
 
 import { searchListings } from 'models/Deal/listing'
 import { getMediaGallery } from 'models/media-manager'
@@ -13,11 +21,19 @@ import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
 import getMockListing from './helpers/get-mock-listing'
 
+const styles = theme => ({
+  alertAction: {
+    alignItems: 'flex-start',
+    marginTop: theme.spacing(0.5)
+  }
+})
+
 class SearchListingDrawer extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      isWorking: false
+      isWorking: false,
+      isMlsDisclaimerOpen: true
     }
   }
 
@@ -103,25 +119,20 @@ class SearchListingDrawer extends React.Component {
   })
 
   searchListing = async value => {
-    // The search listing endpoint does not accept
-    // a value with a length of fewer than three characters
-    if (value.length < 3) {
-      return
-    }
-
     let response = await searchListings(value)
 
+    // Search value consisting of 5-8 numbers represents an MLS#
     if (/^[0-9]{5,8}$/.test(value)) {
-      response = [
-        {
-          ...response.property,
-          is_mls_search: true,
-          id: response.id,
-          price: response.price,
-          status: response.status,
-          cover_image_url: response.cover_image_url
-        }
-      ]
+      const modifiedResponse = response.map(item => ({
+        ...item.property,
+        is_mls_search: true,
+        id: item.id,
+        price: item.price,
+        status: item.status,
+        cover_image_url: item.cover_image_url
+      }))
+
+      response = modifiedResponse
     }
 
     return response.filter(item => {
@@ -151,6 +162,47 @@ class SearchListingDrawer extends React.Component {
         searchFunction={this.searchListing}
         onSelectItems={this.handleSelectListings}
         {...this.props}
+        onClose={() => {
+          this.props.onClose()
+
+          if (this.props.withMlsDisclaimer) {
+            this.setState({ isMlsDisclaimerOpen: true })
+          }
+        }}
+        renderSearchNotices={
+          this.props.withMlsDisclaimer
+            ? () => (
+                <Fade unmountOnExit in={this.state.isMlsDisclaimerOpen}>
+                  <Box mb={2}>
+                    <Alert
+                      severity="warning"
+                      variant="outlined"
+                      classes={{
+                        action: this.props.classes.alertAction
+                      }}
+                      onClose={() => {
+                        this.setState({ isMlsDisclaimerOpen: false })
+                      }}
+                    >
+                      <AlertTitle>
+                        <Typography variant="subtitle1">
+                          Important Note
+                        </Typography>
+                      </AlertTitle>
+                      <Typography variant="body2">
+                        Some MLS's do not allow agents to promote other agent's
+                        listings without their permission. Please make sure you{' '}
+                        <strong>
+                          only market listings that you have permission for
+                        </strong>
+                        .
+                      </Typography>
+                    </Alert>
+                  </Box>
+                </Fade>
+              )
+            : undefined
+        }
         renderAction={
           this.props.allowSkip
             ? props => (
@@ -186,10 +238,17 @@ class SearchListingDrawer extends React.Component {
 }
 
 SearchListingDrawer.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   mockListings: PropTypes.bool,
+  multipleSelection: PropTypes.bool,
   allowedStatuses: PropTypes.array,
+  withMlsDisclaimer: PropTypes.bool,
   title: PropTypes.string,
+  onSelectListingsCallback: PropTypes.func,
+  onSelect: PropTypes.func,
+  renderAction: PropTypes.func,
   defaultLists: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -202,10 +261,12 @@ SearchListingDrawer.propTypes = {
 SearchListingDrawer.defaultProps = {
   searchPlaceholder: 'Enter MLS # or address',
   mockListings: false,
+  withMlsDisclaimer: false,
   allowedStatuses: [],
   title: 'Select a Listing',
   defaultLists: [],
-  allowSkip: false
+  allowSkip: false,
+  multipleSelection: false
 }
 
-export default SearchListingDrawer
+export default withStyles(styles)(SearchListingDrawer)

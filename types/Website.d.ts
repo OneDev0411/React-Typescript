@@ -9,5 +9,5 @@ declare interface IWebsite extends IModel<'website'> {
   template: string
   template_instance: IMarketingTemplateInstance
   attributes: Record<string, string>
-  hostnames: string[]
+  hostnames: Nullable<string[]>
 }

@@ -1,26 +1,26 @@
-import React, { useState } from 'react'
-
-import Flex from 'styled-flex-component'
-
-import { Button } from '@material-ui/core'
+import { useState } from 'react'
+import { Grid, Box, Typography, Button } from '@material-ui/core'
 
 import UploadPlaceholder from './UploadPlaceholder'
 import UploadManager from '../../../UploadManager'
 
-import Files from './Files'
+import { Files } from './Files'
 
-import { FolderContainer, Header, HeaderTitle, ItemsContainer } from '../styled'
+import { useStyles } from '../Checklist/styles'
 
 interface Props {
   deal: IDeal
-  isBackOffice: boolean
 }
 
-export function UploadFolder(props: Props) {
-  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(true)
+export function UploadFolder({ deal }: Props) {
+  const classes = useStyles()
+  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(
+    (deal.files || []).length < 20
+  )
+  const files = (deal.files || []).sort((a, b) => b.created_at - a.created_at)
 
   const hasStashFiles = (): boolean =>
-    Array.isArray(props.deal.files) && props.deal.files.length > 0
+    Array.isArray(deal.files) && deal.files.length > 0
 
   const toggleFolderOpen = () => {
     if (hasStashFiles() === false) {
@@ -31,41 +31,51 @@ export function UploadFolder(props: Props) {
   }
 
   return (
-    <FolderContainer>
-      <Header>
-        <Flex
-          alignCenter
-          style={{ cursor: 'pointer' }}
+    <Grid container className={classes.container}>
+      <Grid container className={classes.header}>
+        <Grid
+          item
+          xs={10}
+          spacing={1}
+          className={classes.titleContainer}
           onClick={toggleFolderOpen}
         >
-          <HeaderTitle>Unorganized Files</HeaderTitle>
-        </Flex>
+          <Box display="flex" alignItems="center">
+            <Box mr={1}>
+              <Typography variant="subtitle1">Unorganized Files</Typography>
+            </Box>
+          </Box>
+        </Grid>
 
-        <Flex>
-          {/*
+        <Grid item xs={2}>
+          <Box textAlign="right">
+            {/*
           // @ts-ignore TODO: js component */}
-          <UploadManager deal={props.deal} disableClick>
-            {({ onClick }) => (
-              <Button
-                size="small"
-                color="secondary"
-                variant="contained"
-                onClick={onClick}
-              >
-                Upload
-              </Button>
-            )}
-          </UploadManager>
-        </Flex>
-      </Header>
+            <UploadManager deal={deal} disableClick>
+              {({ onClick }) => (
+                <Button
+                  size="small"
+                  color="secondary"
+                  variant="contained"
+                  onClick={onClick}
+                >
+                  Upload
+                </Button>
+              )}
+            </UploadManager>
+          </Box>
+        </Grid>
+      </Grid>
 
-      <UploadPlaceholder deal={props.deal} />
+      <UploadPlaceholder deal={deal} />
 
-      <ItemsContainer isOpen={isFolderExpanded}>
-        {/*
-        // @ts-ignore TODO: js component */}
-        <Files deal={props.deal} />
-      </ItemsContainer>
-    </FolderContainer>
+      {isFolderExpanded && (
+        <>
+          {files.map((file, index) => (
+            <Files key={file.id} index={index} deal={deal} file={file} />
+          ))}
+        </>
+      )}
+    </Grid>
   )
 }

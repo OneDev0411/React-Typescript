@@ -1,13 +1,20 @@
-import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Box, IconButton } from '@material-ui/core'
+
+import { mdiCogOutline } from '@mdi/js'
 
 import Spinner from 'components/Spinner'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
 import DeleteDeal from '../DeleteDeal'
+import { DealProperties } from '../DealProperties'
+
 import { Card } from './styled'
-import { FactsheetDivider } from '../Factsheet/styled'
 
 function FactsheetsSideNav(props) {
   const { deal, isBackOffice } = props
@@ -18,54 +25,66 @@ function FactsheetsSideNav(props) {
         <Spinner />
       ) : (
         <>
-          <FactsheetSection
-            showDivider={props.showCriticalDatesDivider}
-            display={props.showCriticalDates}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="Dates"
-            title="Critical Dates"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showCriticalDates}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="Dates"
+              title={
+                <Box display="flex" alignItems="center">
+                  Timeline
+                  <Box ml={0.25}>
+                    <IconButton
+                      size="small"
+                      href="/dashboard/account/reminder-notifications"
+                      target="_blank"
+                    >
+                      <SvgIcon path={mdiCogOutline} size={muiIconSizes.small} />
+                    </IconButton>
+                  </Box>
+                </Box>
+              }
+            />
+          </Box>
+
+          <Box mb={6}>
+            <DealProperties deal={deal} isBackOffice={isBackOffice} />
+          </Box>
 
           {props.showContacts && (
-            <Fragment>
-              <Roles deal={deal} allowDeleteRole />
-              <FactsheetDivider />
-            </Fragment>
+            <Box mb={6}>
+              <Roles deal={deal} allowDeleteRole allowEditRole />
+            </Box>
           )}
 
-          <FactsheetSection
-            showDivider
-            display={props.showCDAInformation}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="CDA"
-            title="CDA Information"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showCDAInformation}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="CDA"
+              title="CDA Information"
+            />
+          </Box>
 
-          <FactsheetSection
-            display={props.showListingInformation}
-            deal={deal}
-            isFetchingContexts={props.isFetchingContexts}
-            isBackOffice={isBackOffice}
-            section="Listing"
-            title="Listing Information"
-          />
+          <Box mb={6}>
+            <FactsheetSection
+              display={props.showListingInformation}
+              deal={deal}
+              isFetchingContexts={props.isFetchingContexts}
+              isBackOffice={isBackOffice}
+              section="Listing"
+              title="Listing Information"
+            />
+          </Box>
 
           {props.showDeleteDeal && (
-            <Fragment>
-              <FactsheetDivider />
-
-              <div
-                style={{
-                  margin: '0.5rem 1.5rem'
-                }}
-              >
-                <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
-              </div>
-            </Fragment>
+            <Box mx={2}>
+              <DeleteDeal deal={deal} isBackOffice={isBackOffice} />
+            </Box>
           )}
         </>
       )}

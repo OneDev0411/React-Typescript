@@ -3,7 +3,7 @@ const MEDIUM_LABEL_MAP: {
 } = {
   Email: 'Email',
   Social: 'Social',
-  Letter: 'Print Flyer',
+  Letter: 'Print',
   FacebookCover: 'Facebook Covers',
   InstagramStory: 'Instagram Stories',
   LinkedInCover: 'LinkedIn Covers',
