@@ -49,6 +49,8 @@ export interface Props {
    * Props to pass to the underlaying {@link Popper} component
    */
   PopperProps?: Partial<Omit<PopperProps, 'open' | 'anchorEl'>>
+
+  disablePortal?: boolean
 }
 
 /**
@@ -62,7 +64,8 @@ export function BaseDropdown({
   buttonLabel,
   DropdownToggleButtonProps = {},
   renderDropdownButton,
-  PopperProps = {}
+  PopperProps = {},
+  disablePortal = false
 }: Props) {
   const anchorRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useControllableState(isOpen, onIsOpenChange, false)
@@ -106,6 +109,7 @@ export function BaseDropdown({
         style={{ zIndex: theme.zIndex.modal }}
         transition
         placement="bottom-start"
+        disablePortal={disablePortal}
         {...PopperProps}
       >
         {({ TransitionProps, placement }) => (

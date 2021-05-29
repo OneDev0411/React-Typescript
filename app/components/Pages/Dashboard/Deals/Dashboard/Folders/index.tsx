@@ -139,7 +139,7 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
       ))}
 
       <MarketingChecklist deal={deal} isBackOffice={isBackOffice} />
-      <UploadFolder deal={deal} isBackOffice={isBackOffice} />
+      <UploadFolder deal={deal} />
 
       <Box display="flex">
         {terminatedChecklistsCount > 0 && (
