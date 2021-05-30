@@ -191,18 +191,26 @@ class SectionWithFields extends React.Component {
         message: `${attribute_def.label || attribute_def.name} added.`
       })
 
-      this.setState(state => ({
-        orderedAttributes: state.orderedAttributes.map(a =>
-          a.cuid !== cuid
-            ? a
-            : {
-                ...newAttribute,
-                attribute_def,
-                order: a.order,
-                cuid
-              }
-        )
-      }))
+      this.setState(prevState => {
+        const isAllFieldsEmpty = prevState.isAllFieldsEmpty
+          ? { isAllFieldsEmpty: false }
+          : {}
+
+        return {
+          ...isAllFieldsEmpty,
+          orderedAttributes: prevState.orderedAttributes.map(a =>
+            a.cuid !== cuid
+              ? a
+              : {
+                  ...newAttribute,
+                  isEmpty: false,
+                  attribute_def,
+                  order: a.order,
+                  cuid
+                }
+          )
+        }
+      })
 
       this.updateContact(attribute_def)
     } catch (error) {
