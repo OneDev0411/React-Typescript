@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -26,7 +26,7 @@ interface Props {
   params: {
     id: UUID
   }
-  children: React.ReactNode
+  children: ReactElement<any>
 }
 
 const DealsContainer = React.memo((props: Props) => {
