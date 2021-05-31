@@ -63,18 +63,18 @@ const useStyles = makeStyles(theme => ({
 }))
 
 ViewMode.propTypes = {
+  label: PropTypes.string,
+  showAdd: PropTypes.bool,
+  value: PropTypes.string,
+  style: PropTypes.shape(),
+  showEdit: PropTypes.bool,
+  contact: PropTypes.shape(),
+  showDelete: PropTypes.bool,
+  renderBody: PropTypes.func,
   handleAddNew: PropTypes.func,
   handleDelete: PropTypes.func,
-  label: PropTypes.string,
-  renderBody: PropTypes.func,
-  showAdd: PropTypes.bool,
-  showEdit: PropTypes.bool,
-  showDelete: PropTypes.bool,
-  style: PropTypes.shape(),
-  contact: PropTypes.shape(),
-  toggleMode: PropTypes.func.isRequired,
-  value: PropTypes.string,
-  attributeName: PropTypes.string
+  attributeName: PropTypes.string,
+  toggleMode: PropTypes.func.isRequired
 }
 
 ViewMode.defaultProps = {
@@ -118,6 +118,21 @@ export function ViewMode({
   const dispatch = useDispatch()
   const classes = useStyles()
 
+  const getEmailRecipient = () => {
+    console.log({ value, attributeName, contact })
+
+    if (!contact || contact.email !== value) {
+      return [
+        {
+          recipient_type: 'Email',
+          email: value
+        }
+      ]
+    }
+
+    return normalizeContactsForEmailCompose([contact])
+  }
+
   const handleCopy = e => {
     e.stopPropagation()
 
@@ -148,10 +163,10 @@ export function ViewMode({
       )
     }
 
-    if (value && contact && attributeName === 'email') {
+    if (value && attributeName === 'email') {
       actions.push(
         <SendEmailButton
-          recipients={normalizeContactsForEmailCompose([contact])}
+          recipients={getEmailRecipient()}
           render={({ onClick }) => (
             <Box
               key="email"
