@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, Chip, Grid, makeStyles, Theme } from '@material-ui/core'
 
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
@@ -37,7 +36,7 @@ export default function TemplateTypesChips({
           <Grid item key={type}>
             <Box mr={1} mb={1}>
               <Chip
-                variant="default"
+                variant="outlined"
                 label={label}
                 color={isActive ? 'primary' : 'default'}
                 onClick={() => onClick(type)}

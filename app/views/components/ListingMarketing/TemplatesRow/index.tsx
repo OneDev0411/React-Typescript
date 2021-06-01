@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { Grid, Box, Typography, makeStyles, Theme } from '@material-ui/core'
 import {
@@ -6,6 +5,7 @@ import {
   mdiLinkedin,
   mdiFacebook,
   mdiEmailOutline,
+  mdiWeb,
   mdiPrinter,
   mdiShareVariant
 } from '@mdi/js'
@@ -22,7 +22,8 @@ const MEDIUM_ICONS: Record<IMarketingTemplateMedium, string> = {
   LinkedInCover: mdiLinkedin,
   FacebookCover: mdiFacebook,
   Letter: mdiPrinter,
-  Social: mdiShareVariant
+  Social: mdiShareVariant,
+  Website: mdiWeb
 }
 
 const useStyles = makeStyles(

@@ -121,6 +121,10 @@ export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.AGENT_NETWORK)
 }
 
+export function hasUserAccessToWebsites(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.WEBSITES)
+}
+
 export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
