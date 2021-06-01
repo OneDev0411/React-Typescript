@@ -30,6 +30,8 @@ interface Props {
 }
 
 const DealsContainer = (props: Props) => {
+  console.log('[ x ] Rerender deals container')
+
   const dispatch = useDispatch()
 
   const { user, deals, brandContexts, isFetchingDeals, brandId } = useSelector<

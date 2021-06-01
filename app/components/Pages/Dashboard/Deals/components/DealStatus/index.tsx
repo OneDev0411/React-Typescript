@@ -1,7 +1,14 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { MenuItem, createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  MenuItem,
+  createStyles,
+  makeStyles,
+  Theme,
+  Tooltip,
+  Button
+} from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import Deal from 'models/Deal'
@@ -17,6 +24,7 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { selectUser } from 'selectors/user'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 
 interface Props {
   deal: IDeal
@@ -45,6 +53,14 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     getDealChecklists(deal, deals.checklists)
   )
   const user = useSelector(selectUser)
+
+  const statusName =
+    deal.has_active_offer || deal.deal_type === 'Buying'
+      ? 'contract_status'
+      : 'listing_status'
+
+  const definition = searchContext(deal, statusName)
+  const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
 
   /**
    * updates listing_status context
@@ -103,29 +119,46 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
   return (
     <BaseDropdown
-      buttonLabel={
-        <>
-          {dealStatus && (
-            <span
-              className={classes.bullet}
-              style={{
-                backgroundColor: getStatusColorClass(dealStatus)
-              }}
-            />
-          )}
-          {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
-        </>
-      }
-      DropdownToggleButtonProps={{
-        variant: 'outlined',
-        size: 'small'
-      }}
+      renderDropdownButton={buttonProps => (
+        <Tooltip
+          title={
+            isDisabled ? (
+              <div>
+                The status can only be changed on MLS. Once changed, the update
+                will be reflected here.
+              </div>
+            ) : (
+              ''
+            )
+          }
+        >
+          <span>
+            <Button
+              {...buttonProps}
+              variant="outlined"
+              size="small"
+              disabled={isDisabled}
+            >
+              {dealStatus && (
+                <span
+                  className={classes.bullet}
+                  style={{
+                    backgroundColor: getStatusColorClass(dealStatus)
+                  }}
+                />
+              )}
+              {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
+            </Button>
+          </span>
+        </Tooltip>
+      )}
       renderMenu={({ close }) => (
         <div>
           {statuses.map((item, index) => (
             <MenuItem
               key={index}
               value={index}
+              selected={item.label === dealStatus}
               onClick={() => {
                 close()
                 updateStatus(item)
