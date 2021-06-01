@@ -1,24 +1,19 @@
-import { useState } from 'react'
-import { useEffectOnce } from 'react-use'
+import { useSelector } from 'react-redux'
 
-import { getDealStatuses } from 'models/Deal/status/get-deal-statuses'
+import { IAppState } from 'reducers'
 
-export function useDealStatuses(dealId: UUID) {
-  const [statuses, setStatuses] = useState<IDealStatus[]>([])
+import { getDealChecklists } from 'reducers/deals/checklists'
 
-  useEffectOnce(() => {
-    const fetchStatuses = async () => {
-      try {
-        const statuses = await getDealStatuses(dealId)
+export function useDealStatuses(deal: IDeal) {
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
 
-        setStatuses(statuses)
-      } catch (e) {
-        console.log(e)
-      }
-    }
+  return checklists.flatMap(({ origin }) => {
+    const brandChecklist = deal.property_type.checklists?.find(
+      ({ id }) => id === origin
+    )
 
-    fetchStatuses()
+    return brandChecklist?.statuses || []
   })
-
-  return statuses
 }

@@ -78,6 +78,11 @@ export function useChecklistsPage(rootBrandId: string | null) {
   const updateChecklist = async (checklist: IBrandChecklist) => {
     applyChecklistUpdate(checklist.id, await updateBrandChecklist(checklist))
   }
+
+  const addChecklists = (list: IBrandChecklist[]) => {
+    setChecklists([...checklists, ...list])
+  }
+
   const addGenericTask = (checklist: IBrandChecklist) => {
     return addTask(checklist, {
       task_type: 'Generic'
@@ -147,11 +152,13 @@ export function useChecklistsPage(rootBrandId: string | null) {
     updateTask,
     deleteTask,
     reorderTasks,
+    addChecklists,
     addGenericTask,
     addGeneralCommentTask,
     addFormTask,
     forms,
     formsError,
-    formsState
+    formsState,
+    fetchChecklists
   }
 }

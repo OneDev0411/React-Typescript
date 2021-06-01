@@ -1,8 +1,12 @@
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
+
 export function getContextInputMask(context: IDealBrandContext) {
-  if (context.properties?.mask) {
-    return context.properties.mask
+  const properties = getContextProperties(context.key)
+
+  if (properties?.mask) {
+    return properties.mask
   }
 
   if (context.data_type === 'Number' && context.format !== 'Currency') {

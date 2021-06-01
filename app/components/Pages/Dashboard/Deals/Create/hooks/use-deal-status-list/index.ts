@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useAsync } from 'react-use'
 
-import { getDealStatuses } from 'models/Deal/status/get-deal-statuses'
+// import { getDealStatuses } from 'models/Deal/status/get-deal-statuses'
 
 export function useStatusList(deal: IDeal | null): IDealStatus[] {
   const [statuses, setStatuses] = useState<IDealStatus[]>([])
@@ -14,7 +14,7 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
       return
     }
 
-    const list = await getDealStatuses(dealId)
+    const list = [] // await getDealStatuses(dealId)
 
     setStatuses(list)
   }, [dealId])

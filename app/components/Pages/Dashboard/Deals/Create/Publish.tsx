@@ -33,7 +33,9 @@ import { getField } from 'models/Deal/helpers/context'
 
 import { createAddressContext } from 'deals/utils/create-address-context'
 
-import { getStatusField } from 'models/Deal/helpers/dynamic-context'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
@@ -70,20 +72,22 @@ export default function Publish({ params }: Props) {
 
   const { control, watch } = useForm()
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const [isSaving, setIsSaving] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
-
-  const dispatch = useDispatch()
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
+
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
-  const deal = useSelector<IAppState, IDeal>(({ deals }) =>
+  const deal: IDeal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
+  )
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
   )
 
   const statusList = useStatusList(deal)
-  const statusContextKey =
-    deal?.deal_type === 'Buying' ? 'contract_status' : 'listing_status'
+  const statusContextKey = getStatusContextKey(deal)
 
   const isStatusVisible =
     deal && showStatusQuestion(deal, deal?.deal_type, statusContextKey)
@@ -97,9 +101,7 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = deal
-    ? getDealContexts(deal, deal.deal_type, deal.property_type)
-    : []
+  const contexts = deal ? getDealContexts(deal, deal.deal_type) : []
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
@@ -176,8 +178,6 @@ export default function Publish({ params }: Props) {
     try {
       setIsSaving(true)
 
-      await dispatch(upsertContexts(deal.id, getFormContexts(values, deal)))
-
       if (values.address) {
         await savePropertyAddress(deal, values.address)
       }
@@ -185,6 +185,13 @@ export default function Publish({ params }: Props) {
       if (roles.length > 0) {
         await dispatch(createRoles(deal.id, roles))
       }
+
+      await dispatch(
+        upsertContexts(
+          deal.id,
+          getFormContexts(values, deal, checklists, deal.deal_type)
+        )
+      )
 
       showNotification &&
         dispatch(
@@ -205,7 +212,7 @@ export default function Publish({ params }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, property.address)
+      const contexts = createAddressContext(deal, checklists, property.address)
 
       dispatch(upsertContexts(deal.id, contexts))
     }
@@ -324,8 +331,8 @@ export default function Publish({ params }: Props) {
                     <div>
                       What's the{' '}
                       <span className={classes.brandedTitle}>
-                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}'s
-                        Legal Name
+                        {propertyType?.is_lease ? 'Tenant' : 'Buyer'}'s Legal
+                        Name
                       </span>
                       ?
                     </div>
@@ -353,9 +360,7 @@ export default function Publish({ params }: Props) {
                     <div>
                       What's the{' '}
                       <span className={classes.brandedTitle}>
-                        {propertyType?.includes('Lease')
-                          ? 'Landlord'
-                          : 'Seller'}
+                        {propertyType?.is_lease ? 'Landlord' : 'Seller'}
                         's Legal Name
                       </span>
                       ?

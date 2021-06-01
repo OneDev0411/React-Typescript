@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 
 import { Paper } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
-import DealContext from 'models/Deal/helpers/dynamic-context'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { selectBrandContexts } from 'reducers/deals/contexts'
+
+import { IAppState } from 'reducers'
+
 import FactsheetSection from '../../../../Dashboard/Factsheet'
-import { getNextDate, getNextDateValue } from '../../../../utils/critical-dates'
+import { getNextDate, getNextDateValue } from './helpers'
 
 export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 
@@ -20,16 +25,15 @@ interface Props {
 export default function CriticalDate({ deal, user }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-  const activeTeamId = getActiveTeamId(user)
-
-  const definitions = DealContext.getFactsheetSection(
-    activeTeamId,
-    deal,
-    'Dates'
+  const contexts = useSelector<IAppState, IDealBrandContext[]>(
+    ({ deals }) =>
+      selectBrandContexts(deals.contexts, getActiveTeamId(user)!) || []
   )
 
+  const definitions = contexts.filter(context => context.section === 'Dates')
+
   // get next critical date
-  const nextDate = getNextDate(deal, activeTeamId)
+  const nextDate = getNextDate(deal, definitions)
 
   const handlePopoverOpen = (
     event: React.MouseEvent<HTMLElement, MouseEvent>

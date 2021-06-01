@@ -27,7 +27,7 @@ import type { IDealFormRole } from '../../types'
 interface Props {
   title: React.ReactNode
   side: IDealType
-  propertyType: IDealPropertyType
+  propertyType?: IDealPropertyType
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
@@ -70,10 +70,10 @@ export function DealClient({
   const getSearchInputPlaceholder = () => {
     const type =
       side === 'Selling'
-        ? propertyType?.includes('Lease')
+        ? propertyType?.is_lease
           ? 'Landlord'
           : 'Seller'
-        : propertyType?.includes('Lease')
+        : propertyType?.is_lease
         ? 'Tenant'
         : 'Buyer'
 

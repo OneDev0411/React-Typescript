@@ -1,13 +1,10 @@
-import {
-  getChecklist,
-  getDefinitionId
-} from 'models/Deal/helpers/dynamic-context'
 import { getContext } from 'models/Deal/helpers/context'
 
 export function getFormContexts(
   values: Record<string, unknown>,
   deal: IDeal,
-  checklist?: IDealChecklist
+  checklists: IDealChecklist[],
+  checklistType: IBrandChecklist['checklist_type']
 ) {
   return Object.entries(values).reduce((acc, [key, value]) => {
     if (value === undefined || !key.includes('context')) {
@@ -17,12 +14,24 @@ export function getFormContexts(
     const [, name] = key.split(':')
     const context = getContext(deal, name)
 
+    const brandChecklist = deal.property_type.checklists?.find(
+      checklist => checklist.checklist_type === checklistType
+    )
+
+    const definition = brandChecklist?.required_contexts.find(
+      item => item.key === name
+    )
+
+    const checklist = checklists.find(
+      ({ origin }) => origin === brandChecklist?.id
+    )
+
     return [
       ...acc,
       {
         value,
-        definition: getDefinitionId(deal.id, name),
-        checklist: checklist ? checklist.id : getChecklist(deal, name),
+        definition: definition?.id,
+        checklist: checklist?.id,
         approved: context ? context.needs_approval : false
       }
     ]

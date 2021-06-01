@@ -7,10 +7,11 @@ import { Modal, ModalHeader } from 'components/Modal'
 import useStyles from './styles'
 import DetailsFiels from './Fields/Details'
 import OptionFields from './Fields/Options'
-import AvailabilityFields from './Fields/Availability'
+import { AvailabilityFields } from './Fields/Availability'
 
 interface Props {
   isOpen: boolean
+  brandPropertyTypes: IDealPropertyType[]
   onClose: () => void
   onSubmit: (contextData: IDealBrandContext, contextId?: UUID) => Promise<any>
   context: IDealBrandContext | null
@@ -22,7 +23,8 @@ function NewContextModal({
   onClose,
   onSubmit,
   context,
-  section
+  section,
+  brandPropertyTypes
 }: Props) {
   const classes = useStyles()
   const baseInitialValues: object = {
@@ -62,15 +64,8 @@ function NewContextModal({
                   <Divider />
                 </Box>
                 <AvailabilityFields
-                  fieldTitle="Mandatory in ..."
-                  fieldName="required"
-                />
-                <Box my={4}>
-                  <Divider />
-                </Box>
-                <AvailabilityFields
-                  fieldTitle="Optional in ..."
-                  fieldName="optional"
+                  context={context}
+                  brandPropertyTypes={brandPropertyTypes}
                 />
               </Box>
               <Box className={classes.modalFooter}>

@@ -1,16 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { addNotification as notify } from 'components/notification'
 
 import { Button } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import config from 'config'
 
 import { saveSubmission, upsertContexts } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
 
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getPdfSize } from 'models/Deal/form'
 
 import Spinner from 'components/Spinner'
@@ -22,6 +23,8 @@ import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 import { selectDealRoles } from 'reducers/deals/roles'
 import { selectFormById } from 'reducers/deals/forms'
+
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { parseAnnotations } from './utils/parse-annotations'
 import { getDefaultValues } from './utils/get-default-values'
@@ -186,7 +189,13 @@ class EditDigitalForm extends React.Component {
   saveContexts = async () => {
     const contexts = Object.entries(this.pendingContexts)
       .map(([name, value]) =>
-        createUpsertObject(this.props.deal, name, value, true)
+        createContextObject(
+          this.props.deal,
+          this.props.checklists,
+          name,
+          value,
+          true
+        )
       )
       .filter(item => item)
 
@@ -292,12 +301,14 @@ function mapStateToProps({ deals, user }, props) {
   const deal = selectDealById(deals.list, props.params.id)
   const task = selectTaskById(deals.tasks, props.params.taskId)
   const form = deal && task && selectFormById(deals.forms, deal.id, task.form)
+  const checklists = deal && getDealChecklists(deal, deals.checklists)
 
   return {
     user,
     deal,
     task,
     form,
+    checklists,
     roles: selectDealRoles(deals.roles, deal)
   }
 }

@@ -13,7 +13,8 @@ import { IAppState } from 'reducers'
 import createNewContext from 'models/Deal/context/create-context'
 import editContext from 'models/Deal/context/edit-context'
 import deleteContext from 'models/Deal/context/delete-context'
-import { selectExactContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getContextsByBrand } from 'actions/deals'
 import { getActiveTeamId } from 'utils/user-teams'
 import PageHeader from 'components/PageHeader'
@@ -43,18 +44,38 @@ function DealContext({ brandId, isFetching, list }: Props) {
     dispatch(getContextsByBrand(brandId))
   }, [brandId, dispatch])
 
+  const {
+    propertyTypes: brandPropertyTypes,
+    reload: reloadBrandPropertyTypes
+  } = useBrandPropertyTypes(brandId)
+
   async function contextFormHandler(
-    contextData: IDealBrandContext,
+    contextData: IDealBrandContext & {
+      checklists: Record<UUID, boolean>
+    },
     contextId?: UUID
   ) {
     try {
       const editMode: boolean = !!(contextId && selectedContext)
       let context: IDealBrandContext
 
+      const checklists = Object.entries(contextData.checklists)
+        .filter(([_, is_required]) => is_required !== null)
+        .map(([checklist, is_required]) => ({
+          checklist,
+          is_required
+        }))
+
       if (editMode) {
-        context = await editContext(brandId, contextId, contextData)
+        context = await editContext(brandId, contextId, {
+          ...contextData,
+          checklists
+        })
       } else {
-        context = await createNewContext(brandId, contextData)
+        context = await createNewContext(brandId, {
+          ...contextData,
+          checklists
+        })
       }
 
       if (context) {
@@ -70,12 +91,14 @@ function DealContext({ brandId, isFetching, list }: Props) {
         if (editMode) {
           setSelectedContext(null)
         }
+
+        reloadBrandPropertyTypes()
       }
     } catch (err) {
       if (err.status === 409) {
         dispatch(
           notify({
-            message: 'Context id has already taken!',
+            message: 'There is already an existing context id!',
             status: 'error'
           })
         )
@@ -154,6 +177,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
         isOpen={isModalOpen}
         section={selectedSection}
         context={selectedContext}
+        brandPropertyTypes={brandPropertyTypes}
         onClose={() => {
           setIsModalOpen(false)
           setSelectedContext(null)
@@ -168,11 +192,11 @@ function DealContext({ brandId, isFetching, list }: Props) {
 
 const mapStateToProps = ({ deals, user }: IAppState) => {
   const brandId = getActiveTeamId(user)
-  const exactContexts = selectExactContextsByBrand(deals.contexts, brandId)
+  const exactContexts = selectBrandContexts(deals.contexts, brandId)
 
   return {
     brandId,
-    isFetching: isEmpty(deals.contexts.byBrand),
+    isFetching: isEmpty(deals.contexts),
     list: !isEmpty(exactContexts)
       ? groupBy(exactContexts, 'section')
       : { isEmpty: true }

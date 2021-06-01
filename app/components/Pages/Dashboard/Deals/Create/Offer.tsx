@@ -19,7 +19,7 @@ import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
 
-import { getStatusField } from 'models/Deal/helpers/dynamic-context'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
@@ -82,11 +82,12 @@ function CreateOffer({ router, route, params }: Props) {
 
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
-  const statusContextKey = getStatusField(deal)
 
-  const dealContexts = deal
-    ? getDealContexts(deal, 'Buying', deal.property_type, true)
-    : []
+  const dealContexts = deal ? getDealContexts(deal, 'Offer') : []
+
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
 
   const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
   const isOfficeDoubleEnded =
@@ -134,7 +135,10 @@ function CreateOffer({ router, route, params }: Props) {
       await Promise.all([
         dispatch(createRoles(deal.id, roles)),
         dispatch(
-          upsertContexts(deal.id, getFormContexts(values, deal, checklist))
+          upsertContexts(
+            deal.id,
+            getFormContexts(values, deal, checklists, 'Offer')
+          )
         )
       ])
 
@@ -200,7 +204,7 @@ function CreateOffer({ router, route, params }: Props) {
                   <div>
                     Enter{' '}
                     <span className={classes.brandedTitle}>
-                      {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}
+                      {propertyType?.is_lease ? 'Tenant' : 'Buyer'}
                     </span>{' '}
                     information as shown on offer
                   </div>
@@ -236,8 +240,7 @@ function CreateOffer({ router, route, params }: Props) {
                     <div>
                       Who is the{' '}
                       <span className={classes.brandedTitle}>
-                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}{' '}
-                        Agent
+                        {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
                       </span>
                       ?
                     </div>
@@ -262,8 +265,7 @@ function CreateOffer({ router, route, params }: Props) {
                   <div>
                     Who is the{' '}
                     <span className={classes.brandedTitle}>
-                      {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'} Co
-                      Agent
+                      {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Co Agent
                     </span>
                     ?
                   </div>
@@ -278,7 +280,7 @@ function CreateOffer({ router, route, params }: Props) {
 
           {showStatusQuestion(deal, 'Buying', 'contract_status') && (
             <Controller
-              name={`context:${statusContextKey}`}
+              name="context:contract_status"
               control={control}
               render={({ onChange }) => (
                 <DealStatus list={statusList} onChange={onChange} />

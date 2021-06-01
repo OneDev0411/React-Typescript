@@ -11,7 +11,7 @@ import {
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
 
 interface StateProps {
@@ -29,7 +29,7 @@ interface Props {
   children: React.ReactNode
 }
 
-const DealsContainer = React.memo((props: Props) => {
+const DealsContainer = (props: Props) => {
   const dispatch = useDispatch()
 
   const { user, deals, brandContexts, isFetchingDeals, brandId } = useSelector<
@@ -40,7 +40,7 @@ const DealsContainer = React.memo((props: Props) => {
 
     return {
       deals: deals.list,
-      brandContexts: selectContextsByBrand(deals.contexts, brandId),
+      brandContexts: selectBrandContexts(deals.contexts, brandId),
       isFetchingDeals: deals.properties.isFetchingDeals,
       brandId,
       user
@@ -80,6 +80,6 @@ const DealsContainer = React.memo((props: Props) => {
   }
 
   return props.children
-})
+}
 
 export default DealsContainer

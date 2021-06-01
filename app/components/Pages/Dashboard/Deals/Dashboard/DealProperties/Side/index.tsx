@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
 
@@ -6,8 +6,11 @@ import { mdiChevronDown } from '@mdi/js'
 
 import Deal from 'models/Deal'
 import { upsertContexts } from 'actions/deals'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getEnderType } from 'models/Deal/helpers/context'
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -34,6 +37,9 @@ interface Props {
 export function DealSide(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const checklists = useSelector<IAppState, IDealChecklist[]>(({ deals }) =>
+    getDealChecklists(props.deal, deals.checklists)
+  )
 
   const options = [
     {
@@ -60,7 +66,7 @@ export function DealSide(props: Props) {
 
     dispatch(
       upsertContexts(props.deal.id, [
-        createUpsertObject(props.deal, 'ender_type', value, true)
+        createContextObject(props.deal, checklists, 'ender_type', value, true)
       ])
     )
   }

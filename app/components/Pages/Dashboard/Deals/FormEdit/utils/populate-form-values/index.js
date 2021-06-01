@@ -1,6 +1,6 @@
 import { getField } from 'models/Deal/helpers/context/get-field'
 import { getType, Types } from 'deals/FormEdit/utils/types'
-import { searchContext } from 'models/Deal/helpers/dynamic-context'
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 
 import { getAnnotationsByType } from '../get-annotations-by-type'
 import { getInputAnnotations } from '../get-input-annotations'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Box,
@@ -18,6 +18,8 @@ import { createAddressContext } from 'deals/utils/create-address-context'
 import { upsertContexts } from 'actions/deals'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { IAppState } from 'reducers'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +49,10 @@ export function Address(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(props.deal, state.deals.checklists)
+  )
+
   const cancelEdit = () => setIsEditingAddress(false)
   const editAddress = () => !props.deal.listing && setIsEditingAddress(true)
   const fullAddress = getField(props.deal, 'full_address')
@@ -54,7 +60,7 @@ export function Address(props: Props) {
   const addressTitle = (fullAddress || props.deal.title).split(',')
 
   const handleSave = async address => {
-    const contexts = createAddressContext(props.deal, address)
+    const contexts = createAddressContext(props.deal, checklists, address)
 
     try {
       await dispatch(upsertContexts(props.deal.id, contexts))

@@ -12,7 +12,7 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { RadioGroup } from 'components/RadioGroup'
 
 interface Props {
-  propertyType: IDealPropertyType
+  propertyType?: IDealPropertyType
   onChange: (value: IDealType) => void
 }
 
@@ -38,11 +38,11 @@ export function DealType({ propertyType, onChange }: Props) {
           name="DealType"
           options={[
             {
-              label: propertyType?.includes('Lease') ? 'Tenant' : 'Buyer',
+              label: propertyType?.is_lease ? 'Tenant' : 'Buyer',
               value: 'Buying'
             },
             {
-              label: propertyType?.includes('Lease') ? 'Landlord' : 'Seller',
+              label: propertyType?.is_lease ? 'Landlord' : 'Seller',
               value: 'Selling'
             },
             {

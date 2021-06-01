@@ -1,26 +1,20 @@
-import { getItems } from 'models/Deal/helpers/dynamic-context'
-
 export function getDealContexts(
   deal: IDeal,
-  dealType?: IDealType,
-  dealPropertyType?: IDealPropertyType,
-  hasActiveOffer = false
+  checklistType?: IBrandChecklist['checklist_type']
 ): IDealBrandContext[] {
-  if (!dealType || !dealPropertyType) {
+  if (!deal || !checklistType) {
     return []
   }
 
-  return getItems(deal.id, dealType, dealPropertyType, hasActiveOffer).filter(
-    (field: IDealBrandContext) => {
-      if (!field.mandatory) {
-        return false
-      }
-
-      if (['contract_status', 'listing_status'].includes(field.key)) {
-        return false
-      }
-
-      return true
-    }
+  const checklist = deal.property_type.checklists?.find(
+    checklist => checklist.checklist_type === checklistType
   )
+
+  return (checklist?.required_contexts || []).filter(context => {
+    if (context.key === 'listing_status' || context.key === 'contract_status') {
+      return false
+    }
+
+    return true
+  })
 }
