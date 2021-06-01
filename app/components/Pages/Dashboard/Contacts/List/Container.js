@@ -691,7 +691,11 @@ class ContactsList extends React.Component {
   }
 
   renderOtherContactsBadge = () => {
-    const { resetActiveFilters, changeActiveFilterSegment } = this.props
+    const {
+      resetActiveFilters,
+      changeActiveFilterSegment,
+      isFetchingContacts
+    } = this.props
     const { parkedContactCount, duplicateClusterCount } = this.state
 
     if (!parkedContactCount && !duplicateClusterCount) {
@@ -703,6 +707,7 @@ class ContactsList extends React.Component {
         {parkedContactCount > 0 && (
           <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
             <OtherContactsBadge
+              disabled={isFetchingContacts}
               title="New contacts to review and add"
               count={parkedContactCount}
               onClick={async () => {
@@ -719,6 +724,7 @@ class ContactsList extends React.Component {
         )}
         {duplicateClusterCount > 0 && (
           <OtherContactsBadge
+            disabled={isFetchingContacts}
             title="Duplicate Contacts"
             count={duplicateClusterCount}
             onClick={() => goTo('/dashboard/contacts/duplicates')}
