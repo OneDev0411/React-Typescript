@@ -29,7 +29,9 @@ interface Props {
   children: React.ReactNode
 }
 
-const DealsContainer = React.memo((props: Props) => {
+const DealsContainer = (props: Props) => {
+  console.log('[ x ] Rerender deals container')
+
   const dispatch = useDispatch()
 
   const { user, deals, brandContexts, isFetchingDeals, brandId } = useSelector<
@@ -80,6 +82,6 @@ const DealsContainer = React.memo((props: Props) => {
   }
 
   return props.children
-})
+}
 
 export default DealsContainer

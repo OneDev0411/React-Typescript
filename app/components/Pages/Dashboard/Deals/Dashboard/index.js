@@ -32,6 +32,8 @@ function DealDetails(props) {
     return false
   }
 
+  console.log(`[ x ] Rerender deal "${props.deal.title}" `)
+
   const getPageTitle = () => {
     const pageTitle = getDealTitle(props.deal)
 
