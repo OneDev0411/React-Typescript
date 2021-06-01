@@ -300,7 +300,11 @@ export const load = async colors => {
               }
               onChange={fontSize => {
                 // in order to sync changed text and keep the changes
-                editor.getSelected().trigger('sync:content')
+                if (!selected) {
+                  return
+                }
+
+                selected.trigger('sync:content')
                 setStyle(selected, 'font-size', fontSize)
               }}
             />,
@@ -322,7 +326,11 @@ export const load = async colors => {
               }
               onChange={width => {
                 // in order to sync changed text and keep the changes
-                editor.getSelected().trigger('sync:content')
+                if (!selected) {
+                  return
+                }
+
+                selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {
                   setMjmlAttr(selected, 'width', width)
@@ -355,7 +363,11 @@ export const load = async colors => {
               }}
               onChange={padding => {
                 // in order to sync changed text and keep the changes
-                editor.getSelected().trigger('sync:content')
+                if (!selected) {
+                  return
+                }
+
+                selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {
                   setMjmlAttr(selected, 'padding-top', padding.top)
