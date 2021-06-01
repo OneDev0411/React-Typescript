@@ -938,9 +938,8 @@ class ContactsList extends React.Component {
           {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              {this.state.viewMode === 'table' && (
-                <>{this.renderOtherContactsBadge()}</>
-              )}
+              {this.state.viewMode === 'table' &&
+                this.renderOtherContactsBadge()}
 
               {this.renderTabs()}
 
