@@ -1,5 +1,4 @@
-import React, { useState, useEffect, ComponentProps } from 'react'
-
+import { useState, useEffect, ComponentProps } from 'react'
 import { makeStyles } from '@material-ui/core'
 
 import { getTemplateImage } from 'utils/marketing-center/helpers'

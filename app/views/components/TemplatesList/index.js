@@ -1,12 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
-import chunk from 'lodash/chunk'
 
 import { addNotification as notify } from 'components/notification'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
+import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 
 import { TemplatesListContainer } from './styled'
 import MarketingTemplateCard from '../MarketingTemplateCard'
@@ -16,12 +16,19 @@ import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
 import TemplateCardActions from './TemplateCardActions'
 
+const PAGE_SIZE = 12
+
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
+
+  const currentPageItems = useInfinitePagination({
+    items: props.items,
+    pageSize: PAGE_SIZE
+  })
 
   useEffect(() => {
     if (!props.defaultSelected || !props.items || props.items.length === 0) {
@@ -96,64 +103,57 @@ function TemplatesList(props) {
     )
   }
 
-  const pages = props.pageSize
-    ? chunk(props.items, props.pageSize)
-    : [props.items]
-
   return (
     <div>
       <TemplatesListContainer>
-        {pages.map((items, index) => (
-          <MarketingTemplateMasonry
-            key={index}
-            breakpointCols={{
-              default: 5,
-              1600: 4,
-              1200: 3,
-              960: 2,
-              568: 1
-            }}
-          >
-            {items.map(template => (
-              <MarketingTemplateCard
-                key={template.id}
-                template={template}
-                handlePreview={() => {
-                  setPreviewModalOpen(true)
-                  setSelectedTemplate(template)
-                  props.onSelect && props.onSelect(template)
-                }}
-                actions={
-                  isTemplateInstance(template) ? (
-                    <TemplateCardActions
-                      editButtonText="Continue"
-                      handleDelete={() => handleDeleteInstance(template)}
-                      handleEdit={() => {
-                        setActionTriggered(true)
-                        setEditActionTriggered(true)
-                        setSelectedTemplate(template)
-                      }}
-                    />
-                  ) : (
-                    <TemplateCardActions
-                      handleDelete={
-                        props.onDelete
-                          ? () => handleDeleteBrandTemplate(template)
-                          : undefined
-                      }
-                      handleEdit={() => {
-                        setActionTriggered(true)
-                        setEditActionTriggered(false)
-                        setSelectedTemplate(template)
-                        props.onSelect && props.onSelect(template)
-                      }}
-                    />
-                  )
-                }
-              />
-            ))}
-          </MarketingTemplateMasonry>
-        ))}
+        <MarketingTemplateMasonry
+          breakpointCols={{
+            default: 5,
+            1600: 4,
+            1200: 3,
+            960: 2,
+            568: 1
+          }}
+        >
+          {currentPageItems.map(template => (
+            <MarketingTemplateCard
+              key={template.id}
+              template={template}
+              handlePreview={() => {
+                setPreviewModalOpen(true)
+                setSelectedTemplate(template)
+                props.onSelect && props.onSelect(template)
+              }}
+              actions={
+                isTemplateInstance(template) ? (
+                  <TemplateCardActions
+                    editButtonText="Continue"
+                    handleDelete={() => handleDeleteInstance(template)}
+                    handleEdit={() => {
+                      setActionTriggered(true)
+                      setEditActionTriggered(true)
+                      setSelectedTemplate(template)
+                    }}
+                  />
+                ) : (
+                  <TemplateCardActions
+                    handleDelete={
+                      props.onDelete
+                        ? () => handleDeleteBrandTemplate(template)
+                        : undefined
+                    }
+                    handleEdit={() => {
+                      setActionTriggered(true)
+                      setEditActionTriggered(false)
+                      setSelectedTemplate(template)
+                      props.onSelect && props.onSelect(template)
+                    }}
+                  />
+                )
+              }
+            />
+          ))}
+        </MarketingTemplateMasonry>
       </TemplatesListContainer>
 
       <MarketingTemplatePreviewModal
