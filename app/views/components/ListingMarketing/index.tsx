@@ -168,8 +168,8 @@ export default function ListingMarketing({
                       size={muiIconSizes.large}
                     />
                   }
-                  title="Open House"
-                  subtitle="Customize Open House registration pages"
+                  title="Websites"
+                  subtitle="Create or manage websites for this listing"
                   url="/dashboard/websites"
                 />
               </Grid>
@@ -191,7 +191,7 @@ export default function ListingMarketing({
         {mediums.map(medium => {
           const currentMediumTemplates = currentTemplateTypeTemplates
             .filter(template => template.template.medium === medium)
-            .slice(0, 4)
+            .slice(0, 6)
 
           if (currentMediumTemplates.length === 0) {
             return null

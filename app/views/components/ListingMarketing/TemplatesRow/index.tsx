@@ -83,8 +83,7 @@ export default function TemplatesRow({
             justify="center"
             xs={12}
             sm={6}
-            md={4}
-            lg={3}
+            md={2}
           >
             <Box p={1} overflow="hidden">
               <MarketingTemplateCardThumbnail
