@@ -22,6 +22,8 @@ import ShowingDuration from '../ShowingDuration'
 import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
 import ShowingRoleList from './ShowingRoleList'
 import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
+import ShowingYesNoRadioGroup from '../ShowingYesNoRadioGroup'
+import { YesNoAnswer } from '../ShowingStepYesNoQuestion'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -102,6 +104,18 @@ function ShowingDetailTabSettings({
     500
   )
 
+  const handleAllowAppraisalChange = (allowAppraisal: YesNoAnswer) =>
+    updateShowing({
+      ...showing,
+      allow_appraisal: allowAppraisal === 'Yes'
+    })
+
+  const handleAllowInspectionChange = (allowInspection: YesNoAnswer) =>
+    updateShowing({
+      ...showing,
+      allow_inspection: allowInspection === 'Yes'
+    })
+
   return (
     <Box display="flex">
       <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
@@ -161,7 +175,26 @@ function ShowingDetailTabSettings({
             />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
-            AppraisalsAndInspections
+            <Box maxWidth={500} mb={9}>
+              <Box mb={9}>
+                <Typography variant="h6" gutterBottom>
+                  Would you like to allow appraisals?
+                </Typography>
+                <ShowingYesNoRadioGroup
+                  name="allow-appraisals"
+                  defaultValue={showing.allow_appraisal ? 'Yes' : 'No'}
+                  onChange={handleAllowAppraisalChange}
+                />
+              </Box>
+              <Typography variant="h6" gutterBottom>
+                Do you want to allow inspections and walk-through?
+              </Typography>
+              <ShowingYesNoRadioGroup
+                name="allow-inspection"
+                defaultValue={showing.allow_inspection ? 'Yes' : 'No'}
+                onChange={handleAllowInspectionChange}
+              />
+            </Box>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Feedback">
             Feedback
