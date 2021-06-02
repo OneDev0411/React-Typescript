@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, ButtonProps, Tooltip } from '@material-ui/core'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
-import ShowingAppointmentRejectDialog from './ShowingAppointmentRejectDialog'
+import ShowingAppointmentRejectFormDialog from './ShowingAppointmentRejectFormDialog'
 import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
 import useShowingHasAppointmentApproved from './use-showing-has-appointment-approved'
 
@@ -11,7 +11,7 @@ export interface ShowingBookingListApprovalButtonProps
   showing: IShowing
   approvals?: Nullable<IShowingApproval[]>
   label: string
-  onClick?: (reason?: string) => void
+  onClick: (reason?: string) => void
   hasConfirmation?: boolean
   confirmationAction?: string
 }
@@ -60,7 +60,7 @@ function ShowingBookingListApprovalButton({
           </Button>
         </span>
       </Tooltip>
-      <ShowingAppointmentRejectDialog
+      <ShowingAppointmentRejectFormDialog
         open={isOpen}
         onClose={closeDialog}
         onConfirm={onClick}
