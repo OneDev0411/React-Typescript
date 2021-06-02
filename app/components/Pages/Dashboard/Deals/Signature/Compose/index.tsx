@@ -142,7 +142,10 @@ export function SignatureComposeDrawer({
               <Recipients deal={deal} />
               <Subject />
               <Message />
-              <Attachments onClickAddAttachments={handleClickAddAttachments} />
+              <Attachments
+                isSubmitting={isSubmitting}
+                onClickAddAttachments={handleClickAddAttachments}
+              />
             </Drawer.Body>
 
             <Drawer.Footer>
