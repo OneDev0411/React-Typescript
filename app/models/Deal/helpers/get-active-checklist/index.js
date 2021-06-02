@@ -3,7 +3,8 @@ export function getActiveChecklist(deal, checklists) {
 
   if (deal.deal_type === 'Selling') {
     checklist = checklists.find(
-      checklist => checklist.checklist_type === 'Buying'
+      checklist =>
+        checklist.checklist_type === 'Buying' && checklist.is_active_offer
     )
   }
 

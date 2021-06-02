@@ -6,8 +6,7 @@ import {
   createStyles,
   makeStyles,
   Theme,
-  Tooltip,
-  Button
+  Tooltip
 } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
@@ -23,6 +22,7 @@ import { getStatusColorClass } from 'utils/listing'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { selectUser } from 'selectors/user'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 interface Props {
   deal: IDeal
@@ -138,7 +138,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           }
         >
           <span>
-            <Button
+            <DropdownToggleButton
               {...buttonProps}
               variant="outlined"
               size="small"
@@ -153,7 +153,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
                 />
               )}
               {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
-            </Button>
+            </DropdownToggleButton>
           </span>
         </Tooltip>
       )}
