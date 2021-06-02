@@ -135,7 +135,7 @@ export default function ListingMarketing({
                     />
                   }
                   title="Agent Network"
-                  subtitle="Market this listing to Top Agents from Any Brokerage"
+                  subtitle="Market this listing to top agents from any brokerage"
                   url={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listing.property.address.street_address}`}
                 />
               </Grid>
