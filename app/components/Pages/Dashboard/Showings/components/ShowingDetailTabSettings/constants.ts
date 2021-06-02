@@ -6,7 +6,7 @@ export const showingDetailSettingsTabs: Record<
 > = {
   Availability: 'Availability',
   ListingInfo: 'Listing Info',
-  AppointmentTypeAndParticipants: 'Appointment Type & Participants',
+  ApprovalTypeAndRoles: 'Appointment Type & Participants',
   AccessInformation: 'Access Information',
   AppraisalsAndInspections: 'Appraisals & Inspections',
   Feedback: 'Feedback'

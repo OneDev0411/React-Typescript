@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -17,6 +17,8 @@ import {
 import ShowingAvailabilitiesTimes from '../ShowingAvailabilitiesTimes'
 import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 import ShowingDuration from '../ShowingDuration'
+import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
+import ShowingRoleList from './ShowingRoleList'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -48,6 +50,11 @@ function ShowingDetailTabSettings({
 
     setErrors(errors)
 
+    console.log(
+      'showing.roles===showingRef.current.roles',
+      showing.roles === showingRef.current.roles
+    )
+
     if (!Object.keys(errors).length) {
       // TODO: use the update API here
       console.log('send updateShowing request then update the showingRef')
@@ -71,7 +78,17 @@ function ShowingDetailTabSettings({
       duration
     })
 
-  console.log('showing.address', showing.address)
+  const handleApprovalTypeChange = (approvalType: IShowingApprovalType) =>
+    updateShowing({
+      ...showing,
+      approval_type: approvalType
+    })
+
+  const handleRolesChange = (roles: IShowingRole[]) =>
+    updateShowing({
+      ...showing,
+      roles
+    })
 
   return (
     <Box display="flex">
@@ -102,8 +119,26 @@ function ShowingDetailTabSettings({
             ListingInfo
           </TabContentSwitch.Item>
         )}
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppointmentTypeAndParticipants">
-          AppointmentTypeAndParticipants
+        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
+          <Box flexBasis="100%">
+            <Box maxWidth={400} mb={9}>
+              <Typography variant="h6" gutterBottom>
+                Appointment Type
+              </Typography>
+              <ShowingApprovalTypeRadioGroup
+                name="approvalType"
+                value={showing.approval_type}
+                onChange={handleApprovalTypeChange}
+              />
+            </Box>
+            {showing.approval_type !== 'None' && (
+              <ShowingRoleList
+                isHipPocket={!!showing.address}
+                value={showing.roles}
+                onChange={handleRolesChange}
+              />
+            )}
+          </Box>
         </TabContentSwitch.Item>
         <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AccessInformation">
           AccessInformation

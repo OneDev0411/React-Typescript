@@ -1,6 +1,6 @@
 export type ShowingDetailSettingsTabType =
   | 'ListingInfo'
-  | 'AppointmentTypeAndParticipants'
+  | 'ApprovalTypeAndRoles'
   | 'AccessInformation'
   | 'AppraisalsAndInspections'
   | 'Availability'
