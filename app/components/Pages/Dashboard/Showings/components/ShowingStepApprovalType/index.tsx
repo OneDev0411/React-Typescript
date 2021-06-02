@@ -1,35 +1,15 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
-import { RadioGroup, RadioItem } from 'components/RadioGroup'
-
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
 
 interface ShowingStepApprovalTypeProps {
   approvalType: Nullable<IShowingApprovalType>
   onApprovalTypeChange: (approvalType: IShowingApprovalType) => void
 }
-
-const approvalTypeOptions: RadioItem<IShowingApprovalType>[] = [
-  {
-    label: 'Appointments required, confirm with any',
-    value: 'Any'
-  },
-  {
-    label: 'Appointments required, confirm with all',
-    value: 'All'
-  },
-  {
-    label: 'Go and Show',
-    value: 'None'
-  }
-  // {
-  //   label: 'View Instructions only',
-  //   value: 'None'
-  // }
-]
 
 function ShowingStepApprovalType({
   approvalType,
@@ -48,10 +28,9 @@ function ShowingStepApprovalType({
         How would you like to set up your appointments?
       </QuestionTitle>
       <SmartQuestionForm>
-        <RadioGroup
+        <ShowingApprovalTypeRadioGroup
           defaultValue={approvalType}
           name="approvalType"
-          options={approvalTypeOptions}
           onChange={handleChange}
         />
       </SmartQuestionForm>
