@@ -164,6 +164,7 @@ export default function TemplateThumbnail({
       <iframe
         width="100%"
         ref={ref}
+        scrolling="no"
         frameBorder={0}
         title="Preview"
         className={classes.iframe}
