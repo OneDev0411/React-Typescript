@@ -7,7 +7,7 @@ export const showingDetailSettingsTabs: Record<
   Availability: 'Availability',
   ListingInfo: 'Listing Info',
   ApprovalTypeAndRoles: 'Appointment Type & Participants',
-  AccessInformation: 'Access Information',
+  Instructions: 'Access Information',
   AppraisalsAndInspections: 'Appraisals & Inspections',
   Feedback: 'Feedback'
 }

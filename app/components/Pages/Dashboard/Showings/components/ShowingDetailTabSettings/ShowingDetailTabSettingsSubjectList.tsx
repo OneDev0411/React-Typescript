@@ -36,7 +36,7 @@ function ShowingDetailTabSettingsSubjectList({
     'Availability',
     hasListingInfo ? 'ListingInfo' : null,
     'ApprovalTypeAndRoles',
-    'AccessInformation',
+    'Instructions',
     'AppraisalsAndInspections',
     'Feedback'
   ]

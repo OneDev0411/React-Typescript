@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 
 import { withRouter, WithRouterProps } from 'react-router'
+
+import { useDebouncedCallback } from 'use-debounce'
 
 import TabContentSwitch from 'components/TabContentSwitch'
 
@@ -19,6 +21,7 @@ import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 import ShowingDuration from '../ShowingDuration'
 import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
 import ShowingRoleList from './ShowingRoleList'
+import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -90,37 +93,46 @@ function ShowingDetailTabSettings({
       roles
     })
 
+  const [handleInstructionsChange] = useDebouncedCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+      updateShowing({
+        ...showing,
+        instructions: event.target.value
+      }),
+    500
+  )
+
   return (
     <Box display="flex">
-      <Box mr={4} width="100%" maxWidth={296}>
+      <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
         <ShowingDetailTabSettingsSubjectList
           tab={tab}
           errors={errors}
           hasListingInfo={!!showing.address}
         />
       </Box>
-      <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
-          <Box flexBasis="100%" maxWidth={580}>
-            <ShowingDuration
-              value={showing.duration}
-              onChange={handleDurationChange}
-              marginBottom={4}
-            />
-            <ShowingAvailabilitiesTimes
-              value={showing.availabilities}
-              onChange={handleAvailabilitiesChange}
-              error={errors.Availability}
-            />
-          </Box>
-        </TabContentSwitch.Item>
-        {showing.address && (
-          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ListingInfo">
-            ListingInfo
+      <Box flexGrow="1" flexShrink="1">
+        <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
+            <Box maxWidth={580}>
+              <ShowingDuration
+                value={showing.duration}
+                onChange={handleDurationChange}
+                marginBottom={4}
+              />
+              <ShowingAvailabilitiesTimes
+                value={showing.availabilities}
+                onChange={handleAvailabilitiesChange}
+                error={errors.Availability}
+              />
+            </Box>
           </TabContentSwitch.Item>
-        )}
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
-          <Box flexBasis="100%">
+          {showing.address && (
+            <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ListingInfo">
+              ListingInfo
+            </TabContentSwitch.Item>
+          )}
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
             <Box maxWidth={400} mb={9}>
               <Typography variant="h6" gutterBottom>
                 Appointment Type
@@ -138,18 +150,24 @@ function ShowingDetailTabSettings({
                 onChange={handleRolesChange}
               />
             )}
-          </Box>
-        </TabContentSwitch.Item>
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AccessInformation">
-          AccessInformation
-        </TabContentSwitch.Item>
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
-          AppraisalsAndInspections
-        </TabContentSwitch.Item>
-        <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Feedback">
-          Feedback
-        </TabContentSwitch.Item>
-      </TabContentSwitch.Container>
+          </TabContentSwitch.Item>
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Instructions">
+            <Typography variant="h6" gutterBottom>
+              Are there any access information you’d like to provide?
+            </Typography>
+            <ShowingInstructionsTextField
+              defaultValue={showing.instructions || ''}
+              onChange={handleInstructionsChange}
+            />
+          </TabContentSwitch.Item>
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
+            AppraisalsAndInspections
+          </TabContentSwitch.Item>
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Feedback">
+            Feedback
+          </TabContentSwitch.Item>
+        </TabContentSwitch.Container>
+      </Box>
     </Box>
   )
 }
