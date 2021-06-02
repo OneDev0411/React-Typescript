@@ -1,7 +1,7 @@
 declare interface IShowingRole extends IModel<'showing_role'> {
   showing: UUID
   created_by: number
-  role: IDealRoleType
+  role: IShowingRoleType
   first_name: string
   last_name: string
   email: string
