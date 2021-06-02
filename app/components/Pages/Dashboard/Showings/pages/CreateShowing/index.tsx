@@ -383,6 +383,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             {/* Listing Co-agent Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is there a co-agent you’d like to add?"
+              name="has-co-agent"
               value={hasCoAgent}
               onChange={setHasCoAgent}
             />
@@ -428,6 +429,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             {/* Listing Occupant Steps - Start */}
             <ShowingStepYesNoQuestion
               question="Is this property occupied?"
+              name="has-occupant"
               value={hasOccupant}
               onChange={setHasOccupant}
             />
@@ -477,12 +479,14 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               onChange={setInstructions}
             />
             <ShowingStepYesNoQuestion
+              name="allow-inspections"
               question="Do you want to allow inspections and walk-through?"
               value={allowInspection}
               onChange={setAllowInspection}
             />
             <ShowingStepYesNoQuestion
               question="Would you like to allow appraisals?"
+              name="allow-appraisals"
               value={allowAppraisal}
               onChange={setAllowAppraisal}
             />

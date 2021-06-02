@@ -1,20 +1,21 @@
 import React, { memo } from 'react'
 
 import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
-import { RadioGroup, RadioItem } from 'components/RadioGroup'
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
+import ShowingYesNoRadioGroup, {
+  ShowingYesNoRadioGroupProps
+} from '../ShowingYesNoRadioGroup'
 
 export type YesNoAnswer = 'Yes' | 'No'
 
-interface ShowingStepYesNoQuestionProps {
+interface ShowingStepYesNoQuestionProps
+  extends Pick<ShowingYesNoRadioGroupProps, 'yesLabel' | 'noLabel' | 'name'> {
   question: string
   value: Nullable<YesNoAnswer>
   onChange: (value: YesNoAnswer) => void
   goNext?: boolean
-  yesLabel?: string
-  noLabel?: string
 }
 
 function ShowingStepYesNoQuestion({
@@ -22,8 +23,9 @@ function ShowingStepYesNoQuestion({
   value,
   onChange,
   goNext = true,
-  yesLabel = 'Yes',
-  noLabel = 'No'
+  yesLabel,
+  noLabel,
+  name
 }: ShowingStepYesNoQuestionProps) {
   const nextStep = useQuestionWizardSmartNext()
 
@@ -35,26 +37,16 @@ function ShowingStepYesNoQuestion({
     }
   }
 
-  const yesNoOptions: RadioItem<YesNoAnswer>[] = [
-    {
-      label: yesLabel,
-      value: 'Yes'
-    },
-    {
-      label: noLabel,
-      value: 'No'
-    }
-  ]
-
   return (
     <QuestionSection>
       <QuestionTitle>{question}</QuestionTitle>
       <SmartQuestionForm>
-        <RadioGroup
+        <ShowingYesNoRadioGroup
+          name={name}
           defaultValue={value}
-          name="approvalType"
-          options={yesNoOptions}
           onChange={handleChange}
+          yesLabel={yesLabel}
+          noLabel={noLabel}
         />
       </SmartQuestionForm>
     </QuestionSection>

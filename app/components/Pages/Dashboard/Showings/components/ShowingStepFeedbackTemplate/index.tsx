@@ -62,6 +62,7 @@ function ShowingStepFeedbackTemplate({
     <>
       <ShowingStepYesNoQuestion
         question="Do you want to get feedback on this?"
+        name="has-feedback"
         value={answer}
         onChange={handleChange}
         goNext={false}
