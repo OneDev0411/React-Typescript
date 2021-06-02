@@ -24,10 +24,11 @@ import { getStatus } from 'models/Deal/helpers/context'
 
 interface Props {
   list: IDealStatus[]
+  error?: string
   onChange?: (value: string) => void
 }
 
-export function DealStatus({ list, onChange }: Props) {
+export function DealStatus({ list, error, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
@@ -63,7 +64,7 @@ export function DealStatus({ list, onChange }: Props) {
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>What is the status of the deal?</QuestionTitle>
 
       <QuestionForm>

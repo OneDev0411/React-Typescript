@@ -79,11 +79,13 @@ const useStyles = makeStyles(
 interface Props {
   skippable: boolean
   concurrentMode?: boolean
+  error?: string
   onChange?: (address: PropertyAddress | null) => void
 }
 
 export function DealAddress({
   concurrentMode = false,
+  error,
   skippable,
   onChange
 }: Props) {
@@ -188,7 +190,7 @@ export function DealAddress({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (
