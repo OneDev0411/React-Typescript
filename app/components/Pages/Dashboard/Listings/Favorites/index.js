@@ -37,7 +37,7 @@ import GridView from '../components/GridView'
 const styles = () => ({
   mlsContainer: {
     display: 'flex',
-    height: '100vh',
+    minHeight: '100vh',
     flexDirection: 'column',
     paddingTop: 0,
     paddingBottom: 0

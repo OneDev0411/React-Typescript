@@ -27,7 +27,7 @@ async function handleDelete({ deal, file, task }) {
 
     store.dispatch(
       notify({
-        title: 'File deleted',
+        message: 'File deleted',
         status: 'success'
       })
     )

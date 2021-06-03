@@ -55,7 +55,7 @@ function OverviewDashboard() {
       </Acl.Crm>
       <Acl.Deals>
         <Box className={classes.centeredContainer}>
-          <MetabaseDashboard dashboardId="bc5561e9-7755-4ed8-a312-5cced96000f7" />
+          <MetabaseDashboard dashboardId="e044be48-42c7-456f-8077-024c93feb99d" />
         </Box>
       </Acl.Deals>
     </Box>

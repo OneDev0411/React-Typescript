@@ -25,7 +25,7 @@ export default function MetabaseDashboard({ dashboardId }: Props) {
       const hash = Array.from(new Uint8Array(crypted))
       const hex = hash.map(b => b.toString(16).padStart(2, '0')).join('')
 
-      const base = `https://rechat.metabaseapp.com/public/dashboard/${dashboardId}`
+      const base = `https://analytics.rechat.com/public/dashboard/${dashboardId}`
 
       setAnalyticsUrl(
         `${base}?brand=${activeBrandId}&` +

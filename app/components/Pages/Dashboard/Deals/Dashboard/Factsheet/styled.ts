@@ -1,22 +1,11 @@
 import styled, { css } from 'styled-components'
 
-import { Theme } from '@material-ui/core'
+import { Theme, Typography } from '@material-ui/core'
 
-import { borderColor } from 'views/utils/colors'
-
-export const FactsheetDivider = styled.div`
-  width: 3.3rem;
-  height: 1px;
-  margin: 1.5rem;
-  background-color: ${borderColor};
-`
-
-export const Container = styled.div``
-
-export const SectionTitle = styled.h3`
+export const SectionTitle = styled(Typography)`
   ${({ theme }) => `
     padding: ${theme.spacing(0, 3)};
-    ${theme.typography.subtitle1};
+    color: ${theme.palette.grey['700']};
   `}
 `
 
@@ -32,27 +21,25 @@ export const ItemsContainer = styled.div`
 export const ItemLabel = styled.span`
   display: flex;
   align-items: center;
-  color: #7f7f7f;
   font-weight: normal;
+  margin-right: ${({ theme }) => theme.spacing(1)}px;
 `
 
 export const ItemValue = styled.span`
   font-weight: normal;
-`
-
-export const EmptyValue = styled.span`
-  ${({ theme }) => css`
-    color: ${theme.palette.grey['500']};
-  `}
+  transition: 0.05s ease-out all;
+  color: ${({ theme }) => theme.palette.grey['600']};
 `
 
 export const ItemActions = styled.div`
   ${({ theme }) => css`
     display: flex;
     position: absolute;
+    align-items: center;
+    height: 100%;
     right: 0;
     visibility: hidden;
-    padding-right: ${theme.spacing(1)}px;
+    padding: ${theme.spacing(0, 1.5)};
   `}
 `
 
@@ -73,14 +60,14 @@ export const Editable = styled.div`
 
 export const Item = styled.div<{
   theme: Theme
-  showBorder?: boolean
   isSaving?: boolean
+  disableHover?: boolean
 }>`
-  ${({ theme, isSaving }) => `
+  ${({ theme, isSaving, disableHover }) => `
     position: relative;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin: 0 0.5rem;
     border-radius: 3px;
     padding: ${theme.spacing(1, 2)};
@@ -90,12 +77,12 @@ export const Item = styled.div<{
       cursor: pointer;
     }
 
-    :hover ${ItemValue} {
-      display: none;
-    }
-
     :hover ${ItemActions} {
       visibility: visible;
+    }
+
+    :hover ${ItemValue} {
+      opacity: 0.05;
     }
 
     ${
@@ -104,6 +91,17 @@ export const Item = styled.div<{
       background-color: ${theme.palette.action.hover};
       justify-content: center;
       cursor: auto !important;
+    `
+    };
+
+    ${
+      disableHover &&
+      `
+      cursor: auto !important;
+
+      :hover ${ItemValue} {
+        opacity: 1;
+      }
     `
     };
   `}
@@ -138,5 +136,16 @@ export const TimelineSplitter = styled.div`
     border-right: 2px solid #ccc;
     left: ${theme.spacing(4)}px;
     top: ${theme.spacing(1.5)}px;
+  `}
+`
+
+export const TimelineDateProgress = styled.div`
+  ${({ theme }) => css`
+    position: absolute;
+    left: ${theme.spacing(3)}px;
+    top: ${theme.spacing(3)}px;
+    height: 100%;
+    width: 1px;
+    border: 1px solid ${theme.palette.primary.main};
   `}
 `

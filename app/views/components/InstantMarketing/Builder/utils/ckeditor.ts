@@ -92,11 +92,14 @@ export async function attachCKEditor(
     throw new Error('CKEDITOR instance not found')
   }
 
+  // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.span = 1
   // @ts-ignore
   CKEDITOR.dtd.$editable.a = 1
 
   editor.setCustomRte({
-    async enable(el, rte) {
+    enable(el, rte) {
       // If already exists I'll just focus on it
       if (rte && rte.status !== 'destroyed') {
         this.focus(el, rte)
@@ -134,9 +137,9 @@ export async function attachCKEditor(
       }
 
       // Get dynamic options
-      const dynamicOptions = await getOpts(c.options)
+      const dynamicOptions = getOpts(c.options)
 
-      // Init CkEditors
+      // Init CKEditor
       // @ts-ignore
       rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
 

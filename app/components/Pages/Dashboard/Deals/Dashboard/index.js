@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
@@ -20,7 +20,7 @@ import TaskView from './TaskView'
 import UploadPrompt from '../UploadManager/prompt'
 import { TaskActions } from '../components/TaskActions'
 
-import { DealContainer, PageWrapper } from './styled'
+import { DealContainer, PageWrapper, PageBody } from './styled'
 
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')
@@ -50,17 +50,19 @@ function DealDetails(props) {
         <ActionContextProvider>
           <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
 
-          <TabSections
-            deal={props.deal}
-            user={props.user}
-            activeTab={activeTab}
-            onChangeTab={tab => setActiveTab(tab.id)}
-            isBackOffice={props.isBackOffice}
-            isFetchingChecklists={isFetchingDeal}
-            isFetchingContexts={isFetchingContexts}
-          />
+          <PageBody>
+            <TabSections
+              deal={props.deal}
+              user={props.user}
+              activeTab={activeTab}
+              onChangeTab={setActiveTab}
+              isBackOffice={props.isBackOffice}
+              isFetchingChecklists={isFetchingDeal}
+              isFetchingContexts={isFetchingContexts}
+            />
 
-          <TaskActions deal={props.deal} />
+            <TaskActions deal={props.deal} />
+          </PageBody>
         </ActionContextProvider>
 
         <TaskView

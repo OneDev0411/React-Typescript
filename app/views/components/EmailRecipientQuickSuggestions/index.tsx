@@ -129,15 +129,18 @@ export function EmailRecipientQuickSuggestions({
 
     if (isSendingToAllContacts) {
       let allContactsCount = contactsInfo.info?.total ?? 0
+      let hasFilter =
+        (contactsInfo.info?.filter || []).length > 0 ||
+        contactsInfo.info?.searchInputValue
 
-      if (allContactsCount === 0) {
+      if (hasFilter || allContactsCount === 0) {
         allContactsCount = await getContactsCount([], false)
       }
 
       if (allContactsCount > 1) {
         return confirmationModal.setConfirmationModal({
           message: 'Send to all your contacts?',
-          description: `You are about to send this email to ${allContactsCount} in your contacts. Are you sure?`,
+          description: `You are about to send this email to ${allContactsCount} of your contacts. Are you sure?`,
           cancelLabel: 'No',
           confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
           onConfirm: () => {

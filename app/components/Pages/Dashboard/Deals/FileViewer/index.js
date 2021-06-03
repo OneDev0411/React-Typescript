@@ -94,7 +94,7 @@ class FileViewer extends React.Component {
 
     if (!file) {
       this.props.notify({
-        title: 'File not found',
+        message: 'File not found',
         status: 'error'
       })
 

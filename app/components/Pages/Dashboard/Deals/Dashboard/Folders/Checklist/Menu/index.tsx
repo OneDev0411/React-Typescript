@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { mdiDotsVertical } from '@mdi/js'
+import { useState } from 'react'
+import { mdiMenu } from '@mdi/js'
 import { MenuItem, IconButton, makeStyles, Theme } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
+
 import { addNotification } from 'components/notification'
 
 import { updateChecklist } from 'actions/deals'
@@ -22,7 +23,7 @@ const useStyles = makeStyles(
 
 interface Props {
   deal: IDeal
-  checklist: IDealChecklist
+  checklist: IDealChecklist | null
   isBackOffice: boolean
 }
 
@@ -39,7 +40,7 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
 
     try {
       await dispatch(
-        updateChecklist(deal.id, checklist.id, {
+        updateChecklist(deal.id, checklist?.id, {
           ...checklist,
           ...data
         })
@@ -63,6 +64,7 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
   }
 
   if (
+    !checklist ||
     !isBackOffice ||
     (!checklist.is_terminatable && !checklist.is_deactivatable)
   ) {
@@ -71,9 +73,12 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
 
   return (
     <BaseDropdown
+      PopperProps={{
+        placement: 'bottom-end'
+      }}
       renderDropdownButton={props => (
         <IconButton size="small" {...props} className={classes.root}>
-          <SvgIcon path={mdiDotsVertical} />
+          <SvgIcon path={mdiMenu} />
         </IconButton>
       )}
       renderMenu={({ close }) => (

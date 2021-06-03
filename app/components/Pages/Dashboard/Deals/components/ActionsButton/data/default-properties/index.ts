@@ -193,7 +193,7 @@ function getDocusignLabel(
     return attachments.some(item => item.id === attachment.id)
   })
 
-  return exists ? 'Remove Docusign' : 'Add to Docusign'
+  return exists ? 'Remove from Docusign' : 'Add to Docusign'
 }
 
 function getEmailLabel(

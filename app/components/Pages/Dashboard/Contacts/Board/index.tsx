@@ -35,7 +35,7 @@ import { updateContactTags } from 'actions/contacts/update-contact-tags'
 
 import { BoardColumn } from './Column'
 
-const Columns = ['Warm', 'Hot', 'Passed Client']
+const Columns = ['Warm', 'Hot', 'Past Client']
 
 interface Props {
   contacts: IContact[]

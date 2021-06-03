@@ -19,7 +19,7 @@ export async function notifyOffice(props, comment) {
 
   store.dispatch(
     notify({
-      title: 'Admin notification is sent.',
+      message: 'Admin notification is sent.',
       status: 'success'
     })
   )

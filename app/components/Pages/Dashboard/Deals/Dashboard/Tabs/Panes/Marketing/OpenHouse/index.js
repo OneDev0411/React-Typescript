@@ -1,9 +1,10 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
 import { Button } from '@material-ui/core'
+
+import { addNotification as notify } from 'components/notification'
 
 import { confirmation } from 'actions/confirmation'
 
@@ -100,7 +101,7 @@ class OpenHouse extends React.Component {
     }))
 
     this.props.notify({
-      title: 'Open house deleted',
+      message: 'Open house deleted',
       status: 'success'
     })
   }
@@ -156,10 +157,7 @@ class OpenHouse extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  {
-    confirmation,
-    notify
-  }
-)(OpenHouse)
+export default connect(null, {
+  confirmation,
+  notify
+})(OpenHouse)
