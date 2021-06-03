@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { useSelector } from 'react-redux'
 import { Grid, Box, Typography, makeStyles, Theme } from '@material-ui/core'
 import {
@@ -45,15 +46,11 @@ interface Props {
   onClick: (template: IBrandMarketingTemplate) => void
 }
 
-export default function TemplatesRow({
-  title,
-  listing,
-  medium,
-  templates,
-  onClick
-}: Props) {
+function TemplatesRow({ title, listing, medium, templates, onClick }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
+
+  console.log('RENDER ROW')
 
   return (
     <Grid
@@ -100,3 +97,5 @@ export default function TemplatesRow({
     </Grid>
   )
 }
+
+export default memo(TemplatesRow)

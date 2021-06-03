@@ -44,13 +44,15 @@ type ListingRelatedProps = RequireOnlyOne<
 type Props = {
   defaultTemplateType?: IMarketingTemplateType
   defaultMedium?: IMarketingTemplateMedium
+  onChangeTemplateType?: (type: IMarketingTemplateType) => void
 } & ListingRelatedProps
 
 export default function ListingMarketing({
   listing: passedListing,
   listingId,
   defaultTemplateType,
-  defaultMedium
+  defaultMedium,
+  onChangeTemplateType
 }: Props) {
   const theme = useTheme()
   const user = useSelector(selectUser)
@@ -133,6 +135,7 @@ export default function ListingMarketing({
 
   const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
     setSelectedTemplateType(type)
+    onChangeTemplateType?.(type)
   }
 
   if (isLoadingListing || isLoadingTemplates || !listing) {

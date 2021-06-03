@@ -7,7 +7,8 @@ interface Props {}
 
 export default function ListingMarketingPage({
   params,
-  location
+  location,
+  router
 }: Props & WithRouterProps) {
   const listingId: UUID = params.id
   const templateType: Optional<IMarketingTemplateType> = location.query.type
@@ -22,6 +23,16 @@ export default function ListingMarketingPage({
           listingId={listingId}
           defaultTemplateType={templateType}
           defaultMedium={medium as IMarketingTemplateMedium}
+          onChangeTemplateType={type => {
+            router.replace({
+              ...location,
+              query: {
+                ...location.query,
+                type
+              },
+              hash: ''
+            })
+          }}
         />
       </PageLayout.Main>
     </PageLayout>

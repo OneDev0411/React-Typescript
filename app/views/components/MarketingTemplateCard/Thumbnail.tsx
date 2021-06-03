@@ -1,5 +1,6 @@
-import { useState, useEffect, ComponentProps } from 'react'
+import { useState, ComponentProps } from 'react'
 import { makeStyles } from '@material-ui/core'
+import { useDeepCompareEffect } from 'react-use'
 
 import { getTemplateImage } from 'utils/marketing-center/helpers'
 import { getFileType } from 'utils/file-utils/get-file-type'
@@ -43,7 +44,7 @@ export function Thumbnail({
   const brand = getActiveBrand(user)
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     async function fetchListingIfNeeded() {
       if (receivedListing) {
         setListing(receivedListing)

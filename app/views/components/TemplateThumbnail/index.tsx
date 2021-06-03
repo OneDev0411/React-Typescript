@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import { useState, useRef } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { Box, Theme, fade, makeStyles } from '@material-ui/core'
 
 import { loadTemplateHtml } from 'models/instant-marketing'
@@ -104,7 +104,7 @@ export default function TemplateThumbnail({
     loadTemplate()
   }, [template, brand, data])
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     if (!ref.current || !previewMarkup) {
       return
     }
