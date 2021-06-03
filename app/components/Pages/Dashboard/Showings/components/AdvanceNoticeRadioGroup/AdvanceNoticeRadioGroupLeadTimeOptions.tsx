@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 
 import Select, { SelectItem } from 'components/Select'
@@ -13,17 +11,17 @@ export const hourOptions: SelectItem<number>[] = new Array(12)
     value: hourToSeconds(index + 1)
   }))
 
-interface ShowingStepAdvanceNoticeLeadTimeOptionsProps {
+interface AdvanceNoticeRadioGroupLeadTimeOptionsProps {
   label?: string
   value: Nullable<number>
   onChange: (value: number) => void
 }
 
-function ShowingStepAdvanceNoticeLeadTimeOptions({
+function AdvanceNoticeRadioGroupLeadTimeOptions({
   label = 'Enter Lead Time',
   value,
   onChange
-}: ShowingStepAdvanceNoticeLeadTimeOptionsProps) {
+}: AdvanceNoticeRadioGroupLeadTimeOptionsProps) {
   return (
     <Box mb={1.5} mt={2} mx={1}>
       <Select<number>
@@ -37,4 +35,4 @@ function ShowingStepAdvanceNoticeLeadTimeOptions({
   )
 }
 
-export default ShowingStepAdvanceNoticeLeadTimeOptions
+export default AdvanceNoticeRadioGroupLeadTimeOptions
