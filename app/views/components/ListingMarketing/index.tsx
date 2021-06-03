@@ -43,12 +43,14 @@ type ListingRelatedProps = RequireOnlyOne<
 
 type Props = {
   defaultTemplateType?: IMarketingTemplateType
+  defaultMedium?: IMarketingTemplateMedium
 } & ListingRelatedProps
 
 export default function ListingMarketing({
   listing: passedListing,
   listingId,
-  defaultTemplateType
+  defaultTemplateType,
+  defaultMedium
 }: Props) {
   const theme = useTheme()
   const user = useSelector(selectUser)
@@ -99,6 +101,37 @@ export default function ListingMarketing({
 
     fetchListing()
   }, [listingId, passedListing])
+
+  useEffect(() => {
+    let timeoutHandler: number
+
+    function scrollToSelectedMedium() {
+      if (isLoadingListing || isLoadingTemplates || !listing) {
+        return
+      }
+
+      if (!defaultMedium) {
+        return
+      }
+
+      timeoutHandler = setTimeout(() => {
+        const selectedMediumHeader = document.getElementById(defaultMedium)
+
+        console.log('SCROLLING TO', selectedMediumHeader)
+
+        selectedMediumHeader?.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'start'
+        })
+      })
+
+      return () => {
+        clearTimeout(timeoutHandler)
+      }
+    }
+
+    scrollToSelectedMedium()
+  }, [isLoadingListing, isLoadingTemplates, listing, defaultMedium])
 
   if (isLoadingListing || isLoadingTemplates || !listing) {
     return <LoadingContainer noPaddings />

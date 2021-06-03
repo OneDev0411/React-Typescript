@@ -12,6 +12,7 @@ export default function ListingMarketingPage({
   const listingId: UUID = params.id
   const templateType: Optional<IMarketingTemplateType> = location.query.type
   const title: string = location.query.title ?? 'Listing Marketing'
+  const medium: Optional<string> = location.hash.split('#').pop() || undefined
 
   return (
     <PageLayout>
@@ -20,6 +21,7 @@ export default function ListingMarketingPage({
         <ListingMarketing
           listingId={listingId}
           defaultTemplateType={templateType}
+          defaultMedium={medium as IMarketingTemplateMedium}
         />
       </PageLayout.Main>
     </PageLayout>

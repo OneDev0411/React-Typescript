@@ -40,6 +40,7 @@ const useStyles = makeStyles(
 interface Props {
   title: string
   listing: IListing
+  medium: IMarketingTemplateMedium
   templates: IBrandMarketingTemplate[]
   onClick: (template: IBrandMarketingTemplate) => void
 }
@@ -47,6 +48,7 @@ interface Props {
 export default function TemplatesRow({
   title,
   listing,
+  medium,
   templates,
   onClick
 }: Props) {
@@ -64,14 +66,13 @@ export default function TemplatesRow({
       <Grid container item direction="row" alignItems="center">
         <Grid item>
           <Box mx={1} display="flex">
-            <SvgIcon
-              size={muiIconSizes.large}
-              path={MEDIUM_ICONS[templates[0].template.medium]}
-            />
+            <SvgIcon size={muiIconSizes.large} path={MEDIUM_ICONS[medium]} />
           </Box>
         </Grid>
         <Grid item>
-          <Typography variant="h5">{title}</Typography>
+          <Typography variant="h5" id={medium}>
+            {title}
+          </Typography>
         </Grid>
       </Grid>
       <Grid container item>
@@ -82,7 +83,7 @@ export default function TemplatesRow({
             item
             justify="center"
             xs={12}
-            sm={6}
+            sm={4}
             md={2}
           >
             <Box p={1} overflow="hidden">
