@@ -1,4 +1,4 @@
 {% for listing in listings %}
-<mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}"></mj-image>
+<mj-image padding="0" rechat-editable="true" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}" href="{{getListingUrl(listing)}}"></mj-image>
 <mj-spacer height="15px"></mj-spacer>
 {% endfor %}
