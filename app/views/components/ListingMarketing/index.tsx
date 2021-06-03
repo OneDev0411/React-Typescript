@@ -117,8 +117,6 @@ export default function ListingMarketing({
       timeoutHandler = setTimeout(() => {
         const selectedMediumHeader = document.getElementById(defaultMedium)
 
-        console.log('SCROLLING TO', selectedMediumHeader)
-
         selectedMediumHeader?.scrollIntoView({
           behavior: 'smooth',
           inline: 'start'
@@ -132,6 +130,10 @@ export default function ListingMarketing({
 
     scrollToSelectedMedium()
   }, [isLoadingListing, isLoadingTemplates, listing, defaultMedium])
+
+  const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
+    setSelectedTemplateType(type)
+  }
 
   if (isLoadingListing || isLoadingTemplates || !listing) {
     return <LoadingContainer noPaddings />
@@ -219,7 +221,7 @@ export default function ListingMarketing({
         <TemplateTypesChips
           activeType={selectedTemplateType ?? templateTypes[0]}
           types={templateTypes}
-          onClick={setSelectedTemplateType}
+          onClick={handleClickTemplateTypeChip}
         />
         {mediums.map(medium => {
           const currentMediumTemplates = currentTemplateTypeTemplates
