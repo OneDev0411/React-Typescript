@@ -5,6 +5,7 @@ export type ShowingDetailSettingsTabType =
   | 'AppraisalsAndInspections'
   | 'Availability'
   | 'Feedback'
+  | 'AdvanceNotice'
 
 export type ShowingDetailTabSettingsErrors = Partial<
   Record<ShowingDetailSettingsTabType, string>

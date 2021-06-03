@@ -9,5 +9,6 @@ export const showingDetailSettingsTabs: Record<
   ApprovalTypeAndRoles: 'Appointment Type & Participants',
   Instructions: 'Access Information',
   AppraisalsAndInspections: 'Appraisals & Inspections',
-  Feedback: 'Feedback'
+  Feedback: 'Feedback',
+  AdvanceNotice: 'Advance Notice'
 }

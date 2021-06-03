@@ -34,6 +34,7 @@ function ShowingDetailTabSettingsSubjectList({
 
   const tabs: Nullable<ShowingDetailSettingsTabType>[] = [
     'Availability',
+    'AdvanceNotice',
     hasListingInfo ? 'ListingInfo' : null,
     'ApprovalTypeAndRoles',
     'Instructions',

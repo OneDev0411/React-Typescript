@@ -24,6 +24,7 @@ import ShowingRoleList from './ShowingRoleList'
 import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
 import ShowingYesNoRadioGroup from '../ShowingYesNoRadioGroup'
 import { YesNoAnswer } from '../ShowingStepYesNoQuestion'
+import AdvanceNoticeRadioGroup from '../AdvanceNoticeRadioGroup'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -116,6 +117,16 @@ function ShowingDetailTabSettings({
       allow_inspection: allowInspection === 'Yes'
     })
 
+  const handleAdvanceNoticeChange = (
+    sameDayAllowed: boolean,
+    noticePeriod: Nullable<number>
+  ) =>
+    updateShowing({
+      ...showing,
+      same_day_allowed: sameDayAllowed,
+      notice_period: noticePeriod
+    })
+
   return (
     <Box display="flex">
       <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
@@ -138,6 +149,18 @@ function ShowingDetailTabSettings({
                 value={showing.availabilities}
                 onChange={handleAvailabilitiesChange}
                 error={errors.Availability}
+              />
+            </Box>
+          </TabContentSwitch.Item>
+          <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AdvanceNotice">
+            <Box maxWidth={580}>
+              <Typography variant="h6" gutterBottom>
+                Is there a need for advance notice?
+              </Typography>
+              <AdvanceNoticeRadioGroup
+                noticePeriod={showing.notice_period}
+                sameDayAllowed={showing.same_day_allowed}
+                onChange={handleAdvanceNoticeChange}
               />
             </Box>
           </TabContentSwitch.Item>
