@@ -1,5 +1,8 @@
-export function getActiveChecklist(deal, checklists) {
-  let checklist = null
+export function getActiveChecklist(
+  deal: IDeal,
+  checklists: IDealChecklist[]
+): IDealChecklist | undefined {
+  let checklist: IDealChecklist | undefined
 
   if (deal.deal_type === 'Selling') {
     checklist = checklists.find(
