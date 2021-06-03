@@ -33,7 +33,7 @@ function ShowingStepDurationAndAvailabilities({
   const nextStep = useQuestionWizardSmartNext()
 
   return (
-    <QuestionSection error={error} displayCurrentStepError>
+    <QuestionSection error={error} displayError>
       <QuestionTitle>When you’re available for this showing?</QuestionTitle>
       <SmartQuestionForm width="70%">
         <ShowingDuration
