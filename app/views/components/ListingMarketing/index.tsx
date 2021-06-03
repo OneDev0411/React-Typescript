@@ -125,7 +125,7 @@ export default function ListingMarketing({
         {shouldShowMarketingButtons && (
           <Grid container item spacing={2}>
             {shouldShowAgentNetworkButton && (
-              <Grid item xs={6} md={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <MarketingButton
                   icon={
                     <SvgIcon
@@ -142,7 +142,7 @@ export default function ListingMarketing({
             )}
 
             {shouldShowOpenHouseButton && (
-              <Grid item xs={6} md={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <MarketingButton
                   icon={
                     <SvgIcon
@@ -159,7 +159,7 @@ export default function ListingMarketing({
             )}
 
             {shouldShowWebsitesButton && (
-              <Grid item xs={6} md={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <MarketingButton
                   icon={
                     <SvgIcon
@@ -202,6 +202,7 @@ export default function ListingMarketing({
           return (
             <TemplatesRow
               key={medium}
+              medium={medium}
               title={mediumLabel}
               listing={listing}
               templates={currentMediumTemplates}

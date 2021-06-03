@@ -6,6 +6,8 @@ import Link from 'components/ALink'
 const useStyles = makeStyles(
   theme => ({
     container: {
+      height: '100%',
+      display: 'flex',
       borderRadius: theme.shape.borderRadius,
       padding: theme.spacing(1.5, 3),
       border: `1px solid ${theme.palette.action.disabledBackground}`,
@@ -32,10 +34,10 @@ export default function MarketingButton({ title, subtitle, icon, url }: Props) {
   const classes = useStyles()
 
   return (
-    <Box className={classes.container}>
-      <Link noStyle to={url}>
+    <Link noStyle to={url}>
+      <Box className={classes.container}>
         <Grid container alignItems="center">
-          <Grid item xs={2}>
+          <Grid container item xs={2}>
             {icon}
           </Grid>
           <Grid container item xs={10} direction="column">
@@ -51,7 +53,7 @@ export default function MarketingButton({ title, subtitle, icon, url }: Props) {
             )}
           </Grid>
         </Grid>
-      </Link>
-    </Box>
+      </Box>
+    </Link>
   )
 }
