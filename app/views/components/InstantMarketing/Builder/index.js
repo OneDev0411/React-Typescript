@@ -306,6 +306,14 @@ class Builder extends React.Component {
     }
   }
 
+  getCKEditorPluginsToRemove = () => {
+    if (this.isMjmlTemplate) {
+      return []
+    }
+
+    return ['quicktable', 'tableresize', 'tabletools', 'table']
+  }
+
   loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
@@ -316,8 +324,11 @@ class Builder extends React.Component {
       const fonts =
         templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
 
+      const pluginsToRemove = this.getCKEditorPluginsToRemove()
+
       return {
-        font_names: fonts.join(';')
+        font_names: fonts.join(';'),
+        removePlugins: pluginsToRemove
       }
     })
   }
