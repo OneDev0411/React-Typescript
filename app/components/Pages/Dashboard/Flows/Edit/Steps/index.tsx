@@ -1,10 +1,45 @@
 import React from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Grid } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import Item from './Item'
-import New from './New'
-import { getNextStepStartFrom } from '../helpers'
+import { Step } from './Step'
+import { NewStep } from './New'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    timeline: {
+      margin: 'auto',
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      width: '100%',
+      maxWidth: '730px', // From figma
+      position: 'relative',
+      '&::after': {
+        position: 'absolute',
+        top: '0',
+        content: "''",
+        width: '1px',
+        height: '100%',
+        background: theme.palette.divider,
+        zIndex: 0
+      }
+    },
+    NewStepContainer: {
+      margin: theme.spacing(2, 'auto', 0),
+      display: 'flex',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      width: '100%',
+      maxWidth: '730px' // From figma
+    },
+    droppableProvider: {
+      width: '100%',
+      zIndex: 1
+    }
+  }),
+  { name: 'Steps' }
+)
 
 interface Props {
   disableEdit: boolean
@@ -14,9 +49,12 @@ interface Props {
   onNewStepSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onStepDelete: (step: IBrandFlowStep) => Promise<any>
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
-  onStepMove: (sourceIndex: number, destinationIndex: number) => Promise<any>
+  onStepMove: (
+    stepId: UUID,
+    sourceIndex: number,
+    destinationIndex: number
+  ) => Promise<any>
   onNewEmailTemplateClick: () => void
-  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
 export default function Steps({
@@ -28,61 +66,95 @@ export default function Steps({
   onStepDelete,
   onStepUpdate,
   onStepMove,
-  onNewEmailTemplateClick,
-  onReviewEmailTemplateClick
+  onNewEmailTemplateClick
 }: Props) {
-  const startFromSeconds = items.length
-    ? getNextStepStartFrom(items[items.length - 1])
-    : 0
+  const classes = useStyles()
 
   return (
-    <DragDropContext
-      onDragEnd={result =>
-        onStepMove(
-          result.source.index,
-          result.destination ? result.destination.index : result.source.index
-        )
-      }
-    >
-      <Grid container item justify="center" xs={11} md={8}>
-        <Droppable droppableId="flow-steps-droppable">
-          {droppableProvided => (
-            <div style={{ width: '100%' }} ref={droppableProvided.innerRef}>
-              {items.map((item, index) => {
-                const prevStep = index > 0 ? items[index - 1] : undefined
+    <>
+      <DragDropContext
+        onDragEnd={result =>
+          onStepMove(
+            result.draggableId,
+            result.source.index,
+            result.destination ? result.destination.index : result.source.index
+          )
+        }
+      >
+        <Box className={classes.timeline}>
+          <Droppable droppableId="flow-steps-droppable">
+            {(droppableProvided, draggableSnapshot) => (
+              <div
+                className={classes.droppableProvider}
+                ref={droppableProvided.innerRef}
+              >
+                {items.map((item, index) => {
+                  const stepIndex = index + 1
+                  const prevStep = index > 0 ? items[index - 1] : null
+                  const isLastStep = stepIndex === items.length
 
-                return (
-                  <Item
-                    index={index}
-                    disableEdit={disableEdit}
-                    onUpdate={onStepUpdate}
-                    onDelete={onStepDelete}
-                    key={item.id}
-                    step={item}
-                    prevStep={prevStep}
-                    emailTemplates={emailTemplates}
-                    defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
-                    onNewEmailTemplateClick={onNewEmailTemplateClick}
-                    onReviewEmailTemplateClick={onReviewEmailTemplateClick}
-                  />
-                )
-              })}
-            </div>
-          )}
-        </Droppable>
-        {!disableEdit && (
-          <New
-            index={items.length + 1}
-            startFrom={startFromSeconds}
+                  return (
+                    <>
+                      <Box
+                        mb={
+                          draggableSnapshot.isDraggingOver || disableEdit
+                            ? 3
+                            : 0
+                        }
+                      >
+                        <Step
+                          index={stepIndex}
+                          key={item.id}
+                          step={item}
+                          prevStep={prevStep}
+                          disableEdit={disableEdit}
+                          isLastStep={isLastStep}
+                          onUpdate={onStepUpdate}
+                          onDelete={onStepDelete}
+                          onStepMove={onStepMove}
+                          emailTemplates={emailTemplates}
+                          defaultSelectedEmailTemplate={
+                            defaultSelectedEmailTemplate
+                          }
+                          onNewEmailTemplateClick={onNewEmailTemplateClick}
+                        />
+                      </Box>
+                      {!isLastStep &&
+                        !disableEdit &&
+                        !draggableSnapshot.isDraggingOver && (
+                          <Box width="100%" my={3}>
+                            <NewStep
+                              miniMode
+                              index={stepIndex + 1}
+                              emailTemplates={emailTemplates}
+                              defaultSelectedEmailTemplate={
+                                defaultSelectedEmailTemplate
+                              }
+                              onSubmit={onNewStepSubmit}
+                              onNewEmailTemplateClick={onNewEmailTemplateClick}
+                            />
+                          </Box>
+                        )}
+                    </>
+                  )
+                })}
+              </div>
+            )}
+          </Droppable>
+        </Box>
+      </DragDropContext>
+      {!disableEdit && (
+        <Box className={classes.NewStepContainer}>
+          <NewStep
+            index={items.length > 0 ? items[items.length - 1].order + 1 : 1}
+            shouldShowDefaultForm={false}
             emailTemplates={emailTemplates}
             defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
             onSubmit={onNewStepSubmit}
-            isNewEventFormOpen={items.length === 0}
             onNewEmailTemplateClick={onNewEmailTemplateClick}
-            onReviewEmailTemplateClick={onReviewEmailTemplateClick}
           />
-        )}
-      </Grid>
-    </DragDropContext>
+        </Box>
+      )}
+    </>
   )
 }

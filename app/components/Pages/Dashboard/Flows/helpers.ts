@@ -2,7 +2,7 @@ import { searchContacts } from 'models/contacts/search-contacts'
 import { createFlow as createNewFlow } from 'models/flows/create-flow'
 
 export function getFlowEditUrl(id: UUID) {
-  return `/dashboard/account/flows/${id}`
+  return `/dashboard/marketing/flows/${id}`
 }
 
 export async function createFlow(
@@ -66,7 +66,7 @@ export function validateInput(
 }
 
 export function validateTimeInput(value?: string) {
-  if (value === undefined) {
+  if (value === undefined || !value.match(/^\d{2,}:\d{2}:\d{2}$/)) {
     return 'Invalid time'
   }
 
@@ -77,9 +77,20 @@ export function convertStepToStepInput(
   step: IBrandFlowStep
 ): IBrandFlowStepInput {
   const resultStep: IBrandFlowStepInput = {
+    order: step.order,
     title: step.title,
     description: step.description,
-    due_in: step.due_in
+    event_type: step.event_type,
+    wait_for: step.wait_for,
+    time: step.time
+  }
+
+  if (step.template) {
+    resultStep.template = step.template.id
+  }
+
+  if (step.template_instance) {
+    resultStep.template_instance = step.template_instance.id
   }
 
   if (step.email) {
