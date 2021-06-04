@@ -23,6 +23,7 @@ import { mdiClose } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import TreeView from 'components/TreeView'
+import { useBrandTree } from 'components/TeamTreeView/use-brand-tree'
 
 import { Types } from 'deals/FormEdit/utils/types'
 
@@ -32,7 +33,6 @@ import {
   deleteBrandFormTemplateValues
 } from 'models/Deal/form'
 
-import { useBrandTree } from './use-brand-tree'
 import { useDefaultValueContext } from './use-default-value-content'
 
 const useStyles = makeStyles(
@@ -65,7 +65,7 @@ const useStyles = makeStyles(
         marginRight: theme.spacing(1)
       }
     },
-    divier: {
+    divider: {
       margin: theme.spacing(3, 0)
     }
   }),
@@ -246,7 +246,7 @@ export function DefaultValues({ formId }: Props) {
               <>
                 <Typography variant="h5">{selectedTeam?.name}</Typography>
 
-                <Divider className={classes.divier} />
+                <Divider className={classes.divider} />
 
                 {[Types.TEXT_ANNOTATION, Types.UNKNOWN_ANNOTATION].includes(
                   annotationType!

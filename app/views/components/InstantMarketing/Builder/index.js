@@ -1435,7 +1435,6 @@ class Builder extends React.Component {
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
                   mjml={this.selectedTemplate.mjml}
-                  user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
                 />
