@@ -5,12 +5,14 @@ import { SectionsEnum } from 'components/PageSideNav/types'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'
 
 import MegaMenu from './SectionMegaMenu'
+import { TabMarketingSkeleton } from './Skeleton'
 
 interface Props {
   sections: SectionCollection
   mediums: { [key: string]: IMarketingTemplateMedium[] }
   templateTypes: string
   isMyDesignsActive: boolean
+  isFlowsActive: boolean
   isOverviewActive: boolean
 }
 
@@ -20,6 +22,7 @@ const MarketingTabs = ({
   templateTypes,
   isMyDesignsActive,
   isOverviewActive,
+  isFlowsActive,
   ...props
 }: Props) => {
   const sectionsList = Object.keys(sections).map(
@@ -41,6 +44,12 @@ const MarketingTabs = ({
       )?.key
     }
 
+    if (isFlowsActive) {
+      return sectionsList.find(
+        section => section.type === SectionsEnum.Link && section.key === 'flows'
+      )?.key
+    }
+
     return sectionsList.find(section => {
       if (section.type === SectionsEnum.Link) {
         return section.items.some(item => item.value === templateTypes)
@@ -57,7 +66,7 @@ const MarketingTabs = ({
   // Do not render menus before getting all mediums
   // We're doing this to prevent sections/tabs flashing
   if (Object.keys(mediums).length === 0) {
-    return null
+    return <TabMarketingSkeleton />
   }
 
   return (

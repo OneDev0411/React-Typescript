@@ -812,6 +812,8 @@ export default (
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
+        <Route path="marketing/flows" component={AsyncFlowsList} />
+        <Route path="marketing/flows/:id" component={AsyncFlowEdit} />
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route
@@ -903,9 +905,6 @@ export default (
             component={ConnectedAccountsSetting}
           />
           {/* <Route path="css" component={AsyncCSS} /> */}
-
-          <Route path="flows" component={AsyncFlowsList} />
-          <Route path="flows/:id" component={AsyncFlowEdit} />
         </Route>
 
         <Route path="teams(/:id)">

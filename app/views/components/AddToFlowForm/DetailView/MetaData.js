@@ -20,9 +20,6 @@ const Item = styled.span`
 
 export default function MetaData({ steps }) {
   const totalSteps = steps.length
-  const MaxDueIn = Math.ceil(
-    Math.max(...steps.map(s => s.due_in)) / (24 * 3600)
-  )
   const automatedSteps = steps.filter(s => s.is_automated).length
   const automationPercent =
     automatedSteps > 0 ? Math.floor((automatedSteps / totalSteps) * 100) : 0
@@ -31,10 +28,6 @@ export default function MetaData({ steps }) {
     <div style={{ display: 'inline-block', marginBottom: '1em' }}>
       <Item>
         {totalSteps}&nbsp;<span>steps</span>&nbsp;&nbsp;.&nbsp;&nbsp;
-      </Item>
-      <Item>
-        {MaxDueIn}&nbsp;<span>days</span>
-        &nbsp;&nbsp;.&nbsp;&nbsp;
       </Item>
       <Item>
         {automationPercent}%&nbsp;<span>automation</span>

@@ -39,11 +39,6 @@ const tabs: ItemsShape[] = [
     isHidden: hasNotAccessToCRM
   },
   {
-    label: 'Flows',
-    to: '/dashboard/account/flows',
-    isHidden: hasNotAccessToCRM
-  },
-  {
     label: 'Email Templates',
     to: '/dashboard/account/email-templates',
     isHidden: hasNotAccessToCRM

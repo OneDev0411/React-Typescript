@@ -27,7 +27,7 @@ export default function WithoutStep({ flowId }) {
           You can add some{' '}
           <ALink
             style={{ color: primary, fontWeight: 'bold' }}
-            to={`/dashboard/account/flows/${flowId}`}
+            to={`/dashboard/marketing/flows/${flowId}`}
           >
             here
           </ALink>

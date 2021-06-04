@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
+import { useEffectOnce } from 'react-use'
+
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -7,22 +9,20 @@ import {
   Box,
   Paper,
   Tab,
-  Tabs as MUITabs,
+  Tabs,
   Chip,
-  useTheme
-} from '@material-ui/core'
-import {
   Theme,
-  makeStyles,
-  withStyles,
-  createStyles
-} from '@material-ui/core/styles'
+  makeStyles
+} from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
+
+import PageLayout from 'components/GlobalPageLayout'
 
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
-import { editBrandFlowSteps } from 'models/flows/edit-brand-flow-steps'
+import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
 import { createStep } from 'models/flows/create-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
@@ -31,7 +31,6 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { Callout } from 'components/Callout'
 import LoadingContainer from 'components/LoadingContainer'
 import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 
@@ -44,35 +43,36 @@ import Header from './Header'
 import Steps from './Steps'
 import Contacts from './Contacts'
 
-import {
-  shouldUpdateNextSteps,
-  updateStepsDue,
-  getUpdatedStepsOnMove
-} from './helpers'
-import { PageContainer, TabPanel } from './styled'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    chip: {
-      margin: theme.spacing(0, 1)
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    headerContainer: {
+      padding: theme.spacing(2, 4, 0)
     },
-    tab: {
-      fontSize: theme.typography.body1.fontSize
-    }
-  })
+    tabContainer: {
+      marginTop: theme.spacing(2),
+      borderBottom: `1px solid ${theme.palette.divider}`
+    },
+    contentContainer: {
+      width: '100%',
+      height: 'auto',
+      minHeight: '100vh',
+      padding: theme.spacing(4),
+      background: theme.palette.grey[50]
+    },
+    warnContainer: {
+      marginBottom: theme.spacing(2),
+      color: theme.palette.warning.contrastText,
+      ...theme.typography.body2
+    },
+    chip: {
+      marginLeft: theme.spacing(1)
+    },
+    tab: theme.typography.body1
+  }),
+  { name: 'FlowEditPage' }
 )
 
-const Tabs = withStyles({
-  root: {
-    padding: '0 25%'
-  },
-  indicator: {
-    height: '3px'
-  }
-})(MUITabs)
-
 function Edit(props: WithRouterProps) {
-  const theme = useTheme()
   const classes = useStyles()
 
   const user = useSelector(selectUser)
@@ -94,6 +94,12 @@ function Edit(props: WithRouterProps) {
   )
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<string | null>(null)
+
+  const indexToOrderMap: number[] = useMemo(
+    () => (flow?.steps || []).map(step => step.order),
+    [flow?.steps]
+  )
+
   const modal = useContext(ConfirmationModalContext)
 
   const getFlow = useCallback(
@@ -122,6 +128,10 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(true)
 
+      if (selectedEmailTemplate) {
+        setSelectedEmailTemplate(null)
+      }
+
       const flowData = await getFlow(brand, props.params.id, reload)
 
       setFlow(flowData)
@@ -140,26 +150,22 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(false)
     },
-    [brand, getFlow, props.params.id]
+    [brand, getFlow, props.params.id, selectedEmailTemplate]
   )
-
-  useEffect(() => {
-    loadFlowData()
-  }, [brand, getFlow, loadFlowData, props.location.state, props.params.id])
-
-  useEffect(() => {
-    async function fetchEmailTemplates() {
-      if (!brand) {
-        return
-      }
-
-      const fetchedTemplates = await getEmailTemplates(brand)
-
-      setEmailTemplates(fetchedTemplates)
+  const fetchEmailTemplates = useCallback(async () => {
+    if (!brand) {
+      return
     }
 
-    fetchEmailTemplates()
+    const fetchedTemplates = await getEmailTemplates(brand)
+
+    setEmailTemplates(fetchedTemplates)
   }, [brand])
+
+  useEffectOnce(() => {
+    loadFlowData(true)
+    fetchEmailTemplates()
+  })
 
   const newStepSubmitHandler = useCallback(
     async (step: IBrandFlowStepInput) => {
@@ -167,7 +173,7 @@ function Edit(props: WithRouterProps) {
         return
       }
 
-      await createStep(brand, flow.id, [step])
+      await createStep(brand, flow.id, step)
 
       loadFlowData(true)
     },
@@ -185,16 +191,6 @@ function Edit(props: WithRouterProps) {
         description: `Are you sure about deleting "${step.title}" step?`,
         confirmLabel: 'Yes, I am sure',
         onConfirm: async () => {
-          const [
-            shouldUpdateSteps,
-            stepDueDiff,
-            stepsToUpdate
-          ] = shouldUpdateNextSteps(flow, step.id, step, true)
-
-          if (shouldUpdateSteps) {
-            await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-          }
-
           await deleteBrandFlowStep(brand, flow.id, step.id)
           loadFlowData(true)
         }
@@ -209,16 +205,6 @@ function Edit(props: WithRouterProps) {
         return
       }
 
-      const [
-        shouldUpdateSteps,
-        stepDueDiff,
-        stepsToUpdate
-      ] = shouldUpdateNextSteps(flow, stepId, step)
-
-      if (shouldUpdateSteps) {
-        await updateStepsDue(brand, flow.id, stepsToUpdate, stepDueDiff)
-      }
-
       await editBrandFlowStep(brand, flow.id, stepId, step)
 
       loadFlowData(true)
@@ -227,24 +213,28 @@ function Edit(props: WithRouterProps) {
   )
 
   const stepMoveHandler = useCallback(
-    async (source: number, destination) => {
-      if (!flow || !brand || !flow.steps) {
+    async (id: UUID, source: number, destination: number) => {
+      if (
+        !flow ||
+        !id ||
+        source === destination ||
+        destination < 1 ||
+        destination > (flow.steps || []).length
+      ) {
         return
       }
 
-      if (source === destination) {
-        return
-      }
-
-      const newSteps = getUpdatedStepsOnMove(flow.steps, source, destination)
+      const destinationOrder = indexToOrderMap[destination - 1]
+      const nextDestination =
+        destination > source ? destinationOrder + 1 : destinationOrder - 1
 
       setIsLoading(true)
 
-      await editBrandFlowSteps(brand, flow.id, newSteps)
+      await editBrandFlowStepOrder(brand, flow.id, id, nextDestination)
 
       loadFlowData(true)
     },
-    [brand, flow, loadFlowData]
+    [brand, flow, indexToOrderMap, loadFlowData]
   )
 
   const flowUpdateHandler = useCallback(
@@ -295,18 +285,6 @@ function Edit(props: WithRouterProps) {
     [brand, flow]
   )
 
-  const reviewEmailTemplateClickHandler = useCallback(
-    (emailTemplate: IBrandEmailTemplate) => {
-      if (!brand || !flow) {
-        return
-      }
-
-      setSelectedEmailTemplate(emailTemplate)
-      setIsEmailTemplateDrawerOpen(true)
-    },
-    [brand, flow]
-  )
-
   const newEmailTemplateClickHandler = useCallback(() => {
     if (!brand || !flow) {
       return
@@ -316,7 +294,11 @@ function Edit(props: WithRouterProps) {
   }, [brand, flow])
 
   if (error) {
-    return <PageContainer>{error && <Paper>{error}</Paper>}</PageContainer>
+    return (
+      <Box className={classes.contentContainer}>
+        {error && <Paper>{error}</Paper>}
+      </Box>
+    )
   }
 
   return (
@@ -326,36 +308,25 @@ function Edit(props: WithRouterProps) {
           {flow ? `${flow.name} | Flows | Rechat` : 'Flow | Rechat'}
         </title>
       </Helmet>
-      {flow && isDuplicateModalOpen && (
-        <New
-          onClose={() => {
-            setIsDuplicateModalOpen(false)
-          }}
-          onSubmit={duplicateFlowHandler}
-          flow={flow}
-        />
-      )}
-      {flow && (
-        <Header
-          name={flow.name}
-          onDuplicateClick={() => {
-            setIsDuplicateModalOpen(true)
-          }}
-          description={flow.description}
-          onChange={flowUpdateHandler}
-          disableEdit={!flow.is_editable}
-        />
-      )}
-      <PageContainer style={!flow ? { paddingTop: '8.9375rem' } : {}}>
-        <Box mb={1}>
-          <Paper>
+      <PageLayout gutter={0}>
+        <Box className={classes.headerContainer}>
+          {flow && (
+            <Header
+              name={flow.name}
+              onDuplicateClick={() => {
+                setIsDuplicateModalOpen(true)
+              }}
+              description={flow.description}
+              onChange={flowUpdateHandler}
+              disableEdit={!flow.is_editable}
+            />
+          )}
+          <Box className={classes.tabContainer}>
             <Tabs
               value={selectedTabIndex}
               onChange={(_, newTabIndex) => setSelectedTabIndex(newTabIndex)}
               textColor="primary"
               indicatorColor="primary"
-              variant="fullWidth"
-              centered
             >
               <Tab disabled={isLoading} className={classes.tab} label="Steps" />
               <Tab
@@ -365,6 +336,7 @@ function Edit(props: WithRouterProps) {
                   <Grid container alignItems="center" justify="center">
                     <span>Contacts</span>
                     <Chip
+                      size="small"
                       className={classes.chip}
                       label={flow ? flow.active_flows : 0}
                     />
@@ -372,59 +344,69 @@ function Edit(props: WithRouterProps) {
                 }
               />
             </Tabs>
-          </Paper>
+          </Box>
         </Box>
-        {warning && (
-          <Box mb={1}>
-            <Callout
-              type="warn"
-              style={{ margin: 0, color: theme.palette.warning.contrastText }}
+
+        <PageLayout.Main mt={0} className={classes.contentContainer}>
+          {warning && (
+            <Alert
+              severity="warning"
+              className={classes.warnContainer}
               onClose={() => setWarning(null)}
             >
               {warning}
-            </Callout>
-          </Box>
-        )}
-        <Box mb={1}>
-          <TabPanel>
-            {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
-            {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
-              <Steps
-                disableEdit={!flow.is_editable}
-                onNewStepSubmit={newStepSubmitHandler}
-                onStepDelete={stepDeleteHandler}
-                onStepUpdate={stepUpdateHandler}
-                onStepMove={stepMoveHandler}
-                onNewEmailTemplateClick={newEmailTemplateClickHandler}
-                onReviewEmailTemplateClick={reviewEmailTemplateClickHandler}
-                items={flow.steps || []}
-                emailTemplates={emailTemplates}
-                defaultSelectedEmailTemplate={
-                  selectedEmailTemplate ? selectedEmailTemplate.id : undefined
-                }
-              />
-            )}
-            {!isLoading && flow && selectedTabIndex === 1 && (
-              <Contacts
-                onStop={flowStopHandler}
-                onContactClick={contactId =>
-                  props.router.push(`/dashboard/contacts/${contactId}`)
-                }
-                flowId={flow.id}
-              />
-            )}
-          </TabPanel>
-        </Box>
-      </PageContainer>
+            </Alert>
+          )}
+          {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
+          {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
+            <Steps
+              disableEdit={!flow.is_editable}
+              onNewStepSubmit={newStepSubmitHandler}
+              onStepDelete={stepDeleteHandler}
+              onStepUpdate={stepUpdateHandler}
+              onStepMove={stepMoveHandler}
+              onNewEmailTemplateClick={newEmailTemplateClickHandler}
+              items={flow.steps || []}
+              emailTemplates={emailTemplates}
+              defaultSelectedEmailTemplate={
+                selectedEmailTemplate ? selectedEmailTemplate.id : undefined
+              }
+            />
+          )}
+          {!isLoading && flow && selectedTabIndex === 1 && (
+            <Contacts
+              onStop={flowStopHandler}
+              onContactClick={contactId =>
+                props.router.push(`/dashboard/contacts/${contactId}`)
+              }
+              flowId={flow.id}
+            />
+          )}
+        </PageLayout.Main>
+      </PageLayout>
+
+      {flow && isDuplicateModalOpen && (
+        <New
+          onClose={() => {
+            setIsDuplicateModalOpen(false)
+          }}
+          onSubmit={duplicateFlowHandler}
+          flow={flow}
+        />
+      )}
       <EmailTemplateDrawer
         isOpen={isEmailTemplateDrawerOpen}
         onClose={() => {
           setIsEmailTemplateDrawerOpen(false)
         }}
         submitCallback={emailTemplate => {
+          const newTemplates = Array.isArray(emailTemplates)
+            ? [...emailTemplates, emailTemplate]
+            : [emailTemplate]
+
+          setEmailTemplates(newTemplates)
           setSelectedEmailTemplate(emailTemplate)
         }}
-        emailTemplate={selectedEmailTemplate}
       />
     </>
   )
