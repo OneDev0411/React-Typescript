@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-
+import { useState } from 'react'
 import {
   Popover,
   Button,
+  Box,
+  Typography,
+  Divider,
   List,
   ListItem,
-  ListItemText,
-  ListSubheader
+  ListItemText
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
@@ -154,8 +155,13 @@ export function AddToMarketingCenter({
             horizontal: 'left'
           }}
         >
-          <List>
-            <ListSubheader>Please select a category to continue</ListSubheader>
+          <Box px={2} pt={2}>
+            <Typography variant="body2">Please Select A Category</Typography>
+          </Box>
+          <Box pt={2}>
+            <Divider />
+          </Box>
+          <List disablePadding>
             {categories.map(category => {
               if (!category.value) {
                 return null
