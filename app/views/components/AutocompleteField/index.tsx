@@ -37,7 +37,7 @@ export interface AutocompleteFieldProps<T extends Option = Option>
   searchDelay?: number
 }
 
-const getOptionLabelDefault = (option: Option) => option.label
+const getOptionLabelDefault = (option: Option) => option.label || ''
 
 const getGroupByDefault = (option: Option) =>
   option.label ? option.label.charAt(0).toLowerCase() : ''
@@ -67,7 +67,9 @@ function AutocompleteField<T extends Option = Option>({
     defaultInputValue
   )
 
-  const { data: results, run, isLoading } = useAsync<T[]>({ data: [] })
+  const { data: results, run, isLoading, error: resultsError } = useAsync<T[]>({
+    data: []
+  })
 
   const [debouncedRunOptions] = useDebouncedCallback((value: string) => {
     if (typeof options === 'function') {
@@ -134,8 +136,8 @@ function AutocompleteField<T extends Option = Option>({
             size="small"
             label={label}
             variant="outlined"
-            error={error}
-            helperText={helperText}
+            error={!!resultsError || error}
+            helperText={resultsError ? resultsError.toString() : helperText}
             InputProps={{
               ...props.InputProps,
               endAdornment: props.InputProps.endAdornment || endAdornment
