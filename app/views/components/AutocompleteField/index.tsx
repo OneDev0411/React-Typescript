@@ -10,15 +10,14 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 
 import useAsync from 'hooks/use-async'
 
-export interface Option {
+export interface BaseOption {
   label: string
   value: string
 }
 
-export interface AutocompleteFieldProps<T extends Option = Option>
+export interface AutocompleteFieldProps<T extends BaseOption = BaseOption>
   extends Pick<
     AutocompleteProps<T, undefined, true, true>,
-    | 'noOptionsText'
     | 'loading'
     | 'getOptionLabel'
     | 'value'
@@ -27,6 +26,7 @@ export interface AutocompleteFieldProps<T extends Option = Option>
     | 'groupBy'
     | 'getOptionSelected'
   > {
+  noOptionsText?: ReactNode | ((loading: boolean) => ReactNode)
   label: string
   options: T[] | ((value: string) => Promise<T[]>)
   defaultInputValue?: string
@@ -37,15 +37,15 @@ export interface AutocompleteFieldProps<T extends Option = Option>
   searchDelay?: number
 }
 
-const getOptionLabelDefault = (option: Option) => option.label || ''
+const getOptionLabelDefault = (option: BaseOption) => option.label || ''
 
-const getGroupByDefault = (option: Option) =>
+const getGroupByDefault = (option: BaseOption) =>
   option.label ? option.label.charAt(0).toLowerCase() : ''
 
-const getOptionSelectedDefault = (option: Option, value: Option) =>
+const getOptionSelectedDefault = (option: BaseOption, value: BaseOption) =>
   option.label === value.label
 
-function AutocompleteField<T extends Option = Option>({
+function AutocompleteField<T extends BaseOption = BaseOption>({
   label,
   value,
   defaultValue,
@@ -115,7 +115,11 @@ function AutocompleteField<T extends Option = Option>({
       options={typeof options === 'function' ? results : options}
       loading={loading || isLoading}
       groupBy={groupBy}
-      noOptionsText={noOptionsText}
+      noOptionsText={
+        typeof noOptionsText === 'function'
+          ? noOptionsText(loading || isLoading)
+          : noOptionsText
+      }
       value={value}
       defaultValue={defaultValue}
       inputValue={outInputValue === undefined ? inputValue : outInputValue}
