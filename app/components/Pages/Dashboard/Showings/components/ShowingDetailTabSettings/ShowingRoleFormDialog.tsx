@@ -9,10 +9,17 @@ import {
 import { SelectItem } from 'components/Select'
 
 import FormDialog, { FormDialogProps } from '../FormDialog'
+import ShowingRoleFormDialogCheckboxGroupField from './ShowingRoleFormDialogCheckboxGroupField'
 
 export type ShowingRoleFormValues = Pick<
   IShowingRole,
-  'role' | 'first_name' | 'last_name' | 'email' | 'phone_number'
+  | 'role'
+  | 'first_name'
+  | 'last_name'
+  | 'email'
+  | 'phone_number'
+  | 'confirm_notification_type'
+  | 'cancel_notification_type'
 >
 
 export interface ShowingRoleFormDialogProps
@@ -21,11 +28,13 @@ export interface ShowingRoleFormDialogProps
     'children' | 'confirmLabel'
   > {
   hideRoles: IShowingRoleType[]
+  hasRoleField: boolean
 }
 
 function ShowingRoleFormDialog({
   initialValues,
   hideRoles,
+  hasRoleField,
   ...otherProps
 }: ShowingRoleFormDialogProps) {
   const roleTypeOptions: FormSelectProps<IShowingRoleType>['options'] = [
@@ -50,11 +59,13 @@ function ShowingRoleFormDialog({
       confirmLabel="Save"
       initialValues={initialValues || { role: firstRoleOption?.value }}
     >
-      <FormSelect<IShowingRoleType>
-        name="role"
-        options={roleTypeOptions}
-        label="Select Role"
-      />
+      {hasRoleField && (
+        <FormSelect<IShowingRoleType>
+          name="role"
+          options={roleTypeOptions}
+          label="Select Role"
+        />
+      )}
       <Box display="flex">
         <FormTextField name="first_name" required label="First Name" />
         <Box flexBasis="16px" flexShrink="0" />
@@ -62,6 +73,14 @@ function ShowingRoleFormDialog({
       </Box>
       <FormTextField name="email" required label="Email" type="email" />
       <FormPhoneField name="phone_number" required label="Phone" />
+      <ShowingRoleFormDialogCheckboxGroupField
+        name="confirm_notification_type"
+        label="Confirm Via"
+      />
+      <ShowingRoleFormDialogCheckboxGroupField
+        name="cancel_notification_type"
+        label="Notify On Confirmed/Canceled"
+      />
     </FormDialog>
   )
 }
