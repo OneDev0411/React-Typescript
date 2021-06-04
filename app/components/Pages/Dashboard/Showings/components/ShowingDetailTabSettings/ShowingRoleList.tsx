@@ -6,25 +6,18 @@ import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
 import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
-import ShowingRoleListColumnActions, {
-  ShowingRoleListColumnActionsProps
-} from './ShowingRoleListColumnActions'
+import ShowingRoleListColumnActions from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
 import ShowingRoleFormDialog, {
   ShowingRoleFormValues
 } from './ShowingRoleFormDialog'
 
-interface ShowingRoleListProps
-  extends Pick<ShowingRoleListColumnActionsProps, 'isHipPocket'> {
+interface ShowingRoleListProps {
   value: IShowingRole[]
   onChange: (value: IShowingRole[]) => void
 }
 
-function ShowingRoleList({
-  isHipPocket,
-  value: roles,
-  onChange
-}: ShowingRoleListProps) {
+function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
   const [isAddOpen, setIsAddOpen] = useState(false)
 
   const openAddDialog = () => setIsAddOpen(true)
@@ -54,35 +47,33 @@ function ShowingRoleList({
   const columns: TableColumn<IShowingRole>[] = [
     {
       id: 'contact',
-      width: '40%',
+      width: '25%',
       sortable: false,
       render: ({ row }) => (
         <ShowingRoleListColumnPerson
           name={`${row.first_name} ${row.last_name}`.trim()}
           role={row.role}
-          phone={row.phone_number}
-          email={row.email}
         />
       )
     },
     {
       id: 'confirm_notification_type',
-      width: '20%',
+      width: '30%',
       sortable: false,
       render: ({ row }) => (
         <ShowingRoleListColumnMediums
-          label="Confirm by"
+          label="Confirm via"
           types={row.confirm_notification_type}
         />
       )
     },
     {
       id: 'cancel_notification_type',
-      width: '20%',
+      width: '30%',
       sortable: false,
       render: ({ row }) => (
         <ShowingRoleListColumnMediums
-          label="Notify On"
+          label="Get Notify On"
           types={row.cancel_notification_type}
         />
       )
@@ -93,7 +84,6 @@ function ShowingRoleList({
       align: 'right',
       render: ({ row }) => (
         <ShowingRoleListColumnActions
-          isHipPocket={isHipPocket}
           role={row}
           hideRoles={roles
             .filter(role => role.id !== row.id)
@@ -129,6 +119,7 @@ function ShowingRoleList({
         onClose={closeAddDialog}
         hideRoles={roles.map(role => role.role)}
         onConfirm={handleAdd}
+        hasRoleField
       />
     </div>
   )

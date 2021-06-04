@@ -182,7 +182,6 @@ function ShowingDetailTabSettings({
             </Box>
             {showing.approval_type !== 'None' && (
               <ShowingRoleList
-                isHipPocket={!!showing.address}
                 value={showing.roles}
                 onChange={handleRolesChange}
               />
