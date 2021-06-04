@@ -25,6 +25,19 @@ export function ChecklistsSidenavItem({ checklistType, propertyType }: Props) {
   const dispatch = useDispatch()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
+    if (propertyType.brand !== getActiveTeamId(user)) {
+      dispatch(
+        confirmation({
+          description: `You can not delete this property type because 
+          it doesn’t belong to your team`,
+          confirmLabel: 'Okay',
+          hideCancelButton: true
+        })
+      )
+
+      return
+    }
+
     dispatch(
       confirmation({
         message: `Delete ${propertyType.label}?`,
