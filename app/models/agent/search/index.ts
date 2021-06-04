@@ -7,7 +7,7 @@ const search = async (criteria, field = 'mlsid') => {
       .query({ [field]: criteria })
       .query({ 'associations[]': 'agent.office' })
 
-    return response.body.data
+    return response.body.data as IAgent[]
   } catch ({ status }) {
     throw status
   }
