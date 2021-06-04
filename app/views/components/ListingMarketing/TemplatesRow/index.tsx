@@ -50,8 +50,6 @@ function TemplatesRow({ title, listing, medium, templates, onClick }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
-  console.log('RENDER ROW')
-
   return (
     <Grid
       container
