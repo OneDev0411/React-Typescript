@@ -6,14 +6,13 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core'
-import pluralize from 'pluralize'
 
 import TreeView from 'components/TreeView'
 
 import { useBrandTree } from './use-brand-tree'
 
 const useStyles = makeStyles(
-  theme => ({
+  () => ({
     nodeContainer: {
       cursor: 'pointer'
     }
@@ -25,13 +24,9 @@ const useStyles = makeStyles(
 
 export interface Props {
   onSelectTeam: (team: IBrand) => void
-  hideMembersCount?: boolean
 }
 
-export default function TeamTreeView({
-  onSelectTeam,
-  hideMembersCount = false
-}: Props) {
+export default function TeamTreeView({ onSelectTeam }: Props) {
   const classes = useStyles()
   const [selectedTeam, setSelectedTeam] = useState<Nullable<IBrand>>(null)
   const { isLoading, getChildNodes, initialExpandedNodes } = useBrandTree()
@@ -76,13 +71,6 @@ export default function TeamTreeView({
                 {team.name}
               </Typography>
             </Grid>
-            {!hideMembersCount && (
-              <Grid item>
-                <Typography variant="caption" color="textSecondary">
-                  {pluralize('member', team.member_count, true)}
-                </Typography>
-              </Grid>
-            )}
           </Grid>
         )
       }}
