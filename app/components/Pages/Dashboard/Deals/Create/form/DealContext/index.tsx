@@ -40,6 +40,7 @@ import { useCreationContext } from '../../context/use-creation-context'
 interface Props {
   concurrentMode?: boolean
   context: IDealBrandContext
+  error?: string
   onChange?: (value: string | number) => void
 }
 
@@ -64,6 +65,7 @@ const useStyles = makeStyles(
 
 export function DealContext({
   concurrentMode = false,
+  error,
   context,
   onChange
 }: Props) {
@@ -175,7 +177,7 @@ export function DealContext({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>
         {contextType === 'Date' ? 'When' : 'What'} is the{' '}
         <span className={classes.label}>{context.label}</span> for this deal?
