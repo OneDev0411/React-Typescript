@@ -73,6 +73,10 @@ export default function DeleteDeal(props: Props) {
   const handleSendRequest = text => {
     const checklist = getActiveChecklist(props.deal, checklists)
 
+    if (!checklist) {
+      return
+    }
+
     dispatch(
       createRequestTask({
         checklist,

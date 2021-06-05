@@ -6,8 +6,7 @@ import {
   createStyles,
   makeStyles,
   Theme,
-  Tooltip,
-  Button
+  Tooltip
 } from '@material-ui/core'
 
 import { IAppState } from 'reducers'
@@ -25,6 +24,7 @@ import { selectUser } from 'selectors/user'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 interface Props {
   deal: IDeal
@@ -102,6 +102,10 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const notifyAdmin = async status => {
     const checklist = getActiveChecklist(deal, checklists)
 
+    if (!checklist) {
+      return
+    }
+
     dispatch(
       createRequestTask({
         checklist,
@@ -133,7 +137,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           }
         >
           <span>
-            <Button
+            <DropdownToggleButton
               {...buttonProps}
               variant="outlined"
               size="small"
@@ -148,7 +152,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
                 />
               )}
               {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
-            </Button>
+            </DropdownToggleButton>
           </span>
         </Tooltip>
       )}
