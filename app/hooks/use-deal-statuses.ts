@@ -14,6 +14,10 @@ export function useDealStatuses(deal: IDeal) {
       ({ id }) => id === origin
     )
 
+    if (!brandChecklist) {
+      return []
+    }
+
     return brandChecklist?.statuses || []
   })
 }

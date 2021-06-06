@@ -18,7 +18,7 @@ export function getFormContexts(
       checklist => checklist.checklist_type === checklistType
     )
 
-    const definition = brandChecklist?.required_contexts.find(
+    const definition = brandChecklist?.required_contexts?.find(
       item => item.key === name
     )
 

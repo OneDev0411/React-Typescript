@@ -18,8 +18,8 @@ import { normalizeForm as normalizeRole } from 'components/DealRole/helpers/norm
 import { goTo } from 'utils/go-to'
 
 import { getLegalFullName } from 'deals/utils/roles'
-
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { useDealStatuses } from 'hooks/use-deal-statuses'
 
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { getChangedRoles } from './helpers/get-changed-roles'
@@ -33,7 +33,6 @@ import { DealStatus } from './form/DealStatus'
 import { DealContext } from './form/DealContext'
 import { Header } from './components/Header'
 
-import { useStatusList } from './hooks/use-deal-status-list'
 import { useDealRoles } from './hooks/use-deal-roles'
 import { useStyles } from './hooks/use-styles'
 import { showStatusQuestion } from './helpers/show-status-question'
@@ -64,7 +63,7 @@ function CreateOffer({ router, route, params }: Props) {
     selectDealById(deals.list, params.id)
   )
 
-  const statusList = useStatusList(deal)
+  const statusList = useDealStatuses(deal)
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {

@@ -27,6 +27,10 @@ import { getField } from 'models/Deal/helpers/context'
 
 import { createAddressContext } from 'deals/utils/create-address-context'
 
+import { getDealChecklists } from 'reducers/deals/checklists'
+
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
+
 import { getDealContexts } from './helpers/get-deal-contexts'
 import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
 

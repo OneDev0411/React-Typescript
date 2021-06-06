@@ -1,15 +1,20 @@
 export function getActiveChecklist(
   deal: IDeal,
-  checklists: IDealChecklist[]
+  checklists: IDealChecklist[],
+  checklistType?: IDealChecklistType
 ): IDealChecklist | undefined {
-  let checklist: IDealChecklist | undefined
+  const type =
+    checklistType || (deal.has_active_offer ? 'Offer' : deal.deal_type)
 
-  if (deal.deal_type === 'Selling') {
-    checklist = checklists.find(
-      checklist =>
-        checklist.checklist_type === 'Buying' && checklist.is_active_offer
-    )
-  }
+  const brandChecklist = deal.property_type.checklists?.find(
+    checklist => checklist.checklist_type === type
+  )
 
-  return checklist || checklists[0]
+  return checklists.find(item => {
+    if (type === 'Offer') {
+      return item.origin === brandChecklist?.id && item.is_active_offer
+    }
+
+    return item.origin === brandChecklist?.id
+  })
 }

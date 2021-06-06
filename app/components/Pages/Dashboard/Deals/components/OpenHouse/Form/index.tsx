@@ -37,6 +37,8 @@ import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
 import { selectUser } from 'selectors/user'
 
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
+
 import { DatePickerContainer } from './styled'
 
 interface Props {
@@ -141,9 +143,7 @@ function OpenHouseForm(props: Props) {
 
     setIsSaving(true)
 
-    const checklist = checklists.find(
-      checklist => checklist.checklist_type === 'Selling'
-    )!
+    const checklist = getActiveChecklist(props.deal, checklists, 'Selling')!
 
     const taskTitle = [
       fecha.format(startDate, 'dddd, MMMM D, YYYY  hh:mmA'),

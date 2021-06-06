@@ -66,13 +66,13 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
    * updates listing_status context
    * @param {Object} selectedItem the selected dropdown item
    */
-  const updateStatus = async (item: IDealStatus): Promise<void> => {
+  const updateStatus = async (status: IDealStatus): Promise<void> => {
     if (isSaving) {
       return
     }
 
-    if (item.admin_only && !deal.is_draft && !isBackOffice) {
-      notifyAdmin(item.label)
+    if (status.admin_only && !deal.is_draft && !isBackOffice) {
+      notifyAdmin(status.label)
 
       return
     }
@@ -85,7 +85,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
           deal,
           checklists,
           getStatusContextKey(deal),
-          item.label,
+          status.label,
           true
         )
       ])
