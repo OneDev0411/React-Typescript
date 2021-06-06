@@ -29,7 +29,6 @@ const useStyles = makeStyles(
     listingImage: {
       objectFit: 'cover',
       width: '100%',
-      maxHeight: '100%',
       [theme.breakpoints.up('sm')]: {
         minHeight: '100vh',
         position: 'absolute',
