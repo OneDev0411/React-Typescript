@@ -26,36 +26,9 @@ import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    pageContainer: {
-      maxWidth: '100%',
-      padding: 0
-    },
-    container: {
-      [theme.breakpoints.up('sm')]: {
-        minHeight: '100vh'
-      }
-    },
     sectionTitleContainer: {
       [theme.breakpoints.down('sm')]: {
         paddingTop: theme.spacing(3)
-      }
-    },
-    contactInfoContainer: {
-      margin: 0
-    },
-    oddContactInfoFieldContainer: {
-      [theme.breakpoints.up('md')]: {
-        marginRight: theme.spacing(2)
-      }
-    },
-    bookButton: {
-      [theme.breakpoints.down('xs')]: {
-        position: 'fixed',
-        zIndex: 1,
-        left: 0,
-        bottom: 0,
-        borderRadius: 0,
-        height: theme.spacing(7)
       }
     }
   }),
