@@ -14,9 +14,7 @@ interface Props {
 
 export function UploadFolder({ deal }: Props) {
   const classes = useStyles()
-  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(
-    (deal.files || []).length < 20
-  )
+  const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(true)
   const files = (deal.files || []).sort((a, b) => b.created_at - a.created_at)
 
   const hasStashFiles = (): boolean =>
