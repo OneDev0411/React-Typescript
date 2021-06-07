@@ -51,13 +51,12 @@ const GENERAL_FLOW_TYPES = [
   'Brand',
   'NewAgent',
   'Newsletter',
-  'HomeAnniversary',
   'Layout',
   HOLIDAY_TYPES.join(','),
   ...HOLIDAY_TYPES
 ]
 
-const CONTACT_FLOW_TYPES = ['WeddingAnniversary']
+const CONTACT_FLOW_TYPES = ['WeddingAnniversary', 'HomeAnniversary']
 
 const WEBSITE_FLOW_TYPES = ['Listing', 'Agent']
 
