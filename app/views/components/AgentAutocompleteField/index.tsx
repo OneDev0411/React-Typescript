@@ -22,6 +22,10 @@ function AgentAutocompleteField({
   ...otherProps
 }: AgentAutocompleteFieldProps) {
   const getOptions = async (value: string) => {
+    if (!value || value.length < 3) {
+      return []
+    }
+
     const agents = await searchAgents(value, 'q')
 
     return agents.map<AgentOption>(agent => ({

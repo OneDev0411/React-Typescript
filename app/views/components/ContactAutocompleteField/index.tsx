@@ -22,6 +22,10 @@ function ContactAutocompleteField({
   ...otherProps
 }: ContactAutocompleteFieldProps) {
   const getOptions = async (value: string) => {
+    if (!value || value.length < 3) {
+      return []
+    }
+
     const { data: contacts } = await searchContacts(value)
 
     return contacts
