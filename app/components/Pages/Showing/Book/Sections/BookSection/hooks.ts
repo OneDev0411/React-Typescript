@@ -9,7 +9,8 @@ import { TimeRange } from 'components/TimeSlotPicker/types'
 
 import {
   getBookedTimes,
-  getDateAvailability,
+  getDateAvailabilities,
+  getDisabledSlotsBetweenAvailabilities,
   getDisabledSlotsByNoticePeriod,
   getPastTimeSlots
 } from './utils'
@@ -42,9 +43,9 @@ export function useBookTimeRange(
       return
     }
 
-    const weekdayAvailability = getDateAvailability(showing, date)
+    const weekdayAvailabilities = getDateAvailabilities(showing, date)
 
-    if (!weekdayAvailability) {
+    if (weekdayAvailabilities.length === 0) {
       setStartTime(0)
       setEndTime(0)
       setDefaultSelectedTimeRange(undefined)
@@ -53,18 +54,22 @@ export function useBookTimeRange(
       return
     }
 
-    const [
-      availabilityStart,
-      availabilityEnd
-    ] = weekdayAvailability.availability
+    const availabilityStart = Math.min(
+      ...weekdayAvailabilities.map(item => item.availability[0])
+    )
+    const availabilityEnd = Math.max(
+      ...weekdayAvailabilities.map(item => item.availability[1])
+    )
 
     setStartTime(availabilityStart)
     setEndTime(availabilityEnd)
 
-    const timeSlots = getTimeSlotsInRange(
-      availabilityStart,
-      availabilityEnd,
-      showing.duration
+    const timeSlots = weekdayAvailabilities.flatMap(item =>
+      getTimeSlotsInRange(
+        item.availability[0],
+        item.availability[1],
+        showing.duration
+      )
     )
 
     const pastSlots = isToday(date) ? getPastTimeSlots(showing) : []
@@ -73,11 +78,17 @@ export function useBookTimeRange(
       ? getDisabledSlotsByNoticePeriod(showing)
       : []
 
+    const sameDaySlotsBetweenRanges = getDisabledSlotsBetweenAvailabilities(
+      showing,
+      date
+    )
+
     const unavailableTimes = [
       ...new Set([
-        ...pastSlots.map(slot => getSecondsSinceStartOfDay(slot)),
-        ...alreadyBookedSlots.map(slot => getSecondsSinceStartOfDay(slot)),
-        ...disabledSlotsByPolicies.map(slot => getSecondsSinceStartOfDay(slot))
+        ...pastSlots.map(getSecondsSinceStartOfDay),
+        ...alreadyBookedSlots.map(getSecondsSinceStartOfDay),
+        ...disabledSlotsByPolicies.map(getSecondsSinceStartOfDay),
+        ...sameDaySlotsBetweenRanges.map(getSecondsSinceStartOfDay)
       ])
     ]
 

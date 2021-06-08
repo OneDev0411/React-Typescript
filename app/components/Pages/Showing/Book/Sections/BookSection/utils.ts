@@ -127,29 +127,27 @@ export function getBookedTimes(showing: IPublicShowing, date: Date): Date[] {
   )
 }
 
-export function getDateAvailability(
+export function getDateAvailabilities(
   showing: IPublicShowing,
   date: Date
-): IShowingAvailability | undefined {
+): IShowingAvailability[] {
   const weekdayName = getWeekdayName(date)
 
-  return showing.availabilities.find(item => item.weekday === weekdayName)
+  return showing.availabilities.filter(item => item.weekday === weekdayName)
 }
 
 export function getTimeSlots(showing: IPublicShowing, date: Date): Date[] {
-  const dateAvailability = getDateAvailability(showing, date)
+  const dateAvailability = getDateAvailabilities(showing, date)
 
-  if (!dateAvailability) {
+  if (dateAvailability.length === 0) {
     return []
   }
 
-  const [availabilityStart, availabilityEnd] = dateAvailability.availability
-
-  return getTimeSlotsInRange(
-    availabilityStart,
-    availabilityEnd,
-    showing.duration
-  ).map(item => setTime(date, item[0]))
+  return dateAvailability
+    .flatMap(({ availability }) =>
+      getTimeSlotsInRange(availability[0], availability[1], showing.duration)
+    )
+    .map(item => setTime(date, item[0]))
 }
 
 export function getPastTimeSlots(showing: IPublicShowing): Date[] {
@@ -176,6 +174,36 @@ export function getDisabledSlotsByNoticePeriod(
   return timeSlots.filter(slot =>
     isBefore(convertLocalTimeToShowingTime(showing, slot), dateWithNoticePeriod)
   )
+}
+
+export function getDisabledSlotsBetweenAvailabilities(
+  showing: IPublicShowing,
+  date: Date
+): Date[] {
+  const availabilities = getDateAvailabilities(showing, date)
+
+  if (availabilities.length <= 1) {
+    return []
+  }
+
+  const unavailableRanges: IShowingAvailability['availability'][] = []
+
+  availabilities.forEach((item, index) => {
+    if (index === availabilities.length - 1) {
+      return
+    }
+
+    const currentEnd = item.availability[1]
+    const nextStart = availabilities[index + 1].availability[0]
+
+    unavailableRanges.push([currentEnd, nextStart])
+  })
+
+  const unavailableDates = unavailableRanges
+    .flatMap(item => getTimeSlotsInRange(item[0], item[1], showing.duration))
+    .map(item => setTime(date, item[0]))
+
+  return unavailableDates
 }
 
 export function validateRequiredField(value: string): true | string {
