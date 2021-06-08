@@ -1,4 +1,4 @@
-import AgentSearchInput from 'components/AgentSearchInput'
+import AgentSearchInput from '../AgentSearchInput'
 
 export interface ShowingStepRolePersonSelectAgentProps {
   isPrimaryAgent?: boolean

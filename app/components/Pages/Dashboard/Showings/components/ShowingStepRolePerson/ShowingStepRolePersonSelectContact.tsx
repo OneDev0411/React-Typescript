@@ -2,9 +2,9 @@ import React from 'react'
 
 import { useSelector } from 'react-redux'
 
-import ContactSearchInput from 'components/ContactSearchInput'
-
 import { selectActiveTeamId } from 'selectors/team'
+
+import ContactSearchInput from '../ContactSearchInput'
 
 import { splitFullName } from '../../helpers'
 
