@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode } from 'react'
+import { MouseEvent } from 'react'
 import classNames from 'classnames'
 import {
   Dialog,
@@ -31,13 +31,12 @@ const useStyles = makeStyles(
 )
 
 export interface FormDialogProps<FormValues>
-  extends Omit<DialogProps, 'fullWidth'>,
-    Pick<FormProps<FormValues>, 'initialValues'> {
+  extends Omit<DialogProps, 'fullWidth' | 'children'>,
+    Pick<FormProps<FormValues>, 'initialValues' | 'mutators' | 'children'> {
   title: string
   confirmLabel?: string
   onConfirm: (values: FormValues) => void
   cancelLabel?: string
-  children: ReactNode
 }
 
 function FormDialog<FormValues>({
@@ -49,6 +48,7 @@ function FormDialog<FormValues>({
   cancelLabel = 'Cancel',
   children,
   initialValues,
+  mutators,
   ...otherProps
 }: FormDialogProps<FormValues>) {
   const classes = useStyles()
@@ -72,16 +72,22 @@ function FormDialog<FormValues>({
         paper: classNames(classes.paper, classesProp?.paper)
       }}
     >
-      <Form<FormValues> onSubmit={handleSubmit} initialValues={initialValues}>
-        {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+      <Form<FormValues>
+        onSubmit={handleSubmit}
+        initialValues={initialValues}
+        mutators={mutators}
+      >
+        {formProps => (
+          <form onSubmit={formProps.handleSubmit}>
             <Box className={classes.header}>
               <DialogTitle>{title}</DialogTitle>
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
             </Box>
-            <DialogContent>{children}</DialogContent>
+            <DialogContent>
+              {typeof children === 'function' ? children(formProps) : children}
+            </DialogContent>
             <DialogActions className={classes.footer}>
               <Button
                 type="button"
