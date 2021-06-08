@@ -1,24 +1,24 @@
+import { searchContacts } from 'models/contacts/search-contacts'
+
 import AutocompleteField, {
   BaseOption,
   AutocompleteFieldProps
-} from 'components/AutocompleteField'
+} from '../AutocompleteField'
 
-import { searchContacts } from 'models/contacts/search-contacts'
-
-type AgentOption = BaseOption & IContact
+type ContactOption = BaseOption & IContact
 
 export interface ContactAutocompleteFieldProps
   extends Omit<
-    AutocompleteFieldProps<AgentOption>,
+    AutocompleteFieldProps<ContactOption>,
     'options' | 'noOptionsText'
   > {
   searchFieldValue: keyof IContact
-  searchFieldLabel: keyof IContact
+  searchFieldLabel?: keyof IContact
 }
 
 function ContactAutocompleteField({
   searchFieldValue,
-  searchFieldLabel,
+  searchFieldLabel = 'display_name',
   ...otherProps
 }: ContactAutocompleteFieldProps) {
   const getOptions = async (value: string) => {

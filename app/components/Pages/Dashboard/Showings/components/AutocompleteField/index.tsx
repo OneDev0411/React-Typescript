@@ -1,6 +1,11 @@
 import { ChangeEvent, ReactNode, useState } from 'react'
-
-import { TextField, CircularProgress } from '@material-ui/core'
+import classNames from 'classnames'
+import {
+  TextField,
+  TextFieldProps,
+  CircularProgress,
+  makeStyles
+} from '@material-ui/core'
 import Autocomplete, {
   AutocompleteInputChangeReason,
   AutocompleteProps
@@ -10,6 +15,13 @@ import { useDebouncedCallback } from 'use-debounce/lib'
 
 import useAsync from 'hooks/use-async'
 
+const useStyles = makeStyles(
+  {
+    rootFullWidth: { width: '100%' }
+  },
+  { name: 'AutocompleteField' }
+)
+
 export interface BaseOption {
   label: string
   value: string
@@ -17,23 +29,25 @@ export interface BaseOption {
 
 export interface AutocompleteFieldProps<T extends BaseOption = BaseOption>
   extends Pick<
-    AutocompleteProps<T, undefined, true, true>,
-    | 'loading'
-    | 'getOptionLabel'
-    | 'value'
-    | 'defaultValue'
-    | 'inputValue'
-    | 'groupBy'
-    | 'getOptionSelected'
-  > {
+      AutocompleteProps<T, undefined, true, true>,
+      | 'loading'
+      | 'getOptionLabel'
+      | 'value'
+      | 'defaultValue'
+      | 'inputValue'
+      | 'groupBy'
+      | 'getOptionSelected'
+      | 'className'
+    >,
+    Pick<
+      TextFieldProps,
+      'label' | 'error' | 'helperText' | 'fullWidth' | 'margin' | 'required'
+    > {
   noOptionsText?: ReactNode | ((loading: boolean) => ReactNode)
-  label: string
   options: T[] | ((value: string) => Promise<T[]>)
   defaultInputValue?: string
   onChange?: (value: T) => void
-  error?: boolean
-  helperText?: ReactNode
-  onInputChange?: (value: string) => void
+  onInputChange?: (event: ChangeEvent<HTMLInputElement>) => void
   searchDelay?: number
 }
 
@@ -46,6 +60,7 @@ const getOptionSelectedDefault = (option: BaseOption, value: BaseOption) =>
   option.label === value.label
 
 function AutocompleteField<T extends BaseOption = BaseOption>({
+  className,
   label,
   value,
   defaultValue,
@@ -61,8 +76,13 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
   getOptionSelected = getOptionSelectedDefault,
   noOptionsText = 'No Options',
   loading,
-  searchDelay = 500
+  searchDelay = 500,
+  fullWidth = true,
+  margin = 'normal',
+  required
 }: AutocompleteFieldProps<T>) {
+  const classes = useStyles()
+
   const [inputValue, setInputValue] = useState<Optional<string>>(
     defaultInputValue
   )
@@ -78,7 +98,7 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
   }, searchDelay)
 
   const handleInputChange = (
-    _: ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
     value: string,
     reason: AutocompleteInputChangeReason
   ) => {
@@ -96,7 +116,7 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
       debouncedRunOptions(value)
     }
 
-    onInputChange?.(value)
+    onInputChange?.(event)
   }
 
   const handleChange = (_: React.ChangeEvent<{}>, option: NonNullable<T>) => {
@@ -108,6 +128,7 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
 
   return (
     <Autocomplete<T, undefined, true, true>
+      className={classNames(className, fullWidth && classes.rootFullWidth)}
       disableClearable
       freeSolo
       getOptionSelected={getOptionSelected}
@@ -146,6 +167,9 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
               ...props.InputProps,
               endAdornment: props.InputProps.endAdornment || endAdornment
             }}
+            fullWidth={fullWidth}
+            margin={margin}
+            required={required}
           />
         )
       }}

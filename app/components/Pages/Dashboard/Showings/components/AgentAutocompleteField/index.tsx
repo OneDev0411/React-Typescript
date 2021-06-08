@@ -1,9 +1,9 @@
+import searchAgents from 'models/agent/search'
+
 import AutocompleteField, {
   BaseOption,
   AutocompleteFieldProps
-} from 'components/AutocompleteField'
-
-import searchAgents from 'models/agent/search'
+} from '../AutocompleteField'
 
 type AgentOption = BaseOption & IAgent
 
