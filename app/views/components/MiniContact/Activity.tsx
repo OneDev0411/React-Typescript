@@ -1,18 +1,10 @@
-import React from 'react'
-// import { Button } from '@material-ui/core'
-
-// import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-import {
-  mdiClockOutline,
-  mdiCakeVariant,
-  mdiDotsHorizontalCircleOutline
-} from '@mdi/js'
-
-import { useTheme } from '@material-ui/core'
+import { mdiClockOutline, mdiDotsHorizontalCircleOutline } from '@mdi/js'
 
 import { RelativeTime } from 'components/RelativeTime'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
+import { calendarEventIcons } from 'views/utils/important-dates-icons'
 
 import { ProfileDateType } from './types'
 import { activitiesFormatter, formatDate } from './helpers'
@@ -24,8 +16,6 @@ interface ActivityPropsType {
 }
 
 function Activity(props: ActivityPropsType) {
-  const theme = useTheme()
-
   if ((!props.dates || props.dates.length == 0) && !props.last_touch) {
     return null
   }
@@ -47,11 +37,10 @@ function Activity(props: ActivityPropsType) {
           return (
             <li key={i}>
               <div className="icon">
-                {item.title.includes('Birthday') ? (
+                {calendarEventIcons[item.title] ? (
                   <SvgIcon
-                    path={mdiCakeVariant}
+                    path={calendarEventIcons[item.title]}
                     size={muiIconSizes.small}
-                    color={theme.palette.error.main}
                   />
                 ) : (
                   <SvgIcon
@@ -63,7 +52,8 @@ function Activity(props: ActivityPropsType) {
               <div className="text">
                 {`${item.title}: ${formatDate(item.date)}`}
 
-                {/* Disabled temporarily. Note: https://gitlab.com/rechat/web/issues/3352#note_219065917 */}
+                {/* Disabled temporarily. 
+                Note: https://gitlab.com/rechat/web/issues/3352#note_219065917 */}
                 {/* {isNearDate(item.date) && (
                   <SendContactCard
                     contactId={props.contactId}
