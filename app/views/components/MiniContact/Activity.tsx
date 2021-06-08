@@ -2,7 +2,11 @@ import React from 'react'
 // import { Button } from '@material-ui/core'
 
 // import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
-import { mdiClockOutline, mdiGiftOutline, mdiCalendarOutline } from '@mdi/js'
+import {
+  mdiClockOutline,
+  mdiCakeVariant,
+  mdiDotsHorizontalCircleOutline
+} from '@mdi/js'
 
 import { useTheme } from '@material-ui/core'
 
@@ -45,14 +49,14 @@ function Activity(props: ActivityPropsType) {
               <div className="icon">
                 {item.title.includes('Birthday') ? (
                   <SvgIcon
-                    path={mdiGiftOutline}
+                    path={mdiCakeVariant}
                     size={muiIconSizes.small}
                     color={theme.palette.error.main}
                   />
                 ) : (
                   <SvgIcon
                     size={muiIconSizes.small}
-                    path={mdiCalendarOutline}
+                    path={mdiDotsHorizontalCircleOutline}
                   />
                 )}
               </div>
