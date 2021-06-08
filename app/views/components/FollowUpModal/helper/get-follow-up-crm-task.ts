@@ -14,8 +14,6 @@ export function getFollowUpCrmTask(
   user: IUser,
   dictionary?: FollowUpProps['dictionary']
 ) {
-  console.log('getFollowUpCrmTask', { email })
-
   if (!email) {
     // return undefined
     const title = getCrmTaskTitle(undefined, dictionary?.taskTitle)
