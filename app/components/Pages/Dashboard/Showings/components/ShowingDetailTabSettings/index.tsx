@@ -24,7 +24,7 @@ import ShowingRoleList from './ShowingRoleList'
 import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
 import ShowingYesNoRadioGroup from '../ShowingYesNoRadioGroup'
 import { YesNoAnswer } from '../ShowingStepYesNoQuestion'
-import AdvanceNoticeRadioGroup from '../AdvanceNoticeRadioGroup'
+import AdvanceNoticeRadioGroup from '../ShowingAdvanceNoticeRadioGroup'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing

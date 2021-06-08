@@ -11,17 +11,17 @@ export const hourOptions: SelectItem<number>[] = new Array(12)
     value: hourToSeconds(index + 1)
   }))
 
-interface AdvanceNoticeRadioGroupLeadTimeOptionsProps {
+interface ShowingAdvanceNoticeRadioGroupLeadTimeOptionsProps {
   label?: string
   value: Nullable<number>
   onChange: (value: number) => void
 }
 
-function AdvanceNoticeRadioGroupLeadTimeOptions({
+function ShowingAdvanceNoticeRadioGroupLeadTimeOptions({
   label = 'Enter Lead Time',
   value,
   onChange
-}: AdvanceNoticeRadioGroupLeadTimeOptionsProps) {
+}: ShowingAdvanceNoticeRadioGroupLeadTimeOptionsProps) {
   return (
     <Box mb={1.5} mt={2} mx={1}>
       <Select<number>
@@ -35,4 +35,4 @@ function AdvanceNoticeRadioGroupLeadTimeOptions({
   )
 }
 
-export default AdvanceNoticeRadioGroupLeadTimeOptions
+export default ShowingAdvanceNoticeRadioGroupLeadTimeOptions

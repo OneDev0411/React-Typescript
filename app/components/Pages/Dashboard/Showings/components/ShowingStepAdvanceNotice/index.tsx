@@ -9,12 +9,12 @@ import {
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
-import AdvanceNoticeRadioGroup, {
-  AdvanceNoticeRadioGroupProps
-} from '../AdvanceNoticeRadioGroup'
+import ShowingAdvanceNoticeRadioGroup, {
+  ShowingAdvanceNoticeRadioGroupProps
+} from '../ShowingAdvanceNoticeRadioGroup'
 
 type ShowingStepAdvanceNoticeProps = Omit<
-  AdvanceNoticeRadioGroupProps,
+  ShowingAdvanceNoticeRadioGroupProps,
   'selectFirstLeadTimeOption' | 'onSelect'
 >
 
@@ -27,7 +27,7 @@ function ShowingStepAdvanceNotice(props: ShowingStepAdvanceNoticeProps) {
     <QuestionSection>
       <QuestionTitle>Is there a need for advance notice?</QuestionTitle>
       <SmartQuestionForm>
-        <AdvanceNoticeRadioGroup
+        <ShowingAdvanceNoticeRadioGroup
           {...props}
           selectFirstLeadTimeOption={step !== wizard.currentStep}
           onSelect={nextStep}

@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import { RadioGroup, RadioGroupProps } from 'components/RadioGroup'
 
-import AdvanceNoticeRadioGroupLeadTimeOptions, {
+import ShowingAdvanceNoticeRadioGroupLeadTimeOptions, {
   hourOptions
-} from './AdvanceNoticeRadioGroupLeadTimeOptions'
+} from './ShowingAdvanceNoticeRadioGroupLeadTimeOptions'
 
 type AdvanceNoticeValue = 'NoNeed' | 'NoSameDay' | 'LeadTime'
 
-export interface AdvanceNoticeRadioGroupProps {
+export interface ShowingAdvanceNoticeRadioGroupProps {
   noticePeriod: Nullable<number>
   onNoticePeriodChange?: (noticePeriod: Nullable<number>) => void
   sameDayAllowed: boolean
@@ -18,7 +18,7 @@ export interface AdvanceNoticeRadioGroupProps {
   onChange?: (sameDayAllowed: boolean, noticePeriod: Nullable<number>) => void
 }
 
-function AdvanceNoticeRadioGroup({
+function ShowingAdvanceNoticeRadioGroup({
   noticePeriod,
   sameDayAllowed,
   onNoticePeriodChange,
@@ -26,7 +26,7 @@ function AdvanceNoticeRadioGroup({
   selectFirstLeadTimeOption = true,
   onSelect,
   onChange
-}: AdvanceNoticeRadioGroupProps) {
+}: ShowingAdvanceNoticeRadioGroupProps) {
   const [radioValue, setRadioValue] = useState<Nullable<AdvanceNoticeValue>>(
     () => {
       if (sameDayAllowed && noticePeriod === 0) {
@@ -114,7 +114,7 @@ function AdvanceNoticeRadioGroup({
       label: 'Lead Time:',
       value: 'LeadTime',
       children: (!radioValue || radioValue === 'LeadTime') && (
-        <AdvanceNoticeRadioGroupLeadTimeOptions
+        <ShowingAdvanceNoticeRadioGroupLeadTimeOptions
           value={noticePeriod}
           onChange={handleLeadTimeChange}
         />
@@ -132,4 +132,4 @@ function AdvanceNoticeRadioGroup({
   )
 }
 
-export default AdvanceNoticeRadioGroup
+export default ShowingAdvanceNoticeRadioGroup
