@@ -8,9 +8,9 @@ import { TableColumn } from 'components/Grid/Table/types'
 import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 import ShowingRoleListColumnActions from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
-import ShowingRoleFormDialog, {
-  ShowingRoleFormValues
-} from './ShowingRoleFormDialog'
+import ShowingRoleFormDialog from './ShowingRoleFormDialog'
+import { ShowingRoleFormValues } from './types'
+import { getShowingRoleLabel } from './helpers'
 
 interface ShowingRoleListProps {
   value: IShowingRole[]
@@ -18,11 +18,11 @@ interface ShowingRoleListProps {
 }
 
 function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
-  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [addRole, setAddRole] = useState<Nullable<IShowingRoleType>>(null)
 
-  const openAddDialog = () => setIsAddOpen(true)
+  const openAddDialog = (role: IShowingRoleType) => setAddRole(role)
 
-  const closeAddDialog = () => setIsAddOpen(false)
+  const closeAddDialog = () => setAddRole(null)
 
   const handleAdd = (role: ShowingRoleFormValues) => {
     // TODO: add the role at the end of the roles list
@@ -83,13 +83,7 @@ function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
       sortable: false,
       align: 'right',
       render: ({ row }) => (
-        <ShowingRoleListColumnActions
-          role={row}
-          hideRoles={roles
-            .filter(role => role.id !== row.id)
-            .map(role => role.role)}
-          onEdit={handleEdit}
-        />
+        <ShowingRoleListColumnActions role={row} onEdit={handleEdit} />
       )
     }
   ]
@@ -103,23 +97,32 @@ function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
         virtualize={false}
       />
       <Box mt={2}>
+        {/* TODO: replace this button */}
         <Button
           size="small"
           variant="outlined"
           color="default"
           startIcon={<AddIcon />}
-          onClick={openAddDialog}
+          onClick={() => openAddDialog('CoSellerAgent')}
         >
-          Add New Participants
+          Add New CoAgent
+        </Button>
+        <Button
+          size="small"
+          variant="outlined"
+          color="default"
+          startIcon={<AddIcon />}
+          onClick={() => openAddDialog('Tenant')}
+        >
+          Add New Occupant
         </Button>
       </Box>
       <ShowingRoleFormDialog
-        title="Add New Participant"
-        open={isAddOpen}
+        title={`Add ${getShowingRoleLabel(addRole!)} Role`}
+        open={!!addRole}
         onClose={closeAddDialog}
-        hideRoles={roles.map(role => role.role)}
         onConfirm={handleAdd}
-        hasRoleField
+        initialValues={{ role: addRole ?? undefined }}
       />
     </div>
   )

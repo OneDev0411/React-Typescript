@@ -1,13 +1,11 @@
 import { useState } from 'react'
+import isEqual from 'lodash/isEqual'
 import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
-import { isEqual } from 'lodash'
-
-import ShowingRoleFormDialog, {
-  ShowingRoleFormDialogProps,
-  ShowingRoleFormValues
-} from './ShowingRoleFormDialog'
+import ShowingRoleFormDialog from './ShowingRoleFormDialog'
+import { ShowingRoleFormValues } from './types'
+import { getShowingRoleLabel } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -17,15 +15,13 @@ const useStyles = makeStyles(
   { name: 'ShowingRoleListColumnActions' }
 )
 
-export interface ShowingRoleListColumnActionsProps
-  extends Pick<ShowingRoleFormDialogProps, 'hideRoles'> {
+export interface ShowingRoleListColumnActionsProps {
   role: IShowingRole
   onEdit: (role: IShowingRole) => void
 }
 
 function ShowingRoleListColumnActions({
   role,
-  hideRoles,
   onEdit
 }: ShowingRoleListColumnActionsProps) {
   const classes = useStyles()
@@ -64,13 +60,11 @@ function ShowingRoleListColumnActions({
         Edit
       </Button>
       <ShowingRoleFormDialog
-        title="Edit Participant"
+        title={`Edit ${getShowingRoleLabel(role.role)} Role`}
         open={isEditOpen}
         onClose={closeEditDialog}
-        hideRoles={hideRoles}
         initialValues={role}
         onConfirm={handleEdit}
-        hasRoleField={role.role !== 'SellerAgent'}
       />
       {hasDelete ? (
         deleteButton

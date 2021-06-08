@@ -1,5 +1,7 @@
+import { Mutator } from 'final-form'
+
 import { showingDetailSettingsTabs } from './constants'
-import { ShowingDetailSettingsTabType } from './types'
+import { ShowingDetailSettingsTabType, ShowingRoleFormValues } from './types'
 
 function isValidSettingsTab(tab: string): tab is ShowingDetailSettingsTabType {
   return !!showingDetailSettingsTabs[tab]
@@ -26,4 +28,54 @@ export function getShowingRoleLabel(role: IDealRoleType): string {
     default:
       return ''
   }
+}
+
+export const selectUserMutator: Mutator<ShowingRoleFormValues> = (
+  [user]: [IUser],
+  state,
+  { changeValue }
+) => {
+  console.log('select user', user)
+  changeValue(state, 'first_name', () => user.first_name)
+  changeValue(state, 'last_name', () => user.last_name)
+  changeValue(state, 'email', () => user.email)
+  changeValue(state, 'phone_number', () => user.phone_number)
+  changeValue(state, 'user', () => user.id)
+}
+
+export const selectAgentMutator: Mutator<ShowingRoleFormValues> = (
+  [agent]: [IAgent],
+  state,
+  { changeValue }
+) => {
+  console.log('select agent', agent)
+  changeValue(state, 'first_name', () => agent.first_name)
+  changeValue(state, 'last_name', () => agent.last_name)
+  changeValue(state, 'email', () => agent.email)
+  changeValue(state, 'phone_number', () => agent.phone_number)
+  changeValue(state, 'user', () => agent.user_id)
+}
+
+export const selectContactMutator: Mutator<ShowingRoleFormValues> = (
+  [contact]: [IContact],
+  state,
+  { changeValue }
+) => {
+  console.log('select contact', contact)
+
+  const attributes = contact.attributes?.reduce<
+    Record<string, string | number>
+  >(
+    (attributes, attribute) => ({
+      ...attributes,
+      [attribute.attribute_type]: attribute[attribute.attribute_def.data_type]
+    }),
+    {}
+  )
+
+  changeValue(state, 'first_name', () => attributes?.first_name || '')
+  changeValue(state, 'last_name', () => attributes?.last_name || '')
+  changeValue(state, 'email', () => attributes?.email || '')
+  changeValue(state, 'phone_number', () => attributes?.phone_number || '')
+  changeValue(state, 'user', () => undefined)
 }
