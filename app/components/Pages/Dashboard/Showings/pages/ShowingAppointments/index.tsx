@@ -4,13 +4,13 @@ import { useTitle } from 'react-use'
 
 import { Box } from '@material-ui/core'
 
-import { RouteComponentProps } from 'react-router'
+import { WithRouterProps } from 'react-router'
 
 import PageLayout from 'components/GlobalPageLayout'
 
 import ShowingAppointmentList from '../../components/ShowingAppointmentList'
 
-type ShowingAppointmentsProps = RouteComponentProps<
+type ShowingAppointmentsProps = WithRouterProps<
   {
     status?: IShowingAppointmentStatus
   },
