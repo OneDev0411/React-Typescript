@@ -86,7 +86,7 @@ function useAsync<T = unknown, U = Error>(
 
   const run = useCallback<(func: () => Promise<T>) => Promise<T>>(
     func => {
-      safeSetState({ status: 'pending' })
+      safeSetState({ status: 'pending', error: null })
 
       return new Promise<T>((resolve, reject) => {
         func().then(
