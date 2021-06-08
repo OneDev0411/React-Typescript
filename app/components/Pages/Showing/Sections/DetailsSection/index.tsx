@@ -47,9 +47,11 @@ export default function DetailsSection({ children }: Props) {
           </Box>
         </Grid>
       </Hidden>
-      <Grid item xs={12}>
-        <Divider />
-      </Grid>
+      <Hidden xsDown>
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+      </Hidden>
       {children}
     </Grid>
   )
