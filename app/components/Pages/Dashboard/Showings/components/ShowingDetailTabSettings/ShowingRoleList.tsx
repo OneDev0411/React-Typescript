@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Box, Button } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
+import { Box } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -9,6 +8,7 @@ import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 import ShowingRoleListColumnActions from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
 import ShowingRoleFormDialog from './ShowingRoleFormDialog'
+import ShowingRoleListAddNewButton from './ShowingRoleListAddNewButton'
 import { ShowingRoleFormValues } from './types'
 import { getShowingRoleLabel } from './helpers'
 
@@ -97,25 +97,7 @@ function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
         virtualize={false}
       />
       <Box mt={2}>
-        {/* TODO: replace this button */}
-        <Button
-          size="small"
-          variant="outlined"
-          color="default"
-          startIcon={<AddIcon />}
-          onClick={() => openAddDialog('CoSellerAgent')}
-        >
-          Add New CoAgent
-        </Button>
-        <Button
-          size="small"
-          variant="outlined"
-          color="default"
-          startIcon={<AddIcon />}
-          onClick={() => openAddDialog('Tenant')}
-        >
-          Add New Occupant
-        </Button>
+        <ShowingRoleListAddNewButton onClick={openAddDialog} />
       </Box>
       <ShowingRoleFormDialog
         title={`Add ${getShowingRoleLabel(addRole!)} Role`}
