@@ -121,6 +121,13 @@ const AsyncShowingAppointmentReschedule = Load({
     )
 })
 
+const AsyncShowingAppointmentFeedback = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Feedback' /* webpackChunkName: "showing_appointment_feedback" */
+    )
+})
+
 /* ==================================== */
 //  Agent On-boarding Wizard
 /* ==================================== */
@@ -833,6 +840,10 @@ export default (
       <Route
         path="showings/appointments/:appointmentToken/reschedule"
         component={AsyncShowingAppointmentReschedule}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/feedback"
+        component={AsyncShowingAppointmentFeedback}
       />
 
       <Route path="mobile" component={AsyncMobile} />

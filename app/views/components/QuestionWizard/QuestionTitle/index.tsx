@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import classNames from 'classnames'
 import { Typography, makeStyles, Theme, Box } from '@material-ui/core'
 
@@ -6,6 +6,7 @@ import { useSectionErrorContext } from '../hooks/use-section-error-context'
 
 interface Props {
   children: React.ReactNode
+  style?: CSSProperties
 }
 
 const useStyles = makeStyles(
@@ -26,7 +27,7 @@ const useStyles = makeStyles(
   }
 )
 
-export function QuestionTitle({ children }: Props) {
+export function QuestionTitle({ children, style = {} }: Props) {
   const classes = useStyles()
   const error = useSectionErrorContext()
 
@@ -35,6 +36,7 @@ export function QuestionTitle({ children }: Props) {
       <Typography
         variant="h6"
         className={classNames(classes.root, !!error && classes.rootError)}
+        style={style}
       >
         {children}
       </Typography>

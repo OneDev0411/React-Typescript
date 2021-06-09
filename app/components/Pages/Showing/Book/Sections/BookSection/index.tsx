@@ -49,7 +49,11 @@ const useStyles = makeStyles(
         left: 0,
         bottom: 0,
         borderRadius: 0,
-        height: theme.spacing(7)
+        height: theme.spacing(7),
+
+        '&:disabled': {
+          backgroundColor: theme.palette.grey[300]
+        }
       }
     }
   }),
