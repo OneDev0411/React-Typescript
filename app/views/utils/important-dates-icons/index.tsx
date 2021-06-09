@@ -23,6 +23,7 @@ export const calendarEventIcons = {
   Birthday: mdiCakeVariant,
   // Note: have to use this confusing name to backward support
   'Child Birthday': mdiCakeVariant,
+  'Partner Birthday': mdiCakeVariant,
   'graduation anniversary': mdiSchoolOutline,
   'New Home': mdiHomeOutline,
   'Home Anniversary': mdiHomeHeart,
@@ -37,6 +38,11 @@ export const importantDatesIcons = [
   {
     name: 'Birthday',
     icon: () => <SvgIcon path={calendarEventIcons.Birthday} />,
+    color: '#ff6f6f'
+  },
+  {
+    name: 'Spouse Birthday',
+    icon: () => <SvgIcon path={calendarEventIcons['Partner Birthday']} />,
     color: '#ff6f6f'
   },
   {
