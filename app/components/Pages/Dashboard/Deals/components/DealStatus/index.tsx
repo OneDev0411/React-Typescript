@@ -79,12 +79,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     await dispatch(
       upsertContexts(deal.id, [
-        DealContext.createUpsertObject(
-          deal,
-          DealContext.getStatusField(deal),
-          item.label,
-          true
-        )
+        DealContext.createUpsertObject(deal, statusName, item.label, true)
       ])
     )
 
