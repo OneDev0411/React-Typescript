@@ -262,6 +262,20 @@ class SendContactCard extends React.Component {
     )
   }
 
+  getTemplateTypes = () => {
+    if (this.props.types) {
+      return this.props.types
+    }
+
+    if (this.props.selectedTemplate) {
+      return this.props.selectedTemplate.template.template_type
+    }
+
+    // Not sure why we have it here! I just refactored it and fixed and another bug
+    // See: https://gitlab.com/rechat/web/-/issues/4999
+    return ['Birthday']
+  }
+
   render() {
     if (hasMarketingAccess(this.props.user) === false) {
       return null
@@ -296,7 +310,7 @@ class SendContactCard extends React.Component {
               user: this.props.user,
               contact: this.state.contact
             }}
-            templateTypes={this.props.types || ['Birthday']}
+            templateTypes={this.getTemplateTypes()}
             defaultTemplate={this.props.selectedTemplate}
             handleSocialSharing={this.handleSocialSharing}
             isEdit={this.props.isEdit}

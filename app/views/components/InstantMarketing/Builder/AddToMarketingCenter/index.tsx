@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
-
+import { useState } from 'react'
 import {
   Popover,
   Button,
+  Box,
+  Typography,
+  Divider,
   List,
   ListItem,
-  ListItemText,
-  ListSubheader
+  ListItemText
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
 
 import { addNotification, Notification } from 'components/notification'
-
-import UserTeams from 'components/UserTeams'
+import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
 
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
 import { createTemplate } from 'models/instant-marketing/create-template'
@@ -43,7 +43,6 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   medium: string
-  user: IUser
   mjml: boolean
   getTemplateMarkup: () => string
   disabled?: boolean
@@ -55,7 +54,6 @@ interface ConnectedProps {
 
 export function AddToMarketingCenter({
   medium,
-  user,
   mjml,
   getTemplateMarkup,
   notify,
@@ -64,7 +62,10 @@ export function AddToMarketingCenter({
   const [selectedTemplateType, setSelectedTemplateType] = useState<
     Optional<IMarketingTemplateType>
   >(undefined)
-  const [isUserTeamsDrawerOpen, setIsUserTeamsDrawerOpen] = useState(false)
+  const [
+    isTeamsSelectorDrawerOpen,
+    setIsTeamsSelectorDrawerOpen
+  ] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const categories = useMarketingCenterCategories()
   const classes = useStyles()
@@ -82,11 +83,11 @@ export function AddToMarketingCenter({
 
   const handleCategoryClick = (selectedCategory: IMarketingTemplateType) => {
     setSelectedTemplateType(selectedCategory)
-    setIsUserTeamsDrawerOpen(true)
+    setIsTeamsSelectorDrawerOpen(true)
     handleClosePopover()
   }
 
-  async function handleSelectTeams(teams: UUID[]) {
+  async function handleSelectTeam(team: IBrand) {
     if (!selectedTemplateType) {
       return
     }
@@ -100,7 +101,7 @@ export function AddToMarketingCenter({
         templateType: selectedTemplateType,
         medium,
         html,
-        brands: teams,
+        brands: [team.id],
         mjml
       }
 
@@ -111,7 +112,7 @@ export function AddToMarketingCenter({
         message: 'Template saved successfully.'
       })
 
-      setIsUserTeamsDrawerOpen(false)
+      setIsTeamsSelectorDrawerOpen(false)
 
       setTimeout(() => window.location.reload(), 1000)
     } catch (err) {
@@ -129,12 +130,11 @@ export function AddToMarketingCenter({
 
   return (
     <>
-      {isUserTeamsDrawerOpen && (
-        <UserTeams
+      {isTeamsSelectorDrawerOpen && (
+        <TeamTreeViewDrawer
           title="Save Template For ..."
-          user={user}
-          onClose={() => setIsUserTeamsDrawerOpen(false)}
-          onSelectTeams={handleSelectTeams}
+          onClose={() => setIsTeamsSelectorDrawerOpen(false)}
+          onSelectTeam={handleSelectTeam}
         />
       )}
       <div className={classes.container}>
@@ -154,8 +154,13 @@ export function AddToMarketingCenter({
             horizontal: 'left'
           }}
         >
-          <List>
-            <ListSubheader>Please select a category to continue</ListSubheader>
+          <Box px={2} pt={2}>
+            <Typography variant="body2">Please Select A Category</Typography>
+          </Box>
+          <Box pt={2}>
+            <Divider />
+          </Box>
+          <List disablePadding>
             {categories.map(category => {
               if (!category.value) {
                 return null
