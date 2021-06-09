@@ -1,4 +1,4 @@
-import React, { useState, useMemo, memo } from 'react'
+import { useState, useMemo, memo, ReactNode } from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
 
 import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
@@ -13,6 +13,7 @@ export interface ShowingAvailabilitiesTimesProps {
   hasContinue?: boolean
   onContinue?: () => void
   error?: string
+  children?: ReactNode
 }
 
 function ShowingAvailabilitiesTimes({
@@ -21,7 +22,8 @@ function ShowingAvailabilitiesTimes({
   onChange,
   hasContinue = false,
   onContinue,
-  error
+  error,
+  children
 }: ShowingAvailabilitiesTimesProps) {
   const [nextId, setNextId] = useState(0)
 
@@ -111,6 +113,7 @@ function ShowingAvailabilitiesTimes({
             Continue
           </Button>
         )}
+        {children}
       </Box>
     </Box>
   )

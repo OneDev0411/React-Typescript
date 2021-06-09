@@ -9,6 +9,10 @@ import TabContentSwitch from 'components/TabContentSwitch'
 
 import useNotify from 'hooks/use-notify'
 
+import useAsync from 'hooks/use-async'
+
+import updateShowing from 'models/showing/update-showing'
+
 import { getValidShowingDetailSettingsTab } from './helpers'
 
 import ShowingDetailTabSettingsSubjectList from './ShowingDetailTabSettingsSubjectList'
@@ -25,6 +29,7 @@ import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
 import ShowingYesNoRadioGroup from '../ShowingYesNoRadioGroup'
 import { YesNoAnswer } from '../ShowingStepYesNoQuestion'
 import AdvanceNoticeRadioGroup from '../ShowingAdvanceNoticeRadioGroup'
+import ShowingDetailTabSettingsSaveButton from './ShowingDetailTabSettingsSaveButton'
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -39,9 +44,53 @@ function ShowingDetailTabSettings({
   const notify = useNotify()
   const tab = getValidShowingDetailSettingsTab(location.query.tab)
   const showingRef = useRef(showing)
-  const [errors, setErrors] = useState<ShowingDetailTabSettingsErrors>({})
+  const [errors, setErrors] = useState<ShowingDetailTabSettingsErrors>(null)
 
-  const updateShowing = (showing: IShowing) => {
+  const { run, isLoading: isSaving } = useAsync()
+
+  const handleSave = () => {
+    if (errors) {
+      notify({
+        status: 'error',
+        message: 'Please fix the validation issues'
+      })
+
+      return
+    }
+
+    run(async () => {
+      console.log('showing', showing)
+
+      const data = await updateShowing(showing.id, {
+        start_date: showing.start_date,
+        end_date: showing.end_date,
+        duration: showing.duration,
+        aired_at: showing.aired_at,
+        notice_period: showing.notice_period ?? undefined, // TODO: fix the related showing types
+        same_day_allowed: showing.same_day_allowed,
+        approval_type: showing.approval_type,
+        feedback_template: undefined, // TODO: remove this later
+        deal: showing.deal?.id,
+        listing: showing.listing?.id,
+        address: showing.address,
+        // gallery: showing.gallery, // TODO: fix the gallery type
+        availabilities: showing.availabilities,
+        allow_appraisal: showing.allow_appraisal,
+        allow_inspection: showing.allow_inspection,
+        instructions: showing.instructions,
+        brand: showing.brand
+      })
+
+      console.log('server response', data)
+
+      notify({
+        status: 'success',
+        message: 'The showing saved successfully'
+      })
+    })
+  }
+
+  const handleShowingUpdate = (showing: IShowing) => {
     setShowing(showing)
 
     const errors: ShowingDetailTabSettingsErrors = {}
@@ -54,51 +103,36 @@ function ShowingDetailTabSettings({
       }
     }
 
-    setErrors(errors)
-
-    console.log(
-      'showing.roles===showingRef.current.roles',
-      showing.roles === showingRef.current.roles
-    )
-
-    if (!Object.keys(errors).length) {
-      // TODO: use the update API here
-      console.log('send updateShowing request then update the showingRef')
-      showingRef.current = showing
-      notify({
-        status: 'error',
-        message: 'Changes detected but there is no API to call'
-      })
-    }
+    setErrors(Object.keys(errors).length ? errors : null)
   }
 
   const handleAvailabilitiesChange = (availabilities: IShowingAvailability[]) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       availabilities
     })
 
   const handleDurationChange = (duration: number) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       duration
     })
 
   const handleApprovalTypeChange = (approvalType: IShowingApprovalType) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       approval_type: approvalType
     })
 
   const handleRolesChange = (roles: IShowingRole[]) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       roles
     })
 
   const [handleInstructionsChange] = useDebouncedCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) =>
-      updateShowing({
+      handleShowingUpdate({
         ...showing,
         instructions: event.target.value
       }),
@@ -106,13 +140,13 @@ function ShowingDetailTabSettings({
   )
 
   const handleAllowAppraisalChange = (allowAppraisal: YesNoAnswer) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       allow_appraisal: allowAppraisal === 'Yes'
     })
 
   const handleAllowInspectionChange = (allowInspection: YesNoAnswer) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       allow_inspection: allowInspection === 'Yes'
     })
@@ -121,11 +155,13 @@ function ShowingDetailTabSettings({
     sameDayAllowed: boolean,
     noticePeriod: Nullable<number>
   ) =>
-    updateShowing({
+    handleShowingUpdate({
       ...showing,
       same_day_allowed: sameDayAllowed,
       notice_period: noticePeriod
     })
+
+  const saveDisabled = showing === showingRef.current
 
   return (
     <Box display="flex">
@@ -148,8 +184,14 @@ function ShowingDetailTabSettings({
               <ShowingAvailabilitiesTimes
                 value={showing.availabilities}
                 onChange={handleAvailabilitiesChange}
-                error={errors.Availability}
-              />
+                error={errors?.Availability}
+              >
+                <ShowingDetailTabSettingsSaveButton
+                  isSaving={isSaving}
+                  disabled={saveDisabled}
+                  onClick={handleSave}
+                />
+              </ShowingAvailabilitiesTimes>
             </Box>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AdvanceNotice">
@@ -162,6 +204,12 @@ function ShowingDetailTabSettings({
                 sameDayAllowed={showing.same_day_allowed}
                 onChange={handleAdvanceNoticeChange}
               />
+              <ShowingDetailTabSettingsSaveButton
+                isSaving={isSaving}
+                disabled={saveDisabled}
+                alignRight
+                onClick={handleSave}
+              />
             </Box>
           </TabContentSwitch.Item>
           {showing.address && (
@@ -170,7 +218,7 @@ function ShowingDetailTabSettings({
             </TabContentSwitch.Item>
           )}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
-            <Box maxWidth={400} mb={9}>
+            <Box maxWidth={400} mb={2}>
               <Typography variant="h6" gutterBottom>
                 Appointment Type
               </Typography>
@@ -180,10 +228,23 @@ function ShowingDetailTabSettings({
                 onChange={handleApprovalTypeChange}
               />
             </Box>
-            {showing.approval_type !== 'None' && (
+            {showing.approval_type !== 'None' ? (
               <ShowingRoleList
                 value={showing.roles}
                 onChange={handleRolesChange}
+              >
+                <ShowingDetailTabSettingsSaveButton
+                  isSaving={isSaving}
+                  disabled={saveDisabled}
+                  onClick={handleSave}
+                />
+              </ShowingRoleList>
+            ) : (
+              <ShowingDetailTabSettingsSaveButton
+                isSaving={isSaving}
+                disabled={saveDisabled}
+                alignRight
+                onClick={handleSave}
               />
             )}
           </TabContentSwitch.Item>
@@ -194,6 +255,12 @@ function ShowingDetailTabSettings({
             <ShowingInstructionsTextField
               defaultValue={showing.instructions || ''}
               onChange={handleInstructionsChange}
+            />
+            <ShowingDetailTabSettingsSaveButton
+              isSaving={isSaving}
+              disabled={saveDisabled}
+              alignRight
+              onClick={handleSave}
             />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
@@ -215,6 +282,12 @@ function ShowingDetailTabSettings({
                 name="allow-inspection"
                 defaultValue={showing.allow_inspection ? 'Yes' : 'No'}
                 onChange={handleAllowInspectionChange}
+              />
+              <ShowingDetailTabSettingsSaveButton
+                isSaving={isSaving}
+                disabled={saveDisabled}
+                alignRight
+                onClick={handleSave}
               />
             </Box>
           </TabContentSwitch.Item>

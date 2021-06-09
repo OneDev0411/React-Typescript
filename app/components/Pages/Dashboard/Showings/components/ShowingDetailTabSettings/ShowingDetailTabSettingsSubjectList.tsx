@@ -52,7 +52,7 @@ function ShowingDetailTabSettingsSubjectList({
               label={showingDetailSettingsTabs[tabName]}
               to={tabName}
               selected={tabName === tab}
-              error={!!errors[tabName]}
+              error={!!errors && !!errors[tabName]}
             />
           )
       )}

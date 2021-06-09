@@ -7,8 +7,8 @@ export type ShowingDetailSettingsTabType =
   | 'Feedback'
   | 'AdvanceNotice'
 
-export type ShowingDetailTabSettingsErrors = Partial<
-  Record<ShowingDetailSettingsTabType, string>
+export type ShowingDetailTabSettingsErrors = Nullable<
+  Partial<Record<ShowingDetailSettingsTabType, string>>
 >
 
 export type ShowingRoleFormValues = Pick<

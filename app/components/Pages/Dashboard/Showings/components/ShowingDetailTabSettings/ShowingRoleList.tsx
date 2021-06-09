@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, ReactNode } from 'react'
 import { Box } from '@material-ui/core'
 
 import { Table } from 'components/Grid/Table'
@@ -15,9 +15,14 @@ import { getShowingRoleLabel } from './helpers'
 interface ShowingRoleListProps {
   value: IShowingRole[]
   onChange: (value: IShowingRole[]) => void
+  children?: ReactNode
 }
 
-function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
+function ShowingRoleList({
+  value: roles,
+  onChange,
+  children
+}: ShowingRoleListProps) {
   const [addRole, setAddRole] = useState<Nullable<IShowingRoleType>>(null)
 
   const openAddDialog = (role: IShowingRoleType) => setAddRole(role)
@@ -96,8 +101,9 @@ function ShowingRoleList({ value: roles, onChange }: ShowingRoleListProps) {
         columns={columns}
         virtualize={false}
       />
-      <Box mt={2}>
+      <Box display="flex" justifyContent="space-between" mt={2}>
         <ShowingRoleListAddNewButton onClick={openAddDialog} />
+        {children}
       </Box>
       <ShowingRoleFormDialog
         title={`Add ${getShowingRoleLabel(addRole!)} Role`}
