@@ -7,8 +7,7 @@ import {
   mdiCakeVariant,
   mdiHomeOutline,
   mdiSchoolOutline,
-  mdiBriefcaseOutline,
-  mdiAccountChildOutline
+  mdiBriefcaseOutline
 } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -21,7 +20,6 @@ export interface ImportantDatesIcon {
 
 export const calendarEventIcons = {
   Birthday: mdiCakeVariant,
-  // Note: have to use this confusing name to backward support
   'Child Birthday': mdiCakeVariant,
   'Partner Birthday': mdiCakeVariant,
   'graduation anniversary': mdiSchoolOutline,
@@ -29,8 +27,6 @@ export const calendarEventIcons = {
   'Home Anniversary': mdiHomeHeart,
   'Work Anniversary': mdiBriefcaseOutline,
   'Wedding Anniversary': mdiRing,
-  // Note: have to use this confusing name to backward support
-  'Child birthday': mdiAccountChildOutline,
   Pet: mdiPaw
 }
 
@@ -73,7 +69,7 @@ export const importantDatesIcons = [
   // TODO should we just using "Child Birthday" here? A reveiw is needed.
   {
     name: 'Child birthday',
-    icon: () => <SvgIcon path={calendarEventIcons['Child birthday']} />,
+    icon: () => <SvgIcon path={calendarEventIcons['Child Birthday']} />,
     color: '#ffb7b9'
   },
   {
