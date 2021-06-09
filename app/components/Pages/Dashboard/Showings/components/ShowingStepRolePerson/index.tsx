@@ -22,7 +22,7 @@ import useUpdateContact from './use-update-contact'
 interface ShowingStepRolePersonProps
   extends Pick<
       ShowingStepRolePersonSelectProps,
-      'selectType' | 'isPrimaryAgent'
+      'selectType' | 'isTeamAvailableMembers' | 'isPrimaryAgent'
     >,
     Pick<QuestionSectionProps, 'error'> {
   personTitle: string
@@ -40,6 +40,7 @@ function ShowingStepRolePerson({
   selectType,
   skippable = true,
   isPrimaryAgent,
+  isTeamAvailableMembers,
   editable,
   required = false,
   error
@@ -122,6 +123,7 @@ function ShowingStepRolePerson({
             onSelect={handleSelect}
             skippable={skippable}
             isPrimaryAgent={isPrimaryAgent}
+            isTeamAvailableMembers={isTeamAvailableMembers}
           />
         )}
         {localStep === 'edit' && person && (

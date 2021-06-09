@@ -11,13 +11,17 @@ export type RolePersonSelectType = 'Agent' | 'Contact'
 
 export interface ShowingStepRolePersonSelectProps
   extends ShowingStepRolePersonSelectContactProps,
-    Pick<ShowingStepRolePersonSelectAgentProps, 'isPrimaryAgent'> {
+    Pick<
+      ShowingStepRolePersonSelectAgentProps,
+      'isPrimaryAgent' | 'isTeamAvailableMembers'
+    > {
   selectType?: RolePersonSelectType
   skippable: boolean
 }
 
 function ShowingStepRolePersonSelect({
   isPrimaryAgent,
+  isTeamAvailableMembers,
   selectType = 'Agent',
   onSelect,
   skippable
@@ -39,6 +43,7 @@ function ShowingStepRolePersonSelect({
         <ShowingStepRolePersonSelectAgent
           onSelect={onSelect}
           isPrimaryAgent={isPrimaryAgent}
+          isTeamAvailableMembers={isTeamAvailableMembers}
         />
       ) : (
         <ShowingStepRolePersonSelectContact onSelect={onSelect} />

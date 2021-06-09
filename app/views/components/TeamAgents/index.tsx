@@ -5,6 +5,8 @@ import { IAppState } from 'reducers'
 
 import { getAgents } from 'models/Deal/agent'
 
+import { selectActiveTeamUnsafe } from 'selectors/team'
+
 import { getBrand } from './helpers/get-brand'
 import { normalizeTeams } from './helpers/normalize-teams'
 
@@ -21,14 +23,19 @@ export interface TeamAgentsProps {
   flattenTeams?: boolean
   criteria?: string
   children: (props: RenderProps) => React.ReactNode
+  isTeamAvailableMembers?: boolean
 }
 
 export default function TeamAgents({
   children,
   isPrimaryAgent,
   criteria = '',
-  flattenTeams = false
+  flattenTeams = false,
+  isTeamAvailableMembers = false
 }: TeamAgentsProps) {
+  const activeTeam = useSelector(selectActiveTeamUnsafe)?.brand
+  const activeTeams = activeTeam ? [activeTeam] : []
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
 
@@ -41,6 +48,7 @@ export default function TeamAgents({
 
         const agents = await getAgents(getBrand(user, isPrimaryAgent))
 
+        console.log('agents', agents)
         setTeamAgents(agents || [])
       } catch (e) {
         console.log(e)
@@ -50,19 +58,23 @@ export default function TeamAgents({
       }
     }
 
-    getTeamAgents()
-  }, [isPrimaryAgent, user])
+    if (!isTeamAvailableMembers) {
+      getTeamAgents()
+    }
+  }, [isPrimaryAgent, user, isTeamAvailableMembers])
 
-  const isEmptyState = !isLoading && teamAgents.length === 0
+  const finalTeamAgents = !isTeamAvailableMembers ? teamAgents : activeTeams
+
+  const isEmptyState = !isLoading && finalTeamAgents.length === 0
 
   return (
     <>
       {children({
-        isLoading,
+        isLoading: !isTeamAvailableMembers && isLoading,
         isEmptyState,
         teams: normalizeTeams(
           user,
-          teamAgents,
+          finalTeamAgents,
           flattenTeams,
           criteria
         ) as NormalizedBrand[]

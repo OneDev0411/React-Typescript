@@ -352,7 +352,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               onPersonChange={setAgentPerson}
               skippable={false}
               editable={agentEditable}
-              isPrimaryAgent
+              isTeamAvailableMembers
               required
               error={showingValidationErrors?.agent}
             />

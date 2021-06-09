@@ -42,6 +42,7 @@ function AgentSearchInput({
   placeholder = 'Search Agent',
   autoFocus,
   isPrimaryAgent,
+  isTeamAvailableMembers,
   flattenTeams,
   onChange,
   defaultValue,
@@ -72,6 +73,7 @@ function AgentSearchInput({
       flattenTeams={flattenTeams}
       isPrimaryAgent={isPrimaryAgent}
       criteria={searchCriteria}
+      isTeamAvailableMembers={isTeamAvailableMembers}
     >
       {({ teams, isLoading }) =>
         isLoading ? (

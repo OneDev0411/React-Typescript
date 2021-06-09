@@ -2,11 +2,13 @@ import AgentSearchInput from '../AgentSearchInput'
 
 export interface ShowingStepRolePersonSelectAgentProps {
   isPrimaryAgent?: boolean
+  isTeamAvailableMembers?: boolean
   onSelect: (person: IShowingRoleInputPerson) => void
 }
 
 function ShowingStepRolePersonSelectAgent({
   isPrimaryAgent = false,
+  isTeamAvailableMembers = false,
   onSelect
 }: ShowingStepRolePersonSelectAgentProps) {
   const handleChange = (agent: IUser) =>
@@ -20,7 +22,11 @@ function ShowingStepRolePersonSelectAgent({
     })
 
   return (
-    <AgentSearchInput isPrimaryAgent={isPrimaryAgent} onChange={handleChange} />
+    <AgentSearchInput
+      isPrimaryAgent={isPrimaryAgent}
+      isTeamAvailableMembers={isTeamAvailableMembers}
+      onChange={handleChange}
+    />
   )
 }
 
