@@ -20,6 +20,7 @@ import { DateField } from './DateField'
 import { TextField } from './TextField'
 
 import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
+import { isContextApproved } from './helpers/is-context-approved'
 
 interface Props {
   deal: IDeal
@@ -109,6 +110,23 @@ export default function Factsheet({
     }
   }
 
+  const getTooltipTitle = (context: IDealBrandContext, isDisabledByMls) => {
+    if (!isContextApproved(deal, context) && !isBackOffice) {
+      return 'Pending Office Approval'
+    }
+
+    if (isDisabledByMls) {
+      return (
+        <div>
+          <b>{context.label}</b> can only be changed on MLS. Once changed, the
+          update will be reflected here.
+        </div>
+      )
+    }
+
+    return ''
+  }
+
   return (
     <>
       {title && <SectionTitle>{title}</SectionTitle>}
@@ -116,26 +134,31 @@ export default function Factsheet({
       <ItemsContainer>
         {section === 'Dates' && <TimelineSplitter />}
 
-        {table.map((field, index) => {
-          const value = getFieldValue(getContextValue(deal, field))
+        {table.map((context, index) => {
+          const value = getFieldValue(getContextValue(deal, context))
+          const isDisabledByMls = !!(
+            deal.listing && context.preffered_source === 'MLS'
+          )
 
           const sharedProps = {
             index,
             total: table.length - 1,
-            field,
+            field: context,
             value,
             deal,
             isBackOffice,
+            isDisabled: isDisabledByMls,
+            tooltip: getTooltipTitle(context, isDisabledByMls),
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,
             onApprove: handleApproveField
           }
 
-          if (field.data_type === 'Date') {
-            return <DateField key={field.key} {...sharedProps} />
+          if (context.data_type === 'Date') {
+            return <DateField key={context.key} {...sharedProps} />
           }
 
-          return <TextField key={field.key} {...sharedProps} />
+          return <TextField key={context.key} {...sharedProps} />
         })}
       </ItemsContainer>
     </>
