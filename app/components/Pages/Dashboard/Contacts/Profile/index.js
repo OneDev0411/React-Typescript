@@ -201,6 +201,8 @@ class ContactProfile extends React.Component {
   }
 
   setContact = (newContact, fallback) => {
+    // Re-fetch timeline after chaning contact info
+    this.fetchTimeline()
     this.setState(
       state => ({ contact: { ...state.contact, ...newContact } }),
       fallback
