@@ -1,4 +1,5 @@
 import React from 'react'
+import { CircularProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -6,8 +7,6 @@ import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
-
-import Spinner from 'components/Spinner'
 
 import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
 import { Container, TemplateItem, Video, Image } from './styled'
@@ -137,19 +136,20 @@ class Templates extends React.Component {
   render() {
     return (
       <Container>
-        {this.state.isLoading && <Spinner />}
+        {this.state.isLoading && <CircularProgress />}
 
-        {this.state.currentTemplatesTypes.length && (
-          <TemplateTypesSelect
-            items={this.state.currentTemplatesTypes}
-            value={this.state.selectedTemplateType}
-            onSelect={value => {
-              this.setState({
-                selectedTemplateType: value
-              })
-            }}
-          />
-        )}
+        {this.state.currentTemplatesTypes.length >
+          0(
+            <TemplateTypesSelect
+              items={this.state.currentTemplatesTypes}
+              value={this.state.selectedTemplateType}
+              onSelect={value => {
+                this.setState({
+                  selectedTemplateType: value
+                })
+              }}
+            />
+          )}
         {this.state.templates
           .filter(
             brandTemplate =>
