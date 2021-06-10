@@ -15,6 +15,8 @@ import { goTo } from 'utils/go-to'
 import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
+import { DONE_STATUS } from 'components/EventDrawer/components/FutureEventDoneConfirmation'
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 
 import {
   meetingRoomOutlined,
@@ -39,15 +41,24 @@ const items: Item[] = [
     type: 'event',
     Icon: mdiCalendarOutline,
     render: props => {
-      return <EventDrawer {...props} />
+      return <EventDrawer title="Add Reminder" {...props} />
     }
   },
   {
-    title: 'Log',
+    title: 'Log Activity',
     type: 'log',
     Icon: mdiCalendarTextOutline,
     render: props => {
-      return <EventDrawer {...props} />
+      return (
+        <EventDrawer
+          title="Add Log Activity"
+          {...props}
+          initialValues={{
+            ...initialValueGenerator(props.user, [], new Date()),
+            status: DONE_STATUS
+          }}
+        />
+      )
     }
   },
   {
