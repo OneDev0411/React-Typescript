@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 
-import { withRouter, WithRouterProps } from 'react-router'
+import { Route, withRouter, WithRouterProps } from 'react-router'
 
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -34,6 +34,7 @@ import ShowingDetailTabSettingsSaveButton from './ShowingDetailTabSettingsSaveBu
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
   setShowing: (showing: IShowing) => void
+  route: Route
 }
 
 function ShowingDetailTabSettings({
@@ -41,8 +42,9 @@ function ShowingDetailTabSettings({
   showing,
   setShowing
 }: ShowingDetailTabSettingsProps) {
-  const notify = useNotify()
   const tab = getValidShowingDetailSettingsTab(location.query.tab)
+
+  const notify = useNotify()
   const showingRef = useRef(showing)
   const [errors, setErrors] = useState<ShowingDetailTabSettingsErrors>(null)
 
@@ -59,10 +61,7 @@ function ShowingDetailTabSettings({
     }
 
     run(async () => {
-      // TODO: remove this log
-      console.log('showing before update', showing)
-
-      const data = await updateShowing(showing.id, {
+      await updateShowing(showing.id, {
         start_date: showing.start_date,
         end_date: showing.end_date,
         duration: showing.duration,
@@ -85,8 +84,7 @@ function ShowingDetailTabSettings({
         brand: showing.brand
       })
 
-      // TODO: remove this console log
-      console.log('server response', data)
+      showingRef.current = showing
 
       notify({
         status: 'success',
@@ -270,7 +268,7 @@ function ShowingDetailTabSettings({
             />
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
-            <Box maxWidth={500} mb={9}>
+            <Box maxWidth={500}>
               <Box mb={9}>
                 <Typography variant="h6" gutterBottom>
                   Would you like to allow appraisals?
@@ -298,7 +296,23 @@ function ShowingDetailTabSettings({
             </Box>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Feedback">
-            Feedback
+            <Box maxWidth={500}>
+              <Typography variant="h6" gutterBottom>
+                Do you want to get feedback on this showing?
+              </Typography>
+              <ShowingYesNoRadioGroup
+                name="has-feedback"
+                // TODO: read this from showing and apply the change
+                defaultValue="Yes"
+                onChange={() => {}}
+              />
+              <ShowingDetailTabSettingsSaveButton
+                isSaving={isSaving}
+                disabled={saveDisabled}
+                alignRight
+                onClick={handleSave}
+              />
+            </Box>
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
       </Box>
