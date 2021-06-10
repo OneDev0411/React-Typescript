@@ -22,9 +22,7 @@ import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
 import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 import ShowingStepRoleConfirmNotificationTypes from '../../components/ShowingStepRoleConfirmNotificationTypes'
 import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStepRoleCancelNotificationTypes'
-import ShowingStepYesNoQuestion, {
-  YesNoAnswer
-} from '../../components/ShowingStepYesNoQuestion'
+import ShowingStepYesNoQuestion from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
@@ -120,14 +118,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   }
 
   const [instructions, setInstructions] = useState<Nullable<string>>(null)
-
-  const [allowInspection, setAllowInspection] = useState<Nullable<YesNoAnswer>>(
-    null
-  )
-
-  const [allowAppraisal, setAllowAppraisal] = useState<Nullable<YesNoAnswer>>(
-    null
-  )
 
   const [noticePeriod, setNoticePeriod] = useState<Nullable<number>>(null)
 
@@ -300,8 +290,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         })),
         notice_period: noticePeriod ?? undefined,
         same_day_allowed: sameDayAllowed,
-        allow_appraisal: allowAppraisal === 'Yes',
-        allow_inspection: allowInspection === 'Yes',
+        allow_appraisal: false,
+        allow_inspection: false,
         listing: property?.type === 'listing' ? property.listing.id : undefined,
         deal: property?.type === 'deal' ? property.deal.id : undefined,
         address: property?.type === 'place' ? property.address : undefined,
@@ -480,18 +470,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             <ShowingStepInstructions
               value={instructions}
               onChange={setInstructions}
-            />
-            <ShowingStepYesNoQuestion
-              name="allow-inspections"
-              question="Do you want to allow inspections and walk-through?"
-              value={allowInspection}
-              onChange={setAllowInspection}
-            />
-            <ShowingStepYesNoQuestion
-              question="Would you like to allow appraisals?"
-              name="allow-appraisals"
-              value={allowAppraisal}
-              onChange={setAllowAppraisal}
             />
             <ShowingStepAdvanceNotice
               noticePeriod={noticePeriod}
