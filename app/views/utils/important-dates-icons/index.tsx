@@ -66,7 +66,7 @@ export const importantDatesIcons = [
     icon: () => <SvgIcon path={calendarEventIcons['Wedding Anniversary']} />,
     color: '#ef3F61'
   },
-  // TODO should we just using "Child Birthday" here? A reveiw is needed.
+  // FIXME: should we just using "Child Birthday" here? A reveiw is needed.
   {
     name: 'Child birthday',
     icon: () => <SvgIcon path={calendarEventIcons['Child Birthday']} />,
