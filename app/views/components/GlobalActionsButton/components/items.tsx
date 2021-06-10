@@ -3,6 +3,7 @@ import React from 'react'
 import {
   mdiEmailOutline,
   mdiCalendarOutline,
+  mdiCalendarTextOutline,
   mdiCurrencyUsdCircleOutline,
   mdiShoePrint
 } from '@mdi/js'
@@ -37,6 +38,14 @@ const items: Item[] = [
     title: 'Reminder',
     type: 'event',
     Icon: mdiCalendarOutline,
+    render: props => {
+      return <EventDrawer {...props} />
+    }
+  },
+  {
+    title: 'Log',
+    type: 'log',
+    Icon: mdiCalendarTextOutline,
     render: props => {
       return <EventDrawer {...props} />
     }
