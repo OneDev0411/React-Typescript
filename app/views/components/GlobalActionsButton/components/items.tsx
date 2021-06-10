@@ -34,7 +34,7 @@ const items: Item[] = [
     }
   },
   {
-    title: 'Event',
+    title: 'Reminder',
     type: 'event',
     Icon: mdiCalendarOutline,
     render: props => {
