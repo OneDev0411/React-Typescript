@@ -347,7 +347,7 @@ function Edit(props: WithRouterProps) {
           </Box>
         </Box>
 
-        <PageLayout.Main mt={0} className={classes.contentContainer}>
+        <Box className={classes.contentContainer}>
           {warning && (
             <Alert
               severity="warning"
@@ -382,7 +382,7 @@ function Edit(props: WithRouterProps) {
               flowId={flow.id}
             />
           )}
-        </PageLayout.Main>
+        </Box>
       </PageLayout>
 
       {flow && isDuplicateModalOpen && (
