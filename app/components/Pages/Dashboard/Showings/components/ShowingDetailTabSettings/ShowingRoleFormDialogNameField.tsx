@@ -1,6 +1,8 @@
 import { Field } from 'react-final-form'
 
-import { AgentAutocompleteFieldProps } from '../AgentAutocompleteField'
+import AgentAutocompleteField, {
+  AgentAutocompleteFieldProps
+} from '../AgentAutocompleteField'
 import ContactAutocompleteField from '../ContactAutocompleteField'
 
 import ActiveTeamAvailableMemberAutocompleteField, {
@@ -22,8 +24,7 @@ function ShowingRoleFormDialogNameField({
   selectUserMutator,
   selectContactMutator,
   name,
-  // TODO: uncomment this when AgentAutocompleteField added to the logic
-  // selectAgentMutator,
+  selectAgentMutator,
   searchFieldValue,
   label
 }: ShowingRoleFormDialogNameFieldProps) {
@@ -50,23 +51,13 @@ function ShowingRoleFormDialogNameField({
             onChange={selectUserMutator}
           />
         ) : (
-          // TODO: uncomment this later when Emil and Abbas were decided about
-          // the seller agent API
-          // <AgentAutocompleteField
-          //   label={label}
-          //   required
-          //   searchFieldValue={searchFieldValue}
-          //   inputValue={input.value}
-          //   onInputChange={input.onChange}
-          //   onChange={selectAgentMutator}
-          // />
-          <ActiveTeamAvailableMemberAutocompleteField
+          <AgentAutocompleteField
             label={label}
             required
             searchFieldValue={searchFieldValue}
             inputValue={input.value}
             onInputChange={input.onChange}
-            onChange={selectUserMutator}
+            onChange={selectAgentMutator}
           />
         )
       }
