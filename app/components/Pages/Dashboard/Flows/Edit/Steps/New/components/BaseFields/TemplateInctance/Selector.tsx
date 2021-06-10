@@ -46,7 +46,6 @@ const allMarketingTemplateType: IMarketingTemplateType[] = [
   'ChineseNewYear',
   'Christmas',
   'ColumbusDay',
-  'ComingSoon',
   'Contact',
   'DaylightSaving',
   'Diwali',
