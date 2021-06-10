@@ -100,7 +100,6 @@ export const load = async colors => {
         backgroundColorPickerContainer
       ]
 
-      console.log({ containers })
       containers.forEach(container => {
         if (container) {
           ReactDOM.unmountComponentAtNode(container)
