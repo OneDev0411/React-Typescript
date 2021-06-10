@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Box, Typography } from '@material-ui/core'
 
-import { Route, withRouter, WithRouterProps } from 'react-router'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -34,7 +34,6 @@ import ShowingDetailTabSettingsSaveButton from './ShowingDetailTabSettingsSaveBu
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
   setShowing: (showing: IShowing) => void
-  route: Route
 }
 
 function ShowingDetailTabSettings({

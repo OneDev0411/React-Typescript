@@ -2,7 +2,9 @@ import { Dispatch, SetStateAction } from 'react'
 import { useSelector } from 'react-redux'
 
 import { selectDealRoles } from 'selectors/deals'
-import { selectActiveTeamAvailableMembers } from 'selectors/team'
+import { getBrandUsers } from 'utils/user-teams'
+
+import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-showings-permission'
 
 import { ShowingPropertyType } from '../../types'
 
@@ -27,7 +29,8 @@ function useFillPersonRolesWithProperty(
   setOccupantPerson: Dispatch<SetStateAction<Nullable<IShowingRoleInputPerson>>>
 ): Dispatch<SetStateAction<Nullable<ShowingPropertyType>>> {
   const dealRoles = useSelector(selectDealRoles)
-  const teamMembers = useSelector(selectActiveTeamAvailableMembers)
+  const activeBrand = useActiveTeamBrandWithShowingsPermission()
+  const teamMembers = activeBrand ? getBrandUsers(activeBrand) : []
 
   return (property: Nullable<ShowingPropertyType>) => {
     setAgentEditable(true)
