@@ -5,11 +5,12 @@ import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
 import { hourToSeconds, findTimeConflicts } from '../../helpers'
 import { findSlotIndexById } from './helpers'
 import ShowingErrorText from '../ShowingErrorText'
+import { ShowingAvailabilityItem } from '../../types'
 
 export interface ShowingAvailabilitiesTimesProps {
   title?: string
-  value: IShowingAvailabilityInput[]
-  onChange: (value: IShowingAvailabilityInput[]) => void
+  value: ShowingAvailabilityItem[]
+  onChange: (value: ShowingAvailabilityItem[]) => void
   hasContinue?: boolean
   onContinue?: () => void
   error?: string
@@ -44,7 +45,7 @@ function ShowingAvailabilitiesTimes({
     ])
   }
 
-  const handleChange = (id: UUID, row: IShowingAvailabilityInput) => {
+  const handleChange = (id: UUID, row: ShowingAvailabilityItem) => {
     const index = findSlotIndexById(value, id)
 
     if (index === -1) {

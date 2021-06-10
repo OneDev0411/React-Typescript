@@ -66,3 +66,7 @@ type CreateShowingErrorField =
 export type CreateShowingErrors = Partial<
   Record<CreateShowingErrorField, string>
 >
+
+export interface ShowingAvailabilityItem extends IShowingAvailabilityInput {
+  id: UUID
+}

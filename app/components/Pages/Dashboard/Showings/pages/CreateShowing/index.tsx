@@ -294,7 +294,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         approval_type: approvalType,
         aired_at: new Date().toISOString(), // TODO: use the real value later
         roles,
-        availabilities,
+        availabilities: availabilities.map(availability => ({
+          weekday: availability.weekday,
+          availability: availability.availability
+        })),
         notice_period: noticePeriod ?? undefined,
         same_day_allowed: sameDayAllowed,
         allow_appraisal: allowAppraisal === 'Yes',

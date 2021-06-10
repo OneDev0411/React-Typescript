@@ -1,7 +1,6 @@
-export function findSlotIndexById(
-  slots: IShowingAvailabilityInput[],
-  id: UUID
-) {
+import { ShowingAvailabilityItem } from '../../types'
+
+export function findSlotIndexById(slots: ShowingAvailabilityItem[], id: UUID) {
   return slots.findIndex(slot => slot.id === id)
 }
 

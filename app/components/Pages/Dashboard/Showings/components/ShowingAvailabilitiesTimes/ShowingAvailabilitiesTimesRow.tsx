@@ -15,6 +15,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
 
 import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
+import { ShowingAvailabilityItem } from '../../types'
 
 interface FormValues {
   start: string
@@ -22,9 +23,9 @@ interface FormValues {
   weekday: Weekday
 }
 
-interface ShowingAvailabilitiesTimesRowProps extends IShowingAvailabilityInput {
+interface ShowingAvailabilitiesTimesRowProps extends ShowingAvailabilityItem {
   onDelete: (id: UUID) => void
-  onChange: (id: UUID, row: IShowingAvailabilityInput) => void
+  onChange: (id: UUID, row: ShowingAvailabilityItem) => void
   disableDelete?: boolean
   hasError: boolean
 }
