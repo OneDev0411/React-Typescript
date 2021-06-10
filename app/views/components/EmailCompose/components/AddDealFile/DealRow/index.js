@@ -22,7 +22,7 @@ export function DealRow({
       <div style={{ paddingLeft: '1em' }}>
         <Address>{item.title}</Address>
         <Details style={{ marginRight: '0.5em' }}>
-          {status || 'Draft'} . {getSide(item)} . {item.property_type?.label}
+          {status || 'Draft'} . {getSide(item)} . {item.property_type}
         </Details>
       </div>
     </Container>
