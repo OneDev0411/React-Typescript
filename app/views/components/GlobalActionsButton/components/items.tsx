@@ -62,6 +62,14 @@ const items: Item[] = [
     }
   },
   {
+    title: 'Log',
+    type: 'log',
+    Icon: mdiCalendarTextOutline,
+    render: props => {
+      return <EventDrawer {...props} />
+    }
+  },
+  {
     title: 'Contact',
     type: 'contact',
     Icon: permContactCalendarOutlined,
