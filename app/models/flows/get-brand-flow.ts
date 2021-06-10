@@ -19,11 +19,7 @@ export async function getBrandFlow(
       return flowData
     }
 
-    // Calculate steps wait_days and inject it
-    return {
-      ...flowData
-      // steps: getStepsWithWaitDays(flowData.steps)
-    }
+    return flowData
   } catch (error) {
     throw error
   }
