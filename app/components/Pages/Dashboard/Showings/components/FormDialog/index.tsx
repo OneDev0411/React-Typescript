@@ -1,5 +1,6 @@
 import { MouseEvent } from 'react'
 import classNames from 'classnames'
+import isEqual from 'lodash/isEqual'
 import {
   Dialog,
   DialogProps,
@@ -59,7 +60,10 @@ function FormDialog<FormValues>({
 
   const handleSubmit = (values: FormValues) => {
     onClose?.({}, 'backdropClick')
-    onConfirm(values)
+
+    if (!isEqual(initialValues, values)) {
+      onConfirm(values)
+    }
   }
 
   return (
