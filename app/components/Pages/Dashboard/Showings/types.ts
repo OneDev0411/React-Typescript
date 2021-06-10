@@ -1,10 +1,6 @@
 import type { ReactNode } from 'react'
 
-export type ShowingDetailTabType =
-  | 'Bookings'
-  | 'Visitors'
-  | 'Feedback'
-  | 'Settings'
+export type ShowingDetailTabType = 'Bookings' | 'Visitors' | 'Settings'
 
 export type ShowingsTabType = 'Properties' | 'Bookings'
 

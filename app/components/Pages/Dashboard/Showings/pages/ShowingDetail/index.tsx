@@ -17,7 +17,6 @@ import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
 import { showingDetailTabs } from '../../constants'
 import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
-import ShowingDetailTabFeedback from '../../components/ShowingDetailTabFeedback'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
 import useBodyBackgroundColor from '../../hooks/use-body-background-color'
@@ -85,9 +84,6 @@ function ShowingDetail({ params }: ShowingDetailProps) {
                 showingId={showingId}
                 appointments={showing.appointments ?? defaultAppointments}
               />
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={showingDetailTabs.Feedback}>
-              <ShowingDetailTabFeedback />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>
               <ShowingDetailTabSettings

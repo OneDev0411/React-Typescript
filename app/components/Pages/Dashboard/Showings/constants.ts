@@ -8,7 +8,6 @@ export const showingDetailTabs: Record<
 > = {
   Bookings: 'Bookings',
   Visitors: 'Visitors',
-  Feedback: 'Feedback',
   Settings: 'Settings'
 }
 
