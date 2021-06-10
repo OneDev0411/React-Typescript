@@ -1,38 +1,58 @@
 import { useState, ReactNode } from 'react'
 import { Box } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
+import useAsync from 'hooks/use-async'
+
+import addShowingRole from 'models/showing/add-showing-role'
+
+import { selectActiveTeamId } from 'selectors/team'
+
 import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
-import ShowingRoleListColumnActions from './ShowingRoleListColumnActions'
+import ShowingRoleListColumnActions, {
+  ShowingRoleListColumnActionsProps
+} from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
 import ShowingRoleFormDialog from './ShowingRoleFormDialog'
 import ShowingRoleListAddNewButton from './ShowingRoleListAddNewButton'
 import { ShowingRoleFormValues } from './types'
 import { getShowingRoleLabel } from './helpers'
 
-interface ShowingRoleListProps {
+interface ShowingRoleListProps
+  extends Pick<ShowingRoleListColumnActionsProps, 'showingId'> {
   value: IShowingRole[]
   onChange: (value: IShowingRole[]) => void
   children?: ReactNode
 }
 
 function ShowingRoleList({
+  showingId,
   value: roles,
   onChange,
   children
 }: ShowingRoleListProps) {
+  const activeTeamId = useSelector(selectActiveTeamId)
   const [addRole, setAddRole] = useState<Nullable<IShowingRoleType>>(null)
 
   const openAddDialog = (role: IShowingRoleType) => setAddRole(role)
 
   const closeAddDialog = () => setAddRole(null)
 
+  const { run, isLoading } = useAsync()
+
   const handleAdd = (role: ShowingRoleFormValues) => {
-    // TODO: add the role at the end of the roles list
-    console.log('handleAdd::role', role)
-    onChange(roles)
+    run(async () => {
+      const newRole = await addShowingRole(showingId, {
+        ...role,
+        brand: activeTeamId
+      })
+
+      onChange([...roles, newRole])
+    })
   }
 
   const handleEdit = (updatedRole: IShowingRole) => {
@@ -45,6 +65,20 @@ function ShowingRoleList({
     const newRoles = [...roles]
 
     newRoles.splice(roleIndex, 1, updatedRole)
+
+    onChange(newRoles)
+  }
+
+  const handleDelete = (roleId: UUID) => {
+    const roleIndex = roles.findIndex(role => role.id === roleId)
+
+    if (roleIndex === -1) {
+      return
+    }
+
+    const newRoles = [...roles]
+
+    newRoles.splice(roleIndex, 1)
 
     onChange(newRoles)
   }
@@ -88,7 +122,12 @@ function ShowingRoleList({
       sortable: false,
       align: 'right',
       render: ({ row }) => (
-        <ShowingRoleListColumnActions role={row} onEdit={handleEdit} />
+        <ShowingRoleListColumnActions
+          role={row}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          showingId={showingId}
+        />
       )
     }
   ]
@@ -102,7 +141,10 @@ function ShowingRoleList({
         virtualize={false}
       />
       <Box display="flex" justifyContent="space-between" mt={2}>
-        <ShowingRoleListAddNewButton onClick={openAddDialog} />
+        <ShowingRoleListAddNewButton
+          onClick={openAddDialog}
+          disabled={isLoading}
+        />
         {children}
       </Box>
       <ShowingRoleFormDialog
@@ -110,7 +152,16 @@ function ShowingRoleList({
         open={!!addRole}
         onClose={closeAddDialog}
         onConfirm={handleAdd}
-        initialValues={{ role: addRole ?? undefined }}
+        initialValues={{
+          role: addRole ?? undefined,
+          first_name: '',
+          last_name: '',
+          phone_number: '',
+          email: '',
+          can_approve: true,
+          confirm_notification_type: [],
+          cancel_notification_type: []
+        }}
       />
     </div>
   )

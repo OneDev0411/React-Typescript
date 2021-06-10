@@ -13,10 +13,12 @@ const useStyles = makeStyles(
 
 interface ShowingRoleListAddNewButtonProps {
   onClick: (role: IShowingRoleType) => void
+  disabled: boolean
 }
 
 function ShowingRoleListAddNewButton({
-  onClick
+  onClick,
+  disabled
 }: ShowingRoleListAddNewButtonProps) {
   const classes = useStyles()
 
@@ -28,6 +30,7 @@ function ShowingRoleListAddNewButton({
       color="default"
       startIcon={<AddIcon />}
       classes={{ paper: classes.width }}
+      disabled={disabled}
       RenderMenu={() => (
         <List dense>
           <ListItem button onClick={() => onClick('CoSellerAgent')}>

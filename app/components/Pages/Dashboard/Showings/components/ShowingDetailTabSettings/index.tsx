@@ -59,7 +59,8 @@ function ShowingDetailTabSettings({
     }
 
     run(async () => {
-      console.log('showing', showing)
+      // TODO: remove this log
+      console.log('showing before update', showing)
 
       const data = await updateShowing(showing.id, {
         start_date: showing.start_date,
@@ -74,13 +75,17 @@ function ShowingDetailTabSettings({
         listing: showing.listing?.id,
         address: showing.address,
         // gallery: showing.gallery, // TODO: fix the gallery type
-        availabilities: showing.availabilities,
+        availabilities: showing.availabilities.map(availability => ({
+          weekday: availability.weekday,
+          availability: availability.availability
+        })),
         allow_appraisal: showing.allow_appraisal,
         allow_inspection: showing.allow_inspection,
         instructions: showing.instructions,
         brand: showing.brand
       })
 
+      // TODO: remove this console log
       console.log('server response', data)
 
       notify({
@@ -230,6 +235,7 @@ function ShowingDetailTabSettings({
             </Box>
             {showing.approval_type !== 'None' ? (
               <ShowingRoleList
+                showingId={showing.id}
                 value={showing.roles}
                 onChange={handleRolesChange}
               >

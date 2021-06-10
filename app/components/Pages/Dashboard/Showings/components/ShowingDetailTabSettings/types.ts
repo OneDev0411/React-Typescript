@@ -21,5 +21,5 @@ export type ShowingRoleFormValues = Pick<
   | 'confirm_notification_type'
   | 'cancel_notification_type'
   | 'user'
-  | 'brand'
+  | 'can_approve'
 >
