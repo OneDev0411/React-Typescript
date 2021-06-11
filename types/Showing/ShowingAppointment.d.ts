@@ -5,8 +5,5 @@ declare interface IShowingAppointment
   contact: IContact
   approvals: Nullable<IShowingApproval[]>
   notifications: Nullable<INotification[]>
-  feedback: Nullable<{
-    questions: string[]
-    answers: string[]
-  }>
+  feedback: Nullable<IShowingAppointmentFeedbackInput>
 }
