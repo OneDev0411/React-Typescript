@@ -38,8 +38,8 @@ function ShowingDetailTabSettingsSubjectList({
     hasListingInfo ? 'ListingInfo' : null,
     'ApprovalTypeAndRoles',
     'Instructions',
-    'AppraisalsAndInspections',
-    'Feedback'
+    'AppraisalsAndInspections'
+    // 'Feedback' // TODO: uncomment this when we have something for feedback on showing
   ]
 
   return (
