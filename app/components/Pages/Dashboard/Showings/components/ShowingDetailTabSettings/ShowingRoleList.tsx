@@ -23,7 +23,10 @@ import { ShowingRoleFormValues } from './types'
 import { getShowingRoleLabel } from './helpers'
 
 interface ShowingRoleListProps
-  extends Pick<ShowingRoleListColumnActionsProps, 'showingId'> {
+  extends Pick<
+    ShowingRoleListColumnActionsProps,
+    'showingId' | 'hasNotificationTypeFields'
+  > {
   value: IShowingRole[]
   onChange: (value: IShowingRole[]) => void
   children?: ReactNode
@@ -33,6 +36,7 @@ function ShowingRoleList({
   showingId,
   value: roles,
   onChange,
+  hasNotificationTypeFields,
   children
 }: ShowingRoleListProps) {
   const activeTeamId = useSelector(selectActiveTeamId)
@@ -95,28 +99,33 @@ function ShowingRoleList({
         />
       )
     },
-    {
-      id: 'confirm_notification_type',
-      width: '30%',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingRoleListColumnMediums
-          label="Confirm via"
-          types={row.confirm_notification_type}
-        />
-      )
-    },
-    {
-      id: 'cancel_notification_type',
-      width: '30%',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingRoleListColumnMediums
-          label="Get Notify On"
-          types={row.cancel_notification_type}
-        />
-      )
-    },
+    ...(hasNotificationTypeFields
+      ? [
+          {
+            id: 'confirm_notification_type',
+            width: '30%',
+            sortable: false,
+            render: ({ row }) => (
+              <ShowingRoleListColumnMediums
+                label="Confirm via"
+                types={row.confirm_notification_type}
+              />
+            )
+          },
+          {
+            id: 'cancel_notification_type',
+            width: '30%',
+            sortable: false,
+            render: ({ row }) => (
+              <ShowingRoleListColumnMediums
+                label="Get Notify On"
+                types={row.cancel_notification_type}
+              />
+            )
+          }
+        ]
+      : []),
+
     {
       id: 'body-actions',
       sortable: false,
@@ -127,6 +136,7 @@ function ShowingRoleList({
           onEdit={handleEdit}
           onDelete={handleDelete}
           showingId={showingId}
+          hasNotificationTypeFields={hasNotificationTypeFields}
         />
       )
     }
@@ -162,6 +172,7 @@ function ShowingRoleList({
           confirm_notification_type: [],
           cancel_notification_type: []
         }}
+        hasNotificationTypeFields={hasNotificationTypeFields}
       />
     </div>
   )

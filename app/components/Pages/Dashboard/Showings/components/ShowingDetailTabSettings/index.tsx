@@ -230,26 +230,18 @@ function ShowingDetailTabSettings({
                 onChange={handleApprovalTypeChange}
               />
             </Box>
-            {showing.approval_type !== 'None' ? (
-              <ShowingRoleList
-                showingId={showing.id}
-                value={showing.roles}
-                onChange={handleRolesChange}
-              >
-                <ShowingDetailTabSettingsSaveButton
-                  isSaving={isSaving}
-                  disabled={saveDisabled}
-                  onClick={handleSave}
-                />
-              </ShowingRoleList>
-            ) : (
+            <ShowingRoleList
+              showingId={showing.id}
+              value={showing.roles}
+              onChange={handleRolesChange}
+              hasNotificationTypeFields={showing.approval_type !== 'None'}
+            >
               <ShowingDetailTabSettingsSaveButton
                 isSaving={isSaving}
                 disabled={saveDisabled}
-                alignRight
                 onClick={handleSave}
               />
-            )}
+            </ShowingRoleList>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Instructions">
             <Typography variant="h6" gutterBottom>

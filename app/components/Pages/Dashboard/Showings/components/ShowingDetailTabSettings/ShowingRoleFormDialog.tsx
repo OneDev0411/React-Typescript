@@ -22,10 +22,13 @@ export interface ShowingRoleFormDialogProps
   extends Omit<
     FormDialogProps<ShowingRoleFormValues>,
     'children' | 'confirmLabel'
-  > {}
+  > {
+  hasNotificationTypeFields: boolean
+}
 
 function ShowingRoleFormDialog({
   initialValues,
+  hasNotificationTypeFields,
   ...otherProps
 }: ShowingRoleFormDialogProps) {
   return (
@@ -60,15 +63,24 @@ function ShowingRoleFormDialog({
             />
           </Box>
           <FormTextField name="email" required label="Email" type="email" />
-          <FormPhoneField name="phone_number" required label="Phone" />
-          <ShowingRoleFormDialogCheckboxGroupField
-            name="confirm_notification_type"
-            label="Confirm Via"
+          <FormPhoneField
+            name="phone_number"
+            required
+            label="Phone"
+            format={false}
           />
-          <ShowingRoleFormDialogCheckboxGroupField
-            name="cancel_notification_type"
-            label="Notify On Confirmed/Canceled"
-          />
+          {hasNotificationTypeFields && (
+            <>
+              <ShowingRoleFormDialogCheckboxGroupField
+                name="confirm_notification_type"
+                label="Confirm Via"
+              />
+              <ShowingRoleFormDialogCheckboxGroupField
+                name="cancel_notification_type"
+                label="Notify On Confirmed/Canceled"
+              />
+            </>
+          )}
         </>
       )}
     </FormDialog>

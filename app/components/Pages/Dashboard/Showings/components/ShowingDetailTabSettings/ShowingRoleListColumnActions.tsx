@@ -8,7 +8,9 @@ import updateShowingRole from 'models/showing/update-showing-role'
 
 import deleteShowingRole from 'models/showing/delete-showing-role'
 
-import ShowingRoleFormDialog from './ShowingRoleFormDialog'
+import ShowingRoleFormDialog, {
+  ShowingRoleFormDialogProps
+} from './ShowingRoleFormDialog'
 import { ShowingRoleFormValues } from './types'
 import { getShowingRoleLabel } from './helpers'
 
@@ -20,7 +22,8 @@ const useStyles = makeStyles(
   { name: 'ShowingRoleListColumnActions' }
 )
 
-export interface ShowingRoleListColumnActionsProps {
+export interface ShowingRoleListColumnActionsProps
+  extends Pick<ShowingRoleFormDialogProps, 'hasNotificationTypeFields'> {
   role: IShowingRole
   showingId: UUID
   onEdit: (role: IShowingRole) => void
@@ -31,7 +34,8 @@ function ShowingRoleListColumnActions({
   role,
   onEdit,
   onDelete,
-  showingId
+  showingId,
+  hasNotificationTypeFields
 }: ShowingRoleListColumnActionsProps) {
   const classes = useStyles()
   const hasDelete = role.role !== 'SellerAgent'
@@ -112,6 +116,7 @@ function ShowingRoleListColumnActions({
           user: role.user
         }}
         onConfirm={handleEdit}
+        hasNotificationTypeFields={hasNotificationTypeFields}
       />
       {hasDelete ? (
         deleteButton
