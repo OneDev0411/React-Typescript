@@ -30,7 +30,7 @@ export default function ShowingAppointmentMultiOptionQuestion<
       </QuestionTitle>
       <QuestionForm
         width={isMobile ? '100%' : undefined}
-        containerProps={isMobile ? { mt: 2 } : undefined}
+        containerProps={isMobile ? { mt: 2 } : { mt: 6 }}
       >
         <RadioGroup
           name={`multi-option-question--${question}`}

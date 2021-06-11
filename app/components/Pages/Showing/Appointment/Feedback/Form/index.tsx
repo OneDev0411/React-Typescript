@@ -1,5 +1,6 @@
-import { Grid, Box, useTheme } from '@material-ui/core'
+import { Grid, Box, useTheme, useMediaQuery } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
+import { isToday } from 'date-fns'
 
 import { ScrollableArea } from 'views/components/ScrollableArea'
 import { QuestionWizard } from 'components/QuestionWizard'
@@ -7,31 +8,25 @@ import { QuestionWizard } from 'components/QuestionWizard'
 import { getWeekdayName } from 'utils/date-utils'
 
 import { getFormattedAppointmentDateTime } from '../../utils'
+import { FormFields } from './types'
 import {
-  ClientInterested,
-  OverallExperience,
-  PriceOpinion,
-  ListingRate
-} from './types'
-import {
+  CLIENT_INTEREST_QUESTION,
+  LISTING_RATE_QUESTION,
+  PRICE_OPINION_QUESTION,
+  OVERALL_EXPERIENCE_QUESTION,
+  COMMENTS_QUESTION,
   CLIENT_INTEREST_OPTIONS,
-  OVERALL_EXPERIENCE_OPTIONS,
+  LISTING_RATE_OPTIONS,
   PRICE_OPINION_OPTIONS,
-  LISTING_RATE_OPTIONS
+  OVERALL_EXPERIENCE_OPTIONS
 } from './constants'
 import IntroStep from './Intro'
 import MultiOptionQuestion from './components/MultiOptionQuestion'
-
-interface FormFields {
-  clientInterested: ClientInterested
-  overallExperience: OverallExperience
-  priceOpinion: PriceOpinion
-  listingRate: ListingRate
-}
+import TextQuestion from './components/TextQuestion'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>
-  onSubmit: () => Promise<void>
+  onSubmit: (data: FormFields) => Promise<void>
 }
 
 export default function ShowingAppointmentFeedbackForm({
@@ -39,9 +34,9 @@ export default function ShowingAppointmentFeedbackForm({
   onSubmit
 }: Props) {
   const theme = useTheme()
-  // const wizard = useWizardContext()
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
 
-  const { handleSubmit, control, formState } = useForm<FormFields>({
+  const { handleSubmit, control } = useForm<FormFields>({
     mode: 'onChange'
   })
 
@@ -50,102 +45,136 @@ export default function ShowingAppointmentFeedbackForm({
   return (
     <Grid item xs={12}>
       <Box mt={3} position="relative" height="80vh">
-        <ScrollableArea
-          hasInvisibleScrollbar
-          shadowColor="transparent"
-          style={{ position: 'absolute', height: '100%' }}
-        >
-          <QuestionWizard
-            onFinish={console.log}
-            styles={{ paddingRight: '2rem' }}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <ScrollableArea
+            hasInvisibleScrollbar
+            shadowColor="transparent"
+            style={{ position: 'absolute', height: '100%' }}
           >
-            <IntroStep>
-              <>
-                Please let us know your feedback about the appointment on{' '}
-                <span style={{ color: theme.palette.primary.main }}>
-                  {getWeekdayName(appointmentTime)},{' '}
-                  {getFormattedAppointmentDateTime(appointment)}
-                </span>
-                .
-              </>
-            </IntroStep>
-            <Controller
-              name="clientInterested"
-              control={control}
-              rules={{
-                required: 'Required'
-              }}
-              defaultValue={null}
-              render={({ onChange, value }) => {
-                return (
-                  <MultiOptionQuestion
-                    goNext
-                    question="Is your client interested in this listing?"
-                    options={CLIENT_INTEREST_OPTIONS}
-                    value={value}
-                    onChange={onChange}
-                  />
-                )
-              }}
-            />
-            <Controller
-              name="overallExperience"
-              control={control}
-              rules={{
-                required: 'Required'
-              }}
-              defaultValue={null}
-              render={({ onChange, value }) => {
-                return (
-                  <MultiOptionQuestion
-                    goNext
-                    question="Please rate your overall experience at this showing"
-                    options={OVERALL_EXPERIENCE_OPTIONS}
-                    value={value}
-                    onChange={onChange}
-                  />
-                )
-              }}
-            />
-            <Controller
-              name="priceOpinion"
-              control={control}
-              rules={{
-                required: 'Required'
-              }}
-              defaultValue={null}
-              render={({ onChange, value }) => {
-                return (
-                  <MultiOptionQuestion
-                    goNext
-                    question="Your and your client’s opinion of the price"
-                    options={PRICE_OPINION_OPTIONS}
-                    value={value}
-                    onChange={onChange}
-                  />
-                )
-              }}
-            />
-            <Controller
-              name="listingRate"
-              control={control}
-              rules={{
-                required: 'Required'
-              }}
-              defaultValue={null}
-              render={({ onChange, value }) => {
-                return (
-                  <MultiOptionQuestion
-                    question="Please rate this listing"
-                    options={LISTING_RATE_OPTIONS}
-                    value={value}
-                    onChange={onChange}
-                  />
-                )
-              }}
-            />
-          </QuestionWizard>
-        </ScrollableArea>
+            <QuestionWizard
+              onFinish={console.log}
+              styles={isMobile ? undefined : { paddingRight: '2rem' }}
+            >
+              <IntroStep>
+                <>
+                  We'd love to have your feedback from your{' '}
+                  <span style={{ color: theme.palette.primary.main }}>
+                    {isToday(appointmentTime)
+                      ? "today's"
+                      : getWeekdayName(appointmentTime)}
+                    , {getFormattedAppointmentDateTime(appointment)}
+                  </span>{' '}
+                  visit. Hope everything went as planned.
+                </>
+              </IntroStep>
+              <Controller
+                name="clientInterested"
+                control={control}
+                rules={{
+                  required: 'Required'
+                }}
+                defaultValue={null}
+                render={({ onChange, value }) => {
+                  return (
+                    <MultiOptionQuestion
+                      goNext
+                      question={CLIENT_INTEREST_QUESTION}
+                      options={CLIENT_INTEREST_OPTIONS}
+                      value={value}
+                      onChange={onChange}
+                    />
+                  )
+                }}
+              />
+              <Controller
+                name="listingRate"
+                control={control}
+                rules={{
+                  required: 'Required'
+                }}
+                defaultValue={null}
+                render={({ onChange, value }) => {
+                  return (
+                    <MultiOptionQuestion
+                      goNext
+                      question={LISTING_RATE_QUESTION}
+                      options={LISTING_RATE_OPTIONS}
+                      value={value}
+                      onChange={onChange}
+                    />
+                  )
+                }}
+              />
+              <Controller
+                name="priceOpinion"
+                control={control}
+                rules={{
+                  required: 'Required'
+                }}
+                defaultValue={null}
+                render={({ onChange, value }) => {
+                  return (
+                    <MultiOptionQuestion
+                      goNext
+                      question={PRICE_OPINION_QUESTION}
+                      options={PRICE_OPINION_OPTIONS}
+                      value={value}
+                      onChange={onChange}
+                    />
+                  )
+                }}
+              />
+              <Controller
+                name="overallExperience"
+                control={control}
+                rules={{
+                  required: 'Required'
+                }}
+                defaultValue={null}
+                render={({ onChange, value }) => {
+                  return (
+                    <MultiOptionQuestion
+                      goNext
+                      question={OVERALL_EXPERIENCE_QUESTION}
+                      options={OVERALL_EXPERIENCE_OPTIONS}
+                      value={value}
+                      onChange={onChange}
+                    />
+                  )
+                }}
+              />
+              <Box>
+                <Controller
+                  name="comment"
+                  control={control}
+                  defaultValue={null}
+                  render={({ onChange, value }) => {
+                    return (
+                      <TextQuestion
+                        question={COMMENTS_QUESTION}
+                        textFieldProps={{
+                          placeholder: 'Enter comments or recommendations',
+                          variant: 'outlined',
+                          multiline: true,
+                          fullWidth: true,
+                          rows: 3
+                        }}
+                        nextButtonCopy="Done"
+                        nextButtonProps={{
+                          type: 'submit',
+                          variant: 'contained',
+                          color: 'primary'
+                        }}
+                        value={value}
+                        onChange={onChange}
+                      />
+                    )
+                  }}
+                />
+              </Box>
+            </QuestionWizard>
+          </ScrollableArea>
+        </form>
       </Box>
     </Grid>
   )

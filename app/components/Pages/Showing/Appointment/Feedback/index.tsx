@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Container, Grid, makeStyles } from '@material-ui/core'
 
-import { rescheduleAppointmentRequest } from 'models/showings/reschedule-appointment-request'
+import { sendAppointmentFeedback } from 'models/showings/send-appointment-feedback'
 
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
@@ -13,6 +13,13 @@ import DetailsSection from '../../Sections/DetailsSection'
 import { usePublicShowingAppointment } from '../../hooks'
 
 import FeedbackForm from './Form'
+import { FormFields } from './Form/types'
+import {
+  CLIENT_INTEREST_QUESTION,
+  OVERALL_EXPERIENCE_QUESTION,
+  PRICE_OPINION_QUESTION,
+  LISTING_RATE_QUESTION
+} from './Form/constants'
 
 interface RouteParams {
   appointmentToken: UUID
@@ -40,23 +47,34 @@ export default function ShowingAppointmentFeedback({
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
-  const handleSubmitForm = async (time: string, message: string) => {
-    const normalizedMessage = message.trim() || undefined
+  const handleSubmitForm = async ({
+    clientInterested,
+    overallExperience,
+    priceOpinion,
+    listingRate,
+    comment
+  }: FormFields) => {
+    const feedbackData: IShowingAppointmentFeedbackInput = {
+      answers: [clientInterested, overallExperience, priceOpinion, listingRate],
+      questions: [
+        CLIENT_INTEREST_QUESTION,
+        OVERALL_EXPERIENCE_QUESTION,
+        PRICE_OPINION_QUESTION,
+        LISTING_RATE_QUESTION
+      ],
+      comment: comment ?? undefined
+    }
 
     try {
-      await rescheduleAppointmentRequest(appointmentToken, {
-        time,
-        message: normalizedMessage
-      })
+      await sendAppointmentFeedback(appointmentToken, feedbackData)
 
       dispatch(
         addNotification({
           status: 'success',
-          message: 'Appointment request rescheduled successfully'
+          message: 'Feedback sent successfully'
         })
       )
       browserHistory.push(`/showings/appointments/${appointmentToken}`)
@@ -65,7 +83,7 @@ export default function ShowingAppointmentFeedback({
       dispatch(
         addNotification({
           status: 'error',
-          message: 'Unable to reschedule appointment request'
+          message: 'Unable to send feedback'
         })
       )
     }
@@ -80,7 +98,7 @@ export default function ShowingAppointmentFeedback({
       <Grid container direction="row" className={classes.container}>
         <InfoSection showing={appointment.showing} />
         <DetailsSection>
-          <FeedbackForm appointment={appointment} onSubmit={console.log} />
+          <FeedbackForm appointment={appointment} onSubmit={handleSubmitForm} />
         </DetailsSection>
       </Grid>
     </Container>

@@ -10,3 +10,11 @@ export type ListingRate =
   | 'Neutral'
   | 'Dissatisfied'
   | 'Highly Dissatisfied'
+
+export interface FormFields {
+  clientInterested: ClientInterested
+  overallExperience: OverallExperience
+  priceOpinion: PriceOpinion
+  listingRate: ListingRate
+  comment?: string
+}
