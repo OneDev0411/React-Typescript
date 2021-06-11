@@ -138,18 +138,17 @@ class Templates extends React.Component {
       <Container>
         {this.state.isLoading && <CircularProgress />}
 
-        {this.state.currentTemplatesTypes.length >
-          0(
-            <TemplateTypesSelect
-              items={this.state.currentTemplatesTypes}
-              value={this.state.selectedTemplateType}
-              onSelect={value => {
-                this.setState({
-                  selectedTemplateType: value
-                })
-              }}
-            />
-          )}
+        {this.state.currentTemplatesTypes.length > 0 && (
+          <TemplateTypesSelect
+            items={this.state.currentTemplatesTypes}
+            value={this.state.selectedTemplateType}
+            onSelect={value => {
+              this.setState({
+                selectedTemplateType: value
+              })
+            }}
+          />
+        )}
         {this.state.templates
           .filter(
             brandTemplate =>
