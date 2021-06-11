@@ -11,17 +11,6 @@ export const showingDetailTabs: Record<
   Settings: 'Settings'
 }
 
-export const showingAppointmentStatuses: Record<
-  IShowingAppointmentStatus,
-  IShowingAppointmentStatus
-> = {
-  Requested: 'Requested',
-  Confirmed: 'Confirmed',
-  Rescheduled: 'Rescheduled',
-  Canceled: 'Canceled',
-  Completed: 'Completed'
-}
-
 export const showingsTabs: Record<ShowingsTabType, ShowingsTabType> = {
   Properties: 'Properties',
   Bookings: 'Bookings'
