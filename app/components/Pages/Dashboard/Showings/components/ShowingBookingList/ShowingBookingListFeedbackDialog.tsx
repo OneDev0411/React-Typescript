@@ -40,15 +40,19 @@ function ShowingBookingListFeedbackDialog({
                 <ShowingBookingListFeedbackCard
                   question={question}
                   answer={answer}
+                  minHeight={90}
                 />
               </Grid>
             )
           })}
           {feedback?.comment && (
-            <ShowingBookingListFeedbackCard
-              question="Comments or recommendations"
-              answer={feedback?.comment}
-            />
+            <Grid item sm={12}>
+              <ShowingBookingListFeedbackCard
+                question="Comments or recommendations"
+                answer={feedback?.comment}
+                multiline
+              />
+            </Grid>
           )}
         </Grid>
       </Box>
