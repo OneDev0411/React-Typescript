@@ -1,5 +1,5 @@
 import React from 'react'
-import { CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -136,7 +136,16 @@ class Templates extends React.Component {
   render() {
     return (
       <Container>
-        {this.state.isLoading && <CircularProgress />}
+        {this.state.isLoading && (
+          <Box
+            pt={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <CircularProgress />
+          </Box>
+        )}
 
         {this.state.currentTemplatesTypes.length > 0 && (
           <TemplateTypesSelect
