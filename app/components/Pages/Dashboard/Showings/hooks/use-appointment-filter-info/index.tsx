@@ -47,7 +47,7 @@ export const appointmentStatusInfo: Record<
     filter: createStatusFilter('Canceled')
   },
   Completed: {
-    label: 'Completed',
+    label: 'Finished',
     icon: <span />, // TODO: select an icon for this when needed
     filledIcon: <FlagIcon />,
     filter: createStatusFilter('Completed')
@@ -55,7 +55,11 @@ export const appointmentStatusInfo: Record<
   Feedback: {
     label: 'Feedback',
     icon: <StarBorderOutlinedIcon />,
-    filter: appointments => [] // TODO: filter all appointments that has feedback
+    filter: appointments =>
+      appointments.filter(
+        appointment =>
+          appointment.status === 'Completed' && !!appointment.feedback
+      )
   }
 }
 

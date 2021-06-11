@@ -1,6 +1,10 @@
 import { useState, useMemo } from 'react'
 import classNames from 'classnames'
 import { Box, Button, makeStyles } from '@material-ui/core'
+import {
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon
+} from '@material-ui/icons'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -16,16 +20,16 @@ import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
 import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import { getShowingImage } from '../../helpers'
-import ShowingRedChip from '../ShowingRedChip'
+import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
+import { getAppointmentFeedbackSubtitle } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
     rowBase: {
-      paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1)
     },
     row: { '&:hover $actions': { opacity: 1 } },
-    notificationRow: { borderLeft: `2px solid ${theme.palette.warning.light}` },
+    notificationRow: {},
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -60,14 +64,19 @@ function ShowingBookingList({
 
   const columns: TableColumn<IShowingAppointment>[] = [
     {
+      id: 'new',
+      width: '40px',
+      sortable: false,
+      render: ({ row }) => (
+        <ShowingBookingListColumnNew isNew={!!row.notifications?.length} />
+      )
+    },
+    {
       id: 'status',
       width: '15%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingBookingListColumnStatus
-          status={row.status}
-          feedbackRate={3} // TODO: use the value from the API response
-        />
+        <ShowingBookingListColumnStatus status={row.status} />
       )
     },
     ...(hasPropertyColumn
@@ -87,14 +96,7 @@ function ShowingBookingList({
           }
         ]
       : []),
-    {
-      id: 'new',
-      width: '48px',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingRedChip count={row.notifications?.length ? 1 : 0} />
-      )
-    },
+
     {
       id: 'date-time',
       width: hasPropertyColumn ? '20%' : '25%',
@@ -129,10 +131,14 @@ function ShowingBookingList({
           approvals={row.approvals}
           notifications={row.notifications}
           onApprovalAction={onApprovalAction}
-          hasFeedback={false} // TODO: use this from the API response
+          contact={row.contact}
+          feedback={row.feedback}
           onDismissAction={onDismissAction}
           buyerName={row.contact.display_name}
           buyerMessage={row.buyer_message}
+          feedbackSubtitle={
+            row.feedback ? getAppointmentFeedbackSubtitle(row) : undefined
+          }
         />
       )
     }
@@ -167,14 +173,6 @@ function ShowingBookingList({
 
   const table = (
     <>
-      {hasPastBookingsFilter && hasAnyPastRows && (
-        <Button size="small" color="secondary" onClick={toggleShowPastBookings}>
-          {showPastBookings ? 'Hide' : 'Show'} Past Bookings
-          {!showPastBookings &&
-            hiddenRowCount &&
-            ` (${hiddenRowCount} item${hiddenRowCount > 1 ? 's' : ''})`}
-        </Button>
-      )}
       <Table
         rows={visibleRows}
         totalRows={visibleRows.length}
@@ -190,6 +188,24 @@ function ShowingBookingList({
           )
         })}
       />
+      {hasPastBookingsFilter && hasAnyPastRows && (
+        <Box mt={3}>
+          <Button
+            size="small"
+            color="secondary"
+            variant="outlined"
+            onClick={toggleShowPastBookings}
+            startIcon={
+              showPastBookings ? <ExpandLessIcon /> : <ExpandMoreIcon />
+            }
+          >
+            {showPastBookings ? 'Hide' : 'Show'} Past Bookings
+            {!showPastBookings &&
+              hiddenRowCount &&
+              ` (${hiddenRowCount} item${hiddenRowCount > 1 ? 's' : ''})`}
+          </Button>
+        </Box>
+      )}
     </>
   )
 

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Button, ButtonProps, makeStyles } from '@material-ui/core'
+import { ButtonProps, makeStyles } from '@material-ui/core'
 
 import useAsync from 'hooks/use-async'
 
@@ -16,6 +16,9 @@ import { ApprovalActionParams, DismissActionParams } from '../../types'
 import ShowingBookingListRejectMessage, {
   ShowingBookingListRejectMessageProps
 } from './ShowingBookingListRejectMessage'
+import ShowingBookingListViewFeedbackButton, {
+  ShowingBookingListViewFeedbackButtonProps
+} from './ShowingBookingListViewFeedbackButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -27,11 +30,11 @@ const useStyles = makeStyles(
 
 export interface ShowingBookingListColumnActionsProps
   extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'>,
-    Pick<ShowingBookingListRejectMessageProps, 'buyerName' | 'buyerMessage'> {
+    Pick<ShowingBookingListRejectMessageProps, 'buyerName' | 'buyerMessage'>,
+    ShowingBookingListViewFeedbackButtonProps {
   className?: string
   appointmentId: UUID
   status: IShowingAppointmentStatus
-  hasFeedback: boolean
   notifications: Nullable<INotification[]>
   onApprovalAction?: (params: ApprovalActionParams) => void
   onDismissAction?: (params: DismissActionParams) => void
@@ -40,7 +43,9 @@ export interface ShowingBookingListColumnActionsProps
 function ShowingBookingListColumnActions({
   className,
   status,
-  hasFeedback,
+  contact,
+  feedback,
+  feedbackSubtitle,
   showing,
   appointmentId,
   onApprovalAction,
@@ -170,8 +175,13 @@ function ShowingBookingListColumnActions({
           label="Dismiss"
         />
       )}
-      {status === 'Completed' && hasFeedback && (
-        <Button {...sharedButtonProps}>View Feedback</Button>
+      {status === 'Completed' && feedback && (
+        <ShowingBookingListViewFeedbackButton
+          {...sharedButtonProps}
+          contact={contact}
+          feedback={feedback}
+          feedbackSubtitle={feedbackSubtitle}
+        />
       )}
     </div>
   )

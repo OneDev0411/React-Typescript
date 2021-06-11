@@ -9,9 +9,12 @@ const tomorrowLabel = format(
   dateFormat
 )
 
-export function getAppointmentDateLabel(appointmentTime: string): string {
+export function getAppointmentDateLabel(
+  appointmentTime: string,
+  customDateFormat: string = dateFormat
+): string {
   const time = new Date(appointmentTime)
-  const timeLabel = format(time, dateFormat)
+  const timeLabel = format(time, customDateFormat)
 
   switch (timeLabel) {
     case todayLabel:
@@ -35,4 +38,19 @@ export function getAppointmentTimeLabel(
     endTime,
     `${timeFormat} A`
   )}`
+}
+
+export function getAppointmentFeedbackSubtitle(
+  appointment: IShowingAppointment
+): string {
+  return [
+    (appointment.showing as IShowing).title,
+    ' — ',
+    getAppointmentDateLabel(appointment.time, 'MMMM DD'),
+    ', ',
+    getAppointmentTimeLabel(
+      appointment.time,
+      (appointment.showing as IShowing).duration
+    )
+  ].join('')
 }
