@@ -3,9 +3,7 @@ import { Star, StarHalf, StarOutline } from '@material-ui/icons'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles(
-  theme => ({
-    star: { fontSize: theme.spacing(2) }
-  }),
+  { star: { fontSize: 20 } },
   { name: 'FeedbackStars' }
 )
 
@@ -24,8 +22,8 @@ function FeedbackStars({ className, value }: FeedbackStarsProps) {
         count={5}
         value={value}
         edit={false}
-        color={theme.palette.warning.main}
-        activeColor={theme.palette.warning.main}
+        color={theme.palette.warning.dark}
+        activeColor={theme.palette.warning.dark}
         isHalf
         size={0}
         emptyIcon={<StarOutline className={classes.star} />}

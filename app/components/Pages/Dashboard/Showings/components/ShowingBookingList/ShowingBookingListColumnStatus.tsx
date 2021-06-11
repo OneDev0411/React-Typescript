@@ -1,8 +1,6 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
-import FeedbackStars from '../FeedbackStars'
-
 import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
 
 const useStyles = makeStyles(
@@ -13,20 +11,17 @@ const useStyles = makeStyles(
     confirmed: { color: theme.palette.success.dark },
     rescheduled: { color: theme.palette.warning.dark },
     canceled: { color: theme.palette.grey[500] },
-    completed: { color: theme.palette.warning.dark },
-    stars: { marginLeft: theme.spacing(0.5) }
+    completed: { color: theme.palette.grey[600] }
   }),
   { name: 'ShowingBookingListColumnStatus' }
 )
 
 interface ShowingBookingListColumnStatusProps {
   status: IShowingAppointmentStatus
-  feedbackRate?: number
 }
 
 function ShowingBookingListColumnStatus({
-  status,
-  feedbackRate
+  status
 }: ShowingBookingListColumnStatusProps) {
   const classes = useStyles()
   const { filledIcon, icon, label } = useAppointmentFilterInfo(status)
@@ -37,29 +32,10 @@ function ShowingBookingListColumnStatus({
       display="flex"
       alignItems="center"
     >
-      {status !== 'Completed' || !feedbackRate ? (
-        <>
-          {filledIcon || icon}
-          <Typography
-            className={classes.label}
-            variant="body2"
-            component="span"
-          >
-            {label}
-          </Typography>
-        </>
-      ) : (
-        <>
-          <Typography
-            className={classes.label}
-            variant="body2"
-            component="span"
-          >
-            {label}:
-          </Typography>
-          <FeedbackStars className={classes.stars} value={feedbackRate} />
-        </>
-      )}
+      {filledIcon || icon}
+      <Typography className={classes.label} variant="body2" component="span">
+        {label}
+      </Typography>
     </Box>
   )
 }

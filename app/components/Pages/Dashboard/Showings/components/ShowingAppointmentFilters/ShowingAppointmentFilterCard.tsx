@@ -26,6 +26,7 @@ const useStyles = makeStyles(
     },
     selected: {
       borderColor: theme.palette.primary.main,
+      borderWidth: 2,
       backgroundColor: theme.palette.success.ultralight,
       color: theme.palette.primary.dark
     },
