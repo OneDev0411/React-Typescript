@@ -6,9 +6,8 @@ import LoadingContainer from 'components/LoadingContainer'
 
 import { goTo } from 'utils/go-to'
 
-// import FeedbackStars from '../FeedbackStars'
 import ShowingColumnProperty from '../ShowingColumnProperty'
-import ShowingRedChip from '../ShowingRedChip'
+import ShowingRedChip from './ShowingRedChip'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
