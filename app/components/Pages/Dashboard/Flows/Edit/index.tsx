@@ -127,7 +127,7 @@ function Edit(props: WithRouterProps) {
               status: 'info'
             })
           )
-          goTo('/dashboard/marketing/flows')
+          goTo('/dashboard/flows')
         }
 
         throw error

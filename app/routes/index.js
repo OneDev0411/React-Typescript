@@ -812,14 +812,14 @@ export default (
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
-        <Route path="marketing/flows" component={AsyncFlowsList} />
-        <Route path="marketing/flows/:id" component={AsyncFlowEdit} />
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
         <Route
           path="marketing/:types(/:medium)"
           component={AsyncMarketingTemplates}
         />
+        <Route path="flows" component={AsyncFlowsList} />
+        <Route path="flows/:id" component={AsyncFlowEdit} />
 
         <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route

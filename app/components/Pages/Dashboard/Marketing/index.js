@@ -104,9 +104,7 @@ export function MarketingLayout({ render, ...props }) {
             isOverviewActive={
               router.location.pathname === '/dashboard/marketing'
             }
-            isFlowsActive={
-              router.location.pathname === '/dashboard/marketing/flows'
-            }
+            isFlowsActive={router.location.pathname === '/dashboard/flows'}
             isMyDesignsActive={
               router.location.pathname === '/dashboard/marketing/designs'
             }
