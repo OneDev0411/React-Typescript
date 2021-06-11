@@ -1,6 +1,6 @@
-import { memo } from 'react'
+import { memo, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
-import { Grid, Box, Typography, makeStyles, Theme } from '@material-ui/core'
+import { Grid, Box, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiInstagram,
   mdiLinkedin,
@@ -31,6 +31,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       marginBottom: theme.spacing(6)
+    },
+    thumbnailContainer: {
+      padding: theme.spacing(1),
+      overflow: 'hidden'
     }
   }),
   {
@@ -39,14 +43,14 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  title: string
+  header: ReactNode
   listing: IListing
   medium: IMarketingTemplateMedium
   templates: IBrandMarketingTemplate[]
   onClick: (template: IBrandMarketingTemplate) => void
 }
 
-function TemplatesRow({ title, listing, medium, templates, onClick }: Props) {
+function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
@@ -64,11 +68,7 @@ function TemplatesRow({ title, listing, medium, templates, onClick }: Props) {
             <SvgIcon size={muiIconSizes.large} path={MEDIUM_ICONS[medium]} />
           </Box>
         </Grid>
-        <Grid item>
-          <Typography variant="h5" id={medium}>
-            {title}
-          </Typography>
-        </Grid>
+        <Grid item>{header}</Grid>
       </Grid>
       <Grid container item>
         {templates.map(template => (
@@ -81,7 +81,7 @@ function TemplatesRow({ title, listing, medium, templates, onClick }: Props) {
             sm={4}
             md={2}
           >
-            <Box p={1} overflow="hidden">
+            <Box className={classes.thumbnailContainer}>
               <MarketingTemplateCardThumbnail
                 user={user}
                 template={template}

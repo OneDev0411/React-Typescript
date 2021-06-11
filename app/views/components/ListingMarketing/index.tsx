@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Grid, Divider, useTheme, Box } from '@material-ui/core'
+import {
+  Grid,
+  Box,
+  Divider,
+  Button,
+  Typography,
+  useTheme
+} from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
 
 import getListing from 'models/listings/listing/get-listing'
@@ -17,6 +24,7 @@ import {
   hasUserAccessToWebsites
 } from 'utils/user-teams'
 
+import Link from 'components/ALink'
 import LoadingContainer from 'components/LoadingContainer'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -62,9 +70,8 @@ export default function ListingMarketing({
     Nullable<IMarketingTemplateType>
   >(defaultTemplateType ?? null)
 
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [isLoadingListing] = useLoadingEntities(listing)
@@ -240,8 +247,28 @@ export default function ListingMarketing({
           return (
             <TemplatesRow
               key={medium}
+              header={
+                <Box display="flex">
+                  {/* The `id` is here to be used with direct anchor links */}
+                  <Typography variant="h5" id={medium}>
+                    {mediumLabel}
+                  </Typography>
+                  <Link
+                    noStyle
+                    style={{
+                      marginLeft: theme.spacing(2)
+                    }}
+                    to={`/dashboard/marketing/${
+                      selectedTemplateType ?? templateTypes[0]
+                    }/${medium}`}
+                  >
+                    <Button variant="text" color="secondary">
+                      View all
+                    </Button>
+                  </Link>
+                </Box>
+              }
               medium={medium}
-              title={mediumLabel}
               listing={listing}
               templates={currentMediumTemplates}
               onClick={setSelectedTemplate}
