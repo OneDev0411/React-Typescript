@@ -20,7 +20,7 @@ function ShowingDetailTabSettingsSaveButton({
       {...otherProps}
       color="primary"
       size="small"
-      variant="contained"
+      variant="outlined"
       startIcon={
         isSaving ? <CircularProgress size="1em" color="inherit" /> : undefined
       }
