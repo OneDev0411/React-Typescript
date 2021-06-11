@@ -56,10 +56,7 @@ export const appointmentStatusInfo: Record<
     label: 'Feedback',
     icon: <StarBorderOutlinedIcon />,
     filter: appointments =>
-      appointments.filter(
-        appointment =>
-          appointment.status === 'Completed' && !!appointment.feedback
-      )
+      appointments.filter(appointment => !!appointment.feedback)
   }
 }
 

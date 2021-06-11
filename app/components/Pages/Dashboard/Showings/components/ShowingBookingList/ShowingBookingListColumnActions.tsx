@@ -175,7 +175,7 @@ function ShowingBookingListColumnActions({
           label="Dismiss"
         />
       )}
-      {status === 'Completed' && feedback && (
+      {feedback && (
         <ShowingBookingListViewFeedbackButton
           {...sharedButtonProps}
           contact={contact}
