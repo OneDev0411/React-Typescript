@@ -38,7 +38,8 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(2),
       overflow: 'hidden',
       height: 'fit-content',
-      boxShadow: theme.shadows[8]
+      boxShadow: theme.shadows[8],
+      borderRadius: theme.shape.borderRadius
     }
   }),
   {
