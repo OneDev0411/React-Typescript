@@ -1,6 +1,10 @@
 import { Box } from '@material-ui/core'
 
-import { FormPhoneField, FormTextField } from 'components/final-form-fields'
+import {
+  FormCheckbox,
+  FormPhoneField,
+  FormTextField
+} from 'components/final-form-fields'
 
 import FormDialog, { FormDialogProps } from '../FormDialog'
 import {
@@ -71,6 +75,7 @@ function ShowingRoleFormDialog({
           />
           {hasNotificationTypeFields && (
             <>
+              <FormCheckbox name="can_approve" label="Can Approve" />
               <ShowingRoleFormDialogCheckboxGroupField
                 name="confirm_notification_type"
                 label="Confirm Via"

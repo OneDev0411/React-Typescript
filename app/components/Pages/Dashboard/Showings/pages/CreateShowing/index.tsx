@@ -34,15 +34,12 @@ import ShowingCloseButton from '../../components/ShowingCloseButton'
 import useShowingRole from './use-showing-role'
 import useFillPersonRolesWithProperty from './use-fill-person-roles-with-property'
 import useShowingPropertyId from './use-showing-property-id'
-import { showingDurationOptions } from '../../constants'
+import {
+  goAndShowNotificationTypes,
+  showingDurationOptions
+} from '../../constants'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
 import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
-
-export const goAndShowNotificationTypes: IShowingRoleInputNotification = {
-  can_approve: true,
-  confirm_notification_type: [],
-  cancel_notification_type: []
-}
 
 const defaultNotificationTypes: INotificationDeliveryType[] = []
 
@@ -128,10 +125,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const [duration, setDuration] = useState<number>(
     showingDurationOptions[0].value
   )
-
-  // const [feedbackTemplate, setFeedbackTemplate] = useState<
-  //   Nullable<IMarketingTemplateInstance>
-  // >(null)
 
   const handlePropertyChange = useFillPersonRolesWithProperty(
     setProperty,

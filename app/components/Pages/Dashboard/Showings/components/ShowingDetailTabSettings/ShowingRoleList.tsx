@@ -12,6 +12,7 @@ import addShowingRole from 'models/showing/add-showing-role'
 
 import { selectActiveTeamId } from 'selectors/team'
 
+import { goAndShowNotificationTypes } from '../../constants'
 import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 import ShowingRoleListColumnActions, {
   ShowingRoleListColumnActionsProps
@@ -52,6 +53,7 @@ function ShowingRoleList({
     run(async () => {
       const newRole = await addShowingRole(showingId, {
         ...role,
+        ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {}),
         brand: activeTeamId
       })
 

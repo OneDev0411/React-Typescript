@@ -13,6 +13,7 @@ import ShowingRoleFormDialog, {
 } from './ShowingRoleFormDialog'
 import { ShowingRoleFormValues } from './types'
 import { getShowingRoleLabel } from './helpers'
+import { goAndShowNotificationTypes } from '../../constants'
 
 const useStyles = makeStyles(
   theme => ({
@@ -49,6 +50,8 @@ function ShowingRoleListColumnActions({
   const { run, isLoading } = useAsync()
 
   const handleEdit = (updatedRole: ShowingRoleFormValues) => {
+    console.log('updatedRole', updatedRole)
+
     const roleInput: IShowingRoleInput = {
       role: updatedRole.role,
       first_name: updatedRole.first_name,
@@ -59,7 +62,8 @@ function ShowingRoleListColumnActions({
       confirm_notification_type: updatedRole.confirm_notification_type,
       cancel_notification_type: updatedRole.cancel_notification_type,
       user: updatedRole.user,
-      brand: role.brand
+      brand: role.brand,
+      ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {})
     }
 
     run(async () => {
