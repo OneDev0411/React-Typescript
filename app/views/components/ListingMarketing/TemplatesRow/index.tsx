@@ -34,11 +34,11 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(6)
     },
     thumbnailContainer: {
-      padding: theme.spacing(1),
       marginRight: theme.spacing(2),
       overflow: 'hidden',
       height: 'fit-content',
       boxShadow: theme.shadows[8],
+      border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     }
   }),
