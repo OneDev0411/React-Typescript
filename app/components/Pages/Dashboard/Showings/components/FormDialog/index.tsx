@@ -1,31 +1,18 @@
 import { MouseEvent } from 'react'
-import classNames from 'classnames'
 import isEqual from 'lodash/isEqual'
 import {
-  Dialog,
-  DialogProps,
-  DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  makeStyles,
-  Box,
-  IconButton
+  makeStyles
 } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+
 import { Form, FormProps } from 'react-final-form'
+
+import Dialog, { DialogProps } from '../Dialog'
 
 const useStyles = makeStyles(
   theme => ({
-    paper: { maxWidth: 600 },
-    header: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      height: theme.spacing(8),
-      borderBottom: `1px solid ${theme.palette.grey[200]}`,
-      paddingRight: theme.spacing(1)
-    },
     footer: { padding: theme.spacing(0, 3, 2, 3) }
   }),
   { name: 'FormDialog' }
@@ -44,7 +31,6 @@ function FormDialog<FormValues>({
   classes: classesProp,
   onClose,
   onConfirm,
-  title,
   confirmLabel = 'Submit',
   cancelLabel = 'Cancel',
   children,
@@ -67,15 +53,7 @@ function FormDialog<FormValues>({
   }
 
   return (
-    <Dialog
-      {...otherProps}
-      onClose={onClose}
-      fullWidth
-      classes={{
-        ...classesProp,
-        paper: classNames(classes.paper, classesProp?.paper)
-      }}
-    >
+    <Dialog {...otherProps} onClose={onClose} hasDialogContent={false}>
       <Form<FormValues>
         onSubmit={handleSubmit}
         initialValues={initialValues}
@@ -83,12 +61,7 @@ function FormDialog<FormValues>({
       >
         {formProps => (
           <form onSubmit={formProps.handleSubmit}>
-            <Box className={classes.header}>
-              <DialogTitle>{title}</DialogTitle>
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
+            <span />
             <DialogContent>
               {typeof children === 'function' ? children(formProps) : children}
             </DialogContent>
