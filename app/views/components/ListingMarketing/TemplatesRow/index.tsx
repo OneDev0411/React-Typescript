@@ -13,6 +13,7 @@ import {
 
 import { selectUser } from 'selectors/user'
 
+import { useResponsiveSubsetOfArray } from 'hooks/use-responsive-subset-of-array'
 import { Thumbnail as MarketingTemplateCardThumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -34,7 +35,10 @@ const useStyles = makeStyles(
     },
     thumbnailContainer: {
       padding: theme.spacing(1),
-      overflow: 'hidden'
+      marginRight: theme.spacing(2),
+      overflow: 'hidden',
+      height: 'fit-content',
+      boxShadow: theme.shadows[8]
     }
   }),
   {
@@ -54,6 +58,14 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
+  const templatesToShow = useResponsiveSubsetOfArray(templates, {
+    xs: 4,
+    sm: 4,
+    md: 4,
+    lg: 4,
+    xl: 4
+  })
+
   return (
     <Grid
       container
@@ -71,15 +83,15 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
         <Grid item>{header}</Grid>
       </Grid>
       <Grid container item>
-        {templates.map(template => (
+        {templatesToShow.map(template => (
           <Grid
             key={template.id}
             container
             item
-            justify="center"
+            justify="flex-start"
             xs={12}
-            sm={4}
-            md={2}
+            sm={6}
+            md={3}
           >
             <Box className={classes.thumbnailContainer}>
               <MarketingTemplateCardThumbnail

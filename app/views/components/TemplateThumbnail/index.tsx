@@ -38,7 +38,7 @@ const useStyles = makeStyles(
     },
     iframePlaceholder: {
       zIndex: 1,
-      transition: '0.2s ease-in background-color',
+      transition: theme.transitions.create('background-color'),
       cursor: 'pointer',
       '&:hover': {
         backgroundColor: fade(theme.palette.common.black, 0.1)
