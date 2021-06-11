@@ -8,6 +8,8 @@ import updateShowingRole from 'models/showing/update-showing-role'
 
 import deleteShowingRole from 'models/showing/delete-showing-role'
 
+import useNotify from 'hooks/use-notify'
+
 import ShowingRoleFormDialog, {
   ShowingRoleFormDialogProps
 } from './ShowingRoleFormDialog'
@@ -49,9 +51,9 @@ function ShowingRoleListColumnActions({
 
   const { run, isLoading } = useAsync()
 
-  const handleEdit = (updatedRole: ShowingRoleFormValues) => {
-    console.log('updatedRole', updatedRole)
+  const notify = useNotify()
 
+  const handleEdit = (updatedRole: ShowingRoleFormValues) => {
     const roleInput: IShowingRoleInput = {
       role: updatedRole.role,
       first_name: updatedRole.first_name,
@@ -72,6 +74,7 @@ function ShowingRoleListColumnActions({
         ...role,
         ...updatedRole
       })
+      notify({ status: 'success', message: 'The role updated successfully.' })
     })
   }
 
@@ -79,6 +82,7 @@ function ShowingRoleListColumnActions({
     run(async () => {
       await deleteShowingRole(showingId, role.id)
       onDelete(role.id)
+      notify({ status: 'success', message: 'The role deleted successfully.' })
     })
   }
 

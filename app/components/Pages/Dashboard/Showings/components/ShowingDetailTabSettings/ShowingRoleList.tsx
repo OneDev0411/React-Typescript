@@ -12,6 +12,8 @@ import addShowingRole from 'models/showing/add-showing-role'
 
 import { selectActiveTeamId } from 'selectors/team'
 
+import useNotify from 'hooks/use-notify'
+
 import { goAndShowNotificationTypes } from '../../constants'
 import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 import ShowingRoleListColumnActions, {
@@ -49,6 +51,8 @@ function ShowingRoleList({
 
   const { run, isLoading } = useAsync()
 
+  const notify = useNotify()
+
   const handleAdd = (role: ShowingRoleFormValues) => {
     run(async () => {
       const newRole = await addShowingRole(showingId, {
@@ -58,6 +62,8 @@ function ShowingRoleList({
       })
 
       onChange([...roles, newRole])
+
+      notify({ status: 'success', message: 'The new role added successfully.' })
     })
   }
 

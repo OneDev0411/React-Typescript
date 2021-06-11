@@ -92,8 +92,15 @@ function ShowingDetailTabSettings({
     })
   }
 
-  const handleShowingUpdate = (showing: IShowing) => {
+  const handleShowingUpdate = (
+    showing: IShowing,
+    updateShowingRef: boolean = false
+  ) => {
     setShowing(showing)
+
+    if (updateShowingRef) {
+      showingRef.current = showing
+    }
 
     const errors: ShowingDetailTabSettingsErrors = {}
 
@@ -127,10 +134,13 @@ function ShowingDetailTabSettings({
     })
 
   const handleRolesChange = (roles: IShowingRole[]) =>
-    handleShowingUpdate({
-      ...showing,
-      roles
-    })
+    handleShowingUpdate(
+      {
+        ...showing,
+        roles
+      },
+      true
+    )
 
   const [handleInstructionsChange] = useDebouncedCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) =>
