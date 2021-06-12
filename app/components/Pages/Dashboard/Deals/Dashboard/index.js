@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { connect } from 'react-redux'
+import { shallowEqual, useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
@@ -28,14 +28,28 @@ function DealDetails(props) {
     props.params.id
   )
 
-  if (!props.deal) {
+  const { user, deal, selectedTask } = useSelector(({ deals, user }) => {
+    const { selectedTask } = deals.properties
+
+    return {
+      user,
+      deal: selectDealById(deals.list, props.params.id),
+      selectedTask: selectTaskById(
+        deals.tasks,
+        selectedTask && selectedTask.id
+      ),
+      isBackOffice: isBackOffice(user)
+    }
+  }, shallowEqual)
+
+  if (!deal) {
     return false
   }
 
-  console.log(`[ x ] Rerender deal "${props.deal.title}" `)
+  console.log(`[ x ] Rerender deal "${deal.title}" `)
 
   const getPageTitle = () => {
-    const pageTitle = getDealTitle(props.deal)
+    const pageTitle = getDealTitle(deal)
 
     return pageTitle
       ? `${pageTitle} | Deals | Rechat`
@@ -50,45 +64,34 @@ function DealDetails(props) {
 
       <PageWrapper>
         <ActionContextProvider>
-          <PageHeader deal={props.deal} isBackOffice={props.isBackOffice} />
+          <PageHeader deal={deal} isBackOffice={isBackOffice} />
 
           <PageBody>
             <TabSections
-              deal={props.deal}
-              user={props.user}
+              deal={deal}
+              user={user}
               activeTab={activeTab}
               onChangeTab={setActiveTab}
-              isBackOffice={props.isBackOffice}
+              isBackOffice={isBackOffice}
               isFetchingChecklists={isFetchingDeal}
               isFetchingContexts={isFetchingContexts}
             />
 
-            <TaskActions deal={props.deal} />
+            <TaskActions deal={deal} />
           </PageBody>
         </ActionContextProvider>
 
         <TaskView
-          deal={props.deal}
-          task={props.selectedTask}
-          isOpen={props.selectedTask !== null}
-          isBackOffice={props.isBackOffice}
+          deal={deal}
+          task={selectedTask}
+          isOpen={selectedTask !== null}
+          isBackOffice={isBackOffice}
         />
       </PageWrapper>
 
-      <UploadPrompt deal={props.deal} />
+      <UploadPrompt deal={deal} />
     </DealContainer>
   )
 }
 
-function mapStateToProps({ deals, user }, { params }) {
-  const { selectedTask } = deals.properties
-
-  return {
-    user,
-    deal: selectDealById(deals.list, params.id),
-    selectedTask: selectTaskById(deals.tasks, selectedTask && selectedTask.id),
-    isBackOffice: isBackOffice(user)
-  }
-}
-
-export default connect(mapStateToProps)(DealDetails)
+export default DealDetails

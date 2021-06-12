@@ -2,6 +2,7 @@ import { Checkbox, Avatar } from '@material-ui/core'
 
 import { TextWithHighlights } from 'components/TextWithHighlights'
 import { BrandedUser } from 'components/TeamAgents/types'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import { Row, RowType } from '../types'
 
@@ -74,7 +75,7 @@ export function ListRow({
             marginRight: '1rem'
           }}
         >
-          {row.user.display_name[0]}
+          {getContactNameInitials(row.user)}
         </Avatar>
 
         <div>

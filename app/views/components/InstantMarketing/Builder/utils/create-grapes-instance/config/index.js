@@ -4,6 +4,14 @@ export default {
     background-color: rgb(243, 243, 243);
   }
 
+  .gjs-selected {
+    outline-offset: 4px;
+  }
+
+  .cke_focus {
+    outline: none;
+  }
+
   .gjs-comp-selected[data-gjs-type=text] {
     outline-offset: 5px;
   }
