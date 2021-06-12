@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Avatar,
-  InputAdornment,
   TextField,
+  TextFieldProps,
   makeStyles,
   Theme
 } from '@material-ui/core'
@@ -14,7 +14,8 @@ import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
 import { useDebouncedCallback } from 'use-debounce'
-import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
+import { merge } from 'lodash'
+import { mdiHomeOutline, mdiMapMarkerOutline } from '@mdi/js'
 
 import { addressTitle } from 'utils/listing'
 
@@ -38,12 +39,12 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
 )
 
 interface Props {
-  placeholder?: string
+  textFieldProps?: TextFieldProps
   onSelect: (result: SearchResult) => void
 }
 
 export default function ListingsAndPlacesSearchInput({
-  placeholder = 'Search address or MLS#',
+  textFieldProps = {},
   onSelect
 }: Props) {
   const [inputValue, setInputValue] = useState<string>('')
@@ -153,24 +154,7 @@ export default function ListingsAndPlacesSearchInput({
   }
 
   function renderInput(params: AutocompleteRenderInputParams) {
-    return (
-      <TextField
-        {...params}
-        placeholder={placeholder}
-        variant="outlined"
-        autoComplete="new-password"
-        size="small"
-        InputProps={{
-          ...params.inputProps,
-          ...params.InputProps,
-          startAdornment: (
-            <InputAdornment position="start">
-              <SvgIcon path={mdiMagnify} />
-            </InputAdornment>
-          )
-        }}
-      />
-    )
+    return <TextField {...merge(params, textFieldProps)} />
   }
 
   return (

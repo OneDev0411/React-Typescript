@@ -27,7 +27,15 @@ export default function AgentNetworkLayout({
       <PageLayout>
         <PageLayout.Header title={title}>
           <Box width="100%" maxWidth={360}>
-            <ListingsAndPlacesSearchInput onSelect={onSelectSearchResult} />
+            <ListingsAndPlacesSearchInput
+              textFieldProps={{
+                placeholder: 'Search address or MLS#',
+                variant: 'outlined',
+                autoComplete: 'new-password',
+                size: 'small'
+              }}
+              onSelect={onSelectSearchResult}
+            />
           </Box>
         </PageLayout.Header>
         <PageLayout.Main>{children}</PageLayout.Main>

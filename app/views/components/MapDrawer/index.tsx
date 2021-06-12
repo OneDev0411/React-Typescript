@@ -104,7 +104,15 @@ function MapDrawer({
       <OverlayDrawer.Body>
         <Box marginTop={3}>
           {hasSearchField && (
-            <ListingsAndPlacesSearchInput onSelect={handleSearch} />
+            <ListingsAndPlacesSearchInput
+              textFieldProps={{
+                placeholder: 'Search address or MLS#',
+                variant: 'outlined',
+                autoComplete: 'new-password',
+                size: 'small'
+              }}
+              onSelect={handleSearch}
+            />
           )}
           <MapThemeList theme={theme} onChange={setTheme} center={center} />
         </Box>
