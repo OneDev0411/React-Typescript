@@ -7,6 +7,7 @@ import compress from 'compression'
 import cookieSession from 'cookie-session'
 import enforce from 'express-sslify'
 import timeout from 'connect-timeout'
+import serveStatic from 'serve-static'
 
 import webpack from 'webpack'
 import history from 'connect-history-api-fallback'
@@ -63,11 +64,24 @@ if (isProduction) {
   app.disable('x-powered-by')
   app.use(enforce.HTTPS())
 
+  const setHeaders = (res: Response, path: string) => {
+    // prevent caching of index.html
+    if (serveStatic.mime.lookup(path) === 'text/html') {
+      res.setHeader('Surrogate-Control', 'no-store')
+      res.setHeader(
+        'Cache-Control',
+        'no-store, no-cache, must-revalidate, proxy-revalidate'
+      )
+      res.setHeader('Pragma', 'no-cache')
+      res.setHeader('Expires', '0')
+    }
+  }
+
   app.use(
     '/',
-    express.static(path.resolve(__dirname, '../dist'), {
-      index: false,
-      maxAge: '7d'
+    serveStatic(path.resolve(__dirname, '../dist'), {
+      maxAge: '7d',
+      setHeaders
     })
   )
 }
