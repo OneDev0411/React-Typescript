@@ -1,13 +1,16 @@
 export function getActiveChecklist(
   deal: IDeal,
+  brandChecklists: IBrandChecklist[],
   checklists: IDealChecklist[],
   checklistType?: IDealChecklistType
 ): IDealChecklist | undefined {
   const type =
     checklistType || (deal.has_active_offer ? 'Offer' : deal.deal_type)
 
-  const brandChecklist = deal.property_type.checklists?.find(
-    checklist => checklist.checklist_type === type
+  const brandChecklist = brandChecklists?.find(
+    checklist =>
+      checklist.checklist_type === type &&
+      checklist.property_type === deal.property_type.id
   )
 
   return checklists.find(item => {

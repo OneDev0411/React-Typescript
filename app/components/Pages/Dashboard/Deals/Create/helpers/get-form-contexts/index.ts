@@ -3,6 +3,7 @@ import { getContext } from 'models/Deal/helpers/context'
 export function getFormContexts(
   values: Record<string, unknown>,
   deal: IDeal,
+  brandChecklists: IBrandChecklist[],
   checklists: IDealChecklist[],
   checklistType: IBrandChecklist['checklist_type']
 ) {
@@ -14,8 +15,10 @@ export function getFormContexts(
     const [, name] = key.split(':')
     const context = getContext(deal, name)
 
-    const brandChecklist = deal.property_type.checklists?.find(
-      checklist => checklist.checklist_type === checklistType
+    const brandChecklist = brandChecklists?.find(
+      checklist =>
+        checklist.checklist_type === checklistType &&
+        checklist.property_type === deal.property_type.id
     )
 
     const definition = brandChecklist?.required_contexts?.find(

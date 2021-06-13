@@ -3,7 +3,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { useSelector } from 'react-redux'
 
-import { getDeal, getForms } from 'actions/deals'
+import { getDeal, getForms, getBrandChecklists } from 'actions/deals'
 import { IAppState } from 'reducers'
 
 import { selectDealById } from 'reducers/deals/list'
@@ -26,7 +26,7 @@ export function useLoadFullDeal(id: UUID) {
     return {
       forms: deals.forms
     }
-  }, [deals.forms, id])
+  }, [deals.forms])
 
   const [dealWithChecklists, setDeal] = useState<IDeal | undefined>(deal)
   const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
@@ -80,14 +80,28 @@ export function useLoadFullDeal(id: UUID) {
     }
 
     /**
+     * fetches forms of a deal
+     */
+    async function fetchChecklists(deal: IDeal): Promise<void> {
+      try {
+        await dispatch(getBrandChecklists(deal.brand.id))
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    /**
      * initializes a deal by fetching its checklists and forms
      */
     async function load(): Promise<void> {
       // fetch deal with its checklists
       const fetchedDeal: IDeal = await fetchDeal()
 
-      // fetch deal forms
-      await fetchForms(fetchedDeal)
+      // fetch deal forms and checklists
+      await Promise.all([
+        await fetchForms(fetchedDeal),
+        await fetchChecklists(fetchedDeal)
+      ])
 
       setIsFetchingCompleted(true)
 

@@ -31,7 +31,11 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 
-import { getDealContexts } from './helpers/get-deal-contexts'
+import {
+  getBrandChecklistRequiredContexts,
+  getBrandChecklistsById
+} from 'reducers/deals/brand-checklists'
+
 import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
 
 import { DealContext } from './form/DealContext'
@@ -76,8 +80,15 @@ export default function Publish({ params }: Props) {
   const deal: IDeal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
   )
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        deal.brand.id
+      ),
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const statusList = useStatusList(deal)
@@ -95,7 +106,23 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = deal ? getDealContexts(deal, deal.deal_type) : []
+  const requiredContexts = useSelector<
+    IAppState,
+    IBrandChecklist['required_contexts']
+  >(({ deals }) => {
+    return deal
+      ? getBrandChecklistRequiredContexts(
+          deals.brandChecklists,
+          deal.brand.id,
+          deal.property_type.id,
+          'Offer'
+        ).filter(
+          context =>
+            ['listing_status', 'contract_status'].includes(context.key) ===
+            false
+        )
+      : []
+  })
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
@@ -141,7 +168,7 @@ export default function Publish({ params }: Props) {
       errors.status = 'Status is required'
     }
 
-    contexts
+    requiredContexts
       .filter(context => {
         const value = watch(`context:${context.key}`)
 
@@ -177,7 +204,13 @@ export default function Publish({ params }: Props) {
       await dispatch(
         upsertContexts(
           deal.id,
-          getFormContexts(values, deal, checklists, deal.deal_type)
+          getFormContexts(
+            values,
+            deal,
+            brandChecklists,
+            checklists,
+            deal.deal_type
+          )
         )
       )
 
@@ -392,8 +425,8 @@ export default function Publish({ params }: Props) {
               />
             )}
 
-            {contexts.length > 0 &&
-              contexts.map((context: IDealBrandContext) => (
+            {requiredContexts.length > 0 &&
+              requiredContexts.map((context: IDealBrandContext) => (
                 <Controller
                   key={context.id}
                   name={`context:${context.key}`}

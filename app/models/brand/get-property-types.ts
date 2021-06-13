@@ -6,7 +6,6 @@ export async function getBrandPropertyTypes(brandId: UUID) {
       .get(`/brands/${brandId}/deals/property_types`)
       .query({
         associations: [
-          'brand_property_type.checklists',
           'brand_checklist.required_contexts',
           'brand_checklist.optional_contexts'
         ]
