@@ -12,13 +12,13 @@ import { formatDate } from '../format-date'
 export function populateFormValues(
   annotations,
   fields,
-  { deal, roles, defaultValues }
+  { deal, roles, defaultValues, brandChecklists }
 ) {
   return {
     ...fields,
     ...defaultValues,
     ...getCheckboxes(annotations),
-    ...getContexts(annotations, deal, fields),
+    ...getContexts(annotations, deal, brandChecklists, fields),
     ...getRoles(annotations, deal, roles)
   }
 }
@@ -36,20 +36,21 @@ function getCheckboxes(annotations) {
     }, {})
 }
 
-function getContexts(annotations, deal, fields) {
+function getContexts(annotations, deal, brandChecklists, fields) {
   return ['addresses', 'contexts'].reduce(
     (current, type) => ({
       ...current,
-      ...getContextsByType(annotations, type, deal, fields)
+      ...getContextsByType(annotations, type, deal, brandChecklists, fields)
     }),
     {}
   )
 }
 
-function getContextsByType(annotations, type, deal, fields) {
+function getContextsByType(annotations, type, deal, brandChecklists, fields) {
   return getAnnotationsByType(annotations, type).reduce((current, group) => {
     const value = normalizeContextValue(
       deal,
+      brandChecklists,
       group[0],
       getFormValue(group, fields)
     )
@@ -79,8 +80,13 @@ function getFormValue(group, fields) {
     .trim()
 }
 
-function normalizeContextValue(deal, annotation, formValue = '') {
-  const context = searchContext(deal.id, annotation.context)
+function normalizeContextValue(
+  deal,
+  brandChecklists,
+  annotation,
+  formValue = ''
+) {
+  const context = searchContext(deal.id, brandChecklists, annotation.context)
 
   if (!context || annotation.disableAutopopulate) {
     return formValue

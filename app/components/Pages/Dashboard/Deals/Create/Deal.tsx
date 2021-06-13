@@ -28,6 +28,8 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import { getDealChecklists } from 'reducers/deals/checklists'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { getChangedRoles } from './helpers/get-changed-roles'
 
 import { CreateDealIntro } from './form/Intro'
@@ -74,8 +76,13 @@ function CreateDeal({ router, route }: Props) {
     dealId ? deals.list[dealId] : null
   )
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
@@ -173,7 +180,11 @@ function CreateDeal({ router, route }: Props) {
 
     if (deal.deal_type === 'Selling') {
       const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'
-      const definition = getDefinitionId(deal, 'listing_status')
+      const definition = getDefinitionId(
+        deal,
+        brandChecklists,
+        'listing_status'
+      )
 
       definition &&
         contexts.push({
@@ -185,7 +196,7 @@ function CreateDeal({ router, route }: Props) {
     }
 
     if (isDoubleEnded) {
-      const definition = getDefinitionId(deal, 'ender_type')
+      const definition = getDefinitionId(deal, brandChecklists, 'ender_type')
 
       definition &&
         contexts.push({
@@ -206,7 +217,12 @@ function CreateDeal({ router, route }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, checklists, property.address)
+      const contexts = createAddressContext(
+        deal,
+        brandChecklists,
+        checklists,
+        property.address
+      )
 
       dispatch(upsertContexts(deal.id, contexts))
     }

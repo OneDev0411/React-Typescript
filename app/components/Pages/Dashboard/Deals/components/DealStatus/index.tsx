@@ -63,7 +63,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
   const statusName = getStatusContextKey(deal)
 
-  const definition = searchContext(deal, statusName)
+  const definition = searchContext(deal, brandChecklists, statusName)
   const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
 
   /**
@@ -85,7 +85,14 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     await dispatch(
       upsertContexts(deal.id, [
-        createContextObject(deal, checklists, statusName, status.label, true)
+        createContextObject(
+          deal,
+          brandChecklists,
+          checklists,
+          statusName,
+          status.label,
+          true
+        )
       ])
     )
 

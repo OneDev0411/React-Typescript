@@ -303,7 +303,7 @@ function CreateOffer({ router, route, params }: Props) {
             )}
           />
 
-          {showStatusQuestion(deal, 'Buying', 'contract_status') && (
+          {showStatusQuestion(deal, brandChecklists, 'contract_status') && (
             <Controller
               name="context:contract_status"
               control={control}

@@ -95,7 +95,7 @@ export default function Publish({ params }: Props) {
   const statusContextKey = getStatusContextKey(deal)
 
   const isStatusVisible =
-    deal && showStatusQuestion(deal, deal?.deal_type, statusContextKey)
+    deal && showStatusQuestion(deal, brandChecklists, statusContextKey)
 
   useEffect(() => {
     if (deal?.is_draft === false) {
@@ -233,7 +233,12 @@ export default function Publish({ params }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, checklists, property.address)
+      const contexts = createAddressContext(
+        deal,
+        brandChecklists,
+        checklists,
+        property.address
+      )
 
       dispatch(upsertContexts(deal.id, contexts))
     }
