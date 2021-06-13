@@ -23,7 +23,7 @@ export default function Menu({ contactId, handleOnDelete }: Props) {
       PopperProps={{
         placement: 'bottom-end'
       }}
-      renderDropdownButton={buttonProps => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <IconButton {...buttonProps} size="small">
           <SvgIcon path={mdiDotsHorizontal} />
         </IconButton>
