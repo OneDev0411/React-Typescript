@@ -94,7 +94,7 @@ export default function Steps({
                   const isLastStep = stepIndex === items.length
 
                   return (
-                    <>
+                    <React.Fragment key={item.id}>
                       <Box
                         mb={
                           draggableSnapshot.isDraggingOver || disableEdit
@@ -135,7 +135,7 @@ export default function Steps({
                             />
                           </Box>
                         )}
-                    </>
+                    </React.Fragment>
                   )
                 })}
               </div>
