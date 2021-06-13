@@ -53,7 +53,7 @@ export default function HipPocketListingFormImageUpload({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     disabled: isUploading,
-    multiple: false,
+    multiple: true,
     accept: 'image/*'
   })
 
