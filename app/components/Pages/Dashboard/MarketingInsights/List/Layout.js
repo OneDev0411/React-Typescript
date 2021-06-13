@@ -88,6 +88,7 @@ function InsightsLayout({
                 key="sort-field"
                 label={
                   <SortField
+                    component="div"
                     sortLabel={sortField.label}
                     onChange={setSortField}
                   />
