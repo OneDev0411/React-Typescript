@@ -50,11 +50,12 @@ export default function HipPocketListingFormImageUpload({
     [onImageUpload]
   )
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
+    accept: 'image/*',
     disabled: isUploading,
-    multiple: true,
-    accept: 'image/*'
+    noClick: true,
+    multiple: true
   })
 
   return (
@@ -87,7 +88,10 @@ export default function HipPocketListingFormImageUpload({
         <Grid item>
           <Typography variant="body2" color="textSecondary">
             <span className={classes.actionableText}>choose from gallery</span>{' '}
-            or <span className={classes.actionableText}>click to upload</span>
+            or{' '}
+            <span onClick={open} className={classes.actionableText}>
+              click to upload
+            </span>
           </Typography>
         </Grid>
       </Grid>
