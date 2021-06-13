@@ -1,25 +1,26 @@
 import uniqBy from 'lodash/uniqBy'
 
+import { useSelector } from 'react-redux'
+
 import { getField } from 'models/Deal/helpers/context'
 
+import { getBrandChecklistContexts } from 'reducers/deals/brand-checklists'
+import { IAppState } from 'reducers'
+
 export function useFactsheetContexts(deal: IDeal, section: string) {
-  const checklist = deal.property_type?.checklists?.find(checklist => {
-    if (deal.has_active_offer) {
-      return checklist.checklist_type === 'Offer'
-    }
-
-    return checklist.checklist_type === deal.deal_type
-  })
-
-  if (!checklist) {
-    return []
-  }
-
-  const list = uniqBy(
-    (checklist.optional_contexts || [])
-      .concat(checklist.required_contexts || [])
-      .filter(context => context.section === section),
-    context => context.key
+  const list = useSelector<
+    IAppState,
+    IBrandChecklist['required_contexts'] & IBrandChecklist['optional_contexts']
+  >(({ deals }) =>
+    uniqBy(
+      getBrandChecklistContexts(
+        deals.brandChecklists,
+        deal.brand.id,
+        deal.property_type.id,
+        deal.has_active_offer ? 'Offer' : deal.deal_type
+      ),
+      context => context.key
+    )
   )
 
   if (section === 'Dates') {

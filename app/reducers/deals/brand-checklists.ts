@@ -50,6 +50,26 @@ export function getBrandChecklistRequiredContexts(
   )
 }
 
+export function getBrandChecklistContexts(
+  state: State,
+  brandId: UUID,
+  propertType: UUID,
+  checklistType: IBrandChecklist['checklist_type']
+) {
+  const checklists = getBrandChecklists(
+    state,
+    brandId,
+    propertType,
+    checklistType
+  )
+
+  return checklists.flatMap(brandChecklist =>
+    (brandChecklist.optional_contexts || []).concat(
+      brandChecklist.required_contexts || []
+    )
+  )
+}
+
 export function getBrandChecklistOptioanlContexts(
   state: State,
   brandId: UUID,
