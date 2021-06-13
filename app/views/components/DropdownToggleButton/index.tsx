@@ -19,6 +19,7 @@ interface Props extends ButtonProps {
   isActive?: boolean
   children?: ReactNode
   iconPath?: string
+  component?: string
 }
 
 const styles = (theme: Theme) => {

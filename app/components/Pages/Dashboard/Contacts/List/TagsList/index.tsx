@@ -141,6 +141,7 @@ export const TagsList = (props: Props) => {
 
   return (
     <BaseDropdownWithMore
+      component="div"
       buttonLabel="Tags"
       DropdownToggleButtonProps={{
         className: classes.dropdownBtn,

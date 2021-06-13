@@ -25,6 +25,7 @@ interface Props {
   popoverOptions?: PopoverProps
   tooltipOptions?: Omit<TooltipProps, 'children'>
   children: (renderProps: RenderProps) => React.ReactNode
+  component?: string
 }
 
 const useStyles = makeStyles(
@@ -52,7 +53,8 @@ export function DropdownTab({
   title,
   children,
   tooltipOptions,
-  popoverOptions
+  popoverOptions,
+  component
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const classes = useStyles({
@@ -78,6 +80,7 @@ export function DropdownTab({
       size="small"
       onClick={toggleMenu}
       className={classes.button}
+      component={component}
     >
       {title}
     </DropdownToggleButton>
