@@ -15,14 +15,13 @@ import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import PageLayout from 'components/GlobalPageLayout'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
-
-import Layout from '../../Marketing'
 
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
@@ -236,8 +235,10 @@ function List(props: Props & WithRouterProps) {
       <Helmet>
         <title>Marketing | Flows</title>
       </Helmet>
-      <Layout
-        render={() => (
+
+      <PageLayout position="relative" overflow="hidden">
+        <PageLayout.Header title="Flows" />
+        <PageLayout.Main minHeight="100vh">
           <Box mt={2}>
             {isModalOpen && (
               <New
@@ -270,7 +271,7 @@ function List(props: Props & WithRouterProps) {
                 getTdProps={({ column, row }) => ({
                   onClick: () => {
                     if (column.id !== 'actions') {
-                      props.router.push(`/dashboard/marketing/flows/${row.id}`)
+                      props.router.push(`/dashboard/flows/${row.id}`)
                     }
                   }
                 })}
@@ -278,8 +279,8 @@ function List(props: Props & WithRouterProps) {
               />
             )}
           </Box>
-        )}
-      />
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }

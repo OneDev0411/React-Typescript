@@ -23,12 +23,12 @@ const useStyles = makeStyles(
     },
     mapContainer: {
       flexBasis: '50%',
-      height: '100%',
+      minHeight: '100%',
       position: 'relative'
     },
     cardsContainer: {
       flexBasis: '50%',
-      height: '100%',
+      minHeight: '100%',
       paddingRight: theme.spacing(0.5),
       borderLeft: `1px solid ${theme.palette.divider}`,
       position: 'relative'

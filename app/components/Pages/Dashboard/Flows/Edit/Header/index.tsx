@@ -86,10 +86,7 @@ export default function Header({
             Duplicate
           </Button>
         </Tooltip>
-        <IconButton
-          size="small"
-          onClick={() => goTo('/dashboard/marketing/flows')}
-        >
+        <IconButton size="small" onClick={() => goTo('/dashboard/flows')}>
           <SvgIcon path={mdiClose} />
         </IconButton>
       </Box>

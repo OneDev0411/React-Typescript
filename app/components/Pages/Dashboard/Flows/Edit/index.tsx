@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback, useMemo } from 'react'
 import { useEffectOnce } from 'react-use'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import {
@@ -17,6 +17,7 @@ import {
 import Alert from '@material-ui/lab/Alert'
 
 import PageLayout from 'components/GlobalPageLayout'
+import { addNotification as notify } from 'components/notification'
 
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
 import { getBrandFlow } from 'models/flows/get-brand-flow'
@@ -74,8 +75,9 @@ const useStyles = makeStyles(
 
 function Edit(props: WithRouterProps) {
   const classes = useStyles()
-
+  const dispatch = useDispatch()
   const user = useSelector(selectUser)
+
   const brand = getActiveTeamId(user) || ''
 
   const [error, setError] = useState('')
@@ -104,18 +106,34 @@ function Edit(props: WithRouterProps) {
 
   const getFlow = useCallback(
     async (brand: string, flowId: UUID, reload): Promise<IBrandFlow> => {
-      if (
-        !reload &&
-        props.location.state &&
-        props.location.state.flow &&
-        props.location.state.flow.id === flowId
-      ) {
-        return props.location.state.flow as IBrandFlow
-      }
+      try {
+        if (
+          !reload &&
+          props.location.state &&
+          props.location.state.flow &&
+          props.location.state.flow.id === flowId
+        ) {
+          return props.location.state.flow as IBrandFlow
+        }
 
-      return getBrandFlow(brand, flowId)
+        const flow = await getBrandFlow(brand, flowId)
+
+        return flow
+      } catch (error) {
+        if (error.status === 404) {
+          dispatch(
+            notify({
+              message: "The flow you're looking for doesn't exist!",
+              status: 'info'
+            })
+          )
+          goTo('/dashboard/flows')
+        }
+
+        throw error
+      }
     },
-    [props.location.state]
+    [dispatch, props.location.state]
   )
 
   const loadFlowData = useCallback(
