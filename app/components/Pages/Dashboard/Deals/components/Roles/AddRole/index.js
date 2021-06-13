@@ -15,7 +15,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
 
-import RoleAgentIntegration from '../AgentIntegration'
+import { RoleAgentIntegration } from '../AgentIntegration'
 
 import { Container, RoleButton, MenuContainer } from './styled'
 
@@ -101,7 +101,7 @@ class AddRoleForm extends React.Component {
               }
             }}
             disablePortal
-            renderDropdownButton={buttonProps => (
+            renderDropdownButton={({ isActive, ...buttonProps }) => (
               <RoleButton {...buttonProps}>
                 <Box mr={1}>
                   <Avatar

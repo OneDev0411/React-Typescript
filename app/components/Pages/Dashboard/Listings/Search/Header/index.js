@@ -47,7 +47,7 @@ export function Header(props) {
         <Box className={classes.body}>
           <Autocomplete activeView={activeView} />
           <BaseDropdown
-            renderDropdownButton={buttonProps => (
+            renderDropdownButton={({ isActive, ...buttonProps }) => (
               <Button
                 className={classes.filtersButton}
                 variant="outlined"

@@ -105,7 +105,7 @@ const Layout = ({
                     PopperProps={{
                       placement: 'bottom-end'
                     }}
-                    renderDropdownButton={buttonProps => (
+                    renderDropdownButton={({ isActive, ...buttonProps }) => (
                       <IconButton {...buttonProps} size="small">
                         <SvgIcon
                           path={mdiDotsVertical}

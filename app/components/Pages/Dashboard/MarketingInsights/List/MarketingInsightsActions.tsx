@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import { IconButton, MenuItem, Typography, Divider } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
+
 import { addNotification } from 'components/notification'
 
 import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
@@ -53,7 +54,7 @@ function Actions({ emailCampaign, isSent, reloadList, reloadItem }: Props) {
         PopperProps={{
           placement: 'bottom-end'
         }}
-        renderDropdownButton={buttonProps => (
+        renderDropdownButton={({ isActive, ...buttonProps }) => (
           <IconButton {...buttonProps} style={{ padding: 0 }}>
             <SvgIcon path={mdiDotsHorizontal} />
           </IconButton>
@@ -87,6 +88,7 @@ function Actions({ emailCampaign, isSent, reloadList, reloadItem }: Props) {
                       appearance: 'danger',
                       message: 'Do you want to delete this scheduled email?',
                       description:
+                        // eslint-disable-next-line max-len
                         "The email will be deleted and you don't have access to it anymore. Are you sure?",
                       confirmLabel: 'Yes, Remove it',
                       onConfirm: () =>

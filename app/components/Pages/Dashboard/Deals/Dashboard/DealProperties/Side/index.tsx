@@ -76,7 +76,7 @@ export function DealSide(props: Props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={buttonProps => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <Button
           {...buttonProps}
           size="small"

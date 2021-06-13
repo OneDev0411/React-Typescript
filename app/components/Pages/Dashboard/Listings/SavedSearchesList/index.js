@@ -73,7 +73,9 @@ class SavedSearchesList extends Component {
       this.setState({ isDeleting: false }, () => {
         const { location } = this.props
 
+        // eslint-disable-next-line max-len
         // Based on the discussion at https://gitlab.com/rechat/web/-/issues/3922#note_303236379
+        // eslint-disable-next-line max-len
         // if we are on the same saved-search page which we're deleting it, we redirect user to
         // MLS' default page, otherwise we're staying where we are.
         if (location.pathname.includes(Item.id)) {
@@ -96,7 +98,7 @@ class SavedSearchesList extends Component {
     return (
       <BaseDropdownWithMore
         className={classes.dropdown}
-        renderDropdownButton={props => (
+        renderDropdownButton={({ isActive, ...props }) => (
           <span {...props}>
             Saved Searches{' '}
             {props.isActive ? (
