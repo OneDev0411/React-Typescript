@@ -195,8 +195,13 @@ export default function ListingCard({
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
   return (
-    <Card variant="outlined" className={classes.card} onClick={onClick}>
-      <CardActionArea>
+    <Card
+      data-test="card"
+      variant="outlined"
+      className={classes.card}
+      onClick={onClick}
+    >
+      <CardActionArea component="div">
         <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
             <Grid item>
