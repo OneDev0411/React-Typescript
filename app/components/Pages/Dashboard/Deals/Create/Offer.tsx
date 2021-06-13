@@ -104,7 +104,7 @@ function CreateOffer({ router, route, params }: Props) {
       ? getBrandChecklistRequiredContexts(
           deals.brandChecklists,
           deal.brand.id,
-          deal.property_type.id,
+          deal.property_type?.id,
           'Offer'
         ).filter(
           context =>

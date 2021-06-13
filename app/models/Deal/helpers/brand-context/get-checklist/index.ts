@@ -8,7 +8,7 @@ export function getContextsChecklist(
 
   return brandChecklists.filter(
     brandChecklist =>
-      brandChecklist.property_type === deal.property_type.id &&
+      brandChecklist.property_type === deal.property_type?.id &&
       brandChecklist.checklist_type === checklistType
   )
 }

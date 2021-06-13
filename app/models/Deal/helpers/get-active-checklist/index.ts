@@ -10,7 +10,7 @@ export function getActiveChecklist(
   const brandChecklist = brandChecklists?.find(
     checklist =>
       checklist.checklist_type === type &&
-      checklist.property_type === deal.property_type.id
+      checklist.property_type === deal.property_type?.id
   )
 
   return checklists.find(item => {
