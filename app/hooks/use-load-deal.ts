@@ -21,6 +21,10 @@ export function useLoadFullDeal(id: UUID) {
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, id)
   )
+  const brandChecklists = useSelector<
+    IAppState,
+    Record<UUID, IBrandChecklist[]>
+  >(({ deals }) => deals.brandChecklists)
 
   const { forms } = useMemo(() => {
     return {
@@ -36,6 +40,10 @@ export function useLoadFullDeal(id: UUID) {
   )
 
   const [isFetchingForms, setIsFetchingForms] = useState<boolean>(!forms[id])
+  const [
+    isFetchingBrandChecklists,
+    setIsFetchingBrandChecklists
+  ] = useState<boolean>(false)
 
   useEffectOnce(() => {
     if (!id) {
@@ -83,8 +91,16 @@ export function useLoadFullDeal(id: UUID) {
      * fetches forms of a deal
      */
     async function fetchChecklists(deal: IDeal): Promise<void> {
+      if (brandChecklists[deal.brand.id]) {
+        return
+      }
+
       try {
+        setIsFetchingBrandChecklists(true)
+
         await dispatch(getBrandChecklists(deal.brand.id))
+
+        setIsFetchingBrandChecklists(false)
       } catch (e) {
         console.log(e)
       }
@@ -114,6 +130,7 @@ export function useLoadFullDeal(id: UUID) {
   return {
     isFetchingDeal,
     isFetchingForms,
+    isFetchingBrandChecklists,
     isFetchingCompleted,
     deal: dealWithChecklists
   }
