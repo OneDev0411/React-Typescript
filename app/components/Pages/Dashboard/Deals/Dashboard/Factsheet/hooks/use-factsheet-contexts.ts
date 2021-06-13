@@ -16,11 +16,11 @@ export function useFactsheetContexts(deal: IDeal, section: string) {
       getBrandChecklistContexts(
         deals.brandChecklists,
         deal.brand.id,
-        deal.property_type.id,
+        deal.property_type?.id,
         deal.has_active_offer ? 'Offer' : deal.deal_type
       ),
       context => context.key
-    )
+    ).filter(context => context.section === section)
   )
 
   if (section === 'Dates') {
