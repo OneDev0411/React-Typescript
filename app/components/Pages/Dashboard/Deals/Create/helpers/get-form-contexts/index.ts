@@ -32,7 +32,7 @@ export function getFormContexts(
     })
 
     if (!checklist || !definition) {
-      console.log(`Could not save context "${key}"`, { checklist, definition })
+      console.log(`Could not save context "${name}"`, { checklist, definition })
 
       return acc
     }
