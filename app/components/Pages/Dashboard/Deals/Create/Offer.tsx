@@ -88,10 +88,9 @@ function CreateOffer({ router, route, params }: Props) {
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
-      brandChecklists: getBrandChecklistsById(
-        deals.brandChecklists,
-        deal.brand.id
-      ),
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
       checklists: getDealChecklists(deal, deals.checklists)
     })
   )

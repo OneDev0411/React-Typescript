@@ -1,3 +1,5 @@
+import { uniqBy } from 'lodash'
+
 import * as actionTypes from '../../constants/deals'
 
 type State = Record<UUID, IBrandChecklist[]>
@@ -45,8 +47,11 @@ export function getBrandChecklistRequiredContexts(
     checklistType
   )
 
-  return checklists.flatMap(
-    brandChecklist => brandChecklist.required_contexts || []
+  return uniqBy(
+    checklists.flatMap(
+      brandChecklist => brandChecklist.required_contexts || []
+    ),
+    context => context.key
   )
 }
 
