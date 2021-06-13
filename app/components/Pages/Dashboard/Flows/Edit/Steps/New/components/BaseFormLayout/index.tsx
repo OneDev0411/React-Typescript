@@ -61,7 +61,7 @@ const Layout = ({
       <form onSubmit={onSubmit} className={classes.form} noValidate>
         <Box className={classes.header}>
           <Grid container alignItems="center" justify="space-between">
-            <Grid container alignItems="center" xs={6}>
+            <Grid container alignItems="center" item xs={6}>
               {step && (
                 <Box className={classes.dragBtn} {...dragHandleProps}>
                   <Tooltip
@@ -86,7 +86,7 @@ const Layout = ({
                 )}
               </Typography>
             </Grid>
-            <Grid container xs={6} justify="flex-end">
+            <Grid container item xs={6} justify="flex-end">
               {!disableEdit && (
                 <Button
                   variant="contained"
