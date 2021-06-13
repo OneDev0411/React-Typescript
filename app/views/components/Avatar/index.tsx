@@ -21,7 +21,7 @@ const BaseAvatar = withStyles((theme: Theme) => ({
   }
 }))((props: Props & { src?: string }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { disableLazyLoad, ...rest } = props
+  const { disableLazyLoad, isOnline, showStatus, ...rest } = props
 
   return <MUIAvatar {...rest} />
 })
