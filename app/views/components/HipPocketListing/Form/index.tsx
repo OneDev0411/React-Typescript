@@ -151,6 +151,7 @@ export default function HipPocketListingForm({
               }}
               as={
                 <TextField
+                  fullWidth
                   error={!!errors.price}
                   helperText={errors.price?.message}
                   variant="outlined"
@@ -172,6 +173,7 @@ export default function HipPocketListingForm({
               }}
               as={
                 <TextField
+                  fullWidth
                   error={!!errors.sqft}
                   helperText={errors.sqft?.message}
                   variant="outlined"
@@ -195,6 +197,7 @@ export default function HipPocketListingForm({
               }}
               as={
                 <TextField
+                  fullWidth
                   error={!!errors.bedrooms}
                   helperText={errors.bedrooms?.message}
                   variant="outlined"
@@ -215,6 +218,7 @@ export default function HipPocketListingForm({
               }}
               as={
                 <TextField
+                  fullWidth
                   error={!!errors.full_baths}
                   helperText={errors.full_baths?.message}
                   variant="outlined"
@@ -235,6 +239,7 @@ export default function HipPocketListingForm({
               }}
               as={
                 <TextField
+                  fullWidth
                   error={!!errors.half_baths}
                   helperText={errors.half_baths?.message}
                   variant="outlined"
@@ -326,14 +331,6 @@ export default function HipPocketListingForm({
             </Grid>
           </Grid>
         )}
-        <Grid container item>
-          <Grid item xs={12}>
-            <pre>{JSON.stringify(errors, null, 2)}</pre>
-          </Grid>
-          <Grid item xs={12}>
-            <pre>{JSON.stringify(formState, null, 2)}</pre>
-          </Grid>
-        </Grid>
 
         <Grid container item direction="row" justify="space-between">
           <Grid item>

@@ -20,6 +20,12 @@ export interface HipPocketListingFormProps {
   onSave: (data: HipPocketListing) => void
 }
 
+export interface HipPocketListingDrawerProps extends HipPocketListingFormProps {
+  title?: string
+  isOpen: boolean
+  onClose: () => void
+}
+
 export type ImageUploadProps = Required<
   Pick<HipPocketListingFormProps, 'onImageUpload'>
 >
