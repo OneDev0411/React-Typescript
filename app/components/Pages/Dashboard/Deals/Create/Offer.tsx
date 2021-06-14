@@ -21,7 +21,11 @@ import { getLegalFullName } from 'deals/utils/roles'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { useDealStatuses } from 'hooks/use-deal-statuses'
 
-import { getDealContexts } from './helpers/get-deal-contexts'
+import {
+  getBrandChecklistRequiredContexts,
+  getBrandChecklistsById
+} from 'reducers/deals/brand-checklists'
+
 import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
 
@@ -63,7 +67,7 @@ function CreateOffer({ router, route, params }: Props) {
     selectDealById(deals.list, params.id)
   )
 
-  const statusList = useDealStatuses(deal)
+  const statusList = useDealStatuses(deal, 'Offer')
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
@@ -82,11 +86,32 @@ function CreateOffer({ router, route, params }: Props) {
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
 
-  const dealContexts = deal ? getDealContexts(deal, 'Offer') : []
-
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
+
+  const requiredContexts = useSelector<
+    IAppState,
+    IBrandChecklist['required_contexts']
+  >(({ deals }) => {
+    return deal
+      ? getBrandChecklistRequiredContexts(
+          deals.brandChecklists,
+          deal.brand.id,
+          deal.property_type?.id,
+          'Offer'
+        ).filter(
+          context =>
+            ['listing_status', 'contract_status'].includes(context.key) ===
+            false
+        )
+      : []
+  })
 
   const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
   const isOfficeDoubleEnded =
@@ -136,7 +161,7 @@ function CreateOffer({ router, route, params }: Props) {
         dispatch(
           upsertContexts(
             deal.id,
-            getFormContexts(values, deal, checklists, 'Offer')
+            getFormContexts(values, deal, brandChecklists, checklists, 'Offer')
           )
         )
       ])
@@ -277,7 +302,7 @@ function CreateOffer({ router, route, params }: Props) {
             )}
           />
 
-          {showStatusQuestion(deal, 'Buying', 'contract_status') && (
+          {showStatusQuestion(deal, brandChecklists, 'contract_status') && (
             <Controller
               name="context:contract_status"
               control={control}
@@ -287,7 +312,7 @@ function CreateOffer({ router, route, params }: Props) {
             />
           )}
 
-          {dealContexts.map((context: IDealBrandContext) => (
+          {requiredContexts.map((context: IDealBrandContext) => (
             <Controller
               key={context.id}
               name={`context:${context.key}`}

@@ -2,15 +2,18 @@ import { getContextsChecklist } from '../get-checklist'
 
 export function createContextObject(
   deal: IDeal,
+  brandChecklists: IBrandChecklist[],
   checklists: IDealChecklist[],
   fieldKey: string,
   value: unknown,
   approved = false
 ) {
-  const brandChecklist = getContextsChecklist(deal)
+  const dealBrandChecklists = getContextsChecklist(deal, brandChecklists)
 
-  const definition = (brandChecklist?.required_contexts || [])
-    .concat(brandChecklist?.optional_contexts || [])
+  const definition = dealBrandChecklists
+    .flatMap(item =>
+      (item.optional_contexts || []).concat(item.required_contexts || [])
+    )
     .find(item => item.key === fieldKey)
 
   if (!definition) {
@@ -19,9 +22,9 @@ export function createContextObject(
     return null
   }
 
-  const checklist = checklists.find(
-    ({ origin }) => origin === brandChecklist?.id
-  )
+  const checklist = checklists.find(({ origin }) => {
+    return dealBrandChecklists.find(({ id }) => id === origin)
+  })
 
   return {
     definition: definition!.id,

@@ -14,6 +14,8 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { ItemValue } from '../../Factsheet/styled'
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -36,8 +38,14 @@ interface Props {
 export function DealSide(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const checklists = useSelector<IAppState, IDealChecklist[]>(({ deals }) =>
-    getDealChecklists(props.deal, deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        props.deal.brand.id
+      ),
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
   )
 
   const options = [
@@ -65,7 +73,14 @@ export function DealSide(props: Props) {
 
     dispatch(
       upsertContexts(props.deal.id, [
-        createContextObject(props.deal, checklists, 'ender_type', value, true)
+        createContextObject(
+          props.deal,
+          brandChecklists,
+          checklists,
+          'ender_type',
+          value,
+          true
+        )
       ])
     )
   }
