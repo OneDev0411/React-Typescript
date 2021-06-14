@@ -255,7 +255,7 @@ export class TourDrawer extends React.Component {
                   <Box ml={4} mb={2}>
                     <Locations
                       locations={values.locations}
-                      handleDelete={this.handleDeleteAssociation}
+                      handleDelete={this.handleDelete}
                     />
                     <Box mt={0.5}>
                       <AddAssociation
@@ -318,15 +318,20 @@ export class TourDrawer extends React.Component {
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip title="Preview and print tour sheets">
-                        <PreviewTourSheets
-                          agent={user}
-                          disabled={isDisabled}
-                          listings={values.locations.map(
-                            l => l.listing.original
-                          )}
-                          tour={prePreviewFormat(values, this.state.tour)}
-                        />
+                      <Tooltip
+                        placement="top"
+                        title="Preview and print tour sheets"
+                      >
+                        <div>
+                          <PreviewTourSheets
+                            agent={user}
+                            disabled={isDisabled}
+                            listings={values.locations.map(
+                              l => l.listing.original
+                            )}
+                            tour={prePreviewFormat(values, this.state.tour)}
+                          />
+                        </div>
                       </Tooltip>
                       <Button
                         variant="contained"
