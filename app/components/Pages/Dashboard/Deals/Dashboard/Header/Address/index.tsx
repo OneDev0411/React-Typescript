@@ -20,6 +20,7 @@ import { upsertContexts } from 'actions/deals'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { IAppState } from 'reducers'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,8 +50,14 @@ export function Address(props: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(props.deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        props.deal.brand.id
+      ),
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
   )
 
   const cancelEdit = () => setIsEditingAddress(false)
@@ -60,7 +67,12 @@ export function Address(props: Props) {
   const addressTitle = (fullAddress || props.deal.title).split(',')
 
   const handleSave = async address => {
-    const contexts = createAddressContext(props.deal, checklists, address)
+    const contexts = createAddressContext(
+      props.deal,
+      brandChecklists,
+      checklists,
+      address
+    )
 
     try {
       await dispatch(upsertContexts(props.deal.id, contexts))

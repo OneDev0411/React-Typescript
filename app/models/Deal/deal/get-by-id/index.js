@@ -18,9 +18,6 @@ export async function getById(id) {
       .query({ 'associations[]': ['user.docusign'] })
       .query({ 'associations[]': ['deal_role.agent'] })
       .query({ 'associations[]': ['agent.office'] })
-      .query({ 'associations[]': ['brand_checklist.required_contexts'] })
-      .query({ 'associations[]': ['brand_checklist.optional_contexts'] })
-      .query({ 'associations[]': ['brand_checklist.statuses'] })
 
     return response.body.data
   } catch (e) {
