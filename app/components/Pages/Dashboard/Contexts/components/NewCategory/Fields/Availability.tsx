@@ -124,9 +124,17 @@ export function AvailabilityFields({
               {propertyType.label}
             </Grid>
 
-            {propertyType.checklists
-              ?.filter(checklist => checklist.brand === brandId)
-              ?.map(checklist => (
+            {(propertyType.checklists || [])
+              .filter(checklist => checklist.brand === brandId)
+              .sort((a, b) => {
+                const checklistsTypes = ['Selling', 'Buying', 'Offer']
+
+                return (
+                  checklistsTypes.indexOf(a.checklist_type) -
+                  checklistsTypes.indexOf(b.checklist_type)
+                )
+              })
+              .map(checklist => (
                 <Grid key={checklist.id} item xs={3} className={classes.center}>
                   <Field
                     name={`checklists[${checklist.id}]`}
