@@ -3,7 +3,7 @@ import { Box, makeStyles, Typography } from '@material-ui/core'
 const useStyles = makeStyles(
   theme => ({
     root: {
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: theme.palette.grey[50],
       height: theme.spacing(8),
       borderRadius: theme.spacing(0.5)
     }
@@ -21,13 +21,7 @@ function ShowingBookingListEmptyState({
   const classes = useStyles()
 
   return (
-    <Box
-      className={classes.root}
-      color="grey.500"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Box className={classes.root} display="flex" alignItems="center" px={2}>
       <Typography variant="body1">{message}</Typography>
     </Box>
   )
