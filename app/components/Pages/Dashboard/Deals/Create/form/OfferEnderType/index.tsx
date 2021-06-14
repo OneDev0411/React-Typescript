@@ -20,6 +20,8 @@ import { upsertContexts } from 'actions/deals'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
@@ -32,8 +34,13 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const dispatch = useDispatch()
@@ -42,6 +49,7 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
     if (deal) {
       const data = createContextObject(
         deal,
+        brandChecklists,
         checklists,
         'ender_type',
         value,

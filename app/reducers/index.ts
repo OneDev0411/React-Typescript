@@ -65,7 +65,5 @@ export interface IAppState extends IAppReducer {
 }
 
 export default (state, action) => {
-  console.log('[ + ] Dispatch action ', action)
-
   return appReducer(state, action)
 }

@@ -180,6 +180,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
         isOpen={isModalOpen}
         section={selectedSection}
         context={selectedContext}
+        brandId={brandId}
         brandPropertyTypes={brandPropertyTypes}
         onClose={() => {
           setIsModalOpen(false)

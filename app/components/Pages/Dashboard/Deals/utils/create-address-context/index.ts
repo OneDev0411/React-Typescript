@@ -3,6 +3,7 @@ import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 export function createAddressContext(
   deal: IDeal,
+  brandChecklists: IBrandChecklist[],
   checklists: IDealChecklist[],
   address: unknown
 ) {
@@ -14,7 +15,14 @@ export function createAddressContext(
       approved: boolean
     }[]
   >((acc, [name, value]) => {
-    const context = createContextObject(deal, checklists, name, value, true)
+    const context = createContextObject(
+      deal,
+      brandChecklists,
+      checklists,
+      name,
+      value,
+      true
+    )
 
     return context ? [...acc, context] : acc
   }, [])

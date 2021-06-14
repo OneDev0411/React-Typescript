@@ -25,6 +25,7 @@ import { createContextObject } from 'models/Deal/helpers/brand-context/create-co
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 interface Props {
   deal: IDeal
@@ -49,14 +50,20 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const statuses = useDealStatuses(deal)
 
-  const checklists = useSelector(({ deals }: IAppState) =>
-    getDealChecklists(deal, deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        deal.brand.id
+      ),
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
   const user = useSelector(selectUser)
 
   const statusName = getStatusContextKey(deal)
 
-  const definition = searchContext(deal, statusName)
+  const definition = searchContext(deal, brandChecklists, statusName)
   const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
 
   /**
@@ -78,7 +85,14 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     await dispatch(
       upsertContexts(deal.id, [
-        createContextObject(deal, checklists, statusName, status.label, true)
+        createContextObject(
+          deal,
+          brandChecklists,
+          checklists,
+          statusName,
+          status.label,
+          true
+        )
       ])
     )
 
@@ -91,7 +105,7 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
    * @param {String} status the new deal status
    */
   const notifyAdmin = async status => {
-    const checklist = getActiveChecklist(deal, checklists)
+    const checklist = getActiveChecklist(deal, brandChecklists, checklists)
 
     if (!checklist) {
       return

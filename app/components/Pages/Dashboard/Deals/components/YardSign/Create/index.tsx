@@ -19,6 +19,7 @@ import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 const ITEMS = [
   'Coming soon',
@@ -31,6 +32,7 @@ const ITEMS = [
 interface StateProps {
   user: IUser
   checklists: IDealChecklist[]
+  brandChecklists: IBrandChecklist[]
 }
 
 interface Props {
@@ -77,7 +79,11 @@ function Form(props: Props & StateProps & DispatchProps) {
   }
 
   const handleCreateYardSign = async (): Promise<void> => {
-    const checklist = getActiveChecklist(props.deal, props.checklists)!
+    const checklist = getActiveChecklist(
+      props.deal,
+      props.brandChecklists,
+      props.checklists
+    )!
 
     setIsCreatingTask(true)
 
@@ -149,10 +155,14 @@ function Form(props: Props & StateProps & DispatchProps) {
   )
 }
 
-function mapStateToProps(state: IAppState, ownProps: Props): StateProps {
+function mapStateToProps(state: IAppState, { deal }: Props): StateProps {
   return {
     user: selectUser(state),
-    checklists: getDealChecklists(ownProps.deal, state.deals.checklists)
+    checklists: getDealChecklists(deal, state.deals.checklists),
+    brandChecklists: getBrandChecklistsById(
+      state.deals.brandChecklists,
+      deal.brand.id
+    )
   }
 }
 
