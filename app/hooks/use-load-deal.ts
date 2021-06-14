@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { useSelector } from 'react-redux'
+import { useSelector, batch } from 'react-redux'
 
 import { getDeal, getForms, getBrandChecklists } from 'actions/deals'
 import { IAppState } from 'reducers'
@@ -110,18 +110,20 @@ export function useLoadFullDeal(id: UUID) {
      * initializes a deal by fetching its checklists and forms
      */
     async function load(): Promise<void> {
-      // fetch deal with its checklists
-      const fetchedDeal: IDeal = await fetchDeal()
+      batch(async () => {
+        // fetch deal with its checklists
+        const fetchedDeal: IDeal = await fetchDeal()
 
-      // fetch deal forms and checklists
-      await Promise.all([
-        await fetchForms(fetchedDeal),
-        await fetchChecklists(fetchedDeal)
-      ])
+        // fetch deal forms and checklists
+        await Promise.all([
+          await fetchForms(fetchedDeal),
+          await fetchChecklists(fetchedDeal)
+        ])
 
-      setIsFetchingCompleted(true)
+        setIsFetchingCompleted(true)
 
-      setDeal(fetchedDeal)
+        setDeal(fetchedDeal)
+      })
     }
 
     load()
