@@ -74,7 +74,7 @@ const Layout = ({
                 </Box>
               )}
               <SvgIcon path={stepIcon} className={classes.stepTypeIcon} />
-              <Typography variant="body1">
+              <Typography variant="body1" component="div">
                 {index}. {title}{' '}
                 {!step && (
                   <Chip
