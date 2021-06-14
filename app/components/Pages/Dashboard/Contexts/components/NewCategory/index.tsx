@@ -12,6 +12,7 @@ import { AvailabilityFields } from './Fields/Availability'
 interface Props {
   isOpen: boolean
   brandPropertyTypes: IDealPropertyType[]
+  brandId: UUID
   onClose: () => void
   onSubmit: (contextData: IDealBrandContext, contextId?: UUID) => Promise<any>
   context: IDealBrandContext | null
@@ -24,6 +25,7 @@ function NewContextModal({
   onSubmit,
   context,
   section,
+  brandId,
   brandPropertyTypes
 }: Props) {
   const classes = useStyles()
@@ -65,6 +67,7 @@ function NewContextModal({
                 </Box>
                 <AvailabilityFields
                   context={context}
+                  brandId={brandId}
                   brandPropertyTypes={brandPropertyTypes}
                 />
               </Box>
