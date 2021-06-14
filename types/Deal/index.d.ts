@@ -1,15 +1,8 @@
 declare type IDealType = 'Selling' | 'Buying'
-declare type IDealPropertyType =
-  | 'Resale'
-  | 'New Home'
-  | 'Lot / Land'
-  | 'Residential Lease'
-  | 'Commercial Sale'
-  | 'Commercial Lease'
-  | 'Active Offer'
 
 declare type IDealVisibility = 'draft' | 'visible'
 declare type IDealEnderType = 'AgentDoubleEnder' | 'OfficeDoubleEnder' | null
+declare type IDealChecklistType = 'Selling' | 'Buying' | 'Offer'
 declare interface IDeal extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'

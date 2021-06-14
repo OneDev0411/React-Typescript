@@ -1,6 +1,3 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-
 import { Box, Button } from '@material-ui/core'
 
 import {
@@ -15,11 +12,6 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 
 import { RadioGroup } from 'components/RadioGroup'
 
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
-import { upsertContexts } from 'actions/deals'
-
-import { useCreationContext } from '../../context/use-creation-context'
-
 interface Props {
   onChange: (value: IDealEnderType) => void
 }
@@ -27,9 +19,6 @@ interface Props {
 export function DealEnderType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal } = useCreationContext()
-
-  const dispatch = useDispatch()
 
   const handleSkip = () => {
     if (wizard.currentStep === step) {
@@ -38,13 +27,7 @@ export function DealEnderType({ onChange }: Props) {
   }
 
   const handleChange = (value: IDealEnderType) => {
-    if (deal) {
-      const data = createUpsertObject(deal, 'ender_type', value, false)
-
-      dispatch(upsertContexts(deal!.id, [data]))
-    } else {
-      onChange(value)
-    }
+    onChange(value)
 
     if (wizard.currentStep === step) {
       wizard.next()

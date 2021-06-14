@@ -25,3 +25,7 @@ export const WizardContext = React.createContext<IWizardState | undefined>(
 export const SectionContext = React.createContext<
   IWizardSectionState | undefined
 >(undefined)
+
+export const SectionErrorContext = React.createContext<string | undefined>(
+  undefined
+)

@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import { useForm, Controller } from 'react-hook-form'
 import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
 
+import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
+
 import Deal from 'models/Deal'
 
 import {
   createDeal,
   createRoles,
-  getContextsByDeal,
   createChecklist,
   updateListing,
   upsertContexts
@@ -22,7 +23,10 @@ import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 
-import { getDefinitionId } from 'models/Deal/helpers/dynamic-context'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { getActiveTeamId } from 'utils/user-teams'
+
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getChangedRoles } from './helpers/get-changed-roles'
 
@@ -44,6 +48,12 @@ import { Header } from './components/Header'
 import { Context } from './context'
 import type { IDealSide } from './types'
 
+interface DealContext {
+  definition: UUID
+  checklist: UUID
+  value: string
+  approved: boolean
+}
 interface Props {
   router: InjectedRouter
   route: Route
@@ -64,16 +74,21 @@ function CreateDeal({ router, route }: Props) {
     dealId ? deals.list[dealId] : null
   )
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
+  const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
+    getActiveTeamId(user)!
+  )
+
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'
-  const propertyType: IDealPropertyType = watch('property_type')
+  const propertyTypeId = watch('property_type')
   const enderType = watch('ender_type')
-
-  useEffect(() => {
-    if (dealId) {
-      dispatch(getContextsByDeal(dealId))
-    }
-  }, [dealId, dispatch])
+  const propertyType = brandPropertyTypes.find(
+    ({ id }) => id === propertyTypeId
+  )
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
@@ -116,7 +131,7 @@ function CreateDeal({ router, route }: Props) {
 
     const newDeal: IDeal = await Deal.create(user, {
       brand: agent!.brand,
-      property_type: propertyType,
+      property_type: propertyType?.id,
       deal_type: dealType,
       is_draft: true
     })
@@ -135,8 +150,8 @@ function CreateDeal({ router, route }: Props) {
       dispatch(
         createChecklist(newDeal.id, {
           conditions: {
-            deal_type: newDeal.deal_type,
-            property_type: newDeal.property_type
+            checklist_type: newDeal.deal_type,
+            property_type: newDeal.property_type.id
           }
         })
       )
@@ -154,28 +169,31 @@ function CreateDeal({ router, route }: Props) {
   }
 
   const saveContexts = (deal: IDeal, checklist: IDealChecklist) => {
-    const contexts: IDealContext[] = []
+    const contexts: DealContext[] = []
 
     if (deal.deal_type === 'Selling') {
-      const defaultStatus = deal.property_type.includes('Lease')
-        ? 'Lease'
-        : 'Active'
+      const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'
+      const definition = getDefinitionId(deal, 'listing_status')
 
-      contexts.push({
-        definition: getDefinitionId(deal.id, 'listing_status'),
-        checklist: checklist.id,
-        value: defaultStatus,
-        approved: true
-      })
+      definition &&
+        contexts.push({
+          definition,
+          checklist: checklist.id,
+          value: defaultStatus,
+          approved: true
+        })
     }
 
     if (isDoubleEnded) {
-      contexts.push({
-        definition: getDefinitionId(deal.id, 'ender_type'),
-        checklist: checklist.id,
-        value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
-        approved: true
-      })
+      const definition = getDefinitionId(deal, 'ender_type')
+
+      definition &&
+        contexts.push({
+          definition,
+          checklist: checklist.id,
+          value: isAgentDoubleEnded ? 'AgentDoubleEnder' : 'OfficeDoubleEnder',
+          approved: true
+        })
     }
 
     if (contexts.length > 0) {
@@ -188,7 +206,7 @@ function CreateDeal({ router, route }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, property.address)
+      const contexts = createAddressContext(deal, checklists, property.address)
 
       dispatch(upsertContexts(deal.id, contexts))
     }
@@ -205,10 +223,10 @@ function CreateDeal({ router, route }: Props) {
   const getClientTitle = () => {
     const type =
       dealType === 'Selling'
-        ? propertyType?.includes('Lease')
+        ? propertyType?.is_lease
           ? 'Landlord'
           : 'Seller'
-        : propertyType?.includes('Lease')
+        : propertyType?.is_lease
         ? 'Tenant'
         : 'Buyer'
 
@@ -224,7 +242,8 @@ function CreateDeal({ router, route }: Props) {
     <Context.Provider
       value={{
         deal,
-        user
+        user,
+        propertyTypes: brandPropertyTypes
       }}
     >
       <Header
@@ -280,8 +299,7 @@ function CreateDeal({ router, route }: Props) {
                     <div>
                       Who is the{' '}
                       <span className={classes.brandedTitle}>
-                        {propertyType?.includes('Lease') ? 'Tenant' : 'Buyer'}{' '}
-                        Agent
+                        {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
                       </span>
                       ?
                     </div>
@@ -320,10 +338,7 @@ function CreateDeal({ router, route }: Props) {
                   <div>
                     Who is the{' '}
                     <span className={classes.brandedTitle}>
-                      {propertyType?.includes('Lease')
-                        ? "Landlord's"
-                        : "Seller's"}{' '}
-                      Agent
+                      {propertyType?.is_lease ? "Landlord's" : "Seller's"} Agent
                     </span>
                     ?
                   </div>

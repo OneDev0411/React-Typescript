@@ -18,6 +18,7 @@ import { createTaskComment } from 'deals/utils/create-task-comment'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
 const ITEMS = [
   'Coming soon',
@@ -76,9 +77,7 @@ function Form(props: Props & StateProps & DispatchProps) {
   }
 
   const handleCreateYardSign = async (): Promise<void> => {
-    const checklist = props.checklists.find(
-      checklist => checklist.checklist_type === props.deal.deal_type
-    ) as IDealChecklist
+    const checklist = getActiveChecklist(props.deal, props.checklists)!
 
     setIsCreatingTask(true)
 

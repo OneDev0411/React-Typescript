@@ -4,7 +4,7 @@ import { Button } from '@material-ui/core'
 
 import { isValidDate } from 'utils/date-times/is-valid-date'
 
-import DealContext from 'models/Deal/helpers/dynamic-context'
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 import { getField } from 'models/Deal/helpers/context/get-field'
 
 import DatePicker from 'components/DatePicker'
@@ -16,9 +16,7 @@ import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
 
 export function ContextField(props) {
-  const context = useRef(
-    DealContext.searchContext(props.deal.id, props.annotation.context)
-  )
+  const context = useRef(searchContext(props.deal, props.annotation.context))
 
   const contextValue = getField(props.deal, props.annotation.context)
 

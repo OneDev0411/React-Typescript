@@ -1,8 +1,7 @@
 import { getContext } from 'models/Deal/helpers/context'
-import {
-  searchContext,
-  filterByStatus
-} from 'models/Deal/helpers/dynamic-context'
+
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
+import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 
 export function showStatusQuestion(
   deal: IDeal | null,
@@ -13,20 +12,14 @@ export function showStatusQuestion(
     return false
   }
 
-  const definition = searchContext(deal.id, contextName)
+  const definition = searchContext(deal, contextName)
   const dealContext = getContext(deal, contextName)
 
   if (!definition) {
     return false
   }
 
-  const isRequired = filterByStatus(
-    definition,
-    dealType,
-    deal.property_type,
-    deal.has_active_offer,
-    'required'
-  )
+  const isRequired = isRequiredContext(deal, definition.key)
 
   if (isRequired === false) {
     return false

@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { MenuItem, createStyles, makeStyles, Theme } from '@material-ui/core'
+import {
+  MenuItem,
+  createStyles,
+  makeStyles,
+  Theme,
+  Tooltip
+} from '@material-ui/core'
 
 import { IAppState } from 'reducers'
 import Deal from 'models/Deal'
@@ -10,12 +16,15 @@ import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { useDealStatuses } from 'hooks/use-deal-statuses'
-import DealContext from 'models/Deal/helpers/dynamic-context'
 
 import { getStatusColorClass } from 'utils/listing'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { selectUser } from 'selectors/user'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
 interface Props {
   deal: IDeal
@@ -35,27 +44,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function DealStatus({ deal, isBackOffice }: Props) {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const [isSaving, setIsSaving] = useState(false)
-  const statuses = useDealStatuses(deal.id)
+  const statuses = useDealStatuses(deal)
 
-  const dispatch = useDispatch()
   const checklists = useSelector(({ deals }: IAppState) =>
     getDealChecklists(deal, deals.checklists)
   )
   const user = useSelector(selectUser)
 
+  const statusName = getStatusContextKey(deal)
+
+  const definition = searchContext(deal, statusName)
+  const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
+
   /**
    * updates listing_status context
    * @param {Object} selectedItem the selected dropdown item
    */
-  const updateStatus = async (item: IDealStatus): Promise<void> => {
+  const updateStatus = async (status: IDealStatus): Promise<void> => {
     if (isSaving) {
       return
     }
 
-    if (item.admin_only && !deal.is_draft && !isBackOffice) {
-      notifyAdmin(item.label)
+    if (status.admin_only && !deal.is_draft && !isBackOffice) {
+      notifyAdmin(status.label)
 
       return
     }
@@ -64,25 +78,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     await dispatch(
       upsertContexts(deal.id, [
-        DealContext.createUpsertObject(
-          deal,
-          DealContext.getStatusField(deal),
-          item.label,
-          true
-        )
+        createContextObject(deal, checklists, statusName, status.label, true)
       ])
     )
 
     // set state
     setIsSaving(false)
-  }
-
-  const getDealType = (): IDealType => {
-    if (deal.has_active_offer) {
-      return 'Buying'
-    }
-
-    return deal.deal_type
   }
 
   /**
@@ -91,6 +92,10 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
    */
   const notifyAdmin = async status => {
     const checklist = getActiveChecklist(deal, checklists)
+
+    if (!checklist) {
+      return
+    }
 
     dispatch(
       createRequestTask({
@@ -109,49 +114,60 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
   return (
     <BaseDropdown
-      buttonLabel={
-        <>
-          {dealStatus && (
-            <span
-              className={classes.bullet}
-              style={{
-                backgroundColor: getStatusColorClass(dealStatus)
-              }}
-            />
-          )}
-          {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
-        </>
-      }
-      DropdownToggleButtonProps={{
-        variant: 'outlined',
-        size: 'small'
-      }}
-      renderMenu={({ close }) => (
-        <div>
-          {statuses
-            .filter(
-              status =>
-                status.deal_types.includes(getDealType()) &&
-                status.property_types.includes(deal.property_type)
+      renderDropdownButton={buttonProps => (
+        <Tooltip
+          title={
+            isDisabled ? (
+              <div>
+                The status can only be changed on MLS. Once changed, the update
+                will be reflected here.
+              </div>
+            ) : (
+              ''
             )
-            .map((item, index) => (
-              <MenuItem
-                key={index}
-                value={index}
-                onClick={() => {
-                  close()
-                  updateStatus(item)
-                }}
-              >
+          }
+        >
+          <span>
+            <DropdownToggleButton
+              {...buttonProps}
+              variant="outlined"
+              size="small"
+              disabled={isDisabled}
+            >
+              {dealStatus && (
                 <span
                   className={classes.bullet}
                   style={{
-                    backgroundColor: getStatusColorClass(item.label)
+                    backgroundColor: getStatusColorClass(dealStatus)
                   }}
                 />
-                {item.label}
-              </MenuItem>
-            ))}
+              )}
+              {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
+            </DropdownToggleButton>
+          </span>
+        </Tooltip>
+      )}
+      renderMenu={({ close }) => (
+        <div>
+          {statuses.map((item, index) => (
+            <MenuItem
+              key={index}
+              value={index}
+              selected={item.label === dealStatus}
+              onClick={() => {
+                close()
+                updateStatus(item)
+              }}
+            >
+              <span
+                className={classes.bullet}
+                style={{
+                  backgroundColor: getStatusColorClass(item.label)
+                }}
+              />
+              {item.label}
+            </MenuItem>
+          ))}
         </div>
       )}
     />

@@ -1,5 +1,5 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { memo } from 'react'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -11,12 +11,12 @@ import {
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
 
 interface StateProps {
   user: IUser | null
-  deals: Record<UUID, IDeal>
+  dealsCount: number
   brandContexts: IDealBrandContext[]
   isFetchingDeals: boolean
   brandId: UUID | null
@@ -29,23 +29,28 @@ interface Props {
   children: React.ReactNode
 }
 
-const DealsContainer = React.memo((props: Props) => {
+function Container(props: Props) {
+  console.log('[ x ] Rerender deals container')
+
   const dispatch = useDispatch()
 
-  const { user, deals, brandContexts, isFetchingDeals, brandId } = useSelector<
-    IAppState,
-    StateProps
-  >(({ deals, user }) => {
+  const {
+    user,
+    dealsCount,
+    brandContexts,
+    isFetchingDeals,
+    brandId
+  } = useSelector<IAppState, StateProps>(({ deals, user }) => {
     const brandId = getActiveTeamId(user)
 
     return {
-      deals: deals.list,
-      brandContexts: selectContextsByBrand(deals.contexts, brandId),
+      dealsCount: Object.keys(deals.list).length,
+      brandContexts: selectBrandContexts(deals.contexts, brandId),
       isFetchingDeals: deals.properties.isFetchingDeals,
       brandId,
       user
     }
-  })
+  }, shallowEqual)
 
   useEffectOnce(() => {
     const isBackOffice = hasUserAccess(user, 'BackOffice')
@@ -58,7 +63,7 @@ const DealsContainer = React.memo((props: Props) => {
       dispatch(getContextsByBrand(brandId))
     }
 
-    if (Object.keys(deals).length === 0 && !isFetchingDeals) {
+    if (dealsCount === 0 && !isFetchingDeals) {
       if (isBackOffice || viewAsEveryoneOnTeam(user)) {
         dispatch(getDeals(user))
       } else {
@@ -79,7 +84,7 @@ const DealsContainer = React.memo((props: Props) => {
     )
   }
 
-  return props.children
-})
+  return <>{props.children}</>
+}
 
-export default DealsContainer
+export default memo(Container)

@@ -1,7 +1,7 @@
 {% for listing in listings %}
 <mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree" >
   <mj-column>
-    <mj-image padding="0" rechat-assets="listing-image" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}" align="left"></mj-image>
+    <mj-image padding="0" rechat-assets="listing-image" href="{{getListingUrl(listing)}}" rechat-listing="{{ listing.id }}" src="{{listing.gallery_image_urls[0]}}" align="left"></mj-image>
    <mj-spacer height="15px"></mj-spacer>
     <mj-text mj-class="h3" padding="0" rechat-editable="tree"  line-height="1.5" align="left">
       {{listing.property.address.street_address}}

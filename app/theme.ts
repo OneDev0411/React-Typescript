@@ -164,6 +164,12 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontSize: '0.875rem',
         lineHeight: 1.42
       },
+      subtitle3: {
+        fontFamily: 'LatoBold',
+        fontWeight: 700,
+        fontSize: '0.8125rem',
+        lineHeight: 1.53
+      },
       body1: {
         fontFamily: 'LatoRegular',
         fontWeight: 400,
@@ -175,6 +181,12 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontWeight: 400,
         fontSize: '0.875rem',
         lineHeight: 1.42
+      },
+      body3: {
+        fontFamily: 'LatoRegular',
+        fontWeight: 400,
+        fontSize: '0.8125rem',
+        lineHeight: 1.53
       },
       button: {
         fontFamily: 'LatoBold',
@@ -226,21 +238,9 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
 
   const theme: Theme = createMuiTheme(mergedValue)
 
-  theme.typography.subtitle3 = {
-    ...theme.typography.subtitle2,
-    fontSize: '0.8125rem',
-    lineHeight: 1.53
-  }
-
-  theme.typography.body3 = {
-    ...theme.typography.body2,
-    fontSize: '0.8125rem',
-    lineHeight: 1.53
-  }
-
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
-    ; (window as any).theme = theme
+    ;(window as any).theme = theme
   }
 
   return theme

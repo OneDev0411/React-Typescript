@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   QuestionSection,
@@ -14,8 +14,11 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { RadioGroup } from 'components/RadioGroup'
 
 import { getLegalFullName } from 'deals/utils/roles'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { upsertContexts } from 'actions/deals'
+
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -29,11 +32,21 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
   const dispatch = useDispatch()
 
   const handleChange = (value: IDealEnderType) => {
     if (deal) {
-      const data = createUpsertObject(deal, 'ender_type', value, false)
+      const data = createContextObject(
+        deal,
+        checklists,
+        'ender_type',
+        value,
+        false
+      )
 
       dispatch(upsertContexts(deal!.id, [data]))
     } else {

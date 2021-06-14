@@ -1,7 +1,7 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+
+import { OAuthProvider } from 'constants/contacts'
 
 import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
 
@@ -44,7 +44,7 @@ export function useConnectOAuthAccount(
       startImportingOAuthContacts(provider)
 
       window.location.href = url
-    } catch(e) {
+    } catch (e) {
       dispatch(
         addNotification({
           status: 'error',

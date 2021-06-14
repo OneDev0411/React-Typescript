@@ -8,9 +8,9 @@ import {
   Theme
 } from '@material-ui/core'
 import fecha from 'fecha'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { upsertContexts } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
 
@@ -28,12 +28,19 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { getContextInputMask } from 'deals/utils/get-context-mask'
 
 import { getField } from 'models/Deal/helpers/context'
+import { validateContext } from 'models/Deal/helpers/context/validate-context'
+
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
   concurrentMode?: boolean
   context: IDealBrandContext
+  error?: string
   onChange?: (value: string | number) => void
 }
 
@@ -58,6 +65,7 @@ const useStyles = makeStyles(
 
 export function DealContext({
   concurrentMode = false,
+  error,
   context,
   onChange
 }: Props) {
@@ -68,11 +76,16 @@ export function DealContext({
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
 
+  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
+    getDealChecklists(deal, state.deals.checklists)
+  )
+
   const defaultValue = deal ? getField(deal, context.key) : ''
 
   const [inputValue, setInputValue] = useState(defaultValue)
 
   const contextType = context.data_type
+  const properties = getContextProperties(context.key)
   const mask = getContextInputMask(context)
 
   useEffect(() => {
@@ -83,7 +96,11 @@ export function DealContext({
   }, [defaultValue])
 
   useEffect(() => {
-    if (inputValue && concurrentMode && context.validate(context, inputValue)) {
+    if (
+      inputValue &&
+      concurrentMode &&
+      validateContext(context, inputValue, true)
+    ) {
       handleSave()
     }
 
@@ -134,14 +151,19 @@ export function DealContext({
     if (deal && !onChange) {
       try {
         const approved = isBackOffice(user) ? true : !context.needs_approval
-        const data = createUpsertObject(deal, context.key, value, approved)
+        const data = createContextObject(
+          deal,
+          checklists,
+          context.key,
+          value,
+          approved
+        )
 
         dispatch(upsertContexts(deal!.id, [data]))
       } catch (e) {
         console.log(e)
       }
     } else {
-      console.log(`Change ${context.key} To ${value}`)
       onChange?.(value)
     }
 
@@ -155,7 +177,7 @@ export function DealContext({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>
         {contextType === 'Date' ? 'When' : 'What'} is the{' '}
         <span className={classes.label}>{context.label}</span> for this deal?
@@ -187,7 +209,7 @@ export function DealContext({
                     context.format === 'Currency' ? (
                       <InputAdornment position="start">$</InputAdornment>
                     ) : null,
-                  placeholder: context.properties?.placeholder ?? '',
+                  placeholder: properties?.placeholder ?? '',
                   inputComponent: mask ? MaskedInput : undefined,
                   value: inputValue,
                   onChange: handleChangeInputValue
@@ -201,7 +223,9 @@ export function DealContext({
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!inputValue || !context.validate(context, inputValue)}
+                disabled={
+                  !inputValue || !validateContext(context, inputValue, true)
+                }
                 className={classes.saveButton}
                 onClick={() => handleSave()}
               >

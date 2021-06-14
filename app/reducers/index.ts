@@ -64,4 +64,8 @@ export interface IAppState extends IAppReducer {
   user: IUserState
 }
 
-export default (state, action) => appReducer(state, action)
+export default (state, action) => {
+  console.log('[ + ] Dispatch action ', action)
+
+  return appReducer(state, action)
+}

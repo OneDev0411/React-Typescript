@@ -121,6 +121,12 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.Marketing>
 
+          <Acl.Marketing>
+            <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
+              Flows
+            </SideNavLinkItem>
+          </Acl.Marketing>
+
           <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
             Properties
           </SideNavLinkItem>
