@@ -27,7 +27,7 @@ const useStyles = makeStyles(
       paddingRight: theme.spacing(1)
     },
     row: { '&:hover $actions': { opacity: 1 } },
-    notificationRow: {},
+    rowPast: { color: theme.palette.grey[700] },
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -180,7 +180,8 @@ function ShowingBookingList({
         getTrProps={({ row }) => ({
           className: classNames(
             classes.rowBase,
-            row.notifications?.length ? classes.notificationRow : classes.row
+
+            row.time >= new Date().toISOString() ? classes.row : classes.rowPast
           )
         })}
       />

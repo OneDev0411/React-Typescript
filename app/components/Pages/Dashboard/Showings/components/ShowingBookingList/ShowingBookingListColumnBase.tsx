@@ -1,12 +1,5 @@
 import { ReactNode } from 'react'
-import { Typography, makeStyles } from '@material-ui/core'
-
-const useStyles = makeStyles(
-  theme => ({
-    root: { color: theme.palette.grey[900] }
-  }),
-  { name: 'ShowingBookingListColumnBase' }
-)
+import { Typography } from '@material-ui/core'
 
 interface ShowingBookingListColumnBaseProps {
   children: ReactNode
@@ -15,10 +8,8 @@ interface ShowingBookingListColumnBaseProps {
 function ShowingBookingListColumnBase({
   children
 }: ShowingBookingListColumnBaseProps) {
-  const classes = useStyles()
-
   return (
-    <Typography className={classes.root} variant="body2" component="div">
+    <Typography variant="body2" component="div">
       {children}
     </Typography>
   )

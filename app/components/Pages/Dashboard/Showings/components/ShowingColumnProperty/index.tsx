@@ -7,11 +7,7 @@ export interface ShowingColumnPropertyProps {
   address: string
 }
 
-function ShowingColumnProperty({
-  image,
-  address,
-  ...otherProps
-}: ShowingColumnPropertyProps) {
+function ShowingColumnProperty({ image, address }: ShowingColumnPropertyProps) {
   return (
     <Box display="flex" alignItems="center" mr={1}>
       <Box flexShrink="0" flexGrow="0" mr={2}>
