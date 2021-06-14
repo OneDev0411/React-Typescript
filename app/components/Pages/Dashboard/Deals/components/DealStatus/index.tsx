@@ -11,6 +11,7 @@ import {
 
 import { IAppState } from 'reducers'
 import Deal from 'models/Deal'
+
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { upsertContexts } from 'actions/deals'
 import { getDealChecklists } from 'reducers/deals/checklists'
@@ -19,6 +20,7 @@ import { useDealStatuses } from 'hooks/use-deal-statuses'
 
 import { getStatusColorClass } from 'utils/listing'
 
+import { addNotification as notify } from 'components/notification'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { selectUser } from 'selectors/user'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
@@ -81,8 +83,6 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
       return
     }
 
-    setIsSaving(true)
-
     const context = createContextObject(
       deal,
       brandChecklists,
@@ -93,10 +93,17 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     )
 
     if (context === null) {
-      console.log('Can not save status')
+      dispatch(
+        notify({
+          status: 'error',
+          message: 'Could not change the status'
+        })
+      )
 
       return
     }
+
+    setIsSaving(true)
 
     await dispatch(upsertContexts(deal.id, [context]))
 
