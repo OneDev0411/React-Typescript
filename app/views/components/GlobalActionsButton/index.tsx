@@ -26,7 +26,7 @@ export const GlobalActions = (props: Props) => {
     const actions: ItemType[] = []
 
     if (hasUserAccessToCrm(user)) {
-      actions.push('email', 'event', 'contact', 'tour')
+      actions.push('email', 'event', 'log', 'contact', 'tour')
     }
 
     if (hasUserAccessToDeals(user)) {
@@ -97,6 +97,14 @@ export const GlobalActions = (props: Props) => {
         })
 
       case 'event':
+        return selectedItem.render({
+          user,
+          isOpen: true,
+          onClose: handleCloseRenderedItem,
+          submitCallback: handleSubmitEvent
+        })
+
+      case 'log':
         return selectedItem.render({
           user,
           isOpen: true,
