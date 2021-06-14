@@ -2,7 +2,7 @@ import { memo } from 'react'
 
 import { useTitle } from 'react-use'
 
-import { Box, useTheme, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import { WithRouterProps } from 'react-router'
 
@@ -13,44 +13,29 @@ import TabContentSwitch from 'components/TabContentSwitch'
 import LoadingContainer from 'components/LoadingContainer'
 
 import { showingsTabs } from '../../constants'
-import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import ShowingsTabProperties from './ShowingsTabProperties'
 import ShowingsTabs, { ShowingsTabsProps } from './ShowingsTabs'
 import ShowingsTabBookings from './ShowingsTabBookings'
 import useGetShowings from './use-get-showings'
-
-const useStyles = makeStyles(
-  theme => ({
-    header: { backgroundColor: theme.palette.common.white }
-  }),
-  { name: 'Showings' }
-)
 
 type ShowingsProps = WithRouterProps<{
   tab?: ShowingsTabsProps['value']
 }>
 
 function Showings({ params }: ShowingsProps) {
-  const theme = useTheme()
-  const classes = useStyles()
-
   useTitle('Showings | Rechat')
-
-  useBodyBackgroundColor(theme.palette.grey[50])
 
   const tab = params.tab || showingsTabs.Properties
 
   const { isLoading, showings, appointments, setShowings } = useGetShowings()
 
   return (
-    <PageLayout position="relative" overflow="hidden" gutter={0}>
-      <Box className={classes.header} px={4} pt={4}>
-        <PageLayout.Header title="Showings" />
-        <Box mt={4}>
+    <PageLayout position="relative" overflow="hidden">
+      <PageLayout.Header title="Showings" />
+      <PageLayout.Main>
+        <Box mb={4}>
           <ShowingsTabs value={tab} />
         </Box>
-      </Box>
-      <PageLayout.Main mt={0} px={4} pb={4} pt={4}>
         {isLoading ? (
           <LoadingContainer style={{ padding: '10% 0' }} />
         ) : (

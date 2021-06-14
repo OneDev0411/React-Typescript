@@ -4,7 +4,7 @@ import { useTitle } from 'react-use'
 
 import { WithRouterProps } from 'react-router'
 
-import { Box, useTheme } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -19,7 +19,6 @@ import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
-import useBodyBackgroundColor from '../../hooks/use-body-background-color'
 import useGetShowing from './use-get-showing'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 
@@ -32,10 +31,6 @@ const defaultAppointments: IShowingAppointment[] = []
 
 function ShowingDetail({ params }: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')
-
-  const theme = useTheme()
-
-  useBodyBackgroundColor(theme.palette.grey[50])
 
   const showingId = params.id
 
@@ -55,10 +50,11 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         address={showing?.title || ''}
         listing={showing?.listing || (showing?.deal?.listing as IListing)}
         bookingUrl={showingBookingUrl}
-      >
-        <ShowingDetailTabs value={tab} id={showingId} />
-      </ShowingDetailHeader>
-      <PageLayout.Main mt={0} px={4} pb={4} pt={3}>
+      />
+      <PageLayout.Main gutter={4} mt={0}>
+        <Box mb={3}>
+          <ShowingDetailTabs value={tab} id={showingId} />
+        </Box>
         {isLoading || !showing ? (
           <Box height="600px">
             <LoadingContainer

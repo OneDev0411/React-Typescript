@@ -34,8 +34,7 @@ const useStyles = makeStyles(
     },
     tableContainer: {
       height: '100%',
-      position: 'relative',
-      backgroundColor: theme.palette.common.white
+      position: 'relative'
     },
     loading: ({ loading }: { loading: LoadingPosition }) => {
       let top: number | string = '50%'

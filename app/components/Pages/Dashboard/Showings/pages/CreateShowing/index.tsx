@@ -27,7 +27,6 @@ import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
-// import ShowingStepFeedbackTemplate from '../../components/ShowingStepFeedbackTemplate'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import ShowingCloseButton from '../../components/ShowingCloseButton'
 

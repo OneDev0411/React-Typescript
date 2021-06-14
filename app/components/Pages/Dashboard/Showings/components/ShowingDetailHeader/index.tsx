@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
 
@@ -33,7 +32,6 @@ interface ShowingDetailHeaderProps {
   address: string
   image: string
   listing?: IListing
-  children: ReactNode
   bookingUrl?: string
 }
 
@@ -41,7 +39,6 @@ function ShowingDetailHeader({
   image,
   address,
   listing,
-  children,
   bookingUrl
 }: ShowingDetailHeaderProps) {
   const classes = useStyles()
@@ -91,7 +88,6 @@ function ShowingDetailHeader({
           <ShowingCloseButton />
         </Box>
       </Box>
-      {children}
     </Box>
   )
 }
