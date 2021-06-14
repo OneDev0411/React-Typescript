@@ -57,12 +57,13 @@ export default function ImageSelectDialog({
   const classes = useStyles()
   const dialogContentRef = useRef<HTMLDivElement>(null)
   const confirmation = useContext(ConfirmationModalContext)
-  const [selectedTab, setSelectedTab] = useState<TabValue>('upload-photo')
+  const [selectedTab, setSelectedTab] = useState<TabValue>(
+    onUpload ? 'upload-photo' : 'team-library'
+  )
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
-  const [imageFileToEdit, setImageFileToEdit] = useState<
-    Nullable<File | string>
-  >(null)
+  const [imageFileToEdit, setImageFileToEdit] =
+    useState<Nullable<File | string>>(null)
 
   const isSearchableTabActive = isSearchableTab(selectedTab)
 
