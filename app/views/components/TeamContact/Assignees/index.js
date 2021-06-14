@@ -78,7 +78,13 @@ export class Assignees extends React.Component {
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
           style={{ marginRight: '0.5rem', display: 'inline-flex' }}
-          buttonRenderer={buttonProps => (
+          buttonRenderer={({
+            isBlock,
+            noBorder,
+            isOpen,
+            selectedItem,
+            ...buttonProps
+          }) => (
             <Button
               {...buttonProps}
               size="small"

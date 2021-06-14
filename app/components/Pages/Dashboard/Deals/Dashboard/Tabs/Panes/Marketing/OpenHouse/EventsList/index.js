@@ -1,9 +1,11 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { mdiDotsVertical } from '@mdi/js'
 import fecha from 'fecha'
+
+import { addNotification as notify } from 'components/notification'
 
 import LinkButton from 'components/Button/LinkButton'
 
@@ -109,9 +111,13 @@ class EventsList extends React.Component {
                   fullHeight
                   pullTo="right"
                   selectedItem={null}
-                  buttonRenderer={props => (
-                    <SvgIcon path={mdiDotsVertical} {...props} />
-                  )}
+                  buttonRenderer={({
+                    isBlock,
+                    noBorder,
+                    isOpen,
+                    selectedItem,
+                    ...props
+                  }) => <SvgIcon path={mdiDotsVertical} {...props} />}
                   items={this.menuItems}
                   onSelect={item => item.onClick(event)}
                 />
