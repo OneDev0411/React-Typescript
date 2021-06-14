@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
 
-import { isBackOffice } from 'utils/user-teams'
+import { isBackOffice as isBackOfficeUser } from 'utils/user-teams'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
 
@@ -28,19 +28,22 @@ function DealDetails(props) {
     props.params.id
   )
 
-  const { user, deal, selectedTask } = useSelector(({ deals, user }) => {
-    const { selectedTask } = deals.properties
+  const { user, deal, isBackOffice, selectedTask } = useSelector(
+    ({ deals, user }) => {
+      const { selectedTask } = deals.properties
 
-    return {
-      user,
-      deal: selectDealById(deals.list, props.params.id),
-      selectedTask: selectTaskById(
-        deals.tasks,
-        selectedTask && selectedTask.id
-      ),
-      isBackOffice: isBackOffice(user)
-    }
-  }, shallowEqual)
+      return {
+        user,
+        deal: selectDealById(deals.list, props.params.id),
+        selectedTask: selectTaskById(
+          deals.tasks,
+          selectedTask && selectedTask.id
+        ),
+        isBackOffice: isBackOfficeUser(user)
+      }
+    },
+    shallowEqual
+  )
 
   if (!deal) {
     return false
