@@ -22,8 +22,10 @@ export function createContextObject(
     return null
   }
 
-  const checklist = checklists.find(({ origin }) => {
-    return dealBrandChecklists.find(({ id }) => id === origin)
+  const checklist = checklists.find(({ origin, is_active_offer }) => {
+    return dealBrandChecklists.find(
+      ({ id }) => id === origin && is_active_offer
+    )
   })
 
   return {
