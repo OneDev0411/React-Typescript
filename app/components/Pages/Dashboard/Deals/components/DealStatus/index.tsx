@@ -83,18 +83,22 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
 
     setIsSaving(true)
 
-    await dispatch(
-      upsertContexts(deal.id, [
-        createContextObject(
-          deal,
-          brandChecklists,
-          checklists,
-          statusName,
-          status.label,
-          true
-        )
-      ])
+    const context = createContextObject(
+      deal,
+      brandChecklists,
+      checklists,
+      statusName,
+      status.label,
+      true
     )
+
+    if (context === null) {
+      console.log('Can not save status')
+
+      return
+    }
+
+    await dispatch(upsertContexts(deal.id, [context]))
 
     // set state
     setIsSaving(false)
