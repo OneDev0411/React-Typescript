@@ -9,8 +9,6 @@ import {
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
-import BoxWithTitle from '../BoxWithTitle'
-
 import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingBookingListColumnActions, {
   ShowingBookingListColumnActionsProps
@@ -43,7 +41,6 @@ export interface ShowingBookingListProps
     ShowingBookingListColumnActionsProps,
     'onApprovalAction' | 'onDismissAction'
   > {
-  title?: string
   rows: IShowingAppointment[]
   emptyMessage: string
   hasPropertyColumn?: boolean
@@ -51,7 +48,6 @@ export interface ShowingBookingListProps
 }
 
 function ShowingBookingList({
-  title,
   rows,
   emptyMessage,
   onApprovalAction,
@@ -209,13 +205,7 @@ function ShowingBookingList({
     </>
   )
 
-  return title ? (
-    <BoxWithTitle title={title} marginTop={6}>
-      {table}
-    </BoxWithTitle>
-  ) : (
-    <Box marginTop={6}>{table}</Box>
-  )
+  return <Box marginTop={6}>{table}</Box>
 }
 
 export default ShowingBookingList

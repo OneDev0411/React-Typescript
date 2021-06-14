@@ -38,7 +38,7 @@ function ShowingFilteredBookingList({
 
   const filteredAppointments = useFilterAppointment(appointments, filterInfo)
 
-  const { title, emptyMessage } = useAppointmentListInfo(filter)
+  const { emptyMessage } = useAppointmentListInfo(filter)
 
   const generateLinkWithLocation = (filter: AppointmentFilter) =>
     generateLink(filter, location)
@@ -51,7 +51,6 @@ function ShowingFilteredBookingList({
         value={filter}
       />
       <ShowingBookingList
-        title={title}
         rows={filteredAppointments}
         emptyMessage={emptyMessage}
         onApprovalAction={onApprovalAction}
