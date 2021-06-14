@@ -4,10 +4,7 @@ import {
   RotateRightOutlined as RotateRightOutlinedIcon,
   HighlightOffOutlined as HighlightOffOutlinedIcon,
   StarBorderOutlined as StarBorderOutlinedIcon,
-  NewReleases as NewReleasesIcon,
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
-  Flag as FlagIcon
+  FlagOutlined as FlagFlagOutlinedIcon
 } from '@material-ui/icons'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
@@ -26,13 +23,11 @@ export const appointmentStatusInfo: Record<
   Requested: {
     label: 'Requested',
     icon: <NewReleasesOutlinedIcon />,
-    filledIcon: <NewReleasesIcon />,
     filter: createStatusFilter('Requested')
   },
   Confirmed: {
     label: 'Approved',
     icon: <CheckCircleOutlineOutlinedIcon />,
-    filledIcon: <CheckCircleIcon />,
     filter: createStatusFilter('Confirmed')
   },
   Rescheduled: {
@@ -43,13 +38,11 @@ export const appointmentStatusInfo: Record<
   Canceled: {
     label: 'Canceled',
     icon: <HighlightOffOutlinedIcon />,
-    filledIcon: <CancelIcon />,
     filter: createStatusFilter('Canceled')
   },
   Completed: {
     label: 'Finished',
-    icon: <span />, // TODO: select an icon for this when needed
-    filledIcon: <FlagIcon />,
+    icon: <FlagFlagOutlinedIcon />, // TODO: select an icon for this when needed
     filter: createStatusFilter('Completed')
   },
   Feedback: {
