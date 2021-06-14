@@ -83,10 +83,9 @@ export default function Publish({ params }: Props) {
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
-      brandChecklists: getBrandChecklistsById(
-        deals.brandChecklists,
-        deal.brand.id
-      ),
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
       checklists: getDealChecklists(deal, deals.checklists)
     })
   )
@@ -115,7 +114,7 @@ export default function Publish({ params }: Props) {
           deals.brandChecklists,
           deal.brand.id,
           deal.property_type?.id,
-          'Offer'
+          deal.has_active_offer ? 'Offer' : deal.deal_type
         ).filter(
           context =>
             ['listing_status', 'contract_status'].includes(context.key) ===
