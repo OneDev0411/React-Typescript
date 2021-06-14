@@ -1,6 +1,7 @@
 import { format } from 'fecha'
 
-const dateFormat = 'dddd, MMMM DD'
+// TODO: use standard date format if exists
+const dateFormat = 'MMM D, ddd'
 
 const todayDate = new Date()
 const todayLabel = format(todayDate, dateFormat)
@@ -22,7 +23,7 @@ export function getAppointmentDateLabel(
     case tomorrowLabel:
       return 'Tomorrow'
     default:
-      return timeLabel
+      return timeLabel.toUpperCase()
   }
 }
 
@@ -30,13 +31,13 @@ export function getAppointmentTimeLabel(
   appointmentTime: string,
   duration: number
 ): string {
-  const timeFormat = 'hh:mm'
+  const timeFormat = 'h:m'
   const startTime = new Date(appointmentTime)
   const endTime = new Date(startTime.getTime() + duration * 1000)
 
   return `${format(startTime, timeFormat)} - ${format(
     endTime,
-    `${timeFormat} A`
+    `${timeFormat}a`
   )}`
 }
 
