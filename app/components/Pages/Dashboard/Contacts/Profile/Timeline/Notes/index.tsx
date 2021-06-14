@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { makeStyles, Tooltip, IconButton, Theme, Box } from '@material-ui/core'
+import { useState, useMemo } from 'react'
+import { Box, Typography, Tooltip, IconButton, Theme } from '@material-ui/core'
 import produce from 'immer'
 
 import fecha from 'fecha'
@@ -17,19 +17,18 @@ import SanitizedHtml from 'components/SanitizedHtml'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
 
-import { styles } from './styles'
+import { useStyles } from './styles'
 
 interface Props {
   contact: IContact
   onChange: (contact: IContact) => void
 }
 
-export const useStyles = makeStyles(styles)
-
 export function Notes(props: Props) {
   const theme = useTheme<Theme>()
   const classes = useStyles()
   const [selectedNote, setSelectedNote] = useState(undefined)
+  const notes = useMemo(() => getNotes(props.contact), [props.contact])
 
   const handleUpdateNote = async note => {
     try {
@@ -66,7 +65,22 @@ export function Notes(props: Props) {
     }
   }
 
-  const noteGroups = groupBy(getNotes(props.contact), note =>
+  if (Array.isArray(notes) && notes.length === 0) {
+    return (
+      <Box className={classes.zeroState}>
+        <img
+          src="/static/images/contacts/notes-zero-state.svg"
+          alt="houston"
+          style={{ marginBottom: '1rem' }}
+        />
+        <Typography variant="subtitle1">
+          There are no notes, write your first one.
+        </Typography>
+      </Box>
+    )
+  }
+
+  const noteGroups = groupBy(notes, note =>
     fecha.format(new Date(note.created_at * 1000), 'YYYY-MM-DD')
   )
 

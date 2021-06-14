@@ -1,8 +1,8 @@
-import { createStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
 
-export const styles = (theme: Theme) =>
-  createStyles({
+export const useStyles = makeStyles(
+  (theme: Theme) => ({
     section: {
       paddingLeft: theme.spacing(2),
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
@@ -64,5 +64,11 @@ export const styles = (theme: Theme) =>
       borderRadius: '100%',
       marginRight: '1rem',
       backgroundColor: fade('#6A7589', 0.2)
+    },
+    zeroState: {
+      margin: 'auto',
+      textAlign: 'center'
     }
-  })
+  }),
+  { name: 'ContactProfileNotes' }
+)
