@@ -58,7 +58,10 @@ import { Title } from './components/Title'
 import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
-import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
+import {
+  DONE_STATUS,
+  FutureEventDoneConfirmation
+} from './components/FutureEventDoneConfirmation'
 import { EventField } from './components/EventField'
 import { DueDateWatcher } from './components/DueDateWatcher'
 import {
@@ -291,7 +294,7 @@ class EventDrawerContainer extends Component {
 
                       <Box ml={4} mb={1}>
                         <EventType />
-                        {!this.isNew && (
+                        {(!this.isNew || values.status === DONE_STATUS) && (
                           <Box mt={1}>
                             <CheckboxField
                               name="status"
