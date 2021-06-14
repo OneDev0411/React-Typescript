@@ -166,22 +166,23 @@ export function viewAs(
   shouldReturnAll: boolean = false,
   team: IUserTeam | null = getActiveTeam(user),
 ): UUID[] {
-  if (
-    team &&
-    !idx(team, t => t.acl.includes('BackOffice')) &&
-    idx(team, team => team.settings.user_filter[0])
-  ) {
-    const allTeamMember = getTeamAvailableMembers(team)
-    const selectedViewAsUsers = team.settings.user_filter || []
+  if(!team) {
+    return []
+  }
 
-    if(!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length){
-      return []
+  const allTeamMember = getTeamAvailableMembers(team)
+
+  if (!idx(team, t => t.acl.includes('BackOffice'))) {
+    const selectedViewAsUsers = team.settings.user_filter || []
+    
+    if(!selectedViewAsUsers[0] || (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)) {
+      return allTeamMember.map(t => t.id)
     }
       
     return selectedViewAsUsers
   }
 
-  return []
+  return allTeamMember.map(t => t.id)
 }
 
 type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
