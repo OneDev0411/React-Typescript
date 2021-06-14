@@ -45,7 +45,7 @@ export default function HipPocketListingForm({
   onSave
 }: HipPocketListingFormProps) {
   const classes = useStyles()
-  const { control, formState, errors, watch, trigger, setValue, handleSubmit } =
+  const { control, formState, errors, watch, trigger, handleSubmit } =
     useForm<HipPocketListingFields>({
       mode: 'onChange',
       defaultValues: {
@@ -72,11 +72,9 @@ export default function HipPocketListingForm({
       return []
     }
 
-    const imageUrls = await onImageUpload(files)
+    const uploadedImagesUrls = await onImageUpload(files)
 
-    const newImages = [...images, ...imageUrls]
-
-    setValue('images', newImages)
+    const newImages = [...images, ...uploadedImagesUrls]
 
     return newImages
   }
@@ -109,8 +107,9 @@ export default function HipPocketListingForm({
                     const urls = await handleImageUpload(files)
 
                     onChange(urls)
-
-                    return urls
+                  }}
+                  onImageSelect={url => {
+                    onChange([...images, url])
                   }}
                 />
               </>

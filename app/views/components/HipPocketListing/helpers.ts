@@ -34,7 +34,7 @@ export function validateListingUrl(
   value: string,
   type: HipPocketListingUrlType
 ): true | string {
-  if (!value || value.length === 0) {
+  if (value.length === 0) {
     return true
   }
 
@@ -53,7 +53,7 @@ export function getFormattedUrl(
   value: string,
   type: HipPocketListingUrlType
 ): string {
-  if (!value || value.length === 0) {
+  if (value.length === 0) {
     return ''
   }
 

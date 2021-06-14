@@ -3,6 +3,7 @@ import { Grid, Typography, makeStyles, useTheme } from '@material-ui/core'
 import { mdiImageMultipleOutline } from '@mdi/js'
 import { useDropzone } from 'dropzone'
 
+import ImageSelectDialog from 'components/ImageSelectDialog'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageUploadProps } from '../../types'
@@ -30,11 +31,27 @@ const useStyles = makeStyles(
 )
 
 export default function HipPocketListingFormImageUpload({
-  onImageUpload
+  onImageUpload,
+  onImageSelect
 }: ImageUploadProps) {
   const classes = useStyles()
   const theme = useTheme()
   const [isUploading, setIsUploading] = useState<boolean>(false)
+  const [isImageSelectDialogOpen, setIsImageSelectDialogOpen] =
+    useState<boolean>(false)
+
+  const openImageSelectDialog = () => {
+    setIsImageSelectDialogOpen(true)
+  }
+
+  const closeImageSelectDialog = () => {
+    setIsImageSelectDialogOpen(false)
+  }
+
+  const handleSelectImage = (url: string) => {
+    onImageSelect(url)
+    closeImageSelectDialog()
+  }
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -59,42 +76,55 @@ export default function HipPocketListingFormImageUpload({
   })
 
   return (
-    <Grid
-      container
-      item
-      style={isDragActive ? { background: theme.palette.grey[400] } : {}}
-      {...{ ...getRootProps(), css: {} }}
-    >
+    <>
+      {isImageSelectDialogOpen && (
+        <ImageSelectDialog
+          onClose={closeImageSelectDialog}
+          onSelect={handleSelectImage}
+        />
+      )}
       <Grid
         container
         item
-        direction="column"
-        alignItems="center"
-        className={classes.container}
+        style={isDragActive ? { background: theme.palette.grey[400] } : {}}
+        {...{ ...getRootProps(), css: {} }}
       >
-        <input {...getInputProps()} />
+        <Grid
+          container
+          item
+          direction="column"
+          alignItems="center"
+          className={classes.container}
+        >
+          <input {...getInputProps()} />
 
-        <Grid item>
-          <SvgIcon
-            path={mdiImageMultipleOutline}
-            color={theme.palette.grey[500]}
-          />
-        </Grid>
-        <Grid item>
-          <Typography variant="body2" color="textSecondary">
-            Drag listing photos here
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="body2" color="textSecondary">
-            <span className={classes.actionableText}>choose from gallery</span>{' '}
-            or{' '}
-            <span onClick={open} className={classes.actionableText}>
-              click to upload
-            </span>
-          </Typography>
+          <Grid item>
+            <SvgIcon
+              path={mdiImageMultipleOutline}
+              color={theme.palette.grey[500]}
+            />
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="textSecondary">
+              Drag listing photos here
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="textSecondary">
+              <span
+                onClick={openImageSelectDialog}
+                className={classes.actionableText}
+              >
+                choose from gallery
+              </span>{' '}
+              or{' '}
+              <span onClick={open} className={classes.actionableText}>
+                click to upload
+              </span>
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   )
 }

@@ -26,9 +26,10 @@ export interface HipPocketListingDrawerProps extends HipPocketListingFormProps {
   onClose: () => void
 }
 
-export type ImageUploadProps = Required<
-  Pick<HipPocketListingFormProps, 'onImageUpload'>
->
+export interface ImageUploadProps {
+  onImageUpload: (files: File[]) => Promise<void>
+  onImageSelect: (imageUrl: string) => void
+}
 
 export type ImageGalleryProps = Pick<HipPocketListing, 'images'>
 
