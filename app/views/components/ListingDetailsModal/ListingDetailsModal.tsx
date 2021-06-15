@@ -14,7 +14,7 @@ function ListingDetailsModal({ listingId, isOpen, closeHandler }: Props) {
   const theme: Theme = useTheme()
 
   return (
-    <Dialog open={isOpen} fullScreen style={{ zIndex: theme.zIndex.modal + 1 }}>
+    <Dialog open={isOpen} fullScreen style={{ zIndex: theme.zIndex.modal + 2 }}>
       {listingId && <ListingDetails id={listingId} onClose={closeHandler} />}
     </Dialog>
   )
