@@ -72,7 +72,7 @@ export default function AlertViewerModal(props: Props) {
     >
       <PageHeader
         onClickCloseButton={onClose}
-        title={`${pageTitle}${feedLength}`}
+        title={`${pageTitle} ${feedLength}`}
       />
       {renderContent()}
 
