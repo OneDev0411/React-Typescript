@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import HipPocketListingForm from '../Form'
-import { HipPocketListingDrawerProps } from '../types'
+import { HipPocketListingDrawerProps, HipPocketListingField } from '../types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -16,12 +16,14 @@ const useStyles = makeStyles(
   }
 )
 
-export default function HipPocketListingDrawer({
+export default function HipPocketListingDrawer<
+  T extends HipPocketListingField
+>({
   title = 'Listing Details',
   isOpen,
   onClose,
   ...listingFormProps
-}: HipPocketListingDrawerProps) {
+}: HipPocketListingDrawerProps<T>) {
   const classes = useStyles()
 
   return (

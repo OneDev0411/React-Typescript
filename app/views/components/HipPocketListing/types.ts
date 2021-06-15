@@ -1,4 +1,4 @@
-export interface HipPocketListing {
+export interface BaseHipPocketListing {
   images: string[]
   address: string
   price: number
@@ -10,11 +10,24 @@ export interface HipPocketListing {
   description?: string
 }
 
-export interface HipPocketListingFields extends HipPocketListing {
+export type HipPocketListingField = keyof BaseHipPocketListing
+
+export type HipPocketListing<T extends HipPocketListingField> = Omit<
+  BaseHipPocketListing,
+  T
+>
+
+export interface HipPocketListingFormFields extends BaseHipPocketListing {
   url_type: HipPocketListingUrlType
 }
 
-export interface HipPocketListingFormProps {
+export interface HipPocketListingFormProps<T extends HipPocketListingField> {
+  /**
+   * A typed string array of fields to disable and hide
+   *
+   * Note that it will affect the `onSave` handler data
+   */
+  disabledFields?: T[]
   /**
    * Save button copy/text
    *
@@ -32,10 +45,11 @@ export interface HipPocketListingFormProps {
   /**
    * The save button click handler
    */
-  onSave: (data: HipPocketListing) => void
+  onSave: (data: HipPocketListing<T>) => void
 }
 
-export interface HipPocketListingDrawerProps extends HipPocketListingFormProps {
+export interface HipPocketListingDrawerProps<T extends HipPocketListingField>
+  extends HipPocketListingFormProps<T> {
   /**
    * The drawer title
    *
@@ -59,6 +73,6 @@ export interface ImageUploadProps {
   onImageSelect: (imageUrl: string) => void
 }
 
-export type ImageGalleryProps = Pick<HipPocketListing, 'images'>
+export type ImageGalleryProps = Pick<BaseHipPocketListing, 'images'>
 
 export type HipPocketListingUrlType = 'url' | 'email' | 'tel'
