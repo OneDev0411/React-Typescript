@@ -127,7 +127,9 @@ export const normalizeDeal = (deal, showStatus = true) => {
       statusColor: `#${getStatusColor(getDealStatus(deal))}`,
       placeHolderImage: '/static/icons/associated-deals-place-holder.svg'
     },
-    details: `${deal.deal_type}, ${deal.property_type}`,
+    details: `${deal.deal_type}, ${
+      deal.property_type ? deal.property_type.label : ''
+    }`,
     id: deal.id,
     title: getDealField(deal, 'street_address'),
     type: deal.type,
