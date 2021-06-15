@@ -117,7 +117,7 @@ function ShowingBookingList({
       : [
           {
             id: 'date',
-            width: '15%',
+            width: '120px',
             render: ({ row }) => (
               <ShowingBookingListColumnBase>
                 {getAppointmentDateLabel(row.time)}
