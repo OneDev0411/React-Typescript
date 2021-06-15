@@ -16,7 +16,7 @@ import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
-
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
@@ -388,6 +388,13 @@ class SendMlsListingCard extends React.Component {
 
         <SearchListingDrawer
           allowHipPocket
+          onHipPocketImageUpload={
+            this.props.selectedTemplate
+              ? getHipPocketTemplateImagesUploader(
+                  this.props.selectedTemplate.template.id
+                )
+              : undefined
+          }
           isOpen={
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit

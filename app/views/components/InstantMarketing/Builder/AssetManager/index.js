@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Uploader } from 'components/Uploader'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 import store from '../../../../../stores'

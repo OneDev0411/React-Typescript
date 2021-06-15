@@ -5,7 +5,8 @@ import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiMenu } from '@mdi/js'
 
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 
 import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -1220,6 +1221,11 @@ class Builder extends React.Component {
           {this.state.isListingDrawerOpen && (
             <SearchListingDrawer
               allowHipPocket
+              onHipPocketImageUpload={
+                this.selectedTemplate
+                  ? getHipPocketTemplateImagesUploader(this.selectedTemplate.id)
+                  : undefined
+              }
               multipleSelection
               withMlsDisclaimer
               isOpen

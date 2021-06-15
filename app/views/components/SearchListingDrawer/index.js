@@ -236,6 +236,7 @@ class SearchListingDrawer extends React.Component {
           isOpen={this.state.isHipPocketListingDrawerOpen}
           onClose={this.closeHipPocketListingDrawer}
           onSave={this.handleSaveHipPocketListing}
+          onImageUpload={this.props.onHipPocketImageUpload}
         />
       </>
     )
@@ -247,6 +248,7 @@ SearchListingDrawer.propTypes = {
   onClose: PropTypes.func,
   searchPlaceholder: PropTypes.string,
   allowHipPocket: PropTypes.bool,
+  onHipPocketImageUpload: PropTypes.func,
   multipleSelection: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   withMlsDisclaimer: PropTypes.bool,

@@ -27,7 +27,7 @@ import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'

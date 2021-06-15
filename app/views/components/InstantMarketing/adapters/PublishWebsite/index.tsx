@@ -17,6 +17,8 @@ import { selectUser } from 'selectors/user'
 
 import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
+
 import useLoadListingsData from './use-load-listings-data'
 
 interface PublishWebsiteProps {
@@ -165,6 +167,9 @@ function PublishWebsite({
       )}
       <SearchListingDrawer
         allowHipPocket
+        onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
+          selectedTemplate.template.id
+        )}
         withMlsDisclaimer
         isOpen={isListingTriggered && !isBuilderOpen}
         title="Select a Listing"

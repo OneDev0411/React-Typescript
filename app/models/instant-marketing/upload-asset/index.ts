@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-export default async function uploadAsset(
+export async function uploadAsset(
   templateId: UUID,
   file: File
 ): Promise<ITemplateAsset> {
