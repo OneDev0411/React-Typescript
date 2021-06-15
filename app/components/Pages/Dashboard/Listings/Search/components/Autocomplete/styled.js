@@ -45,3 +45,7 @@ export const Item = styled.div`
     }
   }
 `
+export const NoResults = styled.div`
+  padding: 8px;
+  text-align: center;
+`

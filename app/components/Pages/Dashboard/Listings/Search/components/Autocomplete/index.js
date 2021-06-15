@@ -33,7 +33,13 @@ import {
   SEARCH_BY_QUERY
 } from '../../../../../../../constants/listings/search'
 
-import { SearchContainer, ListContainer, ListTitle, Item } from './styled'
+import {
+  SearchContainer,
+  ListContainer,
+  ListTitle,
+  Item,
+  NoResults
+} from './styled'
 
 class MlsAutocompleteSearch extends Component {
   state = {
@@ -374,6 +380,10 @@ class MlsAutocompleteSearch extends Component {
                           ))}
                         </div>
                       )}
+                      {!this.state.listings.length &&
+                        !this.state.places.length && (
+                          <NoResults>No results</NoResults>
+                        )}
                     </ListContainer>
                   )}
                 </div>
