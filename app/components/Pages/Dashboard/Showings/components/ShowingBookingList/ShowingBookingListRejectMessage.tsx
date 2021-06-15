@@ -1,14 +1,8 @@
-import React, { useMemo } from 'react'
-import { Button, Tooltip, makeStyles, Typography } from '@material-ui/core'
+import { useMemo, useState } from 'react'
+import { Button, Box } from '@material-ui/core'
 
-const useStyles = makeStyles(
-  theme => ({
-    button: { '&:hover': { cursor: 'default' } },
-    tooltip: { whiteSpace: 'pre-line' },
-    message: { paddingLeft: theme.spacing(1) }
-  }),
-  { name: 'ShowingBookingListRejectMessage' }
-)
+import Dialog from '../Dialog'
+import ShowingDialogCard from './ShowingDialogCard'
 
 interface PersonMessage {
   person: string
@@ -26,7 +20,7 @@ function ShowingBookingListRejectMessage({
   buyerName,
   buyerMessage
 }: ShowingBookingListRejectMessageProps) {
-  const classes = useStyles()
+  const [open, setOpen] = useState(false)
 
   const personMessage = useMemo<Nullable<PersonMessage>>(() => {
     if (buyerMessage) {
@@ -49,31 +43,34 @@ function ShowingBookingListRejectMessage({
     }
   }, [approvals, buyerMessage, buyerName])
 
-  if (!personMessage) {
+  if (!personMessage || !personMessage.message) {
     return null
   }
 
+  const openDialog = () => setOpen(true)
+
+  const closeDialog = () => setOpen(false)
+
   return (
-    <Tooltip
-      title={
-        <>
-          <Typography variant="subtitle2" gutterBottom>
-            {personMessage.person}:
-          </Typography>
-          <div className={classes.message}>{personMessage.message}</div>
-        </>
-      }
-      classes={{ tooltip: classes.tooltip }}
-    >
+    <>
       <Button
-        className={classes.button}
         size="small"
         variant="text"
         color="secondary"
+        onClick={openDialog}
       >
         View Message
       </Button>
-    </Tooltip>
+      <Dialog open={open} onClose={closeDialog} title={personMessage.person}>
+        <Box my={2}>
+          <ShowingDialogCard
+            question="Comments"
+            answer={personMessage.message}
+            multiline
+          />
+        </Box>
+      </Dialog>
+    </>
   )
 }
 

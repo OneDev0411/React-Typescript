@@ -3,24 +3,23 @@ import { Card, Box, BoxProps, Typography, makeStyles } from '@material-ui/core'
 const useStyles = makeStyles(
   theme => ({
     question: { color: theme.palette.grey[500] },
-    answer: { whiteSpace: 'pre' }
+    answer: { whiteSpace: 'pre-line' }
   }),
-  { name: 'ShowingBookingListFeedbackCard' }
+  { name: 'ShowingDialogCard' }
 )
 
-interface ShowingBookingListFeedbackCardProps
-  extends Pick<BoxProps, 'minHeight'> {
+interface ShowingDialogCardProps extends Pick<BoxProps, 'minHeight'> {
   question: string
   answer: string
   multiline?: boolean
 }
 
-function ShowingBookingListFeedbackCard({
+function ShowingDialogCard({
   question,
   answer,
   multiline = false,
   ...otherProps
-}: ShowingBookingListFeedbackCardProps) {
+}: ShowingDialogCardProps) {
   const classes = useStyles()
 
   return (
@@ -40,4 +39,4 @@ function ShowingBookingListFeedbackCard({
   )
 }
 
-export default ShowingBookingListFeedbackCard
+export default ShowingDialogCard

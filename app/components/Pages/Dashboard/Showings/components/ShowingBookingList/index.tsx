@@ -24,9 +24,10 @@ import { getAppointmentFeedbackSubtitle } from './helpers'
 const useStyles = makeStyles(
   theme => ({
     rowBase: {
-      paddingRight: theme.spacing(1)
+      paddingRight: theme.spacing(1),
+      '&:hover $actions': { opacity: 1 }
     },
-    row: { '&:hover $actions': { opacity: 1 } },
+    row: {},
     rowPast: { color: theme.palette.grey[700] },
     actions: {
       opacity: 0,

@@ -1,7 +1,7 @@
 import { Box, Grid } from '@material-ui/core'
 
 import Dialog, { DialogProps } from '../Dialog'
-import ShowingBookingListFeedbackCard from './ShowingBookingListFeedbackCard'
+import ShowingDialogCard from './ShowingDialogCard'
 
 export interface ShowingBookingListFeedbackDialogProps
   extends Omit<DialogProps, 'title' | 'children'>,
@@ -37,7 +37,7 @@ function ShowingBookingListFeedbackDialog({
 
             return (
               <Grid item key={idx} sm={6}>
-                <ShowingBookingListFeedbackCard
+                <ShowingDialogCard
                   question={question}
                   answer={answer}
                   minHeight={90}
@@ -47,7 +47,7 @@ function ShowingBookingListFeedbackDialog({
           })}
           {feedback?.comment && (
             <Grid item sm={12}>
-              <ShowingBookingListFeedbackCard
+              <ShowingDialogCard
                 question="Comments or recommendations"
                 answer={feedback?.comment}
                 multiline
