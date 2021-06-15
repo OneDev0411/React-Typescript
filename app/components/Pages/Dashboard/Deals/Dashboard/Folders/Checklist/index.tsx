@@ -55,6 +55,7 @@ export function ChecklistFolder({
     <Grid container className={classes.container}>
       <Grid container className={classes.header}>
         <Grid
+          container
           item
           xs={10}
           spacing={1}
