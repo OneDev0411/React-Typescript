@@ -13,6 +13,8 @@ import { Address } from './columns/Address'
 
 const BASE_URL = '/dashboard/mls'
 
+import { ShareListings } from '../ShareListings'
+
 const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()
   const gridClasses = useGridStyles()
@@ -143,6 +145,7 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
             listingId={selectedListingId}
             closeHandler={closeListingDetailsModal}
           />
+          <ShareListings />
         </Box>
       )}
     </>
