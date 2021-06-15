@@ -73,6 +73,18 @@ function ShowingAvailabilitiesTimes({
     onChange(newValue)
   }
 
+  const handleInsert = (idx: number) => {
+    const newValue = [...value]
+
+    newValue.splice(idx + 1, 0, {
+      id: getNextId(),
+      weekday: value[idx].weekday || 'Monday',
+      availability: [hourToSeconds(9), hourToSeconds(17)]
+    })
+
+    onChange(newValue)
+  }
+
   const timeConflicts = useMemo(() => findTimeConflicts(value), [value])
 
   return (
@@ -85,12 +97,14 @@ function ShowingAvailabilitiesTimes({
             {...row}
             onDelete={handleDelete}
             onChange={handleChange}
+            onInsert={() => handleInsert(idx)}
             disableDelete={value.length < 2}
             hasError={
               timeConflicts &&
               (idx === timeConflicts.slot1Index ||
                 idx === timeConflicts.slot2Index)
             }
+            hasInsertButton={idx !== value.length - 1}
           />
         ))}
       </Box>

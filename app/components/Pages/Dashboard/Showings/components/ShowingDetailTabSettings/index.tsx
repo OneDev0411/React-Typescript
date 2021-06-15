@@ -173,7 +173,7 @@ function ShowingDetailTabSettings({
       notice_period: noticePeriod
     })
 
-  const saveDisabled = showing === showingRef.current
+  const saveDisabled = showing === showingRef.current || !!errors
 
   return (
     <Box display="flex">

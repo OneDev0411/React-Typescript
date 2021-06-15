@@ -16,6 +16,7 @@ import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
 
 import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
 import { ShowingAvailabilityItem } from '../../types'
+import ShowingAvailabilitiesTimesRowInsert from './ShowingAvailabilitiesTimesRowInsert'
 
 interface FormValues {
   start: string
@@ -26,8 +27,10 @@ interface FormValues {
 interface ShowingAvailabilitiesTimesRowProps extends ShowingAvailabilityItem {
   onDelete: (id: UUID) => void
   onChange: (id: UUID, row: ShowingAvailabilityItem) => void
+  onInsert: () => void
   disableDelete?: boolean
   hasError: boolean
+  hasInsertButton: boolean
 }
 
 function ShowingAvailabilitiesTimesRow({
@@ -37,7 +40,9 @@ function ShowingAvailabilitiesTimesRow({
   onChange,
   onDelete,
   disableDelete = false,
-  hasError
+  hasError,
+  hasInsertButton,
+  onInsert
 }: ShowingAvailabilitiesTimesRowProps) {
   const handleDelete = () => {
     onDelete(id)
@@ -98,25 +103,31 @@ function ShowingAvailabilitiesTimesRow({
 
         return (
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
+            <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={5}>
-                <WeekdaySelect name="weekday" margin="dense" />
+                <Box mr={2}>
+                  <WeekdaySelect name="weekday" margin="none" />
+                </Box>
               </Grid>
               <Grid item xs={5} sm={5} md={3}>
-                <FormTimePicker
-                  label="From"
-                  name="start"
-                  error={!!formError || hasError}
-                  margin="dense"
-                />
+                <Box mr={2}>
+                  <FormTimePicker
+                    label="From"
+                    name="start"
+                    error={!!formError || hasError}
+                    margin="none"
+                  />
+                </Box>
               </Grid>
               <Grid item xs={5} sm={5} md={3}>
-                <FormTimePicker
-                  label="To"
-                  name="end"
-                  error={!!formError || hasError}
-                  margin="dense"
-                />
+                <Box mr={2}>
+                  <FormTimePicker
+                    label="To"
+                    name="end"
+                    error={!!formError || hasError}
+                    margin="none"
+                  />
+                </Box>
               </Grid>
               <Grid item md="auto">
                 <Box display="flex" height="100%" alignItems="center">
@@ -138,6 +149,9 @@ function ShowingAvailabilitiesTimesRow({
               <Box mb={1}>
                 <FormHelperText error>{formError}</FormHelperText>
               </Box>
+            )}
+            {hasInsertButton && (
+              <ShowingAvailabilitiesTimesRowInsert onClick={onInsert} />
             )}
           </form>
         )
