@@ -86,7 +86,7 @@ function normalizeContextValue(
   annotation,
   formValue = ''
 ) {
-  const context = searchContext(deal.id, brandChecklists, annotation.context)
+  const context = searchContext(deal, brandChecklists, annotation.context)
 
   if (!context || annotation.disableAutopopulate) {
     return formValue
