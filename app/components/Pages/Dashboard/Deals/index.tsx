@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { ReactElement, memo } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -26,7 +26,7 @@ interface Props {
   params: {
     id: UUID
   }
-  children: React.ReactNode
+  children: ReactElement<any>
 }
 
 function Container(props: Props) {
@@ -34,23 +34,18 @@ function Container(props: Props) {
 
   const dispatch = useDispatch()
 
-  const {
-    user,
-    dealsCount,
-    brandContexts,
-    isFetchingDeals,
-    brandId
-  } = useSelector<IAppState, StateProps>(({ deals, user }) => {
-    const brandId = getActiveTeamId(user)
+  const { user, dealsCount, brandContexts, isFetchingDeals, brandId } =
+    useSelector<IAppState, StateProps>(({ deals, user }) => {
+      const brandId = getActiveTeamId(user)
 
-    return {
-      dealsCount: Object.keys(deals.list).length,
-      brandContexts: selectBrandContexts(deals.contexts, brandId),
-      isFetchingDeals: deals.properties.isFetchingDeals,
-      brandId,
-      user
-    }
-  }, shallowEqual)
+      return {
+        dealsCount: Object.keys(deals.list).length,
+        brandContexts: selectBrandContexts(deals.contexts, brandId),
+        isFetchingDeals: deals.properties.isFetchingDeals,
+        brandId,
+        user
+      }
+    }, shallowEqual)
 
   useEffectOnce(() => {
     const isBackOffice = hasUserAccess(user, 'BackOffice')
