@@ -14,6 +14,7 @@ import Autocomplete, {
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
 import { selectExistingTags } from 'selectors/contacts'
 
+import { normalizeTags, getTagKeys } from './utils'
 import { SelectorOption } from '../type'
 
 const filter = createFilterOptions<SelectorOption>({
@@ -36,19 +37,15 @@ export const BaseTagSelector = ({
 }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
+  const [tagKeys, setTagKeys] = useState<string[]>([])
   const existingTags = useSelector(selectExistingTags)
 
   useEffectOnce(() => {
-    const normalizeTags = tags =>
-      tags.map(tag => ({
-        value: tag.tag,
-        title: tag.text
-      }))
-
     async function fetchTags() {
       try {
         const response = await getContactsTags()
 
+        setTagKeys(getTagKeys(response.data))
         setAvailableTags(normalizeTags(response.data))
       } catch (error) {
         console.log(error)
@@ -58,6 +55,7 @@ export const BaseTagSelector = ({
     if (existingTags.length === 0) {
       fetchTags()
     } else {
+      setTagKeys(getTagKeys(existingTags))
       setAvailableTags(normalizeTags(existingTags))
     }
   })
@@ -133,7 +131,10 @@ export const BaseTagSelector = ({
         const filtered = filter(options, params)
 
         // Suggest the creation of a new value
-        if (params.inputValue !== '') {
+        if (
+          params.inputValue !== '' &&
+          !tagKeys.includes(params.inputValue.toLowerCase())
+        ) {
           filtered.push({
             inputValue: params.inputValue,
             title: `Add "${params.inputValue}"`,
