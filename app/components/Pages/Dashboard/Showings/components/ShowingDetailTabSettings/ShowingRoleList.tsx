@@ -23,7 +23,7 @@ import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
 import ShowingRoleFormDialog from './ShowingRoleFormDialog'
 import ShowingRoleListAddNewButton from './ShowingRoleListAddNewButton'
 import { ShowingRoleFormValues } from './types'
-import { getShowingRoleLabel } from './helpers'
+import { getShowingRoleLabel } from '../../helpers'
 
 interface ShowingRoleListProps
   extends Pick<

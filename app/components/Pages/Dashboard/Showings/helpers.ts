@@ -103,3 +103,19 @@ export function sortAppointments(
     return 0
   })
 }
+
+export function getShowingRoleLabel(role: IDealRoleType): string {
+  switch (role) {
+    case 'SellerAgent':
+      return 'Agent'
+
+    case 'CoSellerAgent':
+      return 'Co-Agent'
+
+    case 'Tenant':
+      return 'Occupant'
+
+    default:
+      return role
+  }
+}

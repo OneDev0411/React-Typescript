@@ -14,7 +14,7 @@ import ShowingRoleFormDialog, {
   ShowingRoleFormDialogProps
 } from './ShowingRoleFormDialog'
 import { ShowingRoleFormValues } from './types'
-import { getShowingRoleLabel } from './helpers'
+import { getShowingRoleLabel } from '../../helpers'
 import { goAndShowNotificationTypes } from '../../constants'
 
 const useStyles = makeStyles(

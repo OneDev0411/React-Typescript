@@ -2,7 +2,7 @@ import { List, ListItem, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
 import ButtonMenu from '../ButtonMenu'
-import { getShowingRoleLabel } from './helpers'
+import { getShowingRoleLabel } from '../../helpers'
 
 const useStyles = makeStyles(
   {

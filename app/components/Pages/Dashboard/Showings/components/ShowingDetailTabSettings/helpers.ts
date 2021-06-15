@@ -14,22 +14,6 @@ export function getValidShowingDetailSettingsTab(
   return tab && isValidSettingsTab(tab) ? tab : defaultTab
 }
 
-export function getShowingRoleLabel(role: IDealRoleType): string {
-  switch (role) {
-    case 'SellerAgent':
-      return 'Agent'
-
-    case 'CoSellerAgent':
-      return 'Co-Agent'
-
-    case 'Tenant':
-      return 'Occupant'
-
-    default:
-      return ''
-  }
-}
-
 export const selectUserMutator: Mutator<ShowingRoleFormValues> = (
   [user]: [IUser],
   state,

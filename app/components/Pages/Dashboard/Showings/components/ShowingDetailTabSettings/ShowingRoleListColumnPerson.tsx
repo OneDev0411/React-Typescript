@@ -1,6 +1,6 @@
 import { Box, Typography } from '@material-ui/core'
 
-import { getShowingRoleLabel } from './helpers'
+import { getShowingRoleLabel } from '../../helpers'
 
 interface ShowingRoleListColumnPersonProps {
   name: string
