@@ -34,6 +34,8 @@ function ShowingFilteredBookingList({
   generateLink,
   stackDateAndTimeColumns
 }: ShowingFilteredBookingListProps) {
+  const hasDate = !!appointments.length
+
   const filter: AppointmentFilter = getValidAppointmentFilter(
     location.query.filter
   )
@@ -49,7 +51,7 @@ function ShowingFilteredBookingList({
 
   return (
     <>
-      {!!appointments.length && (
+      {hasDate && (
         <ShowingAppointmentFilters
           appointments={appointments}
           generateLink={generateLinkWithLocation}
@@ -64,6 +66,7 @@ function ShowingFilteredBookingList({
         hasPropertyColumn={hasPropertyColumn}
         hasPastBookingsFilter
         stackDateAndTimeColumns={stackDateAndTimeColumns}
+        hasTextEmptyState={hasDate}
         key={`${filter}-bookings`}
       />
     </>

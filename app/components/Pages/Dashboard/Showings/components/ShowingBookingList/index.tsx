@@ -26,6 +26,7 @@ import {
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
 import ShowingEmptyState from '../ShowingEmptyState'
+import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -53,6 +54,7 @@ export interface ShowingBookingListProps
   hasPropertyColumn?: boolean
   hasPastBookingsFilter?: boolean
   stackDateAndTimeColumns?: boolean
+  hasTextEmptyState?: boolean
 }
 
 function ShowingBookingList({
@@ -62,7 +64,8 @@ function ShowingBookingList({
   hasPropertyColumn = false,
   onDismissAction,
   hasPastBookingsFilter = false,
-  stackDateAndTimeColumns = false
+  stackDateAndTimeColumns = false,
+  hasTextEmptyState = true
 }: ShowingBookingListProps) {
   const classes = useStyles()
   const [showPastBookings, setShowPastBookings] = useState(false)
@@ -219,7 +222,13 @@ function ShowingBookingList({
         rows={visibleRows}
         totalRows={visibleRows.length}
         columns={columns}
-        EmptyStateComponent={() => <ShowingEmptyState title={emptyMessage} />}
+        EmptyStateComponent={() =>
+          hasTextEmptyState ? (
+            <ShowingBookingListEmptyState message={emptyMessage || ''} />
+          ) : (
+            <ShowingEmptyState title={emptyMessage} />
+          )
+        }
         virtualize={false}
         getTrProps={({ row }) => ({
           className: classNames(
