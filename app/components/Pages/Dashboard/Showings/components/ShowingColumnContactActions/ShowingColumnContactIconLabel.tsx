@@ -1,4 +1,4 @@
-import { Box, Typography, makeStyles } from '@material-ui/core'
+import { Box, Typography, Tooltip, makeStyles } from '@material-ui/core'
 import { ReactNode } from 'react'
 
 const useStyles = makeStyles(
@@ -29,14 +29,16 @@ function ShowingColumnContactIconLabel({
 
   if (compact) {
     return (
-      <Box
-        display="inline-block"
-        marginRight={marginRight}
-        onClick={onClick}
-        className={onClick ? classes.root : undefined}
-      >
-        {icon}
-      </Box>
+      <Tooltip title={label}>
+        <Box
+          display="inline-block"
+          marginRight={marginRight}
+          onClick={onClick}
+          className={onClick ? classes.root : undefined}
+        >
+          {icon}
+        </Box>
+      </Tooltip>
     )
   }
 
