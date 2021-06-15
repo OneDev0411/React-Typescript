@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Grid, Typography } from '@material-ui/core'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -188,11 +188,18 @@ function ShowingDetailTabSettings({
         <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
             <Box maxWidth={580}>
-              <ShowingDuration
-                value={showing.duration}
-                onChange={handleDurationChange}
-                marginBottom={4}
-              />
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={5}>
+                  <Box mr={2}>
+                    <ShowingDuration
+                      value={showing.duration}
+                      onChange={handleDurationChange}
+                      marginBottom={4}
+                      width="100%"
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
               <ShowingAvailabilitiesTimes
                 value={showing.availabilities}
                 onChange={handleAvailabilitiesChange}
