@@ -28,6 +28,7 @@ import { IAppState } from 'reducers'
 
 import { searchDealsAndListingsAndPlaces } from './helpers'
 import { SearchResult, SearchResultType } from './types'
+import ListingStatus from './ListingStatus'
 
 const useStyles = makeStyles<Theme, { inputValue: string }>(
   () => ({
@@ -176,9 +177,13 @@ export default function DealsAndListingsAndPlacesSearchInput({
           </ListItemAvatar>
           <ListItemText
             primary={addressTitle(listing.address)}
-            secondary={`${listing.address.city}, ${listing.address.state}, ${
-              listing.address.postal_code
-            }, $${listing.price.toLocaleString()}`}
+            secondary={
+              <>
+                {listing.address.city}, {listing.address.state}
+                {listing.address.postal_code}, ${listing.price.toLocaleString()}
+                <ListingStatus listing={listing} />
+              </>
+            }
           />
         </ListItem>
       )
