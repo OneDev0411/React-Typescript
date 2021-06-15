@@ -82,7 +82,8 @@ function Form(props: Props & StateProps & DispatchProps) {
     const checklist = getActiveChecklist(
       props.deal,
       props.brandChecklists,
-      props.checklists
+      props.checklists,
+      'Selling'
     )!
 
     setIsCreatingTask(true)
