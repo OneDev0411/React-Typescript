@@ -19,7 +19,7 @@ import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import { getShowingImage } from '../../helpers'
 import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
-import { getAppointmentFeedbackSubtitle } from './helpers'
+import { getAppointmentTitle } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -133,9 +133,7 @@ function ShowingBookingList({
           onDismissAction={onDismissAction}
           buyerName={row.contact.display_name}
           buyerMessage={row.buyer_message}
-          feedbackSubtitle={
-            row.feedback ? getAppointmentFeedbackSubtitle(row) : undefined
-          }
+          appointmentTitle={getAppointmentTitle(row)}
         />
       )
     }

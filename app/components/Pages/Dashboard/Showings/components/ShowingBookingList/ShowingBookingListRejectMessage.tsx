@@ -3,8 +3,10 @@ import { Button, Box } from '@material-ui/core'
 
 import Dialog from '../Dialog'
 import ShowingDialogCard from './ShowingDialogCard'
+import { getShowingRoleLabel } from '../../helpers'
 
 interface PersonMessage {
+  role: string
   person: string
   message: Nullable<string>
 }
@@ -13,18 +15,20 @@ export interface ShowingBookingListRejectMessageProps {
   approvals?: Nullable<IShowingApproval[]>
   buyerName: string
   buyerMessage: Nullable<string>
+  appointmentTitle?: string
 }
 
 function ShowingBookingListRejectMessage({
   approvals,
   buyerName,
-  buyerMessage
+  buyerMessage,
+  appointmentTitle
 }: ShowingBookingListRejectMessageProps) {
   const [open, setOpen] = useState(false)
 
   const personMessage = useMemo<Nullable<PersonMessage>>(() => {
     if (buyerMessage) {
-      return { person: buyerName, message: buyerMessage }
+      return { role: 'Buyer', person: buyerName, message: buyerMessage }
     }
 
     const approval = approvals?.find(
@@ -38,6 +42,7 @@ function ShowingBookingListRejectMessage({
     const role = approval.role as IShowingRole
 
     return {
+      role: getShowingRoleLabel(role.role),
       person: `${role.first_name} ${role.last_name}`.trim(),
       message: approval.comment ?? null
     }
@@ -61,7 +66,19 @@ function ShowingBookingListRejectMessage({
       >
         View Message
       </Button>
-      <Dialog open={open} onClose={closeDialog} title={personMessage.person}>
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        title={
+          <>
+            {personMessage.person}
+            <Box component="span" color="grey.500">
+              , {personMessage.role}
+            </Box>
+          </>
+        }
+        subtitle={appointmentTitle}
+      >
         <Box my={2}>
           <ShowingDialogCard
             question="Comments"

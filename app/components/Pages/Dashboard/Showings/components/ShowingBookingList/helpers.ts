@@ -41,9 +41,7 @@ export function getAppointmentTimeLabel(
   )}`
 }
 
-export function getAppointmentFeedbackSubtitle(
-  appointment: IShowingAppointment
-): string {
+export function getAppointmentTitle(appointment: IShowingAppointment): string {
   return [
     (appointment.showing as IShowing).title,
     ' — ',

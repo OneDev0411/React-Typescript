@@ -45,7 +45,7 @@ function ShowingBookingListColumnActions({
   status,
   contact,
   feedback,
-  feedbackSubtitle,
+  appointmentTitle,
   showing,
   appointmentId,
   onApprovalAction,
@@ -133,6 +133,7 @@ function ShowingBookingListColumnActions({
           approvals={approvals}
           buyerName={buyerName}
           buyerMessage={buyerMessage}
+          appointmentTitle={appointmentTitle}
         />
       )}
       {(status === 'Requested' || status === 'Rescheduled') && (
@@ -180,7 +181,7 @@ function ShowingBookingListColumnActions({
           {...sharedButtonProps}
           contact={contact}
           feedback={feedback}
-          feedbackSubtitle={feedbackSubtitle}
+          appointmentTitle={appointmentTitle}
         />
       )}
     </div>

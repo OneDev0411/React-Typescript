@@ -8,13 +8,13 @@ import ShowingBookingListFeedbackDialog, {
 export interface ShowingBookingListViewFeedbackButtonProps
   extends Omit<ButtonProps, 'onClick' | 'children'>,
     Pick<ShowingBookingListFeedbackDialogProps, 'contact' | 'feedback'> {
-  feedbackSubtitle?: string
+  appointmentTitle?: string
 }
 
 function ShowingBookingListViewFeedbackButton({
   contact,
   feedback,
-  feedbackSubtitle,
+  appointmentTitle,
   ...otherProps
 }: ShowingBookingListViewFeedbackButtonProps) {
   const [open, setOpen] = useState(false)
@@ -38,7 +38,7 @@ function ShowingBookingListViewFeedbackButton({
         feedback={feedback}
         open={open}
         onClose={closeDialog}
-        subtitle={feedbackSubtitle}
+        subtitle={appointmentTitle}
       />
     </>
   )
