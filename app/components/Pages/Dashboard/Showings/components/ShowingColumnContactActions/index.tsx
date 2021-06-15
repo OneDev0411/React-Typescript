@@ -1,6 +1,5 @@
 import { MouseEvent, useState } from 'react'
-import classNames from 'classnames'
-import { Box, makeStyles } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import {
   MailOutline as MailOutlineIcon,
   Phone as PhoneIcon
@@ -16,25 +15,21 @@ import { addNotification } from 'components/notification'
 
 import copy from 'utils/copy-text-to-clipboard'
 
-import ShowingDetailTabVisitorsIconLabel from './ShowingDetailTabVisitorsIconLabel'
+import ShowingColumnContactIconLabel from './ShowingColumnContactIconLabel'
 
-const useStyles = makeStyles(
-  {
-    root: { opacity: 0 }
-  },
-  { name: 'ShowingDetailTabVisitorsColumnActions' }
-)
-
-interface ShowingDetailTabVisitorsColumnActionsProps {
+interface ShowingColumnContactActionsProps {
   className?: string
   contact: IContact
+  compact?: boolean
+  spacing?: number
 }
 
-function ShowingDetailTabVisitorsColumnActions({
+function ShowingColumnContactActions({
   className,
-  contact
-}: ShowingDetailTabVisitorsColumnActionsProps) {
-  const classes = useStyles()
+  contact,
+  compact = false,
+  spacing = 3
+}: ShowingColumnContactActionsProps) {
   const dispatch = useDispatch()
   const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
 
@@ -51,20 +46,22 @@ function ShowingDetailTabVisitorsColumnActions({
   }
 
   return (
-    <Box className={classNames(classes.root, className)} onClick={handleClick}>
+    <Box className={className} onClick={handleClick}>
       {contact.email && (
-        <ShowingDetailTabVisitorsIconLabel
+        <ShowingColumnContactIconLabel
           icon={<MailOutlineIcon />}
           label="Email"
-          marginRight={contact.phone_number ? 3 : 0}
+          marginRight={contact.phone_number ? spacing : 0}
           onClick={openEmailDrawer}
+          compact={compact}
         />
       )}
       {contact.phone_number && (
-        <ShowingDetailTabVisitorsIconLabel
+        <ShowingColumnContactIconLabel
           icon={<PhoneIcon />}
           label="Phone"
           onClick={handleCopy}
+          compact={compact}
         />
       )}
       {contact.email && (
@@ -79,4 +76,4 @@ function ShowingDetailTabVisitorsColumnActions({
   )
 }
 
-export default ShowingDetailTabVisitorsColumnActions
+export default ShowingColumnContactActions

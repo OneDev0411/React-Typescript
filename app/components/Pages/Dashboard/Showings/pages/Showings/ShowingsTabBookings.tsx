@@ -32,6 +32,7 @@ function ShowingsTabBookings({
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={updateShowingsAppointmentStatus}
       onDismissAction={dismissShowingsAppointmentNotifications}
+      stackDateAndTimeColumns
     />
   )
 }

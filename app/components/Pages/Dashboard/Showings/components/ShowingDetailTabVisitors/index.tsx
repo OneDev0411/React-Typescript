@@ -11,16 +11,19 @@ import { goTo } from 'utils/go-to'
 
 import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColumnPerson'
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
-import ShowingDetailTabVisitorsColumnActions from './ShowingDetailTabVisitorsColumnActions'
+import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import useShowingCountVisitorCount from './use-showing-count-visitor-count'
 import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
     row: {
-      '&:hover $actions': { opacity: 1 }
+      '&:hover $hide': { opacity: 1 }
     },
-    actions: { transition: theme.transitions.create('opacity') }
+    hide: {
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
+    }
   }),
   { name: 'ShowingDetailTabVisitors' }
 )
@@ -72,10 +75,7 @@ function ShowingDetailTabVisitors({
       width: '20%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingDetailTabVisitorsColumnActions
-          contact={row}
-          className={classes.actions}
-        />
+        <ShowingColumnContactActions contact={row} className={classes.hide} />
       )
     },
     {

@@ -7,23 +7,38 @@ const useStyles = makeStyles(
       cursor: 'pointer'
     }
   },
-  { name: 'ShowingDetailTabVisitorsIconLabel' }
+  { name: 'ShowingColumnContactIconLabel' }
 )
 
-interface ShowingDetailTabVisitorsIconLabelProps {
+interface ShowingColumnContactIconLabelProps {
   icon: ReactNode
   label: string
   marginRight?: number
   onClick?: () => void
+  compact: boolean
 }
 
-function ShowingDetailTabVisitorsIconLabel({
+function ShowingColumnContactIconLabel({
   icon,
   label,
   marginRight,
-  onClick
-}: ShowingDetailTabVisitorsIconLabelProps) {
+  onClick,
+  compact
+}: ShowingColumnContactIconLabelProps) {
   const classes = useStyles()
+
+  if (compact) {
+    return (
+      <Box
+        display="inline-block"
+        marginRight={marginRight}
+        onClick={onClick}
+        className={onClick ? classes.root : undefined}
+      >
+        {icon}
+      </Box>
+    )
+  }
 
   return (
     <Box
@@ -43,4 +58,4 @@ function ShowingDetailTabVisitorsIconLabel({
   )
 }
 
-export default ShowingDetailTabVisitorsIconLabel
+export default ShowingColumnContactIconLabel

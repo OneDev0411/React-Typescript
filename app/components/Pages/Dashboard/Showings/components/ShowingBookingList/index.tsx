@@ -19,17 +19,23 @@ import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import { getShowingImage } from '../../helpers'
 import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
-import { getAppointmentTitle } from './helpers'
+import {
+  getAppointmentDateLabel,
+  getAppointmentTimeLabel,
+  getAppointmentTitle
+} from './helpers'
+import ShowingColumnContactActions from '../ShowingColumnContactActions'
+import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
 
 const useStyles = makeStyles(
   theme => ({
     rowBase: {
       paddingRight: theme.spacing(1),
-      '&:hover $actions': { opacity: 1 }
+      '&:hover $hide': { opacity: 1 }
     },
     row: {},
     rowPast: { color: theme.palette.grey[700] },
-    actions: {
+    hide: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
     }
@@ -46,6 +52,7 @@ export interface ShowingBookingListProps
   emptyMessage: string
   hasPropertyColumn?: boolean
   hasPastBookingsFilter?: boolean
+  stackDateAndTimeColumns?: boolean
 }
 
 function ShowingBookingList({
@@ -54,7 +61,8 @@ function ShowingBookingList({
   onApprovalAction,
   hasPropertyColumn = false,
   onDismissAction,
-  hasPastBookingsFilter = false
+  hasPastBookingsFilter = false,
+  stackDateAndTimeColumns = false
 }: ShowingBookingListProps) {
   const classes = useStyles()
   const [showPastBookings, setShowPastBookings] = useState(false)
@@ -70,7 +78,7 @@ function ShowingBookingList({
     },
     {
       id: 'status',
-      width: '15%',
+      width: '125px',
       sortable: false,
       render: ({ row }) => (
         <ShowingBookingListColumnStatus status={row.status} />
@@ -80,7 +88,7 @@ function ShowingBookingList({
       ? [
           {
             id: 'property',
-            width: '30%',
+            width: '25%',
             render: ({ row }) => (
               <ShowingColumnProperty
                 image={getShowingImage({
@@ -93,20 +101,46 @@ function ShowingBookingList({
           }
         ]
       : []),
+    ...(stackDateAndTimeColumns
+      ? [
+          {
+            id: 'date-time',
+            width: '15%',
+            render: ({ row }) => (
+              <ShowingBookingListColumnDateTime
+                time={row.time}
+                duration={(row.showing as IShowing).duration}
+              />
+            )
+          }
+        ]
+      : [
+          {
+            id: 'date',
+            width: '15%',
+            render: ({ row }) => (
+              <ShowingBookingListColumnBase>
+                {getAppointmentDateLabel(row.time)}
+              </ShowingBookingListColumnBase>
+            )
+          },
+          {
+            id: 'tile',
+            width: '15%',
+            render: ({ row }) => (
+              <ShowingBookingListColumnBase>
+                {getAppointmentTimeLabel(
+                  row.time,
+                  (row.showing as IShowing).duration
+                )}
+              </ShowingBookingListColumnBase>
+            )
+          }
+        ]),
 
     {
-      id: 'date-time',
-      width: hasPropertyColumn ? '20%' : '25%',
-      render: ({ row }) => (
-        <ShowingBookingListColumnDateTime
-          time={row.time}
-          duration={(row.showing as IShowing).duration}
-        />
-      )
-    },
-    {
-      id: 'agent',
-      width: '15%',
+      id: 'person',
+      width: '20%',
       sortable: false,
       render: ({ row }) => (
         <ShowingBookingListColumnPerson
@@ -116,12 +150,25 @@ function ShowingBookingList({
       )
     },
     {
+      id: 'person-actions',
+      width: '64px',
+      sortable: false,
+      render: ({ row }) => (
+        <ShowingColumnContactActions
+          contact={row.contact}
+          className={!row.notifications?.length ? classes.hide : undefined}
+          spacing={2}
+          compact
+        />
+      )
+    },
+    {
       id: 'body-actions',
       sortable: false,
       align: 'right',
       render: ({ row }) => (
         <ShowingBookingListColumnActions
-          className={!row.notifications?.length ? classes.actions : undefined}
+          className={!row.notifications?.length ? classes.hide : undefined}
           status={row.status}
           showing={row.showing as IShowing}
           appointmentId={row.id}
@@ -179,7 +226,6 @@ function ShowingBookingList({
         getTrProps={({ row }) => ({
           className: classNames(
             classes.rowBase,
-
             row.time >= new Date().toISOString() ? classes.row : classes.rowPast
           )
         })}

@@ -15,7 +15,10 @@ import { getValidAppointmentFilter } from './helpers'
 export interface ShowingFilteredBookingListProps
   extends Pick<
       ShowingBookingListProps,
-      'onApprovalAction' | 'onDismissAction' | 'hasPropertyColumn'
+      | 'onApprovalAction'
+      | 'onDismissAction'
+      | 'hasPropertyColumn'
+      | 'stackDateAndTimeColumns'
     >,
     WithRouterProps {
   appointments: IShowingAppointment[]
@@ -28,7 +31,8 @@ function ShowingFilteredBookingList({
   onDismissAction,
   hasPropertyColumn,
   location,
-  generateLink
+  generateLink,
+  stackDateAndTimeColumns
 }: ShowingFilteredBookingListProps) {
   const filter: AppointmentFilter = getValidAppointmentFilter(
     location.query.filter
@@ -57,6 +61,7 @@ function ShowingFilteredBookingList({
         onDismissAction={onDismissAction}
         hasPropertyColumn={hasPropertyColumn}
         hasPastBookingsFilter
+        stackDateAndTimeColumns={stackDateAndTimeColumns}
         key={`${filter}-bookings`}
       />
     </>

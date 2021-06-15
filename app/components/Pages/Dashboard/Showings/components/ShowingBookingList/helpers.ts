@@ -31,7 +31,7 @@ export function getAppointmentTimeLabel(
   appointmentTime: string,
   duration: number
 ): string {
-  const timeFormat = 'h:m'
+  const timeFormat = 'h:mm'
   const startTime = new Date(appointmentTime)
   const endTime = new Date(startTime.getTime() + duration * 1000)
 
