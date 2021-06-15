@@ -156,7 +156,7 @@ function OpenHouseForm(props: Props) {
       props.deal,
       brandChecklists,
       checklists,
-      'Selling'
+      props.deal.deal_type
     )!
 
     const taskTitle = [
