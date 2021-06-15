@@ -11,33 +11,17 @@ export function useFactsheetContexts(deal: IDeal, section: string) {
   const list = useSelector<
     IAppState,
     IBrandChecklist['required_contexts'] & IBrandChecklist['optional_contexts']
-  >(({ deals }) => {
-    const contexts: IDealContext[] = []
-
-    if (deal.has_active_offer) {
-      contexts.concat(
-        getBrandChecklistContexts(
-          deals.brandChecklists,
-          deal.brand.id,
-          deal.property_type?.id,
-          'Offer'
-        )
-      )
-    }
-
-    contexts.concat(
+  >(({ deals }) =>
+    uniqBy(
       getBrandChecklistContexts(
         deals.brandChecklists,
         deal.brand.id,
         deal.property_type?.id,
-        deal.deal_type
-      )
-    )
-
-    return uniqBy(contexts, context => context.key).filter(
-      context => context.section === section
-    )
-  })
+        deal.has_active_offer ? 'Offer' : deal.deal_type
+      ),
+      context => context.key
+    ).filter(context => context.section === section)
+  )
 
   if (section === 'Dates') {
     const fieldsWithValue = list
