@@ -1,5 +1,11 @@
 import { memo } from 'react'
-import { Box, FormHelperText, Grid, IconButton } from '@material-ui/core'
+import {
+  Box,
+  FormHelperText,
+  Grid,
+  IconButton,
+  makeStyles
+} from '@material-ui/core'
 
 import { mdiDeleteOutline } from '@mdi/js'
 
@@ -17,6 +23,19 @@ import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
 import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
 import { ShowingAvailabilityItem } from '../../types'
 import ShowingAvailabilitiesTimesRowInsert from './ShowingAvailabilitiesTimesRowInsert'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      '&:hover $insert': { opacity: 1 }
+    },
+    insert: {
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
+    }
+  }),
+  { name: 'ShowingAvailabilitiesTimesRow' }
+)
 
 interface FormValues {
   start: string
@@ -44,6 +63,8 @@ function ShowingAvailabilitiesTimesRow({
   hasInsertButton,
   onInsert
 }: ShowingAvailabilitiesTimesRowProps) {
+  const classes = useStyles()
+
   const handleDelete = () => {
     onDelete(id)
   }
@@ -102,7 +123,7 @@ function ShowingAvailabilitiesTimesRow({
           : undefined
 
         return (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className={classes.root}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={5}>
                 <Box mr={2}>
@@ -151,7 +172,10 @@ function ShowingAvailabilitiesTimesRow({
               </Box>
             )}
             {hasInsertButton && (
-              <ShowingAvailabilitiesTimesRowInsert onClick={onInsert} />
+              <ShowingAvailabilitiesTimesRowInsert
+                onClick={onInsert}
+                className={classes.insert}
+              />
             )}
           </form>
         )

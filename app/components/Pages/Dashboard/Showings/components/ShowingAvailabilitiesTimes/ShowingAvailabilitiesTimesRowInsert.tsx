@@ -7,11 +7,6 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 const useStyles = makeStyles(
   theme => ({
-    root: {
-      opacity: 0,
-      transition: theme.transitions.create('opacity'),
-      '&:hover': { opacity: 1 }
-    },
     line: {
       backgroundColor: theme.palette.primary.main,
       height: 2,
@@ -22,24 +17,26 @@ const useStyles = makeStyles(
 )
 
 interface ShowingAvailabilitiesTimesRowInsertProps {
+  className?: string
   onClick: () => void
 }
 
 function ShowingAvailabilitiesTimesRowInsert({
+  className,
   onClick
 }: ShowingAvailabilitiesTimesRowInsertProps) {
   const classes = useStyles()
 
   return (
     <Box
-      className={classes.root}
+      className={className}
       position="relative"
       height="24px"
       onClick={onClick}
     >
-      <Box position="absolute" left="-24px" top="0">
+      <Box position="absolute" left="-34px" top="0">
         <IconButton size="small">
-          <SvgIcon path={mdiPlus} size={muiIconSizes.small} />
+          <SvgIcon path={mdiPlus} size={muiIconSizes.medium} />
         </IconButton>
       </Box>
       <Box className={classes.line} position="absolute" top="50%" left="4px" />
