@@ -15,7 +15,6 @@ import ShowingBookingListColumnActions, {
 } from './ShowingBookingListColumnActions'
 import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
 import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
-import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import { getShowingImage } from '../../helpers'
 import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
@@ -26,6 +25,7 @@ import {
 } from './helpers'
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
+import ShowingEmptyState from '../ShowingEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -219,9 +219,7 @@ function ShowingBookingList({
         rows={visibleRows}
         totalRows={visibleRows.length}
         columns={columns}
-        EmptyStateComponent={() => (
-          <ShowingBookingListEmptyState message={emptyMessage || ''} />
-        )}
+        EmptyStateComponent={() => <ShowingEmptyState title={emptyMessage} />}
         virtualize={false}
         getTrProps={({ row }) => ({
           className: classNames(

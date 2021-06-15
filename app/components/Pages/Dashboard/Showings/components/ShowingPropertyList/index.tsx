@@ -13,7 +13,7 @@ import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
-import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
+import ShowingEmptyState from '../ShowingEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -129,8 +129,7 @@ function ShowingPropertyList({
           <LoadingContainer style={{ padding: '10% 0' }} />
         )}
         EmptyStateComponent={() => (
-          // TODO: finalize this empty state or move the component to the global scope
-          <ShowingBookingListEmptyState message="There is no property." />
+          <ShowingEmptyState title="There are no properties." />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)

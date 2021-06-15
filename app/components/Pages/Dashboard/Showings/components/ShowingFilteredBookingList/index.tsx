@@ -49,11 +49,13 @@ function ShowingFilteredBookingList({
 
   return (
     <>
-      <ShowingAppointmentFilters
-        appointments={appointments}
-        generateLink={generateLinkWithLocation}
-        value={filter}
-      />
+      {!!appointments.length && (
+        <ShowingAppointmentFilters
+          appointments={appointments}
+          generateLink={generateLinkWithLocation}
+          value={filter}
+        />
+      )}
       <ShowingBookingList
         rows={filteredAppointments}
         emptyMessage={emptyMessage}
