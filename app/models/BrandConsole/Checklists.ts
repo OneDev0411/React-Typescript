@@ -3,7 +3,11 @@ import Fetch from '../../services/fetch'
 export async function getBrandChecklists(
   brandId: string
 ): Promise<IBrandChecklist[]> {
-  const response = await new Fetch().get(`/brands/${brandId}/checklists`)
+  const response = await new Fetch()
+    .get(`/brands/${brandId}/checklists`)
+    .query({ 'associations[]': ['brand_checklist.required_contexts'] })
+    .query({ 'associations[]': ['brand_checklist.optional_contexts'] })
+    .query({ 'associations[]': ['brand_checklist.statuses'] })
 
   return response.body.data
 }

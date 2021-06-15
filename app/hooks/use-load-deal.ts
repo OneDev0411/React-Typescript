@@ -1,10 +1,9 @@
 import { useState, useMemo } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { useSelector } from 'react-redux'
+import { useSelector, batch } from 'react-redux'
 
-import { getDeal, getContextsByDeal, getForms } from 'actions/deals'
-import { selectContextsByDeal } from 'reducers/deals/contexts'
+import { getDeal, getForms, getBrandChecklists } from 'actions/deals'
 import { IAppState } from 'reducers'
 
 import { selectDealById } from 'reducers/deals/list'
@@ -12,7 +11,7 @@ import { selectDealById } from 'reducers/deals/list'
 import { useReduxDispatch } from './use-redux-dispatch'
 
 /**
- * returns full dump of deal inclduing its forms and contexts
+ * returns full dump of deal inclduing its forms
  * @param id - the deal id
  */
 export function useLoadFullDeal(id: UUID) {
@@ -22,13 +21,16 @@ export function useLoadFullDeal(id: UUID) {
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, id)
   )
+  const brandChecklists = useSelector<
+    IAppState,
+    Record<UUID, IBrandChecklist[]>
+  >(({ deals }) => deals.brandChecklists)
 
-  const { contexts, forms } = useMemo(() => {
+  const { forms } = useMemo(() => {
     return {
-      contexts: selectContextsByDeal(deals.contexts, id),
       forms: deals.forms
     }
-  }, [deals.contexts, deals.forms, id])
+  }, [deals.forms])
 
   const [dealWithChecklists, setDeal] = useState<IDeal | undefined>(deal)
   const [isFetchingCompleted, setIsFetchingCompleted] = useState<boolean>(false)
@@ -36,10 +38,12 @@ export function useLoadFullDeal(id: UUID) {
   const [isFetchingDeal, setIsFetchingDeal] = useState<boolean>(
     !deal || !deal.checklists
   )
-  const [isFetchingContexts, setIsFetchingContexts] = useState<boolean>(
-    !contexts
-  )
+
   const [isFetchingForms, setIsFetchingForms] = useState<boolean>(!forms[id])
+  const [
+    isFetchingBrandChecklists,
+    setIsFetchingBrandChecklists
+  ] = useState<boolean>(false)
 
   useEffectOnce(() => {
     if (!id) {
@@ -65,25 +69,6 @@ export function useLoadFullDeal(id: UUID) {
     }
 
     /**
-     * fetches contexts of a deal
-     */
-    async function fetchContexts(deal: IDeal): Promise<void> {
-      if (contexts) {
-        return
-      }
-
-      setIsFetchingContexts(true)
-
-      try {
-        await dispatch(getContextsByDeal(deal.id))
-      } catch (e) {
-        console.log(e)
-      }
-
-      setIsFetchingContexts(false)
-    }
-
-    /**
      * fetches forms of a deal
      */
     async function fetchForms(deal: IDeal): Promise<void> {
@@ -103,21 +88,42 @@ export function useLoadFullDeal(id: UUID) {
     }
 
     /**
-     * initializes a deal by fetching its checklists, contexts and forms
+     * fetches forms of a deal
+     */
+    async function fetchChecklists(deal: IDeal): Promise<void> {
+      if (brandChecklists[deal.brand.id]) {
+        return
+      }
+
+      try {
+        setIsFetchingBrandChecklists(true)
+
+        await dispatch(getBrandChecklists(deal.brand.id))
+
+        setIsFetchingBrandChecklists(false)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    /**
+     * initializes a deal by fetching its checklists and forms
      */
     async function load(): Promise<void> {
-      // fetch deal with its checklists
-      const fetchedDeal: IDeal = await fetchDeal()
+      batch(async () => {
+        // fetch deal with its checklists
+        const fetchedDeal: IDeal = await fetchDeal()
 
-      // fetch deal contexts
-      await fetchContexts(fetchedDeal)
+        // fetch deal forms and checklists
+        await Promise.all([
+          await fetchForms(fetchedDeal),
+          await fetchChecklists(fetchedDeal)
+        ])
 
-      // fetch deal forms
-      await fetchForms(fetchedDeal)
+        setIsFetchingCompleted(true)
 
-      setIsFetchingCompleted(true)
-
-      setDeal(fetchedDeal)
+        setDeal(fetchedDeal)
+      })
     }
 
     load()
@@ -125,8 +131,8 @@ export function useLoadFullDeal(id: UUID) {
 
   return {
     isFetchingDeal,
-    isFetchingContexts,
     isFetchingForms,
+    isFetchingBrandChecklists,
     isFetchingCompleted,
     deal: dealWithChecklists
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Box, CircularProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -6,8 +7,6 @@ import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
 import { getActiveTeamId } from 'utils/user-teams'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
-
-import Spinner from 'components/Spinner'
 
 import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
 import { Container, TemplateItem, Video, Image } from './styled'
@@ -137,9 +136,18 @@ class Templates extends React.Component {
   render() {
     return (
       <Container>
-        {this.state.isLoading && <Spinner />}
+        {this.state.isLoading && (
+          <Box
+            pt={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <CircularProgress />
+          </Box>
+        )}
 
-        {this.state.currentTemplatesTypes.length && (
+        {this.state.currentTemplatesTypes.length > 0 && (
           <TemplateTypesSelect
             items={this.state.currentTemplatesTypes}
             value={this.state.selectedTemplateType}

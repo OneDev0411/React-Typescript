@@ -68,9 +68,10 @@ export function useChecklistsPage(rootBrandId: string | null) {
         await addBrandCheckListTask(rootBrandId, checklist.id, {
           title: '',
           ...taskData,
-          order: Array.isArray(checklist.tasks)
-            ? Math.max(...checklist.tasks.map(task => task.order)) + 1
-            : 1
+          order:
+            Array.isArray(checklist.tasks) && checklist.tasks.length > 0
+              ? Math.max(...checklist.tasks.map(task => task.order)) + 1
+              : 1
         })
       )
     }
@@ -78,6 +79,11 @@ export function useChecklistsPage(rootBrandId: string | null) {
   const updateChecklist = async (checklist: IBrandChecklist) => {
     applyChecklistUpdate(checklist.id, await updateBrandChecklist(checklist))
   }
+
+  const addChecklists = (list: IBrandChecklist[]) => {
+    setChecklists([...checklists, ...list])
+  }
+
   const addGenericTask = (checklist: IBrandChecklist) => {
     return addTask(checklist, {
       task_type: 'Generic'
@@ -147,11 +153,13 @@ export function useChecklistsPage(rootBrandId: string | null) {
     updateTask,
     deleteTask,
     reorderTasks,
+    addChecklists,
     addGenericTask,
     addGeneralCommentTask,
     addFormTask,
     forms,
     formsError,
-    formsState
+    formsState,
+    fetchChecklists
   }
 }

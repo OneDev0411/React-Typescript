@@ -818,6 +818,8 @@ export default (
           path="marketing/:types(/:medium)"
           component={AsyncMarketingTemplates}
         />
+        <Route path="flows" component={AsyncFlowsList} />
+        <Route path="flows/:id" component={AsyncFlowEdit} />
 
         <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route
@@ -903,9 +905,6 @@ export default (
             component={ConnectedAccountsSetting}
           />
           {/* <Route path="css" component={AsyncCSS} /> */}
-
-          <Route path="flows" component={AsyncFlowsList} />
-          <Route path="flows/:id" component={AsyncFlowEdit} />
         </Route>
 
         <Route path="teams(/:id)">

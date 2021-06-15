@@ -1,13 +1,18 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
 
 import { mdiChevronDown } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { updatePropertyType } from 'actions/deals'
+
 import { BaseDropdown } from 'components/BaseDropdown'
-import { propertyTypes } from 'deals/utils/property-types'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ItemValue } from '../../Factsheet/styled'
 
@@ -29,8 +34,11 @@ interface Props {
 }
 
 export function PropertyType(props: Props) {
-  const classes = useStyles()
   const dispatch = useDispatch()
+  const classes = useStyles()
+
+  const user = useSelector(selectUser)
+  const { propertyTypes } = useBrandPropertyTypes(getActiveTeamId(user)!)
 
   const handleChange = async (value: string) => {
     try {
@@ -41,7 +49,7 @@ export function PropertyType(props: Props) {
   }
 
   if (!props.isBackOffice) {
-    return <ItemValue>{props.deal.property_type}</ItemValue>
+    return <ItemValue>{props.deal.property_type?.label}</ItemValue>
   }
 
   return (
@@ -53,20 +61,20 @@ export function PropertyType(props: Props) {
           className={classes.button}
           endIcon={<SvgIcon path={mdiChevronDown} size={muiIconSizes.small} />}
         >
-          {props.deal.property_type}
+          {props.deal.property_type?.label}
         </Button>
       )}
       renderMenu={({ close }) => (
         <div>
-          {propertyTypes.map((value, index) => (
+          {propertyTypes.map((item, index) => (
             <MenuItem
               key={index}
               onClick={() => {
                 close()
-                handleChange(value)
+                handleChange(item.id)
               }}
             >
-              {value}
+              {item.label}
             </MenuItem>
           ))}
         </div>

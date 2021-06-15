@@ -16,8 +16,6 @@ import {
 import { mdiCalendar } from '@mdi/js'
 import cn from 'classnames'
 
-import { useMemo } from 'react'
-
 import { Link } from 'react-router'
 
 import { useDispatch } from 'react-redux'
@@ -27,6 +25,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { PopoverContactTagSelector } from 'components/TagSelector'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 
@@ -144,7 +143,7 @@ export function ColumnCard({ contact, columnId, rowId }: Props) {
                   className={classes.cardAvatar}
                   src={getAccountAvatar(contact)}
                 >
-                  {contact.display_name[0]}
+                  {getContactNameInitials(contact)}
                 </Avatar>
 
                 <Link

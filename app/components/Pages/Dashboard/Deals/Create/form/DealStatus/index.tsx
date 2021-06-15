@@ -1,6 +1,5 @@
-import React from 'react'
 import { CircularProgress } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   QuestionSection,
@@ -14,24 +13,38 @@ import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-con
 
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import DealContext from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 
 import { useCreationContext } from 'deals/Create/context/use-creation-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
 import { getStatus } from 'models/Deal/helpers/context'
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 interface Props {
   list: IDealStatus[]
+  error?: string
   onChange?: (value: string) => void
 }
 
-export function DealStatus({ list, onChange }: Props) {
+export function DealStatus({ list, error, onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
   const status = deal ? getStatus(deal) : null
+
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
+  )
 
   const dispatch = useDispatch()
 
@@ -43,9 +56,11 @@ export function DealStatus({ list, onChange }: Props) {
     if (deal && !onChange) {
       dispatch(
         upsertContexts(deal.id, [
-          DealContext.createUpsertObject(
+          createContextObject(
             deal,
-            DealContext.getStatusField(deal),
+            brandChecklists,
+            checklists,
+            getStatusContextKey(deal),
             value,
             true
           )
@@ -63,7 +78,7 @@ export function DealStatus({ list, onChange }: Props) {
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>What is the status of the deal?</QuestionTitle>
 
       <QuestionForm>

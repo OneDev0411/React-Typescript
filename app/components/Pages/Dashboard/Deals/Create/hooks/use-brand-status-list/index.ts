@@ -1,26 +1,7 @@
-import { useState } from 'react'
-import { useAsync } from 'react-use'
-import { useSelector } from 'react-redux'
-
-import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
-import { getBrandStatuses } from 'models/Deal/status/get-brand-statuses'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useDealStatuses } from 'hooks/use-deal-statuses'
 
 export function useStatusList(deal: IDeal | null): IDealStatus[] {
-  const [statuses, setStatuses] = useState<IDealStatus[]>([])
-  const user = useSelector<IAppState, IUser>(state => selectUser(state))
-  const dealId = deal?.id
-
-  useAsync(async () => {
-    if (!dealId) {
-      return
-    }
-
-    const list = await getBrandStatuses(getActiveTeamId(user)!)
-
-    setStatuses(list)
-  }, [dealId])
+  const statuses = useDealStatuses(deal)
 
   return deal
     ? statuses.filter(status => {
@@ -32,10 +13,7 @@ export function useStatusList(deal: IDeal | null): IDealStatus[] {
           return false
         }
 
-        return (
-          status.deal_types.includes(deal.deal_type) &&
-          status.property_types.includes(deal.property_type)
-        )
+        return true
       })
     : []
 }

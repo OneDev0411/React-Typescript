@@ -3,7 +3,7 @@ import { useField } from 'react-final-form'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-const DONE_STATUS = 'DONE'
+export const DONE_STATUS = 'DONE'
 
 export function FutureEventDoneConfirmation() {
   const confirmation = useContext(ConfirmationModalContext)

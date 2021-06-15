@@ -91,7 +91,7 @@ export const SearchInput = forwardRef(
         return
       }
 
-      onChange(e)
+      onChange(e, value)
     }
 
     const clearInput = () => {
