@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       justifyContent: 'flex-start',
       '&:focus, &:hover': {
         outline: 'none',
-        color: theme.palette.primary.main
+        color: theme.palette.common.black
       }
     },
     selected: {
@@ -50,7 +50,6 @@ function ShowingDetailTabSettingsSubjectListItem({
     <LinkButton
       className={classNames(classes.root, selected && classes.selected)}
       to={`${location.pathname}?tab=${to}`}
-      color="primary"
       endIcon={
         error && (
           <ErrorOutlineIcon className={!selected ? classes.error : undefined} />
