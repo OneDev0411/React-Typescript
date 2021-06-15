@@ -83,7 +83,7 @@ function Form(props: Props & StateProps & DispatchProps) {
       props.deal,
       props.brandChecklists,
       props.checklists,
-      'Selling'
+      props.deal.deal_type
     )!
 
     setIsCreatingTask(true)
