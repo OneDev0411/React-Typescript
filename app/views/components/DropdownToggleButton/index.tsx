@@ -16,6 +16,7 @@ import { SvgIcon } from '../SvgIcons/SvgIcon'
 import { ClassesProps } from '../../../utils/ts-utils'
 
 interface Props extends ButtonProps {
+  component?: string
   isActive?: boolean
   children?: ReactNode
   iconPath?: string
