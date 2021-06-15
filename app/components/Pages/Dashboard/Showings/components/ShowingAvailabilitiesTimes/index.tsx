@@ -99,11 +99,7 @@ function ShowingAvailabilitiesTimes({
             onChange={handleChange}
             onInsert={() => handleInsert(idx)}
             disableDelete={value.length < 2}
-            hasError={
-              timeConflicts &&
-              (idx === timeConflicts.slot1Index ||
-                idx === timeConflicts.slot2Index)
-            }
+            hasError={timeConflicts.includes(idx)}
             hasInsertButton={idx !== value.length - 1}
           />
         ))}
@@ -122,7 +118,7 @@ function ShowingAvailabilitiesTimes({
             variant="contained"
             size="small"
             color="primary"
-            disabled={!value.length || !!timeConflicts || !!error}
+            disabled={!value.length || !!timeConflicts.length || !!error}
             onClick={onContinue}
           >
             Continue

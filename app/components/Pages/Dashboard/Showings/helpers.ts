@@ -52,31 +52,51 @@ export function getShowingBookingPageUrl(
   }-${showing.human_readable_id}/book`
 }
 
-export function findTimeConflicts(
-  slots: IShowingAvailabilityInput[]
-): { slot1Index: number; slot2Index: number } | false {
+function isTimeSlotsConflict(
+  slot1: IShowingAvailabilityInput,
+  slot2: IShowingAvailabilityInput
+) {
+  if (slot1.weekday === slot2.weekday) {
+    if (
+      (slot1.availability[0] >= slot2.availability[0] &&
+        slot1.availability[0] < slot2.availability[1]) ||
+      (slot2.availability[0] >= slot1.availability[0] &&
+        slot2.availability[0] < slot1.availability[1])
+    ) {
+      return true
+    }
+  }
+
+  return false
+}
+
+export function hasTimeConflicts(slots: IShowingAvailabilityInput[]): boolean {
   for (let i = 0; i < slots.length; i++) {
     for (let j = i + 1; j < slots.length; j++) {
-      const slot1 = slots[i]
-      const slot2 = slots[j]
-
-      if (slot1.weekday === slot2.weekday) {
-        if (
-          (slot1.availability[0] >= slot2.availability[0] &&
-            slot1.availability[0] < slot2.availability[1]) ||
-          (slot2.availability[0] >= slot1.availability[0] &&
-            slot2.availability[0] < slot1.availability[1])
-        ) {
-          return {
-            slot1Index: i,
-            slot2Index: j
-          }
-        }
+      if (isTimeSlotsConflict(slots[i], slots[j])) {
+        return true
       }
     }
   }
 
   return false
+}
+
+export function findTimeConflicts(
+  slots: IShowingAvailabilityInput[]
+): number[] {
+  const results: number[] = []
+
+  for (let i = 0; i < slots.length; i++) {
+    for (let j = i + 1; j < slots.length; j++) {
+      if (isTimeSlotsConflict(slots[i], slots[j])) {
+        results.push(i)
+        results.push(j)
+      }
+    }
+  }
+
+  return [...new Set(results)]
 }
 
 export function hasInvalidTimeRange(

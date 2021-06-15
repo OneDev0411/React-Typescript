@@ -38,7 +38,7 @@ import {
   showingDurationOptions
 } from '../../constants'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
-import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 
 const defaultNotificationTypes: INotificationDeliveryType[] = []
 
@@ -146,7 +146,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       errors.property = 'You need to select a property'
     }
 
-    if (findTimeConflicts(availabilities)) {
+    if (hasTimeConflicts(availabilities)) {
       errors.availabilities = 'The time slots has conflicts'
     }
 

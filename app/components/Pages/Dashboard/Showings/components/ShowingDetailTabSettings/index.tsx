@@ -21,7 +21,7 @@ import {
   ShowingDetailTabSettingsErrors
 } from './types'
 import ShowingAvailabilitiesTimes from '../ShowingAvailabilitiesTimes'
-import { findTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 import ShowingDuration from '../ShowingDuration'
 import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
 import ShowingRoleList from './ShowingRoleList'
@@ -105,7 +105,7 @@ function ShowingDetailTabSettings({
     const errors: ShowingDetailTabSettingsErrors = {}
 
     if (showing.availabilities !== showingRef.current.availabilities) {
-      if (findTimeConflicts(showing.availabilities)) {
+      if (hasTimeConflicts(showing.availabilities)) {
         errors.Availability = 'The time slots has conflicts'
       } else if (hasInvalidTimeRange(showing.availabilities)) {
         errors.Availability = 'Invalid time range'
