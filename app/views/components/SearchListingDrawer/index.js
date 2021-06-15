@@ -14,12 +14,13 @@ import { Alert, AlertTitle } from '@material-ui/lab'
 import { searchListings } from 'models/Deal/listing'
 import { getMediaGallery } from 'models/media-manager'
 
+import { HipPocketListingDrawer } from 'components/HipPocketListing'
+
 import Listing from '../../../models/listings/listing'
-import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 
 import SearchDrawer from '../SearchDrawer'
 import ListingItem from './ListingItem'
-import getMockListing from './helpers/get-mock-listing'
+import { convertHipPokcetListingToListing } from './helpers/convert-hip-pocket-listing-to-listing/idnex'
 
 const styles = theme => ({
   alertAction: {
@@ -33,6 +34,7 @@ class SearchListingDrawer extends React.Component {
     super(props)
     this.state = {
       isWorking: false,
+      isHipPocketListingDrawerOpen: false,
       isMlsDisclaimerOpen: true
     }
   }
@@ -44,15 +46,11 @@ class SearchListingDrawer extends React.Component {
       return onSelect(Object.values(items))
     }
 
-    const { mockListings } = this.props
-
     this.setState({
       isWorking: true
     })
 
     try {
-      const mockedMLSData = mockListings ? await getMockListing() : null
-
       const listings = await Promise.all(
         Object.keys(items).map(async key => {
           const item = items[key]
@@ -73,22 +71,6 @@ class SearchListingDrawer extends React.Component {
             currentDealPhotos.push(
               ...currentDealGallery.map(photo => photo.src)
             )
-          }
-
-          // Handle deals without listing, if mockListings is enabled
-          if (mockListings && !listing) {
-            const mergedDealWithListing = attachDealDataToListing(
-              item,
-              mockedMLSData
-            )
-
-            // Prepend deal photos as listing gallery images
-            mergedDealWithListing.gallery_image_urls = [
-              ...currentDealPhotos,
-              ...mergedDealWithListing.gallery_image_urls
-            ]
-
-            return mergedDealWithListing
           }
 
           const selectedListing = await Listing.getListing(listing)
@@ -144,95 +126,118 @@ class SearchListingDrawer extends React.Component {
     })
   }
 
+  openHipPocketListingDrawer = () => {
+    this.setState({ isHipPocketListingDrawerOpen: true })
+  }
+
+  closeHipPocketListingDrawer = () => {
+    this.setState({ isHipPocketListingDrawerOpen: false })
+  }
+
+  handleClickInputManually = () => {
+    this.openHipPocketListingDrawer()
+  }
+
+  handleSaveHipPocketListing = async data => {
+    const listingData = convertHipPokcetListingToListing(data)
+
+    this.closeHipPocketListingDrawer()
+    this.handleSelectListings([listingData])
+  }
+
   render() {
     return (
-      <SearchDrawer
-        forceRenderFooter={this.props.allowSkip}
-        title={this.props.title}
-        showLoadingIndicator={this.state.isWorking}
-        multipleSelection={this.props.multipleSelection}
-        searchInputOptions={{
-          placeholder: this.props.searchPlaceholder,
-          debounceTime: 700,
-          minimumLength: 3
-        }}
-        defaultSelectedItems={this.props.defaultSelectedItems}
-        ItemRow={ListingItem}
-        normalizeSelectedItem={this.normalizeSelectedItem}
-        searchFunction={this.searchListing}
-        onSelectItems={this.handleSelectListings}
-        {...this.props}
-        onClose={() => {
-          this.props.onClose()
+      <>
+        <SearchDrawer
+          forceRenderFooter={this.props.allowHipPocket}
+          title={this.props.title}
+          showLoadingIndicator={this.state.isWorking}
+          multipleSelection={this.props.multipleSelection}
+          searchInputOptions={{
+            placeholder: this.props.searchPlaceholder,
+            debounceTime: 700,
+            minimumLength: 3
+          }}
+          defaultSelectedItems={this.props.defaultSelectedItems}
+          ItemRow={ListingItem}
+          normalizeSelectedItem={this.normalizeSelectedItem}
+          searchFunction={this.searchListing}
+          onSelectItems={this.handleSelectListings}
+          {...this.props}
+          onClose={() => {
+            this.props.onClose()
 
-          if (this.props.withMlsDisclaimer) {
-            this.setState({ isMlsDisclaimerOpen: true })
-          }
-        }}
-        renderSearchNotices={
-          this.props.withMlsDisclaimer
-            ? () => (
-                <Fade unmountOnExit in={this.state.isMlsDisclaimerOpen}>
-                  <Box mb={2}>
-                    <Alert
-                      severity="warning"
-                      variant="outlined"
-                      classes={{
-                        action: this.props.classes.alertAction
-                      }}
-                      onClose={() => {
-                        this.setState({ isMlsDisclaimerOpen: false })
-                      }}
-                    >
-                      <AlertTitle>
-                        <Typography variant="subtitle1">
-                          Important Note
+            if (this.props.withMlsDisclaimer) {
+              this.setState({ isMlsDisclaimerOpen: true })
+            }
+          }}
+          renderSearchNotices={
+            this.props.withMlsDisclaimer
+              ? () => (
+                  <Fade unmountOnExit in={this.state.isMlsDisclaimerOpen}>
+                    <Box mb={2}>
+                      <Alert
+                        severity="warning"
+                        variant="outlined"
+                        classes={{
+                          action: this.props.classes.alertAction
+                        }}
+                        onClose={() => {
+                          this.setState({ isMlsDisclaimerOpen: false })
+                        }}
+                      >
+                        <AlertTitle>
+                          <Typography variant="subtitle1">
+                            Important Note
+                          </Typography>
+                        </AlertTitle>
+                        <Typography variant="body2">
+                          Some MLS's do not allow agents to promote other
+                          agent's listings without their permission. Please make
+                          sure you{' '}
+                          <strong>
+                            only market listings that you have permission for
+                          </strong>
+                          .
                         </Typography>
-                      </AlertTitle>
-                      <Typography variant="body2">
-                        Some MLS's do not allow agents to promote other agent's
-                        listings without their permission. Please make sure you{' '}
-                        <strong>
-                          only market listings that you have permission for
-                        </strong>
-                        .
-                      </Typography>
-                    </Alert>
-                  </Box>
-                </Fade>
-              )
-            : undefined
-        }
-        renderAction={
-          this.props.allowSkip
-            ? props => (
-                <Flex>
-                  <Tooltip
-                    placement="left"
-                    title="Skip if not able to find it on MLS"
-                  >
-                    <Button
-                      variant="outlined"
-                      color="default"
-                      style={{
-                        marginRight: '0.5rem'
-                      }}
-                      onClick={async () => {
-                        const mockListing = await getMockListing()
-
-                        this.handleSelectListings([mockListing])
-                      }}
+                      </Alert>
+                    </Box>
+                  </Fade>
+                )
+              : undefined
+          }
+          renderAction={
+            this.props.allowHipPocket
+              ? props => (
+                  <Flex>
+                    <Tooltip
+                      placement="left"
+                      title="Input your listing data manually, if you can't find it on MLS."
                     >
-                      Skip
-                    </Button>
-                  </Tooltip>
-                  {this.props.multipleSelection &&
-                    this.props.renderAction(props)}
-                </Flex>
-              )
-            : this.props.renderAction
-        }
-      />
+                      <Button
+                        variant="outlined"
+                        color="default"
+                        style={{
+                          marginRight: '0.5rem'
+                        }}
+                        onClick={this.openHipPocketListingDrawer}
+                      >
+                        Input Manually
+                      </Button>
+                    </Tooltip>
+                    {this.props.multipleSelection &&
+                      this.props.renderAction(props)}
+                  </Flex>
+                )
+              : this.props.renderAction
+          }
+        />
+        <HipPocketListingDrawer
+          isOpen={this.state.isHipPocketListingDrawerOpen}
+          onClose={this.closeHipPocketListingDrawer}
+          onSave={this.handleSaveHipPocketListing}
+        />
+      </>
     )
   }
 }
@@ -255,7 +260,7 @@ SearchListingDrawer.propTypes = {
       items: PropTypes.array
     })
   ),
-  allowSkip: PropTypes.bool
+  allowHipPocket: PropTypes.bool
 }
 
 SearchListingDrawer.defaultProps = {
@@ -265,7 +270,7 @@ SearchListingDrawer.defaultProps = {
   allowedStatuses: [],
   title: 'Select a Listing',
   defaultLists: [],
-  allowSkip: false,
+  allowHipPocket: false,
   multipleSelection: false
 }
 

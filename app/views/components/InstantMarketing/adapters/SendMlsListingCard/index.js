@@ -388,7 +388,7 @@ class SendMlsListingCard extends React.Component {
 
         <SearchListingDrawer
           mockListings
-          allowSkip
+          allowHipPocket
           isOpen={
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit

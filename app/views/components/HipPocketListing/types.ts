@@ -1,4 +1,4 @@
-export interface BaseHipPocketListing {
+export interface HipPocketListing {
   images: string[]
   address: string
   price: number
@@ -10,14 +10,14 @@ export interface BaseHipPocketListing {
   description?: string
 }
 
-export type HipPocketListingField = keyof BaseHipPocketListing
+export type HipPocketListingField = keyof HipPocketListing
 
-export type HipPocketListing<T extends HipPocketListingField> = Omit<
-  BaseHipPocketListing,
+export type HipPocketListingSubset<T extends HipPocketListingField> = Omit<
+  HipPocketListing,
   T
 >
 
-export interface HipPocketListingFormFields extends BaseHipPocketListing {
+export interface HipPocketListingFormFields extends HipPocketListing {
   url_type: HipPocketListingUrlType
 }
 
@@ -45,7 +45,7 @@ export interface HipPocketListingFormProps<T extends HipPocketListingField> {
   /**
    * The save button click handler
    */
-  onSave: (data: HipPocketListing<T>) => void
+  onSave: (data: HipPocketListingSubset<T>) => void
 }
 
 export interface HipPocketListingDrawerProps<T extends HipPocketListingField>
@@ -73,6 +73,6 @@ export interface ImageUploadProps {
   onImageSelect: (imageUrl: string) => void
 }
 
-export type ImageGalleryProps = Pick<BaseHipPocketListing, 'images'>
+export type ImageGalleryProps = Pick<HipPocketListing, 'images'>
 
 export type HipPocketListingUrlType = 'url' | 'email' | 'tel'

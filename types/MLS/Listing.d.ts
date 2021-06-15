@@ -190,6 +190,7 @@ declare type IListingAssociation = 'proposed_agent'
 declare type IListing<Associations extends IListingAssociation = ''> = {
   type: 'listing'
   id: UUID
+  url: string
   created_at: number
   updated_at: number
   deleted_at: number | null

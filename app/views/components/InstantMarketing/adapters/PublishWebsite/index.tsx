@@ -52,14 +52,11 @@ function PublishWebsite({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  const {
-    publishWebsite,
-    isPublishing,
-    publishButtonLabel
-  } = usePublishWebsite(result => {
-    setWebsiteData(result.website)
-    openDomainManagement()
-  })
+  const { publishWebsite, isPublishing, publishButtonLabel } =
+    usePublishWebsite(result => {
+      setWebsiteData(result.website)
+      openDomainManagement()
+    })
 
   const handleCloseBuilder = () => {
     setIsBuilderOpen(false)
@@ -168,7 +165,7 @@ function PublishWebsite({
       )}
       <SearchListingDrawer
         mockListings
-        allowSkip
+        allowHipPocket
         withMlsDisclaimer
         isOpen={isListingTriggered && !isBuilderOpen}
         title="Select a Listing"
