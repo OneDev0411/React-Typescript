@@ -246,7 +246,7 @@ SearchListingDrawer.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   searchPlaceholder: PropTypes.string,
-  mockListings: PropTypes.bool,
+  allowHipPocket: PropTypes.bool,
   multipleSelection: PropTypes.bool,
   allowedStatuses: PropTypes.array,
   withMlsDisclaimer: PropTypes.bool,
@@ -259,18 +259,16 @@ SearchListingDrawer.propTypes = {
       title: PropTypes.string,
       items: PropTypes.array
     })
-  ),
-  allowHipPocket: PropTypes.bool
+  )
 }
 
 SearchListingDrawer.defaultProps = {
   searchPlaceholder: 'Enter MLS # or address',
-  mockListings: false,
+  allowHipPocket: false,
   withMlsDisclaimer: false,
   allowedStatuses: [],
   title: 'Select a Listing',
   defaultLists: [],
-  allowHipPocket: false,
   multipleSelection: false
 }
 

@@ -164,7 +164,6 @@ function PublishWebsite({
         />
       )}
       <SearchListingDrawer
-        mockListings
         allowHipPocket
         withMlsDisclaimer
         isOpen={isListingTriggered && !isBuilderOpen}

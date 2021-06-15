@@ -135,7 +135,6 @@ export function ShareListings() {
           isOpen
           withMlsDisclaimer
           title="Manage Listings"
-          allowHipPocket={false}
           multipleSelection
           // @ts-ignore
           defaultSelectedItems={getDefaultSelectedItems()}
