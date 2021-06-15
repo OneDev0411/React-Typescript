@@ -171,18 +171,19 @@ export function viewAs(
   }
 
   const allTeamMember = getTeamAvailableMembers(team)
+  const allTeamMemberIds = allTeamMember.map(t => t.id)
 
   if (!idx(team, t => t.acl.includes('BackOffice'))) {
-    const selectedViewAsUsers = team.settings.user_filter || []
+    const selectedViewAsUsers = (team.settings.user_filter || []).filter(m => allTeamMemberIds.includes(m))
     
     if(!selectedViewAsUsers[0] || (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)) {
-      return allTeamMember.map(t => t.id)
+      return allTeamMemberIds
     }
       
     return selectedViewAsUsers
   }
 
-  return allTeamMember.map(t => t.id)
+  return allTeamMemberIds
 }
 
 type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
