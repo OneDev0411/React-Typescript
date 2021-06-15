@@ -1179,7 +1179,7 @@ class Builder extends React.Component {
 
   uploadFile = async file => {
     const templateId = this.selectedTemplate.id
-    const uploadedAsset = await uploadAsset(file, templateId)
+    const uploadedAsset = await uploadAsset(templateId, file)
 
     return uploadedAsset.file.url
   }
@@ -1287,7 +1287,7 @@ class Builder extends React.Component {
               }}
               onSave={async file => {
                 const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(file, templateId)
+                const uploadedAsset = await uploadAsset(templateId, file)
 
                 this.editor.runCommand('set-image', {
                   value: uploadedAsset.file.url

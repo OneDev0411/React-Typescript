@@ -1,8 +1,8 @@
 import Fetch from 'services/fetch'
 
 export default async function uploadAsset(
-  file: File,
-  templateId: UUID
+  templateId: UUID,
+  file: File
 ): Promise<ITemplateAsset> {
   const response = await new Fetch()
     .upload('/templates/assets')

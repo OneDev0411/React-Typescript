@@ -56,7 +56,7 @@ export const load = async () => {
                     const { templateId } = await getStorageData('templateId')
 
                     const uploadResponses = await Promise.all(
-                      files.map(file => uploadAsset(file, templateId))
+                      files.map(file => uploadAsset(templateId, file))
                     )
 
                     const uploadedAssets = uploadResponses.map(response => ({

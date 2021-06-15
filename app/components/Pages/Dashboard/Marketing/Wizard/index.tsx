@@ -93,29 +93,23 @@ function MarketingWizard(props: WithRouterProps) {
   const activeBrand = getActiveTeamId(rawUser)
   const brand = getActiveBrand(rawUser)
 
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
-  const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<IMarketingTemplateType>
-  >(undefined)
+  const [selectedTemplateType, setSelectedTemplateType] =
+    useState<Optional<IMarketingTemplateType>>(undefined)
 
-  const [generatedTemplateFile, setGeneratedTemplateFile] = useState<
-    Optional<IFile>
-  >(undefined)
+  const [generatedTemplateFile, setGeneratedTemplateFile] =
+    useState<Optional<IFile>>(undefined)
 
-  const [generatedFileBlob, setGeneratedFileBlob] = useState<Optional<File>>(
-    undefined
-  )
+  const [generatedFileBlob, setGeneratedFileBlob] =
+    useState<Optional<File>>(undefined)
 
-  const [templatesLimit, setTemplatesLimit] = useState<number>(
-    TEMPLATES_PAGE_SIZE
-  )
+  const [templatesLimit, setTemplatesLimit] =
+    useState<number>(TEMPLATES_PAGE_SIZE)
 
-  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] = useState<
-    boolean
-  >(false)
+  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] =
+    useState<boolean>(false)
 
   const {
     templates,
@@ -214,7 +208,7 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handleUploadAsset = (file: File) => {
-    return uploadAsset(file, currentTabTemplates[0].template.id)
+    return uploadAsset(currentTabTemplates[0].template.id, file)
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {
