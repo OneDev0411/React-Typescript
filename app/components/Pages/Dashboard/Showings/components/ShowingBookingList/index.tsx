@@ -73,7 +73,7 @@ function ShowingBookingList({
   const columns: TableColumn<IShowingAppointment>[] = [
     {
       id: 'new',
-      width: '40px',
+      width: '24px',
       sortable: false,
       render: ({ row }) => (
         <ShowingBookingListColumnNew isNew={!!row.notifications?.length} />
