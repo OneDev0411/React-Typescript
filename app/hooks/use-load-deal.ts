@@ -116,8 +116,8 @@ export function useLoadFullDeal(id: UUID) {
 
         // fetch deal forms and checklists
         await Promise.all([
-          await fetchForms(fetchedDeal),
-          await fetchChecklists(fetchedDeal)
+          await fetchChecklists(fetchedDeal),
+          await fetchForms(fetchedDeal)
         ])
 
         setIsFetchingCompleted(true)
