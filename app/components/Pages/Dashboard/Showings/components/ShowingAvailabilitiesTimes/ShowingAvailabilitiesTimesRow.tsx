@@ -7,7 +7,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 
-import { mdiDeleteOutline } from '@mdi/js'
+import { mdiTrashCanOutline } from '@mdi/js'
 
 import { Form, FormSpy } from 'react-final-form'
 
@@ -158,7 +158,7 @@ function ShowingAvailabilitiesTimesRow({
                     disabled={disableDelete}
                   >
                     <SvgIcon
-                      path={mdiDeleteOutline}
+                      path={mdiTrashCanOutline}
                       size={muiIconSizes.medium}
                     />
                   </IconButton>
