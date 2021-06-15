@@ -163,7 +163,7 @@ export default function Publish({ params }: Props) {
       errors.selling_clients = 'Seller Legal Names is required'
     }
 
-    if (isStatusVisible && !status) {
+    if (isStatusVisible && statusList.length > 0 && !status) {
       errors.status = 'Status is required'
     }
 
@@ -413,21 +413,23 @@ export default function Publish({ params }: Props) {
               />
             )}
 
-            {isStatusVisible && !getField(deal, statusContextKey) && (
-              <Controller
-                key="status"
-                name={`context:${statusContextKey}`}
-                control={control}
-                defaultValue={getField(deal, statusContextKey)}
-                render={({ onChange }) => (
-                  <DealStatus
-                    list={statusList}
-                    error={errors.status}
-                    onChange={onChange}
-                  />
-                )}
-              />
-            )}
+            {isStatusVisible &&
+              !getField(deal, statusContextKey) &&
+              statusList.length > 0 && (
+                <Controller
+                  key="status"
+                  name={`context:${statusContextKey}`}
+                  control={control}
+                  defaultValue={getField(deal, statusContextKey)}
+                  render={({ onChange }) => (
+                    <DealStatus
+                      list={statusList}
+                      error={errors.status}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              )}
 
             {requiredContexts.length > 0 &&
               requiredContexts.map((context: IDealBrandContext) => (
