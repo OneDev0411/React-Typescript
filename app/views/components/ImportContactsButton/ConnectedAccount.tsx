@@ -40,11 +40,11 @@ export function ConnectedAccount({ account }: Props) {
   return (
     <Grid className={classes.root}>
       <Grid container alignItems="center">
-        <Grid className={classes.avatarWrapper}>
-          <Tooltip title={account.display_name}>
+        <Tooltip title={account.display_name}>
+          <Grid className={classes.avatarWrapper}>
             <Avatar user={account} alt={account.display_name} size="medium" />
-          </Tooltip>
-        </Grid>
+          </Grid>
+        </Tooltip>
         {account.email}
       </Grid>
       <Grid>
