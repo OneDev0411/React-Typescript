@@ -16,17 +16,18 @@ const useStyles = makeStyles(
       display: 'inline-flex',
       alignItems: 'center',
       marginBottom: theme.spacing(1),
-      cursor: 'pointer'
+      cursor: 'pointer',
+      opacity: ({ disabled }) => (disabled ? 0.6 : 1)
     },
     label: {
       marginLeft: theme.spacing(0.5),
       color: theme.palette.grey[500]
     }
   }),
-  { name: 'ContactProfile' }
+  { name: 'ContactProfileOwner' }
 )
 export const Owner = props => {
-  const classes = useStyles()
+  const classes = useStyles(props)
 
   if (props.user && isSoloActiveTeam(props.user)) {
     return null

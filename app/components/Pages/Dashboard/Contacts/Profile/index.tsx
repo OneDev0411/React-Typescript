@@ -257,10 +257,11 @@ const ContactProfile = props => {
     setIsUpdatingOwner(true)
 
     try {
-      const alteredContact = await updateContactSelf(contact.id, {
+      const response = await updateContactSelf(contact.id, {
         // @ts-ignore
         user: item.value.id
       })
+      const alteredContact = response.data || {}
 
       setContact({ ...contact, ...alteredContact })
       setIsUpdatingOwner(false)
