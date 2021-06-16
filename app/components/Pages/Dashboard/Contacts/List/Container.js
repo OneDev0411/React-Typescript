@@ -136,7 +136,6 @@ class ContactsList extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log('conta', { oAuthAccounts: nextProps.oAuthAccounts })
     Object.entries(this.props.oAuthAccounts).forEach(([provider, accounts]) => {
       if (!_.isEqual(nextProps.oAuthAccounts[provider], accounts)) {
         this.updateSyncState(provider, nextProps.oAuthAccounts)
