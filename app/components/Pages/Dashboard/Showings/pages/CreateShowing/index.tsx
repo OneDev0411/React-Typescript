@@ -311,7 +311,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         <ShowingCloseButton />
       </PageLayout.Header>
       <PageLayout.Main>
-        <Box maxWidth={848} margin="0 auto">
+        <Box maxWidth={848} margin="0 auto" width="100%">
           <QuestionWizard
             useWindowScrollbar
             questionPositionOffset={80}
