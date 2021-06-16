@@ -11,10 +11,13 @@ import { selectActiveFilters } from 'reducers/filter-segments'
 import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
+import { ViewSwitcher } from '../ViewSwitcher'
 
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
 import TagsList from '../TagsList'
+
+export type ViewModeType = 'table' | 'board'
 
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
@@ -37,7 +40,8 @@ interface Props {
     onChange: (item) => void
     currentOrder: string
   }
-  viewMode: 'table' | 'board'
+  onChangeView: (viewMode: ViewModeType) => void
+  viewMode: ViewModeType
   contactCount: number
   activeSegment: any
   users: UUID[]
@@ -78,6 +82,7 @@ export const ContactsTabs = ({
   contactCount,
   tagListProps,
   sortProps,
+  onChangeView,
   viewMode,
   filter,
   users
@@ -137,7 +142,14 @@ export const ContactsTabs = ({
             label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
-        actions={[<Tab key={1} label={<SortFields {...sortProps} />} />]}
+        actions={[
+          <Tab key={1} label={<SortFields {...sortProps} />} />,
+          <ViewSwitcher
+            key={2}
+            onChangeView={onChangeView}
+            activeView={viewMode}
+          />
+        ]}
       />
       {viewMode === 'table' && (
         <ContactFilters
