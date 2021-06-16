@@ -73,6 +73,8 @@ export interface ImageUploadProps {
   onImageSelect: (imageUrl: string) => void
 }
 
-export type ImageGalleryProps = Pick<HipPocketListing, 'images'>
+export type ImageGalleryProps = Pick<HipPocketListing, 'images'> & {
+  uploadingImages: HipPocketListing['images']
+}
 
 export type HipPocketListingUrlType = 'url' | 'email' | 'tel'

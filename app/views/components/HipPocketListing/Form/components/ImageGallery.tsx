@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import {
   Grid,
   Box,
@@ -7,6 +7,7 @@ import {
   fade,
   makeStyles
 } from '@material-ui/core'
+import cn from 'classnames'
 
 import { ImageGalleryProps } from '../../types'
 
@@ -52,6 +53,9 @@ const useStyles = makeStyles(
       width: '100%',
       height: '100%',
       objectFit: 'cover'
+    },
+    uploadingImage: {
+      opacity: 0.7
     }
   }),
   {
@@ -60,12 +64,20 @@ const useStyles = makeStyles(
 )
 
 export default function HipPocketListingFormImageGallery({
-  images
+  images,
+  uploadingImages
 }: ImageGalleryProps) {
   const classes = useStyles()
   const [loadedItemsCount, setLoadedItemsCount] = useState<number>(PAGE_SIZE)
 
-  if (images.length === 0) {
+  const isUploadingImage = useCallback(
+    (url: string) => uploadingImages.includes(url),
+    [uploadingImages]
+  )
+
+  const allImages = [...images, ...uploadingImages]
+
+  if (allImages.length === 0) {
     return null
   }
 
@@ -73,9 +85,9 @@ export default function HipPocketListingFormImageGallery({
     setLoadedItemsCount(Infinity)
   }
 
-  const loadedImages = images.slice(0, loadedItemsCount)
+  const loadedImages = allImages.slice(0, loadedItemsCount)
 
-  const moreImagesToShow: number = images.length - loadedImages.length
+  const moreImagesToShow: number = allImages.length - loadedImages.length
 
   return (
     <Grid container item>
@@ -83,6 +95,8 @@ export default function HipPocketListingFormImageGallery({
         {loadedImages.map((image, index) => {
           const shouldShowLoadMore =
             moreImagesToShow > 0 && index === loadedImages.length - 1
+
+          const isUploading = isUploadingImage(image)
 
           return (
             <Grid item xs={4} key={index}>
@@ -97,7 +111,13 @@ export default function HipPocketListingFormImageGallery({
                       <Typography variant="body2">More Photos</Typography>
                     </Box>
                   )}
-                  <img src={image} alt={image} className={classes.image} />
+                  <img
+                    src={image}
+                    alt={image}
+                    className={cn(classes.image, {
+                      [classes.uploadingImage]: isUploading
+                    })}
+                  />
                 </Box>
               </Fade>
             </Grid>

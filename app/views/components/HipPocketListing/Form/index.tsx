@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 
+import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
+
 import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
 
 import ImageGallery from './components/ImageGallery'
@@ -68,14 +70,22 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
   const [isDescriptionFieldVisible, setIsDescriptionFieldVisible] =
     useState<boolean>(false)
 
+  const [uploadingImages, setUploadingImages] = useState<string[]>([])
+
   const handleImageUpload = async (files: File[]): Promise<string[]> => {
     if (!onImageUpload) {
       return []
     }
 
+    const newUploadingImages = await Promise.all(files.map(readFileAsDataUrl))
+
+    setUploadingImages(newUploadingImages)
+
     const uploadedImagesUrls = await onImageUpload(files)
 
     const newImages = [...images, ...uploadedImagesUrls]
+
+    setUploadingImages([])
 
     return newImages
   }
@@ -95,6 +105,9 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
     [disabledFields]
   )
 
+  const isSubmitButtonDisabled =
+    !formState.isValid || formState.isSubmitting || uploadingImages.length > 0
+
   return (
     <form onSubmit={handleSubmit(handleSave)}>
       <Grid container direction="column" spacing={4}>
@@ -104,7 +117,10 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             name="images"
             render={({ onChange, value }) => (
               <>
-                <ImageGallery images={value} />
+                <ImageGallery
+                  images={value}
+                  uploadingImages={uploadingImages}
+                />
                 <ImageUpload
                   onImageUpload={async (files: File[]) => {
                     const urls = await handleImageUpload(files)
@@ -375,7 +391,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
               variant="contained"
               color="secondary"
               size="small"
-              disabled={!formState.isValid || formState.isSubmitting}
+              disabled={isSubmitButtonDisabled}
             >
               {saveButtonText}
             </Button>
