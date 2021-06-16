@@ -1,52 +1,47 @@
-import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
+import { makeStyles, Typography } from '@material-ui/core'
 import fecha from 'fecha'
 
 import { getStatusColorClass } from 'utils/listing'
 
-// TODO: Fix the style later
 const useStyles = makeStyles(
   theme => ({
     root: {
       color: theme.palette.common.white,
-      padding: '0.25rem 0.5rem',
-      fontSize: '0.75rem',
-      borderRadius: 3,
-      fontWeight: 500,
-      marginLeft: theme.spacing(1)
+      padding: theme.spacing(0.5, 1),
+      borderRadius: theme.spacing(0.5)
     }
   }),
   { name: 'ListingStatus' }
 )
 
 interface ListingStatusProps {
+  className?: string
   listing: Pick<ICompactListing, 'status' | 'close_date' | 'status'>
 }
 
 function ListingStatus({
+  className,
   listing: { status, close_date }
 }: ListingStatusProps) {
   const classes = useStyles()
 
-  const getStatus = () => {
-    if ((status === 'Sold' || status === 'Leased') && close_date) {
-      return `${status} ${fecha.format(
-        new Date(close_date * 1000),
-        'mediumDate'
-      )}`
-    }
-
-    return status
-  }
+  const label =
+    (status === 'Sold' || status === 'Leased') && close_date
+      ? `${status} ${fecha.format(new Date(close_date * 1000), 'mediumDate')}`
+      : status
 
   return (
-    <span
-      className={classes.root}
+    <Typography
+      className={classNames(classes.root, className)}
       style={{
         backgroundColor: getStatusColorClass(status)
       }}
+      variant="caption"
+      component="span"
     >
-      {getStatus()}
-    </span>
+      {label}
+    </Typography>
   )
 }
 

@@ -31,13 +31,14 @@ import { SearchResult, SearchResultType } from './types'
 import ListingStatus from './ListingStatus'
 
 const useStyles = makeStyles<Theme, { inputValue: string }>(
-  () => ({
+  theme => ({
     listBox: {
       maxHeight: 300
     },
     popper: ({ inputValue }) => ({
       display: inputValue.length < 3 ? 'none' : 'block'
-    })
+    }),
+    label: { marginLeft: theme.spacing(1) }
   }),
   {
     name: 'DealsAndListingsAndPlacesSearchInput'
@@ -177,14 +178,13 @@ export default function DealsAndListingsAndPlacesSearchInput({
           </ListItemAvatar>
           <ListItemText
             primary={addressTitle(listing.address)}
-            secondary={
-              <>
-                {listing.address.city}, {listing.address.state}
-                {listing.address.postal_code}, ${listing.price.toLocaleString()}
-                <ListingStatus listing={listing} />
-              </>
-            }
+            secondary={`${listing.address.city}, ${listing.address.state}, ${
+              listing.address.postal_code
+            }, $${listing.price.toLocaleString()}`}
           />
+          <ListItemAvatar>
+            <ListingStatus listing={listing} className={classes.label} />
+          </ListItemAvatar>
         </ListItem>
       )
     }
