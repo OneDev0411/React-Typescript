@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { ButtonGroup, Button, Box, Tooltip } from '@material-ui/core'
-import { mdiFormatListText, mdiViewWeekOutline } from '@mdi/js'
+import { Box } from '@material-ui/core'
 
 import { mdiLoading } from '@mdi/js'
 
@@ -783,6 +782,7 @@ class ContactsList extends React.Component {
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
+        onChangeView={this.changeViewMode}
         viewMode={this.state.viewMode}
         {...props}
       />
@@ -852,45 +852,6 @@ class ContactsList extends React.Component {
                 />
               )}
               {showImportAction && <ImportContactsButton />}
-
-              <Box ml={1}>
-                <ButtonGroup
-                  variant="outlined"
-                  style={{
-                    height: props.theme.spacing(5.25)
-                  }}
-                >
-                  <Tooltip title="Switch to Table">
-                    <Button
-                      size="large"
-                      style={{
-                        background:
-                          this.state.viewMode === 'table'
-                            ? props.theme.palette.action.hover
-                            : '#fff'
-                      }}
-                      onClick={() => this.changeViewMode('table')}
-                    >
-                      <SvgIcon path={mdiFormatListText} />
-                    </Button>
-                  </Tooltip>
-
-                  <Tooltip title="Switch to Board">
-                    <Button
-                      size="large"
-                      style={{
-                        background:
-                          this.state.viewMode === 'board'
-                            ? props.theme.palette.action.hover
-                            : '#fff'
-                      }}
-                      onClick={() => this.changeViewMode('board')}
-                    >
-                      <SvgIcon path={mdiViewWeekOutline} />
-                    </Button>
-                  </Tooltip>
-                </ButtonGroup>
-              </Box>
             </Box>
           )}
           <Box ml={1.5}>
