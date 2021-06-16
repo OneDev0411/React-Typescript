@@ -9,11 +9,11 @@ import { goTo } from 'utils/go-to'
 import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingRedChip from './ShowingRedChip'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-import ShowingPropertyListColumnCount from './ShowingPropertyListColumnCount'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 import ShowingEmptyState from '../ShowingEmptyState'
+import ShowingLabeledColumn from '../ShowingLabeledColumn'
 
 const useStyles = makeStyles(
   theme => ({
@@ -71,10 +71,9 @@ function ShowingPropertyList({
       width: '10%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingPropertyListColumnCount
-          value={row.confirmed}
-          label="Approved"
-        />
+        <ShowingLabeledColumn label="Approved">
+          {row.confirmed}
+        </ShowingLabeledColumn>
       )
     },
 
@@ -84,10 +83,9 @@ function ShowingPropertyList({
       width: '10%',
       sortable: false,
       render: ({ row }) => (
-        <ShowingPropertyListColumnCount
-          value={row.visits}
-          label="Total Visits"
-        />
+        <ShowingLabeledColumn label="Total Visits">
+          {row.visits}
+        </ShowingLabeledColumn>
       )
     },
     // {

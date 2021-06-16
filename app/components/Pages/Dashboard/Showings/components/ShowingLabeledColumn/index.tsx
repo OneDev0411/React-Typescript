@@ -1,14 +1,12 @@
+import { ReactNode } from 'react'
 import { Box, Typography } from '@material-ui/core'
 
-interface ShowingPropertyListColumnCountProps {
+interface ShowingLabeledColumnProps {
   label: string
-  value: number
+  children: ReactNode
 }
 
-function ShowingPropertyListColumnCount({
-  label,
-  value
-}: ShowingPropertyListColumnCountProps) {
+function ShowingLabeledColumn({ label, children }: ShowingLabeledColumnProps) {
   return (
     <>
       <Typography noWrap variant="caption" component="span">
@@ -17,10 +15,10 @@ function ShowingPropertyListColumnCount({
         </Box>
       </Typography>
       <Typography variant="body2" component="span">
-        {value}
+        {children}
       </Typography>
     </>
   )
 }
 
-export default ShowingPropertyListColumnCount
+export default ShowingLabeledColumn
