@@ -1,7 +1,15 @@
 import { useState, useCallback } from 'react'
-import { Grid, Typography, makeStyles, useTheme } from '@material-ui/core'
+import {
+  Grid,
+  Box,
+  Typography,
+  CircularProgress,
+  makeStyles,
+  useTheme
+} from '@material-ui/core'
 import { mdiImageMultipleOutline } from '@mdi/js'
 import { useDropzone } from 'dropzone'
+import cn from 'classnames'
 
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -10,10 +18,26 @@ import { ImageUploadProps } from '../../types'
 
 const useStyles = makeStyles(
   theme => ({
+    wrapper: {
+      position: 'relative'
+    },
     container: {
       background: theme.palette.grey[50],
       borderRadius: theme.shape.borderRadius,
       padding: theme.spacing(2, 0)
+    },
+    containerUploading: {
+      opacity: 0
+    },
+    uploadingSpinnerContainer: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     actionableText: {
       cursor: 'pointer',
@@ -86,15 +110,23 @@ export default function HipPocketListingFormImageUpload({
       <Grid
         container
         item
+        className={classes.wrapper}
         style={isDragActive ? { background: theme.palette.grey[400] } : {}}
         {...{ ...getRootProps(), css: {} }}
       >
+        {isUploading && (
+          <Box className={classes.uploadingSpinnerContainer}>
+            <CircularProgress />
+          </Box>
+        )}
         <Grid
           container
           item
           direction="column"
           alignItems="center"
-          className={classes.container}
+          className={cn(classes.container, {
+            [classes.containerUploading]: isUploading
+          })}
         >
           <input {...getInputProps()} />
 
