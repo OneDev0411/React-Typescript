@@ -17,7 +17,7 @@ import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
 import CsvIcon from 'components/SvgIcons/Csv/IconCsv'
 import OutlookIcon from 'components/SvgIcons/Outlook/IconOutlook'
-import { fetchOAuthAccounts as fetchOAuth } from 'actions/contacts/fetch-o-auth-accounts'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import { ConnectedAccount } from './ConnectedAccount'
 import { useStyles } from './styles'
@@ -26,14 +26,14 @@ export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 
 interface Props {
   accounts: IOAuthAccount[]
-  fetchOAuthAccounts: (provider?: OAuthProvider | undefined) => any
   user: IUser
+  onFetchedOAuthAccounts?: () => void
 }
 
 export function ImportContactsButton({
   accounts,
   user,
-  fetchOAuthAccounts
+  onFetchedOAuthAccounts
 }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -66,7 +66,11 @@ export function ImportContactsButton({
   }
 
   React.useEffect(() => {
-    fetchOAuthAccounts()
+    dispatch(fetchOAuthAccounts()).then(() => {
+      if (typeof onFetchedOAuthAccounts === 'function') {
+        onFetchedOAuthAccounts()
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -194,11 +198,4 @@ function mapStateToProps(state: IAppState) {
   }
 }
 
-const mapDispatchToProps = {
-  fetchOAuthAccounts: fetchOAuth
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ImportContactsButton)
+export default connect(mapStateToProps)(ImportContactsButton)
