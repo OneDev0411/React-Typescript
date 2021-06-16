@@ -26,6 +26,9 @@ export const useStyles = makeStyles(
         backgroundColor: theme.palette.info.ultralight
       }
     },
+    iconContainer: {
+      margin: theme.spacing(0, 1.5)
+    },
     actions: {
       position: 'absolute',
       right: theme.spacing(2),

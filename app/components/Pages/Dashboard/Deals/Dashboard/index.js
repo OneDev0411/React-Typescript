@@ -46,7 +46,7 @@ function DealDetails(props) {
   )
 
   if (!deal) {
-    return false
+    return null
   }
 
   console.log(`[ x ] Rerender deal "${deal.title}" `)

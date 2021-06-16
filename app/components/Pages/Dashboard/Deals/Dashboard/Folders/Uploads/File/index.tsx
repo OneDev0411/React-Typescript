@@ -1,8 +1,10 @@
-import { Grid, Box, Typography, Tooltip } from '@material-ui/core'
+import { Grid, Typography, Tooltip } from '@material-ui/core'
 import { Link } from 'react-router'
 import { mdiFileOutline } from '@mdi/js'
 
 import moment from 'moment'
+
+import Flex from 'styled-flex-component'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
@@ -20,40 +22,35 @@ import { useStyles } from '../../Checklist/TaskRow/styles'
 
 interface Props {
   index: number
-  deal: IDeal
-  file: IFile
+  style: React.CSSProperties
+  data: {
+    deal: IDeal
+    files: IFile[]
+  }
 }
 
-export function Files({ index, deal, file }: Props) {
+export function File({ index, style, data: { files, deal } }: Props) {
   const classes = useStyles({ index })
-
-  const getActions = (file: IFile) => {
-    const actions = [MOVE_FILE, VIEW_FILE, DELETE_FILE]
-
-    return file.mime === 'application/pdf' ? [SPLIT_PDF, ...actions] : actions
-  }
+  const file = files[index]
 
   return (
-    <Grid container className={classes.row}>
-      <Box display="flex" alignItems="center">
-        <Box mx={1.5}>
+    <Grid container className={classes.row} style={style}>
+      <Flex alignCenter>
+        <div className={classes.iconContainer}>
           <SvgIcon path={mdiFileOutline} />
-        </Box>
+        </div>
 
         <div>
-          <Box display="flex" alignItems="center">
-            <Box mr={1}>
-              <Link
-                className={classes.link}
-                to={`/dashboard/deals/${deal.id}/view/stash/attachment/${file.id}`}
-              >
-                <span className={classes.title}>
-                  {' '}
-                  <TextMiddleTruncate text={file.name} maxLength={80} />
-                </span>
-              </Link>
-            </Box>
-          </Box>
+          <Flex alignCenter>
+            <Link
+              className={classes.link}
+              to={`/dashboard/deals/${deal.id}/view/stash/attachment/${file.id}`}
+            >
+              <span className={classes.title}>
+                <TextMiddleTruncate text={file.name} maxLength={80} />
+              </span>
+            </Link>
+          </Flex>
 
           <Typography variant="caption" className={classes.caption}>
             <Tooltip
@@ -66,20 +63,26 @@ export function Files({ index, deal, file }: Props) {
             </Tooltip>
           </Typography>
         </div>
-      </Box>
+      </Flex>
 
-      <Box display="flex" alignItems="center" className={classes.actions}>
+      <Flex alignCenter className={classes.actions}>
         <div className="visible-on-hover">
-          <Box display="flex" alignItems="center">
+          <Flex alignCenter>
             <ActionsButton
               deal={deal}
               task={null}
               file={file}
               actions={getActions(file)}
             />
-          </Box>
+          </Flex>
         </div>
-      </Box>
+      </Flex>
     </Grid>
   )
+}
+
+const getActions = (file: IFile) => {
+  const actions = [MOVE_FILE, VIEW_FILE, DELETE_FILE]
+
+  return file.mime === 'application/pdf' ? [SPLIT_PDF, ...actions] : actions
 }
