@@ -8,17 +8,22 @@ interface UseGifLibrary {
   isLoading: boolean
 }
 
-export function useGifLibrary(searchQuery: string): UseGifLibrary {
+export function useGifLibrary(
+  searchQuery: string,
+  defaultSearchQuery: string
+): UseGifLibrary {
   const [results, setResults] = useState<GifObject[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    async function getSearchResults() {
+    async function fetchSearchResults() {
       setIsLoading(true)
 
       try {
         const response = await fetch(
-          getTenorApiRequestUrl('search', [`q=${searchQuery}`])
+          getTenorApiRequestUrl('search', [
+            `q=${searchQuery || defaultSearchQuery}`
+          ])
         )
 
         const data = (await response.json()) as TenorResponse
@@ -31,27 +36,7 @@ export function useGifLibrary(searchQuery: string): UseGifLibrary {
       }
     }
 
-    async function getTrendingResults() {
-      setIsLoading(true)
-
-      try {
-        const response = await fetch(getTenorApiRequestUrl('trending'))
-
-        const data = (await response.json()) as TenorResponse
-
-        setResults(data.results || [])
-      } catch (error) {
-        console.error('Error getting trending results in GIF library', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (searchQuery) {
-      getSearchResults()
-    } else {
-      getTrendingResults()
-    }
+    fetchSearchResults()
   }, [searchQuery])
 
   return { results, isLoading }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import { mdiCheck } from '@mdi/js'
@@ -7,6 +7,8 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
 import { isContextApproved } from '../helpers/is-context-approved'
 
@@ -21,23 +23,25 @@ import {
   ItemLabel,
   ItemValue,
   ItemActions,
-  EmptyValue,
-  CircleStatus
+  CircleStatus,
+  TimelineDateProgress
 } from '../styled'
-
-import { ContextField } from '../types'
 
 interface Props {
   deal: IDeal
-  field: ContextField
+  field: IDealBrandContext
+  index: number
+  total: number
   value: unknown
   isBackOffice: boolean
-  onApprove(field: ContextField): void
-  onChange(field: ContextField, value: unknown): void
-  onDelete(field: ContextField): void
+  onApprove(field: IDealBrandContext): void
+  onChange(field: IDealBrandContext, value: unknown): void
+  onDelete(field: IDealBrandContext): void
 }
 
 export function DateField({
+  index,
+  total,
   deal,
   field,
   value,
@@ -87,9 +91,7 @@ export function DateField({
             </CircleStatus>{' '}
             {field.label}
           </ItemLabel>
-          <ItemValue>
-            {field.getFormattedValue(value) || <EmptyValue>—</EmptyValue>}
-          </ItemValue>
+          <ItemValue>{getFormattedValue(field, value)}</ItemValue>
 
           <ItemActions>
             <DateTimePicker
@@ -107,21 +109,23 @@ export function DateField({
               value={value}
               onClick={handleDelete}
             />
+
+            <ApproveButton
+              deal={deal}
+              context={field}
+              isBackOffice={isBackOffice}
+              onClick={() => onApprove(field)}
+            />
           </ItemActions>
+
+          {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
         </Item>
       </Tooltip>
-
-      <ApproveButton
-        deal={deal}
-        field={field}
-        isBackOffice={isBackOffice}
-        onClick={() => onApprove(field)}
-      />
     </>
   )
 }
 
-function getInitialDate(deal: IDeal, field: ContextField): Date {
+function getInitialDate(deal: IDeal, field: IDealBrandContext): Date {
   const timestamp = getField(deal, field.key)
 
   if (!timestamp) {

@@ -38,7 +38,7 @@ import { Description } from '../../EventDrawer/components/Description'
 import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { EventField } from '../../EventDrawer/components/EventField'
-import { AssosiationContainer } from '../../EventDrawer/styled'
+import { AssociationContainer } from '../../EventDrawer/styled'
 import {
   AssigneesField,
   DateTimeField,
@@ -108,7 +108,7 @@ class OpenHouseDrawerInternal extends React.Component {
 
   static contextType = ConfirmationModalContext
 
-  get dealAassociation() {
+  get dealAssociation() {
     const { openHouse } = this.state
     const { associations } = this.props
 
@@ -121,11 +121,11 @@ class OpenHouseDrawerInternal extends React.Component {
     }
 
     if (openHouse && Array.isArray(openHouse.associations)) {
-      const dealAassociation = openHouse.associations.find(
+      const dealAssociation = openHouse.associations.find(
         a => a.association_type === 'deal'
       )
 
-      return dealAassociation
+      return dealAssociation
     }
 
     return null
@@ -182,10 +182,17 @@ class OpenHouseDrawerInternal extends React.Component {
           ? this.props.openHouse.metadata.template
           : null
 
+        const listingAssociation = this.props.openHouse.associations.find(
+          ({ association_type }) => association_type === 'listing'
+        )
+
+        const listing = listingAssociation ? listingAssociation.listing : null
+
         this.setState({
           isDisabled: false,
           openHouse: this.props.openHouse,
-          template
+          template,
+          listing
         })
 
         return this.props.openHouse
@@ -443,7 +450,7 @@ class OpenHouseDrawerInternal extends React.Component {
                 values,
                 originalValues,
                 this.state.template,
-                this.dealAassociation
+                this.dealAssociation
               )
             }
             save={this.save}
@@ -524,7 +531,7 @@ class OpenHouseDrawerInternal extends React.Component {
                           path: mdiAccountPlusOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="contact"
                             name="registrants"
@@ -538,7 +545,7 @@ class OpenHouseDrawerInternal extends React.Component {
                             name="registrants"
                             caption="Attach Contact"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
 
                       <ItemChangelog
@@ -610,7 +617,6 @@ class OpenHouseDrawerInternal extends React.Component {
                       headerTitle="Edit Guest Registration Page"
                       closeConfirmation={false}
                       hideTemplatesColumn
-                      saveButtonLabel="Save"
                       onClose={this.toggleTemplateBuilder}
                       handleSave={this.handleSaveTemplate}
                       assets={this.getTemplateAssets()}

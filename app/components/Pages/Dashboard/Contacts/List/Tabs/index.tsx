@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { PageTabs, Tab } from 'components/PageTabs'
@@ -11,10 +11,13 @@ import { selectActiveFilters } from 'reducers/filter-segments'
 import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
+import { ViewSwitcher } from '../ViewSwitcher'
 
 import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
 import TagsList from '../TagsList'
+
+export type ViewModeType = 'table' | 'board'
 
 interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
@@ -37,6 +40,8 @@ interface Props {
     onChange: (item) => void
     currentOrder: string
   }
+  onChangeView: (viewMode: ViewModeType) => void
+  viewMode: ViewModeType
   contactCount: number
   activeSegment: any
   users: UUID[]
@@ -77,6 +82,8 @@ export const ContactsTabs = ({
   contactCount,
   tagListProps,
   sortProps,
+  onChangeView,
+  viewMode,
   filter,
   users
 }: Props) => {
@@ -117,6 +124,7 @@ export const ContactsTabs = ({
           <Tab
             key="all-contact"
             value="all-contact"
+            data-tour-id="all-contacts"
             label={
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
@@ -124,23 +132,34 @@ export const ContactsTabs = ({
           <Tab
             key="saved-list"
             value="saved-list"
+            data-tour-id="saved-list"
             label={<SavedSegments {...savedListProps} />}
           />,
           <Tab
             key="tag-list"
             value="tag-list"
+            data-tour-id="tags-list"
             label={<TagsList onFilterChange={tagListProps.onClick} />}
           />
         ]}
-        actions={[<Tab key="sort" label={<SortFields {...sortProps} />} />]}
+        actions={[
+          <Tab key={1} label={<SortFields {...sortProps} />} />,
+          <ViewSwitcher
+            key={2}
+            onChangeView={onChangeView}
+            activeView={viewMode}
+          />
+        ]}
       />
-      <ContactFilters
-        show={filter?.show}
-        contactCount={contactCount}
-        activeSegment={activeSegment}
-        onFilterChange={() => handleFilterChange({}, true)}
-        users={users}
-      />
+      {viewMode === 'table' && (
+        <ContactFilters
+          show={filter?.show}
+          contactCount={contactCount}
+          activeSegment={activeSegment}
+          onFilterChange={() => handleFilterChange({}, true)}
+          users={users}
+        />
+      )}
     </>
   )
 }

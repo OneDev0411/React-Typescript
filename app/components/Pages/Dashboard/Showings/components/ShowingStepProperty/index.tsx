@@ -144,7 +144,6 @@ function ShowingStepProperty({
                   } as ICompactListing
                 }
                 hideFeatures
-                customChip={<span />}
                 changeLabel="Edit Property Details"
                 onChange={goToEditMode}
               />

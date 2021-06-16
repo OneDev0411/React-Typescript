@@ -21,7 +21,7 @@ async function handleResendEnvelope(props) {
 
     store.dispatch(
       notify({
-        title: 'The e-signature is resent',
+        message: 'The e-signature is resent',
         status: 'success'
       })
     )
@@ -30,7 +30,7 @@ async function handleResendEnvelope(props) {
 
     store.dispatch(
       notify({
-        title: 'Could not resend the e-signature. try again.',
+        message: 'Could not resend the e-signature. try again.',
         status: 'error'
       })
     )

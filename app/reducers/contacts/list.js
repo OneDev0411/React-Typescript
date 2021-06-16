@@ -38,8 +38,19 @@ const byId = (state = {}, action) => {
     case actionTypes.DELETE_CONTACTS_SUCCESS:
       return _.omit(state, (value, key) => action.contactIds.includes(key))
 
+    case actionTypes.UPDATE_CONTACT_TAGS:
+      return {
+        ...state,
+        [action.contactId]: {
+          ...state[action.contactId],
+          tags: action.tags,
+          updated_at: Date.now() / 1000
+        }
+      }
+
     case actionTypes.CLEAR_CONTACTS_LIST:
       return {}
+
     default:
       return state
   }

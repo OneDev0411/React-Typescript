@@ -5,7 +5,6 @@ const white = '#fff'
 
 const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
   const defaultValue: ThemeOptions = {
-    // Temporary theme based on our current colors, until design team provides the theme values
     breakpoints: {
       values: {
         xs: 320,
@@ -165,6 +164,12 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontSize: '0.875rem',
         lineHeight: 1.42
       },
+      subtitle3: {
+        fontFamily: 'LatoBold',
+        fontWeight: 700,
+        fontSize: '0.8125rem',
+        lineHeight: 1.53
+      },
       body1: {
         fontFamily: 'LatoRegular',
         fontWeight: 400,
@@ -176,6 +181,12 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
         fontWeight: 400,
         fontSize: '0.875rem',
         lineHeight: 1.42
+      },
+      body3: {
+        fontFamily: 'LatoRegular',
+        fontWeight: 400,
+        fontSize: '0.8125rem',
+        lineHeight: 1.53
       },
       button: {
         fontFamily: 'LatoBold',

@@ -16,7 +16,7 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 
 import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
-import InboxConnectAccount from './components/InboxConnectAccount'
+import InboxZeroState from './components/ZeroState'
 import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxEmailThread from './components/InboxEmailThread'
 
@@ -124,7 +124,7 @@ export default function Inbox({ params }: WithRouterProps) {
           <Divider />
         </Box>
         {initializing ? null : noConnectedAccounts ? (
-          <InboxConnectAccount />
+          <InboxZeroState />
         ) : (
           <Grid container spacing={0} className={classes.body}>
             <Grid item className={classNames(classes.list, classes.fullHeight)}>

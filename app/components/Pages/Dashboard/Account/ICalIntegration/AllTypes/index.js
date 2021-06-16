@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { selectContextsByBrand } from 'reducers/deals/contexts'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals/context'
 import { getActiveTeamId } from 'utils/user-teams'
 import { Checkbox } from 'components/Checkbox'
@@ -126,12 +126,9 @@ function mapToProps({ deals, contacts, user }) {
 
   return {
     user,
-    contexts: selectContextsByBrand(deals.contexts, brandId),
+    contexts: selectBrandContexts(deals.contexts, brandId),
     contactsAttributesDefs: contacts.attributeDefs.byId
   }
 }
 
-export default connect(
-  mapToProps,
-  { getContextsByBrand }
-)(ICalAllTypes)
+export default connect(mapToProps, { getContextsByBrand })(ICalAllTypes)

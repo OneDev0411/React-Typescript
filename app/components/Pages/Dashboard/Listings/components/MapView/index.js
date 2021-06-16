@@ -9,8 +9,8 @@ import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCardWithFavorite'
 import ZeroState from '../ZeroState'
+import { ShareListings } from '../ShareListings'
 
-const VERTICAL_GAP_FROM_PAGE_TOP = '12em' // It's the page header height
 const PAGE_SIZE = 12
 
 const useStyles = makeStyles(
@@ -19,22 +19,31 @@ const useStyles = makeStyles(
       [theme.breakpoints.up('md')]: {
         display: 'flex',
         overflow: 'hidden',
-        height: `calc(100vh - ${VERTICAL_GAP_FROM_PAGE_TOP})`
+        flexGrow: 1
       }
     },
     mapContainer: {
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-      [theme.breakpoints.up('md')]: {
-        width: '50%'
-      }
+      flexBasis: '50%',
+      minHeight: '100%',
+      position: 'relative'
     },
     cardsContainer: {
-      width: '50%',
+      flexBasis: '50%',
+      minHeight: '100%',
       paddingRight: theme.spacing(0.5),
+      borderLeft: `1px solid ${theme.palette.divider}`,
+      position: 'relative'
+    },
+    cardsGridContainer: {
+      height: '100%',
       overflowY: 'scroll',
-      borderLeft: `1px solid ${theme.palette.divider}`
+      position: 'absolute'
+    },
+    selectionActionBar: {
+      position: 'absolute',
+      bottom: 20,
+      right: 0,
+      width: 'calc(100% - 192px)'
     }
   }),
   { name: 'MapView' }
@@ -85,13 +94,20 @@ const MapView = props => {
   return (
     <Box className={classes.container}>
       <Box className={classes.mapContainer}>{props.Map}</Box>
-      <Box
-        // See: https://github.com/mui-org/material-ui/issues/17010
-        ref={cardsContainerRef} // @ts-ignore
-        className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}
-        display={{ xs: 'none', md: 'block' }}
-      >
-        <Grid container>{renderCards()}</Grid>
+      {
+        <Box
+          // See: https://github.com/mui-org/material-ui/issues/17010
+          ref={cardsContainerRef} // @ts-ignore
+          className={cn(classes.cardsContainer, 'u-scrollbar--thinner--self')}
+          display={{ xs: 'none', md: 'block' }}
+        >
+          <Grid container className={classes.cardsGridContainer}>
+            {renderCards()}
+          </Grid>
+        </Box>
+      }
+      <Box className={classes.selectionActionBar}>
+        <ShareListings />
       </Box>
     </Box>
   )

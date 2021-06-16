@@ -48,6 +48,13 @@ declare module '@material-ui/core/styles/createPalette' {
   }
 }
 
+declare module '@material-ui/core/Typography/Typography' {
+  interface TypographyPropsVariantOverrides {
+    subtitle3: true
+    body3: true
+  }
+}
+
 declare module '@material-ui/core/styles/createTypography' {
   interface FontStyle
     extends Required<{
@@ -55,6 +62,10 @@ declare module '@material-ui/core/styles/createTypography' {
       fontWeightBlack: CSSProperties['fontWeight']
     }> {}
 
+  interface TypographyOptions {
+    subtitle3: TypographyStyle
+    body3: TypographyStyle
+  }
   interface Typography {
     subtitle3: TypographyStyle
     body3: TypographyStyle

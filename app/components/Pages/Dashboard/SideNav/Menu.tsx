@@ -22,6 +22,9 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 import { IAppState } from 'reducers'
 
 import { selectShowingsTotalNotificationCount } from 'selectors/showings'
+import { InlineBadge } from 'components/InlineBadge'
+
+import { getActiveTeamSettings } from 'utils/user-teams'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
@@ -30,6 +33,7 @@ import { UserMenu } from './components/UserMenu'
 import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
 import SupportTrigger from './components/SupportTrigger'
+import PoweredBy from './components/PoweredBy'
 
 import { scrollableAreaShadowColor } from './variables'
 
@@ -37,13 +41,13 @@ import {
   Sidenav,
   SidenavBlankLink,
   SideNavItem,
-  SidenavListGroup,
-  AppNavbarBadge
+  SidenavListGroup
 } from './styled'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
+const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
@@ -66,6 +70,12 @@ export function Menu() {
     dispatch(fetchUnreadEmailThreadsCount())
   }
 
+  // This is initially implemented for DE because they're using a
+  // white-labeled version of help.rechat.com
+  const activeBrandSettings = getActiveTeamSettings(user, true)
+  const brandHelpCenterLink =
+    activeBrandSettings.help_center || 'https://help.rechat.com'
+
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
   return (
@@ -78,82 +88,110 @@ export function Menu() {
         hasThinnerScrollbar
       >
         <SidenavListGroup data-test="side-nav-list">
+          <Acl access={dashboardAccess}>
+            <SideNavLinkItem to="/dashboard/overview" tourId="nav-dashboard">
+              Dashboard
+            </SideNavLinkItem>
+          </Acl>
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/inbox">
-              <AppNavbarBadge
+            <SideNavLinkItem to="/dashboard/inbox" tourId="nav-inbox">
+              <InlineBadge
                 badgeContent={inboxNotificationNumber}
                 color="primary"
               >
                 Inbox
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/calendar">Calendar</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/calendar" tourId="nav-calendar">
+              Calendar
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/contacts">Contacts</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/contacts" tourId="nav-contacts">
+              Contacts
+            </SideNavLinkItem>
           </Acl.Crm>
         </SidenavListGroup>
 
         <SidenavListGroup>
           <Acl.Marketing>
-            <SideNavLinkItem to="/dashboard/marketing">
+            <SideNavLinkItem to="/dashboard/marketing" tourId="nav-marketing">
               Marketing
             </SideNavLinkItem>
           </Acl.Marketing>
 
-          <SideNavLinkItem to="/dashboard/mls">Properties</SideNavLinkItem>
+          <Acl.Marketing>
+            <SideNavLinkItem to="/dashboard/flows" tourId="nav-flows">
+              Flows
+            </SideNavLinkItem>
+          </Acl.Marketing>
+
+          <SideNavLinkItem to="/dashboard/mls" tourId="nav-properties">
+            Properties
+          </SideNavLinkItem>
 
           <Acl.AgentNetwork>
-            <SideNavLinkItem to="/dashboard/agent-network">
+            <SideNavLinkItem
+              to="/dashboard/agent-network"
+              tourId="nav-agent-network"
+            >
               Agent Network
             </SideNavLinkItem>
           </Acl.AgentNetwork>
 
           <Acl access={insightAccess}>
-            <SideNavLinkItem to="/dashboard/insights">Insight</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
+              Insight
+            </SideNavLinkItem>
           </Acl>
 
           <Acl.Crm>
-            <SideNavLinkItem to="/dashboard/tours">Tours</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/tours" tourId="nav-tours">
+              Tours
+            </SideNavLinkItem>
           </Acl.Crm>
 
           <Acl access={openHouseAccess}>
-            <SideNavLinkItem to="/dashboard/open-house">
+            <SideNavLinkItem to="/dashboard/open-house" tourId="nav-open-house">
               Open House
             </SideNavLinkItem>
           </Acl>
 
           <Acl access={dealsAccess}>
-            <SideNavLinkItem to="/dashboard/deals">
-              <AppNavbarBadge
+            <SideNavLinkItem to="/dashboard/deals" tourId="nav-deals">
+              <InlineBadge
                 badgeContent={dealsNotificationsNumber}
                 color="primary"
               >
                 Deals
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl>
 
           <Acl access={ACL.WEBSITES}>
-            <SideNavLinkItem to="/dashboard/websites">Websites</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
+              Websites
+            </SideNavLinkItem>
           </Acl>
 
           <Acl access={[ACL.STORE]}>
-            <SideNavLinkItem to="/dashboard/website">Store</SideNavLinkItem>
+            <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
+              Store
+            </SideNavLinkItem>
           </Acl>
 
           <Acl access={ACL.SHOWINGS}>
             <SideNavLinkItem to="/dashboard/showings">
-              <AppNavbarBadge
+              <InlineBadge
                 badgeContent={showingsTotalNotificationCount}
                 color="primary"
               >
                 Showings
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>
@@ -161,20 +199,20 @@ export function Menu() {
         <SidenavListGroup>
           {user && (
             <SideNavItem>
-              <AppNavbarBadge
+              <InlineBadge
                 badgeContent={chatRoomsNotificationsNumber}
                 color="primary"
               >
                 <MessagesDrawerTrigger />
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavItem>
           )}
 
           {user && (
             <SideNavLinkItem to="/dashboard/notifications">
-              <AppNavbarBadge badgeContent={appNotifications} color="primary">
+              <InlineBadge badgeContent={appNotifications} color="primary">
                 Notifications
-              </AppNavbarBadge>
+              </InlineBadge>
             </SideNavLinkItem>
           )}
         </SidenavListGroup>
@@ -183,7 +221,7 @@ export function Menu() {
             <SidenavBlankLink
               target="_blank"
               rel="noopener noreferrer"
-              href="https://help.rechat.com"
+              href={brandHelpCenterLink}
             >
               Help Center
             </SidenavBlankLink>
@@ -194,6 +232,7 @@ export function Menu() {
       </ScrollableArea>
 
       <UserMenu user={user} />
+      <PoweredBy />
     </Sidenav>
   )
 }

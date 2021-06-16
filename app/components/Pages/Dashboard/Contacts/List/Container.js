@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 import { Box } from '@material-ui/core'
+
 import { mdiLoading } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -43,7 +46,8 @@ import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { putUserSetting } from 'models/user/put-user-setting'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
@@ -57,12 +61,17 @@ import {
   OPEN_HOUSE_FILTER_ID,
   SORT_FIELD_SETTING_KEY,
   PARKED_CONTACTS_LIST_ID,
-  DUPLICATE_CONTACTS_LIST_ID
+  DUPLICATE_CONTACTS_LIST_ID,
+  VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 import { SyncSuccessfulModal } from './SyncSuccesfulModal'
-import { ZeroState } from './ZeroState'
+import { ContactsZeroState } from './ZeroState'
 import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
+
+import { Board } from '../Board'
+
+import { ViewMode } from './styled'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -82,7 +91,8 @@ class ContactsList extends React.Component {
       searchInputValue: props.list.textFilter,
       loadedRanges: [],
       duplicateClusterCount: 0,
-      parkedContactCount: 0
+      parkedContactCount: 0,
+      viewMode: 'table'
     }
 
     this.order = null
@@ -100,6 +110,12 @@ class ContactsList extends React.Component {
     fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
+
+    this.setState({
+      viewMode:
+        getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
+        'table'
+    })
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
@@ -674,7 +690,11 @@ class ContactsList extends React.Component {
   }
 
   renderOtherContactsBadge = () => {
-    const { resetActiveFilters, changeActiveFilterSegment } = this.props
+    const {
+      resetActiveFilters,
+      changeActiveFilterSegment,
+      isFetchingContacts
+    } = this.props
     const { parkedContactCount, duplicateClusterCount } = this.state
 
     if (!parkedContactCount && !duplicateClusterCount) {
@@ -686,6 +706,7 @@ class ContactsList extends React.Component {
         {parkedContactCount > 0 && (
           <Box mr={duplicateClusterCount > 0 ? 1 : 0}>
             <OtherContactsBadge
+              disabled={isFetchingContacts}
               title="New contacts to review and add"
               count={parkedContactCount}
               onClick={async () => {
@@ -702,6 +723,7 @@ class ContactsList extends React.Component {
         )}
         {duplicateClusterCount > 0 && (
           <OtherContactsBadge
+            disabled={isFetchingContacts}
             title="Duplicate Contacts"
             count={duplicateClusterCount}
             onClick={() => goTo('/dashboard/contacts/duplicates')}
@@ -709,6 +731,20 @@ class ContactsList extends React.Component {
         )}
       </Box>
     )
+  }
+
+  changeViewMode = viewMode => {
+    if (viewMode === this.state.viewMode) {
+      return
+    }
+
+    this.setState({
+      viewMode
+    })
+
+    putUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+
+    this.reloadContacts()
   }
 
   renderTabs = (props = {}) => {
@@ -747,6 +783,8 @@ class ContactsList extends React.Component {
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
+        onChangeView={this.changeViewMode}
+        viewMode={this.state.viewMode}
         {...props}
       />
     )
@@ -782,8 +820,17 @@ class ContactsList extends React.Component {
     const activeTag = this.getActiveTag()
 
     return (
-      <PageLayout>
+      <PageLayout
+        {...(this.state.viewMode === 'board' && {
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          oferflow: 'hidden',
+          pb: 1
+        })}
+      >
         <PageLayout.HeaderWithSearch
+          flex="0 1 auto"
           title={title}
           onSearch={this.handleSearch}
           SearchInputProps={{
@@ -792,7 +839,7 @@ class ContactsList extends React.Component {
           }}
         >
           {!isZeroState && (
-            <Box ml={1}>
+            <Box display="flex" ml={1}>
               {activeSegment && activeSegment.is_editable && (
                 <TouchReminder
                   value={activeSegment.touch_freq}
@@ -812,7 +859,14 @@ class ContactsList extends React.Component {
             <ViewAs />
           </Box>
         </PageLayout.HeaderWithSearch>
-        <PageLayout.Main>
+        <PageLayout.Main
+          {...(this.state.viewMode === 'board' && {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 auto',
+            overflow: 'hidden'
+          })}
+        >
           {this.state.syncStatus === 'pending' && (
             <Callout
               type="info"
@@ -842,42 +896,57 @@ class ContactsList extends React.Component {
               }}
             />
           )}
-          {isZeroState && <ZeroState />}
+          {isZeroState && <ContactsZeroState />}
           {!isZeroState && !this.state.isShowingDuplicatesList && (
             <>
-              {this.renderOtherContactsBadge()}
+              {this.state.viewMode === 'table' &&
+                this.renderOtherContactsBadge()}
+
               {this.renderTabs()}
-              <Box mt={2}>
-                <Table
-                  data={contacts}
-                  order={this.order}
-                  totalRows={props.listInfo.total || 0}
-                  listInfo={props.listInfo}
-                  activeSegment={activeSegment}
-                  isFetching={isFetchingContacts}
-                  isFetchingMore={state.isFetchingMoreContacts}
-                  isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
-                  isRowsUpdating={state.isRowsUpdating}
-                  onRequestLoadMore={this.handleLoadMore}
-                  onRequestLoadMoreBefore={this.handleLoadMoreBefore}
-                  rowsUpdating={this.rowsUpdating}
-                  onChangeSelectedRows={this.onChangeSelectedRows}
-                  onRequestDelete={this.handleOnDelete}
-                  tableContainerId={this.tableContainerId}
-                  reloadContacts={this.reloadContacts}
-                  handleChangeContactsAttributes={() =>
-                    this.handleFilterChange({}, true)
-                  }
-                  filters={{
-                    alphabet: state.firstLetter,
-                    attributeFilters: props.filters,
-                    crm_tasks: props.crmTasks,
-                    filter_type: props.conditionOperator,
-                    flows: props.flows,
-                    text: state.searchInputValue,
-                    users: viewAsUsers
-                  }}
-                />
+
+              <Box
+                mt={2}
+                {...(this.state.viewMode === 'board' && {
+                  flexGrow: 1,
+                  overflow: 'hidden'
+                })}
+              >
+                <ViewMode enabled={this.state.viewMode === 'board'}>
+                  <Board contacts={contacts} isLoading={isFetchingContacts} />
+                </ViewMode>
+
+                <ViewMode enabled={this.state.viewMode === 'table'}>
+                  <Table
+                    data={contacts}
+                    order={this.order}
+                    totalRows={props.listInfo.total || 0}
+                    listInfo={props.listInfo}
+                    activeSegment={activeSegment}
+                    isFetching={isFetchingContacts}
+                    isFetchingMore={state.isFetchingMoreContacts}
+                    isFetchingMoreBefore={state.isFetchingMoreContactsBefore}
+                    isRowsUpdating={state.isRowsUpdating}
+                    onRequestLoadMore={this.handleLoadMore}
+                    onRequestLoadMoreBefore={this.handleLoadMoreBefore}
+                    rowsUpdating={this.rowsUpdating}
+                    onChangeSelectedRows={this.onChangeSelectedRows}
+                    onRequestDelete={this.handleOnDelete}
+                    tableContainerId={this.tableContainerId}
+                    reloadContacts={this.reloadContacts}
+                    handleChangeContactsAttributes={() =>
+                      this.handleFilterChange({}, true)
+                    }
+                    filters={{
+                      alphabet: state.firstLetter,
+                      attributeFilters: props.filters,
+                      crm_tasks: props.crmTasks,
+                      filter_type: props.conditionOperator,
+                      flows: props.flows,
+                      text: state.searchInputValue,
+                      users: viewAsUsers
+                    }}
+                  />
+                </ViewMode>
               </Box>
             </>
           )}

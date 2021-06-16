@@ -58,14 +58,17 @@ import { Title } from './components/Title'
 import { Description } from './components/Description/RichText'
 import { EventType } from './components/EventType'
 import { NotifyGuests } from './components/NotifyGuests'
-import { FutureEventDoneConfirmation } from './components/FutureEventDoneConfirmation'
+import {
+  DONE_STATUS,
+  FutureEventDoneConfirmation
+} from './components/FutureEventDoneConfirmation'
 import { EventField } from './components/EventField'
 import { DueDateWatcher } from './components/DueDateWatcher'
 import {
   FormContainer,
   FieldContainer,
   Footer,
-  AssosiationContainer
+  AssociationContainer
 } from './styled'
 
 const propTypes = {
@@ -291,7 +294,7 @@ class EventDrawerContainer extends Component {
 
                       <Box ml={4} mb={1}>
                         <EventType />
-                        {!this.isNew && (
+                        {(!this.isNew || values.status === DONE_STATUS) && (
                           <Box mt={1}>
                             <CheckboxField
                               name="status"
@@ -374,14 +377,14 @@ class EventDrawerContainer extends Component {
                         </Box>
                       </EventField>
                       <Reminder dueDate={values.dueDate} />
-                      {/* Assosiations Fields:Start */}
+                      {/* Associations Fields:Start */}
                       <EventField
                         title="contact-associations"
                         iconProps={{
                           path: mdiAccountPlusOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="contact"
                             name="associations"
@@ -394,7 +397,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="contact"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <EventField
                         title="listing-associations"
@@ -402,7 +405,7 @@ class EventDrawerContainer extends Component {
                           path: mdiHomeSearchOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="listing"
                             name="associations"
@@ -415,7 +418,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="listing"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <EventField
                         title="deal-associations"
@@ -423,7 +426,7 @@ class EventDrawerContainer extends Component {
                           path: mdiCashUsdOutline
                         }}
                       >
-                        <AssosiationContainer>
+                        <AssociationContainer>
                           <AssociationsList
                             filterType="deal"
                             name="associations"
@@ -436,7 +439,7 @@ class EventDrawerContainer extends Component {
                             disabled={isDisabled}
                             type="deal"
                           />
-                        </AssosiationContainer>
+                        </AssociationContainer>
                       </EventField>
                       <AssociationsList
                         filterType="email"
@@ -446,7 +449,7 @@ class EventDrawerContainer extends Component {
                         defaultAssociation={defaultAssociation}
                       />
 
-                      {/* Assosiations Fields:End */}
+                      {/* Associations Fields:End */}
                       <ItemChangelog
                         item={values}
                         style={{ marginTop: '2em' }}

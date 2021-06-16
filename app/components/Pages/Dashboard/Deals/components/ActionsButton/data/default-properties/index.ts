@@ -142,14 +142,7 @@ export const actionsDefaultProperties = {
       return task.attention_requested ? 'Cancel Notify' : 'Notify Office'
     },
     type: ({ task }) =>
-      task.attention_requested ? 'remove-task-notification' : 'notify-task',
-    condition: ({ is_backoffice, is_task_notified }) => {
-      if (is_backoffice && !is_task_notified) {
-        return false
-      }
-
-      return true
-    }
+      task.attention_requested ? 'remove-task-notification' : 'notify-task'
   },
   [REQUIRE_TASK]: {
     label: ({ task }) =>
@@ -200,7 +193,7 @@ function getDocusignLabel(
     return attachments.some(item => item.id === attachment.id)
   })
 
-  return exists ? 'Remove Docusign' : 'Add to Docusign'
+  return exists ? 'Remove from Docusign' : 'Add to Docusign'
 }
 
 function getEmailLabel(

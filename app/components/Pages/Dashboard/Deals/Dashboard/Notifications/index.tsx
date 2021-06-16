@@ -22,7 +22,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       color: theme.palette.common.black,
-      margin: `${theme.spacing(1, 0)} !important`
+      margin: `${theme.spacing(1, 5)} !important`
     },
     header: {
       display: 'flex',

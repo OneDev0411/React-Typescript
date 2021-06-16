@@ -11,7 +11,6 @@ import {
   BlockDragStopEventReturn,
   TemplateBlockOptions
 } from './types'
-import { makeModelUndraggable } from '../utils/models'
 
 export function collapseBlockCategories(editor: Editor) {
   const categories = editor.BlockManager.getCategories() as any
@@ -79,10 +78,7 @@ export function handleBlockDragStopEvent<T>(
     if (template) {
       const html = nunjucks.renderString(template, renderData)
 
-      const models = parent.append(html, { at: model.opt.at })
-
-      // Make the models undraggable on dropping new blocks into canvas
-      models.forEach(model => makeModelUndraggable(model))
+      parent.append(html, { at: model.opt.at })
     }
 
     model.remove()

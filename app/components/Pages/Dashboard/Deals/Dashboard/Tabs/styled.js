@@ -19,12 +19,12 @@ export const Card = styled(AbstractCard)`
 `
 
 export const FactsheetContainer = styled.div`
-  width: 19rem;
+  min-width: 22rem;
 `
 
 export const MainContainer = styled.div`
-  width: calc(100% - 20.5rem);
-  margin-left: 1.5rem;
+  flex-grow: 1;
+  margin-left: 1rem;
 `
 
 export const NavBar = styled.div`

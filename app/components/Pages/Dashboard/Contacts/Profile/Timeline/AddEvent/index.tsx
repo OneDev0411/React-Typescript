@@ -25,6 +25,7 @@ function AddEvent({ contact, user }: Props & StateProps) {
         variant="contained"
         size="small"
         onClick={toggleDrawer}
+        data-tour-id="add-event-button"
       >
         Add Event
       </Button>

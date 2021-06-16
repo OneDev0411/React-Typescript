@@ -1,4 +1,4 @@
-declare interface IUserBase {
+declare interface IUserBase extends IModel<'user'> {
   first_name: string | null
   last_name: string | null
   display_name: string
@@ -39,7 +39,6 @@ declare interface IUser extends IUserBase {
 
   agent: IAgent | null // association?
 
-  type: 'user'
   user_type: 'Agent' | 'Client' | 'Admin'
 }
 

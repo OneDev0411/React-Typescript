@@ -1,6 +1,5 @@
 import io from 'socket.io-client'
 
-import { changeSocketStatus } from '../../store_actions/socket'
 import { getTeams } from '../../models/user/get-teams'
 import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 import config from '../../../config/public'
@@ -80,7 +79,7 @@ export default class Socket {
       )
 
       // update app store
-      store.dispatch(changeSocketStatus('connected'))
+      // store.dispatch(changeSocketStatus('connected'))
     })
   }
 
@@ -114,7 +113,7 @@ export default class Socket {
    */
   onReconnecting() {
     console.log('[Socket] Reconnecting')
-    store.dispatch(changeSocketStatus('Reconnecting'))
+    // store.dispatch(changeSocketStatus('Reconnecting'))
   }
 
   /**
@@ -122,7 +121,7 @@ export default class Socket {
    */
   onInternetOffline() {
     console.log('[Socket] Offline')
-    store.dispatch(changeSocketStatus('No Internet'))
+    // store.dispatch(changeSocketStatus('No Internet'))
   }
 
   /**
@@ -143,7 +142,7 @@ export default class Socket {
     this.authenticate()
 
     // emit connected message
-    store.dispatch(changeSocketStatus('connected'))
+    // store.dispatch(changeSocketStatus('connected'))
   }
 
   /**

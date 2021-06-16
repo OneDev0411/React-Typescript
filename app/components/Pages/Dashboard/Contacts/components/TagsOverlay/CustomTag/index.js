@@ -93,6 +93,7 @@ export default class CustomTag extends React.Component {
         <SvgIcon path={mdiTagOutline} leftMargined />
         <Input
           data-test="new-tag-input"
+          data-tour-id="new-tag-input"
           value={inputValue}
           type="text"
           onFocus={this.onFocus}

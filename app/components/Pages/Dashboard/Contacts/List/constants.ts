@@ -1,4 +1,5 @@
 export const SORT_FIELD_SETTING_KEY = 'grid_contacts_sort_field'
+export const VIEW_MODE_FIELD_SETTING_KEY = 'contact_view_mode_field'
 
 export const OPEN_HOUSE_FILTER_ID = 'openHouse'
 export const FLOW_FILTER_ID = 'flow'

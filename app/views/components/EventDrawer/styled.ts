@@ -16,7 +16,7 @@ export const FieldContainer = styled(Flex)`
   border: 1px solid ${({ theme }: Props) => theme.palette.divider};
 `
 
-export const AssosiationContainer = styled.div`
+export const AssociationContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;

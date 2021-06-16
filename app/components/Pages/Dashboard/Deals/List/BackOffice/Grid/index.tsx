@@ -25,7 +25,7 @@ import { selectUser } from 'selectors/user'
 import { SearchQuery } from '../types'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
-import EmptyState from './EmptyState'
+import { ContactsZeroState } from './ZeroState'
 import LoadingState from '../../components/LoadingState'
 import { Address } from '../../components/table-columns/Address'
 
@@ -186,7 +186,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       totalRows={data.length}
       virtualize={data.length > 150}
       LoadingStateComponent={LoadingState}
-      EmptyStateComponent={EmptyState}
+      EmptyStateComponent={ContactsZeroState}
       loading={isFetchingDeals ? 'middle' : null}
       classes={{
         row: gridClasses.row

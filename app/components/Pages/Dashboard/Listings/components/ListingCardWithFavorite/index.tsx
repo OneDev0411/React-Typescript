@@ -48,8 +48,12 @@ const ListingCardWithFavorite = ({
   ])
 
   const handleLikeClick = useCallback(() => {
+    if (selected) {
+      onToggleSelection()
+    }
+
     dispatch(toggleFavorite(listing))
-  }, [dispatch, listing])
+  }, [dispatch, listing, selected, onToggleSelection])
 
   return (
     <>

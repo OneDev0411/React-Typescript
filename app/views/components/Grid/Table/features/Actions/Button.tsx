@@ -11,6 +11,7 @@ interface Props {
   disabled?: boolean
   attachedElementRef?: RefObject<any>
   onClick?: (e: MouseEvent<HTMLElement>) => void
+  tourId?: string
 }
 
 const useStyles = makeStyles(
@@ -63,7 +64,8 @@ export const GridActionButton = ({
   icon,
   attachedElementRef,
   textIcon,
-  onClick
+  onClick,
+  tourId
 }: Props) => {
   const classes = useStyles({
     label,
@@ -88,7 +90,9 @@ export const GridActionButton = ({
       >
         {icon && <SvgIcon path={icon} className={classes.icon} />}
         {textIcon && <div className={classes.textIcon}>{textIcon}</div>}
-        <div className={classes.label}>{label}</div>
+        <div className={classes.label} data-tour-id={tourId || ''}>
+          {label}
+        </div>
       </div>
     </div>
   )

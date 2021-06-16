@@ -91,16 +91,20 @@ function PublishWebsite({
   }
 
   const handleDomainAdd = (domainName: string, isDefault: boolean) => {
-    setWebsiteData(oldWebsiteData =>
-      oldWebsiteData
-        ? {
-            ...oldWebsiteData,
-            hostnames: isDefault
-              ? [domainName, ...oldWebsiteData.hostnames]
-              : [...oldWebsiteData?.hostnames, domainName]
-          }
-        : null
-    )
+    setWebsiteData(oldWebsiteData => {
+      if (!oldWebsiteData) {
+        return null
+      }
+
+      const websiteHostnames = oldWebsiteData.hostnames ?? []
+
+      return {
+        ...oldWebsiteData,
+        hostnames: isDefault
+          ? [domainName, ...websiteHostnames]
+          : [...websiteHostnames, domainName]
+      }
+    })
   }
 
   const handleDomainDelete = (domainName: string) => {
@@ -108,9 +112,10 @@ function PublishWebsite({
       oldWebsiteData
         ? {
             ...oldWebsiteData,
-            hostnames: oldWebsiteData.hostnames.filter(
-              hostname => hostname !== domainName
-            )
+            hostnames:
+              oldWebsiteData.hostnames?.filter(
+                hostname => hostname !== domainName
+              ) || []
           }
         : null
     )
@@ -164,6 +169,7 @@ function PublishWebsite({
       <SearchListingDrawer
         mockListings
         allowSkip
+        withMlsDisclaimer
         isOpen={isListingTriggered && !isBuilderOpen}
         title="Select a Listing"
         searchPlaceholder="Enter MLS# or an address"

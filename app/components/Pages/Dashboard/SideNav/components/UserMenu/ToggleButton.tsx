@@ -1,19 +1,17 @@
-import React from 'react'
-import { Box, Typography } from '@material-ui/core'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { Box, Typography, Tooltip } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import { mdiDotsVertical } from '@mdi/js'
 
-import { Avatar } from '../../../../../../views/components/Avatar'
+import { Avatar } from 'components/Avatar'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { getActiveBrand } from 'utils/user-teams'
 
-import { DropdownToggleButton } from '../../../../../../views/components/DropdownToggleButton'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     dropdownToggleButton: {
       maxWidth: '100%',
-      margin: theme.spacing(0, 2),
-      padding: theme.spacing(2, 0, 1.5),
-      justifyContent: 'space-between',
-      borderTop: `1px solid ${theme.palette.grey[800]}`
+      padding: theme.spacing(1.5, 2, 1.5, 3),
+      justifyContent: 'space-between'
     },
     wrapper: {
       display: 'flex',
@@ -22,20 +20,21 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     userDetails: {
       textAlign: 'left',
-      marginLeft: theme.spacing(1),
-      width: `calc(100% - ${theme.spacing(6)}px)`
+      width: '100%'
+    },
+    userDisplayName: {
+      color: theme.palette.navbar.contrastText
     },
     arrowIcon: {
-      color: theme.palette.navbar.contrastText,
-      transform: 'rotateX(180deg)'
+      color: theme.palette.navbar.contrastText
     },
     arrowIconRotated: {
       transform: 'rotateX(0)'
-    },
-    userInfo: {
-      opacity: 0.7
     }
-  })
+  }),
+  {
+    name: 'UserMenuToggleButton'
+  }
 )
 
 interface Props {
@@ -46,36 +45,38 @@ interface Props {
 }
 
 export default function ToggleButton(props: Props) {
-  const { email, phone_number, display_name } = props.user
   const classes = useStyles()
+  const { display_name } = props.user
+
+  const brandName = getActiveBrand(props.user)?.name ?? ''
+  const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
 
   return (
-    <DropdownToggleButton
-      id={props.id}
-      onClick={props.onClick}
-      isActive={props.isOpen}
-      classes={{
-        arrowIcon: classes.arrowIcon,
-        root: classes.dropdownToggleButton,
-        rotated: classes.arrowIconRotated
-      }}
-    >
-      <Box className={classes.wrapper}>
-        <Avatar user={props.user} />
-        <div className={classes.userDetails}>
-          <Typography noWrap variant="body2">
-            {display_name}
-          </Typography>
-          <Typography
-            noWrap
-            variant="caption"
-            display="block"
-            className={classes.userInfo}
-          >
-            {email || phone_number || ''}
-          </Typography>
-        </div>
-      </Box>
-    </DropdownToggleButton>
+    <Tooltip placement="right" title={tooltipTitle}>
+      <DropdownToggleButton
+        id={props.id}
+        onClick={props.onClick}
+        isActive={props.isOpen}
+        classes={{
+          arrowIcon: classes.arrowIcon,
+          root: classes.dropdownToggleButton,
+          rotated: classes.arrowIconRotated
+        }}
+        iconPath={mdiDotsVertical}
+      >
+        <Box className={classes.wrapper}>
+          {/* <Avatar user={props.user} /> */}
+          <div className={classes.userDetails}>
+            <Typography
+              noWrap
+              variant="body1"
+              className={classes.userDisplayName}
+            >
+              {display_name}
+            </Typography>
+          </div>
+        </Box>
+      </DropdownToggleButton>
+    </Tooltip>
   )
 }

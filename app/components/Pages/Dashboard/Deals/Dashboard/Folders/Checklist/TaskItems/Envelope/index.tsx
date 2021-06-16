@@ -1,16 +1,17 @@
-import React from 'react'
-import Flex from 'styled-flex-component'
 import fecha from 'fecha'
 
-import { useTheme } from '@material-ui/styles'
-import { Theme } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
+import { Link } from 'react-router'
+
+import { mdiFileOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../../EnvelopeStatus'
 
-import { ItemContainer, ItemRow, ItemTitle, ItemDate } from '../styled'
-
 import { getEnvelopeActions } from '../helpers/get-envelope-actions'
+import { useStyles } from '../styles'
 
 interface Props {
   deal: IDeal
@@ -19,33 +20,39 @@ interface Props {
 }
 
 export function Envelope({ deal, task, envelope }: Props) {
-  const theme = useTheme<Theme>()
+  const classes = useStyles()
 
   const actions: ActionButtonId[] = getEnvelopeActions(envelope)
 
   return (
-    <ItemContainer>
-      <ItemRow>
-        <Flex alignCenter justifyBetween>
-          <Flex column>
-            <ItemTitle>{envelope.title}</ItemTitle>
+    <div className={classes.container}>
+      <div className={classes.row}>
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box display="flex" alignItems="center">
+            <div className={classes.horizontalLine} />
+            <SvgIcon path={mdiFileOutline} />
 
-            <Flex
-              style={{
-                margin: theme.spacing(1, 0)
-              }}
-            >
-              <EnvelopeStatus deal={deal} task={task} envelope={envelope} />
-
-              <ItemDate>
-                Created at{' '}
-                {fecha.format(
-                  new Date(envelope.created_at * 1000),
-                  'MMM DD YYYY, h:mm A'
-                )}
-              </ItemDate>
-            </Flex>
-          </Flex>
+            <div>
+              <Box display="flex" alignItems="center" className={classes.title}>
+                <Link
+                  className={classes.link}
+                  to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
+                >
+                  {envelope.title}
+                  {' - '}
+                  <EnvelopeStatus deal={deal} task={task} envelope={envelope} />
+                </Link>
+              </Box>
+              <div>
+                <Typography variant="caption" className={classes.date}>
+                  {fecha.format(
+                    new Date(envelope.created_at * 1000),
+                    'MMM DD YYYY, h:mm A'
+                  )}
+                </Typography>
+              </div>
+            </div>
+          </Box>
 
           <ActionsButton
             deal={deal}
@@ -53,8 +60,8 @@ export function Envelope({ deal, task, envelope }: Props) {
             envelope={envelope}
             actions={actions}
           />
-        </Flex>
-      </ItemRow>
-    </ItemContainer>
+        </Box>
+      </div>
+    </div>
   )
 }

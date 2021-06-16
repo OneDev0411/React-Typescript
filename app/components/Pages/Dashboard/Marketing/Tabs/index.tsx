@@ -5,6 +5,7 @@ import { SectionsEnum } from 'components/PageSideNav/types'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'
 
 import MegaMenu from './SectionMegaMenu'
+import { TabMarketingSkeleton } from './Skeleton'
 
 interface Props {
   sections: SectionCollection
@@ -57,7 +58,7 @@ const MarketingTabs = ({
   // Do not render menus before getting all mediums
   // We're doing this to prevent sections/tabs flashing
   if (Object.keys(mediums).length === 0) {
-    return null
+    return <TabMarketingSkeleton />
   }
 
   return (
@@ -96,6 +97,7 @@ const MarketingTabs = ({
             key={section.key}
             value={section.key}
             label={section.title}
+            data-tour-id={`tab-${section.title?.toLowerCase()}`}
             render={({ close }) => (
               <MegaMenu data={section} mediums={mediums} onClose={close} />
             )}

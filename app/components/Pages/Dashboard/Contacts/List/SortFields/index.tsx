@@ -1,11 +1,10 @@
 import React from 'react'
 import _findIndex from 'lodash/findIndex'
-import { MenuItem, Tooltip } from '@material-ui/core'
+import { MenuItem } from '@material-ui/core'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
-import { BaseDropdown } from 'components/BaseDropdown'
-import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { DropdownTab } from 'components/PageTabs'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
 
@@ -35,33 +34,24 @@ export const SortFields = ({ onChange, currentOrder }: Props) => {
     activeOrder >= 0 ? sortableColumns[activeOrder].label : 'A - Z'
 
   return (
-    <BaseDropdown
-      renderDropdownButton={props => {
-        return (
-          <Tooltip title="Sort by" placement="top">
-            <DropdownToggleButton {...props}>
-              {buttonLabel}
-            </DropdownToggleButton>
-          </Tooltip>
-        )
-      }}
-      renderMenu={({ close }) => (
-        <div>
-          {sortableColumns.map((c, index) => (
+    <DropdownTab title={buttonLabel}>
+      {({ toggleMenu }) => (
+        <>
+          {sortableColumns.map((item, index) => (
             <MenuItem
               key={index}
               value={index}
               onClick={async () => {
-                onChange(c)
-                await putUserSetting(SORT_FIELD_SETTING_KEY, c.value)
-                close()
+                onChange(item)
+                await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
+                toggleMenu()
               }}
             >
-              {c.label}
+              {item.label}
             </MenuItem>
           ))}
-        </div>
+        </>
       )}
-    />
+    </DropdownTab>
   )
 }

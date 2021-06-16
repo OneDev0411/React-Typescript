@@ -16,8 +16,10 @@ import { SvgIcon } from '../SvgIcons/SvgIcon'
 import { ClassesProps } from '../../../utils/ts-utils'
 
 interface Props extends ButtonProps {
+  component?: string
   isActive?: boolean
   children?: ReactNode
+  iconPath?: string
 }
 
 const styles = (theme: Theme) => {
@@ -56,6 +58,7 @@ export const DropdownToggleButton = forwardRef(
       isActive,
       children,
       classes,
+      iconPath = mdiChevronDown,
       ...buttonProps
     }: Props & ClassesProps<typeof styles>,
     ref: Ref<HTMLButtonElement>
@@ -74,7 +77,7 @@ export const DropdownToggleButton = forwardRef(
       >
         {children}
         <SvgIcon
-          path={mdiChevronDown}
+          path={iconPath}
           className={classNames(styleClasses.arrowIcon, {
             [styleClasses.rotated]: isActive
           })}

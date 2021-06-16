@@ -96,7 +96,7 @@ function InsightsLayout({
             ]}
           />
 
-          <Box mt={1.5}>
+          <Box mt={1.5} flex="1 1 auto">
             {renderContent({
               sortBy: sortField,
               onChangeSort: setSortField

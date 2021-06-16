@@ -11,6 +11,8 @@ import {
 
 import TeamAgents from 'components/TeamAgents'
 
+import { NormalizedBrand } from 'components/TeamAgents/types'
+
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
 import { UserRow } from '../../components/UserRow'
@@ -20,7 +22,7 @@ import { IDealFormRole } from '../../types'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      maxHeight: '70vh',
+      maxHeight: '50vh',
       overflow: 'auto'
     },
     selectedAgent: {
@@ -54,6 +56,23 @@ export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
 
+  const getUsers = (teams: NormalizedBrand[]) => {
+    if (searchCriteria.length >= 3) {
+      return teams
+    }
+
+    if (isOfficeDoubleEnded) {
+      return [
+        {
+          ...teams[0],
+          users: teams[0].users.slice(0, 20)
+        }
+      ]
+    }
+
+    return teams.slice(0, 5)
+  }
+
   return (
     <TeamAgents
       flattenTeams={isOfficeDoubleEnded}
@@ -75,9 +94,9 @@ export function AgentsList({ isOfficeDoubleEnded, onSelectRole }: Props) {
               />
             </Box>
 
-            {teams.map((team, index) => (
+            {getUsers(teams).map((team, index) => (
               <div key={index}>
-                {teams.length > 1 && (
+                {(searchCriteria || teams.length > 1) && (
                   <Box ml={1} my={1}>
                     <Typography variant="subtitle2">{team.name}</Typography>
                     <Typography variant="caption">{team.subtitle}</Typography>

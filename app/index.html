@@ -23,6 +23,12 @@
   <meta name="theme-color" content="#ffffff" />
 
   <script>
+    (function() {if(!window.AppcuesReady) { window.AppcuesReady = function(callback) {callback && window.AppcuesReady.q.push(callback);if(window.Appcues){while(window.AppcuesReady.q.length) {cb = window.AppcuesReady.q.shift();if(typeof cb === 'function') cb();}}};window.AppcuesReady.q = [];}})()
+  </script>
+
+  <script src="//fast.appcues.com/86812.js" async defer onload="AppcuesReady()"></script>
+  <style>div.appcues > appcues-checklists > appcues-checklist {z-index: 100;}</style>
+  <script>
     window['_fs_debug'] = false;
     window['_fs_host'] = 'fullstory.com';
     window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
@@ -45,6 +51,7 @@
         if(m[y])m[y]=function(){return g._w[y].apply(this,arguments)};
         g._v="1.3.0";
     })(window,document,window['_fs_namespace'],'script','user');
+    
   </script>
 </head>
 

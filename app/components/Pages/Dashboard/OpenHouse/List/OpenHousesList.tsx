@@ -23,13 +23,15 @@ import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use
 
 import { selectUser } from 'selectors/user'
 
-import EmptyState from './EmptyState'
+import { ZeroState } from 'partials/ZeroState'
+
 import Avatar from './columns/Avatar'
 import Title from './columns/Title'
 import Date from './columns/Date'
 import Registrants from './columns/Registrants'
 import GuestRegistration from './columns/GuestRegistration'
 import Actions from './columns/Actions'
+import CreateNewOpenHouse from './CreateNewOpenHouse'
 
 interface Associations {
   deal?: IDeal
@@ -202,7 +204,14 @@ function OpenHousesList() {
     }
 
     if (!list.length) {
-      return <EmptyState onOpenDrawer={onOpenOHDrawer} />
+      return (
+        <ZeroState
+          imageUrl="/static/images/zero-state/open-house.png"
+          title="No open houses are scheduled, yet."
+          subTitle="Impress sellers with additional marketing exposure while attracting new buyers and adding contacts. Holding an open house has never been easier!"
+          ctaNode={<CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />}
+        />
+      )
     }
 
     return (
@@ -228,7 +237,7 @@ function OpenHousesList() {
       <PageLayout>
         <PageLayout.Header title="Open House Registration Pages" />
         <PageLayout.Main>
-          <Box>
+          <Box height="100%">
             {showNotifyOfficeBanner && (
               <Acl access={ACL.DEALS}>
                 {isAlertOpen && (

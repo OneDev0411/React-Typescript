@@ -7,9 +7,9 @@ import classNames from 'classnames'
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
-import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
+import { EmailInsightsZeroState } from './ZeroState'
 
-import NoSearchResults from '../../../../Partials/no-search-results'
+import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
 import Layout from './Layout'
 import Actions from './MarketingInsightsActions'
@@ -17,7 +17,6 @@ import ThumbnailColumn from './Column/Thumbnail'
 import TitleColumn from './Column/Title'
 import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
-import { InsightContainer } from './styled'
 import useListData from './useListData'
 import { InsightFilterType } from './types'
 import { valueAndPercent, hasPixelTracking } from './helpers'
@@ -205,9 +204,7 @@ function List(props) {
     }
 
     if (hasError) {
-      return (
-        <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
-      )
+      return <EmailInsightsZeroState />
     }
 
     return (
@@ -215,9 +212,7 @@ function List(props) {
         rows={list}
         totalRows={list.length}
         columns={columns}
-        EmptyStateComponent={() => (
-          <NoSearchResults description='Try sending your first campaign using "Create" button and click on "Email".' />
-        )}
+        EmptyStateComponent={() => <EmailInsightsZeroState />}
         sorting={{
           sortBy: {
             value: sortBy.value,
@@ -237,9 +232,7 @@ function List(props) {
       sentCount={counts.sent}
       scheduledCount={counts.scheduled}
       onCreateEmail={reloadList}
-      renderContent={props => (
-        <InsightContainer>{renderContent(props)}</InsightContainer>
-      )}
+      renderContent={props => renderContent(props)}
     />
   )
 }

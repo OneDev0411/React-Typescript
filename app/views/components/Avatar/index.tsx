@@ -16,7 +16,7 @@ const BaseAvatar = withStyles((theme: Theme) => ({
   root: (props: Props) => {
     return {
       ...getSize(theme, props.size),
-      backgroundColor: theme.palette.divider,
+      backgroundColor: theme.palette.grey['200'],
       color: theme.palette.text.primary,
       '& svg': {
         fill: theme.palette.grey['500'],

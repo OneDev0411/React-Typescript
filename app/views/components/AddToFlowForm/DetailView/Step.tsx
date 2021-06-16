@@ -5,7 +5,7 @@ import { Box, Typography, makeStyles } from '@material-ui/core'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
-import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Item/icons'
+import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Step/Components/StepTypeIcon/icons'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { StepContainer } from './styled'
 
@@ -39,12 +39,12 @@ export default function Step({ step }: Props) {
           {step.title}
         </Typography>
       </Box>
-      <div>
+      {/* <div>
         {step.wait_days === 0 && 'The same day'}
         {step.wait_days > 0 && `Wait for ${step.wait_days} `}
         {step.wait_days === 1 && 'day'}
         {step.wait_days > 1 && 'days'}
-      </div>
+      </div> */}
     </StepContainer>
   )
 }

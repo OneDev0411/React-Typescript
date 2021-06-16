@@ -4,7 +4,7 @@ import {
   TemplateBlock,
   TemplateBlocks,
   TemplateBlockBase,
-  TemplateBlockBaseOptions,
+  TemplateOptions,
   TemplateBlockOptions
 } from './types'
 
@@ -13,45 +13,72 @@ import { isComponent as isComponentEmail } from './Email/utils'
 
 import registerBlock from './registerBlock'
 
-async function getTemplateBlockBase(
-  templateBlock: TemplateBlockBase,
-  templateUrl: string
-) {
-  const response = await fetch(
-    `${templateUrl}/blocks/${templateBlock.category}/${templateBlock.name}.html`
-  )
+export async function getTemplateOptions(
+  template: IMarketingTemplate
+): Promise<Nullable<TemplateOptions>> {
+  try {
+    const response = await fetch(`${template.url}/blocks.json`)
 
-  if (response.status === 404) {
+    if (response.status >= 400) {
+      return null
+    }
+
+    return response.json()
+  } catch (e) {
     return null
   }
+}
 
-  const template = await response.text()
+async function getTemplateBlockBase(
+  templateBlock: TemplateBlockBase,
+  template: IMarketingTemplate
+): Promise<Nullable<string>> {
+  if (!templateBlock.category || !templateBlock.name) {
+    return Promise.resolve(null)
+  }
 
-  return template
+  try {
+    const response = await fetch(
+      `${template.url}/blocks/${templateBlock.category}/${templateBlock.name}.html`
+    )
+
+    if (response.status >= 400) {
+      return null
+    }
+
+    return response.text()
+  } catch (e) {
+    return null
+  }
 }
 
 export async function getTemplateBlockOptions(
-  templateUrl: string
+  template: IMarketingTemplate,
+  templateOptions: Nullable<TemplateOptions>
 ): Promise<TemplateBlockOptions> {
-  const response = await fetch(`${templateUrl}/blocks.json`)
+  if (!templateOptions) {
+    return { blocks: {} }
+  }
+
+  const templateUrl = template.url
 
   try {
-    const blockOptions = (await response.json()) as TemplateBlockBaseOptions
-
     const blocksWithTemplate = await Promise.all(
-      blockOptions.blocks.map(
+      templateOptions.blocks.map(
         async templateBlock =>
           ({
             ...templateBlock,
-            icon: `${templateUrl}/${templateBlock.icon}`,
+            icon: templateBlock.icon
+              ? `${templateUrl}/${templateBlock.icon}`
+              : '',
             template:
-              (await getTemplateBlockBase(templateBlock, templateUrl)) ?? ''
+              (await getTemplateBlockBase(templateBlock, template)) ?? ''
           } as TemplateBlock)
       )
     )
 
     return {
-      ...blockOptions,
+      ...templateOptions,
       blocks: blocksWithTemplate
         .filter(templateBlock => !!templateBlock.template)
         .reduce(
@@ -90,10 +117,10 @@ export function registerTemplateBlocks(
       registerBlock(editor, {
         blockName,
         icon: templateBlock.icon,
-        label: templateBlock.label,
-        category: templateBlock.category,
-        template: templateBlock.template,
-        adaptive: templateBlock.adaptive
+        label: templateBlock.label || '',
+        category: templateBlock.category || '',
+        template: templateBlock.template || '',
+        adaptive: !!templateBlock.adaptive
       })
 
       return {

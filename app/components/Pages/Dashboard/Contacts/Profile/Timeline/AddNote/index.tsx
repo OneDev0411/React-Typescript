@@ -51,6 +51,7 @@ function AddNote({
         variant="outlined"
         size="small"
         onClick={toggleDrawer}
+        data-tour-id="add-note-button"
       >
         Add Note
       </Button>

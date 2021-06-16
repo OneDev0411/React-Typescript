@@ -65,7 +65,7 @@ export function removeDirectDependents(editor: Editor, model: Model) {
   const modelId = model.getAttributes().id
 
   if (modelId) {
-    this.editor
+    editor
       .getWrapper()
       .find(`[data-depends="${modelId}"]`)
       .forEach(dependModel => {

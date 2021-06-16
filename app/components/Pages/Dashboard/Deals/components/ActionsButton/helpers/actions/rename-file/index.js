@@ -22,7 +22,7 @@ function handleRenameFile(props, filename) {
   if (filename.trim().length === 0) {
     return store.dispatch(
       notify({
-        title: 'Invalid file name',
+        message: 'Invalid file name',
         status: 'error'
       })
     )
@@ -41,7 +41,7 @@ function handleRenameFile(props, filename) {
   } catch (e) {
     store.dispatch(
       props.notify({
-        title: 'Could not rename the file',
+        message: 'Could not rename the file',
         status: 'error'
       })
     )

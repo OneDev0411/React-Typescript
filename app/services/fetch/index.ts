@@ -71,7 +71,7 @@ export default class Fetch {
       agent = SuperAgent[method](`${config.api_url}${endpoint}`)
     }
 
-    if (this.options.useReferencedFormat && !useProxy) {
+    if (this.options.useReferencedFormat) {
       agent.set('X-RECHAT-FORMAT', 'references')
     }
 

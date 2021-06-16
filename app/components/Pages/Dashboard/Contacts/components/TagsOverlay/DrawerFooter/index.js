@@ -35,6 +35,7 @@ const TagsOverlayFooter = ({
           color="secondary"
           variant="contained"
           data-test="save-tags-button"
+          data-tour-id="save-tags-button"
           className={classes.button}
           onClick={onSubmit}
         >

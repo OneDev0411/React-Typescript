@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   QuestionSection,
@@ -14,8 +14,13 @@ import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-c
 import { RadioGroup } from 'components/RadioGroup'
 
 import { getLegalFullName } from 'deals/utils/roles'
-import { createUpsertObject } from 'models/Deal/helpers/dynamic-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { upsertContexts } from 'actions/deals'
+
+import { IAppState } from 'reducers'
+import { getDealChecklists } from 'reducers/deals/checklists'
+
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 import { useCreationContext } from '../../context/use-creation-context'
 
@@ -29,11 +34,27 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
   const { step } = useSectionContext()
   const { deal } = useCreationContext()
 
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
+  )
+
   const dispatch = useDispatch()
 
   const handleChange = (value: IDealEnderType) => {
     if (deal) {
-      const data = createUpsertObject(deal, 'ender_type', value, false)
+      const data = createContextObject(
+        deal,
+        brandChecklists,
+        checklists,
+        'ender_type',
+        value,
+        false
+      )
 
       dispatch(upsertContexts(deal!.id, [data]))
     } else {

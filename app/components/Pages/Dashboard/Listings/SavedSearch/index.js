@@ -4,7 +4,10 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 import { Helmet } from 'react-helmet'
 import memoize from 'lodash/memoize'
+import { withStyles } from '@material-ui/core/styles'
 import hash from 'object-hash'
+
+import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
@@ -72,6 +75,16 @@ const defaultProps = {
     users: []
   }
 }
+
+const styles = () => ({
+  mlsContainer: {
+    display: 'flex',
+    minHeight: '100vh',
+    flexDirection: 'column',
+    paddingTop: 0,
+    paddingBottom: 0
+  }
+})
 
 class SavedSearch extends React.Component {
   constructor(props) {
@@ -225,32 +238,35 @@ class SavedSearch extends React.Component {
 
   render() {
     const { title } = this.props.savedSearch
+    const { classes } = this.props
 
     return (
       <>
         <Helmet>
           <title> {title && `${`${title} | `}`}Properties | Rechat</title>
         </Helmet>
-        <Header
-          title={title}
-          subtitle={this.props.savedSearch.proposed_title}
-          RightComponent={() => (
-            <Avatars
-              users={this.props.savedSearch.users}
-              style={{ marginRight: '2rem' }}
-              tooltipPlacement="bottom"
-            />
-          )}
-        />
-        <Tabs
-          user={this.props.user}
-          onChangeView={this.onChangeView}
-          onChangeSort={this.onChangeSort}
-          activeView={this.state.activeView}
-          isWidget={this.props.isWidget}
-          activeSort={this.state.activeSort}
-        />
-        {this.renderMain()}
+        <GlobalPageLayout className={classes.mlsContainer}>
+          <Header
+            title={title}
+            subtitle={this.props.savedSearch.proposed_title}
+            RightComponent={() => (
+              <Avatars
+                users={this.props.savedSearch.users}
+                style={{ marginRight: '2rem' }}
+                tooltipPlacement="bottom"
+              />
+            )}
+          />
+          <Tabs
+            user={this.props.user}
+            onChangeView={this.onChangeView}
+            onChangeSort={this.onChangeSort}
+            activeView={this.state.activeView}
+            isWidget={this.props.isWidget}
+            activeSort={this.state.activeSort}
+          />
+          {this.renderMain()}
+        </GlobalPageLayout>
       </>
     )
   }
@@ -264,4 +280,6 @@ const mapStateToProps = ({ alerts, user }, props) => ({
   user
 })
 
-export default withRouter(connect(mapStateToProps)(SavedSearch))
+export default withStyles(styles, { withTheme: true })(
+  withRouter(connect(mapStateToProps)(SavedSearch))
+)

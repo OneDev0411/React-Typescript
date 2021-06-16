@@ -93,13 +93,13 @@ const validate = values => {
   const errors = {}
   const { email, first_name, last_name } = values
 
-  const NAME_CHARACHTER_LIMIT = 1
+  const NAME_CHARACTER_LIMIT = 1
 
   const minimumCharactersError = length =>
     `Must be at least ${length} characters.`
 
   const invalidCharactersError =
-    'Invalid charachter. You are allowed use alphabet character and space in this field.'
+    'Invalid character. You only are allowed to use alphabet characters and spaces in this field.'
 
   const isValidName = name => name && name.trim().length > 0
 
@@ -112,14 +112,14 @@ const validate = values => {
 
   if (!isValidName(first_name)) {
     errors.first_name = invalidCharactersError
-  } else if (first_name && first_name.length < NAME_CHARACHTER_LIMIT) {
-    errors.first_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
+  } else if (first_name && first_name.length < NAME_CHARACTER_LIMIT) {
+    errors.first_name = minimumCharactersError(NAME_CHARACTER_LIMIT)
   }
 
   if (!isValidName(last_name)) {
     errors.last_name = invalidCharactersError
-  } else if (last_name && last_name.length < NAME_CHARACHTER_LIMIT) {
-    errors.last_name = minimumCharactersError(NAME_CHARACHTER_LIMIT)
+  } else if (last_name && last_name.length < NAME_CHARACTER_LIMIT) {
+    errors.last_name = minimumCharactersError(NAME_CHARACTER_LIMIT)
   }
 
   if (!isValidEmail(email)) {

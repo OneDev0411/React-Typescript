@@ -1,31 +1,19 @@
 import React from 'react'
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
+
+import { mdiPencil } from '@mdi/js'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   onClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      padding: 0,
-      minWidth: theme.spacing(5)
-    }
-  })
-)
-
-export function EditButton(props: Props) {
-  const { root: buttonClass } = useStyles()
-
+export function EditButton({ onClick }: Props) {
   return (
-    <Button
-      variant="text"
-      color="secondary"
-      className={buttonClass}
-      onClick={props.onClick}
-    >
-      Edit
-    </Button>
+    <IconButton size="small" onClick={onClick}>
+      <SvgIcon path={mdiPencil} size={muiIconSizes.small} />
+    </IconButton>
   )
 }

@@ -25,7 +25,9 @@ export function useInfinitePagination<T>({
   const [loadedItemsCount, setLoadedItemsCount] = useState<number>(pageSize)
 
   const loadNextPage = () =>
-    setLoadedItemsCount(loadedItemsCount => loadedItemsCount + pageSize)
+    setLoadedItemsCount(loadedItemsCount =>
+      Math.max(loadedItemsCount + pageSize, items.length)
+    )
 
   useEffect(() => {
     setLoadedItemsCount(pageSize)

@@ -32,7 +32,9 @@ export interface Props {
   /**
    * menu content.
    */
-  renderMenu: (renderProps: { close: () => void }) => ReactNode
+  renderMenu: (renderProps: {
+    close: (event?: React.MouseEvent) => void
+  }) => ReactNode
   buttonLabel?: ReactNode
   /**
    * props to be passed to DropdownToggleButton if no renderDropdownButton
@@ -47,6 +49,8 @@ export interface Props {
    * Props to pass to the underlaying {@link Popper} component
    */
   PopperProps?: Partial<Omit<PopperProps, 'open' | 'anchorEl'>>
+
+  disablePortal?: boolean
 }
 
 /**
@@ -60,7 +64,8 @@ export function BaseDropdown({
   buttonLabel,
   DropdownToggleButtonProps = {},
   renderDropdownButton,
-  PopperProps = {}
+  PopperProps = {},
+  disablePortal = false
 }: Props) {
   const anchorRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useControllableState(isOpen, onIsOpenChange, false)
@@ -77,7 +82,15 @@ export function BaseDropdown({
     'aria-haspopup': 'true'
   }
 
-  const menu = renderMenu({ close: () => setOpen(false) })
+  const handleClose = event => {
+    if (event && anchorRef.current?.contains(event.target)) {
+      return
+    }
+
+    setOpen(false)
+  }
+
+  const menu = renderMenu({ close: handleClose })
 
   return (
     // we use ClickAwayListener on the whole stuff to prevent issues
@@ -96,6 +109,7 @@ export function BaseDropdown({
         style={{ zIndex: theme.zIndex.modal }}
         transition
         placement="bottom-start"
+        disablePortal={disablePortal}
         {...PopperProps}
       >
         {({ TransitionProps, placement }) => (
@@ -107,18 +121,7 @@ export function BaseDropdown({
             }}
           >
             <Paper>
-              <ClickAwayListener
-                onClickAway={event => {
-                  if (
-                    anchorRef.current &&
-                    anchorRef.current.contains(event.target as HTMLElement)
-                  ) {
-                    return
-                  }
-
-                  return setOpen(false)
-                }}
-              >
+              <ClickAwayListener onClickAway={handleClose}>
                 {menu}
               </ClickAwayListener>
             </Paper>

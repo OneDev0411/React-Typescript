@@ -26,10 +26,6 @@ export function createGrapesInstance(
   Grapesjs: any,
   { assets, plugins, pluginsOpts, detectComponentByType }
 ): Editor {
-  // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
-  // @ts-ignore
-  CKEDITOR.dtd.$editable.span = 1
-
   return Grapesjs.init({
     ...config,
     keepUnusedStyles: true,

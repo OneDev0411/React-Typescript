@@ -57,7 +57,7 @@ const map = ({
   onClickRemovePolygon,
   fitBoundsByPoints
 }) => (
-  <div>
+  <>
     <Map
       options={mapOptions}
       onChange={onChange}
@@ -68,7 +68,7 @@ const map = ({
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
-      style={{ height: 'calc(100vh - 9em - 1px)' }}
+      style={{ height: '100%', width: '100%' }}
     >
       {clusters.map(({ points, lat, lng }, index) => {
         if (points.length === 1) {
@@ -109,7 +109,7 @@ const map = ({
     <ZoomController tabName="search" isTopOfLocation />
     <LocationButton />
     {!isWidget && <NotLoggedInMessage isLoggedIn={user ? true : ''} />}
-  </div>
+  </>
 )
 
 const mapHOC = compose(

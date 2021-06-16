@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { MenuItem } from '@material-ui/core'
@@ -6,6 +6,7 @@ import _ from 'underscore'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
+import { getActiveBrand } from 'utils/user-teams'
 import { getActiveSort } from 'deals/List/helpers/sorting'
 
 import { SortableColumn } from 'components/Grid/Table/types'
@@ -13,6 +14,8 @@ import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 
 import { selectUser } from 'selectors/user'
+
+import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 
 import {
   SORTABLE_COLUMNS,
@@ -65,19 +68,23 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
       ? `All ${props.params.filter} deals`
       : 'All Deals'
 
+  const activeBrand = getActiveBrand(user)
+
   return (
     <PageTabs
       value={props.location.query.type === 'query' ? 'all-deals' : null}
       defaultValue={props.params.filter}
       tabs={[
-        ...inboxTabs.map((name, index) => (
-          <TabLink
-            key={index}
-            value={name}
-            label={<span>{name}</span>}
-            to={`/dashboard/deals/filter/${name}?type=inbox`}
-          />
-        )),
+        ...inboxTabs
+          .filter(name => !!name)
+          .map((name, index) => (
+            <TabLink
+              key={index}
+              value={name}
+              label={<span>{name}</span>}
+              to={`/dashboard/deals/filter/${name}?type=inbox`}
+            />
+          )),
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"
@@ -123,8 +130,9 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         />
       ]}
       actions={[
+        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
         <Tab
-          key={0}
+          key={1}
           label={
             <DropdownTab
               title={getGridSortLabel(

@@ -76,7 +76,7 @@ export function getTaskActions({
   actions.push(UPLOAD)
 
   actions.push(SHOW_COMMENTS)
-  !isBackOffice && actions.push(TASK_NOTIFICATION)
+  actions.push(TASK_NOTIFICATION)
   isBackOffice && actions.push(APPROVE_TASK)
   isBackOffice && actions.push(DECLINE_TASK)
   isBackOffice && actions.push(REQUIRE_TASK)

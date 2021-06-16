@@ -12,11 +12,12 @@ export const Card = styled.div`
 
 export const Header = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
   background-color: ${grey.A125};
   padding: 0.5rem 1rem;
   border-radius: 3px 3px 0 0;
-  border-bottom: solid 1px ${grey.A300};
+  border: solid 1px ${grey.A300};
 `
 
 export const Title = styled.div`
@@ -41,20 +42,26 @@ export const AgentTitle = styled(LinkButton)`
   color: #262626;
 `
 
-export const RowItem = styled.div`
+export const RowItem = styled.div<{
+  isLastRow?: boolean
+}>`
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
   transition: 0.1s ease-in background-color;
-
-  :not(:last-child) {
-    border-bottom: 1px solid ${grey.A300};
-  }
+  border: 1px solid ${grey.A300};
+  border-top: none;
 
   :hover {
     cursor: pointer;
     background-color: ${grey.A125};
   }
+
+  ${props =>
+    props.isLastRow &&
+    `
+    border-radius: 0 0 3px 3px;
+  `}
 
   :hover ${AgentTitle} {
     color: ${primary};

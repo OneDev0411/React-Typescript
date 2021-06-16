@@ -30,17 +30,10 @@ export async function attachCKEditor(
   editor: Editor,
   fontFamilies: string[],
   colors: string[] = [],
-  opts: any = {}
+  opts: any = {},
+  getOpts: (currentOptions: any) => any = () => ({})
 ) {
-  // @ts-ignore
-  await editor.Canvas.getDocument().fonts.ready
-
-  const templateFonts: string[] = Array.from(
-    // @ts-ignore
-    editor.Canvas.getDocument().fonts
-  ).map(({ family }) => family)
-
-  const fontNames = [...new Set([...templateFonts, ...fontFamilies])]
+  const fontNames = [...new Set([...fontFamilies])]
 
   let c = opts
 
@@ -99,10 +92,16 @@ export async function attachCKEditor(
     throw new Error('CKEDITOR instance not found')
   }
 
+  // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.span = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.a = 1
+
   editor.setCustomRte({
     enable(el, rte) {
       // If already exists I'll just focus on it
-      if (rte && rte.status != 'destroyed') {
+      if (rte && rte.status !== 'destroyed') {
         this.focus(el, rte)
 
         return rte
@@ -120,6 +119,7 @@ export async function attachCKEditor(
 
       // Check for the mandatory options
       let opt = c.options
+
       let plgName = 'sharedspace'
 
       if (opt.extraPlugins) {
@@ -136,11 +136,14 @@ export async function attachCKEditor(
         c.options.sharedSpaces = { top: rteToolbar }
       }
 
-      // Init CkEditors
-      // @ts-ignore
-      rte = CKEDITOR.inline(el, c.options)
+      // Get dynamic options
+      const dynamicOptions = getOpts(c.options)
 
-      // Make click event propogate
+      // Init CKEditor
+      // @ts-ignore
+      rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
+
+      // Make click event propagate
       rte.on('contentDom', () => {
         let editable = rte.editable()
 
@@ -149,7 +152,7 @@ export async function attachCKEditor(
         })
       })
 
-      // The toolbar is not immediatly loaded so will be wrong positioned.
+      // The toolbar is not immediately loaded so will be wrong positioned.
       // With this trick we trigger an event which updates the toolbar position
       rte.on('instanceReady', e => {
         rte.ui.space('top')?.setStyle('width', '405px')

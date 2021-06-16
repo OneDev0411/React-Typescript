@@ -76,4 +76,6 @@ export interface IAppState extends IAppReducer {
   showings: IShowingsState
 }
 
-export default (state, action) => appReducer(state, action)
+export default (state, action) => {
+  return appReducer(state, action)
+}

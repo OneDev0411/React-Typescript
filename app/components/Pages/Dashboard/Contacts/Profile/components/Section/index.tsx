@@ -39,7 +39,12 @@ export const Section: FunctionComponent<Props> = ({
   const classes = useStyles()
 
   return (
-    <Box className={classes.container} pb={2} pt={setting || onEdit ? 1 : 2}>
+    <Box
+      className={classes.container}
+      pb={2}
+      pt={setting || onEdit ? 1 : 2}
+      data-tour-id={`contact-${title?.toLowerCase().replace(' ', '-')}`}
+    >
       <Box
         px={3}
         mb={1}

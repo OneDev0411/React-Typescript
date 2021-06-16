@@ -13,7 +13,7 @@ const PhoneNumberField = ({ type, input, label, meta: { dirty, error } }) => {
         {...input}
         type={type}
         id={input.name}
-        mask="(999)-999-9999"
+        mask="(999) 999-9999"
         className={`c-simple-field__input ${hasError ? 'has-error' : ''}`}
       />
       {hasError && <div className="c-auth__field__error-alert">{error}</div>}

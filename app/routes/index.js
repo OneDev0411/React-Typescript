@@ -214,7 +214,7 @@ const AsyncDashboardOverview = withAcl(
         '../components/Pages/Dashboard/Overview' /* webpackChunkName: "overview" */
       )
   }),
-  user => user.email === 'shayan@rechat.com'
+  { oneOf: [ACL.DEALS, ACL.CRM] }
 )
 
 /* ==================================== */
@@ -317,6 +317,13 @@ const AsyncDealsList = Load({
   loader: () =>
     import(
       '../components/Pages/Dashboard/Deals/List' /* webpackChunkName: "deal_l" */
+    )
+})
+
+const AsyncDealsAnalytics = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Deals/Analytics' /* webpackChunkName: "deal_a" */
     )
 })
 
@@ -890,8 +897,8 @@ export default (
 
         <Route path="calendar(/:id)" component={AsyncCalendar} />
 
-        <Route component={AsyncContacts} path="contacts" />
-        <Route component={AsyncDuplicateContacts} path="contacts/duplicates" />
+        <Route path="contacts" component={AsyncContacts} />
+        <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
         <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
 
@@ -903,6 +910,8 @@ export default (
           path="marketing/:types(/:medium)"
           component={AsyncMarketingTemplates}
         />
+        <Route path="flows" component={AsyncFlowsList} />
+        <Route path="flows/:id" component={AsyncFlowEdit} />
 
         <Route path="agent-network" component={AsyncAgentNetwork} />
         <Route
@@ -920,10 +929,14 @@ export default (
         <Route path="open-house" component={AsyncOpenHousesList} />
 
         <Route
-          path="/dashboard/deals(/filter/:filter)"
+          path="/dashboard/deals(/filter/:filter)(/analytics)"
           component={AsyncDealsLayout}
         >
           <IndexRoute component={AsyncDealsList} />
+          <Route
+            path="/dashboard/deals/analytics/:dashboard"
+            component={AsyncDealsAnalytics}
+          />
           <Route
             path="/dashboard/deals/create(/:id)"
             component={AsyncDealCreate}
@@ -984,9 +997,6 @@ export default (
             component={ConnectedAccountsSetting}
           />
           {/* <Route path="css" component={AsyncCSS} /> */}
-
-          <Route path="flows" component={AsyncFlowsList} />
-          <Route path="flows/:id" component={AsyncFlowEdit} />
         </Route>
 
         <Route path="teams(/:id)">

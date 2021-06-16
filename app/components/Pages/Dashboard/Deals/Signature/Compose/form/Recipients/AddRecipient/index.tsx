@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Button, Theme } from '@material-ui/core'
+import { Box, Button, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
@@ -50,6 +48,7 @@ export function AddNewRecipient({
             showTitle={false}
             deal={deal}
             allowDeleteRole={false}
+            allowEditRole={false}
             filter={role => !selectedRoles[role.id]}
             onSelect={handleAddNewRecipient}
             onUpsertRole={handleAddNewRecipient}
@@ -60,10 +59,16 @@ export function AddNewRecipient({
               overflow: 'auto'
             }}
             addRoleActionRenderer={props => (
-              <Button {...props} color="secondary" variant="outlined">
-                <SvgIcon path={mdiPlusCircleOutline} rightMargined />
-                Add New Contact
-              </Button>
+              <Box mt={1}>
+                <Button
+                  {...props}
+                  color="secondary"
+                  variant="outlined"
+                  startIcon={<SvgIcon path={mdiPlusCircleOutline} />}
+                >
+                  Add New Contact
+                </Button>
+              </Box>
             )}
           />
         )

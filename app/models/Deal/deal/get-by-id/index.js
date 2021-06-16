@@ -13,6 +13,7 @@ export async function getById(id) {
       .query({ 'associations[]': ['room.latest_activity'] })
       .query({ 'associations[]': ['deal.files'] })
       .query({ 'associations[]': ['deal.brand'] })
+      .query({ 'associations[]': ['deal.property_type'] })
       .query({ 'associations[]': ['user.agent'] })
       .query({ 'associations[]': ['user.docusign'] })
       .query({ 'associations[]': ['deal_role.agent'] })
