@@ -1,17 +1,17 @@
 import { Box, Grid } from '@material-ui/core'
 
 import Dialog, { DialogProps } from '../Dialog'
-import ShowingDialogCard from './ShowingDialogCard'
+import ShowingDialogCard from '../ShowingBookingList/ShowingDialogCard'
 
-export interface ShowingBookingListFeedbackDialogProps
+export interface ShowingViewFeedbackDialogProps
   extends Omit<DialogProps, 'title' | 'children'>,
     Pick<IShowingAppointment, 'contact' | 'feedback'> {}
 
-function ShowingBookingListFeedbackDialog({
+function ShowingViewFeedbackDialog({
   contact,
   feedback,
   ...otherProps
-}: ShowingBookingListFeedbackDialogProps) {
+}: ShowingViewFeedbackDialogProps) {
   return (
     <Dialog
       {...otherProps}
@@ -60,4 +60,4 @@ function ShowingBookingListFeedbackDialog({
   )
 }
 
-export default ShowingBookingListFeedbackDialog
+export default ShowingViewFeedbackDialog

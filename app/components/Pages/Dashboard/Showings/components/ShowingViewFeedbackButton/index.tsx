@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import { Button, ButtonProps } from '@material-ui/core'
 
-import ShowingBookingListFeedbackDialog, {
-  ShowingBookingListFeedbackDialogProps
-} from './ShowingBookingListFeedbackDialog'
+import ShowingViewFeedbackDialog, {
+  ShowingViewFeedbackDialogProps
+} from './ShowingViewFeedbackDialog'
 
-export interface ShowingBookingListViewFeedbackButtonProps
+export interface ShowingViewFeedbackButtonProps
   extends Omit<ButtonProps, 'onClick' | 'children'>,
-    Pick<ShowingBookingListFeedbackDialogProps, 'contact' | 'feedback'> {
+    Pick<ShowingViewFeedbackDialogProps, 'contact' | 'feedback'> {
   appointmentTitle?: string
 }
 
-function ShowingBookingListViewFeedbackButton({
+function ShowingViewFeedbackButton({
   contact,
   feedback,
   appointmentTitle,
   ...otherProps
-}: ShowingBookingListViewFeedbackButtonProps) {
+}: ShowingViewFeedbackButtonProps) {
   const [open, setOpen] = useState(false)
 
   const openDialog = () => setOpen(true)
@@ -33,7 +33,7 @@ function ShowingBookingListViewFeedbackButton({
       >
         View Feedback
       </Button>
-      <ShowingBookingListFeedbackDialog
+      <ShowingViewFeedbackDialog
         contact={contact}
         feedback={feedback}
         open={open}
@@ -44,4 +44,4 @@ function ShowingBookingListViewFeedbackButton({
   )
 }
 
-export default ShowingBookingListViewFeedbackButton
+export default ShowingViewFeedbackButton
