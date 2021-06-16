@@ -177,7 +177,7 @@ export function getAppointmentTimeLabel(
   const startTime = new Date(appointmentTime)
   const endTime = new Date(startTime.getTime() + duration * 1000)
 
-  return `${format(startTime, timeFormat)} - ${format(
+  return `${format(startTime, timeFormat)} — ${format(
     endTime,
     `${timeFormat}a`
   )}`

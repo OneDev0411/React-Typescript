@@ -16,9 +16,9 @@ import { ApprovalActionParams, DismissActionParams } from '../../types'
 import ShowingBookingListRejectMessage, {
   ShowingBookingListRejectMessageProps
 } from './ShowingBookingListRejectMessage'
-import ShowingBookingListViewFeedbackButton, {
-  ShowingBookingListViewFeedbackButtonProps
-} from './ShowingBookingListViewFeedbackButton'
+import ShowingViewFeedbackButton, {
+  ShowingViewFeedbackButtonProps
+} from '../ShowingViewFeedbackButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles(
 export interface ShowingBookingListColumnActionsProps
   extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'>,
     Pick<ShowingBookingListRejectMessageProps, 'buyerName' | 'buyerMessage'>,
-    ShowingBookingListViewFeedbackButtonProps {
+    ShowingViewFeedbackButtonProps {
   className?: string
   appointmentId: UUID
   status: IShowingAppointmentStatus
@@ -177,7 +177,7 @@ function ShowingBookingListColumnActions({
         />
       )}
       {feedback && (
-        <ShowingBookingListViewFeedbackButton
+        <ShowingViewFeedbackButton
           {...sharedButtonProps}
           contact={contact}
           feedback={feedback}

@@ -14,10 +14,12 @@ import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitors
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
 import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
+import ShowingDetailTabVisitorsColumnLastVisit from './ShowingDetailTabVisitorsColumnLastVisit'
 
 const useStyles = makeStyles(
   theme => ({
     row: {
+      paddingRight: theme.spacing(1),
       '&:hover $hide': { opacity: 1 }
     },
     hide: {
@@ -72,23 +74,36 @@ function ShowingDetailTabVisitors({
       )
     },
     {
-      header: 'Action',
-      id: 'action',
-      width: '20%',
+      id: 'contact-action',
+      width: '15%',
       sortable: false,
       render: ({ row }) => (
         <ShowingColumnContactActions contact={row} className={classes.hide} />
       )
     },
     {
-      header: 'Total Visits',
       id: 'total-visits',
-      width: '50%',
+      width: '15%',
       sortable: false,
       render: ({ row }) => (
         <ShowingDetailTabVisitorsColumnTotalVisit
           duration={showing.duration}
           appointments={appointmentsByVisitorId[row.id]}
+        />
+      )
+    },
+    {
+      id: 'actions',
+      // width: 'auto',
+      sortable: false,
+      // align: 'right',
+      render: ({ row }) => (
+        <ShowingDetailTabVisitorsColumnLastVisit
+          duration={showing.duration}
+          appointment={
+            appointmentsByVisitorId[row.id] &&
+            appointmentsByVisitorId[row.id][0]
+          }
         />
       )
     }
