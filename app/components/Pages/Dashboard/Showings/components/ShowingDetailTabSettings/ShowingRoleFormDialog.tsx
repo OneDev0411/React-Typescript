@@ -7,6 +7,8 @@ import {
 } from 'components/final-form-fields'
 
 import FormDialog, { FormDialogProps } from '../FormDialog'
+// TODO: put the below validator in a better place
+import { requiredTextValidator } from '../ShowingStepRolePerson/helpers'
 import {
   selectAgentMutator,
   selectContactMutator,
@@ -41,6 +43,7 @@ function ShowingRoleFormDialog({
       confirmLabel="Save"
       initialValues={initialValues}
       mutators={mutators}
+      noValidate
     >
       {({ form }) => (
         <>
@@ -54,6 +57,8 @@ function ShowingRoleFormDialog({
               selectAgentMutator={form.mutators.selectAgent}
               selectContactMutator={form.mutators.selectContact}
               searchFieldValue="first_name"
+              validate={requiredTextValidator}
+              required
             />
             <Box flexBasis="16px" flexShrink="0" />
             <ShowingRoleFormDialogNameField
@@ -64,14 +69,23 @@ function ShowingRoleFormDialog({
               selectAgentMutator={form.mutators.selectAgent}
               selectContactMutator={form.mutators.selectContact}
               searchFieldValue="last_name"
+              validate={requiredTextValidator}
+              required
             />
           </Box>
-          <FormTextField name="email" required label="Email" type="email" />
+          <FormTextField
+            name="email"
+            required
+            label="Email"
+            type="email"
+            validate={requiredTextValidator}
+          />
           <FormPhoneField
             name="phone_number"
             required
             label="Phone"
             format={false}
+            validate={requiredTextValidator}
           />
           {hasNotificationTypeFields && (
             <>

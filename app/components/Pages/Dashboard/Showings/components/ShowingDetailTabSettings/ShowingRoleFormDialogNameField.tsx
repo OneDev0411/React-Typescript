@@ -1,4 +1,6 @@
-import { Field } from 'react-final-form'
+import { Field, FieldProps } from 'react-final-form'
+
+import { ReactNode } from 'react'
 
 import AgentAutocompleteField, {
   AgentAutocompleteFieldProps
@@ -9,7 +11,8 @@ import ActiveTeamAvailableMemberAutocompleteField, {
   ActiveTeamAvailableMemberAutocompleteFieldProps
 } from '../ActiveTeamAvailableMemberAutocompleteField'
 
-interface ShowingRoleFormDialogNameFieldProps {
+interface ShowingRoleFormDialogNameFieldProps
+  extends Pick<FieldProps<string, any>, 'validate'> {
   name: string
   label: string
   roleValue: Optional<IShowingRoleType>
@@ -18,49 +21,68 @@ interface ShowingRoleFormDialogNameFieldProps {
   selectContactMutator: (...args: any) => any
   searchFieldValue: AgentAutocompleteFieldProps['searchFieldValue'] &
     ActiveTeamAvailableMemberAutocompleteFieldProps['searchFieldValue']
+  required?: boolean
+  helperText?: ReactNode
 }
 function ShowingRoleFormDialogNameField({
   roleValue,
   selectUserMutator,
   selectContactMutator,
-  name,
   selectAgentMutator,
   searchFieldValue,
-  label
+  label,
+  required = false,
+  helperText,
+  ...otherProps
 }: ShowingRoleFormDialogNameFieldProps) {
   return (
     <Field
-      name={name}
-      render={({ input }) =>
-        roleValue === 'Tenant' ? (
+      {...otherProps}
+      required={required}
+      render={({ input: { value, onChange }, meta }) => {
+        const hasError: boolean =
+          ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) &&
+          meta.touched
+
+        const errorOrHelperText = hasError
+          ? meta.error || meta.submitError
+          : helperText
+
+        return roleValue === 'Tenant' ? (
           <ContactAutocompleteField
             label={label}
-            required
             searchFieldValue="display_name"
-            inputValue={input.value}
-            onInputChange={input.onChange}
+            inputValue={value}
+            onInputChange={onChange}
             onChange={selectContactMutator}
+            required={required}
+            error={hasError}
+            helperText={errorOrHelperText}
           />
         ) : roleValue === 'SellerAgent' ? (
           <ActiveTeamAvailableMemberAutocompleteField
             label={label}
-            required
             searchFieldValue={searchFieldValue}
-            inputValue={input.value}
-            onInputChange={input.onChange}
+            inputValue={value}
+            onInputChange={onChange}
             onChange={selectUserMutator}
+            required={required}
+            error={hasError}
+            helperText={errorOrHelperText}
           />
         ) : (
           <AgentAutocompleteField
             label={label}
-            required
             searchFieldValue={searchFieldValue}
-            inputValue={input.value}
-            onInputChange={input.onChange}
+            inputValue={value}
+            onInputChange={onChange}
             onChange={selectAgentMutator}
+            required={required}
+            error={hasError}
+            helperText={errorOrHelperText}
           />
         )
-      }
+      }}
     />
   )
 }

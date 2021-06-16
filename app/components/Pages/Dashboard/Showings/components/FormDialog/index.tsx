@@ -25,6 +25,7 @@ export interface FormDialogProps<FormValues>
   confirmLabel?: string
   onConfirm: (values: FormValues) => void
   cancelLabel?: string
+  noValidate?: boolean
 }
 
 function FormDialog<FormValues>({
@@ -36,6 +37,7 @@ function FormDialog<FormValues>({
   children,
   initialValues,
   mutators,
+  noValidate,
   ...otherProps
 }: FormDialogProps<FormValues>) {
   const classes = useStyles()
@@ -60,7 +62,7 @@ function FormDialog<FormValues>({
         mutators={mutators}
       >
         {formProps => (
-          <form onSubmit={formProps.handleSubmit}>
+          <form onSubmit={formProps.handleSubmit} noValidate={noValidate}>
             <span />
             <DialogContent>
               {typeof children === 'function' ? children(formProps) : children}
