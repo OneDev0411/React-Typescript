@@ -18,7 +18,7 @@ export default function IndividualModeRecipientLabel() {
 
   return (
     <span style={{ whiteSpace: 'nowrap' }}>
-      Recipients
+      Bcc
       <Tooltip title="Emails will be sent individually">
         <SvgIcon
           path={mdiLockOutline}

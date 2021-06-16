@@ -11,6 +11,8 @@ import LoadingComponent from '../../../../../../views/components/Spinner'
 
 import ZeroState from '../ZeroState'
 
+import { ShareListings } from '../ShareListings'
+
 const PAGE_SIZE = 12
 
 function GridView({ isFetching, sortedListings }) {
@@ -51,11 +53,14 @@ function GridView({ isFetching, sortedListings }) {
   }
 
   return (
-    <Box>
-      <Grid container spacing={2}>
-        {renderContent()}
-      </Grid>
-    </Box>
+    <>
+      <Box>
+        <Grid container spacing={2}>
+          {renderContent()}
+        </Grid>
+      </Box>
+      <ShareListings />
+    </>
   )
 }
 
