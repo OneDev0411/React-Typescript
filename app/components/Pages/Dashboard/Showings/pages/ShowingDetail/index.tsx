@@ -77,7 +77,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
               <ShowingDetailTabVisitors
-                showingId={showingId}
+                showing={showing}
                 appointments={showing.appointments ?? defaultAppointments}
               />
             </TabContentSwitch.Item>

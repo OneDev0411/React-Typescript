@@ -16,13 +16,14 @@ import ShowingBookingListColumnActions, {
 import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
 import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
 import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
-import { getShowingImage } from '../../helpers'
-import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
 import {
+  getShowingImage,
   getAppointmentDateLabel,
   getAppointmentTimeLabel,
   getAppointmentTitle
-} from './helpers'
+} from '../../helpers'
+import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
+
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
 import ShowingEmptyState from '../ShowingEmptyState'

@@ -12,7 +12,7 @@ import { goTo } from 'utils/go-to'
 import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColumnPerson'
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
-import useShowingCountVisitorCount from './use-showing-count-visitor-count'
+import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
 import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
@@ -29,18 +29,20 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabVisitorsProps {
-  showingId: UUID
+  showing: IShowing
   appointments: IShowingAppointment[]
 }
 
 function ShowingDetailTabVisitors({
-  showingId,
+  showing,
   appointments
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
   const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
 
-  const visitorCount = useShowingCountVisitorCount(appointments)
+  const appointmentsByVisitorId = useShowingGroupAppointmentByVisitorId(
+    appointments
+  )
 
   useEffect(() => {
     run(
@@ -53,11 +55,11 @@ function ShowingDetailTabVisitors({
             undefined,
             undefined,
             undefined,
-            [showingId]
+            [showing.id]
           )
         ).data
     )
-  }, [run, showingId])
+  }, [run, showing.id])
 
   const columns: TableColumn<IContact>[] = [
     {
@@ -85,7 +87,8 @@ function ShowingDetailTabVisitors({
       sortable: false,
       render: ({ row }) => (
         <ShowingDetailTabVisitorsColumnTotalVisit
-          count={visitorCount[row.id] ?? 0}
+          duration={showing.duration}
+          appointments={appointmentsByVisitorId[row.id]}
         />
       )
     }

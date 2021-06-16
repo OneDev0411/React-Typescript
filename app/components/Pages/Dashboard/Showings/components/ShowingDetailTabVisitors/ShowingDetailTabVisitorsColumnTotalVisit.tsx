@@ -1,22 +1,55 @@
-import { Box, Typography } from '@material-ui/core'
+import { useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce/lib'
+import { Typography } from '@material-ui/core'
 
-interface ShowingDetailTabVisitorsColumnTotalVisitProps {
-  count: number
+import ShowingDetailTabVisitorsAppointmentHistory, {
+  ShowingDetailTabVisitorsAppointmentHistoryProps
+} from './ShowingDetailTabVisitorsAppointmentHistory'
+
+interface ShowingDetailTabVisitorsColumnTotalVisitProps
+  extends Pick<ShowingDetailTabVisitorsAppointmentHistoryProps, 'duration'> {
+  appointments: Optional<IShowingAppointment[]>
 }
 
 function ShowingDetailTabVisitorsColumnTotalVisit({
-  count
+  duration,
+  appointments
 }: ShowingDetailTabVisitorsColumnTotalVisitProps) {
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+
+  let [handleMouseEnter, cancel] = useDebouncedCallback(
+    (currentTarget: HTMLDivElement) =>
+      setAnchorEl(anchorEl ? null : currentTarget),
+    500
+  )
+
+  const handleMouseLeave = () => {
+    setAnchorEl(null)
+    cancel()
+  }
+
+  const count = appointments?.length ?? 0
+
   return (
-    <Box color="grey.500">
-      <Typography variant="body2" component="span">
-        Total visit:
-      </Typography>
-      <Box color="common.black" component="span">
-        {' '}
-        {count}
-      </Box>
-    </Box>
+    <Typography
+      variant="body2"
+      component="span"
+      onMouseEnter={event => handleMouseEnter(event.currentTarget)}
+      onMouseLeave={handleMouseLeave}
+      color={anchorEl ? 'secondary' : 'inherit'}
+    >
+      {count} Visit{count !== 1 ? 's' : ''} in Total
+      {appointments && (
+        <ShowingDetailTabVisitorsAppointmentHistory
+          open={!!anchorEl}
+          anchorEl={anchorEl}
+          transition
+          placement="bottom"
+          duration={duration}
+          appointments={appointments}
+        />
+      )}
+    </Typography>
   )
 }
 
