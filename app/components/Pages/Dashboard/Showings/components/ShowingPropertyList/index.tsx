@@ -7,7 +7,6 @@ import LoadingContainer from 'components/LoadingContainer'
 import { goTo } from 'utils/go-to'
 
 import ShowingColumnProperty from '../ShowingColumnProperty'
-import ShowingRedChip from './ShowingRedChip'
 import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
 import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
@@ -48,21 +47,14 @@ function ShowingPropertyList({
   const columns: TableColumn<IShowing>[] = [
     {
       id: 'property',
-      width: '50%',
+      width: '40%',
       primary: true,
       render: ({ row }) => (
         <ShowingColumnProperty
           image={getShowingImage({ listing: row.listing, deal: row.deal })}
           address={row.title}
+          badge={showingNotificationCount[row.id]}
         />
-      )
-    },
-    {
-      id: 'new',
-      width: '10%',
-      sortable: false,
-      render: ({ row }) => (
-        <ShowingRedChip count={showingNotificationCount[row.id]} />
       )
     },
     {
