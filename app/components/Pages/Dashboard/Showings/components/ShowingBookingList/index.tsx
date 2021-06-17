@@ -160,7 +160,7 @@ function ShowingBookingList({
       render: ({ row }) => (
         <ShowingColumnContactActions
           contact={row.contact}
-          className={!row.notifications?.length ? classes.hide : undefined}
+          className={classes.hide}
           spacing={2}
           compact
         />
