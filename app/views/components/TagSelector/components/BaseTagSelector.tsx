@@ -117,6 +117,10 @@ export const BaseTagSelector = ({
           }
 
           if (normalizedLastValue) {
+            if (hasNewTag && normalizedLastValue.value) {
+              setTagKeys([...tagKeys, normalizedLastValue.value])
+            }
+
             newValue = [
               ...newValue.splice(0, newValue.length - 1),
               normalizedLastValue
