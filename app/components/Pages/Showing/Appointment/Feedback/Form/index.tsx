@@ -1,11 +1,8 @@
 import { Grid, Box, useTheme, useMediaQuery } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
-import { isToday } from 'date-fns'
 
 import { ScrollableArea } from 'views/components/ScrollableArea'
 import { QuestionWizard } from 'components/QuestionWizard'
-
-import { getWeekdayName } from 'utils/date-utils'
 
 import { getFormattedAppointmentDateTime } from '../../utils'
 import { FormFields } from './types'
@@ -40,8 +37,6 @@ export default function ShowingAppointmentFeedbackForm({
     mode: 'onChange'
   })
 
-  const appointmentTime = new Date(appointment.time)
-
   return (
     <Grid item xs={12}>
       <Box mt={3} position="relative" height="80vh">
@@ -59,10 +54,7 @@ export default function ShowingAppointmentFeedbackForm({
                 <>
                   We'd love to have your feedback from your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
-                    {isToday(appointmentTime)
-                      ? "today's"
-                      : getWeekdayName(appointmentTime)}
-                    , {getFormattedAppointmentDateTime(appointment)}
+                    {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
                   visit. Hope everything went as planned.
                 </>

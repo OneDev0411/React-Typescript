@@ -18,7 +18,6 @@ import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
 
 import { cancelAppointmentRequest } from 'models/showings/cancel-appointment-request'
-import { getWeekdayName } from 'utils/date-utils'
 
 import InfoSection from '../../Sections/InfoSection'
 import DetailsSection from '../../Sections/DetailsSection'
@@ -61,9 +60,8 @@ export default function ShowingAppointmentCancel({
     mode: 'onChange'
   })
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   const handleSubmitCancelForm = async ({ message }: FormFields) => {
     const normalizedMessage = message.trim() || undefined
@@ -98,8 +96,6 @@ export default function ShowingAppointmentCancel({
     return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />
   }
 
-  const appointmentTime = new Date(appointment.time)
-
   return (
     <Container className={classes.pageContainer}>
       <Grid container direction="row" className={classes.container}>
@@ -111,7 +107,6 @@ export default function ShowingAppointmentCancel({
                 <Typography variant="h6">
                   You’re going to cancel{' '}
                   <span style={{ color: theme.palette.primary.main }}>
-                    {getWeekdayName(appointmentTime)},{' '}
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
                   appointment.

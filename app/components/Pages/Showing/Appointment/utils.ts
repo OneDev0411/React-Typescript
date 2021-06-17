@@ -1,18 +1,16 @@
-import { addSeconds } from 'date-fns'
+import { addSeconds, isToday } from 'date-fns'
 import fecha from 'fecha'
 
 import { convertShowingTimeToLocalTime } from '../Book/Sections/BookSection/utils'
 
-const APPOINTMENT_STATUS_LABEL_MAP: Record<
-  IShowingAppointmentStatus,
-  string
-> = {
-  Requested: 'Requested',
-  Confirmed: 'Confirmed',
-  Rescheduled: 'Rescheduled',
-  Canceled: 'Canceled',
-  Completed: 'Completed'
-}
+const APPOINTMENT_STATUS_LABEL_MAP: Record<IShowingAppointmentStatus, string> =
+  {
+    Requested: 'Requested',
+    Confirmed: 'Confirmed',
+    Rescheduled: 'Rescheduled',
+    Canceled: 'Canceled',
+    Completed: 'Completed'
+  }
 
 export function getAppointmentStatusLabel(
   appointment: IShowingAppointment | IPublicShowingAppointment
@@ -39,9 +37,13 @@ export function getFormattedAppointmentDateTime(
       ? ''
       : `(${appointment.showing.timezone})`
 
-  return `${fecha.format(
+  const isShowingToday = isToday(start)
+
+  const startTimeFormat: string = isShowingToday ? 'h:mm' : 'MMMM D, h:mm'
+
+  return `${isShowingToday ? 'Today,' : ''} ${fecha.format(
     convertShowingTimeToLocalTime(appointment.showing, start),
-    'MMMM D, h:mm'
+    startTimeFormat
   )} - ${fecha.format(
     convertShowingTimeToLocalTime(appointment.showing, end),
     'h:mm A'

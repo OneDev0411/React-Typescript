@@ -14,7 +14,6 @@ import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
 
-import { getWeekdayName } from 'utils/date-utils'
 import { setTime } from 'utils/set-time'
 
 import { getFormattedAppointmentDateTime } from '../utils'
@@ -59,24 +58,16 @@ export default function ShowingAppointmentRescheduleForm({
     mode: 'onChange'
   })
 
-  const {
-    startDate,
-    endDate,
-    defaultSelectedDate,
-    unavailableDates
-  } = getBookableDateRange(appointment.showing)
+  const { startDate, endDate, defaultSelectedDate, unavailableDates } =
+    getBookableDateRange(appointment.showing)
   const selectedDate = useWatch({
     name: 'date',
     control,
     defaultValue: defaultSelectedDate
   })
 
-  const {
-    startTime,
-    endTime,
-    defaultSelectedTimeRange,
-    unavailableTimes
-  } = useBookTimeRange(appointment.showing, selectedDate)
+  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+    useBookTimeRange(appointment.showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
     control,
@@ -102,8 +93,6 @@ export default function ShowingAppointmentRescheduleForm({
       ? ''
       : `(${appointment.showing.timezone})`
 
-  const appointmentTime = new Date(appointment.time)
-
   return (
     <form onSubmit={handleSubmit(handleSubmitRescheduleForm)}>
       <Grid item xs={12}>
@@ -111,7 +100,6 @@ export default function ShowingAppointmentRescheduleForm({
           <Typography variant="h6">
             You’re going to reschedule{' '}
             <span style={{ color: theme.palette.primary.main }}>
-              {getWeekdayName(appointmentTime)},{' '}
               {getFormattedAppointmentDateTime(appointment)}
             </span>{' '}
             appointment.
