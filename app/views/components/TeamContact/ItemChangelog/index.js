@@ -26,7 +26,14 @@ export function ItemChangelog(props) {
   const updatedAt = item.updated_at * 1000
 
   return (
-    <div style={{ color: grey.A900, fontSize: '0.875rem', ...props.style }}>
+    <div
+      style={{
+        color: grey.A600,
+        fontSize: '0.75rem',
+        fontWeight: 400,
+        ...props.style
+      }}
+    >
       <div
         title={fecha.format(new Date(createdAt), 'MMM DD, YYYY hh:mm:ss A')}
       >{`Created by ${getUserTitle(item.created_by)}, ${timeago().format(

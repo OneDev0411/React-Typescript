@@ -15,14 +15,13 @@ import { OpenHouseRegistration } from './actions/OpenHouseRegistration'
 import { sharedStyles } from '../styles'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
   user: IUser
   onEventChange(event: IEvent, type: string): void
 }
 
 const useStyles = makeStyles(sharedStyles)
-export function CrmTask({ style, event, onEventChange }: Props) {
+export function CrmTask({ event, onEventChange }: Props) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
 
@@ -47,7 +46,6 @@ export function CrmTask({ style, event, onEventChange }: Props) {
 
   return (
     <EventContainer
-      style={style}
       event={event}
       Icon={icon.icon}
       editable
