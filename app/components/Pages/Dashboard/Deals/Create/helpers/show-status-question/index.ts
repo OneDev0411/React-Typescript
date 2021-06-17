@@ -5,21 +5,21 @@ import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required
 
 export function showStatusQuestion(
   deal: IDeal | null,
-  dealType: 'Selling' | 'Buying',
+  brandChecklists: IBrandChecklist[],
   contextName: 'listing_status' | 'contract_status'
 ) {
   if (!deal) {
     return false
   }
 
-  const definition = searchContext(deal, contextName)
+  const definition = searchContext(deal, brandChecklists, contextName)
   const dealContext = getContext(deal, contextName)
 
   if (!definition) {
     return false
   }
 
-  const isRequired = isRequiredContext(deal, definition.key)
+  const isRequired = isRequiredContext(deal, brandChecklists, definition.key)
 
   if (isRequired === false) {
     return false

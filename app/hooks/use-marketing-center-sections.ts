@@ -302,17 +302,6 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/ListingLayout')
       }
     ]
-  },
-  flows: {
-    type: SectionsEnum.Link,
-    key: 'flows',
-    title: 'Flows',
-    items: [
-      {
-        title: 'Flows',
-        link: urlGenerator('/flows')
-      }
-    ]
   }
 }
 

@@ -39,6 +39,8 @@ import { selectUser } from 'selectors/user'
 
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { DatePickerContainer } from './styled'
 
 interface Props {
@@ -75,9 +77,16 @@ function OpenHouseForm(props: Props) {
   const classes = useStyles()
   const dispatch = useReduxDispatch()
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(({ deals }) =>
-    getDealChecklists(props.deal, deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        props.deal.brand.id
+      ),
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
   )
+
   const user = useSelector(selectUser)
 
   const confirmation = useContext(ConfirmationModalContext)
@@ -143,7 +152,12 @@ function OpenHouseForm(props: Props) {
 
     setIsSaving(true)
 
-    const checklist = getActiveChecklist(props.deal, checklists, 'Selling')!
+    const checklist = getActiveChecklist(
+      props.deal,
+      brandChecklists,
+      checklists,
+      props.deal.deal_type
+    )!
 
     const taskTitle = [
       fecha.format(startDate, 'dddd, MMMM D, YYYY  hh:mmA'),

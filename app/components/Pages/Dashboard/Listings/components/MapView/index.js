@@ -9,6 +9,7 @@ import LoadingComponent from 'components/Spinner'
 
 import ListingCard from '../ListingCardWithFavorite'
 import ZeroState from '../ZeroState'
+import { ShareListings } from '../ShareListings'
 
 const PAGE_SIZE = 12
 
@@ -37,6 +38,12 @@ const useStyles = makeStyles(
       height: '100%',
       overflowY: 'scroll',
       position: 'absolute'
+    },
+    selectionActionBar: {
+      position: 'absolute',
+      bottom: 20,
+      right: 0,
+      width: 'calc(100% - 192px)'
     }
   }),
   { name: 'MapView' }
@@ -99,6 +106,9 @@ const MapView = props => {
           </Grid>
         </Box>
       }
+      <Box className={classes.selectionActionBar}>
+        <ShareListings />
+      </Box>
     </Box>
   )
 }

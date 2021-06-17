@@ -2,11 +2,12 @@ import { getContextsChecklist } from '../get-checklist'
 
 export function isRequiredContext(
   deal: IDeal,
+  brandChecklists: IBrandChecklist[],
   key: string
 ): boolean | undefined {
-  const checklist = getContextsChecklist(deal)
+  const checklists = getContextsChecklist(deal, brandChecklists)
 
-  return (checklist?.required_contexts || []).some(
-    context => context.key === key
-  )
+  return checklists
+    .flatMap(checklist => checklist.required_contexts || [])
+    .some(context => context.key === key)
 }

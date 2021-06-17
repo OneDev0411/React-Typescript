@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { ReactElement, memo } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -26,7 +26,7 @@ interface Props {
   params: {
     id: UUID
   }
-  children: React.ReactNode
+  children: ReactElement<any>
 }
 
 function Container(props: Props) {

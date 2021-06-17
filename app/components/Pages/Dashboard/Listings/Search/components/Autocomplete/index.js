@@ -4,6 +4,8 @@ import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
 
+import { browserHistory } from 'react-router'
+
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 
 import { getPlace } from 'models/listings/search/get-place'
@@ -31,7 +33,13 @@ import {
   SEARCH_BY_QUERY
 } from '../../../../../../../constants/listings/search'
 
-import { SearchContainer, ListContainer, ListTitle, Item } from './styled'
+import {
+  SearchContainer,
+  ListContainer,
+  ListTitle,
+  Item,
+  NoResults
+} from './styled'
 
 class MlsAutocompleteSearch extends Component {
   state = {
@@ -249,7 +257,14 @@ class MlsAutocompleteSearch extends Component {
     this.setState({ input: item.description })
 
     if (item.type === 'compact_listing') {
+      // It's a listing
       this.handleSelectedListing(item)
+    } else if (this.props.landingPageSearch) {
+      // It's a place and we are in search landing page
+      const query = encodeURIComponent(item.description)
+
+      browserHistory.push(`/dashboard/mls?q=${query}`)
+      this.props.onSelectPlace()
     } else {
       this.handleSelectedPlace(item)
     }
@@ -322,9 +337,10 @@ class MlsAutocompleteSearch extends Component {
                     onKeyDown={this.handleKeyDownInput}
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
-                    placeholder="Search location or MLS number"
+                    placeholder="Enter an address, neighborhood, city, ZIP code or MLS #"
                     onClear={this.onClear}
                     isLoading={this.state.isLoading}
+                    fullWidth={this.props.fullWidth}
                   />
                   {isOpen && (
                     <ListContainer>
@@ -364,6 +380,10 @@ class MlsAutocompleteSearch extends Component {
                           ))}
                         </div>
                       )}
+                      {!this.state.listings.length &&
+                        !this.state.places.length && (
+                          <NoResults>No results</NoResults>
+                        )}
                     </ListContainer>
                   )}
                 </div>

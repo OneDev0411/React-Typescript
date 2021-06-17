@@ -23,6 +23,7 @@ import { getStatus } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 interface Props {
   list: IDealStatus[]
@@ -36,8 +37,13 @@ export function DealStatus({ list, error, onChange }: Props) {
   const { deal } = useCreationContext()
   const status = deal ? getStatus(deal) : null
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const dispatch = useDispatch()
@@ -52,6 +58,7 @@ export function DealStatus({ list, error, onChange }: Props) {
         upsertContexts(deal.id, [
           createContextObject(
             deal,
+            brandChecklists,
             checklists,
             getStatusContextKey(deal),
             value,
