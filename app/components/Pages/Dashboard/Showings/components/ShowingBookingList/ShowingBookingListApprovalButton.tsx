@@ -1,19 +1,35 @@
 import { useState } from 'react'
-import { Button, ButtonProps, Tooltip } from '@material-ui/core'
+import classNames from 'classnames'
+import {
+  Button,
+  ButtonProps,
+  Tooltip,
+  makeStyles,
+  PropTypes
+} from '@material-ui/core'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
 import ShowingAppointmentRejectFormDialog from './ShowingAppointmentRejectFormDialog'
 import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
 import useShowingHasAppointmentApproved from './use-showing-has-appointment-approved'
 
+const useStyles = makeStyles(
+  theme => ({
+    red: { color: theme.palette.error.main },
+    green: { color: theme.palette.primary.main }
+  }),
+  { name: 'ShowingBookingListApprovalButton' }
+)
+
 export interface ShowingBookingListApprovalButtonProps
-  extends Omit<ButtonProps, 'onClick' | 'children'> {
+  extends Omit<ButtonProps, 'onClick' | 'children' | 'color'> {
   showing: IShowing
   approvals?: Nullable<IShowingApproval[]>
   label: string
   onClick: (reason?: string) => void
   hasConfirmation?: boolean
   confirmationAction?: string
+  color?: 'red' | 'green' | PropTypes.Color
 }
 
 function ShowingBookingListApprovalButton({
@@ -24,8 +40,11 @@ function ShowingBookingListApprovalButton({
   label,
   hasConfirmation = false,
   confirmationAction,
+  color,
+  className,
   ...otherProps
 }: ShowingBookingListApprovalButtonProps) {
+  const classes = useStyles()
   const hasApprovalAccess = useShowingHasApprovalAccess(showing.roles)
   const hasApproved = useShowingHasAppointmentApproved(approvals)
   const message = useAppointmentApprovalAccessMessage(
@@ -53,6 +72,10 @@ function ShowingBookingListApprovalButton({
         <span>
           <Button
             {...otherProps}
+            className={classNames(color && classes[color], className)}
+            color={
+              color && !!classes[color] ? 'inherit' : (color as PropTypes.Color)
+            }
             onClick={handleClick}
             disabled={disabled || !hasApprovalAccess || hasApproved}
           >

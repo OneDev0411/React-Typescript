@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { ButtonProps, makeStyles } from '@material-ui/core'
+import { mdiCheck, mdiClose } from '@mdi/js'
 
 import useAsync from 'hooks/use-async'
 
@@ -8,6 +9,10 @@ import approveShowingAppointment from 'models/showing/approve-showing-appointmen
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
 import { ackNotifications } from 'models/notifications'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import ShowingBookingListApprovalButton, {
   ShowingBookingListApprovalButtonProps
@@ -120,7 +125,7 @@ function ShowingBookingListColumnActions({
     })
   }
 
-  const sharedButtonProps: Partial<ButtonProps> = {
+  const sharedButtonProps: Partial<Omit<ButtonProps, 'color'>> = {
     className: classes.button,
     size: 'small',
     variant: 'outlined'
@@ -145,6 +150,8 @@ function ShowingBookingListColumnActions({
             disabled={isLoading}
             label="Reject"
             hasConfirmation
+            color="red"
+            startIcon={<SvgIcon path={mdiClose} size={muiIconSizes.small} />}
           />
           <ShowingBookingListApprovalButton
             {...sharedButtonProps}
@@ -153,6 +160,8 @@ function ShowingBookingListColumnActions({
             disabled={isLoading}
             approvals={approvals}
             label="Approve"
+            color="green"
+            startIcon={<SvgIcon path={mdiCheck} size={muiIconSizes.small} />}
           />
         </>
       )}
