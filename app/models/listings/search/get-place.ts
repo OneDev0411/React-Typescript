@@ -33,7 +33,7 @@ export async function getPlace(address: string, compact: boolean = true) {
 
     if (compact) {
       return {
-        zoom: 16,
+        zoom: 15,
         center: (result.geometry
           .location as unknown) as google.maps.LatLngLiteral
       }
