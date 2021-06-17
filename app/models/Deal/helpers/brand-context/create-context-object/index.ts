@@ -22,11 +22,15 @@ export function createContextObject(
     return null
   }
 
-  const checklist = checklists.find(({ origin, is_active_offer }) => {
-    return dealBrandChecklists.find(({ id }) =>
-      deal.has_active_offer ? id === origin && is_active_offer : id === origin
-    )
-  })
+  const checklist = checklists.find(
+    ({ origin, checklist_type, is_active_offer }) => {
+      return dealBrandChecklists.find(({ id }) =>
+        checklist_type === 'Offer'
+          ? id === origin && is_active_offer
+          : id === origin
+      )
+    }
+  )
 
   return {
     definition: definition!.id,
