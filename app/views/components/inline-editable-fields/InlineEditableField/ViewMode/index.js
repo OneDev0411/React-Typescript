@@ -119,8 +119,6 @@ export function ViewMode({
   const classes = useStyles()
 
   const getEmailRecipient = () => {
-    console.log({ value, attributeName, contact })
-
     if (!contact || contact.email !== value) {
       return [
         {

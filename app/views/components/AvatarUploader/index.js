@@ -55,6 +55,9 @@ export class AvatarUploader extends Component {
           <>
             <ImageUploader
               onSelectImage={this.setAvatar}
+              options={{
+                accept: ['image/jpeg', 'image/png']
+              }}
               editorOptions={{
                 dimensions: [300, 300]
               }}
