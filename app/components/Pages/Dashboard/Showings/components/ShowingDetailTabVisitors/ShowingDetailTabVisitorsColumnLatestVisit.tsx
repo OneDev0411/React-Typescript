@@ -6,15 +6,15 @@ import ShowingLabeledColumn from '../ShowingLabeledColumn'
 
 import ShowingViewFeedbackButton from '../ShowingViewFeedbackButton'
 
-interface ShowingDetailTabVisitorsColumnLastVisitProps {
+interface ShowingDetailTabVisitorsColumnLatestVisitProps {
   duration: number
   appointment: Optional<IShowingAppointment>
 }
 
-function ShowingDetailTabVisitorsColumnLastVisit({
+function ShowingDetailTabVisitorsColumnLatestVisit({
   appointment,
   duration
-}: ShowingDetailTabVisitorsColumnLastVisitProps) {
+}: ShowingDetailTabVisitorsColumnLatestVisitProps) {
   const handleClick = (event: MouseEvent<HTMLSpanElement>) => {
     event.stopPropagation()
   }
@@ -26,7 +26,7 @@ function ShowingDetailTabVisitorsColumnLastVisit({
   return (
     <>
       <Box display="inline-block" mr={2}>
-        <ShowingLabeledColumn label="Last Visit:">
+        <ShowingLabeledColumn label="Visit:">
           {getAppointmentDateLabel(appointment.time)}{' '}
           {getAppointmentTimeLabel(appointment.time, duration)}
         </ShowingLabeledColumn>
@@ -43,4 +43,4 @@ function ShowingDetailTabVisitorsColumnLastVisit({
   )
 }
 
-export default ShowingDetailTabVisitorsColumnLastVisit
+export default ShowingDetailTabVisitorsColumnLatestVisit

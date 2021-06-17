@@ -14,7 +14,7 @@ import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitors
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
 import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
-import ShowingDetailTabVisitorsColumnLastVisit from './ShowingDetailTabVisitorsColumnLastVisit'
+import ShowingDetailTabVisitorsColumnLatestVisit from './ShowingDetailTabVisitorsColumnLatestVisit'
 
 const useStyles = makeStyles(
   theme => ({
@@ -94,11 +94,9 @@ function ShowingDetailTabVisitors({
     },
     {
       id: 'actions',
-      // width: 'auto',
       sortable: false,
-      // align: 'right',
       render: ({ row }) => (
-        <ShowingDetailTabVisitorsColumnLastVisit
+        <ShowingDetailTabVisitorsColumnLatestVisit
           duration={showing.duration}
           appointment={
             appointmentsByVisitorId[row.id] &&
