@@ -14,6 +14,7 @@ import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { selectUser } from 'selectors/user'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 interface Props {
   deal: IDeal
@@ -39,9 +40,16 @@ export default function DeleteDeal(props: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
 
-  const checklists = useSelector(({ deals }: IAppState) =>
-    getDealChecklists(props.deal, deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: getBrandChecklistsById(
+        deals.brandChecklists,
+        props.deal.brand.id
+      ),
+      checklists: getDealChecklists(props.deal, deals.checklists)
+    })
   )
+
   const user = useSelector(selectUser)
 
   const handleClick = () => {
@@ -71,7 +79,15 @@ export default function DeleteDeal(props: Props) {
   }
 
   const handleSendRequest = text => {
-    const checklist = getActiveChecklist(props.deal, checklists)
+    const checklist = getActiveChecklist(
+      props.deal,
+      brandChecklists,
+      checklists
+    )
+
+    if (!checklist) {
+      return
+    }
 
     dispatch(
       createRequestTask({

@@ -1,5 +1,5 @@
 import { normalize } from 'normalizr'
-import { batchActions } from 'redux-batched-actions'
+import { batch } from 'react-redux'
 
 import { setTasks } from '../../task'
 import { setChecklists } from '../../checklist'
@@ -13,14 +13,14 @@ export function createDeal(deal) {
     const { entities } = normalize(deal, schema.dealSchema)
     const { deals, roles, checklists, tasks } = entities
 
-    batchActions([
-      dispatch(setTasks(tasks)),
-      dispatch(setChecklists(checklists)),
-      dispatch(setRoles(roles)),
+    batch(() => {
+      dispatch(setTasks(tasks))
+      dispatch(setChecklists(checklists))
+      dispatch(setRoles(roles))
       dispatch({
         type: actionTypes.CREATE_DEAL,
         deal: deals[deal.id]
       })
-    ])
+    })
   }
 }

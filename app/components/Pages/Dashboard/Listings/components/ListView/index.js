@@ -13,14 +13,15 @@ import { Address } from './columns/Address'
 
 const BASE_URL = '/dashboard/mls'
 
+import { ShareListings } from '../ShareListings'
+
 const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()
   const gridClasses = useGridStyles()
   const { selections, toggleItem } = useListSelection()
   const [selectedListingId, setSelectedListingId] = useState(null)
-  const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] = useState(
-    false
-  )
+  const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] =
+    useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
     window.history.replaceState({}, '', BASE_URL)
@@ -143,6 +144,7 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
             listingId={selectedListingId}
             closeHandler={closeListingDetailsModal}
           />
+          <ShareListings />
         </Box>
       )}
     </>

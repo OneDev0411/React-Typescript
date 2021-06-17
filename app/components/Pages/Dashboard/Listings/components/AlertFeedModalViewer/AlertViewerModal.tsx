@@ -21,10 +21,8 @@ interface Props {
 export default function AlertViewerModal(props: Props) {
   const pageTitle = 'Shared Listings'
   const { isOpen, onClose, feed } = props
-  const [
-    selectedListing,
-    setSelectedListing
-  ] = useState<ICompactListing | null>(null)
+  const [selectedListing, setSelectedListing] =
+    useState<ICompactListing | null>(null)
   const [showListingModal, setShowListingModal] = useState(false)
 
   if (!isOpen) {
@@ -72,7 +70,7 @@ export default function AlertViewerModal(props: Props) {
     >
       <PageHeader
         onClickCloseButton={onClose}
-        title={`${pageTitle}${feedLength}`}
+        title={`${pageTitle} ${feedLength}`}
       />
       {renderContent()}
 

@@ -6,22 +6,23 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 
-import { propertyTypes } from 'deals/utils/property-types'
-
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
 import { RadioGroup } from 'components/RadioGroup'
 
+import { useCreationContext } from '../../context/use-creation-context'
+
 interface Props {
-  onChange: (value: IDealPropertyType) => void
+  onChange: (value: UUID) => void
 }
 
 export function DealPropertyType({ onChange }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
+  const { propertyTypes } = useCreationContext()
 
-  const handleChange = (value: IDealPropertyType) => {
+  const handleChange = (value: UUID) => {
     onChange(value)
 
     if (wizard.currentStep === step) {
@@ -35,9 +36,9 @@ export function DealPropertyType({ onChange }: Props) {
       <QuestionForm>
         <RadioGroup
           name="DealPropertyType"
-          options={propertyTypes.map(propertyType => ({
-            value: propertyType,
-            label: propertyType
+          options={(propertyTypes || []).map(item => ({
+            value: item.id,
+            label: item.label
           }))}
           onChange={handleChange}
         />

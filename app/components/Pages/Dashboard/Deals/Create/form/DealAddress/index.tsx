@@ -79,11 +79,13 @@ const useStyles = makeStyles(
 interface Props {
   skippable: boolean
   concurrentMode?: boolean
+  error?: string
   onChange?: (address: PropertyAddress | null) => void
 }
 
 export function DealAddress({
   concurrentMode = false,
+  error,
   skippable,
   onChange
 }: Props) {
@@ -92,18 +94,14 @@ export function DealAddress({
 
   const classes = useStyles()
 
-  const [place, setPlace] = useState<
-    Nullable<Partial<google.maps.places.AutocompletePrediction>>
-  >(null)
-  const [listing, setListing] = useState<Nullable<ICompactListing | IListing>>(
-    null
-  )
+  const [place, setPlace] =
+    useState<Nullable<Partial<google.maps.places.AutocompletePrediction>>>(null)
+  const [listing, setListing] =
+    useState<Nullable<ICompactListing | IListing>>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const [
-    debouncedSearchCriteria,
-    setDebouncedSearchCriteria
-  ] = useState<string>('')
+  const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
+    useState<string>('')
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -116,13 +114,8 @@ export function DealAddress({
     [searchCriteria]
   )
 
-  const {
-    isEmptyState,
-    isSearching,
-    listings,
-    places,
-    getParsedPlace
-  } = useSearchLocation(debouncedSearchCriteria)
+  const { isEmptyState, isSearching, listings, places, getParsedPlace } =
+    useSearchLocation(debouncedSearchCriteria)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -188,7 +181,7 @@ export function DealAddress({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
         {!listing && !place && (

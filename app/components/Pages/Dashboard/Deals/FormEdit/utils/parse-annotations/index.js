@@ -1,8 +1,9 @@
-import DealContext from 'models/Deal/helpers/dynamic-context'
 import { groupBy } from 'views/utils/object-helpers'
 
 import uuid from 'utils/uuid'
 import importPdfJs from 'utils/import-pdf-js'
+
+import { isAddressContext } from 'utils/is-address-context'
 
 import { populateFormValues } from '../populate-form-values'
 
@@ -161,7 +162,7 @@ function getAnnotationInfo(annotation) {
 
   let { type } = calculated
 
-  if (DealContext.isAddressField(calculated.context)) {
+  if (isAddressContext(calculated.context)) {
     type = 'Address'
   }
 

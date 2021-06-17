@@ -56,7 +56,9 @@ export default (state = null, action) => {
 }
 
 export const getDealChecklists = (deal, state) =>
-  Array.isArray(deal.checklists) ? deal.checklists.map(id => state[id]) : []
+  deal && Array.isArray(deal.checklists)
+    ? deal.checklists.map(id => state[id])
+    : []
 
 export const getChecklistById = (state, id) => state && state[id]
 

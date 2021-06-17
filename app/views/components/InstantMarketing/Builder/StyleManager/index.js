@@ -85,6 +85,28 @@ export const load = async colors => {
       )
     }
 
+    const unmountAllPickers = () => {
+      if (editor.getSelectedAll().length > 0) {
+        return
+      }
+
+      const containers = [
+        fontSizePickerContainer,
+        fontWeightPickerContainer,
+        widthPickerContainer,
+        paddingPickerContainer,
+        textAlignPickerContainer,
+        colorPickerContainer,
+        backgroundColorPickerContainer
+      ]
+
+      containers.forEach(container => {
+        if (container) {
+          ReactDOM.unmountComponentAtNode(container)
+        }
+      })
+    }
+
     const getStyle = target => getComputedStyle(target.view.el)
 
     const setStyle = (target, prop, value) => {
@@ -219,25 +241,7 @@ export const load = async colors => {
       }
     })
 
-    editor.on('component:deselected', () => {
-      if (editor.getSelectedAll().length > 0) {
-        return
-      }
-
-      const containers = [
-        fontSizePickerContainer,
-        fontWeightPickerContainer,
-        textAlignPickerContainer,
-        colorPickerContainer,
-        backgroundColorPickerContainer
-      ]
-
-      containers.forEach(container => {
-        if (container) {
-          ReactDOM.unmountComponentAtNode(container)
-        }
-      })
-    })
+    editor.on('component:deselected', unmountAllPickers)
 
     editor.on('component:selected', selected => {
       if (!selected) {
@@ -299,11 +303,11 @@ export const load = async colors => {
                   : getStyle(selected).fontSize
               }
               onChange={fontSize => {
-                // in order to sync changed text and keep the changes
                 if (!selected) {
                   return
                 }
 
+                // in order to sync changed text and keep the changes
                 selected.trigger('sync:content')
                 setStyle(selected, 'font-size', fontSize)
               }}
@@ -325,11 +329,11 @@ export const load = async colors => {
                   : getStyle(selected).width
               }
               onChange={width => {
-                // in order to sync changed text and keep the changes
                 if (!selected) {
                   return
                 }
 
+                // in order to sync changed text and keep the changes
                 selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {
@@ -362,11 +366,11 @@ export const load = async colors => {
                 bottom
               }}
               onChange={padding => {
-                // in order to sync changed text and keep the changes
                 if (!selected) {
                   return
                 }
 
+                // in order to sync changed text and keep the changes
                 selected.trigger('sync:content')
 
                 if (isMjmlElement(selected)) {

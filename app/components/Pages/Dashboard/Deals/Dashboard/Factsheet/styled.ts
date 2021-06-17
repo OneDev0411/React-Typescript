@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
 
-import { Theme, Typography } from '@material-ui/core'
+import { Theme } from '@material-ui/core'
 
-export const SectionTitle = styled(Typography)`
+export const SectionTitle = styled.div`
   ${({ theme }) => `
     padding: ${theme.spacing(0, 3)};
     color: ${theme.palette.grey['700']};

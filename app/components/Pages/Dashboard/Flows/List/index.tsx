@@ -5,7 +5,7 @@ import { connect, useDispatch } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/styles'
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
 
 import { addNotification as notify } from 'components/notification'
@@ -15,6 +15,7 @@ import { TableColumn } from 'components/Grid/Table/types'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import PageLayout from 'components/GlobalPageLayout'
 
 import { getActiveTeamId } from 'utils/user-teams'
 import { goTo } from 'utils/go-to'
@@ -232,47 +233,54 @@ function List(props: Props & WithRouterProps) {
   return (
     <>
       <Helmet>
-        <title>Flows | Rechat</title>
+        <title>Marketing | Flows</title>
       </Helmet>
 
-      {isModalOpen && (
-        <New
-          onClose={() => {
-            setIsModalOpen(false)
-            setSelectedFlow(null)
-          }}
-          onSubmit={newFlowSubmitHandler}
-          flow={selectedFlow}
-        />
-      )}
+      <PageLayout position="relative" overflow="hidden">
+        <PageLayout.Header title="Flows" />
+        <PageLayout.Main minHeight="100vh">
+          <Box mt={2}>
+            {isModalOpen && (
+              <New
+                onClose={() => {
+                  setIsModalOpen(false)
+                  setSelectedFlow(null)
+                }}
+                onSubmit={newFlowSubmitHandler}
+                flow={selectedFlow}
+              />
+            )}
 
-      <CtaBar
-        label="Create new flow"
-        description="Create a custom flow for your specific needs – We’ll take care of the rest!"
-        onClick={() => setIsModalOpen(true)}
-      />
+            <CtaBar
+              label="Create new flow"
+              description="Create a custom flow for your specific needs – We’ll take care of the rest!"
+              onClick={() => setIsModalOpen(true)}
+            />
 
-      {error ? (
-        <h4>{error}</h4>
-      ) : isFetching ? (
-        <LoadingComponent />
-      ) : (
-        <Table
-          columns={columns}
-          rows={flows}
-          totalRows={(flows || []).length}
-          loading={isFetching ? 'middle' : null}
-          LoadingStateComponent={LoadingComponent}
-          getTdProps={({ column, row }) => ({
-            onClick: () => {
-              if (column.id !== 'actions') {
-                props.router.push(`/dashboard/account/flows/${row.id}`)
-              }
-            }
-          })}
-          classes={{ row: classes.row }}
-        />
-      )}
+            {error ? (
+              <h4>{error}</h4>
+            ) : isFetching ? (
+              <LoadingComponent />
+            ) : (
+              <Table
+                columns={columns}
+                rows={flows}
+                totalRows={(flows || []).length}
+                loading={isFetching ? 'middle' : null}
+                LoadingStateComponent={LoadingComponent}
+                getTdProps={({ column, row }) => ({
+                  onClick: () => {
+                    if (column.id !== 'actions') {
+                      props.router.push(`/dashboard/flows/${row.id}`)
+                    }
+                  }
+                })}
+                classes={{ row: classes.row }}
+              />
+            )}
+          </Box>
+        </PageLayout.Main>
+      </PageLayout>
     </>
   )
 }
