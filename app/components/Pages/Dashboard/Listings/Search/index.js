@@ -3,9 +3,12 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import memoize from 'lodash/memoize'
+
 import hash from 'object-hash'
 
 import { withStyles } from '@material-ui/core/styles'
+import { Box, IconButton, Typography, Tooltip } from '@material-ui/core'
+import MyLocation from '@material-ui/icons/MyLocation'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
@@ -31,17 +34,22 @@ import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
 import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
 import { confirmation } from 'actions/confirmation'
 
+import Autocomplete from './components/Autocomplete'
+
 import {
   parsSortIndex,
   getDefaultSort,
   sortByIndex,
-  SORT_FIELD_SETTING_KEY
+  getUserLastBrowsingLocation,
+  SORT_FIELD_SETTING_KEY,
+  LAST_BROWSING_LOCATION
 } from '../helpers/sort-utils'
 
 import Tabs from '../components/Tabs'
 
 import Map from './components/Map'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
+
 import MapView from '../components/MapView'
 import ListView from '../components/ListView'
 import GridView from '../components/GridView'
@@ -56,13 +64,23 @@ import CreateTourAction from './components/CreateTourAction'
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
 
-const styles = () => ({
-  mlsContainer: {
+const styles = theme => ({
+  exploreContainer: {
     display: 'flex',
     minHeight: '100vh',
     flexDirection: 'column',
     paddingTop: 0,
     paddingBottom: 0
+  },
+  landingContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  landingSearchBox: {
+    width: '80%',
+    maxWidth: 600,
+    marginTop: theme.spacing(10)
   }
 })
 
@@ -81,6 +99,9 @@ class Search extends React.Component {
     }
 
     const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+    const userLastBrowsingLocation = getUserLastBrowsingLocation(
+      this.props.user
+    )
 
     this.state = {
       activeView,
@@ -88,9 +109,13 @@ class Search extends React.Component {
         index,
         ascending
       },
-      isCalculatingLocation: false,
+      isGettingCurrentPosition: false,
       isMapInitialized: false,
-      shareModalIsActive: false
+      shareModalIsActive: false,
+      userLastBrowsingLocation,
+      firstRun:
+        !userLastBrowsingLocation ||
+        Object.keys(userLastBrowsingLocation).length == 0
     }
   }
 
@@ -108,14 +133,20 @@ class Search extends React.Component {
   }
 
   initialize = () => {
+    const { firstRun } = this.state
+
+    if (firstRun) {
+      return
+    }
+
     if (this.props.listings.data.length > 0) {
       return this.state.activeView === 'map' ? this.initMap() : true
     }
 
     if (this.searchQuery) {
-      this._findPlace(this.searchQuery)
+      this._findPlace(decodeURIComponent(this.searchQuery))
     } else {
-      this.fetchDefaultLocationListings()
+      this.initMap()
     }
   }
 
@@ -129,60 +160,48 @@ class Search extends React.Component {
     this.setState({ isMapInitialized: true })
   }
 
-  fetchDefaultLocationListings = () => {
-    const isMapView = this.state.activeView === 'map'
-    const fetchDallas = () => {
-      if (isMapView) {
-        this.initMap()
-      } else {
-        this.fetchDallasListings()
-      }
-    }
+  goToCurrentPosition = () => {
+    const { dispatch } = this.props
 
     if (!window.navigator.geolocation) {
-      return fetchDallas()
+      return dispatch(
+        confirmation({
+          confirmLabel: 'OK',
+          message: 'Your device does not support Geolocation',
+          hideCancelButton: true
+        })
+      )
     }
 
-    this.setState({ isCalculatingLocation: true })
-
-    const setOffIsCalculatingLocation = cb =>
-      this.setState({ isCalculatingLocation: false }, cb)
+    this.setState({ isGettingCurrentPosition: true })
 
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
-        setOffIsCalculatingLocation()
-
-        const center = { lat, lng }
-
-        const { dispatch } = this.props
-        const { bounds, points } = getMapBoundsInCircle(center, RADIUS, true)
-        const mapProps = {
-          bounds: getBounds(bounds),
-          center,
-          zoom: mapInitialState.zoom
-        }
-
-        if (isMapView) {
-          dispatch(setMapProps('search', mapProps))
-          this.initMap()
-        } else {
-          batchActions([
-            dispatch(
-              searchActions.getListings.byValert({
-                ...this.props.filterOptions,
-                limit: 200,
-                points
-              })
-            ),
-            dispatch(setMapProps('search', mapProps))
-          ])
-        }
-
-        setOffIsCalculatingLocation()
+        this.setState(
+          {
+            isGettingCurrentPosition: false,
+            userLastBrowsingLocation: {
+              zoom: 15,
+              center: { lat, lng }
+            }
+          },
+          this.initMap
+        )
       },
       error => {
+        console.log(error)
         console.log(getLocationErrorMessage(error))
-        setOffIsCalculatingLocation(fetchDallas)
+        this.setState({ isGettingCurrentPosition: false })
+        dispatch(
+          confirmation({
+            confirmLabel: 'OK',
+            message: 'Your location is disabled',
+            description:
+              'Please check your browser’s setting and make sure ' +
+              'your location sharing is on.',
+            hideCancelButton: true
+          })
+        )
       },
       { timeout: 5000 }
     )
@@ -363,6 +382,11 @@ class Search extends React.Component {
     (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
   )
 
+  updateUserLocation = gmap => {
+    putUserSetting(LAST_BROWSING_LOCATION, gmap)
+    this.props.dispatch(getUserTeams(this.props.user))
+  }
+
   renderMain() {
     const sortedListings = this.sortListings(
       this.props.listings,
@@ -370,13 +394,14 @@ class Search extends React.Component {
       this.state.activeSort.ascending
     )
 
-    const { isCalculatingLocation } = this.state
+    const { isGettingCurrentPosition } = this.state
     const _props = {
       user: this.props.user,
       listings: this.props.listings,
       sortedListings,
-      isFetching: this.props.isFetching || isCalculatingLocation,
-      totalRows: this.props.listings.info.total
+      isFetching: this.props.isFetching || isGettingCurrentPosition,
+      totalRows: this.props.listings.info.total,
+      lastBrowsingLocation: this.state.userLastBrowsingLocation
     }
 
     switch (this.state.activeView) {
@@ -387,8 +412,12 @@ class Search extends React.Component {
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
-              this.state.isMapInitialized && !isCalculatingLocation ? (
-                <Map {..._props} isWidget={this.props.isWidget} />
+              this.state.isMapInitialized && !isGettingCurrentPosition ? (
+                <Map
+                  {..._props}
+                  isWidget={this.props.isWidget}
+                  updateUserLocation={this.updateUserLocation}
+                />
               ) : null
             }
           />
@@ -420,12 +449,11 @@ class Search extends React.Component {
 
   onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
-  render() {
+  renderExplorePage() {
     const { user, isWidget } = this.props
-    const { classes } = this.props
 
     return (
-      <GlobalPageLayout className={classes.mlsContainer}>
+      <>
         <Header
           isWidget={this.props.isWidget}
           isFetching={this.props.isFetching}
@@ -450,6 +478,62 @@ class Search extends React.Component {
           isActive={this.state.shareModalIsActive}
           alertProposedTitle={this.props.listings.info.proposed_title}
         />
+      </>
+    )
+  }
+
+  renderLadingPage() {
+    const { classes } = this.props
+
+    return (
+      <Box className={classes.landingContainer}>
+        <Box className={classes.landingSearchBox}>
+          <Box my={4}>
+            <Typography variant="h4" align="center">
+              Where do you want to start?
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent>
+            <Box flexGrow={1}>
+              <Autocomplete
+                fullWidth
+                landingPageSearch
+                onSelectPlace={() => {
+                  this.searchQuery = window.location.search.substring(3)
+                  this.setState({ firstRun: false }, this.initialize)
+                }}
+              />
+            </Box>
+            <Tooltip title="Get your exact location on the map">
+              <IconButton
+                aria-label="locate me"
+                onClick={() =>
+                  this.setState({ firstRun: false }, this.goToCurrentPosition)
+                }
+              >
+                <MyLocation />
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <Box mt={1} textAlign="center">
+            <img
+              src="/static/images/properties/search-landing-bg.jpg"
+              width="450"
+              alt="Search properties"
+            />
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+
+  render() {
+    const { classes } = this.props
+    const { firstRun } = this.state
+
+    return (
+      <GlobalPageLayout className={classes.exploreContainer}>
+        {firstRun ? this.renderLadingPage() : this.renderExplorePage()}
       </GlobalPageLayout>
     )
   }
