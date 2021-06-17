@@ -15,7 +15,8 @@ interface UseGetShowingsReturn {
 
 function useGetShowings(): UseGetShowingsReturn {
   const { data: rows, isLoading, run, setData } = useAsync<IShowing[]>({
-    data: []
+    data: [],
+    status: 'pending'
   })
 
   useEffect(() => {

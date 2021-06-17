@@ -15,7 +15,12 @@ interface UseGetShowingReturn {
 }
 
 function useGetShowing(showingId: UUID): UseGetShowingReturn {
-  const { data, run, error, isLoading, setData } = useAsync<IShowing>()
+  const { data, run, error, isLoading, setData } = useAsync<Nullable<IShowing>>(
+    {
+      data: null,
+      status: 'pending'
+    }
+  )
 
   useEffect(() => {
     if (!error) {
