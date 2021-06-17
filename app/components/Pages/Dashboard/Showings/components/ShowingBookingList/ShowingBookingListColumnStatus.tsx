@@ -11,7 +11,7 @@ const useStyles = makeStyles(
       borderRadius: theme.spacing(1.5),
       '& > svg': { fontSize: theme.spacing(2) }
     },
-    label: { marginLeft: theme.spacing(1) },
+    label: { marginLeft: theme.spacing(0.5) },
     requested: {
       color: theme.palette.warning.dark,
       backgroundColor: theme.palette.warning.ultralight
