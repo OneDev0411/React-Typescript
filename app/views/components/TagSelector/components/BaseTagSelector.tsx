@@ -90,30 +90,28 @@ export const BaseTagSelector = ({
         />
       )}
       onChange={(event, value: SelectorOption[]) => {
-        let newValue: SelectorOption[] = [...value]
+        let newValues: SelectorOption[] = [...value]
         let hasNewTag = false
 
-        if (newValue.length > 0) {
+        if (newValues.length > 0) {
           // get last item as new value
-          const lastValue: SelectorOption = newValue[newValue.length - 1]
+          const lastValue: SelectorOption = newValues[newValues.length - 1]
 
           if (lastValue.isNewTag) {
             hasNewTag = true
           }
 
-          let normalizedLastValue: SelectorOption | null = null
+          let value = ''
 
           if (typeof lastValue === 'string') {
-            normalizedLastValue = {
-              value: lastValue,
-              title: lastValue
-            }
+            value = (lastValue as string).trim()
           } else if (lastValue && lastValue.inputValue) {
-            // Create a new value from the user input
-            normalizedLastValue = {
-              value: lastValue.inputValue,
-              title: lastValue.inputValue
-            }
+            value = lastValue.inputValue.trim()
+          }
+
+          let normalizedLastValue: SelectorOption = {
+            value,
+            title: value
           }
 
           if (normalizedLastValue) {
@@ -121,15 +119,15 @@ export const BaseTagSelector = ({
               setTagKeys([...tagKeys, normalizedLastValue.value])
             }
 
-            newValue = [
-              ...newValue.splice(0, newValue.length - 1),
+            newValues = [
+              ...newValues.splice(0, newValues.length - 1),
               normalizedLastValue
             ]
           }
         }
 
-        setSelectedTags(newValue)
-        onChange(newValue, hasNewTag)
+        setSelectedTags(newValues)
+        onChange(newValues, hasNewTag)
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params)
@@ -137,7 +135,7 @@ export const BaseTagSelector = ({
         // Suggest the creation of a new value
         if (
           params.inputValue !== '' &&
-          !tagKeys.includes(params.inputValue.toLowerCase())
+          !tagKeys.includes(params.inputValue.trim().toLowerCase())
         ) {
           filtered.push({
             inputValue: params.inputValue,
