@@ -95,31 +95,37 @@ function getStateFromTrigger(trigger, attribute) {
   }
 }
 
-function getInitialErrorMessage(contact) {
+function getInitialErrorMessage(contact, isTriggerable) {
   if (!contact) {
     return ''
   }
 
-  if (!contact.email) {
+  if (!contact.email && isTriggerable) {
     return "You should provide contact's email to be able to use trigger feature."
   }
 
-  if (!contact.user) {
+  if (!contact.user && isTriggerable) {
     return "You should set an contact's owner to be able to use trigger feature."
   }
 
   return ''
 }
 
-const getInitialState = ({ contact, attribute, trigger }) => ({
-  error: getInitialErrorMessage(contact),
-  isDirty: false,
-  isTriggerFieldDirty: false,
-  isTriggerSaving: false,
-  disabled: false,
-  ...getStateFromTrigger(trigger, attribute),
-  ...getStateFromAttribute(attribute)
-})
+const getInitialState = ({ contact, attribute, trigger }) => {
+  const isTriggerable =
+    TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def.name) &&
+    !attribute?.is_partner
+
+  return {
+    error: getInitialErrorMessage(contact, isTriggerable),
+    isDirty: false,
+    isTriggerFieldDirty: false,
+    isTriggerSaving: false,
+    disabled: false,
+    ...getStateFromTrigger(trigger, attribute),
+    ...getStateFromAttribute(attribute)
+  }
+}
 
 function diffAttributeStateWithProp(attribute, state) {
   const { label, value, is_primary } = getStateFromAttribute(attribute)
@@ -479,20 +485,23 @@ class MasterField extends React.Component {
   }
 
   render() {
+    const { contact } = this.props
     const { disabled, isDirty, label, error } = this.state
 
     if (!this.attribute_def.editable) {
-      return (
-        <div style={{ margin: '0 -0.5em', padding: '0.5em' }}>
-          {this.renderViewMode()}
-        </div>
-      )
+      return <div style={{ padding: '0.5em' }}>{this.renderViewMode()}</div>
     }
 
     return (
       <InlineEditableField
-        error={error}
+        showDelete
+        isEditModeStatic
         cancelOnOutsideClick
+        error={error}
+        contact={contact}
+        label={label}
+        value={this.state.value}
+        attributeName={this.attribute_def.name || ''}
         handleAddNew={this.addInstance}
         handleCancel={this.cancel}
         handleDelete={this.handleDelete}
@@ -501,15 +510,10 @@ class MasterField extends React.Component {
         isDisabled={disabled || !isDirty}
         isEditing={this.props.isActive}
         isPopoverMode={this.isTriggerable}
-        isEditModeStatic
-        label={label}
         renderEditMode={this.renderEditMode}
         renderViewMode={this.renderViewMode}
         showAdd={this.showAdd}
-        showDelete
-        style={{ margin: '0 -0.5em' }}
         toggleMode={this.toggleMode}
-        value={this.state.value}
       />
     )
   }
