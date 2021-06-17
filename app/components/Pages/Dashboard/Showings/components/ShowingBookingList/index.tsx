@@ -242,7 +242,6 @@ function ShowingBookingList({
         <Box mt={3}>
           <Button
             size="small"
-            color="secondary"
             variant="outlined"
             onClick={toggleShowPastBookings}
             startIcon={
