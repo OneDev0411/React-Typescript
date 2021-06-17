@@ -73,12 +73,14 @@ function ShowingDetail({ params }: ShowingDetailProps) {
               <ShowingDetailTabBookings
                 appointments={showing.appointments ?? defaultAppointments}
                 setShowing={setShowing}
+                showingBookingUrl={showingBookingUrl}
               />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
               <ShowingDetailTabVisitors
                 showing={showing}
                 appointments={showing.appointments ?? defaultAppointments}
+                showingBookingUrl={showingBookingUrl}
               />
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>

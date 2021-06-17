@@ -13,8 +13,9 @@ import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColu
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
-import ShowingBookingListEmptyState from '../ShowingBookingList/ShowingBookingListEmptyState'
 import ShowingDetailTabVisitorsColumnLatestVisit from './ShowingDetailTabVisitorsColumnLatestVisit'
+import ShowingEmptyState from '../ShowingEmptyState'
+import ShowingDetailEmptyStateDescription from './ShowingDetailEmptyStateDescription'
 
 const useStyles = makeStyles(
   theme => ({
@@ -33,11 +34,13 @@ const useStyles = makeStyles(
 interface ShowingDetailTabVisitorsProps {
   showing: IShowing
   appointments: IShowingAppointment[]
+  showingBookingUrl?: string
 }
 
 function ShowingDetailTabVisitors({
   showing,
-  appointments
+  appointments,
+  showingBookingUrl
 }: ShowingDetailTabVisitorsProps) {
   const classes = useStyles()
   const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
@@ -122,8 +125,17 @@ function ShowingDetailTabVisitors({
           <LoadingContainer style={{ padding: '20% 0' }} />
         )}
         EmptyStateComponent={() => (
-          // TODO: finalize this empty state or move the component to the global scope
-          <ShowingBookingListEmptyState message="There is no visitor." />
+          <ShowingEmptyState
+            title="There are no visitors."
+            buttonLabel="Open Booking Page"
+            buttonLink={showingBookingUrl}
+            buttonTarget="_blank"
+            description={
+              <ShowingDetailEmptyStateDescription
+                showingBookingUrl={showingBookingUrl}
+              />
+            }
+          />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)

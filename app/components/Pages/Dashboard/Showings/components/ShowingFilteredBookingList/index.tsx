@@ -19,6 +19,10 @@ export interface ShowingFilteredBookingListProps
       | 'onDismissAction'
       | 'hasPropertyColumn'
       | 'stackDateAndTimeColumns'
+      | 'emptyButtonLabel'
+      | 'emptyButtonLink'
+      | 'emptyButtonTarget'
+      | 'emptyDescription'
     >,
     WithRouterProps {
   appointments: IShowingAppointment[]
@@ -32,9 +36,13 @@ function ShowingFilteredBookingList({
   hasPropertyColumn,
   location,
   generateLink,
-  stackDateAndTimeColumns
+  stackDateAndTimeColumns,
+  emptyButtonLabel,
+  emptyButtonLink,
+  emptyButtonTarget,
+  emptyDescription
 }: ShowingFilteredBookingListProps) {
-  const hasDate = !!appointments.length
+  const hasData = !!appointments.length
 
   const filter: AppointmentFilter = getValidAppointmentFilter(
     location.query.filter
@@ -51,7 +59,7 @@ function ShowingFilteredBookingList({
 
   return (
     <>
-      {hasDate && (
+      {hasData && (
         <ShowingAppointmentFilters
           appointments={appointments}
           generateLink={generateLinkWithLocation}
@@ -66,7 +74,11 @@ function ShowingFilteredBookingList({
         hasPropertyColumn={hasPropertyColumn}
         hasPastBookingsFilter
         stackDateAndTimeColumns={stackDateAndTimeColumns}
-        hasTextEmptyState={hasDate}
+        hasTextEmptyState={hasData}
+        emptyButtonLabel={emptyButtonLabel}
+        emptyButtonLink={emptyButtonLink}
+        emptyButtonTarget={emptyButtonTarget}
+        emptyDescription={emptyDescription}
         key={`${filter}-bookings`}
       />
     </>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
 import classNames from 'classnames'
 import { Box, Button, makeStyles } from '@material-ui/core'
 import {
@@ -56,6 +56,10 @@ export interface ShowingBookingListProps
   hasPastBookingsFilter?: boolean
   stackDateAndTimeColumns?: boolean
   hasTextEmptyState?: boolean
+  emptyButtonLabel?: string
+  emptyButtonLink?: string
+  emptyButtonTarget?: string
+  emptyDescription?: ReactNode
 }
 
 function ShowingBookingList({
@@ -66,7 +70,11 @@ function ShowingBookingList({
   onDismissAction,
   hasPastBookingsFilter = false,
   stackDateAndTimeColumns = false,
-  hasTextEmptyState = true
+  hasTextEmptyState = true,
+  emptyButtonLabel,
+  emptyButtonLink,
+  emptyButtonTarget,
+  emptyDescription
 }: ShowingBookingListProps) {
   const classes = useStyles()
   const [showPastBookings, setShowPastBookings] = useState(false)
@@ -227,7 +235,13 @@ function ShowingBookingList({
           hasTextEmptyState ? (
             <ShowingBookingListEmptyState message={emptyMessage || ''} />
           ) : (
-            <ShowingEmptyState title={emptyMessage} />
+            <ShowingEmptyState
+              title={emptyMessage}
+              buttonLabel={emptyButtonLabel}
+              buttonLink={emptyButtonLink}
+              buttonTarget={emptyButtonTarget}
+              description={emptyDescription}
+            />
           )
         }
         virtualize={false}

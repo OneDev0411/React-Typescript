@@ -119,7 +119,10 @@ function ShowingPropertyList({
           <LoadingContainer style={{ padding: '10% 0' }} />
         )}
         EmptyStateComponent={() => (
-          <ShowingEmptyState title="There are no properties." />
+          <ShowingEmptyState
+            title="There are no Showings."
+            description="Create your first showing for your off-market or MLS listings under 2 minutes."
+          />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)

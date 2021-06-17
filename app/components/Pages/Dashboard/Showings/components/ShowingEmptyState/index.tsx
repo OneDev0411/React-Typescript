@@ -1,20 +1,14 @@
-import {
-  Grid,
-  Box,
-  Typography,
-  Theme,
-  makeStyles,
-  Button
-} from '@material-ui/core'
+import { Grid, Box, Typography, Theme, makeStyles } from '@material-ui/core'
+import { ReactNode } from 'react'
 
-import Link from 'components/ALink'
+import LinkButton from '../LinkButton'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       margin: theme.spacing(9, 'auto', 8),
       padding: theme.spacing(0, 4),
-      color: '#0F3057', // TODO: Ask this later from designers
+      color: theme.palette.grey[800],
       maxWidth: theme.spacing(103)
     },
     image: {
@@ -29,9 +23,19 @@ const useStyles = makeStyles(
 
 interface ShowingEmptyStateProps {
   title: string
+  description?: ReactNode
+  buttonLabel?: string
+  buttonLink?: string
+  buttonTarget?: string
 }
 
-export default function ShowingEmptyState({ title }: ShowingEmptyStateProps) {
+export default function ShowingEmptyState({
+  title,
+  description,
+  buttonLabel = 'Create Showing',
+  buttonLink = '/dashboard/showings/create',
+  buttonTarget
+}: ShowingEmptyStateProps) {
   const classes = useStyles()
 
   return (
@@ -53,23 +57,19 @@ export default function ShowingEmptyState({ title }: ShowingEmptyStateProps) {
       <Grid item xs={12} sm={6}>
         <Typography variant="h4">{title}</Typography>
         <Box pt={1}>
-          <Typography variant="body1">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Pellentesque mi est egestas cursus arcu massa. Tellus eu, aenean
-            feugiat sed nulla imperdiet sapien, eget.
-          </Typography>
+          <Typography variant="body1">{description}</Typography>
         </Box>
         <Box pt={2}>
-          <Link noStyle to="/dashboard/showings/create">
-            <Button
-              color="primary"
-              size="large"
-              variant="contained"
-              className={classes.button}
-            >
-              Create Showing
-            </Button>
-          </Link>
+          <LinkButton
+            color="primary"
+            size="large"
+            variant="contained"
+            className={classes.button}
+            to={buttonLink}
+            target={buttonTarget}
+          >
+            {buttonLabel}
+          </LinkButton>
         </Box>
       </Grid>
     </Grid>
