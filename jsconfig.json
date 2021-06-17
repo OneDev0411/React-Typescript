@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": false,
     "baseUrl": ".",
     "paths": {
-      "app/*": [
+      "@app/*": [
         "app/*"
       ],
       "store/*": [
