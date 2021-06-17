@@ -103,8 +103,8 @@ export const BaseTagSelector = ({
 
           let value = ''
 
-          if (typeof lastValue === 'string') {
-            value = (lastValue as string).trim()
+          if (typeof lastValue.value === 'string') {
+            value = lastValue.value.trim()
           } else if (lastValue && lastValue.inputValue) {
             value = lastValue.inputValue.trim()
           }
