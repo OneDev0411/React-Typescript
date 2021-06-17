@@ -24,7 +24,6 @@ import {
   hasUserAccessToWebsites
 } from 'utils/user-teams'
 
-import Link from 'components/ALink'
 import LoadingContainer from 'components/LoadingContainer'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -40,6 +39,8 @@ import {
 import MarketingButton from './MarketingButton'
 import TemplateTypesChips from './TemplateTypesChips'
 import TemplatesRow from './TemplatesRow'
+
+const ROW_SIZE = 4
 
 type ListingRelatedProps = RequireOnlyOne<
   {
@@ -69,6 +70,9 @@ export default function ListingMarketing({
   const [selectedTemplateType, setSelectedTemplateType] = useState<
     Nullable<IMarketingTemplateType>
   >(defaultTemplateType ?? null)
+
+  const [expandedMedium, setExpandedMedium] =
+    useState<Nullable<IMarketingTemplateMedium>>(null)
 
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
@@ -143,6 +147,22 @@ export default function ListingMarketing({
   const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
     setSelectedTemplateType(type)
     onChangeTemplateType?.(type)
+  }
+
+  const handleClickViewMoreLess = (medium: IMarketingTemplateMedium) => {
+    if (!expandedMedium) {
+      setExpandedMedium(medium)
+
+      return
+    }
+
+    if (expandedMedium === medium) {
+      setExpandedMedium(null)
+
+      return
+    }
+
+    setExpandedMedium(medium)
   }
 
   if (isLoadingListing || isLoadingTemplates || !listing) {
@@ -234,11 +254,16 @@ export default function ListingMarketing({
           onClick={handleClickTemplateTypeChip}
         />
         {mediums.map(medium => {
-          const currentMediumTemplates = currentTemplateTypeTemplates
-            .filter(template => template.template.medium === medium)
-            .slice(0, 6)
+          const currentMediumTemplates = currentTemplateTypeTemplates.filter(
+            template => template.template.medium === medium
+          )
 
-          if (currentMediumTemplates.length === 0) {
+          const templatesToShow = currentMediumTemplates.slice(
+            0,
+            expandedMedium === medium ? Infinity : ROW_SIZE
+          )
+
+          if (templatesToShow.length === 0) {
             return null
           }
 
@@ -253,24 +278,23 @@ export default function ListingMarketing({
                   <Typography variant="h5" id={medium}>
                     {mediumLabel}
                   </Typography>
-                  <Link
-                    noStyle
-                    style={{
-                      marginLeft: theme.spacing(2)
-                    }}
-                    to={`/dashboard/marketing/${
-                      selectedTemplateType ?? templateTypes[0]
-                    }/${medium}`}
-                  >
-                    <Button variant="text" color="secondary">
-                      View all
+                  {currentMediumTemplates.length > ROW_SIZE && (
+                    <Button
+                      variant="text"
+                      color="secondary"
+                      style={{
+                        marginLeft: theme.spacing(1)
+                      }}
+                      onClick={() => handleClickViewMoreLess(medium)}
+                    >
+                      View {expandedMedium === medium ? 'less' : 'more'}
                     </Button>
-                  </Link>
+                  )}
                 </Box>
               }
               medium={medium}
               listing={listing}
-              templates={currentMediumTemplates}
+              templates={templatesToShow}
               onClick={setSelectedTemplate}
             />
           )

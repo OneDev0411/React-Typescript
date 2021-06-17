@@ -13,7 +13,6 @@ import {
 
 import { selectUser } from 'selectors/user'
 
-import { useResponsiveSubsetOfArray } from 'hooks/use-responsive-subset-of-array'
 import { Thumbnail as MarketingTemplateCardThumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -35,6 +34,7 @@ const useStyles = makeStyles(
     },
     thumbnailContainer: {
       marginRight: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       overflow: 'hidden',
       height: 'fit-content',
       boxShadow: theme.shadows[8],
@@ -59,14 +59,6 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
-  const templatesToShow = useResponsiveSubsetOfArray(templates, {
-    xs: 4,
-    sm: 4,
-    md: 4,
-    lg: 4,
-    xl: 4
-  })
-
   return (
     <Grid
       container
@@ -84,7 +76,7 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
         <Grid item>{header}</Grid>
       </Grid>
       <Grid container item>
-        {templatesToShow.map(template => (
+        {templates.map(template => (
           <Grid
             key={template.id}
             container
