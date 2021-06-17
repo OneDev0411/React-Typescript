@@ -141,18 +141,18 @@ function ShowingBookingListColumnActions({
           <ShowingBookingListApprovalButton
             {...sharedButtonProps}
             showing={showing}
-            onClick={handleApprove}
-            disabled={isLoading}
-            approvals={approvals}
-            label="Approve"
-          />
-          <ShowingBookingListApprovalButton
-            {...sharedButtonProps}
-            showing={showing}
             onClick={handleReject}
             disabled={isLoading}
             label="Reject"
             hasConfirmation
+          />
+          <ShowingBookingListApprovalButton
+            {...sharedButtonProps}
+            showing={showing}
+            onClick={handleApprove}
+            disabled={isLoading}
+            approvals={approvals}
+            label="Approve"
           />
         </>
       )}
