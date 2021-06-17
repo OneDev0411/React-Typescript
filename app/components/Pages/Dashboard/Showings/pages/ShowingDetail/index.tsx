@@ -51,7 +51,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         listing={showing?.listing || (showing?.deal?.listing as IListing)}
         bookingUrl={showingBookingUrl}
       />
-      <PageLayout.Main gutter={4} mt={0}>
+      <PageLayout.Main gutter={4} mt={0} pt={0}>
         <Box mb={3}>
           <ShowingDetailTabs value={tab} id={showingId} />
         </Box>
