@@ -383,8 +383,12 @@ class Search extends React.Component {
   )
 
   updateUserLocation = gmap => {
-    putUserSetting(LAST_BROWSING_LOCATION, gmap)
-    this.props.dispatch(getUserTeams(this.props.user))
+    // Anonymous user's can also see /mls and explore the map
+    // So updatingLastBrowsing location should not be run for them
+    if (this.props.user) {
+      putUserSetting(LAST_BROWSING_LOCATION, gmap)
+      this.props.dispatch(getUserTeams(this.props.user))
+    }
   }
 
   renderMain() {
@@ -493,7 +497,7 @@ class Search extends React.Component {
               Where do you want to start?
             </Typography>
           </Box>
-          <Box display="flex" justifyContent>
+          <Box display="flex">
             <Box flexGrow={1}>
               <Autocomplete
                 fullWidth
