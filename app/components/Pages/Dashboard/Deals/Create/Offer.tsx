@@ -161,7 +161,16 @@ function CreateOffer({ router, route, params }: Props) {
         dispatch(
           upsertContexts(
             deal.id,
-            getFormContexts(values, deal, brandChecklists, checklists, 'Offer')
+            getFormContexts(
+              values,
+              deal,
+              brandChecklists,
+              checklists,
+              'Offer'
+            ).map(context => ({
+              ...context,
+              checklist: checklist.id
+            }))
           )
         )
       ])
