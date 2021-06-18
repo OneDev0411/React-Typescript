@@ -114,7 +114,8 @@ export function AgentsList({
             {rows.length > 0 && (
               <Paper
                 style={{
-                  height: '250px'
+                  height:
+                    rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
                 }}
               >
                 <AutoSizer>
