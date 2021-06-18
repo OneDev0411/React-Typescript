@@ -4,6 +4,8 @@ import { mdiPlus } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
+
 import { convertContactToRole, convertAgentToRole } from '../../../utils/roles'
 
 import type { IDealFormRole } from '../../types'
@@ -123,10 +125,15 @@ export function Row({
           <Avatar src={row.agent.profile_image_url!} />
 
           <div className={classes.rowContent}>
-            <Typography variant="body2">{row.agent.full_name}</Typography>
+            <Typography variant="body2">
+              <TextMiddleTruncate text={row.agent.full_name} maxLength={35} />
+            </Typography>
 
             <Typography variant="body2" className={classes.email}>
-              {row.agent.mlsid || row.agent.email}
+              <TextMiddleTruncate
+                text={row.agent.mlsid || row.agent.email}
+                maxLength={35}
+              />
             </Typography>
           </div>
         </Box>
