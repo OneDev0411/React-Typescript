@@ -1,9 +1,11 @@
 import React from 'react'
+import moment from 'moment'
 
 import { EventDrawer } from 'components/EventDrawer'
 import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
+import { DONE_STATUS } from '@app/views/components/EventDrawer/components/FutureEventDoneConfirmation'
 
 interface Props {
   isEventDrawerOpen: boolean
@@ -28,13 +30,27 @@ export function CrmEvents(props: Props) {
   }
 
   if (!props.event) {
-    const initialValues = initialValueGenerator(
+    // Change status and drawer title based on initialDueDate
+    const isInFuture =
+      props.initialDueDate && moment().diff(props.initialDueDate, 'days') < 0
+
+    let initialValues = initialValueGenerator(
       props.user,
       [],
       props.initialDueDate
     )
 
-    return <EventDrawer {...sharedProps} initialValues={initialValues} />
+    const title = `Add ${isInFuture ? 'Reminder' : 'Log Activity'}`
+
+    return (
+      <EventDrawer
+        {...sharedProps}
+        initialValues={
+          isInFuture ? initialValues : { ...initialValues, status: DONE_STATUS }
+        }
+        title={title}
+      />
+    )
   }
 
   const id =
@@ -51,5 +67,5 @@ export function CrmEvents(props: Props) {
     return <TourDrawer {...sharedProps} tourId={id} />
   }
 
-  return <EventDrawer {...sharedProps} eventId={id} />
+  return <EventDrawer {...sharedProps} eventId={id} title="hi" />
 }
