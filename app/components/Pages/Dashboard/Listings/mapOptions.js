@@ -37,10 +37,11 @@ export const bootstrapURLKeys = {
 }
 
 export const mapInitialState = {
-  zoom: 14,
+  zoom: 5,
   center: {
-    lat: 32.7767,
-    lng: -96.797
+    // United States Center
+    lat: 37.2755783,
+    lng: -104.6571311
   },
   size: null,
   bounds: null

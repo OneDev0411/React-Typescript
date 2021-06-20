@@ -31,14 +31,14 @@
       "config": [
         "config/public/index.js"
       ],
+      "@app/*": [
+        "app/*"
+      ],
       "store": [
         "app/stores"
       ],
       "actions/*": [
         "app/store_actions/*"
-      ],
-      "app/*": [
-        "app/*"
       ],
       "assets/*": [
         "app/static/*"

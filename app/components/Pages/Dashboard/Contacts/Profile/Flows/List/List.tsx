@@ -10,7 +10,7 @@ interface Props {
 
 export default function List({ items, onStop }: Props) {
   return (
-    <Box mb={2}>
+    <Box>
       {items.map(item => (
         <Item key={item.id} flow={item} onStop={onStop} />
       ))}

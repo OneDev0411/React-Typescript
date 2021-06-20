@@ -10,15 +10,13 @@ export function DateTime({ event }: Props) {
     return <span>All day</span>
   }
 
-  const timeFormat = 'hh:mm\u00A0A'
-  const dueDate = formatDate(event.timestamp, timeFormat)
+  const timeFormat = 'hh:mmA'
+  const dueDate = formatDate(event.timestamp, timeFormat).toLowerCase()
 
   if (event.end_date) {
     return (
       <span>
-        {dueDate}
-        <br />
-        {formatDate(event.end_date, timeFormat)}
+        {dueDate}-{formatDate(event.end_date, timeFormat).toLowerCase()}
       </span>
     )
   }

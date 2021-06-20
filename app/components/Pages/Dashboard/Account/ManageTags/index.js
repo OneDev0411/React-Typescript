@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { Helmet } from 'react-helmet'
+
+import { addNotification as notify } from 'components/notification'
 
 import { confirmation } from 'actions/confirmation'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
@@ -288,13 +290,10 @@ class ManageTags extends Component {
   }
 }
 
-export default connect(
-  null,
-  {
-    notify,
-    confirmation,
-    getContactsTags: getContactTagsAction,
-    resetActiveFilters,
-    changeActiveFilterSegment
-  }
-)(ManageTags)
+export default connect(null, {
+  notify,
+  confirmation,
+  getContactsTags: getContactTagsAction,
+  resetActiveFilters,
+  changeActiveFilterSegment
+})(ManageTags)
