@@ -99,7 +99,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         !role.first_name ||
         !role.last_name ||
         !role.phone_number ||
-        !role.email
+        !role.email ||
+        role.mode === 'form'
       ) {
         errors[`role-${role.id}`] =
           'Please complete the form and click on the Next button'
