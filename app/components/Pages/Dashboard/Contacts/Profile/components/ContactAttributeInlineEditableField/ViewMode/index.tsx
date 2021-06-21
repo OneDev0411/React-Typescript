@@ -32,23 +32,23 @@ const useStyles = makeStyles(
       width: theme.spacing(2),
       height: theme.spacing(2)
     },
-    title: (props: Props) => ({
-      color: props.value ? theme.palette.text.primary : theme.palette.text.hint,
+    title: {
+      color: theme.palette.grey[600],
       wordBreak: 'break-word'
-    }),
+    },
     starIcon: {
-      color: theme.palette.text.primary
+      color: theme.palette.warning.main
     },
     triggerIcon: (props: Props) => ({
       color: props.isTriggerActive
         ? theme.palette.warning.main
         : theme.palette.grey[500]
     }),
-    value: (props: Props) => ({
+    value: {
       minWidth: theme.spacing(10.5),
       textAlign: 'right',
-      color: props.value ? theme.palette.text.primary : theme.palette.text.hint
-    })
+      color: theme.palette.grey[900]
+    }
   }),
   { name: 'InlineEditFieldViewMode' }
 )
@@ -77,22 +77,19 @@ export function ViewMode(props: Props) {
             />
           </Tooltip>
         )}
+        {props.isTriggerable && (
+          <SvgIcon
+            path={mdiLightningBoltOutline}
+            leftMargined
+            className={classes.triggerIcon}
+            size={muiIconSizes.small}
+          />
+        )}
       </Box>
       <Box className={classes.contentContainer}>
         <Box className={classes.value}>
           <Typography variant="body2">{props.value || '-'}</Typography>
         </Box>
-
-        {props.isTriggerable && (
-          <Box>
-            <SvgIcon
-              path={mdiLightningBoltOutline}
-              leftMargined
-              className={classes.triggerIcon}
-              size={muiIconSizes.small}
-            />
-          </Box>
-        )}
       </Box>
     </Box>
   )

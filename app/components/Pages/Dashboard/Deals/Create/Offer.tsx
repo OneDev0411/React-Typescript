@@ -298,7 +298,7 @@ function CreateOffer({ router, route, params }: Props) {
                   <div>
                     Who is the{' '}
                     <span className={classes.brandedTitle}>
-                      {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Co Agent
+                      Co {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
                     </span>
                     ?
                   </div>

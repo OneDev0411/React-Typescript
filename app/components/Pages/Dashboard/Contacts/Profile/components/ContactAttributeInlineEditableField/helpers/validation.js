@@ -1,13 +1,18 @@
 import {
+  isLink,
   isEmail,
-  isPhoneNumber,
   isNumber,
+  isPhoneNumber,
   validateDateField
 } from 'utils/validations'
 import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
 const validators = {
   email: isEmail,
+  website: isLink,
+  linkedin: isLink,
+  facebook: isLink,
+  instagram: isLink,
   phone_number: isPhoneNumber
 }
 

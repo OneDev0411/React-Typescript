@@ -3,7 +3,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 
 import { Tooltip } from '@material-ui/core'
 
-import { updateTask } from 'models/tasks/update-task'
+import { updateTaskStatus } from 'models/tasks/update-task-status'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -24,25 +24,16 @@ export function CrmStatus({ event, onChange }: Props) {
   }
 
   const handleChange = async () => {
-    const [shouldUpdate, newTask] = await new Promise(resolve => {
+    const [newTaskStatus, shouldUpdate] = await new Promise(resolve => {
       context.setConfirmationModal({
         message: 'Heads up!',
         description:
           'If you mark this event as done, the event due date will change to now. Are you sure?',
         onConfirm: () => {
-          return resolve([
-            true,
-            {
-              task_type: event.event_type,
-              title: event.title,
-              status: 'DONE',
-              due_date: now.getTime() / 1000,
-              end_date: (now.getTime() + 3600000) / 1000 // 1 hour after
-            }
-          ])
+          return resolve(['DONE', true])
         },
         onCancel: () => {
-          return resolve([false, null])
+          return resolve([null, false])
         }
       })
     })
@@ -53,17 +44,11 @@ export function CrmStatus({ event, onChange }: Props) {
 
     setIsChecked(!isChecked)
 
-    newTask.id =
+    const taskId =
       event.object_type === 'crm_association' ? event.crm_task : event.id
 
-    if (newTask.status === 'DONE') {
-      newTask.reminders = []
-    }
-
     try {
-      const task: IEvent = await updateTask(newTask, {
-        'associations[]': ['crm_task.associations', 'crm_association.contact']
-      })
+      const task: IEvent = await updateTaskStatus(taskId, newTaskStatus)
 
       onChange(task, 'updated')
     } catch (e) {

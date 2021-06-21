@@ -21,13 +21,12 @@ import { sharedStyles } from '../styles'
 import { EventBadge } from '../components/EventBadge'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent<'full_thread'>
 }
 
 const useStyles = makeStyles(sharedStyles)
 
-export function EmailThread({ style, event }: Props) {
+export function EmailThread({ event }: Props) {
   const classes = useStyles({})
   const { setSelectedEvent } = useContext(ListContext)
   const accounts: IOAuthAccount[] = useSelector((state: IAppState) =>
@@ -51,7 +50,6 @@ export function EmailThread({ style, event }: Props) {
 
   return (
     <EventContainer
-      style={style}
       event={event}
       Icon={eventIcons.Email.icon}
       editable={false}
