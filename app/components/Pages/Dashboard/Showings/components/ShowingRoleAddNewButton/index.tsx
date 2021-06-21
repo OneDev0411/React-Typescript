@@ -8,35 +8,48 @@ const useStyles = makeStyles(
   {
     width: { width: 200 }
   },
-  { name: 'ShowingRoleListAddNewButton' }
+  { name: 'ShowingRoleAddNewButton' }
 )
 
-interface ShowingRoleListAddNewButtonProps {
+interface ShowingRoleAddNewButtonProps {
   onClick: (role: IShowingRoleType) => void
-  disabled: boolean
+  disabled?: boolean
 }
 
-function ShowingRoleListAddNewButton({
+function ShowingRoleAddNewButton({
   onClick,
   disabled
-}: ShowingRoleListAddNewButtonProps) {
+}: ShowingRoleAddNewButtonProps) {
   const classes = useStyles()
 
   return (
     <ButtonMenu
       className={classes.width}
+      type="button"
       size="small"
       variant="outlined"
       color="default"
       startIcon={<AddIcon />}
       classes={{ paper: classes.width }}
       disabled={disabled}
-      RenderMenu={() => (
+      RenderMenu={({ closeMenu }) => (
         <List dense>
-          <ListItem button onClick={() => onClick('CoSellerAgent')}>
+          <ListItem
+            button
+            onClick={event => {
+              onClick('CoSellerAgent')
+              closeMenu(event)
+            }}
+          >
             {getShowingRoleLabel('CoSellerAgent')}
           </ListItem>
-          <ListItem button onClick={() => onClick('Tenant')}>
+          <ListItem
+            button
+            onClick={event => {
+              onClick('Tenant')
+              closeMenu(event)
+            }}
+          >
             {getShowingRoleLabel('Tenant')}
           </ListItem>
         </List>
@@ -47,4 +60,4 @@ function ShowingRoleListAddNewButton({
   )
 }
 
-export default ShowingRoleListAddNewButton
+export default ShowingRoleAddNewButton
