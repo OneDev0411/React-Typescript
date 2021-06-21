@@ -25,10 +25,7 @@ const postcssOptions = {
 module.exports = {
   mode: 'development',
   devtool: 'eval',
-  entry: [
-    'webpack-hot-middleware/client',
-    path.resolve(__dirname, '../app/index.js')
-  ],
+  entry: path.resolve(__dirname, '../app/index.js'),
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: '[name].bundle.js',
@@ -65,7 +62,9 @@ module.exports = {
     },
     removeAvailableModules: false,
     removeEmptyChunks: false,
-    runtimeChunk: true
+    runtimeChunk: {
+      name: entrypoint => `runtime-${entrypoint.name}`
+    }
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -231,7 +230,7 @@ module.exports = {
       template: path.resolve(__dirname, '../app/index.html'),
       hash: false,
       filename: './index.html',
-      inject: 'body',
+      inject: true,
       minify: {
         collapseWhitespace: false
       }
