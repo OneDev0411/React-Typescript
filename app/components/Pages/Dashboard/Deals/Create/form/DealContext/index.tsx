@@ -35,6 +35,8 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { useCreationContext } from '../../context/use-creation-context'
 
 interface Props {
@@ -76,8 +78,13 @@ export function DealContext({
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const defaultValue = deal ? getField(deal, context.key) : ''
@@ -153,6 +160,7 @@ export function DealContext({
         const approved = isBackOffice(user) ? true : !context.needs_approval
         const data = createContextObject(
           deal,
+          brandChecklists,
           checklists,
           context.key,
           value,

@@ -2,7 +2,7 @@ import { searchContacts } from 'models/contacts/search-contacts'
 import { createFlow as createNewFlow } from 'models/flows/create-flow'
 
 export function getFlowEditUrl(id: UUID) {
-  return `/dashboard/marketing/flows/${id}`
+  return `/dashboard/flows/${id}`
 }
 
 export async function createFlow(
@@ -66,7 +66,10 @@ export function validateInput(
 }
 
 export function validateTimeInput(value?: string) {
-  if (value === undefined || !value.match(/^\d{2,}:\d{2}:\d{2}$/)) {
+  if (
+    value === undefined ||
+    !value.match(/^([0-1]?\d|2[0-3])(?::([0-5]?\d))(?::([0-5]?\d))?$/)
+  ) {
     return 'Invalid time'
   }
 

@@ -16,7 +16,7 @@ function DetailsFields(props: Props) {
     },
     {
       name: 'preffered_source',
-      lable: 'MLS Value Prefrred (If Available)'
+      lable: 'MLS Value Preferred (If Available)'
     },
     {
       name: 'exports',

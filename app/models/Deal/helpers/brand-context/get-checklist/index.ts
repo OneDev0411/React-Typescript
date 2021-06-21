@@ -1,9 +1,14 @@
-export function getContextsChecklist(deal: IDeal) {
-  const checklistType: IDealChecklistType = deal.has_active_offer
-    ? 'Offer'
-    : deal.deal_type
+export function getContextsChecklist(
+  deal: IDeal,
+  brandChecklists: IBrandChecklist[]
+) {
+  const checklistTypes = deal.has_active_offer
+    ? [deal.deal_type, 'Offer']
+    : [deal.deal_type]
 
-  return deal.property_type?.checklists?.find(
-    checklist => checklist.checklist_type === checklistType
+  return brandChecklists.filter(
+    brandChecklist =>
+      brandChecklist.property_type === deal.property_type?.id &&
+      checklistTypes.includes(brandChecklist.checklist_type)
   )
 }

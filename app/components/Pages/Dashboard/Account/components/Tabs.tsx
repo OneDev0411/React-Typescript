@@ -31,9 +31,6 @@ export const ProfileTabs = ({ user }: Props) => (
       link="/dashboard/account/connected-accounts"
       title="Connected Accounts"
     />
-    <Acl.Crm>
-      <SideNavItem link="/dashboard/marketing/flows" title="Flows" />
-    </Acl.Crm>
     <SideNavItem
       link="/dashboard/account/email-templates"
       title="Email Templates"

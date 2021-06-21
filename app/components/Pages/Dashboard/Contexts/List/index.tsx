@@ -121,10 +121,13 @@ function DealContext({ brandId, isFetching, list }: Props) {
       const res = await deleteContext(brandId, contextId)
 
       if (res) {
-        notify({
-          message: 'Context is Deleted!',
-          status: 'success'
-        })
+        dispatch(
+          notify({
+            message: 'Context deleted',
+            status: 'success'
+          })
+        )
+
         dispatch(getContextsByBrand(brandId))
       }
     } catch (err) {
@@ -177,6 +180,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
         isOpen={isModalOpen}
         section={selectedSection}
         context={selectedContext}
+        brandId={brandId}
         brandPropertyTypes={brandPropertyTypes}
         onClose={() => {
           setIsModalOpen(false)

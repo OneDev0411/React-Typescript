@@ -68,9 +68,10 @@ export function useChecklistsPage(rootBrandId: string | null) {
         await addBrandCheckListTask(rootBrandId, checklist.id, {
           title: '',
           ...taskData,
-          order: Array.isArray(checklist.tasks)
-            ? Math.max(...checklist.tasks.map(task => task.order)) + 1
-            : 1
+          order:
+            Array.isArray(checklist.tasks) && checklist.tasks.length > 0
+              ? Math.max(...checklist.tasks.map(task => task.order)) + 1
+              : 1
         })
       )
     }

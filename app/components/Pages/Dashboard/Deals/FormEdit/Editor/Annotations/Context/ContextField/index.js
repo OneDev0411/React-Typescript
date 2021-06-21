@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
 import { isValidDate } from 'utils/date-times/is-valid-date'
 
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
@@ -10,13 +12,21 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { formatDate } from '../../../../utils/format-date'
 
 import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
 
 export function ContextField(props) {
-  const context = useRef(searchContext(props.deal, props.annotation.context))
+  const brandChecklists = useSelector(({ deals }) =>
+    getBrandChecklistsById(deals.brandChecklists, props.deal.brand.id)
+  )
+
+  const context = useRef(
+    searchContext(props.deal, brandChecklists, props.annotation.context)
+  )
 
   const contextValue = getField(props.deal, props.annotation.context)
 

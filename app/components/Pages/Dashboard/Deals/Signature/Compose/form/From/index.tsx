@@ -26,6 +26,7 @@ import {
 import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
 import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 interface Props {
   deal: IDeal
@@ -93,7 +94,7 @@ export function From({ deal }: Props) {
                         marginRight: theme.spacing(1)
                       }}
                     >
-                      {user.display_name[0]}
+                      {getContactNameInitials(user)}
                     </Avatar>
 
                     <div>

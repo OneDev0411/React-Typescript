@@ -2,7 +2,7 @@ describe('Flows grid, get brand flows', () => {
   beforeEach(() => {
     cy.sandbox()
     cy.signin()
-    cy.visit('/dashboard/marketing/flows')
+    cy.visit('/dashboard/flows')
   })
 
   it('Should have some flows', () => {

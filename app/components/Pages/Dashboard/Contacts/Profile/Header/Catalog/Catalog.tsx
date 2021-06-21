@@ -1,58 +1,58 @@
 import React from 'react'
-import { Box, Link, Typography } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Box, Typography } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 
-import { LastTouched } from 'components/LastTouched'
+import Tags from '../../Tags/TagsSection'
 
 import Avatar from './Avatar'
+import { Social } from './Social'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+import { Props } from '..'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      flexGrow: 1
+    },
     title: {
-      marginLeft: `${theme.spacing(1)}px`,
-      width: 'calc(100% - 64px)'
+      display: 'flex',
+      alignItems: 'center'
     },
     name: {
       wordBreak: 'break-all'
     },
-    editButton: {
-      marginLeft: theme.spacing(1)
-    },
-    touch: {
-      paddingLeft: theme.spacing(1.5),
-      color: theme.palette.grey['900']
+    tags: {
+      marginTop: theme.spacing(0.5)
     }
-  })
+  }),
+  { name: 'ContactProfileHeaderCatalog' }
 )
 
-interface Props {
-  contact: IContact
-}
-
-export default function Catalog({ contact }: Props) {
+export default function Catalog({
+  contact,
+  onTagChange
+}: Omit<Props, 'handleCreateNote'>) {
   const classes = useStyles()
 
   return (
-    <Box mb={1}>
-      <Box display="flex" alignItems="center" mb={2}>
-        <Avatar contact={contact} />
-        <Box display="flex" alignItems="center" className={classes.title}>
-          <Typography variant="subtitle1" className={classes.name}>
+    <Box className={classes.container}>
+      <Avatar contact={contact} />
+      <Box pl={1}>
+        <Box className={classes.title}>
+          <Typography variant="h6" className={classes.name}>
             {contact.display_name}
           </Typography>
-          <Link
-            color="secondary"
-            href="#Details"
-            variant="caption"
-            className={classes.editButton}
-          >
-            Edit
-          </Link>
+          <Box ml={1}>
+            <Social contact={contact} />
+          </Box>
+        </Box>
+
+        <Box className={classes.tags}>
+          <Tags contact={contact} onChange={onTagChange} />
         </Box>
       </Box>
-      <div className={classes.touch}>
-        <LastTouched contact={contact} />
-      </div>
     </Box>
   )
 }

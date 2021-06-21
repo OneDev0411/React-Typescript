@@ -14,6 +14,8 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
 import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
 
 import { DateField } from './DateField'
@@ -44,8 +46,13 @@ export default function Factsheet({
   const contexts = useFactsheetContexts(deal, section)
   const table = definitions || contexts
 
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   if (table.length === 0 || display === false) {
@@ -56,6 +63,7 @@ export default function Factsheet({
     try {
       const context = createContextObject(
         deal,
+        brandChecklists,
         checklists,
         field.key,
         value,
@@ -84,7 +92,7 @@ export default function Factsheet({
       validateContext(
         field,
         value as string,
-        isRequiredContext(deal, field.key)!
+        isRequiredContext(deal, brandChecklists, field.key)!
       )
 
     if (!isValueChanged || !isValid) {
