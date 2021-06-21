@@ -34,7 +34,18 @@ module.exports = {
     filename: '[name].bundle.js',
     publicPath: '/',
     chunkFilename: '[name].[chunkhash].js',
-    globalObject: 'this'
+    globalObject: 'self'
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+    // Keep the runtime chunk separated to enable long term caching
+    // https://twitter.com/wSokra/status/969679223278505985
+    // https://github.com/facebook/create-react-app/issues/5358
+    runtimeChunk: {
+      name: entrypoint => `runtime-${entrypoint.name}`
+    }
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -77,12 +88,13 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|tsx|js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules|bower_components)/,
         use: [
           {
             loader: require.resolve('babel-loader'),
             options: {
               cacheDirectory: true,
+              cacheCompression: false,
               plugins: [
                 __DEV__ && require.resolve('react-refresh/babel')
               ].filter(Boolean)
@@ -258,5 +270,5 @@ module.exports = {
           sockIntegration: 'whm'
         }
       })
-  ]
+  ].filter(Boolean)
 }
