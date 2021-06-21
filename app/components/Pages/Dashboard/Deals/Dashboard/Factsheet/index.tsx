@@ -119,10 +119,6 @@ export default function Factsheet({
   }
 
   const getTooltipTitle = (context: IDealBrandContext, isDisabledByMls) => {
-    if (!isContextApproved(deal, context) && !isBackOffice) {
-      return 'Pending Office Approval'
-    }
-
     if (isDisabledByMls) {
       return (
         <div>
@@ -130,6 +126,10 @@ export default function Factsheet({
           update will be reflected here.
         </div>
       )
+    }
+
+    if (!isContextApproved(deal, context) && !isBackOffice) {
+      return 'Pending Office Approval'
     }
 
     return ''
@@ -144,8 +144,15 @@ export default function Factsheet({
 
         {table.map((context, index) => {
           const value = getFieldValue(getContextValue(deal, context))
+          const hasMlsValue =
+            value != null &&
+            value !== '' &&
+            deal.context[context.key]?.source === 'MLS'
+
           const isDisabledByMls = !!(
-            deal.listing && context.preffered_source === 'MLS'
+            deal.listing &&
+            context.preffered_source === 'MLS' &&
+            hasMlsValue
           )
 
           const sharedProps = {
