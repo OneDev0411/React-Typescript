@@ -14,7 +14,6 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      borderRadius: theme.shape.borderRadius,
       overflow: 'hidden'
     },
     loadingContainer: {
