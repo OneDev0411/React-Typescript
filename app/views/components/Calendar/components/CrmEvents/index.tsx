@@ -36,13 +36,13 @@ export function CrmEvents(props: Props) {
       isFuture(props.initialDueDate) &&
       !isToday(props.initialDueDate)
 
-    let initialValues = initialValueGenerator(
+    const initialValues = initialValueGenerator(
       props.user,
       [],
       props.initialDueDate
     )
 
-    const title = `Add ${isInFuture ? 'Reminder' : 'Log Activity'}`
+    const title = isInFuture ? 'Add Reminder' : 'Log Activity'
 
     return (
       <EventDrawer
@@ -69,5 +69,5 @@ export function CrmEvents(props: Props) {
     return <TourDrawer {...sharedProps} tourId={id} />
   }
 
-  return <EventDrawer {...sharedProps} eventId={id} title="hi" />
+  return <EventDrawer {...sharedProps} eventId={id} />
 }
