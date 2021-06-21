@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { ACL } from 'constants/acl'
 import { selectActiveTeamUnsafe } from 'selectors/team'
 
-function useActiveTeamBrandWithShowingsPermission(): Optional<IBrand> {
+function useActiveTeamBrandWithPermission(
+  permission: IPermission
+): Optional<IBrand> {
   const activeTeam = useSelector(selectActiveTeamUnsafe)?.brand
 
   return useMemo<Optional<IBrand>>(
@@ -13,12 +14,12 @@ function useActiveTeamBrandWithShowingsPermission(): Optional<IBrand> {
         ? {
             ...activeTeam,
             roles: activeTeam.roles?.filter(role =>
-              role.acl.includes(ACL.SHOWINGS)
+              role.acl.includes(permission)
             )
           }
         : undefined,
-    [activeTeam]
+    [activeTeam, permission]
   )
 }
 
-export default useActiveTeamBrandWithShowingsPermission
+export default useActiveTeamBrandWithPermission
