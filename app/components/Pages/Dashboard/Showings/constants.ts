@@ -22,7 +22,10 @@ export const showingDurationOptions: SelectItem<number>[] = [
   { label: '1 hour', value: 60 * 60 }
 ]
 
-export const goAndShowNotificationTypes: IShowingRoleInputNotification = {
+export const goAndShowNotificationTypes: Pick<
+  IShowingRoleInput,
+  'can_approve' | 'confirm_notification_type' | 'cancel_notification_type'
+> = {
   can_approve: true,
   confirm_notification_type: [],
   cancel_notification_type: []
