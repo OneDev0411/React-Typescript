@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import { isFuture, isToday } from 'date-fns'
 
 import { EventDrawer } from 'components/EventDrawer'
 import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
@@ -32,7 +32,9 @@ export function CrmEvents(props: Props) {
   if (!props.event) {
     // Change status and drawer title based on initialDueDate
     const isInFuture =
-      props.initialDueDate && moment().diff(props.initialDueDate, 'days') < 0
+      props.initialDueDate &&
+      isFuture(props.initialDueDate) &&
+      !isToday(props.initialDueDate)
 
     let initialValues = initialValueGenerator(
       props.user,
