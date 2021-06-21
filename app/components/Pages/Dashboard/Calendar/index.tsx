@@ -40,7 +40,10 @@ export default function CalendarPage(props: WithRouterProps) {
     <div className={classes.container}>
       <GlobalHeader title="Calendar" noPadding>
         <ViewAs />
-        <ImportContactsButton />
+        <ImportContactsButton
+          hasCSVButton
+          tooltip="Connect to Google, Outlook or import from a CSV"
+        />
       </GlobalHeader>
       <div className={classes.listContainer}>
         <GridCalendar actionRef={actionRef} />
