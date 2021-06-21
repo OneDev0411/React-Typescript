@@ -28,12 +28,16 @@ interface Props {
   accounts: IOAuthAccount[]
   user: IUser
   onFetchedOAuthAccounts?: () => void
+  hasCSVButton?: boolean
+  tooltip?: string
 }
 
 export function ImportContactsButton({
   accounts,
   user,
-  onFetchedOAuthAccounts
+  onFetchedOAuthAccounts,
+  hasCSVButton = false,
+  tooltip = 'Connect to Google or Outlook'
 }: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
@@ -82,12 +86,14 @@ export function ImportContactsButton({
         width={150}
         show={isTooltipOpen}
         className={classes.popover}
-        caption={<p>Sync Google, Outlook or import from a CSV</p>}
+        caption={<p>{tooltip}</p>}
       >
         <Grid container justify="center">
           <GoogleIcon size={iconSizes.medium} className={classes.buttonIcon} />
           <OutlookIcon size={iconSizes.medium} className={classes.buttonIcon} />
-          <CsvIcon className={classes.buttonIcon} size={iconSizes.medium} />
+          {hasCSVButton && (
+            <CsvIcon className={classes.buttonIcon} size={iconSizes.medium} />
+          )}
         </Grid>
       </PopOver>
     ),
@@ -153,7 +159,7 @@ export function ImportContactsButton({
                 size={iconSizes.medium}
                 className={classes.listIcon}
               />
-              Sync Google Contacts
+              Connect to Google
             </Grid>
           </MenuItem>
           <MenuItem
@@ -168,23 +174,31 @@ export function ImportContactsButton({
                 size={iconSizes.medium}
                 className={classes.listIcon}
               />
-              Sync Outlook Contacts
+              Connect to Outlook
             </Grid>
           </MenuItem>
-          <Divider />
-          <MenuItem
-            component={RouterLink}
-            style={{ color: 'currentColor' }}
-            onClick={() => {
-              toggleMenu()
-            }}
-            to="/dashboard/contacts/import/csv"
-          >
-            <Grid container className={classes.listItem}>
-              <CsvIcon size={iconSizes.medium} className={classes.listIcon} />
-              Import from CSV
-            </Grid>
-          </MenuItem>
+
+          {hasCSVButton && (
+            <>
+              <Divider />
+              <MenuItem
+                component={RouterLink}
+                style={{ color: 'currentColor' }}
+                onClick={() => {
+                  toggleMenu()
+                }}
+                to="/dashboard/contacts/import/csv"
+              >
+                <Grid container className={classes.listItem}>
+                  <CsvIcon
+                    size={iconSizes.medium}
+                    className={classes.listIcon}
+                  />
+                  Import from CSV
+                </Grid>
+              </MenuItem>
+            </>
+          )}
         </>
       )}
     </DropdownTab>
