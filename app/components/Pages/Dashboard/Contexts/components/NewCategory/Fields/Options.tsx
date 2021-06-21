@@ -6,24 +6,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
-interface Props {}
-
-function DetailsFields(props: Props) {
-  const options = [
-    {
-      name: 'needs_approval',
-      lable: 'Requires Back Office Approval'
-    },
-    {
-      name: 'preffered_source',
-      lable: 'MLS Value Preferred (If Available)'
-    },
-    {
-      name: 'exports',
-      lable: 'Export in CSV'
-    }
-  ]
-
+function DetailsFields() {
   return (
     <Grid container alignItems="flex-start" spacing={1}>
       <Grid item xs={3}>
@@ -32,26 +15,66 @@ function DetailsFields(props: Props) {
       <Grid item xs={9}>
         <Grid container spacing={1}>
           <Grid container alignItems="center" item xs={12}>
-            {options.map(ch => (
-              <Grid item xs={6} key={ch.name}>
-                <Field
-                  name={ch.name}
-                  type="checkbox"
-                  render={({ input }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          color="primary"
-                          checked={input.checked}
-                          onChange={input.onChange}
-                        />
-                      }
-                      label={ch.lable}
-                    />
-                  )}
-                />
-              </Grid>
-            ))}
+            <Grid item xs={6}>
+              <Field
+                name="needs_approval"
+                render={({ input }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="primary"
+                        checked={input.checked}
+                        onChange={input.onChange}
+                      />
+                    }
+                    label="Requires Back Office Approval"
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <Field
+                name="preffered_source"
+                render={({ input }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="primary"
+                        checked={input.value === 'MLS'}
+                        onChange={() =>
+                          input.onChange(
+                            !input.value || input.value === 'Provided'
+                              ? 'MLS'
+                              : 'Provided'
+                          )
+                        }
+                      />
+                    }
+                    label="MLS Value Preferred (If Available)"
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <Field
+                name="exports"
+                render={({ input }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        color="primary"
+                        checked={input.checked}
+                        onChange={input.onChange}
+                      />
+                    }
+                    label="Export in CSV"
+                  />
+                )}
+              />
+            </Grid>
+
             <Grid item xs={6}>
               <Field
                 name="default_value"
