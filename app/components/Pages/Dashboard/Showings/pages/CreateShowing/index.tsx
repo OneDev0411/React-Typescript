@@ -19,10 +19,6 @@ import { CreateShowingErrors, ShowingPropertyType } from '../../types'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
 import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
-import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
-import ShowingStepRoleConfirmNotificationTypes from '../../components/ShowingStepRoleConfirmNotificationTypes'
-import ShowingStepRoleCancelNotificationTypes from '../../components/ShowingStepRoleCancelNotificationTypes'
-import ShowingStepYesNoQuestion from '../../components/ShowingStepYesNoQuestion'
 import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
 import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
@@ -30,17 +26,14 @@ import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
 import ShowingCloseButton from '../../components/ShowingCloseButton'
 
-import useShowingRole from './use-showing-role'
-import useFillPersonRolesWithProperty from './use-fill-person-roles-with-property'
-import useShowingPropertyId from './use-showing-property-id'
+import useShowingRoles from './use-showing-roles'
 import {
   goAndShowNotificationTypes,
   showingDurationOptions
 } from '../../constants'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
 import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
-
-const defaultNotificationTypes: INotificationDeliveryType[] = []
+import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -51,67 +44,18 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const teamId = useSelector(selectActiveTeamId)
 
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
-  const propertyId = useShowingPropertyId(property)
 
   const [approvalType, setApprovalType] = useState<
     Nullable<IShowingApprovalType>
   >(null)
 
   const {
-    rolePerson: agentPerson,
-    setRolePerson: setAgentPerson,
-    roleCanApprove: agentCanApprove,
-    setRoleCanApprove: setAgentCanApprove,
-    roleConfirmNotificationTypes: agentConfirmNotificationTypes,
-    setRoleConfirmNotificationTypes: setAgentConfirmNotificationTypes,
-    roleCancelNotificationTypes: agentCancelNotificationTypes,
-    setRoleCancelNotificationTypes: setAgentCancelNotificationTypes,
-    resetRoleNotification: resetAgentNotificationTypes,
-    editable: agentEditable,
-    setEditable: setAgentEditable
-  } = useShowingRole()
-
-  const {
-    rolePerson: coAgentPerson,
-    setRolePerson: setCoAgentPerson,
-    roleCanApprove: coAgentCanApprove,
-    setRoleCanApprove: setCoAgentCanApprove,
-    roleConfirmNotificationTypes: coAgentConfirmNotificationTypes,
-    setRoleConfirmNotificationTypes: setCoAgentConfirmNotificationTypes,
-    roleCancelNotificationTypes: coAgentCancelNotificationTypes,
-    setRoleCancelNotificationTypes: setCoAgentCancelNotificationTypes,
-    hasRole: hasCoAgent,
-    setHasRoleChange: setHasCoAgent,
-    resetRoleNotification: resetCoAgentNotificationTypes,
-    editable: coAgentEditable,
-    setEditable: setCoAgentEditable
-  } = useShowingRole()
-
-  const {
-    rolePerson: occupantPerson,
-    setRolePerson: setOccupantPerson,
-    roleCanApprove: occupantCanApprove,
-    setRoleCanApprove: setOccupantCanApprove,
-    roleConfirmNotificationTypes: occupantConfirmNotificationTypes,
-    setRoleConfirmNotificationTypes: setOccupantConfirmNotificationTypes,
-    roleCancelNotificationTypes: occupantCancelNotificationTypes,
-    setRoleCancelNotificationTypes: setOccupantCancelNotificationTypes,
-    hasRole: hasOccupant,
-    setHasRoleChange: setHasOccupant,
-    resetRoleNotification: resetOccupantNotificationTypes,
-    editable: occupantEditable,
-    setEditable: setOccupantEditable
-  } = useShowingRole()
-
-  const handleSetApproval = (value: IShowingApprovalType) => {
-    setApprovalType(value)
-
-    if (value === 'None') {
-      resetAgentNotificationTypes()
-      resetCoAgentNotificationTypes()
-      resetOccupantNotificationTypes()
-    }
-  }
+    roles,
+    editRole,
+    addRole,
+    deleteRole,
+    fillRolesWithPropertyRoles
+  } = useShowingRoles()
 
   const [instructions, setInstructions] = useState<Nullable<string>>(null)
 
@@ -125,15 +69,10 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     showingDurationOptions[0].value
   )
 
-  const handlePropertyChange = useFillPersonRolesWithProperty(
-    setProperty,
-    setAgentEditable,
-    setAgentPerson,
-    setCoAgentEditable,
-    setCoAgentPerson,
-    setOccupantEditable,
-    setOccupantPerson
-  )
+  const handlePropertyChange = (property: Nullable<ShowingPropertyType>) => {
+    fillRolesWithPropertyRoles(property)
+    setProperty(property)
+  }
 
   const { isLoading, data: showing, run, error, reset } = useAsync<IShowing>()
 
@@ -155,69 +94,20 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         'The "From" value must be earlier than the "To" value'
     }
 
-    if (!agentPerson) {
-      errors.agent = 'Please select an agent for the agent role'
-    }
-
-    if (approvalType && approvalType !== 'None') {
-      if (!agentConfirmNotificationTypes) {
-        errors.agentConfirmNotification = 'This step is required'
+    roles.forEach(role => {
+      if (
+        !role.first_name ||
+        !role.last_name ||
+        !role.phone_number ||
+        !role.email
+      ) {
+        errors[`role-${role.id}`] =
+          'Please complete the form and click on the Next button'
       }
-
-      if (!agentCancelNotificationTypes) {
-        errors.agentCancelNotification = 'This step is required'
-      }
-    }
-
-    if (hasCoAgent === 'Yes') {
-      if (!coAgentPerson) {
-        errors.coAgent = 'Please select an agent for the co-agent role'
-      }
-
-      if (approvalType && approvalType !== 'None') {
-        if (!coAgentConfirmNotificationTypes) {
-          errors.coAgentConfirmNotification = 'This step is required'
-        }
-
-        if (!coAgentCancelNotificationTypes) {
-          errors.coAgentCancelNotification = 'This step is required'
-        }
-      }
-    }
-
-    if (hasOccupant === 'Yes') {
-      if (!occupantPerson) {
-        errors.occupant = 'Please select a contact for the occupant role'
-      }
-
-      if (approvalType && approvalType !== 'None') {
-        if (!occupantConfirmNotificationTypes) {
-          errors.occupantConfirmNotification = 'This step is required'
-        }
-
-        if (!occupantCancelNotificationTypes) {
-          errors.occupantCancelNotification = 'This step is required'
-        }
-      }
-    }
+    })
 
     return Object.keys(errors).length ? errors : null
-  }, [
-    agentCancelNotificationTypes,
-    agentConfirmNotificationTypes,
-    agentPerson,
-    approvalType,
-    availabilities,
-    coAgentCancelNotificationTypes,
-    coAgentConfirmNotificationTypes,
-    coAgentPerson,
-    hasCoAgent,
-    hasOccupant,
-    occupantCancelNotificationTypes,
-    occupantConfirmNotificationTypes,
-    occupantPerson,
-    property
-  ])
+  }, [availabilities, property, roles])
 
   const handleFinish = () => {
     if (
@@ -231,51 +121,22 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     }
 
     run(async () => {
-      const roles: IShowingRoleInput[] = []
-
-      if (agentPerson) {
-        roles.push({
-          role: 'SellerAgent',
-          can_approve: !!agentCanApprove,
-          cancel_notification_type: agentCancelNotificationTypes ?? [],
-          confirm_notification_type: agentConfirmNotificationTypes ?? [],
-          ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
-          ...agentPerson,
-          user: agentPerson.user || undefined,
-          brand: agentPerson.brand || teamId
-        })
-      }
-
-      if (coAgentPerson) {
-        roles.push({
-          role: 'CoSellerAgent',
-          can_approve: !!coAgentCanApprove,
-          cancel_notification_type: coAgentCancelNotificationTypes ?? [],
-          confirm_notification_type: coAgentConfirmNotificationTypes ?? [],
-          ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
-          ...coAgentPerson,
-          user: coAgentPerson.user || undefined,
-          brand: coAgentPerson.brand || teamId
-        })
-      }
-
-      if (occupantPerson) {
-        roles.push({
-          role: 'Tenant',
-          can_approve: !!occupantCanApprove,
-          cancel_notification_type: occupantCancelNotificationTypes ?? [],
-          confirm_notification_type: occupantConfirmNotificationTypes ?? [],
-          ...(approvalType === 'None' ? goAndShowNotificationTypes : {}),
-          ...occupantPerson,
-          user: occupantPerson.user || undefined,
-          brand: occupantPerson.brand || teamId
-        })
-      }
-
       return createShowing({
         approval_type: approvalType,
         aired_at: new Date().toISOString(), // TODO: use the real value later
-        roles,
+        roles: roles.map<IShowingRoleInput>(role => ({
+          role: role.role,
+          user: role.user,
+          brand: role.brand,
+          first_name: role.first_name,
+          last_name: role.last_name,
+          email: role.email,
+          phone_number: role.phone_number,
+          can_approve: role.can_approve,
+          confirm_notification_type: role.confirm_notification_type,
+          cancel_notification_type: role.cancel_notification_type,
+          ...(approvalType === 'None' ? goAndShowNotificationTypes : {})
+        })),
         availabilities: availabilities.map(availability => ({
           weekday: availability.weekday,
           availability: availability.availability
@@ -326,139 +187,25 @@ function CreateShowing({ router, route }: CreateShowingProps) {
             />
             <ShowingStepApprovalType
               approvalType={approvalType}
-              onApprovalTypeChange={handleSetApproval}
+              onApprovalTypeChange={setApprovalType}
             />
-
-            {/* Listing Agent Steps - Start */}
-            <ShowingStepRolePerson
-              key={propertyId}
-              personTitle="Agent"
-              person={agentPerson}
-              onPersonChange={setAgentPerson}
-              skippable={false}
-              editable={agentEditable}
-              isTeamAvailableMembers
-              required
-              error={showingValidationErrors?.agent}
-            />
-            {approvalType !== 'None' && agentPerson && (
-              <ShowingStepRoleConfirmNotificationTypes
-                firstName={agentPerson.first_name}
-                canApprove={!!agentCanApprove}
-                onCanApproveChange={setAgentCanApprove}
-                notificationTypes={
-                  agentConfirmNotificationTypes || defaultNotificationTypes
-                }
-                onNotificationTypesChange={setAgentConfirmNotificationTypes}
-                error={showingValidationErrors?.agentConfirmNotification}
-              />
-            )}
-            {approvalType !== 'None' && agentPerson && (
-              <ShowingStepRoleCancelNotificationTypes
-                firstName={agentPerson.first_name}
-                notificationTypes={
-                  agentCancelNotificationTypes || defaultNotificationTypes
-                }
-                onNotificationTypesChange={setAgentCancelNotificationTypes}
-                error={showingValidationErrors?.agentCancelNotification}
-              />
-            )}
-            {/* Listing Agent Steps - End */}
-
-            {/* Listing Co-agent Steps - Start */}
-            <ShowingStepYesNoQuestion
-              question="Is there a co-agent you’d like to add?"
-              name="has-co-agent"
-              value={hasCoAgent}
-              onChange={setHasCoAgent}
-            />
-            {hasCoAgent === 'Yes' && (
+            {roles.map(role => (
               <ShowingStepRolePerson
-                key={propertyId}
-                personTitle="CoAgent"
-                person={coAgentPerson}
-                onPersonChange={setCoAgentPerson}
-                isPrimaryAgent={false}
-                editable={coAgentEditable}
-                error={showingValidationErrors?.coAgent}
+                key={role.id}
+                role={role}
+                onRoleEdit={editRole}
+                onRoleAdd={addRole}
+                onRoleDelete={deleteRole}
+                hasNotificationTypeFields={
+                  approvalType === 'All' || approvalType === 'Any'
+                }
+                error={
+                  showingValidationErrors
+                    ? showingValidationErrors[`role-${role.id}`]
+                    : undefined
+                }
               />
-            )}
-            {approvalType !== 'None' &&
-              hasCoAgent === 'Yes' &&
-              coAgentPerson && (
-                <ShowingStepRoleConfirmNotificationTypes
-                  firstName={coAgentPerson.first_name}
-                  canApprove={!!coAgentCanApprove}
-                  onCanApproveChange={setCoAgentCanApprove}
-                  notificationTypes={
-                    coAgentConfirmNotificationTypes || defaultNotificationTypes
-                  }
-                  onNotificationTypesChange={setCoAgentConfirmNotificationTypes}
-                  error={showingValidationErrors?.coAgentConfirmNotification}
-                />
-              )}
-            {approvalType !== 'None' &&
-              hasCoAgent === 'Yes' &&
-              coAgentPerson && (
-                <ShowingStepRoleCancelNotificationTypes
-                  firstName={coAgentPerson.first_name}
-                  notificationTypes={
-                    coAgentCancelNotificationTypes || defaultNotificationTypes
-                  }
-                  onNotificationTypesChange={setCoAgentCancelNotificationTypes}
-                  error={showingValidationErrors?.coAgentCancelNotification}
-                />
-              )}
-            {/* Listing Co-agent Steps - End */}
-
-            {/* Listing Occupant Steps - Start */}
-            <ShowingStepYesNoQuestion
-              question="Is this property occupied?"
-              name="has-occupant"
-              value={hasOccupant}
-              onChange={setHasOccupant}
-            />
-            {hasOccupant === 'Yes' && (
-              <ShowingStepRolePerson
-                key={propertyId}
-                personTitle="Occupant"
-                person={occupantPerson}
-                onPersonChange={setOccupantPerson}
-                selectType="Contact"
-                editable={occupantEditable}
-                error={showingValidationErrors?.occupant}
-              />
-            )}
-            {approvalType !== 'None' &&
-              hasOccupant === 'Yes' &&
-              occupantPerson && (
-                <ShowingStepRoleConfirmNotificationTypes
-                  firstName={occupantPerson.first_name}
-                  canApprove={!!occupantCanApprove}
-                  onCanApproveChange={setOccupantCanApprove}
-                  notificationTypes={
-                    occupantConfirmNotificationTypes || defaultNotificationTypes
-                  }
-                  onNotificationTypesChange={
-                    setOccupantConfirmNotificationTypes
-                  }
-                  error={showingValidationErrors?.occupantConfirmNotification}
-                />
-              )}
-            {approvalType !== 'None' &&
-              hasOccupant === 'Yes' &&
-              occupantPerson && (
-                <ShowingStepRoleCancelNotificationTypes
-                  firstName={occupantPerson.first_name}
-                  notificationTypes={
-                    occupantCancelNotificationTypes || defaultNotificationTypes
-                  }
-                  onNotificationTypesChange={setOccupantCancelNotificationTypes}
-                  error={showingValidationErrors?.occupantCancelNotification}
-                />
-              )}
-            {/* Listing Occupant Steps - End */}
-
+            ))}
             <ShowingStepInstructions
               value={instructions}
               onChange={setInstructions}
@@ -476,10 +223,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               onAvailabilitiesChange={setAvailabilities}
               error={showingValidationErrors?.availabilities}
             />
-            {/* <ShowingStepFeedbackTemplate
-              value={feedbackTemplate}
-              onChange={setFeedbackTemplate}
-            /> */}
             <ShowingStepFinalResult
               isLoading={isLoading}
               showingId={showing?.id}

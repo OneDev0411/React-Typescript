@@ -45,23 +45,21 @@ export interface ApprovalActionParams extends DismissActionParams {
   appointment: IShowingAppointment
 }
 
-type CreateShowingErrorField =
-  | 'property'
-  | 'availabilities'
-  | 'agent'
-  | 'agentConfirmNotification'
-  | 'agentCancelNotification'
-  | 'coAgent'
-  | 'coAgentConfirmNotification'
-  | 'coAgentCancelNotification'
-  | 'occupantConfirmNotification'
-  | 'occupantCancelNotification'
-  | 'occupant'
-
-export type CreateShowingErrors = Partial<
-  Record<CreateShowingErrorField, string>
->
+export type CreateShowingErrors = Record<string, string>
 
 export interface ShowingAvailabilityItem extends IShowingAvailabilityInput {
   id: UUID
 }
+
+export type ShowingRoleInputMode = 'form' | 'card'
+
+export interface ShowingRoleInput extends IShowingRoleInput {
+  id: UUID
+  mode: ShowingRoleInputMode
+  deletable: boolean
+}
+
+export type ShowingRoleInputPerson = Pick<
+  IShowingRoleInput,
+  'user' | 'brand' | 'first_name' | 'last_name' | 'email' | 'phone_number'
+>

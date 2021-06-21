@@ -1,5 +1,3 @@
-import { kebabCase, upperFirst } from 'lodash'
-
 import { Box, IconButton } from '@material-ui/core'
 
 import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
@@ -8,43 +6,48 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import ShowingContactOverviewCard from '../ShowingContactOverviewCard'
+import { getShowingRoleLabel } from '../../helpers'
 
 interface ShowingStepRolePersonCardProps {
-  person: IShowingRoleInputPerson
-  personTitle: string
+  role: Pick<IShowingRoleInput, 'first_name' | 'last_name' | 'role'>
   onEdit: () => void
   onRemove: () => void
   editable?: boolean
+  deletable?: boolean
 }
 
 function ShowingStepRolePersonCard({
-  person,
+  role,
   onEdit,
   onRemove,
-  personTitle,
-  editable = false
+  editable = true,
+  deletable = true
 }: ShowingStepRolePersonCardProps) {
   return (
     <ShowingContactOverviewCard
-      fullName={`${person.first_name} ${person.last_name}`}
-      subtitle={`Listing ${upperFirst(kebabCase(personTitle))}`}
+      fullName={`${role.first_name} ${role.last_name}`}
+      subtitle={`Listing ${getShowingRoleLabel(role.role)}`}
       actions={
-        editable && (
+        (editable || deletable) && (
           <>
-            <Box pl={2}>
-              <IconButton size="medium" onClick={onEdit}>
-                <SvgIcon
-                  path={mdiAccountEditOutline}
-                  size={muiIconSizes.medium}
-                />
-              </IconButton>
-            </Box>
+            {editable && (
+              <Box pl={2}>
+                <IconButton size="medium" onClick={onEdit}>
+                  <SvgIcon
+                    path={mdiAccountEditOutline}
+                    size={muiIconSizes.medium}
+                  />
+                </IconButton>
+              </Box>
+            )}
 
-            <Box>
-              <IconButton size="medium" onClick={onRemove}>
-                <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
-              </IconButton>
-            </Box>
+            {deletable && (
+              <Box>
+                <IconButton size="medium" onClick={onRemove}>
+                  <SvgIcon path={mdiDeleteOutline} size={muiIconSizes.medium} />
+                </IconButton>
+              </Box>
+            )}
           </>
         )
       }

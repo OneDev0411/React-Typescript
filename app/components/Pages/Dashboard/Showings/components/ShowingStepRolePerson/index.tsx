@@ -1,148 +1,114 @@
-import { memo, useEffect, useState } from 'react'
-import { kebabCase } from 'lodash'
+import { memo } from 'react'
+
+import { Box, Button, makeStyles } from '@material-ui/core'
 
 import {
   QuestionSection,
   QuestionSectionProps,
-  QuestionTitle,
-  useSectionContext,
-  useWizardContext
+  QuestionTitle
 } from 'components/QuestionWizard'
 
-import ShowingStepRolePersonEditForm from './ShowingStepRolePersonEditForm'
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
-import ShowingStepRolePersonSelect, {
-  ShowingStepRolePersonSelectProps
-} from './ShowingStepRolePersonSelect'
+
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
-import useCreateContact from './use-create-contact'
-import useUpdateContact from './use-update-contact'
+import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
+
+import { ShowingRoleInput } from '../../types'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
+import { getShowingRoleAOrAn, getShowingRoleLabel } from '../../helpers'
+
+const useStyles = makeStyles(
+  theme => ({
+    footer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      paddingTop: theme.spacing(3)
+    }
+  }),
+  { name: 'ShowingStepRolePerson' }
+)
 
 interface ShowingStepRolePersonProps
-  extends Pick<
-      ShowingStepRolePersonSelectProps,
-      'selectType' | 'isTeamAvailableMembers' | 'isPrimaryAgent'
-    >,
-    Pick<QuestionSectionProps, 'error'> {
-  personTitle: string
-  person: Nullable<IShowingRoleInputPerson>
-  onPersonChange: (person: Nullable<IShowingRoleInputPerson>) => void
-  skippable?: boolean
-  editable: boolean
-  required?: boolean
+  extends Pick<QuestionSectionProps, 'error'>,
+    Pick<ShowingRoleFormProps, 'hasNotificationTypeFields'> {
+  role: ShowingRoleInput
+  onRoleEdit: (role: ShowingRoleInput) => void
+  onRoleAdd: (role: IShowingRoleType, roleId: UUID) => void
+  onRoleDelete: (roleId: UUID) => void
 }
 
 function ShowingStepRolePerson({
-  personTitle,
-  person,
-  onPersonChange,
-  selectType,
-  skippable = true,
-  isPrimaryAgent,
-  isTeamAvailableMembers,
-  editable,
-  required = false,
-  error
+  error,
+  role,
+  onRoleAdd,
+  onRoleEdit,
+  onRoleDelete,
+  hasNotificationTypeFields
 }: ShowingStepRolePersonProps) {
-  type Step = 'search' | 'edit' | 'card'
-
+  const classes = useStyles()
   const nextStep = useQuestionWizardSmartNext()
-  const wizard = useWizardContext()
-  const { step } = useSectionContext()
 
-  const { setLoading } = useWizardContext()
-  const [localStep, setLocalStep] = useState<Step>(editable ? 'search' : 'card')
-  const [contact, setContact] = useState<Nullable<IContact>>(null)
-  const { createContact, isCreatingContact } = useCreateContact()
-  const { updateContact, isUpdatingContact } = useUpdateContact()
-
-  useEffect(() => {
-    if (step === wizard.currentStep && !editable) {
-      nextStep(400)
-    }
-  }, [editable, nextStep, step, wizard.currentStep])
-
-  const handleEdit = () => {
-    setLocalStep('edit')
-  }
-
-  const handleRemove = () => {
-    if (!required) {
-      onPersonChange(null)
-      setContact(null)
-    }
-
-    setLocalStep('search')
-  }
-
-  const handleSelect = (
-    person: IShowingRoleInputPerson,
-    contact?: IContact
-  ) => {
-    onPersonChange(person)
-    setContact(contact ?? null)
-    setLocalStep('edit')
-  }
-
-  const handleSubmit = async (person: IShowingRoleInputPerson) => {
-    if (selectType === 'Contact') {
-      setLoading(true)
-
-      if (!contact) {
-        setContact(await createContact(person))
-      } else {
-        setContact(await updateContact(contact, person))
-      }
-
-      setLoading(false)
-    }
-
-    onPersonChange(person)
-    setLocalStep('card')
+  const handleChange = (values: ShowingRoleFormValues) => {
+    onRoleEdit({ ...role, ...values, mode: 'card' })
     nextStep(400)
   }
 
-  function getSubmitLabel() {
-    if (selectType === 'Contact') {
-      return contact ? 'Save' : 'Save & Add to Contacts'
-    }
+  const handleRemove = () => onRoleDelete(role.id)
 
-    return step !== wizard.currentStep ? 'Save' : undefined
+  const handleEdit = () => onRoleEdit({ ...role, mode: 'form' })
+
+  const handleAdd = (roleType: IShowingRoleType) => {
+    onRoleAdd(roleType, role.id)
+    nextStep()
   }
+
+  const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
+  const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
   return (
     <QuestionSection error={error}>
       <QuestionTitle>
-        Who is the listing {kebabCase(personTitle)}?
+        Select {showingRoleAOrAn} {showingRole} and how they should be notified
       </QuestionTitle>
       <SmartQuestionForm>
-        {localStep === 'search' && (
-          <ShowingStepRolePersonSelect
-            selectType={selectType}
-            onSelect={handleSelect}
-            skippable={skippable}
-            isPrimaryAgent={isPrimaryAgent}
-            isTeamAvailableMembers={isTeamAvailableMembers}
-          />
-        )}
-        {localStep === 'edit' && person && (
-          <ShowingStepRolePersonEditForm
-            personTitle={personTitle}
-            initialData={person}
-            onSubmit={handleSubmit}
-            onCancel={handleRemove}
-            submitLabel={getSubmitLabel()}
-            submitDisabled={isCreatingContact || isUpdatingContact}
-          />
-        )}
-        {localStep === 'card' && person && (
+        {role.mode === 'form' ? (
+          <ShowingRoleForm
+            hasNotificationTypeFields={hasNotificationTypeFields}
+            initialValues={{
+              role: role.role,
+              first_name: role.first_name,
+              last_name: role.last_name,
+              email: role.email,
+              phone_number: role.phone_number,
+              confirm_notification_type: role.confirm_notification_type,
+              cancel_notification_type: role.cancel_notification_type,
+              user: role.user,
+              can_approve: role.can_approve
+            }}
+            onSubmit={handleChange}
+          >
+            <div className={classes.footer}>
+              <Box mr={1} component="span">
+                <ShowingRoleAddNewButton onClick={handleAdd} />
+              </Box>
+              <Button
+                type="submit"
+                variant="contained"
+                size="small"
+                color="primary"
+              >
+                Next
+              </Button>
+            </div>
+          </ShowingRoleForm>
+        ) : (
           <ShowingStepRolePersonCard
-            person={person}
-            personTitle={personTitle}
+            role={role}
             onEdit={handleEdit}
             onRemove={handleRemove}
-            editable={editable}
+            deletable={role.deletable}
           />
         )}
       </SmartQuestionForm>

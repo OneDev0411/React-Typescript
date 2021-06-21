@@ -142,6 +142,22 @@ export function getShowingRoleLabel(role: IDealRoleType): string {
   }
 }
 
+export function getShowingRoleAOrAn(role: IDealRoleType): string {
+  switch (role) {
+    case 'SellerAgent':
+      return 'an'
+
+    case 'CoSellerAgent':
+      return 'a'
+
+    case 'Tenant':
+      return 'a'
+
+    default:
+      return role
+  }
+}
+
 // TODO: use standard date format if exists
 const dateFormat = 'MMM D, ddd'
 
