@@ -51,7 +51,7 @@ function ShowingRoleFormCheckboxGroupField({
         }
 
         return (
-          <FormControl margin="normal">
+          <FormControl margin="normal" fullWidth>
             <Typography variant="subtitle2">{label}</Typography>
             <FormGroup row>
               <FormControlLabel

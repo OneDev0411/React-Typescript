@@ -2,14 +2,11 @@ import { Box } from '@material-ui/core'
 
 import { FormProps, FormRenderProps } from 'react-final-form'
 
-import {
-  FormCheckbox,
-  FormPhoneField,
-  FormTextField
-} from 'components/final-form-fields'
+import { FormPhoneField, FormTextField } from 'components/final-form-fields'
 
 import ShowingRoleFormCheckboxGroupField from './ShowingRoleFormCheckboxGroupField'
 import ShowingRoleFormNameField from './ShowingRoleFormNameField'
+import ShowingRoleYesNoRadioGroupField from './ShowingRoleYesNoRadioGroupField'
 import { ShowingRoleFormValues } from './types'
 import { requiredTextValidator } from './helpers'
 
@@ -68,14 +65,17 @@ function ShowingRoleFormFields({
       />
       {hasNotificationTypeFields && (
         <>
-          <FormCheckbox name="can_approve" label="Can Approve" />
+          <ShowingRoleYesNoRadioGroupField
+            name="can_approve"
+            label="Can Approve"
+          />
           <ShowingRoleFormCheckboxGroupField
             name="confirm_notification_type"
-            label="Confirm Via"
+            label="Notify on new bookings and reschedules"
           />
           <ShowingRoleFormCheckboxGroupField
             name="cancel_notification_type"
-            label="Notify On Confirmed/Canceled"
+            label="Notify on confirmations and cancelations"
           />
         </>
       )}
