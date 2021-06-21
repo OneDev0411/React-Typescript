@@ -18,7 +18,6 @@ const useSharedStyles = makeStyles(sharedStyles)
 const useStyles = makeStyles(styles)
 
 interface Props {
-  style: React.CSSProperties
   title: React.ReactNode
   event: ICalendarEvent & { rowIndex?: number }
   editable: boolean
@@ -28,7 +27,6 @@ interface Props {
 }
 
 export function EventContainer({
-  style,
   event,
   Icon,
   title,
@@ -49,48 +47,46 @@ export function EventContainer({
   })
 
   return (
-    <div style={style}>
-      <div className={classes.root}>
-        <button
-          type="button"
-          className={sharedClasses.buttonContainer}
-          onClick={onClick}
-        >
-          Add
-        </button>
+    <div className={classes.root}>
+      <button
+        type="button"
+        className={sharedClasses.buttonContainer}
+        onClick={onClick}
+      >
+        Add
+      </button>
 
-        <div className={sharedClasses.row}>
-          <div className={sharedClasses.container}>
-            <div className={sharedClasses.time}>
-              <DateTime event={event} />
-            </div>
-            <div className={cn(sharedClasses.container, sharedClasses.title)}>
-              {Icon && (
-                <div className={sharedClasses.icon}>
-                  <Icon
-                    fill="#6A7589"
-                    style={{ width: '24px', height: '24px' }}
-                  />
-                </div>
-              )}
-
-              <div className={sharedClasses.title}>{title}</div>
-            </div>
+      <div className={sharedClasses.row}>
+        <div className={sharedClasses.container}>
+          <div className={sharedClasses.time}>
+            <DateTime event={event} />
           </div>
-
-          <div className={classes.actions}>
-            {editable && (
-              <Tooltip title="Edit Event" placement="top">
-                <IconButton onClick={onClick}>
-                  <SvgIcon
-                    path={mdiPencilOutline}
-                    color={theme.palette.grey[400]}
-                  />
-                </IconButton>
-              </Tooltip>
+          <div className={cn(sharedClasses.container, sharedClasses.title)}>
+            {Icon && (
+              <div className={sharedClasses.icon}>
+                <Icon
+                  fill="#6A7589"
+                  style={{ width: '16px', height: '16px' }}
+                />
+              </div>
             )}
-            {actions}
+
+            <div className={sharedClasses.title}>{title}</div>
           </div>
+        </div>
+
+        <div className={classes.actions}>
+          {editable && (
+            <Tooltip title="Edit Event" placement="top">
+              <IconButton onClick={onClick}>
+                <SvgIcon
+                  path={mdiPencilOutline}
+                  color={theme.palette.grey[400]}
+                />
+              </IconButton>
+            </Tooltip>
+          )}
+          {actions}
         </div>
       </div>
     </div>

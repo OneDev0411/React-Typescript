@@ -11,7 +11,6 @@ import { EventContainer } from '../components/EventContainer'
 import { sharedStyles } from '../styles'
 
 interface Props {
-  style: React.CSSProperties
   event: ICalendarEvent
 }
 
@@ -25,7 +24,7 @@ const useStyles = makeStyles(
   { name: 'EmailCampaign' }
 )
 
-export function EmailCampaign({ style, event }: Props) {
+export function EmailCampaign({ event }: Props) {
   const { setSelectedEvent } = useContext(ListContext)
   const handleContainerClick = () => setSelectedEvent(event)
 
@@ -38,7 +37,6 @@ export function EmailCampaign({ style, event }: Props) {
 
   return (
     <EventContainer
-      style={style}
       classes={{ root: sending ? classes.sending : '' }}
       event={event}
       Icon={eventIcons.Email.icon}

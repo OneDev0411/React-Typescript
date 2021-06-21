@@ -83,7 +83,7 @@ function AvatarUploader({ contact, attributeDefs }: Props) {
   return (
     <Uploader
       avatar={{
-        size: 48,
+        size: 72,
         src: avatar,
         initials: getContactNameInitials(contact)
       }}
