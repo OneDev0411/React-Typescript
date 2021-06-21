@@ -9,15 +9,15 @@ import {
 import { ChangeEvent } from 'react'
 import { Field } from 'react-final-form'
 
-interface ShowingRoleFormDialogCheckboxGroupFieldProps {
+interface ShowingRoleFormCheckboxGroupFieldProps {
   label: string
   name: string
 }
 
-function ShowingRoleFormDialogCheckboxGroupField({
+function ShowingRoleFormCheckboxGroupField({
   label,
   name
-}: ShowingRoleFormDialogCheckboxGroupFieldProps) {
+}: ShowingRoleFormCheckboxGroupFieldProps) {
   return (
     <Field<INotificationDeliveryType[]>
       name={name}
@@ -98,4 +98,4 @@ function ShowingRoleFormDialogCheckboxGroupField({
   )
 }
 
-export default ShowingRoleFormDialogCheckboxGroupField
+export default ShowingRoleFormCheckboxGroupField

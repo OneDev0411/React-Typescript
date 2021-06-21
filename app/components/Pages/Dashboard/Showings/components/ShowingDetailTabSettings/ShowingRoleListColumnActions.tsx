@@ -10,12 +10,13 @@ import deleteShowingRole from 'models/showing/delete-showing-role'
 
 import useNotify from 'hooks/use-notify'
 
-import ShowingRoleFormDialog, {
+import {
+  ShowingRoleFormDialog,
   ShowingRoleFormDialogProps
-} from './ShowingRoleFormDialog'
-import { ShowingRoleFormValues } from './types'
+} from '../ShowingRoleForm'
 import { getShowingRoleLabel } from '../../helpers'
 import { goAndShowNotificationTypes } from '../../constants'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
 
 const useStyles = makeStyles(
   theme => ({

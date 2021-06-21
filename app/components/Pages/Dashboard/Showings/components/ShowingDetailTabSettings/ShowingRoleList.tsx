@@ -20,10 +20,10 @@ import ShowingRoleListColumnActions, {
   ShowingRoleListColumnActionsProps
 } from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
-import ShowingRoleFormDialog from './ShowingRoleFormDialog'
-import ShowingRoleListAddNewButton from './ShowingRoleListAddNewButton'
-import { ShowingRoleFormValues } from './types'
+import { ShowingRoleFormDialog } from '../ShowingRoleForm'
+import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { getShowingRoleLabel } from '../../helpers'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
 
 interface ShowingRoleListProps
   extends Pick<
@@ -159,10 +159,7 @@ function ShowingRoleList({
         virtualize={false}
       />
       <Box display="flex" justifyContent="space-between" mt={2}>
-        <ShowingRoleListAddNewButton
-          onClick={openAddDialog}
-          disabled={isLoading}
-        />
+        <ShowingRoleAddNewButton onClick={openAddDialog} disabled={isLoading} />
         {children}
       </Box>
       <ShowingRoleFormDialog

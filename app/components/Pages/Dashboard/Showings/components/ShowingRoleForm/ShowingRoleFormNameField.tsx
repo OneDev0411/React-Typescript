@@ -2,16 +2,18 @@ import { Field, FieldProps } from 'react-final-form'
 
 import { ReactNode } from 'react'
 
+import { ACL } from 'constants/acl'
+
 import AgentAutocompleteField, {
   AgentAutocompleteFieldProps
 } from '../AgentAutocompleteField'
 import ContactAutocompleteField from '../ContactAutocompleteField'
 
-import ActiveTeamAvailableMemberAutocompleteField, {
-  ActiveTeamAvailableMemberAutocompleteFieldProps
-} from '../ActiveTeamAvailableMemberAutocompleteField'
+import ActiveTeamAvailableMemberWithPermissionAutocompleteField, {
+  ActiveTeamAvailableMemberWithPermissionAutocompleteFieldProps
+} from '../ActiveTeamAvailableMemberWithPermissionAutocompleteField'
 
-interface ShowingRoleFormDialogNameFieldProps
+interface ShowingRoleFormNameFieldProps
   extends Pick<FieldProps<string, any>, 'validate'> {
   name: string
   label: string
@@ -20,11 +22,11 @@ interface ShowingRoleFormDialogNameFieldProps
   selectAgentMutator: (...args: any) => any
   selectContactMutator: (...args: any) => any
   searchFieldValue: AgentAutocompleteFieldProps['searchFieldValue'] &
-    ActiveTeamAvailableMemberAutocompleteFieldProps['searchFieldValue']
+    ActiveTeamAvailableMemberWithPermissionAutocompleteFieldProps['searchFieldValue']
   required?: boolean
   helperText?: ReactNode
 }
-function ShowingRoleFormDialogNameField({
+function ShowingRoleFormNameField({
   roleValue,
   selectUserMutator,
   selectContactMutator,
@@ -34,7 +36,7 @@ function ShowingRoleFormDialogNameField({
   required = false,
   helperText,
   ...otherProps
-}: ShowingRoleFormDialogNameFieldProps) {
+}: ShowingRoleFormNameFieldProps) {
   return (
     <Field
       {...otherProps}
@@ -60,7 +62,7 @@ function ShowingRoleFormDialogNameField({
             helperText={errorOrHelperText}
           />
         ) : roleValue === 'SellerAgent' ? (
-          <ActiveTeamAvailableMemberAutocompleteField
+          <ActiveTeamAvailableMemberWithPermissionAutocompleteField
             label={label}
             searchFieldValue={searchFieldValue}
             inputValue={value}
@@ -69,6 +71,7 @@ function ShowingRoleFormDialogNameField({
             required={required}
             error={hasError}
             helperText={errorOrHelperText}
+            permission={ACL.SHOWINGS}
           />
         ) : (
           <AgentAutocompleteField
@@ -87,4 +90,4 @@ function ShowingRoleFormDialogNameField({
   )
 }
 
-export default ShowingRoleFormDialogNameField
+export default ShowingRoleFormNameField
