@@ -24,7 +24,7 @@ const postcssOptions = {
 
 module.exports = {
   mode: 'development',
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client',
     path.resolve(__dirname, '../app/index.js')
@@ -38,14 +38,34 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      minSize: 0,
+      maxAsyncRequests: Infinity,
+      maxInitialRequests: Infinity,
+      cacheGroups: {
+        default: {
+          chunks: 'async',
+          minSize: 30000,
+          minChunks: 2,
+          maxAsyncRequests: 5,
+          maxInitialRequests: 3,
+          priority: -20,
+          reuseExistingChunk: true
+        },
+        vendors: {
+          name: 'vendors',
+          enforce: true,
+          test(module) {
+            return module.resource && module.resource.includes('node_modules')
+          },
+          priority: -10,
+          reuseExistingChunk: true
+        }
+      }
     },
-    // Keep the runtime chunk separated to enable long term caching
-    // https://twitter.com/wSokra/status/969679223278505985
-    // https://github.com/facebook/create-react-app/issues/5358
-    runtimeChunk: {
-      name: entrypoint => `runtime-${entrypoint.name}`
-    }
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    runtimeChunk: true
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
@@ -207,7 +227,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../app/index.html'),
       hash: false,
