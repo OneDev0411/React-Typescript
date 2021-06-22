@@ -118,7 +118,9 @@ function AgentGrid(props: Props & WithRouterProps) {
         width: '20%',
         class: 'opaque',
         accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
-        render: ({ row: deal }) => <CriticalDate deal={deal} />
+        render: ({ row: deal, totalRows, rowIndex }) => (
+          <CriticalDate deal={deal} user={user} />
+        )
       },
       {
         id: 'agent-name',
@@ -131,7 +133,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         }
       }
     ]
-  }, [roles, statuses])
+  }, [roles, user, statuses])
 
   const data = useMemo(() => {
     if (!deals) {

@@ -122,7 +122,9 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         id: 'critical-dates',
         class: 'opaque',
         accessor: getCriticalDateNextValue,
-        render: ({ row: deal }) => <CriticalDate deal={deal} />
+        render: ({ row: deal, totalRows, rowIndex }) => (
+          <CriticalDate deal={deal} user={user} />
+        )
       },
       {
         id: 'contract-price',
@@ -138,7 +140,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
         accessor: (deal: IDeal) => deal.created_at
       }
     ]
-  }, [roles, props.statuses])
+  }, [roles, user, props.statuses])
 
   const getData = (): IDeal[] => {
     if (!deals) {
