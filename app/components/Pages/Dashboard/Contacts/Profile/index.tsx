@@ -404,7 +404,13 @@ const ContactProfile = props => {
                 onStop={handleStopFlow}
                 addCallback={addToFlowCallback}
               />
-              <Dates {..._props} />
+              <Dates
+                contact={contact}
+                submitCallback={c => {
+                  setNewContact(c)
+                  fetchTimeline()
+                }}
+              />
               <AddressesSection {..._props} />
               <Deals contact={contact} />
               <Details {..._props} />
