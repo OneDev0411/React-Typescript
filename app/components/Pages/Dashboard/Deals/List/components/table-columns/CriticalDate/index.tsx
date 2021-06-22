@@ -2,33 +2,38 @@ import React, { useState } from 'react'
 
 import { Paper } from '@material-ui/core'
 
-import { useSelector } from 'react-redux'
+import { makeStyles } from '@material-ui/styles'
 
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
-import { getActiveTeamId } from 'utils/user-teams'
-
-import { selectBrandContexts } from 'reducers/deals/contexts'
-
-import { IAppState } from 'reducers'
-
 import FactsheetSection from '../../../../Dashboard/Factsheet'
 import { getNextDate, getNextDateValue } from './helpers'
+import { useFactsheetContexts } from '../../../../Dashboard/Factsheet/hooks/use-factsheet-contexts'
 
 export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 
+const useStyles = makeStyles(
+  {
+    paper: {
+      minWidth: '300px',
+      maxHeight: '40vh',
+      overflow: 'auto'
+    }
+  },
+  {
+    name: 'Grid-CriticalDates'
+  }
+)
+
 interface Props {
   deal: IDeal
-  user: IUser
 }
 
-export default function CriticalDate({ deal, user }: Props) {
+export default function CriticalDate({ deal }: Props) {
+  const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-  const contexts = useSelector<IAppState, IDealBrandContext[]>(
-    ({ deals }) =>
-      selectBrandContexts(deals.contexts, getActiveTeamId(user)!) || []
-  )
+  const contexts = useFactsheetContexts(deal, 'Dates')
 
   const definitions = contexts.filter(context => context.section === 'Dates')
 
@@ -44,7 +49,7 @@ export default function CriticalDate({ deal, user }: Props) {
   const handlePopoverClose = () => setAnchorEl(null)
 
   return (
-    <div>
+    <div onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
       <span
         style={{
           display: 'inline-block',
@@ -53,8 +58,6 @@ export default function CriticalDate({ deal, user }: Props) {
         }}
         aria-owns={anchorEl ? 'critical-date-popover' : undefined}
         aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
       >
         {nextDate || 'No closing date'}
       </span>
@@ -65,12 +68,11 @@ export default function CriticalDate({ deal, user }: Props) {
         placement="bottom-start"
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
+        style={{
+          zIndex: 1
+        }}
       >
-        <Paper
-          style={{
-            minWidth: '300px'
-          }}
-        >
+        <Paper className={classes.paper}>
           <FactsheetSection
             definitions={definitions}
             deal={deal}
