@@ -255,7 +255,7 @@ export class TourDrawer extends React.Component {
                   <Box ml={4} mb={2}>
                     <Locations
                       locations={values.locations}
-                      handleDelete={this.handleDelete}
+                      handleDelete={this.handleDeleteAssociation}
                     />
                     <Box mt={0.5}>
                       <AddAssociation
