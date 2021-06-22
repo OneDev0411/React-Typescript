@@ -146,7 +146,13 @@ export function ViewMode({
   const handleLink = e => {
     e.stopPropagation()
 
-    window.open(value, '_blank')
+    let url = value
+
+    if (!url.match(/^http(s?)?:\/\//i)) {
+      url = `http://${url}`
+    }
+
+    window.open(url, '_blank')
   }
 
   const renderActions = () => {
@@ -154,10 +160,10 @@ export function ViewMode({
 
     if (value && linkableAttribute.includes(attributeName)) {
       actions.push(
-        <Box key="open" onClick={handleLink} className={classes.action}>
+        <div key="open" onClick={handleLink} className={classes.action}>
           <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Open</span>
-        </Box>
+        </div>
       )
     }
 

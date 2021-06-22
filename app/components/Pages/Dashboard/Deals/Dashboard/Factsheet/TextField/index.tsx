@@ -1,15 +1,12 @@
 import { useState } from 'react'
 
 import { Tooltip, Button, createStyles, makeStyles } from '@material-ui/core'
-
 import ClickOutside from 'react-click-outside'
 
 import Input from 'components/Input'
 import { getContextInputMask } from 'deals/utils/get-context-mask'
 import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
-
-import { isContextApproved } from '../helpers/is-context-approved'
 
 import { EditButton } from '../ActionButtons/Edit'
 import { DeleteButton } from '../ActionButtons/Delete'
@@ -30,6 +27,8 @@ interface Props {
   field: IDealBrandContext
   value: unknown
   isBackOffice: boolean
+  isDisabled: boolean
+  tooltip: string | React.ReactChild
   onApprove(field: IDealBrandContext): void
   onChange(field: IDealBrandContext, value: unknown): void
   onDelete(field: IDealBrandContext): void
@@ -50,6 +49,8 @@ export function TextField({
   field,
   value,
   isBackOffice,
+  isDisabled,
+  tooltip,
   onChange,
   onDelete,
   onApprove
@@ -61,7 +62,13 @@ export function TextField({
 
   const properties = getContextProperties(field.key)
 
-  const toggleEditing = () => setIsEditing(!isEditing)
+  const toggleEditing = () => {
+    if (isDisabled) {
+      return
+    }
+
+    setIsEditing(!isEditing)
+  }
 
   const handleCancel = () => {
     toggleEditing()
@@ -142,32 +149,28 @@ export function TextField({
 
   return (
     <>
-      <Tooltip
-        title={
-          isContextApproved(deal, field) || isBackOffice
-            ? ''
-            : 'Pending Office Approval'
-        }
-      >
-        <Item>
+      <Tooltip title={tooltip}>
+        <Item disableHover={isDisabled}>
           <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
           <ItemValue>{getFormattedValue(field, value)}</ItemValue>
 
-          <ItemActions>
-            <EditButton onClick={toggleEditing} />
-            <DeleteButton
-              deal={deal}
-              field={field}
-              value={value}
-              onClick={handleDelete}
-            />
-            <ApproveButton
-              deal={deal}
-              context={field}
-              isBackOffice={isBackOffice}
-              onClick={() => onApprove(field)}
-            />
-          </ItemActions>
+          {!isDisabled && (
+            <ItemActions>
+              <EditButton onClick={toggleEditing} />
+              <DeleteButton
+                deal={deal}
+                field={field}
+                value={value}
+                onClick={handleDelete}
+              />
+              <ApproveButton
+                deal={deal}
+                context={field}
+                isBackOffice={isBackOffice}
+                onClick={() => onApprove(field)}
+              />
+            </ItemActions>
+          )}
         </Item>
       </Tooltip>
     </>

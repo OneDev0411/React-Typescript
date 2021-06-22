@@ -1,5 +1,9 @@
 export const fieldsNeedUpdateContact = [
   'email',
+  'website',
+  'facebook',
+  'instagram',
+  'linkedin',
   'phone_number',
   'first_name',
   'last_name',
