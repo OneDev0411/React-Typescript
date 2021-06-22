@@ -8,7 +8,7 @@ import React, {
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { useEffectOnce } from 'react-use'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 
 import cn from 'classnames'
@@ -69,6 +69,9 @@ const useStyles = makeStyles(
       background: theme.palette.background.paper,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderRadius: `${theme.shape.borderRadius}px`
+    },
+    boxContainer: {
+      display: 'flex'
     },
     sidenavContainer: {
       width: '350px',
@@ -386,7 +389,7 @@ const ContactProfile = props => {
         <title>{documentTitle()}</title>
       </Helmet>
       <PageLayout gutter={0}>
-        <Box className={classes.header}>
+        <div className={classes.header}>
           <Header
             contact={contact}
             onTagChange={fetchContact}
@@ -397,13 +400,13 @@ const ContactProfile = props => {
             activeFilter={activeFilter}
             onChangeFilter={handleChangeFilter}
           />
-        </Box>
+        </div>
 
-        <Box className={classes.container}>
+        <div className={classes.container}>
           <MergeDuplicates contact={contact} mergeCallback={mergeCallback} />
 
-          <Box display="flex">
-            <Box
+          <div className={classes.boxContainer}>
+            <div
               className={cn(classes.contentContainer, classes.sidenavContainer)}
             >
               <LastTouch contact={contact} />
@@ -428,8 +431,8 @@ const ContactProfile = props => {
                 disabled={isUpdatingOwner}
               />
               <Delete handleDelete={handleDelete} isDeleting={isDeleting} />
-            </Box>
-            <Box
+            </div>
+            <div
               className={cn(
                 classes.contentContainer,
                 classes.timelineContainer
@@ -441,9 +444,9 @@ const ContactProfile = props => {
                 contact={contact}
                 onChangeNote={setNewContact}
               />
-            </Box>
-          </Box>
-        </Box>
+            </div>
+          </div>
+        </div>
       </PageLayout>
     </>
   )

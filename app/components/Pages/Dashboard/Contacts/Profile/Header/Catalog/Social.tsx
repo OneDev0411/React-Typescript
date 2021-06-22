@@ -47,7 +47,7 @@ export const Social = ({ contact }: Props) => {
   const classes = useStyles()
 
   const getUrl = url => {
-    if (!url.match(/^http?:\/\//i) || !url.match(/^https?:\/\//i)) {
+    if (!url.match(/^http(s?)?:\/\//i)) {
       return `http://${url}`
     }
 
