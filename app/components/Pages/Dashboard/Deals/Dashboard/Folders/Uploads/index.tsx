@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Grid, Box, Typography, Button } from '@material-ui/core'
+
+import AutoSizer from 'react-virtualized-auto-sizer'
+
+import VirtualList from 'components/VirtualList'
 
 import UploadPlaceholder from './UploadPlaceholder'
 import UploadManager from '../../../UploadManager'
 
-import { Files } from './Files'
+import { File } from './File'
 
 import { useStyles } from '../Checklist/styles'
 
@@ -15,7 +19,10 @@ interface Props {
 export function UploadFolder({ deal }: Props) {
   const classes = useStyles()
   const [isFolderExpanded, setIsFolderExpanded] = useState<boolean>(true)
-  const files = (deal.files || []).sort((a, b) => b.created_at - a.created_at)
+  const files = useMemo(
+    () => (deal.files || []).sort((a, b) => b.created_at - a.created_at),
+    [deal.files]
+  )
 
   const hasStashFiles = (): boolean =>
     Array.isArray(deal.files) && deal.files.length > 0
@@ -68,12 +75,34 @@ export function UploadFolder({ deal }: Props) {
 
       <UploadPlaceholder deal={deal} />
 
-      {isFolderExpanded && (
-        <>
-          {files.map((file, index) => (
-            <Files key={file.id} index={index} deal={deal} file={file} />
-          ))}
-        </>
+      {isFolderExpanded && files.length > 0 && (
+        <div
+          style={{
+            width: '100%',
+            height: files.length < 10 ? `${files.length * 64}px` : '70vh'
+          }}
+        >
+          <AutoSizer>
+            {({ width, height }) => (
+              <VirtualList
+                width={width}
+                height={height}
+                itemCount={files.length}
+                itemData={
+                  {
+                    deal,
+                    files
+                  } as React.ComponentProps<typeof File>['data']
+                }
+                threshold={2}
+                itemSize={() => 60}
+                overscanCount={3}
+              >
+                {File}
+              </VirtualList>
+            )}
+          </AutoSizer>
+        </div>
       )}
     </Grid>
   )

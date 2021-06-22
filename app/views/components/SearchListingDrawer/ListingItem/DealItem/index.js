@@ -52,7 +52,8 @@ export function DealItem({ item: deal, showAddButton, ...props }) {
           <Address style={{ fontWeight: '500' }}>{deal.title}</Address>
 
           <Address style={{ color: 'rgba(0, 0, 0, 0.5)', fontWeight: '400' }}>
-            {status} . {dealSide(deal)} . {deal.property_type}
+            {status} . {dealSide(deal)} .{' '}
+            {deal.property_type ? deal.property_type.label : ''}
           </Address>
         </ListItemAddress>
       </AddressContainer>

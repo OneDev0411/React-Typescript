@@ -24,7 +24,7 @@ import { DealContainer, PageWrapper, PageBody } from './styled'
 
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')
-  const { isFetchingDeal, isFetchingContexts } = useLoadFullDeal(
+  const { isFetchingDeal, isFetchingBrandChecklists } = useLoadFullDeal(
     props.params.id
   )
 
@@ -46,7 +46,7 @@ function DealDetails(props) {
   )
 
   if (!deal) {
-    return false
+    return null
   }
 
   console.log(`[ x ] Rerender deal "${deal.title}" `)
@@ -77,7 +77,7 @@ function DealDetails(props) {
               onChangeTab={setActiveTab}
               isBackOffice={isBackOffice}
               isFetchingChecklists={isFetchingDeal}
-              isFetchingContexts={isFetchingContexts}
+              isFetchingContexts={isFetchingBrandChecklists}
             />
 
             <TaskActions deal={deal} />

@@ -43,9 +43,11 @@ export function Header(props) {
 
   return (
     <Box className={classes.container}>
-      <GlobalPageLayout.Header title="All Properties" isHiddenOnMobile={false}>
+      <GlobalPageLayout.Header title="Properties" isHiddenOnMobile={false}>
         <Box className={classes.body}>
-          <Autocomplete activeView={activeView} />
+          <Box width={500}>
+            <Autocomplete activeView={activeView} fullWidth />
+          </Box>
           <BaseDropdown
             renderDropdownButton={({ isActive, ...buttonProps }) => (
               <Button
