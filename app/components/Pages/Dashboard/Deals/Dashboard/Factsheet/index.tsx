@@ -164,7 +164,7 @@ export default function Factsheet({
             value,
             deal,
             isBackOffice,
-            isDisabled: isDisabledByMls,
+            isDisabled: disableEditing || isDisabledByMls,
             tooltip: getTooltipTitle(context, isDisabledByMls),
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,

@@ -11,7 +11,7 @@ export function useFactsheetContexts(
   section: string,
   brandChecklists?: IBrandChecklist[]
 ) {
-  const list = useSelector<
+  const contexts = useSelector<
     IAppState,
     IBrandChecklist['required_contexts'] & IBrandChecklist['optional_contexts']
   >(({ deals }) => {
@@ -19,7 +19,7 @@ export function useFactsheetContexts(
       ? [deal.deal_type, 'Offer']
       : [deal.deal_type]
 
-    const list = brandChecklists || deals.brandChecklists[deal.brand.id] || []
+    const list = deals.brandChecklists[deal.brand.id] || brandChecklists || []
 
     let contexts = uniqBy(
       list
@@ -51,5 +51,5 @@ export function useFactsheetContexts(
     return contexts
   })
 
-  return list
+  return contexts
 }
