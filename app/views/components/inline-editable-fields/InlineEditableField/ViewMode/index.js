@@ -148,7 +148,7 @@ export function ViewMode({
 
     let url = value
 
-    if (!url.match(/^http?:\/\//i) || !url.match(/^https?:\/\//i)) {
+    if (!url.match(/^http(s?)?:\/\//i)) {
       url = `http://${url}`
     }
 
