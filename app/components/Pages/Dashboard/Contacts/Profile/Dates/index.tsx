@@ -31,7 +31,7 @@ interface Props {
   contact: INormalizedContact
   submitCallback: (
     newContact: INormalizedContact,
-    fallback?: () => void
+    updatedAttribute: IContactAttributeDef
   ) => void
 }
 

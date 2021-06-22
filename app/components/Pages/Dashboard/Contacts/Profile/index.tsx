@@ -301,6 +301,17 @@ const ContactProfile = props => {
     setActiveFilter(value)
   }
 
+  const updateAttributeSubmitCallback = (
+    contact: INormalizedContact,
+    updatedAttribute: IContactAttributeDef
+  ) => {
+    setNewContact(contact)
+
+    if (updatedAttribute.data_type === 'date') {
+      fetchTimeline()
+    }
+  }
+
   useEffectOnce(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
 
@@ -366,7 +377,7 @@ const ContactProfile = props => {
 
   const _props = {
     contact,
-    submitCallback: setNewContact
+    submitCallback: updateAttributeSubmitCallback
   }
 
   return (
@@ -404,13 +415,7 @@ const ContactProfile = props => {
                 onStop={handleStopFlow}
                 addCallback={addToFlowCallback}
               />
-              <Dates
-                contact={contact}
-                submitCallback={c => {
-                  setNewContact(c)
-                  fetchTimeline()
-                }}
-              />
+              <Dates {..._props} />
               <AddressesSection {..._props} />
               <Deals contact={contact} />
               <Details {..._props} />
