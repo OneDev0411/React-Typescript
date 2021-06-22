@@ -5,7 +5,9 @@ import { Box, Button, makeStyles } from '@material-ui/core'
 import {
   QuestionSection,
   QuestionSectionProps,
-  QuestionTitle
+  QuestionTitle,
+  useSectionContext,
+  useWizardContext
 } from 'components/QuestionWizard'
 
 import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
@@ -49,19 +51,26 @@ function ShowingStepRolePerson({
 }: ShowingStepRolePersonProps) {
   const classes = useStyles()
   const nextStep = useQuestionWizardSmartNext()
+  const wizard = useWizardContext()
+  const { step } = useSectionContext()
 
   const handleChange = (values: ShowingRoleFormValues) => {
     onRoleEdit({ ...role, ...values, mode: 'card' })
     nextStep(400)
   }
 
-  const handleRemove = () => onRoleDelete(role.id)
+  const handleRemove = () => {
+    onRoleDelete(role.id)
+    wizard.setLastVisitedStep(wizard.lastVisitedStep - 1)
+    wizard.setCurrentStep(step)
+  }
 
   const handleEdit = () => onRoleEdit({ ...role, mode: 'form' })
 
   const handleAdd = (roleType: IShowingRoleType) => {
     onRoleAdd(roleType, role.id)
-    nextStep()
+    wizard.setLastVisitedStep(wizard.lastVisitedStep + 1)
+    wizard.setCurrentStep(step + 1)
   }
 
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
