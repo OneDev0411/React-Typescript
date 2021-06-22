@@ -33,6 +33,7 @@ module.exports = {
     chunkFilename: '[name].[chunkhash].js',
     globalObject: 'self'
   },
+  cache: { type: 'filesystem', allowCollectingMemory: true },
   optimization: {
     splitChunks: {
       chunks: 'all',
@@ -64,7 +65,8 @@ module.exports = {
     removeEmptyChunks: false,
     runtimeChunk: {
       name: entrypoint => `runtime-${entrypoint.name}`
-    }
+    },
+    minimize: false
   },
   resolve: {
     modules: [resolvePath('../app'), 'node_modules'],
