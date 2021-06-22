@@ -76,7 +76,7 @@ export function OfferEnderType({ sellerAgent, onChange }: Props) {
           name="DealType"
           options={[
             {
-              label: 'Yes',
+              label: 'Yes (this is an office double-ender deal)',
               value: 'OfficeDoubleEnder'
             },
             {
