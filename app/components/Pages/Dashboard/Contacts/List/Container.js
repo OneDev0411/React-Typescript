@@ -850,7 +850,12 @@ class ContactsList extends React.Component {
                   onChange={this.handleTagTouchReminderUpdate}
                 />
               )}
-              {showImportAction && <ImportContactsButton />}
+              {showImportAction && (
+                <ImportContactsButton
+                  hasCSVButton
+                  tooltip="Connect to Google, Outlook or import from a CSV"
+                />
+              )}
             </Box>
           )}
           <Box ml={1.5}>
