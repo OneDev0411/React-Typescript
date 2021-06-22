@@ -94,6 +94,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         'The "From" value must be earlier than the "To" value'
     }
 
+    const roleCache: Record<string, boolean> = {}
+
     roles.forEach(role => {
       if (
         !role.first_name ||
@@ -104,7 +106,25 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       ) {
         errors[`role-${role.id}`] =
           'Please complete the form and click on the Next button'
+
+        return
       }
+
+      const roleCacheKey = [
+        role.role,
+        role.first_name,
+        role.last_name,
+        role.phone_number,
+        role.email
+      ]
+        .join('_')
+        .trim()
+
+      if (roleCache[roleCacheKey]) {
+        errors[`role-${role.id}`] = 'Please role information is duplicated'
+      }
+
+      roleCache[roleCacheKey] = true
     })
 
     return Object.keys(errors).length ? errors : null
