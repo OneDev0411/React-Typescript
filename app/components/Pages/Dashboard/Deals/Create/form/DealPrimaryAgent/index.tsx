@@ -21,7 +21,7 @@ import { useCreationContext } from '../../context/use-creation-context'
 import { RoleCard } from '../../components/RoleCard'
 import { ContactRoles } from '../../components/ContactRoles'
 
-import { AgentsList } from './AgentsList'
+import { AgentsList } from '../../components/AgentsList'
 
 import type { IDealFormRole } from '../../types'
 
@@ -143,7 +143,9 @@ export function DealPrimaryAgent({
             />
           ) : (
             <AgentsList
-              isOfficeDoubleEnded={isOfficeDoubleEnded}
+              flattenTeams={isOfficeDoubleEnded}
+              isPrimaryAgent={!isOfficeDoubleEnded}
+              useTeamBrandId={!isOfficeDoubleEnded}
               onSelectRole={setSelectedRole}
             />
           )}
