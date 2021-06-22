@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Downshift from 'downshift'
 import { mdiChevronDown } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
 
+import { Portal } from 'components/Portal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { setSelectedTask } from 'actions/deals'
 import { isBackOffice } from 'utils/user-teams'
@@ -36,6 +36,8 @@ import {
   getFormEmailAttachments,
   getEnvelopeEmailAttachments
 } from 'views/utils/deal-files/get-email-attachments'
+
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
@@ -70,13 +72,7 @@ import {
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
-import {
-  Container,
-  MenuButton,
-  MenuContainer,
-  MenuItem,
-  PrimaryAction
-} from './styled'
+import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
   deal: IDeal
@@ -377,54 +373,71 @@ class ActionsButton extends React.Component<
     const primaryAction: ActionButton = secondaryActions.shift()!
 
     return (
-      <div className={this.props.className}>
-        <Downshift
-          isOpen={this.state.isMenuOpen}
-          onOuterClick={this.handleCloseMenu}
-        >
-          {({ isOpen }) => (
-            <div style={{ position: 'relative' }}>
-              <Container hasSecondaryActions={secondaryActions.length > 0}>
-                <PrimaryAction
-                  hasSecondaryActions={secondaryActions.length > 0}
-                  className={this.getButtonLabel(primaryAction)}
-                  onClick={() => this.handleSelectAction(primaryAction)}
-                >
-                  {this.getButtonLabel(primaryAction)}
-                </PrimaryAction>
+      <div
+        className={this.props.className}
+        style={{
+          ...(this.state.isMenuOpen && {
+            visibility: 'visible'
+          })
+        }}
+      >
+        <BaseDropdown
+          placement="bottom-end"
+          PopperProps={{
+            style: {
+              marginTop: '4px',
+              width: '10.8rem' // TODO: needs refactor all styled components
+            }
+          }}
+          onIsOpenChange={isMenuOpen =>
+            this.setState({
+              isMenuOpen
+            })
+          }
+          renderDropdownButton={({ isActive, ...props }) => (
+            <Container hasSecondaryActions={secondaryActions.length > 0}>
+              <PrimaryAction
+                hasSecondaryActions={secondaryActions.length > 0}
+                className={this.getButtonLabel(primaryAction)}
+                onClick={() => this.handleSelectAction(primaryAction)}
+              >
+                {this.getButtonLabel(primaryAction)}
+              </PrimaryAction>
 
-                {secondaryActions.length > 0 && (
-                  <MenuButton onClick={this.handleToggleMenu}>
-                    <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
-                  </MenuButton>
-                )}
-              </Container>
-
-              {isOpen && (
-                <MenuContainer>
-                  {secondaryActions.map((button, index) => (
-                    <MenuItem
-                      key={index}
-                      disabled={button.disabled === true}
-                      onClick={() => this.handleSelectAction(button)}
-                    >
-                      <Tooltip
-                        placement="left"
-                        title={
-                          button.disabled && button.tooltip
-                            ? button.tooltip
-                            : ''
-                        }
-                      >
-                        <span>{this.getButtonLabel(button)}</span>
-                      </Tooltip>
-                    </MenuItem>
-                  ))}
-                </MenuContainer>
+              {secondaryActions.length > 0 && (
+                <MenuButton {...props}>
+                  <SvgIcon
+                    path={mdiChevronDown}
+                    rotate={this.state.isMenuOpen ? 180 : 0}
+                  />
+                </MenuButton>
               )}
+            </Container>
+          )}
+          renderMenu={({ close }) => (
+            <div>
+              {secondaryActions.map((button, index) => (
+                <MenuItem
+                  key={index}
+                  disabled={button.disabled === true}
+                  onClick={e => {
+                    close(e)
+                    this.handleSelectAction(button)
+                  }}
+                >
+                  <Tooltip
+                    placement="left"
+                    title={
+                      button.disabled && button.tooltip ? button.tooltip : ''
+                    }
+                  >
+                    <span>{this.getButtonLabel(button)}</span>
+                  </Tooltip>
+                </MenuItem>
+              ))}
             </div>
           )}
-        </Downshift>
+        />
 
         {/*
         // @ts-ignore */}
@@ -437,11 +450,13 @@ class ActionsButton extends React.Component<
         </UploadManager>
 
         {this.state.isPdfSplitterOpen && (
-          <PdfSplitter
-            files={this.getSplitterFiles()}
-            deal={this.props.deal}
-            onClose={this.handleToggleSplitPdf}
-          />
+          <Portal>
+            <PdfSplitter
+              files={this.getSplitterFiles()}
+              deal={this.props.deal}
+              onClose={this.handleToggleSplitPdf}
+            />
+          </Portal>
         )}
 
         {this.state.isTasksDrawerOpen && (
