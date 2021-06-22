@@ -29,6 +29,8 @@ import {
 
 import { selectUser } from 'selectors/user'
 
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
 
@@ -75,65 +77,64 @@ function AgentGrid(props: Props & WithRouterProps) {
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
   const user = useSelector(selectUser)
+  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
   const statuses = useBrandStatuses(getActiveTeamId(user)!)
 
-  const columns = useMemo(() => {
-    return [
-      {
-        id: 'address',
-        width: '30%',
-        accessor: (deal: IDeal) => deal.title,
-        render: ({ row: deal, totalRows, rowIndex }) => (
-          <Address
-            deal={deal}
-            roles={roles}
-            totalRows={totalRows}
-            rowIndex={rowIndex}
-            notificationsCount={
-              deal.new_notifications ? deal.new_notifications.length : 0
-            }
-          />
-        )
-      },
-      {
-        id: 'status',
-        width: '15%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal) || '',
-        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
-        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, statuses)
-      },
-      {
-        id: 'price',
-        sortType: 'number' as ColumnSortType,
-        width: '10%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getPriceValue(deal),
-        render: ({ row: deal }: { row: IDeal }) =>
-          getFormattedPrice(getPriceValue(deal), 'currency', 0)
-      },
-      {
-        id: 'critical-dates',
-        width: '20%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
-        render: ({ row: deal, totalRows, rowIndex }) => (
-          <CriticalDate deal={deal} user={user} />
-        )
-      },
-      {
-        id: 'agent-name',
-        width: '10%',
-        class: 'opaque',
-        align: 'right' as TableCellProps['align'],
-        accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
-        render: ({ row: deal }: { row: IDeal }) => {
-          return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
-        }
+  const columns = [
+    {
+      id: 'address',
+      width: '30%',
+      accessor: (deal: IDeal) => deal.title,
+      render: ({ row: deal, totalRows, rowIndex }) => (
+        <Address
+          deal={deal}
+          roles={roles}
+          totalRows={totalRows}
+          rowIndex={rowIndex}
+          notificationsCount={
+            deal.new_notifications ? deal.new_notifications.length : 0
+          }
+        />
+      )
+    },
+    {
+      id: 'status',
+      width: '15%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getStatus(deal) || '',
+      render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+      sortFn: (rows: IDeal[]) => sortDealsStatus(rows, statuses)
+    },
+    {
+      id: 'price',
+      sortType: 'number' as ColumnSortType,
+      width: '10%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getPriceValue(deal),
+      render: ({ row: deal }: { row: IDeal }) =>
+        getFormattedPrice(getPriceValue(deal), 'currency', 0)
+    },
+    {
+      id: 'critical-dates',
+      width: '20%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
+      render: ({ row: deal }) => (
+        <CriticalDate deal={deal} brandChecklists={brandChecklists} />
+      )
+    },
+    {
+      id: 'agent-name',
+      width: '10%',
+      class: 'opaque',
+      align: 'right' as TableCellProps['align'],
+      accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
+      render: ({ row: deal }: { row: IDeal }) => {
+        return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       }
-    ]
-  }, [roles, user, statuses])
+    }
+  ]
 
   const data = useMemo(() => {
     if (!deals) {

@@ -25,25 +25,27 @@ import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
 
 interface Props {
   deal: IDeal
-  definitions?: IDealBrandContext[]
+  contexts?: IDealBrandContext[]
   isBackOffice: boolean
   display?: boolean
   title?: React.ReactText | React.ReactNode
   section: string
+  disableEditing?: boolean
 }
 
 export default function Factsheet({
   deal,
-  definitions,
+  contexts,
   isBackOffice,
   display,
   title,
-  section
+  section,
+  disableEditing = false
 }: Props) {
   const dispatch = useDispatch()
 
-  const contexts = useFactsheetContexts(deal, section)
-  const table = definitions || contexts
+  const contextsList = useFactsheetContexts(deal, section)
+  const table = contexts ?? contextsList
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -134,6 +136,7 @@ export default function Factsheet({
             value,
             deal,
             isBackOffice,
+            disableEditing,
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,
             onApprove: handleApproveField
