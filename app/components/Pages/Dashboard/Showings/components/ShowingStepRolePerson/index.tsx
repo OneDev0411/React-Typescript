@@ -20,13 +20,19 @@ import { ShowingRoleInput } from '../../types'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
 import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { getShowingRoleAOrAn, getShowingRoleLabel } from '../../helpers'
+import ShowingRoleAutoSubmitAddNewButton from './ShowingRoleAutoSubmitAddNewButton'
 
 const useStyles = makeStyles(
   theme => ({
-    footer: {
+    formFooter: {
       display: 'flex',
       justifyContent: 'flex-end',
       paddingTop: theme.spacing(3)
+    },
+    cardFooter: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginTop: theme.spacing(2)
     }
   }),
   { name: 'ShowingStepRolePerson' }
@@ -53,6 +59,7 @@ function ShowingStepRolePerson({
   const nextStep = useQuestionWizardSmartNext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
+  const isLastStep = step === wizard.lastVisitedStep
 
   const handleChange = (values: ShowingRoleFormValues) => {
     onRoleEdit({ ...role, ...values, mode: 'card' })
@@ -76,13 +83,20 @@ function ShowingStepRolePerson({
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
   const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
+  const isForm = role.mode === 'form'
+
   return (
     <QuestionSection error={error}>
       <QuestionTitle>
         Select {showingRoleAOrAn} {showingRole} and how they should be notified
       </QuestionTitle>
-      <SmartQuestionForm>
-        {role.mode === 'form' ? (
+      <SmartQuestionForm
+        width={isForm ? '100%' : undefined}
+        containerProps={
+          isForm ? { maxWidth: 552, marginLeft: 'auto' } : undefined
+        }
+      >
+        {isForm ? (
           <ShowingRoleForm
             hasNotificationTypeFields={hasNotificationTypeFields}
             initialValues={{
@@ -98,9 +112,12 @@ function ShowingStepRolePerson({
             }}
             onSubmit={handleChange}
           >
-            <div className={classes.footer}>
+            <div className={classes.formFooter}>
               <Box mr={1} component="span">
-                <ShowingRoleAddNewButton onClick={handleAdd} />
+                <ShowingRoleAutoSubmitAddNewButton
+                  label="Save and Add new participant"
+                  onClick={handleAdd}
+                />
               </Box>
               <Button
                 type="submit"
@@ -108,17 +125,25 @@ function ShowingStepRolePerson({
                 size="small"
                 color="primary"
               >
-                Next
+                {isLastStep ? 'Next' : 'Save'}
               </Button>
             </div>
           </ShowingRoleForm>
         ) : (
-          <ShowingStepRolePersonCard
-            role={role}
-            onEdit={handleEdit}
-            onRemove={handleRemove}
-            deletable={role.deletable}
-          />
+          <>
+            <ShowingStepRolePersonCard
+              role={role}
+              onEdit={handleEdit}
+              onRemove={handleRemove}
+              deletable={role.deletable}
+            />
+            <div className={classes.cardFooter}>
+              <ShowingRoleAddNewButton
+                label="Add new participant"
+                onClick={handleAdd}
+              />
+            </div>
+          </>
         )}
       </SmartQuestionForm>
     </QuestionSection>

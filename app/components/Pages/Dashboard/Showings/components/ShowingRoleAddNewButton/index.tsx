@@ -6,19 +6,21 @@ import { getShowingRoleLabel } from '../../helpers'
 
 const useStyles = makeStyles(
   {
-    width: { width: 200 }
+    width: { minWidth: 200 }
   },
   { name: 'ShowingRoleAddNewButton' }
 )
 
-interface ShowingRoleAddNewButtonProps {
+export interface ShowingRoleAddNewButtonProps {
   onClick: (role: IShowingRoleType) => void
   disabled?: boolean
+  label?: string
 }
 
 function ShowingRoleAddNewButton({
   onClick,
-  disabled
+  disabled,
+  label = 'Add New Participants'
 }: ShowingRoleAddNewButtonProps) {
   const classes = useStyles()
 
@@ -55,7 +57,7 @@ function ShowingRoleAddNewButton({
         </List>
       )}
     >
-      Add New Participants
+      {label}
     </ButtonMenu>
   )
 }

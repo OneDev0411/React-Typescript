@@ -105,7 +105,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         role.mode === 'form'
       ) {
         errors[`role-${role.id}`] =
-          'Please complete the form and click on the Next button'
+          'Please complete the form and click on the Save button'
 
         return
       }
