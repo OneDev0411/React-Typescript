@@ -24,7 +24,7 @@ const AnalyticsDropdown = ({ brandType }: Props) => {
         <DropdownTab title="Analytics">
           {({ toggleMenu }) => (
             <>
-              {...Object.keys(availableDashboards).map((key, index) => (
+              {Object.keys(availableDashboards).map((key, index) => (
                 <MenuItem
                   key={index}
                   onClick={() => {

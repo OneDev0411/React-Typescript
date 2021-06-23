@@ -21,11 +21,7 @@
     ]
   ],
   "env": {
-    "development": {
-      "plugins": [
-        "react-hot-loader/babel"
-      ]
-    },
+    "development": {},
     "test": {
       "plugins": [
         "dynamic-import-node"
