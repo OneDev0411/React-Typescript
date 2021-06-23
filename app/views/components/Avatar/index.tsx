@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useMemo } from 'react'
 import { Avatar as MUIAvatar, withStyles, Theme } from '@material-ui/core'
 import LazyLoad from 'react-lazy-load'
@@ -20,8 +21,14 @@ const BaseAvatar = withStyles((theme: Theme) => ({
     }
   }
 }))((props: Props & { src?: string }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { disableLazyLoad, isOnline, showStatus, ...rest } = props
+  const {
+    disableLazyLoad,
+    isOnline,
+    showStatus,
+    statusColor,
+    placeHolderImage,
+    ...rest
+  } = props
 
   return <MUIAvatar {...rest} />
 })
