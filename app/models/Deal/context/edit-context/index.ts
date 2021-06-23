@@ -20,7 +20,6 @@ export default async function editContext(
 
   const modifiedContext = {
     ...data,
-    preffered_source: data.preffered_source ? 'MLS' : 'Provided',
     triggers_brokerwolf: false,
     order: 0
   }

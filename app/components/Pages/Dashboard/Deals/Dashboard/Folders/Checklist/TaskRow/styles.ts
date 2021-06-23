@@ -14,13 +14,13 @@ export const useStyles = makeStyles(
       position: 'relative',
       minHeight: theme.spacing(8),
       '& .visible-on-hover': {
-        display: 'none'
+        visibility: 'hidden'
       },
       '&:hover .visible-on-hover': {
-        display: 'block'
+        visibility: 'visible'
       },
       '&:hover .hide-on-hover': {
-        display: 'none'
+        visibility: 'hidden'
       },
       '&:hover': {
         backgroundColor: theme.palette.info.ultralight

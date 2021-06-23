@@ -69,7 +69,7 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
         onClick={handleViewSwitcherToggle}
       >
         {listingViewOptions[activeView].icon({
-          color: theme.palette.primary.main,
+          color: theme.palette.text.primary,
           className: iconClasses.small
         })}
       </DropdownToggleButton>
@@ -97,7 +97,7 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
             onClick={() => handleViewSwitcherItemClick(option.value)}
           >
             {option.icon({
-              color: theme.palette.primary.main,
+              color: theme.palette.text.primary,
               className: cn(iconClasses.small, iconClasses.rightMargin)
             })}
             {option.label}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import Tags from '../../Tags/TagsSection'
@@ -15,6 +15,12 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       flexGrow: 1
+    },
+    infoContainer: {
+      paddingLeft: theme.spacing(1)
+    },
+    socialContainer: {
+      marginLeft: theme.spacing(1)
     },
     title: {
       display: 'flex',
@@ -37,22 +43,22 @@ export default function Catalog({
   const classes = useStyles()
 
   return (
-    <Box className={classes.container}>
+    <div className={classes.container}>
       <Avatar contact={contact} />
-      <Box pl={1}>
-        <Box className={classes.title}>
+      <div className={classes.infoContainer}>
+        <div className={classes.title}>
           <Typography variant="h6" className={classes.name}>
             {contact.display_name}
           </Typography>
-          <Box ml={1}>
+          <div className={classes.socialContainer}>
             <Social contact={contact} />
-          </Box>
-        </Box>
+          </div>
+        </div>
 
-        <Box className={classes.tags}>
+        <div className={classes.tags}>
           <Tags contact={contact} onChange={onTagChange} />
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }
