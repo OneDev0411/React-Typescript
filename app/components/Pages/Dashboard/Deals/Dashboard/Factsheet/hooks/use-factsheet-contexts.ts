@@ -19,7 +19,7 @@ export function useFactsheetContexts(
       ? [deal.deal_type, 'Offer']
       : [deal.deal_type]
 
-    const list = deals.brandChecklists[deal?.brand.id] || brandChecklists || []
+    const list = deals.brandChecklists[deal?.brand?.id] || brandChecklists || []
 
     let contexts = uniqBy(
       list
