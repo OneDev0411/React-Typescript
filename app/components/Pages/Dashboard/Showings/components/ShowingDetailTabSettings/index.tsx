@@ -79,7 +79,7 @@ function ShowingDetailTabSettings({
         })),
         allow_appraisal: showing.allow_appraisal,
         allow_inspection: showing.allow_inspection,
-        instructions: showing.instructions,
+        instructions: showing.instructions?.trim(),
         brand: showing.brand
       })
 
@@ -112,6 +112,10 @@ function ShowingDetailTabSettings({
       ) {
         errors.Availability = 'Invalid time range'
       }
+    }
+
+    if (showing.instructions && showing.instructions.trim() === '') {
+      errors.Instructions = 'Please enter a valid text'
     }
 
     setErrors(Object.keys(errors).length ? errors : null)
@@ -270,6 +274,8 @@ function ShowingDetailTabSettings({
             <ShowingInstructionsTextField
               defaultValue={showing.instructions || ''}
               onChange={handleInstructionsChange}
+              error={!!errors?.Instructions}
+              helperText={errors?.Instructions}
             />
             <ShowingDetailTabSettingsSaveButton
               isSaving={isSaving}
