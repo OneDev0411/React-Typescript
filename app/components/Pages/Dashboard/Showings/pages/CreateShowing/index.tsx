@@ -150,7 +150,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       errors.availabilities = 'The time slots has conflicts'
     }
 
-    if (hasInvalidTimeRange(availabilities)) {
+    if (hasInvalidTimeRange(availabilities, duration)) {
       errors.availabilities =
         'The "From" value must be earlier than the "To" value'
     }
@@ -211,6 +211,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     coAgentCancelNotificationTypes,
     coAgentConfirmNotificationTypes,
     coAgentPerson,
+    duration,
     hasCoAgent,
     hasOccupant,
     occupantCancelNotificationTypes,

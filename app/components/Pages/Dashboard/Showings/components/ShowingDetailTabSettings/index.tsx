@@ -107,7 +107,9 @@ function ShowingDetailTabSettings({
     if (showing.availabilities !== showingRef.current.availabilities) {
       if (hasTimeConflicts(showing.availabilities)) {
         errors.Availability = 'The time slots has conflicts'
-      } else if (hasInvalidTimeRange(showing.availabilities)) {
+      } else if (
+        hasInvalidTimeRange(showing.availabilities, showing.duration)
+      ) {
         errors.Availability = 'Invalid time range'
       }
     }
@@ -201,6 +203,7 @@ function ShowingDetailTabSettings({
                 </Grid>
               </Grid>
               <ShowingAvailabilitiesTimes
+                showingDuration={showing.duration}
                 value={showing.availabilities}
                 onChange={handleAvailabilitiesChange}
                 error={errors?.Availability}

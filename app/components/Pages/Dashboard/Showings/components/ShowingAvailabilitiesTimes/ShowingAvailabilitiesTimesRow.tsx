@@ -1,4 +1,5 @@
 import { memo } from 'react'
+
 import {
   Box,
   FormHelperText,
@@ -20,7 +21,11 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
 
-import { humanTimeToTimestamp, timestampToHumanTime } from './helpers'
+import {
+  getSecondsDifference,
+  humanTimeToTimestamp,
+  timestampToHumanTime
+} from './helpers'
 import { ShowingAvailabilityItem } from '../../types'
 import ShowingAvailabilitiesTimesRowInsert from './ShowingAvailabilitiesTimesRowInsert'
 
@@ -43,13 +48,15 @@ interface FormValues {
   weekday: Weekday
 }
 
-interface ShowingAvailabilitiesTimesRowProps extends ShowingAvailabilityItem {
+export interface ShowingAvailabilitiesTimesRowProps
+  extends ShowingAvailabilityItem {
   onDelete: (id: UUID) => void
   onChange: (id: UUID, row: ShowingAvailabilityItem) => void
   onInsert: () => void
   disableDelete?: boolean
   hasError: boolean
   hasInsertButton: boolean
+  showingDuration: number
 }
 
 function ShowingAvailabilitiesTimesRow({
@@ -61,7 +68,8 @@ function ShowingAvailabilitiesTimesRow({
   disableDelete = false,
   hasError,
   hasInsertButton,
-  onInsert
+  onInsert,
+  showingDuration
 }: ShowingAvailabilitiesTimesRowProps) {
   const classes = useStyles()
 
@@ -102,6 +110,13 @@ function ShowingAvailabilitiesTimesRow({
     if (values.end <= values.start) {
       errors[FORM_ERROR] =
         'The "From" value must be earlier than the "To" value'
+    } else if (
+      values.start &&
+      values.end &&
+      getSecondsDifference(values.end, values.start) < showingDuration
+    ) {
+      errors[FORM_ERROR] =
+        'The "From" and "To" difference must be more than showing duration'
     }
 
     return errors

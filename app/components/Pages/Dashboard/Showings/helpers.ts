@@ -102,9 +102,14 @@ export function findTimeConflicts(
 }
 
 export function hasInvalidTimeRange(
-  slots: IShowingAvailabilityInput[]
+  slots: IShowingAvailabilityInput[],
+  showingDuration: number
 ): boolean {
-  return !!slots.find(slot => slot.availability[1] <= slot.availability[0])
+  return !!slots.find(
+    slot =>
+      slot.availability[1] <= slot.availability[0] ||
+      slot.availability[1] - slot.availability[0] < showingDuration
+  )
 }
 
 export function sortAppointments(
