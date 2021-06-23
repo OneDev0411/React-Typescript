@@ -7,7 +7,7 @@ import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import SmartQuestionForm from '../SmartQuestionForm'
-import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
+import useIsQuestionWizardCurrentOrLastVisitedStep from '../../hooks/use-is-question-wizard-current-or-last-visited-step'
 import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
 
 interface ShowingStepInstructionsProps {
@@ -21,7 +21,7 @@ function ShowingStepInstructions({
 }: ShowingStepInstructionsProps) {
   const nextStep = useQuestionWizardSmartNext()
   const [fieldValue, setFieldValue] = useState(value || '')
-  const isCurrentStep = useIsQuestionWizardCurrentStep()
+  const isCurrentStep = useIsQuestionWizardCurrentOrLastVisitedStep()
 
   const [handleDebouncedChange] = useDebouncedCallback((newValue: string) => {
     onChange(newValue.trim())

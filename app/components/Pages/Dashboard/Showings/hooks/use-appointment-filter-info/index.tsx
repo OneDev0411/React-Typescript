@@ -42,7 +42,7 @@ export const appointmentStatusInfo: Record<
   },
   Completed: {
     label: 'Finished',
-    icon: <FlagFlagOutlinedIcon />, // TODO: select an icon for this when needed
+    icon: <FlagFlagOutlinedIcon />,
     filter: createStatusFilter('Completed')
   },
   Feedback: {

@@ -12,7 +12,7 @@ import ShowingAvailabilitiesTimes, {
 import SmartQuestionForm from '../SmartQuestionForm'
 import ShowingDuration, { ShowingDurationProps } from '../ShowingDuration'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import useIsQuestionWizardCurrentStep from '../../hooks/use-is-question-wizard-current-step'
+import useIsQuestionWizardCurrentOrLastVisitedStep from '../../hooks/use-is-question-wizard-current-or-last-visited-step'
 
 interface ShowingStepDurationAndAvailabilitiesProps
   extends Pick<QuestionSectionProps, 'error'> {
@@ -29,7 +29,7 @@ function ShowingStepDurationAndAvailabilities({
   onAvailabilitiesChange,
   error
 }: ShowingStepDurationAndAvailabilitiesProps) {
-  const isCurrentStep = useIsQuestionWizardCurrentStep()
+  const isCurrentStep = useIsQuestionWizardCurrentOrLastVisitedStep()
   const nextStep = useQuestionWizardSmartNext()
 
   return (
