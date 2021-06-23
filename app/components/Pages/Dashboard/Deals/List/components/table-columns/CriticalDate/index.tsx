@@ -4,6 +4,8 @@ import { Paper } from '@material-ui/core'
 
 import { useSelector } from 'react-redux'
 
+import { makeStyles } from '@material-ui/styles'
+
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import { getActiveTeamId } from 'utils/user-teams'
@@ -17,12 +19,26 @@ import { getNextDate, getNextDateValue } from './helpers'
 
 export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 
+const useStyles = makeStyles(
+  {
+    paper: {
+      minWidth: '300px',
+      maxHeight: '40vh',
+      overflow: 'auto'
+    }
+  },
+  {
+    name: 'Grid-CriticalDates'
+  }
+)
+
 interface Props {
   deal: IDeal
   user: IUser
 }
 
 export default function CriticalDate({ deal, user }: Props) {
+  const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
   const contexts = useSelector<IAppState, IDealBrandContext[]>(
@@ -44,7 +60,7 @@ export default function CriticalDate({ deal, user }: Props) {
   const handlePopoverClose = () => setAnchorEl(null)
 
   return (
-    <div>
+    <div onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
       <span
         style={{
           display: 'inline-block',
@@ -53,8 +69,6 @@ export default function CriticalDate({ deal, user }: Props) {
         }}
         aria-owns={anchorEl ? 'critical-date-popover' : undefined}
         aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
       >
         {nextDate || 'No closing date'}
       </span>
@@ -65,12 +79,11 @@ export default function CriticalDate({ deal, user }: Props) {
         placement="bottom-start"
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
+        style={{
+          zIndex: 1
+        }}
       >
-        <Paper
-          style={{
-            minWidth: '300px'
-          }}
-        >
+        <Paper className={classes.paper}>
           <FactsheetSection
             definitions={definitions}
             deal={deal}

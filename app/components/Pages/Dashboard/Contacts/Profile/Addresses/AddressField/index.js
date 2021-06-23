@@ -219,7 +219,6 @@ class AddressField extends React.Component {
         renderViewMode={this.renderViewMode}
         showAdd
         showDelete
-        style={{ margin: '0 1rem' }}
         toggleMode={this.toggleMode}
       />
     )

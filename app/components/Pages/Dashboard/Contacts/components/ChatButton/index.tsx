@@ -2,12 +2,12 @@ import React, { useState, useMemo, useCallback, ReactNode } from 'react'
 import { AnyAction } from 'redux'
 import { useSelector, useDispatch } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
-import { IconButton } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
 
 import { mdiChatProcessingOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { selectUser } from 'selectors/user'
 
@@ -19,6 +19,8 @@ import Chatroom from '../../../Chatroom/Util/chatroom'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     button: {
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.action.disabledBackground}`,
       '&[disabled] svg': {
         fill: theme.palette.action.disabled
       }
@@ -78,13 +80,15 @@ function ChatButton({ contact, render }: Props) {
   }
 
   return (
-    <IconButton
-      className={classes.button}
-      disabled={!isChattable || isCreatingRoom}
-      onClick={onClick}
-    >
-      <SvgIcon path={mdiChatProcessingOutline} />
-    </IconButton>
+    <Tooltip title="Chat">
+      <IconButton
+        className={classes.button}
+        disabled={!isChattable || isCreatingRoom}
+        onClick={onClick}
+      >
+        <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.medium} />
+      </IconButton>
+    </Tooltip>
   )
 }
 
