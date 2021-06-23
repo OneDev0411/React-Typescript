@@ -37,15 +37,19 @@ export const BaseTagSelector = ({
 }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
-  const [tagKeys, setTagKeys] = useState<string[]>([])
+  const [availableTagKeys, setAvailableTagKeys] = useState<string[]>([])
   const existingTags = useSelector(selectExistingTags)
+  const selectedTagKeys = useMemo(
+    () => selectedTags.map(tag => tag.value?.toLowerCase()),
+    [selectedTags]
+  )
 
   useEffectOnce(() => {
     async function fetchTags() {
       try {
         const response = await getContactsTags()
 
-        setTagKeys(getTagKeys(response.data))
+        setAvailableTagKeys(getTagKeys(response.data))
         setAvailableTags(normalizeTags(response.data))
       } catch (error) {
         console.log(error)
@@ -55,7 +59,7 @@ export const BaseTagSelector = ({
     if (existingTags.length === 0) {
       fetchTags()
     } else {
-      setTagKeys(getTagKeys(existingTags))
+      setAvailableTagKeys(getTagKeys(existingTags))
       setAvailableTags(normalizeTags(existingTags))
     }
   })
@@ -116,15 +120,26 @@ export const BaseTagSelector = ({
 
           if (normalizedLastValue) {
             if (
-              value.length > selectedTags.length &&
+              /*
+               we're doing ts-ignore because the type of event is set to
+               ChangeEvent which keyCode doesn't exist there so
+               it cause error but if user press some key like
+               enter the keyCode value would be there in
+               event object so we need for checking it
+              */
+              // @ts-ignore
+              event.keyCode === 13 && // avoid set tag on enter if tag exist
               normalizedLastValue.value &&
-              tagKeys.includes(normalizedLastValue.value)
+              selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
             ) {
               return
             }
 
             if (hasNewTag && normalizedLastValue.value) {
-              setTagKeys([...tagKeys, normalizedLastValue.value.toLowerCase()])
+              setAvailableTagKeys([
+                ...availableTagKeys,
+                normalizedLastValue.value.toLowerCase()
+              ])
             }
 
             newValues = [
@@ -143,7 +158,7 @@ export const BaseTagSelector = ({
         // Suggest the creation of a new value
         if (
           params.inputValue !== '' &&
-          !tagKeys.includes(params.inputValue.trim().toLowerCase())
+          !availableTagKeys.includes(params.inputValue.trim().toLowerCase())
         ) {
           filtered.push({
             value: params.inputValue,
