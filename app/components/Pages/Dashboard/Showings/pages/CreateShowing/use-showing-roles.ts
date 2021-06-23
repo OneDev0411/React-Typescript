@@ -79,15 +79,9 @@ function useShowingRoles(): UseShowingRolesReturn {
     setRoles(newRoles)
   }
 
-  const resetRoles = () => setRoles(defaultRoles)
-
   const fillRolesWithPropertyRoles = (
     property: Nullable<ShowingPropertyType>
   ) => {
-    // TODO: find a better approach for keeping old roles and
-    // update just the required ones
-    resetRoles()
-
     if (property?.type === 'deal') {
       const roles = property.deal.roles.map(role => dealRoles[role as any])
 
