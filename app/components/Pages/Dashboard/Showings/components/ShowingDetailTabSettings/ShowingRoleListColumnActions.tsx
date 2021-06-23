@@ -74,7 +74,10 @@ function ShowingRoleListColumnActions({
         ...role,
         ...updatedRole
       })
-      notify({ status: 'success', message: 'The role updated successfully.' })
+      notify({
+        status: 'success',
+        message: 'The participant updated successfully.'
+      })
     })
   }
 
@@ -82,7 +85,10 @@ function ShowingRoleListColumnActions({
     run(async () => {
       await deleteShowingRole(showingId, role.id)
       onDelete(role.id)
-      notify({ status: 'success', message: 'The role deleted successfully.' })
+      notify({
+        status: 'success',
+        message: 'The participant deleted successfully.'
+      })
     })
   }
 
