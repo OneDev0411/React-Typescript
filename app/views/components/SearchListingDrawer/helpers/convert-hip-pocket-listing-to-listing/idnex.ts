@@ -54,6 +54,7 @@ export function convertHipPokcetListingToListing(
     type: 'listing',
     gallery_image_urls: hipPocketListing.images ?? [],
     url: hipPocketListing.url ?? '',
+    price: hipPocketListing.price ?? 0,
     property: {
       bedroom_count: hipPocketListing.bedrooms ?? 0,
       full_bathroom_count: hipPocketListing.full_baths ?? 0,

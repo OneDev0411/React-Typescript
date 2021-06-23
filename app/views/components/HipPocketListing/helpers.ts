@@ -2,6 +2,8 @@ import isEmail from 'validator/lib/isEmail'
 import isUrl from 'validator/lib/isURL'
 import isMobilePhone from 'validator/lib/isMobilePhone'
 
+import getListing from 'models/listings/listing/get-listing'
+
 import { HipPocketListingUrlType } from './types'
 
 export function getListingUrlTypeLabel(type: HipPocketListingUrlType): string {
@@ -65,5 +67,17 @@ export function getFormattedUrl(
     return `tel:${value}`
   }
 
-  return value
+  if (value.startsWith('http')) {
+    return value
+  }
+
+  return `http://${value}`
+}
+
+export async function getListingFullAddress(
+  listing: ICompactListing
+): Promise<string> {
+  const listingData = await getListing(listing.id)
+
+  return listingData.property.address.full_address
 }

@@ -25,7 +25,8 @@ import {
   getFormattedUrl,
   validateListingUrl,
   getListingUrlTypeLabel,
-  getListingUrlTypeFieldPlaceholder
+  getListingUrlTypeFieldPlaceholder,
+  getListingFullAddress
 } from '../helpers'
 
 const useStyles = makeStyles(
@@ -50,18 +51,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
   const classes = useStyles()
   const { control, formState, errors, watch, trigger, handleSubmit } =
     useForm<HipPocketListingFormFields>({
-      mode: 'onChange',
-      defaultValues: {
-        bedrooms: 0,
-        full_baths: 0,
-        half_baths: 0,
-        images: [],
-        price: 0,
-        sqft: 0,
-        url: '',
-        url_type: 'url',
-        description: ''
-      }
+      mode: 'onChange'
     })
 
   const urlType = watch('url_type')
@@ -114,6 +104,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         {isFieldEnabled('images') && onImageUpload && (
           <Controller
             control={control}
+            defaultValue={[]}
             name="images"
             render={({ onChange, value }) => (
               <>
@@ -139,6 +130,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
           <Grid item xs={12}>
             <Controller
               control={control}
+              defaultValue=""
               name="address"
               render={({ onChange }) => (
                 <ListingsAndPlacesSearchInput
@@ -147,11 +139,11 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     size: 'small',
                     label: 'Address'
                   }}
-                  onSelect={result => {
+                  onSelect={async result => {
                     const address =
                       result.type === 'place'
                         ? result.place.formatted_address
-                        : result.listing.address.street_address
+                        : await getListingFullAddress(result.listing)
 
                     onChange(address)
                   }}
@@ -165,22 +157,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={6}>
               <Controller
                 control={control}
+                defaultValue={null}
                 name="price"
                 rules={{
                   valueAsNumber: true,
-                  min: 0
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
                 }}
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.price}
-                    helperText={errors.price?.message}
-                    variant="outlined"
-                    size="small"
-                    label="Listing Price"
-                    type="number"
-                  />
-                }
+                fullWidth
+                error={!!errors.price}
+                helperText={errors.price?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Listing Price"
+                as={<TextField />}
               />
             </Grid>
           )}
@@ -189,22 +180,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={6}>
               <Controller
                 control={control}
+                defaultValue={null}
                 name="sqft"
                 rules={{
                   valueAsNumber: true,
-                  min: 0
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
                 }}
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.sqft}
-                    helperText={errors.sqft?.message}
-                    variant="outlined"
-                    size="small"
-                    label="Sqft"
-                    type="number"
-                  />
-                }
+                fullWidth
+                error={!!errors.sqft}
+                helperText={errors.sqft?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Sqft"
+                as={<TextField />}
               />
             </Grid>
           )}
@@ -215,22 +205,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
+                defaultValue={null}
                 name="bedrooms"
                 rules={{
                   valueAsNumber: true,
-                  min: 0
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
                 }}
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.bedrooms}
-                    helperText={errors.bedrooms?.message}
-                    variant="outlined"
-                    size="small"
-                    label="Bedrooms"
-                    type="number"
-                  />
-                }
+                fullWidth
+                error={!!errors.bedrooms}
+                helperText={errors.bedrooms?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Bedrooms"
+                as={<TextField />}
               />
             </Grid>
           )}
@@ -238,22 +227,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
+                defaultValue={null}
                 name="full_baths"
                 rules={{
                   valueAsNumber: true,
-                  min: 0
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
                 }}
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.full_baths}
-                    helperText={errors.full_baths?.message}
-                    variant="outlined"
-                    size="small"
-                    label="Full Baths"
-                    type="number"
-                  />
-                }
+                fullWidth
+                error={!!errors.full_baths}
+                helperText={errors.full_baths?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Full Baths"
+                as={<TextField />}
               />
             </Grid>
           )}
@@ -261,22 +249,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
+                defaultValue={null}
                 name="half_baths"
                 rules={{
                   valueAsNumber: true,
-                  min: 0
+                  min: 0,
+                  max: Number.MAX_SAFE_INTEGER
                 }}
-                as={
-                  <TextField
-                    fullWidth
-                    error={!!errors.half_baths}
-                    helperText={errors.half_baths?.message}
-                    variant="outlined"
-                    size="small"
-                    label="Half Baths"
-                    type="number"
-                  />
-                }
+                fullWidth
+                error={!!errors.half_baths}
+                helperText={errors.half_baths?.message}
+                variant="outlined"
+                type="number"
+                size="small"
+                label="Half Baths"
+                as={<TextField />}
               />
             </Grid>
           )}
@@ -287,6 +274,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={12}>
               <Controller
                 control={control}
+                defaultValue=""
                 name="url"
                 rules={{
                   validate: (value: string) =>
@@ -300,7 +288,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     fullWidth
                     helperText={errors.url?.message}
                     error={!!errors.url}
-                    type={urlType}
+                    type={urlType === 'url' ? 'text' : urlType}
                     variant="outlined"
                     size="small"
                     label="Listing URL"
@@ -310,6 +298,7 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                         <InputAdornment position="start">
                           <Controller
                             control={control}
+                            defaultValue="url"
                             name="url_type"
                             rules={{
                               setValueAs: value => {
@@ -356,12 +345,13 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={12}>
               <Controller
                 control={control}
+                defaultValue=""
                 name="description"
                 as={
                   <TextField
                     fullWidth
                     multiline
-                    rows={3}
+                    rows={5}
                     variant="outlined"
                     size="small"
                     label="Description"
