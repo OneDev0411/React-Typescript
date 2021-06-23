@@ -1,7 +1,7 @@
 import isEmail from 'validator/lib/isEmail'
 import isUrl from 'validator/lib/isURL'
-import isMobilePhone from 'validator/lib/isMobilePhone'
 
+import { isValidPhoneNumber } from '@app/utils/helpers'
 import getListing from 'models/listings/listing/get-listing'
 
 import { HipPocketListingUrlType } from './types'
@@ -32,10 +32,10 @@ export function getListingUrlTypeFieldPlaceholder(
   return 'Your website address'
 }
 
-export function validateListingUrl(
+export async function validateListingUrl(
   value: string,
   type: HipPocketListingUrlType
-): true | string {
+): Promise<true | string> {
   if (value.length === 0) {
     return true
   }
@@ -45,7 +45,7 @@ export function validateListingUrl(
   }
 
   if (type === 'tel') {
-    return isMobilePhone(value, 'en-US') ? true : 'Invalid phone number'
+    return (await isValidPhoneNumber(value)) ? true : 'Invalid US phone number'
   }
 
   return isUrl(value) ? true : 'Invalid website address'
