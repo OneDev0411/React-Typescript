@@ -68,10 +68,10 @@ const linkStyle = css`
   ${itemStyle}
 `
 
-const MyRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (
+const WrappedRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (
   <RouterLink {...rest} />
 )
-export const SidenavLink = styled(MyRouterLink)<SidenavLinkPorps>`
+export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
   ${linkStyle}
 `
 
