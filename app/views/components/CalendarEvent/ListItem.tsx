@@ -105,7 +105,7 @@ export default function CalendarEventListItem({ event }: Props) {
   }
 
   if (event.event_type == 'home_anniversary' && contact) {
-    secondaryText = `Home aniversary of ${
+    secondaryText = `Home anniversary of ${
       contact.display_name
     } ${timeago().format(event.next_occurence)}`
   } else {
