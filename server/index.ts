@@ -20,6 +20,7 @@ import routes from './routes'
 const port = process.env.PORT || 8080
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
+const isBabel = process.env.IS_BABEL === 'true'
 
 const app = express()
 
@@ -48,14 +49,27 @@ app.use(haltOnTimedout)
 app.use(history())
 
 if (isDevelopment) {
-  const config = require('../webpack/development')
-  const compiler = webpack(config)
+  if (isBabel) {
+    const config = require('../webpack/developmentBabel')
+    const compiler = webpack(config)
 
-  app.use(
-    webpackDevMiddleware(compiler, {
-      publicPath: config.output.publicPath
-    })
-  )
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath
+      })
+    )
+    app.use(require('webpack-hot-middleware')(compiler))
+  } else {
+    const config = require('../webpack/development')
+    const compiler = webpack(config)
+
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath
+      })
+    )
+  }
+
   app.use('/static', express.static(path.resolve(__dirname, '../app/static')))
 }
 

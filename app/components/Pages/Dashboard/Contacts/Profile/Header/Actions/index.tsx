@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Box,
   Tooltip,
   IconButton,
   makeStyles,
@@ -59,8 +58,8 @@ export const Actions = ({
   const classes = useStyles()
 
   return (
-    <Box className={classes.container}>
-      <Box className={classes.shortcutContainer}>
+    <div className={classes.container}>
+      <div className={classes.shortcutContainer}>
         <SendEmailButton
           recipients={normalizeContactsForEmailCompose([contact])}
           render={({ onClick, testId }) => (
@@ -91,11 +90,11 @@ export const Actions = ({
             </Tooltip>
           )}
         />
-      </Box>
-      <Box className={classes.actionContainer}>
+      </div>
+      <div className={classes.actionContainer}>
         <AddNote contactId={contact.id} onCreateNote={handleCreateNote} />
         <AddEvent contact={contact} />
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }

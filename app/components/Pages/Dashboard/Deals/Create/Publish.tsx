@@ -200,18 +200,17 @@ export default function Publish({ params }: Props) {
         await dispatch(createRoles(deal.id, roles))
       }
 
-      await dispatch(
-        upsertContexts(
-          deal.id,
-          getFormContexts(
-            values,
-            deal,
-            brandChecklists,
-            checklists,
-            deal.deal_type
-          )
-        )
-      )
+      const contexts = getFormContexts(
+        values,
+        deal,
+        brandChecklists,
+        checklists,
+        deal.deal_type
+      ).filter(context => !!context.checklist)
+
+      if (contexts.length > 0) {
+        await dispatch(upsertContexts(deal.id, contexts))
+      }
 
       showNotification &&
         dispatch(

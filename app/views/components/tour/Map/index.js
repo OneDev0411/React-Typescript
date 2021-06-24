@@ -40,9 +40,7 @@ export class Map extends React.Component {
 
     if (!window.google) {
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          config.google.api_key
-        }&callback=initTourDrawerMap`
+        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=initTourDrawerMap`
       )
     } else {
       this.initMap()
@@ -112,7 +110,9 @@ export class Map extends React.Component {
     const locations = this.getLocations()
 
     if (locations.length === 0) {
-      return this.marker.setMap(null)
+      this.marker && this.marker.setMap(null)
+
+      return
     }
 
     if (!this.directionsService) {

@@ -3,6 +3,8 @@ import React from 'react'
 import cn from 'classnames'
 import { Box, Avatar, Typography, makeStyles, Theme } from '@material-ui/core'
 
+import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -50,7 +52,7 @@ export function UserRow({ name, email, avatarUrl, onClick }: Props) {
       <div>
         <Typography variant="body2">{name}</Typography>
         <Typography variant="body2" className={classes.email}>
-          {email}
+          <TextMiddleTruncate text={email} maxLength={30} />
         </Typography>
       </div>
     </Box>

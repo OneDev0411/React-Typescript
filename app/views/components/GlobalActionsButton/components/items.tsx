@@ -51,7 +51,7 @@ const items: Item[] = [
     render: props => {
       return (
         <EventDrawer
-          title="Add Log Activity"
+          title="Log Activity"
           {...props}
           initialValues={{
             ...initialValueGenerator(props.user, [], new Date()),

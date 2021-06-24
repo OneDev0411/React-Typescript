@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 
 import { Actions } from './Actions'
 import Catalog from './Catalog/Catalog'
@@ -19,16 +19,16 @@ const useStyles = makeStyles(
 export interface Props {
   contact: INormalizedContact
   onTagChange: () => void
-  handleCreateNote: (contact: IContact) => void
+  handleCreateNote: (contact: INormalizedContact) => void
 }
 
 export const Header = ({ contact, onTagChange, handleCreateNote }: Props) => {
   const classes = useStyles()
 
   return (
-    <Box className={classes.container}>
+    <div className={classes.container}>
       <Catalog contact={contact} onTagChange={onTagChange} />
       <Actions contact={contact} handleCreateNote={handleCreateNote} />
-    </Box>
+    </div>
   )
 }

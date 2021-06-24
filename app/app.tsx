@@ -6,8 +6,6 @@ import { useDispatch } from 'react-redux'
 
 import { IntercomProvider } from 'react-use-intercom'
 
-import { hot } from 'react-hot-loader/root'
-
 import { useAppcues } from 'services/appcues/use-appcues'
 
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
@@ -74,4 +72,4 @@ const App = () => {
   )
 }
 
-export default hot(App)
+export default App

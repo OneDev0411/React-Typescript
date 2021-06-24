@@ -27,11 +27,16 @@ export function getFormContexts(
       )
       .find(item => item.key === name)
 
-    const checklist = checklists.find(({ origin }) => {
-      return brandChecklist?.find(({ id }) => id === origin)
-    })
+    const checklist = checklists.find(
+      ({ origin, checklist_type, is_active_offer }) =>
+        brandChecklist?.find(({ id }) =>
+          checklist_type === 'Offer'
+            ? id === origin && is_active_offer
+            : id === origin
+        )
+    )
 
-    if (!checklist || !definition) {
+    if (!definition) {
       console.log(`Could not save context "${name}"`, { checklist, definition })
 
       return acc
@@ -42,7 +47,7 @@ export function getFormContexts(
       {
         value,
         definition: definition.id,
-        checklist: checklist.id,
+        checklist: checklist?.id,
         approved: context ? context.needs_approval : false
       }
     ]

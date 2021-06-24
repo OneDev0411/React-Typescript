@@ -142,8 +142,8 @@ export function convertAgentToRole(agent) {
     legal_last_name: agent.last_name,
     email: agent.email,
     phone_number: agent.phone_number,
-    company: agent.office.name,
-    company_title: agent.office.name
+    company: agent.office ? agent.office.name : '',
+    company_title: agent.office ? agent.office.name : ''
   }
 }
 
