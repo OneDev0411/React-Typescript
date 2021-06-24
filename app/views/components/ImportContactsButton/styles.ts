@@ -11,7 +11,7 @@ export const useStyles = makeStyles((theme: Theme) => ({
   popover: {
     '& div.MuiPaper-root': {
       marginTop: theme.spacing(1),
-      backgroundColor: 'rgb(117 117 117)',
+      backgroundColor: theme.palette.grey[600],
       color: '#fff'
     },
     '& p': {
@@ -22,6 +22,9 @@ export const useStyles = makeStyles((theme: Theme) => ({
   accountsSectionTitle: {
     padding: theme.spacing(2),
     marginBottom: 0
+  },
+  fullWidth: {
+    width: '100%'
   }
 }))
 

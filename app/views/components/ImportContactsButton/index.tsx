@@ -130,7 +130,7 @@ export function ImportContactsButton({
                 to="/dashboard/account/connected-accounts"
                 color="inherit"
                 underline="none"
-                style={{ width: '100%' }}
+                className={classes.fullWidth}
               >
                 <ConnectedAccount account={account} />
               </Link>
@@ -189,7 +189,6 @@ export function ImportContactsButton({
               <Divider />
               <MenuItem
                 component={RouterLink}
-                style={{ color: 'currentColor' }}
                 onClick={() => {
                   toggleMenu()
                 }}
