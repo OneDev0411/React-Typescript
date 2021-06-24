@@ -1,4 +1,4 @@
-const DAY_RANGE = 365
+const RANGE_IN_DAYS = 365
 
 export enum Format {
   Next,
@@ -13,7 +13,8 @@ export enum Format {
  */
 export function getDateRange(
   timestamp: number = new Date().getTime(),
-  format: Format = Format.Middle
+  format: Format = Format.Middle,
+  rangeInDays: number = RANGE_IN_DAYS
 ): NumberRange {
   const day = new Date(timestamp)
 
@@ -23,7 +24,7 @@ export function getDateRange(
       : Date.UTC(
           day.getUTCFullYear(),
           day.getUTCMonth(),
-          day.getUTCDate() - DAY_RANGE,
+          day.getUTCDate() - rangeInDays,
           0,
           0,
           0,
@@ -36,7 +37,7 @@ export function getDateRange(
       : Date.UTC(
           day.getUTCFullYear(),
           day.getUTCMonth(),
-          day.getUTCDate() + DAY_RANGE,
+          day.getUTCDate() + rangeInDays,
           23,
           59,
           59,
