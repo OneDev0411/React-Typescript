@@ -17,6 +17,8 @@ import { useLoadingEntities } from 'hooks/use-loading'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { useUniqueMediums } from 'hooks/use-unique-mediums'
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
+import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
+import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
 import {
   hasUserAccessToCrm,
   hasUserAccessToMarketingCenter,
@@ -100,7 +102,13 @@ export default function ListingMarketing({
   useEffect(() => {
     async function fetchListing() {
       if (passedListing) {
-        setListing(passedListing)
+        setListing({
+          ...passedListing,
+          gallery_image_urls: getArrayWithFallbackAccessor(
+            passedListing.gallery_image_urls ?? [],
+            PLACEHOLDER_IMAGE_URL
+          )
+        })
 
         return
       }
@@ -108,7 +116,13 @@ export default function ListingMarketing({
       if (listingId) {
         const fetchedListing = await getListing(listingId)
 
-        setListing(fetchedListing)
+        setListing({
+          ...fetchedListing,
+          gallery_image_urls: getArrayWithFallbackAccessor(
+            fetchedListing.gallery_image_urls ?? [],
+            PLACEHOLDER_IMAGE_URL
+          )
+        })
       }
     }
 
