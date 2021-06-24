@@ -4,6 +4,7 @@ import classNames from 'classnames'
 
 interface Props {
   id?: string
+  className?: string
   caption?: ReactNode
   placement?: 'top' | 'bottom'
   containerStyle?: CSSProperties
@@ -34,6 +35,7 @@ function PopOver({
   caption,
   containerStyle,
   children,
+  className = '',
   show,
   dark,
   width = 'auto'
@@ -66,7 +68,7 @@ function PopOver({
       </div>
       <Popover
         id={id}
-        className={classes.popover}
+        className={classNames(classes.popover, className)}
         classes={{
           paper: classNames(
             'pop-over',
