@@ -23,6 +23,11 @@ export const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(2),
     marginBottom: 0
   },
+  menuCSVItem: {
+    '&:hover': {
+      color: 'currentcolor'
+    }
+  },
   fullWidth: {
     width: '100%'
   }

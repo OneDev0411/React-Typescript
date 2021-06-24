@@ -10,12 +10,14 @@ interface Props {
   account: IOAuthAccount
   size?: 'small' | 'medium'
   className?: string
+  buttonsClassName?: string
 }
 
 export function ConnectedAccountSyncStatus({
   account,
   size,
-  className = ''
+  className = '',
+  buttonsClassName = ''
 }: Props) {
   const contactsJob = (account.jobs || []).find(
     job => job.job_name === 'contacts'
@@ -37,7 +39,7 @@ export function ConnectedAccountSyncStatus({
             contactsJob?.status === 'success' ? 'synced' : 'syncing'
           } `}
         >
-          <IconButton size={size}>
+          <IconButton className={buttonsClassName} size={size}>
             <SvgIcon path={permContactCalendarOutlined} />
           </IconButton>
         </Tooltip>
@@ -49,7 +51,7 @@ export function ConnectedAccountSyncStatus({
             emailsJob?.status === 'success' ? 'synced' : 'syncing'
           } `}
         >
-          <IconButton size={size}>
+          <IconButton className={buttonsClassName} size={size}>
             <SvgIcon path={mdiEmailOutline} />
           </IconButton>
         </Tooltip>
@@ -61,7 +63,7 @@ export function ConnectedAccountSyncStatus({
             calendarJob?.status === 'success' ? 'synced' : 'syncing'
           }`}
         >
-          <IconButton size={size}>
+          <IconButton className={buttonsClassName} size={size}>
             <SvgIcon path={mdiCalendarOutline} />
           </IconButton>
         </Tooltip>

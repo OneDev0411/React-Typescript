@@ -21,10 +21,10 @@ export const useStyles = makeStyles((theme: Theme) => ({
   },
   accountsButtonsWrapper: {
     paddingLeft: 46,
-    display: 'inline-block',
-    '& > button': {
-      margin: theme.spacing(0, 0.5)
-    }
+    display: 'inline-block'
+  },
+  accountsButtons: {
+    margin: theme.spacing(0, 0.5)
   },
   settingsWrapper: {
     paddingLeft: theme.spacing(1),
@@ -50,6 +50,7 @@ export function ConnectedAccount({ account }: Props) {
       <Grid>
         <ConnectedAccountSyncStatus
           className={classes.accountsButtonsWrapper}
+          buttonsClassName={classes.accountsButtons}
           size="small"
           account={account}
         />

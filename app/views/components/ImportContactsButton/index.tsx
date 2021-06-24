@@ -189,6 +189,7 @@ export function ImportContactsButton({
               <Divider />
               <MenuItem
                 component={RouterLink}
+                className={classes.menuCSVItem}
                 onClick={() => {
                   toggleMenu()
                 }}
