@@ -1,8 +1,10 @@
 import addressParser from 'parse-address'
 
-import { HipPocketListing } from 'components/HipPocketListing'
-
+import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
+import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
 import { feetToMeters } from 'utils/listing'
+
+import { HipPocketListing } from 'components/HipPocketListing'
 
 function getPropertyAddress(address?: string): Partial<Address> {
   if (!address) {
@@ -52,7 +54,10 @@ export function convertHipPokcetListingToListing(
 ): DeepPartial<IListing> {
   return {
     type: 'listing',
-    gallery_image_urls: hipPocketListing.images ?? [],
+    gallery_image_urls: getArrayWithFallbackAccessor(
+      hipPocketListing.images ?? [],
+      PLACEHOLDER_IMAGE_URL
+    ),
     url: hipPocketListing.url ?? '',
     price: hipPocketListing.price ?? 0,
     property: {
