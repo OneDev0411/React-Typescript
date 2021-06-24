@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react'
+import React, { useEffect, useCallback, Fragment } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem, Typography, Grid } from '@material-ui/core'
@@ -107,7 +107,7 @@ export function ImportContactsButton({
     [isTooltipOpen, classes]
   )
 
-  const renderConnectedAccounts = React.useCallback(
+  const renderConnectedAccounts = useCallback(
     (toggleMenu: () => void) => (
       <>
         {accounts.length > 0 && (
