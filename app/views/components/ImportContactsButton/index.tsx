@@ -71,11 +71,15 @@ export function ImportContactsButton({
   }
 
   useEffectOnce(() => {
-    dispatch(fetchOAuthAccounts()).then(() => {
+    async function fetch() {
+      await dispatch(fetchOAuthAccounts())
+
       if (typeof onFetchedOAuthAccounts === 'function') {
         onFetchedOAuthAccounts()
       }
-    })
+    }
+
+    fetch()
   })
 
   const renderButton = React.useMemo(
