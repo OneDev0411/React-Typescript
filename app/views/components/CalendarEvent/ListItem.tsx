@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
-  Box,
   Button,
   ListItem,
   ListItemText,
@@ -43,12 +42,10 @@ export default function CalendarEventListItem({ event }: Props) {
   let linkTitle
 
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
@@ -96,16 +93,14 @@ export default function CalendarEventListItem({ event }: Props) {
         />
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
-            <Box>
-              <>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setIsTemplatePickerOpen(true)}
-                >
-                  Send Card
-                </Button>
-              </>
+            <div>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setIsTemplatePickerOpen(true)}
+              >
+                Send Card
+              </Button>
               {isTemplatePickerOpen && (
                 <MarketingTemplatePickerModal
                   title="Select Template"
@@ -127,7 +122,7 @@ export default function CalendarEventListItem({ event }: Props) {
                   buttonRenderrer={() => null}
                 />
               )}
-            </Box>
+            </div>
           )}
         </ListItemSecondaryAction>
       </ListItem>

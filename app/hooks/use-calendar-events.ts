@@ -3,12 +3,15 @@ import { useDeepCompareEffect } from 'react-use'
 
 import { isToday, setYear, compareAsc } from 'date-fns'
 
+import { useSelector } from 'react-redux'
+
 import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
 import { useLoadingEntities } from 'hooks/use-loading'
 import {
   getDateRange,
   Format
 } from 'components/Calendar/helpers/get-date-range'
+import { selectUser } from 'selectors/user'
 
 interface UseCalendarEvents {
   isLoading: boolean
@@ -21,16 +24,18 @@ export function useCalendarEvents(
   const [events, setEvents] = useState<Nullable<ICalendarEvent[]>>(null)
 
   const [isLoading] = useLoadingEntities(events)
+  const user = useSelector(selectUser)
 
   useDeepCompareEffect(() => {
     async function fetchEvents() {
-      const range = getDateRange(new Date().getTime(), Format.Next)
+      const range = getDateRange(new Date().getTime(), Format.Next, 7)
       const calendarEvents = (await getCalendar({
         range,
         filter: {
           'object_types[]': objectTypes
         },
-        associations: ['calendar_event.people'] // , 'calendar_event.full_thread'
+        associations: ['calendar_event.people'], // , 'calendar_event.full_thread'
+        users: [user.id]
       })) as ICalendarEvent[]
 
       // API team made me do this and sort the events on the client side

@@ -10,8 +10,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
-import { isContextApproved } from '../helpers/is-context-approved'
-
 import { EditButton } from '../ActionButtons/Edit'
 import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
@@ -34,6 +32,8 @@ interface Props {
   total: number
   value: unknown
   isBackOffice: boolean
+  isDisabled: boolean
+  tooltip: string | React.ReactChild
   onApprove(field: IDealBrandContext): void
   onChange(field: IDealBrandContext, value: unknown): void
   onDelete(field: IDealBrandContext): void
@@ -46,6 +46,8 @@ export function DateField({
   field,
   value,
   isBackOffice,
+  isDisabled,
+  tooltip,
   onChange,
   onDelete,
   onApprove
@@ -77,14 +79,8 @@ export function DateField({
 
   return (
     <>
-      <Tooltip
-        title={
-          isContextApproved(deal, field) || isBackOffice
-            ? ''
-            : 'Pending Office Approval'
-        }
-      >
-        <Item>
+      <Tooltip title={tooltip}>
+        <Item disableHover={isDisabled}>
           <ItemLabel>
             <CircleStatus checked={isPastDate}>
               {isPastDate && <SvgIcon path={mdiCheck} color="#fff" />}
@@ -93,30 +89,32 @@ export function DateField({
           </ItemLabel>
           <ItemValue>{getFormattedValue(field, value)}</ItemValue>
 
-          <ItemActions>
-            <DateTimePicker
-              selectedDate={getInitialDate(deal, field)}
-              showTimePicker={false}
-              onClose={handleSave}
-              saveCaption="Save Date"
-            >
-              {({ handleOpen }) => <EditButton onClick={handleOpen} />}
-            </DateTimePicker>
+          {!isDisabled && (
+            <ItemActions>
+              <DateTimePicker
+                selectedDate={getInitialDate(deal, field)}
+                showTimePicker={false}
+                onClose={handleSave}
+                saveCaption="Save Date"
+              >
+                {({ handleOpen }) => <EditButton onClick={handleOpen} />}
+              </DateTimePicker>
 
-            <DeleteButton
-              deal={deal}
-              field={field}
-              value={value}
-              onClick={handleDelete}
-            />
+              <DeleteButton
+                deal={deal}
+                field={field}
+                value={value}
+                onClick={handleDelete}
+              />
 
-            <ApproveButton
-              deal={deal}
-              context={field}
-              isBackOffice={isBackOffice}
-              onClick={() => onApprove(field)}
-            />
-          </ItemActions>
+              <ApproveButton
+                deal={deal}
+                context={field}
+                isBackOffice={isBackOffice}
+                onClick={() => onApprove(field)}
+              />
+            </ItemActions>
+          )}
 
           {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
         </Item>

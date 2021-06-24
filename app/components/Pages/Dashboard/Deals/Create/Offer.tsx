@@ -161,7 +161,16 @@ function CreateOffer({ router, route, params }: Props) {
         dispatch(
           upsertContexts(
             deal.id,
-            getFormContexts(values, deal, brandChecklists, checklists, 'Offer')
+            getFormContexts(
+              values,
+              deal,
+              brandChecklists,
+              checklists,
+              'Offer'
+            ).map(context => ({
+              ...context,
+              checklist: checklist.id
+            }))
           )
         )
       ])
@@ -289,7 +298,7 @@ function CreateOffer({ router, route, params }: Props) {
                   <div>
                     Who is the{' '}
                     <span className={classes.brandedTitle}>
-                      {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Co Agent
+                      Co {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
                     </span>
                     ?
                   </div>

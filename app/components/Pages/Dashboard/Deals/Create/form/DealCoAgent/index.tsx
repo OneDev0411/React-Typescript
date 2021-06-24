@@ -1,13 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  CircularProgress,
-  Button,
-  makeStyles,
-  TextField,
-  Typography,
-  Theme
-} from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
@@ -20,43 +12,15 @@ import {
 
 import DealRole from 'components/DealRole/Form'
 
-import TeamAgents from 'components/TeamAgents'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 
-import { NormalizedBrand } from 'components/TeamAgents/types'
-
 import { useCreationContext } from '../../context/use-creation-context'
-import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
 
-import { UserRow } from '../../components/UserRow'
 import { RoleCard } from '../../components/RoleCard'
+import { AgentsList } from '../../components/AgentsList'
 
 import type { IDealFormRole } from '../../types'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    root: {
-      maxHeight: '70vh',
-      overflow: 'auto'
-    },
-    selectedAgent: {
-      border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius,
-      margin: theme.spacing(1, 0.5, 0.5, 0)
-    },
-    searchInputContainer: {
-      backgroundColor: '#fff',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1,
-      marginBottom: theme.spacing(2)
-    }
-  }),
-  {
-    name: 'CreateDeal-PrimaryAgent'
-  }
-)
 
 interface Props {
   title: React.ReactNode
@@ -73,17 +37,13 @@ export function DealCoAgent({
   isCommissionRequired,
   onChange
 }: Props) {
-  const classes = useStyles()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
   const { deal, user } = useCreationContext()
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
-
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
   const allowedRoles = getAllowedRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
@@ -109,19 +69,6 @@ export function DealCoAgent({
     if (wizard.currentStep === step) {
       wizard.next()
     }
-  }
-
-  const getUsers = (teams: NormalizedBrand[]) => {
-    if (searchCriteria.length >= 3) {
-      return teams
-    }
-
-    return [
-      {
-        ...teams[0],
-        users: teams[0].users.slice(0, 20)
-      }
-    ]
   }
 
   if (wizard.lastVisitedStep < step) {
@@ -166,95 +113,41 @@ export function DealCoAgent({
             display: !selectedRole ? 'block' : 'none'
           }}
         >
-          <TeamAgents
+          <AgentsList
             flattenTeams
+            useTeamBrandId
             isPrimaryAgent={false}
-            criteria={searchCriteria}
-          >
-            {({ teams, isLoading }) => (
-              <div>
-                {isLoading ? (
-                  <CircularProgress disableShrink />
-                ) : (
-                  <div className={classes.root}>
-                    <Box className={classes.searchInputContainer}>
-                      <TextField
-                        fullWidth
-                        variant="outlined"
-                        onChange={e => setSearchCriteria(e.target.value)}
-                        placeholder="Search Agents"
-                        size="small"
-                      />
-                    </Box>
+            onSelectRole={setSelectedRole}
+          />
 
-                    {getUsers(teams).map((team, index) => (
-                      <div key={index}>
-                        {(searchCriteria || teams.length > 1) && (
-                          <Box ml={1} my={1}>
-                            <Typography variant="subtitle2">
-                              {team.name}
-                            </Typography>
-                            <Typography variant="caption">
-                              {team.subtitle}
-                            </Typography>
-                          </Box>
-                        )}
+          {!selectedRole && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+              mt={4}
+            >
+              <Button
+                variant="outlined"
+                disabled={agentRoles.length > 0}
+                onClick={handleNext}
+              >
+                Skip
+              </Button>
 
-                        {team.users.map(agent => (
-                          <UserRow
-                            key={agent.id}
-                            name={agent.display_name}
-                            email={agent.email}
-                            avatarUrl={agent.profile_image_url!}
-                            onClick={() => {
-                              setSelectedRole(
-                                convertUserAgentToRole({
-                                  ...agent,
-                                  brand_id: team.id
-                                })
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {!selectedRole && (
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                    mt={4}
+              {roles.length > 0 && (
+                <Box ml={2}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleNext}
                   >
-                    {!isLoading && (
-                      <Button
-                        variant="outlined"
-                        disabled={agentRoles.length > 0}
-                        onClick={handleNext}
-                      >
-                        Skip
-                      </Button>
-                    )}
-
-                    {roles.length > 0 && (
-                      <Box ml={2}>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          disabled={isLoading}
-                          onClick={handleNext}
-                        >
-                          Continue
-                        </Button>
-                      </Box>
-                    )}
-                  </Box>
-                )}
-              </div>
-            )}
-          </TeamAgents>
+                    Continue
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
       </QuestionForm>
     </QuestionSection>

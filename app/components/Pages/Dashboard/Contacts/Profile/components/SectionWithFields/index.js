@@ -150,10 +150,13 @@ class SectionWithFields extends React.Component {
       }))
 
       if (submitCallback) {
-        submitCallback({
-          ...normalizeContact(response.data),
-          deals: contact.deals
-        })
+        submitCallback(
+          {
+            ...normalizeContact(response.data),
+            deals: contact.deals
+          },
+          attribute_def
+        )
       }
     } catch (error) {
       console.log(error)
@@ -413,10 +416,8 @@ class SectionWithFields extends React.Component {
 
   renderToggleButton = () => {
     const { toggleEmptyAttributes } = this.state
-    const {
-      expandButtonLabel = 'More Fields',
-      expandButtonIcon = mdiPlus
-    } = this.props
+    const { expandButtonLabel = 'More Fields', expandButtonIcon = mdiPlus } =
+      this.props
 
     return (
       <SectionButton

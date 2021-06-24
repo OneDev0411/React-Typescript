@@ -21,7 +21,7 @@ import { useCreationContext } from '../../context/use-creation-context'
 import { RoleCard } from '../../components/RoleCard'
 import { ContactRoles } from '../../components/ContactRoles'
 
-import { AgentsList } from './AgentsList'
+import { AgentsList } from '../../components/AgentsList'
 
 import type { IDealFormRole } from '../../types'
 
@@ -52,9 +52,8 @@ export function DealPrimaryAgent({
 
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
@@ -143,7 +142,9 @@ export function DealPrimaryAgent({
             />
           ) : (
             <AgentsList
-              isOfficeDoubleEnded={isOfficeDoubleEnded}
+              flattenTeams={isOfficeDoubleEnded}
+              isPrimaryAgent={!isOfficeDoubleEnded}
+              useTeamBrandId={!isOfficeDoubleEnded}
               onSelectRole={setSelectedRole}
             />
           )}

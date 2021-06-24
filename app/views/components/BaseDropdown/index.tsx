@@ -54,6 +54,7 @@ export interface Props {
   disablePortal?: boolean
 
   component?: string
+  placement?: PopperProps['placement']
 }
 
 /**
@@ -67,6 +68,7 @@ export function BaseDropdown({
   buttonLabel,
   DropdownToggleButtonProps = {},
   renderDropdownButton,
+  placement = 'bottom-start',
   PopperProps = {},
   component = 'button',
   disablePortal = false
@@ -113,7 +115,7 @@ export function BaseDropdown({
         anchorEl={anchorRef.current}
         style={{ zIndex: theme.zIndex.modal }}
         transition
-        placement="bottom-start"
+        placement={placement}
         disablePortal={disablePortal}
         {...PopperProps}
       >
