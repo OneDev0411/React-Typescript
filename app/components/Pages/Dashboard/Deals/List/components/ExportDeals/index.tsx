@@ -93,8 +93,8 @@ export function ExportDeals(props) {
             filter: [
               {
                 key: 'deal_type',
-                type: 'point',
-                point: 'Buying',
+                type: 'set',
+                point: ['Buying', 'Offer'],
                 invert: false
               },
               {
