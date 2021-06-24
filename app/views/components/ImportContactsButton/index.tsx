@@ -2,6 +2,7 @@ import React, { useEffect, Fragment } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 import { Link, MenuItem, Typography, Grid } from '@material-ui/core'
+import { useEffectOnce } from 'react-use'
 
 import { addNotification as notify } from 'components/notification'
 import { OAuthProvider } from 'constants/contacts'
@@ -69,14 +70,13 @@ export function ImportContactsButton({
     google.connect()
   }
 
-  React.useEffect(() => {
+  useEffectOnce(() => {
     dispatch(fetchOAuthAccounts()).then(() => {
       if (typeof onFetchedOAuthAccounts === 'function') {
         onFetchedOAuthAccounts()
       }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
   const renderButton = React.useMemo(
     () => (
