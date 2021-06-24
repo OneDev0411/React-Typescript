@@ -25,6 +25,8 @@ import { useStyles } from './styles'
 
 export const IMPORT_TOOLTIP_VISITED_SETTINGS_KEY = 'import_tooltip_visited'
 
+const TOOLTIP_WIDTH = 150
+
 interface Props {
   accounts: IOAuthAccount[]
   user: IUser
@@ -87,7 +89,7 @@ export function ImportContactsButton({
       <PopOver
         placement="bottom"
         dark
-        width={150}
+        width={TOOLTIP_WIDTH}
         show={isTooltipOpen}
         className={classes.popover}
         caption={<p>{tooltip}</p>}
