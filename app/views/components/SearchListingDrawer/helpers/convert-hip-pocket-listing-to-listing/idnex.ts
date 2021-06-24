@@ -26,7 +26,6 @@ function getPropertyAddress(address?: string): Partial<Address> {
     parsed.prefix,
     parsed.street,
     parsed.type,
-    parsed.city,
     parsed.sec_unit_type,
     parsed.sec_unit_num
   ].filter(item => !!item)
