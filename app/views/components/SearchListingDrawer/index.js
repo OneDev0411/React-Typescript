@@ -225,8 +225,7 @@ class SearchListingDrawer extends React.Component {
                         Input Manually
                       </Button>
                     </Tooltip>
-                    {this.props.multipleSelection &&
-                      this.props.renderAction(props)}
+                    {this.props.renderAction && this.props.renderAction(props)}
                   </Flex>
                 )
               : this.props.renderAction

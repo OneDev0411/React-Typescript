@@ -1227,6 +1227,11 @@ class Builder extends React.Component {
                   : undefined
               }
               multipleSelection
+              renderAction={props => (
+                <Button {...props.buttonProps}>
+                  Next ({props.selectedItemsCount} Listings Selected)
+                </Button>
+              )}
               withMlsDisclaimer
               isOpen
               title="Select Listing"
