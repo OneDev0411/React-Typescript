@@ -12,7 +12,7 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 
-const NUMBER_OF_EVENTS_TO_SHOW = 4
+const NUMBER_OF_EVENTS_TO_SHOW = 6
 
 interface Props {
   isLoading: boolean
@@ -36,7 +36,8 @@ const useStyles = makeStyles(
       padding: theme.spacing(1),
       height: '315px',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.background.paper
+      backgroundColor: theme.palette.background.paper,
+      overflowY: 'scroll'
     },
     boxFooter: {
       textAlign: 'right',

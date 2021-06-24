@@ -9,7 +9,7 @@ import Fetch from '../../../services/fetch'
  * @param {UUID} [brand] The active brand id
  * @return {Array} a new setting object
  */
-export async function putUserSetting(key, value, brand) {
+export async function putUserSetting(key: string, value: any, brand?: UUID) {
   if (!key) {
     throw new Error(`key is ${key}.`)
   }

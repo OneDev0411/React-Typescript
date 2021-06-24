@@ -19,10 +19,18 @@ export async function postLoadFormat(task, owner, listings) {
   let locations = []
 
   if (listings && listings.length > 0) {
-    locations = listings.map(listing => ({
-      association_type: 'listing',
-      listing: normalizeListing(listing)
-    }))
+    locations = listings
+      .filter(listing => {
+        if (!task) {
+          return true
+        }
+
+        return (task.listings || []).includes(listing.id) === false
+      })
+      .map(listing => ({
+        association_type: 'listing',
+        listing: normalizeListing(listing)
+      }))
   }
 
   if (!task) {
