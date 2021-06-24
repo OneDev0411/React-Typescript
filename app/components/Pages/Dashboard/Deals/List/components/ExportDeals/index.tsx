@@ -94,7 +94,7 @@ export function ExportDeals(props) {
               {
                 key: 'checklist_type',
                 type: 'set',
-                point: ['Buying', 'Offer'],
+                set: ['Buying', 'Offer'],
                 invert: false
               },
               {
