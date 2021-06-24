@@ -40,7 +40,7 @@ export async function searchDeals(
       associations += 'associations[]=deal.created_by'
     } else {
       associations = 'associations[]=deal.brand&'
-      associations = 'associations[]=deal.property_type'
+      associations += 'associations[]=deal.property_type'
 
       payload.$order = order
     }
