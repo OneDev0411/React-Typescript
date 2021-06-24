@@ -22,7 +22,7 @@ interface RenderProps {
 }
 
 interface Props {
-  title: string | React.ReactNode
+  title: React.ReactNode
   buttonClassName?: string
   buttonVariant?: 'text' | 'outlined' | 'contained' | undefined
   popoverOptions?: PopoverProps
