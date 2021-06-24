@@ -92,7 +92,7 @@ export function ExportDeals(props) {
           JSON.stringify({
             filter: [
               {
-                key: 'deal_type',
+                key: 'checklist_type',
                 type: 'set',
                 point: ['Buying', 'Offer'],
                 invert: false
