@@ -80,9 +80,6 @@ export default function CalendarEventListItem({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
   const eventTime = new Date(event.next_occurence)
-  const humanizedEventTime = isToday(eventTime)
-    ? 'Today'
-    : timeago().format(eventTime)
 
   if (contact) {
     avatarIcon = (
@@ -116,11 +113,7 @@ export default function CalendarEventListItem({ event }: Props) {
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-<<<<<<< HEAD
-        <ListItemText primary={linkTitle} secondary={humanizedEventTime} />
-=======
         <ListItemText primary={linkTitle} secondary={secondaryText} />
->>>>>>> b19db0352e... feat(welcome): add contact info for home anniversary rows
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>
