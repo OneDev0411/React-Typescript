@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import {
   TextField,
   Button,
-  Box,
   Avatar,
   Typography,
-  Theme,
-  makeStyles,
   CircularProgress
 } from '@material-ui/core'
 import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
 import { getStatusColorClass } from 'utils/listing'
 
@@ -24,57 +22,30 @@ import {
 
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-import { Callout } from 'components/Callout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useSearchLocation } from 'hooks/use-search-location'
+
+import { ManualAddress } from './ManualAddress'
+
+import { useStyles } from './styles'
+
+interface Address {
+  city?: string
+  county?: string
+  postal_code?: string
+  state?: string
+  street_name?: string
+  street_number?: string
+  street_prefix?: string
+  street_suffix?: string
+  unit_number?: string
+}
 
 export interface PropertyAddress {
   type: 'Place' | 'Listing'
   address: string | unknown
 }
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    root: {
-      '&.has-border': {
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: theme.shape.borderRadius
-      }
-    },
-    status: {
-      color: '#fff',
-      marginTop: theme.spacing(0.5),
-      padding: theme.spacing(0.25, 0.5),
-      borderRadius: theme.shape.borderRadius
-    },
-    resultItem: {
-      padding: theme.spacing(1),
-      '&:hover': {
-        background: theme.palette.action.hover,
-        cursor: 'pointer'
-      }
-    },
-    resultItemContent: {
-      paddingLeft: theme.spacing(2)
-    },
-    lightText: {
-      color: theme.palette.grey[500]
-    },
-    subtitle: {
-      margin: theme.spacing(2, 1),
-      color: theme.palette.grey[500]
-    },
-    place: {
-      border: `1px solid ${theme.palette.divider}`,
-      padding: theme.spacing(1),
-      borderRadius: theme.shape.borderRadius
-    }
-  }),
-  {
-    name: 'CreateDeal-Address'
-  }
-)
 
 interface Props {
   skippable: boolean
@@ -100,6 +71,7 @@ export function DealAddress({
   const [listing, setListing] = useState<Nullable<ICompactListing | IListing>>(
     null
   )
+  const [address, setAddress] = useState<Address | null>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
   const [
@@ -118,13 +90,16 @@ export function DealAddress({
     [searchCriteria]
   )
 
-  const {
-    isEmptyState,
-    isSearching,
-    listings,
-    places,
-    getParsedPlace
-  } = useSearchLocation(debouncedSearchCriteria)
+  const { isSearching, listings, places, getParsedPlace } = useSearchLocation(
+    debouncedSearchCriteria
+  )
+
+  const getAddressString = (
+    fields: (string | undefined)[],
+    separator = ', '
+  ) => {
+    return fields.filter(item => !!item).join(separator)
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -135,6 +110,7 @@ export function DealAddress({
   const handleRemove = () => {
     setPlace(null)
     setListing(null)
+    setAddress(null)
     setSearchCriteria('')
 
     onChange?.(null)
@@ -175,6 +151,23 @@ export function DealAddress({
     goNext()
   }
 
+  const handleSelectNewAddress = (address: Address) => {
+    const newAddress = {
+      ...address,
+      // TODO: our global address component isn't well typed
+      street_prefix: (address as any).street_prefix.value
+    }
+
+    setAddress(newAddress)
+
+    onChange?.({
+      type: 'Place',
+      address: newAddress
+    })
+
+    goNext()
+  }
+
   const goNext = () => {
     if (concurrentMode) {
       wizard.setStep(step)
@@ -193,10 +186,10 @@ export function DealAddress({
     <QuestionSection error={error}>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
-        {!listing && !place && (
-          <Box className={classes.root}>
-            <Box mb={3}>
-              <Box>
+        {!listing && !place && !address && (
+          <div className={classes.root}>
+            <div className={classes.searchContainer}>
+              <div>
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -206,10 +199,10 @@ export function DealAddress({
                   value={searchCriteria}
                   onChange={handleChange}
                 />
-              </Box>
+              </div>
 
               {skippable && wizard.currentStep === step && (
-                <Box mt={2} textAlign="right">
+                <div className={classes.skipContainer}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -217,41 +210,39 @@ export function DealAddress({
                   >
                     Skip
                   </Button>
-                </Box>
+                </div>
               )}
-            </Box>
+            </div>
 
             {isSearching && (
-              <Box my={1}>
+              <div className={classes.loadingContainer}>
                 <CircularProgress />
-              </Box>
+              </div>
             )}
 
-            <Box>
-              {places.length > 0 && (
+            <div>
+              {!isSearching && debouncedSearchCriteria && (
                 <Typography variant="body1" className={classes.subtitle}>
                   Places
                 </Typography>
               )}
 
               {places.map((place, index) => (
-                <Box
+                <Flex
                   key={place.id || index}
-                  display="flex"
-                  alignItems="center"
+                  alignCenter
                   className={classes.resultItem}
                   onClick={() => handleSelectPlace(place)}
                 >
-                  <Box
-                    width="32px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    mr={1}
+                  <Flex
+                    alignCenter
+                    justifyCenter
+                    className={classes.avatarContainer}
                   >
                     <SvgIcon path={mdiMapMarker} />
-                  </Box>
-                  <Box>
+                  </Flex>
+
+                  <div>
                     <Typography
                       variant="body2"
                       className={classes.resultItemContent}
@@ -266,9 +257,16 @@ export function DealAddress({
                         )}
                       </span>
                     </Typography>
-                  </Box>
-                </Box>
+                  </div>
+                </Flex>
               ))}
+
+              {!isSearching && debouncedSearchCriteria.length > 0 && (
+                <ManualAddress
+                  address={searchCriteria}
+                  onSelectAddress={handleSelectNewAddress}
+                />
+              )}
 
               {listings.length > 0 && (
                 <Typography variant="body1" className={classes.subtitle}>
@@ -277,21 +275,20 @@ export function DealAddress({
               )}
 
               {listings.map(listing => (
-                <Box
+                <Flex
                   key={listing.mls_number}
-                  display="flex"
-                  alignItems="center"
+                  alignCenter
                   className={classes.resultItem}
                   onClick={() => handleSelectListing(listing)}
                 >
-                  <Box width="32px" mr={1}>
+                  <div className={classes.avatarContainer}>
                     <Avatar
                       src={listing.cover_image_url}
                       alt={listing.mls_number}
                     >
                       <SvgIcon path={mdiHome} />
                     </Avatar>
-                  </Box>
+                  </div>
 
                   <div className={classes.resultItemContent}>
                     <Typography variant="body2">
@@ -313,54 +310,45 @@ export function DealAddress({
                       {listing.status}
                     </Typography>
                   </div>
-                </Box>
+                </Flex>
               ))}
-
-              {isEmptyState && (
-                <Callout
-                  type="error"
-                  style={{
-                    margin: 0
-                  }}
-                >
-                  Nothing found
-                </Callout>
-              )}
-            </Box>
-          </Box>
+            </div>
+          </div>
         )}
 
         {listing && <ListingCard listing={listing} />}
 
-        {place && (
-          <Box display="flex" alignItems="center" className={classes.place}>
-            <Box mr={1}>
+        {(place || address) && (
+          <Flex alignCenter className={classes.place}>
+            <div className={classes.avatarContainer}>
               <Avatar title="P">
                 <SvgIcon path={mdiHome} />
               </Avatar>
-            </Box>
-            <Box>
+            </div>
+
+            <div>
               <Typography variant="subtitle1">
-                {place.structured_formatting!.main_text}
+                {place && place.structured_formatting!.main_text}
+                {address &&
+                  getAddressString(
+                    [address.street_number, address.street_name],
+                    ' '
+                  )}
               </Typography>
 
               <Typography variant="subtitle2" className={classes.lightText}>
-                {place.structured_formatting!.secondary_text}
+                {place && place.structured_formatting!.secondary_text}
+                {address && getAddressString([address.city, address.state])}
               </Typography>
-            </Box>
-          </Box>
+            </div>
+          </Flex>
         )}
 
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-end"
-          mt={2}
-        >
-          {(listing || place) && (
+        <Flex alignCenter justifyEnd className={classes.actions}>
+          {(listing || place || address) && (
             <Button onClick={handleRemove}>Change Property</Button>
           )}
-        </Box>
+        </Flex>
       </QuestionForm>
     </QuestionSection>
   )
