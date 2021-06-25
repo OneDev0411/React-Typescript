@@ -1,4 +1,3 @@
-import React from 'react'
 import Select from 'react-select'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -25,7 +24,6 @@ export const SCHOOLS_TYPE = [
 
 const Schools = ({
   schools = {},
-  districts = [],
   loadingSchools,
   selectedSchools,
   onChangeSchools,
@@ -45,20 +43,19 @@ const Schools = ({
         loadOptions={api.getSchoolsDistricts}
       />
     </Label>
-    {Object.keys(schools).length === 0 &&
-      loadingSchools && (
-        <p
-          style={{
-            padding: '1rem',
-            color: '#fff',
-            lineHeight: '1',
-            fontSize: '1.7rem',
-            backgroundColor: '#2196f3'
-          }}
-        >
-          Loading Schools ...
-        </p>
-      )}
+    {Object.keys(schools).length === 0 && loadingSchools && (
+      <p
+        style={{
+          padding: '1rem',
+          color: '#fff',
+          lineHeight: '1',
+          fontSize: '1.7rem',
+          backgroundColor: '#2196f3'
+        }}
+      >
+        Loading Schools ...
+      </p>
+    )}
     {Object.keys(schools).length > 0 && (
       <div>
         {Object.keys(schools).map(school => {
@@ -111,12 +108,7 @@ export default compose(
   withState('schools', 'setSchools', {}),
   withState('loadingSchools', 'setLoadingSchools', false),
   withHandlers({
-    getSchools: ({
-      setSchools,
-      updateField,
-      loadingSchools,
-      setLoadingSchools
-    }) => districts => {
+    getSchools: ({ setSchools, setLoadingSchools }) => districts => {
       setLoadingSchools(true)
 
       api.getSchools(districts).then(schools => {
@@ -161,12 +153,10 @@ export default compose(
         getSchools(districts)
       }
     },
-    onChangeSchools: ({
-      updateField,
-      loadingSchools,
-      selectedSchools,
-      setSelectedSchools
-    }) => (type, schools) => {
+    onChangeSchools: ({ updateField, loadingSchools, selectedSchools }) => (
+      type,
+      schools
+    ) => {
       if (loadingSchools) {
         return
       }

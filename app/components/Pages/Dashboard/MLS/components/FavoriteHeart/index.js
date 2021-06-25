@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -13,8 +12,11 @@ const style = {
 const Heart = ({ isFavorited, onClick, width = '100%', height = '100%' }) => (
   <img
     style={{ ...style, width, height }}
+    alt="heart"
     onClick={onClick}
-    src={`/static/images/dashboard/mls/heart${isFavorited ? '-red' : '-white'}.svg`}
+    src={`/static/images/dashboard/mls/heart${
+      isFavorited ? '-red' : '-white'
+    }.svg`}
   />
 )
 
