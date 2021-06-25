@@ -9,6 +9,7 @@ import {
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
   withStyles,
+  makeStyles,
   Theme
 } from '@material-ui/core'
 
@@ -38,10 +39,22 @@ const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
   }
 }))(MuiAvatar)
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    listItemWithButton: {
+      paddingRight: theme.spacing(12)
+    }
+  }),
+  { name: 'CalendarListItem' }
+)
+
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
   let linkTitle
+  let secondaryText
+
+  const classes = useStyles()
 
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
@@ -91,11 +104,23 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
+  if (event.event_type == 'home_anniversary' && contact) {
+    secondaryText = `Home anniversary of ${
+      contact.display_name
+    } ${timeago().format(event.next_occurence)}`
+  } else {
+    secondaryText = timeago().format(event.next_occurence)
+  }
+
   return (
     <>
-      <ListItem>
+      <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
+<<<<<<< HEAD
         <ListItemText primary={linkTitle} secondary={humanizedEventTime} />
+=======
+        <ListItemText primary={linkTitle} secondary={secondaryText} />
+>>>>>>> b19db0352e... feat(welcome): add contact info for home anniversary rows
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>
