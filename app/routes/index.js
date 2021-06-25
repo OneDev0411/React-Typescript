@@ -7,6 +7,8 @@ import { ACL } from 'constants/acl'
 
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
+import { listingTabs } from '../components/Pages/Dashboard/Listings/constants'
+
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
@@ -942,7 +944,7 @@ export default (
 
         <Route path="website" component={AsyncOldWebsite} />
 
-        <Route path="listings">
+        <Route path={`listings(/:type(${Object.keys(listingTabs).join('|')}))`}>
           <IndexRoute component={AsyncListingsList} />
         </Route>
       </Route>
