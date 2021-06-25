@@ -27,11 +27,12 @@ import type { IDealFormRole } from '../../types'
 interface Props {
   title: React.ReactNode
   side: IDealType
-  propertyType: IDealPropertyType
+  propertyType?: IDealPropertyType
   roles: IDealRole[]
   predefinedRoles?: IDealRole[]
   skippable?: boolean
   concurrentMode?: boolean
+  error?: string
   onChange?: (role: IDealRole, type: 'update' | 'create' | 'delete') => void
 }
 
@@ -39,6 +40,7 @@ export function DealClient({
   side,
   title,
   roles,
+  error,
   concurrentMode = false,
   propertyType,
   predefinedRoles = [],
@@ -70,10 +72,10 @@ export function DealClient({
   const getSearchInputPlaceholder = () => {
     const type =
       side === 'Selling'
-        ? propertyType?.includes('Lease')
+        ? propertyType?.is_lease
           ? 'Landlord'
           : 'Seller'
-        : propertyType?.includes('Lease')
+        : propertyType?.is_lease
         ? 'Tenant'
         : 'Buyer'
 
@@ -111,7 +113,7 @@ export function DealClient({
   }
 
   return (
-    <QuestionSection>
+    <QuestionSection error={error}>
       <QuestionTitle>{title}</QuestionTitle>
 
       <QuestionForm>

@@ -85,31 +85,32 @@ export const SearchInput = forwardRef(
       setNonEmpty(!!value)
 
       if (debounceTime > 0) {
-        // https://stackoverflow.com/questions/49081149/debounce-on-react-got-e-target-value-undefined?answertab=active#tab-top
+        // https://stackoverflow.com/questions/49081149
         debouncedOnChange(e, value)
 
         return
       }
 
-      onChange(e)
+      onChange(e, value)
     }
 
     const clearInput = () => {
       if (inputEl && inputEl.current) {
         inputEl.current.value = ''
 
-        if (onClear) {
+        if (typeof onClear === 'function') {
           // A custom `onClear` routine may also be provided as a prop
           onClear()
           setNonEmpty(false)
         } else {
           // Since components using this TextField may rely on an standard `onChange`
-          // event listener for getting the latest input value, we should respect it
-          // and as soon as this gets cleared we notify them of the change. We could not
-          // just go with setting the value to an empty string ('') here as it doesn't
-          // trigger an `onChange` event. (They may want to reset their search results)
-          // So, the approach we are taking is to manually trigger an `input` event on
-          // the inputElement and let those listeners for their jobs.
+          // event listener for getting the latest input value, we should respect
+          // that and as soon as this input gets cleared we notify them of the change
+          // We could not just go with setting the value to an empty string ('') here
+          // as it doesn't trigger an `onChange` event. (They may want to reset their
+          // search results)
+          // So the approach we are taking is to manually triggering an `input` event
+          // on the inputElement and let those listeners do their job.
           // More on this: https://stackoverflow.com/questions/23892547
 
           // Another thing we're doing here is removing the original `onChange` from

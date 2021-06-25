@@ -1,5 +1,6 @@
 import { normalize } from 'normalizr'
-import { batchActions } from 'redux-batched-actions'
+import { batch } from 'react-redux'
+
 import { addNotification as notify } from 'components/notification'
 
 import * as actionTypes from '../../../../constants/deals'
@@ -14,15 +15,15 @@ import * as schema from '../../schema'
 export function searchDeals(user, value) {
   return async dispatch => {
     try {
-      batchActions([
+      batch(() => {
         dispatch({
           type: actionTypes.SET_FETCHING_STATUS,
           status: true
-        }),
+        })
         dispatch({
           type: actionTypes.CLEAR_DEALS
         })
-      ])
+      })
 
       const data = await Deal.searchDeals(user, value)
 
@@ -33,12 +34,12 @@ export function searchDeals(user, value) {
       const { entities } = normalize(data, schema.dealsSchema)
       const { deals, roles, checklists, tasks } = entities
 
-      batchActions([
-        dispatch(setTasks(tasks)),
-        dispatch(setChecklists(checklists)),
-        dispatch(setRoles(roles)),
+      batch(() => {
+        dispatch(setTasks(tasks))
+        dispatch(setChecklists(checklists))
+        dispatch(setRoles(roles))
         dispatch(setDeals(deals))
-      ])
+      })
     } catch (e) {
       console.log(e)
       dispatch(

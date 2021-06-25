@@ -73,6 +73,7 @@ export function ImageUploader({
   }
 
   const handleSave = (imageUrl: File) => {
+    setFile(null)
     setIsOpen(false)
     onSelectImage(imageUrl)
   }

@@ -33,9 +33,11 @@ module.exports = {
     modules: [resolvePath('../app'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
     alias: {
+      '@app': resolvePath('../app'),
       store: resolvePath('../app/stores'),
       actions: resolvePath('../app/store_actions'),
       assets: resolvePath('../app/static'),
+      styles: resolvePath('../app/styles'),
       components: resolvePath('../app/views/components'),
       constants: resolvePath('../app/constants'),
       dashboard: resolvePath('../app/components/Dashboard'),

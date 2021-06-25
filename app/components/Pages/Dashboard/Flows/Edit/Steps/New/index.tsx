@@ -1,124 +1,122 @@
 import React, { useState } from 'react'
-import { Grid, Box, Card, CardContent } from '@material-ui/core'
+import { Box, Theme, makeStyles } from '@material-ui/core'
 
 import EventForm from './EventForm'
-import { StepIndex } from '../styled'
-import ScheduledEmailForm from './ScheduledEmailForm'
-import AddButton from './AddButton'
+import BasicEmailForm from './BasicEmailForm'
+import MarketingEmailForm from './MarketingEmailForm'
+import { AddButtons } from './components/AddButtons'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      width: '100%'
+    },
+    plus: {
+      width: '55px', // from figma
+      height: '55px', // from figma
+      margin: 'auto',
+      background: theme.palette.background.paper,
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: '50%',
+      color: theme.palette.secondary.main,
+      fontSize: '1.3rem',
+      textAlign: 'center',
+      lineHeight: '52px',
+      cursor: 'pointer'
+    }
+  }),
+  { name: 'NewStep' }
+)
 
 interface Props {
   index: number
-  startFrom: number
+  miniMode?: boolean
   emailTemplates: IBrandEmailTemplate[]
   defaultSelectedEmailTemplate?: UUID
-  isNewEventFormOpen?: boolean
+  shouldShowDefaultForm?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onNewEmailTemplateClick: () => void
-  onReviewEmailTemplateClick: (template: IBrandEmailTemplate) => void
 }
 
-export default function New({
-  isNewEventFormOpen: passedIsNewEventFormOpen,
+export const NewStep = ({
   index,
-  startFrom,
   emailTemplates,
+  miniMode = false,
+  shouldShowDefaultForm,
   defaultSelectedEmailTemplate,
   onSubmit,
-  onNewEmailTemplateClick,
-  onReviewEmailTemplateClick
-}: Props) {
-  const [isNewEventFormOpen, setIsNewEventFormOpen] = useState(
-    passedIsNewEventFormOpen || false
-  )
-  const [
-    isNewScheduledEmailFormOpen,
-    setIsNewScheduledEmailFormOpen
-  ] = useState(false)
+  onNewEmailTemplateClick
+}: Props) => {
+  const classes = useStyles()
+  const [isMiniMode, setIsMiniMode] = useState(miniMode)
+  const [openForm, setOpenForm] = useState<
+    Nullable<'event' | 'basic_email' | 'marketing_email'>
+  >(shouldShowDefaultForm ? 'event' : null)
 
   async function submitHandler(data: IBrandFlowStepInput) {
-    const step: IBrandFlowStepInput = {
-      ...data,
-      due_in: data.due_in
+    await onSubmit(data)
+    setOpenForm(null)
+  }
+
+  const renderEventForm = () => (
+    <EventForm index={index} onSubmit={submitHandler} />
+  )
+
+  const rebderBasicEmailForm = () => (
+    <BasicEmailForm
+      index={index}
+      templates={emailTemplates}
+      defaultSelectedTemplate={defaultSelectedEmailTemplate}
+      onSubmit={submitHandler}
+      onNewTemplateClick={onNewEmailTemplateClick}
+    />
+  )
+  const rebderTemplateEmailForm = () => (
+    <MarketingEmailForm index={index} onSubmit={submitHandler} />
+  )
+
+  const renderForm = () => {
+    switch (openForm) {
+      case 'event':
+        return renderEventForm()
+      case 'basic_email':
+        return rebderBasicEmailForm()
+      case 'marketing_email':
+        return rebderTemplateEmailForm()
+    }
+  }
+
+  const renderNewStep = () => {
+    if (!openForm) {
+      return null
     }
 
-    await onSubmit(step)
-    setIsNewEventFormOpen(false)
-  }
-
-  function cancelHandler() {
-    setIsNewEventFormOpen(false)
-    setIsNewScheduledEmailFormOpen(false)
-  }
-
-  function renderNewEventForm() {
-    return (
-      <Grid item xs={12} style={{ position: 'relative' }}>
-        <StepIndex>{index}</StepIndex>
-        <Box m={2}>
-          <Card>
-            <CardContent>
-              <Grid container item alignItems="center" xs={12}>
-                <EventForm
-                  startFrom={startFrom}
-                  onCancel={cancelHandler}
-                  onSubmit={submitHandler}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
-        </Box>
-      </Grid>
-    )
-  }
-
-  function renderNewScheduledEmailForm() {
-    return (
-      <Grid item xs={12} style={{ position: 'relative' }}>
-        <StepIndex>{index}</StepIndex>
-        <Box m={2}>
-          <Card>
-            <CardContent>
-              <Grid container item alignItems="center" xs={12}>
-                <ScheduledEmailForm
-                  startFrom={startFrom}
-                  templates={emailTemplates}
-                  defaultSelectedTemplate={defaultSelectedEmailTemplate}
-                  onCancel={cancelHandler}
-                  onSubmit={submitHandler}
-                  onNewTemplateClick={onNewEmailTemplateClick}
-                  onReviewTemplateClick={onReviewEmailTemplateClick}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
-        </Box>
-      </Grid>
-    )
+    return <Box className={classes.container}>{renderForm()}</Box>
   }
 
   function renderAddNewStep() {
-    return (
-      <Grid item xs={12}>
-        <Box m={2}>
-          <AddButton
-            onNewEventClick={() => {
-              setIsNewScheduledEmailFormOpen(false)
-              setIsNewEventFormOpen(true)
-            }}
-            onNewScheduledEmailClick={() => {
-              setIsNewEventFormOpen(false)
-              setIsNewScheduledEmailFormOpen(true)
-            }}
-          />
+    if (isMiniMode) {
+      return (
+        <Box className={classes.plus} onClick={() => setIsMiniMode(false)}>
+          +
         </Box>
-      </Grid>
+      )
+    }
+
+    return (
+      <Box className={classes.container} mt={openForm ? 2 : 0}>
+        <AddButtons
+          onNewEventClick={() => setOpenForm('event')}
+          onNewMarketingEmailClick={() => setOpenForm('marketing_email')}
+          onNewBasicEmailClick={() => setOpenForm('basic_email')}
+        />
+      </Box>
     )
   }
 
   return (
     <>
-      {isNewEventFormOpen && renderNewEventForm()}
-      {isNewScheduledEmailFormOpen && renderNewScheduledEmailForm()}
+      {renderNewStep()}
       {renderAddNewStep()}
     </>
   )

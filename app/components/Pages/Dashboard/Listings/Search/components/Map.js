@@ -55,7 +55,8 @@ const map = ({
   searchLocation,
   onGoogleApiLoaded,
   onClickRemovePolygon,
-  fitBoundsByPoints
+  fitBoundsByPoints,
+  lastBrowsingLocation
 }) => (
   <>
     <Map
@@ -63,8 +64,14 @@ const map = ({
       onChange={onChange}
       zoom={map.props.zoom}
       center={map.props.center}
-      defaultZoom={mapInitialState.zoom}
-      defaultCenter={mapInitialState.center}
+      defaultZoom={
+        lastBrowsingLocation ? lastBrowsingLocation.zoom : mapInitialState.zoom
+      }
+      defaultCenter={
+        lastBrowsingLocation
+          ? lastBrowsingLocation.center
+          : mapInitialState.center
+      }
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}
@@ -170,8 +177,13 @@ const mapHOC = compose(
       setMapProps,
       resetSearchType,
       setOffMapAutoMove,
-      getListingsByMapBounds
+      getListingsByMapBounds,
+      updateUserLocation
     }) => (gmap = {}) => {
+      if (map.props.center && map.props.zoom) {
+        updateUserLocation({ center: map.props.center, zoom: map.props.zoom })
+      }
+
       if (!isInit) {
         return
       }
@@ -185,6 +197,7 @@ const mapHOC = compose(
 
         // search by our api
         if (searchType === 'by_map_bounds') {
+          console.log('searchType === by_map_bounds')
           getListingsByMapBounds(bounds)
         }
 

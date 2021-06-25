@@ -1,5 +1,5 @@
 import { normalize } from 'normalizr'
-import { batchActions } from 'redux-batched-actions'
+import { batch } from 'react-redux'
 
 import Deal from '../../../../models/Deal'
 import { appendChecklist } from '../../deal/append-checklist'
@@ -11,8 +11,8 @@ import * as schema from '../../schema'
 
 interface Options {
   conditions: {
-    deal_type: IDealType
-    property_type: IDealPropertyType
+    checklist_type: UUID
+    property_type: UUID
   }
 }
 
@@ -24,11 +24,11 @@ export function createChecklist(dealId: UUID, options: Options) {
     const { checklists, tasks } = entities
     const checklistId = Object.keys(checklists || {})[0]
 
-    batchActions([
-      dispatch(setTasks(tasks)),
-      dispatch(setChecklists(checklists)),
+    batch(() => {
+      dispatch(setTasks(tasks))
+      dispatch(setChecklists(checklists))
       dispatch(appendChecklist(dealId, checklistId))
-    ])
+    })
 
     return checklist
   }

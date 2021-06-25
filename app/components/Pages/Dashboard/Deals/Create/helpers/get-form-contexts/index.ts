@@ -1,13 +1,11 @@
-import {
-  getChecklist,
-  getDefinitionId
-} from 'models/Deal/helpers/dynamic-context'
 import { getContext } from 'models/Deal/helpers/context'
 
 export function getFormContexts(
   values: Record<string, unknown>,
   deal: IDeal,
-  checklist?: IDealChecklist
+  brandChecklists: IBrandChecklist[],
+  checklists: IDealChecklist[],
+  checklistType: IBrandChecklist['checklist_type']
 ) {
   return Object.entries(values).reduce((acc, [key, value]) => {
     if (value === undefined || !key.includes('context')) {
@@ -17,12 +15,39 @@ export function getFormContexts(
     const [, name] = key.split(':')
     const context = getContext(deal, name)
 
+    const brandChecklist = brandChecklists?.filter(
+      checklist =>
+        checklist.checklist_type === checklistType &&
+        checklist.property_type === deal.property_type?.id
+    )
+
+    const definition = brandChecklist
+      .flatMap(item =>
+        (item.optional_contexts || []).concat(item.required_contexts || [])
+      )
+      .find(item => item.key === name)
+
+    const checklist = checklists.find(
+      ({ origin, checklist_type, is_active_offer }) =>
+        brandChecklist?.find(({ id }) =>
+          checklist_type === 'Offer'
+            ? id === origin && is_active_offer
+            : id === origin
+        )
+    )
+
+    if (!definition) {
+      console.log(`Could not save context "${name}"`, { checklist, definition })
+
+      return acc
+    }
+
     return [
       ...acc,
       {
         value,
-        definition: getDefinitionId(deal.id, name),
-        checklist: checklist ? checklist.id : getChecklist(deal, name),
+        definition: definition.id,
+        checklist: checklist?.id,
         approved: context ? context.needs_approval : false
       }
     ]

@@ -1,21 +1,18 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Tooltip, Button, createStyles, makeStyles } from '@material-ui/core'
-
 import ClickOutside from 'react-click-outside'
 
 import Input from 'components/Input'
 import { getContextInputMask } from 'deals/utils/get-context-mask'
-
-import { isContextApproved } from '../helpers/is-context-approved'
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
+import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
 import { EditButton } from '../ActionButtons/Edit'
 import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
 
 import { Loading } from '../components/Loading'
-
-import { ContextField } from '../types'
 
 import {
   Editable as Container,
@@ -27,12 +24,14 @@ import {
 
 interface Props {
   deal: IDeal
-  field: ContextField
+  field: IDealBrandContext
   value: unknown
   isBackOffice: boolean
-  onApprove(field: ContextField): void
-  onChange(field: ContextField, value: unknown): void
-  onDelete(field: ContextField): void
+  isDisabled: boolean
+  tooltip: string | React.ReactChild
+  onApprove(field: IDealBrandContext): void
+  onChange(field: IDealBrandContext, value: unknown): void
+  onDelete(field: IDealBrandContext): void
 }
 
 const useStyles = makeStyles(() =>
@@ -50,6 +49,8 @@ export function TextField({
   field,
   value,
   isBackOffice,
+  isDisabled,
+  tooltip,
   onChange,
   onDelete,
   onApprove
@@ -59,7 +60,15 @@ export function TextField({
   const [fieldValue, setFieldValue] = useState<unknown>(value)
   const classes = useStyles()
 
-  const toggleEditing = () => setIsEditing(!isEditing)
+  const properties = getContextProperties(field.key)
+
+  const toggleEditing = () => {
+    if (isDisabled) {
+      return
+    }
+
+    setIsEditing(!isEditing)
+  }
 
   const handleCancel = () => {
     toggleEditing()
@@ -108,7 +117,7 @@ export function TextField({
               maxLength={40}
               value={fieldValue}
               mask={getContextInputMask(field)}
-              placeholder={field.properties.placeholder || field.label}
+              placeholder={properties.placeholder || field.label}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
@@ -140,32 +149,28 @@ export function TextField({
 
   return (
     <>
-      <Tooltip
-        title={
-          isContextApproved(deal, field) || isBackOffice
-            ? ''
-            : 'Pending Office Approval'
-        }
-      >
-        <Item>
+      <Tooltip title={tooltip}>
+        <Item disableHover={isDisabled}>
           <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
-          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+          <ItemValue>{getFormattedValue(field, value)}</ItemValue>
 
-          <ItemActions>
-            <EditButton onClick={toggleEditing} />
-            <DeleteButton
-              deal={deal}
-              field={field}
-              value={value}
-              onClick={handleDelete}
-            />
-            <ApproveButton
-              deal={deal}
-              field={field}
-              isBackOffice={isBackOffice}
-              onClick={() => onApprove(field)}
-            />
-          </ItemActions>
+          {!isDisabled && (
+            <ItemActions>
+              <EditButton onClick={toggleEditing} />
+              <DeleteButton
+                deal={deal}
+                field={field}
+                value={value}
+                onClick={handleDelete}
+              />
+              <ApproveButton
+                deal={deal}
+                context={field}
+                isBackOffice={isBackOffice}
+                onClick={() => onApprove(field)}
+              />
+            </ItemActions>
+          )}
         </Item>
       </Tooltip>
     </>

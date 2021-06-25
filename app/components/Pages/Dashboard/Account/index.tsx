@@ -23,7 +23,7 @@ const AccountLayout = ({ user, children }: Props) => {
         <PageLayout.Header title="Account Settings" />
         <PageLayout.Main>
           <SettingsTabs user={user} />
-          <Box paddingTop={2.5}>{children}</Box>
+          <Box paddingTop={1}>{children}</Box>
         </PageLayout.Main>
       </PageLayout>
     </>

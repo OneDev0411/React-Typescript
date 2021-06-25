@@ -7,6 +7,7 @@ import compress from 'compression'
 import cookieSession from 'cookie-session'
 import enforce from 'express-sslify'
 import timeout from 'connect-timeout'
+import serveStatic from 'serve-static'
 
 import webpack from 'webpack'
 import history from 'connect-history-api-fallback'
@@ -19,6 +20,7 @@ import routes from './routes'
 const port = process.env.PORT || 8080
 const isProduction = process.env.NODE_ENV === 'production'
 const isDevelopment = !isProduction
+const isBabel = process.env.IS_BABEL === 'true'
 
 const app = express()
 
@@ -47,14 +49,27 @@ app.use(haltOnTimedout)
 app.use(history())
 
 if (isDevelopment) {
-  const config = require('../webpack/development')
-  const compiler = webpack(config)
+  if (isBabel) {
+    const config = require('../webpack/developmentBabel')
+    const compiler = webpack(config)
 
-  app.use(
-    webpackDevMiddleware(compiler, {
-      publicPath: config.output.publicPath
-    })
-  )
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath
+      })
+    )
+    app.use(require('webpack-hot-middleware')(compiler))
+  } else {
+    const config = require('../webpack/development')
+    const compiler = webpack(config)
+
+    app.use(
+      webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath
+      })
+    )
+  }
+
   app.use('/static', express.static(path.resolve(__dirname, '../app/static')))
 }
 
@@ -63,11 +78,24 @@ if (isProduction) {
   app.disable('x-powered-by')
   app.use(enforce.HTTPS())
 
+  const setHeaders = (res: Response, path: string) => {
+    // prevent caching of index.html
+    if (serveStatic.mime.lookup(path) === 'text/html') {
+      res.setHeader('Surrogate-Control', 'no-store')
+      res.setHeader(
+        'Cache-Control',
+        'no-store, no-cache, must-revalidate, proxy-revalidate'
+      )
+      res.setHeader('Pragma', 'no-cache')
+      res.setHeader('Expires', '0')
+    }
+  }
+
   app.use(
     '/',
-    express.static(path.resolve(__dirname, '../dist'), {
-      index: false,
-      maxAge: '7d'
+    serveStatic(path.resolve(__dirname, '../dist'), {
+      maxAge: '7d',
+      setHeaders
     })
   )
 }

@@ -1,7 +1,6 @@
 // @ts-nocheck
 const { merge } = require('webpack-merge')
 const Webpackbar = require('webpackbar')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const common = require('./base')
 
@@ -19,13 +18,7 @@ const config = {
     filename: '[name].bundle.js',
     publicPath: '/'
   },
-  plugins: [
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: false
-    }),
-    new Webpackbar()
-  ],
+  plugins: [new Webpackbar()],
   module: {
     rules: [
       {

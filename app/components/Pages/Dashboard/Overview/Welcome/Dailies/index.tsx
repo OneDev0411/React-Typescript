@@ -10,12 +10,10 @@ export function Dailies() {
   // 'contact_attribute', 'deal_context' object types.
   // For more details on what kinds of event each objectTypes would provide refer
   // to type CalendarObjectType
-  const { isLoading, events } = useCalendarEvents([
-    'crm_task',
-    'contact',
-    'contact_attribute',
-    'deal_context'
-  ])
+  const { isLoading, events } = useCalendarEvents(
+    ['crm_task', 'contact', 'contact_attribute', 'deal_context'],
+    7 // get events of last 7 days
+  )
 
   return (
     <>

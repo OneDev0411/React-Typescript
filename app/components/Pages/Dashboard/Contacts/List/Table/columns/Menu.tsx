@@ -1,11 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { mdiDotsHorizontal } from '@mdi/js'
 
-import { IconButton, MenuItem, Typography } from '@material-ui/core'
+import { IconButton, MenuItem, Typography, Popover } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { BaseDropdown } from 'components/BaseDropdown'
 
 interface Props {
   contactId: UUID
@@ -18,30 +16,48 @@ interface Props {
 }
 
 export default function Menu({ contactId, handleOnDelete }: Props) {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'menu-popover' : undefined
+
   return (
-    <BaseDropdown
-      PopperProps={{
-        placement: 'bottom-end'
-      }}
-      renderDropdownButton={buttonProps => (
-        <IconButton {...buttonProps} size="small">
-          <SvgIcon path={mdiDotsHorizontal} />
-        </IconButton>
-      )}
-      renderMenu={({ close }) => (
-        <div>
-          <MenuItem
-            onClick={e => {
-              close()
-              handleOnDelete(e, {
-                singleSelectedRow: [contactId]
-              })
-            }}
-          >
-            <Typography color="error">Delete</Typography>
-          </MenuItem>
-        </div>
-      )}
-    />
+    <>
+      <IconButton size="small" onClick={handleClick}>
+        <SvgIcon path={mdiDotsHorizontal} />
+      </IconButton>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <MenuItem
+          onClick={e => {
+            handleOnDelete(e, {
+              singleSelectedRow: [contactId]
+            })
+          }}
+        >
+          <Typography color="error">Delete</Typography>
+        </MenuItem>
+      </Popover>
+    </>
   )
 }

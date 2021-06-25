@@ -13,10 +13,11 @@ import {
 } from 'deals/contexts/actions-context/constants'
 
 interface Props {
+  isSubmitting: boolean
   onClickAddAttachments: () => void
 }
 
-export function Attachments({ onClickAddAttachments }: Props) {
+export function Attachments({ isSubmitting, onClickAddAttachments }: Props) {
   const field = useField('attachments')
   const [, actionsDispatch] = useChecklistActionsContext()
 
@@ -60,7 +61,11 @@ export function Attachments({ onClickAddAttachments }: Props) {
       </Box>
 
       <Box marginBottom={2}>
-        <Button color="secondary" onClick={handleAddAttachments}>
+        <Button
+          color="secondary"
+          disabled={isSubmitting}
+          onClick={handleAddAttachments}
+        >
           Add More Attachments
         </Button>
       </Box>

@@ -4,36 +4,40 @@ declare type IContextDataType = 'Text' | 'Date' | 'Number' | null
 declare type IContextFormat = 'Currency' | null
 declare type IContextCondition = IDealType | IDealPropertyType
 
-declare interface IDealBrandContext {
-  id: UUID
+declare interface IDealBrandContext extends IModel<'brand_context'> {
   brand: UUID
+  data_type: 'Number' | 'Date' | 'Text'
+  default_value: Nullable<string | number>
+  exports: boolean
+  format: Nullable<string>
   key: string
-  type: 'brand_context'
   label: string
-  mandatory: boolean
-  short_label: string | null
-  section: IContextSection
-  needs_approval: boolean | null
-  exports: boolean | null
-  preffered_source: IContextSource
-  default_value: string | null
-  data_type: IContextDataType
-  format: IContextFormat
-  required: Array<IContextCondition> | null
-  optional: Array<IContextCondition> | null
-  triggers_brokerwolf: boolean
+  needs_approval: boolean
   order: number
-  deleted_at?: number | null
-  properties: {
-    placeholder: string
-    mask: string[]
-  }
-  validate: (context: IDealBrandContext, value: unknown) => boolean
+  preffered_source: 'Provided' | 'MLS' | null
+  section: string
+  short_label: string
+  triggers_brokerwolf: boolean
 }
 
-declare interface IDealContext {
-  definition: UUID
+declare interface IDealBrandContextChecklist {
   checklist: UUID
-  value: unknown
-  approved: boolean
+  is_required: boolean | null
+}
+
+declare interface IDealContext extends IModel<'deal_context_item'> {
+  approved_at: string | null
+  approved_by: UUID | null
+  checklist: UUID
+  created_by: UUID
+  data_type: string // requires better typing
+  date: string | null
+  deal: UUID
+  definition: UUID
+  id: UUID
+  key: string
+  number: number
+  searchable: string
+  source: string
+  text: string
 }

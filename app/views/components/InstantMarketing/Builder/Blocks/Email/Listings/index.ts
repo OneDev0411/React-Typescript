@@ -1,11 +1,11 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
+import GridIcon from 'assets/images/marketing/editor/blocks/listing-grid.png'
 import ImageIcon from 'assets/images/marketing/editor/blocks/listing-image.png'
 import ImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
 import ImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
 import ImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
-import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
 
 import { isLeaseProperty } from 'utils/listing'
 
@@ -15,7 +15,6 @@ import {
 } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-import { adaptTemplates } from '../utils'
 
 import Image from './image.mjml'
 import Top from './top.mjml'
@@ -92,7 +91,7 @@ export default function registerBlocks(
     editor,
     {
       label: 'Grid',
-      icon: DualIcon,
+      icon: GridIcon,
       category: LISTINGS_BLOCK_CATEGORY,
       blockName: listingGridBlockName,
       template: listingBlocks[listingGridBlockName]
@@ -116,7 +115,7 @@ export default function registerBlocks(
     editor,
     {
       label: 'Aligned Grid',
-      icon: DualIcon,
+      icon: GridIcon,
       category: LISTINGS_BLOCK_CATEGORY,
       blockName: listingGridTwoBlockName,
       template: listingBlocks[listingGridTwoBlockName]
@@ -145,7 +144,7 @@ export default function registerBlocks(
 
   return handleBlockDragStopEvent(
     editor,
-    adaptTemplates(allBlocks),
+    allBlocks,
     (listings: (IListing & { is_lease?: boolean })[]) => ({
       ...renderData,
       listings: listings.map(listing => ({

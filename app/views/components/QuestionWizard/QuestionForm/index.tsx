@@ -4,14 +4,14 @@ import { Box } from '@material-ui/core'
 import { useWizardContext } from '../hooks/use-wizard-context'
 import { IWizardState } from '../context'
 
-interface Props {
+export interface QuestionFormProps {
   width?: string
   children:
     | React.ReactNode
     | ((data: { wizard: IWizardState }) => React.ReactNode)
 }
 
-export function QuestionForm({ children, width = '50%' }: Props) {
+export function QuestionForm({ children, width = '50%' }: QuestionFormProps) {
   const wizard = useWizardContext()
 
   return (
