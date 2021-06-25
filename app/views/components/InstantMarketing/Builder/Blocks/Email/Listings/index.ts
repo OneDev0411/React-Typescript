@@ -15,7 +15,6 @@ import {
 } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-import { adaptTemplates } from '../utils'
 
 import Image from './image.mjml'
 import Top from './top.mjml'
@@ -145,7 +144,7 @@ export default function registerBlocks(
 
   return handleBlockDragStopEvent(
     editor,
-    adaptTemplates(allBlocks),
+    allBlocks,
     (listings: (IListing & { is_lease?: boolean })[]) => ({
       ...renderData,
       listings: listings.map(listing => ({
