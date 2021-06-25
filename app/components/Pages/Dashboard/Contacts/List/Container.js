@@ -42,16 +42,15 @@ import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-q
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import ImportContactsButton from 'components/ImportContactsButton'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
-import ImportContactsButton from './ImportContactsButton'
 import TouchReminder from './TouchReminder'
 import { OtherContactsBadge } from './OtherContactsBadge'
 
@@ -103,11 +102,10 @@ class ContactsList extends React.Component {
     const globalButtonDispatch = this.context
 
     const { parkedContactsCount } = this.state
-    const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
+    const { user, fetchTags, getContactsTags } = this.props
 
     this.order =
       getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
-    fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
@@ -852,7 +850,12 @@ class ContactsList extends React.Component {
                   onChange={this.handleTagTouchReminderUpdate}
                 />
               )}
-              {showImportAction && <ImportContactsButton />}
+              {showImportAction && (
+                <ImportContactsButton
+                  hasCSVButton
+                  tooltip="Connect to Google, Outlook or import from a CSV"
+                />
+              )}
             </Box>
           )}
           <Box ml={1.5}>
@@ -1007,7 +1010,6 @@ ContactsList.contextType = GlobalButtonDispatch
 export default withRouter(
   connect(mapStateToProps, {
     getContacts,
-    fetchOAuthAccounts,
     searchContacts,
     deleteContacts,
     confirmation,
