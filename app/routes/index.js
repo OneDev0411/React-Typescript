@@ -180,15 +180,13 @@ const AsyncDashboardOverview = withAcl(
 
 const AsyncMLSLayout = Load({
   loader: () =>
-    import(
-      '../components/Pages/Dashboard/MLS' /* webpackChunkName: "listings" */
-    )
+    import('../components/Pages/Dashboard/MLS' /* webpackChunkName: "mls" */)
 })
 
 const AsyncMLSSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "listing_search" */
+      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "mls_search" */
     )
 })
 
@@ -729,6 +727,17 @@ const AsyncContexts = withAcl.admin(
   })
 )
 
+/* ==================================== */
+//  Listings
+/* ==================================== */
+
+const AsyncListingsList = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Listings/pages/Listings' /* webpackChunkName: "listings" */
+    )
+})
+
 export default (
   <Route>
     <Route path="/">
@@ -932,6 +941,10 @@ export default (
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />
+
+        <Route path="listings">
+          <IndexRoute component={AsyncListingsList} />
+        </Route>
       </Route>
     </Route>
 
