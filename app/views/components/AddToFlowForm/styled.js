@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import Card from 'components/Card'
-
 import { CONTAINER_HEIGHT } from './constants'
 
-export const Container = styled(Card)`
+export const Container = styled.div`
+  background: #fff;
+  border-radius: 3px;
   width: 50rem;
   height: ${CONTAINER_HEIGHT};
   display: flex;

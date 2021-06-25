@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
-  Box,
   Button,
   ListItem,
   ListItemText,
@@ -10,10 +9,13 @@ import {
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
   withStyles,
+  makeStyles,
   Theme
 } from '@material-ui/core'
 
 import timeago from 'timeago.js'
+
+import { isToday } from 'date-fns'
 
 import Link from 'components/ALink'
 
@@ -37,10 +39,22 @@ const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
   }
 }))(MuiAvatar)
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    listItemWithButton: {
+      paddingRight: theme.spacing(12)
+    }
+  }),
+  { name: 'CalendarListItem' }
+)
+
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
   let linkTitle
+  let secondaryText
+
+  const classes = useStyles()
 
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
@@ -65,6 +79,10 @@ export default function CalendarEventListItem({ event }: Props) {
   linkTitle = event.title
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
+  const eventTime = new Date(event.next_occurence)
+  const humanizedEventTime = isToday(eventTime)
+    ? 'Today'
+    : timeago().format(eventTime)
 
   if (contact) {
     avatarIcon = (
@@ -86,26 +104,33 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
+  if (event.event_type == 'home_anniversary' && contact) {
+    secondaryText = `Home anniversary of ${
+      contact.display_name
+    } ${timeago().format(event.next_occurence)}`
+  } else {
+    secondaryText = timeago().format(event.next_occurence)
+  }
+
   return (
     <>
-      <ListItem>
+      <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-        <ListItemText
-          primary={linkTitle}
-          secondary={timeago().format(event.next_occurence)}
-        />
+<<<<<<< HEAD
+        <ListItemText primary={linkTitle} secondary={humanizedEventTime} />
+=======
+        <ListItemText primary={linkTitle} secondary={secondaryText} />
+>>>>>>> b19db0352e... feat(welcome): add contact info for home anniversary rows
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
-            <Box>
-              <>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setIsTemplatePickerOpen(true)}
-                >
-                  Send Card
-                </Button>
-              </>
+            <div>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setIsTemplatePickerOpen(true)}
+              >
+                Send Card
+              </Button>
               {isTemplatePickerOpen && (
                 <MarketingTemplatePickerModal
                   title="Select Template"
@@ -127,7 +152,7 @@ export default function CalendarEventListItem({ event }: Props) {
                   buttonRenderrer={() => null}
                 />
               )}
-            </Box>
+            </div>
           )}
         </ListItemSecondaryAction>
       </ListItem>

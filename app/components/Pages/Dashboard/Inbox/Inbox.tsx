@@ -1,17 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { Helmet } from 'react-helmet'
 import classNames from 'classnames'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
+import ImportContactsButton from 'components/ImportContactsButton'
 
 import { IAppState } from 'reducers'
 
@@ -74,11 +73,9 @@ export default function Inbox({ params }: WithRouterProps) {
     []
   )
 
-  const dispatch = useDispatch()
-
-  useEffectOnce(() => {
-    dispatch(fetchOAuthAccounts()).then(() => setInitializing(false))
-  })
+  const onFetchedOAuthAccounts = useCallback(() => {
+    setInitializing(false)
+  }, [])
 
   const handleInboxEmailThreadClose = useCallback(
     () => setSelectedEmailThreadId(undefined),
@@ -98,19 +95,27 @@ export default function Inbox({ params }: WithRouterProps) {
 
       <Box paddingLeft={5} flex="0 1 auto">
         {initializing || noConnectedAccounts ? (
-          <GlobalPageLayout.Header title="Inbox" />
+          <GlobalPageLayout.Header title="Inbox">
+            <ImportContactsButton
+              onFetchedOAuthAccounts={onFetchedOAuthAccounts}
+            />
+          </GlobalPageLayout.Header>
         ) : (
           <GlobalPageLayout.HeaderWithSearch
             title="Inbox"
-            onSearch={
-              query =>
-                setSearchQuery(searchQuery => query || (searchQuery && query)) // Keep it undefined until there are actually some query.
+            onSearch={query =>
+              // Keep it undefined until there are actually some query.
+              setSearchQuery(searchQuery => query || (searchQuery && query))
             }
             SearchInputProps={{
               placeholder: 'Search emails',
               isLoading: searchStatus
             }}
-          />
+          >
+            <ImportContactsButton
+              onFetchedOAuthAccounts={onFetchedOAuthAccounts}
+            />
+          </GlobalPageLayout.HeaderWithSearch>
         )}
       </Box>
 

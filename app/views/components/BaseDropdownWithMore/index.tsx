@@ -30,7 +30,7 @@ export function BaseDropdownWithMore({
   const basicShowMoreStyle = { maxHeight: 350, overflow: 'auto' }
   const showMoreStyle =
     morePlugin && morePlugin.style
-      ? { ...morePlugin.style, ...basicShowMoreStyle }
+      ? { ...basicShowMoreStyle, ...morePlugin.style }
       : basicShowMoreStyle
 
   return (

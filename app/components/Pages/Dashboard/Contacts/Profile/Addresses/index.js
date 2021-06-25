@@ -10,7 +10,7 @@ import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 import AddressField from './AddressField'
-import { Section } from '../components/Section'
+import { BasicSection } from '../components/Section/Basic'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
 class Addresses extends React.Component {
@@ -156,7 +156,7 @@ class Addresses extends React.Component {
 
   render() {
     return (
-      <Section title="Addresses" isNew>
+      <BasicSection title="Addresses">
         {this.state.addresses.map((address, index) => (
           <AddressField
             key={index}
@@ -167,7 +167,7 @@ class Addresses extends React.Component {
             toggleMode={this.toggleAddressActiveMode}
           />
         ))}
-      </Section>
+      </BasicSection>
     )
   }
 }

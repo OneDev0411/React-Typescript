@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Tooltip } from '@material-ui/core'
 import fecha from 'fecha'
 import { mdiCheck } from '@mdi/js'
@@ -8,7 +8,7 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { isContextApproved } from '../helpers/is-context-approved'
+import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
 import { EditButton } from '../ActionButtons/Edit'
 import { DeleteButton } from '../ActionButtons/Delete'
@@ -25,18 +25,18 @@ import {
   TimelineDateProgress
 } from '../styled'
 
-import { ContextField } from '../types'
-
 interface Props {
   deal: IDeal
-  field: ContextField
+  field: IDealBrandContext
   index: number
   total: number
   value: unknown
   isBackOffice: boolean
-  onApprove(field: ContextField): void
-  onChange(field: ContextField, value: unknown): void
-  onDelete(field: ContextField): void
+  isDisabled: boolean
+  tooltip: string | React.ReactChild
+  onApprove(field: IDealBrandContext): void
+  onChange(field: IDealBrandContext, value: unknown): void
+  onDelete(field: IDealBrandContext): void
 }
 
 export function DateField({
@@ -46,6 +46,8 @@ export function DateField({
   field,
   value,
   isBackOffice,
+  isDisabled,
+  tooltip,
   onChange,
   onDelete,
   onApprove
@@ -77,46 +79,42 @@ export function DateField({
 
   return (
     <>
-      <Tooltip
-        title={
-          isContextApproved(deal, field) || isBackOffice
-            ? ''
-            : 'Pending Office Approval'
-        }
-      >
-        <Item>
+      <Tooltip title={tooltip}>
+        <Item disableHover={isDisabled}>
           <ItemLabel>
             <CircleStatus checked={isPastDate}>
               {isPastDate && <SvgIcon path={mdiCheck} color="#fff" />}
             </CircleStatus>{' '}
             {field.label}
           </ItemLabel>
-          <ItemValue>{field.getFormattedValue(value)}</ItemValue>
+          <ItemValue>{getFormattedValue(field, value)}</ItemValue>
 
-          <ItemActions>
-            <DateTimePicker
-              selectedDate={getInitialDate(deal, field)}
-              showTimePicker={false}
-              onClose={handleSave}
-              saveCaption="Save Date"
-            >
-              {({ handleOpen }) => <EditButton onClick={handleOpen} />}
-            </DateTimePicker>
+          {!isDisabled && (
+            <ItemActions>
+              <DateTimePicker
+                selectedDate={getInitialDate(deal, field)}
+                showTimePicker={false}
+                onClose={handleSave}
+                saveCaption="Save Date"
+              >
+                {({ handleOpen }) => <EditButton onClick={handleOpen} />}
+              </DateTimePicker>
 
-            <DeleteButton
-              deal={deal}
-              field={field}
-              value={value}
-              onClick={handleDelete}
-            />
+              <DeleteButton
+                deal={deal}
+                field={field}
+                value={value}
+                onClick={handleDelete}
+              />
 
-            <ApproveButton
-              deal={deal}
-              field={field}
-              isBackOffice={isBackOffice}
-              onClick={() => onApprove(field)}
-            />
-          </ItemActions>
+              <ApproveButton
+                deal={deal}
+                context={field}
+                isBackOffice={isBackOffice}
+                onClick={() => onApprove(field)}
+              />
+            </ItemActions>
+          )}
 
           {value && index < total - 1 && isPastDate && <TimelineDateProgress />}
         </Item>
@@ -125,7 +123,7 @@ export function DateField({
   )
 }
 
-function getInitialDate(deal: IDeal, field: ContextField): Date {
+function getInitialDate(deal: IDeal, field: IDealBrandContext): Date {
   const timestamp = getField(deal, field.key)
 
   if (!timestamp) {

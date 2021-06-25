@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: ({ address }: Props) => ({
       display: 'flex',
-      flexDirection: address.id ? 'column' : 'row',
+      flexDirection: address.id ? 'column' : 'row-reverse',
       alignItems: address.id ? 'initial' : 'center',
       justifyContent: 'space-between',
 
@@ -22,19 +22,19 @@ const useStyles = makeStyles((theme: Theme) =>
         color: theme.palette.text.primary
       }
     }),
-    leftSide: {
+    labelContainer: {
       display: 'flex',
       alignItems: 'center'
     },
     label: ({ address }: Props) => ({
-      color: address.id ? theme.palette.text.primary : theme.palette.text.hint
+      color: address.id ? theme.palette.grey[600] : theme.palette.text.hint
     }),
     starIcon: {
-      color: theme.palette.text.primary
+      color: theme.palette.grey[600]
     },
     value: ({ address }: Props) => ({
       textAlign: address.id ? 'left' : 'right',
-      color: address.id ? theme.palette.text.primary : theme.palette.text.hint
+      color: address.id ? theme.palette.grey[900] : theme.palette.text.hint
     })
   })
 )
@@ -51,7 +51,10 @@ export function ViewMode(props: Props) {
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.leftSide}>
+      <Typography variant="body2" className={classes.value}>
+        {address.full_address || '-'}
+      </Typography>
+      <Box className={classes.labelContainer}>
         <Typography variant="body2" className={classes.label}>
           {label}
         </Typography>
@@ -66,9 +69,6 @@ export function ViewMode(props: Props) {
           </Tooltip>
         )}
       </Box>
-      <Typography variant="body2" className={classes.value}>
-        {address.full_address || '-'}
-      </Typography>
     </Box>
   )
 }

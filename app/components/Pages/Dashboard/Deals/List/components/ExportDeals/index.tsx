@@ -61,10 +61,9 @@ export function ExportDeals(props) {
                 invert: false
               },
               {
-                key: 'property_type',
-                type: 'set',
-                set: ['Residential Lease', 'Commercial Lease'],
-                invert: true
+                key: 'is_lease',
+                type: 'point',
+                point: false
               },
               {
                 key: 'list_date',
@@ -93,16 +92,15 @@ export function ExportDeals(props) {
           JSON.stringify({
             filter: [
               {
-                key: 'deal_type',
-                type: 'point',
-                point: 'Buying',
+                key: 'checklist_type',
+                type: 'set',
+                set: ['Buying', 'Offer'],
                 invert: false
               },
               {
-                key: 'property_type',
-                type: 'set',
-                set: ['Residential Lease', 'Commercial Lease'],
-                invert: true
+                key: 'is_lease',
+                type: 'point',
+                point: false
               },
               {
                 key: 'contract_date',

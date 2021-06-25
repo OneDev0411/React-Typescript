@@ -12,8 +12,8 @@ export async function createOffer(deal, { name, order, is_deactivated }) {
         order
       },
       conditions: {
-        deal_type: 'Buying',
-        property_type: deal.property_type
+        checklist_type: 'Offer',
+        property_type: deal.property_type.id
       }
     })
   } catch (e) {

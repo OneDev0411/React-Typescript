@@ -1,9 +1,11 @@
 import React from 'react'
 import Flex from 'styled-flex-component'
 import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
+
 import { mdiDotsVertical } from '@mdi/js'
 import fecha from 'fecha'
+
+import { addNotification as notify } from 'components/notification'
 
 import LinkButton from 'components/Button/LinkButton'
 

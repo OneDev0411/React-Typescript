@@ -85,8 +85,8 @@ export function NameInput({
         return agents.map(agent => ({
           ...agent,
           company: agent.office ? agent.office.name : '',
-          value: agent[searchFieldValue],
-          label: agent.full_name
+          value: agent.full_name || `${agent.first_name} ${agent.last_name}`,
+          label: agent.full_name || `${agent.first_name} ${agent.last_name}`
         }))
       } catch (e) {
         setIsSearching(false)

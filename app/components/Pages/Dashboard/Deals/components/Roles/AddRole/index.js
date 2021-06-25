@@ -100,6 +100,7 @@ class AddRoleForm extends React.Component {
                 zIndex: 1
               }
             }}
+            disablePortal
             renderDropdownButton={buttonProps => (
               <RoleButton {...buttonProps}>
                 <Box mr={1}>

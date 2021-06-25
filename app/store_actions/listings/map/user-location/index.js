@@ -3,7 +3,7 @@ import { batchActions } from 'redux-batched-actions'
 import * as types from 'constants/listings/map'
 import { getLocationErrorMessage } from 'utils/map'
 import { DEFAULT_ZOOM } from 'constants/listings/defaults'
-import { addNotification as notify } from 'components/notification'
+import { confirmation } from 'actions/confirmation'
 
 import { setMapProps } from '..'
 
@@ -29,15 +29,26 @@ export const getLocation = () => dispatch => {
       },
       error => {
         dispatch({ type: types.GET_USER_LOCATION_DONE, tabName: 'search' })
+        dispatch(
+          confirmation({
+            confirmLabel: 'OK',
+            message: 'Your location is disabled',
+            description:
+              'Please check your browser’s setting and make sure ' +
+              'your location sharing is on.',
+            hideCancelButton: true
+          })
+        )
         console.log(getLocationErrorMessage(error))
       },
       { timeout: 5000 }
     )
   } else {
     dispatch(
-      notify({
-        message: 'Geolocation is not supported by this browser.',
-        status: 'error'
+      confirmation({
+        confirmLabel: 'OK',
+        message: 'Your device does not support Geolocation',
+        hideCancelButton: true
       })
     )
   }

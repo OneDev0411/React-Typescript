@@ -45,11 +45,10 @@ export default function Signature({
   const handleSubmit = async (form: FormValues) => {
     dispatch(
       confirmation({
-        message: 'Notify back office admin?',
-        description:
-          'Once this document is signed, would you like us to submit it to your back office for review?',
-        confirmLabel: 'Notify Office',
-        cancelLabel: 'Do not notify office',
+        message: '🔔',
+        description: 'Should we notify Back-office to review once it’s signed?',
+        confirmLabel: 'Submit for Review',
+        cancelLabel: 'Do Not Submit for Review',
         onCancel: () => send(form, false),
         onConfirm: () => send(form, true)
       })

@@ -71,16 +71,21 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
   })
 
   const toggleTaskOpen = () => {
-    dispatch(setExpandTask(task.id, !isTaskExpanded))
     setIsTaskExpanded(state => !state)
+
+    setTimeout(() => {
+      dispatch(setExpandTask(task.id, !isTaskExpanded))
+    }, 0)
   }
 
   const handleSelectTask = () => {
-    if (task.room.new_notifications > 0) {
-      dispatch(updateDealNotifications(deal, task.room))
-    }
-
     dispatch(setSelectedTask(task))
+
+    if (task.room.new_notifications > 0) {
+      setTimeout(() => {
+        dispatch(updateDealNotifications(deal, task.room))
+      }, 0)
+    }
   }
 
   return (
@@ -119,19 +124,16 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
               </div>
             )}
 
-            <div
+            <ActionsButton
+              deal={deal}
+              task={task}
+              envelope={envelope}
+              file={file}
+              actions={actions}
               className={cn({
                 'visible-on-hover': !isTaskExpanded && !isBulkMode
               })}
-            >
-              <ActionsButton
-                deal={deal}
-                task={task}
-                envelope={envelope}
-                file={file}
-                actions={actions}
-              />
-            </div>
+            />
           </Box>
 
           <Box className="hide-on-hover">

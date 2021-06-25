@@ -9,6 +9,7 @@ import {
   TooltipProps
 } from '@material-ui/core'
 import { PopoverProps } from '@material-ui/core/Popover'
+import classnames from 'classnames'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
@@ -21,7 +22,9 @@ interface RenderProps {
 }
 
 interface Props {
-  title: string
+  title: React.ReactNode
+  buttonClassName?: string
+  buttonVariant?: 'text' | 'outlined' | 'contained' | undefined
   popoverOptions?: PopoverProps
   tooltipOptions?: Omit<TooltipProps, 'children'>
   children: (renderProps: RenderProps) => React.ReactNode
@@ -51,6 +54,8 @@ const useStyles = makeStyles(
 export function DropdownTab({
   title,
   children,
+  buttonClassName = '',
+  buttonVariant,
   tooltipOptions,
   popoverOptions
 }: Props) {
@@ -77,7 +82,8 @@ export function DropdownTab({
       isActive={Boolean(anchorEl)}
       size="small"
       onClick={toggleMenu}
-      className={classes.button}
+      variant={buttonVariant}
+      className={classnames(classes.button, buttonClassName)}
     >
       {title}
     </DropdownToggleButton>
