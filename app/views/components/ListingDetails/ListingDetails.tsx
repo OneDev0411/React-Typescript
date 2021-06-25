@@ -8,7 +8,7 @@ import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
 
-import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
+import ShareModal from '../../../components/Pages/Dashboard/MLS/components/modals/ShareListingModal'
 import { useGetListing, UseGetListing } from './use-get-listing'
 import Header from './Header'
 import Title from './Title'

@@ -14,7 +14,7 @@ import {
   getIndexLabel
 } from '../../../../../utils/helpers'
 import { H1 } from '../../../Typography/headings'
-import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
+import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/MLS/helpers/prepare-listings-properties'
 
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 

@@ -11,7 +11,7 @@ import extendedBounds from '../../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../../utils/map'
 import { removePolygon, inactiveDrawing } from '../../map/drawing'
 import { feetToMeters, acresToMeters } from '../../../../utils/listing'
-import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
+import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/Schools'
 
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
 import { setSearchType } from '../set-type'

@@ -9,7 +9,7 @@ import { SuggestionsPopover } from './SuggestionsPopover'
 import { loadJS } from '../../../../utils/load-js'
 import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
-import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
+import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
@@ -61,9 +61,7 @@ export class InlineAddressField extends React.Component {
       window.isLoadingGoogleApi = true
 
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          bootstrapURLKeys.key
-        }&libraries=places`
+        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=places`
       )
     }
   }

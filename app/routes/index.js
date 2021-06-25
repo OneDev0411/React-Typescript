@@ -178,38 +178,38 @@ const AsyncDashboardOverview = withAcl(
 //  MLS
 /* ==================================== */
 
-const AsyncListingsLayout = Load({
+const AsyncMLSLayout = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */
+      '../components/Pages/Dashboard/MLS' /* webpackChunkName: "listings" */
     )
 })
 
-const AsyncListingsSearch = Load({
+const AsyncMLSSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
+      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "listing_search" */
     )
 })
 
-const AsyncMlsSavedSearch = Load({
+const AsyncMLSSavedSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */
+      '../components/Pages/Dashboard/MLS/SavedSearch' /* webpackChunkName: "alerts" */
     )
 })
 
-const AsyncListingsFavorites = Load({
+const AsyncMLSFavorites = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */
+      '../components/Pages/Dashboard/MLS/Favorites' /* webpackChunkName: "fav" */
     )
 })
 
-const AsyncListingSinglePage = Load({
+const AsyncMLSSinglePage = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
+      '../components/Pages/Dashboard/MLS/Listing' /* webpackChunkName: "list_single" */
     )
 })
 
@@ -871,13 +871,13 @@ export default (
           />
         </Route>
 
-        <Route path="/dashboard/mls" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingsSearch} />
-          <Route path="favorites" component={AsyncListingsFavorites} />
-          <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
+        <Route path="/dashboard/mls" component={AsyncMLSLayout}>
+          <IndexRoute component={AsyncMLSSearch} />
+          <Route path="favorites" component={AsyncMLSFavorites} />
+          <Route path="saved-searches/:id" component={AsyncMLSSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
