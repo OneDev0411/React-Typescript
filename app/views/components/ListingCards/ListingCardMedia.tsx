@@ -1,7 +1,17 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import { fade, makeStyles, Theme } from '@material-ui/core'
-import { Slide } from 'react-slideshow-image'
-import 'react-slideshow-image/dist/styles.css'
+import cn from 'classnames'
+import { makeStyles, Theme } from '@material-ui/core'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+// Import Swiper styles
+import 'swiper/swiper.min.css'
+import 'swiper/components/lazy/lazy.min.css'
+import 'swiper/components/pagination/pagination.min.css'
+import 'swiper/components/navigation/navigation.min.css'
+
+import SwiperCore, { Lazy, Pagination, Navigation } from 'swiper/core'
+
+SwiperCore.use([Lazy, Pagination, Navigation])
 
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 
@@ -23,32 +33,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      backgroundColor: theme.palette.grey[100],
-
-      // Arrow keys style overrides
-      '& button.default-nav': {
-        zIndex: 3,
-        backgroundColor: 'transparent !important',
-
-        '&:first-of-type': {
-          transform: 'translateX(8px)'
-        },
-
-        '&:last-of-type': {
-          transform: 'translateX(-8px)'
-        },
-
-        '& svg': {
-          filter: `drop-shadow(0px 1px 4px ${fade(
-            theme.palette.text.primary,
-            0.8
-          )})`
-        },
-
-        '& path': {
-          fill: theme.palette.common.white
-        }
-      }
+      backgroundColor: theme.palette.grey[100]
     },
     childrenContainer: {
       position: 'absolute',
@@ -86,7 +71,7 @@ export default function ListingCardMedia({ children, listing }: Props) {
         const targetElement = e.target as HTMLElement
 
         if (
-          targetElement.classList.contains('default-nav') ||
+          targetElement.classList.contains('swiper-button-next') ||
           targetElement.tagName.toLowerCase() === 'path' ||
           targetElement.tagName.toLowerCase() === 'svg'
         ) {
@@ -96,13 +81,25 @@ export default function ListingCardMedia({ children, listing }: Props) {
     >
       <div className={classes.childrenContainer}>{children}</div>
       {images.length > 1 ? (
-        <Slide canSwipe={false} transitionDuration={200} autoplay={false}>
+        <Swiper
+          lazy
+          pagination={{
+            clickable: true
+          }}
+          navigation
+          className="mySwiper"
+        >
           {images.map(image => (
-            <div key={image}>
-              <img className={classes.image} src={image} alt="listing" />
-            </div>
+            <SwiperSlide key={image}>
+              <img
+                className={cn(classes.image, 'swiper-lazy')}
+                data-src={image}
+                alt="listing"
+              />
+              <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
+            </SwiperSlide>
           ))}
-        </Slide>
+        </Swiper>
       ) : (
         <div>
           <img className={classes.image} src={images[0]} alt="listing" />
