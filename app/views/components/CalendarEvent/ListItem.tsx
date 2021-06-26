@@ -116,11 +116,7 @@ export default function CalendarEventListItem({ event }: Props) {
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-<<<<<<< HEAD
-        <ListItemText primary={linkTitle} secondary={humanizedEventTime} />
-=======
         <ListItemText primary={linkTitle} secondary={secondaryText} />
->>>>>>> b19db0352e... feat(welcome): add contact info for home anniversary rows
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>
