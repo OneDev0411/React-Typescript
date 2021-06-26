@@ -15,8 +15,6 @@ import {
 
 import timeago from 'timeago.js'
 
-import { isToday } from 'date-fns'
-
 import Link from 'components/ALink'
 
 import { selectUser } from 'selectors/user'
@@ -77,10 +75,6 @@ export default function CalendarEventListItem({ event }: Props) {
   linkTitle = event.title
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
-  const eventTime = new Date(event.next_occurence)
-  const humanizedEventTime = isToday(eventTime)
-    ? 'Today'
-    : timeago().format(eventTime)
 
   if (contact) {
     avatarIcon = (
