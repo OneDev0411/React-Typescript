@@ -33,7 +33,7 @@ export function registerBlock(
   const { tagName } = document.body.children[0]
 
   const elementName =
-    templateBlock?.adaptive || adaptive
+    templateBlock?.adaptive ?? adaptive
       ? 'mj-adaptive'
       : tagName === 'IFRAME'
       ? 'DIV'
@@ -47,7 +47,8 @@ export function registerBlock(
             templateBlock?.label || label
           }</div>`
         : label,
-    content: `<${elementName} data-block="${blockName}"></${elementName}>`
+    content: `<${elementName} data-block="${blockName}"></${elementName}>`,
+    adaptive: templateBlock?.adaptive ?? adaptive
   })
 }
 

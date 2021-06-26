@@ -2,6 +2,8 @@ import React, { useRef } from 'react'
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import ImportContactsButton from 'components/ImportContactsButton'
+
 import GlobalHeader from 'components/GlobalHeader'
 
 import { GridCalendar } from 'components/GridCalendar'
@@ -38,6 +40,7 @@ export default function CalendarPage(props: WithRouterProps) {
     <div className={classes.container}>
       <GlobalHeader title="Calendar" noPadding>
         <ViewAs />
+        <ImportContactsButton />
       </GlobalHeader>
       <div className={classes.listContainer}>
         <GridCalendar actionRef={actionRef} />

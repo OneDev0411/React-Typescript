@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
-  Box,
   Button,
   ListItem,
   ListItemText,
@@ -10,6 +9,7 @@ import {
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
   withStyles,
+  makeStyles,
   Theme
 } from '@material-ui/core'
 
@@ -37,18 +37,28 @@ const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
   }
 }))(MuiAvatar)
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    listItemWithButton: {
+      paddingRight: theme.spacing(12)
+    }
+  }),
+  { name: 'CalendarListItem' }
+)
+
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
   let linkTitle
+  let secondaryText
+
+  const classes = useStyles()
 
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
@@ -86,26 +96,29 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
+  if (event.event_type == 'home_anniversary' && contact) {
+    secondaryText = `Home anniversary of ${
+      contact.display_name
+    } ${timeago().format(event.next_occurence)}`
+  } else {
+    secondaryText = timeago().format(event.next_occurence)
+  }
+
   return (
     <>
-      <ListItem>
+      <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-        <ListItemText
-          primary={linkTitle}
-          secondary={timeago().format(event.next_occurence)}
-        />
+        <ListItemText primary={linkTitle} secondary={secondaryText} />
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
-            <Box>
-              <>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setIsTemplatePickerOpen(true)}
-                >
-                  Send Card
-                </Button>
-              </>
+            <div>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => setIsTemplatePickerOpen(true)}
+              >
+                Send Card
+              </Button>
               {isTemplatePickerOpen && (
                 <MarketingTemplatePickerModal
                   title="Select Template"
@@ -127,7 +140,7 @@ export default function CalendarEventListItem({ event }: Props) {
                   buttonRenderrer={() => null}
                 />
               )}
-            </Box>
+            </div>
           )}
         </ListItemSecondaryAction>
       </ListItem>

@@ -1,5 +1,7 @@
-function adapt(parent: any, template: string): string {
-  const type = parent.get('type')
+import { Model } from 'grapesjs'
+
+function adapt(parent: Model, template: string): string {
+  const type: string = parent.get('type')
 
   if (template.startsWith('<mj-section')) {
     return template
