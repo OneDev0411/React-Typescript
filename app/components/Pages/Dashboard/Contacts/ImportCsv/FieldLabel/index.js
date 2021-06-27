@@ -106,7 +106,6 @@ const FieldLabel = ({
 
   return (
     <BasicDropdown
-      isBlock
       items={options}
       buttonStyle={buttonStyle}
       onChange={handleChangeValue}
