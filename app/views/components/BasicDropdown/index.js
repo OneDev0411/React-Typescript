@@ -31,12 +31,10 @@ export class BasicDropdown extends React.Component {
 
   render() {
     const {
-      buttonIcon,
-      buttonIconSize = 'large',
       buttonSize,
       buttonStyle = {},
       buttonText,
-      buttonAppearance,
+      buttonVariant = 'outline',
       buttonRenderer,
       disabled,
       items,
@@ -50,7 +48,6 @@ export class BasicDropdown extends React.Component {
       defaultSelectedItem,
       selectedItem,
       menuStyle = {},
-      isBlock = true,
       noBorder = false,
       maxHeight = 200,
       itemToString = item => item.label,
@@ -93,13 +90,9 @@ export class BasicDropdown extends React.Component {
               <DropButton
                 onClick={this.toggleOpenMenu}
                 disabled={disabled}
-                iconLeft={buttonIcon}
-                iconSize={buttonIconSize}
-                isBlock={isBlock}
                 isOpen={downshift.isOpen}
-                size={buttonSize}
-                noBorder={noBorder}
-                appearance={buttonAppearance || 'outline'}
+                buttonSize={buttonSize}
+                buttonVariant={buttonVariant}
                 style={buttonStyle}
                 text={
                   buttonText ||
