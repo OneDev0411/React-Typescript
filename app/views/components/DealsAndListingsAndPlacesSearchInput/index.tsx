@@ -169,6 +169,15 @@ export default function DealsAndListingsAndPlacesSearchInput({
     if (option.type === 'listing') {
       const listing = option.listing
 
+      const address = [
+        listing.address.city,
+        listing.address.state,
+        listing.address.postal_code,
+        `$${listing.price.toLocaleString()}`
+      ]
+        .filter(part => !!part)
+        .join(', ')
+
       return (
         <ListItem dense disableGutters component="div">
           <ListItemAvatar>
@@ -178,9 +187,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
           </ListItemAvatar>
           <ListItemText
             primary={addressTitle(listing.address)}
-            secondary={`${listing.address.city}, ${listing.address.state}, ${
-              listing.address.postal_code
-            }, $${listing.price.toLocaleString()}`}
+            secondary={address}
           />
           <ListItemAvatar>
             <ListingStatus listing={listing} className={classes.label} />
