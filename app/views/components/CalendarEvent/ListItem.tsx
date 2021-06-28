@@ -80,9 +80,6 @@ export default function CalendarEventListItem({ event }: Props) {
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
   const eventTime = new Date(event.next_occurence)
-  const humanizedEventTime = isToday(eventTime)
-    ? 'Today'
-    : timeago().format(eventTime)
 
   if (contact) {
     avatarIcon = (
