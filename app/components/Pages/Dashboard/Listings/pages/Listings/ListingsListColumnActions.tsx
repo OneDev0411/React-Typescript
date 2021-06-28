@@ -1,6 +1,12 @@
 import { Button, makeStyles } from '@material-ui/core'
 
+import { useSelector } from 'react-redux'
+
+import { selectActiveTeamId } from '@app/selectors/team'
+import LinkButton from '@app/views/components/LinkButton'
+
 import { ListingRow } from '../../types'
+import ListingsListColumnActionsDealButton from './ListingsListColumnActionsDealButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -19,27 +25,41 @@ function ListingsListColumnActions({
   row
 }: ListingsListColumnActionsProps) {
   const classes = useStyles()
+  const teamId = useSelector(selectActiveTeamId)
 
   return (
     <div className={className}>
-      <Button className={classes.button} variant="outlined" size="small">
+      <LinkButton
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        to={`/openhouse/${row.id}/${teamId}/register`}
+        target="_blank"
+      >
+        {/* TODO: Ask this from Ramin or Emil */}
         OH Registrants Page
-      </Button>
-      <Button className={classes.button} variant="outlined" size="small">
+      </LinkButton>
+      <LinkButton
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        to={`/dashboard/mls/${row.id}`}
+        target="_blank"
+      >
         View Listing
-      </Button>
+      </LinkButton>
       <Button className={classes.button} variant="outlined" size="small">
+        {/* TODO: Connect this to Mamal's page */}
         Market Listing
       </Button>
-      <Button
+      <ListingsListColumnActionsDealButton
         className={classes.button}
         variant="contained"
         size="small"
         color="secondary"
-      >
-        {/* TODO: Create deal or view deal according to the logic */}
-        Create Deal
-      </Button>
+        listingId={row.id}
+        target="_blank"
+      />
     </div>
   )
 }

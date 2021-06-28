@@ -8,26 +8,26 @@ import { getFormattedPrice } from 'models/Deal/helpers/context'
 
 import LoadingContainer from '@app/views/components/LoadingContainer'
 
-import { ListingRow, ListingTabType } from '../../types'
+import useActiveBrandListings from '@app/hooks/use-active-brand-listings'
+
+import { ListingRow } from '../../types'
 import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnText from './ListingsListColumnText'
-import useGetListingsListRows from './use-get-listings-list-rows'
 
 const useStyles = makeStyles(
-  {
-    // TODO: remove this if not needed
-    actions: {}
-  },
+  theme => ({
+    row: { '&:hover $actions': { opacity: 1 } },
+    actions: {
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
+    }
+  }),
   { name: 'ListingsList' }
 )
 
-interface ListingsListProps {
-  type: ListingTabType
-}
-
-function ListingsList({ type }: ListingsListProps) {
+function ListingsList() {
   const classes = useStyles()
-  const { rows, isLoading } = useGetListingsListRows(type)
+  const { listings: rows, isLoading } = useActiveBrandListings()
 
   const columns: TableColumn<ListingRow>[] = [
     {
@@ -59,7 +59,7 @@ function ListingsList({ type }: ListingsListProps) {
       primary: false,
       render: ({ row }) => (
         <ListingsListColumnText>
-          {row.list_agent_full_name /* TODO: Ask this from Emil */}
+          {row.list_agent_full_name}
         </ListingsListColumnText>
       )
     },
@@ -93,6 +93,10 @@ function ListingsList({ type }: ListingsListProps) {
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
+      getTrProps={() => ({
+        className: classes.row
+      })}
+
       // TODO: handle empty state
       // EmptyStateComponent={() => (
       //   <ShowingEmptyState
