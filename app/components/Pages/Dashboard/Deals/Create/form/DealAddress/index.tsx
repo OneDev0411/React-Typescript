@@ -111,6 +111,7 @@ export function DealAddress({
     setPlace(null)
     setListing(null)
     setAddress(null)
+    setDebouncedSearchCriteria('')
     setSearchCriteria('')
 
     onChange?.(null)
