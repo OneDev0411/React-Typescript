@@ -1,9 +1,10 @@
 import { WithRouterProps } from 'react-router'
 
-import PageLayout from 'components/GlobalPageLayout'
+import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import ListingsTabs, { ListingsTabsProps } from './ListingsTabs'
 import { listingTabs } from '../../constants'
+import ListingsList from './ListingsList'
 
 type ListingsProps = WithRouterProps<{ type?: ListingsTabsProps['type'] }, {}>
 
@@ -15,7 +16,7 @@ function Listings({ params }: ListingsProps) {
       <PageLayout.Header title="Listings" />
       <PageLayout.Main>
         <ListingsTabs type={type} />
-        listings page
+        <ListingsList type={type} />
       </PageLayout.Main>
     </PageLayout>
   )

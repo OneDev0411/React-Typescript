@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { PageTabs, TabLink } from 'components/PageTabs'
+import { PageTabs, TabLink } from '@app/views/components/PageTabs'
 
 import { listingTabs } from '../../constants'
 import { ListingTabType } from '../../types'
@@ -18,7 +16,7 @@ function ListingsTabs({ type }: ListingsTabsProps) {
       label="My Listings"
     />,
     <TabLink
-      key={1}
+      key={2}
       value={listingTabs.BrokerageListings}
       to={`/dashboard/listings/${listingTabs.BrokerageListings}`}
       label="Brokerage Listings"
