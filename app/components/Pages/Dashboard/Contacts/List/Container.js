@@ -150,8 +150,23 @@ class ContactsList extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.setContactsListTextFilter(this.state.searchInputValue)
+  async componentWillUnmount() {
+    const { selectedShortcutFilter } = this.state
+    const {
+      activeSegment,
+      filters,
+      setContactsListTextFilter,
+      resetActiveFilters
+    } = this.props
+
+    if (
+      filters &&
+      (!selectedShortcutFilter || activeSegment.id === 'default')
+    ) {
+      await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+    }
+
+    setContactsListTextFilter(this.state.searchInputValue)
   }
 
   setSelectedShortcutFilter = () => {

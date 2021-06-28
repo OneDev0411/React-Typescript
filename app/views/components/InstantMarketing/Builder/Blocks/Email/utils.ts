@@ -1,7 +1,4 @@
-import type { Editor, Model } from 'grapesjs'
-
-import adapt from '../adapt'
-import type { BlockTemplates, GetBlockTemplateFunc } from '../types'
+import type { Editor } from 'grapesjs'
 
 const BLOCK_IDS_TO_REMOVE = [
   'mj-button',
@@ -23,15 +20,6 @@ const BLOCK_IDS_TO_REMOVE = [
 
 export function removeUnusedBlocks(editor: Editor) {
   BLOCK_IDS_TO_REMOVE.forEach(editor.BlockManager.remove)
-}
-
-export function adaptTemplates(
-  templates: BlockTemplates
-): GetBlockTemplateFunc {
-  return (parent: Model | null, blockId: string) =>
-    parent && templates[blockId]
-      ? adapt(parent, templates[blockId])
-      : templates[blockId]
 }
 
 export const isComponent = (

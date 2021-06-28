@@ -15,7 +15,6 @@ import { MARKET_REPORTS_CATEGORY } from '../../../constants'
 import neighborhoodsTemplates from './neighborhoods.mjml'
 import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { adaptTemplates } from '../utils'
 import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
@@ -159,7 +158,7 @@ export default function registerNeighborhoodsBlocks(
 
   return handleBlockDragStopEvent(
     editor,
-    adaptTemplates(allBlocks),
+    allBlocks,
     (selectedReport: NeighborhoodsReport, droppedBlockName: string) => ({
       ...renderData,
       report:

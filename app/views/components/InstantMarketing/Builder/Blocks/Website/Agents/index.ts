@@ -2,7 +2,7 @@ import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
-import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
+import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 
 import { Agent } from 'components/TeamAgents/types'
 
@@ -97,7 +97,7 @@ export default function registerAgentBlocks(
     editor,
     {
       label: 'Grid',
-      icon: DualIcon,
+      icon: AgentGridIcon,
       category: AGENTS_BLOCK_CATEGORY,
       blockName: agentGridBlockName,
       template: agentBlocks[agentGridBlockName]
