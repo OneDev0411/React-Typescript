@@ -1,22 +1,19 @@
-import { useSelector } from 'react-redux'
-
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import { useBrandListings, useDealsListings } from '@app/hooks/use-listings'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
-import { ListingRow, ListingTabType } from '../../types'
+type ListingRow = IListing | ICompactListing
 
 const defaultRows: ListingRow[] = []
 
-interface UseGetListingsListRowsReturn {
+interface UseActiveBrandListings {
   isLoading: boolean
-  rows: ListingRow[]
+  listings: ListingRow[]
 }
 
-function useGetListingsListRows(
-  type: ListingTabType // TODO: implement the loading logic using this parameter
-): UseGetListingsListRowsReturn {
+function useActiveBrandListings(): UseActiveBrandListings {
   const brand = useSelector(selectActiveBrandId)
 
   const brandListings = useBrandListings(brand)
@@ -26,15 +23,15 @@ function useGetListingsListRows(
   )
   const dealsListings = useDealsListings(brandListingsIds)
 
-  const rows =
+  const listings =
     brandListings && dealsListings
       ? [...dealsListings, ...brandListings]
       : defaultRows
 
   return {
     isLoading: !brandListings || !dealsListings,
-    rows
+    listings
   }
 }
 
-export default useGetListingsListRows
+export default useActiveBrandListings
