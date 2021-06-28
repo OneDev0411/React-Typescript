@@ -91,8 +91,8 @@ export class BasicDropdown extends React.Component {
                 onClick={this.toggleOpenMenu}
                 disabled={disabled}
                 isOpen={downshift.isOpen}
-                buttonSize={buttonSize}
-                buttonVariant={buttonVariant}
+                size={buttonSize}
+                variant={buttonVariant}
                 style={buttonStyle}
                 text={
                   buttonText ||
