@@ -26,10 +26,12 @@ export function setUserSetting(key: string, value: any, brand: UUID) {
             ...user,
             teams: user.teams.map(team => {
               if (currentTeamId === team.id) {
+                const currentSettings = team.settings || {}
+
                 return {
                   ...team,
                   settings: {
-                    ...team.settings,
+                    ...currentSettings,
                     [key]: value
                   }
                 }
