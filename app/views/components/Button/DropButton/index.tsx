@@ -1,35 +1,34 @@
 import React from 'react'
 import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
-import Button from '@material-ui/core/Button'
+import Button, { ButtonProps } from '@material-ui/core/Button'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-interface Props {
+interface Props
+  extends Pick<
+    ButtonProps,
+    'disabled' | 'style' | 'size' | 'variant' | 'onClick'
+  > {
   text: string
   isOpen: boolean
-  disabled?: boolean
-  onClick: React.MouseEventHandler<HTMLButtonElement>
-  buttonVariant?: 'contained' | 'outlined' | 'text'
-  buttonSize?: 'small' | 'medium' | 'large'
-  style?: object
 }
 
 export function DropButton({
   isOpen,
   onClick,
   disabled = false,
-  buttonSize = 'medium',
+  size = 'medium',
   style,
-  buttonVariant = 'outlined',
+  variant = 'outlined',
   text
 }: Props) {
   return (
     <Button
       onClick={onClick}
       disabled={disabled}
-      size={buttonSize}
+      size={size}
       style={style}
-      variant={buttonVariant}
+      variant={variant}
       endIcon={
         isOpen ? (
           <SvgIcon path={mdiChevronUp} />
