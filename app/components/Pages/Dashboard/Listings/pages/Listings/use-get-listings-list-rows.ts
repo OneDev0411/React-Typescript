@@ -32,7 +32,7 @@ function useGetListingsListRows(
       : defaultRows
 
   return {
-    isLoading: !!brandListings && !!dealsListings,
+    isLoading: !brandListings || !dealsListings,
     rows
   }
 }

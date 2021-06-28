@@ -15,6 +15,7 @@ import useGetListingsListRows from './use-get-listings-list-rows'
 
 const useStyles = makeStyles(
   {
+    // TODO: remove this if not needed
     actions: {}
   },
   { name: 'ListingsList' }
