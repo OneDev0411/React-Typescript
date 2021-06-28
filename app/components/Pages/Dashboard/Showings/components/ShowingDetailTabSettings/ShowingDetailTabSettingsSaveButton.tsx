@@ -1,6 +1,6 @@
 import { Box, Button, ButtonProps, CircularProgress } from '@material-ui/core'
 
-interface ShowingDetailTabSettingsSaveButtonProps
+export interface ShowingDetailTabSettingsSaveButtonProps
   extends Omit<
     ButtonProps,
     'color' | 'size' | 'variant' | 'children' | 'startIcon'

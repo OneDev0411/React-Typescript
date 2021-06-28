@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Box, Grid, Typography } from '@material-ui/core'
+import { useRef, useState, ChangeEvent } from 'react'
+import { Box, makeStyles } from '@material-ui/core'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -8,27 +8,35 @@ import { useDebouncedCallback } from 'use-debounce'
 import TabContentSwitch from 'components/TabContentSwitch'
 
 import useNotify from 'hooks/use-notify'
-
 import useAsync from 'hooks/use-async'
 
 import updateShowing from 'models/showing/update-showing'
 
-import { getValidShowingDetailSettingsTab } from './helpers'
+import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
 
+import { getValidShowingDetailSettingsTab } from './helpers'
 import ShowingDetailTabSettingsSubjectList from './ShowingDetailTabSettingsSubjectList'
 import {
   ShowingDetailSettingsTabType,
   ShowingDetailTabSettingsErrors
 } from './types'
-import ShowingAvailabilitiesTimes from '../ShowingAvailabilitiesTimes'
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
-import ShowingDuration from '../ShowingDuration'
-import ShowingApprovalTypeRadioGroup from '../ShowingApprovalTypeRadioGroup'
-import ShowingRoleList from './ShowingRoleList'
-import ShowingInstructionsTextField from '../ShowingInstructionsTextField'
-import ShowingYesNoRadioGroup, { YesNoAnswer } from '../ShowingYesNoRadioGroup'
-import AdvanceNoticeRadioGroup from '../ShowingAdvanceNoticeRadioGroup'
-import ShowingDetailTabSettingsSaveButton from './ShowingDetailTabSettingsSaveButton'
+import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
+import ShowingDetailTabSettingsSaveButton, {
+  ShowingDetailTabSettingsSaveButtonProps
+} from './ShowingDetailTabSettingsSaveButton'
+import ShowingDetailTabSettingsTabAvailability from './ShowingDetailTabSettingsTabAvailability'
+import ShowingDetailTabSettingsTabAdvanceNotice from './ShowingDetailTabSettingsTabAdvanceNotice'
+import ShowingDetailTabSettingsTabApprovalTypeAndRoles from './ShowingDetailTabSettingsTabApprovalTypeAndRoles'
+import ShowingDetailTabSettingsTabInstructions from './ShowingDetailTabSettingsTabInstructions'
+import ShowingDetailTabSettingsTabAppraisalsAndInspections from './ShowingDetailTabSettingsTabAppraisalsAndInspections'
+import ShowingDetailTabSettingsTabFeedback from './ShowingDetailTabSettingsTabFeedback'
+
+const useStyles = makeStyles(
+  {
+    content: { overflowX: 'hidden' }
+  },
+  { name: 'ShowingDetailTabSettings' }
+)
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
   showing: IShowing
@@ -40,6 +48,8 @@ function ShowingDetailTabSettings({
   showing,
   setShowing
 }: ShowingDetailTabSettingsProps) {
+  const classes = useStyles()
+
   const tab = getValidShowingDetailSettingsTab(location.query.tab)
 
   const notify = useNotify()
@@ -64,7 +74,7 @@ function ShowingDetailTabSettings({
         end_date: showing.end_date,
         duration: showing.duration,
         aired_at: showing.aired_at,
-        notice_period: showing.notice_period ?? undefined, // TODO: fix the related showing types
+        notice_period: showing.notice_period ?? undefined,
         same_day_allowed: showing.same_day_allowed,
         approval_type: showing.approval_type,
         feedback_template: undefined, // TODO: remove this later
@@ -142,7 +152,7 @@ function ShowingDetailTabSettings({
     )
 
   const [handleInstructionsChange] = useDebouncedCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+    (event: ChangeEvent<HTMLTextAreaElement>) =>
       handleShowingUpdate({
         ...showing,
         instructions: event.target.value
@@ -174,6 +184,12 @@ function ShowingDetailTabSettings({
 
   const saveDisabled = showing === showingRef.current || !!errors
 
+  const saveButtonProps: ShowingDetailTabSettingsSaveButtonProps = {
+    isSaving,
+    disabled: saveDisabled,
+    onClick: handleSave
+  }
+
   return (
     <Box display="flex">
       <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
@@ -183,143 +199,83 @@ function ShowingDetailTabSettings({
           hasListingInfo={!!showing.address}
         />
       </Box>
-      <Box flexGrow="1" flexShrink="1">
+      <Box flexGrow="1" flexShrink="1" className={classes.content}>
         <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
-            <Box maxWidth={580}>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={5}>
-                  <Box mr={2}>
-                    <ShowingDuration
-                      value={showing.duration}
-                      onChange={handleDurationChange}
-                      marginBottom={4}
-                      width="100%"
-                    />
-                  </Box>
-                </Grid>
-              </Grid>
-              <ShowingAvailabilitiesTimes
-                value={showing.availabilities}
-                onChange={handleAvailabilitiesChange}
-                error={errors?.Availability}
-              >
-                <ShowingDetailTabSettingsSaveButton
-                  isSaving={isSaving}
-                  disabled={saveDisabled}
-                  onClick={handleSave}
-                />
-              </ShowingAvailabilitiesTimes>
-            </Box>
+            <ShowingDetailTabSettingsTabAvailability
+              duration={showing.duration}
+              onDurationChange={handleDurationChange}
+              availabilities={showing.availabilities}
+              onAvailabilitiesChange={handleAvailabilitiesChange}
+              availabilitiesError={errors?.Availability}
+            >
+              <ShowingDetailTabSettingsSaveButton {...saveButtonProps} />
+            </ShowingDetailTabSettingsTabAvailability>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AdvanceNotice">
-            <Box maxWidth={580}>
-              <Typography variant="h6" gutterBottom>
-                Is there a need for advance notice?
-              </Typography>
-              <AdvanceNoticeRadioGroup
-                noticePeriod={showing.notice_period}
-                sameDayAllowed={showing.same_day_allowed}
-                onChange={handleAdvanceNoticeChange}
-              />
+            <ShowingDetailTabSettingsTabAdvanceNotice
+              noticePeriod={showing.notice_period}
+              sameDayAllowed={showing.same_day_allowed}
+              onChange={handleAdvanceNoticeChange}
+            >
               <ShowingDetailTabSettingsSaveButton
-                isSaving={isSaving}
-                disabled={saveDisabled}
+                {...saveButtonProps}
                 alignRight
-                onClick={handleSave}
               />
-            </Box>
+            </ShowingDetailTabSettingsTabAdvanceNotice>
           </TabContentSwitch.Item>
           {showing.address && (
             <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ListingInfo">
-              ListingInfo
+              ListingInfo {/* TODO: Implement this step */}
             </TabContentSwitch.Item>
           )}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
-            <Box maxWidth={400} mb={2}>
-              <Typography variant="h6" gutterBottom>
-                Appointment Type
-              </Typography>
-              <ShowingApprovalTypeRadioGroup
-                name="approvalType"
-                value={showing.approval_type}
-                onChange={handleApprovalTypeChange}
-              />
-            </Box>
-            <ShowingRoleList
+            <ShowingDetailTabSettingsTabApprovalTypeAndRoles
+              approvalType={showing.approval_type}
+              onApprovalTypeChange={handleApprovalTypeChange}
               showingId={showing.id}
-              value={showing.roles}
-              onChange={handleRolesChange}
+              roles={showing.roles}
+              onRolesChange={handleRolesChange}
               hasNotificationTypeFields={showing.approval_type !== 'None'}
             >
-              <ShowingDetailTabSettingsSaveButton
-                isSaving={isSaving}
-                disabled={saveDisabled}
-                onClick={handleSave}
-              />
-            </ShowingRoleList>
+              <ShowingDetailTabSettingsSaveButton {...saveButtonProps} />
+            </ShowingDetailTabSettingsTabApprovalTypeAndRoles>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Instructions">
-            <Typography variant="h6" gutterBottom>
-              Are there any access information you’d like to provide?
-            </Typography>
-            <ShowingInstructionsTextField
+            <ShowingDetailTabSettingsTabInstructions
               defaultValue={showing.instructions || ''}
               onChange={handleInstructionsChange}
-            />
-            <ShowingDetailTabSettingsSaveButton
-              isSaving={isSaving}
-              disabled={saveDisabled}
-              alignRight
-              onClick={handleSave}
-            />
+            >
+              <ShowingDetailTabSettingsSaveButton
+                {...saveButtonProps}
+                alignRight
+              />
+            </ShowingDetailTabSettingsTabInstructions>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
-            <Box maxWidth={500}>
-              <Box mb={9}>
-                <Typography variant="h6" gutterBottom>
-                  Would you like to allow appraisals?
-                </Typography>
-                <ShowingYesNoRadioGroup
-                  name="allow-appraisals"
-                  defaultValue={showing.allow_appraisal ? 'Yes' : 'No'}
-                  onChange={handleAllowAppraisalChange}
-                />
-              </Box>
-              <Typography variant="h6" gutterBottom>
-                Do you want to allow inspections and walk-through?
-              </Typography>
-              <ShowingYesNoRadioGroup
-                name="allow-inspection"
-                defaultValue={showing.allow_inspection ? 'Yes' : 'No'}
-                onChange={handleAllowInspectionChange}
-              />
+            <ShowingDetailTabSettingsTabAppraisalsAndInspections
+              allowAppraisalDefaultValue={
+                showing.allow_appraisal ? 'Yes' : 'No'
+              }
+              onAllowAppraisalChange={handleAllowAppraisalChange}
+              allowInspectionDefaultValue={
+                showing.allow_inspection ? 'Yes' : 'No'
+              }
+              onAllowInspectionChange={handleAllowInspectionChange}
+            >
               <ShowingDetailTabSettingsSaveButton
-                isSaving={isSaving}
-                disabled={saveDisabled}
+                {...saveButtonProps}
                 alignRight
-                onClick={handleSave}
               />
-            </Box>
+            </ShowingDetailTabSettingsTabAppraisalsAndInspections>
           </TabContentSwitch.Item>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Feedback">
-            <Box maxWidth={500}>
-              <Typography variant="h6" gutterBottom>
-                Do you want to get feedback on this showing?
-              </Typography>
-              <ShowingYesNoRadioGroup
-                name="has-feedback"
-                // TODO: read this from showing and apply the change
-                defaultValue="Yes"
-                onChange={() => {}}
-              />
+            <ShowingDetailTabSettingsTabFeedback>
               <ShowingDetailTabSettingsSaveButton
-                isSaving={isSaving}
-                disabled={saveDisabled}
+                {...saveButtonProps}
                 alignRight
-                onClick={handleSave}
               />
-            </Box>
+            </ShowingDetailTabSettingsTabFeedback>
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
       </Box>

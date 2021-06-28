@@ -25,7 +25,7 @@ import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { getShowingRoleLabel } from '../../helpers'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
 
-interface ShowingRoleListProps
+export interface ShowingRoleListProps
   extends Pick<
     ShowingRoleListColumnActionsProps,
     'showingId' | 'hasNotificationTypeFields'
@@ -111,7 +111,7 @@ function ShowingRoleList({
       ? [
           {
             id: 'confirm_notification_type',
-            width: '30%',
+            width: '25%',
             sortable: false,
             render: ({ row }) => (
               <ShowingRoleListColumnMediums
@@ -122,7 +122,7 @@ function ShowingRoleList({
           },
           {
             id: 'cancel_notification_type',
-            width: '30%',
+            width: '25%',
             sortable: false,
             render: ({ row }) => (
               <ShowingRoleListColumnMediums
@@ -138,6 +138,7 @@ function ShowingRoleList({
       id: 'body-actions',
       sortable: false,
       align: 'right',
+      width: 'auto',
       render: ({ row }) => (
         <ShowingRoleListColumnActions
           role={row}

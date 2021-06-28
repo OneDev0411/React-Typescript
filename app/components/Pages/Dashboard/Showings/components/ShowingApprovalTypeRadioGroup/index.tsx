@@ -19,7 +19,7 @@ const approvalTypeOptions: RadioItem<IShowingApprovalType>[] = [
   // }
 ]
 
-type ShowingApprovalTypeRadioGroupProps = Omit<
+export type ShowingApprovalTypeRadioGroupProps = Omit<
   RadioGroupProps<IShowingApprovalType>,
   'options'
 >

@@ -14,7 +14,7 @@ function ShowingRoleListColumnPerson({
   const roleLabel = getShowingRoleLabel(role)
 
   return (
-    <Typography variant="body2" component="div">
+    <Typography variant="body2" component="div" noWrap>
       {name}
       {roleLabel && <Box color="grey.500">{roleLabel}</Box>}
     </Typography>

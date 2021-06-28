@@ -12,7 +12,7 @@ const useStyles = makeStyles(
   { name: 'ShowingInstructionsTextField' }
 )
 
-type ShowingInstructionsTextFieldProps = Omit<
+export type ShowingInstructionsTextFieldProps = Omit<
   TextFieldProps,
   'placeholder' | 'multiline' | 'fullWidth' | 'variant'
 >
