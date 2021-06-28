@@ -79,7 +79,6 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
         variant="outlined"
         color="secondary"
         size="small"
-        type="button"
       >
         Add Event
       </Button>
