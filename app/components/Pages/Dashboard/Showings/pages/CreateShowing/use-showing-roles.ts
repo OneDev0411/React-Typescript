@@ -14,7 +14,11 @@ import {
   ShowingRoleInput,
   ShowingRoleInputPerson
 } from '../../types'
-import { getPersonFromUser, isValidShowingRoleType } from './helpers'
+import {
+  getPersonFromDealRole,
+  getPersonFromUser,
+  isValidShowingRoleType
+} from './helpers'
 
 interface UseShowingRolesReturn {
   roles: ShowingRoleInput[]
@@ -91,7 +95,7 @@ function useShowingRoles(): UseShowingRolesReturn {
         }
 
         if (role.role_type === 'Person' && isValidShowingRoleType(role.role)) {
-          setRoleFromProperty(role.role, getPersonFromUser(role.user))
+          setRoleFromProperty(role.role, getPersonFromDealRole(role))
         }
       })
     } else if (property?.type === 'listing') {
