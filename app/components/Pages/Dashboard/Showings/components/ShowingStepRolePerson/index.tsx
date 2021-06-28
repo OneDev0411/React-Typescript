@@ -26,7 +26,7 @@ const useStyles = makeStyles(
   theme => ({
     formFooter: {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       paddingTop: theme.spacing(3)
     },
     cardFooter: {
@@ -113,20 +113,35 @@ function ShowingStepRolePerson({
             onSubmit={handleChange}
           >
             <div className={classes.formFooter}>
-              <Box mr={1} component="span">
-                <ShowingRoleAutoSubmitAddNewButton
-                  label="Save and Add new participant"
-                  onClick={handleAdd}
-                />
-              </Box>
-              <Button
-                type="submit"
-                variant="contained"
-                size="small"
-                color="primary"
-              >
-                {isLastStep ? 'Next' : 'Save'}
-              </Button>
+              {role.deletable ? (
+                <Button
+                  type="button"
+                  variant="outlined"
+                  size="small"
+                  onClick={handleRemove}
+                >
+                  Delete
+                </Button>
+              ) : (
+                <span />
+              )}
+
+              <div>
+                <Box mr={1} component="span">
+                  <ShowingRoleAutoSubmitAddNewButton
+                    label="Save and Add new participant"
+                    onClick={handleAdd}
+                  />
+                </Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                >
+                  {isLastStep ? 'Next' : 'Save'}
+                </Button>
+              </div>
             </div>
           </ShowingRoleForm>
         ) : (

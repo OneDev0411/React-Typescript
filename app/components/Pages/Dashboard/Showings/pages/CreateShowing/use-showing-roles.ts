@@ -68,7 +68,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       ...person,
       role,
       mode: 'form',
-      deletable: true,
+      deletable: role !== 'SellerAgent',
       can_approve: true,
       confirm_notification_type: [],
       cancel_notification_type: []
