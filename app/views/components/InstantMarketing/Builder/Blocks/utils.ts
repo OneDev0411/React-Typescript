@@ -4,13 +4,13 @@ import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../utils/get-template-render-data'
 import {
-  GetBlockTemplateFunc,
   BlockTemplates,
   TemplateRenderDataFunc,
   BlockOnDropFunc,
   BlockDragStopEventReturn,
   TemplateBlockOptions
 } from './types'
+import adapt from './adapt'
 
 export function collapseBlockCategories(editor: Editor) {
   const categories = editor.BlockManager.getCategories() as any
@@ -31,12 +31,6 @@ export function handleBlockDragStopEvent(
   renderData: TemplateRenderData
 ): void
 
-export function handleBlockDragStopEvent(
-  editor: Editor,
-  getTemplate: GetBlockTemplateFunc,
-  renderData: TemplateRenderData
-): void
-
 export function handleBlockDragStopEvent<T>(
   editor: Editor,
   templates: BlockTemplates,
@@ -46,21 +40,20 @@ export function handleBlockDragStopEvent<T>(
 
 export function handleBlockDragStopEvent<T>(
   editor: Editor,
-  getTemplate: GetBlockTemplateFunc,
-  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
-  onDrop: BlockOnDropFunc
-): BlockDragStopEventReturn<T>
-
-export function handleBlockDragStopEvent<T>(
-  editor: Editor,
-  templates: BlockTemplates | GetBlockTemplateFunc,
+  templates: BlockTemplates,
   renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
   onDrop?: BlockOnDropFunc
 ): BlockDragStopEventReturn<T> {
-  function getBlockTemplate(blockId: string, parent: Model | null = null) {
-    return typeof templates === 'function'
-      ? templates(parent, blockId)
-      : templates[blockId]
+  function adaptTemplateIfNeeded(
+    template: string,
+    blockId: string,
+    parent: Model | null = null
+  ) {
+    return parent &&
+      template &&
+      editor.BlockManager.get(blockId)?.attributes.adaptive
+      ? adapt(parent, template)
+      : template
   }
 
   function appendBlock(model: Model, renderData: TemplateRenderData) {
@@ -70,13 +63,17 @@ export function handleBlockDragStopEvent<T>(
       return
     }
 
-    const template = getBlockTemplate(
-      model.attributes.attributes['data-block'],
-      parent
-    )
+    const blockId = model.attributes.attributes['data-block']
+    const rawTemplate = templates[blockId]
 
-    if (template) {
-      const html = nunjucks.renderString(template, renderData)
+    if (rawTemplate) {
+      // To make sure the adapt logic works fine, we have to pass
+      // the rendered template
+      const html = adaptTemplateIfNeeded(
+        nunjucks.renderString(rawTemplate, renderData),
+        blockId,
+        parent
+      )
 
       parent.append(html, { at: model.opt.at })
     }
@@ -111,7 +108,7 @@ export function handleBlockDragStopEvent<T>(
   }
 
   editor.on('block:drag:stop', (model: Model, block: any) => {
-    if (!model || !getBlockTemplate(block.id)) {
+    if (!model || !templates[block.id]) {
       return
     }
 
