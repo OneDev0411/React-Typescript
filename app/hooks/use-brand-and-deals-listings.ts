@@ -1,22 +1,18 @@
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 
 import { useBrandListings, useDealsListings } from '@app/hooks/use-listings'
-import { selectActiveBrandId } from '@app/selectors/brand'
 
 type ListingRow = IListing | ICompactListing
 
 const defaultRows: ListingRow[] = []
 
-interface UseActiveBrandListings {
+interface UseBrandAndDealsListings {
   isLoading: boolean
   listings: ListingRow[]
 }
 
-function useActiveBrandListings(): UseActiveBrandListings {
-  const brand = useSelector(selectActiveBrandId)
-
-  const brandListings = useBrandListings(brand)
+function useBrandAndDealsListings(brandId: UUID): UseBrandAndDealsListings {
+  const brandListings = useBrandListings(brandId)
   const brandListingsIds = useMemo(
     () => brandListings?.map(listing => listing.id),
     [brandListings]
@@ -34,4 +30,4 @@ function useActiveBrandListings(): UseActiveBrandListings {
   }
 }
 
-export default useActiveBrandListings
+export default useBrandAndDealsListings

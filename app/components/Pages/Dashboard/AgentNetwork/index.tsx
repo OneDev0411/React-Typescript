@@ -1,8 +1,10 @@
-import React from 'react'
+import { useSelector } from 'react-redux'
 
 import { withRouter } from 'react-router'
 
-import useActiveBrandListings from '@app/hooks/use-active-brand-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
+
+import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 
 import Layout from './Layout'
 import Info from './Sections/Info'
@@ -10,7 +12,9 @@ import Listings from './Sections/Listings'
 import { openListingPage, openSearchResultPage } from './helpers'
 
 export function AgentNetwork() {
-  const { listings, isLoading } = useActiveBrandListings()
+  const brandId = useSelector(selectActiveBrandId)
+
+  const { listings, isLoading } = useBrandAndDealsListings(brandId)
 
   return (
     <Layout title="Agent Network" onSelectSearchResult={openSearchResultPage}>
