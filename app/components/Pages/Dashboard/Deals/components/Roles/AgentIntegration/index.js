@@ -119,6 +119,8 @@ export class RoleAgentIntegration extends React.Component {
     if (relatedContacts.length > 0) {
       let role = {
         ...convertContactToRole(relatedContacts[0], this.props.attributeDefs),
+        legal_last_name: last_name,
+        legal_first_name: first_name,
         brand: shouldSetBrand ? user.brand_id : null,
         phone_number: phone_number || work_phone,
         company_title: office ? office.name : ''
