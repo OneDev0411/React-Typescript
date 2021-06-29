@@ -27,9 +27,10 @@ const useStyles = makeStyles(
 
 interface ListingsListProps {
   brandId: UUID
+  hasActions: boolean
 }
 
-function ListingsList({ brandId }: ListingsListProps) {
+function ListingsList({ brandId, hasActions }: ListingsListProps) {
   const classes = useStyles()
   const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
 
@@ -82,9 +83,10 @@ function ListingsList({ brandId }: ListingsListProps) {
       width: '35%',
       primary: false,
       align: 'right',
-      render: ({ row }) => (
-        <ListingsListColumnActions className={classes.actions} row={row} />
-      )
+      render: ({ row }) =>
+        hasActions ? (
+          <ListingsListColumnActions className={classes.actions} row={row} />
+        ) : null
     }
   ]
 
@@ -97,10 +99,7 @@ function ListingsList({ brandId }: ListingsListProps) {
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
-      getTrProps={() => ({
-        className: classes.row
-      })}
-
+      getTrProps={() => ({ className: classes.row })}
       // TODO: handle empty state
       // EmptyStateComponent={() => (
       //   <ShowingEmptyState

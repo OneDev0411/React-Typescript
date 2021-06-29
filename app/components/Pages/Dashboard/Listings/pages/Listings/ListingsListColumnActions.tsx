@@ -1,12 +1,11 @@
 import { Button, makeStyles } from '@material-ui/core'
 
-import { useSelector } from 'react-redux'
-
-import { selectActiveTeamId } from '@app/selectors/team'
 import LinkButton from '@app/views/components/LinkButton'
 
-import { ListingRow } from './types'
 import ListingsListColumnActionsDealButton from './ListingsListColumnActionsDealButton'
+import ListingsListColumnActionsOpenHouseButton, {
+  ListingsListColumnActionsOpenHouseButtonProps
+} from './ListingsListColumnActionsOpenHouseButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -15,9 +14,9 @@ const useStyles = makeStyles(
   { name: 'ListingsListColumnActions' }
 )
 
-interface ListingsListColumnActionsProps {
+interface ListingsListColumnActionsProps
+  extends Pick<ListingsListColumnActionsOpenHouseButtonProps, 'row'> {
   className: string
-  row: ListingRow
 }
 
 function ListingsListColumnActions({
@@ -25,20 +24,15 @@ function ListingsListColumnActions({
   row
 }: ListingsListColumnActionsProps) {
   const classes = useStyles()
-  const teamId = useSelector(selectActiveTeamId)
 
   return (
     <div className={className}>
-      <LinkButton
+      <ListingsListColumnActionsOpenHouseButton
         className={classes.button}
         variant="outlined"
         size="small"
-        to={`/openhouse/${row.id}/${teamId}/register`}
-        target="_blank"
-      >
-        {/* TODO: Ask this from Ramin or Emil */}
-        OH Registrants Page
-      </LinkButton>
+        row={row}
+      />
       <LinkButton
         className={classes.button}
         variant="outlined"

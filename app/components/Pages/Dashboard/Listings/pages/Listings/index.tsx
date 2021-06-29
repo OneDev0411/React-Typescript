@@ -8,20 +8,27 @@ import LoadingContainer from '@app/views/components/LoadingContainer'
 import ListingsTabs from './ListingsTabs'
 import ListingsList from './ListingsList'
 import useListingsTabs from './use-listings-tabs'
+import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
 
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 
 function Listings({ params }: ListingsProps) {
-  const { tabs, value: brandId } = useListingsTabs(params.brandId)
+  const { tabs, tab } = useListingsTabs(params.brandId)
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Listings" />
       <PageLayout.Main>
-        {brandId ? (
+        {tab ? (
           <>
-            <ListingsTabs tabs={tabs} value={brandId} />
-            <ListingsList brandId={brandId} key={brandId} />
+            <ListingsTabs tabs={tabs} value={tab.value} />
+            <ListingsOpenHouseProvider>
+              <ListingsList
+                key={tab.value}
+                brandId={tab.value}
+                hasActions={tab.hasActions}
+              />
+            </ListingsOpenHouseProvider>
           </>
         ) : (
           <Box height="600px">

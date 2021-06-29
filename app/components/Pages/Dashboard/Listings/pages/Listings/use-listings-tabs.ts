@@ -5,7 +5,7 @@ import { selectUserTeams } from '@app/selectors/team'
 import { ListingTab } from './types'
 
 interface UseListingsTabsReturn {
-  value: Nullable<UUID>
+  tab: Nullable<ListingTab>
   tabs: ListingTab[]
 }
 
@@ -20,17 +20,18 @@ function useListingsTabs(brandId?: UUID): UseListingsTabsReturn {
         team.brand.brand_type === 'Personal'
           ? myListingsLabel
           : team.brand.name,
-      value: team.brand.id
+      value: team.brand.id,
+      hasActions: team.brand.brand_type === 'Personal'
     }))
     .reverse()
 
-  const selectedTabValue = tabs.find(tab =>
+  const selectedTab = tabs.find(tab =>
     brandId ? tab.value === brandId : tab.label === myListingsLabel
-  )?.value
-  const firstTabValue: Nullable<UUID> = tabs[0]?.value ?? null
+  )
+  const firstTab: Nullable<ListingTab> = tabs[0] ?? null
 
   return {
-    value: selectedTabValue ?? firstTabValue,
+    tab: selectedTab ?? firstTab,
     tabs
   }
 }
