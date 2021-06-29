@@ -942,7 +942,7 @@ export default (
 
         <Route path="website" component={AsyncOldWebsite} />
 
-        <Route path="listings" component={AsyncListingsList} />
+        <Route path="listings(/:brandId)" component={AsyncListingsList} />
       </Route>
     </Route>
 

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { selectActiveTeamId } from '@app/selectors/team'
 import LinkButton from '@app/views/components/LinkButton'
 
-import { ListingRow } from '../../types'
+import { ListingRow } from './types'
 import ListingsListColumnActionsDealButton from './ListingsListColumnActionsDealButton'
 
 const useStyles = makeStyles(

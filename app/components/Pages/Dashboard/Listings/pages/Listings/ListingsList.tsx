@@ -8,9 +8,9 @@ import { getFormattedPrice } from 'models/Deal/helpers/context'
 
 import LoadingContainer from '@app/views/components/LoadingContainer'
 
-import useActiveBrandListings from '@app/hooks/use-active-brand-listings'
+import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 
-import { ListingRow } from '../../types'
+import { ListingRow } from './types'
 import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnText from './ListingsListColumnText'
 
@@ -25,9 +25,13 @@ const useStyles = makeStyles(
   { name: 'ListingsList' }
 )
 
-function ListingsList() {
+interface ListingsListProps {
+  brandId: UUID
+}
+
+function ListingsList({ brandId }: ListingsListProps) {
   const classes = useStyles()
-  const { listings: rows, isLoading } = useActiveBrandListings()
+  const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
 
   const columns: TableColumn<ListingRow>[] = [
     {
