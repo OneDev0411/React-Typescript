@@ -1,7 +1,6 @@
-import { useSelector } from 'react-redux'
-
-import { selectDealsList } from '@app/selectors/deals'
 import LinkButton, { LinkButtonProps } from '@app/views/components/LinkButton'
+
+import useListingsFindDealId from './use-listings-find-deal-id'
 
 interface ListingsListColumnActionsDealButtonProps
   extends Omit<LinkButtonProps, 'to' | 'children'> {
@@ -13,22 +12,19 @@ function ListingsListColumnActionsDealButton({
   disabled,
   ...otherProps
 }: ListingsListColumnActionsDealButtonProps) {
-  const deals = useSelector(selectDealsList)
-
-  const dealList: IDeal[] = Object.values(deals ?? {})
-  const deal = dealList.find(deal => deal.listing === listingId)
+  const dealId = useListingsFindDealId(listingId)
 
   return (
     <LinkButton
       {...otherProps}
       to={
-        deal
-          ? `/dashboard/deals/${deal.id}`
+        dealId
+          ? `/dashboard/deals/${dealId}`
           : `/dashboard/deals/create?listingId=${listingId}`
       }
-      disabled={disabled || !deals}
+      disabled={disabled}
     >
-      {deal ? 'View' : 'Create'} Deal
+      {dealId ? 'View' : 'Create'} Deal
     </LinkButton>
   )
 }
