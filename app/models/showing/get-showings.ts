@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function getShowings() {
+async function getShowings(): Promise<IShowing[]> {
   return (
     await new Fetch().post('/showings/filter').query({
       associations: [
@@ -14,7 +14,7 @@ async function getShowings() {
         'showing_appointment.notifications'
       ]
     })
-  ).body.data as IShowing[]
+  ).body.data
 }
 
 export default getShowings

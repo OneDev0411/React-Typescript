@@ -1,6 +1,6 @@
 import Fetch from 'services/fetch'
 
-async function getShowing(showingId: UUID) {
+async function getShowing(showingId: UUID): Promise<IShowing> {
   return (
     await new Fetch().get(`/showings/${showingId}`).query({
       associations: [
@@ -16,7 +16,7 @@ async function getShowing(showingId: UUID) {
         'showing.availabilities'
       ]
     })
-  ).body.data as IShowing
+  ).body.data
 }
 
 export default getShowing

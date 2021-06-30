@@ -3,11 +3,10 @@ import Fetch from 'services/fetch'
 async function updateShowing(
   showingId: UUID,
   data: Omit<IShowingInput, 'roles'>
-) {
-  // TODO: fix the response type
+): Promise<IShowing> {
   return (
     await new Fetch({ proxy: false }).put(`/showings/${showingId}`).send(data)
-  ).body.data as IShowing
+  ).body.data
 }
 
 export default updateShowing
