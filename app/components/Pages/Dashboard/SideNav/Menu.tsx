@@ -140,10 +140,6 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl.AgentNetwork>
 
-          <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
-            Listings
-          </SideNavLinkItem>
-
           <Acl access={insightAccess}>
             <SideNavLinkItem to="/dashboard/insights" tourId="nav-insight">
               Insight
@@ -172,6 +168,10 @@ export function Menu() {
               </InlineBadge>
             </SideNavLinkItem>
           </Acl>
+
+          <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
+            Listings
+          </SideNavLinkItem>
 
           <Acl access={ACL.WEBSITES}>
             <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
