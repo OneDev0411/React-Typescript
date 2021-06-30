@@ -3,8 +3,8 @@ import cn from 'classnames'
 import { MenuItem, Popover, useTheme } from '@material-ui/core'
 import { mdiViewWeekOutline, mdiFormatListText } from '@mdi/js'
 
-import { useIconStyles } from 'app/styles/use-icon-styles'
-import { ViewModeType } from 'app/components/Pages/Dashboard/Contacts/List/Tabs'
+import { useIconStyles } from '@app/styles/use-icon-styles'
+import { ViewModeType } from '@app/components/Pages/Dashboard/Contacts/List/Tabs'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -69,7 +69,7 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
         onClick={handleViewSwitcherToggle}
       >
         {listingViewOptions[activeView].icon({
-          color: theme.palette.primary.main,
+          color: theme.palette.text.primary,
           className: iconClasses.small
         })}
       </DropdownToggleButton>
@@ -97,7 +97,7 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
             onClick={() => handleViewSwitcherItemClick(option.value)}
           >
             {option.icon({
-              color: theme.palette.primary.main,
+              color: theme.palette.text.primary,
               className: cn(iconClasses.small, iconClasses.rightMargin)
             })}
             {option.label}

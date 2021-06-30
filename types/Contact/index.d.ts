@@ -1,3 +1,16 @@
+declare interface IContactAddress {
+  city: string
+  extra: string
+  full: string
+  house_num: string
+  line1: string
+  line2: string
+  name: string
+  postcode: string
+  state: string
+  suftype: string
+  type: 'stdaddr'
+}
 declare interface IContactAttributeDefInput {
   name: string
   data_type: 'number' | 'text' | 'date'
@@ -89,6 +102,9 @@ declare interface IContact extends IContactBase {
   summary?: IContactSummary
   created_by?: IUser
   updated_by?: IUser
+
+  address: IContactAddress[] | null
+
   type: string
 
   company: Nullable<string>

@@ -26,9 +26,7 @@ import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
 
 import { getChangedRoles } from './helpers/get-changed-roles'
 
@@ -74,15 +72,6 @@ function CreateDeal({ router, route }: Props) {
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
-  )
-
-  const { checklists, brandChecklists } = useSelector(
-    ({ deals }: IAppState) => ({
-      brandChecklists: deal
-        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
-        : [],
-      checklists: getDealChecklists(deal, deals.checklists)
-    })
   )
 
   const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
@@ -166,20 +155,30 @@ function CreateDeal({ router, route }: Props) {
 
     newDeal.checklists = [checklist.id]
 
+    const brandChecklists = await getBrandChecklists(newDeal.brand.id)
+
     if (values.property_address) {
-      savePropertyAddress(newDeal, values.property_address)
+      savePropertyAddress(
+        newDeal,
+        brandChecklists,
+        checklist,
+        values.property_address
+      )
     }
 
-    saveContexts(newDeal, checklist)
+    saveContexts(newDeal, brandChecklists, checklist)
 
     setIsCreatingDeal(false)
   }
 
-  const saveContexts = (deal: IDeal, checklist: IDealChecklist) => {
+  const saveContexts = (
+    deal: IDeal,
+    brandChecklists: IBrandChecklist[],
+    checklist: IDealChecklist
+  ) => {
     const contexts: DealContext[] = []
 
     if (deal.deal_type === 'Selling') {
-      const defaultStatus = deal.property_type.is_lease ? 'Lease' : 'Active'
       const definition = getDefinitionId(
         deal,
         brandChecklists,
@@ -190,7 +189,7 @@ function CreateDeal({ router, route }: Props) {
         contexts.push({
           definition,
           checklist: checklist.id,
-          value: defaultStatus,
+          value: deal.property_type.is_lease ? 'Lease' : 'Active',
           approved: true
         })
     }
@@ -214,13 +213,15 @@ function CreateDeal({ router, route }: Props) {
 
   const savePropertyAddress = async (
     deal: IDeal,
+    brandChecklists: IBrandChecklist[],
+    checklist: IDealChecklist,
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
       const contexts = createAddressContext(
         deal,
         brandChecklists,
-        checklists,
+        [checklist],
         property.address
       )
 

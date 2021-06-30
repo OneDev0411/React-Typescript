@@ -170,22 +170,24 @@ export function viewAs(
   shouldReturnAll: boolean = false,
   team: IUserTeam | null = getActiveTeam(user),
 ): UUID[] {
-  if (
-    team &&
-    !idx(team, t => t.acl.includes('BackOffice')) &&
-    idx(team, team => team.settings.user_filter[0])
-  ) {
-    const allTeamMember = getTeamAvailableMembers(team)
-    const selectedViewAsUsers = team.settings.user_filter || []
+  if(!team) {
+    return []
+  }
 
-    if(!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length){
-      return []
+  const allTeamMember = getTeamAvailableMembers(team)
+  const allTeamMemberIds = allTeamMember.map(t => t.id)
+
+  if (!idx(team, t => t.acl.includes('BackOffice'))) {
+    const selectedViewAsUsers = (team.settings?.user_filter || []).filter(m => allTeamMemberIds.includes(m))
+    
+    if(!selectedViewAsUsers[0] || (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)) {
+      return allTeamMemberIds
     }
       
     return selectedViewAsUsers
   }
 
-  return []
+  return allTeamMemberIds
 }
 
 type GetSettings = (

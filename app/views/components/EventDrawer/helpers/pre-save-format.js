@@ -53,8 +53,6 @@ export async function preSaveFormat(values, originalValues = null) {
     status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : defaultStatus
   }
 
-  console.log('2 pre-save-format', values, task)
-
   if (originalValues?.id || description) {
     const currentDescription = description.getCurrentContent()
 

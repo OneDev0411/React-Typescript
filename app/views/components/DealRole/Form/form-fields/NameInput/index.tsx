@@ -73,6 +73,10 @@ export function NameInput({
               phone_numbers: getOptionsByAttributeType(contact, 'phone_number'),
               emails: getOptionsByAttributeType(contact, 'email'),
               companies: getOptionsByAttributeType(contact, 'company'),
+              current_address:
+                Array.isArray(contact.address) && contact.address.length > 0
+                  ? contact.address[0]
+                  : null,
               value: (contact[searchFieldValue] || '') as string,
               label: (contact[searchFieldLabel] || '') as string
             }))
@@ -85,8 +89,8 @@ export function NameInput({
         return agents.map(agent => ({
           ...agent,
           company: agent.office ? agent.office.name : '',
-          value: agent[searchFieldValue],
-          label: agent.full_name
+          value: agent.full_name || `${agent.first_name} ${agent.last_name}`,
+          label: agent.full_name || `${agent.first_name} ${agent.last_name}`
         }))
       } catch (e) {
         setIsSearching(false)

@@ -11,7 +11,6 @@ import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import template from './template.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { adaptTemplates } from '../utils'
 import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
@@ -57,7 +56,7 @@ export default function registerImageBlock(
 
   return handleBlockDragStopEvent(
     editor,
-    adaptTemplates(allBlocks),
+    allBlocks,
     (selectedImageUrl: Image) => ({
       ...renderData,
       image: selectedImageUrl

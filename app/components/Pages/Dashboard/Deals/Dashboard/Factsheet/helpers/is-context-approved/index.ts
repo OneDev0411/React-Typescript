@@ -6,7 +6,11 @@ export function isContextApproved(
 ): boolean {
   const context: IDealContext = getContext(deal, field.key)
 
-  if (!context || context.source === 'MLS') {
+  if (!context) {
+    return true
+  }
+
+  if (deal.listing && field.preffered_source === 'MLS') {
     return true
   }
 

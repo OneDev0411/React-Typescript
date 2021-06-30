@@ -1,24 +1,39 @@
 import React from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography, makeStyles, Theme } from '@material-ui/core'
 
 import { List } from './List'
-import { Section } from '../components/Section'
+import { BasicSection } from '../components/Section/Basic'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    emptyState: {
+      paddingLeft: theme.spacing(1)
+    }
+  }),
+  { name: 'ContactProfileDealsList' }
+)
 
 interface Props {
   contact: IContact
 }
 
 function DealsList({ contact }: Props) {
+  const classes = useStyles()
+
   return (
-    <Section title="Deals" style={{ padding: '0 1.5rem' }}>
+    <BasicSection title="Deals">
       {Array.isArray(contact.deals) && contact.deals.length > 0 ? (
         <List contact={contact} deals={contact.deals} />
       ) : (
-        <Typography variant="body2" color="textSecondary">
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className={classes.emptyState}
+        >
           No deals connected to this contact.
         </Typography>
       )}
-    </Section>
+    </BasicSection>
   )
 }
 

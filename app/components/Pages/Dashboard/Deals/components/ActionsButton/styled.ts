@@ -108,19 +108,6 @@ export const Container = styled.div<{
   `}
 `
 
-export const MenuContainer = styled.div`
-  left: 0;
-  right: 0;
-  position: absolute;
-  margin-top: 0.5rem;
-  background-color: #fff;
-  overflow: auto;
-  border-radius: 3px;
-  z-index: 1;
-  box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.15),
-    0 8px 10px 0 rgba(0, 0, 0, 0.16);
-`
-
 export const MenuItem = styled.div<MenuItemProps>`
   ${({ theme, disabled }) => css`
     color: ${disabled ? theme.palette.grey['900'] : theme.palette.common.black};

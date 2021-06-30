@@ -22,28 +22,31 @@ import { DateField } from './DateField'
 import { TextField } from './TextField'
 
 import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
+import { isContextApproved } from './helpers/is-context-approved'
 
 interface Props {
   deal: IDeal
-  definitions?: IDealBrandContext[]
+  contexts?: IDealBrandContext[]
   isBackOffice: boolean
   display?: boolean
   title?: React.ReactText | React.ReactNode
   section: string
+  disableEditing?: boolean
 }
 
 export default function Factsheet({
   deal,
-  definitions,
+  contexts,
   isBackOffice,
   display,
   title,
-  section
+  section,
+  disableEditing = false
 }: Props) {
   const dispatch = useDispatch()
 
-  const contexts = useFactsheetContexts(deal, section)
-  const table = definitions || contexts
+  const contextsList = useFactsheetContexts(deal, section)
+  const table = contexts ?? contextsList
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -117,6 +120,23 @@ export default function Factsheet({
     }
   }
 
+  const getTooltipTitle = (context: IDealBrandContext, isDisabledByMls) => {
+    if (isDisabledByMls) {
+      return (
+        <div>
+          <b>{context.label}</b> can only be changed on MLS. Once changed, the
+          update will be reflected here.
+        </div>
+      )
+    }
+
+    if (!isContextApproved(deal, context) && !isBackOffice) {
+      return 'Pending Office Approval'
+    }
+
+    return ''
+  }
+
   return (
     <>
       {title && <SectionTitle>{title}</SectionTitle>}
@@ -124,26 +144,38 @@ export default function Factsheet({
       <ItemsContainer>
         {section === 'Dates' && <TimelineSplitter />}
 
-        {table.map((field, index) => {
-          const value = getFieldValue(getContextValue(deal, field))
+        {table.map((context, index) => {
+          const value = getFieldValue(getContextValue(deal, context))
+          const hasMlsValue =
+            value != null &&
+            value !== '' &&
+            deal.context[context.key]?.source === 'MLS'
+
+          const isDisabledByMls = !!(
+            deal.listing &&
+            context.preffered_source === 'MLS' &&
+            hasMlsValue
+          )
 
           const sharedProps = {
             index,
             total: table.length - 1,
-            field,
+            field: context,
             value,
             deal,
             isBackOffice,
+            isDisabled: disableEditing || isDisabledByMls,
+            tooltip: getTooltipTitle(context, isDisabledByMls),
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,
             onApprove: handleApproveField
           }
 
-          if (field.data_type === 'Date') {
-            return <DateField key={field.key} {...sharedProps} />
+          if (context.data_type === 'Date') {
+            return <DateField key={context.key} {...sharedProps} />
           }
 
-          return <TextField key={field.key} {...sharedProps} />
+          return <TextField key={context.key} {...sharedProps} />
         })}
       </ItemsContainer>
     </>
