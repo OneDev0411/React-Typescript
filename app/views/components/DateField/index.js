@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { months } from 'utils/date-times'
+import { isLeapYear, months } from 'utils/date-times'
 import Button from 'components/Button/ActionButton'
 import { BasicDropdown } from 'components/BasicDropdown'
 
@@ -36,8 +36,6 @@ export function DateField(props) {
     []
   )
 
-  console.log({ props })
-
   const display = 'flex'
 
   const onChangeDay = value => {
@@ -48,12 +46,30 @@ export function DateField(props) {
   const onChangeMonth = value => {
     setMonth(value)
     props.onChangeMonth(value)
+
+    if (value.value === 1 && day.value >= 29) {
+      if (day.value === 29 && year && isLeapYear(year)) {
+        return
+      }
+
+      const alteredDay = { label: '28', value: 28 }
+
+      setDay(alteredDay)
+      props.onChangeDay(alteredDay)
+    }
   }
 
   const onChangeYear = event => {
     const { value } = event.target
 
     if (!value || /^\d+$/.test(value)) {
+      if (value.length >= 4 && !isLeapYear(value) && day.value === 29) {
+        const alteredDay = { label: '28', value: 28 }
+
+        setDay(alteredDay)
+        props.onChangeDay(alteredDay)
+      }
+
       setYear(value)
       props.onChangeYear(value)
     }
