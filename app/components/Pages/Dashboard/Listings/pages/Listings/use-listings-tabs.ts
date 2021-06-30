@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-import { selectUserTeams } from '@app/selectors/team'
+import { selectActiveTeamBrands } from '@app/selectors/team'
 
 import { ListingTab } from './types'
 
@@ -11,19 +11,16 @@ interface UseListingsTabsReturn {
 
 function useListingsTabs(brandId?: UUID): UseListingsTabsReturn {
   const myListingsLabel = 'My Listings'
-  const teams = useSelector(selectUserTeams)
 
-  const tabs = teams
-    .filter(team => team.brand.brand_type !== 'Other')
-    .map<ListingTab>(team => ({
-      label:
-        team.brand.brand_type === 'Personal'
-          ? myListingsLabel
-          : team.brand.name,
-      value: team.brand.id,
-      hasActions: team.brand.brand_type === 'Personal'
+  const brands = useSelector(selectActiveTeamBrands)
+
+  const tabs = brands
+    .filter(brand => brand.brand_type !== 'Other')
+    .map<ListingTab>(brand => ({
+      label: brand.brand_type === 'Personal' ? myListingsLabel : brand.name,
+      value: brand.id,
+      hasActions: brand.brand_type === 'Personal'
     }))
-    .reverse()
 
   const selectedTab = tabs.find(tab =>
     brandId ? tab.value === brandId : tab.label === myListingsLabel

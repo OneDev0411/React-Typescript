@@ -1,5 +1,7 @@
+import { createSelector } from 'reselect'
+
 import { IAppState } from 'reducers'
-import { getActiveTeamId } from 'utils/user-teams'
+import { getActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
 import { selectUser } from './user'
 
@@ -27,9 +29,53 @@ export function selectActiveTeamId(state: IAppState): UUID {
 }
 
 /**
+ * Returns the active team for the current user if exists
+ * @param state The app state
+ */
+export function selectActiveTeamUnsafe(state: IAppState): Nullable<IUserTeam> {
+  return getActiveTeam(selectUser(state))
+}
+
+/**
+ * Returns the active team for the current user or throw an error
+ * if there is no active team
+ * @param state The app state
+ */
+export function selectActiveTeam(state: IAppState): IUserTeam {
+  const activeTeam = selectActiveTeamUnsafe(state)
+
+  if (!activeTeam) {
+    throw new Error('The current user does not have an active team')
+  }
+
+  return activeTeam
+}
+
+/**
  * Returns the user teams
  * @param state The app state
  */
 export function selectUserTeams(state: IAppState): IUserTeam[] {
   return selectUser(state)?.teams ?? []
 }
+
+/**
+ * Returns the active user team brands
+ * @param state The app state
+ */
+export const selectActiveTeamBrands = createSelector<
+  IAppState,
+  IUserTeam,
+  IBrand[]
+>(selectActiveTeam, team => {
+  const brands: IBrand[] = []
+
+  let brand: Nullable<IBrand> = team.brand
+
+  while (brand) {
+    brands.push(brand)
+    brand = brand.parent
+  }
+
+  return brands
+})
