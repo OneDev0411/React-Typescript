@@ -63,11 +63,7 @@ export default function MiniProfile({
   return (
     <ProfileContainer>
       <div className="head">
-        <Avatar
-          alt={getName(data)}
-          contact={data as IContact}
-          className={classes.avatar}
-        >
+        <Avatar alt={getName(data)} contact={data} className={classes.avatar}>
           {getNameInitials(getName(data))}
         </Avatar>
 
