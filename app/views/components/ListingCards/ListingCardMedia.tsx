@@ -79,8 +79,7 @@ export default function ListingCardMedia({ children, listing }: Props) {
 
         if (
           targetElement.classList.contains('swiper-button-next') ||
-          targetElement.tagName.toLowerCase() === 'path' ||
-          targetElement.tagName.toLowerCase() === 'svg'
+          targetElement.classList.contains('swiper-button-prev')
         ) {
           e.stopPropagation()
         }
