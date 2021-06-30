@@ -57,12 +57,10 @@ export default function CalendarEventListItem({ event }: Props) {
   const classes = useStyles()
 
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
@@ -105,11 +103,9 @@ export default function CalendarEventListItem({ event }: Props) {
   }
 
   if (event.event_type == 'home_anniversary' && contact) {
-    secondaryText = `Home anniversary of ${
-      contact.display_name
-    } ${timeago().format(event.next_occurence)}`
+    secondaryText = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
   } else {
-    secondaryText = timeago().format(event.next_occurence)
+    secondaryText = humanizedEventTime
   }
 
   return (
