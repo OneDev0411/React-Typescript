@@ -41,11 +41,6 @@ export interface TemplateBlockOptions {
 
 export type BlockTemplates = Record<string, string>
 
-export type GetBlockTemplateFunc = (
-  parent: Model | null,
-  blockId: string
-) => string
-
 export type TemplateRenderDataFunc<T> = (
   selectedItem: T,
   blockId: string

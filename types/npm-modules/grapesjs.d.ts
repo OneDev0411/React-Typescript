@@ -246,7 +246,7 @@ declare module 'grapesjs' {
     getConfig(): BlockManagerConfig | object
     onLoad(): void
     add(id: string, opts: BlockOptions): void
-    get(id: string): Backbone.Model | undefined
+    get(id: string): Model | undefined
     getAll(): Array<object>
     getAllVisible(): Array<object>
     remove(id: string): object
@@ -260,6 +260,7 @@ declare module 'grapesjs' {
     content: string
     category: string | object
     attributes?: object
+    adaptive?: boolean
   }
 
   export interface UndoManager {

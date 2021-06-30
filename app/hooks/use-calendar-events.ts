@@ -19,7 +19,8 @@ interface UseCalendarEvents {
 }
 
 export function useCalendarEvents(
-  objectTypes: CalendarObjectType[]
+  objectTypes: CalendarObjectType[],
+  days?: number
 ): UseCalendarEvents {
   const [events, setEvents] = useState<Nullable<ICalendarEvent[]>>(null)
 
@@ -28,7 +29,7 @@ export function useCalendarEvents(
 
   useDeepCompareEffect(() => {
     async function fetchEvents() {
-      const range = getDateRange(new Date().getTime(), Format.Next, 7)
+      const range = getDateRange(new Date().getTime(), Format.Next, days)
       const calendarEvents = (await getCalendar({
         range,
         filter: {
