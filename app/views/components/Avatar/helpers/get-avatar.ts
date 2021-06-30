@@ -1,11 +1,17 @@
+import { ProfileType } from '../../MiniContact/types'
+
 /**
  * return the avatar url of user or contact
  * @param account // User, Contact, Auth Account
  */
+type AccountType =
+  | IUser
+  | IContact
+  | INormalizedContact
+  | IOAuthAccount
+  | ProfileType
 
-export const getAccountAvatar = (
-  account: IUser | IContact | INormalizedContact | IOAuthAccount
-): string => {
+export const getAccountAvatar = (account: AccountType): string => {
   if (account.profile_image_url) {
     return account.profile_image_url
   }
