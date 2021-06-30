@@ -1,11 +1,10 @@
 import { Button, makeStyles } from '@material-ui/core'
 
-import LinkButton from '@app/views/components/LinkButton'
-
 import ListingsListColumnActionsDealButton from './ListingsListColumnActionsDealButton'
 import ListingsListColumnActionsOpenHouseButton, {
   ListingsListColumnActionsOpenHouseButtonProps
 } from './ListingsListColumnActionsOpenHouseButton'
+import ListingsListColumnActionsViewListingButton from './ListingsListColumnActionsViewListingButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -14,46 +13,51 @@ const useStyles = makeStyles(
   { name: 'ListingsListColumnActions' }
 )
 
-interface ListingsListColumnActionsProps
+export interface ListingsListColumnActionsProps
   extends Pick<ListingsListColumnActionsOpenHouseButtonProps, 'row'> {
   className: string
+  hasActions: boolean
 }
 
 function ListingsListColumnActions({
   className,
-  row
+  row,
+  hasActions
 }: ListingsListColumnActionsProps) {
   const classes = useStyles()
 
   return (
     <div className={className}>
-      <ListingsListColumnActionsOpenHouseButton
+      {hasActions && (
+        <ListingsListColumnActionsOpenHouseButton
+          className={classes.button}
+          variant="outlined"
+          size="small"
+          row={row}
+        />
+      )}
+      <ListingsListColumnActionsViewListingButton
         className={classes.button}
         variant="outlined"
         size="small"
-        row={row}
-      />
-      <LinkButton
-        className={classes.button}
-        variant="outlined"
-        size="small"
-        to={`/dashboard/mls/${row.id}`}
-        target="_blank"
-      >
-        View Listing
-      </LinkButton>
-      <Button className={classes.button} variant="outlined" size="small">
-        {/* TODO: Connect this to Mamal's page */}
-        Market Listing
-      </Button>
-      <ListingsListColumnActionsDealButton
-        className={classes.button}
-        variant="contained"
-        size="small"
-        color="secondary"
         listingId={row.id}
-        target="_blank"
       />
+      {hasActions && (
+        <Button className={classes.button} variant="outlined" size="small">
+          {/* TODO: Connect this to Mamal's page */}
+          Market Listing
+        </Button>
+      )}
+      {hasActions && (
+        <ListingsListColumnActionsDealButton
+          className={classes.button}
+          variant="contained"
+          size="small"
+          color="secondary"
+          listingId={row.id}
+          target="_blank"
+        />
+      )}
     </div>
   )
 }

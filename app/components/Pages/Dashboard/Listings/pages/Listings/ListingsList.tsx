@@ -11,13 +11,18 @@ import LoadingContainer from '@app/views/components/LoadingContainer'
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 
 import { ListingRow } from './types'
-import ListingsListColumnActions from './ListingsListColumnActions'
+import ListingsListColumnActions, {
+  ListingsListColumnActionsProps
+} from './ListingsListColumnActions'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
-    row: { '&:hover $actions': { opacity: 1 } },
+    row: {
+      paddingRight: theme.spacing(1),
+      '&:hover $actions': { opacity: 1 }
+    },
     actions: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
@@ -26,9 +31,9 @@ const useStyles = makeStyles(
   { name: 'ListingsList' }
 )
 
-interface ListingsListProps {
+interface ListingsListProps
+  extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
   brandId: UUID
-  hasActions: boolean
 }
 
 function ListingsList({ brandId, hasActions }: ListingsListProps) {
@@ -84,10 +89,13 @@ function ListingsList({ brandId, hasActions }: ListingsListProps) {
       width: '35%',
       primary: false,
       align: 'right',
-      render: ({ row }) =>
-        hasActions ? (
-          <ListingsListColumnActions className={classes.actions} row={row} />
-        ) : null
+      render: ({ row }) => (
+        <ListingsListColumnActions
+          className={classes.actions}
+          row={row}
+          hasActions={hasActions}
+        />
+      )
     }
   ]
 
