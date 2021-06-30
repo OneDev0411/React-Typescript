@@ -22,8 +22,7 @@ const propTypes = {
   showDeleteButton: PropTypes.bool,
   handleSubmit: PropTypes.func,
   preSaveFormat: PropTypes.func,
-  postLoadFormat: PropTypes.func,
-  closeAddressAndSuggestionOnSubmit: PropTypes.bool
+  postLoadFormat: PropTypes.func
 }
 
 const defaultProps = {
@@ -33,8 +32,7 @@ const defaultProps = {
   formStyle: {},
   handleDelete() {},
   handleInputChange() {},
-  showDeleteButton: false,
-  closeAddressAndSuggestionOnSubmit: false
+  showDeleteButton: false
 }
 
 export class InlineAddressField extends React.Component {
@@ -220,14 +218,6 @@ export class InlineAddressField extends React.Component {
     })
   }
 
-  handleAddressPopoverSubmit = value => {
-    this.props.handleSubmit(value)
-
-    if (this.props.closeAddressAndSuggestionOnSubmit) {
-      this.handleClose()
-    }
-  }
-
   render() {
     const address = this.state.address
 
@@ -260,7 +250,7 @@ export class InlineAddressField extends React.Component {
           preSaveFormat={this.props.preSaveFormat}
           postLoadFormat={this.props.postLoadFormat}
           onDelete={this.props.handleDelete}
-          onSubmit={this.handleAddressPopoverSubmit}
+          onSubmit={this.props.handleSubmit}
           onClose={this.handleClose}
         />
       </div>
