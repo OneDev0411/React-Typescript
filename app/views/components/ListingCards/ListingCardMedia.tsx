@@ -3,15 +3,10 @@ import cn from 'classnames'
 import { makeStyles, Theme } from '@material-ui/core'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-// Import Swiper styles
-import 'swiper/swiper.min.css'
-import 'swiper/components/lazy/lazy.min.css'
-import 'swiper/components/pagination/pagination.min.css'
-import 'swiper/components/navigation/navigation.min.css'
 
-import SwiperCore, { Lazy, Pagination, Navigation } from 'swiper/core'
+import SwiperCore, { Lazy, Navigation } from 'swiper/core'
 
-SwiperCore.use([Lazy, Pagination, Navigation])
+SwiperCore.use([Lazy, Navigation])
 
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 
@@ -37,16 +32,27 @@ const useStyles = makeStyles(
     },
     childrenContainer: {
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 2,
       width: '100%',
-      height: '100%'
+      top: 0,
+      left: 0
     },
     image: ({ listing }: Pick<Props, 'listing'>) => ({
       height: 200,
       width: '100%',
       objectFit: getListingImageObjectFit(listing),
       backgroundColor: theme.palette.grey[100]
-    })
+    }),
+    placeHolder: {
+      height: 200,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    swiper: {
+      height: 200,
+      '--swiper-navigation-color': '#fff'
+    }
   }),
   {
     name: 'ListingCardMedia'
@@ -60,6 +66,7 @@ interface Props {
 
 export default function ListingCardMedia({ children, listing }: Props) {
   const images = getListingImages(listing)
+
   const classes = useStyles({ listing })
 
   return (
@@ -81,22 +88,21 @@ export default function ListingCardMedia({ children, listing }: Props) {
     >
       <div className={classes.childrenContainer}>{children}</div>
       {images.length > 1 ? (
-        <Swiper
-          lazy
-          pagination={{
-            clickable: true
-          }}
-          navigation
-          className="mySwiper"
-        >
+        <Swiper lazy navigation className={classes.swiper}>
           {images.map(image => (
             <SwiperSlide key={image}>
               <img
-                className={cn(classes.image, 'swiper-lazy')}
+                className={cn('swiper-lazy', classes.image)}
                 data-src={image}
-                alt="listing"
+                alt=""
               />
-              <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
+              <div
+                className={cn(
+                  classes.placeHolder,
+                  'swiper-lazy-preloader',
+                  'swiper-lazy-preloader-white'
+                )}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
