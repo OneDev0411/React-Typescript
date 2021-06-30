@@ -13,6 +13,7 @@ import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { ListingRow } from './types'
 import ListingsListColumnActions from './ListingsListColumnActions'
 import ListingsListColumnText from './ListingsListColumnText'
+import ListingsListEmptyState from './ListingsListEmptyState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -100,13 +101,7 @@ function ListingsList({ brandId, hasActions }: ListingsListProps) {
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({ className: classes.row })}
-      // TODO: handle empty state
-      // EmptyStateComponent={() => (
-      //   <ShowingEmptyState
-      //     title="There are no Showings."
-      //     description="Create your first showing for your off-market or MLS listings under 2 minutes."
-      //   />
-      // )}
+      EmptyStateComponent={ListingsListEmptyState}
     />
   )
 }
