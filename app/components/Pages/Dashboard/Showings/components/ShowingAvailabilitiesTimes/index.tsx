@@ -1,13 +1,16 @@
 import { useState, useMemo, memo, ReactNode } from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
 
-import ShowingAvailabilitiesTimesRow from './ShowingAvailabilitiesTimesRow'
+import ShowingAvailabilitiesTimesRow, {
+  ShowingAvailabilitiesTimesRowProps
+} from './ShowingAvailabilitiesTimesRow'
 import { hourToSeconds, findTimeConflicts } from '../../helpers'
 import { findSlotIndexById } from './helpers'
 import ShowingErrorText from '../ShowingErrorText'
 import { ShowingAvailabilityItem } from '../../types'
 
-export interface ShowingAvailabilitiesTimesProps {
+export interface ShowingAvailabilitiesTimesProps
+  extends Pick<ShowingAvailabilitiesTimesRowProps, 'showingDuration'> {
   title?: string
   value: ShowingAvailabilityItem[]
   onChange: (value: ShowingAvailabilityItem[]) => void
@@ -24,7 +27,8 @@ function ShowingAvailabilitiesTimes({
   hasContinue = false,
   onContinue,
   error,
-  children
+  children,
+  showingDuration
 }: ShowingAvailabilitiesTimesProps) {
   const [nextId, setNextId] = useState(0)
 
@@ -101,6 +105,7 @@ function ShowingAvailabilitiesTimes({
             disableDelete={value.length < 2}
             hasError={timeConflicts.includes(idx)}
             hasInsertButton={idx !== value.length - 1}
+            showingDuration={showingDuration}
           />
         ))}
       </Box>

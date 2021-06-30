@@ -39,6 +39,7 @@ function ShowingDetailTabSettingsTabAvailability({
         </Grid>
       </Grid>
       <ShowingAvailabilitiesTimes
+        showingDuration={duration}
         value={availabilities}
         onChange={onAvailabilitiesChange}
         error={availabilitiesError}

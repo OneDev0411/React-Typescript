@@ -1,7 +1,11 @@
 import { Box } from '@material-ui/core'
 import { MouseEvent } from 'react'
 
-import { getAppointmentDateLabel, getAppointmentTimeLabel } from '../../helpers'
+import {
+  getAppointmentDateLabel,
+  getAppointmentTimeLabel,
+  getAppointmentTitle
+} from '../../helpers'
 import ShowingLabeledColumn from '../ShowingLabeledColumn'
 
 import ShowingViewFeedbackButton from '../ShowingViewFeedbackButton'
@@ -36,6 +40,7 @@ function ShowingDetailTabVisitorsColumnLatestVisit({
           <ShowingViewFeedbackButton
             feedback={appointment.feedback}
             contact={appointment.contact}
+            appointmentTitle={getAppointmentTitle(appointment)}
           />
         </span>
       )}

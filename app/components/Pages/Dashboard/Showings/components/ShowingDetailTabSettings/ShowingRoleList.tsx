@@ -63,7 +63,10 @@ function ShowingRoleList({
 
       onChange([...roles, newRole])
 
-      notify({ status: 'success', message: 'The new role added successfully.' })
+      notify({
+        status: 'success',
+        message: 'The new participant added successfully.'
+      })
     })
   }
 

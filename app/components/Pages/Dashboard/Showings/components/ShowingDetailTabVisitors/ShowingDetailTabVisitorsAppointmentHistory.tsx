@@ -8,7 +8,11 @@ import {
   Box
 } from '@material-ui/core'
 
-import { getAppointmentTimeLabel, getAppointmentDateLabel } from '../../helpers'
+import {
+  getAppointmentTimeLabel,
+  getAppointmentDateLabel,
+  getAppointmentTitle
+} from '../../helpers'
 import ShowingViewFeedbackButton from '../ShowingViewFeedbackButton'
 
 const useStyles = makeStyles(
@@ -125,6 +129,7 @@ function ShowingDetailTabVisitorsAppointmentHistory({
                 <ShowingViewFeedbackButton
                   feedback={appointment.feedback}
                   contact={appointment.contact}
+                  appointmentTitle={getAppointmentTitle(appointment)}
                 />
               )}
             </Box>

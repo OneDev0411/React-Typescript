@@ -42,6 +42,7 @@ function ShowingStepDurationAndAvailabilities({
           marginBottom={4}
         />
         <ShowingAvailabilitiesTimes
+          showingDuration={duration}
           value={availabilities}
           onChange={onAvailabilitiesChange}
           hasContinue={isCurrentStep}

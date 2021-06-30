@@ -89,7 +89,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
       errors.availabilities = 'The time slots has conflicts'
     }
 
-    if (hasInvalidTimeRange(availabilities)) {
+    if (hasInvalidTimeRange(availabilities, duration)) {
       errors.availabilities =
         'The "From" value must be earlier than the "To" value'
     }
@@ -128,7 +128,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     })
 
     return Object.keys(errors).length ? errors : null
-  }, [availabilities, property, roles])
+  }, [availabilities, property, roles, duration])
 
   const handleFinish = () => {
     if (

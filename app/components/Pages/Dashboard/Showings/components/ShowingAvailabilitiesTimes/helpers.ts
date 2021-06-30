@@ -20,3 +20,7 @@ export function humanTimeToTimestamp(time: string): number {
 
   return parseInt(hours, 10) * 60 * 60 + parseInt(minutes, 10) * 60
 }
+
+export const getSecondsDifference = (end: string, start: string) => {
+  return humanTimeToTimestamp(end) - humanTimeToTimestamp(start)
+}
