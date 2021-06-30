@@ -89,8 +89,9 @@ export default function ListingCardMedia({ children, listing }: Props) {
       <div className={classes.childrenContainer}>{children}</div>
       {images.length > 1 ? (
         <Swiper lazy navigation className={classes.swiper}>
-          {images.map(image => (
-            <SwiperSlide key={image}>
+          {images.map((image, index) => (
+            // we have images with identical names so we can't use only image as key
+            <SwiperSlide key={`${index}-${image}`}>
               <img
                 className={cn('swiper-lazy', classes.image)}
                 data-src={image}
