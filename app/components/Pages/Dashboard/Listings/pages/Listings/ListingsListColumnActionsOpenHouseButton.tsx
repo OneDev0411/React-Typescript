@@ -6,8 +6,6 @@ import { OpenHouseDrawer } from '@app/views/components/open-house/OpenHouseDrawe
 
 import { ListingRow } from './types'
 
-import useListingsOpenHouseHasAccess from './use-listings-open-house-has-access'
-
 import useListingsOpenHouseIsLoading from './use-listings-open-house-is-loading'
 import useListingsOpenHouseReload from './use-listings-open-house-reload'
 import useListingsOpenHouseRow from './use-listings-open-house-row'
@@ -21,7 +19,6 @@ function ListingsListColumnActionsOpenHouseButton({
   row,
   ...otherProps
 }: ListingsListColumnActionsOpenHouseButtonProps) {
-  const hasAccess = useListingsOpenHouseHasAccess()
   const isLoading = useListingsOpenHouseIsLoading()
   const reload = useListingsOpenHouseReload()
   const openHouse = useListingsOpenHouseRow(row.id)
@@ -37,7 +34,7 @@ function ListingsListColumnActionsOpenHouseButton({
     reload()
   }
 
-  if (!hasAccess || isLoading) {
+  if (isLoading) {
     return null
   }
 

@@ -1,10 +1,14 @@
 import { Button, makeStyles } from '@material-ui/core'
 
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+
 import ListingsListColumnActionsDealButton from './ListingsListColumnActionsDealButton'
 import ListingsListColumnActionsOpenHouseButton, {
   ListingsListColumnActionsOpenHouseButtonProps
 } from './ListingsListColumnActionsOpenHouseButton'
 import ListingsListColumnActionsViewListingButton from './ListingsListColumnActionsViewListingButton'
+import useListingsOpenHouseHasAccess from './use-listings-open-house-has-access'
 
 const useStyles = makeStyles(
   theme => ({
@@ -19,21 +23,27 @@ export interface ListingsListColumnActionsProps
   hasActions: boolean
 }
 
+const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
+
 function ListingsListColumnActions({
   className,
   row,
   hasActions
 }: ListingsListColumnActionsProps) {
   const classes = useStyles()
+  const hasOpenHouseAccess = useListingsOpenHouseHasAccess()
+  const hasDealsAccess = useAcl(dealsAccess)
 
   return (
     <div className={className}>
-      <ListingsListColumnActionsOpenHouseButton
-        className={classes.button}
-        variant="outlined"
-        size="small"
-        row={row}
-      />
+      {hasOpenHouseAccess && (
+        <ListingsListColumnActionsOpenHouseButton
+          className={classes.button}
+          variant="outlined"
+          size="small"
+          row={row}
+        />
+      )}
       <ListingsListColumnActionsViewListingButton
         className={classes.button}
         variant="outlined"
@@ -49,7 +59,7 @@ function ListingsListColumnActions({
         {/* TODO: Connect this to Mamal's page */}
         Market Listing
       </Button>
-      {hasActions && (
+      {hasDealsAccess && hasActions && (
         <ListingsListColumnActionsDealButton
           className={classes.button}
           variant="contained"
