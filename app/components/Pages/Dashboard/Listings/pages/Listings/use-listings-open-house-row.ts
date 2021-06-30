@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { OpenHouseRow } from './types'
 import useListingsOpenHouseRows from './use-listings-open-house-rows'
 
@@ -8,9 +10,10 @@ function useListingsOpenHouseRow(
 ): UseListingsOpenHouseRowReturn {
   const openHouses = useListingsOpenHouseRows()
 
-  // TODO: there is a problem here in finding the open house by Id
-
-  return openHouses.find(openHouse => openHouse.listings.includes(listingId))
+  return useMemo(
+    () => openHouses.find(openHouse => openHouse.listings.includes(listingId)),
+    [listingId, openHouses]
+  )
 }
 
 export default useListingsOpenHouseRow
