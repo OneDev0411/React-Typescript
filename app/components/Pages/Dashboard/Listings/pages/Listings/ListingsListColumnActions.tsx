@@ -28,26 +28,27 @@ function ListingsListColumnActions({
 
   return (
     <div className={className}>
-      {hasActions && (
-        <ListingsListColumnActionsOpenHouseButton
-          className={classes.button}
-          variant="outlined"
-          size="small"
-          row={row}
-        />
-      )}
+      <ListingsListColumnActionsOpenHouseButton
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        row={row}
+      />
       <ListingsListColumnActionsViewListingButton
         className={classes.button}
         variant="outlined"
         size="small"
         listingId={row.id}
       />
-      {hasActions && (
-        <Button className={classes.button} variant="outlined" size="small">
-          {/* TODO: Connect this to Mamal's page */}
-          Market Listing
-        </Button>
-      )}
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        onClick={() => alert('The action is not implemented')}
+      >
+        {/* TODO: Connect this to Mamal's page */}
+        Market Listing
+      </Button>
       {hasActions && (
         <ListingsListColumnActionsDealButton
           className={classes.button}
