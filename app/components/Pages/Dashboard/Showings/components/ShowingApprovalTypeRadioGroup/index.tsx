@@ -13,10 +13,6 @@ const approvalTypeOptions: RadioItem<IShowingApprovalType>[] = [
     label: 'Go and Show',
     value: 'None'
   }
-  // {
-  //   label: 'View Instructions only',
-  //   value: 'None'
-  // }
 ]
 
 export type ShowingApprovalTypeRadioGroupProps = Omit<

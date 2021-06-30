@@ -54,7 +54,7 @@ function ShowingRoleYesNoRadioGroupField({
             <Typography variant="subtitle2">{label}</Typography>
             <RadioGroup
               row
-              name="gender1"
+              name="showing-role"
               value={value ? 'Yes' : 'No'}
               onChange={handleChange}
             >
