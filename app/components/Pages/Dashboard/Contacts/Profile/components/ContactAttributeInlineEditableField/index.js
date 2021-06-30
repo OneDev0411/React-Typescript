@@ -96,19 +96,19 @@ function getStateFromTrigger(trigger, attribute) {
 }
 
 function getInitialErrorMessage(contact, isTriggerable) {
-  if (!contact) {
-    return ''
-  }
+  let error = ''
 
   if (!contact.email && isTriggerable) {
-    return "You should provide contact's email to be able to use trigger feature."
+    error =
+      "You should provide contact's email to be able to use trigger feature."
   }
 
   if (!contact.user && isTriggerable) {
-    return "You should set an contact's owner to be able to use trigger feature."
+    error =
+      "You should set an contact's owner to be able to use trigger feature."
   }
 
-  return ''
+  return error
 }
 
 const getInitialState = ({ contact, attribute, trigger }) => {
@@ -117,6 +117,7 @@ const getInitialState = ({ contact, attribute, trigger }) => {
     !attribute?.is_partner
 
   return {
+    contact,
     error: getInitialErrorMessage(contact, isTriggerable),
     isDirty: false,
     isTriggerFieldDirty: false,
@@ -151,9 +152,10 @@ class MasterField extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (
-      !props.isActive &&
-      props.attribute?.updated_at &&
-      props.attribute?.updated_at > state.updated_at
+      (!props.isActive &&
+        props.attribute?.updated_at &&
+        props.attribute?.updated_at > state.updated_at) ||
+      props.contact?.email !== state.contact?.email
     ) {
       return getInitialState(props)
     }
