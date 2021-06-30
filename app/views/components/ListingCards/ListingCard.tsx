@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
   Card,
   CardActionArea,
@@ -44,7 +44,7 @@ const useStyles = makeStyles(
     statusChip: {
       display: 'flex'
     },
-    statusDot: ({ listing }: Props) => ({
+    statusDot: ({ listing }: ListingCardProps) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
       width: theme.spacing(1),
       height: theme.spacing(1),
@@ -94,7 +94,7 @@ const useStyles = makeStyles(
   }
 )
 
-export interface Props {
+export interface ListingCardProps {
   /**
    * The listing or compact listing object
    */
@@ -148,11 +148,6 @@ export interface Props {
    * The click handler of listing card
    */
   onClick?: () => void
-
-  /**
-   * Render custom children
-   */
-  children?: ReactNode
 }
 
 export default function ListingCard({
@@ -163,9 +158,8 @@ export default function ListingCard({
   onToggleSelection = noop,
   liked = undefined,
   onLikeClick = noop,
-  onClick,
-  children
-}: Props) {
+  onClick
+}: ListingCardProps) {
   const classes = useStyles({ listing })
 
   const address =
@@ -202,7 +196,7 @@ export default function ListingCard({
 
   return (
     <Card variant="outlined" className={classes.card} onClick={onClick}>
-      <CardActionArea component="div">
+      <CardActionArea>
         <ListingCardMedia listing={listing}>
           <Grid container justify="space-between">
             <Grid item>
@@ -353,7 +347,6 @@ export default function ListingCard({
           </Grid>
         </CardContent>
       </CardActionArea>
-      {children}
     </Card>
   )
 }

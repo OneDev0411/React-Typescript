@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
 import ListingCard, {
-  Props as ListingCardProps
+  ListingCardProps
 } from 'components/ListingCards/ListingCard'
 
 import ShowingStepPropertyChangeButton, {
