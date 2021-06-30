@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import {
   FormControl,
   FormControlProps,
@@ -9,6 +9,8 @@ import {
   Select as MSelect,
   SelectProps as MSelectProps
 } from '@material-ui/core'
+
+import { useControllableState } from 'react-use-controllable-state/dist'
 
 export type SelectValue = MenuItemProps['value']
 
@@ -41,7 +43,7 @@ function Select<T extends SelectValue = string>({
   displayEmpty = !!placeholder,
   label,
   defaultValue,
-  value: outValue,
+  value,
   onChange,
   options,
   margin,
@@ -49,16 +51,11 @@ function Select<T extends SelectValue = string>({
   error,
   ...otherProps
 }: SelectProps<T>) {
-  const [value, setValue] = useState<Optional<T>>(defaultValue)
-  const finalValue = outValue !== undefined ? outValue : value
-
-  const handleChange = (event: ChangeEvent<{ value: T }>) => {
-    onChange?.(event.target.value)
-
-    if (outValue === undefined) {
-      setValue(event.target.value)
-    }
-  }
+  const [selectValue, setSelectValue] = useControllableState<T>(
+    value,
+    onChange,
+    defaultValue as any // TODO: The useControllableState has a type issue on this parameter
+  )
 
   return (
     <FormControl
@@ -71,8 +68,8 @@ function Select<T extends SelectValue = string>({
       {label && <InputLabel>{label}</InputLabel>}
       <MSelect
         {...otherProps}
-        value={displayEmpty ? finalValue || '' : finalValue}
-        onChange={handleChange}
+        value={displayEmpty ? selectValue || '' : selectValue}
+        onChange={event => setSelectValue(event.target.value as T)}
         displayEmpty={displayEmpty}
         label={label}
       >

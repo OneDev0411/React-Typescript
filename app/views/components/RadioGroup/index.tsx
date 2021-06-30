@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import {
   makeStyles,
   Theme,
@@ -7,6 +7,8 @@ import {
   Typography,
   useTheme
 } from '@material-ui/core'
+
+import { useControllableState } from 'react-use-controllable-state/dist'
 
 export interface RadioItem<T extends string = string> {
   value: Nullable<T>
@@ -55,22 +57,16 @@ export function RadioGroup<T extends string = string>({
   style = {},
   groupStyle = {},
   onChange,
-  value: outValue
+  value
 }: RadioGroupProps<T>) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
-  const [value, setValue] = useState(defaultValue)
-  const finalValue = outValue !== undefined ? outValue : value
 
-  const handleChange = (newValue: string | null) => {
-    if (outValue === undefined) {
-      setValue(newValue)
-    }
-
-    if (newValue !== finalValue) {
-      onChange(newValue)
-    }
-  }
+  const [radioValue, setRadioValue] = useControllableState(
+    value,
+    onChange,
+    defaultValue
+  )
 
   return (
     <div style={style}>
@@ -79,7 +75,7 @@ export function RadioGroup<T extends string = string>({
           return null
         }
 
-        const isChecked = item.value === finalValue
+        const isChecked = item.value === radioValue
 
         return (
           <div
@@ -94,7 +90,7 @@ export function RadioGroup<T extends string = string>({
                 : 'inherit',
               ...groupStyle
             }}
-            onClick={() => handleChange(item.value)}
+            onClick={() => setRadioValue(item.value)}
           >
             <Box
               display="flex"
