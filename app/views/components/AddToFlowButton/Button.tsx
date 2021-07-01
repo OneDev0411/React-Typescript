@@ -30,12 +30,12 @@ interface Props {
 export function AddToFlowButton({ id = '', isOpen, render, onClick }: Props) {
   const classes = useStyles()
 
-  const buttonProps = {
+  const buttonProps: ButtonProps = {
     type: 'button',
     onClick,
     'aria-describedby': id,
     className: isOpen ? classes.isOpen : classes.isClose
-  } as ButtonProps
+  }
 
   if (render) {
     return render(buttonProps)
