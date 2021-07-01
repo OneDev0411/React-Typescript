@@ -15,24 +15,19 @@ interface RenderProps {
   isEmptyState: boolean
   teams: NormalizedBrand[]
 }
-
-export interface TeamAgentsProps {
+interface Props {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
   criteria?: string
   children: (props: RenderProps) => React.ReactNode
-  options?: Optional<IBrand[]>
 }
 
 export default function TeamAgents({
   children,
   isPrimaryAgent,
   criteria = '',
-  flattenTeams = false,
-  options
-}: TeamAgentsProps) {
-  const isOptionsProvided = !!options
-
+  flattenTeams = false
+}: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
 
@@ -45,7 +40,6 @@ export default function TeamAgents({
 
         const agents = await getAgents(getBrand(user, isPrimaryAgent))
 
-        console.log('agents', agents)
         setTeamAgents(agents || [])
       } catch (e) {
         console.log(e)
@@ -55,23 +49,19 @@ export default function TeamAgents({
       }
     }
 
-    if (!isOptionsProvided) {
-      getTeamAgents()
-    }
-  }, [isPrimaryAgent, user, isOptionsProvided])
+    getTeamAgents()
+  }, [isPrimaryAgent, user])
 
-  const finalTeamAgents = isOptionsProvided ? options! : teamAgents
-
-  const isEmptyState = !isLoading && finalTeamAgents.length === 0
+  const isEmptyState = !isLoading && teamAgents.length === 0
 
   return (
     <>
       {children({
-        isLoading: !isOptionsProvided && isLoading,
+        isLoading,
         isEmptyState,
         teams: normalizeTeams(
           user,
-          finalTeamAgents,
+          teamAgents,
           flattenTeams,
           criteria
         ) as NormalizedBrand[]
