@@ -1,5 +1,9 @@
 import { List, ListItem, makeStyles } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
+
+import { mdiPlus } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 
 import ButtonMenu from '../ButtonMenu'
 import { getShowingRoleLabel } from '../../helpers'
@@ -31,7 +35,7 @@ function ShowingRoleAddNewButton({
       size="small"
       variant="outlined"
       color="default"
-      startIcon={<AddIcon />}
+      startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
       classes={{ paper: classes.width }}
       disabled={disabled}
       RenderMenu={({ closeMenu }) => (

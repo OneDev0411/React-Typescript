@@ -1,5 +1,9 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
-import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
+
+import { mdiOpenInNew } from '@mdi/js'
+
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { Avatar } from 'components/Avatar'
 
@@ -59,7 +63,9 @@ function ShowingDetailHeader({
                 color="secondary"
                 size="small"
                 variant="text"
-                endIcon={<OpenInNewOutlinedIcon />}
+                endIcon={
+                  <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
+                }
                 to={`/dashboard/mls/${listing.id}`}
                 target="_blank"
               >

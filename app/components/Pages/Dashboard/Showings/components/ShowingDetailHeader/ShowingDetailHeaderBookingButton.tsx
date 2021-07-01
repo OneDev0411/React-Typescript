@@ -1,4 +1,7 @@
-import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@material-ui/icons'
+import { mdiOpenInNew } from '@mdi/js'
+
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import useIsMobile from 'hooks/use-is-mobile'
 
@@ -20,7 +23,7 @@ function ShowingDetailHeaderBookingButton({
       className={className}
       size="small"
       variant="contained"
-      endIcon={<OpenInNewOutlinedIcon />}
+      endIcon={<SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />}
       to={bookingUrl}
       target="_blank"
       color="primary"

@@ -1,11 +1,11 @@
 import { MouseEvent, useState } from 'react'
 import { Box } from '@material-ui/core'
-import {
-  MailOutline as MailOutlineIcon,
-  Phone as PhoneIcon
-} from '@material-ui/icons'
+
+import { mdiEmailOutline, mdiPhoneOutline } from '@mdi/js'
 
 import { useDispatch } from 'react-redux'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 
@@ -49,7 +49,7 @@ function ShowingColumnContactActions({
     <Box className={className} onClick={handleClick}>
       {contact.email && (
         <ShowingColumnContactIconLabel
-          icon={<MailOutlineIcon />}
+          icon={<SvgIcon path={mdiEmailOutline} />}
           label="Email"
           marginRight={contact.phone_number ? spacing : 0}
           onClick={openEmailDrawer}
@@ -58,7 +58,7 @@ function ShowingColumnContactActions({
       )}
       {contact.phone_number && (
         <ShowingColumnContactIconLabel
-          icon={<PhoneIcon />}
+          icon={<SvgIcon path={mdiPhoneOutline} />}
           label="Phone"
           onClick={handleCopy}
           compact={compact}

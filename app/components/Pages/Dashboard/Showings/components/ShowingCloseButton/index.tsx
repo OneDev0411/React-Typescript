@@ -1,5 +1,8 @@
 import { makeStyles } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import LinkIconButton from '../LinkIconButton'
 
@@ -15,7 +18,7 @@ function ShowingCloseButton() {
 
   return (
     <LinkIconButton className={classes.close} to="/dashboard/showings">
-      <CloseIcon />
+      <SvgIcon path={mdiClose} />
     </LinkIconButton>
   )
 }

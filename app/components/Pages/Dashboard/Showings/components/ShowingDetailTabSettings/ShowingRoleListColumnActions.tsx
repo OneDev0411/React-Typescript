@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+
+import { mdiTrashCanOutline } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import useAsync from 'hooks/use-async'
 
@@ -99,7 +102,7 @@ function ShowingRoleListColumnActions({
       disabled={!hasDelete || isLoading}
       onClick={handleDelete}
     >
-      <DeleteOutlineIcon />
+      <SvgIcon path={mdiTrashCanOutline} />
     </IconButton>
   )
 

@@ -1,7 +1,11 @@
 import { Button } from '@material-ui/core'
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
+
+import { mdiContentCopy } from '@mdi/js'
 
 import { useDispatch } from 'react-redux'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 
 import { addNotification } from 'components/notification'
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
@@ -27,7 +31,7 @@ function ShowingDetailHeaderCopyButton({
       className={className}
       size="small"
       variant="outlined"
-      startIcon={<FileCopyOutlinedIcon />}
+      startIcon={<SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />}
       onClick={handleClick}
     >
       Copy Link

@@ -1,10 +1,10 @@
 import { useState, useMemo, ReactNode } from 'react'
 import classNames from 'classnames'
 import { Box, Button, makeStyles } from '@material-ui/core'
-import {
-  ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
-} from '@material-ui/icons'
+
+import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
@@ -256,7 +256,11 @@ function ShowingBookingList({
             variant="outlined"
             onClick={toggleShowPastBookings}
             startIcon={
-              showPastBookings ? <ExpandLessIcon /> : <ExpandMoreIcon />
+              showPastBookings ? (
+                <SvgIcon path={mdiChevronUp} />
+              ) : (
+                <SvgIcon path={mdiChevronDown} />
+              )
             }
           >
             {showPastBookings ? 'Hide' : 'Show'} Past Bookings

@@ -11,7 +11,9 @@ import {
 } from '@material-ui/core'
 import classNames from 'classnames'
 
-import { Close as CloseIcon } from '@material-ui/icons'
+import { mdiClose } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   theme => ({
@@ -76,7 +78,7 @@ function Dialog({
           )}
         </DialogTitle>
         <IconButton onClick={handleClose}>
-          <CloseIcon />
+          <SvgIcon path={mdiClose} />
         </IconButton>
       </Box>
       {hasDialogContent ? <DialogContent>{children}</DialogContent> : children}

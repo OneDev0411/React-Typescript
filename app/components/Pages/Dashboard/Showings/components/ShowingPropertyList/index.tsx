@@ -17,6 +17,7 @@ import ShowingLabeledColumn from '../ShowingLabeledColumn'
 const useStyles = makeStyles(
   theme => ({
     row: {
+      paddingRight: theme.spacing(2),
       '&:hover $actions': { opacity: 1 }
     },
     actions: {
@@ -80,20 +81,11 @@ function ShowingPropertyList({
         </ShowingLabeledColumn>
       )
     },
-    // {
-    //   header: 'Feedback',
-    //   id: 'feedback',
-    //   width: '15%',
-    //   sortable: false,
-    //   render: ({ row }) => (
-    //     // TODO: use the feedback rate from API response
-    //     <FeedbackStars value={random(5)} />
-    //   )
-    // },
     {
       header: 'Body',
       id: 'body-actions',
       sortable: false,
+      align: 'right',
       render: ({ row }) => (
         <ShowingPropertyListColumnActions
           className={classes.actions}

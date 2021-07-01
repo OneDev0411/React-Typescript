@@ -1,8 +1,11 @@
 import classNames from 'classnames'
 import { makeStyles, Typography } from '@material-ui/core'
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
+
+import { mdiAlertCircleOutline } from '@mdi/js'
 
 import { withRouter, WithRouterProps } from 'react-router'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import LinkButton from '../LinkButton'
 
@@ -52,7 +55,10 @@ function ShowingDetailTabSettingsSubjectListItem({
       to={`${location.pathname}?tab=${to}`}
       endIcon={
         error && (
-          <ErrorOutlineIcon className={!selected ? classes.error : undefined} />
+          <SvgIcon
+            path={mdiAlertCircleOutline}
+            className={!selected ? classes.error : undefined}
+          />
         )
       }
       fullWidth
