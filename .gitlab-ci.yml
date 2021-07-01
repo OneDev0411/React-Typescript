@@ -12,6 +12,7 @@ test_unit:
     - merge_requests
   script:
     - npm i
+    - npm run types:check
     - npm run test:ci -- --coverage
 
 
