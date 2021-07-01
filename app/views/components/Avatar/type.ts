@@ -1,5 +1,7 @@
 import { AvatarProps } from '@material-ui/core'
 
+import { ProfileType } from '../MiniContact/types'
+
 export interface BaseProps extends Omit<AvatarProps, 'src' | 'sizes'> {
   size?: 'small' | 'medium' | 'large' | 'xlarge'
   showStatus?: boolean
@@ -8,7 +10,7 @@ export interface BaseProps extends Omit<AvatarProps, 'src' | 'sizes'> {
   statusColor?: string
   placeHolderImage?: string
   user?: IUser | IOAuthAccount
-  contact?: IContact | INormalizedContact
+  contact?: IContact | INormalizedContact | ProfileType
   email?: IEmailCampaign
   url?: string
 }

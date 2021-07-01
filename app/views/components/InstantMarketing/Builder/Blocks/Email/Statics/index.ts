@@ -27,7 +27,6 @@ import Divider from './divider.mjml'
 import Spacer from './spacer.mjml'
 import SocialGroup from './social-group.mjml'
 import { handleBlockDragStopEvent } from '../../utils'
-import { adaptTemplates } from '../utils'
 import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
 
@@ -204,5 +203,5 @@ export default function registerStaticBlocks(
     templateBlockOptions.blocks
   )
 
-  handleBlockDragStopEvent(editor, adaptTemplates(allBlocks), renderData)
+  handleBlockDragStopEvent(editor, allBlocks, renderData)
 }

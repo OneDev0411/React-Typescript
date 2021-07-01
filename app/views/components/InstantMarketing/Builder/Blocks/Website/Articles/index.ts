@@ -3,9 +3,9 @@ import { Model } from 'backbone'
 
 import { Metadata } from 'components/ArticleDrawer/types'
 
-import ArticleTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
-import ArticleLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
-import ArticleRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
+import ArticleTopIcon from 'assets/images/marketing/editor/blocks/article-image-top.png'
+import ArticleLeftIcon from 'assets/images/marketing/editor/blocks/article-image-left.png'
+import ArticleRightIcon from 'assets/images/marketing/editor/blocks/article-image-right.png'
 
 import registerBlock from '../../registerBlock'
 import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'

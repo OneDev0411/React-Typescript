@@ -1,9 +1,9 @@
 import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
 
-import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
-import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
-import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/article-image-top.png'
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/article-image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/article-image-right.png'
 
 import { Metadata } from 'components/ArticleDrawer/types'
 

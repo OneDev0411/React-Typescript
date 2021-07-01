@@ -1,27 +1,29 @@
 import React, { useRef, useEffect } from 'react'
 
 import { Popover } from '@material-ui/core'
-import { PopoverActions } from '@material-ui/core/Popover'
+import { PopoverActions, PopoverProps } from '@material-ui/core/Popover'
 
 import { InlineAddressForm } from '../InlineAddressForm'
 
 interface Props {
   isOpen: boolean
   address: string | object
-  formStyle: React.CSSProperties
-  showDeleteButton: boolean
-  preSaveFormat(values: object, originalValues: object): void
-  postLoadFormat(values: object): void
-  onDelete(): void
-  onSubmit(): void
-  onClose(): void
+  formStyle?: React.CSSProperties
+  showDeleteButton?: boolean
+  PopoverProps?: Partial<PopoverProps>
+  preSaveFormat?: (values: object, originalValues: object) => void
+  postLoadFormat?: (values: object) => void
+  onDelete?: () => void
+  onSubmit: () => void
+  onClose: () => void
 }
 
 export function AddressPopover({
   isOpen,
   address,
   formStyle,
-  showDeleteButton,
+  PopoverProps,
+  showDeleteButton = false,
   preSaveFormat,
   postLoadFormat,
   onDelete,
@@ -57,6 +59,7 @@ export function AddressPopover({
           zIndex: 1004,
           ...formStyle
         }}
+        {...PopoverProps}
       >
         <InlineAddressForm
           address={address}
