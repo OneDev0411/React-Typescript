@@ -105,7 +105,7 @@ export const WaitForFields = ({
           defaultValue={value}
           disabled={disabled}
           inputProps={{
-            min: '1'
+            min: '0'
           }}
           classes={{
             input: classes.outlinedPadding
@@ -129,7 +129,7 @@ export const WaitForFields = ({
         >
           {unitOptions.map(option => (
             <MenuItem key={option.value} value={option.value}>
-              {pluralize(option.title, value)}
+              {value > 0 ? pluralize(option.title, value) : option.title}
             </MenuItem>
           ))}
         </Select>
