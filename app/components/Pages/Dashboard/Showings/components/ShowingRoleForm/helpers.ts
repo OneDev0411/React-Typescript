@@ -7,8 +7,6 @@ export const selectUserMutator: Mutator<ShowingRoleFormValues> = (
   state,
   { changeValue }
 ) => {
-  // TODO: remove this log
-  console.log('select user', user)
   changeValue(state, 'first_name', () => user.first_name)
   changeValue(state, 'last_name', () => user.last_name)
   changeValue(state, 'email', () => user.email)
@@ -21,8 +19,6 @@ export const selectAgentMutator: Mutator<ShowingRoleFormValues> = (
   state,
   { changeValue }
 ) => {
-  // TODO: remove this log
-  console.log('select agent', agent)
   changeValue(state, 'first_name', () => agent.first_name)
   changeValue(state, 'last_name', () => agent.last_name)
   changeValue(state, 'email', () => agent.email)
@@ -35,9 +31,6 @@ export const selectContactMutator: Mutator<ShowingRoleFormValues> = (
   state,
   { changeValue }
 ) => {
-  // TODO: remove this log
-  console.log('select contact', contact)
-
   const attributes = contact.attributes?.reduce<
     Record<string, string | number>
   >(

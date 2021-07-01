@@ -184,9 +184,6 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     ? 'You need to fix the validation errors to continue the process'
     : null
 
-  // TODO: remove this after testing the validations
-  console.log('showingValidationErrors', showingValidationErrors)
-
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Create Showing">

@@ -27,12 +27,8 @@ function useShowingNotifications({
             return
           case 'Canceled':
             onShowingAppointmentCanceled?.(notification)
-
-            return
         }
       }
-
-      console.log('ShowingAppointment::notification', notification)
     }
 
     socket.on('Notification', handleNewNotification)
