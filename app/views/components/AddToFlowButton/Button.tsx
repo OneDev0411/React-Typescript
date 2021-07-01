@@ -14,19 +14,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface ButtonProps {
+  type: string
+  onClick: (event: React.MouseEvent) => void
+  'aria-describedby': string
+  className: string
+}
 interface Props {
   id?: string
   isOpen: boolean
-  onClick: () => void
-  render?: (props?: any) => boolean
+  onClick: (event: React.MouseEvent) => void
+  render?: (props?: ButtonProps) => JSX.Element
 }
 
-export function AddToFlowButton({
-  id = '',
-  isOpen,
-  render = () => false,
-  onClick
-}: Props) {
+export function AddToFlowButton({ id = '', isOpen, render, onClick }: Props) {
   const classes = useStyles()
 
   const buttonProps = {
@@ -34,9 +35,9 @@ export function AddToFlowButton({
     onClick,
     'aria-describedby': id,
     className: isOpen ? classes.isOpen : classes.isClose
-  }
+  } as ButtonProps
 
-  if (render()) {
+  if (render) {
     return render(buttonProps)
   }
 
