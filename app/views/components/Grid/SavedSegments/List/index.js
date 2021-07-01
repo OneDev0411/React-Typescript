@@ -99,7 +99,10 @@ class SegmentsList extends React.Component {
           style: { width: 220 }
         }}
         morePlugin={{
-          count: 5,
+          count: 7,
+          style: {
+            maxHeight: 250
+          },
           textContainer: ({ children }) => (
             <ListItem button>{children}</ListItem>
           )
