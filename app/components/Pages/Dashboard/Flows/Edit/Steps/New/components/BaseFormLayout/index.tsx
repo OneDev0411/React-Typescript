@@ -159,7 +159,7 @@ const Layout = ({
               <WaitFor disabled={disableEdit} />
             </Box>
             <Box className={classes.commonField} flexGrow={1} px={0.75}>
-              <EventType disabled={disableEdit} />
+              <EventType index={index} disabled={disableEdit} />
             </Box>
             <Box className={classes.commonField} flexGrow={0} maxWidth={140}>
               <Time

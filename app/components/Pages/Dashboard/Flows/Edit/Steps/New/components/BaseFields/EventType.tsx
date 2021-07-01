@@ -15,10 +15,11 @@ import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import { IAppState } from 'reducers'
 
 interface Props {
+  index: number
   disabled?: boolean
 }
 
-export const EventType = ({ disabled = false }: Props) => {
+export const EventType = ({ index, disabled = false }: Props) => {
   const dateAttributes = useSelector(({ contacts }: IAppState) =>
     selectDefsBySection(contacts.attributeDefs, 'Dates')
   )
@@ -30,7 +31,7 @@ export const EventType = ({ disabled = false }: Props) => {
         value: 0
       },
       {
-        label: 'Previous Step',
+        label: index === 1 ? 'Contact added to flow' : 'Previous Step',
         value: 'last_step_date'
       },
       ...dateAttributes.map(attribute => ({
@@ -38,7 +39,7 @@ export const EventType = ({ disabled = false }: Props) => {
         value: attribute.name
       }))
     ]
-  }, [dateAttributes])
+  }, [dateAttributes, index])
 
   const getSelectedItem = useCallback(
     value => {
