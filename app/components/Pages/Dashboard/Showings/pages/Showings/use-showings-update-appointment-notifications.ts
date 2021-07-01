@@ -3,9 +3,10 @@ import { Dispatch, SetStateAction } from 'react'
 import useShowingNotifications from 'hooks/use-showing-notifications'
 
 import { updateShowingsAppointmentState } from './helpers'
+import { sortAppointments } from '../../helpers'
 
 function useShowingsUpdateAppointmentNotifications(
-  setShowings: Dispatch<SetStateAction<IShowing[]>>
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 ): void {
   const handleShowingAppointmentCreate = (notification: INotification) => {
     const showingId: UUID = notification.objects[0].showing_id
@@ -35,7 +36,10 @@ function useShowingsUpdateAppointmentNotifications(
 
       const newShowings = [...showings]
 
-      newShowings.splice(showingIndex, 1, { ...showing, appointments })
+      newShowings.splice(showingIndex, 1, {
+        ...showing,
+        appointments: sortAppointments(appointments)
+      })
 
       return newShowings
     })
@@ -54,6 +58,7 @@ function useShowingsUpdateAppointmentNotifications(
       oldAppointment => ({
         ...oldAppointment,
         ...appointment,
+        showing: oldAppointment.showing,
         notifications: oldAppointment.notifications
           ? [...oldAppointment.notifications, notification]
           : [notification],

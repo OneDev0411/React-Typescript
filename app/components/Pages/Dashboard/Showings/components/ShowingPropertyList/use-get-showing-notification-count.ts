@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 type UseGetShowingNotificationCountReturn = Record<UUID, number>
 
 function useGetShowingNotificationCount(
-  showings: IShowing[]
+  showings: IShowing<'showing'>[]
 ): UseGetShowingNotificationCountReturn {
   return useMemo(
     () =>

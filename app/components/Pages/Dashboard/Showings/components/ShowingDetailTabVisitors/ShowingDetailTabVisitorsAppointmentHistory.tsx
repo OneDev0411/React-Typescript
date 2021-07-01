@@ -85,7 +85,7 @@ const useStyles = makeStyles(
 export interface ShowingDetailTabVisitorsAppointmentHistoryProps
   extends Omit<PopperProps, 'children'> {
   duration: IShowing['duration']
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
 }
 
 function ShowingDetailTabVisitorsAppointmentHistory({

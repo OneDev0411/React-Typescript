@@ -32,8 +32,8 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabVisitorsProps {
-  showing: IShowing
-  appointments: IShowingAppointment[]
+  showing: IShowing<'showing'>
+  appointments: IShowingAppointment<'showing'>[]
   showingBookingUrl?: string
 }
 

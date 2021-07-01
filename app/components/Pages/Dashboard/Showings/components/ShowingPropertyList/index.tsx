@@ -29,7 +29,7 @@ const useStyles = makeStyles(
 
 interface ShowingPropertyListProps {
   isLoading?: boolean
-  showings: IShowing[]
+  showings: IShowing<'showing'>[]
 }
 
 function ShowingPropertyList({
@@ -44,7 +44,7 @@ function ShowingPropertyList({
     goTo(`/dashboard/showings/${showingId}/detail`)
   }
 
-  const columns: TableColumn<IShowing>[] = [
+  const columns: TableColumn<IShowing<'showing'>>[] = [
     {
       id: 'property',
       width: '40%',

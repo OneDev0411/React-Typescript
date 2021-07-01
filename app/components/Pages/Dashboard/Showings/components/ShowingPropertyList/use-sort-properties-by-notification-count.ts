@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
 function useSortPropertiesByNotificationCount(
-  showings: IShowing[],
+  showings: IShowing<'showing'>[],
   showingNotificationCount: Record<UUID, number>
-): IShowing[] {
-  return useMemo<IShowing[]>(
+): IShowing<'showing'>[] {
+  return useMemo<IShowing<'showing'>[]>(
     () =>
       [...showings].sort((a, b) => {
         if (showingNotificationCount[a.id] > showingNotificationCount[b.id]) {

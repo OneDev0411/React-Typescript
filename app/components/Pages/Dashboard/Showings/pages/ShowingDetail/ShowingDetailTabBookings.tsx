@@ -14,8 +14,8 @@ const generateAppointmentFilterLink = (
 ) => `${location.pathname}?filter=${filter}`
 
 interface ShowingDetailTabBookingsProps {
-  appointments: IShowingAppointment[]
-  setShowing: Dispatch<SetStateAction<IShowing>>
+  appointments: IShowingAppointment<'showing'>[]
+  setShowing: Dispatch<SetStateAction<IShowing<'showing'>>>
   showingBookingUrl?: string
 }
 

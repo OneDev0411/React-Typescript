@@ -1,9 +1,12 @@
-declare interface IShowingAppointment
-  extends IModel<'showing_appointment'>,
+declare type IShowingAppointmentAssociations = 'showing'
+
+declare interface IShowingAppointment<
+  A extends IShowingAppointmentAssociations = ''
+> extends IModel<'showing_appointment'>,
     IBaseShowingAppointment {
-  showing: UUID | IShowing // TODO: make association like IPublicShowingAppointment
+  showing: A extends 'showing' ? IShowing : UUID
   contact: IContact
-  approvals: Nullable<IShowingApproval[]>
+  approvals: Nullable<IShowingApproval<'role'>[]>
   notifications: Nullable<INotification[]>
   feedback: Nullable<IShowingAppointmentFeedbackInput>
 }

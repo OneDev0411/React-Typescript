@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 
 type UseShowingGroupAppointmentByVisitorIdReturn = Record<
   UUID,
-  IShowingAppointment[]
+  IShowingAppointment<'showing'>[]
 >
 
 function useShowingGroupAppointmentByVisitorId(
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
 ): UseShowingGroupAppointmentByVisitorIdReturn {
   return useMemo(
     () =>

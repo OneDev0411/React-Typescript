@@ -7,7 +7,7 @@ import ShowingAppointmentFilterCard from './ShowingAppointmentFilterCard'
 export interface ShowingAppointmentFiltersProps {
   value?: AppointmentFilter
   onChange?: (value: AppointmentFilter) => void
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
   generateLink?: (filter: AppointmentFilter) => string
 }
 

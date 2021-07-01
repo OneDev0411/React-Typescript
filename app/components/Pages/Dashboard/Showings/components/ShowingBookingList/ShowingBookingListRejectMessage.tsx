@@ -12,7 +12,7 @@ interface PersonMessage {
 }
 
 export interface ShowingBookingListRejectMessageProps {
-  approvals?: Nullable<IShowingApproval[]>
+  approvals?: Nullable<IShowingApproval<'role'>[]>
   buyerName: string
   buyerMessage: Nullable<string>
   appointmentTitle?: string
@@ -39,7 +39,7 @@ function ShowingBookingListRejectMessage({
       return null
     }
 
-    const role = approval.role as IShowingRole
+    const role = approval.role
 
     return {
       role: getShowingRoleLabel(role.role),

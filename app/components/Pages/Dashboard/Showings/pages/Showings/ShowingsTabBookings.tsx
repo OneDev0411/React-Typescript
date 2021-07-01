@@ -10,7 +10,7 @@ import useShowingsUpdateAppointmentStatus from './use-showings-update-appointmen
 
 interface ShowingsTabBookingsProps
   extends Pick<ShowingFilteredBookingListProps, 'appointments'> {
-  setShowings: Dispatch<SetStateAction<IShowing[]>>
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 }
 
 function ShowingsTabBookings({

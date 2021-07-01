@@ -8,14 +8,18 @@ type UseShowingsUpdateAppointmentStatusReturn = (
 ) => void
 
 function useShowingsUpdateAppointmentStatus(
-  setShowings: Dispatch<SetStateAction<IShowing[]>>
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 ): UseShowingsUpdateAppointmentStatusReturn {
   return ({ appointmentId, appointment, showingId }: ApprovalActionParams) => {
     updateShowingsAppointmentState(
       setShowings,
       showingId,
       appointmentId,
-      () => appointment
+      oldAppointment => ({
+        ...oldAppointment,
+        ...appointment,
+        showing: oldAppointment.showing
+      })
     )
   }
 }

@@ -21,7 +21,7 @@ const useStyles = makeStyles(
 
 interface ShowingDetailTabVisitorsColumnTotalVisitProps
   extends Pick<ShowingDetailTabVisitorsAppointmentHistoryProps, 'duration'> {
-  appointments: Optional<IShowingAppointment[]>
+  appointments: Optional<IShowingAppointment<'showing'>[]>
 }
 
 function ShowingDetailTabVisitorsColumnTotalVisit({

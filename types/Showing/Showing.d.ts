@@ -1,4 +1,6 @@
-declare interface IShowing extends IModel<'showing'>, IBaseShowing {
+declare interface IShowing<A extends IShowingAppointmentAssociations = ''>
+  extends IModel<'showing'>,
+    IBaseShowing {
   aired_at?: string
   approval_type: IShowingApprovalType
   feedback_template?: IMarketingTemplateInstance
@@ -6,7 +8,7 @@ declare interface IShowing extends IModel<'showing'>, IBaseShowing {
   address?: IStdAddr
   gallery?: IMediaGallery
   roles: IShowingRole[]
-  appointments: Nullable<IShowingAppointment[]>
+  appointments: Nullable<IShowingAppointment<A>[]>
   allow_appraisal: boolean
   allow_inspection: boolean
   instructions?: string

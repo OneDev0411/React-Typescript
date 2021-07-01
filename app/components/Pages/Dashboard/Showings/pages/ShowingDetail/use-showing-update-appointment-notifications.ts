@@ -3,9 +3,10 @@ import { Dispatch, SetStateAction } from 'react'
 import useShowingNotifications from 'hooks/use-showing-notifications'
 
 import { updateAppointmentState } from './helpers'
+import { sortAppointments } from '../../helpers'
 
 function useShowingUpdateAppointmentNotifications(
-  setShowing: Dispatch<SetStateAction<IShowing>>
+  setShowing: Dispatch<SetStateAction<IShowing<'showing'>>>
 ): void {
   const handleShowingAppointmentCreate = (notification: INotification) => {
     setShowing(showing => {
@@ -27,7 +28,7 @@ function useShowingUpdateAppointmentNotifications(
 
       return {
         ...showing,
-        appointments
+        appointments: sortAppointments(appointments)
       }
     })
   }
@@ -35,7 +36,7 @@ function useShowingUpdateAppointmentNotifications(
   const handleShowingAppointmentRescheduleCancel = (
     notification: INotification
   ) => {
-    const appointment: IShowingAppointment = notification.objects[0]
+    const appointment: IShowingAppointment<'showing'> = notification.objects[0]
 
     updateAppointmentState(setShowing, appointment.id, oldAppointment => ({
       ...oldAppointment,

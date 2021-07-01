@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from 'react'
 
 export function updateAppointmentState(
-  setShowing: Dispatch<SetStateAction<IShowing>>,
+  setShowing: Dispatch<SetStateAction<IShowing<'showing'>>>,
   appointmentId: UUID,
-  modifier: (appointment: IShowingAppointment) => IShowingAppointment
+  modifier: (
+    appointment: IShowingAppointment<'showing'>
+  ) => IShowingAppointment<'showing'>
 ) {
   setShowing(showing => {
     if (!showing.appointments) {

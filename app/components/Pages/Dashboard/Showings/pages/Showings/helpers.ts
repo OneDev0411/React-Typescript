@@ -1,10 +1,12 @@
 import { Dispatch, SetStateAction } from 'react'
 
 export function updateShowingsAppointmentState(
-  setShowings: Dispatch<SetStateAction<IShowing[]>>,
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>,
   showingId: UUID,
   appointmentId: UUID,
-  modifier: (appointment: IShowingAppointment) => IShowingAppointment
+  modifier: (
+    appointment: IShowingAppointment<'showing'>
+  ) => IShowingAppointment<'showing'>
 ) {
   setShowings(showings => {
     const showingIndex = showings.findIndex(showing => showing.id === showingId)

@@ -24,7 +24,7 @@ const useStyles = makeStyles(
 export interface ShowingBookingListApprovalButtonProps
   extends Omit<ButtonProps, 'onClick' | 'children' | 'color'> {
   showing: IShowing
-  approvals?: Nullable<IShowingApproval[]>
+  approvals?: Nullable<IShowingApproval<'role'>[]>
   label: string
   onClick: (reason?: string) => void
   hasConfirmation?: boolean

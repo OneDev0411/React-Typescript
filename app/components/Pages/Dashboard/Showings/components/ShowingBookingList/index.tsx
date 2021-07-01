@@ -50,7 +50,7 @@ export interface ShowingBookingListProps
     ShowingBookingListColumnActionsProps,
     'onApprovalAction' | 'onDismissAction'
   > {
-  rows: IShowingAppointment[]
+  rows: IShowingAppointment<'showing'>[]
   emptyMessage: string
   hasPropertyColumn?: boolean
   hasPastBookingsFilter?: boolean
@@ -79,7 +79,7 @@ function ShowingBookingList({
   const classes = useStyles()
   const [showPastBookings, setShowPastBookings] = useState(false)
 
-  const columns: TableColumn<IShowingAppointment>[] = [
+  const columns: TableColumn<IShowingAppointment<'showing'>>[] = [
     {
       id: 'new',
       width: '24px',
@@ -121,7 +121,7 @@ function ShowingBookingList({
             render: ({ row }) => (
               <ShowingBookingListColumnDateTime
                 time={row.time}
-                duration={(row.showing as IShowing).duration}
+                duration={row.showing.duration}
               />
             )
           }
@@ -141,10 +141,7 @@ function ShowingBookingList({
             width: '15%',
             render: ({ row }) => (
               <ShowingBookingListColumnBase>
-                {getAppointmentTimeLabel(
-                  row.time,
-                  (row.showing as IShowing).duration
-                )}
+                {getAppointmentTimeLabel(row.time, row.showing.duration)}
               </ShowingBookingListColumnBase>
             )
           }
@@ -182,7 +179,7 @@ function ShowingBookingList({
         <ShowingBookingListColumnActions
           className={!row.notifications?.length ? classes.hide : undefined}
           status={row.status}
-          showing={row.showing as IShowing}
+          showing={row.showing}
           appointmentId={row.id}
           approvals={row.approvals}
           notifications={row.notifications}
@@ -202,7 +199,7 @@ function ShowingBookingList({
     setShowPastBookings(showPastBookings => !showPastBookings)
   }
 
-  const visibleRows = useMemo<IShowingAppointment[]>(() => {
+  const visibleRows = useMemo<IShowingAppointment<'showing'>[]>(() => {
     if (!hasPastBookingsFilter || showPastBookings) {
       return rows
     }

@@ -6,7 +6,7 @@ import type { BookingFilterType } from './ShowingAppointmentFilterCard'
 
 function useAppointmentFilters(
   filters: AppointmentFilter[],
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
 ): BookingFilterType[] {
   return useMemo<BookingFilterType[]>(
     () =>

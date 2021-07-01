@@ -10,7 +10,7 @@ import {
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
 const createStatusFilter = (status: IShowingAppointmentStatus) => (
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
 ) => appointments.filter(appointment => appointment.status === status)
 
 export const appointmentStatusInfo: Record<

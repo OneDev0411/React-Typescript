@@ -8,36 +8,43 @@ import useShowingsUpdateAppointmentNotifications from './use-showings-update-app
 
 interface UseGetShowingsReturn {
   isLoading: boolean
-  showings: IShowing[]
-  appointments: IShowingAppointment[]
-  setShowings: Dispatch<SetStateAction<IShowing[]>>
+  showings: IShowing<'showing'>[]
+  appointments: IShowingAppointment<'showing'>[]
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 }
 
 function useGetShowings(): UseGetShowingsReturn {
-  const { data: rows, isLoading, run, setData } = useAsync<IShowing[]>({
+  const { data: rows, isLoading, run, setData } = useAsync<
+    IShowing<'showing'>[]
+  >({
     data: [],
     status: 'pending'
   })
 
   useEffect(() => {
-    run(getShowings)
+    run(async () => {
+      const showings = await getShowings()
+
+      return showings.map(showing => ({
+        ...showing,
+        appointments: showing.appointments
+          ? showing.appointments.map(appointment => ({
+              ...appointment,
+              showing: {
+                ...showing,
+                appointments: null
+              }
+            }))
+          : null
+      }))
+    })
   }, [run])
 
   const appointments = useMemo(
     () =>
-      rows.reduce<IShowingAppointment[]>(
+      rows.reduce<IShowingAppointment<'showing'>[]>(
         (acc, showing) =>
-          showing.appointments
-            ? acc.concat(
-                showing.appointments.map(appointment => ({
-                  ...appointment,
-                  showing: {
-                    ...showing,
-                    appointments: null
-                  }
-                }))
-              )
-            : acc,
+          showing.appointments ? [...acc, ...showing.appointments] : acc,
         []
       ),
     [rows]

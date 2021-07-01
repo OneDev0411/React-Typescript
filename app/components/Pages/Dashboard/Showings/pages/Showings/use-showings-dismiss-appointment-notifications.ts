@@ -11,7 +11,7 @@ type UseShowingsDismissAppointmentNotifications = (
 ) => void
 
 function useShowingsDismissAppointmentNotifications(
-  setShowings: Dispatch<SetStateAction<IShowing[]>>
+  setShowings: Dispatch<SetStateAction<IShowing<'showing'>[]>>
 ): UseShowingsDismissAppointmentNotifications {
   const dispatch = useDispatch()
 

@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 
 import useAsync from 'hooks/use-async'
 
@@ -9,50 +9,46 @@ import useShowingUpdateAppointmentNotifications from './use-showing-update-appoi
 import { sortAppointments } from '../../helpers'
 
 interface UseGetShowingReturn {
-  showing: Nullable<IShowing>
+  showing: Nullable<IShowing<'showing'>>
   isLoading: boolean
-  setShowing: Dispatch<SetStateAction<Nullable<IShowing>>>
+  setShowing: Dispatch<SetStateAction<Nullable<IShowing<'showing'>>>>
 }
 
 function useGetShowing(showingId: UUID): UseGetShowingReturn {
-  const { data, run, error, isLoading, setData } = useAsync<Nullable<IShowing>>(
-    {
-      data: null,
-      status: 'pending'
-    }
-  )
+  const { data, run, error, isLoading, setData } = useAsync<
+    Nullable<IShowing<'showing'>>
+  >({
+    data: null,
+    status: 'pending'
+  })
 
   useEffect(() => {
     if (!error) {
-      run(async () => getShowing(showingId))
+      run(async () => {
+        const showing = await getShowing(showingId)
+
+        return {
+          ...showing,
+          appointments: showing.appointments
+            ? sortAppointments(
+                showing.appointments.map(appointment => ({
+                  ...appointment,
+                  showing: {
+                    ...showing,
+                    appointments: null
+                  }
+                }))
+              )
+            : null
+        }
+      })
     }
   }, [run, showingId, error])
-
-  const showing = useMemo<Nullable<IShowing>>(
-    () =>
-      data
-        ? {
-            ...data,
-            appointments: data.appointments
-              ? sortAppointments(
-                  data.appointments.map(appointment => ({
-                    ...appointment,
-                    showing: {
-                      ...data,
-                      appointments: null
-                    }
-                  }))
-                )
-              : null
-          }
-        : data,
-    [data]
-  )
 
   useShowingUpdateAppointmentNotifications(setData)
 
   return {
-    showing,
+    showing: data,
     isLoading,
     setShowing: setData
   }

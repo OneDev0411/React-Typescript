@@ -39,8 +39,8 @@ const useStyles = makeStyles(
 )
 
 interface ShowingDetailTabSettingsProps extends WithRouterProps {
-  showing: IShowing
-  setShowing: (showing: IShowing) => void
+  showing: IShowing<'showing'>
+  setShowing: (showing: IShowing<'showing'>) => void
 }
 
 function ShowingDetailTabSettings({
@@ -102,7 +102,7 @@ function ShowingDetailTabSettings({
   }
 
   const handleShowingUpdate = (
-    showing: IShowing,
+    showing: IShowing<'showing'>,
     updateShowingRef: boolean = false
   ) => {
     setShowing(showing)

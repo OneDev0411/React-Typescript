@@ -25,7 +25,7 @@ export interface ShowingFilteredBookingListProps
       | 'emptyDescription'
     >,
     WithRouterProps {
-  appointments: IShowingAppointment[]
+  appointments: IShowingAppointment<'showing'>[]
   generateLink: (filter: AppointmentFilter, location: Location) => string
 }
 

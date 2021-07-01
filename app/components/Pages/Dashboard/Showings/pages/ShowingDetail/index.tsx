@@ -27,7 +27,7 @@ type ShowingDetailProps = WithRouterProps<{
   id: UUID
 }>
 
-const defaultAppointments: IShowingAppointment[] = []
+const defaultAppointments: IShowingAppointment<'showing'>[] = []
 
 function ShowingDetail({ params }: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')

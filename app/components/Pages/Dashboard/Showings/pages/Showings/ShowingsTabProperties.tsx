@@ -1,7 +1,7 @@
 import ShowingPropertyList from '../../components/ShowingPropertyList'
 
 interface ShowingsTabPropertiesProps {
-  showings: IShowing[]
+  showings: IShowing<'showing'>[]
 }
 
 function ShowingsTabProperties(props: ShowingsTabPropertiesProps) {

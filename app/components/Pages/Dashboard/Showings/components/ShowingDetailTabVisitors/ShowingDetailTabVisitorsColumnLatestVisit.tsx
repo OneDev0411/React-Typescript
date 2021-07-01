@@ -12,7 +12,7 @@ import ShowingViewFeedbackButton from '../ShowingViewFeedbackButton'
 
 interface ShowingDetailTabVisitorsColumnLatestVisitProps {
   duration: number
-  appointment: Optional<IShowingAppointment>
+  appointment: Optional<IShowingAppointment<'showing'>>
 }
 
 function ShowingDetailTabVisitorsColumnLatestVisit({

@@ -8,7 +8,7 @@ declare interface IDeal extends IModel<'deal'> {
   deal_type: 'Selling' | 'Buying'
   checklists: IDealChecklist[]
   tasks: IDealTask[]
-  roles: IDealRole[]
+  roles: IDealRole[] | UUID[]
   listing: UUID | IListing
   files: IFile[] | null
   inboxes: string[] | null

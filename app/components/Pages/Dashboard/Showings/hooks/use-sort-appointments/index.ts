@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { sortAppointments } from '../../helpers'
 
 function useSortAppointments(
-  appointments: IShowingAppointment[]
-): IShowingAppointment[] {
+  appointments: IShowingAppointment<'showing'>[]
+): IShowingAppointment<'showing'>[] {
   return useMemo(() => sortAppointments(appointments), [appointments])
 }
 

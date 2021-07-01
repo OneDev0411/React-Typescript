@@ -113,8 +113,8 @@ export function hasInvalidTimeRange(
 }
 
 export function sortAppointments(
-  appointments: IShowingAppointment[]
-): IShowingAppointment[] {
+  appointments: IShowingAppointment<'showing'>[]
+): IShowingAppointment<'showing'>[] {
   return [...appointments].sort((a, b) => {
     const time1 = new Date(a.time)
     const time2 = new Date(b.time)
@@ -204,15 +204,14 @@ export function getAppointmentTimeLabel(
   )}`
 }
 
-export function getAppointmentTitle(appointment: IShowingAppointment): string {
+export function getAppointmentTitle(
+  appointment: IShowingAppointment<'showing'>
+): string {
   return [
-    (appointment.showing as IShowing).title,
+    appointment.showing.title,
     ' — ',
     getAppointmentDateLabel(appointment.time, 'MMMM DD'),
     ', ',
-    getAppointmentTimeLabel(
-      appointment.time,
-      (appointment.showing as IShowing).duration
-    )
+    getAppointmentTimeLabel(appointment.time, appointment.showing.duration)
   ].join('')
 }
