@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
-import { createAppointmentRequest } from 'models/showings/create-appointment-request'
+import { createAppointmentRequest } from 'models/showing/create-appointment-request'
 
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'

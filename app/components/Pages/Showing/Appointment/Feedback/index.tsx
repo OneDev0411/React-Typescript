@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { Container, Grid, makeStyles } from '@material-ui/core'
 
-import { sendAppointmentFeedback } from 'models/showings/send-appointment-feedback'
+import { sendAppointmentFeedback } from 'models/showing/send-appointment-feedback'
 
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
@@ -47,8 +47,9 @@ export default function ShowingAppointmentFeedback({
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const { isLoading, appointment } =
-    usePublicShowingAppointment(appointmentToken)
+  const { isLoading, appointment } = usePublicShowingAppointment(
+    appointmentToken
+  )
 
   const handleSubmitForm = async ({
     clientInterested,

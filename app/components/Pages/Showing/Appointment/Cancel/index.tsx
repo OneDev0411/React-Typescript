@@ -17,7 +17,7 @@ import { useForm, Controller } from 'react-hook-form'
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
 
-import { cancelAppointmentRequest } from 'models/showings/cancel-appointment-request'
+import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
 
 import InfoSection from '../../Sections/InfoSection'
 import DetailsSection from '../../Sections/DetailsSection'
@@ -60,8 +60,9 @@ export default function ShowingAppointmentCancel({
     mode: 'onChange'
   })
 
-  const { isLoading, appointment } =
-    usePublicShowingAppointment(appointmentToken)
+  const { isLoading, appointment } = usePublicShowingAppointment(
+    appointmentToken
+  )
 
   const handleSubmitCancelForm = async ({ message }: FormFields) => {
     const normalizedMessage = message.trim() || undefined

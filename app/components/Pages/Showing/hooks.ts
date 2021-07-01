@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import { getPublicShowing } from 'models/showings/get-public-showing'
-import { getPublicShowingAppointment } from 'models/showings/get-public-showing-appointment'
+import { getPublicShowing } from 'models/showing/get-public-showing'
+import { getPublicShowingAppointment } from 'models/showing/get-public-showing-appointment'
+
 import { useLoadingEntities } from 'hooks/use-loading'
 
 interface UsePublicShowing {
