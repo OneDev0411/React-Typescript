@@ -3,6 +3,8 @@ import { WithRouterProps } from 'react-router'
 
 import { Box } from '@material-ui/core'
 
+import { useTitle } from 'react-use'
+
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 
@@ -16,6 +18,8 @@ import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 
 function Listings({ params }: ListingsProps) {
+  useTitle('Listings | Rechat')
+
   const { tabs, tab } = useListingsTabs(params.brandId)
   const [search, setSearch] = useState('')
 
