@@ -35,6 +35,7 @@ interface Props {
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
   tourId?: string
+  disablePortal?: boolean
 }
 
 const styles = (theme: Theme) =>
@@ -96,6 +97,7 @@ export default function SplitButton(
         style={{ zIndex: theme.zIndex.modal }}
         placement={props.popperPlacement}
         transition
+        disablePortal={props.disablePortal}
       >
         {({ TransitionProps, placement }) => (
           <Grow
@@ -105,11 +107,13 @@ export default function SplitButton(
                 placement === 'bottom' ? 'center top' : 'center bottom'
             }}
           >
-            <ClickAwayListener onClickAway={handleClose}>
-              <Paper id="menu-list-grow">
-                {props.renderMenu({ closeMenu: handleClose })}
-              </Paper>
-            </ClickAwayListener>
+            <div>
+              <ClickAwayListener onClickAway={handleClose}>
+                <Paper id="menu-list-grow">
+                  {props.renderMenu({ closeMenu: handleClose })}
+                </Paper>
+              </ClickAwayListener>
+            </div>
           </Grow>
         )}
       </Popper>
