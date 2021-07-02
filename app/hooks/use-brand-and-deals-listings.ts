@@ -19,10 +19,13 @@ function useBrandAndDealsListings(brandId: UUID): UseBrandAndDealsListings {
   )
   const dealsListings = useDealsListings(brandListingsIds)
 
-  const listings =
-    brandListings && dealsListings
-      ? [...dealsListings, ...brandListings]
-      : defaultRows
+  const listings = useMemo(
+    () =>
+      brandListings && dealsListings
+        ? [...dealsListings, ...brandListings]
+        : defaultRows,
+    [brandListings, dealsListings]
+  )
 
   return {
     isLoading: !brandListings || !dealsListings,

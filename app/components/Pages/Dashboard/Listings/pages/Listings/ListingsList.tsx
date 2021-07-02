@@ -16,6 +16,7 @@ import ListingsListColumnActions, {
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
+import useListingsSearchRows from './use-listings-search-rows'
 
 const useStyles = makeStyles(
   theme => ({
@@ -34,11 +35,14 @@ const useStyles = makeStyles(
 interface ListingsListProps
   extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
   brandId: UUID
+  search: string
 }
 
-function ListingsList({ brandId, hasActions }: ListingsListProps) {
+function ListingsList({ brandId, hasActions, search }: ListingsListProps) {
   const classes = useStyles()
   const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
+
+  const resultRows = useListingsSearchRows(rows, search)
 
   const columns: TableColumn<ListingRow>[] = [
     {
@@ -102,15 +106,19 @@ function ListingsList({ brandId, hasActions }: ListingsListProps) {
 
   return (
     <Table
-      rows={rows}
-      totalRows={rows.length}
+      rows={resultRows}
+      totalRows={resultRows.length}
       columns={columns}
       loading={isLoading ? 'middle' : null}
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
       getTrProps={() => ({ className: classes.row })}
-      EmptyStateComponent={ListingsListEmptyState}
+      EmptyStateComponent={() => (
+        <ListingsListEmptyState
+          message={search ? 'No results' : 'There are no listings.'}
+        />
+      )}
     />
   )
 }

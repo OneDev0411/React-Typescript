@@ -1,6 +1,10 @@
 import { Box } from '@material-ui/core'
 
-function ListingsListEmptyState() {
+interface ListingsListEmptyStateProps {
+  message: string
+}
+
+function ListingsListEmptyState({ message }: ListingsListEmptyStateProps) {
   return (
     <Box
       height={400}
@@ -8,7 +12,7 @@ function ListingsListEmptyState() {
       alignItems="center"
       justifyContent="center"
     >
-      There are no listings.
+      {message}
     </Box>
   )
 }
