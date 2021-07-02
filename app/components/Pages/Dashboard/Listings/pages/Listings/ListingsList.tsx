@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core'
 
 import { Table } from '@app/views/components/Grid/Table'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
-import TableColumnProperty from '@app/views/components/TableColumnProperty'
 
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 
@@ -16,6 +15,7 @@ import ListingsListColumnActions, {
 } from './ListingsListColumnActions'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
+import ListingsListColumnProperty from './ListingsListColumnProperty'
 
 const useStyles = makeStyles(
   theme => ({
@@ -44,15 +44,16 @@ function ListingsList({ brandId, hasActions }: ListingsListProps) {
     {
       id: 'property',
       width: '30%',
-      primary: false,
+      primary: true,
       render: ({ row }) => (
-        <TableColumnProperty
+        <ListingsListColumnProperty
           image={row.cover_image_url || ''}
           address={
             row.type === 'compact_listing'
               ? row.address.street_address
               : row.property.address.street_address
           }
+          listingId={row.id}
         />
       )
     },
