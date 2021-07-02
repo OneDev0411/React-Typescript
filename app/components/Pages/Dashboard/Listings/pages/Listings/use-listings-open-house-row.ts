@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { OpenHouseRow } from './types'
 import useListingsOpenHouseRows from './use-listings-open-house-rows'
 
-type UseListingsOpenHouseRowReturn = Optional<OpenHouseRow>
+export type UseListingsOpenHouseRowReturn = Optional<OpenHouseRow>
 
 function useListingsOpenHouseRow(
   listingId: UUID

@@ -1,9 +1,9 @@
-import ListingsListColumnActionsMegaButton, {
-  ListingsListColumnActionsMegaButtonProps
-} from './ListingsListColumnActionsMegaButton'
+import ListingsListColumnActionsButton, {
+  ListingsListColumnActionsButtonProps
+} from './ListingsListColumnActionsButton'
 
 export interface ListingsListColumnActionsProps
-  extends Pick<ListingsListColumnActionsMegaButtonProps, 'row' | 'hasActions'> {
+  extends Pick<ListingsListColumnActionsButtonProps, 'row' | 'hasActions'> {
   className: string
 }
 
@@ -13,7 +13,7 @@ function ListingsListColumnActions({
 }: ListingsListColumnActionsProps) {
   return (
     <div className={className}>
-      <ListingsListColumnActionsMegaButton {...otherProps} />
+      <ListingsListColumnActionsButton {...otherProps} />
     </div>
   )
 }
