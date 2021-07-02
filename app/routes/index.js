@@ -731,12 +731,15 @@ const AsyncContexts = withAcl.admin(
 //  Listings
 /* ==================================== */
 
-const AsyncListingsList = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Listings/pages/Listings' /* webpackChunkName: "listings" */
-    )
-})
+const AsyncListingsList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Listings/pages/Listings' /* webpackChunkName: "listings" */
+      )
+  }),
+  { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
+)
 
 export default (
   <Route>
