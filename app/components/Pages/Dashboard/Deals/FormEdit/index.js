@@ -76,7 +76,8 @@ class EditDigitalForm extends React.Component {
       return true
     }
 
-    return 'Your work is not saved! Are you sure you want to leave?'
+    return `You have not saved your work! 
+    Could you please confirm that you want to leave?`
   }
 
   /**
