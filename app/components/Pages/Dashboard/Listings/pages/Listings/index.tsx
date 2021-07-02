@@ -6,7 +6,6 @@ import { Box } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
 import PageLayout from '@app/views/components/GlobalPageLayout'
-import LoadingContainer from '@app/views/components/LoadingContainer'
 
 import SearchTextField from '../../components/SearchTextField'
 
@@ -14,6 +13,7 @@ import ListingsTabs from './ListingsTabs'
 import ListingsList from './ListingsList'
 import useListingsTabs from './use-listings-tabs'
 import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
+import ListingsLoading from './ListingsLoading'
 
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 
@@ -44,17 +44,7 @@ function Listings({ params }: ListingsProps) {
             </ListingsOpenHouseProvider>
           </>
         ) : (
-          <Box height="600px">
-            <LoadingContainer
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-                padding: 0
-              }}
-            />
-          </Box>
+          <ListingsLoading />
         )}
       </PageLayout.Main>
     </PageLayout>
