@@ -6,11 +6,12 @@ import { Box } from '@material-ui/core'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 
+import SearchTextField from '../../components/SearchTextField'
+
 import ListingsTabs from './ListingsTabs'
 import ListingsList from './ListingsList'
 import useListingsTabs from './use-listings-tabs'
 import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
-import SearchTextField from '../components/SearchTextField'
 
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 
