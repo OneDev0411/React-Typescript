@@ -1,3 +1,3 @@
 export function isRetinaScreen(): boolean {
-  return window.devicePixelRatio === 2
+  return window.devicePixelRatio > 1
 }
