@@ -122,7 +122,11 @@ export function convertContactToRole(contact) {
     email: contact.email,
     phone_number: contact.phone_number,
     company: contact.company,
-    company_title: contact.company
+    company_title: contact.company,
+    current_address:
+      Array.isArray(contact.address) && contact.address.length > 0
+        ? contact.address[0]
+        : null
   }
 }
 

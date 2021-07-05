@@ -97,6 +97,37 @@ const EventCardComponent = ({
     onClose()
   }
 
+  const renderFollowUpModal = () => {
+    const baseDate = new Date(rowEvent.timestamp * 1000)
+
+    if (rowEvent.all_day) {
+      baseDate.setFullYear(
+        baseDate.getUTCFullYear(),
+        baseDate.getUTCMonth(),
+        baseDate.getUTCDate()
+      )
+      baseDate.setHours(baseDate.getUTCHours(), baseDate.getUTCMinutes(), 0, 0)
+    }
+
+    return (
+      <FollowUpModal
+        isOpen
+        dictionary={{
+          description:
+            'Never forget an event, put a reminder on your calendar now!',
+          taskTitle: () => `Follow Up: ${event.event.title}`,
+          taskDescription: (item, dueDate) =>
+            `This is a follow up reminder ${
+              event.event.title
+            } set in Rechat, on ${fecha.format(dueDate, 'dddd MMMM Do, YYYY')}.`
+        }}
+        baseDate={baseDate}
+        onClose={onCloseFollowUpModal}
+        callback={e => onChange(e, 'created')}
+      />
+    )
+  }
+
   return (
     <>
       <Popover
@@ -181,26 +212,7 @@ const EventCardComponent = ({
           </footer>
         </div>
       </Popover>
-      {isFollowUpModalOpen && (
-        <FollowUpModal
-          isOpen
-          dictionary={{
-            description:
-              'Never forget an event, put a reminder on your calendar now!',
-            taskTitle: () => `Follow Up: ${event.event.title}`,
-            taskDescription: (item, dueDate) =>
-              `This is a follow up reminder ${
-                event.event.title
-              } set in Rechat, on ${fecha.format(
-                dueDate,
-                'dddd MMMM Do, YYYY'
-              )}.`
-          }}
-          baseDate={new Date(rowEvent.timestamp * 1000)}
-          onClose={onCloseFollowUpModal}
-          callback={e => onChange(e, 'created')}
-        />
-      )}
+      {isFollowUpModalOpen && renderFollowUpModal()}
     </>
   )
 }

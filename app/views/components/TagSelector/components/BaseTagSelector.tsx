@@ -14,6 +14,7 @@ import Autocomplete, {
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
 import { selectExistingTags } from 'selectors/contacts'
 
+import { normalizeTags, getTagKeys } from './utils'
 import { SelectorOption } from '../type'
 
 const filter = createFilterOptions<SelectorOption>({
@@ -36,19 +37,19 @@ export const BaseTagSelector = ({
 }: Props) => {
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
   const [availableTags, setAvailableTags] = useState<SelectorOption[]>([])
+  const [availableTagKeys, setAvailableTagKeys] = useState<string[]>([])
   const existingTags = useSelector(selectExistingTags)
+  const selectedTagKeys = useMemo(
+    () => selectedTags.map(tag => tag.value?.toLowerCase()),
+    [selectedTags]
+  )
 
   useEffectOnce(() => {
-    const normalizeTags = tags =>
-      tags.map(tag => ({
-        value: tag.tag,
-        title: tag.text
-      }))
-
     async function fetchTags() {
       try {
         const response = await getContactsTags()
 
+        setAvailableTagKeys(getTagKeys(response.data))
         setAvailableTags(normalizeTags(response.data))
       } catch (error) {
         console.log(error)
@@ -58,6 +59,7 @@ export const BaseTagSelector = ({
     if (existingTags.length === 0) {
       fetchTags()
     } else {
+      setAvailableTagKeys(getTagKeys(existingTags))
       setAvailableTags(normalizeTags(existingTags))
     }
   })
@@ -92,50 +94,74 @@ export const BaseTagSelector = ({
         />
       )}
       onChange={(event, value: SelectorOption[]) => {
-        let newValue: SelectorOption[] = [...value]
+        let newValues: SelectorOption[] = [...value]
         let hasNewTag = false
 
-        if (newValue.length > 0) {
+        if (newValues.length > 0) {
           // get last item as new value
-          const lastValue: SelectorOption = newValue[newValue.length - 1]
+          const lastValue: SelectorOption = newValues[newValues.length - 1]
 
           if (lastValue.isNewTag) {
             hasNewTag = true
           }
 
-          let normalizedLastValue: SelectorOption | null = null
+          let tagValue = ''
 
           if (typeof lastValue === 'string') {
-            normalizedLastValue = {
-              value: lastValue,
-              title: lastValue
-            }
-          } else if (lastValue && lastValue.inputValue) {
-            // Create a new value from the user input
-            normalizedLastValue = {
-              value: lastValue.inputValue,
-              title: lastValue.inputValue
-            }
+            tagValue = (lastValue as string).trim()
+          } else if (lastValue && lastValue.value) {
+            tagValue = lastValue.value.trim()
+          }
+
+          let normalizedLastValue: SelectorOption = {
+            value: tagValue,
+            title: tagValue
           }
 
           if (normalizedLastValue) {
-            newValue = [
-              ...newValue.splice(0, newValue.length - 1),
+            if (
+              /*
+               we're doing ts-ignore because the type of event is set to
+               ChangeEvent which keyCode doesn't exist there so
+               it cause error but if user press some key like
+               enter the keyCode value would be there in
+               event object so we need for checking it
+              */
+              // @ts-ignore
+              event.keyCode === 13 && // avoid set tag on enter if tag exist
+              normalizedLastValue.value &&
+              selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
+            ) {
+              return
+            }
+
+            if (hasNewTag && normalizedLastValue.value) {
+              setAvailableTagKeys([
+                ...availableTagKeys,
+                normalizedLastValue.value.toLowerCase()
+              ])
+            }
+
+            newValues = [
+              ...newValues.splice(0, newValues.length - 1),
               normalizedLastValue
             ]
           }
         }
 
-        setSelectedTags(newValue)
-        onChange(newValue, hasNewTag)
+        setSelectedTags(newValues)
+        onChange(newValues, hasNewTag)
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params)
 
         // Suggest the creation of a new value
-        if (params.inputValue !== '') {
+        if (
+          params.inputValue !== '' &&
+          !availableTagKeys.includes(params.inputValue.trim().toLowerCase())
+        ) {
           filtered.push({
-            inputValue: params.inputValue,
+            value: params.inputValue,
             title: `Add "${params.inputValue}"`,
             isNewTag: true
           })
