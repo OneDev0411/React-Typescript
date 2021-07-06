@@ -97,6 +97,13 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     const roleCache: Record<string, boolean> = {}
 
     roles.forEach(role => {
+      if (role.role === 'SellerAgent' && !role.user) {
+        errors[`role-${role.id}`] =
+          'You need to select one of the available people from the menu.'
+
+        return
+      }
+
       if (
         !role.first_name ||
         !role.last_name ||
