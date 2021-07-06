@@ -47,18 +47,20 @@ interface Props {
 export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const backdropTimeout = useRef(0)
+  const backdropTimeout = useRef<Nullable<Timeout>>(null)
   const [selectedAgent, setSelectedAgent] = useState<IAgent | null>(null)
 
   useEffect(() => {
     return () => {
-      clearTimeout(backdropTimeout.current)
+      if (backdropTimeout.current) {
+        clearTimeout(backdropTimeout.current)
+      }
     }
   }, [])
 
   const hide = () => {
     onHide()
-    backdropTimeout.current = setTimeout(
+    backdropTimeout.current = window.setTimeout(
       () => setSelectedAgent(null),
       BACKDROP_TIMEOUT
     )
