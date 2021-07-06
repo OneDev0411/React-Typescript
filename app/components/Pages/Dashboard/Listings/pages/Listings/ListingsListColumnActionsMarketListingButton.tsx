@@ -1,18 +1,24 @@
-import { Button, ButtonProps } from '@material-ui/core'
+import { ButtonProps } from '@material-ui/core'
 
-type ListingsListColumnActionsMarketListingButtonProps = Omit<
-  ButtonProps,
-  'onClick' | 'children'
->
+import LinkButton from '@app/views/components/LinkButton'
 
-function ListingsListColumnActionsMarketListingButton(
-  props: ListingsListColumnActionsMarketListingButtonProps
-) {
+interface ListingsListColumnActionsMarketListingButtonProps
+  extends Omit<ButtonProps, 'onClick' | 'children'> {
+  listingId: UUID
+}
+
+function ListingsListColumnActionsMarketListingButton({
+  listingId,
+  ...otherProps
+}: ListingsListColumnActionsMarketListingButtonProps) {
   return (
-    <Button {...props} onClick={() => alert('The action is not implemented')}>
-      {/* TODO: Connect this to Mamal's page */}
+    <LinkButton
+      {...otherProps}
+      to={`/dashboard/mls/${listingId}/marketing`}
+      target="_blank"
+    >
       Market Listing
-    </Button>
+    </LinkButton>
   )
 }
 

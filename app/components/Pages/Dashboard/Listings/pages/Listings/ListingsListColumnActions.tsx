@@ -46,6 +46,7 @@ function ListingsListColumnActions({
         className={classes.button}
         variant="outlined"
         size="small"
+        listingId={row.id}
       />
       <ListingsListColumnActionsMoreButton
         className={classes.button}
