@@ -155,10 +155,12 @@ export const BaseTagSelector = ({
       filterOptions={(options, params) => {
         const filtered = filter(options, params)
 
+        const allTagKeys = [...availableTagKeys, ...selectedTagKeys]
+
         // Suggest the creation of a new value
         if (
           params.inputValue !== '' &&
-          !availableTagKeys.includes(params.inputValue.trim().toLowerCase())
+          !allTagKeys.includes(params.inputValue.trim().toLowerCase())
         ) {
           filtered.push({
             value: params.inputValue,
