@@ -17,6 +17,7 @@ import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
 import useListingsSearchRows from './use-listings-search-rows'
+import useListingsListSort from './use-listings-list-sort'
 
 const useStyles = makeStyles(
   theme => ({
@@ -43,6 +44,7 @@ function ListingsList({ brandId, hasActions, search }: ListingsListProps) {
   const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
 
   const resultRows = useListingsSearchRows(rows, search)
+  const sortedRows = useListingsListSort(resultRows)
 
   const columns: TableColumn<ListingRow>[] = [
     {
@@ -106,8 +108,8 @@ function ListingsList({ brandId, hasActions, search }: ListingsListProps) {
 
   return (
     <Table
-      rows={resultRows}
-      totalRows={resultRows.length}
+      rows={sortedRows}
+      totalRows={sortedRows.length}
       columns={columns}
       loading={isLoading ? 'middle' : null}
       LoadingStateComponent={() => (
