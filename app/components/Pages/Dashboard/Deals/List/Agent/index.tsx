@@ -15,6 +15,10 @@ import { selectUser } from 'selectors/user'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
+import {
+  getUrlSearchParam,
+  setUrlSearchParam
+} from '../helpers/url-search-param'
 
 import Grid from './Grid'
 import TabFilters from './Filters'
@@ -37,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function AgentTable(props: WithRouterProps) {
-  const [searchCriteria, setSearchCriteria] = useState('')
+  const [searchCriteria, setSearchCriteria] = useState(getUrlSearchParam())
   const classes = useStyles()
 
   const dispatch = useDispatch()
@@ -46,15 +50,6 @@ export default function AgentTable(props: WithRouterProps) {
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const user = useSelector(selectUser)
-
-  const handleQueryChange = value => {
-    if (isFetchingDeals) {
-      return
-    }
-
-    setSearchCriteria(value)
-    fetch(user, value)
-  }
 
   const fetch = useCallback(
     (user: IUser, searchCriteria: string) => {
@@ -67,12 +62,23 @@ export default function AgentTable(props: WithRouterProps) {
     [dispatch]
   )
 
+  const handleQueryChange = (value: string) => {
+    if (isFetchingDeals) {
+      return
+    }
+
+    setUrlSearchParam(value)
+    setSearchCriteria(value)
+    fetch(user, value)
+  }
+
   return (
     <PageLayout>
       <PageLayout.Header title="My deals">
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
+            defaultValue={searchCriteria}
             onChange={handleQueryChange}
           />
 

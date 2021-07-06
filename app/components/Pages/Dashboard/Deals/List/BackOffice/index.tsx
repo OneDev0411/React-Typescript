@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
@@ -24,6 +24,10 @@ import { SearchQuery } from './types'
 import { getStaticFilterQuery } from './utils/get-static-filter-query'
 
 import Grid from './Grid'
+import {
+  getUrlSearchParam,
+  setUrlSearchParam
+} from '../helpers/url-search-param'
 
 interface StateProps {
   user: IUser
@@ -58,15 +62,15 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
   }))
 
   const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [searchCriteria, setSearchCriteria] = useState(getUrlSearchParam())
 
-  const [searchCriteria, setSearchCriteria] = useState('')
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
     term: searchCriteria
   }
 
-  const handleQueryChange = (value): void => {
+  const handleQueryChange = (value: string): void => {
     setSearchCriteria(value)
 
     if (value.length === 0) {
@@ -76,11 +80,17 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     if (value.length > 3 && searchQuery.type === 'inbox') {
       dispatch(searchDeals(user, value))
     }
+
+    setUrlSearchParam(value)
   }
 
   useDeepCompareEffect(() => {
     if (searchQuery.type === 'query' && statuses.length > 0) {
       dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+    }
+
+    if (searchQuery.type === 'inbox') {
+      dispatch(searchDeals(user, searchQuery.term))
     }
   }, [dispatch, searchQuery, statuses, user])
 
@@ -90,6 +100,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
+            defaultValue={searchCriteria}
             onChange={handleQueryChange}
           />
 
