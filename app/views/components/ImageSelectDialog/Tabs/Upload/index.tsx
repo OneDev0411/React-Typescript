@@ -1,18 +1,33 @@
-import React from 'react'
+import { useState } from 'react'
 import { useDropzone } from 'dropzone'
-import { Box, Typography, Divider, Button, useTheme } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Divider,
+  Button,
+  useTheme
+} from '@material-ui/core'
 
 import { UploadableImageTabProps } from '../../types'
 
 export default function Upload({ onSelectFile }: UploadableImageTabProps) {
   const theme = useTheme()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const onDrop = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
       return
     }
 
-    onSelectFile(acceptedFiles[0])
+    try {
+      setIsLoading(true)
+      await onSelectFile(acceptedFiles[0])
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -20,6 +35,22 @@ export default function Upload({ onSelectFile }: UploadableImageTabProps) {
     multiple: false,
     accept: 'image/*'
   })
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+      >
+        <div>
+          <CircularProgress />
+        </div>
+      </Box>
+    )
+  }
 
   return (
     <Box
