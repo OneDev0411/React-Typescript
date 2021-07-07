@@ -90,6 +90,7 @@ export class RoleAgentIntegration extends React.Component {
 
   onSelectAgent = agents => {
     const { agent: user, contacts: relatedContacts = [] } = agents[0]
+    const shouldSetBrand = this.getShouldSelectRoleFromAgentsList()
 
     let newState
 
@@ -105,7 +106,7 @@ export class RoleAgentIntegration extends React.Component {
         role: {
           agent,
           email,
-          brand: this.isOfficeDoubleEnded ? null : user.brand_id,
+          brand: shouldSetBrand ? user.brand_id : null,
           legal_last_name: last_name,
           legal_first_name: first_name,
           phone_number: phone_number || work_phone,
@@ -118,7 +119,9 @@ export class RoleAgentIntegration extends React.Component {
     if (relatedContacts.length > 0) {
       let role = {
         ...convertContactToRole(relatedContacts[0], this.props.attributeDefs),
-        brand: this.isOfficeDoubleEnded ? null : user.brand_id,
+        legal_last_name: last_name,
+        legal_first_name: first_name,
+        brand: shouldSetBrand ? user.brand_id : null,
         phone_number: phone_number || work_phone,
         company_title: office ? office.name : ''
       }

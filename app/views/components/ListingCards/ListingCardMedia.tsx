@@ -1,7 +1,12 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import { fade, makeStyles, Theme } from '@material-ui/core'
-import { Slide } from 'react-slideshow-image'
-import 'react-slideshow-image/dist/styles.css'
+import cn from 'classnames'
+import { makeStyles, Theme } from '@material-ui/core'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+import SwiperCore, { Lazy, Navigation } from 'swiper/core'
+
+SwiperCore.use([Lazy, Navigation])
 
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 
@@ -23,45 +28,31 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      backgroundColor: theme.palette.grey[100],
-
-      // Arrow keys style overrides
-      '& button.default-nav': {
-        zIndex: 3,
-        backgroundColor: 'transparent !important',
-
-        '&:first-of-type': {
-          transform: 'translateX(8px)'
-        },
-
-        '&:last-of-type': {
-          transform: 'translateX(-8px)'
-        },
-
-        '& svg': {
-          filter: `drop-shadow(0px 1px 4px ${fade(
-            theme.palette.text.primary,
-            0.8
-          )})`
-        },
-
-        '& path': {
-          fill: theme.palette.common.white
-        }
-      }
+      backgroundColor: theme.palette.grey[100]
     },
     childrenContainer: {
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 2,
       width: '100%',
-      height: '100%'
+      top: 0,
+      left: 0
     },
     image: ({ listing }: Pick<Props, 'listing'>) => ({
       height: 200,
       width: '100%',
       objectFit: getListingImageObjectFit(listing),
       backgroundColor: theme.palette.grey[100]
-    })
+    }),
+    placeHolder: {
+      height: 200,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    swiper: {
+      height: 200,
+      '--swiper-navigation-color': '#fff'
+    }
   }),
   {
     name: 'ListingCardMedia'
@@ -75,6 +66,7 @@ interface Props {
 
 export default function ListingCardMedia({ children, listing }: Props) {
   const images = getListingImages(listing)
+
   const classes = useStyles({ listing })
 
   return (
@@ -86,9 +78,8 @@ export default function ListingCardMedia({ children, listing }: Props) {
         const targetElement = e.target as HTMLElement
 
         if (
-          targetElement.classList.contains('default-nav') ||
-          targetElement.tagName.toLowerCase() === 'path' ||
-          targetElement.tagName.toLowerCase() === 'svg'
+          targetElement.classList.contains('swiper-button-next') ||
+          targetElement.classList.contains('swiper-button-prev')
         ) {
           e.stopPropagation()
         }
@@ -96,13 +87,30 @@ export default function ListingCardMedia({ children, listing }: Props) {
     >
       <div className={classes.childrenContainer}>{children}</div>
       {images.length > 1 ? (
-        <Slide canSwipe={false} transitionDuration={200} autoplay={false}>
-          {images.map(image => (
-            <div key={image}>
-              <img className={classes.image} src={image} alt="listing" />
-            </div>
+        <Swiper
+          lazy
+          navigation
+          className={classes.swiper}
+          preloadImages={false}
+        >
+          {images.map((image, index) => (
+            // we have images with identical names so we can't use only image as key
+            <SwiperSlide key={`${index}-${image}`}>
+              <img
+                className={cn('swiper-lazy', classes.image)}
+                data-src={image}
+                alt=""
+              />
+              <div
+                className={cn(
+                  classes.placeHolder,
+                  'swiper-lazy-preloader',
+                  'swiper-lazy-preloader-white'
+                )}
+              />
+            </SwiperSlide>
           ))}
-        </Slide>
+        </Swiper>
       ) : (
         <div>
           <img className={classes.image} src={images[0]} alt="listing" />

@@ -34,7 +34,9 @@ const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
 
 export function RoleForm(props) {
-  const [showNameDetails, setShowNameDetails] = useState(false)
+  const [showNameDetails, setShowNameDetails] = useState(
+    props.values.legal_prefix || props.values.legal_middle_name
+  )
 
   const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)

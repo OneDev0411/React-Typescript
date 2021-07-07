@@ -23,5 +23,5 @@ export interface SearchableImageTabProps {
 }
 
 export interface UploadableImageTabProps {
-  onSelectFile: (file: File) => void
+  onSelectFile: (file: File) => Promise<void>
 }

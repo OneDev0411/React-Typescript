@@ -73,6 +73,10 @@ export function NameInput({
               phone_numbers: getOptionsByAttributeType(contact, 'phone_number'),
               emails: getOptionsByAttributeType(contact, 'email'),
               companies: getOptionsByAttributeType(contact, 'company'),
+              current_address:
+                Array.isArray(contact.address) && contact.address.length > 0
+                  ? contact.address[0]
+                  : null,
               value: (contact[searchFieldValue] || '') as string,
               label: (contact[searchFieldLabel] || '') as string
             }))

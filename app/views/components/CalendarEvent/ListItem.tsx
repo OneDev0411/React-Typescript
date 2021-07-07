@@ -57,10 +57,12 @@ export default function CalendarEventListItem({ event }: Props) {
   const classes = useStyles()
 
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
-    useState<boolean>(false)
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<Nullable<IBrandMarketingTemplate>>(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
+    false
+  )
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
