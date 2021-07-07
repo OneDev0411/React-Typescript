@@ -108,7 +108,15 @@ export const BaseTagSelector = ({
           let tagValue = ''
 
           if (typeof lastValue === 'string') {
-            tagValue = (lastValue as string).trim()
+            const baseValue = (lastValue as string).trim()
+            const originalTitle = availableTagKeys.indexOf(
+              baseValue.toLowerCase()
+            )
+
+            tagValue =
+              originalTitle >= 0
+                ? availableTags[originalTitle].value!
+                : baseValue
           } else if (lastValue && lastValue.value) {
             tagValue = lastValue.value.trim()
           }
