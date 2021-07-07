@@ -90,7 +90,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     }
 
     if (hasTimeConflicts(availabilities)) {
-      errors.availabilities = 'The time slots has conflicts'
+      errors.availabilities = 'The time slots have conflicts'
     } else if (hasInvalidTimeRange(availabilities, duration)) {
       errors.availabilities = 'Invalid time ranges'
     }

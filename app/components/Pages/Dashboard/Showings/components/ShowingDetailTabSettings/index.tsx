@@ -115,7 +115,7 @@ function ShowingDetailTabSettings({
 
     if (showing.availabilities !== showingRef.current.availabilities) {
       if (hasTimeConflicts(showing.availabilities)) {
-        errors.Availability = 'The time slots has conflicts'
+        errors.Availability = 'The time slots have conflicts'
       } else if (
         hasInvalidTimeRange(showing.availabilities, showing.duration)
       ) {
