@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
@@ -11,40 +11,6 @@ export const Description = styled.h2`
   font-weight: normal;
   color: #4a4a4a;
   margin: 0 1.5rem;
-`
-
-export const RowContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0.5rem 0;
-  transition: background-color 1s ease-in;
-
-  ${({ highlight, theme }) =>
-    highlight &&
-    css`
-      background-color: ${theme.palette.grey[50]};
-    `}
-`
-
-export const ItemsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-
-  > div {
-    padding: 0;
-    display: flex;
-    align-items: center;
-  }
-`
-
-export const RowTitle = styled.h6`
-  color: ${({ theme }) => theme.palette.grey[600]};
-  font-size: 1rem;
-  line-height: 1.5rem;
-  margin: auto 1.5rem;
-  min-width: 1.3125rem;
 `
 
 export const TextInputSuffix = styled.button`

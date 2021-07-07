@@ -52,6 +52,8 @@ class ManageTags extends Component {
     try {
       const response = await getContactsTags()
 
+      console.log({ dd: response })
+
       const rawTags = response.data.map(({ text }) => ({
         text,
         highlight: false
@@ -84,6 +86,8 @@ class ManageTags extends Component {
   }
 
   getTagRows = rawTags => {
+    console.log({ rawTags })
+
     const rows = {}
 
     rawTags.forEach(tag => {
