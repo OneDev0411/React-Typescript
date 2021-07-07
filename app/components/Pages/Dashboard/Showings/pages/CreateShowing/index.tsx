@@ -129,7 +129,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         .trim()
 
       if (roleCache[roleCacheKey]) {
-        errors[`role-${role.id}`] = 'Please role information is duplicated'
+        errors[`role-${role.id}`] = 'Role information is duplicated'
       }
 
       roleCache[roleCacheKey] = true
