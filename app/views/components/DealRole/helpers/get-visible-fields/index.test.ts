@@ -16,6 +16,5 @@ describe('Test Deal Role get-visible-fields helper', () => {
     })
 
     expect(visibleFields).toContainEqual('current_address')
-    expect(visibleFields).toContainEqual('future_address')
   })
 })

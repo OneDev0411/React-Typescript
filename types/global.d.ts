@@ -6,3 +6,6 @@ declare interface Window {
   INTERCOM_ID: string
   AppcuesReady: (callback: any) => void
 }
+
+declare type Timeout = ReturnType<typeof setTimeout>
+declare type Interval = ReturnType<typeof setInterval>
