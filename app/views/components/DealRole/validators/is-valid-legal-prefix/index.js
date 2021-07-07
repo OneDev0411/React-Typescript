@@ -6,5 +6,9 @@ export function isValidLegalPrefix(prefix, requiredFields) {
     return true
   }
 
-  return ['Mr.', 'Ms.', 'Mrs.', 'Miss', 'Dr.'].includes(prefix)
+  return isValidNameTitle(prefix)
+}
+
+export function isValidNameTitle(title) {
+  return ['Mr.', 'Ms.', 'Mrs.', 'Miss.', 'Dr.'].includes(title)
 }

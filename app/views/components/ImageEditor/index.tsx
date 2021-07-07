@@ -82,7 +82,7 @@ interface Props {
   file: File | string
   dimensions?: [number, number]
   onClose: () => void
-  onSave: (image: Blob) => void
+  onSave: (image: File) => void
 }
 
 export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
