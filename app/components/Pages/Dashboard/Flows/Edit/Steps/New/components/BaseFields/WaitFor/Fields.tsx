@@ -48,7 +48,7 @@ const unitOptions = [
 ]
 
 export const defaultWaitForValue: RawWaitFor = {
-  value: 1,
+  value: 0,
   unit: 'days',
   triggerAt: 'after'
 }
