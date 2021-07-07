@@ -22,14 +22,8 @@ function ShowingDetailTabs({ value, id }: ShowingDetailTabsProps) {
       to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Visitors}`}
       label="Visitors"
     />,
-    // <TabLink
-    //   key={3}
-    //   value={showingDetailTabs.Feedback}
-    //   to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Feedback}`}
-    //   label="Feedback"
-    // />,
     <TabLink
-      key={4}
+      key={3}
       value={showingDetailTabs.Settings}
       to={`/dashboard/showings/${id}/detail/${showingDetailTabs.Settings}`}
       label="Settings"

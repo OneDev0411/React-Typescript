@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 
 import { InjectedRouter, Route } from 'react-router'
 
+import { useTitle } from 'react-use'
+
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
 
@@ -41,6 +43,8 @@ interface CreateShowingProps {
 }
 
 function CreateShowing({ router, route }: CreateShowingProps) {
+  useTitle('Create New Showing | Rechat')
+
   const teamId = useSelector(selectActiveTeamId)
 
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
@@ -87,11 +91,8 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
     if (hasTimeConflicts(availabilities)) {
       errors.availabilities = 'The time slots has conflicts'
-    }
-
-    if (hasInvalidTimeRange(availabilities, duration)) {
-      errors.availabilities =
-        'The "From" value must be earlier than the "To" value'
+    } else if (hasInvalidTimeRange(availabilities, duration)) {
+      errors.availabilities = 'Invalid time ranges'
     }
 
     const roleCache: Record<string, boolean> = {}

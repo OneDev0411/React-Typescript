@@ -119,7 +119,7 @@ function ShowingDetailTabSettings({
       } else if (
         hasInvalidTimeRange(showing.availabilities, showing.duration)
       ) {
-        errors.Availability = 'Invalid time range'
+        errors.Availability = 'Invalid time ranges'
       }
     }
 
