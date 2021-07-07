@@ -1,0 +1,8 @@
+@import '../../../../node_modules/swiper/swiper.scss';
+@import '../../../../node_modules/swiper/components/navigation/navigation.scss';
+@import '../../../../node_modules/swiper/components/lazy/lazy.scss';
+
+:root {
+  --swiper-navigation-size: 1rem;
+  --swiper-navigation-color: #3A3B3E; // grey.800;
+}
