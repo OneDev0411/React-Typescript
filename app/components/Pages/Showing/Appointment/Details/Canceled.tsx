@@ -4,12 +4,12 @@ import {
   Step,
   StepLabel,
   Typography,
-  useTheme,
-  useMediaQuery
+  useTheme
 } from '@material-ui/core'
 import { mdiCheck, mdiExclamation } from '@mdi/js'
 import cn from 'classnames'
 
+import useIsMobile from '@app/hooks/use-is-mobile'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import StepConnector from './StepConnector'
@@ -23,13 +23,13 @@ interface Props {
 export default function ShowingAppointmentCanceled({ appointment }: Props) {
   const classes = useShowingAppointmentStatusDetailsStyles()
   const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobile = useIsMobile()
 
   return (
     <Stepper
       orientation="vertical"
       className={classes.stepper}
-      connector={isSmallScreen ? <Box py={2} px={1} /> : <StepConnector />}
+      connector={isMobile ? <Box py={2} px={1} /> : <StepConnector />}
       activeStep={1}
     >
       <Step>
