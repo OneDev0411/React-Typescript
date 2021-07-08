@@ -170,7 +170,7 @@ class Search extends React.Component {
     this.setState({ isMapInitialized: true })
   }
 
-  goToCurrentPosition = (lat, lng) => {
+  initUserLocation = (lat, lng) => {
     this.setState(
       {
         firstRun: false,
