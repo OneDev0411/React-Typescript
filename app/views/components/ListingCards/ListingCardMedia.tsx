@@ -51,7 +51,12 @@ const useStyles = makeStyles(
     },
     swiper: {
       height: 200,
-      '--swiper-navigation-color': '#fff'
+      '--swiper-navigation-color': '#fff',
+      // Had to add more clickable area this way
+      '.swiper-button-prev, .swiper-button-next': {
+        top: `calc(50% - ${theme.spacing(2.5)})`,
+        padding: theme.spacing(5)
+      }
     }
   }),
   {
