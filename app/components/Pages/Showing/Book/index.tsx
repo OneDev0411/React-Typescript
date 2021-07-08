@@ -1,12 +1,10 @@
-import { WithRouterProps } from 'react-router'
-import { useDispatch } from 'react-redux'
+import { WithRouterProps, browserHistory } from 'react-router'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
-import { browserHistory } from 'react-router'
 
 import { createAppointmentRequest } from 'models/showing/create-appointment-request'
 
+import useNotify from '@app/hooks/use-notify'
 import LoadingContainer from 'components/LoadingContainer'
-import { addNotification } from 'components/notification'
 
 import InfoSection from '../Sections/InfoSection'
 import BookSection from './Sections/BookSection'
@@ -38,7 +36,7 @@ export default function BookShowing({
 }: WithRouterProps<RouteParams>) {
   const id = Number(slugAndId.split('-').pop())
 
-  const dispatch = useDispatch()
+  const notify = useNotify()
   const classes = useStyles()
   const { showing, isLoading } = usePublicShowing(id)
 
@@ -52,21 +50,17 @@ export default function BookShowing({
     try {
       const appointment = await createAppointmentRequest(id, appointmentData)
 
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: 'Appointment request created successfully'
-        })
-      )
+      notify({
+        status: 'success',
+        message: 'Appointment request created successfully'
+      })
       browserHistory.push(`/showings/appointments/${appointment.token}`)
     } catch (error) {
       console.error(error)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Unable to create appointment request'
-        })
-      )
+      notify({
+        status: 'error',
+        message: 'Unable to create appointment request'
+      })
     }
   }
 

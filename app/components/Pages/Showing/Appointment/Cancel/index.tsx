@@ -1,6 +1,4 @@
-import { WithRouterProps } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { WithRouterProps, browserHistory } from 'react-router'
 import {
   Container,
   Grid,
@@ -14,10 +12,9 @@ import {
 } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 
-import LoadingContainer from 'components/LoadingContainer'
-import { addNotification } from 'components/notification'
-
+import useNotify from '@app/hooks/use-notify'
 import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
+import LoadingContainer from 'components/LoadingContainer'
 
 import InfoSection from '../../Sections/InfoSection'
 import DetailsSection from '../../Sections/DetailsSection'
@@ -54,15 +51,14 @@ export default function ShowingAppointmentCancel({
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const notify = useNotify()
 
   const { handleSubmit, control, formState } = useForm<FormFields>({
     mode: 'onChange'
   })
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   const handleSubmitCancelForm = async ({ message }: FormFields) => {
     const normalizedMessage = message.trim() || undefined
@@ -70,12 +66,10 @@ export default function ShowingAppointmentCancel({
     try {
       await cancelAppointmentRequest(appointmentToken, normalizedMessage)
 
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: 'Appointment request canceled successfully'
-        })
-      )
+      notify({
+        status: 'success',
+        message: 'Appointment request canceled successfully'
+      })
 
       if (appointment) {
         browserHistory.push(
@@ -84,12 +78,10 @@ export default function ShowingAppointmentCancel({
       }
     } catch (error) {
       console.error(error)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Unable to cancel appointment request'
-        })
-      )
+      notify({
+        status: 'error',
+        message: 'Unable to cancel appointment request'
+      })
     }
   }
 

@@ -1,12 +1,10 @@
-import { WithRouterProps } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { WithRouterProps, browserHistory } from 'react-router'
 import { Container, Grid, makeStyles } from '@material-ui/core'
 
 import { rescheduleAppointmentRequest } from 'models/showing/reschedule-appointment-request'
 
+import useNotify from '@app/hooks/use-notify'
 import LoadingContainer from 'components/LoadingContainer'
-import { addNotification } from 'components/notification'
 
 import InfoSection from '../../Sections/InfoSection'
 import DetailsSection from '../../Sections/DetailsSection'
@@ -39,10 +37,9 @@ export default function ShowingAppointmentReschedule({
   params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
-  const dispatch = useDispatch()
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
+  const notify = useNotify()
 
   const handleSubmitForm = async (time: string, message: string) => {
     const normalizedMessage = message.trim() || undefined
@@ -53,21 +50,17 @@ export default function ShowingAppointmentReschedule({
         message: normalizedMessage
       })
 
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: 'Appointment request rescheduled successfully'
-        })
-      )
+      notify({
+        status: 'success',
+        message: 'Appointment request rescheduled successfully'
+      })
       browserHistory.push(`/showings/appointments/${appointmentToken}`)
     } catch (error) {
       console.error(error)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Unable to reschedule appointment request'
-        })
-      )
+      notify({
+        status: 'error',
+        message: 'Unable to reschedule appointment request'
+      })
     }
   }
 
