@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Box, IconButton, Typography, Tooltip } from '@material-ui/core'
 import MyLocation from '@material-ui/icons/MyLocation'
 
+import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
@@ -160,7 +161,21 @@ class Search extends React.Component {
     this.setState({ isMapInitialized: true })
   }
 
-  goToCurrentPosition = () => {
+  goToCurrentPosition = (lat, lng) => {
+    this.setState(
+      {
+        firstRun: false,
+        isGettingCurrentPosition: false,
+        userLastBrowsingLocation: {
+          zoom: 15,
+          center: { lat, lng }
+        }
+      },
+      this.initMap
+    )
+  }
+
+  onClickLocate = () => {
     const { dispatch } = this.props
 
     if (!window.navigator.geolocation) {
@@ -177,16 +192,7 @@ class Search extends React.Component {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
-        this.setState(
-          {
-            isGettingCurrentPosition: false,
-            userLastBrowsingLocation: {
-              zoom: 15,
-              center: { lat, lng }
-            }
-          },
-          this.initMap
-        )
+        this.goToCurrentPosition(lat, lng)
       },
       error => {
         console.log(error)
@@ -203,7 +209,7 @@ class Search extends React.Component {
           })
         )
       },
-      { timeout: 5000 }
+      { timeout: 10000 }
     )
   }
 
@@ -508,16 +514,7 @@ class Search extends React.Component {
                 }}
               />
             </Box>
-            <Tooltip title="Get your exact location on the map">
-              <IconButton
-                aria-label="locate me"
-                onClick={() =>
-                  this.setState({ firstRun: false }, this.goToCurrentPosition)
-                }
-              >
-                <MyLocation />
-              </IconButton>
-            </Tooltip>
+            {this.renderLocateButton()}
           </Box>
           <Box mt={1} textAlign="center">
             <img
@@ -528,6 +525,20 @@ class Search extends React.Component {
           </Box>
         </Box>
       </Box>
+    )
+  }
+
+  renderLocateButton() {
+    return (
+      <Tooltip title="Get your exact location on the map">
+        {!this.state.isGettingCurrentPosition ? (
+          <IconButton aria-label="locate me" onClick={this.onClickLocate}>
+            <MyLocation />
+          </IconButton>
+        ) : (
+          <Loading />
+        )}
+      </Tooltip>
     )
   }
 
