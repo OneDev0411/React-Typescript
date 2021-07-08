@@ -24,7 +24,6 @@ import {
 import { getGridSortLabel } from '../../helpers/sorting'
 
 import { SearchQuery } from '../types'
-import DealsClosingsTabLink from '../../components/DealsClosingsTabLink'
 
 interface Props {
   deals: IDeal[]
@@ -76,7 +75,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
       value={props.location.query.type === 'query' ? 'all-deals' : null}
       defaultValue={props.params.filter}
       tabs={[
-        <DealsClosingsTabLink key="closings" />,
+        <TabLink
+          key="closings"
+          value="closings"
+          label={<span>Closings</span>}
+          to="/dashboard/deals/filter/closings"
+        />,
         ...inboxTabs
           .filter(name => !!name)
           .map((name, index) => (
