@@ -20,6 +20,7 @@ import {
   SORT_FIELD_SETTING_KEY
 } from '../helpers/agent-sorting'
 import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
+import DealsClosingsTabLink from '../../components/DealsClosingsTabLink'
 
 const BASE_URL = '/dashboard/deals'
 
@@ -77,6 +78,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     <PageTabs
       defaultValue={props.params.filter || 'all'}
       tabs={[
+        <DealsClosingsTabLink key="closings" />,
         ...TAB_ITEMS.map(({ label, link }, index: number) => {
           const url = link ? `${BASE_URL}/filter/${link}` : BASE_URL
           const urlWithQuery = `${url}${props.location.search}`
