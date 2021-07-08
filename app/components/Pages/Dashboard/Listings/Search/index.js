@@ -7,10 +7,15 @@ import memoize from 'lodash/memoize'
 import hash from 'object-hash'
 
 import { withStyles } from '@material-ui/core/styles'
-import { Box, IconButton, Typography, Tooltip } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Typography,
+  Tooltip,
+  CircularProgress
+} from '@material-ui/core'
 import MyLocation from '@material-ui/icons/MyLocation'
 
-import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
@@ -82,6 +87,10 @@ const styles = theme => ({
     width: '80%',
     maxWidth: 600,
     marginTop: theme.spacing(10)
+  },
+  loadingLocateIcon: {
+    marginLeft: theme.spacing(3),
+    marginTop: theme.spacing(1.5)
   }
 })
 
@@ -192,7 +201,7 @@ class Search extends React.Component {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
-        this.goToCurrentPosition(lat, lng)
+        this.initUserLocation(lat, lng)
       },
       error => {
         console.log(error)
@@ -531,12 +540,15 @@ class Search extends React.Component {
   renderLocateButton() {
     return (
       <Tooltip title="Get your exact location on the map">
-        {!this.state.isGettingCurrentPosition ? (
+        {this.state.isGettingCurrentPosition ? (
+          <CircularProgress
+            className={this.props.classes.loadingLocateIcon}
+            size={21}
+          />
+        ) : (
           <IconButton aria-label="locate me" onClick={this.onClickLocate}>
             <MyLocation />
           </IconButton>
-        ) : (
-          <Loading />
         )}
       </Tooltip>
     )
