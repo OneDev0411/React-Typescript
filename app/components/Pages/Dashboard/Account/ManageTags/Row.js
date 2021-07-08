@@ -7,30 +7,20 @@ const useStyles = makeStyles(
   theme => ({
     rowContainer: {
       display: 'flex',
-      flexRirection: 'row',
+      alignItems: 'flex-start',
       background: ({ highlight }) =>
         highlight ? theme.palette.grey[50] : 'inherit',
-      padding: theme.spacing(1, 0),
       borderBottom: `1px solid ${theme.palette.divider}`,
       transition: 'background-color 1s ease-in'
     },
     rowTitle: {
       color: theme.palette.tertiary.dark,
-      margin: theme.spacing('auto', 3),
+      marginTop: theme.spacing(2),
+      marginRight: theme.spacing(3),
       ...theme.typography.subtitle1
     },
     itemContainer: {
-      background: 'red',
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'center',
-
-      '& > div': {
-        padding: 0,
-        display: 'flex',
-        alignItems: 'center'
-      }
+      flexGrow: 1
     }
   }),
   { name: 'ManageTagsRow' }

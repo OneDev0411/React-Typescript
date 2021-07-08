@@ -1,99 +1,83 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
-import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
+// import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
 import { ViewMode } from './ViewMode'
-import { EditMode } from './EditMode'
+// import { EditMode } from './EditMode'
 
-export default class Item extends Component {
-  state = {
-    isEditing: false,
-    loading: false,
-    text: this.props.tag.text
+export default function ManageTagsItem(props) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [text, setText] = useState(props.tag.text)
+
+  // const toggleEditing = () => setIsEditing(!isEditing)
+
+  // const onChange = text => setText(text)
+
+  // const handleCancel = () => {
+  //   setIsEditing(false)
+  //   setText(props.tag.text)
+  // }
+
+  // const handleSave = async () => {
+  //   if (loading) {
+  //     return
+  //   }
+
+  //   if (text === props.tag.text) {
+  //     return setIsEditing(false)
+  //   }
+
+  //   try {
+  //     setLoading(true)
+
+  //     const done = await props.onChange({
+  //       oldText: props.tag.text,
+  //       newText: text
+  //     })
+
+  //     setLoading(false)
+
+  //     if (done) {
+  //       setIsEditing(false)
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //     setIsEditing(false)
+  //   }
+  // }
+
+  const handleDelete = async tag => {
+    setLoading(true)
+
+    await props.onDelete(tag)
+    setLoading(false)
   }
 
-  toggleEditing = () =>
-    this.setState(state => ({
-      isEditing: !state.isEditing
-    }))
+  // const renderEditMode = props => (
+  //   <EditMode value={text} onChange={onChange} loading={loading} {...props} />
+  // )
 
-  onChange = text => this.setState({ text })
+  // const renderViewMode = () => (
+  //   <ViewMode onDelete={handleDelete} tag={props.tag} loading={loading} />
+  // )
 
-  cancel = () =>
-    this.setState({
-      isEditing: false,
-      text: this.props.tag.text
-    })
+  return <ViewMode onDelete={handleDelete} tag={props.tag} loading={loading} />
 
-  save = async () => {
-    if (this.state.loading) {
-      return
-    }
-
-    if (this.state.text === this.props.tag.text) {
-      return this.setState({ isEditing: false })
-    }
-
-    try {
-      this.setState({ loading: true })
-
-      const done = await this.props.onChange({
-        oldText: this.props.tag.text,
-        newText: this.state.text
-      })
-
-      this.setState({ loading: false })
-
-      if (done) {
-        this.setState({ loading: false, isEditing: false })
-      }
-    } catch (error) {
-      console.log(error)
-      this.setState({ loading: false })
-    }
-  }
-
-  delete = async tag => {
-    this.setState({ loading: true })
-
-    await this.props.onDelete(tag)
-
-    this.setState({ loading: false })
-  }
-
-  renderEditMode = props => (
-    <EditMode
-      value={this.state.text}
-      onChange={this.onChange}
-      loading={this.state.loading}
-      {...props}
-    />
-  )
-
-  renderViewMode = () => (
-    <ViewMode
-      onDelete={this.delete}
-      tag={this.props.tag}
-      loading={this.state.loading}
-    />
-  )
-
-  render() {
-    return (
-      <InlineEditableField
-        cancelOnOutsideClick
-        handleCancel={this.cancel}
-        handleSave={this.save}
-        handleDelete={this.delete}
-        isDisabled={this.state.loading}
-        isEditing={this.state.isEditing}
-        renderEditMode={this.renderEditMode}
-        renderViewMode={this.renderViewMode}
-        showEdit={false}
-        showDelete={false}
-        style={{ margin: '0 0.3rem' }}
-        toggleMode={this.toggleEditing}
-      />
-    )
-  }
+  // return (
+  //   <InlineEditableField
+  //     cancelOnOutsideClick
+  //     handleCancel={handleCancel}
+  //     handleSave={handleSave}
+  //     handleDelete={handleDelete}
+  //     isDisabled={loading}
+  //     isEditing={isEditing}
+  //     renderEditMode={renderEditMode}
+  //     renderViewMode={renderViewMode}
+  //     showEdit={false}
+  //     showDelete={false}
+  //     style={{ margin: '0 0.3rem' }}
+  //     toggleMode={toggleEditing}
+  //   />
+  // )
 }

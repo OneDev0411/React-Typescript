@@ -54,8 +54,8 @@ class ManageTags extends Component {
 
       console.log({ dd: response })
 
-      const rawTags = response.data.map(({ text }) => ({
-        text,
+      const rawTags = response.data.map(tag => ({
+        ...tag,
         highlight: false
       }))
 
