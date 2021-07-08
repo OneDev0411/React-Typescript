@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 
 import { addNotification } from 'components/notification'
 
-import { uploadMedia } from 'models/media-manager'
+import { uploadMedia } from 'models/Deal/media-manager'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import LoadingContainer from 'components/LoadingContainer'
 

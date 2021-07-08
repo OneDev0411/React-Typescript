@@ -130,7 +130,7 @@ export function ChecklistHeader({
         size="small"
         onClick={openFormPickerDrawer}
         className={classes.splitButton}
-        renderMenu={({ closeMenu }) => (
+        RenderMenu={({ closeMenu }) => (
           <List dense>
             <ListItem
               className={classes.splitMenuItem}

@@ -3,7 +3,7 @@ import { AvatarProps } from '@material-ui/core'
 import { ProfileType } from '../MiniContact/types'
 
 export interface BaseProps extends Omit<AvatarProps, 'src' | 'sizes'> {
-  size?: 'small' | 'medium' | 'large' | 'xlarge'
+  size?: 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge'
   showStatus?: boolean
   disableLazyLoad?: boolean
   isOnline?: boolean

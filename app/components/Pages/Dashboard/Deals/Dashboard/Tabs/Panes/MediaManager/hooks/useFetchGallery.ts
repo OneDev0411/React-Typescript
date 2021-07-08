@@ -2,7 +2,7 @@ import { useState } from 'react'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 import useThunkReducer from 'react-hook-thunk-reducer'
 
-import { getMediaGallery } from 'models/media-manager'
+import { getMediaGallery } from 'models/Deal/media-manager'
 
 import { reducer } from '../context/reducers'
 import type { IMediaGallery } from '../types'
