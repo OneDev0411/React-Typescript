@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-use'
 
-type UseQueryParam = [string | null, (value: string) => void]
+type UseQueryParam = [string, (value: string) => void]
 
-function useQueryParamValue(name: string): string | null {
+function useQueryParamValue(name: string): string {
   const location = useLocation()
 
   const value = useMemo(() => new URLSearchParams(location.search).get(name), [
@@ -11,7 +11,7 @@ function useQueryParamValue(name: string): string | null {
     name
   ])
 
-  return value
+  return value || ''
 }
 
 export function useQueryParam(name: string): UseQueryParam {

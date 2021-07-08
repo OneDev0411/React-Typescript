@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+
+import { useEffectOnce } from 'react-use'
 
 import { IAppState } from 'reducers'
 
@@ -12,13 +14,11 @@ import PageLayout from 'components/GlobalPageLayout'
 
 import { selectUser } from 'selectors/user'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
+
 import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
-import {
-  getUrlSearchParam,
-  setUrlSearchParam
-} from '../helpers/url-search-param'
 
 import Grid from './Grid'
 import TabFilters from './Filters'
@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function AgentTable(props: WithRouterProps) {
-  const [searchCriteria, setSearchCriteria] = useState(getUrlSearchParam())
   const classes = useStyles()
+  const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const dispatch = useDispatch()
   const deals = useSelector(({ deals }: IAppState) => deals.list)
@@ -62,12 +62,17 @@ export default function AgentTable(props: WithRouterProps) {
     [dispatch]
   )
 
+  useEffectOnce(() => {
+    if (searchCriteria.length > 0) {
+      fetch(user, searchCriteria)
+    }
+  })
+
   const handleQueryChange = (value: string) => {
     if (isFetchingDeals) {
       return
     }
 
-    setUrlSearchParam(value)
     setSearchCriteria(value)
     fetch(user, value)
   }
@@ -78,7 +83,7 @@ export default function AgentTable(props: WithRouterProps) {
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
-            defaultValue={searchCriteria}
+            value={searchCriteria}
             onChange={handleQueryChange}
           />
 
@@ -90,7 +95,6 @@ export default function AgentTable(props: WithRouterProps) {
           <TabFilters
             deals={deals}
             activeFilter={props.params.filter}
-            searchCriteria={searchCriteria}
             sortableColumns={SORTABLE_COLUMNS}
           />
         </div>
