@@ -11,8 +11,6 @@ interface Props {
 export default function ShowingAppointmentStatusSection({
   appointment
 }: Props) {
-  console.log({ appointment })
-
   return (
     <DetailsSection>
       <Grid item xs={12}>
