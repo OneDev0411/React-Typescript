@@ -3,13 +3,17 @@ declare type IDealType = 'Selling' | 'Buying'
 declare type IDealVisibility = 'draft' | 'visible'
 declare type IDealEnderType = 'AgentDoubleEnder' | 'OfficeDoubleEnder' | null
 declare type IDealChecklistType = 'Selling' | 'Buying' | 'Offer'
-declare interface IDeal extends IModel<'deal'> {
+
+type IDealAssociations = 'roles' | 'listing'
+
+declare interface IDeal<A extends IDealAssociations = ''>
+  extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'
   checklists: IDealChecklist[]
   tasks: IDealTask[]
-  roles: IDealRole[] | UUID[]
-  listing: UUID | IListing
+  roles: A extends 'roles' ? IDealRole[] : UUID[]
+  listing: A extends 'listing' ? IListing : UUID
   files: IFile[] | null
   inboxes: string[] | null
   attention_requests: number

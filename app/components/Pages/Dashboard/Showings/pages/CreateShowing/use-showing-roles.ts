@@ -87,8 +87,7 @@ function useShowingRoles(): UseShowingRolesReturn {
     property: Nullable<ShowingPropertyType>
   ) => {
     if (property?.type === 'deal') {
-      // TODO: remove the below typecast when the deal type issue get fixed
-      const roles = (property.deal.roles as UUID[]).map(role => dealRoles[role])
+      const roles = property.deal.roles.map(role => dealRoles[role])
 
       roles.forEach(role => {
         if (!role) {

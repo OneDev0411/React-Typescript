@@ -48,7 +48,7 @@ function ShowingDetail({ params }: ShowingDetailProps) {
           listing: showing?.listing ?? null
         })}
         address={showing?.title || ''}
-        listing={showing?.listing || (showing?.deal?.listing as IListing)}
+        listing={showing?.listing || showing?.deal?.listing}
         bookingUrl={showingBookingUrl}
       />
       <PageLayout.Main gutter={4} mt={0} pt={0}>

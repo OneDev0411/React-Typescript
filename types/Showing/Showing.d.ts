@@ -4,7 +4,7 @@ declare interface IShowing<A extends IShowingAppointmentAssociations = ''>
   aired_at?: string
   approval_type: IShowingApprovalType
   feedback_template?: IMarketingTemplateInstance
-  deal?: IDeal
+  deal?: IDeal<'listing'>
   address?: IStdAddr
   gallery?: IMediaGallery
   roles: IShowingRole[]

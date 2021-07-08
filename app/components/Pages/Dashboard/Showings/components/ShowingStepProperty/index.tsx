@@ -99,8 +99,7 @@ function ShowingStepProperty({
           <>
             {property?.type === 'deal' && property.deal.listing && (
               <ShowingStepPropertyDealListingCard
-                // TODO: remove the below typecast when the deal type issue get fixed
-                listing={property.deal.listing as UUID}
+                listing={property.deal.listing}
                 onChange={goToSearchMode}
                 changeLabel="Change Property"
               />
