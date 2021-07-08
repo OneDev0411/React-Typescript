@@ -96,14 +96,8 @@ export function RoleForm(props) {
                   isVisible={isVisible('title')}
                 />
               </Grid>
-              <Grid item md={compact ? 12 : true} xs={12}>
-                <Field
-                  name="legal_middle_name"
-                  label="Mid. Name"
-                  isVisible={isVisible('legal_middle_name')}
-                  component={TextInput}
-                />
-              </Grid>
+
+              <Grid item md={compact ? 12 : true} xs={12} />
             </Grid>
           ) : (
             <Grid container xs spacing={2} alignItems="center">
@@ -146,6 +140,17 @@ export function RoleForm(props) {
               component={NameInput}
             />
           </Grid>
+
+          {showNameDetails && (
+            <Grid item md={compact ? 12 : true} xs={12}>
+              <Field
+                name="legal_middle_name"
+                label="Mid. Name"
+                isVisible={isVisible('legal_middle_name')}
+                component={TextInput}
+              />
+            </Grid>
+          )}
 
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
