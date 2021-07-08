@@ -40,19 +40,11 @@ export default function ShowingAppointmentStatusDetails({
   }
 
   if (appointment.status === 'Canceled') {
-    return (
-      <>
-        <CanceledStatusDetails appointment={appointment} />
-      </>
-    )
+    return <CanceledStatusDetails appointment={appointment} />
   }
 
   if (appointment.status === 'Completed') {
-    return (
-      <>
-        <CompletedStatusDetails appointment={appointment} />
-      </>
-    )
+    return <CompletedStatusDetails appointment={appointment} />
   }
 
   return null
