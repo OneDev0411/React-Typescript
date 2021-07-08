@@ -61,9 +61,7 @@ export class InlineAddressField extends React.Component {
       window.isLoadingGoogleApi = true
 
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          bootstrapURLKeys.key
-        }&libraries=places`
+        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=places`
       )
     }
   }

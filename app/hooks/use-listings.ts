@@ -58,13 +58,14 @@ export function useDealsListings(
         deal => deal.listing
       )
         .filter(
-          deal => deal.listing && !listingIdsToExclude.includes(deal.listing)
+          deal =>
+            deal.listing && !listingIdsToExclude.includes(deal.listing as UUID)
         )
         .map(deal => deal.listing)
 
       try {
         const dealsListings = await Promise.all(
-          uniqDealListingIds.map(listingId => getListing(listingId))
+          uniqDealListingIds.map(listingId => getListing(listingId as UUID))
         )
 
         setListings(dealsListings)

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { Typography, Box, Button, Checkbox } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { deleteMedias, downloadMedias } from 'models/media-manager'
+import { deleteMedias, downloadMedias } from 'models/Deal/media-manager'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DangerButton } from 'components/Button/DangerButton'

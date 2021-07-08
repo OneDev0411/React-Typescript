@@ -8,6 +8,8 @@ export interface IWizardState {
   goto: (step: number) => void
   next: (delay?: number) => void
   setStep: (step: number) => void
+  setCurrentStep: (step: number) => void
+  setLastVisitedStep: (step: number) => void
   setLoading: (status: boolean) => void
   previous: () => void
   first: () => void

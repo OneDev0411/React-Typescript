@@ -65,7 +65,7 @@ class ProfileCatalog extends Component {
         <Container>
           <Avatar
             user={this.props.user}
-            size="xlarge"
+            size="xxlarge"
             data-test="profile-avatar-image"
           />
 

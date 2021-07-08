@@ -153,6 +153,8 @@ export function QuestionWizard({
         currentStep,
         lastVisitedStep,
         setStep,
+        setCurrentStep,
+        setLastVisitedStep,
         goto: gotoStep,
         next: gotoNext,
         totalSteps: sectionsCount,
