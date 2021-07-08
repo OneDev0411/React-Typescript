@@ -25,6 +25,7 @@ import NoResults from '../../NoResults'
 import Loading from '../../Loading'
 import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
+import { isGifImage } from '../../helpers'
 import { useTeamLibrary } from './hooks'
 import { DEFAULT_ASSET_LABEL } from './constants'
 
@@ -285,7 +286,7 @@ function TeamLibrary({
                   <ImageThumbnail
                     key={item.id}
                     onEditClick={
-                      onEdit
+                      onEdit && !isGifImage(imageUrl)
                         ? () => onEdit(`/api/utils/cors/${btoa(imageUrl)}`)
                         : undefined
                     }

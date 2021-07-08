@@ -43,8 +43,7 @@ class YearMonthList extends React.Component {
     return (
       <Container className="DayPicker-Caption">
         <BasicDropdown
-          noBorder
-          isBlock={false}
+          buttonVariant="text"
           buttonSize="small"
           defaultSelectedItem={Months[this.defaultMonth]}
           items={this.Months}
@@ -60,8 +59,7 @@ class YearMonthList extends React.Component {
           centerSelected
         />
         <BasicDropdown
-          noBorder
-          isBlock={false}
+          buttonVariant="text"
           buttonSize="small"
           defaultSelectedItem={Years[this.defaultYear]}
           items={Years}
