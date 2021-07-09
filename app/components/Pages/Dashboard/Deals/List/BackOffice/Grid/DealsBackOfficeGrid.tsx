@@ -46,19 +46,17 @@ import useDealsGetGridData from '../../hooks/use-deals-get-grid-data'
 interface DealsBackOfficeGridProps extends WithRouterProps {
   searchQuery: SearchQuery
   statuses: IDealStatus[]
-  activeFilter: string
 }
 
 function DealsBackOfficeGrid({
   searchQuery,
   statuses,
-  location,
-  activeFilter
+  location
 }: DealsBackOfficeGridProps) {
   const gridClasses = useGridStyles()
 
   const { deals, roles, isLoading, isClosingsTab } = useDealsGetGridData(
-    activeFilter
+    searchQuery.filter
   )
   const user = useSelector(selectUser)
   const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
