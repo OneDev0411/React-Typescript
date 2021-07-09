@@ -11,7 +11,7 @@ function useQueryParamValue(name: string): string {
     name
   ])
 
-  return value || ''
+  return decodeURIComponent(value || '')
 }
 
 export function useQueryParam(name: string): UseQueryParam {
