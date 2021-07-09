@@ -4,12 +4,9 @@ import { getBrandUsers } from 'utils/user-teams'
 
 import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-permission'
 
-import AutocompleteField, {
-  AutocompleteFieldProps,
-  BaseOption
-} from '../AutocompleteField'
-
-type ActiveTeamMemberOption = BaseOption & IUser
+import AutocompleteField, { AutocompleteFieldProps } from '../AutocompleteField'
+import { compareLabelsAsc } from './helpers'
+import { ActiveTeamMemberOption } from './types'
 
 export interface ActiveTeamAvailableMemberWithPermissionAutocompleteFieldProps
   extends Omit<AutocompleteFieldProps<ActiveTeamMemberOption>, 'options'> {
@@ -31,11 +28,13 @@ function ActiveTeamAvailableMemberWithPermissionAutocompleteField({
       ? getBrandUsers(activeBrand)
       : []
 
-    return activeTeamAvailableMembers.map(activeTeamAvailableMember => ({
-      ...activeTeamAvailableMember,
-      value: activeTeamAvailableMember[searchFieldValue] as string,
-      label: activeTeamAvailableMember[searchFieldLabel] as string
-    }))
+    return activeTeamAvailableMembers
+      .map(activeTeamAvailableMember => ({
+        ...activeTeamAvailableMember,
+        value: activeTeamAvailableMember[searchFieldValue] as string,
+        label: activeTeamAvailableMember[searchFieldLabel] as string
+      }))
+      .sort(compareLabelsAsc)
   }, [activeBrand, searchFieldLabel, searchFieldValue])
 
   return (

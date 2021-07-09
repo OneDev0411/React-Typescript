@@ -83,7 +83,7 @@ function ShowingStepRolePerson({
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
   const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
-  const isForm = role.mode === 'form' || !error
+  const isForm = role.mode === 'form' || !!error
 
   return (
     <QuestionSection error={error}>
