@@ -52,15 +52,13 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
 
   useEffect(() => {
     return () => {
-      if (backdropTimeout.current) {
-        clearTimeout(backdropTimeout.current)
-      }
+      clearTimeout(backdropTimeout.current)
     }
   }, [])
 
   const hide = () => {
     onHide()
-    backdropTimeout.current = window.setTimeout(
+    backdropTimeout.current = setTimeout(
       () => setSelectedAgent(null),
       BACKDROP_TIMEOUT
     )!

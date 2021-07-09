@@ -118,7 +118,7 @@ function OpenHouseForm(props: Props) {
     async function fetchLisitng() {
       try {
         if (listingId && listing == null) {
-          const response = await getListing(listingId)
+          const response = await getListing(listingId as UUID)
 
           setListing(response)
         }

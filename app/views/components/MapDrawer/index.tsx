@@ -5,9 +5,9 @@ import { Button, Box } from '@material-ui/core'
 
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
-import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
+import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 import { mapThemes } from './constants'
 import MapThemeList from './MapThemeList'
@@ -104,7 +104,7 @@ function MapDrawer({
       <OverlayDrawer.Body>
         <Box marginTop={3}>
           {hasSearchField && (
-            <ListingsAndPlacesSearchInput onSelect={handleSearch} />
+            <DealsAndListingsAndPlacesSearchInput onSelect={handleSearch} />
           )}
           <MapThemeList theme={theme} onChange={setTheme} center={center} />
         </Box>
