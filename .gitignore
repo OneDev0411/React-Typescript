@@ -193,7 +193,7 @@ server-dist
 !.idea/jsLibraryMappings.xml
 
 yarn.lock
-package-lock.json
+#package-lock.json
 
 // cypress
 tests/cypress/screenshots/
