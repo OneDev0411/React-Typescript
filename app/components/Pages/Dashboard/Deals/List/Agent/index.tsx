@@ -63,7 +63,7 @@ export default function AgentTable(props: WithRouterProps) {
   )
 
   useEffectOnce(() => {
-    if (searchCriteria.length > 0) {
+    if (searchCriteria.length > 0 && !isFetchingDeals) {
       fetch(user, searchCriteria)
     }
   })
