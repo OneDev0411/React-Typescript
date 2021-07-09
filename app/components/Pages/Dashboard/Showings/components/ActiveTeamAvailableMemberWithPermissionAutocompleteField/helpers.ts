@@ -1,6 +1,6 @@
 import { ActiveTeamMemberOption } from './types'
 
-export function compareLabels(
+export function compareLabelsAsc(
   a: ActiveTeamMemberOption,
   b: ActiveTeamMemberOption
 ): number {
