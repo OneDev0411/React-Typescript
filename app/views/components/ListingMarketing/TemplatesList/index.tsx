@@ -1,6 +1,6 @@
 import { memo, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
-import { Grid, Box, makeStyles, Theme } from '@material-ui/core'
+import { Grid, Box, Button, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiInstagram,
   mdiLinkedin,
@@ -30,7 +30,23 @@ const MEDIUM_ICONS: Record<IMarketingTemplateMedium, string> = {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(6)
+      marginBottom: theme.spacing(6),
+      position: 'relative'
+    },
+    templatesListContainerCollapsed: {
+      maxHeight: 400,
+      overflowY: 'hidden',
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      boxShadow: `inset 0 0px 0px 0 ${theme.palette.grey[400]}, inset 0px -22px 15px -10px ${theme.palette.grey[500]}`
+    },
+    expandButtonContainer: {
+      position: 'absolute',
+      zIndex: theme.zIndex.tooltip,
+      bottom: -24,
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     thumbnailContainer: {
       marginRight: theme.spacing(2),
@@ -43,7 +59,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'ListingMarketingTemplatesRow'
+    name: 'ListingMarketingTemplatesList'
   }
 )
 
@@ -52,10 +68,20 @@ interface Props {
   listing: IListing
   medium: IMarketingTemplateMedium
   templates: IBrandMarketingTemplate[]
+  isExpanded: boolean
+  onExpandClick: () => void
   onClick: (template: IBrandMarketingTemplate) => void
 }
 
-function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
+function TemplatesList({
+  header,
+  listing,
+  medium,
+  templates,
+  isExpanded,
+  onExpandClick,
+  onClick
+}: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
@@ -75,7 +101,13 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
         </Grid>
         <Grid item>{header}</Grid>
       </Grid>
-      <Grid container item>
+      <Grid
+        container
+        item
+        className={
+          isExpanded ? undefined : classes.templatesListContainerCollapsed
+        }
+      >
         {templates.map(template => (
           <Grid
             key={template.id}
@@ -97,8 +129,20 @@ function TemplatesRow({ header, listing, medium, templates, onClick }: Props) {
           </Grid>
         ))}
       </Grid>
+      {!isExpanded && (
+        <div className={classes.expandButtonContainer}>
+          <Button
+            size="large"
+            variant="contained"
+            color="secondary"
+            onClick={onExpandClick}
+          >
+            Expand
+          </Button>
+        </div>
+      )}
     </Grid>
   )
 }
 
-export default memo(TemplatesRow)
+export default memo(TemplatesList)

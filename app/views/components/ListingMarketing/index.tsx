@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import {
-  Grid,
-  Box,
-  Divider,
-  Button,
-  Typography,
-  useTheme
-} from '@material-ui/core'
+import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
 
 import getListing from 'models/listings/listing/get-listing'
@@ -40,9 +33,7 @@ import {
 
 import MarketingButton from './MarketingButton'
 import TemplateTypesChips from './TemplateTypesChips'
-import TemplatesRow from './TemplatesRow'
-
-const ROW_SIZE = 4
+import TemplatesList from './TemplatesList'
 
 type ListingRelatedProps = RequireOnlyOne<
   {
@@ -56,6 +47,7 @@ type Props = {
   defaultTemplateType?: IMarketingTemplateType
   defaultMedium?: IMarketingTemplateMedium
   onChangeTemplateType?: (type: IMarketingTemplateType) => void
+  onChangeMedium?: (medium: IMarketingTemplateMedium) => void
 } & ListingRelatedProps
 
 export default function ListingMarketing({
@@ -63,7 +55,8 @@ export default function ListingMarketing({
   listingId,
   defaultTemplateType,
   defaultMedium,
-  onChangeTemplateType
+  onChangeTemplateType,
+  onChangeMedium
 }: Props) {
   const theme = useTheme()
   const user = useSelector(selectUser)
@@ -142,6 +135,8 @@ export default function ListingMarketing({
       }
 
       timeoutHandler = setTimeout(() => {
+        setExpandedMedium(defaultMedium)
+
         const selectedMediumHeader = document.getElementById(defaultMedium)
 
         selectedMediumHeader?.scrollIntoView({
@@ -160,23 +155,13 @@ export default function ListingMarketing({
 
   const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
     setSelectedTemplateType(type)
+    setExpandedMedium(null)
     onChangeTemplateType?.(type)
   }
 
-  const handleClickViewMoreLess = (medium: IMarketingTemplateMedium) => {
-    if (!expandedMedium) {
-      setExpandedMedium(medium)
-
-      return
-    }
-
-    if (expandedMedium === medium) {
-      setExpandedMedium(null)
-
-      return
-    }
-
+  const handleClickExpandMedium = (medium: IMarketingTemplateMedium) => {
     setExpandedMedium(medium)
+    onChangeMedium?.(medium)
   }
 
   if (isLoadingListing || isLoadingTemplates || !listing) {
@@ -272,19 +257,15 @@ export default function ListingMarketing({
             template => template.template.medium === medium
           )
 
-          const templatesToShow = currentMediumTemplates.slice(
-            0,
-            expandedMedium === medium ? Infinity : ROW_SIZE
-          )
-
-          if (templatesToShow.length === 0) {
+          if (currentMediumTemplates.length === 0) {
             return null
           }
 
           const mediumLabel = getTemplateMediumLabel(medium)
+          const isExpanded = expandedMedium === medium
 
           return (
-            <TemplatesRow
+            <TemplatesList
               key={medium}
               header={
                 <Box display="flex">
@@ -292,23 +273,13 @@ export default function ListingMarketing({
                   <Typography variant="h5" id={medium}>
                     {mediumLabel}
                   </Typography>
-                  {currentMediumTemplates.length > ROW_SIZE && (
-                    <Button
-                      variant="text"
-                      color="secondary"
-                      style={{
-                        marginLeft: theme.spacing(1)
-                      }}
-                      onClick={() => handleClickViewMoreLess(medium)}
-                    >
-                      View {expandedMedium === medium ? 'less' : 'more'}
-                    </Button>
-                  )}
                 </Box>
               }
               medium={medium}
               listing={listing}
-              templates={templatesToShow}
+              templates={currentMediumTemplates}
+              isExpanded={isExpanded}
+              onExpandClick={() => handleClickExpandMedium(medium)}
               onClick={setSelectedTemplate}
             />
           )

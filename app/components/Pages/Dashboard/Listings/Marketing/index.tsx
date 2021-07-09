@@ -33,6 +33,12 @@ export default function ListingMarketingPage({
               hash: ''
             })
           }}
+          onChangeMedium={medium => {
+            router.replace({
+              ...location,
+              hash: `#${medium}`
+            })
+          }}
         />
       </PageLayout.Main>
     </PageLayout>
