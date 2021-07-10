@@ -1,6 +1,6 @@
 import { getField } from '../get-field'
 
-export function getStatus(deal: IDeal): string {
+export function getStatus(deal: IDeal): IListingStatus {
   if (deal.deleted_at) {
     return 'Archived'
   }
