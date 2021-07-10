@@ -1,12 +1,12 @@
 import { getField } from '../get-field'
 
-export function getStatus(deal) {
+export function getStatus(deal: IDeal): string {
   if (deal.deleted_at) {
     return 'Archived'
   }
 
   const key =
-    deal.deal_type === 'Buying' || deal.has_active_offer
+    deal?.deal_type === 'Buying' || deal?.has_active_offer
       ? 'contract_status'
       : 'listing_status'
 
