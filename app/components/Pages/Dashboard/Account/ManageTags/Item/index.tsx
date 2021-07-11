@@ -5,10 +5,15 @@ import React, { useState } from 'react'
 import { ViewMode } from './ViewMode'
 // import { EditMode } from './EditMode'
 
-export default function ManageTagsItem(props) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [text, setText] = useState(props.tag.text)
+interface Props {
+  tag: IContactTag
+  onDelete: (tag: IContactTag) => void
+}
+
+export default function ManageTagsItem(props: Props) {
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [text, setText] = useState<string>(props.tag.text)
 
   // const toggleEditing = () => setIsEditing(!isEditing)
 
@@ -47,7 +52,7 @@ export default function ManageTagsItem(props) {
   //   }
   // }
 
-  const handleDelete = async tag => {
+  const handleDelete = async (tag: IContactTag) => {
     setLoading(true)
 
     await props.onDelete(tag)

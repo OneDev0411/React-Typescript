@@ -156,6 +156,20 @@ declare interface IContactAttributeInput {
   is_partner?: boolean
 }
 
+declare interface IContactTag {
+  id: UUID
+  created_at: number
+  updated_at: number
+  deleted_at?: Nullable<number>
+
+  created_by: Nullable<UUID>
+  updated_by: Nullable<UUID>
+  tag: string
+  text: string
+  touch_freq: Nullable<number>
+  type: string
+}
+
 declare interface IContactAttributeInputWithContact
   extends IContactAttributeInput {
   contact: UUID

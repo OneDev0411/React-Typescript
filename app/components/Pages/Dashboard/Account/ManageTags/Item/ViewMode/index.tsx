@@ -27,14 +27,28 @@ const useStyles = makeStyles(
     },
     title: {
       marginRight: theme.spacing(1)
-    }
+    },
+    touchDate: {
+      display: 'flex'
+    },
+    touchDateCaption: {
+      color: theme.palette.grey[500],
+      marginRight: theme.spacing(0.5)
+    },
+    touchDateValue: {}
   }),
   {
     name: 'ManageTagsViewMode'
   }
 )
 
-export function ViewMode({ tag, loading, onDelete }) {
+interface Props {
+  tag: IContactTag
+  loading: boolean
+  onDelete: (tag: IContactTag) => void
+}
+
+export function ViewMode({ tag, loading, onDelete }: Props) {
   const classes = useStyles()
 
   console.log({ tag })
@@ -56,6 +70,18 @@ export function ViewMode({ tag, loading, onDelete }) {
       <Typography variant="body2" className={classes.title}>
         {tag.text}
       </Typography>
+      <div className={classes.touchDate}>
+        {tag.touch_freq && (
+          <Typography variant="caption" className={classes.touchDateCaption}>
+            Touch:
+          </Typography>
+        )}
+        <Typography variant="body2">
+          {tag.touch_freq
+            ? `every ${tag.touch_freq} days`
+            : 'No touch reminder'}
+        </Typography>
+      </div>
 
       {loading ? (
         <div>
