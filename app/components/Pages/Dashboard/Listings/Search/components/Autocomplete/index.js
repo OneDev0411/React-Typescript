@@ -3,17 +3,18 @@ import { connect } from 'react-redux'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
-import idx from 'idx'
 import { browserHistory } from 'react-router'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
 import { getBounds } from 'utils/map'
-import { loadJS } from '@app/utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getListingAddress } from 'utils/listing'
-import { bootstrapURLKeys } from '@app/components/Pages/Dashboard/Listings/mapOptions'
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
 import {
   reset as resetSearchType,
   setSearchType
@@ -60,20 +61,16 @@ class MlsAutocompleteSearch extends Component {
   }
 
   componentDidMount() {
-    // Load google maps places if is not loaded yet
-    if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
-      window.isLoadingGoogleApi = true
+    const googleMapAPIParams = { libraries: ['places'] }
 
-      loadJS(
-        // eslint-disable-next-line max-len
-        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=places`
-      )
+    // Load google maps places if is not loaded yet
+    if (!isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
+      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
     }
   }
 
   componentWillUnmount() {
     this.props.dispatch(searchActions.setSearchInput(this.state.input))
-    delete window.isLoadingGoogleApi
   }
 
   inputRef = React.createRef()
@@ -164,8 +161,6 @@ class MlsAutocompleteSearch extends Component {
 
   autocompleteAddress(input) {
     const { google } = window
-
-    console.log(window.google.maps)
 
     const service = new google.maps.places.AutocompleteService()
 
