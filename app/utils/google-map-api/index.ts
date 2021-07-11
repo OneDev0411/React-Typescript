@@ -19,21 +19,17 @@ export interface GoogleMapAPIParams {
 
 // Verify that the Google map and desired library are loaded
 export function isMapLibrariesLoaded(libraries: GoogleMapLibrary[]) {
-  let isMissedLibrary = false
   if (idx(window, w => w.google.maps)) {
     // Check for missing library
-    if (libraries.length) {
+    if (libraries) {
       for (let i = 0; i < libraries.length; i += 1) {
-        if (!window.google.maps.hasOwnProperty(libraries[i])) {
-          isMissedLibrary = true
-          break
+        const lib = libraries[i]
+        if (typeof window.google.maps[lib] === 'undefined') {
+          return false
         }
       }
     }
 
-    if (isMissedLibrary) {
-      return false
-    }
     return true
   } else {
     return false
@@ -55,6 +51,10 @@ export function createGoogleMapApiUrl({
 }
 
 // Load Google map API
-export function loadMapLibraries(arg: GoogleMapAPIParams) {
-  loadJS(createGoogleMapApiUrl(arg))
+export function loadMapLibraries(
+  arg: GoogleMapAPIParams,
+  id?: string,
+  cb?: () => void
+) {
+  loadJS(createGoogleMapApiUrl(arg), id, cb)
 }
