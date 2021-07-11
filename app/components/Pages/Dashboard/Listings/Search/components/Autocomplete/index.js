@@ -3,18 +3,17 @@ import { connect } from 'react-redux'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
-
+import idx from 'idx'
 import { browserHistory } from 'react-router'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
-
 import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
-
 import { getBounds } from 'utils/map'
+import { loadJS } from '@app/utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getListingAddress } from 'utils/listing'
-
+import { bootstrapURLKeys } from '@app/components/Pages/Dashboard/Listings/mapOptions'
 import {
   reset as resetSearchType,
   setSearchType
@@ -24,14 +23,12 @@ import { getListingsByQuery } from 'actions/listings/search/get-listings-by-quer
 import { goToPlace, setMapProps } from 'actions/listings/map'
 import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
-
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
-
 import {
   SEARCH_BY_GOOGLE_SUGGESTS,
   SEARCH_BY_QUERY
-} from '../../../../../../../constants/listings/search'
+} from '@app/constants/listings/search'
 
 import {
   SearchContainer,
@@ -49,7 +46,6 @@ class MlsAutocompleteSearch extends Component {
     places: [],
     listings: [],
     input: '',
-    // eslint-disable-next-line
     isDrity: false,
     selectedListingId: null,
     isListingDetailsModalOpen: false
@@ -63,8 +59,21 @@ class MlsAutocompleteSearch extends Component {
     return null
   }
 
+  componentDidMount() {
+    // Load google maps places if is not loaded yet
+    if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
+      window.isLoadingGoogleApi = true
+
+      loadJS(
+        // eslint-disable-next-line max-len
+        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=places`
+      )
+    }
+  }
+
   componentWillUnmount() {
     this.props.dispatch(searchActions.setSearchInput(this.state.input))
+    delete window.isLoadingGoogleApi
   }
 
   inputRef = React.createRef()
@@ -155,6 +164,8 @@ class MlsAutocompleteSearch extends Component {
 
   autocompleteAddress(input) {
     const { google } = window
+
+    console.log(window.google.maps)
 
     const service = new google.maps.places.AutocompleteService()
 
@@ -337,6 +348,7 @@ class MlsAutocompleteSearch extends Component {
                     onKeyDown={this.handleKeyDownInput}
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
+                    // eslint-disable-next-line max-len
                     placeholder="Enter an address, neighborhood, city, ZIP code or MLS #"
                     onClear={this.onClear}
                     isLoading={this.state.isLoading}
