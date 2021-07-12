@@ -22,7 +22,7 @@ const useStyles = makeStyles(
     input: {
       // TODO: remove this line after refactoring the form
       backgroundColor: '#f9f9f9',
-      width: theme.spacing(30)
+      width: theme.spacing(45)
     }
   }),
   { name: 'timezoneComponent' }
