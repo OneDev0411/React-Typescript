@@ -4,8 +4,8 @@ import { useTitle } from 'react-use'
 
 import ListingMarketing from '@app/views/components/ListingMarketing'
 import PageLayout from '@app/views/components/GlobalPageLayout'
+import ListingHeader from '@app/views/components/ListingHeader'
 
-import { getListingAddress } from '@app/utils/listing'
 import getListing from '@app/models/listings/listing/get-listing'
 
 export default function ListingMarketingPage({
@@ -39,11 +39,11 @@ export default function ListingMarketingPage({
     return null
   }
 
-  const title = getListingAddress(listing)
-
   return (
     <PageLayout>
-      <PageLayout.Header title={title} />
+      <PageLayout.Header>
+        <ListingHeader title="Listing Marketing" listing={listing} />
+      </PageLayout.Header>
       <PageLayout.Main>
         <ListingMarketing
           listing={listing}
