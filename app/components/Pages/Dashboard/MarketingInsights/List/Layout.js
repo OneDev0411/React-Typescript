@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 import { Helmet } from 'react-helmet'
 import { browserHistory } from 'react-router'
 
@@ -7,6 +9,9 @@ import { Box, Button, Chip, makeStyles } from '@material-ui/core'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { selectUser } from 'selectors/user'
+import { setUserSetting } from 'actions/user/set-setting'
 
 import SortField from './SortField'
 
@@ -18,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer'
   }
 }))
+const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 
 function InsightsLayout({
   sentCount,
@@ -26,6 +32,8 @@ function InsightsLayout({
   renderContent
 }) {
   const classes = useStyles()
+  const user = useSelector(selectUser)
+  const dispatch = useDispatch()
   const [sortField, setSortField] = useState({
     label: 'Newest',
     value: 'title-date',
@@ -44,6 +52,22 @@ function InsightsLayout({
       to: urlGenerator('/scheduled')
     }
   ]
+
+  useEffectOnce(() => {
+    const savedSortField = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_INSIGHT_KEY
+    )
+
+    if (savedSortField) {
+      setSortField(savedSortField)
+    }
+  })
+
+  const handleSortChange = async item => {
+    dispatch(setUserSetting(SORT_FIELD_INSIGHT_KEY, item))
+    setSortField(item)
+  }
 
   return (
     <>
@@ -89,7 +113,7 @@ function InsightsLayout({
                 label={
                   <SortField
                     sortLabel={sortField.label}
-                    onChange={setSortField}
+                    onChange={handleSortChange}
                   />
                 }
               />
@@ -99,7 +123,7 @@ function InsightsLayout({
           <Box mt={1.5} flex="1 1 auto">
             {renderContent({
               sortBy: sortField,
-              onChangeSort: setSortField
+              onChangeSort: handleSortChange
             })}
           </Box>
         </PageLayout.Main>

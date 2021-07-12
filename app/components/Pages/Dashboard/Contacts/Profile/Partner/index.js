@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { mdiRing } from '@mdi/js'
+
 import SectionWithFields from '../components/SectionWithFields'
 
 export const fieldsOrder = [
@@ -13,12 +15,14 @@ export const fieldsOrder = [
 export function Partner(props) {
   return (
     <SectionWithFields
+      title="Spouse/Partner"
+      expandButtonLabel="Add Spouse & Partner Info"
+      expandButtonIcon={mdiRing}
+      section={['Contact Info', 'Details', 'Dates']}
       contact={props.contact}
       fieldsOrder={fieldsOrder}
       validFields={fieldsOrder}
       isPartner
-      section={['Contact Info', 'Details', 'Dates']}
-      title="Spouse/Partner"
       submitCallback={props.submitCallback}
     />
   )

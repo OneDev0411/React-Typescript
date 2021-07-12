@@ -3,6 +3,10 @@ import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
+import { fetchShowingTotalNotificationCount } from 'actions/showings'
+
+import ShowingSocket from 'services/socket/showings'
+
 import asyncComponentLoader from '../../../loader'
 
 const InstantChat = asyncComponentLoader({
@@ -74,6 +78,7 @@ class Dashboard extends Component {
 
     this.hasCrmAccess = hasUserAccess(user, 'CRM')
     this.hasDealsAccess = hasUserAccess(user, 'Deals') || isBackOffice
+    this.hasShowingsAccess = hasUserAccess(user, 'Showings')
 
     dispatch(getRooms())
 
@@ -83,10 +88,14 @@ class Dashboard extends Component {
       Object.keys(deals).length === 0 &&
       !this.props.isFetchingDeals
     ) {
-      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+      const searchParamValue =
+        this.props.location.pathname.startsWith('/dashboard/deals') &&
+        new URLSearchParams(this.props.location.search).get('q')
+
+      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user))
+        dispatch(searchDeals(user, decodeURIComponent(searchParamValue)))
       }
     }
 
@@ -113,6 +122,11 @@ class Dashboard extends Component {
 
       window.addEventListener('online', this.handleOnlineEvent)
     }
+
+    // fetch the number of showing notifications count
+    if (this.hasShowingsAccess) {
+      dispatch(fetchShowingTotalNotificationCount())
+    }
   }
 
   initializeSockets(user) {
@@ -124,6 +138,10 @@ class Dashboard extends Component {
 
     if (this.hasDealsAccess) {
       new DealSocket(user)
+    }
+
+    if (this.hasShowingsAccess) {
+      new ShowingSocket(user)
     }
   }
 

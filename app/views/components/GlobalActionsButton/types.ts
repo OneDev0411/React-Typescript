@@ -10,10 +10,12 @@ import CreateOpenHouse from './components/OpenHouse'
 export type ItemType =
   | 'email'
   | 'event'
+  | 'log'
   | 'contact'
   | 'deal'
   | 'openhouse'
   | 'tour'
+  | 'showing'
 
 interface BaseItem<T extends ItemType> {
   title: string
@@ -26,6 +28,10 @@ interface EmailItem extends BaseItem<'email'> {
 }
 
 interface EventItem extends BaseItem<'event'> {
+  render(props: ComponentProps<typeof EventDrawer>): ReactNode
+}
+
+interface LogItem extends BaseItem<'log'> {
   render(props: ComponentProps<typeof EventDrawer>): ReactNode
 }
 
@@ -45,10 +51,16 @@ interface TourItem extends BaseItem<'tour'> {
   render(props: ComponentProps<typeof TourDrawer>): ReactNode
 }
 
+interface ShowingItem extends BaseItem<'showing'> {
+  redirectTo(url: string): void
+}
+
 export type Item =
   | EmailItem
   | EventItem
+  | LogItem
   | ContactItem
   | DealItem
   | OpenHouseItem
   | TourItem
+  | ShowingItem

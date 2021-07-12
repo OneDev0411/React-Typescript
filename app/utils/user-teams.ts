@@ -121,6 +121,10 @@ export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.AGENT_NETWORK)
 }
 
+export function hasUserAccessToShowings(user: IUser | null): boolean {
+  return hasUserAccess(user, ACL.SHOWINGS)
+}
+
 export function isBackOffice(user: IUser | null): boolean {
   return hasUserAccess(user, ACL.BACK_OFFICE)
 }
@@ -131,8 +135,8 @@ export function isAdmin(user: IUser | null): boolean {
 
 export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
   const brand = getActiveBrand(user)
-  
-  // Only brokerages should have brand settings 
+
+  // Only brokerages should have brand settings
   if (!brand || brand.brand_type !== 'Brokerage') {
     return false
   }
@@ -166,25 +170,30 @@ export function viewAs(
   shouldReturnAll: boolean = false,
   team: IUserTeam | null = getActiveTeam(user),
 ): UUID[] {
-  if (
-    team &&
-    !idx(team, t => t.acl.includes('BackOffice')) &&
-    idx(team, team => team.settings.user_filter[0])
-  ) {
-    const allTeamMember = getTeamAvailableMembers(team)
-    const selectedViewAsUsers = team.settings.user_filter || []
+  if(!team) {
+    return []
+  }
 
-    if(!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length){
-      return []
+  const allTeamMember = getTeamAvailableMembers(team)
+  const allTeamMemberIds = allTeamMember.map(t => t.id)
+
+  if (!idx(team, t => t.acl.includes('BackOffice'))) {
+    const selectedViewAsUsers = (team.settings?.user_filter || []).filter(m => allTeamMemberIds.includes(m))
+    
+    if(!selectedViewAsUsers[0] || (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)) {
+      return allTeamMemberIds
     }
       
     return selectedViewAsUsers
   }
 
-  return []
+  return allTeamMemberIds
 }
 
-type GetSettings = (team: IUserTeam, includesParents?: boolean) => StringMap<any>
+type GetSettings = (
+  team: IUserTeam,
+  includesParents?: boolean
+) => StringMap<any>
 
 const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   user: IUser | null,
@@ -195,7 +204,7 @@ const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
   if (!team) {
     return {}
   }
-  
+
   return getSettings(team, includesParents)
 }
 
@@ -227,11 +236,7 @@ export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   }
 
   const brand = flattenBrand(team.brand)
-  if (
-    !brand ||
-    !brand.settings ||
-    !brand.settings.marketing_palette
-  ) {
+  if (!brand || !brand.settings || !brand.settings.marketing_palette) {
     return DEFAULT_BRAND_PALETTE
   }
 

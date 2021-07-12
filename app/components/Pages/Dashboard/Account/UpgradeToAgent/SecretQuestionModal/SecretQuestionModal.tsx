@@ -61,7 +61,7 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
     backdropTimeout.current = setTimeout(
       () => setSelectedAgent(null),
       BACKDROP_TIMEOUT
-    )
+    )!
   }
 
   const onChangeSelectMls = event => {

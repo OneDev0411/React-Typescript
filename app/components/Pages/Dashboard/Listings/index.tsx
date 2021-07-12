@@ -4,8 +4,6 @@ import { useTitle } from 'react-use'
 
 import { ListSelection } from 'components/ListSelection'
 
-import { ShareListings } from './components/ShareListings'
-
 interface Props {
   children: ReactElement<ReactChildren>
 }
@@ -16,7 +14,6 @@ function Listings({ children, ...rest }: Props) {
   return (
     <ListSelection<IListing>>
       <>{cloneElement(children, rest)}</>
-      <ShareListings />
     </ListSelection>
   )
 }

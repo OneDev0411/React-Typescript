@@ -15,6 +15,7 @@ module.exports = {
     '\\.svg$': 'jest-raw-loader'
   },
   moduleNameMapper: {
+    '^@app/(.*)': '<rootDir>/app/$1',
     '^actions/(.*)': '<rootDir>/app/store_actions/$1',
     '^assets/(.*)': '<rootDir>/app/static/$1',
     '^components/(.*)': '<rootDir>/app/views/components/$1',

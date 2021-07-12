@@ -34,7 +34,9 @@ const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
 
 export function RoleForm(props) {
-  const [showNameDetails, setShowNameDetails] = useState(false)
+  const [showNameDetails, setShowNameDetails] = useState(
+    props.values.legal_prefix || props.values.legal_middle_name
+  )
 
   const hasErrors = Object.keys(props.errors).length > 0
   const isRequired = field => props.requiredFields.includes(field)
@@ -134,7 +136,7 @@ export function RoleForm(props) {
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="legal_first_name"
-              searchFieldValue="first_name"
+              searchFieldValue="display_name"
               searchFieldLabel="display_name"
               label="First Name"
               isVisible={isVisible('legal_first_name')}
@@ -148,7 +150,7 @@ export function RoleForm(props) {
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
               name="legal_last_name"
-              searchFieldValue="last_name"
+              searchFieldValue="display_name"
               searchFieldLabel="display_name"
               label="Last Name"
               isVisible={isVisible('legal_last_name')}

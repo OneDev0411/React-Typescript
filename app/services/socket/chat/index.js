@@ -6,10 +6,8 @@ import store from '../../../stores'
 import {
   addMessageTyping,
   removeMessageTyping,
-  initialStates,
-  updateState
+  initialStates
 } from '../../../store_actions/chatroom'
-import { changeSocketStatus } from '../../../store_actions/socket'
 
 export default class ChatSocket extends Socket {
   constructor(user) {
@@ -94,8 +92,8 @@ export default class ChatSocket extends Socket {
   /**
    * on change user state
    */
-  onUserState({ state, user_id }) {
-    store.dispatch(updateState(user_id, state))
+  onUserState(/* { state, user_id } */) {
+    // store.dispatch(updateState(user_id, state))
   }
 
   /**
@@ -121,12 +119,12 @@ export default class ChatSocket extends Socket {
    */
   onReconnected() {
     // change socket status
-    store.dispatch(changeSocketStatus('synchronizing'))
+    // store.dispatch(changeSocketStatus('synchronizing'))
 
     // synchronize chatroom
     Chatroom.synchronize()
 
     // change socket status again
-    store.dispatch(changeSocketStatus('connected'))
+    // store.dispatch(changeSocketStatus('connected'))
   }
 }

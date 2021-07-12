@@ -41,6 +41,8 @@ export async function preSaveFormat(values, originalValues = null) {
   const end_date =
     endDateTimestamp > dueDateTimestamp ? endDateTimestamp / 1000 : null
 
+  const defaultStatus = values.status || 'PENDING'
+
   const task = {
     title: title.trim(),
     due_date: dueDateTimestamp / 1000,
@@ -48,7 +50,7 @@ export async function preSaveFormat(values, originalValues = null) {
     task_type: task_type.value,
     all_day: isAllDay,
     assignees: assignees.map(a => a.id),
-    status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : 'PENDING'
+    status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : defaultStatus
   }
 
   if (originalValues?.id || description) {

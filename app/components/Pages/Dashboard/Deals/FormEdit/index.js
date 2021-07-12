@@ -26,6 +26,10 @@ import { selectFormById } from 'reducers/deals/forms'
 
 import { getDealChecklists } from 'reducers/deals/checklists'
 
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+
+import { isRetinaScreen } from '@app/utils/is-retina-screen'
+
 import { parseAnnotations } from './utils/parse-annotations'
 import { getDefaultValues } from './utils/get-default-values'
 
@@ -59,7 +63,9 @@ class EditDigitalForm extends React.Component {
     this.unregisterLeaveHook()
   }
 
-  scale = window.devicePixelRatio * 1.2
+  scale = isRetinaScreen()
+    ? window.devicePixelRatio * 2
+    : window.devicePixelRatio * 1.6
 
   displayWidth = Math.min(window.innerWidth - 80, 900)
 
@@ -70,7 +76,8 @@ class EditDigitalForm extends React.Component {
       return true
     }
 
-    return 'Your work is not saved! Are you sure you want to leave?'
+    return `You have not saved your work! 
+    Could you please confirm that you want to leave?`
   }
 
   /**
@@ -142,6 +149,7 @@ class EditDigitalForm extends React.Component {
       defaultValues,
       deal: this.props.deal,
       roles: this.props.roles,
+      brandChecklists: this.props.brandChecklists,
       scale: this.scale,
       displayWidth: this.displayWidth
     })
@@ -191,6 +199,7 @@ class EditDigitalForm extends React.Component {
       .map(([name, value]) =>
         createContextObject(
           this.props.deal,
+          this.props.brandChecklists,
           this.props.checklists,
           name,
           value,
@@ -302,6 +311,8 @@ function mapStateToProps({ deals, user }, props) {
   const task = selectTaskById(deals.tasks, props.params.taskId)
   const form = deal && task && selectFormById(deals.forms, deal.id, task.form)
   const checklists = deal && getDealChecklists(deal, deals.checklists)
+  const brandChecklists =
+    deal && getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
 
   return {
     user,
@@ -309,6 +320,7 @@ function mapStateToProps({ deals, user }, props) {
     task,
     form,
     checklists,
+    brandChecklists,
     roles: selectDealRoles(deals.roles, deal)
   }
 }

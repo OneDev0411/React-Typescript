@@ -42,7 +42,9 @@ function AddToFlowForm({ contacts, handleClose, callback, ...props }) {
         setIsFetching(true)
 
         let templatesById = {}
-        const data = await getBrandFlows(getActiveTeamId(props.user))
+        const data = await getBrandFlows(getActiveTeamId(props.user), {
+          associations: ['brand_flow.steps']
+        })
 
         data.forEach(t => {
           templatesById[t.id] = {

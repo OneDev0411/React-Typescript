@@ -6,6 +6,7 @@ import tasks from './tasks'
 import roles from './roles'
 import envelopes from './envelopes'
 import checklists from './checklists'
+import brandChecklists from './brand-checklists'
 import forms from './forms'
 import upload from './upload'
 import contexts from './contexts'
@@ -15,6 +16,7 @@ export default combineReducers({
   list,
   tasks,
   checklists,
+  brandChecklists,
   roles,
   envelopes,
   forms,

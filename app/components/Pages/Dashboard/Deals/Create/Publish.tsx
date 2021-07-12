@@ -23,7 +23,7 @@ import { useLoadFullDeal } from 'hooks/use-load-deal'
 
 import { goTo } from 'utils/go-to'
 
-import { getField } from 'models/Deal/helpers/context'
+import { getField, getStatus } from 'models/Deal/helpers/context'
 
 import { createAddressContext } from 'deals/utils/create-address-context'
 
@@ -31,7 +31,11 @@ import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 
-import { getDealContexts } from './helpers/get-deal-contexts'
+import {
+  getBrandChecklistRequiredContexts,
+  getBrandChecklistsById
+} from 'reducers/deals/brand-checklists'
+
 import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
 
 import { DealContext } from './form/DealContext'
@@ -76,15 +80,21 @@ export default function Publish({ params }: Props) {
   const deal: IDeal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, params.id)
   )
-  const checklists = useSelector<IAppState, IDealChecklist[]>(state =>
-    getDealChecklists(deal, state.deals.checklists)
+
+  const { checklists, brandChecklists } = useSelector(
+    ({ deals }: IAppState) => ({
+      brandChecklists: deal
+        ? getBrandChecklistsById(deals.brandChecklists, deal.brand.id)
+        : [],
+      checklists: getDealChecklists(deal, deals.checklists)
+    })
   )
 
   const statusList = useStatusList(deal)
   const statusContextKey = getStatusContextKey(deal)
 
   const isStatusVisible =
-    deal && showStatusQuestion(deal, deal?.deal_type, statusContextKey)
+    deal && showStatusQuestion(deal, brandChecklists, statusContextKey)
 
   useEffect(() => {
     if (deal?.is_draft === false) {
@@ -95,7 +105,23 @@ export default function Publish({ params }: Props) {
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
 
-  const contexts = deal ? getDealContexts(deal, deal.deal_type) : []
+  const requiredContexts = useSelector<
+    IAppState,
+    IBrandChecklist['required_contexts']
+  >(({ deals }) => {
+    return deal
+      ? getBrandChecklistRequiredContexts(
+          deals.brandChecklists,
+          deal.brand.id,
+          deal.property_type?.id,
+          deal.has_active_offer ? 'Offer' : deal.deal_type
+        ).filter(
+          context =>
+            ['listing_status', 'contract_status'].includes(context.key) ===
+            false
+        )
+      : []
+  })
 
   const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
     selectDealRoles(deals.roles, deal)
@@ -137,11 +163,11 @@ export default function Publish({ params }: Props) {
       errors.selling_clients = 'Seller Legal Names is required'
     }
 
-    if (isStatusVisible && !status) {
+    if (isStatusVisible && statusList.length > 0 && !status) {
       errors.status = 'Status is required'
     }
 
-    contexts
+    requiredContexts
       .filter(context => {
         const value = watch(`context:${context.key}`)
 
@@ -174,12 +200,17 @@ export default function Publish({ params }: Props) {
         await dispatch(createRoles(deal.id, roles))
       }
 
-      await dispatch(
-        upsertContexts(
-          deal.id,
-          getFormContexts(values, deal, checklists, deal.deal_type)
-        )
-      )
+      const contexts = getFormContexts(
+        values,
+        deal,
+        brandChecklists,
+        checklists,
+        deal.deal_type
+      ).filter(context => !!context.checklist)
+
+      if (contexts.length > 0) {
+        await dispatch(upsertContexts(deal.id, contexts))
+      }
 
       showNotification &&
         dispatch(
@@ -200,7 +231,12 @@ export default function Publish({ params }: Props) {
     property: PropertyAddress
   ) => {
     if (property.type === 'Place') {
-      const contexts = createAddressContext(deal, checklists, property.address)
+      const contexts = createAddressContext(
+        deal,
+        brandChecklists,
+        checklists,
+        property.address
+      )
 
       dispatch(upsertContexts(deal.id, contexts))
     }
@@ -376,12 +412,12 @@ export default function Publish({ params }: Props) {
               />
             )}
 
-            {isStatusVisible && !getField(deal, statusContextKey) && (
+            {isStatusVisible && !getStatus(deal) && statusList.length > 0 && (
               <Controller
                 key="status"
                 name={`context:${statusContextKey}`}
                 control={control}
-                defaultValue={getField(deal, statusContextKey)}
+                defaultValue={getStatus(deal)}
                 render={({ onChange }) => (
                   <DealStatus
                     list={statusList}
@@ -392,8 +428,8 @@ export default function Publish({ params }: Props) {
               />
             )}
 
-            {contexts.length > 0 &&
-              contexts.map((context: IDealBrandContext) => (
+            {requiredContexts.length > 0 &&
+              requiredContexts.map((context: IDealBrandContext) => (
                 <Controller
                   key={context.id}
                   name={`context:${context.key}`}

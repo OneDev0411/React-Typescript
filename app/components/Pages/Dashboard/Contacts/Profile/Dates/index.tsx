@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
@@ -12,16 +13,30 @@ const fieldsOrder = [
   'birthday',
   'child_birthday',
   'wedding_anniversary',
-  'home_anniversary',
-  'work_anniversary'
+  'work_anniversary',
+  'home_anniversary'
 ]
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    loadingContainer: {
+      padding: theme.spacing(0, 1),
+      textAlign: 'center'
+    }
+  }),
+  { name: 'ContactProfileDates' }
+)
 
 interface Props {
   contact: INormalizedContact
-  submitCallback: () => {}
+  submitCallback: (
+    newContact: INormalizedContact,
+    updatedAttribute: IContactAttributeDef
+  ) => void
 }
 
 export function Dates({ contact, submitCallback }: Props) {
+  const classes = useStyles()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [otherFields, setOtherFields] = useState<ICalendarEvent[]>([])
 
@@ -52,26 +67,30 @@ export function Dates({ contact, submitCallback }: Props) {
 
   return (
     <>
-      {/*
-        // @ts-ignore */}
       <SectionWithFields
+        showTitleAnyway
         contact={contact}
         fieldsOrder={fieldsOrder}
         section="Dates"
         submitCallback={submitCallback}
         title="Touch Dates"
+        expandButtonLabel="Add Birthdays & Anniversaries"
       >
         {isLoading ? (
-          <Loading />
+          <Box className={classes.loadingContainer}>
+            <Loading />
+          </Box>
         ) : (
-          otherFields.map(field => (
-            <DealContextField
-              deal={field.deal || ''}
-              key={field.id}
-              title={field.title}
-              value={field.timestamp}
-            />
-          ))
+          <Box>
+            {otherFields.map(field => (
+              <DealContextField
+                deal={field.deal || ''}
+                key={field.id}
+                title={field.title}
+                value={field.timestamp}
+              />
+            ))}
+          </Box>
         )}
       </SectionWithFields>
     </>

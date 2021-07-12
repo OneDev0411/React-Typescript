@@ -16,7 +16,7 @@ export const getInitialTemplateValue = (
     return typeof step.template_instance === 'string'
       ? step.template_instance
       : {
-          isInstance: false,
+          isInstance: true,
           id: step.template_instance.id
         }
   }

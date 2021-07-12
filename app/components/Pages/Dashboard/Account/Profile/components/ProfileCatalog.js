@@ -49,14 +49,14 @@ class ProfileCatalog extends Component {
 
   getImageUploadButtonText() {
     if (this.props.isUploading) {
-      return 'Uploading'
+      return 'Uploading...'
     }
 
     if (this.props.user.profile_image_url) {
-      return 'Update'
+      return 'Update Profile Picture'
     }
 
-    return 'Upload'
+    return 'Upload Profile Picture'
   }
 
   render() {
@@ -65,7 +65,7 @@ class ProfileCatalog extends Component {
         <Container>
           <Avatar
             user={this.props.user}
-            size="xlarge"
+            size="xxlarge"
             data-test="profile-avatar-image"
           />
 
@@ -96,7 +96,7 @@ class ProfileCatalog extends Component {
                   onClick={openDialog}
                   data-test="profile-avatar-upload-button"
                 >
-                  {`${this.getImageUploadButtonText()} Profile Picture`}
+                  {`${this.getImageUploadButtonText()}`}
                 </Button>
               )}
             </ImageUploader>

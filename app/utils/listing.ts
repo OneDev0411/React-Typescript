@@ -75,6 +75,7 @@ export const localAddress = (address: Address | ICompactAddress): string =>
 export const addressTitle = (address: Address | ICompactAddress): string => {
   const street = [
     address.street_number,
+    address.street_dir_prefix,
     address.street_name,
     address.street_suffix
   ].filter(a => a).join(' ')

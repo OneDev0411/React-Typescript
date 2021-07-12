@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { ButtonGroup, Button, Box, Tooltip } from '@material-ui/core'
-import { mdiFormatListText, mdiViewWeekOutline } from '@mdi/js'
+import { Box } from '@material-ui/core'
 
 import { mdiLoading } from '@mdi/js'
 
@@ -43,16 +42,15 @@ import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-q
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
 import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { Callout } from 'components/Callout'
 import { selectActiveSavedSegment } from 'reducers/filter-segments'
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import ImportContactsButton from 'components/ImportContactsButton'
 
 import { putUserSetting } from 'models/user/put-user-setting'
 
 import ContactsTabs from './Tabs'
 import Table from './Table'
-import ImportContactsButton from './ImportContactsButton'
 import TouchReminder from './TouchReminder'
 import { OtherContactsBadge } from './OtherContactsBadge'
 
@@ -104,11 +102,10 @@ class ContactsList extends React.Component {
     const globalButtonDispatch = this.context
 
     const { parkedContactsCount } = this.state
-    const { user, fetchOAuthAccounts, fetchTags, getContactsTags } = this.props
+    const { user, fetchTags, getContactsTags } = this.props
 
     this.order =
       getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
-    fetchOAuthAccounts()
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
@@ -153,8 +150,23 @@ class ContactsList extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.setContactsListTextFilter(this.state.searchInputValue)
+  async componentWillUnmount() {
+    const { selectedShortcutFilter } = this.state
+    const {
+      activeSegment,
+      filters,
+      setContactsListTextFilter,
+      resetActiveFilters
+    } = this.props
+
+    if (
+      filters &&
+      (!selectedShortcutFilter || activeSegment.id === 'default')
+    ) {
+      await resetActiveFilters(CONTACTS_SEGMENT_NAME)
+    }
+
+    setContactsListTextFilter(this.state.searchInputValue)
   }
 
   setSelectedShortcutFilter = () => {
@@ -784,6 +796,7 @@ class ContactsList extends React.Component {
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
+        onChangeView={this.changeViewMode}
         viewMode={this.state.viewMode}
         {...props}
       />
@@ -852,46 +865,12 @@ class ContactsList extends React.Component {
                   onChange={this.handleTagTouchReminderUpdate}
                 />
               )}
-              {showImportAction && <ImportContactsButton />}
-
-              <Box ml={1}>
-                <ButtonGroup
-                  variant="outlined"
-                  style={{
-                    height: props.theme.spacing(5.25)
-                  }}
-                >
-                  <Tooltip title="Switch to Table">
-                    <Button
-                      size="large"
-                      style={{
-                        background:
-                          this.state.viewMode === 'table'
-                            ? props.theme.palette.action.hover
-                            : '#fff'
-                      }}
-                      onClick={() => this.changeViewMode('table')}
-                    >
-                      <SvgIcon path={mdiFormatListText} />
-                    </Button>
-                  </Tooltip>
-
-                  <Tooltip title="Switch to Board">
-                    <Button
-                      size="large"
-                      style={{
-                        background:
-                          this.state.viewMode === 'board'
-                            ? props.theme.palette.action.hover
-                            : '#fff'
-                      }}
-                      onClick={() => this.changeViewMode('board')}
-                    >
-                      <SvgIcon path={mdiViewWeekOutline} />
-                    </Button>
-                  </Tooltip>
-                </ButtonGroup>
-              </Box>
+              {showImportAction && (
+                <ImportContactsButton
+                  hasCSVButton
+                  tooltip="Connect to Google, Outlook or import from a CSV"
+                />
+              )}
             </Box>
           )}
           <Box ml={1.5}>
@@ -1046,7 +1025,6 @@ ContactsList.contextType = GlobalButtonDispatch
 export default withRouter(
   connect(mapStateToProps, {
     getContacts,
-    fetchOAuthAccounts,
     searchContacts,
     deleteContacts,
     confirmation,

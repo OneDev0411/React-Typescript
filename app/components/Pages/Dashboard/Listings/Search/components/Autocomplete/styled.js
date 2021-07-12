@@ -4,11 +4,10 @@ import { grey, borderColor } from '../../../../../../../views/utils/colors'
 import Card from '../../../../../../../views/components/Card'
 
 export const SearchContainer = styled.div`
-  display: inline-block;
   position: relative;
 `
 export const ListContainer = styled(Card)`
-  width: 133%;
+  width: 100%;
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
@@ -22,7 +21,7 @@ export const ListTitle = styled.div`
 `
 
 export const Item = styled.div`
-  cursor: default;
+  cursor: pointer;
   padding: 0 0.75rem;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -45,4 +44,8 @@ export const Item = styled.div`
       font-weight: 600;
     }
   }
+`
+export const NoResults = styled.div`
+  padding: 8px;
+  text-align: center;
 `

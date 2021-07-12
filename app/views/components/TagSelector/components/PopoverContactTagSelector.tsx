@@ -9,7 +9,12 @@ import {
   Theme
 } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router'
 
+import { mdiCogOutline } from '@mdi/js'
+
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { bulkTag } from 'models/contacts/bulk-tag'
 import {
   generateContactFilters,
@@ -41,13 +46,26 @@ const useStyles = makeStyles(
         ...theme.typography.body2
       }
     },
-    actions: {
-      marginTop: theme.spacing(2),
+    actionsContainer: {
+      marginTop: theme.spacing(1),
       paddingTop: theme.spacing(1),
       display: 'flex',
       alignItems: 'center',
-      borderTop: `1px solid ${theme.palette.divider}`,
       direction: 'rtl'
+    },
+    manageTags: {
+      display: 'flex',
+      alignItems: 'center',
+      padding: theme.spacing(1.25, 2),
+      background: theme.palette.grey[100],
+      color: theme.palette.tertiary.dark,
+      ...theme.typography.button,
+      '&:hover': {
+        textDecoration: 'none'
+      }
+    },
+    manageTagsIcon: {
+      marginRight: theme.spacing(0.5)
     }
   }),
   { name: 'PopoverContactTagSelector' }
@@ -57,15 +75,17 @@ interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   label?: string
   filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
+  showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
 }
 
 export const PopoverContactTagSelector = ({
-  anchorRenderer,
+  showManageTags = false,
   popoverProps = {},
-  value = [],
   callback = noop,
+  anchorRenderer,
+  value = [],
   filter,
   label,
   ...props
@@ -160,9 +180,10 @@ export const PopoverContactTagSelector = ({
             value={value}
             onChange={handleChange}
           />
-          <Box className={classes.actions}>
-            <Box>
+          <Box className={classes.actionsContainer}>
+            <Box flexGrow={1}>
               <Button
+                fullWidth
                 variant="contained"
                 color="secondary"
                 size="small"
@@ -172,13 +193,33 @@ export const PopoverContactTagSelector = ({
                 {isSaving ? 'Saving' : 'Done'}
               </Button>
             </Box>
-            <Box mr={0.5}>
-              <Button variant="outlined" size="small" onClick={handleClose}>
+            <Box flexGrow={1} mr={0.5}>
+              <Button
+                fullWidth
+                variant="outlined"
+                size="small"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
             </Box>
           </Box>
         </Box>
+        {showManageTags && (
+          <Box>
+            <Link
+              to="/dashboard/account/manage-tags"
+              className={classes.manageTags}
+            >
+              <SvgIcon
+                path={mdiCogOutline}
+                size={muiIconSizes.small}
+                className={classes.manageTagsIcon}
+              />
+              Manage Tags
+            </Link>
+          </Box>
+        )}
       </Popover>
     </>
   )

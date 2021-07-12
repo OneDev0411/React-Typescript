@@ -12,6 +12,7 @@ import { Field } from 'react-final-form'
 
 interface Props {
   context: IDealBrandContext | null
+  brandId: UUID
   brandPropertyTypes: IDealPropertyType[]
 }
 
@@ -29,7 +30,11 @@ const useStyles = makeStyles(
   }
 )
 
-export function AvailabilityFields({ context, brandPropertyTypes }: Props) {
+export function AvailabilityFields({
+  context,
+  brandId,
+  brandPropertyTypes
+}: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
 
@@ -119,24 +124,36 @@ export function AvailabilityFields({ context, brandPropertyTypes }: Props) {
               {propertyType.label}
             </Grid>
 
-            {propertyType.checklists?.map(checklist => (
-              <Grid key={checklist.id} item xs={3} className={classes.center}>
-                <Field
-                  name={`checklists[${checklist.id}]`}
-                  defaultValue={getDefaultValue(checklist)}
-                  render={({ input }) => (
-                    <Button
-                      style={{
-                        color: getButtonColor(input.value)
-                      }}
-                      onClick={() => input.onChange(getNextState(input.value))}
-                    >
-                      {getButtonLabel(input.value)}
-                    </Button>
-                  )}
-                />
-              </Grid>
-            ))}
+            {(propertyType.checklists || [])
+              .filter(checklist => checklist.brand === brandId)
+              .sort((a, b) => {
+                const checklistsTypes = ['Selling', 'Buying', 'Offer']
+
+                return (
+                  checklistsTypes.indexOf(a.checklist_type) -
+                  checklistsTypes.indexOf(b.checklist_type)
+                )
+              })
+              .map(checklist => (
+                <Grid key={checklist.id} item xs={3} className={classes.center}>
+                  <Field
+                    name={`checklists[${checklist.id}]`}
+                    defaultValue={getDefaultValue(checklist)}
+                    render={({ input }) => (
+                      <Button
+                        style={{
+                          color: getButtonColor(input.value)
+                        }}
+                        onClick={() =>
+                          input.onChange(getNextState(input.value))
+                        }
+                      >
+                        {getButtonLabel(input.value)}
+                      </Button>
+                    )}
+                  />
+                </Grid>
+              ))}
           </Grid>
         ))}
     </Box>

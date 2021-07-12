@@ -122,7 +122,11 @@ export function convertContactToRole(contact) {
     email: contact.email,
     phone_number: contact.phone_number,
     company: contact.company,
-    company_title: contact.company
+    company_title: contact.company,
+    current_address:
+      Array.isArray(contact.address) && contact.address.length > 0
+        ? contact.address[0]
+        : null
   }
 }
 
@@ -142,8 +146,8 @@ export function convertAgentToRole(agent) {
     legal_last_name: agent.last_name,
     email: agent.email,
     phone_number: agent.phone_number,
-    company: agent.office.name,
-    company_title: agent.office.name
+    company: agent.office ? agent.office.name : '',
+    company_title: agent.office ? agent.office.name : ''
   }
 }
 

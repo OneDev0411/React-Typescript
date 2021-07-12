@@ -33,9 +33,11 @@ module.exports = {
     modules: [resolvePath('../app'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
     alias: {
+      '@app': resolvePath('../app'),
       store: resolvePath('../app/stores'),
       actions: resolvePath('../app/store_actions'),
       assets: resolvePath('../app/static'),
+      styles: resolvePath('../app/styles'),
       components: resolvePath('../app/views/components'),
       constants: resolvePath('../app/constants'),
       dashboard: resolvePath('../app/components/Dashboard'),
@@ -110,7 +112,8 @@ module.exports = {
           process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION
         ),
         MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
-        STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY)
+        STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY),
+        SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL)
       },
       __DEV__,
       NODE_ENV: env,

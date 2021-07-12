@@ -1,5 +1,5 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { ReactElement, memo } from 'react'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -13,10 +13,11 @@ import {
 } from 'utils/user-teams'
 import { selectBrandContexts } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
+import { useQueryParam } from '@app/hooks/use-query-param'
 
 interface StateProps {
   user: IUser | null
-  deals: Record<UUID, IDeal>
+  dealsCount: number
   brandContexts: IDealBrandContext[]
   isFetchingDeals: boolean
   brandId: UUID | null
@@ -26,28 +27,32 @@ interface Props {
   params: {
     id: UUID
   }
-  children: React.ReactNode
+  children: ReactElement<any>
 }
 
-const DealsContainer = (props: Props) => {
+function Container(props: Props) {
   console.log('[ x ] Rerender deals container')
 
   const dispatch = useDispatch()
+  const [queryParamValue] = useQueryParam('q')
 
-  const { user, deals, brandContexts, isFetchingDeals, brandId } = useSelector<
-    IAppState,
-    StateProps
-  >(({ deals, user }) => {
+  const {
+    user,
+    dealsCount,
+    brandContexts,
+    isFetchingDeals,
+    brandId
+  } = useSelector<IAppState, StateProps>(({ deals, user }) => {
     const brandId = getActiveTeamId(user)
 
     return {
-      deals: deals.list,
+      dealsCount: Object.keys(deals.list).length,
       brandContexts: selectBrandContexts(deals.contexts, brandId),
       isFetchingDeals: deals.properties.isFetchingDeals,
       brandId,
       user
     }
-  })
+  }, shallowEqual)
 
   useEffectOnce(() => {
     const isBackOffice = hasUserAccess(user, 'BackOffice')
@@ -60,11 +65,11 @@ const DealsContainer = (props: Props) => {
       dispatch(getContextsByBrand(brandId))
     }
 
-    if (Object.keys(deals).length === 0 && !isFetchingDeals) {
-      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+    if (dealsCount === 0 && !isFetchingDeals) {
+      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !queryParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user))
+        dispatch(searchDeals(user, queryParamValue))
       }
     }
   })
@@ -81,7 +86,7 @@ const DealsContainer = (props: Props) => {
     )
   }
 
-  return props.children
+  return <>{props.children}</>
 }
 
-export default DealsContainer
+export default memo(Container)

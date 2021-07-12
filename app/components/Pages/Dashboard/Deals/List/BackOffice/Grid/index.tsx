@@ -1,4 +1,3 @@
-import React, { useMemo } from 'react'
 import { WithRouterProps, withRouter } from 'react-router'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
@@ -22,6 +21,14 @@ import { getGridSort } from 'deals/List/helpers/sorting'
 
 import { selectUser } from 'selectors/user'
 
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+
+import { getActiveTeamId } from '@app/utils/user-teams'
+
+import { TrProps } from '@app/views/components/Grid/Table/types'
+
+import { goTo } from '@app/utils/go-to'
+
 import { SearchQuery } from '../types'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
@@ -38,6 +45,8 @@ import {
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
 
+import onDealOpened from '../../../utils/on-deal-opened'
+
 interface Props {
   searchQuery: SearchQuery
   statuses: IDealStatus[]
@@ -52,6 +61,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
   const user = useSelector(selectUser)
+  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
   const getOffice = (deal: IDeal) => {
     let brand: IBrand | null = deal.brand
@@ -81,66 +91,73 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     return ''
   }
 
-  const columns = useMemo(() => {
-    return [
-      {
-        id: 'address',
-        width: '25%',
-        accessor: (deal: IDeal) => deal.title,
-        render: ({ row: deal }) => (
-          <Address deal={deal} notificationsCount={deal.attention_requests} />
-        )
-      },
-      {
-        id: 'status',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal) || '',
-        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
-        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, props.statuses)
-      },
-      {
-        id: 'agent-name',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
-        render: ({ row: deal }: { row: IDeal }) =>
-          getPrimaryAgentName(deal, roles)
-      },
-      {
-        id: 'office',
-        class: 'opaque',
-        accessor: getOffice,
-        render: ({ row: deal }: { row: IDeal }) => getOffice(deal)
-      },
-      {
-        id: 'submitted-at',
-        class: 'opaque',
-        accessor: (deal: IDeal) => deal.attention_requested_at,
-        render: ({ row: deal }: { row: IDeal }) =>
-          getSubmitTime(deal.attention_requested_at)
-      },
-      {
-        id: 'critical-dates',
-        class: 'opaque',
-        accessor: getCriticalDateNextValue,
-        render: ({ row: deal, totalRows, rowIndex }) => (
-          <CriticalDate deal={deal} user={user} />
-        )
-      },
-      {
-        id: 'contract-price',
-        class: 'opaque',
-        align: 'right' as TableCellProps['align'],
-        accessor: getPrice,
-        render: ({ row: deal }: { row: IDeal }) => (
-          <div>{getFormattedPrice(getPrice(deal))}</div>
-        )
-      },
-      {
-        id: 'creation-time',
-        accessor: (deal: IDeal) => deal.created_at
+  const columns = [
+    {
+      id: 'address',
+      width: '25%',
+      accessor: (deal: IDeal) => deal.title,
+      render: ({ row: deal }) => (
+        <Address deal={deal} notificationsCount={deal.attention_requests} />
+      )
+    },
+    {
+      id: 'status',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getStatus(deal) || '',
+      render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+      sortFn: (rows: IDeal[]) => sortDealsStatus(rows, props.statuses)
+    },
+    {
+      id: 'agent-name',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
+      render: ({ row: deal }: { row: IDeal }) =>
+        getPrimaryAgentName(deal, roles)
+    },
+    {
+      id: 'office',
+      class: 'opaque',
+      accessor: getOffice,
+      render: ({ row: deal }: { row: IDeal }) => getOffice(deal)
+    },
+    {
+      id: 'submitted-at',
+      class: 'opaque',
+      accessor: (deal: IDeal) => deal.attention_requested_at,
+      render: ({ row: deal }: { row: IDeal }) =>
+        getSubmitTime(deal.attention_requested_at)
+    },
+    {
+      id: 'critical-dates',
+      class: 'opaque',
+      accessor: getCriticalDateNextValue,
+      render: ({ row: deal }) => (
+        <CriticalDate deal={deal} brandChecklists={brandChecklists} />
+      )
+    },
+    {
+      id: 'contract-price',
+      class: 'opaque',
+      align: 'right' as TableCellProps['align'],
+      accessor: getPrice,
+      render: ({ row: deal }: { row: IDeal }) => (
+        <div>{getFormattedPrice(getPrice(deal))}</div>
+      )
+    },
+    {
+      id: 'creation-time',
+      accessor: (deal: IDeal) => deal.created_at
+    }
+  ]
+
+  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
+    return {
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}`)
+        onDealOpened()
       }
-    ]
-  }, [roles, user, props.statuses])
+    }
+  }
 
   const getData = (): IDeal[] => {
     if (!deals) {
@@ -188,6 +205,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={ContactsZeroState}
       loading={isFetchingDeals ? 'middle' : null}
+      getTrProps={getRowProps}
       classes={{
         row: gridClasses.row
       }}

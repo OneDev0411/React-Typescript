@@ -5,7 +5,10 @@ import juice from 'juice'
 import { Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiMenu } from '@mdi/js'
 
+import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
+
 import uploadAsset from 'models/instant-marketing/upload-asset'
+import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 
 import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -306,6 +309,14 @@ class Builder extends React.Component {
     }
   }
 
+  getCKEditorPluginsToRemove = () => {
+    if (this.isMjmlTemplate) {
+      return []
+    }
+
+    return ['quicktable', 'tableresize', 'tabletools', 'table']
+  }
+
   loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const brandColors = getBrandColors(brand)
@@ -316,8 +327,11 @@ class Builder extends React.Component {
       const fonts =
         templateFonts.length > 0 ? templateFonts : this.getTemplateMarkupFonts()
 
+      const pluginsToRemove = this.getCKEditorPluginsToRemove()
+
       return {
-        font_names: fonts.join(';')
+        font_names: fonts.join(';'),
+        removePlugins: pluginsToRemove
       }
     })
   }
@@ -1224,7 +1238,15 @@ class Builder extends React.Component {
               onSelectListingsCallback={listings => {
                 listings.forEach(this.addListingAssets)
 
-                this.blocks.listing.selectHandler(listings)
+                const listingsWithFallbackImages = listings.map(listing => ({
+                  ...listing,
+                  gallery_image_urls: getArrayWithFallbackAccessor(
+                    listing.gallery_image_urls,
+                    PLACEHOLDER_IMAGE_URL
+                  )
+                }))
+
+                this.blocks.listing.selectHandler(listingsWithFallbackImages)
                 this.setState({ isListingDrawerOpen: false })
               }}
             />
@@ -1424,7 +1446,6 @@ class Builder extends React.Component {
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
                   mjml={this.selectedTemplate.mjml}
-                  user={this.props.user}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
                 />

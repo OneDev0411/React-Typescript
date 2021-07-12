@@ -1,55 +1,37 @@
 import React, { useState } from 'react'
-
 import {
   Box,
   makeStyles,
   TextField,
   Theme,
-  Typography,
-  Avatar
+  Paper,
+  CircularProgress
 } from '@material-ui/core'
-import cn from 'classnames'
 import { useAsync, useDebounce } from 'react-use'
-import { mdiPlus } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { parseFullName } from 'parse-full-name'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 import searchAgents from 'models/agent/search'
 
-import { convertContactToRole, convertAgentToRole } from '../../../utils/roles'
+import VirtualList from 'components/VirtualList'
+
+import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
+
+import { Row, RowItem, RowType } from './Row'
 
 import { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      maxHeight: '30vh',
-      overflow: 'auto',
       '&.has-border': {
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius
       }
     },
-    row: {
-      padding: theme.spacing(1),
-      '&:hover': {
-        background: theme.palette.action.hover,
-        cursor: 'pointer'
-      }
-    },
-    newClientAvatar: {
-      border: `1px solid ${theme.palette.secondary.main}`,
-      backgroundColor: '#fff'
-    },
-    newClient: {
-      color: theme.palette.secondary.main
-    },
-    rowContent: {
-      paddingLeft: theme.spacing(2)
-    },
-    email: {
-      color: theme.palette.grey[500]
+    listContainer: {
+      padding: theme.spacing(1)
     },
     searchInput: {
       padding: theme.spacing(1, 0)
@@ -79,8 +61,8 @@ export function ContactRoles({
     setDebouncedSearchCriteria
   ] = useState<string>('')
 
-  const [contacts, setContacts] = useState<IContact[]>([])
-  const [agents, setAgents] = useState<IAgent[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [rows, setRows] = useState<RowItem[]>([])
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -97,38 +79,80 @@ export function ContactRoles({
    * Search for contacts when the search criteria changes
    */
   useAsync(async () => {
+    if (searchCriteria.length === 0) {
+      setRows([])
+
+      return
+    }
+
     if (searchCriteria.length < 3) {
       return
     }
 
-    if (source === 'MLS') {
-      const agents = await searchAgents(searchCriteria, 'q')
+    setIsSearching(true)
 
-      setAgents(agents)
+    if (source === 'MLS') {
+      const agents: IAgent[] = await searchAgents(searchCriteria, 'q')
+
+      setRows([
+        {
+          type: RowType.New,
+          name: searchCriteria
+        },
+        ...agents.map(
+          agent =>
+            ({
+              type: RowType.Agent,
+              agent
+            } as RowItem)
+        )
+      ])
     }
 
     if (source === 'CRM') {
       const { data: contacts } = await searchContacts(searchCriteria)
 
-      setContacts(contacts)
+      setRows([
+        {
+          type: RowType.New,
+          name: searchCriteria
+        },
+        ...contacts.map(
+          contact =>
+            ({
+              type: RowType.Contact,
+              contact
+            } as RowItem)
+        )
+      ])
     }
+
+    setIsSearching(false)
   }, [debouncedSearchCriteria])
 
   /**
    * Starts creating a new contact based on the given name
    */
   const createNewContact = () => {
-    const name = debouncedSearchCriteria.split(' ')
+    const { first, last, middle, title } = parseFullName(
+      debouncedSearchCriteria,
+      'all',
+      1,
+      0,
+      0
+    )
 
     handleSelectRole({
-      legal_first_name: name[0],
-      legal_last_name: name[1]
+      legal_prefix: isValidNameTitle(title) ? title : undefined,
+      legal_first_name: first,
+      legal_last_name: last,
+      legal_middle_name: middle
     })
   }
 
   const handleSelectRole = (role: Partial<IDealFormRole>) => {
     setSearchCriteria('')
-    setContacts([])
+    setRows([])
 
     onSelectRole(role)
   }
@@ -146,60 +170,39 @@ export function ContactRoles({
         className={classes.searchInput}
       />
 
-      {debouncedSearchCriteria && (
-        <Box
-          display="flex"
-          alignItems="center"
-          className={cn(classes.row, classes.newClient)}
-          onClick={createNewContact}
-        >
-          <Avatar className={classes.newClientAvatar}>
-            <SvgIcon path={mdiPlus} className={classes.newClient} />
-          </Avatar>
+      {isSearching && <CircularProgress />}
 
-          <div className={classes.rowContent}>
-            Add <strong>{searchCriteria}</strong>
-          </div>
-        </Box>
+      {rows.length > 0 && !isSearching && (
+        <Paper
+          className={classes.listContainer}
+          style={{
+            height: rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
+          }}
+        >
+          <AutoSizer>
+            {({ width, height }) => (
+              <VirtualList
+                width={width}
+                height={height}
+                itemCount={rows.length}
+                itemData={
+                  {
+                    rows,
+                    searchCriteria,
+                    onSelectRole: handleSelectRole,
+                    onCreateNewContact: createNewContact
+                  } as React.ComponentProps<typeof Row>['data']
+                }
+                threshold={2}
+                itemSize={() => 60}
+                overscanCount={3}
+              >
+                {Row}
+              </VirtualList>
+            )}
+          </AutoSizer>
+        </Paper>
       )}
-
-      {contacts.map(contact => (
-        <Box
-          key={contact.id}
-          display="flex"
-          className={classes.row}
-          onClick={() => handleSelectRole(convertContactToRole(contact))}
-        >
-          <Avatar src={contact.profile_image_url!} alt={contact.display_name} />
-
-          <div className={classes.rowContent}>
-            <Typography variant="body2">{contact.display_name}</Typography>
-
-            <Typography variant="body2" className={classes.email}>
-              {contact.email}
-            </Typography>
-          </div>
-        </Box>
-      ))}
-
-      {agents.map(agent => (
-        <Box
-          key={agent.id}
-          display="flex"
-          className={classes.row}
-          onClick={() => handleSelectRole(convertAgentToRole(agent))}
-        >
-          <Avatar src={agent.profile_image_url!} />
-
-          <div className={classes.rowContent}>
-            <Typography variant="body2">{agent.full_name}</Typography>
-
-            <Typography variant="body2" className={classes.email}>
-              {agent.mlsid || agent.email}
-            </Typography>
-          </div>
-        </Box>
-      ))}
     </Box>
   )
 }
