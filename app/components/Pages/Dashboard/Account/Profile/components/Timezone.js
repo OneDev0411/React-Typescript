@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Form, Field } from 'react-final-form'
 import moment from 'moment-timezone'
 import {
@@ -28,13 +28,14 @@ const useStyles = makeStyles(
   { name: 'timezoneComponent' }
 )
 
-const Timezone = ({ timezone, dispatch }) => {
+const timezones = moment.tz.names().map(item => ({ title: item, value: item }))
+
+function Timezone() {
+  const timezone = useSelector(store => store.user.timezone)
+  const dispatch = useDispatch()
+
   let submitError = null
   const classes = useStyles()
-
-  const timezones = moment.tz
-    .names()
-    .map(item => ({ title: item, value: item }))
 
   const time_zone = timezone ? { title: timezone, value: timezone } : null
 
@@ -70,6 +71,11 @@ const Timezone = ({ timezone, dispatch }) => {
   return (
     <FormCard title="Set Timezone">
       <Form
+        // To fix Changing initialValues without changing form state
+        // https://gitlab.com/rechat/web/-/issues/5231#note_624121151
+        // https://github.com/final-form/react-final-form/issues/246
+        // TODO: we have a major re-rendering issue related to redux-form here
+        keepDirtyOnReinitialize
         onSubmit={onSubmit}
         initialValues={{ time_zone }}
         render={({ handleSubmit, submitFailed, submitting }) => (
@@ -132,4 +138,4 @@ const Timezone = ({ timezone, dispatch }) => {
   )
 }
 
-export default connect()(Timezone)
+export default Timezone
