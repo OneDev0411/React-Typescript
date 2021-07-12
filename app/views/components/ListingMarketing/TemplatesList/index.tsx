@@ -12,12 +12,15 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(10),
-      position: 'relative'
+      position: 'relative',
+      '&:not(:last-child)': {
+        marginBottom: theme.spacing(3)
+      }
     },
     templatesListContainerCollapsed: {
       maxHeight: 300,
       overflowY: 'hidden',
+      marginBottom: theme.spacing(10),
       borderBottom: `1px solid ${theme.palette.divider}`,
       position: 'relative',
       '&::after': {
@@ -33,7 +36,7 @@ const useStyles = makeStyles(
     expandButtonContainer: {
       position: 'absolute',
       zIndex: theme.zIndex.gridAction,
-      bottom: theme.spacing(-9),
+      bottom: theme.spacing(1),
       width: '100%',
       display: 'flex',
       alignItems: 'center',
