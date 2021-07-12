@@ -5,8 +5,8 @@ import { Box } from '@material-ui/core'
 import { ACL } from 'constants/acl'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
-import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
-import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
+import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 interface Props {
   title?: string
@@ -27,13 +27,7 @@ export default function AgentNetworkLayout({
       <PageLayout>
         <PageLayout.Header title={title}>
           <Box width="100%" maxWidth={360}>
-            <ListingsAndPlacesSearchInput
-              textFieldProps={{
-                placeholder: 'Search address or MLS#',
-                variant: 'outlined',
-                autoComplete: 'new-password',
-                size: 'small'
-              }}
+            <DealsAndListingsAndPlacesSearchInput
               onSelect={onSelectSearchResult}
             />
           </Box>

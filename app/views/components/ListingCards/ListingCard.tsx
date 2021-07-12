@@ -44,7 +44,7 @@ const useStyles = makeStyles(
     statusChip: {
       display: 'flex'
     },
-    statusDot: ({ listing }: Props) => ({
+    statusDot: ({ listing }: ListingCardProps) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
       width: theme.spacing(1),
       height: theme.spacing(1),
@@ -94,7 +94,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+export interface ListingCardProps {
   /**
    * The listing or compact listing object
    */
@@ -159,7 +159,7 @@ export default function ListingCard({
   liked = undefined,
   onLikeClick = noop,
   onClick
-}: Props) {
+}: ListingCardProps) {
   const classes = useStyles({ listing })
 
   const address =

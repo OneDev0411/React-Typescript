@@ -1,17 +1,17 @@
 /**
  * Set a fixed time to a Date
  * @param {Date} date The original date
- * @param {number} time Fixed time of day
- * @returns {number} a Date in seconds
+ * @param {number} time Fixed time of day (seconds passed since day start)
+ * @returns {number} a Date
  */
 export function setTime(date: Date | number, time: number = 0): Date {
   // prevent from overriding the reference date object
-  const datetime = new Date(date)
+  const dateTime = new Date(date)
   
-  datetime.setHours(Math.floor(time / 3600))
-  datetime.setMinutes(Math.floor((time % 3600) / 60))
-  datetime.setSeconds(0)
-  datetime.setMilliseconds(0)
+  dateTime.setHours(Math.floor(time / 3600))
+  dateTime.setMinutes(Math.floor((time % 3600) / 60))
+  dateTime.setSeconds(0)
+  dateTime.setMilliseconds(0)
 
-  return datetime
+  return dateTime
 }

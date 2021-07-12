@@ -12,7 +12,7 @@ import { useForm, Controller } from 'react-hook-form'
 
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
-import ListingsAndPlacesSearchInput from 'components/ListingsAndPlacesSearchInput'
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
 import ImageGallery from './components/ImageGallery'
 import ImageUpload from './components/ImageUpload'
@@ -133,17 +133,17 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
               defaultValue=""
               name="address"
               render={({ onChange }) => (
-                <ListingsAndPlacesSearchInput
+                <DealsAndListingsAndPlacesSearchInput
                   textFieldProps={{
-                    variant: 'outlined',
-                    size: 'small',
                     label: 'Address'
                   }}
                   onSelect={async result => {
                     const address =
                       result.type === 'place'
                         ? result.place.formatted_address
-                        : await getListingFullAddress(result.listing)
+                        : result.type === 'listing'
+                        ? await getListingFullAddress(result.listing)
+                        : ''
 
                     onChange(address)
                   }}

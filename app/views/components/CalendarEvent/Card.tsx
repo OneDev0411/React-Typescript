@@ -53,12 +53,10 @@ interface Props {
 export default function CalendarEventCard({ event }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)
@@ -97,7 +95,7 @@ export default function CalendarEventCard({ event }: Props) {
                       <div>
                         <Avatar
                           disableLazyLoad
-                          size="xlarge"
+                          size="xxlarge"
                           contact={contact}
                         />
                       </div>

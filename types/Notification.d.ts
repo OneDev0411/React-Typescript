@@ -65,6 +65,7 @@ declare type TNotificationObjectType =
   | 'ContactList'
   | 'DealContext'
   | 'ContactAttribute'
+  | 'ShowingAppointment'
 
 declare interface INotification extends IModel<'notification'> {
   object: UUID
