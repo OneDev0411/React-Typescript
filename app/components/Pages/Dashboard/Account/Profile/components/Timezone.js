@@ -1,26 +1,42 @@
-import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
-
 import React, { Fragment } from 'react'
 import { connect } from 'react-redux'
 import { Form, Field } from 'react-final-form'
-import { addNotification as notify } from 'components/notification'
 import moment from 'moment-timezone'
-import { Button, Typography, Box } from '@material-ui/core'
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  makeStyles
+} from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+
+import { addNotification as notify } from 'components/notification'
+import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
 
 import FormCard from 'components/FormCard'
-import { Dropdown } from 'components/Dropdown'
 import { setUserTimezone } from 'models/user/set-user-timezone'
+
+const useStyles = makeStyles(
+  theme => ({
+    input: {
+      // TODO: remove this line after refactoring the form
+      backgroundColor: '#f9f9f9',
+      width: theme.spacing(30)
+    }
+  }),
+  { name: 'timezoneComponent' }
+)
 
 const Timezone = ({ timezone, dispatch }) => {
   let submitError = null
+  const classes = useStyles()
 
   const timezones = moment.tz
     .names()
     .map(item => ({ title: item, value: item }))
 
-  const time_zone = timezone
-    ? { title: timezone, value: timezone }
-    : { title: 'Select a timezone', value: null }
+  const time_zone = timezone ? { title: timezone, value: timezone } : null
 
   const onSubmit = async ({ time_zone }) => {
     if (!time_zone || time_zone.value === timezone) {
@@ -51,8 +67,6 @@ const Timezone = ({ timezone, dispatch }) => {
     }
   }
 
-  const handleItemToString = item => (item == null ? '' : String(item.title))
-
   return (
     <FormCard title="Set Timezone">
       <Form
@@ -67,13 +81,30 @@ const Timezone = ({ timezone, dispatch }) => {
                   <Box marginBottom={1} style={{ cursor: 'pointer' }}>
                     <Typography variant="body2">Timezones</Typography>
                   </Box>
-                  <Dropdown
-                    input={input}
-                    hasSearch
-                    noBorder={false}
-                    items={timezones}
-                    itemToString={handleItemToString}
+                  <Autocomplete
+                    value={input.value || null}
+                    onChange={(event, newValue) => {
+                      input.onChange(newValue)
+                    }}
+                    getOptionLabel={option =>
+                      option.title ? option.title : ''
+                    }
+                    getOptionSelected={(option, selectedValue) => {
+                      return option.value === selectedValue.value
+                    }}
+                    options={timezones}
+                    disableClearable
                     data-test="timezone-dropdown"
+                    disabled={submitting}
+                    renderInput={params => (
+                      <TextField
+                        {...params}
+                        placeholder="Select a timezone"
+                        className={classes.input}
+                        variant="outlined"
+                        size="small"
+                      />
+                    )}
                   />
                 </Fragment>
               )}
