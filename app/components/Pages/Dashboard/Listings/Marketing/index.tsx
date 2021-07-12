@@ -17,7 +17,8 @@ export default function ListingMarketingPage({
 
   const listingId: UUID = params.id
   const templateType: Optional<IMarketingTemplateType> = location.query.type
-  const medium: Optional<string> = location.hash.split('#').pop() || undefined
+  const medium: Optional<IMarketingTemplateMedium> =
+    (location.hash.split('#').pop() as IMarketingTemplateMedium) || undefined
 
   const [listing, setListing] = useState<Nullable<IListing>>(null)
 
@@ -48,7 +49,7 @@ export default function ListingMarketingPage({
         <ListingMarketing
           listing={listing}
           templateType={templateType}
-          medium={medium as IMarketingTemplateMedium}
+          medium={medium}
           onChangeTemplateType={type => {
             router.push({
               ...location,

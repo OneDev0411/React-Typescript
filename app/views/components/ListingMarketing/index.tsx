@@ -149,11 +149,11 @@ export default function ListingMarketing({
   ])
 
   const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
-    onChangeTemplateType?.(type)
+    onChangeTemplateType(type)
   }
 
   const handleClickExpandMedium = (medium: IMarketingTemplateMedium) => {
-    onChangeMedium?.(medium)
+    onChangeMedium(medium)
   }
 
   if (isLoadingListing || isLoadingTemplates || !listing) {
