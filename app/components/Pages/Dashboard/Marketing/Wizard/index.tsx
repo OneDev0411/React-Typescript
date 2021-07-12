@@ -142,7 +142,7 @@ function MarketingWizard(props: WithRouterProps) {
     listing: rawListing,
     isLoading: isLoadingListing,
     error: errorListing
-  } = useListingById(props.location)
+  } = useListingById()
 
   const [{ user, listing }, setTemplateVariables] = useEntityWithSetter<{
     user: IUser
