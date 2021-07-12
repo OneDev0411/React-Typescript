@@ -13,6 +13,7 @@ import {
 } from 'utils/user-teams'
 import { selectBrandContexts } from 'reducers/deals/contexts'
 import { IAppState } from 'reducers'
+import { useQueryParam } from '@app/hooks/use-query-param'
 
 interface StateProps {
   user: IUser | null
@@ -33,6 +34,7 @@ function Container(props: Props) {
   console.log('[ x ] Rerender deals container')
 
   const dispatch = useDispatch()
+  const [queryParamValue] = useQueryParam('q')
 
   const { user, dealsCount, brandContexts, isFetchingDeals, brandId } =
     useSelector<IAppState, StateProps>(({ deals, user }) => {
@@ -59,10 +61,10 @@ function Container(props: Props) {
     }
 
     if (dealsCount === 0 && !isFetchingDeals) {
-      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !queryParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user))
+        dispatch(searchDeals(user, queryParamValue))
       }
     }
   })

@@ -67,7 +67,6 @@ export const Menu = withRouter(
         <DealStatus deal={deal} isBackOffice={isBackOffice} />
 
         <CloseButton
-          backUrl="/dashboard/deals"
           buttonProps={{
             size: 'small'
           }}
