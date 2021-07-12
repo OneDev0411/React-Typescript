@@ -33,7 +33,7 @@ export default function ListingHeader({ title, listing }: Props) {
       <Grid item>
         <Typography variant="h4">{title}</Typography>
       </Grid>
-      <Grid container item direction="row" spacing={1}>
+      <Grid container item direction="row" alignItems="center" spacing={1}>
         <Grid item>
           <Typography variant="h6" color="textSecondary">
             {address}
