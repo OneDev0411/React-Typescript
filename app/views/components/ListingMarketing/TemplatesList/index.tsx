@@ -57,11 +57,7 @@ const useStyles = makeStyles(
       width: '100%',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      pointerEvents: 'none'
-    },
-    expandButton: {
-      pointerEvents: 'initial'
+      justifyContent: 'center'
     },
     thumbnailContainer: {
       marginRight: theme.spacing(6),
@@ -152,7 +148,6 @@ function TemplatesList({
             variant="text"
             color="default"
             size="small"
-            className={classes.expandButton}
             onClick={onExpandClick}
           >
             <Grid container direction="column">
