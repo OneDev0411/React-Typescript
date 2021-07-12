@@ -49,8 +49,8 @@ const useStyles = makeStyles(
       justifyContent: 'center'
     },
     thumbnailContainer: {
-      marginRight: theme.spacing(2),
-      marginBottom: theme.spacing(2),
+      marginRight: theme.spacing(3),
+      marginBottom: theme.spacing(3),
       overflow: 'hidden',
       height: 'fit-content',
       boxShadow: theme.shadows[8],
