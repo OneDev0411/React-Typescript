@@ -41,7 +41,7 @@ const useStyles = makeStyles(
     },
     expandButtonContainer: {
       position: 'absolute',
-      zIndex: theme.zIndex.tooltip,
+      zIndex: theme.zIndex.gridAction,
       bottom: -24,
       width: '100%',
       display: 'flex',
