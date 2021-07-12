@@ -8,14 +8,16 @@ import {
   mdiEmailOutline,
   mdiWeb,
   mdiPrinter,
-  mdiShareVariant
+  mdiShareVariant,
+  mdiChevronDown
 } from '@mdi/js'
+import pluralize from 'pluralize'
 
-import { selectUser } from 'selectors/user'
+import { selectUser } from '@app/selectors/user'
 
-import { Thumbnail as MarketingTemplateCardThumbnail } from 'components/MarketingTemplateCard/Thumbnail'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Thumbnail } from '@app/views/components/MarketingTemplateCard/Thumbnail'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 
 const MEDIUM_ICONS: Record<IMarketingTemplateMedium, string> = {
   InstagramStory: mdiInstagram,
@@ -30,30 +32,43 @@ const MEDIUM_ICONS: Record<IMarketingTemplateMedium, string> = {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginBottom: theme.spacing(6),
+      marginBottom: theme.spacing(10),
       position: 'relative'
     },
     templatesListContainerCollapsed: {
-      maxHeight: 400,
+      maxHeight: 300,
       overflowY: 'hidden',
       borderBottom: `1px solid ${theme.palette.divider}`,
-      boxShadow: `inset 0 0px 0px 0 ${theme.palette.grey[400]}, inset 0px -22px 15px -10px ${theme.palette.grey[500]}`
+      position: 'relative',
+      '&::after': {
+        position: 'absolute',
+        content: "''",
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        pointerEvents: 'none',
+        boxShadow: theme.shadows[8]
+      }
     },
     expandButtonContainer: {
       position: 'absolute',
       zIndex: theme.zIndex.gridAction,
-      bottom: -24,
+      bottom: theme.spacing(-9),
       width: '100%',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      pointerEvents: 'none'
+    },
+    expandButton: {
+      pointerEvents: 'initial'
     },
     thumbnailContainer: {
-      marginRight: theme.spacing(3),
-      marginBottom: theme.spacing(3),
+      marginRight: theme.spacing(6),
+      marginBottom: theme.spacing(6),
       overflow: 'hidden',
       height: 'fit-content',
-      boxShadow: theme.shadows[8],
+      boxShadow: theme.shadows[2],
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     }
@@ -67,6 +82,7 @@ interface Props {
   header: ReactNode
   listing: IListing
   medium: IMarketingTemplateMedium
+  mediumLabel: string
   templates: IBrandMarketingTemplate[]
   isExpanded: boolean
   onExpandClick: () => void
@@ -77,6 +93,7 @@ function TemplatesList({
   header,
   listing,
   medium,
+  mediumLabel,
   templates,
   isExpanded,
   onExpandClick,
@@ -119,7 +136,7 @@ function TemplatesList({
             md={3}
           >
             <Box className={classes.thumbnailContainer}>
-              <MarketingTemplateCardThumbnail
+              <Thumbnail
                 user={user}
                 template={template}
                 listing={listing}
@@ -132,12 +149,18 @@ function TemplatesList({
       {!isExpanded && (
         <div className={classes.expandButtonContainer}>
           <Button
-            size="large"
-            variant="contained"
-            color="secondary"
+            variant="text"
+            color="default"
+            size="small"
+            className={classes.expandButton}
             onClick={onExpandClick}
           >
-            Expand
+            <Grid container direction="column">
+              <Grid item>Show More {pluralize(mediumLabel)}</Grid>
+              <Grid item>
+                <SvgIcon path={mdiChevronDown} />
+              </Grid>
+            </Grid>
           </Button>
         </div>
       )}

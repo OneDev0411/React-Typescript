@@ -252,7 +252,7 @@ export default function ListingMarketing({
             return null
           }
 
-          const mediumLabel = getTemplateMediumLabel(currentMedium)
+          const currentMediumLabel = getTemplateMediumLabel(currentMedium)
           const isExpanded = medium === currentMedium
 
           return (
@@ -262,11 +262,12 @@ export default function ListingMarketing({
                 <Box display="flex">
                   {/* The `id` is here to be used with direct anchor links */}
                   <Typography variant="h5" id={currentMedium}>
-                    {mediumLabel}
+                    {currentMediumLabel}
                   </Typography>
                 </Box>
               }
               medium={currentMedium}
+              mediumLabel={currentMediumLabel}
               listing={listing}
               templates={currentMediumTemplates}
               isExpanded={isExpanded}
