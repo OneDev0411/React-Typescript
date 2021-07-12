@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
@@ -44,17 +44,17 @@ type ListingRelatedProps = RequireOnlyOne<
 >
 
 type Props = {
-  defaultTemplateType?: IMarketingTemplateType
-  defaultMedium?: IMarketingTemplateMedium
-  onChangeTemplateType?: (type: IMarketingTemplateType) => void
-  onChangeMedium?: (medium: IMarketingTemplateMedium) => void
+  templateType?: IMarketingTemplateType
+  medium?: IMarketingTemplateMedium
+  onChangeTemplateType: (type: IMarketingTemplateType) => void
+  onChangeMedium: (medium: IMarketingTemplateMedium) => void
 } & ListingRelatedProps
 
 export default function ListingMarketing({
   listing: passedListing,
   listingId,
-  defaultTemplateType,
-  defaultMedium,
+  templateType,
+  medium,
   onChangeTemplateType,
   onChangeMedium
 }: Props) {
@@ -62,15 +62,9 @@ export default function ListingMarketing({
   const user = useSelector(selectUser)
   const activeBrand = getActiveTeamId(user)
 
-  const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Nullable<IMarketingTemplateType>
-  >(defaultTemplateType ?? null)
-
-  const [expandedMedium, setExpandedMedium] =
-    useState<Nullable<IMarketingTemplateMedium>>(null)
-
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<Nullable<IBrandMarketingTemplate>>(null)
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
 
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [isLoadingListing] = useLoadingEntities(listing)
@@ -122,45 +116,43 @@ export default function ListingMarketing({
     fetchListing()
   }, [listingId, passedListing])
 
-  useEffect(() => {
-    let timeoutHandler: number
-
-    function scrollToSelectedMedium() {
-      if (isLoadingListing || isLoadingTemplates || !listing) {
-        return
-      }
-
-      if (!defaultMedium) {
-        return
-      }
-
-      timeoutHandler = setTimeout(() => {
-        setExpandedMedium(defaultMedium)
-
-        const selectedMediumHeader = document.getElementById(defaultMedium)
-
-        selectedMediumHeader?.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'start'
-        })
-      })
-
-      return () => {
-        clearTimeout(timeoutHandler)
-      }
+  const scrollToSelectedMedium = useCallback(() => {
+    if (!medium) {
+      return
     }
 
-    scrollToSelectedMedium()
-  }, [isLoadingListing, isLoadingTemplates, listing, defaultMedium])
+    const selectedMediumHeader = document.getElementById(medium)
+
+    selectedMediumHeader?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start'
+    })
+  }, [medium])
+
+  useEffect(() => {
+    if (isLoadingListing || isLoadingTemplates || !listing || !medium) {
+      return
+    }
+
+    let timeoutHandler: number
+
+    setTimeout(scrollToSelectedMedium)
+
+    return () => clearTimeout(timeoutHandler)
+  }, [
+    isLoadingListing,
+    isLoadingTemplates,
+    listing,
+    medium,
+    templateType,
+    scrollToSelectedMedium
+  ])
 
   const handleClickTemplateTypeChip = (type: IMarketingTemplateType) => {
-    setSelectedTemplateType(type)
-    setExpandedMedium(null)
     onChangeTemplateType?.(type)
   }
 
   const handleClickExpandMedium = (medium: IMarketingTemplateMedium) => {
-    setExpandedMedium(medium)
     onChangeMedium?.(medium)
   }
 
@@ -170,8 +162,7 @@ export default function ListingMarketing({
 
   const currentTemplateTypeTemplates = templates.filter(
     template =>
-      template.template.template_type ===
-      (selectedTemplateType ?? templateTypes[0])
+      template.template.template_type === (templateType ?? templateTypes[0])
   )
 
   const shouldShowAgentNetworkButton = hasUserAccessToAgentNetwork(user)
@@ -248,38 +239,38 @@ export default function ListingMarketing({
           </Grid>
         </Grid>
         <TemplateTypesChips
-          activeType={selectedTemplateType ?? templateTypes[0]}
+          activeType={templateType ?? templateTypes[0]}
           types={templateTypes}
           onClick={handleClickTemplateTypeChip}
         />
-        {mediums.map(medium => {
+        {mediums.map(currentMedium => {
           const currentMediumTemplates = currentTemplateTypeTemplates.filter(
-            template => template.template.medium === medium
+            template => template.template.medium === currentMedium
           )
 
           if (currentMediumTemplates.length === 0) {
             return null
           }
 
-          const mediumLabel = getTemplateMediumLabel(medium)
-          const isExpanded = expandedMedium === medium
+          const mediumLabel = getTemplateMediumLabel(currentMedium)
+          const isExpanded = medium === currentMedium
 
           return (
             <TemplatesList
-              key={medium}
+              key={currentMedium}
               header={
                 <Box display="flex">
                   {/* The `id` is here to be used with direct anchor links */}
-                  <Typography variant="h5" id={medium}>
+                  <Typography variant="h5" id={currentMedium}>
                     {mediumLabel}
                   </Typography>
                 </Box>
               }
-              medium={medium}
+              medium={currentMedium}
               listing={listing}
               templates={currentMediumTemplates}
               isExpanded={isExpanded}
-              onExpandClick={() => handleClickExpandMedium(medium)}
+              onExpandClick={() => handleClickExpandMedium(currentMedium)}
               onClick={setSelectedTemplate}
             />
           )

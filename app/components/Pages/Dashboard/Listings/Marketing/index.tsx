@@ -21,16 +21,15 @@ export default function ListingMarketingPage({
       <PageLayout.Main>
         <ListingMarketing
           listingId={listingId}
-          defaultTemplateType={templateType}
-          defaultMedium={medium as IMarketingTemplateMedium}
+          templateType={templateType}
+          medium={medium as IMarketingTemplateMedium}
           onChangeTemplateType={type => {
-            router.replace({
+            router.push({
               ...location,
               query: {
                 ...location.query,
                 type
-              },
-              hash: ''
+              }
             })
           }}
           onChangeMedium={medium => {
