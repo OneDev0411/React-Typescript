@@ -1,33 +1,13 @@
 import { memo, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
 import { Grid, Box, Button, makeStyles, Theme } from '@material-ui/core'
-import {
-  mdiInstagram,
-  mdiLinkedin,
-  mdiFacebook,
-  mdiEmailOutline,
-  mdiWeb,
-  mdiPrinter,
-  mdiShareVariant,
-  mdiChevronDown
-} from '@mdi/js'
+import { mdiChevronDown } from '@mdi/js'
 import pluralize from 'pluralize'
 
 import { selectUser } from '@app/selectors/user'
 
 import { Thumbnail } from '@app/views/components/MarketingTemplateCard/Thumbnail'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-
-const MEDIUM_ICONS: Record<IMarketingTemplateMedium, string> = {
-  InstagramStory: mdiInstagram,
-  Email: mdiEmailOutline,
-  LinkedInCover: mdiLinkedin,
-  FacebookCover: mdiFacebook,
-  Letter: mdiPrinter,
-  Social: mdiShareVariant,
-  Website: mdiWeb
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -107,11 +87,6 @@ function TemplatesList({
       className={classes.container}
     >
       <Grid container item direction="row" alignItems="center">
-        <Grid item>
-          <Box mx={1} display="flex">
-            <SvgIcon size={muiIconSizes.large} path={MEDIUM_ICONS[medium]} />
-          </Box>
-        </Grid>
         <Grid item>{header}</Grid>
       </Grid>
       <Grid
