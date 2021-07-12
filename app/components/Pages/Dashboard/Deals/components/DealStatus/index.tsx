@@ -28,6 +28,7 @@ import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-statu
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getContext } from '@app/models/Deal/helpers/context'
 
 interface Props {
   deal: IDeal
@@ -66,7 +67,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const statusName = getStatusContextKey(deal)
 
   const definition = searchContext(deal, brandChecklists, statusName)
-  const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
+  const dealContext = getContext(deal, statusName)
+  const isDisabled = !!(
+    deal.listing &&
+    definition?.preffered_source === 'MLS' &&
+    dealContext?.source === 'MLS'
+  )
 
   /**
    * updates listing_status context
