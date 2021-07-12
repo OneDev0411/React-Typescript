@@ -49,7 +49,6 @@ const TAB_ITEMS = [
 interface Props {
   deals: IDeal[]
   activeFilter: string
-  searchCriteria: string
   sortableColumns: SortableColumn[]
 }
 
