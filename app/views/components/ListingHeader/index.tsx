@@ -8,8 +8,8 @@ const useStyles = makeStyles(
       paddingLeft: theme.spacing(0.5)
     },
     statusBadgeIcon: {
-      width: theme.spacing(2),
-      height: theme.spacing(2),
+      width: theme.spacing(1),
+      height: theme.spacing(1),
       borderRadius: '50%'
     }
   }),
@@ -42,6 +42,7 @@ export default function ListingHeader({ title, listing }: Props) {
         <Grid item>
           <Chip
             variant="outlined"
+            size="small"
             label={listing.status}
             className={classes.statusChip}
             icon={
