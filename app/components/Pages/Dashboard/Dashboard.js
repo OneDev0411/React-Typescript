@@ -88,10 +88,14 @@ class Dashboard extends Component {
       Object.keys(deals).length === 0 &&
       !this.props.isFetchingDeals
     ) {
-      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+      const searchParamValue =
+        this.props.location.pathname.startsWith('/dashboard/deals') &&
+        new URLSearchParams(this.props.location.search).get('q')
+
+      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user))
+        dispatch(searchDeals(user, decodeURIComponent(searchParamValue)))
       }
     }
 
