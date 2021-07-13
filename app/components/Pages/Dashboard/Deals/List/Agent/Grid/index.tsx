@@ -24,6 +24,7 @@ import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   isActiveDeal,
   isArchivedDeal,
+  isClosingDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
 
@@ -47,6 +48,8 @@ import CriticalDate, {
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import onDealOpened from '../../../utils/on-deal-opened'
+import { getClosingFromAndToDates } from '../../helpers/closings'
+import { ClosingFromAndToDates } from '../../types'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -68,7 +71,9 @@ const Filters = {
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isArchivedDeal(deal, statuses)
-  }
+  },
+  closings: (deal: IDeal, _, closingFromAndToDates: ClosingFromAndToDates) =>
+    isClosingDeal(deal, closingFromAndToDates)
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -144,13 +149,15 @@ function AgentGrid(props: Props & WithRouterProps) {
       return []
     }
 
+    const closingFromAndToDates = getClosingFromAndToDates()
+
     const filterFn =
       props.activeFilter && Filters[props.activeFilter]
         ? Filters[props.activeFilter]
         : Filters.all
 
     return Object.values(deals).filter(deal =>
-      filterFn(deal, statuses)
+      filterFn(deal, statuses, closingFromAndToDates)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
 
