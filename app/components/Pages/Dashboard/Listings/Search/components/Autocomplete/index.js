@@ -65,7 +65,7 @@ class MlsAutocompleteSearch extends Component {
 
     // Load google maps places if is not loaded yet
     if (!isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
-      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
+      loadMapLibraries(googleMapAPIParams, 'google-maps-places')
     }
   }
 
