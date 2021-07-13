@@ -77,7 +77,7 @@ export const selectUserIsSignedIn = (state: IAppState) =>
 export const selectUserId = (state: IAppState) => selectUser(state).id
 
 /**
- * Returns the user timeozone
+ * Returns the user timezone
  * @param state The app state
  * @returns The current user timezone
  */
