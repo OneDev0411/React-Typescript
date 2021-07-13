@@ -791,7 +791,7 @@ const AsyncOops = Load({
 })
 
 /* ==================================== */
-//  CRM Deal Context
+//  Deal Context
 /* ==================================== */
 
 const AsyncContexts = withAcl.admin(
@@ -799,6 +799,19 @@ const AsyncContexts = withAcl.admin(
     loader: () =>
       import(
         '../components/Pages/Dashboard/Contexts/List' /* webpackChunkName: "deal_context" */
+      )
+  })
+)
+
+/* ==================================== */
+//  Deal Statues
+/* ==================================== */
+
+const AsyncDealStatues = withAcl.admin(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/DealStatuses' /* webpackChunkName: "deal_statues" */
       )
   })
 )
@@ -1009,6 +1022,10 @@ export default (
 
         <Route path="contexts">
           <IndexRoute component={AsyncContexts} />
+        </Route>
+
+        <Route path="statues">
+          <IndexRoute component={AsyncDealStatues} />
         </Route>
 
         <Route path="brand-settings">

@@ -85,6 +85,11 @@ export function UserMenuContent({
               Contexts
             </ListItem>
           </Acl.Admin>
+          <Acl.Admin>
+            <ListItem button onClick={() => onClick('statues')}>
+              Statuses
+            </ListItem>
+          </Acl.Admin>
           {showChecklists && (
             <ListItem button onClick={() => onClick('checklists')}>
               Checklists
