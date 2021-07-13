@@ -25,6 +25,7 @@ const useStyles = makeStyles(
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   onSearch: (query: string) => void
+  searchDebounceTime?: number
   SearchInputProps?: SearchInputProps
 }
 
@@ -32,6 +33,7 @@ export * from './SearchInput'
 
 export default function GlobalHeaderWithSearch({
   onSearch,
+  searchDebounceTime = 500,
   SearchInputProps,
   children,
   ...globalHeaderProps
@@ -43,7 +45,7 @@ export default function GlobalHeaderWithSearch({
   )
 
   const throttledSearchHandler = useRef(
-    debounce((value: string) => onSearch(value), 500)
+    debounce((value: string) => onSearch(value), searchDebounceTime)
   )
 
   return (
