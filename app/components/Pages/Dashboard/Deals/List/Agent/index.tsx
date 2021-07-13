@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+
+import { useEffectOnce } from 'react-use'
 
 import { IAppState } from 'reducers'
 
@@ -11,6 +13,8 @@ import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { selectUser } from 'selectors/user'
+
+import { useQueryParam } from '@app/hooks/use-query-param'
 
 import { DebouncedSearchInput } from '../components/SearchInput'
 
@@ -37,8 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 export default function AgentTable(props: WithRouterProps) {
-  const [searchCriteria, setSearchCriteria] = useState('')
   const classes = useStyles()
+  const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const dispatch = useDispatch()
   const deals = useSelector(({ deals }: IAppState) => deals.list)
@@ -46,15 +50,6 @@ export default function AgentTable(props: WithRouterProps) {
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const user = useSelector(selectUser)
-
-  const handleQueryChange = value => {
-    if (isFetchingDeals) {
-      return
-    }
-
-    setSearchCriteria(value)
-    fetch(user, value)
-  }
 
   const fetch = useCallback(
     (user: IUser, searchCriteria: string) => {
@@ -67,12 +62,28 @@ export default function AgentTable(props: WithRouterProps) {
     [dispatch]
   )
 
+  useEffectOnce(() => {
+    if (searchCriteria.length > 0 && !isFetchingDeals) {
+      fetch(user, searchCriteria)
+    }
+  })
+
+  const handleQueryChange = (value: string) => {
+    if (isFetchingDeals) {
+      return
+    }
+
+    setSearchCriteria(value)
+    fetch(user, value)
+  }
+
   return (
     <PageLayout>
       <PageLayout.Header title="My deals">
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
+            value={searchCriteria}
             onChange={handleQueryChange}
           />
 
@@ -84,7 +95,6 @@ export default function AgentTable(props: WithRouterProps) {
           <TabFilters
             deals={deals}
             activeFilter={props.params.filter}
-            searchCriteria={searchCriteria}
             sortableColumns={SORTABLE_COLUMNS}
           />
         </div>

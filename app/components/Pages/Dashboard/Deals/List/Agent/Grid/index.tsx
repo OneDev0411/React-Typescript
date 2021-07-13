@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -31,6 +31,8 @@ import { selectUser } from 'selectors/user'
 
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 
+import { goTo } from '@app/utils/go-to'
+
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 import { getGridSort } from '../../helpers/sorting'
 
@@ -44,6 +46,7 @@ import CriticalDate, {
 } from '../../components/table-columns/CriticalDate'
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
+import onDealOpened from '../../../utils/on-deal-opened'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -153,7 +156,10 @@ function AgentGrid(props: Props & WithRouterProps) {
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
-      onClick: () => props.router.push(`/dashboard/deals/${deal.id}`)
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}`)
+        onDealOpened()
+      }
     }
   }
 

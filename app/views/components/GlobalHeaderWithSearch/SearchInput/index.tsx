@@ -122,6 +122,7 @@ export const SearchInput = forwardRef(
 
     return (
       <TextField
+        defaultValue={defaultValue}
         color="secondary"
         InputProps={{
           startAdornment: (
