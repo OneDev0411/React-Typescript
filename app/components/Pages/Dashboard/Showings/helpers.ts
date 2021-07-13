@@ -156,7 +156,7 @@ export function getShowingRoleAOrAn(role: IDealRoleType): string {
       return 'a'
 
     case 'Tenant':
-      return 'a'
+      return 'an'
 
     default:
       return role
