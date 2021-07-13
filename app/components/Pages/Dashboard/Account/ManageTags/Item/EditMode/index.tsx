@@ -46,7 +46,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  tag: IContactTag
+  tag: IContactTag & { highlight: boolean }
   loading: boolean
   anchorEl: Nullable<HTMLElement>
   handleClose: () => void

@@ -5,7 +5,7 @@ import { EditMode } from './EditMode'
 import { Props as BaseProps } from '../Row'
 
 interface Props extends Pick<BaseProps, 'onChange' | 'onDelete'> {
-  tag: IContactTag
+  tag: IContactTag & { highlight: boolean }
 }
 
 export default function ManageTagsItem(props: Props) {

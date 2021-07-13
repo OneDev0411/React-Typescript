@@ -26,9 +26,11 @@ const useStyles = makeStyles(
   { name: 'ManageTagsRow' }
 )
 
+type Items = IContactTag & { highlight: boolean }
+
 export interface Props {
   title: string
-  items: IContactTag[]
+  items: Items[]
   onChange: (payload: {
     oldText: string
     newText: string

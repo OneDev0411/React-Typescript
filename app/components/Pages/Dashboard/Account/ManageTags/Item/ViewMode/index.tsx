@@ -47,7 +47,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  tag: IContactTag
+  tag: IContactTag & { highlight: boolean }
   loading: boolean
   onEdit: (e: MouseEvent<HTMLElement>) => void
   onDelete: (tag: IContactTag) => void
