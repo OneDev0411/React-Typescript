@@ -1,6 +1,6 @@
 import { addDays } from 'date-fns'
 
-import { ClosingFromAndToDates } from '../types'
+import { ClosingFromAndToDates, ClosingsFilterQuery } from '../types'
 
 export function getClosingFromAndToDates(
   days: number = 14
@@ -11,7 +11,10 @@ export function getClosingFromAndToDates(
   }
 }
 
-export function getClosingsFilterQuery(query: string, days: number = 14) {
+export function getClosingsFilterQuery(
+  query: string,
+  days: number = 14
+): ClosingsFilterQuery {
   return {
     query,
     contexts: {

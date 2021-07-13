@@ -1,4 +1,3 @@
-import React from 'react'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
