@@ -1,4 +1,3 @@
-import React from 'react'
 import { WithRouterProps, withRouter } from 'react-router'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
@@ -26,6 +25,10 @@ import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 
 import { getActiveTeamId } from '@app/utils/user-teams'
 
+import { TrProps } from '@app/views/components/Grid/Table/types'
+
+import { goTo } from '@app/utils/go-to'
+
 import { SearchQuery } from '../types'
 
 import { getPrimaryAgentName } from '../../../utils/roles'
@@ -41,6 +44,8 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
+
+import onDealOpened from '../../../utils/on-deal-opened'
 
 interface Props {
   searchQuery: SearchQuery
@@ -145,6 +150,15 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   ]
 
+  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
+    return {
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}`)
+        onDealOpened()
+      }
+    }
+  }
+
   const getData = (): IDeal[] => {
     if (!deals) {
       return []
@@ -191,6 +205,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={ContactsZeroState}
       loading={isFetchingDeals ? 'middle' : null}
+      getTrProps={getRowProps}
       classes={{
         row: gridClasses.row
       }}
