@@ -465,6 +465,7 @@ class Search extends React.Component {
         return (
           <MapView
             {..._props}
+            isWidget={this.props.isWidget}
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
