@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       width: theme.spacing(45)
     }
   }),
-  { name: 'timezoneComponent' }
+  { name: 'AccountTimezonePicker' }
 )
 
 const timezones = moment.tz.names().map(item => ({ title: item, value: item }))
