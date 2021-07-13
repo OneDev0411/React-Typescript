@@ -1,56 +1,46 @@
-import React, { useState } from 'react'
-
-// import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
+import React, { useState, MouseEvent } from 'react'
 
 import { ViewMode } from './ViewMode'
-// import { EditMode } from './EditMode'
+import { EditMode } from './EditMode'
+import { Props as BaseProps } from '../Row'
 
-interface Props {
+interface Props extends Pick<BaseProps, 'onChange' | 'onDelete'> {
   tag: IContactTag
-  onDelete: (tag: IContactTag) => void
 }
 
 export default function ManageTagsItem(props: Props) {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [editAnchorEl, setEditAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [text, setText] = useState<string>(props.tag.text)
 
-  // const toggleEditing = () => setIsEditing(!isEditing)
+  const handleShowEdit = (e: MouseEvent<HTMLElement>) => {
+    setEditAnchorEl(e.currentTarget)
+  }
 
-  // const onChange = text => setText(text)
+  const handleCloseEdit = () => {
+    setEditAnchorEl(null)
+  }
 
-  // const handleCancel = () => {
-  //   setIsEditing(false)
-  //   setText(props.tag.text)
-  // }
+  const handleSave = async (text, touchDate) => {
+    if (loading) {
+      return
+    }
 
-  // const handleSave = async () => {
-  //   if (loading) {
-  //     return
-  //   }
+    console.log({ text, touchDate })
 
-  //   if (text === props.tag.text) {
-  //     return setIsEditing(false)
-  //   }
+    try {
+      setLoading(true)
 
-  //   try {
-  //     setLoading(true)
-
-  //     const done = await props.onChange({
-  //       oldText: props.tag.text,
-  //       newText: text
-  //     })
-
-  //     setLoading(false)
-
-  //     if (done) {
-  //       setIsEditing(false)
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //     setIsEditing(false)
-  //   }
-  // }
+      await props.onChange({
+        oldText: props.tag.text,
+        newText: text,
+        touchDate
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleDelete = async (tag: IContactTag) => {
     setLoading(true)
@@ -59,30 +49,21 @@ export default function ManageTagsItem(props: Props) {
     setLoading(false)
   }
 
-  // const renderEditMode = props => (
-  //   <EditMode value={text} onChange={onChange} loading={loading} {...props} />
-  // )
-
-  // const renderViewMode = () => (
-  //   <ViewMode onDelete={handleDelete} tag={props.tag} loading={loading} />
-  // )
-
-  return <ViewMode onDelete={handleDelete} tag={props.tag} loading={loading} />
-
-  // return (
-  //   <InlineEditableField
-  //     cancelOnOutsideClick
-  //     handleCancel={handleCancel}
-  //     handleSave={handleSave}
-  //     handleDelete={handleDelete}
-  //     isDisabled={loading}
-  //     isEditing={isEditing}
-  //     renderEditMode={renderEditMode}
-  //     renderViewMode={renderViewMode}
-  //     showEdit={false}
-  //     showDelete={false}
-  //     style={{ margin: '0 0.3rem' }}
-  //     toggleMode={toggleEditing}
-  //   />
-  // )
+  return (
+    <>
+      <ViewMode
+        onEdit={handleShowEdit}
+        onDelete={handleDelete}
+        tag={props.tag}
+        loading={loading}
+      />
+      <EditMode
+        tag={props.tag}
+        anchorEl={editAnchorEl}
+        loading={loading}
+        handleClose={handleCloseEdit}
+        onSave={handleSave}
+      />
+    </>
+  )
 }

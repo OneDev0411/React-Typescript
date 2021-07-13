@@ -1,14 +1,14 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { Theme, makeStyles } from '@material-ui/core'
 
 import Item from './Item'
 
 const useStyles = makeStyles(
-  theme => ({
+  (theme: Theme) => ({
     rowContainer: {
       display: 'flex',
       alignItems: 'flex-start',
-      background: ({ highlight }) =>
+      background: ({ highlight }: { highlight: boolean }) =>
         highlight ? theme.palette.grey[50] : 'inherit',
       borderBottom: `1px solid ${theme.palette.divider}`,
       transition: 'background-color 1s ease-in'
@@ -26,7 +26,23 @@ const useStyles = makeStyles(
   { name: 'ManageTagsRow' }
 )
 
-export default function ManageTagsRow({ title, items, onChange, onDelete }) {
+export interface Props {
+  title: string
+  items: IContactTag[]
+  onChange: (payload: {
+    oldText: string
+    newText: string
+    touchDate: Nullable<number>
+  }) => void
+  onDelete: (tag: IContactTag) => void
+}
+
+export default function ManageTagsRow({
+  title,
+  items,
+  onChange,
+  onDelete
+}: Props) {
   const highlight = items.some(item => item.highlight)
   const classes = useStyles({ highlight })
 
@@ -40,7 +56,7 @@ export default function ManageTagsRow({ title, items, onChange, onDelete }) {
           <Item
             onChange={onChange}
             onDelete={onDelete}
-            key={tag.text}
+            key={tag.id}
             tag={tag}
           />
         ))}

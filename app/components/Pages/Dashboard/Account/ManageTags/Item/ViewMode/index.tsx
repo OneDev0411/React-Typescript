@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import {
   IconButton,
   Typography,
@@ -6,7 +6,7 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { mdiTrashCanOutline } from '@mdi/js'
+import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
@@ -17,7 +17,7 @@ const useStyles = makeStyles(
       width: '100%',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'start',
       padding: theme.spacing(1.5),
       // transition: 'box-shadow 1s ease-in',
       // box-shadow: 0 0 0 1px theme.palette.primary.main inset
@@ -29,13 +29,17 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     touchDate: {
-      display: 'flex'
+      display: 'flex',
+      margin: theme.spacing(0, 2)
     },
     touchDateCaption: {
       color: theme.palette.grey[500],
       marginRight: theme.spacing(0.5)
     },
-    touchDateValue: {}
+    touchDateValue: {},
+    actions: {
+      display: 'flex'
+    }
   }),
   {
     name: 'ManageTagsViewMode'
@@ -45,13 +49,12 @@ const useStyles = makeStyles(
 interface Props {
   tag: IContactTag
   loading: boolean
+  onEdit: (e: MouseEvent<HTMLElement>) => void
   onDelete: (tag: IContactTag) => void
 }
 
-export function ViewMode({ tag, loading, onDelete }: Props) {
+export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
   const classes = useStyles()
-
-  console.log({ tag })
 
   const onDeleteClick = event => {
     if (event && event.stopPropagation) {
@@ -88,11 +91,18 @@ export function ViewMode({ tag, loading, onDelete }: Props) {
           <IconCircleSpinner />
         </div>
       ) : (
-        <Tooltip title="Delete tag">
-          <IconButton size="small" onClick={onDeleteClick}>
-            <SvgIcon path={mdiTrashCanOutline} />
-          </IconButton>
-        </Tooltip>
+        <div className={classes.actions}>
+          <Tooltip title="Delete tag">
+            <IconButton size="small" onClick={onDeleteClick}>
+              <SvgIcon path={mdiTrashCanOutline} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit tag">
+            <IconButton size="small" onClick={onEdit}>
+              <SvgIcon path={mdiPencilOutline} />
+            </IconButton>
+          </Tooltip>
+        </div>
       )}
     </div>
   )

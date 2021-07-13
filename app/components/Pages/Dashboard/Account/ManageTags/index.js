@@ -131,7 +131,7 @@ class ManageTags extends Component {
     this.highlightTag(tag, false, HIGHLIGHT_SECONDS * 1000)
   }
 
-  handleChange = async ({ oldText, newText: rawNewText }) => {
+  handleChange = async ({ oldText, newText: rawNewText, touchDate }) => {
     const text = rawNewText.trim()
 
     if (!text) {
@@ -162,15 +162,18 @@ class ManageTags extends Component {
       status: 'success',
       message: `"${text}" updated.`
     })
+
     this.setState(prevState => ({
-      rawTags: [
-        ...prevState.rawTags.filter(
-          item => item.text.toLowerCase() !== oldText.toLowerCase()
-        ),
-        {
-          text
+      rawTags: prevState.rawTags.map(item => {
+        if (item.text.toLowerCase() === oldText.toLowerCase()) {
+          return {
+            ...item,
+            text
+          }
         }
-      ]
+
+        return item
+      })
     }))
 
     return true

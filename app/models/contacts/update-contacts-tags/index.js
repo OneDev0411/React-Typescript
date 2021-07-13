@@ -1,6 +1,8 @@
 import Fetch from '../../../services/fetch'
 
 export async function updateContactsTags(oldTag, newTag) {
+  console.log('updateContactsTags', { oldTag, newTag })
+
   try {
     const response = await new Fetch()
       .patch(`/contacts/tags/${encodeURIComponent(oldTag)}`)
