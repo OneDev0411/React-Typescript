@@ -21,6 +21,8 @@ export default function ManageTagsItem(props: Props) {
   }
 
   const handleSave = async (text, touchDate) => {
+    handleCloseEdit()
+
     if (loading) {
       return
     }
@@ -33,7 +35,7 @@ export default function ManageTagsItem(props: Props) {
       await props.onChange({
         oldText: props.tag.text,
         newText: text,
-        touchDate
+        touchDate: touchDate !== 0 ? touchDate : null
       })
     } catch (error) {
       console.log(error)

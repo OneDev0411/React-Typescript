@@ -52,8 +52,6 @@ class ManageTags extends Component {
     try {
       const response = await getContactsTags()
 
-      console.log({ dd: response })
-
       const rawTags = response.data.map(tag => ({
         ...tag,
         highlight: false
@@ -86,8 +84,6 @@ class ManageTags extends Component {
   }
 
   getTagRows = rawTags => {
-    console.log({ rawTags })
-
     const rows = {}
 
     rawTags.forEach(tag => {
@@ -109,15 +105,16 @@ class ManageTags extends Component {
   highlightTag = (tag, highlight = true, delay = 0) => {
     setTimeout(() => {
       this.setState(prevState => ({
-        rawTags: [
-          ...prevState.rawTags.filter(
-            item => item.text.toLowerCase() !== tag.text.toLowerCase()
-          ),
-          {
-            ...tag,
-            highlight
+        rawTags: prevState.rawTags.map(item => {
+          if (item.text.toLowerCase() === tag.text.toLowerCase()) {
+            return {
+              ...item,
+              highlight
+            }
           }
-        ]
+
+          return item
+        })
       }))
     }, delay)
   }
@@ -149,13 +146,13 @@ class ManageTags extends Component {
 
     const foundTag = this.getTag(text)
 
-    if (foundTag) {
+    if (foundTag && foundTag.touch_freq === touchDate) {
       this.handleDuplicateTag(foundTag)
 
       return false
     }
 
-    await updateContactsTags(oldText, text)
+    await updateContactsTags(oldText, text, touchDate)
     await this.reloadStoreTags()
     await this.resetContactsFilters()
     this.props.notify({
@@ -168,6 +165,7 @@ class ManageTags extends Component {
         if (item.text.toLowerCase() === oldText.toLowerCase()) {
           return {
             ...item,
+            touch_freq: touchDate,
             text
           }
         }
@@ -237,7 +235,7 @@ class ManageTags extends Component {
           })
           this.setState(
             prevState => ({
-              rawTags: [...prevState.rawTags.filter(item => item.text !== text)]
+              rawTags: prevState.rawTags.filter(item => item.text !== text)
             }),
             resolve
           )

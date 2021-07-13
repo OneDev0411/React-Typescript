@@ -60,8 +60,6 @@ export function EditMode({
   onSave,
   handleClose
 }: Props) {
-  console.log({ tag })
-
   const classes = useStyles()
   const [text, setText] = useState<string>(tag.text || '')
   const [touchDate, setTouchDate] = useState<Nullable<number>>(
@@ -125,6 +123,7 @@ export function EditMode({
           <FormControl
             variant="outlined"
             size="small"
+            color="secondary"
             className={classes.inputField}
           >
             <InputLabel id="tag-touch-date">Touch Date</InputLabel>
@@ -148,6 +147,7 @@ export function EditMode({
           <Button
             color="secondary"
             variant="contained"
+            disabled={loading}
             className={classes.inputField}
             onClick={handleOnSave}
           >
@@ -157,16 +157,4 @@ export function EditMode({
       </div>
     </Popover>
   )
-  // return (
-  //   <>
-  //     <TextField
-  //       variant="standard"
-  //       fullWidth
-  //       autoFocus
-  //       disabled={loading}
-  //       value={value}
-  //       onChange={({ target: { value } }) => onChange(value)}
-  //     />
-  //   </>
-  // )
 }

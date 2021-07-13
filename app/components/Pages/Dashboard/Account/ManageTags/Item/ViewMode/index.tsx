@@ -9,7 +9,6 @@ import {
 import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -86,24 +85,18 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
         </Typography>
       </div>
 
-      {loading ? (
-        <div>
-          <IconCircleSpinner />
-        </div>
-      ) : (
-        <div className={classes.actions}>
-          <Tooltip title="Delete tag">
-            <IconButton size="small" onClick={onDeleteClick}>
-              <SvgIcon path={mdiTrashCanOutline} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Edit tag">
-            <IconButton size="small" onClick={onEdit}>
-              <SvgIcon path={mdiPencilOutline} />
-            </IconButton>
-          </Tooltip>
-        </div>
-      )}
+      <div className={classes.actions}>
+        <Tooltip title="Delete tag">
+          <IconButton size="small" disabled={loading} onClick={onDeleteClick}>
+            <SvgIcon path={mdiTrashCanOutline} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Edit tag">
+          <IconButton size="small" disabled={loading} onClick={onEdit}>
+            <SvgIcon path={mdiPencilOutline} />
+          </IconButton>
+        </Tooltip>
+      </div>
     </div>
   )
 }

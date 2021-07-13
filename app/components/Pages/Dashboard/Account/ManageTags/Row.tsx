@@ -48,8 +48,6 @@ export default function ManageTagsRow({
   const highlight = items.some(item => item.highlight)
   const classes = useStyles({ highlight })
 
-  // console.log({ title, items, onChange, onDelete })
-
   return (
     <div className={classes.rowContainer}>
       <div className={classes.rowTitle}>{title}</div>
