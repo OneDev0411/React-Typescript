@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { Form, Field } from 'react-final-form'
 import moment from 'moment-timezone'
 import {
@@ -10,6 +11,8 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
+
+import { selectUserTimezone } from 'selectors/user'
 
 import { addNotification as notify } from 'components/notification'
 import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
@@ -31,7 +34,7 @@ const useStyles = makeStyles(
 const timezones = moment.tz.names().map(item => ({ title: item, value: item }))
 
 function Timezone() {
-  const timezone = useSelector(store => store.user.timezone)
+  const timezone = useSelector(selectUserTimezone)
   const dispatch = useDispatch()
 
   let submitError = null
