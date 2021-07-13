@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.22",
+  "version": "86.0.23",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -44,7 +44,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run types:check && lint-staged",
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run types:check",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && ./githooks/commit-msg.js $HUSKY_GIT_PARAMS `git rev-parse --abbrev-ref HEAD`"
     }
   },
@@ -412,6 +413,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "engines": {
-    "node": "14.x"
+    "node": "14.x",
+    "npm": "7.x"
   }
 }
