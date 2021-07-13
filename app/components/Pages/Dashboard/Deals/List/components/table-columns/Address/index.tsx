@@ -5,13 +5,12 @@ import { mdiHomeOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import ALinkToClosable from 'components/ALinkToClosable'
+
 import { getField, getEnderType } from 'models/Deal/helpers/context'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import { Side } from '../Side'
 
-import onDealOpened from '../../../../utils/on-deal-opened'
 import { Notification } from '../../Notification'
 
 const useStyles = makeStyles(
@@ -74,13 +73,9 @@ export function Address({
       </div>
 
       <div className={classes.title}>
-        <ALinkToClosable
-          className="underline-on-hover"
-          onClick={onDealOpened}
-          to={`/dashboard/deals/${deal.id}`}
-        >
+        <div className="underline-on-hover">
           <TextMiddleTruncate text={deal.title} maxLength={40} />
-        </ALinkToClosable>
+        </div>
 
         <div className={classes.container}>
           <Typography variant="caption" className={classes.enderType}>

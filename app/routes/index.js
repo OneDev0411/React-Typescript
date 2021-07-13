@@ -5,6 +5,10 @@ import withAcl from 'components/Acl/with-acl'
 
 import { ACL } from 'constants/acl'
 
+import {
+  showingDetailTabs,
+  showingsTabs
+} from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 
 import GoToDashboard from '../views/components/GoToDashboard'
@@ -81,6 +85,45 @@ const AsyncResetPassword = Load({
   loader: () =>
     import(
       '../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */
+    )
+})
+
+/* ==================================== */
+//  Showings Public
+/* ==================================== */
+
+const AsyncBookShowing = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Book' /* webpackChunkName: "book_showing" */
+    )
+})
+
+const AsyncShowingAppointment = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment' /* webpackChunkName: "showing_appointment" */
+    )
+})
+
+const AsyncShowingAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Cancel' /* webpackChunkName: "showing_appointment_cancel" */
+    )
+})
+
+const AsyncShowingAppointmentReschedule = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Reschedule' /* webpackChunkName: "showing_appointment_reschedule" */
+    )
+})
+
+const AsyncShowingAppointmentFeedback = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Feedback' /* webpackChunkName: "showing_appointment_feedback" */
     )
 })
 
@@ -662,6 +705,37 @@ const AsyncOldWebsite = withAcl.store(
 )
 
 /* ==================================== */
+//  Showings
+/* ==================================== */
+
+const AsyncShowings = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/Showings' /* webpackChunkName: "showings" */
+      )
+  })
+)
+
+const AsyncShowingDetail = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/ShowingDetail' /* webpackChunkName: "showing_detail" */
+      )
+  })
+)
+
+const AsyncCreateShowing = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -750,6 +824,24 @@ export default (
 
       <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
+
+      <Route path="showings/:slugAndId/book" component={AsyncBookShowing} />
+      <Route
+        path="showings/appointments/:appointmentToken"
+        component={AsyncShowingAppointment}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/cancel"
+        component={AsyncShowingAppointmentCancel}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/reschedule"
+        component={AsyncShowingAppointmentReschedule}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/feedback"
+        component={AsyncShowingAppointmentFeedback}
+      />
 
       <Route path="mobile" component={AsyncMobile} />
 
@@ -929,6 +1021,22 @@ export default (
           )}))`}
         >
           <IndexRoute component={AsyncWebsitesList} />
+        </Route>
+
+        <Route path="showings">
+          <IndexRoute component={AsyncShowings} />
+          <Route
+            path={`:id/detail/:tab(${Object.keys(showingDetailTabs).join(
+              '|'
+            )})`}
+            component={AsyncShowingDetail}
+          />
+          <Route path=":id/detail" component={AsyncShowingDetail} />
+          <Route path="create" component={AsyncCreateShowing} />
+          <Route
+            path={`:tab(${Object.keys(showingsTabs).join('|')})`}
+            component={AsyncShowings}
+          />
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />

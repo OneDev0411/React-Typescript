@@ -64,6 +64,10 @@
   @include scrollbar(false, 0.375em !important);
 }
 
+.u-scrollbar--invisible {
+  @include scrollbar(false, 0 !important);
+}
+
 .u-scrollbar--thinner--self {
   @include scrollbar(true, 0.375em !important);
 }

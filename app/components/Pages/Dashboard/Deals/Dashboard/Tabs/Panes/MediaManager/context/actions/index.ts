@@ -1,7 +1,7 @@
 import {
   reorderGallery as reorderGalleryModel,
   renameMedia as renameMediaModel
-} from 'models/media-manager'
+} from 'models/Deal/media-manager'
 
 import * as actionTypes from './action-types'
 import type { IMediaGallery } from '../../types'
