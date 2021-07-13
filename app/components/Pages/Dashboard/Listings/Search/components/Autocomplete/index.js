@@ -392,6 +392,7 @@ class MlsAutocompleteSearch extends Component {
           />
         </SearchContainer>
         <ListingDetailsModal
+          isWidget={!!this.props.isWidget}
           isOpen={this.state.isListingDetailsModalOpen}
           listingId={this.state.selectedListingId}
           closeHandler={this.closeListingDetailsModal}
