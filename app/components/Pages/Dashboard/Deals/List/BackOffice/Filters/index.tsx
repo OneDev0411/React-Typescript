@@ -72,15 +72,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      value={props.location.query.type === 'query' ? 'all-deals' : null}
+      value={
+        props.location.query.type === 'query' &&
+        ['listing', 'contact'].includes(props.params.filter)
+          ? 'all-deals'
+          : null
+      }
       defaultValue={props.params.filter}
       tabs={[
-        <TabLink
-          key="closings"
-          value="closings"
-          label={<span>Closings</span>}
-          to="/dashboard/deals/filter/closings"
-        />,
         ...inboxTabs
           .filter(name => !!name)
           .map((name, index) => (
@@ -91,6 +90,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               to={`/dashboard/deals/filter/${name}?type=inbox`}
             />
           )),
+        <TabLink
+          key="closings"
+          value="closings"
+          label={<span>Closings</span>}
+          to="/dashboard/deals/filter/closings?type=query"
+        />,
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"

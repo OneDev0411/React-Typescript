@@ -25,6 +25,7 @@ import { SearchQuery } from './types'
 import { getStaticFilterQuery } from './utils/get-static-filter-query'
 
 import Grid from './Grid'
+import { getClosingsFilterQuery } from '../helpers/closings'
 
 interface StateProps {
   user: IUser
@@ -67,27 +68,37 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     term: searchCriteria || ''
   }
 
-  const handleQueryChange = (value: string): void => {
-    if (value.length === 0) {
-      dispatch(getDeals(user))
-    }
-
-    if (value.length > 3 && searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, value))
-    }
-
-    setSearchCriteria(value)
-  }
+  // The inbox tabs call /brands/${brandId}/deals/inbox API then the grid component
+  // filters the result on the frontend side. So all of them need just one API call.
+  // Other tabs need to call /deals/filter API with their specific filters.
+  // This means we don't need to call the API on every tab change.
+  // The listKey variable helps this component to be smart and call the APIs at the
+  // right time.
+  const listKey =
+    searchQuery.type === 'inbox'
+      ? searchQuery.type
+      : [searchQuery.type, searchQuery.filter].join('-')
 
   useDeepCompareEffect(() => {
-    if (searchQuery.type === 'query' && statuses.length > 0) {
-      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+    if (searchQuery.type === 'query') {
+      if (searchQuery.filter === 'closings') {
+        dispatch(searchDeals(user, getClosingsFilterQuery(searchQuery.term)))
+      } else if (statuses.length > 0) {
+        dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+      }
+    } else if (searchQuery.type === 'inbox') {
+      if (!searchQuery.term) {
+        dispatch(getDeals(user))
+      } else {
+        dispatch(searchDeals(user, searchQuery.term))
+      }
     }
-
-    if (searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, searchQuery.term))
-    }
-  }, [dispatch, searchQuery, statuses, user])
+  }, [
+    listKey,
+    searchQuery.term, // This dependency leads to call the API on every term changes
+    statuses,
+    user
+  ])
 
   return (
     <PageLayout>
@@ -96,7 +107,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             value={searchCriteria}
-            onChange={handleQueryChange}
+            onChange={setSearchCriteria}
           />
 
           <ExportDeals />
