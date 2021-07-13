@@ -21,28 +21,28 @@ describe('createGoogleMapApiUrl function', () => {
       callback: 'initialize'
     }
   })
-  it('should returns default key when it is not present', () => {
+  it('should return default key when it is not present', () => {
     const param: GoogleMapAPIParams = { ...googleMapAPIParams, key: undefined }
     const expected = `https://maps.googleapis.com/maps/api/js?key=${DEFAULT_KEY}&libraries=places,localContext,geometry&callback=initialize`
 
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should returns key when key is present', () => {
+  it('should return key when key is present', () => {
     const param: GoogleMapAPIParams = { ...googleMapAPIParams }
     const expected = `https://maps.googleapis.com/maps/api/js?key=${param.key}&libraries=places,localContext,geometry&callback=initialize`
 
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should`nt returns libraries when libraries is empty', () => {
+  it("shouldn't returns libraries when libraries is empty", () => {
     const param: GoogleMapAPIParams = { ...googleMapAPIParams, libraries: [] }
     const expected = `https://maps.googleapis.com/maps/api/js?key=${param.key}&callback=initialize`
 
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should`nt returns libraries when libraries is undefined', () => {
+  it("shouldn't returns libraries when libraries is undefined", () => {
     const param: GoogleMapAPIParams = {
       ...googleMapAPIParams,
       libraries: undefined
@@ -52,7 +52,7 @@ describe('createGoogleMapApiUrl function', () => {
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should returns libraries when callback is not undefined', () => {
+  it('should return libraries when callback is not undefined', () => {
     const param: GoogleMapAPIParams = {
       ...googleMapAPIParams,
       libraries: ['drawing', 'places']
@@ -62,7 +62,7 @@ describe('createGoogleMapApiUrl function', () => {
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should`nt returns callback when callback is undefined', () => {
+  it("shouldn't returns callback when callback is undefined", () => {
     const param: GoogleMapAPIParams = {
       ...googleMapAPIParams,
       callback: undefined
@@ -72,7 +72,7 @@ describe('createGoogleMapApiUrl function', () => {
     expect(createGoogleMapApiUrl(param)).toEqual(expected)
   })
 
-  it('should returns callback when callback is not undefined', () => {
+  it('should return callback when callback is not undefined', () => {
     const param: GoogleMapAPIParams = {
       ...googleMapAPIParams,
       callback: 'something'
@@ -133,7 +133,7 @@ describe('isMapLibrariesLoaded function', () => {
     } as any
   })
 
-  it('should returns true if all libraries are loaded and all are desired', () => {
+  it('should return true if all libraries are loaded and all are desired', () => {
     const param: GoogleMapLibrary[] = [
       'places',
       'localContext',
@@ -145,13 +145,13 @@ describe('isMapLibrariesLoaded function', () => {
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
-  it('should returns true if all libraries are loaded and some are desired', () => {
+  it('should return true if all libraries are loaded and some are desired', () => {
     const param: GoogleMapLibrary[] = ['places', 'geometry', 'drawing']
     const expected = true
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
-  it('should returns false if one library is missing', () => {
+  it('should return false if one library is missing', () => {
     global.google = {
       maps: {
         drawing: true
@@ -162,7 +162,7 @@ describe('isMapLibrariesLoaded function', () => {
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
-  it('should returns false if all librarie is missing', () => {
+  it('should return false if all librarie is missing', () => {
     global.google = {
       maps: {
         places: true
