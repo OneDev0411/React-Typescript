@@ -96,10 +96,8 @@ function OpenHouseForm(props: Props) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isVirtual, setIsVirtual] = useState(false)
   const [virtualUrl, setVirtualUrl] = useState('')
-  const [
-    showOHRegistrationDrawer,
-    setShowOHRegistrationDrawer
-  ] = useState<boolean>(false)
+  const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] =
+    useState<boolean>(false)
 
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate
@@ -340,7 +338,7 @@ function OpenHouseForm(props: Props) {
         <OpenHouseDrawer
           isOpen
           dealNotifyOffice={false}
-          user={user}
+          // user={user} // TODO: Ramin jan please check this
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}

@@ -52,9 +52,8 @@ export function DealPrimaryAgent({
 
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
@@ -105,7 +104,7 @@ export function DealPrimaryAgent({
             isOpen
             compact
             deal={deal}
-            user={user}
+            // user={user} // TODO: Ramin please check this
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}

@@ -65,9 +65,8 @@ export function DealClient({
    * list of all existence roles
    */
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const getDefaultRole = () => {
     if (side === 'Selling') {
@@ -121,7 +120,7 @@ export function DealClient({
             isOpen
             compact
             showSaveContactButton
-            user={user}
+            // user={user} // TODO: Ramin please check this
             checklist={checklist}
             dealSide={side}
             form={selectedRole}
