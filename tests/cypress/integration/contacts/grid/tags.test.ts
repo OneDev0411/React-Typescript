@@ -1,5 +1,4 @@
 import { acceptConfirmationModal } from 'helpers/modal'
-
 import { expandShowMoreLess, getTestSelector } from 'helpers/page'
 
 describe('Contacts page, tags', () => {
