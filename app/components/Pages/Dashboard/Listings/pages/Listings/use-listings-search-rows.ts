@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 
 import { ListingRow } from './types'
 
-function useListingsQueryRows(
+function useListingsSearchRows(
   rows: ListingRow[],
-  search: string
+  query: string
 ): ListingRow[] {
   return useMemo(() => {
-    if (!search) {
+    if (!query) {
       return rows
     }
 
@@ -17,9 +17,9 @@ function useListingsQueryRows(
           ? row.address.street_address
           : row.property.address.street_address
 
-      return address.includes(search)
+      return address.includes(query)
     })
-  }, [rows, search])
+  }, [rows, query])
 }
 
-export default useListingsQueryRows
+export default useListingsSearchRows

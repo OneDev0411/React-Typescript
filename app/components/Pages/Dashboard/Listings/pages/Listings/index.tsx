@@ -21,13 +21,13 @@ function Listings({ params }: ListingsProps) {
   useTitle('Listings | Rechat')
 
   const { tabs, tab } = useListingsTabs(params.brandId)
-  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Listings">
         <Box width="100%" maxWidth={360}>
-          <SearchTextField onChange={setSearch} />
+          <SearchTextField onChange={setSearchTerm} />
         </Box>
       </PageLayout.Header>
       <PageLayout.Main>
@@ -39,7 +39,7 @@ function Listings({ params }: ListingsProps) {
                 key={tab.value}
                 brandId={tab.value}
                 hasActions={tab.hasActions}
-                search={search}
+                searchTerm={searchTerm}
               />
             </ListingsOpenHouseProvider>
           </>

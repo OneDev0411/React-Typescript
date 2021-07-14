@@ -16,7 +16,7 @@ import ListingsListColumnActions, {
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
 import ListingsListColumnProperty from './ListingsListColumnProperty'
-import useListingsQueryRows from './use-listings-query-rows'
+import useListingsSearchRows from './use-listings-search-rows'
 import useListingsListSort from './use-listings-list-sort'
 
 const useStyles = makeStyles(
@@ -36,14 +36,14 @@ const useStyles = makeStyles(
 interface ListingsListProps
   extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
   brandId: UUID
-  search: string
+  searchTerm: string
 }
 
-function ListingsList({ brandId, hasActions, search }: ListingsListProps) {
+function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
   const classes = useStyles()
   const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
 
-  const resultRows = useListingsQueryRows(rows, search)
+  const resultRows = useListingsSearchRows(rows, searchTerm)
   const sortedRows = useListingsListSort(resultRows)
 
   const columns: TableColumn<ListingRow>[] = [
@@ -118,7 +118,7 @@ function ListingsList({ brandId, hasActions, search }: ListingsListProps) {
       getTrProps={() => ({ className: classes.row })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState
-          message={search ? 'No results' : 'There are no listings.'}
+          message={searchTerm ? 'No results' : 'There are no listings.'}
         />
       )}
     />
