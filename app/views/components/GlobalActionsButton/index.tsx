@@ -119,7 +119,7 @@ export const GlobalActions = (props: Props) => {
 
       case 'contact':
         return selectedItem.render({
-          user,
+          // user, // TODO: Please check this
           isOpen: true,
           onClose: handleCloseRenderedItem,
           saveCallback: state.onCreateContact,
