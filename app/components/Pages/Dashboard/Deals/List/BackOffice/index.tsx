@@ -58,7 +58,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     deals: deals.list
   }))
 
-  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const searchQuery: SearchQuery = {

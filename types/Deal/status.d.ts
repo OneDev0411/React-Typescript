@@ -4,7 +4,6 @@ declare interface IDealStatus extends IModel<'brand_deal_status'> {
   is_active: boolean
   is_pending: boolean
   is_archived: boolean
-  deal_types: IDealType[]
-  property_types: IDealPropertyType[]
+  is_closed: boolean
   admin_only: boolean
 }

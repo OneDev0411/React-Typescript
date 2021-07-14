@@ -1,21 +1,20 @@
-import { uniq } from 'lodash'
-
 import { useState } from 'react'
 import { useEffectOnce } from 'react-use'
 
-import { getBrandChecklists } from 'models/BrandConsole/Checklists'
+import {
+  getBrandStatuses,
+  updateBrandStatus
+} from '@app/models/brand/brand-statuses'
 
-export function useBrandStatuses(brandId: UUID): IDealStatus[] {
+export function useBrandStatuses(
+  brandId: UUID
+): [IDealStatus[], (id: UUID, data: Record<string, unknown>) => void] {
   const [statuses, setStatuses] = useState<IDealStatus[]>([])
 
   useEffectOnce(() => {
     const fetchStatuses = async () => {
       try {
-        const checklists = await getBrandChecklists(brandId)
-
-        const statuses = uniq(
-          checklists.flatMap(checklist => checklist.statuses || [])
-        )
+        const statuses = await getBrandStatuses(brandId)
 
         setStatuses(statuses)
       } catch (e) {
@@ -26,5 +25,22 @@ export function useBrandStatuses(brandId: UUID): IDealStatus[] {
     fetchStatuses()
   })
 
-  return statuses
+  const updateStatus = async (
+    statusId: UUID,
+    data: Record<string, unknown>
+  ) => {
+    try {
+      await updateBrandStatus(brandId, statusId, data)
+
+      setStatuses(statuses =>
+        statuses.map(status =>
+          status.id === statusId ? { ...status, ...data } : status
+        )
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  return [statuses, updateStatus]
 }
