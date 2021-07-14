@@ -43,10 +43,10 @@ export function useAppcues() {
     }
 
     ;(async function prepareAndSendUserData() {
-      const google = await getOAuthAccounts(OAuthProvider.Google)
-      const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
-
       if (user && user.id) {
+        const google = await getOAuthAccounts(OAuthProvider.Google)
+        const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
+
         const starts = moment(user.created_at * 1000)
         const ends = moment()
         const accountAge = moment.duration(ends.diff(starts))
