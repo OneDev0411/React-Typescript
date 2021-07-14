@@ -1,17 +1,12 @@
-import { useDeepCompareEffect } from 'react-use'
+import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-
 import moment from 'moment'
 
 import { selectUserHasAccess } from 'selectors/acl'
-
 import { selectUserUnsafe } from 'selectors/user'
-
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
-
 import { IAppState } from 'reducers'
 import { OAuthProvider } from 'constants/contacts'
-
 import { ACL } from 'constants/acl'
 
 interface Location {
@@ -35,27 +30,40 @@ export function useAppcues() {
   )
   const user = useSelector(selectUserUnsafe)
 
+  const userInfoToWatch = useMemo(
+    () =>
+      user && user.id
+        ? {
+            id: user.id,
+            firstName: user.first_name,
+            fullName: user.display_name,
+            email: user.email,
+            userType: user.user_type,
+            createdAt: user.created_at
+          }
+        : null,
+    [user]
+  )
+
   const pathname = location ? location.pathname : null
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     if (!pathname) {
       return
     }
 
-    ;(async function prepareAndSendUserData() {
-      if (user && user.id) {
+    if (userInfoToWatch) {
+      ;(async function prepareAndSendUserData() {
+        const { id, createdAt, ...userInfo } = userInfoToWatch
         const google = await getOAuthAccounts(OAuthProvider.Google)
         const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
 
-        const starts = moment(user.created_at * 1000)
+        const starts = moment(createdAt * 1000)
         const ends = moment()
         const accountAge = moment.duration(ends.diff(starts))
 
         const userData = {
-          firstName: user.first_name,
-          fullName: user.display_name,
-          email: user.email,
-          userType: user.user_type,
+          ...userInfo,
           accountAgeInDays:
             accountAge.days() +
             accountAge.months() * 30 +
@@ -68,9 +76,9 @@ export function useAppcues() {
         // behind the scenes, Appcues.identify() also invokes that function.
         // Reac more: https://docs.appcues.com/article/161-javascript-api
         window.AppcuesReady(() => {
-          window.Appcues.identify(user.id, userData)
+          window.Appcues.identify(id, userData)
         })
-      }
-    })()
-  }, [pathname, user, accessList])
+      })()
+    }
+  }, [pathname, userInfoToWatch, accessList])
 }
