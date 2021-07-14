@@ -873,9 +873,7 @@ class ContactsList extends React.Component {
               )}
             </Box>
           )}
-          <Box ml={1.5}>
-            <ViewAs />
-          </Box>
+          <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
           {...(this.state.viewMode === 'board' && {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, ReactNode } from 'react'
+import React, { useState, useMemo, ReactNode, CSSProperties } from 'react'
 import { useSelector } from 'react-redux'
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
@@ -30,7 +30,11 @@ const useStyles = makeStyles(
   { name: 'ViewAs' }
 )
 
-export const ViewAs = props => {
+interface Props {
+  containerStyle?: CSSProperties
+}
+
+export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
   const user: IUser = useSelector(selectUser)
   const team: IUserTeam | null = getActiveTeam(user)
@@ -95,8 +99,8 @@ export const ViewAs = props => {
     return null
   }
 
-  return (
-    <>
+  const renderAvatarGroup = () => {
+    const base = (
       <Tooltip title={tooltipTitle}>
         <AvatarGroup
           max={4}
@@ -107,6 +111,18 @@ export const ViewAs = props => {
           {initialSelectedMembers.length < 4 && <Avatar>+</Avatar>}
         </AvatarGroup>
       </Tooltip>
+    )
+
+    if (containerStyle) {
+      return <div style={containerStyle}>{base}</div>
+    }
+
+    return base
+  }
+
+  return (
+    <>
+      {renderAvatarGroup()}
       <Popover
         id={id}
         open={open}
