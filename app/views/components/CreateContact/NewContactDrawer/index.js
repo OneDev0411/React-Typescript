@@ -26,11 +26,13 @@ import { preSaveFormat, submitValidate, getDefaultOptions } from './helpers'
 import { generateInitialValues } from './helpers/generate-initial-values'
 
 const propTypes = {
+  isOpen: PropTypes.bool,
   section: PropTypes.string,
   saveCallback: PropTypes.func,
   saveAndAddNewCallback: PropTypes.func,
   user: PropTypes.shape().isRequired,
-  showAddAnother: PropTypes.bool
+  showAddAnother: PropTypes.bool,
+  onClose: PropTypes.func
 }
 const defaultProps = {
   section: '',
