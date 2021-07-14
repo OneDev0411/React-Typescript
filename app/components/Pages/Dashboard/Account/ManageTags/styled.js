@@ -6,11 +6,17 @@ export const Container = styled.div`
   position: relative;
 `
 
+export const AddTagContainer = styled.div`
+  margin-left: 2.1875rem;
+  margin-bottom: 1rem;
+`
+
 export const Description = styled.h2`
   font-size: 1rem;
   font-weight: normal;
   color: #4a4a4a;
-  margin: 0 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 `
 
 export const TextInputSuffix = styled.button`

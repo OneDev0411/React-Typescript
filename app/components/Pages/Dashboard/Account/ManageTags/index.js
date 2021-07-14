@@ -17,7 +17,7 @@ import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
 import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
-import { Container, Description } from './styled'
+import { Container, AddTagContainer, Description } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 const HIGHLIGHT_SECONDS = 4
@@ -265,17 +265,20 @@ class ManageTags extends Component {
             <Loading />
           ) : (
             <Fragment>
-              <Description>
-                Start typing tags and hit Return/Enter to add.
-              </Description>
-              <Input
-                onChange={this.handleCreateTagInputChange}
-                onSubmit={this.handleAdd}
-                value={this.state.createTagInputValue}
-                isDisabled={
-                  this.state.isSaving || !this.state.createTagInputValue.trim()
-                }
-              />
+              <AddTagContainer>
+                <Description>
+                  Start typing tags and hit Return/Enter to add.
+                </Description>
+                <Input
+                  onChange={this.handleCreateTagInputChange}
+                  onSubmit={this.handleAdd}
+                  value={this.state.createTagInputValue}
+                  isDisabled={
+                    this.state.isSaving ||
+                    !this.state.createTagInputValue.trim()
+                  }
+                />
+              </AddTagContainer>
               {Object.keys(rows)
                 .sort()
                 .map((title, rowIndex) => (

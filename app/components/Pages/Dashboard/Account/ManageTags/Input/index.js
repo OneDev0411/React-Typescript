@@ -31,7 +31,6 @@ export class Input extends React.Component {
         onEnterKeyPress={props.onSubmit}
         placeholder="Add a tag..."
         prefixElementRenderer={this.renderPrefixElement}
-        style={{ margin: '1rem 1.5rem' }}
         suffixElementRenderer={this.renderSuffixElement}
         value={props.value}
       />
