@@ -1,17 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Theme,
-  Select,
   Button,
   Popover,
-  MenuItem,
   TextField,
-  InputLabel,
   makeStyles,
-  Typography,
-  FormControl
+  Typography
 } from '@material-ui/core'
-import pluralize from 'pluralize'
 import { mdiClose } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -61,6 +56,7 @@ export function EditMode({
   handleClose
 }: Props) {
   const classes = useStyles()
+  const [isDirty, setIsDirty] = useState<boolean>(false)
   const [text, setText] = useState<string>(tag.text || '')
   const [touchDate, setTouchDate] = useState<Nullable<number>>(
     tag.touch_freq || 0
@@ -74,14 +70,22 @@ export function EditMode({
     setText(value)
   }
   const handleTouchDateChange = (
-    event: React.ChangeEvent<{ value: number }>
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = event.target.value
+    const value = parseInt(event.target.value, 10)
 
     setTouchDate(value)
   }
 
   const handleOnSave = () => onSave(text, touchDate)
+
+  useEffect(() => {
+    if (text !== tag.text || touchDate !== tag.touch_freq) {
+      setIsDirty(true)
+    } else {
+      setIsDirty(false)
+    }
+  }, [tag.text, tag.touch_freq, text, touchDate])
 
   return (
     <Popover
@@ -107,7 +111,7 @@ export function EditMode({
         </div>
         <div className={classes.fields}>
           <TextField
-            id="text"
+            id="title"
             label="Title"
             type="text"
             size="small"
@@ -120,34 +124,25 @@ export function EditMode({
             className={classes.inputField}
             onChange={handleTitleChange}
           />
-          <FormControl
-            variant="outlined"
+          <TextField
+            id="touch-date"
+            label="Touch Date"
+            type="number"
             size="small"
             color="secondary"
+            defaultValue={touchDate}
+            InputLabelProps={{
+              shrink: true
+            }}
+            variant="outlined"
             className={classes.inputField}
-          >
-            <InputLabel id="tag-touch-date">Touch Date</InputLabel>
-            <Select
-              labelId="tag-touch-date"
-              id="tag-touch-date-select"
-              color="secondary"
-              value={touchDate}
-              defaultValue={0}
-              onChange={handleTouchDateChange}
-              label="Touch Date"
-            >
-              <MenuItem value={0}>No touch reminder</MenuItem>
-              {[1, 2, 3, 4, 5].map(item => (
-                <MenuItem key={item} value={item}>
-                  Every {pluralize('day', item, true)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+            onChange={handleTouchDateChange}
+          />
+
           <Button
             color="secondary"
             variant="contained"
-            disabled={loading}
+            disabled={loading || !isDirty}
             className={classes.inputField}
             onClick={handleOnSave}
           >
