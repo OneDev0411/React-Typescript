@@ -14,7 +14,7 @@ test_unit:
     - npm -v
     - npm install -g npm@latest
     - npm -v
-    - npm i
+    - npm i --legacy-peer-deps
     - npm run types:check
     - npm run test:ci -- --coverage
 
