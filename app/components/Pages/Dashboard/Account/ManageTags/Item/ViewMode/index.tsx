@@ -25,17 +25,23 @@ const useStyles = makeStyles(
       }
     },
     title: {
-      marginRight: theme.spacing(1)
+      width: '35%',
+      maxWidth: '250px'
     },
     touchDate: {
       display: 'flex',
-      margin: theme.spacing(0, 2)
+      width: '20%',
+      maxWidth: '200px',
+      padding: theme.spacing(0, 1)
     },
     touchDateCaption: {
       color: theme.palette.grey[500],
       marginRight: theme.spacing(0.5)
     },
-    touchDateValue: {},
+    touchDateValue: {
+      color: ({ tag }: Props) =>
+        tag.touch_freq ? theme.palette.tertiary.dark : theme.palette.grey[500]
+    },
     actions: {
       display: 'flex'
     }
@@ -53,7 +59,7 @@ interface Props {
 }
 
 export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({ tag, loading, onEdit, onDelete })
 
   const onDeleteClick = event => {
     if (event && event.stopPropagation) {
@@ -78,7 +84,7 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
             Touch:
           </Typography>
         )}
-        <Typography variant="body2">
+        <Typography variant="body2" className={classes.touchDateValue}>
           {tag.touch_freq
             ? `every ${tag.touch_freq} days`
             : 'No touch reminder'}
