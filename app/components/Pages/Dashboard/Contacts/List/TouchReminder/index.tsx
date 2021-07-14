@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Typography, Theme, makeStyles } from '@material-ui/core'
-import { mdiClockOutline } from '@mdi/js'
+import { mdiBellOutline } from '@mdi/js'
 
 import { addNotification, Notification } from 'components/notification'
 
@@ -92,7 +92,7 @@ function TouchReminder({
 
   return (
     <div className={classes.container}>
-      <SvgIcon path={mdiClockOutline} className={classes.icon} rightMargined />
+      <SvgIcon path={mdiBellOutline} className={classes.icon} rightMargined />
       <Typography variant="body2" className={classes.label}>
         Remind to touch every
       </Typography>
