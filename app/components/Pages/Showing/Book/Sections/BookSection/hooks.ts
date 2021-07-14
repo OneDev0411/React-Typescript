@@ -28,9 +28,8 @@ export function useBookTimeRange(
 ): UseBookTimeRange {
   const [startTime, setStartTime] = useState<number>(0)
   const [endTime, setEndTime] = useState<number>(0)
-  const [defaultSelectedTimeRange, setDefaultSelectedTimeRange] = useState<
-    Optional<TimeRange>
-  >(undefined)
+  const [defaultSelectedTimeRange, setDefaultSelectedTimeRange] =
+    useState<Optional<TimeRange>>(undefined)
   const [unavailableTimes, setUnavailableTimes] = useState<number[]>([])
 
   useDeepCompareEffect(() => {

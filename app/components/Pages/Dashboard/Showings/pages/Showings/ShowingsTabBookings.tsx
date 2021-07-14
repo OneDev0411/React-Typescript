@@ -17,13 +17,11 @@ function ShowingsTabBookings({
   appointments,
   setShowings
 }: ShowingsTabBookingsProps) {
-  const updateShowingsAppointmentStatus = useShowingsUpdateAppointmentStatus(
-    setShowings
-  )
+  const updateShowingsAppointmentStatus =
+    useShowingsUpdateAppointmentStatus(setShowings)
 
-  const dismissShowingsAppointmentNotifications = useShowingsDismissAppointmentNotifications(
-    setShowings
-  )
+  const dismissShowingsAppointmentNotifications =
+    useShowingsDismissAppointmentNotifications(setShowings)
 
   return (
     <ShowingFilteredBookingList

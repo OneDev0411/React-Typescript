@@ -59,7 +59,7 @@ export default function PromoteListingsSection() {
               hideFeatures
               listing={listing}
               onClick={() => {
-                goTo(`/dashboard/marketing/wizard?listingId=${listing.id}`)
+                goTo(`/dashboard/mls/${listing.id}/marketing`)
               }}
             />
           </Grid>
