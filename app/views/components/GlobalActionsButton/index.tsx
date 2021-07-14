@@ -1,6 +1,8 @@
 import React, { MouseEvent, useState, useMemo, memo } from 'react'
+
 import { useSelector } from 'react-redux'
 
+import { selectUserUnsafe } from 'selectors/user'
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
@@ -8,13 +10,11 @@ import {
   hasUserAccessToShowings
 } from 'utils/user-teams'
 
-import { selectUserUnsafe } from 'selectors/user'
-
-import { Item, ItemType } from './types'
 import Button from './components/Button'
 import items from './components/items'
 import Menu from './components/Menu'
 import { useGlobalActionContext } from './hooks/use-global-action-context'
+import { Item, ItemType } from './types'
 
 interface Props {}
 

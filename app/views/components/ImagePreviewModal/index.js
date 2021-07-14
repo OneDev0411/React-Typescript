@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import ProgressiveImage from 'react-progressive-image'
-import PropTypes from 'prop-types'
+
 import { Tooltip } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import ProgressiveImage from 'react-progressive-image'
 
 import { ModalHeader } from 'components/ModalHeader'
 

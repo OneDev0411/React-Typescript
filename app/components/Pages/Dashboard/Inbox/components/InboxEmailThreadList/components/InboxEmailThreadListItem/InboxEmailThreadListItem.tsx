@@ -1,25 +1,26 @@
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Paper, Typography, IconButton, Tooltip } from '@material-ui/core'
-import fecha from 'fecha'
-import classNames from 'classnames'
 import {
   mdiEmailOutline,
   mdiEmailOpenOutline,
   mdiTrashCanOutline,
   mdiArchiveOutline
 } from '@mdi/js'
+import classNames from 'classnames'
+import fecha from 'fecha'
+import { useSelector } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { selectUser } from 'selectors/user'
 
-import { useInboxEmailThreadListItemStyles } from './styles'
-import getRecipientNamesText from './helpers/get-recipient-names-text'
-import useEmailThreadReadStatusSetter from '../../../../helpers/use-email-thread-read-status-setter'
-import useEmailThreadDeleter from '../../../../helpers/use-email-thread-deleter'
 import useEmailThreadArchiver from '../../../../helpers/use-email-thread-archiver'
+import useEmailThreadDeleter from '../../../../helpers/use-email-thread-deleter'
+import useEmailThreadReadStatusSetter from '../../../../helpers/use-email-thread-read-status-setter'
+
+import getRecipientNamesText from './helpers/get-recipient-names-text'
+import { useInboxEmailThreadListItemStyles } from './styles'
 
 interface Props {
   emailThread: IEmailThread<'contacts'>

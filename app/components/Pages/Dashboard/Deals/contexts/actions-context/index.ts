@@ -1,7 +1,6 @@
 import { createContext } from 'react'
 
 import { EmailFormValues } from 'components/EmailCompose'
-
 import { FormValues } from 'deals/Signature/types'
 
 import { initialState } from './reducers'
@@ -15,5 +14,7 @@ export interface StateContext {
   isDrawerOpen: boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StateContext = createContext<StateContext>(initialState)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const DispatchContext = createContext<DispatchContext>(() => null)

@@ -1,10 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
+import { FieldError } from '../../final-form-fields/FieldError'
 import { InputContainer, InputLabel, InputRequired } from '../styled'
 
 import { FormattedInputField, InputField } from './styled'
-import { FieldError } from '../../final-form-fields/FieldError'
 
 TextInput.propTypes = {
   input: PropTypes.object,

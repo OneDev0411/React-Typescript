@@ -1,7 +1,7 @@
 import React from 'react'
 
-import AsyncMultiSelect from '../components/AsyncMultiSelect'
 import api from '../../../../../../../../models/listings/search'
+import AsyncMultiSelect from '../components/AsyncMultiSelect'
 
 const Counties = () => (
   <AsyncMultiSelect

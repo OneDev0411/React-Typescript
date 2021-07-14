@@ -1,7 +1,7 @@
 import React from 'react'
 
-import MinMaxInputs from '../components/MinMaxInputs'
 import { toNumber } from '../../../../../../../../utils/helpers'
+import MinMaxInputs from '../components/MinMaxInputs'
 
 const currentYear = () => {
   const date = new Date()

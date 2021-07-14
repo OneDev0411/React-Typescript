@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Box, Tooltip, Theme, useTheme } from '@material-ui/core'
 
-import ContactName from 'components/ContactInfo/ContactName'
 import { Avatar } from 'components/Avatar'
+import ContactName from 'components/ContactInfo/ContactName'
 import { getNameInitials } from 'utils/helpers'
 
 import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'

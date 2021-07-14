@@ -1,23 +1,21 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-
-import Flex from 'styled-flex-component'
 
 import { mdiBell } from '@mdi/js'
-
-import { Modal, ModalFooter } from 'components/Modal'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import Flex from 'styled-flex-component'
 
 import createAlert from 'actions/listings/alerts/create-alert'
 import ActionButton from 'components/Button/ActionButton'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Modal, ModalFooter } from 'components/Modal'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import SuccessModal from './SuccessModal'
-import ShareAlertModal from './ShareAlertModal'
 import { normalizeAlertOptions } from './normalize-alert-options'
+import ShareAlertModal from './ShareAlertModal'
+import SuccessModal from './SuccessModal'
 
 const CreateAlertModal = ({
   onHide,

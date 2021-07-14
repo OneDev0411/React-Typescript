@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+
+import { TextField } from 'final-form-material-ui'
 import { FieldRenderProps } from 'react-final-form'
+import { connect } from 'react-redux'
+import { useControllableState } from 'react-use-controllable-state/dist'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { Observable } from 'rxjs'
 import { combineLatest } from 'rxjs/observable/combineLatest'
 import { startWith } from 'rxjs/operators'
-import { useControllableState } from 'react-use-controllable-state/dist'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
-import { TextField } from 'final-form-material-ui'
 
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
@@ -16,13 +17,14 @@ import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { areListsFetched, getSegments } from 'reducers/filter-segments'
 
 import { ChipsInput } from '../ChipsInput'
-import { InlineInputLabel } from '../InlineInputLabel'
 import { ChipsInputProps } from '../ChipsInput/types'
+import { InlineInputLabel } from '../InlineInputLabel'
+
+import { getContactSuggestions } from './helpers/get-contact-suggestions'
+import { getListSuggestions } from './helpers/get-list-suggestions'
+import { getTagSuggestions } from './helpers/get-tag-suggestions'
 import { recipientToChip } from './helpers/recipient-to-chip'
 import { recipientToSuggestion } from './helpers/recipient-to-suggestion'
-import { getTagSuggestions } from './helpers/get-tag-suggestions'
-import { getListSuggestions } from './helpers/get-list-suggestions'
-import { getContactSuggestions } from './helpers/get-contact-suggestions'
 
 type BaseProps = Partial<FieldRenderProps<HTMLInputElement>> &
   Omit<

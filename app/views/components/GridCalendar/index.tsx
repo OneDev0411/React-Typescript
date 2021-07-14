@@ -6,56 +6,46 @@ import React, {
   useImperativeHandle,
   RefObject
 } from 'react'
-import { connect } from 'react-redux'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { makeStyles, Theme } from '@material-ui/core'
 
-// List of full calendar assets
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import FullCalendar, {
   EventApi,
   EventInput,
   DatesSetArg,
   EventContentArg
 } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
-
+import { makeStyles, Theme } from '@material-ui/core'
 import _map from 'lodash/map'
+import { connect } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
-import { updateTask } from 'models/tasks'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-
-import { IAppState } from 'reducers/index'
-
-import { viewAs } from 'utils/user-teams'
+// List of full calendar assets
 
 import { CrmEventType } from 'components/Calendar/types'
+import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { updateTask } from 'models/tasks'
+import { IAppState } from 'reducers/index'
+import { viewAs } from 'utils/user-teams'
+
+import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
+import { ApiOptions, FetchOptions } from '../Calendar/types'
 
 import { Event } from './components/Event'
 import { EventController } from './components/EventController'
-
-// List of basic calendar dependency
+import { FilterEvents } from './components/FilterEvents'
+import { FilterShape } from './components/FilterEvents/type'
+import { INITIAL_FILTERS } from './components/FilterEvents/values'
 import {
   getDateRange,
   shouldRecreateRange,
   Format
 } from './helpers/get-date-range'
-import { ApiOptions, FetchOptions } from '../Calendar/types'
-
-// helpers
-import { normalizeEvents } from './helpers/normalize-events'
 import { normalizeEventOnEdit } from './helpers/normalize-event-on-edit'
-import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
-
-// helpers
+import { normalizeEvents } from './helpers/normalize-events'
 import { StateProps, SocketUpdate, ActionRef } from './types'
-
-// filter component
-import { FilterEvents } from './components/FilterEvents'
-import { FilterShape } from './components/FilterEvents/type'
-import { INITIAL_FILTERS } from './components/FilterEvents/values'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

@@ -1,28 +1,28 @@
 import React, { useContext, useRef, useState } from 'react'
+
 import { Box, RootRef } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
-import { addNotification } from 'components/notification'
-
-import { uploadMedia } from 'models/Deal/media-manager'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import LoadingContainer from 'components/LoadingContainer'
+import { addNotification } from 'components/notification'
+import { uploadMedia } from 'models/Deal/media-manager'
 
-import acceptedDocuments from './constants/acceptedDocuments'
-import Uploader, { DropzoneRef } from './components/MediaUploader'
-import Header from './components/Header'
 import BulkActionsMenu from './components/BulkActionsMenu'
 import Gallery from './components/Gallery'
-import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
-import { useStyles } from './styles'
+import Header from './components/Header'
+import Uploader, { DropzoneRef } from './components/MediaUploader'
+import acceptedDocuments from './constants/acceptedDocuments'
 import { MediaManagerContext } from './context'
-import useFetchGallery from './hooks/useFetchGallery'
 import {
   addMedia,
   setMediaUploadProgress,
   setMediaAsUploaded,
   setNewlyUploadedMediaFields
 } from './context/actions'
+import { getUploadedMedia, getSelectedMedia } from './context/helpers/selectors'
+import useFetchGallery from './hooks/useFetchGallery'
+import { useStyles } from './styles'
 
 interface Props {
   user: IUser

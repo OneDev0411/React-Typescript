@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+
 import {
   SET_ACTIVE_PANEL,
   SET_PANEL_SORTING_INDEX,

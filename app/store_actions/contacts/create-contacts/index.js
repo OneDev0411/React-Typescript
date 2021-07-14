@@ -1,9 +1,9 @@
 import idx from 'idx'
 
 import * as actionTypes from '../../../constants/contacts'
-import { normalizeContacts } from '../helpers/normalize-contacts'
 import { createContacts as postNewContacts } from '../../../models/contacts/create-contacts'
 import { selectContactsInfo } from '../../../reducers/contacts/list'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function createContacts(contacts, query) {
   return async (dispatch, getState) => {

@@ -1,7 +1,7 @@
 import * as actionsType from '../../constants/user'
 import upgrade from '../../models/user/upgrade-to-agent'
 
-const upgradeToAgent = userInfo => async (dispatch, getState) => {
+const upgradeToAgent = userInfo => async dispatch => {
   dispatch({
     type: actionsType.UPGRADE_TO_AGENT_REQUEST
   })

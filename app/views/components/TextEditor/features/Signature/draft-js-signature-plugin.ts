@@ -1,13 +1,11 @@
 import { ContentBlock, ContentState, EditorState } from 'draft-js'
-import { PluginFunctions } from 'draft-js-plugins-editor'
-
+import { BlockStyleFn } from 'draft-js-export-html'
 import {
   CustomBlockFn,
   Options as ImportOptions,
   stateFromHTML
 } from 'draft-js-import-html'
-
-import { BlockStyleFn } from 'draft-js-export-html'
+import { PluginFunctions } from 'draft-js-plugins-editor'
 
 import { appendBlocks } from '../../utils/append-blocks'
 import { isValidSelection } from '../../utils/is-valid-selection'

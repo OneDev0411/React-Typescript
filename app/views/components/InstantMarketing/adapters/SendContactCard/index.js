@@ -1,25 +1,22 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
+import idx from 'idx'
 import { connect } from 'react-redux'
 
-import idx from 'idx'
-import { Button } from '@material-ui/core'
-
-import { addNotification as notify } from 'components/notification'
-
-import { getContact } from 'models/contacts/get-contact'
-import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
-
 import { confirmation } from 'actions/confirmation'
-
-import MissingEmailModal from 'components/MissingEmailModal'
-import InstantMarketing from 'components/InstantMarketing'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
-import { SearchContactDrawer } from 'components/SearchContactDrawer'
+import InstantMarketing from 'components/InstantMarketing'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+import MissingEmailModal from 'components/MissingEmailModal'
+import { addNotification as notify } from 'components/notification'
+import { SearchContactDrawer } from 'components/SearchContactDrawer'
+import { getContact } from 'models/contacts/get-contact'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 
 import SocialDrawer from '../../components/SocialDrawer'
 

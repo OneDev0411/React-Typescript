@@ -1,5 +1,5 @@
-import { getField } from '../get-field'
 import { getClientNames } from '../get-client-names'
+import { getField } from '../get-field'
 
 /**
  * a helper that extracts address from deal

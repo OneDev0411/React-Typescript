@@ -1,6 +1,5 @@
-import classNames from 'classnames'
 import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
-
+import classNames from 'classnames'
 import { Link } from 'react-router'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'

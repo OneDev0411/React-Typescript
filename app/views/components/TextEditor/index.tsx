@@ -6,28 +6,29 @@ import React, {
   useMemo,
   useRef
 } from 'react'
-import Dropzone from 'react-dropzone-rechat'
+
+import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import { EditorState } from 'draft-js'
 import PluginsEditor from 'draft-js-plugins-editor'
-import cn from 'classnames'
-import { makeStyles } from '@material-ui/core'
+import Dropzone from 'react-dropzone-rechat'
 import { shallowEqual } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 
-import { EditorContainer, EditorWrapper, Toolbar } from './styled'
 // import { FieldError } from '../final-form-fields/FieldError'
-import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
-import { TextEditorProps } from './types'
+import { ToolbarFragments } from './components/ToolbarFragments'
 import { createEditorRef } from './create-editor-ref'
 import { createPlugins } from './create-plugins'
-import { styles } from './styles'
-import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
-import { ToolbarFragments } from './components/ToolbarFragments'
-import { useCreateEditorContext } from './hooks/use-create-editor-context'
 import { DEFAULT_EDITOR_FEATURES } from './default-editor-features'
 import { EditorContext, EditorToolbarContext } from './editor-context'
+import { useCreateEditorContext } from './hooks/use-create-editor-context'
+import { useCreateToolbarContext } from './hooks/use-create-toolbar-context'
 import { moveSelectionToStart } from './modifiers/move-selection-to-start'
+import { EditorContainer, EditorWrapper, Toolbar } from './styled'
+import { styles } from './styles'
+import { TextEditorProps } from './types'
+import { shouldHidePlaceholder } from './utils/should-hide-placeholder'
 
 const useStyles = makeStyles(styles, { name: 'TextEditor' })
 

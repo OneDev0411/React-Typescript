@@ -1,5 +1,5 @@
-import { PluginFunctions } from 'draft-js-plugins-editor'
 import { EditorState, Modifier, SelectionState } from 'draft-js'
+import { PluginFunctions } from 'draft-js-plugins-editor'
 
 import { getExpressionInOffset } from './utils/get-expression-in-offset'
 

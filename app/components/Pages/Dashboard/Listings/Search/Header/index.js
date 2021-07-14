@@ -1,14 +1,14 @@
 import React from 'react'
-import { Box, Button, makeStyles } from '@material-ui/core'
 
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 
-import GlobalPageLayout from 'components/GlobalPageLayout'
 import { BaseDropdown } from 'components/BaseDropdown'
+import GlobalPageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
+import Filters from '../components/Filters'
 
 const useStyles = makeStyles(
   theme => ({

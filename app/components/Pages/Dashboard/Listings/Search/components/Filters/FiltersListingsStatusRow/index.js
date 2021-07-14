@@ -1,15 +1,16 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import { formValueSelector } from 'redux-form'
-import withHandlers from 'recompose/withHandlers'
 
 import SwitchToggle from '../components/SwitchToggle'
 
-import Flag from './Flag'
 import Accordion from './Accordion'
 import AccordionTrigger from './AccordionTrigger'
+import Flag from './Flag'
 
 const selector = formValueSelector('filters')
 

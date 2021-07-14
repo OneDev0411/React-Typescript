@@ -9,8 +9,8 @@ import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-con
 import useAsync from 'hooks/use-async'
 import suggestDomainName from 'models/domains/suggest-domain-name'
 
-import DomainSearchResults from './DomainSearchResults'
 import DomainSearchForm from './DomainSearchForm'
+import DomainSearchResults from './DomainSearchResults'
 
 interface DomainSearchProps {
   domainName: string

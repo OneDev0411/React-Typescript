@@ -1,11 +1,12 @@
 import { batchActions } from 'redux-batched-actions'
 
-import getListingsByValert from './by-valert'
 import { SEARCH_BY_POLYGON_POINTS } from '../../../../constants/listings/search'
 import { allLocationBasedFilterOptions } from '../../../../utils/map'
 import resetAreasOptions from '../reset-areas-options'
 import setSearchInput from '../set-search-input'
 import { setSearchLocation } from '../set-search-location'
+
+import getListingsByValert from './by-valert'
 
 const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
   if (points.length === 0) {

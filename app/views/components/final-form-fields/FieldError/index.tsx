@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react'
-import { Field } from 'react-final-form'
+
 import cn from 'classnames'
+import { Field } from 'react-final-form'
 
 import { ErrorContainer } from './styled'
 

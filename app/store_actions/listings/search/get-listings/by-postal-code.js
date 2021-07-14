@@ -1,5 +1,6 @@
-import getListingsByValert from './by-valert'
 import { getFetchingStatus } from '../../../../reducers/listings'
+
+import getListingsByValert from './by-valert'
 
 const QUERY_LIMIT = 200
 

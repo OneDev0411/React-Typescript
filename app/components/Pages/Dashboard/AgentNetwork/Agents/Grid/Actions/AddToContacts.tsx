@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useEffectOnce } from 'react-use'
-import pluralize from 'pluralize'
 
 import { mdiAccountPlusOutline } from '@mdi/js'
+import pluralize from 'pluralize'
+import { useDispatch } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
-import { getAttributeDefs } from 'models/contacts/get-attribute-defs'
-import { createContacts } from 'models/contacts/create-contacts'
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { addNotification as notify } from 'components/notification'
+import { createContacts } from 'models/contacts/create-contacts'
+import { getAttributeDefs } from 'models/contacts/get-attribute-defs'
 
 const SOURCE_TYPE_ATTRIBUTE_DEF_NAME = 'source_type'
 const TAG_ATTRIBUTE_DEF_NAME = 'tag'

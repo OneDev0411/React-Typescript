@@ -1,11 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import { mdiClose } from '@mdi/js'
 
-// import { Modal, ModalFooter } from 'components/Modal'
 import {
   Box,
   Dialog,
@@ -14,21 +8,25 @@ import {
   DialogTitle,
   useTheme
 } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
-import SuccessModal from './SuccessModal'
-import Recipients from '../../../../../Partials/ShareView'
-import { hasRecipients } from '../../../../../../utils/helpers'
-import { createRoom } from '../../../../../../store_actions/chatroom/room'
 import createRecommendation from '../../../../../../models/recommendation/create-recs'
-
+import { createRoom } from '../../../../../../store_actions/chatroom/room'
+import { hasRecipients } from '../../../../../../utils/helpers'
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import IconButton from '../../../../../../views/components/Button/IconButton'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
+import Recipients from '../../../../../Partials/ShareView'
+
+import SuccessModal from './SuccessModal'
 
 const ShareListingModal = ({
   onHide,
   isActive,
-  // internals
   isSharing,
   recipients,
   shareHandler,

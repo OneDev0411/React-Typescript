@@ -1,9 +1,8 @@
-import * as actionTypes from 'constants/email-templates'
-
 import { ThunkDispatch } from 'redux-thunk'
 
-import { EmailTemplateAction } from 'reducers/email-templates/types'
+import * as actionTypes from 'constants/email-templates'
 import { createEmailTemplate as create } from 'models/email-templates/create-email-template'
+import { EmailTemplateAction } from 'reducers/email-templates/types'
 
 export const createEmailTemplate = (
   brandId: string,

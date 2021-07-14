@@ -1,13 +1,11 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
-import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
-
-import { addNotification as notify } from 'components/notification'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
 import { confirmation } from 'actions/confirmation'
-
+import { addNotification as notify } from 'components/notification'
 import { CreateOpenHouse } from 'components/open-house/CreateOpenHouse'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { getTasks, deleteTask } from 'models/tasks'
@@ -15,7 +13,6 @@ import { getTasks, deleteTask } from 'models/tasks'
 import { Title, Description, LeftColumn, RightColumn, Image } from '../styled'
 
 import EventsList from './EventsList'
-
 import { OpenHouseContainer } from './styled.js'
 
 class OpenHouse extends React.Component {

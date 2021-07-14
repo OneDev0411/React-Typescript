@@ -1,19 +1,19 @@
 import { ReactElement, memo } from 'react'
+
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import LoadingContainer from 'components/LoadingContainer'
-
+import { useQueryParam } from '@app/hooks/use-query-param'
 import { getDeals, searchDeals, getContextsByBrand } from 'actions/deals'
+import LoadingContainer from 'components/LoadingContainer'
+import { IAppState } from 'reducers'
+import { selectBrandContexts } from 'reducers/deals/contexts'
 import {
   getActiveTeamId,
   hasUserAccess,
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
-import { selectBrandContexts } from 'reducers/deals/contexts'
-import { IAppState } from 'reducers'
-import { useQueryParam } from '@app/hooks/use-query-param'
 
 interface StateProps {
   user: IUser | null
@@ -36,18 +36,23 @@ function Container(props: Props) {
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')
 
-  const { user, dealsCount, brandContexts, isFetchingDeals, brandId } =
-    useSelector<IAppState, StateProps>(({ deals, user }) => {
-      const brandId = getActiveTeamId(user)
+  const {
+    user,
+    dealsCount,
+    brandContexts,
+    isFetchingDeals,
+    brandId
+  } = useSelector<IAppState, StateProps>(({ deals, user }) => {
+    const brandId = getActiveTeamId(user)
 
-      return {
-        dealsCount: Object.keys(deals.list).length,
-        brandContexts: selectBrandContexts(deals.contexts, brandId),
-        isFetchingDeals: deals.properties.isFetchingDeals,
-        brandId,
-        user
-      }
-    }, shallowEqual)
+    return {
+      dealsCount: Object.keys(deals.list).length,
+      brandContexts: selectBrandContexts(deals.contexts, brandId),
+      isFetchingDeals: deals.properties.isFetchingDeals,
+      brandId,
+      user
+    }
+  }, shallowEqual)
 
   useEffectOnce(() => {
     const isBackOffice = hasUserAccess(user, 'BackOffice')

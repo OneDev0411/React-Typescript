@@ -1,9 +1,10 @@
 import React from 'react'
+
 import Downshift from 'downshift'
 
+import DropButton from '../Button/DropButton'
 import Card from '../Card'
 import { Item } from '../Dropdown/Item'
-import DropButton from '../Button/DropButton'
 
 export class BasicDropdown extends React.Component {
   state = {

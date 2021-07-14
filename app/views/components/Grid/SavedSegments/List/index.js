@@ -1,6 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import { ListItem, withStyles } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import {
   // eslint-disable-next-line import/named
@@ -8,15 +9,13 @@ import {
   deleteFilterSegment,
   getSavedSegments
 } from 'actions/filter-segments'
-
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import {
   getDefaultList,
   getSegments,
   areListsFetched,
   selectActiveSavedSegment
 } from 'reducers/filter-segments'
-
-import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 
 import Item from './Item'
 

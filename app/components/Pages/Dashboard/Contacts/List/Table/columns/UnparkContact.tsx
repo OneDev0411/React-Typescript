@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { Button, Tooltip, makeStyles, Theme } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-
 import { unparkContact } from 'models/contacts/unparak-contact'
 
 interface Props {

@@ -1,7 +1,6 @@
 import { Grid } from '@material-ui/core'
 
 import DetailsSection from '../../../Sections/DetailsSection'
-
 import ShowingAppointmentStatusDetails from '../../Details'
 
 interface Props {

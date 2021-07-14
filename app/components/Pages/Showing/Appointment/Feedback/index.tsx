@@ -1,23 +1,22 @@
-import { WithRouterProps, browserHistory } from 'react-router'
 import { Container, Grid, makeStyles } from '@material-ui/core'
-
-import { sendAppointmentFeedback } from 'models/showing/send-appointment-feedback'
+import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
 import LoadingContainer from 'components/LoadingContainer'
+import { sendAppointmentFeedback } from 'models/showing/send-appointment-feedback'
 
-import InfoSection from '../../Sections/InfoSection'
-import DetailsSection from '../../Sections/DetailsSection'
 import { usePublicShowingAppointment } from '../../hooks'
+import DetailsSection from '../../Sections/DetailsSection'
+import InfoSection from '../../Sections/InfoSection'
 
 import FeedbackForm from './Form'
-import { FormFields } from './Form/types'
 import {
   CLIENT_INTEREST_QUESTION,
   OVERALL_EXPERIENCE_QUESTION,
   PRICE_OPINION_QUESTION,
   LISTING_RATE_QUESTION
 } from './Form/constants'
+import { FormFields } from './Form/types'
 
 interface RouteParams {
   appointmentToken: UUID
@@ -44,8 +43,9 @@ export default function ShowingAppointmentFeedback({
   params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
-  const { isLoading, appointment } =
-    usePublicShowingAppointment(appointmentToken)
+  const { isLoading, appointment } = usePublicShowingAppointment(
+    appointmentToken
+  )
   const notify = useNotify()
 
   const handleSubmitForm = async ({

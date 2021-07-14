@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
-import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import verify from '../../../../models/verify'
+import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 
 const requestVerify = ({
   brand,

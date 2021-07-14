@@ -1,9 +1,8 @@
 import React from 'react'
 
+import { StateContext } from './context'
 import { GridContextProvider } from './context/provider'
-
 import { GridTable } from './Table'
-
 import {
   TableColumn,
   GridSelectionOptions,
@@ -14,7 +13,6 @@ import {
   TrProps,
   TdProps
 } from './types'
-import { StateContext } from './context'
 
 export interface Props<Row> {
   columns: TableColumn<Row>[]
@@ -39,7 +37,7 @@ export const GridProvider = GridContextProvider
 
 export default function Grid<Row>(props: Props<Row>) {
   return (
-    <GridContextProvider<Row>>
+    <GridContextProvider>
       <GridTable<Row> {...props} />
     </GridContextProvider>
   )

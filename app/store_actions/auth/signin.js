@@ -1,11 +1,9 @@
+import * as Sentry from '@sentry/react'
 import { browserHistory } from 'react-router'
 
-import * as Sentry from '@sentry/react'
-
+import * as actionsType from '../../constants/auth/signin'
 import signin from '../../models/auth/signin'
 import getUser from '../../models/user/get-user'
-import * as actionsType from '../../constants/auth/signin'
-
 import { getUserTeams } from '../user/teams'
 
 const submitSigninForm = (loginData, redirectTo, userId) => (

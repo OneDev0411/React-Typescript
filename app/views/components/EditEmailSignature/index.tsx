@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { Box, Button, Grid, Theme } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
 import styled, { css, ThemeProps } from 'styled-components'
 
-import { addNotification } from 'components/notification'
-
 import editUser from 'actions/user/edit'
+import { addNotification } from 'components/notification'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
-
 import { selectUserEmailSignature } from 'selectors/user'
 
 import { TextEditor } from '../TextEditor'
+import { EmojiFeature } from '../TextEditor/features/Emoji'
 import { ImageFeature } from '../TextEditor/features/Image'
 import { RichTextFeature } from '../TextEditor/features/RichText'
-import { EmojiFeature } from '../TextEditor/features/Emoji'
 import { useEditorState } from '../TextEditor/hooks/use-editor-state'
 
 interface Props {

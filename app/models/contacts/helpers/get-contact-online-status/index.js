@@ -1,5 +1,5 @@
-import { getContactUsers } from '../get-contact-users'
 import { isOnline } from '../../../../utils/user'
+import { getContactUsers } from '../get-contact-users'
 
 export function getContactOnlineStatus(contact) {
   if (!contact) {

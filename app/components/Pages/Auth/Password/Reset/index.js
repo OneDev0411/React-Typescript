@@ -1,17 +1,18 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import { Field, reduxForm } from 'redux-form'
 
-import { getBrandInfo } from '../../SignIn/get-brand-info'
-import ConflictModal from '../../../Branch/components/ConflictModal'
 import updatePassword from '../../../../../models/auth/password/update'
 import { createUrlSearch } from '../../../../../utils/helpers'
 import Button from '../../../../../views/components/Button/ActionButton'
+import ConflictModal from '../../../Branch/components/ConflictModal'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
+import { getBrandInfo } from '../../SignIn/get-brand-info'
 
 const Reset = ({
   user,

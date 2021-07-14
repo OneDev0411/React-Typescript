@@ -1,13 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
-import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
+import { connect } from 'react-redux'
+
 import { confirmation } from 'actions/confirmation'
+import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 import { blue } from 'views/utils/colors'
 
 import Message from '../../../../../Chatroom/Util/message'
-
 import CommentActions from '../CommentActions'
 
 import { Container, Actions, Textarea, Divider } from './styled'
@@ -21,6 +21,7 @@ class CommentInput extends React.Component {
   }
 
   onHeightChangeHandler = height => {
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(height)) {
       return false
     }

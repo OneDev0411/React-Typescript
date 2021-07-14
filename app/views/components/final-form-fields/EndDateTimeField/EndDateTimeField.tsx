@@ -1,9 +1,6 @@
 // TODO: should be removed and use standard DateTimeField component
 import React, { useState, useRef } from 'react'
-import fecha from 'fecha'
-import { Field, FieldRenderProps } from 'react-final-form'
-import DayPicker, { Modifiers } from 'react-day-picker'
-import Flex from 'styled-flex-component'
+
 import {
   Box,
   Button,
@@ -14,10 +11,14 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 import { useTheme } from '@material-ui/core/styles'
+import fecha from 'fecha'
+import DayPicker, { Modifiers } from 'react-day-picker'
+import { Field, FieldRenderProps } from 'react-final-form'
+import Flex from 'styled-flex-component'
 
-import TimeInput from 'components/TimeInput'
-import { Divider } from 'components/Divider'
 import { PickerContainer } from 'components/DateTimePicker/styled'
+import { Divider } from 'components/Divider'
+import TimeInput from 'components/TimeInput'
 
 interface Props {
   selectedDate: Date

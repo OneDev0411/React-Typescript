@@ -13,15 +13,14 @@ import { useForm, useWatch, Controller } from 'react-hook-form'
 import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
-
 import { setTime } from 'utils/set-time'
 
-import { getFormattedAppointmentDateTime } from '../utils'
+import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
 import {
   getBookableDateRange,
   convertLocalTimeToShowingTime
 } from '../../Book/Sections/BookSection/utils'
-import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
+import { getFormattedAppointmentDateTime } from '../utils'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -58,16 +57,24 @@ export default function ShowingAppointmentRescheduleForm({
     mode: 'onChange'
   })
 
-  const { startDate, endDate, defaultSelectedDate, unavailableDates } =
-    getBookableDateRange(appointment.showing)
+  const {
+    startDate,
+    endDate,
+    defaultSelectedDate,
+    unavailableDates
+  } = getBookableDateRange(appointment.showing)
   const selectedDate = useWatch({
     name: 'date',
     control,
     defaultValue: defaultSelectedDate
   })
 
-  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
-    useBookTimeRange(appointment.showing, selectedDate)
+  const {
+    startTime,
+    endTime,
+    defaultSelectedTimeRange,
+    unavailableTimes
+  } = useBookTimeRange(appointment.showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
     control,

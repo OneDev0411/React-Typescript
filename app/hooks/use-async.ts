@@ -115,14 +115,12 @@ function useAsync<T = unknown, U = Error>(
     },
     [safeSetState]
   )
-  const setError = useCallback(
-    (error: U) => safeSetState({ error }),
-    [safeSetState]
-  )
-  const reset = useCallback(
-    () => safeSetState(initialStateRef.current),
-    [safeSetState]
-  )
+  const setError = useCallback((error: U) => safeSetState({ error }), [
+    safeSetState
+  ])
+  const reset = useCallback(() => safeSetState(initialStateRef.current), [
+    safeSetState
+  ])
 
   return {
     isIdle: status === 'idle',

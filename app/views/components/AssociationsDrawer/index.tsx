@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Drawer from 'components/OverlayDrawer'
 import { AssociationItem } from 'components/AssocationItem'
+import Drawer from 'components/OverlayDrawer'
 
 interface Props {
   associations: ICRMTaskAssociation<CRMTaskAssociationType>[]

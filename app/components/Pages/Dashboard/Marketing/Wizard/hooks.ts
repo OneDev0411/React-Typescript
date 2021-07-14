@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
-import _set from 'lodash/set'
+
 import _clone from 'lodash/cloneDeep'
+import _set from 'lodash/set'
+import { useDeepCompareEffect } from 'react-use'
 
 import { TemplateVariable, TemplateVariableType } from './types'
 

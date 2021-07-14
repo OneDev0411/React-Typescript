@@ -1,12 +1,8 @@
 import React from 'react'
+
 import { Box, Typography } from '@material-ui/core'
 import MuiLinearProgress from '@material-ui/core/LinearProgress'
-import {
-  withStyles,
-  Theme,
-  createStyles,
-  makeStyles
-} from '@material-ui/core/styles'
+import { withStyles, Theme, makeStyles } from '@material-ui/core/styles'
 
 interface Props {
   value: number

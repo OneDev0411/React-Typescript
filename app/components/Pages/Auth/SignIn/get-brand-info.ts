@@ -1,5 +1,4 @@
 import Brand from '../../../../controllers/Brand'
-
 import { primary } from '../../../../views/utils/colors'
 
 export const getBrandInfo = brand => {

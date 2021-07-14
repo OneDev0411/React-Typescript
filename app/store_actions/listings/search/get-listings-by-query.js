@@ -3,11 +3,9 @@ import { batchActions } from 'redux-batched-actions'
 
 import { setMapProps, setOnMapAutoMove } from 'actions/listings/map'
 import searchActions from 'actions/listings/search'
-
-import extendedBounds from 'utils/extendedBounds'
-
 import * as schema from 'models/listings/schema'
 import { searchListings } from 'models/listings/search/search-listings'
+import extendedBounds from 'utils/extendedBounds'
 
 import * as listingsTypes from '../../../constants/listings'
 

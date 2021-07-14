@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
+
 import { CircularProgress, Button } from '@material-ui/core'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
-import { Neighborhood, NeighborhoodsReport } from './types'
 import { getNeighborhoods, getReport } from './api'
+import { getFormattedReportWithNeededPeriods } from './helpers'
 import NeighborhoodsList from './NeighborhoodsList'
 import ReportSelector from './ReportSelector'
-import { getFormattedReportWithNeededPeriods } from './helpers'
+import { Neighborhood, NeighborhoodsReport } from './types'
 
 const DEFAULT_TITLE = 'Search for a neighborhood'
 

@@ -1,15 +1,16 @@
 import React from 'react'
-import Select from 'react-select'
+
 import { connect } from 'react-redux'
-import { formValueSelector } from 'redux-form'
+import Select from 'react-select'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import { formValueSelector } from 'redux-form'
 import { change as updateField } from 'redux-form'
 
-import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
+import Label from '../components/Label'
 
 const formName = 'filters'
 const selector = formValueSelector(formName)

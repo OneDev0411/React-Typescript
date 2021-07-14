@@ -1,10 +1,11 @@
 import React from 'react'
+
+import { Box } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
-import { Box } from '@material-ui/core'
 
-import { Map } from '../../../tour/Map'
 import { AssociationItem } from '../../../AssocationItem'
+import { Map } from '../../../tour/Map'
 
 function LocationComponent({ location }) {
   return (

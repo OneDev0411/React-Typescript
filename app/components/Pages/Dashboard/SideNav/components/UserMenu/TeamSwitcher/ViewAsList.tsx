@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from 'react'
+
+import { Box, Button, List, ListSubheader, makeStyles } from '@material-ui/core'
 import isEqual from 'lodash/isEqual'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Button, List, ListSubheader, makeStyles } from '@material-ui/core'
 
 import { selectUser } from 'selectors/user'
 
+import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 import {
   viewAs,
   isBackOffice,
   getTeamAvailableMembers
 } from '../../../../../../../utils/user-teams'
-
-import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 
 import { ViewAsMember } from './ViewAsMember'
 

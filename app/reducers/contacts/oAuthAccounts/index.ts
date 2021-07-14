@@ -1,4 +1,5 @@
 import * as actionTypes from '../../../constants/contacts'
+
 import { IOAuthAccountAction, IOauthAccountsState } from './types'
 
 /**

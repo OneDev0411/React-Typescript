@@ -1,8 +1,9 @@
 import { normalize } from 'normalizr'
+
+import * as actionsType from '../../../constants/listings/alerts'
 import api from '../../../models/listings/alerts'
 import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
-import * as actionsType from '../../../constants/listings/alerts'
 
 const createAlert = alertOptions => (dispatch, getState) => {
   const addHandler = alert => {
@@ -24,6 +25,7 @@ const createAlert = alertOptions => (dispatch, getState) => {
         response: addHandler(response),
         type: actionsType.ADD_ALERT_SUCCESS
       })
+
       return response
     },
     error => {

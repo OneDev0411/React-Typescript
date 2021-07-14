@@ -7,7 +7,7 @@
 export function setTime(date: Date | number, time: number = 0): Date {
   // prevent from overriding the reference date object
   const dateTime = new Date(date)
-  
+
   dateTime.setHours(Math.floor(time / 3600))
   dateTime.setMinutes(Math.floor((time % 3600) / 60))
   dateTime.setSeconds(0)

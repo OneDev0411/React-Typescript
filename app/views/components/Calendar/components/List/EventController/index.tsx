@@ -2,13 +2,12 @@ import React, { useContext } from 'react'
 
 import { EditEmailDrawer } from 'components/EmailCompose'
 
-import { ListContext } from '../context'
-
-import { CrmEvents } from '../../CrmEvents'
 import {
   EmailThreadDrawerByThreadKey,
   EmailCampaignThreadByCampaignId
 } from '../../../../EmailThreadDrawer'
+import { CrmEvents } from '../../CrmEvents'
+import { ListContext } from '../context'
 
 interface Props {
   user: IUser

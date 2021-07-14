@@ -1,11 +1,13 @@
 import React from 'react'
+
 import { IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { Container, Title } from './styled'
 import { LoadingIcon } from '../styled'
+
+import { Container, Title } from './styled'
 
 export class ViewMode extends React.Component {
   onDeleteClick = event => {

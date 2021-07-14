@@ -41,8 +41,9 @@ export function getStdAddrFromAddressComponents(
     full: ''
   }
 
-  const flatAddressComponentsObject =
-    getFlatAddressComponentsObject(addressComponents)
+  const flatAddressComponentsObject = getFlatAddressComponentsObject(
+    addressComponents
+  )
 
   const keyMap: Partial<Record<keyof IStdAddr, string>> = {
     city: 'locality',

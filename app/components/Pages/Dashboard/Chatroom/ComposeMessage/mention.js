@@ -1,4 +1,5 @@
 import React from 'react'
+
 import cn from 'classnames'
 
 import UserAvatar from 'components/UserAvatar'
@@ -51,7 +52,7 @@ export default class Mentions extends React.Component {
       'keydown'
     ).subscribe(e => this.onKeyDown(e))
 
-    this.blurHandler = Observable.fromEvent(this.input, 'blur').subscribe(e =>
+    this.blurHandler = Observable.fromEvent(this.input, 'blur').subscribe(() =>
       this.clearSuggestions()
     )
 

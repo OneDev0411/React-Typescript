@@ -37,9 +37,10 @@ export type IncreaseShowingTotalNotificationCountAction = ReturnType<
   typeof increaseShowingTotalNotificationCount
 >
 
-export const fetchShowingTotalNotificationCount =
-  () => async (dispatch: Dispatch) => {
-    dispatch(
-      setShowingTotalNotificationCount(await getShowingTotalNotificationCount())
-    )
-  }
+export const fetchShowingTotalNotificationCount = () => async (
+  dispatch: Dispatch
+) => {
+  dispatch(
+    setShowingTotalNotificationCount(await getShowingTotalNotificationCount())
+  )
+}

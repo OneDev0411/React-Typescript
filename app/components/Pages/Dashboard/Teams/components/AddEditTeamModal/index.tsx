@@ -1,15 +1,12 @@
-import { Field, Form } from 'react-final-form'
-
-import Flex, { FlexItem } from 'styled-flex-component'
-
 import * as React from 'react'
 
-import { Modal, ModalHeader } from 'components/Modal'
-import { TextInput } from 'components/Forms/TextInput'
-import { SelectInput } from 'components/Forms/SelectInput'
+import { Field, Form } from 'react-final-form'
+import Flex, { FlexItem } from 'styled-flex-component'
 
 import Button from 'components/Button/ActionButton'
-
+import { SelectInput } from 'components/Forms/SelectInput'
+import { TextInput } from 'components/Forms/TextInput'
+import { Modal, ModalHeader } from 'components/Modal'
 import { BrandTypes, IAddEditTeamFormData } from 'models/BrandConsole'
 
 interface Props {

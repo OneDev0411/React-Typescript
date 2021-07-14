@@ -1,12 +1,11 @@
 import { List, ListItem, makeStyles } from '@material-ui/core'
-
 import { mdiPlus } from '@mdi/js'
 
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import ButtonMenu from '../ButtonMenu'
 import { getShowingRoleLabel } from '../../helpers'
+import ButtonMenu from '../ButtonMenu'
 
 const useStyles = makeStyles(
   {

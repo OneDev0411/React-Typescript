@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { useAsync } from 'react-use'
 
 import { useSelector } from 'react-redux'
-
-import { selectUser } from 'selectors/user'
-import { getActiveBrand, getActiveTeamId } from 'utils/user-teams'
+import { useAsync } from 'react-use'
 
 import dashboards, { IDashboard } from 'constants/metabase'
+import { selectUser } from 'selectors/user'
+import { getActiveBrand, getActiveTeamId } from 'utils/user-teams'
 
 export function useMetaBaseDashboard(key: string) {
   const [analyticsUrl, setAnalyticsUrl] = useState<string>()

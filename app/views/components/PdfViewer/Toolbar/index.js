@@ -1,15 +1,15 @@
 import React from 'react'
+
+import { Tooltip } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
 import {
   mdiPlusCircleOutline,
   mdiProgressDownload,
   mdiMinusCircleOutline
 } from '@mdi/js'
-import { useTheme } from '@material-ui/core/styles'
 
-import { Tooltip } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { rotateRightIcon, fitToPageIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, MenuItem } from './styled'
 

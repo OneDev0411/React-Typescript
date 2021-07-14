@@ -2,11 +2,11 @@ import React from 'react'
 
 import { Button } from '@material-ui/core'
 
-import { Drawer } from '../Drawer'
 import { AsyncValueContainer } from '../../../AsyncValueContainer'
 import { EmailThread } from '../../../EmailThread'
-import { DrawerProps } from '../../../OverlayDrawer'
 import { useEmailCampaignThreadLoader } from '../../../EmailThread/use-email-campaign-thread-loader'
+import { DrawerProps } from '../../../OverlayDrawer'
+import { Drawer } from '../Drawer'
 
 interface Props extends DrawerProps {
   campaignId: string | undefined

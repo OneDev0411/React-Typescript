@@ -1,5 +1,5 @@
 import { ChangeEvent, ReactNode, useState } from 'react'
-import classNames from 'classnames'
+
 import {
   TextField,
   TextFieldProps,
@@ -10,7 +10,7 @@ import Autocomplete, {
   AutocompleteInputChangeReason,
   AutocompleteProps
 } from '@material-ui/lab/Autocomplete'
-
+import classNames from 'classnames'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import useAsync from 'hooks/use-async'
@@ -83,15 +83,11 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
 }: AutocompleteFieldProps<T>) {
   const classes = useStyles()
 
-  const [inputValue, setInputValue] =
-    useState<Optional<string>>(defaultInputValue)
+  const [inputValue, setInputValue] = useState<Optional<string>>(
+    defaultInputValue
+  )
 
-  const {
-    data: results,
-    run,
-    isLoading,
-    error: resultsError
-  } = useAsync<T[]>({
+  const { data: results, run, isLoading, error: resultsError } = useAsync<T[]>({
     data: []
   })
 

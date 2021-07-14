@@ -1,20 +1,20 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import { reduxForm } from 'redux-form'
-import { Button } from '@material-ui/core'
 
 import { updateUser } from 'actions/user'
-
 import FormCard from 'components/FormCard'
 
+import changePassword from '../../../../../../models/user/change-password'
 import getUser from '../../../../../../models/user/get-user/index'
 
 import Field from './Field'
 import SimpleField from './SimpleField'
-import changePassword from '../../../../../../models/user/change-password'
 
 const ChangePasswordForm = ({
   user,

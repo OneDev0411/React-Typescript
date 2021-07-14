@@ -1,13 +1,13 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+
 import { makeStyles } from '@material-ui/core'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import TimeCard from './components/TimeCard'
-
-import { getTimeSlotsInRange } from './utils'
 import { TimeRange } from './types'
+import { getTimeSlotsInRange } from './utils'
 
 SwiperCore.use([Navigation, A11y, Mousewheel])
 
@@ -43,8 +43,9 @@ export default function TimeSlotPicker({
 
   const slots = getTimeSlotsInRange(start, end, duration)
   const [initialSlide, setInitialSlide] = useState<number>(0)
-  const [controlledSwiper, setControlledSwiper] =
-    useState<Nullable<SwiperCore>>(null)
+  const [controlledSwiper, setControlledSwiper] = useState<
+    Nullable<SwiperCore>
+  >(null)
 
   const isSlotDisabled = useCallback(
     (slot: TimeRange) => {

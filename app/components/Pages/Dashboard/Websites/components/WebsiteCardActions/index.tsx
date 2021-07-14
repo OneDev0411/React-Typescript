@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
-import cn from 'classnames'
 
 import { Button } from '@material-ui/core'
+import cn from 'classnames'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
 import EditIcon from 'components/SvgIcons/Edit/EditIcon'
 import SiteLinkIcon from 'components/SvgIcons/SiteLink/SiteLinkIcon'
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import useStyles from './styles'
 

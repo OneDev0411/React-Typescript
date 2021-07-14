@@ -1,7 +1,7 @@
 import React, { memo, ReactNode } from 'react'
-import classNames from 'classnames'
 
 import { Box } from '@material-ui/core'
+import classNames from 'classnames'
 
 import useStyles from './styles'
 

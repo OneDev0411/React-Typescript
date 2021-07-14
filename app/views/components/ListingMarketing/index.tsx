@@ -1,29 +1,29 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
-import getListing from 'models/listings/listing/get-listing'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
-import { useUniqueMediums } from 'hooks/use-unique-mediums'
-import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
+import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import LoadingContainer from 'components/LoadingContainer'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { meetingRoomOutlined } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useLoadingEntities } from 'hooks/use-loading'
+import { useUniqueMediums } from 'hooks/use-unique-mediums'
+import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
+import getListing from 'models/listings/listing/get-listing'
+import { selectUser } from 'selectors/user'
+import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 import {
   hasUserAccessToCrm,
   hasUserAccessToMarketingCenter,
   hasUserAccessToAgentNetwork,
   hasUserAccessToWebsites
 } from 'utils/user-teams'
-
-import LoadingContainer from 'components/LoadingContainer'
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { meetingRoomOutlined } from 'components/SvgIcons/icons'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
 import {
@@ -32,8 +32,8 @@ import {
 } from '../../../components/Pages/Dashboard/Marketing/Wizard/constants'
 
 import MarketingButton from './MarketingButton'
-import TemplateTypesChips from './TemplateTypesChips'
 import TemplatesList from './TemplatesList'
+import TemplateTypesChips from './TemplateTypesChips'
 
 type ListingRelatedProps = RequireOnlyOne<
   {

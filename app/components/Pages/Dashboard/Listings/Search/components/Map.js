@@ -1,39 +1,40 @@
 import React from 'react'
+
 import Map from 'google-map-react'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import supercluster from 'points-cluster'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withPropsOnChange from 'recompose/withPropsOnChange'
 import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
+import supercluster from 'points-cluster'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withPropsOnChange from 'recompose/withPropsOnChange'
+import withState from 'recompose/withState'
 
+import * as mapActions from 'actions/listings/map'
+import * as drawingActions from 'actions/listings/map/drawing'
+import getListingsByMapBounds from 'actions/listings/search/get-listings/by-map-bounds'
+import { reset as resetSearchType } from 'actions/listings/search/set-type'
+import SearchPinMarker from 'components/SearchPinMarker'
 import {
   setCssPositionToListingsWithSameBuilding,
   normalizeListingsForMarkers,
   getBounds
 } from 'utils/map'
-import * as mapActions from 'actions/listings/map'
-import * as drawingActions from 'actions/listings/map/drawing'
-import { reset as resetSearchType } from 'actions/listings/search/set-type'
-import getListingsByMapBounds from 'actions/listings/search/get-listings/by-map-bounds'
 
-import SearchPinMarker from 'components/SearchPinMarker'
-
-import ZoomController from '../../components/ZoomController'
-import SimpleMarker from '../../components/Markers/SimpleMarker'
 import ClusterMarker from '../../components/Markers/ClusterMarker'
+import SimpleMarker from '../../components/Markers/SimpleMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
-import DrawingButton from './DrawingButton'
-import LocationButton from './LocationButton'
-import { DrawingRemoveButton } from './DrawingRemoveButton'
+import ZoomController from '../../components/ZoomController'
 import {
   bootstrapURLKeys,
   mapOptions,
   mapInitialState,
   DECLUSTER_ZOOM_LEVEL
 } from '../../mapOptions'
+
+import DrawingButton from './DrawingButton'
+import { DrawingRemoveButton } from './DrawingRemoveButton'
+import LocationButton from './LocationButton'
 
 const actions = {
   ...mapActions,

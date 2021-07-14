@@ -1,12 +1,12 @@
 import React from 'react'
 
-import UserAvatar from 'components/UserAvatar'
 import MiniContact from 'components/MiniContact'
+import UserAvatar from 'components/UserAvatar'
 
 import DateSplitter from '../components/date-splitter'
-import Message from '../message-types'
 import DeliveryReport from '../components/delivery-report'
 import MessageDate from '../components/message-date'
+import Message from '../message-types'
 
 export default props => {
   const {

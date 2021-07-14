@@ -1,22 +1,19 @@
-import fecha from 'fecha'
 import { Box } from '@material-ui/core'
-
 import {
   mdiFileDocumentOutline,
   mdiFileImageOutline,
   mdiFilePdfOutline
 } from '@mdi/js'
+import fecha from 'fecha'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 
 import ActionsButton from '../../../../../components/ActionsButton'
-
-import { ItemLink } from './ItemLink'
-
+import { getFileActions } from '../helpers/get-file-actions'
 import { useStyles } from '../styles'
 
-import { getFileActions } from '../helpers/get-file-actions'
+import { ItemLink } from './ItemLink'
 
 interface Props {
   deal: IDeal

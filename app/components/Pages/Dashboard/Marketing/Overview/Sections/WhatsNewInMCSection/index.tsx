@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Grid,
   Typography,
@@ -8,13 +8,13 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useSelector } from 'react-redux'
 
 import CardSkeleton from 'components/CardSkeleton'
-import TemplateAction from 'components/TemplatesList/TemplateAction'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import TemplateAction from 'components/TemplatesList/TemplateAction'
+import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import SectionLayout from '../SectionLayout'

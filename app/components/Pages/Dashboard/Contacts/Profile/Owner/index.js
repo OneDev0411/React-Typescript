@@ -1,9 +1,10 @@
 import React from 'react'
+
 import { Box, Typography, Tooltip, makeStyles } from '@material-ui/core'
 
-import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
-import { ItemChangelog } from '../../../../../../views/components/TeamContact/ItemChangelog'
 import { isSoloActiveTeam } from '../../../../../../utils/user-teams'
+import { ItemChangelog } from '../../../../../../views/components/TeamContact/ItemChangelog'
+import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
 
 const useStyles = makeStyles(
   theme => ({

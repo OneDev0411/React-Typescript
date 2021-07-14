@@ -1,6 +1,6 @@
-import { Helmet } from 'react-helmet'
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { Helmet } from 'react-helmet'
 
 import TemplatesList from 'components/TemplatesList'
 

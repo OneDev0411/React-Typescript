@@ -1,26 +1,26 @@
 import React, { ComponentProps, useState, useMemo } from 'react'
+
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { confirmation } from 'actions/confirmation'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
+import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { selectUser } from 'selectors/user'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 
-import { confirmation } from 'actions/confirmation'
+import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
 
-import { selectUser } from 'selectors/user'
-
-import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
-import { getFromData } from './helpers/get-from-data'
-import { normalizeRecipients } from './helpers/normalize-recepients'
-import { getInitialValues } from './helpers/get-initial-values'
-import { hasAccountSendPermission } from './helpers/has-account-send-permission'
-import { EmailFormValues, EmailComposeFormProps } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
-import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
+import { getFromData } from './helpers/get-from-data'
+import { getInitialValues } from './helpers/get-initial-values'
+import { hasAccountSendPermission } from './helpers/has-account-send-permission'
+import { normalizeRecipients } from './helpers/normalize-recepients'
+import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { EmailFormValues, EmailComposeFormProps } from './types'
 
 interface Props
   extends Omit<

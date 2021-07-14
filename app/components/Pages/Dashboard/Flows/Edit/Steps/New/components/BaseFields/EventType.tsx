@@ -1,7 +1,5 @@
 import React, { useMemo, useCallback, ChangeEvent } from 'react'
-import { useSelector } from 'react-redux'
 
-import { Field } from 'react-final-form'
 import {
   FormControl,
   InputLabel,
@@ -9,10 +7,11 @@ import {
   MenuItem,
   FormHelperText
 } from '@material-ui/core'
-
-import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
+import { Field } from 'react-final-form'
+import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
+import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 interface Props {
   disabled?: boolean

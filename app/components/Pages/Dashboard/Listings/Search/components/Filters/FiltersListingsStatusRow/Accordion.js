@@ -1,7 +1,11 @@
 import React from 'react'
 
 const Accordion = ({ active, children }) => (
-  <div className={`c-filters-status__accordion-target ${active ? 'is-active' : ''}`}>
+  <div
+    className={`c-filters-status__accordion-target ${
+      active ? 'is-active' : ''
+    }`}
+  >
     {children}
   </div>
 )

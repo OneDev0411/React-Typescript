@@ -1,26 +1,21 @@
 import React from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
+import { upsertContexts } from 'actions/deals'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { RadioGroup } from 'components/RadioGroup'
-
 import { getLegalFullName } from 'deals/utils/roles'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
-import { upsertContexts } from 'actions/deals'
-
 import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { useCreationContext } from '../../context/use-creation-context'
 

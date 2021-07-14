@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react'
-import Flex from 'styled-flex-component'
-import { Form, Field } from 'react-final-form'
 
-import { TextInput } from 'components/Forms/TextInput'
-import { SelectInput } from 'components/Forms/SelectInput'
+import { Form, Field } from 'react-final-form'
+import Flex from 'styled-flex-component'
+
 import ActionButton from 'components/Button/ActionButton'
+import { SelectInput } from 'components/Forms/SelectInput'
+import { TextInput } from 'components/Forms/TextInput'
 
 import { MarketLocation } from './types'
 

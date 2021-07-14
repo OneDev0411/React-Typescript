@@ -1,11 +1,12 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { formatPhoneNumber } from 'utils/format'
 
-import { TruncatedColumn } from '../styled'
 import { getAttributeFromSummary } from '../../../../../../../models/contacts/helpers'
 import { grey } from '../../../../../../../views/utils/colors'
+import { TruncatedColumn } from '../styled'
 
 const PhoneNumber = styled(TruncatedColumn)`
   color: ${({ email }) => (email ? grey.A550 : '#000')};

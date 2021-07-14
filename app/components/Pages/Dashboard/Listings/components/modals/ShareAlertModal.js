@@ -1,27 +1,25 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import { IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
-import { mdiClose } from '@mdi/js'
-
-import { Modal, ModalFooter } from 'components/Modal'
-
-import { hasRecipients } from 'utils/helpers'
 import { createRoom } from 'actions/chatroom/room'
 import createAlert from 'actions/listings/alerts/create-alert'
-
 import ActionButton from 'components/Button/ActionButton'
-import { H2 } from 'components/Typography/headings'
+import { Modal, ModalFooter } from 'components/Modal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { H2 } from 'components/Typography/headings'
+import { hasRecipients } from 'utils/helpers'
 
 import Recipients from '../../../../../Partials/ShareView'
 
-import SuccessModal from './SuccessModal'
 import { normalizeAlertOptions } from './normalize-alert-options'
+import SuccessModal from './SuccessModal'
 
 const ShareAlertModal = ({
   onHide,

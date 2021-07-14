@@ -1,12 +1,7 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-
-import {
-  getDefaultList,
-  selectActiveFilters,
-  selectActiveSavedSegment
-} from 'reducers/filter-segments'
 
 import {
   addActiveFilter,
@@ -16,8 +11,12 @@ import {
   toggleActiveFilter,
   updateActiveFilter
 } from 'actions/filter-segments/active-filters'
-
 import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+import {
+  getDefaultList,
+  selectActiveFilters,
+  selectActiveSavedSegment
+} from 'reducers/filter-segments'
 
 import { ConditionOperators } from './ConditionOperators'
 import { AddFilter } from './Create'

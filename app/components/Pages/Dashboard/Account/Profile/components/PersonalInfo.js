@@ -1,20 +1,21 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import { reduxForm } from 'redux-form'
-import { Button } from '@material-ui/core'
 
 import FormCard from 'components/FormCard'
 
+import editUser from '../../../../../../store_actions/user/edit'
+
 import Field from './Field'
+import PhoneNumberField from './PhoneNumberField'
 import Catalog from './ProfileCatalog'
 import SimpleField from './SimpleField'
-import PhoneNumberField from './PhoneNumberField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
-
-import editUser from '../../../../../../store_actions/user/edit'
 
 let PersonalInfoForm = ({
   user,

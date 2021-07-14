@@ -1,25 +1,21 @@
 import React, { useState } from 'react'
+
+import * as Sentry from '@sentry/react'
+import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { Location } from 'history'
-import * as Sentry from '@sentry/react'
-
-import { IAppState } from '../../../../reducers'
-
-import { getTeams } from '../../../../models/user/get-teams'
 
 import * as actionsType from '../../../../constants/auth/signin'
-
 import signin from '../../../../models/auth/signin'
 import signup from '../../../../models/auth/signup'
+import { getTeams } from '../../../../models/user/get-teams'
 import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
-
+import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
 
 import { getBrandInfo } from './get-brand-info'
-import SignInForm from './SiginForm'
 import LookUpUserForm from './LookupUserForm'
-
+import SignInForm from './SiginForm'
 import { SubmitMessage } from './types'
 
 interface Props {

@@ -1,9 +1,8 @@
 import React from 'react'
-import _ from 'underscore'
-
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import Flex from 'styled-flex-component'
+import _ from 'underscore'
 
 import RadioButton from 'components/RadioButton'
 

@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { isToday } from 'date-fns'
+
 import {
   Card,
   Grid,
@@ -11,14 +10,15 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core'
+import { isToday } from 'date-fns'
+import { useSelector } from 'react-redux'
 import timeago from 'timeago.js'
-
-import { selectUser } from 'selectors/user'
 
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import { selectUser } from 'selectors/user'
 
 import { getEventMarketingTemplateTypes } from './helpers'
 
@@ -53,10 +53,12 @@ interface Props {
 export default function CalendarEventCard({ event }: Props) {
   const classes = useStyles()
   const user = useSelector(selectUser)
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
-    useState<boolean>(false)
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<Nullable<IBrandMarketingTemplate>>(null)
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
+    false
+  )
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    Nullable<IBrandMarketingTemplate>
+  >(null)
 
   const handleSelectTemplate = (template: IBrandMarketingTemplate) => {
     setSelectedTemplate(template)

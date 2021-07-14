@@ -1,16 +1,17 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import lifecycle from 'recompose/lifecycle'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
-import Alert from '../../Dashboard/Partials/Alert'
-import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import verify from '../../../../models/verify'
-import { Spinner } from '../../../Partials/Loading'
 import { updateUser } from '../../../../store_actions/user'
+import { Spinner } from '../../../Partials/Loading'
+import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
+import Alert from '../../Dashboard/Partials/Alert'
 
 const ERROR_MESSAGE =
   "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our support."

@@ -1,27 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import _ from 'underscore'
-import cn from 'classnames'
-import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
 
 import { Tooltip, Grid } from '@material-ui/core'
-
-import UserAvatar from 'components/UserAvatar'
+import { mdiChevronDoubleLeft, mdiArrowExpand } from '@mdi/js'
+import cn from 'classnames'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import Badge from 'components/Badge'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import UserAvatar from 'components/UserAvatar'
 
-import SocketStatus from '../SocketStatus'
-import CreateRoom from './create-room'
-import UserTyping from '../UserTyping'
-import SearchInput from '../../../../Partials/SearchInput'
 import {
   changeActiveRoom,
   toggleChatbar,
   toggleInstantMode
 } from '../../../../../store_actions/chatroom'
+import SearchInput from '../../../../Partials/SearchInput'
+import SocketStatus from '../SocketStatus'
+import UserTyping from '../UserTyping'
+
+import CreateRoom from './create-room'
 
 class Rooms extends React.Component {
   constructor(props) {

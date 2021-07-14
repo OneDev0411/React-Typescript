@@ -1,17 +1,18 @@
 import React from 'react'
-import { fireEvent, render, RenderResult } from '@testing-library/react'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
 import { ReactNode } from 'react'
-import { FieldRenderProps } from 'react-final-form'
-import { keyBy } from 'lodash'
 
-import dealWithDraft from 'fixtures/deal/deal-with-draft-files.json'
-import checklistsArray from 'fixtures/deal/checklists.json'
-import file1 from 'fixtures/files/file1.json'
+import { fireEvent, render, RenderResult } from '@testing-library/react'
+import { keyBy } from 'lodash'
+import { FieldRenderProps } from 'react-final-form'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+
 import deal1 from 'fixtures/deal/164ca424-6732-11e9-82bf-0a95998482ac.json'
+import checklistsArray from 'fixtures/deal/checklists.json'
+import dealWithDraft from 'fixtures/deal/deal-with-draft-files.json'
 import deal2 from 'fixtures/deal/fa2126f8-6740-11e9-90e4-0a95998482ac.json'
 import tasksArray from 'fixtures/deal/tasks.json'
+import file1 from 'fixtures/files/file1.json'
 
 import { TestBed } from '../../../../../../tests/unit/TestBed'
 

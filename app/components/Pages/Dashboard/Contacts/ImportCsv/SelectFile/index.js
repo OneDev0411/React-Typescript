@@ -1,26 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone-rechat'
-import { batchActions } from 'redux-batched-actions'
-import cn from 'classnames'
-import Flex from 'styled-flex-component'
-import { mdiInformationOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiInformationOutline } from '@mdi/js'
+import cn from 'classnames'
+import Dropzone from 'react-dropzone-rechat'
+import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions'
+import Flex from 'styled-flex-component'
 
+import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
 import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 import {
   addCsvFile,
   updateWizardStep,
   setCurrentStepValidation
 } from '../../../../../../store_actions/contacts'
-import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from '../../../../../../constants/contacts'
 import { getActiveTeam } from '../../../../../../utils/user-teams'
-import { H1 } from '../../../../../../views/components/Typography/headings'
 import Button from '../../../../../../views/components/Button/ActionButton'
 import { Divider } from '../../../../../../views/components/Divider'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '../../../../../../views/components/TeamContact/TeamContactSelect'
+import { H1 } from '../../../../../../views/components/Typography/headings'
 import { primary } from '../../../../../../views/utils/colors'
 
 class SelectFile extends React.Component {

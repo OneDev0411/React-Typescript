@@ -4,7 +4,6 @@ import { createContext, ReactType, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { splitByMatches } from 'components/TextWithHighlights/helpers/split-by-matches'
-
 import { primary } from 'views/utils/colors'
 
 const DefaultHighlightComponent = styled.span`

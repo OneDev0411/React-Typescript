@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 
+import { useLoadingEntities } from 'hooks/use-loading'
 import { getPublicShowing } from 'models/showing/get-public-showing'
 import { getPublicShowingAppointment } from 'models/showing/get-public-showing-appointment'
-
-import { useLoadingEntities } from 'hooks/use-loading'
 
 interface UsePublicShowing {
   isLoading: boolean
@@ -38,8 +37,9 @@ interface UseShowingAppointment {
 export function usePublicShowingAppointment(
   appointmentToken: string
 ): UseShowingAppointment {
-  const [appointment, setAppointment] =
-    useState<Nullable<IPublicShowingAppointment<'showing'>>>(null)
+  const [appointment, setAppointment] = useState<
+    Nullable<IPublicShowingAppointment<'showing'>>
+  >(null)
   const [isLoading] = useLoadingEntities(appointment)
 
   useEffect(() => {

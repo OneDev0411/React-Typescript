@@ -1,16 +1,16 @@
 import React from 'react'
+
 import { Typography, Box, Button, useTheme } from '@material-ui/core'
-import pluralize from 'pluralize'
 import { mdiProgressUpload } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import CreateSyncTask from './CreateSyncTask'
-
+import { toggleGallerySelection } from '../../context/actions'
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { useStyles } from '../../styles'
 
-import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import { toggleGallerySelection } from '../../context/actions'
+import CreateSyncTask from './CreateSyncTask'
 
 interface Props {
   mediasCount: number

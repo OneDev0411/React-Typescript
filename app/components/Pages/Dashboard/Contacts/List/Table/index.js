@@ -1,33 +1,28 @@
 import React from 'react'
 
-import cn from 'classnames'
 import { makeStyles, useTheme } from '@material-ui/core'
-
-import { getAttributeFromSummary } from 'models/contacts/helpers'
+import cn from 'classnames'
 
 import { Table } from 'components/Grid/Table'
-
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 import { useGridStyles } from 'components/Grid/Table/styles'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-
+import { getAttributeFromSummary } from 'models/contacts/helpers'
 import { goTo } from 'utils/go-to'
 
-import { TableActions } from './Actions'
-
 import NoSearchResults from '../../../../../Partials/no-search-results'
-
-import { LoadingComponent } from './components/LoadingComponent'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
 
-import Menu from './columns/Menu'
+import { TableActions } from './Actions'
 import Avatar from './columns/Avatar'
-import Name from './columns/Name'
 import CtaAction from './columns/Cta'
-import TagsString from './columns/Tags'
 import FlowCell from './columns/Flows'
 import LastTouched from './columns/LastTouched'
+import Menu from './columns/Menu'
+import Name from './columns/Name'
+import TagsString from './columns/Tags'
 import { UnparkContact } from './columns/UnparkContact'
+import { LoadingComponent } from './components/LoadingComponent'
 
 const useCustomGridStyles = makeStyles(theme => ({
   row: {

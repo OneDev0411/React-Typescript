@@ -1,9 +1,8 @@
 import { Response } from 'superagent'
 
 import Fetch from '../../../services/fetch'
-
-import { CSSInput, CSSData } from '../types'
 import { API_PATH } from '../constants'
+import { CSSInput, CSSData } from '../types'
 
 export default async function connect(data: CSSInput): Promise<CSSData> {
   try {

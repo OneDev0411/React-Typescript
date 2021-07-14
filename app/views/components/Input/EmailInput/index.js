@@ -1,6 +1,7 @@
 import React from 'react'
-import emailMask from 'text-mask-addons/dist/emailMask'
+
 import Input from 'react-text-mask'
+import emailMask from 'text-mask-addons/dist/emailMask'
 import _ from 'underscore'
 
 function validate(email) {

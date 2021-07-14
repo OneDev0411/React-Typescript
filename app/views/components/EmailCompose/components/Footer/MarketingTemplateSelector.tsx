@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
+
 import { Box, Button, Link, makeStyles, Theme } from '@material-ui/core'
 import { range } from 'lodash'
 
 import MarketingTemplateCard, {
   MarketingTemplateCardSkeleton
 } from 'components/MarketingTemplateCard'
+import MarketingTemplatePreviewModal from 'components/MarketingTemplatePreviewModal'
 import { ScrollableArea } from 'components/ScrollableArea'
 import { ServerError } from 'components/ServerError'
-import MarketingTemplatePreviewModal from 'components/MarketingTemplatePreviewModal'
 
 import { useTemplatesHistory } from '../../../../../components/Pages/Dashboard/Marketing/hooks/use-templates-history'
-import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
 import { MarketingTemplateMasonry } from '../../../MarketingTemplateMasonry'
+
+import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
 
 interface Props {
   onTemplateSelected: (template: IMarketingTemplateInstance) => void

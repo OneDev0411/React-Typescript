@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+
 import { useLocation } from 'react-use'
 
 type UseQueryParam = [string, (value: string) => void]

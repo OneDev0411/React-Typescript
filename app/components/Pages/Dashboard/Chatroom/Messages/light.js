@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getMessages } from '../../../../../store_actions/chatroom'
-import MessageItem from './message-item'
 import SocketStatus from '../SocketStatus'
+
+import MessageItem from './message-item'
 
 class Messages extends React.Component {
   constructor(props) {

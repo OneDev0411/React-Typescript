@@ -1,12 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Field } from 'react-final-form'
-import { mdiInformationOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiInformationOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { Field } from 'react-final-form'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, Label, Input, Hint } from './styled'
 

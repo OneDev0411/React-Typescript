@@ -4,6 +4,7 @@ import BareModal from 'components/BareModal'
 import { ModalHeader } from 'components/ModalHeader'
 
 import { PdfViewer } from '..'
+
 import { Container } from './styled'
 
 interface Props {

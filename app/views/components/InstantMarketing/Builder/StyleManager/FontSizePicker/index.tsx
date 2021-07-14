@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { Slider } from '@material-ui/core'
 
 import { ItemTitle, ItemContainer } from '../styled'

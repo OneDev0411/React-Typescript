@@ -3,7 +3,6 @@ import React from 'react'
 import { mdiHomeOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {

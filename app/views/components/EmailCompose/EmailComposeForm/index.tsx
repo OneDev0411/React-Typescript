@@ -1,43 +1,42 @@
 import React, { useContext, useMemo, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Field, Form } from 'react-final-form'
+
+import { Box, makeStyles, useTheme } from '@material-ui/core'
 import arrayMutators from 'final-form-arrays'
 import createFocusDecorator from 'final-form-focus'
 import { TextField } from 'final-form-material-ui'
-import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { isEqual } from 'lodash'
+import { Field, Form } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { addNotification } from 'components/notification'
-
-import { ClassesProps } from 'utils/ts-utils'
-
-import {
-  uploadEmailAttachment,
-  UploadOrigin
-} from 'models/email/upload-email-attachment'
-
 import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
+import {
+  uploadEmailAttachment,
+  UploadOrigin
+} from 'models/email/upload-email-attachment'
 import { selectUser } from 'selectors/user'
+import { ClassesProps } from 'utils/ts-utils'
 
+import { DangerButton } from '../../Button/DangerButton'
+import { Callout } from '../../Callout'
+import ConfirmationModalContext from '../../ConfirmationModal/context'
+import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
+import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
+import { TextEditorRef } from '../../TextEditor/types'
+import EmailBody from '../components/EmailBody'
+import { Footer } from '../components/Footer'
+import { AttachmentsList } from '../fields/Attachments'
+import { getSendEmailResultMessages } from '../helpers/email-result-messages'
 import {
   EmailComposeFormProps,
   EmailFormValues,
   EmailComposeValues
 } from '../types'
-import EmailBody from '../components/EmailBody'
-import { AttachmentsList } from '../fields/Attachments'
+
 import { styles } from './styles'
-import { Footer } from '../components/Footer'
-import ConfirmationModalContext from '../../ConfirmationModal/context'
-import { getSendEmailResultMessages } from '../helpers/email-result-messages'
-import { TextEditorRef } from '../../TextEditor/types'
-import { Callout } from '../../Callout'
-import { DangerButton } from '../../Button/DangerButton'
-import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
-import { useEditorState } from '../../TextEditor/hooks/use-editor-state'
 import { useEmailFormValidator } from './use-email-form-validator'
 
 export const useEmailFormStyles = makeStyles(styles, { name: 'EmailForm' })

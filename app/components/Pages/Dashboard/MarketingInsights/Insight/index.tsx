@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
+
 import {
   Dialog,
   Theme,
@@ -9,40 +8,39 @@ import {
   makeStyles,
   Avatar as MUIAvatar
 } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
 import {
   mdiCheckAll,
   mdiEyeOutline,
   mdiCursorDefaultClickOutline,
   mdiAccountMultipleOutline
 } from '@mdi/js'
-
-import pluralize from 'pluralize'
 import classNames from 'classnames'
+import pluralize from 'pluralize'
+import { Helmet } from 'react-helmet'
+import { useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 
-import { addNotification } from 'components/notification'
-
-import { formatDate } from 'components/DateTimePicker/helpers'
-import { EmailThread } from 'components/EmailThread'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
+import { formatDate } from 'components/DateTimePicker/helpers'
 import EmailNotificationSetting from 'components/EmailNotificationSetting'
-
+import { EmailThread } from 'components/EmailThread'
+import { addNotification } from 'components/notification'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
-
+import { getContactNameInitials } from 'models/contacts/helpers'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
-import { getContactNameInitials } from 'models/contacts/helpers'
 import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
 
-import Header from './Header'
-import { Container } from '../../Contacts/components/Container'
 import Loading from '../../../../Partials/Loading'
+import { Container } from '../../Contacts/components/Container'
 import { hasPixelTracking, valueAndPercent } from '../List/helpers'
-import { useItemData } from './useItemData'
+
 import ContactsTable from './ContactsTable'
-import { ContactsListType } from './types'
+import Header from './Header'
 import SortField, { SortableColumnsType as SortFieldType } from './SortField'
+import { ContactsListType } from './types'
+import { useItemData } from './useItemData'
 
 const useStyles = makeStyles((theme: Theme) => ({
   pageContainer: {

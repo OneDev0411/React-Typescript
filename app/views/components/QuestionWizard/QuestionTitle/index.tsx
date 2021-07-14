@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react'
-import classNames from 'classnames'
+
 import { Typography, makeStyles, Theme, Box } from '@material-ui/core'
+import classNames from 'classnames'
 
 import { useSectionErrorContext } from '../hooks/use-section-error-context'
 

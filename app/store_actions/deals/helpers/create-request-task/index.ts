@@ -1,7 +1,5 @@
-import { addNotification as notify } from 'components/notification'
-
 import { createTask, changeNeedsAttention } from 'actions/deals'
-
+import { addNotification as notify } from 'components/notification'
 import { createTaskComment } from 'deals/utils/create-task-comment'
 
 interface CreateRequestTask {

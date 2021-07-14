@@ -11,10 +11,9 @@ import {
   endOfDay
 } from 'date-fns'
 
-import { setTime } from 'utils/set-time'
-import { getWeekdayName } from 'utils/date-utils'
-
 import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
+import { getWeekdayName } from 'utils/date-utils'
+import { setTime } from 'utils/set-time'
 
 export function convertLocalTimeToShowingTime(
   showing: IPublicShowing,

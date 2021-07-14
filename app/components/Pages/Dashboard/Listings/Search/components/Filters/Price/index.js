@@ -1,9 +1,10 @@
 import React from 'react'
-import { change as updateField, formValueSelector } from 'redux-form'
-import { connect } from 'react-redux'
 
-import MinMaxInputs from '../components/MinMaxInputs'
+import { connect } from 'react-redux'
+import { change as updateField, formValueSelector } from 'redux-form'
+
 import { toNumber } from '../../../../../../../../utils/helpers'
+import MinMaxInputs from '../components/MinMaxInputs'
 
 const FORM_NAME = 'filters'
 const selector = formValueSelector(FORM_NAME)

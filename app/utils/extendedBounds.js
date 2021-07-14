@@ -2,6 +2,7 @@ import { fitBounds } from 'google-map-react/utils'
 
 export const getBounds = points => {
   const googleMapsLatLngBounds = new google.maps.LatLngBounds()
+
   points.forEach(point => googleMapsLatLngBounds.extend(point))
 
   // The condition checked that if all points have the same coordinates,
@@ -43,7 +44,7 @@ export const getBounds = points => {
 }
 
 export const getExtededMapProps = (mapProps, bounds) => {
-  const { ne, sw, nw, se } = bounds
+  const { ne, sw } = bounds
 
   const { size = { width: 600, height: 480 } } = mapProps
 

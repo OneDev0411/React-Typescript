@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+
 import { Button, IconButton, Box, useTheme, Tooltip } from '@material-ui/core'
 import { mdiAccount, mdiTrashCanOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
 import editUser from 'actions/user/edit'
 import uploadCoverImage from 'actions/user/upload-cover-image'
-
 import FormCard from 'components/FormCard'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
 
 import { Button, Tooltip } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
 

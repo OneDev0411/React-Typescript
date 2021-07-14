@@ -1,6 +1,4 @@
-
 import { SET_SEARCH_LISTINGS_OPTIONS } from '../../../constants/listings/search'
-
 
 const setSearchListingsOptions = options => ({
   options,

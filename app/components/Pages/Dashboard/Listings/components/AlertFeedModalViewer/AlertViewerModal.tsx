@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+
 import { Box, Typography } from '@material-ui/core'
 
 import Modal from 'components/BareModal'
-import PageHeader from 'components/PageHeader'
-import LoadingContainer from 'components/LoadingContainer'
 import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import LoadingContainer from 'components/LoadingContainer'
+import PageHeader from 'components/PageHeader'
 
 import { formatListing } from '../../helpers/format-listing'
 
@@ -21,8 +22,10 @@ interface Props {
 export default function AlertViewerModal(props: Props) {
   const pageTitle = 'Shared Listings'
   const { isOpen, onClose, feed } = props
-  const [selectedListing, setSelectedListing] =
-    useState<ICompactListing | null>(null)
+  const [
+    selectedListing,
+    setSelectedListing
+  ] = useState<ICompactListing | null>(null)
   const [showListingModal, setShowListingModal] = useState(false)
 
   if (!isOpen) {

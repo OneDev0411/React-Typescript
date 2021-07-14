@@ -1,9 +1,9 @@
+import { SEARCH_BY_MLS_NUMBER } from '../../../constants/listings/search'
+import { selectListings } from '../../../reducers/listings'
 import { goToPlace } from '../map'
 
-import { selectListings } from '../../../reducers/listings'
 import getListingsByMlsNumber from './get-listings/by-mls-number'
 import { reset as resetSearchType, setSearchType } from './set-type'
-import { SEARCH_BY_MLS_NUMBER } from '../../../constants/listings/search'
 
 const searchByMlsNumber = mlsNumber => async (dispatch, getState) => {
   if (!mlsNumber) {

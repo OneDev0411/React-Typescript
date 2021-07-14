@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import {
   mdiAccountEditOutline,
@@ -10,8 +11,8 @@ import {
 import PageHeader from 'components/PageHeader'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { TeamMember } from '../TeamMember'
 import { getTeamUsersWithRoles } from '../../helpers/get-team-users-with-roles'
+import { TeamMember } from '../TeamMember'
 import { TeamMemberTitle } from '../TeamMember/styled'
 
 interface Props {

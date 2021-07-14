@@ -1,27 +1,26 @@
 import React, { Fragment } from 'react'
+
+import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Button } from '@material-ui/core'
 
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import { selectContact } from 'reducers/contacts/list'
-import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
+import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import SearchListingDrawer from 'components/SearchListingDrawer'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
-
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import { selectContact } from 'reducers/contacts/list'
+import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
+import { getActiveTeamId } from 'utils/user-teams'
 
+import SocialDrawer from '../../components/SocialDrawer'
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
-import SocialDrawer from '../../components/SocialDrawer'
 
 const propTypes = {
   isMultiListing: PropTypes.bool

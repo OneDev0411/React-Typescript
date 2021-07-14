@@ -1,57 +1,53 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Flex from 'styled-flex-component'
+
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
-
 import { mdiTrashCanOutline } from '@mdi/js'
-
 import {
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline
 } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import InstantMarketing from 'components/InstantMarketing'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { formatDate } from 'components/InstantMarketing/helpers/nunjucks-filters'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import LoadingContainer from 'components/LoadingContainer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTemplates } from 'models/instant-marketing'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
-import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import getListing from 'models/listings/listing/get-listing'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
-import LoadingContainer from 'components/LoadingContainer'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { goTo } from 'utils/go-to'
+import { isSoloActiveTeam, getActiveTeamId } from 'utils/user-teams'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
-
+import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import AddAssociation from '../../AddAssociation'
 import { Divider } from '../../Divider'
-import Drawer from '../../OverlayDrawer'
-import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-
-import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { EventField } from '../../EventDrawer/components/EventField'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import { Title } from '../../EventDrawer/components/Title'
+import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
 import { AssociationContainer } from '../../EventDrawer/styled'
 import {
   AssigneesField,
   DateTimeField,
   FieldError
 } from '../../final-form-fields'
-import AddAssociation from '../../AddAssociation'
 import { AssociationsList, EndTimeField } from '../../final-form-fields'
-import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import Drawer from '../../OverlayDrawer'
+import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 
-import { validate } from './helpers/validate'
-import { preSaveFormat } from './helpers/pre-save-format'
 import { postLoadFormat } from './helpers/post-load-format'
-
+import { preSaveFormat } from './helpers/pre-save-format'
+import { validate } from './helpers/validate'
 import { Location } from './Location'
 import { Footer } from './styled'
 

@@ -8,27 +8,25 @@ import {
   Divider,
   Typography
 } from '@material-ui/core'
-import { spacing } from '@material-ui/system'
 import { styled } from '@material-ui/core/styles'
+import { spacing } from '@material-ui/system'
 
 import { roleName } from 'deals/utils/roles'
 
-import DeleteRole from '../components/DeleteRole'
-
 import Field from '../components/CustomField'
+import DeleteRole from '../components/DeleteRole'
+import { TYPE_PERSON } from '../constants/role-types'
+import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 
-import { TitleInput } from './form-fields/TitleInput'
-import { TypeInput } from './form-fields/TypeInput'
-import { Roles } from './form-fields/Roles'
 import { Address } from './form-fields/Address'
 import { AutoCompleteInput } from './form-fields/AutoCompleteInput'
-import { NameInput } from './form-fields/NameInput'
-import { MlsInput } from './form-fields/MlsInput'
 import { CommissionInput } from './form-fields/CommissionInput'
+import { MlsInput } from './form-fields/MlsInput'
+import { NameInput } from './form-fields/NameInput'
+import { Roles } from './form-fields/Roles'
 import { TextInput } from './form-fields/TextInput'
-
-import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
-import { TYPE_PERSON } from '../constants/role-types'
+import { TitleInput } from './form-fields/TitleInput'
+import { TypeInput } from './form-fields/TypeInput'
 
 const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)

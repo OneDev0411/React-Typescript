@@ -9,24 +9,19 @@ import {
   IconButton,
   Tooltip
 } from '@material-ui/core'
-import { ColorState } from 'react-color'
-
 import { mdiDraw, mdiVectorLine, mdiHand } from '@mdi/js'
-
+import { ColorState } from 'react-color'
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { useSelector } from 'react-redux'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import { getBrandByType } from 'utils/user-teams'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
-
 import { getBrandColors } from 'utils/get-brand-colors'
+import { getBrandByType } from 'utils/user-teams'
 
-import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
+import { Slider } from '../../../components/Slider'
 import { ImageEditor, Actions, DRAWING_MODE } from '../../../types'
 
 const useStyles = makeStyles(

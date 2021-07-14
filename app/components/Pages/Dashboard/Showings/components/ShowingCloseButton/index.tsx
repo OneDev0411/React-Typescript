@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core'
-
 import { mdiClose } from '@mdi/js'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'

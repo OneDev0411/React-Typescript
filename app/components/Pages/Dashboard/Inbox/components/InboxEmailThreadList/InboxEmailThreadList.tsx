@@ -1,23 +1,21 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import { addNotification } from 'components/notification'
-
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 import { getEmailThreads } from 'models/email/get-email-threads'
 import {
   searchEmailThreads,
   SearchEmailThreadsNext
 } from 'models/email/search-email-threads'
-
+import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
-
-import { IAppState } from 'reducers'
-
-import InfiniteScrollList from '../InfiniteScrollList'
-import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
+import InfiniteScrollList from '../InfiniteScrollList'
+
+import InboxEmailThreadListItem from './components/InboxEmailThreadListItem'
 
 const emailThreadFetchCountInitial = 10
 const emailThreadFetchCount = 20
@@ -60,7 +58,7 @@ export default function InboxEmailThreadList({
     setEmailThreads([])
     searchQuery && onSelectEmailThread(undefined)
     delete searchMetaDataRef.current.next
-  }, [onUpdateEmailThreads, searchQuery])
+  }, [onUpdateEmailThreads, onSelectEmailThread, searchQuery])
 
   const dispatch = useDispatch()
 

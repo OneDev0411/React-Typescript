@@ -3,9 +3,10 @@ import {
   renameMedia as renameMediaModel
 } from 'models/Deal/media-manager'
 
-import * as actionTypes from './action-types'
 import type { IMediaGallery } from '../../types'
 import { getMediaSorts } from '../helpers/selectors'
+
+import * as actionTypes from './action-types'
 
 export const setGalleryItems = (gallery: IMediaGallery) => ({
   type: actionTypes.SET_GALLERY_ITEMS,
@@ -21,19 +22,21 @@ export const toggleMediaSelection = (id: UUID) => ({
   }
 })
 
-export const renameMedia =
-  (id: UUID, name: string, dealId: IDeal['id']) =>
-  async (dispatch: React.Dispatch<any>) => {
-    dispatch({
-      type: actionTypes.SET_MEDIA_NAME,
-      payload: {
-        id,
-        name
-      }
-    })
+export const renameMedia = (
+  id: UUID,
+  name: string,
+  dealId: IDeal['id']
+) => async (dispatch: React.Dispatch<any>) => {
+  dispatch({
+    type: actionTypes.SET_MEDIA_NAME,
+    payload: {
+      id,
+      name
+    }
+  })
 
-    await renameMediaModel(dealId, id, name)
-  }
+  await renameMediaModel(dealId, id, name)
+}
 
 export const toggleGallerySelection = (selected: boolean) => ({
   type: actionTypes.TOGGLE_GALLERY_SELECTION,
@@ -85,18 +88,20 @@ export const setMediaUploadProgress = (id: UUID, progress: number) => ({
   }
 })
 
-export const reorderGallery =
-  (oldIndex: number, newIndex: number, dealId: IDeal['id']) =>
-  async (dispatch: React.Dispatch<any>, getState: () => IMediaGallery) => {
-    dispatch({
-      type: actionTypes.REORDER_GALLERY,
-      payload: {
-        oldIndex,
-        newIndex
-      }
-    })
-    reorderGalleryModel(dealId, getMediaSorts(getState()))
-  }
+export const reorderGallery = (
+  oldIndex: number,
+  newIndex: number,
+  dealId: IDeal['id']
+) => async (dispatch: React.Dispatch<any>, getState: () => IMediaGallery) => {
+  dispatch({
+    type: actionTypes.REORDER_GALLERY,
+    payload: {
+      oldIndex,
+      newIndex
+    }
+  })
+  reorderGalleryModel(dealId, getMediaSorts(getState()))
+}
 
 export const setNewlyUploadedMediaFields = (
   id: UUID,

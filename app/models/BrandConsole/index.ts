@@ -1,7 +1,7 @@
+import Brands from './Brands'
 import Members from './Members'
 import Roles from './Roles'
 import Tasks from './Tasks'
-import Brands from './Brands'
 
 const BrandConsole = {
   ...Members,

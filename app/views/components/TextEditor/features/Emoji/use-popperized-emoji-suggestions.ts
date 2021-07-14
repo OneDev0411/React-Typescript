@@ -1,9 +1,9 @@
-import { EmojiPluginConfig } from 'draft-js-emoji-plugin'
-import { useTheme } from '@material-ui/core'
 import { useCallback, useRef, useState } from 'react'
-import PopperJs from 'popper.js'
 
+import { useTheme } from '@material-ui/core'
 import { PopperProps } from '@material-ui/core/Popper'
+import { EmojiPluginConfig } from 'draft-js-emoji-plugin'
+import PopperJs from 'popper.js'
 
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
@@ -56,7 +56,7 @@ export function usePopperizedEmojiSuggestions(): UsePopperizedEmojiSuggestions {
 
       return {}
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps: anchorElRef is ref!
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [anchorElRef]
   )
 

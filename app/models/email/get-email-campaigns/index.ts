@@ -1,5 +1,4 @@
 import Fetch from 'services/fetch'
-
 import { toEntityAssociation } from 'utils/association-utils'
 import { getActiveTeamId } from 'utils/user-teams'
 

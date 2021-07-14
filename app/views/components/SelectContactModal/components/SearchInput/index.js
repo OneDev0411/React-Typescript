@@ -1,8 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import { mdiMagnify } from '@mdi/js'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

@@ -22,11 +22,12 @@ export function removeUnusedBlocks(editor: Editor) {
   BLOCK_IDS_TO_REMOVE.forEach(editor.BlockManager.remove)
 }
 
-export const isComponent =
-  (type: string, returnFunc?: (el: HTMLElement) => object) =>
-  (el: HTMLElement) =>
-    el.tagName === type
-      ? returnFunc
-        ? { type, ...returnFunc(el) }
-        : true
-      : false
+export const isComponent = (
+  type: string,
+  returnFunc?: (el: HTMLElement) => object
+) => (el: HTMLElement) =>
+  el.tagName === type
+    ? returnFunc
+      ? { type, ...returnFunc(el) }
+      : true
+    : false

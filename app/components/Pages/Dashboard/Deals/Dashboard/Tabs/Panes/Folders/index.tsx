@@ -4,10 +4,9 @@ import Flex from 'styled-flex-component'
 
 import Spinner from 'components/Spinner'
 
-import Folders from '../../../Folders'
-import FactsheetsNav from '../../../FactsheetsNav'
 import UploadManager from '../../../../UploadManager'
-
+import FactsheetsNav from '../../../FactsheetsNav'
+import Folders from '../../../Folders'
 import { FactsheetContainer, MainContainer } from '../../styled'
 
 interface Props {

@@ -1,6 +1,7 @@
 import { RefObject, useMemo, useState } from 'react'
-import PluginsEditor, { DraftJsPlugin } from 'draft-js-plugins-editor'
+
 import { EditorState } from 'draft-js'
+import PluginsEditor, { DraftJsPlugin } from 'draft-js-plugins-editor'
 
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 

@@ -1,10 +1,10 @@
 import { ContentBlock, EditorState } from 'draft-js'
 
-import { renderAtomicBlockStyles } from './render-atomic-block-styles'
 import { blockStyleFn } from './block-style-fn'
-import { stylesToString } from './styles-to-string'
-import { renderAttributes } from './render-attributes'
 import { renderAtomicBlockAttrs } from './render-atomic-block-attributes'
+import { renderAtomicBlockStyles } from './render-atomic-block-styles'
+import { renderAttributes } from './render-attributes'
+import { stylesToString } from './styles-to-string'
 
 export const renderImage = (getEditorState: () => EditorState | null) => (
   block: ContentBlock

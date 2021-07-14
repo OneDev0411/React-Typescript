@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 
 import { mdiBullhornOutline } from '@mdi/js'
 
-import { convertToTemplate } from 'utils/marketing-center/helpers'
-
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { convertToTemplate } from 'utils/marketing-center/helpers'
 
 import { ListingWithProposedAgent } from '../../types'
 

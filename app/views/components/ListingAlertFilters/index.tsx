@@ -1,8 +1,9 @@
 import React, { ComponentProps, MouseEvent, useState } from 'react'
+
 import { Grid, Button, Popover } from '@material-ui/core'
 
-import ListingAlertFiltersList from 'components/ListingAlertFiltersList'
 import ListingAlertFiltersEditor from 'components/ListingAlertFiltersEditor'
+import ListingAlertFiltersList from 'components/ListingAlertFiltersList'
 
 type Props = Omit<
   ComponentProps<typeof ListingAlertFiltersList>,

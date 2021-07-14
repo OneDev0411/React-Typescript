@@ -1,19 +1,19 @@
 import { useRef, useState } from 'react'
+
 import { useSelector } from 'react-redux'
 
 import { ACL } from 'constants/acl'
-
 import { selectDealRoles } from 'selectors/deals'
 import { selectActiveTeamId } from 'selectors/team'
 import { getBrandUsers } from 'utils/user-teams'
 
 import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-permission'
-
 import {
   ShowingPropertyType,
   ShowingRoleInput,
   ShowingRoleInputPerson
 } from '../../types'
+
 import {
   getPersonFromDealRole,
   getPersonFromUser,

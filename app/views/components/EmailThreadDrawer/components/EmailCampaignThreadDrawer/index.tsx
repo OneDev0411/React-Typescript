@@ -2,9 +2,9 @@ import React from 'react'
 
 import { getEmailCampaignEmail } from 'models/email/helpers/get-email-campaign-email'
 
-import { Drawer } from '../Drawer'
 import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
+import { Drawer } from '../Drawer'
 
 interface Props extends DrawerProps {
   campaign: IEmailCampaign<

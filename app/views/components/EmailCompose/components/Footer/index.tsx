@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useFormState, useField, Field } from 'react-final-form'
+
 import {
   IconButton,
   Theme,
@@ -10,29 +10,31 @@ import {
 import { makeStyles } from '@material-ui/styles'
 import { mdiLayersOutline, mdiTrashCanOutline, mdiDotsVertical } from '@mdi/js'
 import classNames from 'classnames'
+import { useFormState, useField, Field } from 'react-final-form'
 
+import { BaseDropdown } from 'components/BaseDropdown'
 import ActionButton from 'components/Button/ActionButton'
-import DateTimePicker from 'components/DateTimePicker/next'
 import { formatDate } from 'components/DateTimePicker/helpers'
+import DateTimePicker from 'components/DateTimePicker/next'
+import EmailNotificationSetting from 'components/EmailNotificationSetting'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { myDesignIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   uploadEmailAttachment,
   UploadOrigin
 } from 'models/email/upload-email-attachment'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { myDesignIcon } from 'components/SvgIcons/icons'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { BaseDropdown } from 'components/BaseDropdown'
-import EmailNotificationSetting from 'components/EmailNotificationSetting'
 
-import { isFileAttachment } from '../../helpers/is-file-attachment'
-import { textForSubmitButton } from './helpers'
-import SchedulerButton from './SchedulerButton'
-import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
 import { useButtonStyles } from '../../../../../styles/use-button-styles'
 import { DropdownToggleButton } from '../../../DropdownToggleButton'
-import { FooterBottomDrawer } from './FooterBottomDrawer'
+import { isFileAttachment } from '../../helpers/is-file-attachment'
+import { EmailAttachmentsDropdown } from '../EmailAttachmentsDropdown'
+
 import EmailTemplateSelector from './EmailTemplateSelector'
+import { FooterBottomDrawer } from './FooterBottomDrawer'
+import { textForSubmitButton } from './helpers'
 import { MarketingTemplateSelector } from './MarketingTemplateSelector'
+import SchedulerButton from './SchedulerButton'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

@@ -1,15 +1,17 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { addNotification as notify } from 'components/notification'
 
-import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
+import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
 import {
   TextField,
   Select,
   TextFieldArray
 } from '../../../../../../views/components/final-form-fields'
-import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
+import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
 import { preSaveFormat, validate } from './helpers'
 import { TipsBanner } from './TipsBanner'

@@ -1,11 +1,12 @@
 import React from 'react'
+
 import { isFuture, isToday } from 'date-fns'
 
+import { DONE_STATUS } from '@app/views/components/EventDrawer/components/FutureEventDoneConfirmation'
 import { EventDrawer } from 'components/EventDrawer'
 import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
-import { DONE_STATUS } from '@app/views/components/EventDrawer/components/FutureEventDoneConfirmation'
 
 interface Props {
   isEventDrawerOpen: boolean

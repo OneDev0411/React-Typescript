@@ -1,9 +1,10 @@
 import React from 'react'
-import { mdiDraw } from '@mdi/js'
-import { Button } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Button } from '@material-ui/core'
+import { mdiDraw } from '@mdi/js'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageEditor, Actions } from '../../types'
 

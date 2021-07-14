@@ -3,14 +3,16 @@ import fecha from 'fecha'
 
 import { convertShowingTimeToLocalTime } from '../Book/Sections/BookSection/utils'
 
-const APPOINTMENT_STATUS_LABEL_MAP: Record<IShowingAppointmentStatus, string> =
-  {
-    Requested: 'Requested',
-    Confirmed: 'Confirmed',
-    Rescheduled: 'Rescheduled',
-    Canceled: 'Canceled',
-    Completed: 'Completed'
-  }
+const APPOINTMENT_STATUS_LABEL_MAP: Record<
+  IShowingAppointmentStatus,
+  string
+> = {
+  Requested: 'Requested',
+  Confirmed: 'Confirmed',
+  Rescheduled: 'Rescheduled',
+  Canceled: 'Canceled',
+  Completed: 'Completed'
+}
 
 export function getAppointmentStatusLabel(
   appointment: IShowingAppointment | IPublicShowingAppointment

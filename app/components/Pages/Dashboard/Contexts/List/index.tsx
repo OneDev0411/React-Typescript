@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { connect, useDispatch } from 'react-redux'
-import { Helmet } from 'react-helmet'
+
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
-
 import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
+import { Helmet } from 'react-helmet'
+import { connect, useDispatch } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
-
-import { IAppState } from 'reducers'
-import createNewContext from 'models/Deal/context/create-context'
-import editContext from 'models/Deal/context/edit-context'
-import deleteContext from 'models/Deal/context/delete-context'
-import { selectBrandContexts } from 'reducers/deals/contexts'
-import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getContextsByBrand } from 'actions/deals'
-import { getActiveTeamId } from 'utils/user-teams'
-import PageHeader from 'components/PageHeader'
 import LoadingContainer from 'components/LoadingContainer'
+import { addNotification as notify } from 'components/notification'
+import PageHeader from 'components/PageHeader'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import createNewContext from 'models/Deal/context/create-context'
+import deleteContext from 'models/Deal/context/delete-context'
+import editContext from 'models/Deal/context/edit-context'
+import { IAppState } from 'reducers'
+import { selectBrandContexts } from 'reducers/deals/contexts'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import CategoryItem from '../components/CategoryItem'
-import NewCategoryModal from '../components/NewCategory'
 import EmptyState from '../components/EmptyState'
+import NewCategoryModal from '../components/NewCategory'
 
 interface Props {
   brandId: UUID
@@ -35,8 +34,10 @@ function DealContext({ brandId, isFetching, list }: Props) {
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
-  const [selectedContext, setSelectedContext] =
-    useState<IDealBrandContext | null>(null)
+  const [
+    selectedContext,
+    setSelectedContext
+  ] = useState<IDealBrandContext | null>(null)
 
   useEffect(() => {
     dispatch(getContextsByBrand(brandId))

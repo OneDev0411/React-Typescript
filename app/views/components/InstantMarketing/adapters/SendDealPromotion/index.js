@@ -1,22 +1,18 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
-
-import Listing from 'models/listings/listing'
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import { connect } from 'react-redux'
 
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
-
 import InstantMarketing from 'components/InstantMarketing'
-
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
-import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
-import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { getMediaGallery } from 'models/Deal/media-manager'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import Listing from 'models/listings/listing'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'

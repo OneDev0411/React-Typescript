@@ -1,7 +1,6 @@
 import { css } from 'styled-components'
 
 import { primary, red, orange, green } from '../../utils/colors'
-
 import ALink from '../ALink'
 
 export const badgeBaseStyle = css`

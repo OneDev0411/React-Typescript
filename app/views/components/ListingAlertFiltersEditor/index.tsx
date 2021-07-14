@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import isEqual from 'lodash/isEqual'
+
 import {
   Button,
   Grid,
@@ -10,6 +10,7 @@ import {
   Divider,
   Slider
 } from '@material-ui/core'
+import isEqual from 'lodash/isEqual'
 
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 

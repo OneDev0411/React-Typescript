@@ -2,10 +2,10 @@ import { Helmet } from 'react-helmet'
 
 import TemplatesList from 'components/TemplatesList'
 
-import { useTemplatesHistory } from '../hooks/use-templates-history'
-import EmptyState from './EmptyState'
-
 import Layout from '..'
+import { useTemplatesHistory } from '../hooks/use-templates-history'
+
+import EmptyState from './EmptyState'
 
 function History() {
   const { templates, isLoading, deleteTemplate } = useTemplatesHistory()

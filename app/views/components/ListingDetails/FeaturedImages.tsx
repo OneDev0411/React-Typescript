@@ -1,8 +1,9 @@
 import React from 'react'
-import cn from 'classnames'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import ButtonBase from '@material-ui/core/ButtonBase'
-import { makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 
 import { MAIN_IMAGE_PLACEHOLDER_SRC } from './constans'
 import Lightbox from './Lightbox'

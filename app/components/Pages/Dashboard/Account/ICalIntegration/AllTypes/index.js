@@ -1,15 +1,16 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
-import { selectBrandContexts } from 'reducers/deals/contexts'
 import { getContextsByBrand } from 'actions/deals/context'
-import { getActiveTeamId } from 'utils/user-teams'
 import { Checkbox } from 'components/Checkbox'
+import { selectBrandContexts } from 'reducers/deals/contexts'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import CategoryType from '../CategoryTypes'
-
 import { Section } from '../styled'
 import Title from '../Title'
+
 import { CategoryTypesContainer } from './styled'
 
 const defaultTaskTypes = [

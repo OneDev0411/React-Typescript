@@ -1,36 +1,33 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
-
 import {
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline
 } from '@mdi/js'
+import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
-import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-import { isSoloActiveTeam } from 'utils/user-teams'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
+import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import AddAssociation from '../../AddAssociation'
 import { Divider } from '../../Divider'
-import Drawer from '../../OverlayDrawer'
-import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-
-import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { EventField } from '../../EventDrawer/components/EventField'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import { Title } from '../../EventDrawer/components/Title'
 import {
   FormContainer,
   FieldContainer,
   AssociationContainer
 } from '../../EventDrawer/styled'
-
-import AddAssociation from '../../AddAssociation'
 import {
   AssigneesField,
   AssociationsList,
@@ -38,16 +35,15 @@ import {
   EndTimeField,
   FieldError
 } from '../../final-form-fields'
-import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
-
-import { validate } from './helpers/validate'
-import { preSaveFormat } from './helpers/pre-save-format'
-import { prePreviewFormat } from './helpers/pre-preview-format'
-import { postLoadFormat } from './helpers/post-load-format'
-
-import { Locations } from './components/Locations'
+import Drawer from '../../OverlayDrawer'
+import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import { PreviewTourSheets } from '../PreviewTourSheets'
 
+import { Locations } from './components/Locations'
+import { postLoadFormat } from './helpers/post-load-format'
+import { prePreviewFormat } from './helpers/pre-preview-format'
+import { preSaveFormat } from './helpers/pre-save-format'
+import { validate } from './helpers/validate'
 import { Footer } from './styled'
 
 const propTypes = {

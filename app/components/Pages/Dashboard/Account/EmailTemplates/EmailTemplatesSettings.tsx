@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { useState } from 'react'
+
 import { Helmet } from 'react-helmet'
 
 import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import CtaBar from '../components/CtaBar'
+
 import List from './List'
 
 function EmailTemplatesSettings() {

@@ -11,10 +11,9 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
-const createStatusFilter =
-  (status: IShowingAppointmentStatus) =>
-  (appointments: IShowingAppointment<'showing'>[]) =>
-    appointments.filter(appointment => appointment.status === status)
+const createStatusFilter = (status: IShowingAppointmentStatus) => (
+  appointments: IShowingAppointment<'showing'>[]
+) => appointments.filter(appointment => appointment.status === status)
 
 export const appointmentStatusInfo: Record<
   AppointmentFilter,

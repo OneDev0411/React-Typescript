@@ -1,4 +1,5 @@
 import React from 'react'
+
 export default ({ fill = '#BFBFC0', width = '9', height = '9' }) => (
   <svg
     width={width}
