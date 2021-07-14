@@ -804,14 +804,14 @@ const AsyncContexts = withAcl.admin(
 )
 
 /* ==================================== */
-//  Deal Statues
+//  Deal Statuses
 /* ==================================== */
 
-const AsyncDealStatues = withAcl.admin(
+const AsyncDealStatuses = withAcl.admin(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/DealStatuses' /* webpackChunkName: "deal_statues" */
+        '../components/Pages/Dashboard/DealStatuses' /* webpackChunkName: "deal_statuses" */
       )
   })
 )
@@ -1024,8 +1024,8 @@ export default (
           <IndexRoute component={AsyncContexts} />
         </Route>
 
-        <Route path="statues">
-          <IndexRoute component={AsyncDealStatues} />
+        <Route path="statuses(/:id)">
+          <IndexRoute component={AsyncDealStatuses} />
         </Route>
 
         <Route path="brand-settings">

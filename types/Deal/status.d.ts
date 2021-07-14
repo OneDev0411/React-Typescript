@@ -1,9 +1,4 @@
-declare interface IDealStatus {
-  type: 'brand_deal_status'
-  id: string
-  created_at: number
-  updated_at: number | null
-  deleted_at: number | null
+declare interface IDealStatus extends IModel<'brand_deal_status'> {
   brand: string
   label: IListingStatus
   is_active: boolean

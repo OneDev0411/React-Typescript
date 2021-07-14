@@ -86,7 +86,7 @@ export function UserMenuContent({
             </ListItem>
           </Acl.Admin>
           <Acl.Admin>
-            <ListItem button onClick={() => onClick('statues')}>
+            <ListItem button onClick={() => onClick('statuses')}>
               Statuses
             </ListItem>
           </Acl.Admin>
