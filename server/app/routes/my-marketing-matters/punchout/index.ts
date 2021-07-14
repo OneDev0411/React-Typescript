@@ -1,14 +1,12 @@
 import path from 'path'
 
 import axios from 'axios'
-
 import { Request, Response, NextFunction } from 'express'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
-import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
-
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import {
   API_URL,
   DUNS,
