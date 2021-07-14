@@ -9,7 +9,7 @@ import { goTo } from '@app/utils/go-to'
  * @param isLoading The deals loading state
  */
 function useDealsListsLuckyMode(deals: IDeal[], isLoading: boolean) {
-  const [lucky, , deleteLucky] = useQueryParam('lucky')
+  const [lucky, setLucky] = useQueryParam('lucky')
   const isLuckyMode = !!lucky
 
   useEffect(() => {
@@ -19,10 +19,10 @@ function useDealsListsLuckyMode(deals: IDeal[], isLoading: boolean) {
       // redirect the user to the deal page again because of the lucky param.
       // So we need to delete the lucky param and then go to the deal page to prevent
       // the redirect issue.
-      deleteLucky()
+      setLucky('')
       goTo(`/dashboard/deals/${deals[0].id}`)
     }
-  }, [deals, deleteLucky, isLoading, isLuckyMode])
+  }, [deals, setLucky, isLoading, isLuckyMode])
 }
 
 export default useDealsListsLuckyMode
