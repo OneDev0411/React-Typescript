@@ -28,7 +28,7 @@ const propTypes = {
   hasExternalTrigger: PropTypes.bool,
   isTriggered: PropTypes.bool,
   isTemplatesColumnHiddenDefault: PropTypes.bool,
-  mediums: PropTypes.arrayOf(PropTypes.string),
+  mediums: PropTypes.string,
   types: PropTypes.arrayOf(PropTypes.string),
   listing: PropTypes.object,
   selectedTemplate: PropTypes.object,
