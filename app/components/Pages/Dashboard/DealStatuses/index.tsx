@@ -1,26 +1,30 @@
 import { useMemo, useState } from 'react'
 
 import {
+  Box,
   CircularProgress,
   makeStyles,
   Typography,
-  Theme
+  Theme,
+  Button
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
 
 import { browserHistory } from 'react-router'
 
-import PageLayout from 'components/GlobalPageLayout'
+import { useDispatch } from 'react-redux'
 
-import Grid from 'components/Grid/Table'
-import { useGridStyles } from 'components/Grid/Table/styles'
-
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-import { useActiveTeamId } from 'hooks/use-active-team-id'
-
+import PageLayout from '@app/views/components/GlobalPageLayout'
+import Grid from '@app/views/components/Grid/Table'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
+import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
+import { useActiveTeamId } from '@app/hooks/use-active-team-id'
 import { getStatusColorClass } from '@app/utils/listing'
+import { confirmation } from '@app/store_actions/confirmation'
+import { addNotification } from '@app/views/components/notification'
 
-import { EditStatus } from './EditStatus'
+import { StatusForm } from './StatusForm'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -46,10 +50,11 @@ interface Props {
 export default function DealStatusesAdmin({ params }: Props) {
   const gridClasses = useGridStyles()
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const teamId = useActiveTeamId()
 
-  const [statuses, updateStatus] = useBrandStatuses(teamId)
+  const [statuses, upsertStatus, deleteStatus] = useBrandStatuses(teamId)
   const [criteria, setCriteria] = useState('')
 
   const statusesList = useMemo(() => {
@@ -114,16 +119,55 @@ export default function DealStatusesAdmin({ params }: Props) {
     }
   }
 
+  const handleClose = () => browserHistory.push('/dashboard/statuses')
+
+  const handleDeleteStatus = () => {
+    if (!selectedStatus) {
+      return
+    }
+
+    dispatch(
+      confirmation({
+        message: 'Delete Status',
+        description: `Please confirm that you want to 
+          delete "${selectedStatus.label}" status`,
+        onConfirm: () => {
+          deleteStatus(selectedStatus.id)
+          handleClose()
+
+          dispatch(
+            addNotification({
+              status: 'success',
+              message: 'Status Deleted'
+            })
+          )
+        }
+      })
+    )
+  }
+
   return (
     <PageLayout>
-      <PageLayout.HeaderWithSearch
-        title="Statuses"
-        SearchInputProps={{
-          placeholder: 'Search status'
-        }}
-        searchDebounceTime={0}
-        onSearch={setCriteria}
-      />
+      <PageLayout.Header title="Statuses">
+        <Box display="flex">
+          <Box mr={1}>
+            <SearchInput
+              placeholder="Search status"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setCriteria(e.target.value)
+              }
+            />
+          </Box>
+
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => browserHistory.push('/dashboard/statuses/new')}
+          >
+            Create New Status
+          </Button>
+        </Box>
+      </PageLayout.Header>
 
       <PageLayout.Main>
         <Grid<IDealStatus>
@@ -131,7 +175,16 @@ export default function DealStatusesAdmin({ params }: Props) {
           rows={statusesList}
           totalRows={statusesList.length}
           virtualize={false}
-          LoadingStateComponent={CircularProgress}
+          LoadingStateComponent={() => (
+            <Box
+              display="flex"
+              height="100vh"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <CircularProgress />
+            </Box>
+          )}
           loading={statuses.length === 0 ? 'middle' : null}
           getTrProps={getRowProps}
           classes={{
@@ -139,10 +192,12 @@ export default function DealStatusesAdmin({ params }: Props) {
           }}
         />
 
-        <EditStatus
+        <StatusForm
+          isNewStatus={params.id === 'new'}
           status={selectedStatus}
-          onChange={updateStatus}
-          onClose={() => browserHistory.goBack()}
+          onChange={upsertStatus}
+          onDelete={handleDeleteStatus}
+          onClose={handleClose}
         />
       </PageLayout.Main>
     </PageLayout>

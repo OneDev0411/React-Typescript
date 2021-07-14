@@ -25,3 +25,29 @@ export async function updateBrandStatus(
     throw e
   }
 }
+
+export async function createBrandStatus(
+  brandId: UUID,
+  data: Record<string, unknown>
+): Promise<IDealStatus> {
+  try {
+    const response = await new Fetch()
+      .post(`/brands/${brandId}/deals/statuses`)
+      .send(data)
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
+export async function deleteBrandStatus(
+  brandId: UUID,
+  statusId: UUID
+): Promise<void> {
+  try {
+    await new Fetch().delete(`/brands/${brandId}/deals/statuses/${statusId}`)
+  } catch (e) {
+    throw e
+  }
+}

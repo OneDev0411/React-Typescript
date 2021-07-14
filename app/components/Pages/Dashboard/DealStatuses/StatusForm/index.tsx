@@ -17,7 +17,8 @@ import {
   Grid,
   TextField,
   makeStyles,
-  Theme
+  Theme,
+  Divider
 } from '@material-ui/core'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -25,6 +26,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { mdiClose } from '@mdi/js'
 
 import { useDispatch } from 'react-redux'
+
+import { browserHistory } from 'react-router'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -53,12 +56,23 @@ interface FormData {
 }
 
 interface Props {
+  isNewStatus: boolean
   status: IDealStatus | undefined
-  onChange: (statusId: UUID, data: Record<string, unknown>) => void
+  onChange: (
+    statusId: UUID | undefined,
+    data: Record<string, unknown>
+  ) => Promise<IDealStatus | void>
+  onDelete: () => void
   onClose: () => void
 }
 
-export function EditStatus({ status, onChange, onClose }: Props) {
+export function StatusForm({
+  status,
+  isNewStatus,
+  onChange,
+  onClose,
+  onDelete
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -79,7 +93,7 @@ export function EditStatus({ status, onChange, onClose }: Props) {
         {}
       ),
       label: form.label,
-      admin_only: form.admin_only,
+      admin_only: form.admin_only || false,
       checklists: Object.entries(form.checklists)
         .filter(([_, value]) => !!value)
         .map(([key]) => key)
@@ -88,12 +102,18 @@ export function EditStatus({ status, onChange, onClose }: Props) {
     try {
       setIsSaving(true)
 
-      await onChange(status!.id, data)
+      const upsertedStatus = await onChange(status?.id, data)
+
+      if (isNewStatus) {
+        browserHistory.push(
+          `/dashboard/statuses/${(upsertedStatus as IDealStatus).id}`
+        )
+      }
 
       dispatch(
         addNotification({
           status: 'success',
-          message: 'Status Updated'
+          message: 'Status Saved'
         })
       )
     } catch (e) {
@@ -102,7 +122,7 @@ export function EditStatus({ status, onChange, onClose }: Props) {
       dispatch(
         addNotification({
           status: 'error',
-          message: 'Could not update the status'
+          message: 'Could not save the status'
         })
       )
     } finally {
@@ -111,7 +131,12 @@ export function EditStatus({ status, onChange, onClose }: Props) {
   }
 
   return (
-    <Dialog open={!!status} fullWidth maxWidth="sm" onClose={onClose}>
+    <Dialog
+      open={!!status || isNewStatus}
+      fullWidth
+      maxWidth="sm"
+      onClose={onClose}
+    >
       <form onSubmit={handleSubmit(handleSave)}>
         <DialogTitle>
           <Box
@@ -119,20 +144,24 @@ export function EditStatus({ status, onChange, onClose }: Props) {
             alignItems="center"
             justifyContent="space-between"
           >
-            <div>
-              Update{' '}
-              {status?.label === newLabel ? (
-                <span>"{status?.label}"</span>
-              ) : (
-                <>
-                  <span className={classes.previousLabel}>
-                    "{status?.label}"
-                  </span>
-                  {' → '}
-                  {newLabel}
-                </>
-              )}
-            </div>
+            {isNewStatus ? (
+              'Create New Status'
+            ) : (
+              <div>
+                Update{' '}
+                {status?.label === newLabel ? (
+                  <span>"{status?.label}"</span>
+                ) : (
+                  <>
+                    <span className={classes.previousLabel}>
+                      "{status?.label}"
+                    </span>
+                    {' → '}
+                    {newLabel}
+                  </>
+                )}
+              </div>
+            )}
             <IconButton onClick={onClose}>
               <SvgIcon path={mdiClose} />
             </IconButton>
@@ -224,18 +253,36 @@ export function EditStatus({ status, onChange, onClose }: Props) {
           </FormControl>
         </DialogContent>
 
-        <DialogActions>
-          <Box mx={2}>
-            <Button onClick={onClose}>Cancel</Button>
+        <Box my={0.25}>
+          <Divider />
+        </Box>
 
-            <Button
-              color="primary"
-              type="submit"
-              variant="contained"
-              disabled={isSaving || formState.isValid === false}
-            >
-              {isSaving ? 'Saving...' : 'Save Changes'}
-            </Button>
+        <DialogActions>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            flexGrow={1}
+            mx={2}
+          >
+            <div>
+              {!isNewStatus && (
+                <Button onClick={onDelete}>Delete Status</Button>
+              )}
+            </div>
+
+            <Box display="flex">
+              <Button onClick={onClose}>Cancel</Button>
+
+              <Button
+                color="primary"
+                type="submit"
+                variant="contained"
+                disabled={isSaving || formState.isValid === false}
+              >
+                {isSaving ? 'Saving...' : 'Save Status'}
+              </Button>
+            </Box>
           </Box>
         </DialogActions>
       </form>

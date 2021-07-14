@@ -18,9 +18,13 @@ export const StatusTypes = [
 ]
 
 export function getStatusActiveType(status: IDealStatus | undefined) {
+  const defaultStatus = StatusTypes[0].key
+
   if (!status) {
-    return null
+    return defaultStatus
   }
 
-  return StatusTypes.find(type => status[type.key] === true)?.key
+  return (
+    StatusTypes.find(type => status[type.key] === true)?.key || defaultStatus
+  )
 }
