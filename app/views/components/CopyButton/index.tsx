@@ -9,7 +9,7 @@ import store from '../../../stores'
 
 interface CopyButtonProps {
   text?: string
-  buttonProps: ButtonProps
+  buttonProps?: ButtonProps
 }
 
 function CopyButton({ text, buttonProps = {} }: CopyButtonProps) {
