@@ -102,7 +102,7 @@ export function PropertyChecklistTable({ status, formControl }: Props) {
                   <Controller
                     control={formControl}
                     name={`checklists[${checklist.id}]`}
-                    defaultValue={checklist.statuses.some(
+                    defaultValue={(checklist.statuses || []).some(
                       ({ id }) => id === status?.id
                     )}
                     render={({ value, onChange }) => (
