@@ -36,23 +36,18 @@ function Container(props: Props) {
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')
 
-  const {
-    user,
-    dealsCount,
-    brandContexts,
-    isFetchingDeals,
-    brandId
-  } = useSelector<IAppState, StateProps>(({ deals, user }) => {
-    const brandId = getActiveTeamId(user)
+  const { user, dealsCount, brandContexts, isFetchingDeals, brandId } =
+    useSelector<IAppState, StateProps>(({ deals, user }) => {
+      const brandId = getActiveTeamId(user)
 
-    return {
-      dealsCount: Object.keys(deals.list).length,
-      brandContexts: selectBrandContexts(deals.contexts, brandId),
-      isFetchingDeals: deals.properties.isFetchingDeals,
-      brandId,
-      user
-    }
-  }, shallowEqual)
+      return {
+        dealsCount: Object.keys(deals.list).length,
+        brandContexts: selectBrandContexts(deals.contexts, brandId),
+        isFetchingDeals: deals.properties.isFetchingDeals,
+        brandId,
+        user
+      }
+    }, shallowEqual)
 
   useEffectOnce(() => {
     const isBackOffice = hasUserAccess(user, 'BackOffice')

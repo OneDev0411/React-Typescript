@@ -2,7 +2,7 @@ import { createContext } from 'react'
 
 import { initialState } from './reducers'
 
-export interface StateContext {
+export interface StateContextType {
   onCreateEvent: (event: IEvent) => void
   onCreateContact?: (contact: IContact) => void
   onCreateAndAddNewContact?: (contact: IContact) => void
@@ -16,6 +16,6 @@ export interface StateContext {
   ) => void
 }
 
-export type DispatchContext = React.Dispatch<any>
-export const StateContext = createContext<StateContext>(initialState)
-export const DispatchContext = createContext<DispatchContext>(() => null)
+export type DispatchContextType = React.Dispatch<any>
+export const StateContext = createContext<StateContextType>(initialState)
+export const DispatchContext = createContext<DispatchContextType>(() => null)

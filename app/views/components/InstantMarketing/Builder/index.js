@@ -949,15 +949,11 @@ class Builder extends React.Component {
     const canvas = this.editor.Canvas.getBody()
     const viewport = document.querySelector('.gjs-cv-canvas')
 
-    const {
-      width: canvasWidth,
-      height: canvasHeight
-    } = canvas.getBoundingClientRect()
+    const { width: canvasWidth, height: canvasHeight } =
+      canvas.getBoundingClientRect()
 
-    const {
-      width: viewportWidth,
-      height: viewportHeight
-    } = viewport.getBoundingClientRect()
+    const { width: viewportWidth, height: viewportHeight } =
+      viewport.getBoundingClientRect()
 
     let scale = 1
 

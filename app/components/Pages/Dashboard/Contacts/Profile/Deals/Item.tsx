@@ -26,7 +26,7 @@ export function DealItem({ deal, contact }: Props) {
 
   function getContactRole() {
     // TODO: fix the below typecast
-    const role = ((deal.roles as unknown) as IDealRole[]).find(
+    const role = (deal.roles as unknown as IDealRole[]).find(
       role => contact.emails && contact.emails.includes(role.email)
     )
 
