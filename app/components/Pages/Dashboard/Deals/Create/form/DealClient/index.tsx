@@ -47,7 +47,7 @@ export function DealClient({
   skippable = false,
   onChange
 }: Props) {
-  const { user, checklist } = useCreationContext()
+  const { checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
@@ -120,7 +120,6 @@ export function DealClient({
             isOpen
             compact
             showSaveContactButton
-            // user={user} // TODO: Ramin please check this
             checklist={checklist}
             dealSide={side}
             form={selectedRole}

@@ -39,7 +39,7 @@ export function DealCoAgent({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
   const dispatch = useDispatch()
 
   const [selectedRole, setSelectedRole] =
@@ -85,7 +85,6 @@ export function DealCoAgent({
             isOpen
             compact
             deal={deal}
-            // user={user} // TODO: Ramin please check this
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}

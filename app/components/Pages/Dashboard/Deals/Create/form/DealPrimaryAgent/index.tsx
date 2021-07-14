@@ -48,7 +48,7 @@ export function DealPrimaryAgent({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
 
   const dispatch = useDispatch()
 
@@ -104,7 +104,6 @@ export function DealPrimaryAgent({
             isOpen
             compact
             deal={deal}
-            // user={user} // TODO: Ramin please check this
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}
