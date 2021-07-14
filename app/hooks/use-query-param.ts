@@ -1,13 +1,9 @@
 import { useCallback, useMemo } from 'react'
 import { useLocation } from 'react-use'
 import { browserHistory } from 'react-router'
+import { LocationDescriptor } from 'history'
 
-type UseQueryParam = [string, (value: string) => void, () => void]
-
-interface UseQueryParamOptions {
-  deleteEmptyParam?: boolean // Delete the query param if the value is empty
-  replaceMode?: boolean // Decide about the updating method
-}
+type UseQueryParam = [string, (value: string) => void]
 
 export function useQueryParamValue(name: string): string {
   const location = useLocation()
@@ -20,45 +16,34 @@ export function useQueryParamValue(name: string): string {
   return decodeURIComponent(value || '')
 }
 
-export function useQueryParam(
-  name: string,
-  options: UseQueryParamOptions = { deleteEmptyParam: true, replaceMode: false }
+function useQueryParamBase(
+  historyAction: (path: LocationDescriptor) => void,
+  name: string
 ): UseQueryParam {
   const value = useQueryParamValue(name)
-
-  const historyAction = !options.replaceMode
-    ? browserHistory.push
-    : browserHistory.replace
 
   const setValue = useCallback(
     (value: string) => {
       const url = new URL(window.location.href)
 
-      url.searchParams.set(name, encodeURIComponent(value))
+      if (value) {
+        url.searchParams.set(name, encodeURIComponent(value))
+      } else {
+        url.searchParams.delete(name)
+      }
 
       historyAction.call(browserHistory, url.toString())
     },
     [historyAction, name]
   )
 
-  const deleteValue = useCallback(() => {
-    const url = new URL(window.location.href)
+  return [value, setValue]
+}
 
-    url.searchParams.delete(name)
+export function useQueryParam(name: string): UseQueryParam {
+  return useQueryParamBase(browserHistory.push, name)
+}
 
-    historyAction.call(browserHistory, url.toString())
-  }, [historyAction, name])
-
-  const setOrDeleteValue = useCallback(
-    (value: string) => {
-      if (options.deleteEmptyParam && !value) {
-        deleteValue()
-      } else {
-        setValue(value)
-      }
-    },
-    [options.deleteEmptyParam, deleteValue, setValue]
-  )
-
-  return [value, setOrDeleteValue, deleteValue]
+export function useReplaceQueryParam(name: string): UseQueryParam {
+  return useQueryParamBase(browserHistory.replace, name)
 }
