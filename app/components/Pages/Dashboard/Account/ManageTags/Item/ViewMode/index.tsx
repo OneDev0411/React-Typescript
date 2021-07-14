@@ -20,7 +20,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(1.5),
       // transition: 'box-shadow 1s ease-in',
       // box-shadow: 0 0 0 1px theme.palette.primary.main inset
-      '&:nth-child(odd)': {
+      '&:nth-child(even)': {
         background: theme.palette.grey[50]
       }
     },

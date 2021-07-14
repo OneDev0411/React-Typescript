@@ -169,7 +169,7 @@ declare interface IContactTag {
   tag: string
   text: string
   touch_freq: Nullable<number>
-  type: string
+  type: 'crm_tag'
 }
 
 declare interface IContactAttributeInputWithContact
@@ -280,14 +280,6 @@ declare interface IContactDuplicateCluster {
 declare interface IContactDuplicateClusterInput {
   parent: UUID
   sub_contacts: UUID[]
-}
-
-declare interface IContactTag {
-  id: UUID
-  text: string
-  created_at: number
-  updated_at: number
-  type: 'crm_tag'
 }
 
 type TContactAssociation =
