@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { ListingRow } from './types'
 
-function useListingsSearchRows(
+function useListingsQueryRows(
   rows: ListingRow[],
   search: string
 ): ListingRow[] {
@@ -22,4 +22,4 @@ function useListingsSearchRows(
   }, [rows, search])
 }
 
-export default useListingsSearchRows
+export default useListingsQueryRows
