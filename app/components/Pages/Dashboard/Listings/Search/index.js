@@ -32,6 +32,7 @@ import {
 } from 'utils/map'
 
 import { selectListings } from 'reducers/listings'
+import { setUserSetting } from 'actions/user/set-setting'
 
 import { getUserTeams } from 'actions/user/teams'
 import searchActions from 'actions/listings/search'
@@ -404,8 +405,7 @@ class Search extends React.Component {
     // Anonymous user's can also see /mls and explore the map
     // So updatingLastBrowsing location should not be run for them
     if (this.props.user) {
-      putUserSetting(LAST_BROWSING_LOCATION, gmap)
-      this.props.dispatch(getUserTeams(this.props.user))
+      this.props.dispatch(setUserSetting(LAST_BROWSING_LOCATION, gmap))
     }
   }
 
