@@ -40,9 +40,8 @@ export default function ListingAlertFiltersEditor({
   onApply
 }: Props) {
   const classes = useStyles()
-  const [filters, setFilters] = useState<AlertFiltersWithRadiusAndCenter>(
-    originalFilters
-  )
+  const [filters, setFilters] =
+    useState<AlertFiltersWithRadiusAndCenter>(originalFilters)
 
   function handleRadiusChange(newValue: number) {
     const newPoints = getMapBoundsInCircle(

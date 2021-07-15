@@ -33,23 +33,22 @@ export default function createIframePlugin({ decorator = i => i }: Options) {
  * used as the srcDoc of the iframe
  * @param className
  */
-export const iFrameCustomBlockFn = (className: string) => (
-  element: HTMLElement
-) => {
-  if (element.classList.contains(className)) {
-    const srcDoc = `${element.outerHTML}`
+export const iFrameCustomBlockFn =
+  (className: string) => (element: HTMLElement) => {
+    if (element.classList.contains(className)) {
+      const srcDoc = `${element.outerHTML}`
 
-    // To prevent being removed in stateFromHtml
-    element.innerHTML = '\u200B'
+      // To prevent being removed in stateFromHtml
+      element.innerHTML = '\u200B'
 
-    return {
-      type: 'atomic',
-      data: {
-        srcDoc
+      return {
+        type: 'atomic',
+        data: {
+          srcDoc
+        }
       }
     }
   }
-}
 
 export const renderIFrame = (block: ContentBlock) => {
   const data = block.getData()

@@ -6,32 +6,31 @@ import { renderAtomicBlockStyles } from './render-atomic-block-styles'
 import { renderAttributes } from './render-attributes'
 import { stylesToString } from './styles-to-string'
 
-export const renderImage = (getEditorState: () => EditorState | null) => (
-  block: ContentBlock
-) => {
-  const entityKey = block.getEntityAt(0)
+export const renderImage =
+  (getEditorState: () => EditorState | null) => (block: ContentBlock) => {
+    const entityKey = block.getEntityAt(0)
 
-  const editorState = getEditorState()
+    const editorState = getEditorState()
 
-  if (entityKey && editorState) {
-    const entity = editorState.getCurrentContent().getEntity(entityKey)
+    if (entityKey && editorState) {
+      const entity = editorState.getCurrentContent().getEntity(entityKey)
 
-    if (entity.getType().toLocaleLowerCase() === 'image') {
-      const data = entity.getData()
-      const atomicStyles = renderAtomicBlockStyles(data)
-      const imgAttrsStr = renderAtomicBlockAttrs(data)
+      if (entity.getType().toLocaleLowerCase() === 'image') {
+        const data = entity.getData()
+        const atomicStyles = renderAtomicBlockStyles(data)
+        const imgAttrsStr = renderAtomicBlockAttrs(data)
 
-      const img = `<img style="${atomicStyles}" ${imgAttrsStr} />`
+        const img = `<img style="${atomicStyles}" ${imgAttrsStr} />`
 
-      const { attributes = {}, style = {} } = blockStyleFn(block) || {}
+        const { attributes = {}, style = {} } = blockStyleFn(block) || {}
 
-      const styleString = stylesToString({ margin: 0, ...style })
+        const styleString = stylesToString({ margin: 0, ...style })
 
-      const attrsString = renderAttributes(attributes)
+        const attrsString = renderAttributes(attributes)
 
-      return `<figure style="${styleString}" ${attrsString}>${img}</figure>`
+        return `<figure style="${styleString}" ${attrsString}>${img}</figure>`
+      }
     }
-  }
 
-  return undefined
-}
+    return undefined
+  }

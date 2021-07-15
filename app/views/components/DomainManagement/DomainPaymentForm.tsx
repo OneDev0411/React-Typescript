@@ -87,9 +87,10 @@ function DomainPaymentForm({
     )
   }
 
-  const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] = event => {
-    setActiveSubmit(event.complete)
-  }
+  const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] =
+    event => {
+      setActiveSubmit(event.complete)
+    }
 
   const fieldErrorText = data?.error?.message
 

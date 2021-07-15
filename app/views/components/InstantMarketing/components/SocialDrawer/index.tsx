@@ -32,9 +32,8 @@ export default function SocialDrawer({
 }: Props) {
   const dispatch = useDispatch()
 
-  const [templateInstance, setTemplateInstance] = useState<
-    Optional<IMarketingTemplateInstance>
-  >(passedInstance)
+  const [templateInstance, setTemplateInstance] =
+    useState<Optional<IMarketingTemplateInstance>>(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
   useDeepCompareEffect(() => {

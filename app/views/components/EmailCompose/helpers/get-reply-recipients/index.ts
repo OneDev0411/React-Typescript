@@ -5,9 +5,7 @@ import { EmailThreadEmail } from '../../../EmailThread/types'
  * Given an email, returns to and cc recipient arrays for Reply action.
  * The logic is captured from Gmail
  */
-export function getReplyRecipients(
-  email: EmailThreadEmail
-): {
+export function getReplyRecipients(email: EmailThreadEmail): {
   to: IDenormalizedEmailRecipientEmailInput[]
   cc: IDenormalizedEmailRecipientEmailInput[]
 } {

@@ -20,21 +20,24 @@ export function AttachmentsList(props: FieldRenderProps<any>) {
   return (
     <Box mt={2}>
       {Array.isArray(props.input.value) &&
-        (props.input
-          .value as EmailFormValues['attachments']).map(attachment => (
-          <FileAttachment
-            key={isFileAttachment(attachment) ? attachment.id : attachment.url}
-            file={attachment}
-            onDelete={() => handleRemove(attachment)}
-          />
-        ))}
+        (props.input.value as EmailFormValues['attachments']).map(
+          attachment => (
+            <FileAttachment
+              key={
+                isFileAttachment(attachment) ? attachment.id : attachment.url
+              }
+              file={attachment}
+              onDelete={() => handleRemove(attachment)}
+            />
+          )
+        )}
       <Field
         name="uploadingAttachments"
         onFinish={(file: IFile) => {
-          props.input.onChange(([
+          props.input.onChange([
             ...(props.input.value || []),
             file
-          ] as EmailFormValues['attachments']) as any)
+          ] as EmailFormValues['attachments'] as any)
         }}
         component={UploadingAttachmentsList}
       />

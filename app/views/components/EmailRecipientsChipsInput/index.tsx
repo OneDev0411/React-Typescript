@@ -137,8 +137,11 @@ function EmailRecipientsChipsInput({
     )
   }
 
-  const { InputProps = {}, inputProps = {}, ...TextFieldProps } =
-    chipsInputProps.TextFieldProps || {}
+  const {
+    InputProps = {},
+    inputProps = {},
+    ...TextFieldProps
+  } = chipsInputProps.TextFieldProps || {}
 
   const createEmailRecipient: (
     email: string

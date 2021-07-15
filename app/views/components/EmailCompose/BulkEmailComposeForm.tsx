@@ -58,9 +58,8 @@ export function BulkEmailComposeForm({
   const user = useSelector(selectUser)
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
-  const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
-    filterAccounts
-  )
+  const [allAccounts, isLoadingAccounts] =
+    useGetAllOauthAccounts(filterAccounts)
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,

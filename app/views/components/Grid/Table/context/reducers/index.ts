@@ -95,9 +95,8 @@ export function reducer(state = initialState, action: Pick<Action, any>) {
         let isSelected = draft.selection.selectedRowIds.includes(action.id)
 
         if (isSelected) {
-          draft.selection.selectedRowIds = draft.selection.selectedRowIds.filter(
-            id => id !== action.id
-          )
+          draft.selection.selectedRowIds =
+            draft.selection.selectedRowIds.filter(id => id !== action.id)
 
           draft.selection.isAllRowsSelected = false
 

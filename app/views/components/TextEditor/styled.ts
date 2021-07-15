@@ -23,13 +23,13 @@ export const Separator = styled.span`
   background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
 `
-export const EditorContainer = (styled(Flex).attrs({ column: true })<{
+export const EditorContainer = styled(Flex).attrs({ column: true })<{
   minHeight: boolean | CSSProperties['minHeight']
 }>`
   flex: 1 1 0%;
   min-height: ${({ minHeight }) =>
     minHeight === true ? '12.5rem' : minHeight || undefined};
-` as unknown) as ComponentType<
+` as unknown as ComponentType<
   ComponentProps<typeof Flex> & {
     minHeight: boolean | CSSProperties['minHeight']
   }

@@ -78,10 +78,8 @@ export function TeamAgentsDrawer({
     try {
       const response = await searchContacts(user.email)
 
-      contacts = normalizeContactAttribute(
-        response
-      ).filter((contact: IContact) =>
-        (contact.emails || []).includes(user.email)
+      contacts = normalizeContactAttribute(response).filter(
+        (contact: IContact) => (contact.emails || []).includes(user.email)
       )
     } catch (e) {
       console.log(e)

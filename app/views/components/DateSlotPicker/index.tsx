@@ -39,9 +39,8 @@ export default function DateSlotPicker({
   const classes = useStyles()
   const days = eachDayOfInterval({ start, end })
   const [initialSlide, setInitialSlide] = useState<number>(0)
-  const [controlledSwiper, setControlledSwiper] = useState<
-    Nullable<SwiperCore>
-  >(null)
+  const [controlledSwiper, setControlledSwiper] =
+    useState<Nullable<SwiperCore>>(null)
 
   useDeepCompareEffect(() => {
     if (!active || days.length === 0) {

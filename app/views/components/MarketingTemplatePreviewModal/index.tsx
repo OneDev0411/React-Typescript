@@ -30,9 +30,8 @@ function PreviewModal(props: Props) {
     return null
   }
 
-  const { thumbnail: imgSrcTiny, original: imgSrc } = getTemplateImage(
-    selectedTemplate
-  )
+  const { thumbnail: imgSrcTiny, original: imgSrc } =
+    getTemplateImage(selectedTemplate)
 
   let modalProps: ComponentProps<typeof ImagePreviewModal> = {
     isOpen: props.isOpen,

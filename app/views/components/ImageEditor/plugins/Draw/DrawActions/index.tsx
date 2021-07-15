@@ -53,10 +53,8 @@ export function DrawActions({ editor, onChangeActiveAction }: Props) {
     'FREE_DRAWING'
   )
 
-  const [
-    activeObject,
-    setActiveObject
-  ] = useState<tuiImageEditor.IGraphicObjectProps | null>(null)
+  const [activeObject, setActiveObject] =
+    useState<tuiImageEditor.IGraphicObjectProps | null>(null)
   const [brushWidth, setBrushWidth] = useState(5)
   const [brushColor, setBrushColor] = useState('#000')
 

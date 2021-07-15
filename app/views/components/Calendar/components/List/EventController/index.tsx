@@ -20,9 +20,11 @@ export function EventController({
   onEventChange,
   onScheduledEmailChange
 }: Props) {
-  const { selectedEvent: event, setSelectedEvent, contact } = useContext(
-    ListContext
-  )
+  const {
+    selectedEvent: event,
+    setSelectedEvent,
+    contact
+  } = useContext(ListContext)
 
   const eventDrawer =
     event && ['crm_task', 'crm_association'].includes(event.object_type) ? (

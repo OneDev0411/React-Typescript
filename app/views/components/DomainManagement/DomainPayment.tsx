@@ -30,7 +30,11 @@ function DomainPayment({
   const [showForm, setShowForm] = useState(false)
   const wizard = useWizardContext()
 
-  const { data: customers, run, isLoading: isLoadingCustomers } = useAsync({
+  const {
+    data: customers,
+    run,
+    isLoading: isLoadingCustomers
+  } = useAsync({
     data: defaultCustomers
   })
 

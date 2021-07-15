@@ -216,6 +216,7 @@ const normalizeValues = (values, options, state) => {
   if (listing_statuses.length === 0) {
     let alertMsg = 'Please select at least one listing status.'
 
+    // eslint-disable-next-line no-alert
     window.alert(alertMsg)
 
     throw new SubmissionError({

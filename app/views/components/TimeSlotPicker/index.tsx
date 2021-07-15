@@ -43,9 +43,8 @@ export default function TimeSlotPicker({
 
   const slots = getTimeSlotsInRange(start, end, duration)
   const [initialSlide, setInitialSlide] = useState<number>(0)
-  const [controlledSwiper, setControlledSwiper] = useState<
-    Nullable<SwiperCore>
-  >(null)
+  const [controlledSwiper, setControlledSwiper] =
+    useState<Nullable<SwiperCore>>(null)
 
   const isSlotDisabled = useCallback(
     (slot: TimeRange) => {

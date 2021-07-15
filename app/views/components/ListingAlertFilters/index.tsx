@@ -17,9 +17,8 @@ export default function ListingAlertFilters({
   limit,
   onApply
 }: Props) {
-  const [alertFiltersAnchor, setAlertFiltersAnchor] = useState<
-    Nullable<HTMLButtonElement>
-  >(null)
+  const [alertFiltersAnchor, setAlertFiltersAnchor] =
+    useState<Nullable<HTMLButtonElement>>(null)
 
   function handleShowAlertFiltersDialog(event: MouseEvent<HTMLButtonElement>) {
     setAlertFiltersAnchor(event.currentTarget)

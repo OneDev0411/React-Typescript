@@ -38,10 +38,8 @@ const useStyles = makeStyles(
 export function MarketingTemplateSelector(props: Props) {
   const { templates, isLoading, error } = useTemplatesHistory()
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
-  const [
-    selectedTemplate,
-    setSelectedTemplate
-  ] = useState<IMarketingTemplateInstance | null>(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<IMarketingTemplateInstance | null>(null)
 
   const classes = useStyles()
 

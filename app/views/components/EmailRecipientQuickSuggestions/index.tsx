@@ -235,7 +235,9 @@ export function EmailRecipientQuickSuggestions({
                       <ListItemText
                         primary={
                           text ||
-                          (recipient as IDenormalizedEmailRecipientBrandInput).brand.name.trim()
+                          (
+                            recipient as IDenormalizedEmailRecipientBrandInput
+                          ).brand.name.trim()
                         }
                       />
                     </ListItem>

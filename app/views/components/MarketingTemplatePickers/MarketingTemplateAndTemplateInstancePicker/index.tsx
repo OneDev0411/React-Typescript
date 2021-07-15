@@ -13,9 +13,8 @@ export default function MarketingTemplateAndTemplateInstancePicker({
   templateTypes,
   ...props
 }: MarketingTemplateAndTemplateInstancePickerProps) {
-  const [selectedTab, setSelectedTab] = useState<MyDesignsOrTemplateType>(
-    'MyDesigns'
-  )
+  const [selectedTab, setSelectedTab] =
+    useState<MyDesignsOrTemplateType>('MyDesigns')
 
   return (
     <Grid container>

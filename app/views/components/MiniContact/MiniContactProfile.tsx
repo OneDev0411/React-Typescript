@@ -27,10 +27,8 @@ interface MiniContactPropsType {
 
 function MiniContact(props: MiniContactPropsType) {
   // It should be here because after leaving out the mouse, it will be lost if it's inside the component
-  const [
-    actionSettings,
-    setActionSettings
-  ] = React.useState<ActionSettingsType>({})
+  const [actionSettings, setActionSettings] =
+    React.useState<ActionSettingsType>({})
   const [anchorEl, setAnchorEl] = React.useState(null)
   const theme = useTheme()
 

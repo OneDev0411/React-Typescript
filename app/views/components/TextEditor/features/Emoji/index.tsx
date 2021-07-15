@@ -45,11 +45,8 @@ export function EmojiFeature({ closeOnSelection = true }: Props) {
     setEditorState,
     getEditorState: () => editorStateRef.current
   })
-  const {
-    EmojiSuggestionProps,
-    PopperProps,
-    positionSuggestions
-  } = usePopperizedEmojiSuggestions()
+  const { EmojiSuggestionProps, PopperProps, positionSuggestions } =
+    usePopperizedEmojiSuggestions()
 
   const emojiTheme = useEmojiStyles()
   const theme = useMemo(

@@ -117,9 +117,8 @@ export function Footer({
 
   const buttonClasses = useButtonStyles()
   const [isDeleting, setDeleting] = useState(false)
-  const [isEmailTemplateDrawerOpen, setEmailTemplateDrawerOpen] = useState(
-    false
-  )
+  const [isEmailTemplateDrawerOpen, setEmailTemplateDrawerOpen] =
+    useState(false)
   const [isMcTemplateDrawerOpen, setMcTemplateDrawerOpen] = useState(false)
 
   const busy = isDeleting || formState.submitting

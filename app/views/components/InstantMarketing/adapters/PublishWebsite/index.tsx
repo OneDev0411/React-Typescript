@@ -47,14 +47,11 @@ function PublishWebsite({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  const {
-    publishWebsite,
-    isPublishing,
-    publishButtonLabel
-  } = usePublishWebsite(result => {
-    setWebsiteData(result.website)
-    openDomainManagement()
-  })
+  const { publishWebsite, isPublishing, publishButtonLabel } =
+    usePublishWebsite(result => {
+      setWebsiteData(result.website)
+      openDomainManagement()
+    })
 
   const handleCloseBuilder = () => {
     setIsBuilderOpen(false)

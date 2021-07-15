@@ -32,7 +32,8 @@ export function useEditorSelectionAnchor(
       )
 
       if (selectionContainerElement && visibleSelectionRect) {
-        const selectionContainerBBox = selectionContainerElement.getBoundingClientRect()
+        const selectionContainerBBox =
+          selectionContainerElement.getBoundingClientRect()
         const leftOffset =
           visibleSelectionRect.left - selectionContainerBBox.left
         const left = selectionContainerBBox.left + leftOffset
@@ -42,7 +43,8 @@ export function useEditorSelectionAnchor(
           clientWidth: 10,
           clientHeight: 10,
           getBoundingClientRect: () => {
-            const selectionContainerBBox = selectionContainerElement.getBoundingClientRect()
+            const selectionContainerBBox =
+              selectionContainerElement.getBoundingClientRect()
 
             const top = selectionContainerBBox.top + topOffset
 

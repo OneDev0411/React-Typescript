@@ -12,49 +12,51 @@ interface CreateRequestTask {
   notifyMessage: string
 }
 
-export const createRequestTask = ({
-  checklist,
-  userId,
-  dealId,
-  taskTitle,
-  taskComment,
-  notifyMessage,
-  taskType
-}: CreateRequestTask) => async dispatch => {
-  let task: IDealTask | null
+export const createRequestTask =
+  ({
+    checklist,
+    userId,
+    dealId,
+    taskTitle,
+    taskComment,
+    notifyMessage,
+    taskType
+  }: CreateRequestTask) =>
+  async dispatch => {
+    let task: IDealTask | null
 
-  try {
-    task = await dispatch(
-      createTask({
-        dealId,
-        taskTitle,
-        checklistId: checklist.id,
-        taskType
-      })
-    )
-  } catch (e) {
+    try {
+      task = await dispatch(
+        createTask({
+          dealId,
+          taskTitle,
+          checklistId: checklist.id,
+          taskType
+        })
+      )
+    } catch (e) {
+      dispatch(
+        notify({
+          message: 'Could not finish the request. please try again.',
+          status: 'error'
+        })
+      )
+
+      return null
+    }
+
+    if (taskComment) {
+      createTaskComment(task as IDealTask, userId, taskComment)
+    }
+
+    dispatch(changeNeedsAttention(dealId, task!.id, true))
+
     dispatch(
       notify({
-        message: 'Could not finish the request. please try again.',
-        status: 'error'
+        message: notifyMessage,
+        status: 'success'
       })
     )
 
-    return null
+    return task
   }
-
-  if (taskComment) {
-    createTaskComment(task as IDealTask, userId, taskComment)
-  }
-
-  dispatch(changeNeedsAttention(dealId, task!.id, true))
-
-  dispatch(
-    notify({
-      message: notifyMessage,
-      status: 'success'
-    })
-  )
-
-  return task
-}

@@ -28,9 +28,8 @@ export function EmailThreadDrawerByThreadKey({
   threadKey,
   ...drawerProps
 }: Props) {
-  const { fetchThread, thread, loading, error } = useEmailThreadLoader(
-    threadKey
-  )
+  const { fetchThread, thread, loading, error } =
+    useEmailThreadLoader(threadKey)
   const [markedAsReadThreadId, setMarkAsReadThreadId] = useState<
     UUID | undefined
   >(undefined)

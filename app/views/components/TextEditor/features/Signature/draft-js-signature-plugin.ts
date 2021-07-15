@@ -184,29 +184,29 @@ type SignatureCustomBlockFn = (className: string) => CustomBlockFn
  * A helper function to be used in stateToHtml options in order to
  * add a css class to signature blocks
  */
-export const signatureBlockStyleFn: SignatureBlockStyleFn = (
-  className = 'signature'
-) => block => {
-  if (block.getData().get('isSignature')) {
-    return {
-      attributes: {
-        class: className
+export const signatureBlockStyleFn: SignatureBlockStyleFn =
+  (className = 'signature') =>
+  block => {
+    if (block.getData().get('isSignature')) {
+      return {
+        attributes: {
+          class: className
+        }
       }
     }
   }
-}
 
-export const signatureCustomBlockFn: SignatureCustomBlockFn = (
-  className = 'signature'
-) => (element: HTMLElement) => {
-  if (element.classList.contains(className)) {
-    return {
-      data: {
-        isSignature: true
+export const signatureCustomBlockFn: SignatureCustomBlockFn =
+  (className = 'signature') =>
+  (element: HTMLElement) => {
+    if (element.classList.contains(className)) {
+      return {
+        data: {
+          isSignature: true
+        }
       }
     }
   }
-}
 
 function getSignatureSeparator() {
   return stateFromHTML('<div>--</div>')

@@ -8,26 +8,28 @@ import { setSearchLocation } from '../set-search-location'
 
 import getListingsByValert from './by-valert'
 
-const getListingsByPolygonPoints = (points = []) => (dispatch, getState) => {
-  if (points.length === 0) {
-    return Promise.resolve()
-  }
+const getListingsByPolygonPoints =
+  (points = []) =>
+  (dispatch, getState) => {
+    if (points.length === 0) {
+      return Promise.resolve()
+    }
 
-  const options = {
-    ...getState().search.options,
-    limit: 200,
-    points,
-    postal_codes: null,
-    ...allLocationBasedFilterOptions
-  }
+    const options = {
+      ...getState().search.options,
+      limit: 200,
+      points,
+      postal_codes: null,
+      ...allLocationBasedFilterOptions
+    }
 
-  batchActions([
-    dispatch(resetAreasOptions()),
-    dispatch(setSearchInput('')),
-    dispatch(setSearchLocation(null)),
-    dispatch({ type: SEARCH_BY_POLYGON_POINTS }),
-    dispatch(getListingsByValert(options))
-  ])
-}
+    batchActions([
+      dispatch(resetAreasOptions()),
+      dispatch(setSearchInput('')),
+      dispatch(setSearchLocation(null)),
+      dispatch({ type: SEARCH_BY_POLYGON_POINTS }),
+      dispatch(getListingsByValert(options))
+    ])
+  }
 
 export default getListingsByPolygonPoints

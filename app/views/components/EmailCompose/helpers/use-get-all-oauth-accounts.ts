@@ -20,9 +20,8 @@ export function useGetAllOauthAccounts(
   )
 
   const dispatch = useDispatch()
-  const allAccounts: IOAuthAccount[] = selectAllConnectedAccounts(
-    oAuthAccounts
-  ).filter(filterAccounts)
+  const allAccounts: IOAuthAccount[] =
+    selectAllConnectedAccounts(oAuthAccounts).filter(filterAccounts)
 
   useEffectOnce(() => {
     Object.entries(oAuthAccounts.loading).forEach(

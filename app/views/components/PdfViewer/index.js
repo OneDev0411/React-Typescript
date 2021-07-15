@@ -122,9 +122,8 @@ export class PdfViewer extends React.Component {
   }
 
   goToNextPage = () => {
-    const visiblePage = this.state.visiblePages[
-      this.state.visiblePages.length - 1
-    ]
+    const visiblePage =
+      this.state.visiblePages[this.state.visiblePages.length - 1]
 
     if (!visiblePage) {
       return false

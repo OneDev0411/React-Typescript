@@ -16,9 +16,7 @@ interface GoogleLocation {
   unit: string
 }
 
-export function useSearchLocation(
-  criteria: string
-): {
+export function useSearchLocation(criteria: string): {
   isSearching: boolean
   isEmptyState: boolean
   places: google.maps.places.AutocompletePrediction[]

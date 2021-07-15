@@ -25,9 +25,8 @@ export function BasicMultiSelectDropdown({
   applyChangesOnClose = false,
   ...basicDropdownProps
 }: Props) {
-  const [pendingSelectedItems, setPendingSelectedItems] = useState(
-    selectedItems
-  )
+  const [pendingSelectedItems, setPendingSelectedItems] =
+    useState(selectedItems)
 
   const currentSelectedItems = applyChangesOnClose
     ? pendingSelectedItems

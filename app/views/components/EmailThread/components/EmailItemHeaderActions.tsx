@@ -77,18 +77,20 @@ export function EmailItemHeaderActions(
     'mail.modify'
   )
 
-  const select = (action, hasAccess = true) => () => {
-    if (!hasAccess) {
-      return
+  const select =
+    (action, hasAccess = true) =>
+    () => {
+      if (!hasAccess) {
+        return
+      }
+
+      onClose()
+
+      // to ensure action is run when menu is closed. This ensures autofocus
+      // behavior isn't broken in any content that is toggled into view as a
+      // result of running this action
+      setTimeout(action)
     }
-
-    onClose()
-
-    // to ensure action is run when menu is closed. This ensures autofocus
-    // behavior isn't broken in any content that is toggled into view as a
-    // result of running this action
-    setTimeout(action)
-  }
 
   return (
     <Box ml={1} onClick={e => e.stopPropagation()}>

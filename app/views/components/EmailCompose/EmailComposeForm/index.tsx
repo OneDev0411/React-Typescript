@@ -87,16 +87,13 @@ export default function EmailComposeForm<T>({
   const hasSubject = !!initialValues.subject
   const autofocusBody = hasRecipients && hasSubject
 
-  const [topFieldsCollapsed, setTopFieldsCollapsed] = useState<boolean>(
-    hasRecipients
-  )
+  const [topFieldsCollapsed, setTopFieldsCollapsed] =
+    useState<boolean>(hasRecipients)
   const editorRef = useRef<TextEditorRef>(null)
-  const [
-    marketingTemplate,
-    setMarketingTemplate
-  ] = useState<IMarketingTemplateInstance | null>(
-    initialValues.templateInstance ?? null
-  )
+  const [marketingTemplate, setMarketingTemplate] =
+    useState<IMarketingTemplateInstance | null>(
+      initialValues.templateInstance ?? null
+    )
 
   const dispatch = useDispatch()
 

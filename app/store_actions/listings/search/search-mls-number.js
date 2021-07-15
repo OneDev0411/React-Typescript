@@ -18,10 +18,8 @@ const searchByMlsNumber = mlsNumber => async (dispatch, getState) => {
     if (listing) {
       dispatch(setSearchType(SEARCH_BY_MLS_NUMBER))
 
-      const {
-        latitude: lat,
-        longitude: lng
-      } = listing.property.address.location
+      const { latitude: lat, longitude: lng } =
+        listing.property.address.location
 
       const place = { center: { lat, lng }, zoom: 17 }
 

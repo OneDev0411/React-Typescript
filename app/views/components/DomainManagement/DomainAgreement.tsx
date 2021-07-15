@@ -41,7 +41,11 @@ function DomainAgreement({
   const classes = useStyles()
   const wizard = useWizardContext()
   const [checked, setChecked] = useState(false)
-  const { run, data: agreements, isLoading } = useAsync({
+  const {
+    run,
+    data: agreements,
+    isLoading
+  } = useAsync({
     data: defaultAgreementList
   })
 

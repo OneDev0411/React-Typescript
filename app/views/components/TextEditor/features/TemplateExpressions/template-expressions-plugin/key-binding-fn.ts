@@ -11,39 +11,44 @@ import { getExpressionInOffset } from './utils/get-expression-in-offset'
  * @param getEditorState
  * @param setEditorState
  */
-export const keyBindingFn = ({
-  getEditorState,
-  setEditorState
-}: Pick<PluginFunctions, 'setEditorState' | 'getEditorState'>) => e => {
-  const editorState = getEditorState()
-  const selection = editorState.getSelection()
+export const keyBindingFn =
+  ({
+    getEditorState,
+    setEditorState
+  }: Pick<PluginFunctions, 'setEditorState' | 'getEditorState'>) =>
+  e => {
+    const editorState = getEditorState()
+    const selection = editorState.getSelection()
 
-  if (e.key === 'Backspace' && selection.isCollapsed()) {
-    const block = editorState
-      .getCurrentContent()
-      .getBlockForKey(selection.getAnchorKey())
+    if (e.key === 'Backspace' && selection.isCollapsed()) {
+      const block = editorState
+        .getCurrentContent()
+        .getBlockForKey(selection.getAnchorKey())
 
-    const expression = getExpressionInOffset(block, selection.getAnchorOffset())
-
-    if (expression) {
-      const newEditorState = EditorState.push(
-        editorState,
-        Modifier.removeRange(
-          editorState.getCurrentContent(),
-          selection.merge({
-            anchorOffset: expression.from,
-            focusOffset: expression.to
-          }) as SelectionState,
-          'forward'
-        ),
-        'backspace-character'
+      const expression = getExpressionInOffset(
+        block,
+        selection.getAnchorOffset()
       )
 
-      setEditorState(newEditorState)
+      if (expression) {
+        const newEditorState = EditorState.push(
+          editorState,
+          Modifier.removeRange(
+            editorState.getCurrentContent(),
+            selection.merge({
+              anchorOffset: expression.from,
+              focusOffset: expression.to
+            }) as SelectionState,
+            'forward'
+          ),
+          'backspace-character'
+        )
 
-      return 'remove-expression' // just to prevent default behavior
+        setEditorState(newEditorState)
+
+        return 'remove-expression' // just to prevent default behavior
+      }
     }
-  }
 
-  return undefined
-}
+    return undefined
+  }

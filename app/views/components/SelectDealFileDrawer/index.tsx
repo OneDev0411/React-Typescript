@@ -48,9 +48,8 @@ function SelectDealFileDrawer({
   getDeal,
   onClose
 }: Props & StateProps & DispatchProps) {
-  const [selectedItems, setSelectedItems] = useState<IDealFile[]>(
-    defaultSelectedItems
-  )
+  const [selectedItems, setSelectedItems] =
+    useState<IDealFile[]>(defaultSelectedItems)
 
   const fullDeal = getDealById(dealId)
 

@@ -140,17 +140,16 @@ export const TextEditor = forwardRef(
 
     useEffect(() => {}, [])
 
-    const dropzoneProps: Partial<
-      ComponentType<typeof Dropzone>
-    > = getDropzoneProps({
-      disabled: !onAttachmentDropped,
-      accept: onAttachmentDropped ? '*/*' : undefined,
-      onDrop: (files: File[]) => {
-        if (files && files[0] && onAttachmentDropped) {
-          onAttachmentDropped(files)
+    const dropzoneProps: Partial<ComponentType<typeof Dropzone>> =
+      getDropzoneProps({
+        disabled: !onAttachmentDropped,
+        accept: onAttachmentDropped ? '*/*' : undefined,
+        onDrop: (files: File[]) => {
+          if (files && files[0] && onAttachmentDropped) {
+            onAttachmentDropped(files)
+          }
         }
-      }
-    })
+      })
 
     const handlerWrapperClick = e => {
       // It's important to check if it's the wrapper which is clicked

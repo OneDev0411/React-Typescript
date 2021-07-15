@@ -62,9 +62,8 @@ export default function ImageSelectDialog({
   const [selectedTab, setSelectedTab] = useState<TabValue>('upload-photo')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
-  const [imageFileToEdit, setImageFileToEdit] = useState<
-    Nullable<File | string>
-  >(null)
+  const [imageFileToEdit, setImageFileToEdit] =
+    useState<Nullable<File | string>>(null)
 
   const isSearchableTabActive = isSearchableTab(selectedTab)
 

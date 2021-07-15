@@ -31,34 +31,35 @@ export function usePopperizedEmojiSuggestions(): UsePopperizedEmojiSuggestions {
   const [anchorEl, setAnchorEl] = useState<ReferenceObject | null>(null)
   const anchorElRef = useLatestValueRef(anchorEl)
 
-  const positionSuggestions: EmojiPluginConfig['positionSuggestions'] = useCallback(
-    ({ decoratorRect, state: { isActive } }) => {
-      const prevRect =
-        anchorElRef.current && anchorElRef.current.getBoundingClientRect()
-      const targetChanged =
-        !prevRect ||
-        prevRect.left !== decoratorRect.left ||
-        prevRect.right !== decoratorRect.right ||
-        prevRect.top !== decoratorRect.top ||
-        prevRect.bottom !== decoratorRect.bottom
+  const positionSuggestions: EmojiPluginConfig['positionSuggestions'] =
+    useCallback(
+      ({ decoratorRect, state: { isActive } }) => {
+        const prevRect =
+          anchorElRef.current && anchorElRef.current.getBoundingClientRect()
+        const targetChanged =
+          !prevRect ||
+          prevRect.left !== decoratorRect.left ||
+          prevRect.right !== decoratorRect.right ||
+          prevRect.top !== decoratorRect.top ||
+          prevRect.bottom !== decoratorRect.bottom
 
-      if (targetChanged) {
-        setAnchorEl({
-          clientHeight: decoratorRect.height,
-          clientWidth: decoratorRect.width,
-          getBoundingClientRect: () => decoratorRect
-        })
-      }
+        if (targetChanged) {
+          setAnchorEl({
+            clientHeight: decoratorRect.height,
+            clientWidth: decoratorRect.width,
+            getBoundingClientRect: () => decoratorRect
+          })
+        }
 
-      if (popperRef.current) {
-        popperRef.current.update()
-      }
+        if (popperRef.current) {
+          popperRef.current.update()
+        }
 
-      return {}
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [anchorElRef]
-  )
+        return {}
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [anchorElRef]
+    )
 
   return {
     positionSuggestions,

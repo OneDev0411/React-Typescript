@@ -32,10 +32,10 @@ export function From({ accounts, children, users }: Props) {
   const fromField = useField('from')
   const error = fromField.meta.error
 
-  const items = useMemo(() => [...(accounts || []), ...users], [
-    users,
-    accounts
-  ])
+  const items = useMemo(
+    () => [...(accounts || []), ...users],
+    [users, accounts]
+  )
 
   const renderItemToValue = (item: IUser | IOAuthAccount) => {
     switch (item.type) {

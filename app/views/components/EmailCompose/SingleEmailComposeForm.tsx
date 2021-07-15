@@ -59,9 +59,8 @@ export function SingleEmailComposeForm({
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
 
-  const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
-    filterAccounts
-  )
+  const [allAccounts, isLoadingAccounts] =
+    useGetAllOauthAccounts(filterAccounts)
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
@@ -101,44 +100,42 @@ export function SingleEmailComposeForm({
       : createEmailCampaign(emailData)
   }
 
-  const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] = (
-    template,
-    values
-  ) => {
-    if (!template) {
-      setIndividualMode(false)
+  const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] =
+    (template, values) => {
+      if (!template) {
+        setIndividualMode(false)
 
-      return true
-    }
+        return true
+      }
 
-    const ccBcc = [...(values.cc || []), ...(values.bcc || [])]
+      const ccBcc = [...(values.cc || []), ...(values.bcc || [])]
 
-    if (ccBcc.length === 0) {
-      setIndividualMode(true)
+      if (ccBcc.length === 0) {
+        setIndividualMode(true)
 
-      return true
-    }
+        return true
+      }
 
-    return new Promise(resolve =>
-      dispach(
-        confirmation({
-          message: 'You have recipients in the Cc and Bcc fields',
-          description:
-            'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
-          confirmLabel: 'Yes',
-          cancelLabel: 'Cancel',
-          onConfirm: () => {
-            values.to = [...(values.to || []), ...ccBcc]
-            delete values.cc
-            delete values.bcc
-            setIndividualMode(true)
-            resolve(true)
-          },
-          onCancel: () => resolve(false)
-        })
+      return new Promise(resolve =>
+        dispach(
+          confirmation({
+            message: 'You have recipients in the Cc and Bcc fields',
+            description:
+              'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
+            confirmLabel: 'Yes',
+            cancelLabel: 'Cancel',
+            onConfirm: () => {
+              values.to = [...(values.to || []), ...ccBcc]
+              delete values.cc
+              delete values.bcc
+              setIndividualMode(true)
+              resolve(true)
+            },
+            onCancel: () => resolve(false)
+          })
+        )
       )
-    )
-  }
+    }
 
   const initialToFieldValue = initialValues?.to
   const [toFieldValue, setToFieldValue] = useState(initialToFieldValue)

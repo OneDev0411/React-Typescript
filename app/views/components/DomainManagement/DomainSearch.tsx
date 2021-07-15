@@ -27,7 +27,11 @@ function DomainSearch({
 }: DomainSearchProps) {
   const wizard = useWizardContext()
 
-  const { data: searchResults, run, isLoading } = useAsync({
+  const {
+    data: searchResults,
+    run,
+    isLoading
+  } = useAsync({
     data: defaultSearchResult
   })
 

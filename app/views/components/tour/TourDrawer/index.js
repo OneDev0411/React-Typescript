@@ -47,6 +47,7 @@ import { validate } from './helpers/validate'
 import { Footer } from './styled'
 
 const propTypes = {
+  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Drawer.propTypes,
   tour: PropTypes.any,
   tourId: PropTypes.any,

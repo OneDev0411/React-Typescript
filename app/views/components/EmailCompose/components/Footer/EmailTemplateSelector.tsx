@@ -79,10 +79,8 @@ function EmailTemplateSelector({
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
-  const [
-    editingTemplate,
-    setEditingTemplate
-  ] = useState<IBrandEmailTemplate | null>(null)
+  const [editingTemplate, setEditingTemplate] =
+    useState<IBrandEmailTemplate | null>(null)
 
   const openNewTemplateDrawer = () => {
     setEditingTemplate(null)

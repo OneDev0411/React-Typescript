@@ -22,9 +22,10 @@ function useLoadListingsData(enable: boolean): [ICompactListing[], any] {
     }
   }, [enable, brandId, run])
 
-  const sortedDealsList = useMemo(() => getMlsDrawerInitialDeals(dealsList), [
-    dealsList
-  ])
+  const sortedDealsList = useMemo(
+    () => getMlsDrawerInitialDeals(dealsList),
+    [dealsList]
+  )
 
   return [brandListings, sortedDealsList]
 }
