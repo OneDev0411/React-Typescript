@@ -44,7 +44,6 @@ function ListingsListColumnActionsMoreButton({
     <>
       <MoreActionsButton
         {...otherProps}
-        disablePortal
         popperPlacement="bottom-end"
         RenderMenu={({ closeMenu }) => (
           <List dense>
