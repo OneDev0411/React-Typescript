@@ -1,4 +1,4 @@
-export const ACL: Record<
+export type AccessRecord = Record<
   | 'CRM'
   | 'ADMIN'
   | 'DEALS'
@@ -10,7 +10,8 @@ export const ACL: Record<
   | 'WEBSITES'
   | 'SHOWINGS',
   IPermission
-> = {
+>
+export const ACL: AccessRecord = {
   CRM: 'CRM',
   ADMIN: 'Admin',
   DEALS: 'Deals',
