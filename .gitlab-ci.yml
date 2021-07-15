@@ -22,7 +22,7 @@ deploy_beta:
   before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
-    - gem install dpl
+    - gem install dpl --pre
   script:
     - dpl heroku api --api_key $HEROKU_API_KEY --strategy api --app rechat-irish
   environment:
@@ -37,7 +37,7 @@ deploy_production:
   before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
-    - gem install dpl
+    - gem install dpl --pre
   script:
     - dpl heroku api --api_key $HEROKU_API_KEY --strategy api --app rechat-web
   environment:
