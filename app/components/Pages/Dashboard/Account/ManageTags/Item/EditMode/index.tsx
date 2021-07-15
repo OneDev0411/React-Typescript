@@ -4,10 +4,12 @@ import {
   Button,
   Popover,
   TextField,
+  Typography,
   makeStyles,
-  Typography
+  InputAdornment
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -133,6 +135,15 @@ export function EditMode({
             defaultValue={touchDate}
             InputLabelProps={{
               shrink: true
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {touchDate && touchDate > 0
+                    ? pluralize('Day', touchDate)
+                    : 'Day'}
+                </InputAdornment>
+              )
             }}
             variant="outlined"
             className={classes.inputField}
