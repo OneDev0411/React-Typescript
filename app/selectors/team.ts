@@ -54,6 +54,29 @@ export function selectActiveTeam(state: IAppState): IUserTeam {
 }
 
 /**
+ * Returns the active team roles for the current user if exists
+ * @param state The app state
+ */
+export function selectActiveTeamRolesUnsafe(state: IAppState): IBrandRole[] {
+  return selectActiveTeamUnsafe(state)?.brand.roles ?? []
+}
+
+/**
+ * Returns the active team roles for the current user or throw an error
+ * if there is no active team roles
+ * @param state The app state
+ */
+export function selectActiveTeamRoles(state: IAppState): IBrandRole[] {
+  const activeTeamRoles = selectActiveTeam(state).brand.roles
+
+  if (!activeTeamRoles) {
+    throw new Error('The current user does not have an active team roles')
+  }
+
+  return activeTeamRoles
+}
+
+/**
  * Returns the available members for the current active team
  * @param state The app state
  */
