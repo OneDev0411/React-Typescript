@@ -6,3 +6,7 @@ export interface AppcuesUserInfo {
   userType: TUserType
   createdAt: number
 }
+
+export interface Location {
+  pathname: string
+}
