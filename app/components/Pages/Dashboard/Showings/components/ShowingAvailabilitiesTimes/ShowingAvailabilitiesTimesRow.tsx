@@ -109,14 +109,14 @@ function ShowingAvailabilitiesTimesRow({
 
     if (values.end <= values.start) {
       errors[FORM_ERROR] =
-        'The "From" value must be earlier than the "To" value'
+        'The "From" value must be earlier than the "To" value.'
     } else if (
       values.start &&
       values.end &&
       getSecondsDifference(values.end, values.start) < showingDuration
     ) {
       errors[FORM_ERROR] =
-        'The "From" and "To" difference must be more than showing duration'
+        'Time difference between "From" and "To" values should exceed Showing duration.'
     }
 
     return errors

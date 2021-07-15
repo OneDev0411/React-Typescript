@@ -65,7 +65,7 @@ function ShowingRoleList({
 
       notify({
         status: 'success',
-        message: 'The new participant added successfully.'
+        message: 'A new participant was added successfully.'
       })
     })
   }
