@@ -121,7 +121,7 @@ export const WaitForFields = ({
           variant="outlined"
           color="secondary"
           value={unit}
-          disabled={disabled}
+          disabled={disabled || value == 0}
           onChange={handleUnitChange}
           classes={{
             outlined: classes.outlinedPadding
@@ -129,7 +129,7 @@ export const WaitForFields = ({
         >
           {unitOptions.map(option => (
             <MenuItem key={option.value} value={option.value}>
-              {value > 0 ? pluralize(option.title, value) : option.title}
+              {pluralize(option.title, value)}
             </MenuItem>
           ))}
         </Select>
@@ -142,7 +142,7 @@ export const WaitForFields = ({
           variant="outlined"
           color="secondary"
           value={triggerAt}
-          disabled={disabled}
+          disabled={disabled || value == 0}
           onChange={handleTriggerAtChange}
           classes={{
             outlined: classes.outlinedPadding
