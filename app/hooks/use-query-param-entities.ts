@@ -31,7 +31,7 @@ export function useListingById(
   useEffect(() => {
     async function fetchListing() {
       if (!listingId) {
-        const mockedListing = ((await getMockListing()) as unknown) as IListing
+        const mockedListing = (await getMockListing()) as unknown as IListing
 
         const images: string[] = serializedListingImages
           ? serializedListingImages.split(',').map(decode)

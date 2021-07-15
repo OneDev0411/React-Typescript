@@ -2,19 +2,19 @@ image: node:14
 
 stages:
   - test
-  - deploy
   - review
+  - deploy
 
 test_unit:
-  needs: []
   stage: test
   only:
     - merge_requests
   script:
-    - npm i -g npm
-    - npm i
+    - npm i -g npm@latest
+    - npm i --legacy-peer-deps
     - npm run types:check
     - npm run test:ci -- --coverage
+  needs: []
 
 deploy_beta:
   stage: deploy
@@ -24,7 +24,7 @@ deploy_beta:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+    - dpl heroku api --api_key $HEROKU_API_KEY --strategy api --app rechat-irish
   environment:
     name: beta
     url: https://beta.rechat.com
@@ -39,7 +39,7 @@ deploy_production:
     - apt-get install -y ruby-dev
     - gem install dpl
   script:
-    - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
+    - dpl heroku api --api_key $HEROKU_API_KEY --strategy api --app rechat-web
   environment:
     name: production
     url: https://app.rechat.com
