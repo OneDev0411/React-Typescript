@@ -43,17 +43,11 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
 
-  const [approvalType, setApprovalType] = useState<
-    Nullable<IShowingApprovalType>
-  >(null)
+  const [approvalType, setApprovalType] =
+    useState<Nullable<IShowingApprovalType>>(null)
 
-  const {
-    roles,
-    editRole,
-    addRole,
-    deleteRole,
-    fillRolesWithPropertyRoles
-  } = useShowingRoles()
+  const { roles, editRole, addRole, deleteRole, fillRolesWithPropertyRoles } =
+    useShowingRoles()
 
   const [instructions, setInstructions] = useState<Nullable<string>>(null)
 
@@ -80,21 +74,20 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     const errors: CreateShowingErrors = {}
 
     if (!property) {
-      errors.property = 'You need to select a property'
+      errors.property = 'Please choose a property.'
     }
 
     if (hasTimeConflicts(availabilities)) {
-      errors.availabilities = 'The time slots have conflicts'
+      errors.availabilities = 'Selected time ranges have conflicts.'
     } else if (hasInvalidTimeRange(availabilities, duration)) {
-      errors.availabilities = 'Invalid time ranges'
+      errors.availabilities = 'Invalid time ranges.'
     }
 
     const roleCache: Record<string, boolean> = {}
 
     roles.forEach(role => {
       if (role.role === 'SellerAgent' && !role.user) {
-        errors[`role-${role.id}`] =
-          'You need to select one of the available people from the menu.'
+        errors[`role-${role.id}`] = 'Please choose a person from the menu.'
 
         return
       }
@@ -107,7 +100,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         role.mode === 'form'
       ) {
         errors[`role-${role.id}`] =
-          'Please complete the form and click on the Save button'
+          'Please complete the form and click on Save button.'
 
         return
       }
@@ -123,7 +116,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         .trim()
 
       if (roleCache[roleCacheKey]) {
-        errors[`role-${role.id}`] = 'Role information is duplicated'
+        errors[`role-${role.id}`] = 'Role information is duplicated.'
       }
 
       roleCache[roleCacheKey] = true
@@ -183,7 +176,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   }
 
   const validationError: Nullable<string> = showingValidationErrors
-    ? 'You need to fix the validation errors to continue the process'
+    ? 'Please fix the errors above to continue.'
     : null
 
   return (

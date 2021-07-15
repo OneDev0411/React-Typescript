@@ -36,12 +36,11 @@ export function DealCoAgent({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
   const allowedRoles = getAllowedRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
@@ -83,7 +82,6 @@ export function DealCoAgent({
             isOpen
             compact
             deal={deal}
-            user={user}
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}

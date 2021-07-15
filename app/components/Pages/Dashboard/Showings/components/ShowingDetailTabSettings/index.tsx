@@ -59,7 +59,7 @@ function ShowingDetailTabSettings({
     if (errors) {
       notify({
         status: 'error',
-        message: 'Please fix the validation issues'
+        message: 'Please fix the errors.'
       })
 
       return
@@ -93,7 +93,7 @@ function ShowingDetailTabSettings({
 
       notify({
         status: 'success',
-        message: 'The showing saved successfully'
+        message: 'The Showing was saved successfully.'
       })
     })
   }
@@ -112,16 +112,16 @@ function ShowingDetailTabSettings({
 
     if (showing.availabilities !== showingRef.current.availabilities) {
       if (hasTimeConflicts(showing.availabilities)) {
-        errors.Availability = 'The time slots have conflicts'
+        errors.Availability = 'Selected time ranges have conflicts.'
       } else if (
         hasInvalidTimeRange(showing.availabilities, showing.duration)
       ) {
-        errors.Availability = 'Invalid time ranges'
+        errors.Availability = 'Invalid time ranges.'
       }
     }
 
     if (showing.instructions && showing.instructions.trim() === '') {
-      errors.Instructions = 'Please enter a valid text'
+      errors.Instructions = "The access information can't be blank."
     }
 
     setErrors(Object.keys(errors).length ? errors : null)

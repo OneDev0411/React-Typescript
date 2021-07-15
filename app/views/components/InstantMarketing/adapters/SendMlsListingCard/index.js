@@ -23,7 +23,19 @@ import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-d
 import { getTemplateTypes } from '../../helpers/get-template-types'
 
 const propTypes = {
-  isMultiListing: PropTypes.bool
+  isMultiListing: PropTypes.bool,
+  hasExternalTrigger: PropTypes.bool,
+  isTriggered: PropTypes.bool,
+  isTemplatesColumnHiddenDefault: PropTypes.bool,
+  mediums: PropTypes.string,
+  types: PropTypes.arrayOf(PropTypes.string),
+  listing: PropTypes.object,
+  selectedTemplate: PropTypes.object,
+  selectedRows: PropTypes.array,
+  handleTrigger: PropTypes.func,
+  disabled: PropTypes.bool,
+  buttonRenderer: PropTypes.func,
+  listings: PropTypes.arrayOf(PropTypes.object)
 }
 
 const defaultProps = {

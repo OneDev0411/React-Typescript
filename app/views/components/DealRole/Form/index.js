@@ -40,7 +40,9 @@ const propTypes = {
   showBrokerageFields: PropTypes.bool,
   compact: PropTypes.bool,
   onUpsertRole: PropTypes.func,
-  onDeleteRole: PropTypes.func
+  onDeleteRole: PropTypes.func,
+  showSaveContactButton: PropTypes.bool,
+  dealSide: PropTypes.string
 }
 
 const defaultProps = {

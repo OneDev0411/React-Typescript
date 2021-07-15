@@ -7,10 +7,10 @@ type UseQueryParam = [string, (value: string) => void]
 export function useQueryParamValue(name: string): string {
   const location = useLocation()
 
-  const value = useMemo(() => new URLSearchParams(location.search).get(name), [
-    location.search,
-    name
-  ])
+  const value = useMemo(
+    () => new URLSearchParams(location.search).get(name),
+    [location.search, name]
+  )
 
   return decodeURIComponent(value || '')
 }

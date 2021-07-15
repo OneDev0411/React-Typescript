@@ -54,7 +54,7 @@ export function Thumbnail({
 
       const listing = await getMockListing()
 
-      setListing((listing as unknown) as IListing)
+      setListing(listing as unknown as IListing)
     }
 
     fetchListingIfNeeded()

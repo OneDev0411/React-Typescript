@@ -69,14 +69,6 @@
     "@stripe/stripe-js": "^1.11.0",
     "@types/cookie-session": "^2.0.41",
     "@types/react-window": "^1.8.0",
-    "@visx/axis": "^1.7.0",
-    "@visx/curve": "^1.7.0",
-    "@visx/group": "^1.7.0",
-    "@visx/marker": "^1.7.0",
-    "@visx/mock-data": "^1.7.0",
-    "@visx/responsive": "^1.7.0",
-    "@visx/scale": "^1.7.0",
-    "@visx/shape": "^1.7.0",
     "array-move": "^2.2.1",
     "axios": "^0.21.0",
     "babel-plugin-dynamic-import-node": "^2.3.3",
@@ -415,6 +407,6 @@
   },
   "engines": {
     "node": "14.x",
-    "npm": "7.x"
+    "npm": "6.x"
   }
 }

@@ -59,7 +59,10 @@ const propTypes = {
   dealNotifyOffice: PropTypes.bool,
   submitCallback: PropTypes.func,
   deleteCallback: PropTypes.func,
-  user: PropTypes.shape().isRequired
+  user: PropTypes.shape().isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func.isRequired,
+  associations: PropTypes.shape({ deal: PropTypes.object })
 }
 
 const defaultProps = {

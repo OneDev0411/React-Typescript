@@ -76,7 +76,7 @@ function ShowingRoleListColumnActions({
       })
       notify({
         status: 'success',
-        message: 'The participant updated successfully.'
+        message: 'The participant information was updated successfully.'
       })
     })
   }
@@ -87,7 +87,7 @@ function ShowingRoleListColumnActions({
       onDelete(role.id)
       notify({
         status: 'success',
-        message: 'The participant deleted successfully.'
+        message: 'The participant was deleted successfully.'
       })
     })
   }

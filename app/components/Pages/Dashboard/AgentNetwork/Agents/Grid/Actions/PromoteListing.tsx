@@ -9,7 +9,7 @@ import { convertToTemplate } from 'utils/marketing-center/helpers'
 
 import { ListingWithProposedAgent } from '../../types'
 
-const MEDIUMS: IMarketingTemplateMedium[] = ['Email']
+const MEDIUM: IMarketingTemplateMedium = 'Email'
 const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'OpenHouse',
   'JustSold',
@@ -26,9 +26,8 @@ interface Props {
 
 export default function PromoteListing({ user, listing, agents }: Props) {
   const [isPromoteClicked, setIsPromoteClicked] = useState<boolean>(false)
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   function handlePromoteClick() {
     setIsPromoteClicked(true)
@@ -67,7 +66,7 @@ export default function PromoteListing({ user, listing, agents }: Props) {
         <MarketingTemplateAndTemplateInstancePickerModal
           user={user}
           templateTypes={TEMPLATE_TYPES}
-          mediums={MEDIUMS}
+          mediums={[MEDIUM]}
           onSelect={handleSelectTemplate}
           onClose={handleCloseTemplatePickerModal}
         />
@@ -77,7 +76,7 @@ export default function PromoteListing({ user, listing, agents }: Props) {
           hasExternalTrigger
           isTriggered
           isTemplatesColumnHiddenDefault={false}
-          mediums={MEDIUMS}
+          mediums={MEDIUM}
           types={TEMPLATE_TYPES}
           listing={listing}
           selectedTemplate={selectedTemplate}
