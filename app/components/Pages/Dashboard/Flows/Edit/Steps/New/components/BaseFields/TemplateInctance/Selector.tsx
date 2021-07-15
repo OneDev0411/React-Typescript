@@ -141,14 +141,12 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [selectedBrandTemplate, setSelectedBrandTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(currentBrandTemplate)
+  const [selectedBrandTemplate, setSelectedBrandTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(currentBrandTemplate)
   const [selectedTemplateInstance, setSelectedTemplateInstace] = useState<
     Nullable<IMarketingTemplateInstance>
   >(currentTemplateInstance)

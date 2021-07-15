@@ -84,24 +84,16 @@ export default function BookSection({ showing, onBook }: Props) {
     mode: 'onChange'
   })
 
-  const {
-    startDate,
-    endDate,
-    defaultSelectedDate,
-    unavailableDates
-  } = getBookableDateRange(showing)
+  const { startDate, endDate, defaultSelectedDate, unavailableDates } =
+    getBookableDateRange(showing)
   const selectedDate = useWatch({
     name: 'date',
     control,
     defaultValue: defaultSelectedDate
   })
 
-  const {
-    startTime,
-    endTime,
-    defaultSelectedTimeRange,
-    unavailableTimes
-  } = useBookTimeRange(showing, selectedDate)
+  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+    useBookTimeRange(showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
     control,

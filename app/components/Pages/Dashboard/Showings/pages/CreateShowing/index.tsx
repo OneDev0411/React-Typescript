@@ -49,17 +49,11 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   const [property, setProperty] = useState<Nullable<ShowingPropertyType>>(null)
 
-  const [approvalType, setApprovalType] = useState<
-    Nullable<IShowingApprovalType>
-  >(null)
+  const [approvalType, setApprovalType] =
+    useState<Nullable<IShowingApprovalType>>(null)
 
-  const {
-    roles,
-    editRole,
-    addRole,
-    deleteRole,
-    fillRolesWithPropertyRoles
-  } = useShowingRoles()
+  const { roles, editRole, addRole, deleteRole, fillRolesWithPropertyRoles } =
+    useShowingRoles()
 
   const [instructions, setInstructions] = useState<Nullable<string>>(null)
 

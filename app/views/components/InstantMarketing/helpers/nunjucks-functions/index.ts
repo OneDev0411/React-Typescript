@@ -6,6 +6,14 @@ import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
 import config from '../../../../../../config/public'
 
 export function getListingUrl(activeBrand: IBrand, listing: IListing) {
+  if (!listing) {
+    return ''
+  }
+
+  if (listing.url) {
+    return listing.url
+  }
+
   const brand = flattenBrand(activeBrand)
   const listing_url = brand && brand.messages ? brand.messages.listing_url : ''
 

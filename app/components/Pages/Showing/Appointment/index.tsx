@@ -34,9 +34,8 @@ export default function ShowingAppointment({
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   if (isLoading || !appointment) {
     return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />

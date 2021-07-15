@@ -45,9 +45,8 @@ function ShowingDetailTabVisitors({
   const classes = useStyles()
   const { data: contacts, run, isLoading } = useAsync<IContact[]>({ data: [] })
 
-  const appointmentsByVisitorId = useShowingGroupAppointmentByVisitorId(
-    appointments
-  )
+  const appointmentsByVisitorId =
+    useShowingGroupAppointmentByVisitorId(appointments)
 
   useEffect(() => {
     run(

@@ -256,6 +256,15 @@ const AsyncListingSinglePage = Load({
     )
 })
 
+const AsyncListingMarketing = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Listings/Marketing' /* webpackChunkName: "listing_marketing" */
+      )
+  })
+)
+
 /* ==================================== */
 //  Agent Network
 /* ==================================== */
@@ -970,6 +979,10 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route
+          path="/dashboard/mls/:id/marketing"
+          component={AsyncListingMarketing}
+        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
