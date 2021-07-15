@@ -148,83 +148,87 @@ const mapHOC = compose(
     }
   }),
   withHandlers({
-    generateClusters: ({ setClusters }) => (markers = [], mapProps) => {
-      const getCluster = supercluster(markers, {
-        // min zoom to generate clusters on
-        minZoom: 12,
-        // max zoom level to cluster the points on
-        maxZoom: DECLUSTER_ZOOM_LEVEL - 1,
-        radius: 60 // cluster radius in pixels
-      })
+    generateClusters:
+      ({ setClusters }) =>
+      (markers = [], mapProps) => {
+        const getCluster = supercluster(markers, {
+          // min zoom to generate clusters on
+          minZoom: 12,
+          // max zoom level to cluster the points on
+          maxZoom: DECLUSTER_ZOOM_LEVEL - 1,
+          radius: 60 // cluster radius in pixels
+        })
 
-      let clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
-        points,
-        lat: wy,
-        lng: wx
-      }))
+        let clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
+          points,
+          lat: wy,
+          lng: wx
+        }))
 
-      if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
-        clusters = setCssPositionToListingsWithSameBuilding(clusters)
+        if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
+          clusters = setCssPositionToListingsWithSameBuilding(clusters)
+        }
+
+        setClusters(clusters)
       }
-
-      setClusters(clusters)
-    }
   }),
   withHandlers({
-    onChange: ({
-      map,
-      isInit,
-      searchType,
-      setMapProps,
-      resetSearchType,
-      setOffMapAutoMove,
-      getListingsByMapBounds,
-      updateUserLocation
-    }) => (gmap = {}) => {
-      if (map.props.center && map.props.zoom) {
-        updateUserLocation({ center: map.props.center, zoom: map.props.zoom })
-      }
-
-      if (!isInit) {
-        return
-      }
-
-      const { bounds } = gmap
-
-      setMapProps('search', gmap)
-
-      if (map.autoMove) {
-        setOffMapAutoMove()
-
-        // search by our api
-        if (searchType === 'by_map_bounds') {
-          console.log('searchType === by_map_bounds')
-          getListingsByMapBounds(bounds)
+    onChange:
+      ({
+        map,
+        isInit,
+        searchType,
+        setMapProps,
+        resetSearchType,
+        setOffMapAutoMove,
+        getListingsByMapBounds,
+        updateUserLocation
+      }) =>
+      (gmap = {}) => {
+        if (map.props.center && map.props.zoom) {
+          updateUserLocation({ center: map.props.center, zoom: map.props.zoom })
         }
 
-        if (searchType === 'by_google_suggests') {
-          getListingsByMapBounds(bounds)
-          resetSearchType()
+        if (!isInit) {
+          return
         }
 
-        if (searchType === 'by_filters_areas') {
-          resetSearchType()
+        const { bounds } = gmap
+
+        setMapProps('search', gmap)
+
+        if (map.autoMove) {
+          setOffMapAutoMove()
+
+          // search by our api
+          if (searchType === 'by_map_bounds') {
+            console.log('searchType === by_map_bounds')
+            getListingsByMapBounds(bounds)
+          }
+
+          if (searchType === 'by_google_suggests') {
+            getListingsByMapBounds(bounds)
+            resetSearchType()
+          }
+
+          if (searchType === 'by_filters_areas') {
+            resetSearchType()
+          }
+
+          return
         }
 
-        return
-      }
-
-      if (!mapOnChangeDebounce) {
-        mapOnChangeDebounce = 1
-        getListingsByMapBounds(bounds)
-      } else {
-        clearTimeout(mapOnChangeDebounce)
-        mapOnChangeDebounce = setTimeout(() => {
+        if (!mapOnChangeDebounce) {
+          mapOnChangeDebounce = 1
           getListingsByMapBounds(bounds)
+        } else {
           clearTimeout(mapOnChangeDebounce)
-        }, 300)
+          mapOnChangeDebounce = setTimeout(() => {
+            getListingsByMapBounds(bounds)
+            clearTimeout(mapOnChangeDebounce)
+          }, 300)
+        }
       }
-    }
   }),
   withHandlers({
     getMapProps: () => googleMapObj => ({
@@ -234,55 +238,50 @@ const mapHOC = compose(
     })
   }),
   withHandlers({
-    onGoogleApiLoaded: ({
-      markers,
-      setIsInit,
-      map,
-      onChange,
-      getMapProps,
-      fitBoundsByPoints
-    }) => ({ map: googleMap }) => {
-      googleMap.id = 'SEARCH_MAP'
-      window.currentMap = googleMap
+    onGoogleApiLoaded:
+      ({ markers, setIsInit, map, onChange, getMapProps, fitBoundsByPoints }) =>
+      ({ map: googleMap }) => {
+        googleMap.id = 'SEARCH_MAP'
+        window.currentMap = googleMap
 
-      const { shape, points: drawingPoints } = map.drawing
+        const { shape, points: drawingPoints } = map.drawing
 
-      if (drawingPoints.length > 0) {
-        shape.setMap(googleMap)
-        fitBoundsByPoints(
-          drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
-            lat,
-            lng
-          }))
-        )
-      }
-
-      if (markers.length > 0 && !map.autoMove) {
-        if (drawingPoints.length === 0 && Object.keys(map.props).length === 0) {
-          const normalizedMarkers = normalizeListingsForMarkers(markers)
-
-          fitBoundsByPoints(normalizedMarkers)
+        if (drawingPoints.length > 0) {
+          shape.setMap(googleMap)
+          fitBoundsByPoints(
+            drawingPoints.map(({ latitude: lat, longitude: lng }) => ({
+              lat,
+              lng
+            }))
+          )
         }
 
-        const timeoutID = setTimeout(() => {
+        if (markers.length > 0 && !map.autoMove) {
+          if (
+            drawingPoints.length === 0 &&
+            Object.keys(map.props).length === 0
+          ) {
+            const normalizedMarkers = normalizeListingsForMarkers(markers)
+
+            fitBoundsByPoints(normalizedMarkers)
+          }
+
+          const timeoutID = setTimeout(() => {
+            setIsInit(true)
+            clearTimeout(timeoutID)
+          }, 1000)
+        } else {
           setIsInit(true)
-          clearTimeout(timeoutID)
-        }, 1000)
-      } else {
-        setIsInit(true)
-        onChange(getMapProps(googleMap))
+          onChange(getMapProps(googleMap))
+        }
+      },
+    onClickRemovePolygon:
+      ({ map, removePolygon, inactiveDrawing, getListingsByMapBounds }) =>
+      () => {
+        removePolygon(map.drawing.shape)
+        inactiveDrawing()
+        getListingsByMapBounds(map.props.marginBounds || map.props.bounds)
       }
-    },
-    onClickRemovePolygon: ({
-      map,
-      removePolygon,
-      inactiveDrawing,
-      getListingsByMapBounds
-    }) => () => {
-      removePolygon(map.drawing.shape)
-      inactiveDrawing()
-      getListingsByMapBounds(map.props.marginBounds || map.props.bounds)
-    }
   }),
   withPropsOnChange(
     (props, nextProps) =>

@@ -96,9 +96,7 @@ interface StateProps {
   user: IUser
   envelopes: IDealEnvelope[]
   isBackOffice: boolean
-  setSelectedTask(
-    task: any
-  ): {
+  setSelectedTask(task: any): {
     type: string
     task: any
   }
@@ -484,15 +482,14 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
-const withContext = (Component: typeof ActionsButton) => (
-  props: Props & StateProps
-) => {
-  const [state, dispatch] = useChecklistActionsContext()
+const withContext =
+  (Component: typeof ActionsButton) => (props: Props & StateProps) => {
+    const [state, dispatch] = useChecklistActionsContext()
 
-  return (
-    <Component {...props} actionsState={state} actionsDispatch={dispatch} />
-  )
-}
+    return (
+      <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+    )
+  }
 
 export default connect(mapStateToProps, {
   setSelectedTask

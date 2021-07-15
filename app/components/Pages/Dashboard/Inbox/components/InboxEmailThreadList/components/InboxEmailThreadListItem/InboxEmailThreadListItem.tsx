@@ -33,10 +33,10 @@ export default function InboxEmailThreadListItem({
 }: Props) {
   const user = useSelector(selectUser)
 
-  const recipients = useMemo(() => getRecipientNamesText(user, emailThread), [
-    user,
-    emailThread
-  ])
+  const recipients = useMemo(
+    () => getRecipientNamesText(user, emailThread),
+    [user, emailThread]
+  )
 
   const messageDate = new Date(emailThread.last_message_date * 1000)
   const messageDateText = fecha.format(messageDate, 'MMMM D, YYYY - h:mm A')
@@ -49,18 +49,12 @@ export default function InboxEmailThreadListItem({
     messageDate < today ? 'D\u00A0MMM' : 'h:mm\u00A0A'
   )
 
-  const {
-    setEmailThreadReadStatus,
-    setEmailThreadReadStatusDisabled
-  } = useEmailThreadReadStatusSetter(emailThread.id, emailThread.is_read)
-  const {
-    deleteEmailThread,
-    deleteEmailThreadDisabled
-  } = useEmailThreadDeleter(emailThread.id)
-  const {
-    archiveEmailThread,
-    archiveEmailThreadDisabled
-  } = useEmailThreadArchiver(emailThread.id)
+  const { setEmailThreadReadStatus, setEmailThreadReadStatusDisabled } =
+    useEmailThreadReadStatusSetter(emailThread.id, emailThread.is_read)
+  const { deleteEmailThread, deleteEmailThreadDisabled } =
+    useEmailThreadDeleter(emailThread.id)
+  const { archiveEmailThread, archiveEmailThreadDisabled } =
+    useEmailThreadArchiver(emailThread.id)
 
   const classes = useInboxEmailThreadListItemStyles()
 

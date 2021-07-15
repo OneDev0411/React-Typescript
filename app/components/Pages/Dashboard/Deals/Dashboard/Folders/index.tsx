@@ -36,13 +36,11 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
     checklists: deals.checklists
   }))
 
-  const [showTerminatedFolders, setShowTerminatedFolders] = useState<boolean>(
-    false
-  )
+  const [showTerminatedFolders, setShowTerminatedFolders] =
+    useState<boolean>(false)
 
-  const [showDeactivatedFolders, setShowDeactivatedFolders] = useState<boolean>(
-    false
-  )
+  const [showDeactivatedFolders, setShowDeactivatedFolders] =
+    useState<boolean>(false)
 
   useEffect(() => {
     const hasNotifications = (checklist: IDealChecklist, tasks: Tasks) => {

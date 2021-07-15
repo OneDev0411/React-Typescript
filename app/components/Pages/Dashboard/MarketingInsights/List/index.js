@@ -48,14 +48,8 @@ function List(props) {
     ? InsightFilterType.SCHEDULED
     : InsightFilterType.SENT
 
-  const {
-    isLoading,
-    hasError,
-    list,
-    counts,
-    reloadList,
-    reloadItem
-  } = useListData(props.user, filterType)
+  const { isLoading, hasError, list, counts, reloadList, reloadItem } =
+    useListData(props.user, filterType)
 
   useEffect(() => {
     function handleEmailCampaignSentEvent(event) {

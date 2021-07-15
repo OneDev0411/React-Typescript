@@ -79,9 +79,8 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const currentTemplate = selectedTemplate || currentValue?.campaign?.template

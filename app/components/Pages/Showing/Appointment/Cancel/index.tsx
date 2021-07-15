@@ -57,9 +57,8 @@ export default function ShowingAppointmentCancel({
     mode: 'onChange'
   })
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   const handleSubmitCancelForm = async ({ message }: FormFields) => {
     const normalizedMessage = message.trim() || undefined

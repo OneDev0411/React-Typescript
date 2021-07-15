@@ -26,13 +26,10 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
   const [isOpen, setIsOpen] = useState(true)
   const [masterId, setMasterId] = useState(contact.id)
-  const [isContactsListDrawerOpen, setIsContactsListDrawerOpen] = useState(
-    false
-  )
-  const [
-    duplicateContacts,
-    setDuplicateContacts
-  ] = useState<DuplicateContacts | null>(null)
+  const [isContactsListDrawerOpen, setIsContactsListDrawerOpen] =
+    useState(false)
+  const [duplicateContacts, setDuplicateContacts] =
+    useState<DuplicateContacts | null>(null)
 
   const fetchDuplicates = useCallback(async () => {
     try {

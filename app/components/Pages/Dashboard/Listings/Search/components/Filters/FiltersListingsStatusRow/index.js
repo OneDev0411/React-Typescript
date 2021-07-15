@@ -110,11 +110,10 @@ export default compose(
     ({ hasSwitchToggle }) => hasSwitchToggle
   ),
   withHandlers({
-    onClickAccordionTriggger: ({
-      accordionIsActive,
-      triggerAccordion
-    }) => () => {
-      triggerAccordion(!accordionIsActive)
-    }
+    onClickAccordionTriggger:
+      ({ accordionIsActive, triggerAccordion }) =>
+      () => {
+        triggerAccordion(!accordionIsActive)
+      }
   })
 )(FiltersListingsStatus)

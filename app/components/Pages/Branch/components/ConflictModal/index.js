@@ -8,14 +8,8 @@ import RedirectModal from '../RedirectModal'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  let {
-    to,
-    email,
-    userInfo,
-    redirectTo,
-    messageText,
-    actionButtonProps
-  } = params
+  let { to, email, userInfo, redirectTo, messageText, actionButtonProps } =
+    params
   let is_shadow
 
   if (userInfo) {

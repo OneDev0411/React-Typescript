@@ -35,16 +35,12 @@ export default function Signin(props: Props) {
     props.location.state?.redirectTo || props.location.query?.redirectTo
 
   const [isLookinUp, setIsLookingUp] = useState<boolean>(false)
-  const [
-    lookUpFormSubmitMsg,
-    setLookUpFormSubmitMsg
-  ] = useState<SubmitMessage | null>(null)
+  const [lookUpFormSubmitMsg, setLookUpFormSubmitMsg] =
+    useState<SubmitMessage | null>(null)
 
   const [isLogging, setIsLogging] = useState<boolean>(false)
-  const [
-    signInFormSubmitMsg,
-    setSignInFormSubmitMsg
-  ] = useState<SubmitMessage | null>(null)
+  const [signInFormSubmitMsg, setSignInFormSubmitMsg] =
+    useState<SubmitMessage | null>(null)
   const [isHiddenLookUpForm, setIsHiddenLookUpForm] = useState<boolean>(false)
 
   const handleLookUp = async ({ username }) => {
@@ -63,8 +59,7 @@ export default function Signin(props: Props) {
           await signup(username)
           setLookUpFormSubmitMsg({
             type: 'info',
-            text:
-              "Your email already has been signed up in Rechat. But you didn't complete the registration. We resent a new activation email. Please check your inbox."
+            text: "Your email already has been signed up in Rechat. But you didn't complete the registration. We resent a new activation email. Please check your inbox."
           })
         } else if (response.password) {
           setIsHiddenLookUpForm(true)

@@ -15,9 +15,12 @@ interface UseGetShowingsReturn {
 }
 
 function useGetShowings(): UseGetShowingsReturn {
-  const { data: rows, isLoading, run, setData } = useAsync<
-    IShowing<'showing'>[]
-  >({
+  const {
+    data: rows,
+    isLoading,
+    run,
+    setData
+  } = useAsync<IShowing<'showing'>[]>({
     data: [],
     status: 'pending'
   })

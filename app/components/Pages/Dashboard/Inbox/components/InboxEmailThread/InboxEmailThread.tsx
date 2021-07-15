@@ -121,21 +121,15 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     fetchEmailThread()
   }, [fetchEmailThread])
 
-  const {
-    setEmailThreadReadStatus,
-    setEmailThreadReadStatusDisabled
-  } = useEmailThreadReadStatusSetter(
-    emailThreadId!,
-    (emailThread && emailThread.is_read)!
-  )
-  const {
-    deleteEmailThread,
-    deleteEmailThreadDisabled
-  } = useEmailThreadDeleter(emailThreadId!)
-  const {
-    archiveEmailThread,
-    archiveEmailThreadDisabled
-  } = useEmailThreadArchiver(emailThreadId!)
+  const { setEmailThreadReadStatus, setEmailThreadReadStatusDisabled } =
+    useEmailThreadReadStatusSetter(
+      emailThreadId!,
+      (emailThread && emailThread.is_read)!
+    )
+  const { deleteEmailThread, deleteEmailThreadDisabled } =
+    useEmailThreadDeleter(emailThreadId!)
+  const { archiveEmailThread, archiveEmailThreadDisabled } =
+    useEmailThreadArchiver(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {

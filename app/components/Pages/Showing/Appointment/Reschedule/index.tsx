@@ -36,9 +36,8 @@ export default function ShowingAppointmentReschedule({
   params: { appointmentToken }
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
   const notify = useNotify()
 
   const handleSubmitForm = async (time: string, message: string) => {

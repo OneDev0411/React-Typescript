@@ -183,24 +183,28 @@ export default compose(
     destroyOnUnmount: false
   }),
   withHandlers({
-    onSubmitHandler: ({ submitFiltersForm }) => values => {
-      submitFiltersForm(values)
-    }
+    onSubmitHandler:
+      ({ submitFiltersForm }) =>
+      values => {
+        submitFiltersForm(values)
+      }
   }),
   withHandlers({
-    resetHandler: ({
-      reset,
-      initialValues,
-      submitFiltersForm,
-      submitSucceeded,
-      submitFailed
-    }) => () => {
-      if (submitSucceeded || submitFailed) {
-        reset()
-        submitFiltersForm(initialValues)
-      } else {
-        reset()
+    resetHandler:
+      ({
+        reset,
+        initialValues,
+        submitFiltersForm,
+        submitSucceeded,
+        submitFailed
+      }) =>
+      () => {
+        if (submitSucceeded || submitFailed) {
+          reset()
+          submitFiltersForm(initialValues)
+        } else {
+          reset()
+        }
       }
-    }
   })
 )(Filters)

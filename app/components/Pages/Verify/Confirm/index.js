@@ -100,76 +100,75 @@ export default compose(
   withState('userMessage', 'setUserMessage', null),
   withState('isSubmitting', 'setIsSubmitting', true),
   withHandlers({
-    verifyRequestHandler: ({
-      verifyType,
-      setUserMessage,
-      setIsSubmitting,
-      verifyQueryParams
-    }) => () => {
-      setUserMessage(null)
+    verifyRequestHandler:
+      ({ verifyType, setUserMessage, setIsSubmitting, verifyQueryParams }) =>
+      () => {
+        setUserMessage(null)
 
-      const to =
-        verifyType === 'email'
-          ? verifyQueryParams.body.email
-          : verifyQueryParams.body.phone_number
+        const to =
+          verifyType === 'email'
+            ? verifyQueryParams.body.email
+            : verifyQueryParams.body.phone_number
 
-      verify
-        .request(verifyType)
-        .then(() => {
-          setIsSubmitting(false)
-          setUserMessage({
-            type: 'success',
-            text: `Your previous activation code has expired. We\'ve sent a new verification link to ${to}.`
+        verify
+          .request(verifyType)
+          .then(() => {
+            setIsSubmitting(false)
+            setUserMessage({
+              type: 'success',
+              text: `Your previous activation code has expired. We\'ve sent a new verification link to ${to}.`
+            })
           })
-        })
-        .catch(errorCode => {
-          setIsSubmitting(false)
-          setUserMessage({
-            code: errorCode,
-            type: 'error',
-            text: ERROR_MESSAGE
+          .catch(errorCode => {
+            setIsSubmitting(false)
+            setUserMessage({
+              code: errorCode,
+              type: 'error',
+              text: ERROR_MESSAGE
+            })
           })
-        })
-    }
+      }
   }),
   withHandlers({
-    confirmHandler: ({
-      updateUser,
-      verifyType,
-      verifyQueryParams,
-      setUserMessage,
-      setIsSubmitting,
-      verifyRequestHandler
-    }) => () => {
-      setUserMessage(null)
+    confirmHandler:
+      ({
+        updateUser,
+        verifyType,
+        verifyQueryParams,
+        setUserMessage,
+        setIsSubmitting,
+        verifyRequestHandler
+      }) =>
+      () => {
+        setUserMessage(null)
 
-      verify
-        .confirm(verifyQueryParams)
-        .then(user => {
-          updateUser(user)
-          setIsSubmitting(false)
-          setUserMessage({
-            type: 'success',
-            text: `${
-              verifyType === 'email' ? 'Email' : 'Phone number'
-            } is verified.`
+        verify
+          .confirm(verifyQueryParams)
+          .then(user => {
+            updateUser(user)
+            setIsSubmitting(false)
+            setUserMessage({
+              type: 'success',
+              text: `${
+                verifyType === 'email' ? 'Email' : 'Phone number'
+              } is verified.`
+            })
           })
-        })
-        .catch(errorCode => {
-          if (errorCode === 403) {
-            verifyRequestHandler()
+          .catch(errorCode => {
+            if (errorCode === 403) {
+              verifyRequestHandler()
 
-            return
-          }
+              return
+            }
 
-          setIsSubmitting(false)
-          setUserMessage({
-            code: errorCode,
-            type: 'error',
-            text: ERROR_MESSAGE
+            setIsSubmitting(false)
+            setUserMessage({
+              code: errorCode,
+              type: 'error',
+              text: ERROR_MESSAGE
+            })
           })
-        })
-    }
+      }
   }),
   lifecycle({
     componentDidMount() {

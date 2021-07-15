@@ -119,86 +119,84 @@ export default compose(
   withState('isDeleting', 'setIsDeleting', false),
   withState('submitLabelText', 'setSubmitLabelText', SUBMIT_LABEL_TEXT),
   withHandlers({
-    uploadHandler: ({
-      setCoverImage,
-      setSubmitError,
-      uploadCoverImage,
-      setSubmitLabelText
-    }) => async event => {
-      const reader = new FileReader()
-      const file = event.target.files[0]
+    uploadHandler:
+      ({
+        setCoverImage,
+        setSubmitError,
+        uploadCoverImage,
+        setSubmitLabelText
+      }) =>
+      async event => {
+        const reader = new FileReader()
+        const file = event.target.files[0]
 
-      setSubmitError('')
+        setSubmitError('')
 
-      reader.addEventListener('load', () => {
-        const img = new Image()
-        const _URL = window.URL || window.webkitURL
+        reader.addEventListener('load', () => {
+          const img = new Image()
+          const _URL = window.URL || window.webkitURL
 
-        img.addEventListener('load', async () => {
-          const { width, height, src } = img
-          const size = Math.round(file.size / 1024)
+          img.addEventListener('load', async () => {
+            const { width, height, src } = img
+            const size = Math.round(file.size / 1024)
 
-          try {
-            if (width < MIN_WIDTH || height < MIN_HEIGHT) {
-              throw new Error(
-                'Selected image dimensions is small! Please select a bigger one.'
-              )
+            try {
+              if (width < MIN_WIDTH || height < MIN_HEIGHT) {
+                throw new Error(
+                  'Selected image dimensions is small! Please select a bigger one.'
+                )
+              }
+
+              if (size > MAX_SIZE) {
+                throw new Error(
+                  'Selected image sizes is large! Please select a smaller one.'
+                )
+              }
+
+              setCoverImage(src)
+
+              setSubmitLabelText('Uploading...')
+
+              const user = await uploadCoverImage(file)
+
+              if (user instanceof Error) {
+                throw user
+              }
+
+              setSubmitLabelText(SUBMIT_LABEL_TEXT)
+            } catch ({ message }) {
+              // console.log(message)
+              setCoverImage(null)
+              setSubmitLabelText(SUBMIT_LABEL_TEXT)
+              setSubmitError(message || UNEXPECTED_ERROR)
             }
+          })
 
-            if (size > MAX_SIZE) {
-              throw new Error(
-                'Selected image sizes is large! Please select a smaller one.'
-              )
-            }
-
-            setCoverImage(src)
-
-            setSubmitLabelText('Uploading...')
-
-            const user = await uploadCoverImage(file)
-
-            if (user instanceof Error) {
-              throw user
-            }
-
-            setSubmitLabelText(SUBMIT_LABEL_TEXT)
-          } catch ({ message }) {
-            // console.log(message)
-            setCoverImage(null)
-            setSubmitLabelText(SUBMIT_LABEL_TEXT)
-            setSubmitError(message || UNEXPECTED_ERROR)
-          }
+          img.src = _URL.createObjectURL(file)
         })
 
-        img.src = _URL.createObjectURL(file)
-      })
+        try {
+          reader.readAsDataURL(file)
+        } catch ({ message }) {
+          setSubmitError(message)
+        }
+      },
+    deleteHandler:
+      ({ setValue, editUser, setCoverImage, setIsDeleting, setSubmitError }) =>
+      async () => {
+        setSubmitError('')
+        setIsDeleting(true)
 
-      try {
-        reader.readAsDataURL(file)
-      } catch ({ message }) {
-        setSubmitError(message)
+        try {
+          await editUser({ cover_image_url: '' })
+          setValue('')
+          setCoverImage(null)
+          setIsDeleting(false)
+        } catch (error) {
+          // console.log(error)
+          setIsDeleting(false)
+          setSubmitError(UNEXPECTED_ERROR)
+        }
       }
-    },
-    deleteHandler: ({
-      setValue,
-      editUser,
-      setCoverImage,
-      setIsDeleting,
-      setSubmitError
-    }) => async () => {
-      setSubmitError('')
-      setIsDeleting(true)
-
-      try {
-        await editUser({ cover_image_url: '' })
-        setValue('')
-        setCoverImage(null)
-        setIsDeleting(false)
-      } catch (error) {
-        // console.log(error)
-        setIsDeleting(false)
-        setSubmitError(UNEXPECTED_ERROR)
-      }
-    }
   })
 )(CoverImage)

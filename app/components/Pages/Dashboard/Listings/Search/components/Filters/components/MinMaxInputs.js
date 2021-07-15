@@ -103,14 +103,18 @@ const MinMaxInputs = ({
 export default compose(
   withState('minimumValue', 'setMinimumValue', 0),
   withHandlers({
-    onChangeMin: ({ setMinimumValue }) => value => {
-      setMinimumValue(turnToNumber(value))
-    },
-    validateMinValue: ({ minimumValue, humanNumber }) => value =>
-      value && minimumValue && turnToNumber(value) < minimumValue
-        ? `Must be minimum ${
-            humanNumber ? minimumValue.toLocaleString() : minimumValue
-          }`
-        : undefined
+    onChangeMin:
+      ({ setMinimumValue }) =>
+      value => {
+        setMinimumValue(turnToNumber(value))
+      },
+    validateMinValue:
+      ({ minimumValue, humanNumber }) =>
+      value =>
+        value && minimumValue && turnToNumber(value) < minimumValue
+          ? `Must be minimum ${
+              humanNumber ? minimumValue.toLocaleString() : minimumValue
+            }`
+          : undefined
   })
 )(MinMaxInputs)

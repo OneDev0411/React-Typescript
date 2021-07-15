@@ -55,10 +55,8 @@ export function ContactRoles({
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [
-    debouncedSearchCriteria,
-    setDebouncedSearchCriteria
-  ] = useState<string>('')
+  const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
+    useState<string>('')
 
   const [isSearching, setIsSearching] = useState(false)
   const [rows, setRows] = useState<RowItem[]>([])

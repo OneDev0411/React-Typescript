@@ -72,9 +72,8 @@ function OpenHousesList() {
   const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) || ''
   const activeBrandSettings = getActiveTeamSettings(user, true)
-  const {
-    enable_open_house_requests: showNotifyOfficeBanner
-  } = activeBrandSettings
+  const { enable_open_house_requests: showNotifyOfficeBanner } =
+    activeBrandSettings
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAlertOpen, setAlertToOpen] = useState(true)

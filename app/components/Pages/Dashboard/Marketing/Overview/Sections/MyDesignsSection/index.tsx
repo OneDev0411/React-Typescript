@@ -24,14 +24,11 @@ const useStyles = makeStyles(
 export default function MyDesignsSection() {
   const classes = useStyles()
   const { templates, isLoading } = useTemplatesHistory()
-  const [
-    isTemplateInstanceClicked,
-    setIsTemplateInstanceClicked
-  ] = useState<boolean>(false)
+  const [isTemplateInstanceClicked, setIsTemplateInstanceClicked] =
+    useState<boolean>(false)
 
-  const [selectedTemplateInstance, setSelectedTemplateInstance] = useState<
-    Nullable<IMarketingTemplateInstance>
-  >(null)
+  const [selectedTemplateInstance, setSelectedTemplateInstance] =
+    useState<Nullable<IMarketingTemplateInstance>>(null)
 
   function handleTemplateInstanceClick(template: IMarketingTemplateInstance) {
     setSelectedTemplateInstance(template)

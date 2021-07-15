@@ -44,9 +44,8 @@ export default function CtaAction({ contact }: Props) {
   const user = useSelector(selectUser)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
   const [showEventDrawer, setShowEventDrawer] = useState<boolean>(false)
-  const [showMissingEmailModal, setShowMissingEmailModal] = useState<boolean>(
-    false
-  )
+  const [showMissingEmailModal, setShowMissingEmailModal] =
+    useState<boolean>(false)
   const { id, emails, email, phone_number, users } = contact
   const classes = useStyles()
 

@@ -176,27 +176,29 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      loginParams,
-      setIsSubmitting,
-      setSubmitError,
-      setSubmitSuccessfully
-    }) => ({ password }) => {
-      const { email, token } = loginParams
+    onSubmitHandler:
+      ({
+        loginParams,
+        setIsSubmitting,
+        setSubmitError,
+        setSubmitSuccessfully
+      }) =>
+      ({ password }) => {
+        const { email, token } = loginParams
 
-      setIsSubmitting(true)
+        setIsSubmitting(true)
 
-      updatePassword({ email, password, token })
-        .then(statusCode => {
-          if (statusCode === 200) {
+        updatePassword({ email, password, token })
+          .then(statusCode => {
+            if (statusCode === 200) {
+              setIsSubmitting(false)
+              setSubmitSuccessfully(email)
+            }
+          })
+          .catch(() => {
             setIsSubmitting(false)
-            setSubmitSuccessfully(email)
-          }
-        })
-        .catch(() => {
-          setIsSubmitting(false)
-          setSubmitError(true)
-        })
-    }
+            setSubmitError(true)
+          })
+      }
   })
 )(Reset)

@@ -9,13 +9,10 @@ export default function useEmailThreadReadStatusSetter(
   emailThreadId: UUID,
   readStatus: boolean
 ) {
-  const [
-    settingEmailThreadReadStatus,
-    setSettingEmailThreadReadStatus
-  ] = useState(false)
-  const [lastEmailThreadReadStatus, setLastEmailThreadReadStatus] = useState(
-    readStatus
-  )
+  const [settingEmailThreadReadStatus, setSettingEmailThreadReadStatus] =
+    useState(false)
+  const [lastEmailThreadReadStatus, setLastEmailThreadReadStatus] =
+    useState(readStatus)
 
   useEffect(() => {
     setSettingEmailThreadReadStatus(false)

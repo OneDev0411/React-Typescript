@@ -26,9 +26,8 @@ export default function AgentsGrid({
   agents,
   isLoading
 }: Props) {
-  const [selectedAgentInfo, setSelectedAgentInfo] = useState<
-    Nullable<{ info: AggregatedAgentInfo; side: AgentSide }>
-  >(null)
+  const [selectedAgentInfo, setSelectedAgentInfo] =
+    useState<Nullable<{ info: AggregatedAgentInfo; side: AgentSide }>>(null)
 
   const onCloseDrawer = () => setSelectedAgentInfo(null)
 

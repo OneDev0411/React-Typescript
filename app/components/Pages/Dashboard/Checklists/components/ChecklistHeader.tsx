@@ -64,10 +64,8 @@ export function ChecklistHeader({
   setDeactivatable,
   setTerminable
 }: Props) {
-  const [
-    isDeactivatableChanging,
-    setDeactivatableChanging
-  ] = useDictionary<boolean>()
+  const [isDeactivatableChanging, setDeactivatableChanging] =
+    useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
 

@@ -34,13 +34,8 @@ class CommentInput extends React.Component {
    * also change attention_requested flag and change status of task if requests by BO
    */
   sendComment = async (attention_requested = null, task_status = null) => {
-    const {
-      deal,
-      task,
-      user,
-      changeTaskStatus,
-      changeNeedsAttention
-    } = this.props
+    const { deal, task, user, changeTaskStatus, changeNeedsAttention } =
+      this.props
 
     const { comment } = this.state
 

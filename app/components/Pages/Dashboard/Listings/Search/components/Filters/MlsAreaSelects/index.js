@@ -72,57 +72,58 @@ export default compose(
   withState('subareas', 'setSubareas', []),
   withState('loadingSubareas', 'setLoadingSubareas', false),
   withHandlers({
-    getSubareas: ({ setSubareas, setLoadingSubareas }) => async areas => {
-      setLoadingSubareas(true)
+    getSubareas:
+      ({ setSubareas, setLoadingSubareas }) =>
+      async areas => {
+        setLoadingSubareas(true)
 
-      const subareas = await api.getMlsSubAreas(areas.map(({ value }) => value))
+        const subareas = await api.getMlsSubAreas(
+          areas.map(({ value }) => value)
+        )
 
-      setSubareas(
-        subareas.map(({ title, number, parent }) => ({
-          parent,
-          value: number,
-          label: `${title}: #${number}`
-        }))
-      )
-      setLoadingSubareas(false)
-    }
+        setSubareas(
+          subareas.map(({ title, number, parent }) => ({
+            parent,
+            value: number,
+            label: `${title}: #${number}`
+          }))
+        )
+        setLoadingSubareas(false)
+      }
   }),
   withHandlers({
-    onChangeAreas: ({
-      getSubareas,
-      updateField,
-      selectedAreas,
-      selectedSubareas
-    }) => areas => {
-      if (areas.length === 0) {
-        updateField(formName, 'mlsAreas', [])
+    onChangeAreas:
+      ({ getSubareas, updateField, selectedAreas, selectedSubareas }) =>
+      areas => {
+        if (areas.length === 0) {
+          updateField(formName, 'mlsAreas', [])
 
-        if (selectedSubareas.length > 0) {
-          updateField(formName, 'mlsSubareas', [])
+          if (selectedSubareas.length > 0) {
+            updateField(formName, 'mlsSubareas', [])
+
+            return
+          }
 
           return
         }
 
-        return
-      }
+        // delete subareas when theirs parent deleted.
+        if (areas.length < selectedAreas.length) {
+          const subareas = selectedSubareas.map(subarea => {
+            const hasParent = areas.some(area => subarea.parent === area.value)
 
-      // delete subareas when theirs parent deleted.
-      if (areas.length < selectedAreas.length) {
-        const subareas = selectedSubareas.map(subarea => {
-          const hasParent = areas.some(area => subarea.parent === area.value)
+            if (hasParent) {
+              return subarea
+            }
+          })
 
-          if (hasParent) {
-            return subarea
-          }
-        })
+          getSubareas(areas)
+          updateField(formName, 'mlsSubareas', subareas)
+        }
 
         getSubareas(areas)
-        updateField(formName, 'mlsSubareas', subareas)
+        updateField(formName, 'mlsAreas', areas)
       }
-
-      getSubareas(areas)
-      updateField(formName, 'mlsAreas', areas)
-    }
   }),
   lifecycle({
     componentDidMount() {

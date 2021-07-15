@@ -414,10 +414,8 @@ class SectionWithFields extends React.Component {
 
   renderToggleButton = () => {
     const { toggleEmptyAttributes } = this.state
-    const {
-      expandButtonLabel = 'More Fields',
-      expandButtonIcon = mdiPlus
-    } = this.props
+    const { expandButtonLabel = 'More Fields', expandButtonIcon = mdiPlus } =
+      this.props
 
     return (
       <SectionButton

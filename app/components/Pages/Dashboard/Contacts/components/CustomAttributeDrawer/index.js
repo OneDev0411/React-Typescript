@@ -93,20 +93,17 @@ class CustomAttributeDrawer extends React.Component {
                 {
                   title: 'Date',
                   value: 'date',
-                  hint:
-                    'For custom fields that are date based when capturing values like a birthday or anniversary'
+                  hint: 'For custom fields that are date based when capturing values like a birthday or anniversary'
                 },
                 {
                   title: 'Number',
                   value: 'number',
-                  hint:
-                    "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
+                  hint: "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
                 },
                 {
                   title: 'Text',
                   value: 'text',
-                  hint:
-                    'For custom fields that can accept words, numbers and characters and have unique values and labels'
+                  hint: 'For custom fields that can accept words, numbers and characters and have unique values and labels'
                 }
               ]}
               label="Type"

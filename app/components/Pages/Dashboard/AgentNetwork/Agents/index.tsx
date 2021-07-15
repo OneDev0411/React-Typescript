@@ -33,15 +33,13 @@ function Agents(props: WithRouterProps) {
     libraries: GOOGLE_MAPS_LIBRARIES
   })
 
-  const [listing, setListing] = useState<Nullable<ListingWithProposedAgent>>(
-    null
-  )
+  const [listing, setListing] =
+    useState<Nullable<ListingWithProposedAgent>>(null)
   const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
-  const [filters, setFilters] = useState<
-    Nullable<AlertFiltersWithRadiusAndCenter>
-  >(null)
+  const [filters, setFilters] =
+    useState<Nullable<AlertFiltersWithRadiusAndCenter>>(null)
 
   useEffect(() => {
     async function fetchListingBasedData() {
@@ -97,7 +95,8 @@ function Agents(props: WithRouterProps) {
 
       setFilters(placeBasedFilters)
 
-      const mockedListing = ((await getMockListing()) as unknown) as ListingWithProposedAgent
+      const mockedListing =
+        (await getMockListing()) as unknown as ListingWithProposedAgent
 
       setListing(mockedListing)
     }

@@ -34,9 +34,8 @@ export function BrandSettings() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const activeBrand = getActiveTeamId(user) as UUID
-  const [defaultSettings, setDefaultSettings] = useState<
-    Nullable<BrandMarketingPalette>
-  >(null)
+  const [defaultSettings, setDefaultSettings] =
+    useState<Nullable<BrandMarketingPalette>>(null)
   const [settings, setSettings] = useState<BrandMarketingPalette>(
     getActiveTeamPalette(user)
   )
@@ -51,7 +50,7 @@ export function BrandSettings() {
 
       const mockedListing = await getMockListing()
 
-      setListing((mockedListing as any) as IListing)
+      setListing(mockedListing as any as IListing)
       setIsLoading(false)
     }
 

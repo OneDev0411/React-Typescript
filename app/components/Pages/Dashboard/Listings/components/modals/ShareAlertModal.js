@@ -76,42 +76,44 @@ export default compose(
   withState('isSharing', 'setIsSharing', false),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),
   withHandlers({
-    shareHandler: ({
-      user,
-      onHide,
-      recipients,
-      alertTitle,
-      createRoom,
-      setIsSharing,
-      drawingPoints,
-      searchOptions,
-      setSuccessModalIsActive,
-      createAlert
-    }) => () => {
-      setIsSharing(true)
+    shareHandler:
+      ({
+        user,
+        onHide,
+        recipients,
+        alertTitle,
+        createRoom,
+        setIsSharing,
+        drawingPoints,
+        searchOptions,
+        setSuccessModalIsActive,
+        createAlert
+      }) =>
+      () => {
+        setIsSharing(true)
 
-      createRoom(recipients).then(room => {
-        const alertOptions = normalizeAlertOptions(
-          searchOptions,
-          drawingPoints,
-          {
-            room,
-            title: alertTitle,
-            created_by: user.id
-          }
-        )
+        createRoom(recipients).then(room => {
+          const alertOptions = normalizeAlertOptions(
+            searchOptions,
+            drawingPoints,
+            {
+              room,
+              title: alertTitle,
+              created_by: user.id
+            }
+          )
 
-        createAlert(alertOptions)
-          .then(() => {
-            setIsSharing(false)
-            onHide()
-            setSuccessModalIsActive(true)
-            setTimeout(() => setSuccessModalIsActive(false), 2000)
-          })
-          .catch(() => {
-            setIsSharing(false)
-          })
-      })
-    }
+          createAlert(alertOptions)
+            .then(() => {
+              setIsSharing(false)
+              onHide()
+              setSuccessModalIsActive(true)
+              setTimeout(() => setSuccessModalIsActive(false), 2000)
+            })
+            .catch(() => {
+              setIsSharing(false)
+            })
+        })
+      }
   })
 )(ShareAlertModal)

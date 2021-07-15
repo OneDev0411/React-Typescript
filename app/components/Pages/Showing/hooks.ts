@@ -37,9 +37,8 @@ interface UseShowingAppointment {
 export function usePublicShowingAppointment(
   appointmentToken: string
 ): UseShowingAppointment {
-  const [appointment, setAppointment] = useState<
-    Nullable<IPublicShowingAppointment<'showing'>>
-  >(null)
+  const [appointment, setAppointment] =
+    useState<Nullable<IPublicShowingAppointment<'showing'>>>(null)
   const [isLoading] = useLoadingEntities(appointment)
 
   useEffect(() => {

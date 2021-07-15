@@ -7,8 +7,8 @@ import { confirmation } from 'actions/confirmation'
 
 class Agent extends React.Component {
   sendComment = () => {
-    const isBackupChecklist = this.props.checklists[this.props.task.checklist]
-      .is_deactivated
+    const isBackupChecklist =
+      this.props.checklists[this.props.task.checklist].is_deactivated
 
     if (isBackupChecklist) {
       return this.props.confirmation({

@@ -80,12 +80,16 @@ const mapHOC = compose(
   }, actions),
   // describe events
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
-    },
-    onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('favorites', mapProps)
-    }
+    onGoogleApiLoaded:
+      () =>
+      ({ map }) => {
+        window.currentMap = map
+      },
+    onChange:
+      ({ setMapProps }) =>
+      mapProps => {
+        setMapProps('favorites', mapProps)
+      }
   }),
   withPropsOnChange(
     (props, nextProps) => props.markers.length !== nextProps.markers.length,

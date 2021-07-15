@@ -13,7 +13,12 @@ import WebsiteListState from '../WebsiteListState'
 const defaultData: IWebsite[] = []
 
 function WebsiteList() {
-  const { data: instances, run, isLoading, setData } = useAsync({
+  const {
+    data: instances,
+    run,
+    isLoading,
+    setData
+  } = useAsync({
     data: defaultData,
     status: 'pending'
   })

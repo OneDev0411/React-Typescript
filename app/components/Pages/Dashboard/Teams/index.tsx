@@ -47,9 +47,8 @@ function TeamsPage(props: Props) {
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
-  const inputRef: MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(
-    null
-  )
+  const inputRef: MutableRefObject<HTMLInputElement | null> =
+    useRef<HTMLInputElement | null>(null)
 
   // FIXME: move useCaptureTyping into Search component when it's refactored
   // into a function component.

@@ -158,33 +158,35 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      user,
-      reset,
-      updateUser,
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => async formInputsValue => {
-      const { old_password, new_password } = formInputsValue
+    onSubmitHandler:
+      ({
+        user,
+        reset,
+        updateUser,
+        setSubmitError,
+        setIsSubmitting,
+        setSubmitSuccessfully
+      }) =>
+      async formInputsValue => {
+        const { old_password, new_password } = formInputsValue
 
-      setIsSubmitting(true)
-      setSubmitError(null)
+        setIsSubmitting(true)
+        setSubmitError(null)
 
-      try {
-        await changePassword({ old_password, new_password })
+        try {
+          await changePassword({ old_password, new_password })
 
-        const updatedUser = await getUser(user.id)
+          const updatedUser = await getUser(user.id)
 
-        updateUser(updatedUser)
-        reset()
-        setIsSubmitting(false)
-        setSubmitSuccessfully(true)
-        setTimeout(() => setSubmitSuccessfully(false), 2000)
-      } catch (errorCode) {
-        setIsSubmitting(false)
-        setSubmitError({ message: getErrorMessage(errorCode) })
+          updateUser(updatedUser)
+          reset()
+          setIsSubmitting(false)
+          setSubmitSuccessfully(true)
+          setTimeout(() => setSubmitSuccessfully(false), 2000)
+        } catch (errorCode) {
+          setIsSubmitting(false)
+          setSubmitError({ message: getErrorMessage(errorCode) })
+        }
       }
-    }
   })
 )(ChangePasswordForm)

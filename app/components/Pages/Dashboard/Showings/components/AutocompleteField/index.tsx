@@ -83,11 +83,15 @@ function AutocompleteField<T extends BaseOption = BaseOption>({
 }: AutocompleteFieldProps<T>) {
   const classes = useStyles()
 
-  const [inputValue, setInputValue] = useState<Optional<string>>(
-    defaultInputValue
-  )
+  const [inputValue, setInputValue] =
+    useState<Optional<string>>(defaultInputValue)
 
-  const { data: results, run, isLoading, error: resultsError } = useAsync<T[]>({
+  const {
+    data: results,
+    run,
+    isLoading,
+    error: resultsError
+  } = useAsync<T[]>({
     data: []
   })
 

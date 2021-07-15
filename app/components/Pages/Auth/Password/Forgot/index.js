@@ -124,48 +124,46 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('resetSuccessfully', 'setResetSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      setIsSubmitting,
-      setSubmitError,
-      setResetSuccessfully
-    }) => async ({ email }) => {
-      setIsSubmitting(true)
+    onSubmitHandler:
+      ({ setIsSubmitting, setSubmitError, setResetSuccessfully }) =>
+      async ({ email }) => {
+        setIsSubmitting(true)
 
-      try {
-        const response = await resetPassword(email)
+        try {
+          const response = await resetPassword(email)
 
-        if (response.status === 204) {
+          if (response.status === 204) {
+            setIsSubmitting(false)
+            setResetSuccessfully(email)
+          }
+        } catch ({ status, response }) {
+          if (status === 403) {
+            try {
+              await signup(email)
+            } catch (error) {}
+
+            setIsSubmitting(false)
+            setResetSuccessfully(email)
+
+            return
+          }
+
+          let errorMessage = 'An unexpected error occurred. Please try again.'
+
+          if (status === 404) {
+            errorMessage = (
+              <div>
+                Sorry, that email address is not registered with us.
+                <br />
+                <span>Please try again or</span>
+                <Link to="/signup"> register for a new account</Link>.
+              </div>
+            )
+          }
+
           setIsSubmitting(false)
-          setResetSuccessfully(email)
+          setSubmitError(errorMessage)
         }
-      } catch ({ status, response }) {
-        if (status === 403) {
-          try {
-            await signup(email)
-          } catch (error) {}
-
-          setIsSubmitting(false)
-          setResetSuccessfully(email)
-
-          return
-        }
-
-        let errorMessage = 'An unexpected error occurred. Please try again.'
-
-        if (status === 404) {
-          errorMessage = (
-            <div>
-              Sorry, that email address is not registered with us.
-              <br />
-              <span>Please try again or</span>
-              <Link to="/signup"> register for a new account</Link>.
-            </div>
-          )
-        }
-
-        setIsSubmitting(false)
-        setSubmitError(errorMessage)
       }
-    }
   })
 )(ForgotForm)

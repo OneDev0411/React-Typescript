@@ -108,16 +108,20 @@ const mapHOC = compose(
   ),
   withState('isLoggedActivity', 'setIsLoggedActivity', null),
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
+    onGoogleApiLoaded:
+      () =>
+      ({ map }) => {
+        window.currentMap = map
 
-      if (markersOverlay) {
-        markersOverlay.setMap(map)
+        if (markersOverlay) {
+          markersOverlay.setMap(map)
+        }
+      },
+    onChange:
+      ({ setMapProps }) =>
+      mapProps => {
+        setMapProps('alerts', mapProps)
       }
-    },
-    onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('alerts', mapProps)
-    }
   }),
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),

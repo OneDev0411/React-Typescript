@@ -43,10 +43,8 @@ export const ViewSwitcher = ({ onChangeView, activeView }: Props) => {
   const theme = useTheme()
   const iconClasses = useIconStyles()
 
-  const [
-    viewSwitcherAnchorEl,
-    setViewSwitcherAnchorEl
-  ] = useState<Element | null>(null)
+  const [viewSwitcherAnchorEl, setViewSwitcherAnchorEl] =
+    useState<Element | null>(null)
 
   const handleViewSwitcherToggle = (event: React.MouseEvent) => {
     if (viewSwitcherAnchorEl) {

@@ -35,12 +35,8 @@ class TagsOverlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const {
-      entireMode,
-      selectedContactsIds,
-      ContactListStore,
-      existingTags
-    } = this.props
+    const { entireMode, selectedContactsIds, ContactListStore, existingTags } =
+      this.props
 
     const tags = entireMode
       ? this.getAllTags()

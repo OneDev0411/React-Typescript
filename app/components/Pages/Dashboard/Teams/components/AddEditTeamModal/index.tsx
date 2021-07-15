@@ -12,9 +12,9 @@ import { BrandTypes, IAddEditTeamFormData } from 'models/BrandConsole'
 interface Props {
   close: () => void
   submit: (values: Partial<IBrand> & IAddEditTeamFormData) => void
-  validate: (
-    values: IAddEditTeamFormData
-  ) => { [fieldName: string]: string | undefined }
+  validate: (values: IAddEditTeamFormData) => {
+    [fieldName: string]: string | undefined
+  }
   isOpen: boolean
   team: IBrand | null
 }

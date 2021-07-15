@@ -29,9 +29,8 @@ interface Props {
 
 export default function AddToContacts({ user, agents }: Props) {
   const dispatch = useDispatch()
-  const [attributeDefsMap, setAttributeDefsMap] = useState<
-    Nullable<StringMap<IContactAttributeDef>>
-  >(null)
+  const [attributeDefsMap, setAttributeDefsMap] =
+    useState<Nullable<StringMap<IContactAttributeDef>>>(null)
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
 

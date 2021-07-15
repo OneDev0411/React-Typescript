@@ -59,12 +59,8 @@ class Messages extends React.Component {
   }
 
   render() {
-    const {
-      roomId,
-      user,
-      deliveryReportPlacement,
-      openFilesInNewTab
-    } = this.props
+    const { roomId, user, deliveryReportPlacement, openFilesInNewTab } =
+      this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null

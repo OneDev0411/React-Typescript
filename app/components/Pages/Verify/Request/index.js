@@ -82,24 +82,26 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
-    verifyRequestHandler: ({
-      verifyType,
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => () => {
-      setIsSubmitting(true)
+    verifyRequestHandler:
+      ({
+        verifyType,
+        setSubmitError,
+        setIsSubmitting,
+        setSubmitSuccessfully
+      }) =>
+      () => {
+        setIsSubmitting(true)
 
-      verify
-        .request(verifyType)
-        .then(() => {
-          setIsSubmitting(false)
-          setSubmitSuccessfully(true)
-        })
-        .catch(() => {
-          setIsSubmitting(false)
-          setSubmitError(true)
-        })
-    }
+        verify
+          .request(verifyType)
+          .then(() => {
+            setIsSubmitting(false)
+            setSubmitSuccessfully(true)
+          })
+          .catch(() => {
+            setIsSubmitting(false)
+            setSubmitError(true)
+          })
+      }
   })
 )(requestVerify)

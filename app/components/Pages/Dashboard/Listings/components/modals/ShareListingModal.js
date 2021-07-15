@@ -82,34 +82,36 @@ export default compose(
   withState('isSharing', 'setIsSharing', false),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),
   withHandlers({
-    shareHandler: ({
-      onHide,
-      listing,
-      recipients,
-      createRoom,
-      setIsSharing,
-      setSuccessModalIsActive
-    }) => () => {
-      const { mls_number } = listing
-      const notification = true
+    shareHandler:
+      ({
+        onHide,
+        listing,
+        recipients,
+        createRoom,
+        setIsSharing,
+        setSuccessModalIsActive
+      }) =>
+      () => {
+        const { mls_number } = listing
+        const notification = true
 
-      setIsSharing(true)
+        setIsSharing(true)
 
-      createRoom(recipients).then(room => {
-        createRecommendation({ room, mls_number, notification })
-          .then(recsId => {
-            setIsSharing(false)
+        createRoom(recipients).then(room => {
+          createRecommendation({ room, mls_number, notification })
+            .then(recsId => {
+              setIsSharing(false)
 
-            if (recsId) {
-              onHide()
-              setSuccessModalIsActive(true)
-              setTimeout(() => setSuccessModalIsActive(false), 2000)
-            }
-          })
-          .catch(() => {
-            setIsSharing(false)
-          })
-      })
-    }
+              if (recsId) {
+                onHide()
+                setSuccessModalIsActive(true)
+                setTimeout(() => setSuccessModalIsActive(false), 2000)
+              }
+            })
+            .catch(() => {
+              setIsSharing(false)
+            })
+        })
+      }
   })
 )(ShareListingModal)

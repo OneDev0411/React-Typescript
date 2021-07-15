@@ -9,13 +9,8 @@ import MessageDate from '../components/message-date'
 import Message from '../message-types'
 
 export default props => {
-  const {
-    user,
-    author,
-    message,
-    previousMessage,
-    deliveryReportPlacement
-  } = props
+  const { user, author, message, previousMessage, deliveryReportPlacement } =
+    props
 
   const shouldShowMiniContact = props.author.type === 'user'
   const ContentWrapper = shouldShowMiniContact ? MiniContact : React.Fragment

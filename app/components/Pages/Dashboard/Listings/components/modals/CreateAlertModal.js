@@ -108,45 +108,57 @@ export default compose(
   withState('successModalIsActive', 'setSuccessModalIsActive', false),
   withState('shareAlertModalIsActive', 'setShareAlertModalIsActive', false),
   withHandlers({
-    titleInputOnChange: ({ setAlertTitle }) => e => {
-      setAlertTitle(e.target.value.trim())
-    },
-    saveAlertHandler: ({
-      user,
-      onHide,
-      alertTitle,
-      createAlert,
-      setIsSaving,
-      drawingPoints,
-      searchOptions,
-      alertProposedTitle,
-      setSuccessModalIsActive
-    }) => () => {
-      setIsSaving(true)
+    titleInputOnChange:
+      ({ setAlertTitle }) =>
+      e => {
+        setAlertTitle(e.target.value.trim())
+      },
+    saveAlertHandler:
+      ({
+        user,
+        onHide,
+        alertTitle,
+        createAlert,
+        setIsSaving,
+        drawingPoints,
+        searchOptions,
+        alertProposedTitle,
+        setSuccessModalIsActive
+      }) =>
+      () => {
+        setIsSaving(true)
 
-      const alertOptions = normalizeAlertOptions(searchOptions, drawingPoints, {
-        created_by: user.id,
-        room: user.personal_room,
-        title: alertTitle || alertProposedTitle
-      })
+        const alertOptions = normalizeAlertOptions(
+          searchOptions,
+          drawingPoints,
+          {
+            created_by: user.id,
+            room: user.personal_room,
+            title: alertTitle || alertProposedTitle
+          }
+        )
 
-      createAlert(alertOptions)
-        .then(() => {
-          setIsSaving(false)
-          onHide()
-          setSuccessModalIsActive(true)
-          setTimeout(() => setSuccessModalIsActive(false), 2000)
-        })
-        .catch(() => {
-          setIsSaving(false)
-        })
-    },
-    hideShareAlertModal: ({ setShareAlertModalIsActive }) => () => {
-      setShareAlertModalIsActive(false)
-    },
-    activeShareAlertModal: ({ onHide, setShareAlertModalIsActive }) => () => {
-      onHide()
-      setShareAlertModalIsActive(true)
-    }
+        createAlert(alertOptions)
+          .then(() => {
+            setIsSaving(false)
+            onHide()
+            setSuccessModalIsActive(true)
+            setTimeout(() => setSuccessModalIsActive(false), 2000)
+          })
+          .catch(() => {
+            setIsSaving(false)
+          })
+      },
+    hideShareAlertModal:
+      ({ setShareAlertModalIsActive }) =>
+      () => {
+        setShareAlertModalIsActive(false)
+      },
+    activeShareAlertModal:
+      ({ onHide, setShareAlertModalIsActive }) =>
+      () => {
+        onHide()
+        setShareAlertModalIsActive(true)
+      }
   })
 )(CreateAlertModal)

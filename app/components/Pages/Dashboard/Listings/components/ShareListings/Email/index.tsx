@@ -20,9 +20,8 @@ export function EmailAction({ buttonRenderer }: Props) {
 
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
   const [listings, setListings] = useState<IListing[]>([])
-  const [template, setTemplate] = useState<Nullable<IBrandMarketingTemplate>>(
-    null
-  )
+  const [template, setTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const user = useSelector(selectUser)
 

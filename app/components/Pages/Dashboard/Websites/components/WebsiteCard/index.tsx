@@ -71,20 +71,17 @@ function WebsiteCard({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  const {
-    publishWebsite,
-    isPublishing,
-    publishButtonLabel
-  } = usePublishWebsite(result => {
-    updateItem(id, {
-      template_instance: {
-        ...result.instance,
-        template: template_instance.template
-      }
-    })
+  const { publishWebsite, isPublishing, publishButtonLabel } =
+    usePublishWebsite(result => {
+      updateItem(id, {
+        template_instance: {
+          ...result.instance,
+          template: template_instance.template
+        }
+      })
 
-    openDomainManagement()
-  })
+      openDomainManagement()
+    })
 
   const handleSave = html => {
     const newInstance = {

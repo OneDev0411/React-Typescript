@@ -68,14 +68,15 @@ function ShowingStepProperty({
     setIsSearchMode(true)
   }
 
-  const handlePropertyFormConfirm: ShowingStepPropertyFormProps['onConfirm'] = formData => {
-    onPropertyChange({
-      type: 'place',
-      ...formData
-    })
-    setIsEditMode(false)
-    nextStep()
-  }
+  const handlePropertyFormConfirm: ShowingStepPropertyFormProps['onConfirm'] =
+    formData => {
+      onPropertyChange({
+        type: 'place',
+        ...formData
+      })
+      setIsEditMode(false)
+      nextStep()
+    }
 
   const handlePropertyFormCancel = () => {
     setIsEditMode(false)

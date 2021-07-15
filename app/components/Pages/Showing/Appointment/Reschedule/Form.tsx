@@ -57,24 +57,16 @@ export default function ShowingAppointmentRescheduleForm({
     mode: 'onChange'
   })
 
-  const {
-    startDate,
-    endDate,
-    defaultSelectedDate,
-    unavailableDates
-  } = getBookableDateRange(appointment.showing)
+  const { startDate, endDate, defaultSelectedDate, unavailableDates } =
+    getBookableDateRange(appointment.showing)
   const selectedDate = useWatch({
     name: 'date',
     control,
     defaultValue: defaultSelectedDate
   })
 
-  const {
-    startTime,
-    endTime,
-    defaultSelectedTimeRange,
-    unavailableTimes
-  } = useBookTimeRange(appointment.showing, selectedDate)
+  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+    useBookTimeRange(appointment.showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
     control,

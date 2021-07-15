@@ -135,6 +135,7 @@ export default function InboxEmailThreadList({
         return newEmailThreads
       })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchQuery]
   )
 

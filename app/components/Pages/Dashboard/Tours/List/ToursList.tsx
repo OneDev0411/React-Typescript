@@ -39,9 +39,8 @@ function ToursList(props: { user: IUser }) {
     }
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [isOpenToursheetViewer, setIsOpenToursheetViewer] = useState<boolean>(
-    false
-  )
+  const [isOpenToursheetViewer, setIsOpenToursheetViewer] =
+    useState<boolean>(false)
   const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType

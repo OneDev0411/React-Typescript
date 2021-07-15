@@ -47,19 +47,17 @@ export default class Mentions extends React.Component {
       this.onKeyUp(e)
     )
 
-    this.cursorHandler = Observable.fromEvent(
-      this.input,
-      'keydown'
-    ).subscribe(e => this.onKeyDown(e))
+    this.cursorHandler = Observable.fromEvent(this.input, 'keydown').subscribe(
+      e => this.onKeyDown(e)
+    )
 
     this.blurHandler = Observable.fromEvent(this.input, 'blur').subscribe(() =>
       this.clearSuggestions()
     )
 
-    this.suggestionsHandler = Observable.fromEvent(
-      window,
-      'keyup'
-    ).subscribe(e => this.handleSuggestionsKeyEvents(e))
+    this.suggestionsHandler = Observable.fromEvent(window, 'keyup').subscribe(
+      e => this.handleSuggestionsKeyEvents(e)
+    )
   }
 
   componentWillUnmount() {

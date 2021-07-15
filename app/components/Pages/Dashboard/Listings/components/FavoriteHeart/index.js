@@ -30,9 +30,11 @@ const HeartHOC = compose(
     { toggleFavorite }
   ),
   withHandlers({
-    onClick: ({ toggleFavorite, listing }) => () => {
-      toggleFavorite(listing)
-    }
+    onClick:
+      ({ toggleFavorite, listing }) =>
+      () => {
+        toggleFavorite(listing)
+      }
   })
 )
 

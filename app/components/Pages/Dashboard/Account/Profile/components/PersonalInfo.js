@@ -106,7 +106,8 @@ const validate = values => {
 
   const isValidEmail = email => {
     // eslint-disable-next-line max-len
-    const regular = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    const regular =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     return !email || new RegExp(regular).exec(email)
   }
@@ -156,61 +157,63 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      editUser,
-      initialValues,
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => async fields => {
-      setSubmitError('')
+    onSubmitHandler:
+      ({
+        editUser,
+        initialValues,
+        setSubmitError,
+        setIsSubmitting,
+        setSubmitSuccessfully
+      }) =>
+      async fields => {
+        setSubmitError('')
 
-      const userInfo = {}
+        const userInfo = {}
 
-      try {
-        if (!fields.email) {
-          throw new Error('Email fields could not be empty!')
-        }
+        try {
+          if (!fields.email) {
+            throw new Error('Email fields could not be empty!')
+          }
 
-        Object.keys(fields).forEach(field => {
-          if (initialValues[field] !== fields[field]) {
-            if (field === 'phone_number' && !fields.phone_number) {
-              userInfo.phone_number = null
+          Object.keys(fields).forEach(field => {
+            if (initialValues[field] !== fields[field]) {
+              if (field === 'phone_number' && !fields.phone_number) {
+                userInfo.phone_number = null
 
-              return
+                return
+              }
+
+              userInfo[field] = fields[field]
+            }
+          })
+
+          if (Object.keys(userInfo).length > 0) {
+            setIsSubmitting(true)
+
+            const user = await editUser(userInfo)
+
+            if (user instanceof Error) {
+              throw user
             }
 
-            userInfo[field] = fields[field]
+            setIsSubmitting(false)
+            setSubmitSuccessfully(true)
+            setTimeout(() => setSubmitSuccessfully(false), 3000)
           }
-        })
+        } catch ({ message, response }) {
+          let errorMessage = 'An unexpected error occurred. Please try again.'
 
-        if (Object.keys(userInfo).length > 0) {
-          setIsSubmitting(true)
+          if (message && message !== 'Conflict') {
+            errorMessage = message
+          }
 
-          const user = await editUser(userInfo)
-
-          if (user instanceof Error) {
-            throw user
+          if (response && response.body.message) {
+            errorMessage = response.body.message
           }
 
           setIsSubmitting(false)
-          setSubmitSuccessfully(true)
-          setTimeout(() => setSubmitSuccessfully(false), 3000)
+          setSubmitError(errorMessage)
         }
-      } catch ({ message, response }) {
-        let errorMessage = 'An unexpected error occurred. Please try again.'
-
-        if (message && message !== 'Conflict') {
-          errorMessage = message
-        }
-
-        if (response && response.body.message) {
-          errorMessage = response.body.message
-        }
-
-        setIsSubmitting(false)
-        setSubmitError(errorMessage)
       }
-    }
   })
 )(PersonalInfoForm)
