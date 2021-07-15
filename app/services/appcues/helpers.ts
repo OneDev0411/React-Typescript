@@ -18,7 +18,7 @@ export function createAppcuesAccessList(
     }
   }, {})
 
-  const mappedAccessList: Record<string, string> = userACL.reduce(
+  const mappedAccessList: Record<string, boolean> = userACL.reduce(
     (acc, cur) => ({
       ...acc,
       [`has${cur}Access`]: true
