@@ -139,8 +139,6 @@ export const selectUserAccessList = createSelector(
       })
     }
 
-    console.log({ activeRoles })
-
     // Get unique items
     return [...new Set(acls)]
   }
