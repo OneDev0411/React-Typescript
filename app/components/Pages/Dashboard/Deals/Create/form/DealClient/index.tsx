@@ -65,9 +65,8 @@ export function DealClient({
    * list of all existence roles
    */
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const getDefaultRole = () => {
     if (side === 'Selling') {

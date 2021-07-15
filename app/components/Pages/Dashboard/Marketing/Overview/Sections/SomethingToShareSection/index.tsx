@@ -82,16 +82,22 @@ export default function SomethingToShareSection() {
         <>
           {isLoading && (
             <>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
+                <CardSkeleton />
+              </Grid>
+              <Grid item xs={12} sm={6} md={2}>
+                <CardSkeleton />
+              </Grid>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
             </>
@@ -100,14 +106,14 @@ export default function SomethingToShareSection() {
             <Typography variant="h6">No designs to show</Typography>
           )}
           {!isLoading &&
-            templates.slice(0, 4).map(template => (
+            templates.slice(0, 6).map(template => (
               <Grid
                 key={template.id}
                 className={classes.templateCardContainer}
                 item
                 xs={12}
                 sm={6}
-                md={3}
+                md={2}
               >
                 <MarketingTemplateCard
                   template={template}

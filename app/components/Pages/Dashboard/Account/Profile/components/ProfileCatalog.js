@@ -65,7 +65,7 @@ class ProfileCatalog extends Component {
         <Container>
           <Avatar
             user={this.props.user}
-            size="xlarge"
+            size="xxlarge"
             data-test="profile-avatar-image"
           />
 
@@ -117,29 +117,33 @@ export default compose(
     props => props.user.profile_image_url || null
   ),
   withHandlers({
-    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async file => {
-      try {
-        const dataUrl = await readFileAsDataUrl(file)
+    handleOnChange:
+      ({ dispatch, setAvatar, setUploading }) =>
+      async file => {
+        try {
+          const dataUrl = await readFileAsDataUrl(file)
 
-        setAvatar(dataUrl)
+          setAvatar(dataUrl)
 
-        setUploading(true)
-        await dispatch(uploadUserAvatarAction(file))
-      } catch (error) {
-        setAvatar(null)
-        console.log(error)
-      } finally {
-        setUploading(false)
+          setUploading(true)
+          await dispatch(uploadUserAvatarAction(file))
+        } catch (error) {
+          setAvatar(null)
+          console.log(error)
+        } finally {
+          setUploading(false)
+        }
+      },
+    handleOnDelete:
+      ({ setAvatar, dispatch }) =>
+      async () => {
+        try {
+          await dispatch(editUser({ profile_image_url: '' }))
+          setAvatar(null)
+        } catch (error) {
+          console.log(error)
+        }
       }
-    },
-    handleOnDelete: ({ setAvatar, dispatch }) => async () => {
-      try {
-        await dispatch(editUser({ profile_image_url: '' }))
-        setAvatar(null)
-      } catch (error) {
-        console.log(error)
-      }
-    }
   }),
   connect(null, {
     confirmation

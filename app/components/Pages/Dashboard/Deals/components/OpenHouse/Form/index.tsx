@@ -96,10 +96,8 @@ function OpenHouseForm(props: Props) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isVirtual, setIsVirtual] = useState(false)
   const [virtualUrl, setVirtualUrl] = useState('')
-  const [
-    showOHRegistrationDrawer,
-    setShowOHRegistrationDrawer
-  ] = useState<boolean>(false)
+  const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] =
+    useState<boolean>(false)
 
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate
@@ -118,7 +116,7 @@ function OpenHouseForm(props: Props) {
     async function fetchLisitng() {
       try {
         if (listingId && listing == null) {
-          const response = await getListing(listingId)
+          const response = await getListing(listingId as UUID)
 
           setListing(response)
         }
