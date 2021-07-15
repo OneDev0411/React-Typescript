@@ -1,4 +1,5 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
+import { useDeepCompareEffect } from 'react-use'
 import { useSelector } from 'react-redux'
 
 import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
@@ -37,7 +38,10 @@ export function useAppcues() {
 
   const pathname = location ? location.pathname : null
 
-  useEffect(() => {
+  // TODO: Use `useEffect` instead of `useDeepCompareEffect`
+  // when store.teams unwanted update is fixed
+  // https://gitlab.com/rechat/web/-/issues/5355#note_626397173
+  useDeepCompareEffect(() => {
     if (!pathname || !userInfoToWatch) {
       return
     }
