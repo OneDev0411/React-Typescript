@@ -116,7 +116,7 @@ function ShowingAvailabilitiesTimesRow({
       getSecondsDifference(values.end, values.start) < showingDuration
     ) {
       errors[FORM_ERROR] =
-        'Time difference between "From" and "To" values should exceed Showing duration.'
+        'The time difference between "From" and "To" values should exceed the Showing duration.'
     }
 
     return errors
