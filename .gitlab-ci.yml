@@ -24,7 +24,7 @@ deploy_beta:
     - apt-get install -y ruby-dev
     - gem install dpl --pre
   script:
-    - dpl heroku api --strategy api --app rechat-irish
+    - dpl heroku api --app rechat-irish
   environment:
     name: beta
     url: https://beta.rechat.com
@@ -39,7 +39,7 @@ deploy_production:
     - apt-get install -y ruby-dev
     - gem install dpl --pre
   script:
-    - dpl heroku api --strategy api --app rechat-web
+    - dpl heroku api --app rechat-web
   environment:
     name: production
     url: https://app.rechat.com
