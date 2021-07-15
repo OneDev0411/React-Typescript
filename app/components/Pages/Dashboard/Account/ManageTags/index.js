@@ -17,7 +17,12 @@ import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
 import Loading from '../../../../Partials/Loading'
 import Row from './Row'
 import { Input } from './Input'
-import { Container, AddTagContainer, Description } from './styled'
+import {
+  Container,
+  Description,
+  AddTagContainer,
+  AddTagInputContainer
+} from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 const HIGHLIGHT_SECONDS = 4
@@ -269,15 +274,17 @@ class ManageTags extends Component {
                 <Description>
                   Start typing tags and hit Return/Enter to add.
                 </Description>
-                <Input
-                  onChange={this.handleCreateTagInputChange}
-                  onSubmit={this.handleAdd}
-                  value={this.state.createTagInputValue}
-                  isDisabled={
-                    this.state.isSaving ||
-                    !this.state.createTagInputValue.trim()
-                  }
-                />
+                <AddTagInputContainer>
+                  <Input
+                    onChange={this.handleCreateTagInputChange}
+                    onSubmit={this.handleAdd}
+                    value={this.state.createTagInputValue}
+                    isDisabled={
+                      this.state.isSaving ||
+                      !this.state.createTagInputValue.trim()
+                    }
+                  />
+                </AddTagInputContainer>
               </AddTagContainer>
               {Object.keys(rows)
                 .sort()

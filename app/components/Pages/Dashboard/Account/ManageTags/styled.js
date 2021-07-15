@@ -11,6 +11,11 @@ export const AddTagContainer = styled.div`
   margin-bottom: 1rem;
 `
 
+export const AddTagInputContainer = styled.div`
+  width: 100%;
+  max-width: 700px;
+`
+
 export const Description = styled.h2`
   font-size: 1rem;
   font-weight: normal;
