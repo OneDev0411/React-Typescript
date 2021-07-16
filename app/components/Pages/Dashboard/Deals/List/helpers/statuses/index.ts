@@ -1,6 +1,6 @@
 import { getStatus } from 'models/Deal/helpers/context'
 
-import { ClosingFromAndToDates } from '../../types'
+import { ClosingDateRange } from '../../types'
 
 export function isActiveDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
   if (deal.is_draft || deal.deleted_at) {
@@ -38,14 +38,9 @@ function searchStatusByFlag(
 
 export function isClosingDeal(
   deal: IDeal,
-  closingFromAndToDates: ClosingFromAndToDates
+  closingDateRange: ClosingDateRange
 ): boolean {
-  // TODO: fix the blow typecast
-  const date: Optional<number> = (deal.context as any).closing_date?.date
+  const date = deal.context.closing_date?.date
 
-  return (
-    !!date &&
-    date >= closingFromAndToDates.from &&
-    date <= closingFromAndToDates.to
-  )
+  return !!date && date >= closingDateRange.from && date <= closingDateRange.to
 }

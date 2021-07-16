@@ -48,8 +48,8 @@ import CriticalDate, {
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import onDealOpened from '../../../utils/on-deal-opened'
-import { getClosingFromAndToDates } from '../../helpers/closings'
-import { ClosingFromAndToDates } from '../../types'
+import { getClosingDateRange } from '../../helpers/closings'
+import { ClosingDateRange } from '../../types'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -72,8 +72,11 @@ const Filters = {
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isArchivedDeal(deal, statuses)
   },
-  closings: (deal: IDeal, _, closingFromAndToDates: ClosingFromAndToDates) =>
-    isClosingDeal(deal, closingFromAndToDates)
+  closings: (
+    deal: IDeal,
+    _: IDealStatus[],
+    closingDateRange: ClosingDateRange
+  ) => isClosingDeal(deal, closingDateRange)
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -149,7 +152,7 @@ function AgentGrid(props: Props & WithRouterProps) {
       return []
     }
 
-    const closingFromAndToDates = getClosingFromAndToDates()
+    const closingDateRange = getClosingDateRange()
 
     const filterFn =
       props.activeFilter && Filters[props.activeFilter]
@@ -157,7 +160,7 @@ function AgentGrid(props: Props & WithRouterProps) {
         : Filters.all
 
     return Object.values(deals).filter(deal =>
-      filterFn(deal, statuses, closingFromAndToDates)
+      filterFn(deal, statuses, closingDateRange)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
 

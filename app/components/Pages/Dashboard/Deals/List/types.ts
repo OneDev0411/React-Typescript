@@ -1,4 +1,4 @@
-export interface ClosingFromAndToDates {
+export interface ClosingDateRange {
   from: number
   to: number
 }
