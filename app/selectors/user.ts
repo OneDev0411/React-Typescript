@@ -131,15 +131,10 @@ export const selectUserTimezone = (state: IAppState) =>
 export const selectUserAccessList = createSelector(
   selectActiveTeamRolesUnsafe,
   activeRoles => {
-    let acls: IPermission[] = []
-
-    if (activeRoles) {
-      activeRoles.forEach(role => {
-        acls = [...acls, ...role.acl]
-      })
+    if (!activeRoles) {
+      return []
     }
 
-    // Get unique items
-    return [...new Set(acls)]
+    return [...new Set(activeRoles.flatMap(role => role.acl))]
   }
 )
