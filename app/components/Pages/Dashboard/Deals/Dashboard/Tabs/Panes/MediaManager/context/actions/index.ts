@@ -21,21 +21,19 @@ export const toggleMediaSelection = (id: UUID) => ({
   }
 })
 
-export const renameMedia = (
-  id: UUID,
-  name: string,
-  dealId: IDeal['id']
-) => async (dispatch: React.Dispatch<any>) => {
-  dispatch({
-    type: actionTypes.SET_MEDIA_NAME,
-    payload: {
-      id,
-      name
-    }
-  })
+export const renameMedia =
+  (id: UUID, name: string, dealId: IDeal['id']) =>
+  async (dispatch: React.Dispatch<any>) => {
+    dispatch({
+      type: actionTypes.SET_MEDIA_NAME,
+      payload: {
+        id,
+        name
+      }
+    })
 
-  await renameMediaModel(dealId, id, name)
-}
+    await renameMediaModel(dealId, id, name)
+  }
 
 export const toggleGallerySelection = (selected: boolean) => ({
   type: actionTypes.TOGGLE_GALLERY_SELECTION,
@@ -87,20 +85,18 @@ export const setMediaUploadProgress = (id: UUID, progress: number) => ({
   }
 })
 
-export const reorderGallery = (
-  oldIndex: number,
-  newIndex: number,
-  dealId: IDeal['id']
-) => async (dispatch: React.Dispatch<any>, getState: () => IMediaGallery) => {
-  dispatch({
-    type: actionTypes.REORDER_GALLERY,
-    payload: {
-      oldIndex,
-      newIndex
-    }
-  })
-  reorderGalleryModel(dealId, getMediaSorts(getState()))
-}
+export const reorderGallery =
+  (oldIndex: number, newIndex: number, dealId: IDeal['id']) =>
+  async (dispatch: React.Dispatch<any>, getState: () => IMediaGallery) => {
+    dispatch({
+      type: actionTypes.REORDER_GALLERY,
+      payload: {
+        oldIndex,
+        newIndex
+      }
+    })
+    reorderGalleryModel(dealId, getMediaSorts(getState()))
+  }
 
 export const setNewlyUploadedMediaFields = (
   id: UUID,

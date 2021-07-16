@@ -23,7 +23,7 @@ function useAppointmentApprovalAccessMessage(
   }, [roles])
 
   return hasApproved
-    ? `You approved this before. It is waiting for ${names} to approve this appointment`
+    ? `You've already approved this appointment. It's waiting for approval from ${names}.`
     : `${names} ${count > 1 ? 'have' : 'has'} access to do this.`
 }
 

@@ -3,13 +3,13 @@ import { useLocation } from 'react-use'
 
 type UseQueryParam = [string, (value: string) => void]
 
-function useQueryParamValue(name: string): string {
+export function useQueryParamValue(name: string): string {
   const location = useLocation()
 
-  const value = useMemo(() => new URLSearchParams(location.search).get(name), [
-    location.search,
-    name
-  ])
+  const value = useMemo(
+    () => new URLSearchParams(location.search).get(name),
+    [location.search, name]
+  )
 
   return decodeURIComponent(value || '')
 }

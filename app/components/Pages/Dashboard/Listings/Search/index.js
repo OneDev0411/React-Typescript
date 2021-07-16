@@ -17,13 +17,13 @@ import {
 import MyLocation from '@material-ui/icons/MyLocation'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
-
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getPlace } from 'models/listings/search/get-place'
-
-import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import {
   getBounds,
@@ -133,13 +133,16 @@ class Search extends React.Component {
   componentDidMount() {
     window.initialize = this.initialize
 
-    if (!window.google) {
-      loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
-        'loadJS-mls-search-map'
-      )
-    } else {
+    const googleMapAPIParams = {
+      key: bootstrapURLKeys.key,
+      libraries: bootstrapURLKeys.libraries.split(','),
+      callback: 'initialize'
+    }
+
+    if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
+    } else {
+      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
     }
   }
 

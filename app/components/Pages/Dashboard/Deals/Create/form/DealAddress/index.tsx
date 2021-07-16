@@ -65,19 +65,15 @@ export function DealAddress({
 
   const classes = useStyles()
 
-  const [place, setPlace] = useState<
-    Nullable<Partial<google.maps.places.AutocompletePrediction>>
-  >(null)
-  const [listing, setListing] = useState<Nullable<ICompactListing | IListing>>(
-    null
-  )
+  const [place, setPlace] =
+    useState<Nullable<Partial<google.maps.places.AutocompletePrediction>>>(null)
+  const [listing, setListing] =
+    useState<Nullable<ICompactListing | IListing>>(null)
   const [address, setAddress] = useState<Address | null>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
-  const [
-    debouncedSearchCriteria,
-    setDebouncedSearchCriteria
-  ] = useState<string>('')
+  const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
+    useState<string>('')
 
   /**
    * debounce search criteria to don't search contacts on input change

@@ -193,6 +193,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   created_at: number
   updated_at: number
   deleted_at: number | null
+  url: string
   property_id: UUID
   price: number
   matrix_unique_id: number
