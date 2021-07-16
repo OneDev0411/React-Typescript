@@ -102,6 +102,7 @@ class Search extends React.Component {
     const { query } = props.location
 
     this.searchQuery = query.q || ''
+    this.brokerageQuery = query.brokerage || ''
 
     let activeView = query.view
 
@@ -149,7 +150,12 @@ class Search extends React.Component {
   initialize = () => {
     const { firstRun } = this.state
 
-    if (firstRun) {
+    if (
+      firstRun &&
+      !this.brokerageQuery &&
+      !this.searchQuery &&
+      !this.props.isWidget
+    ) {
       return
     }
 
@@ -159,6 +165,8 @@ class Search extends React.Component {
 
     if (this.searchQuery) {
       this._findPlace(decodeURIComponent(this.searchQuery))
+    } else if (this.brokerageQuery) {
+      this._findBrokerage(this.brokerageQuery)
     } else {
       this.initMap()
     }
@@ -307,6 +315,32 @@ class Search extends React.Component {
     }
   }
 
+  _findBrokerage = brokerage => {
+    const { dispatch, filterOptions } = this.props
+
+    try {
+      batchActions([
+        dispatch(
+          searchActions.getListings.byValert({
+            ...filterOptions,
+            offices: [brokerage],
+            limit: 200
+          })
+        ),
+        dispatch(
+          setMapProps('search', {
+            center: mapInitialState.center,
+            zoom: mapInitialState.zoom
+          })
+        )
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+
+    return this.initMap()
+  }
+
   onChangeView = e => {
     const activeView = e.currentTarget.dataset.view
 
@@ -431,6 +465,7 @@ class Search extends React.Component {
         return (
           <MapView
             {..._props}
+            isWidget={this.props.isWidget}
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
@@ -558,12 +593,15 @@ class Search extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, isWidget } = this.props
     const { firstRun } = this.state
+    const hasUrlQuery = !!(this.brokerageQuery || this.searchQuery)
 
     return (
       <GlobalPageLayout className={classes.exploreContainer}>
-        {firstRun ? this.renderLadingPage() : this.renderExplorePage()}
+        {firstRun && !hasUrlQuery && !isWidget
+          ? this.renderLadingPage()
+          : this.renderExplorePage()}
       </GlobalPageLayout>
     )
   }

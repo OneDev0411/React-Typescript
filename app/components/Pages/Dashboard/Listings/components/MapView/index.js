@@ -81,6 +81,7 @@ const MapView = props => {
       <Grid key={listing.id} item md={12} lg={6}>
         <Box pb={1} pl={1}>
           <ListingCard
+            isWidget={props.isWidget}
             listing={listing}
             tags={listing.new ? [listing.new] : undefined}
             selected={selections.some(item => item.id === listing.id)}

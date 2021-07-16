@@ -46,9 +46,8 @@ export default function WhatsNewInMCSection() {
   const classes = useStyles()
   const user = useSelector(selectUser)
   const activeBrand = getActiveTeamId(user)
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
   const [isTemplateClicked, setIsTemplateClicked] = useState<boolean>(false)
 
   const { templates, isLoading } = useTemplates(

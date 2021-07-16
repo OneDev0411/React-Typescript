@@ -338,7 +338,6 @@ function OpenHouseForm(props: Props) {
         <OpenHouseDrawer
           isOpen
           dealNotifyOffice={false}
-          user={user}
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}

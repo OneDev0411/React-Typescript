@@ -62,9 +62,8 @@ export default function ListingMarketing({
   const user = useSelector(selectUser)
   const activeBrand = getActiveTeamId(user)
 
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [isLoadingListing] = useLoadingEntities(listing)
@@ -282,8 +281,8 @@ export default function ListingMarketing({
           hasExternalTrigger
           isTriggered
           isTemplatesColumnHiddenDefault={false}
-          mediums={selectedTemplate.template.medium}
-          types={selectedTemplate.template.template_type}
+          mediums={medium}
+          types={[templateType]}
           listing={listing}
           selectedTemplate={selectedTemplate}
           handleTrigger={() => setSelectedTemplate(null)}

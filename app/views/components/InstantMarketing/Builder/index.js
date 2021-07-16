@@ -1527,7 +1527,26 @@ class Builder extends React.Component {
 }
 
 Builder.propTypes = {
-  onBuilderLoad: PropTypes.func
+  onBuilderLoad: PropTypes.func,
+  hideTemplatesColumn: PropTypes.bool,
+  templateData: PropTypes.object,
+  templateTypes: PropTypes.arrayOf(PropTypes.string),
+  mediums: PropTypes.string,
+  assets: PropTypes.arrayOf(PropTypes.object),
+  defaultTemplate: PropTypes.object,
+  onShowEditListings: PropTypes.func,
+  containerStyle: PropTypes.object,
+  isTemplatesColumnHiddenDefault: PropTypes.bool,
+  bareMode: PropTypes.bool,
+  saveButtonText: PropTypes.string,
+  saveButtonStartIcon: PropTypes.node,
+  onClose: PropTypes.func,
+  onSave: PropTypes.func,
+  onSocialSharing: PropTypes.func,
+  onPrintableSharing: PropTypes.func,
+  actionButtonsDisabled: PropTypes.bool,
+  customActions: PropTypes.node,
+  saveButtonWrapper: PropTypes.func
 }
 
 Builder.defaultProps = {
