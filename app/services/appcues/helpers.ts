@@ -1,4 +1,4 @@
-import moment from 'moment'
+import { differenceInDays } from 'date-fns'
 
 import { AccessRecord } from '@app/constants/acl'
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
@@ -37,16 +37,11 @@ export async function prepareAndSendUserData(
   const google = await getOAuthAccounts(OAuthProvider.Google)
   const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
 
-  const starts = moment(createdAt * 1000)
-  const ends = moment()
-  const accountAge = moment.duration(ends.diff(starts))
-
   const mappedAccessList = createAppcuesAccessList(accessList, ACL)
 
   const userData = {
     ...userInfo,
-    accountAgeInDays:
-      accountAge.days() + accountAge.months() * 30 + accountAge.years() * 365,
+    accountAgeInDays: differenceInDays(createdAt * 1000, new Date()),
     gmailOrOutlookSynced: Boolean(google.length || outlook.length),
     ...mappedAccessList
   }
