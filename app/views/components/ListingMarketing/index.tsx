@@ -282,7 +282,7 @@ export default function ListingMarketing({
           isTriggered
           isTemplatesColumnHiddenDefault={false}
           mediums={medium}
-          types={[templateType]}
+          types={templateTypes}
           listing={listing}
           selectedTemplate={selectedTemplate}
           handleTrigger={() => setSelectedTemplate(null)}
