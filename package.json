@@ -13,6 +13,7 @@
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
+    "lint:ci": "eslint app/views && eslint app/components && eslint app/constants && eslint app/hooks && eslint app/models && eslint app/reducers && eslint app/routes && eslint app/selectors && eslint app/services && eslint app/store_actions && eslint app/stores && eslint app/utils && eslint server",
     "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",

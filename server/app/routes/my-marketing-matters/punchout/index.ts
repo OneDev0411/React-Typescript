@@ -156,9 +156,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     res.json({
       response: {
-        url:
-          parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
-            .URL[0]
+        url: parsedResponse.cXML.Response[0].PunchOutSetupResponse[0]
+          .StartPage[0].URL[0]
       }
     })
   } catch (e) {
