@@ -7,14 +7,15 @@ import React, {
   RefObject
 } from 'react'
 
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
+// eslint-disable-next-line import/order
 import FullCalendar, {
   EventApi,
   EventInput,
   DatesSetArg,
   EventContentArg
 } from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { makeStyles, Theme } from '@material-ui/core'
 import _map from 'lodash/map'
