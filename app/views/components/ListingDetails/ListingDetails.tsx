@@ -130,10 +130,11 @@ const useStyles = makeStyles(
 
 interface Props {
   id: UUID
+  isWidget?: boolean
   onClose?: () => void
 }
 
-function ListingDetails({ id, onClose }: Props) {
+function ListingDetails({ id, isWidget = false, onClose }: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const user = useSelector(selectUserUnsafe)
@@ -170,6 +171,7 @@ function ListingDetails({ id, onClose }: Props) {
     <Container maxWidth="xl" disableGutters>
       <div className={classes.header}>
         <Header
+          isWidget={isWidget}
           listing={listing}
           handleShare={openShareModal}
           handleClose={onClose}

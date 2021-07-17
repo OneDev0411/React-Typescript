@@ -65,14 +65,8 @@ const map = ({
       onChange={onChange}
       zoom={map.props.zoom}
       center={map.props.center}
-      defaultZoom={
-        lastBrowsingLocation ? lastBrowsingLocation.zoom : mapInitialState.zoom
-      }
-      defaultCenter={
-        lastBrowsingLocation
-          ? lastBrowsingLocation.center
-          : mapInitialState.center
-      }
+      defaultZoom={lastBrowsingLocation?.zoom || mapInitialState.zoom}
+      defaultCenter={lastBrowsingLocation?.center || mapInitialState.center}
       yesIWantToUseGoogleMapApiInternals
       bootstrapURLKeys={bootstrapURLKeys}
       onGoogleApiLoaded={onGoogleApiLoaded}

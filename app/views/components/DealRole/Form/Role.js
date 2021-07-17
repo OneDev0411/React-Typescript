@@ -87,19 +87,11 @@ export function RoleForm(props) {
         <>
           {showNameDetails ? (
             <Grid container xs spacing={2} alignItems="center" mt={1}>
-              <Grid item md={compact ? 12 : true} xs={12}>
+              <Grid item md={compact ? 12 : 6} xs={12}>
                 <Field
                   name="legal_prefix"
                   component={TitleInput}
                   isVisible={isVisible('title')}
-                />
-              </Grid>
-              <Grid item md={compact ? 12 : true} xs={12}>
-                <Field
-                  name="legal_middle_name"
-                  label="Mid. Name"
-                  isVisible={isVisible('legal_middle_name')}
-                  component={TextInput}
                 />
               </Grid>
             </Grid>
@@ -116,7 +108,7 @@ export function RoleForm(props) {
       )}
 
       <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-        <Grid item md={compact ? 12 : true} xs={12}>
+        <Grid item md={compact ? 12 : 6} xs={12}>
           <Field
             name="role"
             label="Role"
@@ -125,8 +117,6 @@ export function RoleForm(props) {
             component={Roles}
           />
         </Grid>
-
-        <Grid item md={compact ? 12 : true} xs={12} />
       </Grid>
 
       {roleType === TYPE_PERSON && (
@@ -144,6 +134,17 @@ export function RoleForm(props) {
               component={NameInput}
             />
           </Grid>
+
+          {showNameDetails && (
+            <Grid item md={compact ? 12 : true} xs={12}>
+              <Field
+                name="legal_middle_name"
+                label="Mid. Name"
+                isVisible={isVisible('legal_middle_name')}
+                component={TextInput}
+              />
+            </Grid>
+          )}
 
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field

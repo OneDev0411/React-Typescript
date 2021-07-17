@@ -26,7 +26,7 @@ const setMarkerCssPosition = listing => {
   return position
 }
 
-const SimpleMarker = ({ listing }) => {
+const SimpleMarker = ({ listing, isWidget }) => {
   const [isHoverd, setIsHoverd] = React.useState(false)
   const [isListingOpen, setIsListingOpen] = React.useState(false)
 
@@ -56,6 +56,7 @@ const SimpleMarker = ({ listing }) => {
         />
       </ButtonBase>
       <ListingDetailsModal
+        isWidget={!!isWidget}
         isOpen={isListingOpen}
         listingId={listing.id}
         closeHandler={closeListing}
