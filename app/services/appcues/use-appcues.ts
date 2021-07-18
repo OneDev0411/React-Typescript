@@ -1,18 +1,16 @@
 import { useMemo, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-use'
 
 import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
-import { IAppState } from 'reducers'
 
-import { AppcuesUserInfo, Location } from './types'
+import { AppcuesUserInfo } from './types'
 import { prepareAndSendUserData } from './helpers'
 
 export function useAppcues() {
   const accessList = useSelector(selectUserAccessList)
 
-  const location = useSelector<IAppState, Location | null>(
-    state => state.data.location
-  )
+  const location = useLocation()
   const user = useSelector(selectUserUnsafe)
 
   const userInfoToWatch = useMemo<Nullable<AppcuesUserInfo>>(() => {
@@ -35,10 +33,10 @@ export function useAppcues() {
     user?.created_at
   ])
 
-  const pathname = location ? location.pathname : null
+  const pathname = location.pathname
 
   useEffect(() => {
-    if (!pathname || !userInfoToWatch) {
+    if (!userInfoToWatch) {
       return
     }
 
