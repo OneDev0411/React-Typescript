@@ -31,16 +31,16 @@ export function createAppcuesAccessList(
 
 export async function prepareAndSendUserData(
   accessList: IPermission[],
-  userInfoToWatch: AppcuesUserInfo
+  userInfo: AppcuesUserInfo
 ) {
-  const { id, createdAt, ...userInfo } = userInfoToWatch
+  const { id, createdAt, ...restInfo } = userInfo
   const google = await getOAuthAccounts(OAuthProvider.Google)
   const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
 
   const mappedAccessList = createAppcuesAccessList(accessList, ACL)
 
   const userData = {
-    ...userInfo,
+    ...restInfo,
     accountAgeInDays: differenceInDays(new Date(), createdAt * 1000),
     gmailOrOutlookSynced: Boolean(google.length || outlook.length),
     ...mappedAccessList
