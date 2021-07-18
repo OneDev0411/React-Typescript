@@ -41,7 +41,7 @@ export async function prepareAndSendUserData(
 
   const userData = {
     ...userInfo,
-    accountAgeInDays: differenceInDays(createdAt * 1000, new Date()),
+    accountAgeInDays: differenceInDays(new Date(), createdAt * 1000),
     gmailOrOutlookSynced: Boolean(google.length || outlook.length),
     ...mappedAccessList
   }
