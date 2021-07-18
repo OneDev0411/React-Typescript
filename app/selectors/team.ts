@@ -67,7 +67,7 @@ export function selectActiveTeamRolesUnsafe(state: IAppState): Optional<IBrandRo
  * @param state The app state
  */
 export function selectActiveTeamRoles(state: IAppState): IBrandRole[] {
-  const activeTeamRoles = selectActiveTeam(state).brand.roles
+  const activeTeamRoles = selectActiveTeamRolesUnsafe(state)
 
   if (!activeTeamRoles) {
     throw new Error('The current user does not have an active team roles')
