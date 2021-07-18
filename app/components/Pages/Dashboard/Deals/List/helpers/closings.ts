@@ -1,10 +1,8 @@
-import { addDays } from 'date-fns'
+import addDays from 'date-fns/addDays'
 
-import { ClosingFromAndToDates, ClosingsFilterQuery } from '../types'
+import { ClosingDateRange, ClosingsFilterQuery } from '../types'
 
-export function getClosingFromAndToDates(
-  days: number = 14
-): ClosingFromAndToDates {
+export function getClosingDateRange(days: number = 14): ClosingDateRange {
   return {
     from: new Date().getTime() / 1000,
     to: addDays(new Date(), days).getTime() / 1000
