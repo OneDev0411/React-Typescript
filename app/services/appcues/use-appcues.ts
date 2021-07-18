@@ -13,7 +13,11 @@ export function useAppcues() {
   const location = useLocation()
   const user = useSelector(selectUserUnsafe)
 
-  const userInfoToWatch = useMemo<Nullable<AppcuesUserInfo>>(() => {
+  interface UserInfoToWatch extends AppcuesUserInfo {
+    id: string
+  }
+
+  const userInfoToWatch = useMemo<Nullable<UserInfoToWatch>>(() => {
     return user?.id
       ? {
           id: user.id,
@@ -40,6 +44,8 @@ export function useAppcues() {
       return
     }
 
-    prepareAndSendUserData(accessList, userInfoToWatch)
+    const { id, ...appcuesUserInfo } = userInfoToWatch
+
+    prepareAndSendUserData(accessList, id, appcuesUserInfo)
   }, [pathname, userInfoToWatch, accessList])
 }

@@ -1,5 +1,6 @@
+import { ACL } from '@app/constants/acl'
+
 export interface AppcuesUserInfo {
-  id: string
   firstName: string | null
   fullName: string
   email: string
@@ -7,6 +8,7 @@ export interface AppcuesUserInfo {
   createdAt: number
 }
 
-export interface Location {
-  pathname: string
-}
+export type AppcuesUserList = Record<
+  `has${typeof ACL[keyof typeof ACL]}Access`,
+  boolean
+>
