@@ -39,14 +39,18 @@ const useStyles = makeStyles(
 
 export function Header(props) {
   const classes = useStyles()
-  const { isFetching, activeView } = props
+  const { isFetching, activeView, isWidget } = props
 
   return (
     <Box className={classes.container}>
       <GlobalPageLayout.Header title="Properties" isHiddenOnMobile={false}>
         <Box className={classes.body}>
           <Box width={500}>
-            <Autocomplete activeView={activeView} fullWidth />
+            <Autocomplete
+              activeView={activeView}
+              fullWidth
+              isWidget={isWidget}
+            />
           </Box>
           <BaseDropdown
             renderDropdownButton={buttonProps => (

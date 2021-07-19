@@ -11,10 +11,13 @@ import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 interface Props
-  extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {}
+  extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {
+  isWidget?: boolean
+}
 
 const ListingCardWithFavorite = ({
   listing,
+  isWidget = false,
   tags,
   selected = undefined,
   onToggleSelection = noop,
@@ -69,6 +72,7 @@ const ListingCardWithFavorite = ({
 
       <ListingDetailsModal
         isOpen={isListingOpen}
+        isWidget={isWidget}
         listingId={listing.id}
         closeHandler={closeListing}
       />

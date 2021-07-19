@@ -36,12 +36,14 @@ const useStyles = makeStyles(
 
 interface Props {
   listing: IListing
+  isWidget?: boolean
   handleClose?: () => void
   handleShare: () => void
 }
 
 function Header({
   listing,
+  isWidget = false,
   handleShare,
   location,
   handleClose
@@ -113,7 +115,7 @@ function Header({
                 Share
               </Button>
             )}
-            {!user && (
+            {!isWidget && !user && (
               <Button variant="contained" color="primary" onClick={handleLogin}>
                 Login
               </Button>
