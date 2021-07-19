@@ -20,7 +20,7 @@ export function createAppcuesAccessList(
   userACL: IPermission[],
   defaultUserAcl = DEFAULT_APPCUES_USER_ACL
 ) {
-  const appcuesAccessList: AppcuesUserList = {
+  const appcuesAccessList: AppcuesUserAccessList = {
     ...defaultUserAcl
   }
 
@@ -34,7 +34,7 @@ export function createAppcuesAccessList(
 export function createAppcuesUserData(
   gmailOrOutlookSynced: boolean,
   userInfo: AppcuesUserInfo,
-  appcuesAccessList: AppcuesUserList
+  appcuesAccessList: AppcuesUserAccessList
 ) {
   const { createdAt, ...restInfo } = userInfo
 
