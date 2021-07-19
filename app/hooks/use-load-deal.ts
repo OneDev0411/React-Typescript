@@ -40,10 +40,8 @@ export function useLoadFullDeal(id: UUID) {
   )
 
   const [isFetchingForms, setIsFetchingForms] = useState<boolean>(!forms[id])
-  const [
-    isFetchingBrandChecklists,
-    setIsFetchingBrandChecklists
-  ] = useState<boolean>(false)
+  const [isFetchingBrandChecklists, setIsFetchingBrandChecklists] =
+    useState<boolean>(false)
 
   useEffectOnce(() => {
     if (!id) {

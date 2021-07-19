@@ -47,7 +47,7 @@ interface Props {
 export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const backdropTimeout = useRef(0)
+  const backdropTimeout = useRef<Nullable<NodeJS.Timeout>>(null)
   const [selectedAgent, setSelectedAgent] = useState<IAgent | null>(null)
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export function SecretQuestionModal({ isOpen, onHide, agents, mlsId }: Props) {
 
   const hide = () => {
     onHide()
-    backdropTimeout.current = window.setTimeout(
+    backdropTimeout.current = setTimeout(
       () => setSelectedAgent(null),
       BACKDROP_TIMEOUT
     )!

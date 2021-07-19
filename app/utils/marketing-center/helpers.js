@@ -15,7 +15,7 @@ export function getTemplateImage(
 
   return {
     original: template.preview ? template.preview.url : fallbackImage,
-    thumbnail: template.thumbnail ? template.thumbnail.url : fallbackImage
+    thumbnail: template.thumbnail ? template.thumbnail.preview_url : fallbackImage
   }
 }
 

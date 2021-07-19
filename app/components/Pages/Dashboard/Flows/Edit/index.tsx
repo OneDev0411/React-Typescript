@@ -82,18 +82,14 @@ function Edit(props: WithRouterProps) {
 
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
-  const [emailTemplates, setEmailTemplates] = useState<
-    Nullable<IBrandEmailTemplate[]>
-  >(null)
+  const [emailTemplates, setEmailTemplates] =
+    useState<Nullable<IBrandEmailTemplate[]>>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
-  const [
-    selectedEmailTemplate,
-    setSelectedEmailTemplate
-  ] = useState<IBrandEmailTemplate | null>(null)
-  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] = useState(
-    false
-  )
+  const [selectedEmailTemplate, setSelectedEmailTemplate] =
+    useState<IBrandEmailTemplate | null>(null)
+  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] =
+    useState(false)
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<string | null>(null)
 
