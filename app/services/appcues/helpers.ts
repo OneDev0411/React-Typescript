@@ -6,22 +6,21 @@ import { OAuthProvider } from 'constants/contacts'
 
 import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
-export const DEFAULT_APPCUES_USER_ACL = Object.values(ACL).reduce(
-  (acc, cur) => {
-    return {
-      ...acc,
-      [`has${ACL[cur]}Access`]: false
-    }
-  },
-  {} as AppcuesUserAccessList
-)
+export const DEFAULT_APPCUES_USER_ACL = Object.values(
+  ACL
+).reduce<AppcuesUserAccessList>((acc, cur) => {
+  return {
+    ...acc,
+    [`has${ACL[cur]}Access`]: false
+  }
+}, {} as AppcuesUserAccessList)
 
 export function createAppcuesAccessList(
   userACL: IPermission[],
-  defaultUserAcl = DEFAULT_APPCUES_USER_ACL
-) {
+  appcuesUserAccessList: AppcuesUserAccessList
+): AppcuesUserAccessList {
   const appcuesAccessList: AppcuesUserAccessList = {
-    ...defaultUserAcl
+    ...appcuesUserAccessList
   }
 
   userACL.forEach(acl => {
@@ -55,7 +54,10 @@ export async function prepareAndSendUserData(
   const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
   const gmailOrOutlookSynced = Boolean(google.length || outlook.length)
 
-  const appcuesAccessList = createAppcuesAccessList(accessList)
+  const appcuesAccessList = createAppcuesAccessList(
+    accessList,
+    DEFAULT_APPCUES_USER_ACL
+  )
 
   const userData = createAppcuesUserData(
     gmailOrOutlookSynced,
