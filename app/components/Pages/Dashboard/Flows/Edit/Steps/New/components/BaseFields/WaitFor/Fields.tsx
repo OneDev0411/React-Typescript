@@ -135,9 +135,11 @@ export const WaitForFields = ({
   return (
     <div className={classes.container}>
       <FormControlLabel
+        disabled={disabled}
         control={
           <Checkbox
             checked={isSameDayActive}
+            disabled={disabled}
             onChange={handleSameDayChange}
             name="sameDay"
           />
