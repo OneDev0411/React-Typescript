@@ -1,5 +1,3 @@
-import { ACL } from '@app/constants/acl'
-
 export interface AppcuesUserInfo {
   firstName: string | null
   fullName: string
@@ -8,7 +6,4 @@ export interface AppcuesUserInfo {
   createdAt: number
 }
 
-export type AppcuesUserAccessList = Record<
-  `has${typeof ACL[keyof typeof ACL]}Access`,
-  boolean
->
+export type AppcuesUserAccessList = Record<`has${IPermission}Access`, boolean>
