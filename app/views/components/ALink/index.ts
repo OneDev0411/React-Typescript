@@ -23,6 +23,7 @@ const defaultProps = {
 
 const ALink = styled.a<Props>`
   color: #000;
+  cursor: pointer;
 
   ${({ noStyle }) =>
     noStyle
