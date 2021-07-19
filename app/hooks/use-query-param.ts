@@ -22,10 +22,15 @@ function useQueryParamBase(
   deleteIfEmpty: boolean
 ): UseQueryParam {
   const value = useQueryParamValue(name)
+  const location = useLocation()
 
   const setValue = useCallback(
     (value: string) => {
-      const url = new URL(window.location.href)
+      if (!location.href) {
+        return
+      }
+
+      const url = new URL(location.href)
 
       if (deleteIfEmpty && !value) {
         url.searchParams.delete(name)
@@ -35,16 +40,20 @@ function useQueryParamBase(
 
       historyAction(url.toString())
     },
-    [historyAction, name, deleteIfEmpty]
+    [location.href, historyAction, name, deleteIfEmpty]
   )
 
   const deleteValue = useCallback(() => {
-    const url = new URL(window.location.href)
+    if (!location.href) {
+      return
+    }
+
+    const url = new URL(location.href)
 
     url.searchParams.delete(name)
 
     historyAction(url.toString())
-  }, [historyAction, name])
+  }, [location.href, historyAction, name])
 
   return [value, setValue, deleteValue]
 }
