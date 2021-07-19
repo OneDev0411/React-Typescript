@@ -59,7 +59,7 @@ const Layout = ({
 
     return (
       <form onSubmit={onSubmit} className={classes.form} noValidate>
-        <Box className={classes.header}>
+        <header className={classes.header}>
           <Grid container alignItems="center" justify="space-between">
             <Grid container alignItems="center" xs={6}>
               {step && (
@@ -149,28 +149,28 @@ const Layout = ({
               )}
             </Grid>
           </Grid>
-        </Box>
-        <Box className={classes.commonFieldsContainer}>
+        </header>
+        <div className={classes.commonFieldsContainer}>
           <Typography variant="subtitle2" className={classes.commonFieldsTitle}>
             When is this reminder for?
           </Typography>
-          <Box className={classes.commonFields}>
-            <Box className={classes.commonField} width={270}>
-              <WaitFor disabled={disableEdit} />
-            </Box>
-            <Box className={classes.commonField} flexGrow={1} px={0.75}>
+          <div className={classes.waitForContainer}>
+            <WaitFor disabled={disableEdit} />
+          </div>
+          <div className={classes.commonFields}>
+            <div className={cn(classes.commonField, classes.eventType)}>
               <EventType index={index} disabled={disableEdit} />
-            </Box>
-            <Box className={classes.commonField} flexGrow={0} maxWidth={140}>
+            </div>
+            <div className={cn(classes.commonField, classes.time)}>
               <Time
                 textFieldProps={{
                   disabled: disableEdit
                 }}
               />
-            </Box>
-          </Box>
-        </Box>
-        <Box className={classes.otherFieldsContainer}>{children}</Box>
+            </div>
+          </div>
+        </div>
+        <div className={classes.otherFieldsContainer}>{children}</div>
       </form>
     )
   }
@@ -188,7 +188,7 @@ const Layout = ({
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
           >
-            <Box
+            <div
               onMouseOver={raise}
               onFocus={raise}
               onMouseOut={stopRaise}
@@ -198,14 +198,14 @@ const Layout = ({
               })}
             >
               {renderForm({ draggableProvided })}
-            </Box>
+            </div>
           </div>
         )}
       </Draggable>
     )
   }
 
-  return <Box className={classes.container}>{renderForm({})}</Box>
+  return <div className={classes.container}>{renderForm({})}</div>
 }
 
 export const BaseFormLayout = memo(Layout)
