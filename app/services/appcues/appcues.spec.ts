@@ -2,10 +2,10 @@ import MockDate from 'mockdate'
 
 import { createAppcuesAccessList, createAppcuesUserData } from './helpers'
 
-import { AppcuesUserInfo, AppcuesUserList } from './types'
+import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
 describe('createAppcuesAccessList', () => {
-  let defaultUserAcl: AppcuesUserList
+  let defaultUserAcl: AppcuesUserAccessList
 
   beforeEach(() => {
     defaultUserAcl = {
@@ -32,7 +32,7 @@ describe('createAppcuesAccessList', () => {
       'STORE'
     ]
 
-    const expected: AppcuesUserList = {
+    const expected: AppcuesUserAccessList = {
       hasAdminAccess: true,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: true,
@@ -63,7 +63,7 @@ describe('createAppcuesAccessList', () => {
       'Websites'
     ]
 
-    const expected: AppcuesUserList = {
+    const expected: AppcuesUserAccessList = {
       hasAdminAccess: true,
       hasAgentNetworkAccess: true,
       hasBackOfficeAccess: true,
@@ -83,7 +83,7 @@ describe('createAppcuesAccessList', () => {
   it('should work when user has no access', () => {
     const userACL: IPermission[] = []
 
-    const expected: AppcuesUserList = {
+    const expected: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: false,
@@ -122,7 +122,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-11T11:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: false,
@@ -165,7 +165,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-15T11:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: false,
@@ -208,7 +208,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-16T10:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: true,
@@ -251,7 +251,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-11T11:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: true,
       hasBackOfficeAccess: false,
@@ -294,7 +294,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-11T11:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: true,
       hasAgentNetworkAccess: true,
       hasBackOfficeAccess: true,
@@ -337,7 +337,7 @@ describe('createAppcuesUserData', () => {
       createdAt: new Date('2021-05-11T11:59:59.000Z').getTime() / 1000
     }
 
-    const appcuesAccessList: AppcuesUserList = {
+    const appcuesAccessList: AppcuesUserAccessList = {
       hasAdminAccess: false,
       hasAgentNetworkAccess: false,
       hasBackOfficeAccess: false,

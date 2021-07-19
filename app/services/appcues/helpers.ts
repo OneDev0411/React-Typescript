@@ -4,7 +4,7 @@ import { ACL } from '@app/constants/acl'
 import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 import { OAuthProvider } from 'constants/contacts'
 
-import { AppcuesUserInfo, AppcuesUserList } from './types'
+import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
 export const DEFAULT_APPCUES_USER_ACL = Object.values(ACL).reduce(
   (acc, cur) => {
@@ -13,7 +13,7 @@ export const DEFAULT_APPCUES_USER_ACL = Object.values(ACL).reduce(
       [`has${ACL[cur]}Access`]: false
     }
   },
-  {} as AppcuesUserList
+  {} as AppcuesUserAccessList
 )
 
 export function createAppcuesAccessList(

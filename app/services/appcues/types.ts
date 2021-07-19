@@ -8,7 +8,7 @@ export interface AppcuesUserInfo {
   createdAt: number
 }
 
-export type AppcuesUserList = Record<
+export type AppcuesUserAccessList = Record<
   `has${typeof ACL[keyof typeof ACL]}Access`,
   boolean
 >
