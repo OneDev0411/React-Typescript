@@ -142,9 +142,7 @@ export default function ListingMarketing({
       return
     }
 
-    let timeoutHandler: number
-
-    setTimeout(scrollToSelectedMedium)
+    const timeoutHandler = setTimeout(scrollToSelectedMedium)
 
     return () => clearTimeout(timeoutHandler)
   }, [
