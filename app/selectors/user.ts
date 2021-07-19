@@ -19,7 +19,7 @@ export const selectUserUnsafe = (state: IAppState) => state.user
  * @param state The app state
  * @returns The user state
  */
-export function selectUser(state: IAppState) {
+export function selectUser(state: IAppState): IUser {
   const user = selectUserUnsafe(state)!
 
   // if (!user) {
@@ -75,3 +75,11 @@ export const selectUserIsSignedIn = (state: IAppState) =>
  * @returns The current user id
  */
 export const selectUserId = (state: IAppState) => selectUser(state).id
+
+/**
+ * Returns the user timezone
+ * @param state The app state
+ * @returns The current user timezone
+ */
+export const selectUserTimezone = (state: IAppState) =>
+  selectUser(state).timezone

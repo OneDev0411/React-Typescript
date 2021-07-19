@@ -35,10 +35,8 @@ function DealContext({ brandId, isFetching, list }: Props) {
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [selectedSection, setSelectedSection] = useState<string | null>(null)
-  const [
-    selectedContext,
-    setSelectedContext
-  ] = useState<IDealBrandContext | null>(null)
+  const [selectedContext, setSelectedContext] =
+    useState<IDealBrandContext | null>(null)
 
   useEffect(() => {
     dispatch(getContextsByBrand(brandId))

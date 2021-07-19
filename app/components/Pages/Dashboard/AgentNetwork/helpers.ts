@@ -1,5 +1,5 @@
 import { goTo } from 'utils/go-to'
-import { SearchResult } from 'components/ListingsAndPlacesSearchInput/types'
+import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
 
 export function openListingPage(listing: ICompactListing | IListing): void {
   const listingAddress =
@@ -24,9 +24,7 @@ export function openPlacePage(place: google.maps.GeocoderResult): void {
 export function openSearchResultPage(result: SearchResult): void {
   if (result.type === 'listing') {
     openListingPage(result.listing)
-
-    return
+  } else if (result.type === 'place') {
+    openPlacePage(result.place)
   }
-
-  openPlacePage(result.place)
 }

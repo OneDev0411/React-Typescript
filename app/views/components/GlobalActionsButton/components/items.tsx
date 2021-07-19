@@ -20,7 +20,8 @@ import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-va
 
 import {
   meetingRoomOutlined,
-  permContactCalendarOutlined
+  permContactCalendarOutlined,
+  showingIcon
 } from '../../SvgIcons/icons'
 
 import CreateOpenHouse from './OpenHouse'
@@ -91,6 +92,14 @@ const items: Item[] = [
     Icon: mdiShoePrint,
     render: props => {
       return <TourDrawer {...props} />
+    }
+  },
+  {
+    title: 'Showing',
+    type: 'showing',
+    Icon: showingIcon,
+    redirectTo: url => {
+      goTo(url)
     }
   }
 ]

@@ -64,10 +64,8 @@ export function ChecklistHeader({
   setDeactivatable,
   setTerminable
 }: Props) {
-  const [
-    isDeactivatableChanging,
-    setDeactivatableChanging
-  ] = useDictionary<boolean>()
+  const [isDeactivatableChanging, setDeactivatableChanging] =
+    useDictionary<boolean>()
   const [isTerminableChanging, setTerminableChanging] = useDictionary<boolean>()
   const [formPickerOpen, setFormPickerOpen] = useState(false)
 
@@ -130,7 +128,7 @@ export function ChecklistHeader({
         size="small"
         onClick={openFormPickerDrawer}
         className={classes.splitButton}
-        renderMenu={({ closeMenu }) => (
+        RenderMenu={({ closeMenu }) => (
           <List dense>
             <ListItem
               className={classes.splitMenuItem}

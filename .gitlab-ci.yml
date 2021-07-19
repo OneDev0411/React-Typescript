@@ -2,19 +2,18 @@ image: node:14
 
 stages:
   - test
-  - deploy
   - review
+  - deploy
 
 test_unit:
-  needs: []
   stage: test
   only:
     - merge_requests
   script:
-    - npm i -g npm
     - npm i
     - npm run types:check
     - npm run test:ci -- --coverage
+  needs: []
 
 deploy_beta:
   stage: deploy

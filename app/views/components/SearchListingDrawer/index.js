@@ -12,7 +12,7 @@ import {
 import { Alert, AlertTitle } from '@material-ui/lab'
 
 import { searchListings } from 'models/Deal/listing'
-import { getMediaGallery } from 'models/media-manager'
+import { getMediaGallery } from 'models/Deal/media-manager'
 
 import Listing from '../../../models/listings/listing'
 import { attachDealDataToListing } from './helpers/attach-deal-to-listing'

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { WithRouterProps } from 'react-router'
 import { decode } from 'js-base64'
 
+import { useQueryParamValue } from '@app/hooks/use-query-param'
 import getListing from 'models/listings/listing/get-listing'
 import { getContact } from 'models/contacts/get-contact'
 
@@ -12,7 +12,7 @@ interface UseEntityById {
   error: Nullable<Error>
 }
 
-const LISTING_ID_QUERY_KEY = 'listingId'
+export const LISTING_ID_QUERY_KEY = 'listingId'
 const LISTING_IMAGES_QUERY_KEY = 'imageUrls'
 
 interface UseListingById extends UseEntityById {
@@ -20,21 +20,21 @@ interface UseListingById extends UseEntityById {
 }
 
 export function useListingById(
-  location: WithRouterProps['location']
+  field: string = LISTING_ID_QUERY_KEY
 ): UseListingById {
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<Nullable<Error>>(null)
+  const listingId = useQueryParamValue(field)
+  const serializedListingImages = useQueryParamValue(LISTING_IMAGES_QUERY_KEY)
 
   useEffect(() => {
     async function fetchListing() {
-      const listingId: Optional<UUID> = location.query[LISTING_ID_QUERY_KEY]
-
       if (!listingId) {
-        const mockedListing = ((await getMockListing()) as unknown) as IListing
+        const mockedListing = (await getMockListing()) as unknown as IListing
 
-        const images: string[] = location.query[LISTING_IMAGES_QUERY_KEY]
-          ? location.query[LISTING_IMAGES_QUERY_KEY].split(',').map(decode)
+        const images: string[] = serializedListingImages
+          ? serializedListingImages.split(',').map(decode)
           : []
 
         setListing({
@@ -66,7 +66,7 @@ export function useListingById(
     }
 
     fetchListing()
-  }, [location.query])
+  }, [listingId, serializedListingImages])
 
   return {
     listing,
@@ -79,18 +79,14 @@ interface UseContactById extends UseEntityById {
   contact: Nullable<IContact>
 }
 
-export function useContactById(
-  location: WithRouterProps['location'],
-  field: string = 'contactId'
-): UseContactById {
+export function useContactById(field: string = 'contactId'): UseContactById {
   const [contact, setContact] = useState<Nullable<IContact>>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<Nullable<Error>>(null)
+  const contactId = useQueryParamValue(field)
 
   useEffect(() => {
     async function fetchContact() {
-      const contactId: Optional<UUID> = location.query[field]
-
       if (!contactId) {
         setContact(null)
         setIsLoading(false)
@@ -114,7 +110,7 @@ export function useContactById(
       }
     }
     fetchContact()
-  }, [location.query, field])
+  }, [contactId])
 
   return {
     contact,

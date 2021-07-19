@@ -20,9 +20,8 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
   const gridClasses = useGridStyles()
   const { selections, toggleItem } = useListSelection()
   const [selectedListingId, setSelectedListingId] = useState(null)
-  const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] = useState(
-    false
-  )
+  const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] =
+    useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
     window.history.replaceState({}, '', BASE_URL)
