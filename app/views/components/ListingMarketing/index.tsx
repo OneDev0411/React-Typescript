@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
 
-import Link from '@app/views/components/ALink'
+import useNotify from '@app/hooks/use-notify'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import getListing from '@app/models/listings/listing/get-listing'
-import { selectUser } from '@app/selectors/user'
 import { selectActiveTeamId } from '@app/selectors/team'
 import { useLoadingEntities } from '@app/hooks/use-loading'
 import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
@@ -13,13 +13,8 @@ import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
-import {
-  hasUserAccessToCrm,
-  hasUserAccessToMarketingCenter,
-  hasUserAccessToAgentNetwork,
-  hasUserAccessToWebsites
-} from 'utils/user-teams'
 
+import Link from '@app/views/components/ALink'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import SendMlsListingCard from '@app/views/components/InstantMarketing/adapters/SendMlsListingCard'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -32,8 +27,6 @@ import {
   ALL_MEDIUMS,
   LISTING_TEMPLATE_TYPES
 } from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
-
-import useNotify from '@app/hooks/use-notify'
 
 import MarketingButton from './MarketingButton'
 import TemplateTypesChips from './TemplateTypesChips'
@@ -64,9 +57,17 @@ export default function ListingMarketing({
   onChangeMedium
 }: Props) {
   const theme = useTheme()
-  const user = useSelector(selectUser)
   const activeTeamId = useSelector(selectActiveTeamId)
   const notify = useNotify()
+
+  const shouldShowAgentNetworkButton = useAcl('AgentNetwork')
+  const hasMarketingAccess = useAcl('Marketing')
+  const shouldShowOpenHouseButton = useAcl('CRM') && hasMarketingAccess
+  const shouldShowWebsitesButton = useAcl('Websites')
+  const shouldShowMarketingButtons =
+    shouldShowAgentNetworkButton ||
+    shouldShowOpenHouseButton ||
+    shouldShowWebsitesButton
 
   const [isOpenHouseDrawerOpen, setIsOpenHouseDrawerOpen] =
     useState<boolean>(false)
@@ -187,15 +188,6 @@ export default function ListingMarketing({
     template =>
       template.template.template_type === (templateType ?? templateTypes[0])
   )
-
-  const shouldShowAgentNetworkButton = hasUserAccessToAgentNetwork(user)
-  const shouldShowOpenHouseButton =
-    hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)
-  const shouldShowWebsitesButton = hasUserAccessToWebsites(user)
-  const shouldShowMarketingButtons =
-    shouldShowAgentNetworkButton ||
-    shouldShowOpenHouseButton ||
-    shouldShowWebsitesButton
 
   return (
     <>
