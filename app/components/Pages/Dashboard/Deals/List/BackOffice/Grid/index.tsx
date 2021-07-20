@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { WithRouterProps, withRouter } from 'react-router'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
@@ -46,6 +47,7 @@ import {
 } from '../helpers/backoffice-sorting'
 
 import onDealOpened from '../../../utils/on-deal-opened'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 
 interface Props {
   searchQuery: SearchQuery
@@ -159,7 +161,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   }
 
-  const getData = (): IDeal[] => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -183,9 +185,14 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
 
     return Object.values(deals)
-  }
+  }, [
+    deals,
+    props.searchQuery.filter,
+    props.searchQuery.term.length,
+    props.searchQuery.type
+  ])
 
-  const data = getData()
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
     <Grid<IDeal>

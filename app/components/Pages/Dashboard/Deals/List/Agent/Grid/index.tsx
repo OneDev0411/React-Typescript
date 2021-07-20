@@ -47,6 +47,7 @@ import CriticalDate, {
 
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import onDealOpened from '../../../utils/on-deal-opened'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -139,7 +140,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     }
   ]
 
-  const data = useMemo(() => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -153,6 +154,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       filterFn(deal, statuses)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
+
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
