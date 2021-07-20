@@ -126,8 +126,8 @@ function ShowingAvailabilitiesTimes({
             size="small"
             color="primary"
             disabled={
-              !value.length ||
-              !!timeConflicts.length ||
+              value.length === 0 ||
+              timeConflicts.length > 0 ||
               !!error ||
               disabledContinue
             }
