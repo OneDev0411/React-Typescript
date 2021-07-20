@@ -62,7 +62,10 @@ const propTypes = {
   user: PropTypes.shape().isRequired,
   isOpen: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  associations: PropTypes.shape({ deal: PropTypes.object })
+  associations: PropTypes.shape({
+    deal: PropTypes.object,
+    listing: PropTypes.object
+  })
 }
 
 const defaultProps = {

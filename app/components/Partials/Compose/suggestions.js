@@ -41,13 +41,8 @@ export default ({
     return style
   }
 
-  const isWebkit = 'WebkitAppearance' in document.documentElement.style
-
   return (
-    <div
-      className="sg-container u-scrollbar"
-      data-simplebar={(!isWebkit && _.size(viewList) > 0) || null}
-    >
+    <div className="sg-container u-scrollbar">
       <div
         className={cn('suggestions', { dropdown: dropDownBox === true })}
         style={getStyles()}

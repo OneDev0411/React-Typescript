@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { TableCellProps } from '@material-ui/core'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
@@ -26,6 +28,7 @@ import { Address } from '../../components/table-columns/Address'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
@@ -146,7 +149,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   }
 
-  const getData = (): IDeal[] => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -170,9 +173,14 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
 
     return Object.values(deals)
-  }
+  }, [
+    deals,
+    props.searchQuery.filter,
+    props.searchQuery.term.length,
+    props.searchQuery.type
+  ])
 
-  const data = getData()
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
     <Grid<IDeal>

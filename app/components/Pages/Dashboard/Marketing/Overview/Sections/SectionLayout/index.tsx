@@ -63,7 +63,7 @@ export default function SectionLayout({
         </Grid>
         {actionNode && <Grid item>{actionNode}</Grid>}
       </Grid>
-      <Grid container item spacing={1} direction="row">
+      <Grid container item spacing={2} direction="row">
         {children}
       </Grid>
     </Grid>

@@ -4,32 +4,29 @@ import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
-import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
-import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import LoadingContainer from 'components/LoadingContainer'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { meetingRoomOutlined } from 'components/SvgIcons/icons'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { useUniqueMediums } from 'hooks/use-unique-mediums'
-import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
-import getListing from 'models/listings/listing/get-listing'
-import { selectUser } from 'selectors/user'
-import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
-import {
-  hasUserAccessToCrm,
-  hasUserAccessToMarketingCenter,
-  hasUserAccessToAgentNetwork,
-  hasUserAccessToWebsites
-} from 'utils/user-teams'
-import { getActiveTeamId } from 'utils/user-teams'
-
-import { useTemplates } from '../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
+import { useTemplates } from '@app/components/Pages/Dashboard/Marketing/hooks/use-templates'
 import {
   ALL_MEDIUMS,
   LISTING_TEMPLATE_TYPES
-} from '../../../components/Pages/Dashboard/Marketing/Wizard/constants'
+} from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
+import { useLoadingEntities } from '@app/hooks/use-loading'
+import useNotify from '@app/hooks/use-notify'
+import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
+import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
+import getListing from '@app/models/listings/listing/get-listing'
+import { selectActiveTeamId } from '@app/selectors/team'
+import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
+import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+import Link from '@app/views/components/ALink'
+import SendMlsListingCard from '@app/views/components/InstantMarketing/adapters/SendMlsListingCard'
+import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
+import LoadingContainer from '@app/views/components/LoadingContainer'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { meetingRoomOutlined } from '@app/views/components/SvgIcons/icons'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import { OpenHouseDrawer } from '../open-house/OpenHouseDrawer'
 
 import MarketingButton from './MarketingButton'
 import TemplatesList from './TemplatesList'
@@ -59,8 +56,20 @@ export default function ListingMarketing({
   onChangeMedium
 }: Props) {
   const theme = useTheme()
-  const user = useSelector(selectUser)
-  const activeBrand = getActiveTeamId(user)
+  const activeTeamId = useSelector(selectActiveTeamId)
+  const notify = useNotify()
+
+  const shouldShowAgentNetworkButton = useAcl('AgentNetwork')
+  const hasMarketingAccess = useAcl('Marketing')
+  const shouldShowOpenHouseButton = useAcl('CRM') && hasMarketingAccess
+  const shouldShowWebsitesButton = useAcl('Websites')
+  const shouldShowMarketingButtons =
+    shouldShowAgentNetworkButton ||
+    shouldShowOpenHouseButton ||
+    shouldShowWebsitesButton
+
+  const [isOpenHouseDrawerOpen, setIsOpenHouseDrawerOpen] =
+    useState<boolean>(false)
 
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
@@ -69,7 +78,7 @@ export default function ListingMarketing({
   const [isLoadingListing] = useLoadingEntities(listing)
 
   const { templates, isLoading: isLoadingTemplates } = useTemplates(
-    activeBrand,
+    activeTeamId,
     undefined,
     LISTING_TEMPLATE_TYPES
   )
@@ -133,9 +142,7 @@ export default function ListingMarketing({
       return
     }
 
-    let timeoutHandler: number
-
-    setTimeout(scrollToSelectedMedium)
+    const timeoutHandler = setTimeout(scrollToSelectedMedium)
 
     return () => clearTimeout(timeoutHandler)
   }, [
@@ -155,6 +162,23 @@ export default function ListingMarketing({
     onChangeMedium(medium)
   }
 
+  const openOpenHouseDrawer = () => {
+    setIsOpenHouseDrawerOpen(true)
+  }
+
+  const closeOpenHouseDrawer = () => {
+    setIsOpenHouseDrawerOpen(false)
+  }
+
+  const handleSaveOpenHouse = () => {
+    closeOpenHouseDrawer()
+
+    notify({
+      message: 'Open house created successfully',
+      status: 'success'
+    })
+  }
+
   if (isLoadingListing || isLoadingTemplates || !listing) {
     return <LoadingContainer noPaddings />
   }
@@ -164,15 +188,6 @@ export default function ListingMarketing({
       template.template.template_type === (templateType ?? templateTypes[0])
   )
 
-  const shouldShowAgentNetworkButton = hasUserAccessToAgentNetwork(user)
-  const shouldShowOpenHouseButton =
-    hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)
-  const shouldShowWebsitesButton = hasUserAccessToWebsites(user)
-  const shouldShowMarketingButtons =
-    shouldShowAgentNetworkButton ||
-    shouldShowOpenHouseButton ||
-    shouldShowWebsitesButton
-
   return (
     <>
       <Grid container direction="row">
@@ -180,52 +195,58 @@ export default function ListingMarketing({
           <Grid container item spacing={2}>
             {shouldShowAgentNetworkButton && (
               <Grid item xs={12} sm={6} md={4}>
-                <MarketingButton
-                  icon={
-                    <SvgIcon
-                      path={mdiAccountGroupOutline}
-                      color={theme.palette.primary.main}
-                      size={muiIconSizes.large}
-                    />
-                  }
-                  title="Agent Network"
-                  subtitle="Market this listing to top agents from any brokerage"
-                  url={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listing.property.address.street_address}`}
-                />
+                <Link
+                  noStyle
+                  to={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listing.property.address.street_address}`}
+                >
+                  <MarketingButton
+                    icon={
+                      <SvgIcon
+                        path={mdiAccountGroupOutline}
+                        color={theme.palette.primary.main}
+                        size={muiIconSizes.large}
+                      />
+                    }
+                    title="Agent Network"
+                    subtitle="Market this listing to top agents from any brokerage"
+                  />
+                </Link>
               </Grid>
             )}
 
             {shouldShowOpenHouseButton && (
               <Grid item xs={12} sm={6} md={4}>
-                <MarketingButton
-                  icon={
-                    <SvgIcon
-                      path={meetingRoomOutlined}
-                      color={theme.palette.primary.main}
-                      size={muiIconSizes.large}
-                    />
-                  }
-                  title="Open House"
-                  subtitle="Customize Open House registration pages"
-                  url="/dashboard/open-house"
-                />
+                <Link noStyle onClick={openOpenHouseDrawer}>
+                  <MarketingButton
+                    icon={
+                      <SvgIcon
+                        path={meetingRoomOutlined}
+                        color={theme.palette.primary.main}
+                        size={muiIconSizes.large}
+                      />
+                    }
+                    title="Open House"
+                    subtitle="Create Open House registration page for this listing"
+                  />
+                </Link>
               </Grid>
             )}
 
             {shouldShowWebsitesButton && (
               <Grid item xs={12} sm={6} md={4}>
-                <MarketingButton
-                  icon={
-                    <SvgIcon
-                      path={mdiWeb}
-                      color={theme.palette.primary.main}
-                      size={muiIconSizes.large}
-                    />
-                  }
-                  title="Websites"
-                  subtitle="Create or manage websites for this listing"
-                  url="/dashboard/websites"
-                />
+                <Link noStyle to="/dashboard/websites">
+                  <MarketingButton
+                    icon={
+                      <SvgIcon
+                        path={mdiWeb}
+                        color={theme.palette.primary.main}
+                        size={muiIconSizes.large}
+                      />
+                    }
+                    title="Websites"
+                    subtitle="Create or manage websites for this listing"
+                  />
+                </Link>
               </Grid>
             )}
           </Grid>
@@ -276,6 +297,14 @@ export default function ListingMarketing({
           )
         })}
       </Grid>
+      {isOpenHouseDrawerOpen && (
+        <OpenHouseDrawer
+          isOpen
+          onClose={closeOpenHouseDrawer}
+          submitCallback={handleSaveOpenHouse}
+          associations={{ listing }}
+        />
+      )}
       {selectedTemplate && (
         <SendMlsListingCard
           hasExternalTrigger

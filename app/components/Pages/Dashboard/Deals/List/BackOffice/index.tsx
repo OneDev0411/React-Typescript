@@ -78,7 +78,9 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     }
 
     if (searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, searchQuery.term))
+      dispatch(
+        searchQuery.term ? searchDeals(user, searchQuery.term) : getDeals(user)
+      )
     }
   }, [dispatch, searchQuery, statuses, user])
 

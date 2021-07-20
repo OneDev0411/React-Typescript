@@ -35,6 +35,7 @@ import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
 import { getGridSort } from '../../helpers/sorting'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 
 import EmptyState from './EmptyState'
@@ -130,7 +131,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     }
   ]
 
-  const data = useMemo(() => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -144,6 +145,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       filterFn(deal, statuses)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
+
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
