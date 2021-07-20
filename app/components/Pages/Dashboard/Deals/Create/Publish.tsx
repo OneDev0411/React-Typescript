@@ -23,7 +23,7 @@ import { useLoadFullDeal } from 'hooks/use-load-deal'
 
 import { goTo } from 'utils/go-to'
 
-import { getField } from 'models/Deal/helpers/context'
+import { getField, getStatus } from 'models/Deal/helpers/context'
 
 import { createAddressContext } from 'deals/utils/create-address-context'
 
@@ -412,23 +412,21 @@ export default function Publish({ params }: Props) {
               />
             )}
 
-            {isStatusVisible &&
-              !getField(deal, statusContextKey) &&
-              statusList.length > 0 && (
-                <Controller
-                  key="status"
-                  name={`context:${statusContextKey}`}
-                  control={control}
-                  defaultValue={getField(deal, statusContextKey)}
-                  render={({ onChange }) => (
-                    <DealStatus
-                      list={statusList}
-                      error={errors.status}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              )}
+            {isStatusVisible && !getStatus(deal) && statusList.length > 0 && (
+              <Controller
+                key="status"
+                name={`context:${statusContextKey}`}
+                control={control}
+                defaultValue={getStatus(deal)}
+                render={({ onChange }) => (
+                  <DealStatus
+                    list={statusList}
+                    error={errors.status}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            )}
 
             {requiredContexts.length > 0 &&
               requiredContexts.map((context: IDealBrandContext) => (

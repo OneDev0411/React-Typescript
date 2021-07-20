@@ -21,10 +21,8 @@ interface Props {
 export default function AlertViewerModal(props: Props) {
   const pageTitle = 'Shared Listings'
   const { isOpen, onClose, feed } = props
-  const [
-    selectedListing,
-    setSelectedListing
-  ] = useState<ICompactListing | null>(null)
+  const [selectedListing, setSelectedListing] =
+    useState<ICompactListing | null>(null)
   const [showListingModal, setShowListingModal] = useState(false)
 
   if (!isOpen) {

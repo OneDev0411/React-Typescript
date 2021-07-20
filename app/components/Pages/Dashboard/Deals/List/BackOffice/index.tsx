@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+
+import { useQueryParam } from '@app/hooks/use-query-param'
 
 import { IAppState } from 'reducers/index'
 
@@ -58,17 +59,15 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
   }))
 
   const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
-  const [searchCriteria, setSearchCriteria] = useState('')
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
-    term: searchCriteria
+    term: searchCriteria || ''
   }
 
-  const handleQueryChange = (value): void => {
-    setSearchCriteria(value)
-
+  const handleQueryChange = (value: string): void => {
     if (value.length === 0) {
       dispatch(getDeals(user))
     }
@@ -76,11 +75,17 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     if (value.length > 3 && searchQuery.type === 'inbox') {
       dispatch(searchDeals(user, value))
     }
+
+    setSearchCriteria(value)
   }
 
   useDeepCompareEffect(() => {
     if (searchQuery.type === 'query' && statuses.length > 0) {
       dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+    }
+
+    if (searchQuery.type === 'inbox') {
+      dispatch(searchDeals(user, searchQuery.term))
     }
   }, [dispatch, searchQuery, statuses, user])
 
@@ -90,6 +95,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
+            value={searchCriteria}
             onChange={handleQueryChange}
           />
 

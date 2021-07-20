@@ -37,13 +37,16 @@ const propTypes = {
   deal: PropTypes.object,
   checklist: PropTypes.object,
   form: PropTypes.object,
+  defaultRole: PropTypes.string,
   allowedRoles: PropTypes.array,
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
   showBrokerageFields: PropTypes.bool,
   compact: PropTypes.bool,
   onUpsertRole: PropTypes.func,
-  onDeleteRole: PropTypes.func
+  onDeleteRole: PropTypes.func,
+  showSaveContactButton: PropTypes.bool,
+  dealSide: PropTypes.string
 }
 
 const defaultProps = {
@@ -53,6 +56,7 @@ const defaultProps = {
   isCommissionRequired: true,
   showBrokerageFields: false,
   compact: false,
+  defaultRole: '',
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -123,7 +127,7 @@ export class DealRole extends React.Component {
    * preselect role, if there is only one allowed role to select
    */
   get PreselectRole() {
-    const { form } = this.props
+    const { form, defaultRole } = this.props
     const formRole = form && form.role
 
     if (formRole) {
@@ -133,7 +137,10 @@ export class DealRole extends React.Component {
     }
 
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
-    const preselectedRole = availableRoles.length > 0 && availableRoles[0]
+
+    const preselectedRole = availableRoles.some(name => name === defaultRole)
+      ? defaultRole
+      : availableRoles.length > 0 && availableRoles[0]
 
     return {
       role: preselectedRole || null

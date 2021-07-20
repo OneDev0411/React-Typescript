@@ -47,7 +47,7 @@ export function DealClient({
   skippable = false,
   onChange
 }: Props) {
-  const { user, checklist } = useCreationContext()
+  const { checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
@@ -65,21 +65,19 @@ export function DealClient({
    * list of all existence roles
    */
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
-  const getSearchInputPlaceholder = () => {
-    const type =
-      side === 'Selling'
-        ? propertyType?.is_lease
-          ? 'Landlord'
-          : 'Seller'
-        : propertyType?.is_lease
-        ? 'Tenant'
-        : 'Buyer'
+  const getDefaultRole = () => {
+    if (side === 'Selling') {
+      return propertyType?.is_lease ? 'Landlord' : 'Seller'
+    }
 
-    return `Type ${clientRoles.length > 0 ? 'Co-' : ''}${type} Name`
+    if (side === 'Buying') {
+      return propertyType?.is_lease ? 'Tenant' : 'Buyer'
+    }
+
+    return ''
   }
 
   const handleNext = () => {
@@ -122,10 +120,10 @@ export function DealClient({
             isOpen
             compact
             showSaveContactButton
-            user={user}
             checklist={checklist}
             dealSide={side}
             form={selectedRole}
+            defaultRole={getDefaultRole()}
             allowedRoles={allowedRoles}
             onUpsertRole={handleUpsertRole}
             onDeleteRole={handleDeleteRole}
@@ -154,7 +152,9 @@ export function DealClient({
           }}
         >
           <ContactRoles
-            placeholder={getSearchInputPlaceholder()}
+            placeholder={`Type ${
+              clientRoles.length > 0 ? 'Co-' : ''
+            }${getDefaultRole()} Name`}
             onSelectRole={setSelectedRole}
           />
         </Box>

@@ -41,7 +41,7 @@ export default function ProfileAvatar({ onChange, data }: Props) {
         justifyContent="space-between"
       >
         <Box display="flex" alignItems="center">
-          <Avatar url={data.src} size="xlarge" />
+          <Avatar url={data.src} size="xxlarge" />
           <Box ml={3} textAlign="left">
             <Typography variant="h6">Your profile image</Typography>
             {data.type && (

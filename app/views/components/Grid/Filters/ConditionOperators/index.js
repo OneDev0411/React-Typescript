@@ -21,7 +21,7 @@ export function ConditionOperators(props) {
 
   return (
     <BasicDropdown
-      noBorder
+      buttonVariant="text"
       items={MENU_OPTIONS}
       onChange={selectedItem => props.onChange(selectedItem)}
       menuStyle={{ width: '100%', overflow: 'hidden' }}

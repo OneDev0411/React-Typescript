@@ -59,13 +59,10 @@ export function AddToMarketingCenter({
   notify,
   disabled = false
 }: Props & ConnectedProps) {
-  const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<IMarketingTemplateType>
-  >(undefined)
-  const [
-    isTeamsSelectorDrawerOpen,
-    setIsTeamsSelectorDrawerOpen
-  ] = useState<boolean>(false)
+  const [selectedTemplateType, setSelectedTemplateType] =
+    useState<Optional<IMarketingTemplateType>>(undefined)
+  const [isTeamsSelectorDrawerOpen, setIsTeamsSelectorDrawerOpen] =
+    useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const categories = useMarketingCenterCategories()
   const classes = useStyles()

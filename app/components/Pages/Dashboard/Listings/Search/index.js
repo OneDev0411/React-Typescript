@@ -7,17 +7,23 @@ import memoize from 'lodash/memoize'
 import hash from 'object-hash'
 
 import { withStyles } from '@material-ui/core/styles'
-import { Box, IconButton, Typography, Tooltip } from '@material-ui/core'
+import {
+  Box,
+  IconButton,
+  Typography,
+  Tooltip,
+  CircularProgress
+} from '@material-ui/core'
 import MyLocation from '@material-ui/icons/MyLocation'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
-
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { getPlace } from 'models/listings/search/get-place'
-
-import { loadJS } from 'utils/load-js'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import {
   getBounds,
@@ -81,6 +87,10 @@ const styles = theme => ({
     width: '80%',
     maxWidth: 600,
     marginTop: theme.spacing(10)
+  },
+  loadingLocateIcon: {
+    marginLeft: theme.spacing(3),
+    marginTop: theme.spacing(1.5)
   }
 })
 
@@ -91,6 +101,7 @@ class Search extends React.Component {
     const { query } = props.location
 
     this.searchQuery = query.q || ''
+    this.brokerageQuery = query.brokerage || ''
 
     let activeView = query.view
 
@@ -122,20 +133,28 @@ class Search extends React.Component {
   componentDidMount() {
     window.initialize = this.initialize
 
-    if (!window.google) {
-      loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
-        'loadJS-mls-search-map'
-      )
-    } else {
+    const googleMapAPIParams = {
+      key: bootstrapURLKeys.key,
+      libraries: bootstrapURLKeys.libraries.split(','),
+      callback: 'initialize'
+    }
+
+    if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
+    } else {
+      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
     }
   }
 
   initialize = () => {
     const { firstRun } = this.state
 
-    if (firstRun) {
+    if (
+      firstRun &&
+      !this.brokerageQuery &&
+      !this.searchQuery &&
+      !this.props.isWidget
+    ) {
       return
     }
 
@@ -145,6 +164,8 @@ class Search extends React.Component {
 
     if (this.searchQuery) {
       this._findPlace(decodeURIComponent(this.searchQuery))
+    } else if (this.brokerageQuery) {
+      this._findBrokerage(this.brokerageQuery)
     } else {
       this.initMap()
     }
@@ -160,7 +181,21 @@ class Search extends React.Component {
     this.setState({ isMapInitialized: true })
   }
 
-  goToCurrentPosition = () => {
+  initUserLocation = (lat, lng) => {
+    this.setState(
+      {
+        firstRun: false,
+        isGettingCurrentPosition: false,
+        userLastBrowsingLocation: {
+          zoom: 15,
+          center: { lat, lng }
+        }
+      },
+      this.initMap
+    )
+  }
+
+  onClickLocate = () => {
     const { dispatch } = this.props
 
     if (!window.navigator.geolocation) {
@@ -177,16 +212,7 @@ class Search extends React.Component {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
-        this.setState(
-          {
-            isGettingCurrentPosition: false,
-            userLastBrowsingLocation: {
-              zoom: 15,
-              center: { lat, lng }
-            }
-          },
-          this.initMap
-        )
+        this.initUserLocation(lat, lng)
       },
       error => {
         console.log(error)
@@ -203,7 +229,7 @@ class Search extends React.Component {
           })
         )
       },
-      { timeout: 5000 }
+      { timeout: 10000 }
     )
   }
 
@@ -286,6 +312,32 @@ class Search extends React.Component {
     } finally {
       this.initMap()
     }
+  }
+
+  _findBrokerage = brokerage => {
+    const { dispatch, filterOptions } = this.props
+
+    try {
+      batchActions([
+        dispatch(
+          searchActions.getListings.byValert({
+            ...filterOptions,
+            offices: [brokerage],
+            limit: 200
+          })
+        ),
+        dispatch(
+          setMapProps('search', {
+            center: mapInitialState.center,
+            zoom: mapInitialState.zoom
+          })
+        )
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+
+    return this.initMap()
   }
 
   onChangeView = e => {
@@ -413,6 +465,7 @@ class Search extends React.Component {
         return (
           <MapView
             {..._props}
+            isWidget={this.props.isWidget}
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
@@ -508,16 +561,7 @@ class Search extends React.Component {
                 }}
               />
             </Box>
-            <Tooltip title="Get your exact location on the map">
-              <IconButton
-                aria-label="locate me"
-                onClick={() =>
-                  this.setState({ firstRun: false }, this.goToCurrentPosition)
-                }
-              >
-                <MyLocation />
-              </IconButton>
-            </Tooltip>
+            {this.renderLocateButton()}
           </Box>
           <Box mt={1} textAlign="center">
             <img
@@ -531,13 +575,33 @@ class Search extends React.Component {
     )
   }
 
+  renderLocateButton() {
+    return (
+      <Tooltip title="Get your exact location on the map">
+        {this.state.isGettingCurrentPosition ? (
+          <CircularProgress
+            className={this.props.classes.loadingLocateIcon}
+            size={21}
+          />
+        ) : (
+          <IconButton aria-label="locate me" onClick={this.onClickLocate}>
+            <MyLocation />
+          </IconButton>
+        )}
+      </Tooltip>
+    )
+  }
+
   render() {
-    const { classes } = this.props
+    const { classes, isWidget } = this.props
     const { firstRun } = this.state
+    const hasUrlQuery = !!(this.brokerageQuery || this.searchQuery)
 
     return (
       <GlobalPageLayout className={classes.exploreContainer}>
-        {firstRun ? this.renderLadingPage() : this.renderExplorePage()}
+        {firstRun && !hasUrlQuery && !isWidget
+          ? this.renderLadingPage()
+          : this.renderExplorePage()}
       </GlobalPageLayout>
     )
   }

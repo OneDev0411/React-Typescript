@@ -88,12 +88,8 @@ export function DefaultValues({ formId }: Props) {
     IFormTemplateValue[]
   >([])
 
-  const {
-    rootTeam,
-    isLoading,
-    getChildNodes,
-    initialExpandedNodes
-  } = useBrandTree()
+  const { rootTeam, isLoading, getChildNodes, initialExpandedNodes } =
+    useBrandTree()
   const { annotation, annotationType, setAnnotation } = useDefaultValueContext()
 
   useEffect(() => {
