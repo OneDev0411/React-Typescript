@@ -14,7 +14,7 @@ interface SearchTextFieldProps extends Omit<SearchInputProps, 'onChange'> {
 function SearchTextField({
   onChange,
   delay = 500,
-  placeholder = ' Search',
+  placeholder = 'Search',
   ...otherProps
 }: SearchTextFieldProps) {
   const [debouncedOnChange] = useDebouncedCallback(onChange, delay)
