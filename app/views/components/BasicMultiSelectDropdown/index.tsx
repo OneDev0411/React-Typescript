@@ -1,8 +1,8 @@
 import React, { ReactNode, useState } from 'react'
 
-import { Item } from 'components/Dropdown/Item'
 import { BasicDropdown } from 'components/BasicDropdown'
 import { Checkbox } from 'components/Checkbox'
+import { Item } from 'components/Dropdown/Item'
 import { DropdownItem } from 'components/Dropdown/types'
 
 interface Props {
@@ -13,7 +13,9 @@ interface Props {
    * something to be shown when nothing is selected
    */
   placeholder?: ReactNode
-  [key: string]: any /* TODO: migrate basicDropdown to ts and use appropriate type */
+  [
+    key: string
+  ]: any /* TODO: migrate basicDropdown to ts and use appropriate type */
 }
 
 export function BasicMultiSelectDropdown({
@@ -23,9 +25,8 @@ export function BasicMultiSelectDropdown({
   applyChangesOnClose = false,
   ...basicDropdownProps
 }: Props) {
-  const [pendingSelectedItems, setPendingSelectedItems] = useState(
-    selectedItems
-  )
+  const [pendingSelectedItems, setPendingSelectedItems] =
+    useState(selectedItems)
 
   const currentSelectedItems = applyChangesOnClose
     ? pendingSelectedItems

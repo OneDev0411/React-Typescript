@@ -1,22 +1,20 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
+import NeighborhoodsGraphsIcon from 'assets/images/marketing/editor/blocks/neighborhoods-graphs.png'
+import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
 import { NeighborhoodsReport } from 'components/NeighborhoodsReportDrawer/types'
 import getStaticImageChartUrl from 'utils/charts/get-static-image-chart-url'
 
-import NeighborhoodsIcon from 'assets/images/marketing/editor/blocks/neighborhoods.png'
-
-import NeighborhoodsGraphsIcon from 'assets/images/marketing/editor/blocks/neighborhoods-graphs.png'
-
+import { MARKET_REPORTS_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-import { MARKET_REPORTS_CATEGORY } from '../../../constants'
-
-import neighborhoodsTemplates from './neighborhoods.mjml'
-import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+
+import neighborhoodsGraphsTemplates from './neighborhoods-graphs.mjml'
+import neighborhoodsTemplates from './neighborhoods.mjml'
 
 export const neighborhoodsBlockName = 'rechat-neighborhoods'
 export const neighborhoodsGraphsBlockName = 'rechat-neighborhoods-graphs'

@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+
 import { Typography, useTheme, Theme } from '@material-ui/core'
 import { Variant } from '@material-ui/core/styles/createTypography'
 
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
-import { Container } from './styled'
 import EditMode from './EditMode'
+import { Container } from './styled'
 
 interface Props {
   value?: string

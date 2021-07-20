@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { useIntercom } from 'react-use-intercom'
+
 import { useSelector, useDispatch } from 'react-redux'
+import { useIntercom } from 'react-use-intercom'
 
 import { selectUser } from 'selectors/user'
 

@@ -1,9 +1,8 @@
+import { changeNeedsAttention } from 'actions/deals'
 import { addNotification as notify } from 'components/notification'
 
-import { changeNeedsAttention } from 'actions/deals'
-
-import Message from '../../../../../../Chatroom/Util/message'
 import store from '../../../../../../../../../stores'
+import Message from '../../../../../../Chatroom/Util/message'
 
 export async function notifyOffice(props, comment) {
   if (comment) {

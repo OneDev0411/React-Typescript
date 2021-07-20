@@ -1,6 +1,6 @@
 import React from 'react'
-import { createStyles, makeStyles, Paper, Theme } from '@material-ui/core'
 
+import { createStyles, makeStyles, Paper, Theme } from '@material-ui/core'
 import { PaperProps } from '@material-ui/core/Paper'
 import classNames from 'classnames'
 

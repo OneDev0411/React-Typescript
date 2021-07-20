@@ -1,7 +1,8 @@
 import React from 'react'
-import fecha from 'fecha'
+
 import { Link, Typography, Tooltip } from '@material-ui/core'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import fecha from 'fecha'
 
 interface Props {
   deal: UUID

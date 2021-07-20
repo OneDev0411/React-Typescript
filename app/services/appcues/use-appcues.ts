@@ -1,18 +1,13 @@
-import { useDeepCompareEffect } from 'react-use'
-import { useSelector } from 'react-redux'
-
 import moment from 'moment'
-
-import { selectUserHasAccess } from 'selectors/acl'
-
-import { selectUserUnsafe } from 'selectors/user'
-
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
-
-import { IAppState } from 'reducers'
-import { OAuthProvider } from 'constants/contacts'
+import { useSelector } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 
 import { ACL } from 'constants/acl'
+import { OAuthProvider } from 'constants/contacts'
+import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
+import { IAppState } from 'reducers'
+import { selectUserHasAccess } from 'selectors/acl'
+import { selectUserUnsafe } from 'selectors/user'
 
 interface Location {
   pathname: string

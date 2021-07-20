@@ -1,15 +1,16 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { withRouter, WithRouterProps, browserHistory } from 'react-router'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles, Theme } from '@material-ui/core'
 import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
+import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 
-import { selectUserUnsafe } from 'selectors/user'
-import { useFavorite } from 'hooks/use-favorite'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useFavorite } from 'hooks/use-favorite'
+import { selectUserUnsafe } from 'selectors/user'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

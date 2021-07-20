@@ -1,5 +1,5 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
 import {
   EDIT_IMAGE_TOOLBAR_BUTTON_NAME,
@@ -7,7 +7,6 @@ import {
   CHANGE_MAP_THEME_TOOLBAR_BUTTON_NAME,
   MANAGE_CAROUSEL_TOOLBAR_BUTTON_NAME
 } from '../constants'
-
 import {
   isImage,
   isBackgroundImageAllowed,

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Field } from 'redux-form'
 
 // each index represent month period for minimum_sold_date

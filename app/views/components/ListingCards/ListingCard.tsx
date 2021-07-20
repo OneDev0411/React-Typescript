@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Card,
   CardActionArea,
@@ -13,19 +14,18 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { noop } from 'lodash'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import { noop } from 'lodash'
 import pluralize from 'pluralize'
 
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import {
   getListingFeatures,
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import ListingCardMedia from './ListingCardMedia'
 

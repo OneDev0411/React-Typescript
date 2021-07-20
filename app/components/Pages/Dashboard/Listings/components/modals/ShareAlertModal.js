@@ -1,27 +1,25 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import { IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
-import { mdiClose } from '@mdi/js'
-
-import { Modal, ModalFooter } from 'components/Modal'
-
-import { hasRecipients } from 'utils/helpers'
 import { createRoom } from 'actions/chatroom/room'
 import createAlert from 'actions/listings/alerts/create-alert'
-
 import ActionButton from 'components/Button/ActionButton'
-import { H2 } from 'components/Typography/headings'
+import { Modal, ModalFooter } from 'components/Modal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { H2 } from 'components/Typography/headings'
+import { hasRecipients } from 'utils/helpers'
 
 import Recipients from '../../../../../Partials/ShareView'
 
-import SuccessModal from './SuccessModal'
 import { normalizeAlertOptions } from './normalize-alert-options'
+import SuccessModal from './SuccessModal'
 
 const ShareAlertModal = ({
   onHide,
@@ -78,42 +76,44 @@ export default compose(
   withState('isSharing', 'setIsSharing', false),
   withState('successModalIsActive', 'setSuccessModalIsActive', false),
   withHandlers({
-    shareHandler: ({
-      user,
-      onHide,
-      recipients,
-      alertTitle,
-      createRoom,
-      setIsSharing,
-      drawingPoints,
-      searchOptions,
-      setSuccessModalIsActive,
-      createAlert
-    }) => () => {
-      setIsSharing(true)
+    shareHandler:
+      ({
+        user,
+        onHide,
+        recipients,
+        alertTitle,
+        createRoom,
+        setIsSharing,
+        drawingPoints,
+        searchOptions,
+        setSuccessModalIsActive,
+        createAlert
+      }) =>
+      () => {
+        setIsSharing(true)
 
-      createRoom(recipients).then(room => {
-        const alertOptions = normalizeAlertOptions(
-          searchOptions,
-          drawingPoints,
-          {
-            room,
-            title: alertTitle,
-            created_by: user.id
-          }
-        )
+        createRoom(recipients).then(room => {
+          const alertOptions = normalizeAlertOptions(
+            searchOptions,
+            drawingPoints,
+            {
+              room,
+              title: alertTitle,
+              created_by: user.id
+            }
+          )
 
-        createAlert(alertOptions)
-          .then(() => {
-            setIsSharing(false)
-            onHide()
-            setSuccessModalIsActive(true)
-            setTimeout(() => setSuccessModalIsActive(false), 2000)
-          })
-          .catch(() => {
-            setIsSharing(false)
-          })
-      })
-    }
+          createAlert(alertOptions)
+            .then(() => {
+              setIsSharing(false)
+              onHide()
+              setSuccessModalIsActive(true)
+              setTimeout(() => setSuccessModalIsActive(false), 2000)
+            })
+            .catch(() => {
+              setIsSharing(false)
+            })
+        })
+      }
   })
 )(ShareAlertModal)

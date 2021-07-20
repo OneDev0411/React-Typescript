@@ -1,19 +1,20 @@
 import React, { useCallback, memo, useState } from 'react'
-import pluralize from 'pluralize'
+
 import { Box, Checkbox, useTheme } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import Table from 'components/Grid/Table'
-import LoadingComponent from 'components/Spinner'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
-
-import ZeroState from '../ZeroState'
-import { Address } from './columns/Address'
+import LoadingComponent from 'components/Spinner'
 
 const BASE_URL = '/dashboard/mls'
 
 import { ShareListings } from '../ShareListings'
+import ZeroState from '../ZeroState'
+
+import { Address } from './columns/Address'
 
 const ListView = ({ sortedListings, listings, isFetching }) => {
   const theme = useTheme()

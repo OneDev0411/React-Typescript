@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+
 import {
   makeStyles,
   Theme,
@@ -9,10 +10,9 @@ import {
 } from '@material-ui/core'
 
 import { ONE_DAY_IN_SECONDS, ONE_WEEK_IN_SECONDS } from '../constants'
-
 import { doSecondsRepresentWeeks } from '../helpers/do-seconds-represent-weeks'
-import { getWeeksFromSeconds } from '../helpers/get-weeks-from-seconds'
 import { getDaysFromSeconds } from '../helpers/get-days-from-seconds'
+import { getWeeksFromSeconds } from '../helpers/get-weeks-from-seconds'
 
 const daysOption = {
   label: 'Days',

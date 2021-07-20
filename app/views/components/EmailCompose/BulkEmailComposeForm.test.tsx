@@ -1,16 +1,18 @@
 import React from 'react'
+
 import { fireEvent, render } from '@testing-library/react'
 
+import templateInstance from 'fixtures/marketing-center/template-instance.json'
+import user from 'fixtures/users/agent.json'
 import { createEmailCampaign as mockCreateEmailCampaign } from 'models/email/create-email-campaign'
 import { updateEmailCampaign as mockUpdateEmailCampaign } from 'models/email/update-email-campaign'
 
 // eslint-disable-next-line import/no-unresolved
-import user from 'fixtures/users/agent.json'
 
 // eslint-disable-next-line import/no-unresolved
-import templateInstance from 'fixtures/marketing-center/template-instance.json'
 
 import { TestBed } from '../../../../tests/unit/TestBed'
+
 import { BulkEmailComposeForm } from './BulkEmailComposeForm'
 
 jest.mock('models/email/create-email-campaign')

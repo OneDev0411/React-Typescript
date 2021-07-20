@@ -3,13 +3,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { updateUserRoles } from '../helpers/update-user-roles'
-import { useTeamsFilterHook } from './use-teams-filter.hook'
-import { useAddEditTeamModal } from './use-add-edit-team-modal.hook'
-import { useDeleteTeam } from './use-delete-team.hook'
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
-import { useEditRolesModal } from './use-edit-roles-modal.hook'
+import { updateUserRoles } from '../helpers/update-user-roles'
+
+import { useAddEditTeamModal } from './use-add-edit-team-modal.hook'
 import { useAddMembersModal } from './use-add-members-modal.hook'
+import { useDeleteTeam } from './use-delete-team.hook'
+import { useEditRolesModal } from './use-edit-roles-modal.hook'
+import { useTeamsFilterHook } from './use-teams-filter.hook'
 
 export function useTeamsPage(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)

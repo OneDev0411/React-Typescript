@@ -1,7 +1,7 @@
 import { primary } from 'views/utils/colors'
 
-import Brand from '../../../../controllers/Brand'
 import * as types from '../../../../constants/listings/map'
+import Brand from '../../../../controllers/Brand'
 import getListingsByPolygonPonits from '../../search/get-listings/by-polygon-points'
 
 const overlayColor = Brand.color('primary', primary)
@@ -24,7 +24,7 @@ const getPolygonBounds = polygon => {
 
 let drawingManager
 
-const setDrawingManager = (dispatch, getState) => {
+const setDrawingManager = dispatch => {
   const { google } = window
 
   drawingManager = new google.maps.drawing.DrawingManager({

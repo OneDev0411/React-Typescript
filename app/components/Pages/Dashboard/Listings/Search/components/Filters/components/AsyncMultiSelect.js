@@ -1,6 +1,7 @@
 import React from 'react'
-import Select from 'react-select'
+
 import { connect } from 'react-redux'
+import Select from 'react-select'
 import compose from 'recompose/compose'
 import { change as updateField, formValueSelector } from 'redux-form'
 

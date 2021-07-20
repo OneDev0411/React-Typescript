@@ -1,9 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
-import { InputContainer, InputRequired, InputLabel } from '../styled'
-import { InputField } from './styled'
 import { FieldError } from '../../final-form-fields/FieldError'
+import { InputContainer, InputRequired, InputLabel } from '../styled'
+
+import { InputField } from './styled'
 
 export class TextArea extends React.Component {
   state = {
@@ -11,6 +13,7 @@ export class TextArea extends React.Component {
   }
 
   onHeightChangeHandler = height => {
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(height)) {
       return false
     }

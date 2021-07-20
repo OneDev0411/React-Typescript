@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import { Menu } from './Menu'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 
 import Address from './Address'
 import { ListingImage } from './Image'
+import { Menu } from './Menu'
 
 interface Props {
   deal: IDeal

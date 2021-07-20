@@ -1,7 +1,6 @@
-import { addNotification as notify } from 'components/notification'
-
-import { asyncDeleteFile } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { asyncDeleteFile } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 
 import store from '../../../../../../../../../stores'
 

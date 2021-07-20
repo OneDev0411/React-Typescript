@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+
 import { getTriggerCampaign } from './helpers/get-trigger-campaign'
 import { TriggerDataInput } from './types'
 

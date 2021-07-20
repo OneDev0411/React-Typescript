@@ -4,11 +4,6 @@ import {
   FETCH_LISTINGS_FAILURE
 } from '../../../constants/listings'
 import {
-  FETCH_CHANGE_LISTING_FOLLOW_REQUEST,
-  FETCH_CHANGE_LISTING_FOLLOW_SUCCESS,
-  FETCH_CHANGE_LISTING_FOLLOW_FAILURE
-} from '../../../constants/listings/listing'
-import {
   ADD_ALERT_FAILURE,
   FETCH_ALERTS_SUCCESS,
   FETCH_ALERTS_REQUEST,

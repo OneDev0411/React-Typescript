@@ -4,7 +4,6 @@ import { TextField, CircularProgress } from '@material-ui/core'
 import Autocomplete, {
   AutocompleteInputChangeReason
 } from '@material-ui/lab/Autocomplete'
-
 import { useAsync, useDebounce } from 'react-use'
 
 export type Option = Record<string, any> & {

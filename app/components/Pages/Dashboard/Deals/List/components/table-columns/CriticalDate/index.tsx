@@ -5,8 +5,9 @@ import { Paper, makeStyles } from '@material-ui/core'
 import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 
 import FactsheetSection from '../../../../Dashboard/Factsheet'
-import { getNextDate, getNextDateValue } from './helpers'
 import { useFactsheetContexts } from '../../../../Dashboard/Factsheet/hooks/use-factsheet-contexts'
+
+import { getNextDate, getNextDateValue } from './helpers'
 
 export const getCriticalDateNextValue = (deal: IDeal) => getNextDateValue(deal)
 

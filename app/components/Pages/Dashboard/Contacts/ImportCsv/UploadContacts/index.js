@@ -1,22 +1,20 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
+
 import { addNotification as notify } from 'components/notification'
 
-import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
-
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
-
+import { confirmation as showMessageModal } from '../../../../../../store_actions/confirmation'
 import {
   updateWizardStep,
   uploadCsvFile,
   requestImportCsv,
   getWorkerState
 } from '../../../../../../store_actions/contacts'
-
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
 import CancelButton from '../../../../../../views/components/Button/CancelButton'
-
 import Loading from '../../../../../Partials/Loading'
 
 class UploadContacts extends React.Component {

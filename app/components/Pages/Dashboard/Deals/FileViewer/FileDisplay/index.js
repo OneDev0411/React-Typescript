@@ -2,11 +2,11 @@ import React from 'react'
 
 import { PdfViewer } from 'components/PdfViewer'
 
-import { Image } from './Image'
-import { Html } from './Html'
-import { Unknown } from './Unknown'
-
 import { PageContent } from '../styled'
+
+import { Html } from './Html'
+import { Image } from './Image'
+import { Unknown } from './Unknown'
 
 export class FileDisplay extends React.Component {
   get RenderFile() {

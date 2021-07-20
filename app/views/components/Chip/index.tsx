@@ -1,6 +1,7 @@
 import React from 'react'
-import classNames from 'classnames'
+
 import type { ChipProps as MChipProps } from '@material-ui/core'
+import classNames from 'classnames'
 
 import useStyles from './styles'
 

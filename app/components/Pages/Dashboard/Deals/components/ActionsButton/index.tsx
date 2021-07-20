@@ -1,47 +1,43 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { mdiChevronDown } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiChevronDown } from '@mdi/js'
+import { connect } from 'react-redux'
 
-import { Portal } from 'components/Portal'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { setSelectedTask } from 'actions/deals'
-import { isBackOffice } from 'utils/user-teams'
+import { Portal } from 'components/Portal'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
-import { IAppState } from 'reducers'
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import {
-  getFormEsignAttachments,
-  getEnvelopeEsignAttachments,
-  getFileEsignAttachments
-} from 'views/utils/deal-files/get-esign-attachments'
-import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
-
-import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type {
   StateContext,
   DispatchContext
 } from 'deals/contexts/actions-context'
-
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
   SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
-
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
+import { IAppState } from 'reducers'
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+import { isBackOffice } from 'utils/user-teams'
+import { getLastStates } from 'views/utils/deal-files/get-document-last-state'
 import {
   getFileEmailAttachments,
   getFormEmailAttachments,
   getEnvelopeEmailAttachments
 } from 'views/utils/deal-files/get-email-attachments'
+import {
+  getFormEsignAttachments,
+  getEnvelopeEsignAttachments,
+  getFileEsignAttachments
+} from 'views/utils/deal-files/get-esign-attachments'
 
-import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import PdfSplitter from '../../PdfSplitter'
+import UploadManager from '../../UploadManager'
 
-import { normalizeActions } from './data/normalize-actions'
 import { SelectItemDrawer } from './components/SelectItemDrawer'
-
 import {
   DOCUSIGN_FORM,
   DOCUSIGN_ENVELOPE,
@@ -50,7 +46,7 @@ import {
   EMAIL_FILE,
   EMAIL_ENVELOPE
 } from './data/action-buttons'
-
+import { normalizeActions } from './data/normalize-actions'
 import {
   approveTask,
   requireTask,
@@ -68,10 +64,6 @@ import {
   viewForm,
   viewFile
 } from './helpers/actions'
-
-import PdfSplitter from '../../PdfSplitter'
-import UploadManager from '../../UploadManager'
-
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
@@ -104,9 +96,7 @@ interface StateProps {
   user: IUser
   envelopes: IDealEnvelope[]
   isBackOffice: boolean
-  setSelectedTask(
-    task: any
-  ): {
+  setSelectedTask(task: any): {
     type: string
     task: any
   }
@@ -492,15 +482,14 @@ function mapStateToProps({ deals, user }: IAppState, props: Props) {
   }
 }
 
-const withContext = (Component: typeof ActionsButton) => (
-  props: Props & StateProps
-) => {
-  const [state, dispatch] = useChecklistActionsContext()
+const withContext =
+  (Component: typeof ActionsButton) => (props: Props & StateProps) => {
+    const [state, dispatch] = useChecklistActionsContext()
 
-  return (
-    <Component {...props} actionsState={state} actionsDispatch={dispatch} />
-  )
-}
+    return (
+      <Component {...props} actionsState={state} actionsDispatch={dispatch} />
+    )
+  }
 
 export default connect(mapStateToProps, {
   setSelectedTask

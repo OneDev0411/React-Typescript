@@ -1,10 +1,9 @@
-import classNames from 'classnames'
-import { mdiPlus } from '@mdi/js'
-
 import { IconButton, makeStyles } from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
+import classNames from 'classnames'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   theme => ({

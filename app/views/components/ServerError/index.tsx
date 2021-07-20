@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { ReactNode } from 'react'
+
 import {
   Button,
   createStyles,
@@ -6,15 +8,12 @@ import {
   Theme,
   Typography
 } from '@material-ui/core'
-
+import { mdiAlertOutline } from '@mdi/js'
 import request, { ResponseError } from 'superagent'
 
-import { ReactNode } from 'react'
-import { mdiAlertOutline } from '@mdi/js'
-
-import { ClassesProps } from 'utils/ts-utils'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { ClassesProps } from 'utils/ts-utils'
 
 type ErrorResponse = ResponseError & { response?: request.Response }
 

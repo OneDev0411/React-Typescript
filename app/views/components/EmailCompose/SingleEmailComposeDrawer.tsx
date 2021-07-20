@@ -4,6 +4,7 @@ import { noop } from 'utils/helpers'
 
 import FollowUpModal from '../FollowUpModal'
 import OverlayDrawer from '../OverlayDrawer'
+
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 
 interface Props extends ComponentProps<typeof SingleEmailComposeForm> {

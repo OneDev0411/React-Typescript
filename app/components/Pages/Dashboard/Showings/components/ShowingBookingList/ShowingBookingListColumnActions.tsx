@@ -1,29 +1,25 @@
-import classNames from 'classnames'
 import { ButtonProps, makeStyles } from '@material-ui/core'
 import { mdiCheck, mdiClose } from '@mdi/js'
-
-import useAsync from 'hooks/use-async'
-
-import approveShowingAppointment from 'models/showing/approve-showing-appointment'
-
-import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
-
-import { ackNotifications } from 'models/notifications'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import classNames from 'classnames'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useAsync from 'hooks/use-async'
+import { ackNotifications } from 'models/notifications'
+import approveShowingAppointment from 'models/showing/approve-showing-appointment'
+import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
+
+import { ApprovalActionParams, DismissActionParams } from '../../types'
+import ShowingViewFeedbackButton, {
+  ShowingViewFeedbackButtonProps
+} from '../ShowingViewFeedbackButton'
 
 import ShowingBookingListApprovalButton, {
   ShowingBookingListApprovalButtonProps
 } from './ShowingBookingListApprovalButton'
-import { ApprovalActionParams, DismissActionParams } from '../../types'
 import ShowingBookingListRejectMessage, {
   ShowingBookingListRejectMessageProps
 } from './ShowingBookingListRejectMessage'
-import ShowingViewFeedbackButton, {
-  ShowingViewFeedbackButtonProps
-} from '../ShowingViewFeedbackButton'
 
 const useStyles = makeStyles(
   theme => ({

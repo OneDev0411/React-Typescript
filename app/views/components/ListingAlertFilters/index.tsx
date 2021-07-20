@@ -1,8 +1,9 @@
 import React, { ComponentProps, MouseEvent, useState } from 'react'
+
 import { Grid, Button, Popover } from '@material-ui/core'
 
-import ListingAlertFiltersList from 'components/ListingAlertFiltersList'
 import ListingAlertFiltersEditor from 'components/ListingAlertFiltersEditor'
+import ListingAlertFiltersList from 'components/ListingAlertFiltersList'
 
 type Props = Omit<
   ComponentProps<typeof ListingAlertFiltersList>,
@@ -16,9 +17,8 @@ export default function ListingAlertFilters({
   limit,
   onApply
 }: Props) {
-  const [alertFiltersAnchor, setAlertFiltersAnchor] = useState<
-    Nullable<HTMLButtonElement>
-  >(null)
+  const [alertFiltersAnchor, setAlertFiltersAnchor] =
+    useState<Nullable<HTMLButtonElement>>(null)
 
   function handleShowAlertFiltersDialog(event: MouseEvent<HTMLButtonElement>) {
     setAlertFiltersAnchor(event.currentTarget)

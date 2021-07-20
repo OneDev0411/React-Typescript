@@ -1,6 +1,6 @@
-import { isNumeric } from 'utils/helpers'
-import { formatPhoneNumber } from 'utils/format'
 import { addZero, months_abbr } from 'utils/date-times'
+import { formatPhoneNumber } from 'utils/format'
+import { isNumeric } from 'utils/helpers'
 
 export function formatValue(attribute_def, value) {
   if (value == null || value === '') {

@@ -1,5 +1,5 @@
-import { createStyles, CreateCSSProperties } from '@material-ui/styles'
 import { Theme } from '@material-ui/core'
+import { createStyles, CreateCSSProperties } from '@material-ui/styles'
 
 interface StylesProps {
   isTablet: boolean

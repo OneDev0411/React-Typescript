@@ -1,6 +1,6 @@
 import { submitDrawerForm } from 'helpers/drawer'
-import { getTestSelector } from 'helpers/page'
 import { acceptConfirmationModal } from 'helpers/modal'
+import { getTestSelector } from 'helpers/page'
 
 interface ContactData {
   title?: string
@@ -33,9 +33,7 @@ export function deleteContact(index: number = 0) {
   cy.get(
     [getGridRowSelector(index), getTestSelector('contact-menu')].join(' ')
   ).click()
-  cy.getByTestSelector('contact-row-delete-action')
-    .eq(index)
-    .click()
+  cy.getByTestSelector('contact-row-delete-action').eq(index).click()
 
   return acceptConfirmationModal()
 }

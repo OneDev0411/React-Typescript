@@ -1,10 +1,10 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
+
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { makeStyles } from '@material-ui/styles'
 
 import Brand from '../../../../controllers/Brand'
 import SearchIcon from '../../../../views/components/SvgIcons/Search/IconSearch'
-
 import MlsSearchAutocomplete from '../MlsSearchAutocomplete'
 
 import { styles } from './styles'

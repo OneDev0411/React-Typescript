@@ -2,10 +2,10 @@ import React, { Fragment } from 'react'
 
 import { Divider } from 'components/Divider'
 
-import { RowContainer, ItemsContainer, RowTitle } from './styled'
 import Item from './Item'
+import { RowContainer, ItemsContainer, RowTitle } from './styled'
 
-export default function({ title, items, onChange, onDelete }) {
+export default function TagsRow({ title, items, onChange, onDelete }) {
   const highlight = items.some(item => item.highlight)
 
   return (

@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { FormControlLabel, Checkbox } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
-import { FormControlLabel, Checkbox } from '@material-ui/core'
 
 CheckboxField.propTypes = {
   name: PropTypes.string.isRequired,

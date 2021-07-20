@@ -1,10 +1,9 @@
-import styled, { ThemeProps } from 'styled-components'
-import { Theme } from '@material-ui/core/styles'
-
 import { Typography } from '@material-ui/core'
+import { Theme } from '@material-ui/core/styles'
+import styled, { ThemeProps } from 'styled-components'
 
-import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 import IconButtonFlex from '../../Button/IconButton'
+import IconSearchBase from '../../SvgIcons/Search/IconSearch'
 
 interface StyleProp extends ThemeProps<Theme> {
   isFocused?: boolean

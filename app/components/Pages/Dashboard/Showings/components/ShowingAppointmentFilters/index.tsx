@@ -1,8 +1,9 @@
 import { Grid } from '@material-ui/core'
 
 import { AppointmentFilter } from '../../types'
-import useAppointmentFilters from './use-appointment-filters'
+
 import ShowingAppointmentFilterCard from './ShowingAppointmentFilterCard'
+import useAppointmentFilters from './use-appointment-filters'
 
 export interface ShowingAppointmentFiltersProps {
   value?: AppointmentFilter

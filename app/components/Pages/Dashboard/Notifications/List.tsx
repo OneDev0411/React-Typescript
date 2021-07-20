@@ -2,7 +2,6 @@ import React from 'react'
 
 import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
-
 import LoadingContainer from 'components/LoadingContainer'
 
 import Message from './columns/Message'

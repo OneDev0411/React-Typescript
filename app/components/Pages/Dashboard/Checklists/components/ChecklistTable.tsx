@@ -1,11 +1,4 @@
 import React, { RefObject, useContext } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import type {
-  DroppableProvided,
-  DraggableProvided,
-  DraggableStateSnapshot,
-  DropResult
-} from 'react-beautiful-dnd'
 
 import {
   Checkbox,
@@ -19,17 +12,21 @@ import {
   Theme,
   Tooltip
 } from '@material-ui/core'
-import classNames from 'classnames'
-
 import { useTheme } from '@material-ui/styles'
 import { mdiDrag, mdiTrashCanOutline } from '@mdi/js'
+import classNames from 'classnames'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import type {
+  DroppableProvided,
+  DraggableProvided,
+  DraggableStateSnapshot,
+  DropResult
+} from 'react-beautiful-dnd'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { useDictionary } from 'hooks/use-dictionary'
-
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useDictionary } from 'hooks/use-dictionary'
 
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'

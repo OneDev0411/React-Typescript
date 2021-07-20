@@ -1,15 +1,16 @@
 import React from 'react'
-import { compose, withState, pure } from 'recompose'
-import { connect } from 'react-redux'
+
 import { mdiMessagePlusOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import { compose, withState, pure } from 'recompose'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Compose from '../Shared/compose-wrapper'
 import {
   createRoom,
   toggleChatbar
 } from '../../../../../store_actions/chatroom'
+import Compose from '../Shared/compose-wrapper'
 import Chatroom from '../Util/chatroom'
 
 async function createNewRoom(recipients, createRoom, toggleChatbar) {

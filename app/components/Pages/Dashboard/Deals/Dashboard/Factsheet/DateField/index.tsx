@@ -1,21 +1,18 @@
 import { useState } from 'react'
-import { Tooltip } from '@material-ui/core'
-import fecha from 'fecha'
-import { mdiCheck } from '@mdi/js'
 
-import { getField } from 'models/Deal/helpers/context/get-field'
+import { Tooltip } from '@material-ui/core'
+import { mdiCheck } from '@mdi/js'
+import fecha from 'fecha'
 
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
+import { getField } from 'models/Deal/helpers/context/get-field'
 
-import { EditButton } from '../ActionButtons/Edit'
-import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
-
+import { DeleteButton } from '../ActionButtons/Delete'
+import { EditButton } from '../ActionButtons/Edit'
 import { Loading } from '../components/Loading'
-
 import {
   Item,
   ItemLabel,

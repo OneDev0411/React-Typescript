@@ -1,29 +1,29 @@
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import { reduxForm } from 'redux-form'
 import withHandlers from 'recompose/withHandlers'
+import { reduxForm } from 'redux-form'
 
-import { getStatusColor } from 'utils/listing'
 import actions from 'actions/listings/search/filters'
 import ActionButton from 'components/Button/ActionButton'
+import { getStatusColor } from 'utils/listing'
 
 import { property_subtypes, architectural_styles } from '../../../mapOptions'
 
-import Price from './Price'
-import Schools from './Schools'
-import Counties from './Counties'
-import YearBuilt from './YearBuilt'
-import Tags from './components/Tags'
-import Subdivision from './Subdivision'
-import MasterBedroom from './MasterBedroom'
-import MlsAreaSelects from './MlsAreaSelects'
 import GroupRadios from './components/GroupRadios'
-import SubStatuses from './components/SubStatuses'
 import MinMaxInputs from './components/MinMaxInputs'
-import SoldStatusChildrens from './SoldStatusChildrens'
-import { pendingStatuses, otherStatuses } from './statuses'
+import SubStatuses from './components/SubStatuses'
+import Tags from './components/Tags'
+import Counties from './Counties'
 import FiltersListingsStatusRow from './FiltersListingsStatusRow'
 import { yesNoEitherFieldItems } from './helpers/yes-no-either-field-items'
+import MasterBedroom from './MasterBedroom'
+import MlsAreaSelects from './MlsAreaSelects'
+import Price from './Price'
+import Schools from './Schools'
+import SoldStatusChildrens from './SoldStatusChildrens'
+import { pendingStatuses, otherStatuses } from './statuses'
+import Subdivision from './Subdivision'
+import YearBuilt from './YearBuilt'
 
 const INITIAL_VALUES = {
   pool: 'either',
@@ -183,24 +183,28 @@ export default compose(
     destroyOnUnmount: false
   }),
   withHandlers({
-    onSubmitHandler: ({ submitFiltersForm }) => values => {
-      submitFiltersForm(values)
-    }
+    onSubmitHandler:
+      ({ submitFiltersForm }) =>
+      values => {
+        submitFiltersForm(values)
+      }
   }),
   withHandlers({
-    resetHandler: ({
-      reset,
-      initialValues,
-      submitFiltersForm,
-      submitSucceeded,
-      submitFailed
-    }) => () => {
-      if (submitSucceeded || submitFailed) {
-        reset()
-        submitFiltersForm(initialValues)
-      } else {
-        reset()
+    resetHandler:
+      ({
+        reset,
+        initialValues,
+        submitFiltersForm,
+        submitSucceeded,
+        submitFailed
+      }) =>
+      () => {
+        if (submitSucceeded || submitFailed) {
+          reset()
+          submitFiltersForm(initialValues)
+        } else {
+          reset()
+        }
       }
-    }
   })
 )(Filters)

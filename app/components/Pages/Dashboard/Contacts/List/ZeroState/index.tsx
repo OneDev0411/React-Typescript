@@ -1,19 +1,14 @@
 import { Button } from '@material-ui/core'
-import { browserHistory } from 'react-router'
 import { Theme, makeStyles } from '@material-ui/core'
+import { browserHistory } from 'react-router'
 
-import { ZeroState } from 'partials/ZeroState'
-
-import { OAuthProvider } from 'constants/contacts'
-
-import { OutlookSignInButton } from 'components/OutlookSignInButton'
-
-import { GoogleSignInButton } from 'components/GoogleSignInButton'
-
-import { Divider } from 'components/Divider'
 import { CreateContact } from 'components/CreateContact'
-
+import { Divider } from 'components/Divider'
+import { GoogleSignInButton } from 'components/GoogleSignInButton'
+import { OutlookSignInButton } from 'components/OutlookSignInButton'
+import { OAuthProvider } from 'constants/contacts'
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+import { ZeroState } from 'partials/ZeroState'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

@@ -20,6 +20,7 @@ export function loadJS(src, id, cb) {
 
 export function unloadJS(id) {
   const element = window.document.getElementById(id)
+
   if (element) {
     element.remove()
   }

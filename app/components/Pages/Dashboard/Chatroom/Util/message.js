@@ -1,11 +1,13 @@
-import moment from 'moment'
 import emojify from 'emojify.js'
 import linkifyString from 'linkifyjs/string'
-import store from '../../../../../stores'
+import moment from 'moment'
+
 import {
   createMessage,
   updateMessage
 } from '../../../../../store_actions/chatroom'
+import store from '../../../../../stores'
+
 import Mention from './mention'
 
 emojify.setConfig({

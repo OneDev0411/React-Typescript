@@ -1,7 +1,6 @@
-import { getContext } from 'models/Deal/helpers/context'
-
-import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
 import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
+import { getContext } from 'models/Deal/helpers/context'
 
 export function showStatusQuestion(
   deal: IDeal | null,

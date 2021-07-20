@@ -1,8 +1,10 @@
 import React from 'react'
+
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 
-import { List } from './List'
 import { BasicSection } from '../components/Section/Basic'
+
+import { List } from './List'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

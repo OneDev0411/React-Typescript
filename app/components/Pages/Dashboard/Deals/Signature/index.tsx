@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+
 import { useSelector, useDispatch } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
 import { createEnvelope } from 'actions/deals'
-
 import Deal from 'models/Deal'
 import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 import { selectUser } from 'selectors/user'

@@ -1,17 +1,18 @@
 import { useCallback, useMemo } from 'react'
-import { useLocation } from 'react-use'
-import { browserHistory } from 'react-router'
+
 import { LocationDescriptor } from 'history'
+import { browserHistory } from 'react-router'
+import { useLocation } from 'react-use'
 
 type UseQueryParam = [string, (value: string) => void, () => void]
 
 export function useQueryParamValue(name: string): string {
   const location = useLocation()
 
-  const value = useMemo(() => new URLSearchParams(location.search).get(name), [
-    location.search,
-    name
-  ])
+  const value = useMemo(
+    () => new URLSearchParams(location.search).get(name),
+    [location.search, name]
+  )
 
   return decodeURIComponent(value || '')
 }

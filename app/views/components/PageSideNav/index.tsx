@@ -1,9 +1,8 @@
 import React from 'react'
 
+import LinkList from './LinkList'
 import { SideNavContainer } from './styled'
 import { PageSideNavProps, SectionsEnum } from './types'
-
-import LinkList from './LinkList'
 
 PageSideNav.defaultProps = {
   isOpen: true,

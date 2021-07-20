@@ -1,6 +1,7 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
+import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
 import registerButtonBlock, {
@@ -8,13 +9,12 @@ import registerButtonBlock, {
   buttonBlockTraits
 } from './button'
 import registerGridBlock, { GridBlockOptions } from './grid'
-import registerTextBlock, { TextBlockOptions } from './text'
 import registerHeadlineBlock, { HeadlineBlockOptions } from './headline'
 import registerSocialGroupBlock, {
   SocialGroupBlockOptions,
   socialGroupBlockTraits
 } from './social-group'
-import { TemplateBlockOptions } from '../../types'
+import registerTextBlock, { TextBlockOptions } from './text'
 
 export const staticBlocksTraits = {
   ...socialGroupBlockTraits,

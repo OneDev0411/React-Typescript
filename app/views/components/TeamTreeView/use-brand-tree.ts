@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
+
 import { useSelector } from 'react-redux'
 
-import { getActiveTeamId } from 'utils/user-teams'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
 
 export function useBrandTree() {
   const user = useSelector(selectUser)

@@ -1,30 +1,28 @@
 import React, { useCallback, useMemo } from 'react'
+
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 import { flow, uniq } from 'lodash'
+import { useSelector } from 'react-redux'
 import { shallowEqual } from 'recompose'
 
+import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
 import { OAuthProvider } from 'constants/contacts'
-
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'
 import { IAppState } from 'reducers'
-
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-
-import { parseEmailRecipient } from 'components/EmailRecipientsChipsInput/helpers/parse-email-recipient'
-
 import { selectUser } from 'selectors/user'
 
+import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
+import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
+
+import { getForwardHtml } from './helpers/get-forward-html'
+import { getReplyHtml } from './helpers/get-reply-html'
 import {
   getReplyAllRecipients,
   getReplyRecipients
 } from './helpers/get-reply-recipients'
-import { getReplyHtml } from './helpers/get-reply-html'
-import { getForwardHtml } from './helpers/get-forward-html'
 import { getReplySubject } from './helpers/get-reply-subject'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
-import { EmailResponseType, EmailThreadEmail } from '../EmailThread/types'
-import { encodeContentIds } from '../EmailThread/helpers/encode-content-ids'
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 import { EmailFormValues } from './types'
 

@@ -1,4 +1,5 @@
 import React, { CSSProperties, ReactNode, useRef } from 'react'
+
 import cn from 'classnames'
 
 import { useScrollDetector } from '../../../hooks/use-scroll-detector'

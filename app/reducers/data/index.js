@@ -1,7 +1,7 @@
-import { types } from '../../store_actions/data'
+import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
 import { BRAND_SUCCESS } from '../../constants/brand'
 import { EDIT_USER_SUCCESS } from '../../constants/user'
-import { SIGNIN_SUCCESS } from '../../constants/auth/signin'
+import { types } from '../../store_actions/data'
 
 const initialState = {
   counter: 1

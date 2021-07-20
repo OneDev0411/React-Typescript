@@ -1,12 +1,12 @@
 import React from 'react'
-import Downshift from 'downshift'
 
-import Flex from 'styled-flex-component'
 import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
+import Downshift from 'downshift'
+import Flex from 'styled-flex-component'
 
 import { Avatar } from 'components/Avatar'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   DeleteButton,

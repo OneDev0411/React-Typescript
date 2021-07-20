@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { useState } from 'react'
+
 import { Helmet } from 'react-helmet'
 
 import Drawer from 'components/AddOrEditEmailTemplateDrawer'
 
 import CtaBar from '../components/CtaBar'
+
 import List from './List'
 
 function EmailTemplatesSettings() {
   const [isOpen, setIsOpen] = useState(false)
-  const [
-    selectedTemplate,
-    setSelectedTemplate
-  ] = useState<IBrandEmailTemplate | null>(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<IBrandEmailTemplate | null>(null)
 
   return (
     <>

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
+
 import Downshift from 'downshift'
 import Fuse from 'fuse.js'
-
+import PropTypes from 'prop-types'
 import _ from 'underscore'
 
 import { TextInput } from 'components/Forms/TextInput'

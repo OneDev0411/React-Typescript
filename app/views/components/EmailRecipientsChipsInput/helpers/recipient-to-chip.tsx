@@ -1,7 +1,8 @@
 import { ChipInputItem } from '../../ChipsInput/types'
-import { validateRecipient } from './validate-recipient'
-import { recipientToString } from './recipient-to-string'
+
 import { parseEmailRecipient } from './parse-email-recipient'
+import { recipientToString } from './recipient-to-string'
+import { validateRecipient } from './validate-recipient'
 
 export function recipientToChip(
   recipient: IDenormalizedEmailRecipientInput

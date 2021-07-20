@@ -1,6 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+
 import { Field } from 'react-final-form'
+import styled from 'styled-components'
 
 import { grey } from 'views/utils/colors'
 

@@ -1,6 +1,5 @@
 import { EditorState, Modifier, RichUtils, SelectionState } from 'draft-js'
 import PluginsUtils from 'draft-js-plugins-utils'
-
 import { getSelectionText, setBlockData } from 'draftjs-utils'
 
 import { collapseSelection } from './collapse-selection'

@@ -1,5 +1,4 @@
 import { DEAL_DATE_OBJECT_TYPE } from '../constants'
-
 import { ColumnState, ItemState } from '../types'
 
 export function getDealColumn(

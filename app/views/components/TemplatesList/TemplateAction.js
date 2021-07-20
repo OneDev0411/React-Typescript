@@ -1,19 +1,18 @@
 import React from 'react'
+
 import { withRouter } from 'react-router'
 
-import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
+import PublishWebsiteFlow from 'components/InstantMarketing/adapters/PublishWebsite'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import PublishWebsiteFlow from 'components/InstantMarketing/adapters/PublishWebsite'
-
+import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import {
   convertToTemplate,
   getMedium,
   getTemplateType
 } from 'utils/marketing-center/helpers'
-
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 
 import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
 

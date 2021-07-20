@@ -1,5 +1,7 @@
 import type { Editor } from 'grapesjs'
 
+import { isComponent as isComponentEmail } from './Email/utils'
+import registerBlock from './registerBlock'
 import {
   TemplateBlock,
   TemplateBlocks,
@@ -7,11 +9,7 @@ import {
   TemplateOptions,
   TemplateBlockOptions
 } from './types'
-
 import { isComponent as isComponentWebsite } from './Website/utils'
-import { isComponent as isComponentEmail } from './Email/utils'
-
-import registerBlock from './registerBlock'
 
 export async function getTemplateOptions(
   template: IMarketingTemplate

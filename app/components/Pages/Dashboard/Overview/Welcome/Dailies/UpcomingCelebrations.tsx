@@ -1,15 +1,11 @@
 import { Box, Typography, List } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-
 import { mdiGiftOutline } from '@mdi/js'
 
-import { InlineBadge } from 'components/InlineBadge'
-
 import { AnimatedLoader } from 'components/AnimatedLoader'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
+import { InlineBadge } from 'components/InlineBadge'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   isLoading: boolean

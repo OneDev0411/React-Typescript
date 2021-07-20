@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
 
+import { Box, Typography } from '@material-ui/core'
 import { mdiHomeSearchOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export default function ZeroState() {
   return (

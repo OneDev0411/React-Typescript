@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core'
 
 import AgentCard from 'components/AgentCard'
-
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import { isLeaseProperty } from 'utils/listing'
 

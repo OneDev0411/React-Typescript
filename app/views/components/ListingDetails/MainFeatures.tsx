@@ -1,9 +1,10 @@
 import React from 'react'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Tooltip from '@material-ui/core/Tooltip'
-import { makeStyles, Theme } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 import {
   mdiBedKingOutline,
   mdiShower,

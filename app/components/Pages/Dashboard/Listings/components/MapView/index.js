@@ -1,15 +1,16 @@
 import React, { useState, useRef, memo } from 'react'
-import cn from 'classnames'
+
 import { Grid, Box, makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import { useDeepCompareEffect } from 'react-use'
 
-import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import LoadingComponent from 'components/Spinner'
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 
 import ListingCard from '../ListingCardWithFavorite'
-import ZeroState from '../ZeroState'
 import { ShareListings } from '../ShareListings'
+import ZeroState from '../ZeroState'
 
 const PAGE_SIZE = 12
 

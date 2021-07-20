@@ -1,6 +1,7 @@
 import React from 'react'
-import Downshift from 'downshift'
+
 import { mdiChevronUp } from '@mdi/js'
+import Downshift from 'downshift'
 
 import { Item } from 'components/Dropdown/Item'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

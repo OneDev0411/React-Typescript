@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
 import {
   Box,
   IconButton,
@@ -11,9 +8,6 @@ import {
   Checkbox,
   Tooltip
 } from '@material-ui/core'
-
-import { Field } from 'react-final-form'
-
 import {
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
@@ -21,21 +15,23 @@ import {
   mdiHomeSearchOutline,
   mdiCashUsdOutline
 } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { Field } from 'react-final-form'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import IconDelete from 'components/SvgIcons/Trash/TrashIcon'
-
-import Drawer from '../OverlayDrawer'
-import { Divider } from '../Divider'
-import ActionButton from '../Button/ActionButton'
-import { ItemChangelog } from '../TeamContact/ItemChangelog'
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
+import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
+import AddAssociation from '../AddAssociation'
+import ActionButton from '../Button/ActionButton'
+import { Divider } from '../Divider'
 import {
   DateTimeField,
   CheckboxField,
@@ -44,26 +40,25 @@ import {
   EndDateTimeField,
   FieldError
 } from '../final-form-fields'
-import AddAssociation from '../AddAssociation'
-import LoadSaveReinitializeForm from '../../utils/LoadSaveReinitializeForm'
+import Drawer from '../OverlayDrawer'
+import { ItemChangelog } from '../TeamContact/ItemChangelog'
 
-import { validate } from './helpers/validate'
-import { hasContactAssociation } from './helpers/has-contact-association'
-import { hasValidConnectedAccount } from './helpers/has-valid-connected-account'
-import { preSaveFormat } from './helpers/pre-save-format'
-import { postLoadFormat } from './helpers/post-load-format'
-
-import Reminder from './components/Reminder/Reminder'
-import { Title } from './components/Title'
 import { Description } from './components/Description/RichText'
+import { DueDateWatcher } from './components/DueDateWatcher'
+import { EventField } from './components/EventField'
 import { EventType } from './components/EventType'
-import { NotifyGuests } from './components/NotifyGuests'
 import {
   DONE_STATUS,
   FutureEventDoneConfirmation
 } from './components/FutureEventDoneConfirmation'
-import { EventField } from './components/EventField'
-import { DueDateWatcher } from './components/DueDateWatcher'
+import { NotifyGuests } from './components/NotifyGuests'
+import Reminder from './components/Reminder/Reminder'
+import { Title } from './components/Title'
+import { hasContactAssociation } from './helpers/has-contact-association'
+import { hasValidConnectedAccount } from './helpers/has-valid-connected-account'
+import { postLoadFormat } from './helpers/post-load-format'
+import { preSaveFormat } from './helpers/pre-save-format'
+import { validate } from './helpers/validate'
 import {
   FormContainer,
   FieldContainer,
@@ -72,6 +67,7 @@ import {
 } from './styled'
 
 const propTypes = {
+  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Drawer.propTypes,
   event: PropTypes.any,
   eventId: PropTypes.any,

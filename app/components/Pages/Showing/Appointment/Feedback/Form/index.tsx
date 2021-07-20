@@ -1,11 +1,13 @@
 import { Grid, Box, useTheme, useMediaQuery } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 
-import { ScrollableArea } from 'views/components/ScrollableArea'
 import { QuestionWizard } from 'components/QuestionWizard'
+import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import { getFormattedAppointmentDateTime } from '../../utils'
-import { FormFields } from './types'
+
+import MultiOptionQuestion from './components/MultiOptionQuestion'
+import TextQuestion from './components/TextQuestion'
 import {
   CLIENT_INTEREST_QUESTION,
   LISTING_RATE_QUESTION,
@@ -18,8 +20,7 @@ import {
   OVERALL_EXPERIENCE_OPTIONS
 } from './constants'
 import IntroStep from './Intro'
-import MultiOptionQuestion from './components/MultiOptionQuestion'
-import TextQuestion from './components/TextQuestion'
+import { FormFields } from './types'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>

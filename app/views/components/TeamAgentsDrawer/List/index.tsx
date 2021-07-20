@@ -1,16 +1,13 @@
 import { ComponentProps, useMemo } from 'react'
-import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { Box } from '@material-ui/core'
-
-import VirtualList from 'components/VirtualList'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 import Search from 'components/Grid/Search'
-
 import { NormalizedBrand, BrandedUser } from 'components/TeamAgents/types'
+import VirtualList from 'components/VirtualList'
 
 import { ListRow } from '../ListRow'
-
 import { RowType } from '../types'
 
 interface Props {

@@ -1,13 +1,14 @@
-import styled from 'styled-components'
 import React from 'react'
-import Downshift from 'downshift'
-import { mdiPlus } from '@mdi/js'
+
 import Button from '@material-ui/core/Button'
+import { mdiPlus } from '@mdi/js'
+import Downshift from 'downshift'
+import styled from 'styled-components'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { FilterItemTooltip } from './tooltip'
 import { Container, List, ListItem } from './styled'
+import { FilterItemTooltip } from './tooltip'
 
 const IconAdd = styled(SvgIcon)`
   color: ${props =>

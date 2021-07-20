@@ -1,12 +1,10 @@
 import { ThunkDispatch } from 'redux-thunk'
 
 import * as actionTypes from 'constants/email-templates'
-
-import { IAppState } from 'reducers'
-import { EmailTemplateAction } from 'reducers/email-templates/types'
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
-
+import { IAppState } from 'reducers'
 import { selectEmailTemplatesIsFetching } from 'reducers/email-templates'
+import { EmailTemplateAction } from 'reducers/email-templates/types'
 
 export const fetchEmailTemplates =
   (brandId: UUID) =>

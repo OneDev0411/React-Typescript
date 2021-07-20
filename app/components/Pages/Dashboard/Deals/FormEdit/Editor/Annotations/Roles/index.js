@@ -1,14 +1,15 @@
 import React from 'react'
+
 import { useSelector } from 'react-redux'
 
-import { selectDealRoles } from 'reducers/deals/roles'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { getRoleText } from 'deals/FormEdit/utils/get-roles-text'
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
-
-import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
-import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+import { selectDealRoles } from 'reducers/deals/roles'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
+
 import { RoleField } from './RoleField'
 
 export function Roles(props) {

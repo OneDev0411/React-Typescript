@@ -1,15 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Grid } from '@material-ui/core'
 
-import { goTo } from 'utils/go-to'
-import { getActiveTeamId } from 'utils/user-teams'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { useBrandListings, useDealsListings } from 'hooks/use-listings'
-import { selectUser } from 'selectors/user'
+import { Grid } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import CardSkeleton from 'components/CardSkeleton'
 import ListingCard from 'components/ListingCards/ListingCard'
+import { useBrandListings, useDealsListings } from 'hooks/use-listings'
+import { useLoadingEntities } from 'hooks/use-loading'
+import { selectUser } from 'selectors/user'
+import { goTo } from 'utils/go-to'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'

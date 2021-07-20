@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -6,9 +7,9 @@ import defaultProps from 'recompose/defaultProps'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
 
+import * as actions from '../../../../../../store_actions/listings/map'
 import Marker from '../../components/Markers/SimpleMarker'
 import ZoomController from '../../components/ZoomController'
-import * as actions from '../../../../../../store_actions/listings/map'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
@@ -67,27 +68,28 @@ const mapHOC = compose(
       height: '100%'
     }
   }),
-  connect(
-    ({ user, brand, favorites }) => {
-      const { map } = favorites
+  connect(({ user, brand, favorites }) => {
+    const { map } = favorites
 
-      return {
-        map,
-        user,
-        brand,
-        mapProps: map.props
-      }
-    },
-    actions
-  ),
+    return {
+      map,
+      user,
+      brand,
+      mapProps: map.props
+    }
+  }, actions),
   // describe events
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
-    },
-    onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('favorites', mapProps)
-    }
+    onGoogleApiLoaded:
+      () =>
+      ({ map }) => {
+        window.currentMap = map
+      },
+    onChange:
+      ({ setMapProps }) =>
+      mapProps => {
+        setMapProps('favorites', mapProps)
+      }
   }),
   withPropsOnChange(
     (props, nextProps) => props.markers.length !== nextProps.markers.length,

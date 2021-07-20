@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect } from 'react'
-import { connect } from 'react-redux'
 
 import { mdiClockOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { addNotification, Notification } from 'components/notification'
-
-import useInput from 'hooks/use-input'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useInput from 'hooks/use-input'
 
 import { Container, Label, Input } from './styled'
 

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   Button,
@@ -12,18 +11,15 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
+import { isToday } from 'date-fns'
+import { useSelector } from 'react-redux'
 import timeago from 'timeago.js'
 
-import { isToday } from 'date-fns'
-
 import Link from 'components/ALink'
-
-import { selectUser } from 'selectors/user'
-
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import { selectUser } from 'selectors/user'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'

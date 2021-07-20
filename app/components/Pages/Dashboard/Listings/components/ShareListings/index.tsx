@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 
 import { Slide, Box, Button, Theme, makeStyles, fade } from '@material-ui/core'
-
 import { mdiClose, mdiShoePrint, mdiEmailOutline } from '@mdi/js'
 
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import SearchListingDrawer from 'components/SearchListingDrawer'
-
 import { TextTransition } from 'components/TextTransition'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
 import { EmailAction } from './Email'
 import { CreateTourAction } from './Tour'

@@ -1,7 +1,8 @@
 // Oops.js
 import React from 'react'
-import { Link } from 'react-router'
+
 import { Helmet } from 'react-helmet'
+import { Link } from 'react-router'
 
 const TITLE = 'Something went wrong!'
 

@@ -1,8 +1,9 @@
 import React from 'react'
+
+import { Motion, spring } from 'react-motion'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
 import withPropsOnChange from 'recompose/withPropsOnChange'
-import { Motion, spring } from 'react-motion'
 
 const ClusterMarker = ({
   text,
@@ -45,7 +46,14 @@ export default compose(
   ),
   withPropsOnChange(
     ['hovered'],
-    ({ hovered, hoveredScale, defaultScale, stiffness, damping, precision }) => ({
+    ({
+      hovered,
+      hoveredScale,
+      defaultScale,
+      stiffness,
+      damping,
+      precision
+    }) => ({
       hovered,
       motionStyle: {
         scale: spring(hovered ? hoveredScale : defaultScale, {

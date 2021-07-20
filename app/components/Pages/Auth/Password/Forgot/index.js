@@ -1,16 +1,17 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import compose from 'recompose/compose'
-import { Field, reduxForm } from 'redux-form'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import { Field, reduxForm } from 'redux-form'
 
-import signup from '../../../../../models/auth/signup'
-import { getBrandInfo } from '../../SignIn/get-brand-info'
 import resetPassword from '../../../../../models/auth/password/reset'
+import signup from '../../../../../models/auth/signup'
 import Button from '../../../../../views/components/Button/ActionButton'
 import SimpleField from '../../../Dashboard/Account/Profile/components/SimpleField'
+import { getBrandInfo } from '../../SignIn/get-brand-info'
 
 const ForgotForm = ({
   brand,
@@ -123,48 +124,46 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('resetSuccessfully', 'setResetSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      setIsSubmitting,
-      setSubmitError,
-      setResetSuccessfully
-    }) => async ({ email }) => {
-      setIsSubmitting(true)
+    onSubmitHandler:
+      ({ setIsSubmitting, setSubmitError, setResetSuccessfully }) =>
+      async ({ email }) => {
+        setIsSubmitting(true)
 
-      try {
-        const response = await resetPassword(email)
+        try {
+          const response = await resetPassword(email)
 
-        if (response.status === 204) {
+          if (response.status === 204) {
+            setIsSubmitting(false)
+            setResetSuccessfully(email)
+          }
+        } catch ({ status, response }) {
+          if (status === 403) {
+            try {
+              await signup(email)
+            } catch (error) {}
+
+            setIsSubmitting(false)
+            setResetSuccessfully(email)
+
+            return
+          }
+
+          let errorMessage = 'An unexpected error occurred. Please try again.'
+
+          if (status === 404) {
+            errorMessage = (
+              <div>
+                Sorry, that email address is not registered with us.
+                <br />
+                <span>Please try again or</span>
+                <Link to="/signup"> register for a new account</Link>.
+              </div>
+            )
+          }
+
           setIsSubmitting(false)
-          setResetSuccessfully(email)
+          setSubmitError(errorMessage)
         }
-      } catch ({ status, response }) {
-        if (status === 403) {
-          try {
-            await signup(email)
-          } catch (error) {}
-
-          setIsSubmitting(false)
-          setResetSuccessfully(email)
-
-          return
-        }
-
-        let errorMessage = 'An unexpected error occurred. Please try again.'
-
-        if (status === 404) {
-          errorMessage = (
-            <div>
-              Sorry, that email address is not registered with us.
-              <br />
-              <span>Please try again or</span>
-              <Link to="/signup"> register for a new account</Link>.
-            </div>
-          )
-        }
-
-        setIsSubmitting(false)
-        setSubmitError(errorMessage)
       }
-    }
   })
 )(ForgotForm)

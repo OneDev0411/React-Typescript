@@ -1,5 +1,4 @@
 import Fetch from '../../../../services/fetch'
-
 import { getActiveTeamId } from '../../../../utils/user-teams'
 
 /**

@@ -1,12 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { Tooltip, Grid } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import { toggleInstantMode } from '../../../../../store_actions/chatroom'
+import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
+
 import Members from './members'
 import RoomSettings from './settings'
-import ExitFullscreenIcon from '../../Partials/Svgs/ExitFullscreenIcon'
 
 const MessagesToolbar = ({ toggleInstantMode, instantMode, room }) => (
   <Grid container className="toolbar">

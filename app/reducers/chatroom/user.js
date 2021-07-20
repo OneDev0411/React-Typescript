@@ -1,5 +1,4 @@
 import types from '../../constants/chatroom'
-import moment from 'moment'
 
 /**
  * initial user statuses

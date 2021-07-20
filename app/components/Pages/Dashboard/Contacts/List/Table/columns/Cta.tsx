@@ -1,25 +1,21 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Tooltip, IconButton, makeStyles, Theme } from '@material-ui/core'
-
 import {
   mdiCalendarOutline,
   mdiEmailOutline,
   mdiChatProcessingOutline
 } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { EventDrawer } from 'components/EventDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
-import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
-
-import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { EventDrawer } from 'components/EventDrawer'
 import MissingEmailModal from 'components/MissingEmailModal'
-import { normalizeContact } from 'views/utils/association-normalizers'
-
+import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 import { selectUser } from 'selectors/user'
+import { normalizeContact } from 'views/utils/association-normalizers'
 
 import ChatButton from '../../../components/ChatButton'
 
@@ -48,9 +44,8 @@ export default function CtaAction({ contact }: Props) {
   const user = useSelector(selectUser)
   const [showEmailComposer, setShowEmailComposer] = useState<boolean>(false)
   const [showEventDrawer, setShowEventDrawer] = useState<boolean>(false)
-  const [showMissingEmailModal, setShowMissingEmailModal] = useState<boolean>(
-    false
-  )
+  const [showMissingEmailModal, setShowMissingEmailModal] =
+    useState<boolean>(false)
   const { id, emails, email, phone_number, users } = contact
   const classes = useStyles()
 

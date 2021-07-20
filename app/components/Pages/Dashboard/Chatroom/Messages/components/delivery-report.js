@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
+
+import { Grid, Popover, Box } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import { mdiCheck } from '@mdi/js'
+import moment from 'moment'
 import { connect } from 'react-redux'
 import _ from 'underscore'
-import moment from 'moment'
-import { mdiCheck } from '@mdi/js'
-import { useTheme } from '@material-ui/core/styles'
-import { Grid, Popover, Box } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
 
 function getAckedUsers(message, room) {

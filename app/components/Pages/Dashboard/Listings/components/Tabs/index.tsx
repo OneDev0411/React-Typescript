@@ -1,17 +1,17 @@
 import React, { ReactNode } from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
+
 import { Box } from '@material-ui/core'
 import { Theme, ButtonBase, makeStyles, createStyles } from '@material-ui/core'
-
 import { mdiPlus } from '@mdi/js'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import SavedSearchesList from '../../SavedSearchesList'
-import ViewSwitcher from '../GridControllers/ViewSwitcher'
 import SortDropdown from '../GridControllers/SortDropdown'
+import ViewSwitcher from '../GridControllers/ViewSwitcher'
 
 interface Props {
   onChangeView: () => void

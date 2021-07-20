@@ -1,7 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { Tooltip } from '@material-ui/core'
+import styled from 'styled-components'
 
 const Title = styled.div`
   font-size: 17px;

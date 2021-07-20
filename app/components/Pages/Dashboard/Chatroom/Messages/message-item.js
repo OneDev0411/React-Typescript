@@ -1,9 +1,10 @@
 import React from 'react'
 
 import messageUtil from '../Util/message'
+
 import LeadMessage from './message-kinds/lead'
-import SubMessage from './message-kinds/sub'
 import SingleMessage from './message-kinds/single'
+import SubMessage from './message-kinds/sub'
 
 export default ({
   user,

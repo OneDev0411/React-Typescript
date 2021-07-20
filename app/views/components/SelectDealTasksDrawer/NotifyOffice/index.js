@@ -1,7 +1,7 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 
 import { Tooltip } from '@material-ui/core'
+import Flex from 'styled-flex-component'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
 

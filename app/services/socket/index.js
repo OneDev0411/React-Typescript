@@ -1,9 +1,9 @@
 import io from 'socket.io-client'
 
-import { getTeams } from '../../models/user/get-teams'
-import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 import config from '../../../config/public'
+import { getTeams } from '../../models/user/get-teams'
 import store from '../../stores'
+import { getActiveTeamACL, getActiveTeamId } from '../../utils/user-teams'
 
 // create socket
 const socket = io(config.socket.server, {

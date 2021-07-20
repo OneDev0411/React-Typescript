@@ -1,5 +1,5 @@
-import edit from '../../models/user/edit'
 import * as actionsType from '../../constants/user'
+import edit from '../../models/user/edit'
 
 const editUser = (userInfo: IUserInput) => async dispatch => {
   dispatch({

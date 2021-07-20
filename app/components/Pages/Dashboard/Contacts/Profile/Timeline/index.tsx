@@ -4,16 +4,16 @@ import React, {
   useImperativeHandle,
   useRef
 } from 'react'
+
 import { makeStyles, Theme } from '@material-ui/core'
 
 import List from 'components/Calendar'
 import { CalendarRef } from 'components/Calendar/types'
 
-import { getTimelineInitialRange } from './helpers/get-timeline-range'
-
-import { Notes } from './Notes'
-
 import { Filters } from '../Tabs'
+
+import { getTimelineInitialRange } from './helpers/get-timeline-range'
+import { Notes } from './Notes'
 
 export interface TimelineRef {
   refresh(): void
