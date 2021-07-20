@@ -45,12 +45,6 @@ class Dashboard extends Component {
     if (user) {
       new ChatSocket(user)
     }
-
-    if (typeof window !== 'undefined') {
-      if (!('WebkitAppearance' in document.documentElement.style)) {
-        import('simplebar')
-      }
-    }
   }
 
   componentDidMount() {
