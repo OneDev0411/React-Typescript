@@ -22,7 +22,7 @@ export default function PromoteListingsSection() {
     <SectionLayout
       title="Promote Your Listings"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/agent-network" />
+        <LinkSectionAction title="View all" url="/dashboard/listings" />
       }
     >
       {isLoading && (
