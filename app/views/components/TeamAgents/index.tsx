@@ -6,9 +6,9 @@ import { IAppState } from 'reducers'
 import { getAgents } from 'models/Deal/agent'
 
 import { getBrand } from './helpers/get-brand'
-import { normalizeTeams } from './helpers/normalize-teams'
 
 import type { NormalizedBrand } from './types'
+import useTeamAgentsSearch from './use-team-agents-search'
 
 interface RenderProps {
   isLoading: boolean
@@ -53,18 +53,14 @@ export default function TeamAgents({
   }, [isPrimaryAgent, user])
 
   const isEmptyState = !isLoading && teamAgents.length === 0
+  const teams = useTeamAgentsSearch(teamAgents, criteria, flattenTeams)
 
   return (
     <>
       {children({
         isLoading,
         isEmptyState,
-        teams: normalizeTeams(
-          user,
-          teamAgents,
-          flattenTeams,
-          criteria
-        ) as NormalizedBrand[]
+        teams
       })}
     </>
   )
