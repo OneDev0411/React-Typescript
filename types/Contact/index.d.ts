@@ -106,6 +106,8 @@ declare interface IContact extends IContactBase {
   address: IContactAddress[] | null
 
   type: string
+
+  company: Nullable<string>
 }
 
 declare interface INormalizedContact extends IContact {

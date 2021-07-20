@@ -3,18 +3,18 @@ import { connect } from 'react-redux'
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { batchActions } from 'redux-batched-actions'
-
 import { browserHistory } from 'react-router'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
-
 import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
-
 import { getBounds } from 'utils/map'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getListingAddress } from 'utils/listing'
-
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
 import {
   reset as resetSearchType,
   setSearchType
@@ -24,14 +24,12 @@ import { getListingsByQuery } from 'actions/listings/search/get-listings-by-quer
 import { goToPlace, setMapProps } from 'actions/listings/map'
 import resetAreasOptions from 'actions/listings/search/reset-areas-options'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
-
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
-
 import {
   SEARCH_BY_GOOGLE_SUGGESTS,
   SEARCH_BY_QUERY
-} from '../../../../../../../constants/listings/search'
+} from '@app/constants/listings/search'
 
 import {
   SearchContainer,
@@ -49,7 +47,6 @@ class MlsAutocompleteSearch extends Component {
     places: [],
     listings: [],
     input: '',
-    // eslint-disable-next-line
     isDrity: false,
     selectedListingId: null,
     isListingDetailsModalOpen: false
@@ -61,6 +58,15 @@ class MlsAutocompleteSearch extends Component {
     }
 
     return null
+  }
+
+  componentDidMount() {
+    const googleMapAPIParams = { libraries: ['places'] }
+
+    // Load google maps places if is not loaded yet
+    if (!isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
+      loadMapLibraries(googleMapAPIParams, 'google-maps-places')
+    }
   }
 
   componentWillUnmount() {
@@ -337,6 +343,7 @@ class MlsAutocompleteSearch extends Component {
                     onKeyDown={this.handleKeyDownInput}
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
+                    // eslint-disable-next-line max-len
                     placeholder="Enter an address, neighborhood, city, ZIP code or MLS #"
                     onClear={this.onClear}
                     isLoading={this.state.isLoading}
@@ -392,6 +399,7 @@ class MlsAutocompleteSearch extends Component {
           />
         </SearchContainer>
         <ListingDetailsModal
+          isWidget={!!this.props.isWidget}
           isOpen={this.state.isListingDetailsModalOpen}
           listingId={this.state.selectedListingId}
           closeHandler={this.closeListingDetailsModal}

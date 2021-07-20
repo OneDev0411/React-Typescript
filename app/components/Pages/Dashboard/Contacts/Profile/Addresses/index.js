@@ -37,7 +37,7 @@ class Addresses extends React.Component {
         ...normalizedAddresses,
         generateEmptyAddress(
           addressAttributeDefs,
-          addresses,
+          normalizedAddresses,
           false,
           defaultLabel,
           defaultIsPrimary

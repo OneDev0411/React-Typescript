@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -23,6 +21,7 @@ import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import { IAppState } from 'reducers'
 
+import { selectShowingsTotalNotificationCount } from 'selectors/showings'
 import { InlineBadge } from 'components/InlineBadge'
 
 import { getActiveTeamSettings } from 'utils/user-teams'
@@ -61,6 +60,10 @@ export function Menu() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
+
+  const showingsTotalNotificationCount = useSelector(
+    selectShowingsTotalNotificationCount
+  )
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
@@ -185,6 +188,17 @@ export function Menu() {
           <Acl access={[ACL.STORE]}>
             <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
               Store
+            </SideNavLinkItem>
+          </Acl>
+
+          <Acl access={ACL.SHOWINGS}>
+            <SideNavLinkItem to="/dashboard/showings">
+              <InlineBadge
+                badgeContent={showingsTotalNotificationCount}
+                color="primary"
+              >
+                Showings
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>

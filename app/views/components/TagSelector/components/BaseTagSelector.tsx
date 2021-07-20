@@ -108,7 +108,15 @@ export const BaseTagSelector = ({
           let tagValue = ''
 
           if (typeof lastValue === 'string') {
-            tagValue = (lastValue as string).trim()
+            const baseValue = (lastValue as string).trim()
+            const originalTitle = availableTagKeys.indexOf(
+              baseValue.toLowerCase()
+            )
+
+            tagValue =
+              originalTitle >= 0
+                ? availableTags[originalTitle].value!
+                : baseValue
           } else if (lastValue && lastValue.value) {
             tagValue = lastValue.value.trim()
           }
@@ -155,10 +163,12 @@ export const BaseTagSelector = ({
       filterOptions={(options, params) => {
         const filtered = filter(options, params)
 
+        const allTagKeys = [...availableTagKeys, ...selectedTagKeys]
+
         // Suggest the creation of a new value
         if (
           params.inputValue !== '' &&
-          !availableTagKeys.includes(params.inputValue.trim().toLowerCase())
+          !allTagKeys.includes(params.inputValue.trim().toLowerCase())
         ) {
           filtered.push({
             value: params.inputValue,

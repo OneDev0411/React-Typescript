@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ReactNode } from 'react'
 import {
   makeStyles,
   Theme,
@@ -8,16 +8,20 @@ import {
   useTheme
 } from '@material-ui/core'
 
-type RadioItem = {
-  value: string | null
+import { useControllableState } from 'react-use-controllable-state/dist'
+
+export interface RadioItem<T extends string = string> {
+  value: Nullable<T>
   label: string
   description?: string
+  children?: ReactNode
 }
 
-interface Props {
+export interface RadioGroupProps<T extends string = string> {
   name: string
   defaultValue?: string | null
-  options: RadioItem[]
+  value?: T | null
+  options: (RadioItem<T> | false)[]
   style?: React.CSSProperties
   groupStyle?: React.CSSProperties
   onChange: (value: unknown) => void
@@ -42,31 +46,36 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'CreateDeal-RadioGroup'
+    name: 'RadioGroup'
   }
 )
 
-export function RadioGroup({
+export function RadioGroup<T extends string = string>({
   name,
   options,
   defaultValue,
   style = {},
   groupStyle = {},
-  onChange
-}: Props) {
+  onChange,
+  value
+}: RadioGroupProps<T>) {
   const classes = useStyles()
-  const [value, setValue] = useState(defaultValue)
   const theme = useTheme<Theme>()
 
-  const handleChange = (value: string | null) => {
-    setValue(value)
-    onChange(value)
-  }
+  const [radioValue, setRadioValue] = useControllableState(
+    value,
+    onChange,
+    defaultValue
+  )
 
   return (
     <div style={style}>
       {options.map((item, index) => {
-        const isChecked = item.value === value
+        if (!item) {
+          return null
+        }
+
+        const isChecked = item.value === radioValue
 
         return (
           <div
@@ -81,6 +90,7 @@ export function RadioGroup({
                 : 'inherit',
               ...groupStyle
             }}
+            onClick={() => setRadioValue(item.value)}
           >
             <Box
               display="flex"
@@ -93,7 +103,6 @@ export function RadioGroup({
                   value={item.value}
                   color={isChecked ? 'primary' : 'default'}
                   checked={isChecked}
-                  onClick={() => handleChange(item.value)}
                 />
               </Box>
               <Box
@@ -106,7 +115,6 @@ export function RadioGroup({
                     ? theme.palette.primary.main
                     : theme.palette.common.black
                 }}
-                onClick={() => handleChange(item.value)}
               >
                 <Typography variant="body1">{item.label}</Typography>
                 <Typography variant="body2" className={classes.description}>
@@ -114,6 +122,7 @@ export function RadioGroup({
                 </Typography>
               </Box>
             </Box>
+            {item.children}
           </div>
         )
       })}

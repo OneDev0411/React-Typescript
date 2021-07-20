@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
-  hasUserAccessToMarketingCenter
+  hasUserAccessToMarketingCenter,
+  hasUserAccessToShowings
 } from 'utils/user-teams'
 
 import { selectUserUnsafe } from 'selectors/user'
@@ -35,6 +36,10 @@ export const GlobalActions = (props: Props) => {
 
     if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
       actions.push('openhouse')
+    }
+
+    if (hasUserAccessToShowings(user)) {
+      actions.push('showing')
     }
 
     return items.filter(item => actions.includes(item.type))
@@ -114,7 +119,6 @@ export const GlobalActions = (props: Props) => {
 
       case 'contact':
         return selectedItem.render({
-          user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
           saveCallback: state.onCreateContact,
@@ -142,6 +146,12 @@ export const GlobalActions = (props: Props) => {
           onClose: handleCloseRenderedItem,
           submitCallback: handleSubmitTour
         })
+
+      case 'showing':
+        setSelectedItem(null)
+        selectedItem.redirectTo('/dashboard/showings/create')
+
+        return null
     }
   }
 

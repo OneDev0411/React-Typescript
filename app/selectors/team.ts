@@ -1,7 +1,11 @@
 import { createSelector } from 'reselect'
 
 import { IAppState } from 'reducers'
-import { getActiveTeam, getActiveTeamId } from 'utils/user-teams'
+import {
+  getActiveTeam,
+  getActiveTeamId,
+  getTeamAvailableMembers
+} from 'utils/user-teams'
 
 import { selectUser } from './user'
 
@@ -79,3 +83,11 @@ export const selectActiveTeamBrands = createSelector<
 
   return brands
 })
+
+/**
+ * Returns the available members for the current active team
+ * @param state The app state
+ */
+export function selectActiveTeamAvailableMembers(state: IAppState): IUser[] {
+  return getTeamAvailableMembers(selectActiveTeamUnsafe(state))
+}
