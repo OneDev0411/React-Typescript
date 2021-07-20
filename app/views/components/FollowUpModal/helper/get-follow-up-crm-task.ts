@@ -137,7 +137,9 @@ function getCrmTaskTitle(
 
     switch (recipientType) {
       case 'Email':
-        return `${title}: ${email.recipients[0].contact.display_name}`
+        return `${title}: ${
+          email.recipients[0].contact?.display_name || email.recipients[0].email
+        }`
       case 'Tag':
         return `${title}: ${email.recipients[0].tag}'s Tag`
       case 'AllContacts':
