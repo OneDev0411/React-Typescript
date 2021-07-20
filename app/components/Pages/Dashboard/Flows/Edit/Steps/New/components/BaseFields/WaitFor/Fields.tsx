@@ -26,7 +26,7 @@ const useStyles = makeStyles(
     },
     value: {
       flexGrow: 1,
-      maxWidth: '65px'
+      maxWidth: '100px'
     },
     unit: {
       flexGrow: 1,
