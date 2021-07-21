@@ -1,8 +1,8 @@
 import { differenceInDays } from 'date-fns'
 
 import { ACL } from '@app/constants/acl'
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 import { OAuthProvider } from 'constants/contacts'
+import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 
 import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 

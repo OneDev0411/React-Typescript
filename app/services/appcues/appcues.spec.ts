@@ -1,7 +1,6 @@
 import MockDate from 'mockdate'
 
 import { createAppcuesAccessList, createAppcuesUserData } from './helpers'
-
 import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
 describe('createAppcuesAccessList', () => {
