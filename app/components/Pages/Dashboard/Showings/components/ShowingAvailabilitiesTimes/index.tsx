@@ -18,6 +18,7 @@ export interface ShowingAvailabilitiesTimesProps
   onContinue?: () => void
   error?: string
   children?: ReactNode
+  disabledContinue?: boolean
 }
 
 function ShowingAvailabilitiesTimes({
@@ -28,7 +29,8 @@ function ShowingAvailabilitiesTimes({
   onContinue,
   error,
   children,
-  showingDuration
+  showingDuration,
+  disabledContinue = false
 }: ShowingAvailabilitiesTimesProps) {
   const [nextId, setNextId] = useState(0)
 
@@ -123,7 +125,12 @@ function ShowingAvailabilitiesTimes({
             variant="contained"
             size="small"
             color="primary"
-            disabled={!value.length || !!timeConflicts.length || !!error}
+            disabled={
+              value.length === 0 ||
+              timeConflicts.length > 0 ||
+              !!error ||
+              disabledContinue
+            }
             onClick={onContinue}
           >
             Continue
