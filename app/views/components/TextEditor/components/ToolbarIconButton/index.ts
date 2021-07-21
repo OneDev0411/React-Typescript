@@ -1,5 +1,5 @@
-import styled, { ThemeProps } from 'styled-components'
 import { IconButton, Theme, IconButtonProps } from '@material-ui/core'
+import styled, { ThemeProps } from 'styled-components'
 
 export const ToolbarIconButton = styled(IconButton).attrs({
   type: 'button'

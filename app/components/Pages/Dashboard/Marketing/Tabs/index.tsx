@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { PageTabs, TabLink, MegaTab } from 'components/PageTabs'
 import { SectionsEnum } from 'components/PageSideNav/types'
+import { PageTabs, TabLink, MegaTab } from 'components/PageTabs'
 import { SectionCollection } from 'hooks/use-marketing-center-sections'
 
 import MegaMenu from './SectionMegaMenu'

@@ -1,11 +1,7 @@
-import { OutlookSignInButton } from 'components/OutlookSignInButton'
-
 import { GoogleSignInButton } from 'components/GoogleSignInButton'
-
+import { OutlookSignInButton } from 'components/OutlookSignInButton'
 import { OAuthProvider } from 'constants/contacts'
-
 import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
-
 import { ZeroState } from 'partials/ZeroState'
 
 export default function InboxZeroState() {

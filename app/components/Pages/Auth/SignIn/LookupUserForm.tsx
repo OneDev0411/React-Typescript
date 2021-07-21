@@ -1,14 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router'
+
 import { Typography, Box } from '@material-ui/core'
-import { Form, Field } from 'react-final-form'
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
+import { Form, Field } from 'react-final-form'
+import { Link } from 'react-router'
+
+import { Callout } from '../../../../views/components/Callout'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
 import SubmitButton from './SubmitButton'
-import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
-import { Callout } from '../../../../views/components/Callout'
-
 import { SubmitMessage } from './types'
 
 interface FormValues {

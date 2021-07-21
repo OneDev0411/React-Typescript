@@ -1,26 +1,22 @@
 import { memo } from 'react'
 
+import { Box } from '@material-ui/core'
+import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { WithRouterProps } from 'react-router'
-
-import { Box } from '@material-ui/core'
-
 import PageLayout from 'components/GlobalPageLayout'
-
+import LoadingContainer from 'components/LoadingContainer'
 import TabContentSwitch from 'components/TabContentSwitch'
 
-import LoadingContainer from 'components/LoadingContainer'
-
-import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
-
-import { showingDetailTabs } from '../../constants'
-import ShowingDetailTabBookings from './ShowingDetailTabBookings'
-import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
-import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
 import ShowingDetailHeader from '../../components/ShowingDetailHeader'
-import useGetShowing from './use-get-showing'
+import ShowingDetailTabSettings from '../../components/ShowingDetailTabSettings'
+import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
+import { showingDetailTabs } from '../../constants'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
+
+import ShowingDetailTabBookings from './ShowingDetailTabBookings'
+import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
+import useGetShowing from './use-get-showing'
 
 type ShowingDetailProps = WithRouterProps<{
   tab?: ShowingDetailTabsProps['value']

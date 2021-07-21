@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Masked, { maskArray } from 'react-text-mask'
 
 interface Props {

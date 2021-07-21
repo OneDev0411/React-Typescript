@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from 'react'
+
 import { Box, Divider } from '@material-ui/core'
 
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
-
-import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
-import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
 import { isFetchingSelectedTeam } from '../../../../../../../reducers/user'
+import { viewAs, getActiveTeamId } from '../../../../../../../utils/user-teams'
+import Loading from '../../../../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
 import { TeamItem } from './TeamItem'
 

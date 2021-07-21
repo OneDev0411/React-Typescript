@@ -1,10 +1,10 @@
 import { FunctionComponent } from 'react'
+
 import styled, { StyledComponent, css } from 'styled-components'
 import { FlexItem } from 'styled-flex-component'
 
-import { primary, grey } from 'views/utils/colors'
-
 import IconKeyboardArrowDown from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import { primary, grey } from 'views/utils/colors'
 
 export const TreeViewNodeContainer = styled.div<{
   selectable?: boolean

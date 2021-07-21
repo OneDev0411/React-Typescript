@@ -1,13 +1,12 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import { Avatar } from 'components/Avatar'
-
-import { getNameInitials } from 'utils/helpers.js'
-
 import { formatPhoneNumber } from 'utils/format'
+import { getNameInitials } from 'utils/helpers.js'
 
 import { useAvatarStyles } from '../../../../../styles/use-avatar-styles'
 

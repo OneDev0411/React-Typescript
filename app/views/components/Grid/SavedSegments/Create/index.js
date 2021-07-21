@@ -1,21 +1,19 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import MUIButton from '@material-ui/core/Button'
+import { connect } from 'react-redux'
 
+import Modal from 'components/BasicModal'
+import Button from 'components/Button/ActionButton'
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+import RadioButton from 'components/RadioButton'
+import { SWITCH_ACTIVE_SAVED_SEGMENT } from 'constants/filter-segments'
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import {
   createFilterSegment,
   updateFilterSegment,
   changeActiveFilterSegment
 } from 'store_actions/filter-segments'
-import { SWITCH_ACTIVE_SAVED_SEGMENT } from 'constants/filter-segments'
-import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
-
-import Modal from 'components/BasicModal'
-import Button from 'components/Button/ActionButton'
-
-import RadioButton from 'components/RadioButton'
-import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
 
 import { Container, ItemRow, ItemTitle, TextInput } from './styled'
 

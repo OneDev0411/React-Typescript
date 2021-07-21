@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Grid,
   IconButton,
@@ -8,6 +9,7 @@ import {
   makeStyles,
   Box
 } from '@material-ui/core'
+import { mdiArrowUpDown, mdiTrashCanOutline, mdiCameraOutline } from '@mdi/js'
 import {
   DragDropContext,
   Droppable,
@@ -17,12 +19,12 @@ import {
   DraggableStateSnapshot,
   DropResult
 } from 'react-beautiful-dnd'
-import { mdiArrowUpDown, mdiTrashCanOutline, mdiCameraOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { UploadableFieldProps } from './types'
 import { TemplateVariable } from '../../types'
+
+import { UploadableFieldProps } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

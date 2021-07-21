@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react'
 
-import PropTypes from 'prop-types'
 import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
+import PropTypes from 'prop-types'
 
 import { DoneButton } from 'components/Grid/Filters/Item/styled'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { DropDownList } from './components/DropDownList'
 import { TextInput } from './components/TextInput'
+import getOperator from './get-operator'
 import {
   Container,
   InputContainer,
@@ -16,8 +17,6 @@ import {
   Title,
   MarkedIcon
 } from './styled'
-
-import getOperator from './get-operator'
 
 export const operators = [
   {

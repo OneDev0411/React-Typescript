@@ -1,12 +1,12 @@
 import { normalize } from 'normalizr'
 
-import { contactsSchema } from '../../../models/contacts/schema'
 import {
   DELETE_ATTRIBUTES_FROM_CONTACTS_FAILURE,
   DELETE_ATTRIBUTES_FROM_CONTACTS_REQUEST,
   DELETE_ATTRIBUTES_FROM_CONTACTS_SUCCESS
 } from '../../../constants/contacts'
 import { deleteAttributesFromContacts as fetchDeleteAttributesFromContacts } from '../../../models/contacts/delete-attributes-bulk-contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
 import { selectContact } from '../../../reducers/contacts/list'
 
 export function deleteAttributesFromContacts(ids, attributes, attribute_def) {

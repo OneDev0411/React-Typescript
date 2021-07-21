@@ -1,24 +1,23 @@
 import React, { useContext } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
 
+import { Box, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
-import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
-import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
-import { getPersonDisplayName } from 'utils/get-person-display-name'
+import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
 import IconAttachment from 'components/SvgIcons/Attachment/IconAttachment'
 import { iconSizes } from 'components/SvgIcons/icon-sizes'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
-
 import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { findInPeopleByEmail } from 'utils/find-in-people-by-email'
+import { getPersonDisplayName } from 'utils/get-person-display-name'
+import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
+import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
 import { ListContext } from '../../context'
+import { EventBadge } from '../components/EventBadge'
 import { EventContainer } from '../components/EventContainer'
 import { sharedStyles } from '../styles'
-import { EventBadge } from '../components/EventBadge'
 
 interface Props {
   event: ICalendarEvent<'full_thread'>

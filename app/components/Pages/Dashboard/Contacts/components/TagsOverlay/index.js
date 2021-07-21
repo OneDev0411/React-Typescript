@@ -1,17 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import _ from 'underscore'
-import unionBy from 'lodash/unionBy'
+
 import intersectionBy from 'lodash/intersectionBy'
+import unionBy from 'lodash/unionBy'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 
-import OverlayDrawer from 'components/OverlayDrawer'
-
-import {
-  getAttributeFromSummary,
-  getContactAttribute // eslint-disable-line
-} from 'models/contacts/helpers'
-
+import { confirmation } from 'actions/confirmation'
 import {
   updateContact,
   deleteAttributes,
@@ -19,31 +14,29 @@ import {
   getContactsTags,
   upsertAttributesToContacts
 } from 'actions/contacts'
-import { confirmation } from 'actions/confirmation'
-
+import OverlayDrawer from 'components/OverlayDrawer'
 import { addAttributesBulk } from 'models/contacts/add-attributes-bulk'
-
-import { selectTags } from 'reducers/contacts/tags'
+import {
+  getAttributeFromSummary,
+  getContactAttribute // eslint-disable-line
+} from 'models/contacts/helpers'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectContact, selectContactsInfo } from 'reducers/contacts/list'
+import { selectTags } from 'reducers/contacts/tags'
 
-import Tags from './Tags'
-import Info from './Info'
 import CustomTag from './CustomTag'
-import Header from './Header'
 import DrawerFooter from './DrawerFooter'
+import Header from './Header'
+import Info from './Info'
 import { SubHeaderContainer } from './styled'
+import Tags from './Tags'
 
 class TagsOverlay extends React.Component {
   constructor(props) {
     super(props)
 
-    const {
-      entireMode,
-      selectedContactsIds,
-      ContactListStore,
-      existingTags
-    } = this.props
+    const { entireMode, selectedContactsIds, ContactListStore, existingTags } =
+      this.props
 
     const tags = entireMode
       ? this.getAllTags()

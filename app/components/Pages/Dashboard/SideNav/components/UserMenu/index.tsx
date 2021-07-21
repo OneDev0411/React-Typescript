@@ -1,14 +1,14 @@
 import React from 'react'
-import usePromise from 'react-use-promise'
+
 import { Popover } from '@material-ui/core'
+import usePromise from 'react-use-promise'
 
 import { IUserState } from 'reducers/user'
 
-import { getActiveTeamId } from '../../../../../../utils/user-teams'
 import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
+import { getActiveTeamId } from '../../../../../../utils/user-teams'
 
 import ToggleButton from './ToggleButton'
-
 import { UserMenuContent } from './UserMenuContent'
 
 export function UserMenu({ user }: { user: IUserState }) {

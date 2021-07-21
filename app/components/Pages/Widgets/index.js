@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import idx from 'idx'
+
 import * as Sentry from '@sentry/react'
+import idx from 'idx'
+import { connect } from 'react-redux'
 
 import getBrand from '../../../store_actions/brand'
 import getFavorites from '../../../store_actions/listings/favorites/get-favorites'

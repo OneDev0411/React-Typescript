@@ -1,14 +1,13 @@
 import { ReactNode } from 'react'
-import { fireEvent, render } from '@testing-library/react'
-
 import * as React from 'react'
+
+import { fireEvent, render } from '@testing-library/react'
 
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 
+import { TextEditor } from '..'
 import { TestBed } from '../../../../../tests/unit/TestBed'
 import { ImageFeature } from '../features/Image'
-
-import { TextEditor } from '..'
 
 const TE = ({ children }: { children?: ReactNode }) => {
   const [editorState, setEditorState] = useEditorState('')

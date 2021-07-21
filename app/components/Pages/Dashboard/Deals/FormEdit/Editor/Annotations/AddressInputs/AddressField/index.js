@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 
 import { AddressEdit } from './AddressEdit'
 import { AddressWithSuggestion } from './AddressWithSuggestion'
-
 import { NotEditable } from './NotEditable'
 
 const inputStyles = {

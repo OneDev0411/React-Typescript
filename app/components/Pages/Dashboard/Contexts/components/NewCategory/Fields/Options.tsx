@@ -1,8 +1,9 @@
 import React from 'react'
-import { Field } from 'react-final-form'
+
 import { Grid, Box } from '@material-ui/core'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { Field } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 

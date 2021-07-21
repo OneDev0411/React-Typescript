@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { debounce } from 'lodash'
+
 import { makeStyles, Theme } from '@material-ui/core'
+import { debounce } from 'lodash'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 

@@ -1,7 +1,8 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import { Field } from 'react-final-form'
+import styled from 'styled-components'
 
 import { grey } from '../../../utils/colors'
 import { Container, Label, LabelNote, ErrorMessage } from '../styled'
@@ -55,25 +56,25 @@ export function TextAreaField(props) {
             {props.label && (
               <Label htmlFor={id} required={props.required}>
                 {props.label}
-                {props.labelNote &&
-                  !props.required && <LabelNote>{props.labelNote}</LabelNote>}
+                {props.labelNote && !props.required && (
+                  <LabelNote>{props.labelNote}</LabelNote>
+                )}
               </Label>
             )}
             <TextArea {...input} id={id} placeholder={props.placeholder} />
             {hasError && <ErrorMessage>{meta.error}</ErrorMessage>}
-            {meta.active &&
-              props.hint && (
-                <div
-                  style={{
-                    marginTop: '0.5em',
-                    padding: '0.5em',
-                    borderRadius: 3,
-                    backgroundColor: '#f6fafb'
-                  }}
-                >
-                  {props.hint}
-                </div>
-              )}
+            {meta.active && props.hint && (
+              <div
+                style={{
+                  marginTop: '0.5em',
+                  padding: '0.5em',
+                  borderRadius: 3,
+                  backgroundColor: '#f6fafb'
+                }}
+              >
+                {props.hint}
+              </div>
+            )}
           </Container>
         )
       }}

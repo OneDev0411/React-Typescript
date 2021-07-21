@@ -1,5 +1,5 @@
 import React, { useMemo, ReactNode } from 'react'
-import { useField } from 'react-final-form'
+
 import {
   Box,
   FormHelperText,
@@ -8,6 +8,7 @@ import {
   Select,
   Typography
 } from '@material-ui/core'
+import { useField } from 'react-final-form'
 
 import {
   GOOGLE_CREDENTIAL,
@@ -31,10 +32,10 @@ export function From({ accounts, children, users }: Props) {
   const fromField = useField('from')
   const error = fromField.meta.error
 
-  const items = useMemo(() => [...(accounts || []), ...users], [
-    users,
-    accounts
-  ])
+  const items = useMemo(
+    () => [...(accounts || []), ...users],
+    [users, accounts]
+  )
 
   const renderItemToValue = (item: IUser | IOAuthAccount) => {
     switch (item.type) {

@@ -1,11 +1,11 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
-import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
-
-import LinkButton from 'components/Button/LinkButton'
 import IconButton from 'components/Button/IconButton'
+import LinkButton from 'components/Button/LinkButton'
+import RemoveIcon from 'components/SvgIcons/RemoveCircleOutline/IconRemoveCircleOutline'
 
 import { NotifyOffice } from '../NotifyOffice'
 

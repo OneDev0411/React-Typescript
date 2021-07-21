@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { SideNavItem, SidenavLink } from '../styled'

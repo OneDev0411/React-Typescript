@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+
 import { byId, info, allIds, isFetching, errorMessage } from './shared'
 
 const listings = combineReducers({

@@ -1,12 +1,11 @@
 import React from 'react'
-import { Field } from 'react-final-form'
 
 import { TextFieldProps } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 
 import { MAX_STEP_TITLE_LENGTH } from '../../../../../constants'
-
 import { validateStringInput } from '../../../../../helpers'
 
 interface Props {

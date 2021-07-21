@@ -41,6 +41,7 @@ describe('updateTree', () => {
         name: 'c2'
       })
     )
+
     expect(newTree).toEqual({
       name: 'a',
       children: [{ name: 'b', children: [] }, { name: 'c2' }]
@@ -57,6 +58,7 @@ describe('updateTree', () => {
         name: 'a2'
       })
     )
+
     expect(newTree).toEqual({ name: 'a2' })
 
     expect(newTree).not.toBe(sampleTree) // no mutation
@@ -69,6 +71,7 @@ describe('updateTree', () => {
         name: 'f2'
       })
     )
+
     expect(newTree).toEqual({
       name: 'a',
       children: [

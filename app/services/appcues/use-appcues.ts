@@ -1,11 +1,12 @@
 import { useMemo, useEffect } from 'react'
+
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-use'
 
 import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
 
-import { AppcuesUserInfo } from './types'
 import { prepareAndSendUserData } from './helpers'
+import { AppcuesUserInfo } from './types'
 
 export function useAppcues() {
   const accessList = useSelector(selectUserAccessList)

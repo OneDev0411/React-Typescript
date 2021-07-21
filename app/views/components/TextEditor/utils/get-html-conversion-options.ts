@@ -1,24 +1,25 @@
 import { EditorState } from 'draft-js'
 import { Options as ExportOptions } from 'draft-js-export-html'
-import { Options as ImportOptions } from 'draft-js-import-html'
 import {
   INLINE_ELEMENTS,
   SPECIAL_ELEMENTS
 } from 'draft-js-import-element/lib/lib/Constants'
+import { Options as ImportOptions } from 'draft-js-import-html'
 import { wrap } from 'lodash'
 
-import { createAtomicBlockEntityData } from './create-atomic-block-entity-data'
 import { signatureCustomBlockFn } from '../features/Signature/draft-js-signature-plugin'
 import {
   iFrameCustomBlockFn,
   renderIFrame
 } from '../plugins/draft-js-iframe-plugin'
-import { combine } from './combine'
-import { blockStyleFn } from './block-style-fn'
-import { renderImage } from './render-image'
-import { blockLevelLinkRendererWrapper } from './block-level-link-renderer-wrapper'
+
 import { blockLevelLinkCustomBlockFn } from './block-level-link-custom-block-fn'
+import { blockLevelLinkRendererWrapper } from './block-level-link-renderer-wrapper'
+import { blockStyleFn } from './block-style-fn'
+import { combine } from './combine'
+import { createAtomicBlockEntityData } from './create-atomic-block-entity-data'
 import { mergeFunctions } from './merge-functions'
+import { renderImage } from './render-image'
 
 interface HtmlConversionOptions {
   stateToHtmlOptions: ExportOptions

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
+
 import { Popover, MenuItem } from '@material-ui/core'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
-import { GridSortingOption, TableColumn, SortableColumn } from '../../types'
-
-import { useGridContext } from '../../hooks/use-grid-context'
-import { setActiveSort } from '../../context/actions/sorting/set-active-sort'
 import { StateContext } from '../../context'
+import { setActiveSort } from '../../context/actions/sorting/set-active-sort'
+import { useGridContext } from '../../hooks/use-grid-context'
+import { GridSortingOption, TableColumn, SortableColumn } from '../../types'
 
 interface Props<Row> {
   options: GridSortingOption | null

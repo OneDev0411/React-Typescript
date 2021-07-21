@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+
 import { isToday } from 'date-fns'
+import { useDeepCompareEffect } from 'react-use'
 
-import { getSecondsSinceStartOfDay } from 'utils/date-utils'
-
-import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
 import { TimeRange } from 'components/TimeSlotPicker/types'
+import { getTimeSlotsInRange } from 'components/TimeSlotPicker/utils'
+import { getSecondsSinceStartOfDay } from 'utils/date-utils'
 
 import {
   getBookedTimes,

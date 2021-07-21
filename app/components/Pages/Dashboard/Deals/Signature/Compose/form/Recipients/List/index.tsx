@@ -1,5 +1,5 @@
 import React from 'react'
-import { useField } from 'react-final-form'
+
 import {
   Table,
   TableHead,
@@ -15,13 +15,12 @@ import {
   TableContainer,
   makeStyles
 } from '@material-ui/core'
-
 import { useTheme } from '@material-ui/styles'
 import { mdiClose } from '@mdi/js'
+import { useField } from 'react-final-form'
 
-import { BaseDropdown } from 'components/BaseDropdown'
 import { Avatar } from 'components/Avatar'
-
+import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type { ISignatureRecipient } from 'deals/Signature/types'
 import { getAvatarTitle } from 'deals/utils/get-avatar-title'

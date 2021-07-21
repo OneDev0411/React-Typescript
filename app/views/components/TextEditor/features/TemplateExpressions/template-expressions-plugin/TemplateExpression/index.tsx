@@ -7,25 +7,22 @@ import {
   Popper,
   Tooltip
 } from '@material-ui/core'
-
-import classNames from 'classnames'
-import { get } from 'lodash'
-
-import { EditorState, Modifier, SelectionState } from 'draft-js'
 import { mdiAlertOutline } from '@mdi/js'
-
-import { useMenu } from 'hooks/use-menu'
+import classNames from 'classnames'
+import { EditorState, Modifier, SelectionState } from 'draft-js'
+import { get } from 'lodash'
 
 import { defaultTemplateVariableSuggestions } from 'components/EmailCompose/default-template-variable-suggestions'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
+import { useMenu } from 'hooks/use-menu'
 
-import { expressionRegExp } from '../expression-regexp'
-import { TemplateExpressionPopover } from '../TemplateExpressionPopover'
 import { DraftPluginEditorInlineDecoratorProps } from '../../../../types'
+import { expressionRegExp } from '../expression-regexp'
+import { TemplateExpressionContext } from '../template-expression-context'
+import { TemplateExpressionPopover } from '../TemplateExpressionPopover'
 
 import { styles } from './styles'
-import { TemplateExpressionContext } from '../template-expression-context'
 
 const useTemplateExpressionStyles = makeStyles(styles)
 

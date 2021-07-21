@@ -1,30 +1,30 @@
-import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import { reducer as reduxFormReducer } from 'redux-form'
 import { reducer as notificationsReducer } from 'reapop'
+import { combineReducers } from 'redux'
+import { reducer as reduxFormReducer } from 'redux-form'
 
-import data from './data'
 import auth from './auth'
-import user, { IUserState } from './user'
 import brand from './brand'
-import socket from './socket'
-import contacts from './contacts'
 import chatroom from './chatroom'
+import confirmation from './confirmation'
+import contacts from './contacts'
+import data from './data'
 import deals from './deals'
-import search from './listings/search'
+import { emailTemplates } from './email-templates'
+import { inbox } from './inbox'
+import { intercom } from './intercom'
 import alerts from './listings/alerts'
 import favorites from './listings/favorites'
-import widgets from './widgets'
-import confirmation from './confirmation'
-import { intercom } from './intercom'
-import { tasks } from './tasks'
+import search from './listings/search'
 import {
   INotificationState,
   notifications as globalNotifications
 } from './notifications'
-import { emailTemplates } from './email-templates'
-import { inbox } from './inbox'
 import showings, { IShowingsState } from './showings'
+import socket from './socket'
+import { tasks } from './tasks'
+import user, { IUserState } from './user'
+import widgets from './widgets'
 
 const appReducer = combineReducers({
   socket,

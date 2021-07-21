@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { Tooltip, IconButton } from '@material-ui/core'
 import { mdiCalendarOutline, mdiEmailOutline } from '@mdi/js'
 
-import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { permContactCalendarOutlined } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 interface Props {
   account: IOAuthAccount

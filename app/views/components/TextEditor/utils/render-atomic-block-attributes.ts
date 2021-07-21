@@ -1,4 +1,5 @@
 import { AtomicBlockEntityData } from '../types'
+
 import { renderAttributes } from './render-attributes'
 
 /**

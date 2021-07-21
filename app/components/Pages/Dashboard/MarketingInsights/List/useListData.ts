@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react'
 
-import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
+import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 
 import { InsightActionType, InsightFilterType, InsightState } from './types'
 import { useInsightStateReducer, initialState } from './useInsightStateReducer'

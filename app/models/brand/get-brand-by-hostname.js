@@ -1,8 +1,8 @@
 // models/brand/index.js
 import URL from 'url'
 
-import Fetch from '../../services/fetch'
 import config from '../../../config/public'
+import Fetch from '../../services/fetch'
 
 import DEFAULT_QUERY from './helpers/default-query'
 

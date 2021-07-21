@@ -1,7 +1,7 @@
 import React from 'react'
-import { Field } from 'react-final-form'
 
 import { TextFieldProps } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 

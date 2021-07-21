@@ -1,19 +1,17 @@
 import React, { useMemo } from 'react'
-import { connect } from 'react-redux'
 
 import { Tooltip } from '@material-ui/core'
+import { connect } from 'react-redux'
 
-import { IAppState } from 'reducers'
 import { resetActiveFilters as resetActiveFiltersAction } from 'actions/filter-segments/active-filters'
-import { selectActiveFilters } from 'reducers/filter-segments'
-
+import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
 import {
   ListTitle,
   ListItem,
   ListItemName
 } from 'components/Grid/SavedSegments/List/styled'
-
-import { changeActiveFilterSegment as changeActiveFilterSegmentAction } from 'actions/filter-segments/change-active-segment'
+import { IAppState } from 'reducers'
+import { selectActiveFilters } from 'reducers/filter-segments'
 
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import {

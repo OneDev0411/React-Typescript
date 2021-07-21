@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
+
 import PropTypes from 'prop-types'
 
 import ActionButton from '../../Button/ActionButton'
-
 import { OpenHouseDrawer } from '../OpenHouseDrawer'
 
 const propTypes = {

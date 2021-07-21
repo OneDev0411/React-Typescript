@@ -1,16 +1,15 @@
 import React, { useRef } from 'react'
+
 import { WithRouterProps } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import ImportContactsButton from 'components/ImportContactsButton'
-
-import GlobalHeader from 'components/GlobalHeader'
-
-import { GridCalendar } from 'components/GridCalendar'
-import { ViewAs } from 'components/ViewAs'
-import { ActionRef } from 'components/GridCalendar/types'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
+import GlobalHeader from 'components/GlobalHeader'
+import { GridCalendar } from 'components/GridCalendar'
+import { ActionRef } from 'components/GridCalendar/types'
+import ImportContactsButton from 'components/ImportContactsButton'
+import { ViewAs } from 'components/ViewAs'
 
 import { useStyles as useCommonStyles } from './use-styles'
 

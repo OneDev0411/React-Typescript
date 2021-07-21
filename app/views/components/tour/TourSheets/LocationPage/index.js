@@ -1,21 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import { mdiMapMarkerOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
-import {
-  getListingAddressObj,
-  isLeaseProperty
-} from '../../../../../utils/listing'
 import {
   joinItemsWithString,
   getIndexLabel
 } from '../../../../../utils/helpers'
+import {
+  getListingAddressObj,
+  isLeaseProperty
+} from '../../../../../utils/listing'
 import { H1 } from '../../../Typography/headings'
-import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
-
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 
 import '../styles/shared.scss'

@@ -1,17 +1,16 @@
 import * as React from 'react'
-import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
-
-import { TextWithHighlights } from 'components/TextWithHighlights'
-import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
+import { mdiPlusCircleOutline } from '@mdi/js'
 
 import IconButton from 'components/Button/IconButton'
+import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
+import { TextWithHighlights } from 'components/TextWithHighlights'
 import { getBrandUsers } from 'utils/user-teams'
 
 import { userMatches } from '../../helpers/users-matches'
+
 import { TeamLink, TeamLinkWrapper, TeamUserBadge } from './styled'
 
 interface Props {

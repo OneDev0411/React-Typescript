@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { Grid, Typography, makeStyles } from '@material-ui/core'
 
 import CardSkeleton from 'components/CardSkeleton'
@@ -6,8 +7,8 @@ import TemplateInstanceCard from 'components/TemplateInstanceCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
 
 import { useTemplatesHistory } from '../../../hooks/use-templates-history'
-import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
+import SectionLayout from '../SectionLayout'
 
 const useStyles = makeStyles(
   () => ({
@@ -23,13 +24,11 @@ const useStyles = makeStyles(
 export default function MyDesignsSection() {
   const classes = useStyles()
   const { templates, isLoading } = useTemplatesHistory()
-  const [isTemplateInstanceClicked, setIsTemplateInstanceClicked] = useState<
-    boolean
-  >(false)
+  const [isTemplateInstanceClicked, setIsTemplateInstanceClicked] =
+    useState<boolean>(false)
 
-  const [selectedTemplateInstance, setSelectedTemplateInstance] = useState<
-    Nullable<IMarketingTemplateInstance>
-  >(null)
+  const [selectedTemplateInstance, setSelectedTemplateInstance] =
+    useState<Nullable<IMarketingTemplateInstance>>(null)
 
   function handleTemplateInstanceClick(template: IMarketingTemplateInstance) {
     setSelectedTemplateInstance(template)

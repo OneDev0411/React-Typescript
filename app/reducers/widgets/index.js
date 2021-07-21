@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
-import listings from './listings'
+
 import isWidget from './isWidget'
+import listings from './listings'
 
 const widgets = combineReducers({
   listings,

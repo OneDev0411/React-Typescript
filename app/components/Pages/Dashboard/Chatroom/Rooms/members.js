@@ -1,21 +1,22 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import cn from 'classnames'
-import { mdiClose } from '@mdi/js'
 
 import { Tooltip, Grid } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import cn from 'classnames'
+import { connect } from 'react-redux'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import UserAvatar from 'components/UserAvatar'
 
-import Compose from '../Shared/compose-wrapper'
-import MembersIcon from '../../Partials/Svgs/MembersIcon'
 import {
   addRecipients,
   removeMember
 } from '../../../../../store_actions/chatroom'
-import LastSeen from './components/last-seen'
+import MembersIcon from '../../Partials/Svgs/MembersIcon'
+import Compose from '../Shared/compose-wrapper'
 import Chatroom from '../Util/chatroom'
+
+import LastSeen from './components/last-seen'
 
 const ManageMembers = ({
   addRecipients,

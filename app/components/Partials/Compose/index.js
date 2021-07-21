@@ -1,25 +1,25 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import isEmail from 'validator/es/lib/isEmail'
-import _ from 'underscore'
 
-import { searchContacts } from 'models/contacts/search-contacts'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import _ from 'underscore'
+import isEmail from 'validator/es/lib/isEmail'
 
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+import { searchContacts } from 'models/contacts/search-contacts'
 
-import Fetch from '../../../services/fetch'
-import Recipients from './recipients'
-import Suggestions from './suggestions'
-import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
-
-import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
 import {
   getContactUsers,
   getContactAvatar,
   getContactAttribute
 } from '../../../models/contacts/helpers'
+import { selectDefinitionByName } from '../../../reducers/contacts/attributeDefs'
+import Fetch from '../../../services/fetch'
+import { isValidPhoneNumber, formatPhoneNumber } from '../../../utils/helpers'
 import { getActiveTeamACL } from '../../../utils/user-teams'
+
+import Recipients from './recipients'
+import Suggestions from './suggestions'
 
 class Compose extends React.Component {
   constructor(props) {

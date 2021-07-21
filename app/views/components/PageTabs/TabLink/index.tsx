@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link, LinkProps } from 'react-router'
+
 import { createStyles, makeStyles, Theme, TabProps } from '@material-ui/core'
+import { Link, LinkProps } from 'react-router'
 
 import { Tab } from '../Tab'
 

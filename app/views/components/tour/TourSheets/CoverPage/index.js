@@ -1,13 +1,12 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import Brand from '../../../../../controllers/Brand'
-import { getActiveTeam } from '../../../../../utils/user-teams'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
+import { getActiveTeam } from '../../../../../utils/user-teams'
 import { H1 } from '../../../Typography/headings'
-
 import { Map } from '../../Map'
-
 import { getFormatedDueDate } from '../helpers/get-formated-due-date'
 
 import '../styles/shared.scss'

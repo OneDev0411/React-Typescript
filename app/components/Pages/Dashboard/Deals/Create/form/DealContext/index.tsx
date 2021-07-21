@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import {
   Button,
   Box,
@@ -10,32 +11,25 @@ import {
 import fecha from 'fecha'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { upsertContexts } from 'actions/deals'
-import { isBackOffice } from 'utils/user-teams'
-
+import DatePicker from 'components/DatePicker'
+import { MaskedInput } from 'components/MaskedInput'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import DatePicker from 'components/DatePicker'
-import { MaskedInput } from 'components/MaskedInput'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { getContextInputMask } from 'deals/utils/get-context-mask'
-
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 import { getField } from 'models/Deal/helpers/context'
 import { validateContext } from 'models/Deal/helpers/context/validate-context'
-
 import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
-
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { isBackOffice } from 'utils/user-teams'
 
 import { useCreationContext } from '../../context/use-creation-context'
 

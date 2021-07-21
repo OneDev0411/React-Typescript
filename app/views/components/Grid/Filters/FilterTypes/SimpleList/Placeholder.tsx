@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Box, BoxProps } from '@material-ui/core'
-
 import { useTheme } from '@material-ui/core/styles'
 
 interface Props extends BoxProps {

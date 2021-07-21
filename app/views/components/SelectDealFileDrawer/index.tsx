@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
-
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
 
 import { Button } from '@material-ui/core'
-
-import Drawer from 'components/OverlayDrawer'
-
-import Loading from 'components/Spinner'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { getDeal } from 'actions/deals'
-
-import { selectDealById } from 'reducers/deals/list'
+import Drawer from 'components/OverlayDrawer'
+import Loading from 'components/Spinner'
 import { IAppState } from 'reducers'
+import { selectDealById } from 'reducers/deals/list'
 
 import Documents from './Documents'
 
@@ -52,9 +48,8 @@ function SelectDealFileDrawer({
   getDeal,
   onClose
 }: Props & StateProps & DispatchProps) {
-  const [selectedItems, setSelectedItems] = useState<IDealFile[]>(
-    defaultSelectedItems
-  )
+  const [selectedItems, setSelectedItems] =
+    useState<IDealFile[]>(defaultSelectedItems)
 
   const fullDeal = getDealById(dealId)
 

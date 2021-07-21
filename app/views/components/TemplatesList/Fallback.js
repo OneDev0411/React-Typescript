@@ -2,8 +2,8 @@ import React from 'react'
 
 import Loading from 'components/LoadingContainer'
 
-import { FallbackContainer } from './styled'
 import EmptyState from './EmptyState'
+import { FallbackContainer } from './styled'
 
 function Fallback(props) {
   function renderContent() {

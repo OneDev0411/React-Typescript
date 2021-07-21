@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Box, Button, CircularProgress } from '@material-ui/core'
 
+import { Box, Button, CircularProgress } from '@material-ui/core'
 import type { Model } from 'backbone'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
 import useStyles from './styles'
 

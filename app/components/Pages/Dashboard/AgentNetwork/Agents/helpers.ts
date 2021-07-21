@@ -8,6 +8,7 @@ import {
   ALL_PROPERTY_TYPES,
   ALL_PROPERTY_SUBTYPES
 } from '../constants'
+
 import { AggregatedAgentInfo, CompactListingWithBothSideAgents } from './types'
 
 function getSixMonthsAgoTimestamp() {

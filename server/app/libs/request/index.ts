@@ -1,11 +1,9 @@
-import { Request } from 'express'
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-
-import { requestRefreshToken } from '../refresh-token'
+import { Request } from 'express'
 
 import config from '../../../config'
-
 import type { RequestWithSession } from '../../../types'
+import { requestRefreshToken } from '../refresh-token'
 
 export function request(req: Request, requestConfig: AxiosRequestConfig) {
   const instance = axios.create()

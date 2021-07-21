@@ -1,25 +1,22 @@
 import React from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { MenuItem } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 
-import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
-import { getActiveBrand } from 'utils/user-teams'
-
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-
+import { putUserSetting } from 'models/user/put-user-setting'
 import { selectUser } from 'selectors/user'
+import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
-
+import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/agent-sorting'
-import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
 
 const BASE_URL = '/dashboard/deals'
 

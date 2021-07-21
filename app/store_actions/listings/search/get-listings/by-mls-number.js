@@ -1,5 +1,5 @@
-import api from '../../../../models/listings/search'
 import * as listingsTypes from '../../../../constants/listings'
+import api from '../../../../models/listings/search'
 import { getFetchingStatus } from '../../../../reducers/listings'
 
 const getListingsByMlsNumber = mlsNumber => (dispatch, getState) => {

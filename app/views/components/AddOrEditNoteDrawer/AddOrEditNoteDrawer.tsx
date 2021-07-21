@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react'
+
 import { IconButton, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import { TextEditor } from 'components/TextEditor'
-import { TextEditorRef } from 'components/TextEditor/types'
-import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
-import Drawer from 'components/OverlayDrawer'
 import Button from 'components/Button/ActionButton'
+import Drawer from 'components/OverlayDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { TextEditor } from 'components/TextEditor'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
+import { TextEditorRef } from 'components/TextEditor/types'
 
 import Alert from '../../../components/Pages/Dashboard/Partials/Alert'
 

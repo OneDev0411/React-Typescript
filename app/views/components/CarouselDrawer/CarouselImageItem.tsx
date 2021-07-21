@@ -1,14 +1,14 @@
 import React, { ReactNode, useState } from 'react'
-import classNames from 'classnames'
-import { makeStyles, fade } from '@material-ui/core'
 
+import { makeStyles, fade } from '@material-ui/core'
+import classNames from 'classnames'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 
 import useSafeDispatch from 'hooks/use-safe-dispatch'
 
+import CarouselImage from './CarouselImage'
 import { CAROUSEL_IMAGE_ITEM_TYPE } from './constants'
 import { CarouselImageItemEdge, ImageDragObject } from './types'
-import CarouselImage from './CarouselImage'
 
 const useStyles = makeStyles(
   theme => ({

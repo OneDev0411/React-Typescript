@@ -1,7 +1,6 @@
-import { loadTemplateHtml } from "models/instant-marketing"
-
-import { getTemplateRenderData } from "components/InstantMarketing/Builder/utils/get-template-render-data"
+import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import { loadTemplateHtml } from 'models/instant-marketing'
 
 export interface TemplateData {
   contact?: IContact
@@ -10,7 +9,11 @@ export interface TemplateData {
   listings?: IListing[]
 }
 
-export const renderBrandedNunjucksTemplate = async (template: IBrandMarketingTemplate, brand: IBrand, data: TemplateData = {}): Promise<string> => {
+export const renderBrandedNunjucksTemplate = async (
+  template: IBrandMarketingTemplate,
+  brand: IBrand,
+  data: TemplateData = {}
+): Promise<string> => {
   const renderData = getTemplateRenderData(brand)
 
   const markup = await loadTemplateHtml(template)

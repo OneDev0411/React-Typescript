@@ -1,8 +1,9 @@
 // AppDispatcher.js
+import checkForMobile from '../actions/device/check-for-mobile'
+
 import { Dispatcher } from './flux'
 
 // Device
-import checkForMobile from '../actions/device/check-for-mobile'
 
 const AppDispatcher = new Dispatcher()
 

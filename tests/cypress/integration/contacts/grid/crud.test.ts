@@ -19,9 +19,7 @@ describe('Contacts grid', () => {
       .should('not.contain', 'of')
 
     selectGridRow()
-    cy.getByTestSelector('table-summary')
-      .invoke('text')
-      .should('contain', 'of')
+    cy.getByTestSelector('table-summary').invoke('text').should('contain', 'of')
 
     deleteContact()
     cy.getByTestSelector('table-summary')

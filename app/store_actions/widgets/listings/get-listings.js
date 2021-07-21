@@ -1,6 +1,6 @@
-import api from '../../../models/widgets/listings'
-import { getBrandByHostname } from '../../../models/brand/get-brand-by-hostname'
 import * as actionsType from '../../../constants/widgets/listing'
+import { getBrandByHostname } from '../../../models/brand/get-brand-by-hostname'
+import api from '../../../models/widgets/listings'
 
 const getListingsByValert = (options, params) => async (dispatch, getState) => {
   try {

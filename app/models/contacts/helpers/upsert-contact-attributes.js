@@ -1,4 +1,5 @@
 import { updateContact } from '../update-contact'
+
 import { normalizeContact } from './normalize-contact'
 
 export async function upsertContactAttributes(

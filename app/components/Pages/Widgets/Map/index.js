@@ -1,4 +1,5 @@
 import React from 'react'
+
 import SearchMap from '../../Dashboard/Listings/Search'
 
 const MapWidget = props => (

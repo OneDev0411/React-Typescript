@@ -1,4 +1,5 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -13,7 +14,11 @@ const Container = styled.div`
   }
 `
 
-export default function({ title, description, ...rest }) {
+export default function GridFiltersConditionOperator({
+  title,
+  description,
+  ...rest
+}) {
   return (
     <Container {...rest}>
       <div>{title}</div>

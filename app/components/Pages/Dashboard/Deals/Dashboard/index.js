@@ -1,26 +1,22 @@
 import { useState } from 'react'
-import { shallowEqual, useSelector } from 'react-redux'
+
 import { Helmet } from 'react-helmet'
+import { shallowEqual, useSelector } from 'react-redux'
 
 import { useLoadFullDeal } from 'hooks/use-load-deal'
-
-import { isBackOffice as isBackOfficeUser } from 'utils/user-teams'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
+import { isBackOffice as isBackOfficeUser } from 'utils/user-teams'
 
+import { TaskActions } from '../components/TaskActions'
 import { ActionContextProvider } from '../contexts/actions-context/provider'
-
+import UploadPrompt from '../UploadManager/prompt'
 import { getDealTitle } from '../utils/get-deal-title'
 
 import { PageHeader } from './Header'
-
+import { DealContainer, PageWrapper, PageBody } from './styled'
 import TabSections from './Tabs'
 import TaskView from './TaskView'
-
-import UploadPrompt from '../UploadManager/prompt'
-import { TaskActions } from '../components/TaskActions'
-
-import { DealContainer, PageWrapper, PageBody } from './styled'
 
 function DealDetails(props) {
   const [activeTab, setActiveTab] = useState(props.params.tab || 'checklists')

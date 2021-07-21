@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
+
+import { Checkbox, Dialog } from '@material-ui/core'
+import cn from 'classnames'
 import LazyLoad from 'react-lazy-load'
 import { useSelector } from 'react-redux'
-import { Checkbox, Dialog } from '@material-ui/core'
 import { Link } from 'react-router'
-import cn from 'classnames'
 
 import { isLeaseProperty } from 'utils/listing'
 
 import Listing from '../../Listing'
-
-import './style.scss'
-
 import FavoriteHeart from '../FavoriteHeart'
+import './style.scss'
 
 const ListingCard = ({
   listing,

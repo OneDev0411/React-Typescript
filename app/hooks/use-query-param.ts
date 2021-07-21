@@ -1,7 +1,10 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
+
+import { LocationDescriptor } from 'history'
+import { browserHistory } from 'react-router'
 import { useLocation } from 'react-use'
 
-type UseQueryParam = [string, (value: string) => void]
+type UseQueryParam = [string, (value: string) => void, () => void]
 
 export function useQueryParamValue(name: string): string {
   const location = useLocation()
@@ -14,31 +17,100 @@ export function useQueryParamValue(name: string): string {
   return decodeURIComponent(value || '')
 }
 
-export function useQueryParam(name: string): UseQueryParam {
+function useQueryParamBase(
+  historyAction: (path: LocationDescriptor) => void,
+  name: string,
+  deleteIfEmpty: boolean
+): UseQueryParam {
   const value = useQueryParamValue(name)
+  const location = useLocation()
 
-  const setValue = (value: string) => {
-    const url = new URL(window.location.href)
+  const setValue = useCallback(
+    (value: string) => {
+      if (!location.href) {
+        return
+      }
 
-    url.searchParams.set(name, encodeURIComponent(value))
+      const url = new URL(location.href)
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/History/pushState
-    window.history.pushState({}, '', url.toString())
-  }
+      if (deleteIfEmpty && !value) {
+        url.searchParams.delete(name)
+      } else {
+        url.searchParams.set(name, encodeURIComponent(value))
+      }
 
-  return [value, setValue]
+      historyAction(url.toString())
+    },
+    [location.href, historyAction, name, deleteIfEmpty]
+  )
+
+  const deleteValue = useCallback(() => {
+    if (!location.href) {
+      return
+    }
+
+    const url = new URL(location.href)
+
+    url.searchParams.delete(name)
+
+    historyAction(url.toString())
+  }, [location.href, historyAction, name])
+
+  return [value, setValue, deleteValue]
 }
 
+/**
+ * This hook provides the param value, a setter and a delete function for
+ * managing the param.
+ *
+ * Please consider that it calls the `pushState` method under the hood to
+ * insert a new state into the browser history.
+ * @param name The param name
+ * @returns [the param value, the setter function, the delete function]
+ */
+export function useQueryParam(name: string): UseQueryParam {
+  return useQueryParamBase(browserHistory.push, name, false)
+}
+
+/**
+ * This hook provides the param value, a setter and a delete function for
+ * managing the param.
+ *
+ * Please consider that it calls the `replaceState` method under the hood to
+ * replace the state on the browser history.
+ * @param name The param name
+ * @returns [the param value, the setter function, the delete function]
+ */
 export function useReplaceQueryParam(name: string): UseQueryParam {
-  const value = useQueryParamValue(name)
+  return useQueryParamBase(browserHistory.replace, name, false)
+}
 
-  const setValue = (value: string) => {
-    const url = new URL(window.location.href)
+/**
+ * This hook provides the param value, a setter and a delete function for
+ * managing the param.
+ *
+ * Please consider that it calls the `pushState` method under the hood to insert
+ * a new state into the browser history.
+ *
+ * Also, this hook deletes the param automatically if you pass an empty string.
+ * @param name The param name
+ * @returns [the param value, the setter function, the delete function]
+ */
+export function useAutoQueryParam(name: string): UseQueryParam {
+  return useQueryParamBase(browserHistory.push, name, true)
+}
 
-    url.searchParams.set(name, encodeURIComponent(value))
-
-    window.history.replaceState({}, '', url.toString())
-  }
-
-  return [value, setValue]
+/**
+ * This hook provides the param value, a setter and a delete function for
+ * managing the param.
+ *
+ * Please consider that it calls the `replaceState` method under the hood to
+ * replace the state on the browser history.
+ *
+ * Also, this hook deletes the param automatically if you pass an empty string.
+ * @param name The param name
+ * @returns [the param value, the setter function, the delete function]
+ */
+export function useReplaceAutoQueryParam(name: string): UseQueryParam {
+  return useQueryParamBase(browserHistory.replace, name, true)
 }

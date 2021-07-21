@@ -1,23 +1,20 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import fecha from 'fecha'
-
-import Flex from 'styled-flex-component'
 
 import { Button, Tooltip } from '@material-ui/core'
-
-import { addNotification } from 'components/notification'
+import fecha from 'fecha'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import Search from 'components/Grid/Search'
-
-import { selectDealTasks } from 'reducers/deals/tasks'
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { getChecklistById } from 'reducers/deals/checklists'
-
+import { addNotification } from 'components/notification'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { getChecklistById } from 'reducers/deals/checklists'
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+import { selectDealTasks } from 'reducers/deals/tasks'
+
+import { getAllDealDocuments } from '../helpers/get-all-deal-documents'
 
 import {
   ChecklistName,
@@ -28,7 +25,6 @@ import {
   Title,
   ViewDocument
 } from './styled'
-import { getAllDealDocuments } from '../helpers/get-all-deal-documents'
 
 interface Props {
   deal: IDeal

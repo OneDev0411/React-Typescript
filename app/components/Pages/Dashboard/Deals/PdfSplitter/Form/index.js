@@ -1,20 +1,16 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
-
-import _ from 'underscore'
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
-
-import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
-import { createTaskMessage } from 'models/Deal/task'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
+import _ from 'underscore'
 
 import { changeNeedsAttention, addTaskFile } from 'actions/deals'
-
 import { CheckBoxButton } from 'components/Button/CheckboxButton'
-
+import { addNotification as notify } from 'components/notification'
 import Spinner from 'components/Spinner'
+import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
+import { createTaskMessage } from 'models/Deal/task'
 
 import TasksDropDown from '../../components/TasksDropdown'
 
@@ -243,11 +239,8 @@ function mapStateToProps({ deals, user }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    notify,
-    changeNeedsAttention,
-    addTaskFile
-  }
-)(Form)
+export default connect(mapStateToProps, {
+  notify,
+  changeNeedsAttention,
+  addTaskFile
+})(Form)

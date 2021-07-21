@@ -7,8 +7,8 @@ import {
   QuestionSection,
   QuestionTitle
 } from 'components/QuestionWizard'
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { IWizardState } from 'components/QuestionWizard/context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 interface DomainNameProps {
   onChange: (value: string, wizard: IWizardState) => void

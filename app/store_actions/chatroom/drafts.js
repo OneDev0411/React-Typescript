@@ -6,4 +6,3 @@ export function insertDraft(draft) {
     draft
   }
 }
-

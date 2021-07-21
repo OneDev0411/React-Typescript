@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Box,
   fade,
@@ -16,22 +17,16 @@ import {
   mdiTrashCanOutline,
   mdiPencilOutline
 } from '@mdi/js'
-
 import pluralize from 'pluralize'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { BaseDropdown } from 'components/BaseDropdown'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import {
   EmailFormValues,
   SingleEmailComposeDrawer
 } from 'components/EmailCompose'
-
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import {
   DOCUSIGN_ENVELOPE,
   DOCUSIGN_FILE,
@@ -40,6 +35,7 @@ import {
   EMAIL_FILE,
   EMAIL_FORM
 } from 'deals/components/ActionsButton/data/action-buttons'
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import {
   CANCEL,
@@ -48,7 +44,6 @@ import {
   SET_FORM_META
 } from '../../contexts/actions-context/constants'
 import { useChecklistActionsContext } from '../../contexts/actions-context/hooks'
-
 import GetSignature from '../../Signature'
 
 const useStyles = makeStyles(

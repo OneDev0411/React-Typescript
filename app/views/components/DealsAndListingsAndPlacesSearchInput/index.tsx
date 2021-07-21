@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import {
   List,
   ListItem,
@@ -13,22 +14,18 @@ import {
 import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
-import { useDebouncedCallback } from 'use-debounce'
 import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
-
 import { useSelector } from 'react-redux'
-
-import { selectDealsList } from 'selectors/deals'
-
-import { addressTitle } from 'utils/listing'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { IAppState } from 'reducers'
+import { selectDealsList } from 'selectors/deals'
+import { addressTitle } from 'utils/listing'
 
 import { searchDealsAndListingsAndPlaces } from './helpers'
-import { SearchResult, SearchResultType } from './types'
 import ListingStatus from './ListingStatus'
+import { SearchResult, SearchResultType } from './types'
 
 const useStyles = makeStyles<Theme, { inputValue: string }>(
   theme => ({

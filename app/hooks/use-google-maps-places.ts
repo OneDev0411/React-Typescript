@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import config from 'config'
-import uuid from 'utils/uuid'
 import { loadJS, unloadJS } from 'utils/load-js'
+import uuid from 'utils/uuid'
 
 export function useGoogleMapsPlaces() {
   useEffect(() => {

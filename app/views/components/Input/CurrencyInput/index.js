@@ -1,18 +1,17 @@
 import React from 'react'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
 import Input from 'react-text-mask'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import _ from 'underscore'
 
 export default props => {
-  const opt = Object.assign(
-    {
-      suffix: '',
-      allowNegative: false,
-      allowLeadingZeroes: false,
-      allowDecimal: false
-    },
-    props.options || {}
-  )
+  const opt = {
+    suffix: '',
+    allowNegative: false,
+    allowLeadingZeroes: false,
+    allowDecimal: false,
+    ...(props.options || {})
+  }
 
   const value =
     props.value === null || props.value === undefined ? '' : props.value
@@ -36,6 +35,7 @@ export default props => {
           : ''
 
         // control result of original value
+        // eslint-disable-next-line no-restricted-globals
         if (isNaN(originalValue) || typeof originalValue === 'undefined') {
           originalValue = ''
         }

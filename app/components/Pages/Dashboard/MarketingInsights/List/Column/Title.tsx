@@ -6,6 +6,7 @@ import { EditEmailButton } from 'components/EditEmailButton'
 
 import { isEmailFailed, isEmailInProgress, isEmailScheduled } from '../helpers'
 import { StyledBadge, StyledLink } from '../styled'
+
 import Date from './Date'
 
 interface Props {

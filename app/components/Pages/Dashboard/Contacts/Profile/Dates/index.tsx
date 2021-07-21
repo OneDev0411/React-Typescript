@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
+
 import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import { getCalendar } from 'models/calendar/get-calendar'
 import Loading from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { getCalendar } from 'models/calendar/get-calendar'
 
 import SectionWithFields from '../components/SectionWithFields'
 

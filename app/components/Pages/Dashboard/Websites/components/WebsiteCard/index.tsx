@@ -1,9 +1,5 @@
 import React, { memo, useState } from 'react'
 
-import classNames from 'classnames'
-
-import { Link } from 'react-router'
-
 import {
   Grid,
   Box,
@@ -12,35 +8,28 @@ import {
   CircularProgress,
   Tooltip
 } from '@material-ui/core'
-
+import classNames from 'classnames'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router'
 
-import useAsync from 'hooks/use-async'
-
-import deleteWebsite from 'models/website/delete-website'
-
+import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
-
+import useAsync from 'hooks/use-async'
+import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 import usePublishWebsite from 'hooks/use-publish-website'
+import deleteWebsite from 'models/website/delete-website'
+import { selectUser } from 'selectors/user'
 import {
   convertToTemplate,
   getTemplateImage
 } from 'utils/marketing-center/helpers'
-
-import DomainManagementDrawer from 'components/DomainManagementDrawer'
-
 import { generateWebsiteUrl } from 'utils/website'
 
-import { selectUser } from 'selectors/user'
-
-import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
-
-import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
-import WebsiteCardImage from '../WebsiteCardImage'
-import WebsiteCardTitle from '../WebsiteCardTitle'
 import WebsiteCardActions from '../WebsiteCardActions'
-
+import WebsiteCardImage from '../WebsiteCardImage'
 import WebsiteCardMenu from '../WebsiteCardMenu'
+import WebsiteCardTitle from '../WebsiteCardTitle'
+import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 
 import useStyles from './styles'
 
@@ -82,20 +71,17 @@ function WebsiteCard({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  const {
-    publishWebsite,
-    isPublishing,
-    publishButtonLabel
-  } = usePublishWebsite(result => {
-    updateItem(id, {
-      template_instance: {
-        ...result.instance,
-        template: template_instance.template
-      }
-    })
+  const { publishWebsite, isPublishing, publishButtonLabel } =
+    usePublishWebsite(result => {
+      updateItem(id, {
+        template_instance: {
+          ...result.instance,
+          template: template_instance.template
+        }
+      })
 
-    openDomainManagement()
-  })
+      openDomainManagement()
+    })
 
   const handleSave = html => {
     const newInstance = {
