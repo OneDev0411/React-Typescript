@@ -1,17 +1,15 @@
-import { Provider } from 'react-redux'
-
 import * as React from 'react'
 import { ReactNode } from 'react'
 
 import { merge } from 'lodash'
-
+import { Provider } from 'react-redux'
 import { DeepPartial } from 'redux'
 
-import user from './fixtures/users/agent.json'
-
+import { AppTheme } from '../../app/AppTheme'
 import { IAppState } from '../../app/reducers'
 import store from '../../app/stores'
-import { AppTheme } from '../../app/AppTheme'
+
+import user from './fixtures/users/agent.json'
 
 interface Props {
   reduxState?: Partial<Omit<IAppState, 'deals' | 'contacts'>> & {

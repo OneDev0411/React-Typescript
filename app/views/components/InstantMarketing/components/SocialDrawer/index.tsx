@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
+
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
-import { getFileType } from 'utils/file-utils/get-file-type'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+import { addNotification as notify } from 'components/notification'
+import Drawer from 'components/OverlayDrawer'
 import {
   createTemplateInstance,
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
+import { getFileType } from 'utils/file-utils/get-file-type'
 
-import { addNotification as notify } from 'components/notification'
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-import Drawer from 'components/OverlayDrawer'
-
+import CopyFileUrl from './CopyFileUrl'
+import DownloadFile from './DownloadFile'
 import PreviewFile from './PreviewFile'
 import SendSMS from './SendSMS'
-import DownloadFile from './DownloadFile'
-import CopyFileUrl from './CopyFileUrl'
 
 interface Props {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
@@ -32,9 +32,8 @@ export default function SocialDrawer({
 }: Props) {
   const dispatch = useDispatch()
 
-  const [templateInstance, setTemplateInstance] = useState<
-    Optional<IMarketingTemplateInstance>
-  >(passedInstance)
+  const [templateInstance, setTemplateInstance] =
+    useState<Optional<IMarketingTemplateInstance>>(passedInstance)
   const [errorMessage, setErrorMessage] = useState<Nullable<string>>(null)
 
   useDeepCompareEffect(() => {

@@ -1,8 +1,6 @@
+import { IconButton, Theme, Tooltip, useTheme } from '@material-ui/core'
 import moment from 'moment'
 
-import { IconButton, Theme, Tooltip, useTheme } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import {
   dealApprovedFolder,
@@ -16,6 +14,7 @@ import {
   dealRequiredFolder,
   dealRequiredFolderOpen
 } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   deal: IDeal

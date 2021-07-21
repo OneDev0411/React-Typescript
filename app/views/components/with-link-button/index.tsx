@@ -1,9 +1,8 @@
 import { forwardRef, ComponentType, Ref } from 'react'
-import classNames from 'classnames'
-
-import { Link, LinkProps } from 'react-router'
 
 import { makeStyles, ButtonProps } from '@material-ui/core'
+import classNames from 'classnames'
+import { Link, LinkProps } from 'react-router'
 
 const useStyles = makeStyles(
   {

@@ -1,7 +1,8 @@
 import React from 'react'
-import { useField, Form } from 'react-final-form'
+
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
+import { useField, Form } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import { TextArea } from 'components/Forms/TextArea'

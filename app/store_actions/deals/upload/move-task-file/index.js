@@ -2,9 +2,8 @@ import { addNotification as notify } from 'components/notification'
 
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
-
-import { asyncDeleteFile } from '../delete-file'
 import { changeNeedsAttention } from '../../task'
+import { asyncDeleteFile } from '../delete-file'
 
 /**
  * move a file from a task to another task

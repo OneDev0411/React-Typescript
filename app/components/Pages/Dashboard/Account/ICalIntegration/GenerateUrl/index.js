@@ -1,16 +1,17 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { Box, Button } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-import _ from 'underscore'
 import { mdiCalendarMonthOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import { addNotification as notify } from 'components/notification'
 
+import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
 import copy from '../../../../../../utils/copy-text-to-clipboard'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
-import getCalenderFeed from '../../../../../../models/user/generate-calender-feed'
+
 import { GenerateUrlContainer, GenerateUrlText, FeedUrl } from './styled'
 
 class GenerateUrl extends React.Component {

@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
 import axios, { AxiosError, AxiosResponse } from 'axios'
+import { Request, Response, NextFunction } from 'express'
 
 import { getParsedHeaders } from '../../utils/parse-headers'
 

@@ -1,5 +1,5 @@
-import { getTestSelector } from 'helpers/page'
 import { acceptConfirmationModal } from 'helpers/modal'
+import { getTestSelector } from 'helpers/page'
 
 export function deleteList(listName: string) {
   const listSelector = getTestSelector(`contact-list-${listName}`)

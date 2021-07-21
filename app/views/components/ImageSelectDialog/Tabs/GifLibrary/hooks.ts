@@ -37,7 +37,7 @@ export function useGifLibrary(
     }
 
     fetchSearchResults()
-  }, [searchQuery])
+  }, [searchQuery, defaultSearchQuery])
 
   return { results, isLoading }
 }

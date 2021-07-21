@@ -2,12 +2,10 @@ import React from 'react'
 
 import { Slide, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { fade } from '@material-ui/core/styles'
-
 import { mdiClose } from '@mdi/js'
 
-import { useGridContext } from '../../hooks/use-grid-context'
-
 import { resetRows } from '../../context/actions/selection/reset-rows'
+import { useGridContext } from '../../hooks/use-grid-context'
 
 import { GridActionButton } from './Button'
 

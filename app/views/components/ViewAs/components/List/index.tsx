@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import isEqual from 'lodash/isEqual'
-import { useDispatch } from 'react-redux'
+
 import {
   Box,
   Button,
@@ -10,9 +9,10 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import isEqual from 'lodash/isEqual'
+import { useDispatch } from 'react-redux'
 
 import { setViewAsFilter } from '../../../../../store_actions/user/set-view-as-filter'
-
 import { MemberItem } from '../Item'
 
 const useStyles = makeStyles(

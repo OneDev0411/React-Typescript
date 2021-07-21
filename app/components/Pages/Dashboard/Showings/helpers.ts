@@ -1,7 +1,7 @@
 import { format } from 'fecha'
 
-import Deal from 'models/Deal'
 import config from 'config'
+import Deal from 'models/Deal'
 
 import { showingsTabs } from './constants'
 import { AppointmentFilter } from './types'

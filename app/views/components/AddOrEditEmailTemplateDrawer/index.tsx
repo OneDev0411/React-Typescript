@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Field } from 'react-final-form'
+
 import { TextField } from 'final-form-material-ui'
+import { Field } from 'react-final-form'
 import { connect, useDispatch } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
-import { addNotification } from 'components/notification'
-
-import { updateEmailTemplate } from 'actions/email-templates/update-email-template'
 import { createEmailTemplate } from 'actions/email-templates/create-email-template'
+import { updateEmailTemplate } from 'actions/email-templates/update-email-template'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { addNotification } from 'components/notification'
+import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
 import { IAppState } from 'reducers'
 import { getActiveTeamId } from 'utils/user-teams'
-import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { InlineInputLabel } from '../InlineInputLabel'
 import EmailBody from '../EmailCompose/components/EmailBody'
 import { FinalFormDrawer } from '../FinalFormDrawer'
+import { InlineInputLabel } from '../InlineInputLabel'
 
 interface Props {
   isOpen: boolean
@@ -55,6 +55,7 @@ export function AddOrEditEmailTemplateDrawer({
     (emailTemplate && emailTemplate.body) || ''
   )
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => bodyEditor.reset(), [isOpen])
 
   useDeepCompareEffect(() => {

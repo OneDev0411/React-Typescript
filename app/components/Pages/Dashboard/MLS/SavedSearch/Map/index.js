@@ -1,26 +1,26 @@
 import React from 'react'
-import _ from 'underscore'
+
 import Map from 'google-map-react'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import defaultProps from 'recompose/defaultProps'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
+import withState from 'recompose/withState'
+import _ from 'underscore'
 
 import { primary } from 'views/utils/colors'
 
 import Brand from '../../../../../../controllers/Brand'
-import Marker from '../../components/Markers/SimpleMarker'
+import logUserActivity from '../../../../../../models/user/post-new-activity'
+import { setActivityLog } from '../../../../../../store_actions/listings/alerts/set-alert-activity-log'
+import * as actions from '../../../../../../store_actions/listings/map'
+import { getBounds } from '../../../../../../utils/extendedBounds'
 import {
   setCssPositionToListingsWithSameBuilding,
   generatePointsFromBounds
 } from '../../../../../../utils/map'
-import { getBounds } from '../../../../../../utils/extendedBounds'
-import * as actions from '../../../../../../store_actions/listings/map'
-import logUserActivity from '../../../../../../models/user/post-new-activity'
-import { setActivityLog } from '../../../../../../store_actions/listings/alerts/set-alert-activity-log'
-
+import Marker from '../../components/Markers/SimpleMarker'
 import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 const map = ({
@@ -108,16 +108,20 @@ const mapHOC = compose(
   ),
   withState('isLoggedActivity', 'setIsLoggedActivity', null),
   withHandlers({
-    onGoogleApiLoaded: () => ({ map }) => {
-      window.currentMap = map
+    onGoogleApiLoaded:
+      () =>
+      ({ map }) => {
+        window.currentMap = map
 
-      if (markersOverlay) {
-        markersOverlay.setMap(map)
+        if (markersOverlay) {
+          markersOverlay.setMap(map)
+        }
+      },
+    onChange:
+      ({ setMapProps }) =>
+      mapProps => {
+        setMapProps('alerts', mapProps)
       }
-    },
-    onChange: ({ setMapProps }) => mapProps => {
-      setMapProps('alerts', mapProps)
-    }
   }),
   withPropsOnChange(
     (props, nextProps) => !_.isEqual(props.markers, nextProps.markers),

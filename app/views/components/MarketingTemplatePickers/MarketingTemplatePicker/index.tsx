@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+
 import { Grid, Tabs, Tab } from '@material-ui/core'
 
 import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
-
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 
 import TemplatesList from './TemplatesList'

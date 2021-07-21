@@ -1,4 +1,5 @@
 import React, { EventHandler, ReactNode } from 'react'
+
 import {
   Box,
   createStyles,
@@ -8,11 +9,10 @@ import {
   Theme,
   Typography
 } from '@material-ui/core'
-
 import { mdiClose } from '@mdi/js'
 
-import { ClassesProps } from 'utils/ts-utils'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { ClassesProps } from 'utils/ts-utils'
 
 interface Props {
   children: ReactNode

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
+
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import parseAppearanceString from 'deals/FormEdit/utils/appearance'
-import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
-
-import { Types } from 'deals/FormEdit/utils/types'
 import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
+import parseAppearanceString from 'deals/FormEdit/utils/appearance'
+import { Types } from 'deals/FormEdit/utils/types'
+import { calculateWordWrap } from 'deals/FormEdit/utils/word-wrap'
 
 import { MaskedInput } from './MaskedInput'
 

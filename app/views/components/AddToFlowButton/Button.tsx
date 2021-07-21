@@ -1,5 +1,5 @@
-import { mdiLightningBolt } from '@mdi/js'
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
+import { mdiLightningBolt } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

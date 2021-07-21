@@ -1,4 +1,3 @@
-import { useForm, useWatch, Controller } from 'react-hook-form'
 import {
   Grid,
   Box,
@@ -8,22 +7,23 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import isMobilePhone from 'validator/es/lib/isMobilePhone'
+import { useForm, useWatch, Controller } from 'react-hook-form'
 import isEmail from 'validator/es/lib/isEmail'
+import isMobilePhone from 'validator/es/lib/isMobilePhone'
 
 import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
-
 import { setTime } from 'utils/set-time'
 
 import DetailsSection from '../../../Sections/DetailsSection'
+
+import { useBookTimeRange } from './hooks'
 import {
   getBookableDateRange,
   convertLocalTimeToShowingTime,
   validateRequiredField
 } from './utils'
-import { useBookTimeRange } from './hooks'
 
 const REQUIRED_VALIDATION_ERROR = 'This field is required'
 

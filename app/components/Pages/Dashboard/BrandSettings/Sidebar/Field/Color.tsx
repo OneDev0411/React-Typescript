@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { InputAdornment, Theme, makeStyles } from '@material-ui/core'
 import ColorPicker from 'material-ui-color-picker'
 

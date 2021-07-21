@@ -1,5 +1,4 @@
 import { getCalendar } from 'models/calendar/get-calendar'
-
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 
 async function getCRMTimeline(query = {}, associations = []) {

@@ -1,29 +1,22 @@
 import { CircularProgress } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { upsertContexts } from 'actions/deals'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import { upsertContexts } from 'actions/deals'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-
-import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
-
-import { useCreationContext } from 'deals/Create/context/use-creation-context'
-
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { RadioGroup } from 'components/RadioGroup'
-
+import { useCreationContext } from 'deals/Create/context/use-creation-context'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 import { getStatus } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 interface Props {
   list: IDealStatus[]

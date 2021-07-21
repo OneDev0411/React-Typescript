@@ -28,10 +28,7 @@ export function getRolesList({ roles, values, annotation, rectIndex }) {
       return acc
     }
 
-    const index = valuesList
-      .join(' ')
-      .substring(cursor)
-      .indexOf(text)
+    const index = valuesList.join(' ').substring(cursor).indexOf(text)
 
     if (index === -1) {
       return acc

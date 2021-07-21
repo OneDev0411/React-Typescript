@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { List } from '@material-ui/core'
 
-import { NeighborhoodReportMetric } from './types'
 import ReportMetricsListItem from './ReportMetricsListItem'
+import { NeighborhoodReportMetric } from './types'
 
 interface Props {
   metrics: NeighborhoodReportMetric[]

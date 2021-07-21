@@ -1,5 +1,6 @@
-import { addNotification as notify } from 'components/notification'
 import { batchActions } from 'redux-batched-actions'
+
+import { addNotification as notify } from 'components/notification'
 
 import {
   FETCH_MERGE_CONTACTS_REQUEST,

@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
 
 import {
   Button,
@@ -8,6 +7,7 @@ import {
   makeStyles,
   createStyles
 } from '@material-ui/core'
+import { withRouter, WithRouterProps } from 'react-router'
 
 interface Props {
   deal: IDeal

@@ -1,24 +1,24 @@
 import React, { Component, Fragment } from 'react'
-import { connect } from 'react-redux'
 
 import { Helmet } from 'react-helmet'
-
-import { addNotification as notify } from 'components/notification'
+import { connect } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
+import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-import { getContactsTags } from 'models/contacts/get-contacts-tags'
-import { getContactsTags as getContactTagsAction } from 'actions/contacts/get-contacts-tags'
+import { addNotification as notify } from 'components/notification'
 import { createContactsTags } from 'models/contacts/create-contacts-tags'
-import { updateContactsTags } from 'models/contacts/update-contacts-tags'
 import { deleteContactsTags } from 'models/contacts/delete-contacts-tags'
+import { getContactsTags } from 'models/contacts/get-contacts-tags'
+import { updateContactsTags } from 'models/contacts/update-contacts-tags'
 
 import Loading from '../../../../Partials/Loading'
-import Row from './Row'
-import { Input } from './Input'
-import { Container, Description } from './styled'
 import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
+
+import { Input } from './Input'
+import Row from './Row'
+import { Container, Description } from './styled'
 
 const HIGHLIGHT_SECONDS = 4
 const INVALID_TAG_PATTERN = /^\.+$/

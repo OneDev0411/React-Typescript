@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Select, MenuItem, makeStyles, Theme } from '@material-ui/core'
 
 import {
@@ -6,9 +7,9 @@ import {
   SectionCollection
 } from 'hooks/use-marketing-center-sections'
 
-function getValueToLabelMapping(
-  sections: SectionCollection
-): { [value: string]: string } {
+function getValueToLabelMapping(sections: SectionCollection): {
+  [value: string]: string
+} {
   const resultMapping = {}
   const rootSectionKeys = Object.keys(sections)
 

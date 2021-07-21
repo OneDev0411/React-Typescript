@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import Card from 'components/Card'
 import Button from 'components/Button/ActionButton'
 import IconButton from 'components/Button/IconButton'
+import Card from 'components/Card'
 
 function getItemColor(props) {
   if (props.isIncomplete && !props.isActive) {

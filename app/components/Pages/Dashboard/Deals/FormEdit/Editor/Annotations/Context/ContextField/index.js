@@ -1,23 +1,19 @@
 import React, { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
-
-import { isValidDate } from 'utils/date-times/is-valid-date'
-
-import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
-import { getField } from 'models/Deal/helpers/context/get-field'
 
 import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
-
+import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
+import { getField } from 'models/Deal/helpers/context/get-field'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { isValidDate } from 'utils/date-times/is-valid-date'
 
 import { formatDate } from '../../../../utils/format-date'
 
-import { TextInput } from './TextInput'
 import { Body, Footer } from './styled'
+import { TextInput } from './TextInput'
 
 export function ContextField(props) {
   const brandChecklists = useSelector(({ deals }) =>

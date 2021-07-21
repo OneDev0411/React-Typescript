@@ -1,8 +1,9 @@
-import getListingsByValert from './by-valert'
-import { isAutoMove } from '../../../../reducers/listings/map'
-import { getFetchingStatus } from '../../../../reducers/listings'
 import { SEARCH_BY_MAP_BOUNDS } from '../../../../constants/listings/search'
+import { getFetchingStatus } from '../../../../reducers/listings'
+import { isAutoMove } from '../../../../reducers/listings/map'
 import { generatePointsFromBounds } from '../../../../utils/map'
+
+import getListingsByValert from './by-valert'
 
 const QUERY_LIMIT = 200
 

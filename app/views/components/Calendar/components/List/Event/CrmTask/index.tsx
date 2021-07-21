@@ -1,18 +1,17 @@
 import React, { useContext, useMemo, MouseEvent } from 'react'
+
 import { makeStyles } from '@material-ui/styles'
 
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
 import { ListContext } from '../../context'
-
 import { EventContainer } from '../components/EventContainer'
+import { sharedStyles } from '../styles'
+
+import { OpenHouseRegistration } from './actions/OpenHouseRegistration'
 import { Associations } from './Associations'
 import { CrmStatus } from './Status'
-import { OpenHouseRegistration } from './actions/OpenHouseRegistration'
-
-import { sharedStyles } from '../styles'
 
 interface Props {
   event: ICalendarEvent

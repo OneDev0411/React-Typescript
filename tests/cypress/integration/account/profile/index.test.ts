@@ -55,9 +55,7 @@ describe('Profile settings', () => {
     cy.get('[name="time_zone"]').click()
 
     cy.getByTestSelector('timezone-dropdown').within(() => {
-      cy.get('input')
-        .clear()
-        .type('GMT{downarrow}{enter}')
+      cy.get('input').clear().type('GMT{downarrow}{enter}')
     })
 
     cy.getByTestSelector('timezone-form-submit-button').click()

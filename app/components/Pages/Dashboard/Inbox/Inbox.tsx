@@ -1,23 +1,22 @@
 import React, { useState, useCallback } from 'react'
-import { useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
+
 import { Grid, Theme, Divider, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { Helmet } from 'react-helmet'
 import classNames from 'classnames'
-
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
+import { Helmet } from 'react-helmet'
+import { useSelector } from 'react-redux'
+import { WithRouterProps } from 'react-router'
 
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import ImportContactsButton from 'components/ImportContactsButton'
-
 import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 
-import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
-import InboxZeroState from './components/ZeroState'
-import InboxEmailThreadList from './components/InboxEmailThreadList'
 import InboxEmailThread from './components/InboxEmailThread'
+import InboxEmailThreadList from './components/InboxEmailThreadList'
+import InboxZeroState from './components/ZeroState'
+import setSelectedEmailThreadId from './helpers/set-selected-email-thread-id'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

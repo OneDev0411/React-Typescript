@@ -1,43 +1,33 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import { Button } from '@material-ui/core'
-
-import { addNotification as notify } from 'components/notification'
-
-import config from 'config'
-
-import { saveSubmission, upsertContexts } from 'actions/deals'
+import { isRetinaScreen } from '@app/utils/is-retina-screen'
 import { confirmation } from 'actions/confirmation'
-
-import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
-import { getPdfSize } from 'models/Deal/form'
-
-import Spinner from 'components/Spinner'
+import { saveSubmission, upsertContexts } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 import ProgressBar from 'components/ProgressBar'
-
+import Spinner from 'components/Spinner'
+import config from 'config'
+import { getPdfSize } from 'models/Deal/form'
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectFormById } from 'reducers/deals/forms'
+import { selectDealById } from 'reducers/deals/list'
+import { selectDealRoles } from 'reducers/deals/roles'
+import { selectTaskById } from 'reducers/deals/tasks'
 import importPdfJs from 'utils/import-pdf-js'
 
-import { selectDealById } from 'reducers/deals/list'
-import { selectTaskById } from 'reducers/deals/tasks'
-import { selectDealRoles } from 'reducers/deals/roles'
-import { selectFormById } from 'reducers/deals/forms'
-
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
-
-import { isRetinaScreen } from '@app/utils/is-retina-screen'
-
-import { parseAnnotations } from './utils/parse-annotations'
-import { getDefaultValues } from './utils/get-default-values'
-
 import LoadDeal from '../components/LoadDeal'
+
 import PDFEdit from './Editor'
 import { Header } from './Header'
-
 import { Container, LoadingDealContainer, ErrorContainer } from './styled'
+import { getDefaultValues } from './utils/get-default-values'
+import { parseAnnotations } from './utils/parse-annotations'
 
 class EditDigitalForm extends React.Component {
   state = {

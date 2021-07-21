@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { mdiImageOutline } from '@mdi/js'
 import { Button, makeStyles, Theme } from '@material-ui/core'
+import { mdiImageOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { ImageEditor } from '../../types'

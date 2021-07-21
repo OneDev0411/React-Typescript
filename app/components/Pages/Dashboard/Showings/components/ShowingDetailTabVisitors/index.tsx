@@ -1,21 +1,22 @@
 import { useEffect } from 'react'
+
 import { Box, makeStyles } from '@material-ui/core'
 
+import { Table } from 'components/Grid/Table'
+import { TableColumn } from 'components/Grid/Table/types'
+import LoadingContainer from 'components/LoadingContainer'
 import useAsync from 'hooks/use-async'
 import { searchContacts } from 'models/contacts/search-contacts'
-import { TableColumn } from 'components/Grid/Table/types'
-import { Table } from 'components/Grid/Table'
-import LoadingContainer from 'components/LoadingContainer'
-
 import { goTo } from 'utils/go-to'
 
+import ShowingColumnContactActions from '../ShowingColumnContactActions'
+import ShowingEmptyState from '../ShowingEmptyState'
+
+import ShowingDetailEmptyStateDescription from './ShowingDetailEmptyStateDescription'
+import ShowingDetailTabVisitorsColumnLatestVisit from './ShowingDetailTabVisitorsColumnLatestVisit'
 import ShowingDetailTabVisitorsColumnPerson from './ShowingDetailTabVisitorsColumnPerson'
 import ShowingDetailTabVisitorsColumnTotalVisit from './ShowingDetailTabVisitorsColumnTotalVisit'
-import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import useShowingGroupAppointmentByVisitorId from './use-showing-group-appointment-by-visitor-id'
-import ShowingDetailTabVisitorsColumnLatestVisit from './ShowingDetailTabVisitorsColumnLatestVisit'
-import ShowingEmptyState from '../ShowingEmptyState'
-import ShowingDetailEmptyStateDescription from './ShowingDetailEmptyStateDescription'
 
 const useStyles = makeStyles(
   theme => ({

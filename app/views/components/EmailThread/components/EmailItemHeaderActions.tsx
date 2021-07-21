@@ -13,7 +13,6 @@ import {
   Tooltip
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
-import classNames from 'classnames'
 import {
   mdiDotsVertical,
   mdiReplyOutline,
@@ -21,22 +20,19 @@ import {
   mdiEmailOutline,
   mdiEmailOpenOutline
 } from '@mdi/js'
-
+import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { forwardOutlined } from 'components/SvgIcons/icons'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useMenu } from 'hooks/use-menu'
-
+import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { ClassesProps } from 'utils/ts-utils'
 
-import { IAppState } from 'reducers'
-
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
-import { EmailThreadEmail } from '../types'
 import { hasOAuthAccess } from '../helpers/has-oauth-access'
+import { EmailThreadEmail } from '../types'
 
 interface Props {
   email: EmailThreadEmail
@@ -81,18 +77,20 @@ export function EmailItemHeaderActions(
     'mail.modify'
   )
 
-  const select = (action, hasAccess = true) => () => {
-    if (!hasAccess) {
-      return
+  const select =
+    (action, hasAccess = true) =>
+    () => {
+      if (!hasAccess) {
+        return
+      }
+
+      onClose()
+
+      // to ensure action is run when menu is closed. This ensures autofocus
+      // behavior isn't broken in any content that is toggled into view as a
+      // result of running this action
+      setTimeout(action)
     }
-
-    onClose()
-
-    // to ensure action is run when menu is closed. This ensures autofocus
-    // behavior isn't broken in any content that is toggled into view as a
-    // result of running this action
-    setTimeout(action)
-  }
 
   return (
     <Box ml={1} onClick={e => e.stopPropagation()}>

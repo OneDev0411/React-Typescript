@@ -1,6 +1,7 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
+
 import { Button, Theme, makeStyles } from '@material-ui/core'
+import { browserHistory } from 'react-router'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

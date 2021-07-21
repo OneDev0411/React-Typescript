@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { DragSource } from 'react-dnd'
 
 import { Page } from 'components/PdfViewer/Page'
@@ -64,6 +65,8 @@ class DraggablePage extends React.Component {
   }
 }
 
-export default DragSource('SPLITTER_PDF_PAGE', pageSource, collect)(
-  DraggablePage
-)
+export default DragSource(
+  'SPLITTER_PDF_PAGE',
+  pageSource,
+  collect
+)(DraggablePage)

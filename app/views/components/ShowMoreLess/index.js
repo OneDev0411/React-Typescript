@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import Flex from 'styled-flex-component'
 
 import { ShowMoreLessText, ArrowDown, ArrowUp } from './styled'

@@ -1,12 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
-import memoize from 'lodash/memoize'
 
-import hash from 'object-hash'
-
-import { withStyles } from '@material-ui/core/styles'
 import {
   Box,
   IconButton,
@@ -14,16 +7,30 @@ import {
   Tooltip,
   CircularProgress
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 import MyLocation from '@material-ui/icons/MyLocation'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 
-import GlobalPageLayout from 'components/GlobalPageLayout'
-import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 import {
   loadMapLibraries,
   isMapLibrariesLoaded
 } from '@app/utils/google-map-api'
-import { putUserSetting } from 'models/user/put-user-setting'
+import { confirmation } from 'actions/confirmation'
+import { setMapProps } from 'actions/listings/map'
+import searchActions from 'actions/listings/search'
+import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
+import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
+import { setUserSetting } from 'actions/user/set-setting'
+import { getUserTeams } from 'actions/user/teams'
+import GlobalPageLayout from 'components/GlobalPageLayout'
+import { DALLAS_POINTS } from 'constants/listings/dallas-points'
 import { getPlace } from 'models/listings/search/get-place'
+import { putUserSetting } from 'models/user/put-user-setting'
+import { selectListings } from 'reducers/listings'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import {
   getBounds,
@@ -31,17 +38,15 @@ import {
   normalizeListingLocation
 } from 'utils/map'
 
-import { selectListings } from 'reducers/listings'
-
-import { getUserTeams } from 'actions/user/teams'
-import searchActions from 'actions/listings/search'
-import { setMapProps } from 'actions/listings/map'
-import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
-import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
-import { confirmation } from 'actions/confirmation'
-
-import Autocomplete from './components/Autocomplete'
-
+import GridView from '../components/GridView'
+import ListView from '../components/ListView'
+import MapView from '../components/MapView'
+import CreateAlertModal from '../components/modals/CreateAlertModal'
+import Tabs from '../components/Tabs'
+import {
+  addDistanceFromCenterToListing,
+  formatListing
+} from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -50,22 +55,12 @@ import {
   SORT_FIELD_SETTING_KEY,
   LAST_BROWSING_LOCATION
 } from '../helpers/sort-utils'
-
-import Tabs from '../components/Tabs'
-
-import Map from './components/Map'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 
-import MapView from '../components/MapView'
-import ListView from '../components/ListView'
-import GridView from '../components/GridView'
-import CreateAlertModal from '../components/modals/CreateAlertModal'
-import {
-  addDistanceFromCenterToListing,
-  formatListing
-} from '../helpers/format-listing'
-import { Header } from './Header'
+import Autocomplete from './components/Autocomplete'
 import CreateTourAction from './components/CreateTourAction'
+import Map from './components/Map'
+import { Header } from './Header'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
@@ -438,8 +433,7 @@ class Search extends React.Component {
     // Anonymous user's can also see /mls and explore the map
     // So updatingLastBrowsing location should not be run for them
     if (this.props.user) {
-      putUserSetting(LAST_BROWSING_LOCATION, gmap)
-      this.props.dispatch(getUserTeams(this.props.user))
+      this.props.dispatch(setUserSetting(LAST_BROWSING_LOCATION, gmap))
     }
   }
 
@@ -577,18 +571,20 @@ class Search extends React.Component {
 
   renderLocateButton() {
     return (
-      <Tooltip title="Get your exact location on the map">
+      <>
         {this.state.isGettingCurrentPosition ? (
           <CircularProgress
             className={this.props.classes.loadingLocateIcon}
             size={21}
           />
         ) : (
-          <IconButton aria-label="locate me" onClick={this.onClickLocate}>
-            <MyLocation />
-          </IconButton>
+          <Tooltip title="Get your exact location on the map">
+            <IconButton aria-label="locate me" onClick={this.onClickLocate}>
+              <MyLocation />
+            </IconButton>
+          </Tooltip>
         )}
-      </Tooltip>
+      </>
     )
   }
 

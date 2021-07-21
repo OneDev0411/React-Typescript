@@ -1,36 +1,34 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { Alert } from '@material-ui/lab'
+
 import { Box, Link, IconButton, Theme, makeStyles } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { mdiClose } from '@mdi/js'
+import { Helmet } from 'react-helmet'
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { ACL } from 'constants/acl'
-import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
-
-import { RenderProps } from 'components/Grid/Table/types'
-import { useGridStyles } from 'components/Grid/Table/styles'
 import Acl from 'components/Acl'
-import Table from 'components/Grid/Table'
-import PageLayout from 'components/GlobalPageLayout'
-import LoadingContainer from 'components/LoadingContainer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
 import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
-
-import { selectUser } from 'selectors/user'
-
+import PageLayout from 'components/GlobalPageLayout'
+import Table from 'components/Grid/Table'
+import { useGridStyles } from 'components/Grid/Table/styles'
+import { RenderProps } from 'components/Grid/Table/types'
+import LoadingContainer from 'components/LoadingContainer'
+import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { ACL } from 'constants/acl'
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { ZeroState } from 'partials/ZeroState'
+import { selectUser } from 'selectors/user'
+import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
 
-import Avatar from './columns/Avatar'
-import Title from './columns/Title'
-import Date from './columns/Date'
-import Registrants from './columns/Registrants'
-import GuestRegistration from './columns/GuestRegistration'
 import Actions from './columns/Actions'
+import Avatar from './columns/Avatar'
+import Date from './columns/Date'
+import GuestRegistration from './columns/GuestRegistration'
+import Registrants from './columns/Registrants'
+import Title from './columns/Title'
 import CreateNewOpenHouse from './CreateNewOpenHouse'
 
 interface Associations {
@@ -74,9 +72,8 @@ function OpenHousesList() {
   const user = useSelector(selectUser)
   const activeBrandId = getActiveTeamId(user) || ''
   const activeBrandSettings = getActiveTeamSettings(user, true)
-  const {
-    enable_open_house_requests: showNotifyOfficeBanner
-  } = activeBrandSettings
+  const { enable_open_house_requests: showNotifyOfficeBanner } =
+    activeBrandSettings
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isAlertOpen, setAlertToOpen] = useState(true)

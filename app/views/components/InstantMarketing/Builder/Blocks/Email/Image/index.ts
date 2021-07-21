@@ -1,18 +1,17 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
-
-import { Image } from 'components/ImageDrawer/types'
+import { Editor } from 'grapesjs'
 
 import ImageIcon from 'assets/images/marketing/editor/blocks/image.png'
-
+import { Image } from 'components/ImageDrawer/types'
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
-import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
-import template from './template.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlockOptions } from '../../types'
+import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+
+import template from './template.mjml'
 
 export const blockName = 'rechat-image'
 

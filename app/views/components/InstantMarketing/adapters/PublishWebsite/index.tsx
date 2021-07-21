@@ -1,21 +1,16 @@
 import React, { useState } from 'react'
 
 import { Button, CircularProgress, Tooltip } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
 
-import SearchListingDrawer from 'components/SearchListingDrawer'
+import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
 } from 'components/InstantMarketing'
-
-import DomainManagementDrawer from 'components/DomainManagementDrawer'
-
-import usePublishWebsite from 'hooks/use-publish-website'
-
-import { selectUser } from 'selectors/user'
-
+import SearchListingDrawer from 'components/SearchListingDrawer'
 import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
+import usePublishWebsite from 'hooks/use-publish-website'
+import { selectUser } from 'selectors/user'
 
 import useLoadListingsData from './use-load-listings-data'
 
@@ -52,14 +47,11 @@ function PublishWebsite({
 
   const closeDomainManagement = () => setIsDomainManagementOpen(false)
 
-  const {
-    publishWebsite,
-    isPublishing,
-    publishButtonLabel
-  } = usePublishWebsite(result => {
-    setWebsiteData(result.website)
-    openDomainManagement()
-  })
+  const { publishWebsite, isPublishing, publishButtonLabel } =
+    usePublishWebsite(result => {
+      setWebsiteData(result.website)
+      openDomainManagement()
+    })
 
   const handleCloseBuilder = () => {
     setIsBuilderOpen(false)

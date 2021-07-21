@@ -1,19 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import moment from 'moment'
 
 import { Button, Tooltip } from '@material-ui/core'
+import moment from 'moment'
+import { connect } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
-
-import { voidEnvelope } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
-
-import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
-import Deal from 'models/Deal'
-
+import { voidEnvelope } from 'actions/deals'
 import { Avatar } from 'components/Avatar'
+import { addNotification as notify } from 'components/notification'
+import Deal from 'models/Deal'
+import { getEnvelopeEditLink } from 'models/Deal/helpers/get-envelope-edit-link'
 
 import { getLegalFullName } from '../../utils/roles'
 

@@ -1,14 +1,14 @@
 import { useState, ComponentProps } from 'react'
+
 import { makeStyles } from '@material-ui/core'
 import { useDeepCompareEffect } from 'react-use'
 
-import { getTemplateImage } from 'utils/marketing-center/helpers'
-import { getFileType } from 'utils/file-utils/get-file-type'
-import { getActiveBrand } from 'utils/user-teams'
-
-import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { PdfThumbnail } from 'components/PdfThumbnail'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
+import { getFileType } from 'utils/file-utils/get-file-type'
+import { getTemplateImage } from 'utils/marketing-center/helpers'
+import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   () => ({

@@ -1,4 +1,5 @@
 import React, { ReactNode, ComponentType } from 'react'
+
 import {
   Button,
   ButtonGroup,
@@ -9,11 +10,9 @@ import {
   useTheme
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
-
 import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { ClassesProps } from 'utils/ts-utils'
 
 import useStyles from './styles'

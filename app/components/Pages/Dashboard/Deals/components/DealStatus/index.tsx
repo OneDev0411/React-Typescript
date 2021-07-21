@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import {
   MenuItem,
@@ -8,26 +7,24 @@ import {
   Theme,
   Tooltip
 } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { IAppState } from 'reducers'
-import Deal from 'models/Deal'
-
-import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { upsertContexts } from 'actions/deals'
-import { getDealChecklists } from 'reducers/deals/checklists'
-import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
-import { useDealStatuses } from 'hooks/use-deal-statuses'
-
-import { getStatusColorClass } from 'utils/listing'
-
-import { addNotification as notify } from 'components/notification'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { BaseDropdown } from 'components/BaseDropdown'
-import { selectUser } from 'selectors/user'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { addNotification as notify } from 'components/notification'
+import { useDealStatuses } from 'hooks/use-deal-statuses'
+import Deal from 'models/Deal'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
-import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
+import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectUser } from 'selectors/user'
+import { getStatusColorClass } from 'utils/listing'
 
 interface Props {
   deal: IDeal

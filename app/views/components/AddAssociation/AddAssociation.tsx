@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { useField } from 'react-final-form'
 
-import { AddAssociationProps } from './types'
-import { AddDealAssociation } from './AddDealAssociation'
 import { AddContactAssociation } from './AddContactAssociation'
+import { AddDealAssociation } from './AddDealAssociation'
 import { AddListingAssociation } from './AddListingAssociations'
+import { AddAssociationProps } from './types'
 
 interface Props {
   name?: string

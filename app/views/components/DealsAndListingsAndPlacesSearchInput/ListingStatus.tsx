@@ -1,5 +1,5 @@
-import classNames from 'classnames'
 import { makeStyles, Typography } from '@material-ui/core'
+import classNames from 'classnames'
 import fecha from 'fecha'
 
 import { getStatusColorClass } from 'utils/listing'

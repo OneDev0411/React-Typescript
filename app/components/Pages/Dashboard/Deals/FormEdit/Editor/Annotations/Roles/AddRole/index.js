@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import ClickOutside from 'react-click-outside'
-import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiPlusCircleOutline } from '@mdi/js'
+import ClickOutside from 'react-click-outside'
 
-import { isPrimaryAgent } from 'deals/utils/roles'
-import { dynamicRoles } from 'deals/FormEdit/utils/normalize-role-names'
-import Roles from 'deals/components/Roles'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import Roles from 'deals/components/Roles'
+import { dynamicRoles } from 'deals/FormEdit/utils/normalize-role-names'
+import { isPrimaryAgent } from 'deals/utils/roles'
 
 import { Container, RolesList } from './styled'
 

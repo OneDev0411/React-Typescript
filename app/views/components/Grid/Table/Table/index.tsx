@@ -1,24 +1,18 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
 
+import { makeStyles, Theme } from '@material-ui/core'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { Sorting } from '../features/Sorting'
-import { Actions } from '../features/Actions'
-
-import { Body } from '../Body'
-import { useTable } from '../hooks/use-table'
-
-import { useRowsSelection } from '../features/Selection/use-row-selection'
-import { useRowsSorting } from '../features/Sorting/use-row-sorting'
-
-import { GridHookPlugin, LoadingPosition } from '../types'
-
-import { useGridContext } from '../hooks/use-grid-context'
-
-import { setActiveSort } from '../context/actions/sorting/set-active-sort'
-
 import { Props } from '..'
+import { Body } from '../Body'
+import { setActiveSort } from '../context/actions/sorting/set-active-sort'
+import { Actions } from '../features/Actions'
+import { useRowsSelection } from '../features/Selection/use-row-selection'
+import { Sorting } from '../features/Sorting'
+import { useRowsSorting } from '../features/Sorting/use-row-sorting'
+import { useGridContext } from '../hooks/use-grid-context'
+import { useTable } from '../hooks/use-table'
+import { GridHookPlugin, LoadingPosition } from '../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import useAsync from 'hooks/use-async'
-
 import getListing from 'models/listings/listing/get-listing'
 
 import ShowingStepPropertyListingCard, {

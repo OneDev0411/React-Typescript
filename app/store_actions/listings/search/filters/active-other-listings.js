@@ -1,9 +1,6 @@
-// import { formValueSelector, change } from 'redux-form'
-import toggleSubStatuses from './toggle-sub-statuses'
 import { otherStatuses } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/statuses'
 
-// const formName = 'filters'
-// const selector = formValueSelector(formName)
+import toggleSubStatuses from './toggle-sub-statuses'
 
 const activeOtherListings = event => dispatch => {
   dispatch({

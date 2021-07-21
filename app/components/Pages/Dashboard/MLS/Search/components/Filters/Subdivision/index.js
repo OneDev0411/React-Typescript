@@ -1,5 +1,5 @@
-import AsyncMultiSelect from '../components/AsyncMultiSelect'
 import api from '../../../../../../../../models/listings/search'
+import AsyncMultiSelect from '../components/AsyncMultiSelect'
 
 const Subdivisions = () => (
   <AsyncMultiSelect

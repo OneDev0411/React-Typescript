@@ -1,13 +1,12 @@
 import React from 'react'
-import { mdiClose } from '@mdi/js'
 
 import { IconButton } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { mdiClose } from '@mdi/js'
 
 import { Divider } from 'components/Divider'
 import PageHeader from 'components/PageHeader'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   title: string

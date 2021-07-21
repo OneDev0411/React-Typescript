@@ -8,6 +8,7 @@ import { useCallback, useEffect } from 'react'
  * https://stackoverflow.com/a/13123626/1493081
  */
 export function useOnRestoredFromPersistedState(callback, deps) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const cb = useCallback(callback, deps)
 
   useEffect(() => {

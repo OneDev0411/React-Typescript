@@ -3,14 +3,11 @@ import React, { useContext, useState, ReactNode, MouseEvent } from 'react'
 import { Button, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { selectUser } from 'selectors/user'
-
-import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
-
+import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
 import getListing from 'models/listings/listing/get-listing'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   buttonRenderer?: (props: {

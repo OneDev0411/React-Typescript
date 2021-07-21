@@ -1,12 +1,13 @@
 import React from 'react'
-import { useTitle } from 'react-use'
-import { Box } from '@material-ui/core'
 
-import { ACL } from 'constants/acl'
+import { Box } from '@material-ui/core'
+import { useTitle } from 'react-use'
+
 import Acl from 'components/Acl'
-import PageLayout from 'components/GlobalPageLayout'
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
+import PageLayout from 'components/GlobalPageLayout'
+import { ACL } from 'constants/acl'
 
 interface Props {
   title?: string

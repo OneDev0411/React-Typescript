@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+
 import { useSelector } from 'react-redux'
 
-import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { useLoadingEntities } from 'hooks/use-loading'
+import { getEmailCampaigns } from 'models/email/get-email-campaigns'
 import { selectUser } from 'selectors/user'
 
 type EmailCampaign = IEmailCampaign<'recipients' | 'template', 'list', 'email'>

@@ -1,9 +1,8 @@
 import styled from 'styled-components'
-
 import Flex from 'styled-flex-component'
 
-import IconButton from '../../../Button/IconButton'
 import { grey } from '../../../../utils/colors'
+import IconButton from '../../../Button/IconButton'
 
 export const DeleteButton = styled(IconButton)`
   margin-left: 6px;

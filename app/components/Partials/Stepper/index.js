@@ -1,6 +1,7 @@
 import React from 'react'
-import cn from 'classnames'
+
 import { mdiCheck } from '@mdi/js'
+import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

@@ -12,6 +12,7 @@ const getSubdivisions = async query => {
       label: title,
       value: appearances
     }))
+
     return { options }
   } catch (error) {
     // console.log(error.message)

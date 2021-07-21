@@ -1,33 +1,28 @@
 import React, { useContext, useState } from 'react'
 
-import { connect, useDispatch } from 'react-redux'
-
-import { Helmet } from 'react-helmet'
-import { withRouter, WithRouterProps } from 'react-router'
 import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
+import { Helmet } from 'react-helmet'
+import { connect, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 
-import { addNotification as notify } from 'components/notification'
-
+import { BaseDropdown } from 'components/BaseDropdown'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import PageLayout from 'components/GlobalPageLayout'
 import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { BaseDropdown } from 'components/BaseDropdown'
+import { addNotification as notify } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import PageLayout from 'components/GlobalPageLayout'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import { goTo } from 'utils/go-to'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
-
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
+import { goTo } from 'utils/go-to'
+import { getActiveTeamId } from 'utils/user-teams'
 
+import CtaBar from '../../Account/components/CtaBar'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
-
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
-import CtaBar from '../../Account/components/CtaBar'
 
 import { getFlowActions } from './helpers'
 

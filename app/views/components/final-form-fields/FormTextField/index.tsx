@@ -1,7 +1,8 @@
 import React from 'react'
-import { Field } from 'react-final-form'
-import { TextField } from 'final-form-material-ui'
+
 import type { TextFieldProps } from '@material-ui/core'
+import { TextField } from 'final-form-material-ui'
+import { Field } from 'react-final-form'
 
 import { FinalFieldProps } from '../types'
 

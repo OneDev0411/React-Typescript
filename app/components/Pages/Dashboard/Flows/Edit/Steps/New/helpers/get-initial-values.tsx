@@ -1,12 +1,12 @@
+import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
+import { convertToWebInput as convertWaitForToWebInput } from '../components/BaseFields/WaitFor/helpers'
+import { getInitialTemplateValue } from '../MarketingEmailForm/helpers'
 import {
   BaseFormData,
   EventFormData,
   MarketingEmailFormData,
   BasicEmailFormData
 } from '../types'
-import { defaultWaitForValue } from '../components/BaseFields/WaitFor/Fields'
-import { convertToWebInput as convertWaitForToWebInput } from '../components/BaseFields/WaitFor/helpers'
-import { getInitialTemplateValue } from '../MarketingEmailForm/helpers'
 
 /**
  * return the basic initial value of form

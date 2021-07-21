@@ -1,13 +1,15 @@
 import { useState, useMemo, memo, ReactNode } from 'react'
+
 import { Box, Button, Typography } from '@material-ui/core'
 
+import { hourToSeconds, findTimeConflicts } from '../../helpers'
+import { ShowingAvailabilityItem } from '../../types'
+import ShowingErrorText from '../ShowingErrorText'
+
+import { findSlotIndexById } from './helpers'
 import ShowingAvailabilitiesTimesRow, {
   ShowingAvailabilitiesTimesRowProps
 } from './ShowingAvailabilitiesTimesRow'
-import { hourToSeconds, findTimeConflicts } from '../../helpers'
-import { findSlotIndexById } from './helpers'
-import ShowingErrorText from '../ShowingErrorText'
-import { ShowingAvailabilityItem } from '../../types'
 
 export interface ShowingAvailabilitiesTimesProps
   extends Pick<ShowingAvailabilitiesTimesRowProps, 'showingDuration'> {

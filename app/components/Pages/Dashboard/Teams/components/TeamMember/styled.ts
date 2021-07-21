@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { dimmerOverlayColor, grey } from 'views/utils/colors'
 import OriginalUserAvatar from 'components/UserAvatar'
+import { dimmerOverlayColor, grey } from 'views/utils/colors'
 
 export const TeamMemberItem = styled.div`
   display: flex;

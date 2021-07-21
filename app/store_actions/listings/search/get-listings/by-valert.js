@@ -1,9 +1,9 @@
 import { batchActions } from 'redux-batched-actions'
 
+import { DECLUSTER_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
+import * as listingsTypes from '../../../../constants/listings'
 import api from '../../../../models/listings/search'
 import setSearchListingsOptions from '../set-options'
-import * as listingsTypes from '../../../../constants/listings'
-import { DECLUSTER_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 
 const getListingsByValert = options => (dispatch, getState) => {
   const { brand, search } = getState()

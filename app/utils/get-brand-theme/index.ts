@@ -1,9 +1,7 @@
-import {  ThemeOptions } from '@material-ui/core'
-import flattenBrand from 'utils/flatten-brand'
-
+import { ThemeOptions } from '@material-ui/core'
 
 export const getBrandTheme = (brand: IBrand): ThemeOptions => {
-  if(!brand?.settings?.theme){
+  if (!brand?.settings?.theme) {
     return {}
   }
 

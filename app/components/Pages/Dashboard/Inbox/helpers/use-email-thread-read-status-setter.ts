@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
 
+import { useDispatch } from 'react-redux'
+
+import { addNotification } from 'components/notification'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 
 export default function useEmailThreadReadStatusSetter(
   emailThreadId: UUID,
   readStatus: boolean
 ) {
-  const [
-    settingEmailThreadReadStatus,
-    setSettingEmailThreadReadStatus
-  ] = useState(false)
-  const [lastEmailThreadReadStatus, setLastEmailThreadReadStatus] = useState(
-    readStatus
-  )
+  const [settingEmailThreadReadStatus, setSettingEmailThreadReadStatus] =
+    useState(false)
+  const [lastEmailThreadReadStatus, setLastEmailThreadReadStatus] =
+    useState(readStatus)
 
   useEffect(() => {
     setSettingEmailThreadReadStatus(false)

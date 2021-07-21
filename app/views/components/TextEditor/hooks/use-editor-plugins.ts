@@ -1,4 +1,5 @@
 import { useContext, useMemo } from 'react'
+
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
 import useUnmount from 'react-use/lib/useUnmount'
 
@@ -12,6 +13,7 @@ export function useEditorPlugins<T extends { [name: string]: DraftJsPlugin }>(
 ): T {
   const { addPlugins } = useContext(EditorContext)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const plugins = useMemo(factory, deps)
 
   const removePlugins = useInitializer(() => addPlugins(plugins))

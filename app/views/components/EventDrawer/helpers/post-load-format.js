@@ -2,9 +2,8 @@ import { EditorState } from 'draft-js'
 import { stateFromHTML } from 'draft-js-import-html'
 
 import { isNegativeTimezone } from 'utils/is-negative-timezone'
-
-import { getReminderItem } from 'views/utils/reminder'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
+import { getReminderItem } from 'views/utils/reminder'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 import { initialValueGenerator } from './initial-value-generator'

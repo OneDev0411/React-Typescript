@@ -1,4 +1,5 @@
 import { memo, useEffect } from 'react'
+
 import { Box, Button } from '@material-ui/core'
 
 import {
@@ -8,8 +9,8 @@ import {
 } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import SmartQuestionForm from '../SmartQuestionForm'
 import LinkButton from '../LinkButton'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 interface ShowingStepFinalResultProps {
   isLoading: boolean

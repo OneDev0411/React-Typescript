@@ -1,10 +1,12 @@
-import { browserHistory } from 'react-router'
 import { normalize } from 'normalizr'
+import { browserHistory } from 'react-router'
+
+import * as actionsType from '../../../constants/listings/alerts'
 import api from '../../../models/listings/alerts'
-import setSelectedAlertId from './set-selected-alert-id'
 import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
-import * as actionsType from '../../../constants/listings/alerts'
+
+import setSelectedAlertId from './set-selected-alert-id'
 
 const deleteAlert = alert => (dispatch, getState) => {
   const { selectedAlertId } = getState().alerts
@@ -25,7 +27,7 @@ const deleteAlert = alert => (dispatch, getState) => {
   })
 
   return api.deleteAlert(alertId, alertRoom).then(
-    response => {
+    () => {
       dispatch({
         tabName: 'alerts',
         response: deleteHandler(),

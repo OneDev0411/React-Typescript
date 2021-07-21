@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Box, BoxProps } from '@material-ui/core'
 
-import { useWizardContext } from '../hooks/use-wizard-context'
 import { IWizardState } from '../context'
+import { useWizardContext } from '../hooks/use-wizard-context'
 
 export interface QuestionFormProps {
   children:

@@ -1,8 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 
 import { Tooltip } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import styled, { css } from 'styled-components'
 
 import { getUserTitle } from '../../../models/user/helpers'
 import { Avatar } from '../Avatar'

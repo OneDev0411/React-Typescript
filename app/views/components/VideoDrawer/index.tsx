@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { CircularProgress, Button } from '@material-ui/core'
 
+import { CircularProgress, Button } from '@material-ui/core'
 import type { Model } from 'backbone'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
 import { getVideoThumbnailUrl } from './helpers'
-import { Video } from './types'
 import { Thumbnail } from './styled'
+import { Video } from './types'
 
 interface Props {
   isOpen: boolean

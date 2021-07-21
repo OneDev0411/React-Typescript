@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { useLocation } from 'react-use'
-import { browserHistory } from 'react-router'
+
 import { LocationDescriptor } from 'history'
+import { browserHistory } from 'react-router'
+import { useLocation } from 'react-use'
 
 type UseQueryParam = [string, (value: string) => void, () => void]
 

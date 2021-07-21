@@ -1,9 +1,10 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+
 import { makeStyles } from '@material-ui/core'
 import { eachDayOfInterval, isSameDay } from 'date-fns'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import DayCard from './components/DayCard'
 

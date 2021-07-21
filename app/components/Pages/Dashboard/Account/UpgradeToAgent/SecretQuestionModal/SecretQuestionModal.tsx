@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { browserHistory } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { FORM_ERROR } from 'final-form'
+
 import {
   Box,
   Modal,
@@ -10,6 +8,9 @@ import {
   Backdrop,
   makeStyles
 } from '@material-ui/core'
+import { FORM_ERROR } from 'final-form'
+import { useDispatch } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { updateUser } from 'actions/user'
 import { upgradeAgent } from 'models/user/upgrade-to-agent'

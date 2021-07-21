@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
-import Socket from '../socket'
+
 import config from '../../../config/public'
+import Socket from '../socket'
 
 // create emitter instance
 const emitter = new EventEmitter()

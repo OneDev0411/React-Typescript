@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import {
   Checkbox,
   CheckboxProps,
@@ -6,7 +8,6 @@ import {
   FormHelperText,
   FormControlProps
 } from '@material-ui/core'
-import { ReactNode } from 'react'
 import { Field } from 'react-final-form'
 
 import { FinalFieldProps } from '../types'

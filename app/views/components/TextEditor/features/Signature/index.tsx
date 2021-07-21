@@ -1,16 +1,18 @@
 import React, { useContext, useLayoutEffect } from 'react'
-import { ContentBlock } from 'draft-js'
+
 import { Box } from '@material-ui/core'
+import { ContentBlock } from 'draft-js'
 import { Options as ExportOptions } from 'draft-js-import-html'
 
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
-import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import createSignaturePlugin from './draft-js-signature-plugin'
-import { EditorContext } from '../../editor-context'
-import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { Checkbox } from '../../../Checkbox'
 import ConfirmationModalContext from '../../../ConfirmationModal/context'
+import { ToolbarFragment } from '../../components/ToolbarFragment'
+import { EditorContext } from '../../editor-context'
+import { useEditorPlugins } from '../../hooks/use-editor-plugins'
+
+import createSignaturePlugin from './draft-js-signature-plugin'
 
 interface Props {
   /**

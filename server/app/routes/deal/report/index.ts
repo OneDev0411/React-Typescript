@@ -2,8 +2,8 @@ import { AxiosError, AxiosResponse } from 'axios'
 import { Request, Response, NextFunction } from 'express'
 import fecha from 'fecha'
 
-import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
+import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   const data = JSON.parse(

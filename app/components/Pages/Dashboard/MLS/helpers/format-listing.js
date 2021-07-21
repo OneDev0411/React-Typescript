@@ -67,10 +67,11 @@ export const addDistanceFromCenterToListing = (listing, center) => {
 
   const listingLocation = new google.maps.LatLng(listing.lat, listing.lng)
 
-  const distanceFromCenter = google.maps.geometry.spherical.computeDistanceBetween(
-    centerLatLng,
-    listingLocation
-  )
+  const distanceFromCenter =
+    google.maps.geometry.spherical.computeDistanceBetween(
+      centerLatLng,
+      listingLocation
+    )
 
   return {
     ...listing,

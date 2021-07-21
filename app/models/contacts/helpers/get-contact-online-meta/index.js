@@ -11,8 +11,8 @@ export function getContactOnlineMeta(contact) {
     return undefined
   }
 
-  const latestOnlineUser = users.reduce(
-    (a, b) => (a.last_seen_at > b.last_seen_at ? a : b)
+  const latestOnlineUser = users.reduce((a, b) =>
+    a.last_seen_at > b.last_seen_at ? a : b
   )
 
   if (latestOnlineUser) {

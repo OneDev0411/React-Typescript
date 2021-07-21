@@ -1,14 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+
 import { Grid } from '@material-ui/core'
-
-import { goTo } from 'utils/go-to'
-import CardSkeleton from 'components/CardSkeleton'
-import ListingCard from 'components/ListingCards/ListingCard'
-
-import { selectActiveBrandId } from '@app/selectors/brand'
+import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
+import CardSkeleton from 'components/CardSkeleton'
+import ListingCard from 'components/ListingCards/ListingCard'
+import { goTo } from 'utils/go-to'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'

@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Box, Button, CircularProgress, Typography } from '@material-ui/core'
-import { useTitle } from 'react-use'
-import { useSelector, useDispatch } from 'react-redux'
-import { useForm, Controller } from 'react-hook-form'
 
-import { QuestionWizard } from 'components/QuestionWizard'
-import { addNotification as notify } from 'components/notification'
+import { Box, Button, CircularProgress, Typography } from '@material-ui/core'
+import { useForm, Controller } from 'react-hook-form'
+import { useSelector, useDispatch } from 'react-redux'
+import { useTitle } from 'react-use'
 
 import {
   createRoles,
@@ -13,45 +11,35 @@ import {
   updateListing,
   upsertContexts
 } from 'actions/deals'
-
-import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
-
-import { selectDealById } from 'reducers/deals/list'
-import { selectDealRoles } from 'reducers/deals/roles'
-import { useLoadFullDeal } from 'hooks/use-load-deal'
-
-import { goTo } from 'utils/go-to'
-
-import { getField, getStatus } from 'models/Deal/helpers/context'
-
+import { addNotification as notify } from 'components/notification'
+import { QuestionWizard } from 'components/QuestionWizard'
 import { createAddressContext } from 'deals/utils/create-address-context'
-
-import { getDealChecklists } from 'reducers/deals/checklists'
-
+import { useLoadFullDeal } from 'hooks/use-load-deal'
 import { getStatusContextKey } from 'models/Deal/helpers/brand-context/get-status-field'
-
+import { getField, getStatus } from 'models/Deal/helpers/context'
+import { IAppState } from 'reducers'
 import {
   getBrandChecklistRequiredContexts,
   getBrandChecklistsById
 } from 'reducers/deals/brand-checklists'
-
-import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
-
-import { DealContext } from './form/DealContext'
-import { DealClient } from './form/DealClient'
-import { DealStatus } from './form/DealStatus'
-import { DealAddress, PropertyAddress } from './form/DealAddress'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectDealById } from 'reducers/deals/list'
+import { selectDealRoles } from 'reducers/deals/roles'
+import { selectUser } from 'selectors/user'
+import { goTo } from 'utils/go-to'
 
 import { Header } from './components/Header'
-
-import { useStatusList } from './hooks/use-brand-status-list'
-import { useStyles } from './hooks/use-styles'
-import { showStatusQuestion } from './helpers/show-status-question'
+import { Context } from './context'
+import { DealAddress, PropertyAddress } from './form/DealAddress'
+import { DealClient } from './form/DealClient'
+import { DealContext } from './form/DealContext'
+import { DealStatus } from './form/DealStatus'
 import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
-
-import { Context } from './context'
+import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
+import { showStatusQuestion } from './helpers/show-status-question'
+import { useStatusList } from './hooks/use-brand-status-list'
+import { useStyles } from './hooks/use-styles'
 
 type FormValues = {
   buying_clients: IDealRole[]

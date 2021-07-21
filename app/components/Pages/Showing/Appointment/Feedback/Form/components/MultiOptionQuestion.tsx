@@ -4,7 +4,6 @@ import {
   QuestionForm
 } from 'components/QuestionWizard'
 import { RadioGroup, RadioItem } from 'components/RadioGroup'
-
 import useIsMobile from 'hooks/use-is-mobile'
 
 import { useGoNextStep } from '../hooks'

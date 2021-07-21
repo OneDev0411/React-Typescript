@@ -1,10 +1,10 @@
 import React from 'react'
+
 import ClickOutside from 'react-click-outside'
 
-import { ListContainer } from '../styled'
-import { Body } from '../components/Body'
-
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
+import { Body } from '../components/Body'
+import { ListContainer } from '../styled'
 
 export function SearchResultList(props) {
   if (props.isLoading) {

@@ -1,9 +1,7 @@
 import uniqBy from 'lodash/uniqBy'
-
 import { useSelector } from 'react-redux'
 
 import { getField } from 'models/Deal/helpers/context'
-
 import { IAppState } from 'reducers'
 
 export function useFactsheetContexts(

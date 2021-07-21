@@ -1,23 +1,20 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import Downshift from 'downshift'
-import { addNotification as notify } from 'components/notification'
+import { connect } from 'react-redux'
 
 import { createFormTask, changeNeedsAttention } from 'actions/deals'
-
-import { selectChecklistTasks } from 'reducers/deals/tasks'
+import { addNotification as notify } from 'components/notification'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectChecklistTasks } from 'reducers/deals/tasks'
 
-import { Tasks } from './ChecklistTasks'
-import { CreateTaskItem } from './CreateTask/NewItem'
-import { CreateTaskForm } from './CreateTask/Form'
-import { ChecklistStash } from './ChecklistStash'
 import Forms from './ChecklistForms'
-
-import { ChecklistTitle } from './styled'
-
+import { ChecklistStash } from './ChecklistStash'
+import { Tasks } from './ChecklistTasks'
+import { CreateTaskForm } from './CreateTask/Form'
+import { CreateTaskItem } from './CreateTask/NewItem'
 import { SearchInput } from './SearchInput'
+import { ChecklistTitle } from './styled'
 import { DropDownContainer, DropDownMenu } from './styled'
 
 class DropDownTasks extends React.Component {
@@ -371,11 +368,8 @@ function mapStateToProps({ deals }, props) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    notify,
-    createFormTask,
-    changeNeedsAttention
-  }
-)(DropDownTasks)
+export default connect(mapStateToProps, {
+  notify,
+  createFormTask,
+  changeNeedsAttention
+})(DropDownTasks)

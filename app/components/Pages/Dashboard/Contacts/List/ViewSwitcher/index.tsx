@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import cn from 'classnames'
+
 import { MenuItem, Popover, useTheme } from '@material-ui/core'
 import { mdiViewWeekOutline, mdiFormatListText } from '@mdi/js'
+import cn from 'classnames'
 
-import { useIconStyles } from '@app/styles/use-icon-styles'
 import { ViewModeType } from '@app/components/Pages/Dashboard/Contacts/List/Tabs'
-
+import { useIconStyles } from '@app/styles/use-icon-styles'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

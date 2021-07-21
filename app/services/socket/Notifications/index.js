@@ -1,6 +1,6 @@
-import Socket from '../'
-import store from '../../../stores'
+import Socket from '..'
 import { receivedANotification } from '../../../store_actions/notifications/receive-a-notifications'
+import store from '../../../stores'
 
 export default class ContactSocket extends Socket {
   constructor(user) {

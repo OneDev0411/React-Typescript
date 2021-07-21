@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled from 'styled-components'
 
 export const ButtonText = styled.div`
   margin: ${({ theme }: { theme: Theme }) => theme.spacing(0, 1, 0, 2)};

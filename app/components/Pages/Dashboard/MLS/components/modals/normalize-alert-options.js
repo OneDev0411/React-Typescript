@@ -4,13 +4,8 @@ export const normalizeAlertOptions = (
   alertOptions
 ) => {
   let points = searchOptions.points
-  const {
-    mls_areas,
-    postal_codes,
-    school_districts,
-    subdivisions,
-    counties
-  } = searchOptions
+  const { mls_areas, postal_codes, school_districts, subdivisions, counties } =
+    searchOptions
 
   if (
     drawingPoints.length === 0 &&

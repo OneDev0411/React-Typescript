@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+
 import Dropzone from 'react-dropzone-rechat'
 
 import Spinner from '../Spinner'

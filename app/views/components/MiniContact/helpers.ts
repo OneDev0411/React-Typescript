@@ -1,13 +1,13 @@
 import fecha from 'fecha'
 
 import { getContact } from 'models/contacts/get-contact'
-import { searchContacts } from 'models/contacts/search-contacts'
-import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { getContactAttributesBySection } from 'models/contacts/helpers/get-contact-attributes-by-section'
 import { getAttributeFromSummary } from 'models/contacts/helpers/get-attribute-from-summary'
+import { getContactAttributesBySection } from 'models/contacts/helpers/get-contact-attributes-by-section'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
+import { searchContacts } from 'models/contacts/search-contacts'
 
-import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { getAddresses } from '../../../components/Pages/Dashboard/Contacts/Profile/Addresses/helpers/get-addresses'
+import { selectDefsBySection } from '../../../reducers/contacts/attributeDefs'
 import { normalizeContact as normalizeContactForAssociation } from '../../utils/association-normalizers'
 
 import {
