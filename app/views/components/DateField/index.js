@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 
-import { isLeapYear } from 'date-fns'
+import { isLeapYear, getDaysInMonth } from 'date-fns'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
@@ -20,11 +20,9 @@ export function DateField(props) {
   const daysItems = useMemo(() => {
     const selectedMonth = month.value ? parseInt(month.value, 10) + 1 : 0
     const selectedYear = year ? parseInt(year, 10) : 1800
-    const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate()
+    const daysInMonth = getDaysInMonth(new Date(selectedYear, selectedMonth, 0))
 
     const days = [...Array(daysInMonth).keys()].map(day => day + 1)
-
-    console.log({ days, daysInMonth })
 
     return days.map(day => ({
       label: addZero(day),
@@ -40,16 +38,16 @@ export function DateField(props) {
     []
   )
 
-  const onChangeDay = value => {
-    setDay(value)
-    props.onChangeDay(value)
+  const onChangeDay = day => {
+    setDay(day)
+    props.onChangeDay(day)
   }
 
-  const onChangeMonth = value => {
-    setMonth(value)
-    props.onChangeMonth(value)
+  const onChangeMonth = month => {
+    setMonth(month)
+    props.onChangeMonth(month)
 
-    if (value.value === 1 && day.value >= 29) {
+    if (month.value === 1 && day.value >= 29) {
       if (day.value === 29 && year && isLeapYear(new Date(year))) {
         return
       }
