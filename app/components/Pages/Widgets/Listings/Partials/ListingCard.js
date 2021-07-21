@@ -1,5 +1,5 @@
 // Widgets/Partials/ListingCard.js
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { numberWithCommas } from '../../../../../utils/helpers'
 import listingUtils from '../../../../../utils/listing'
-import FavoriteHeart from '../../../Dashboard/Listings/components/FavoriteHeart'
+import FavoriteHeart from '../../../Dashboard/MLS/components/FavoriteHeart'
 
 import AgentImage from './AgentImage'
 

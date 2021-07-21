@@ -1,6 +1,6 @@
 import { batchActions } from 'redux-batched-actions'
 
-import { DECLUSTER_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
+import { DECLUSTER_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 import * as listingsTypes from '../../../../constants/listings'
 import api from '../../../../models/listings/search'
 import setSearchListingsOptions from '../set-options'

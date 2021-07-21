@@ -10,7 +10,6 @@ import { searchDeals, getDeals } from 'actions/deals'
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
@@ -48,11 +47,9 @@ export default function AgentTable(props: WithRouterProps) {
 
   const fetch = useCallback(
     (user: IUser, searchCriteria: string) => {
-      if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
-        dispatch(getDeals(user))
-      } else {
-        dispatch(searchDeals(user, searchCriteria))
-      }
+      dispatch(
+        searchCriteria ? searchDeals(user, searchCriteria) : getDeals(user)
+      )
     },
     [dispatch]
   )

@@ -28,8 +28,8 @@ const TAB_ITEMS = [
     link: 'drafts'
   },
   {
-    label: 'Listings',
-    link: 'listings'
+    label: 'Actives',
+    link: 'actives'
   },
   {
     label: 'Pending',

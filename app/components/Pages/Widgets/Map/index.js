@@ -1,6 +1,4 @@
-import React from 'react'
-
-import SearchMap from '../../Dashboard/Listings/Search'
+import SearchMap from '../../Dashboard/MLS/Search'
 
 const MapWidget = props => (
   <div className="l-listings is-widget">
