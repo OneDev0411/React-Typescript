@@ -232,7 +232,10 @@ class MlsAutocompleteSearch extends Component {
   handleItemToString = item => (item == null ? '' : item.description)
 
   handleSelectedListing = item => {
-    window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+    if (!this.props.isWidget) {
+      window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+    }
+
     this.setState({
       isListingDetailsModalOpen: true,
       selectedListingId: item.id
@@ -240,7 +243,10 @@ class MlsAutocompleteSearch extends Component {
   }
 
   closeListingDetailsModal = () => {
-    window.history.replaceState({}, '', '/dashboard/mls')
+    if (!this.props.isWidget) {
+      window.history.replaceState({}, '', '/dashboard/mls')
+    }
+
     this.setState({
       isListingDetailsModalOpen: false,
       selectedListingId: null
