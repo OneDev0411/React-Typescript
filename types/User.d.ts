@@ -22,6 +22,9 @@ declare interface IUserInput extends Partial<IUserBase> {
   room_connect?: UUID
   actions?: string[]
 }
+
+declare type TUserType = 'Agent' | 'Client' | 'Admin'
+
 declare interface IUser extends IUserBase {
   last_seen_at: number | null
   cover_image_thumbnail_url: string | null
@@ -39,7 +42,7 @@ declare interface IUser extends IUserBase {
 
   agent: IAgent | null // association?
 
-  user_type: 'Agent' | 'Client' | 'Admin'
+  user_type: TUserType
 }
 
 declare type TUserLogicalType =

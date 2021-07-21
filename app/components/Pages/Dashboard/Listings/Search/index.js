@@ -24,6 +24,7 @@ import { setMapProps } from 'actions/listings/map'
 import searchActions from 'actions/listings/search'
 import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
 import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
+import { setUserSetting } from 'actions/user/set-setting'
 import { getUserTeams } from 'actions/user/teams'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
@@ -432,8 +433,7 @@ class Search extends React.Component {
     // Anonymous user's can also see /mls and explore the map
     // So updatingLastBrowsing location should not be run for them
     if (this.props.user) {
-      putUserSetting(LAST_BROWSING_LOCATION, gmap)
-      this.props.dispatch(getUserTeams(this.props.user))
+      this.props.dispatch(setUserSetting(LAST_BROWSING_LOCATION, gmap))
     }
   }
 
