@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components'
-
 import { CSSProperties } from 'react'
+
+import styled, { css } from 'styled-components'
 
 import { borderColor, grey } from 'views/utils/colors'
 
@@ -33,7 +33,7 @@ export const Divider = styled.div<Props>`
     props.text &&
     css`
       ::after {
-        content: "${props.text}";
+        content: '${props.text}';
         position: absolute;
         left: 50%;
         top: -50%;
@@ -41,7 +41,7 @@ export const Divider = styled.div<Props>`
         background: #fff;
         padding: 0 0.56rem;
         font-size: 0.75rem;
-        color: ${grey.A500}
+        color: ${grey.A500};
       }
     `}
 `

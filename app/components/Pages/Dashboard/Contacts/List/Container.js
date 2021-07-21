@@ -1,58 +1,51 @@
 import React from 'react'
+
+import { Box } from '@material-ui/core'
+import { mdiLoading } from '@mdi/js'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
-import { Box } from '@material-ui/core'
-
-import { mdiLoading } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import PageLayout from 'components/GlobalPageLayout'
-import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
-import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
-
-import { ViewAs } from 'components/ViewAs'
 
 import { confirmation } from 'actions/confirmation'
-import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-text-filter'
 import { updateFilterSegment } from 'actions/filter-segments'
-import { getUserTeams } from 'actions/user/teams'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-
-import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import { getUserTeams } from 'actions/user/teams'
+import { Callout } from 'components/Callout'
+import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
+import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
+import PageLayout from 'components/GlobalPageLayout'
+import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
+import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
+import ImportContactsButton from 'components/ImportContactsButton'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { ViewAs } from 'components/ViewAs'
+import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
+import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
+import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-contacts-count'
+import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
+import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
+import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
+import { putUserSetting } from 'models/user/put-user-setting'
 import {
   selectContacts,
   selectContactsInfo,
   selectContactsListFetching
 } from 'reducers/contacts/list'
-import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import { selectActiveSavedSegment } from 'reducers/filter-segments'
+import { goTo } from 'utils/go-to'
 import {
   clearImportingGoogleContacts,
   getNewConnectedGoogleAccount
 } from 'utils/oauth-provider'
-import { goTo } from 'utils/go-to'
-import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
-import { deleteContactsBulk } from 'models/contacts/delete-contacts-bulk'
-import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-contacts-count'
-import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
-import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import { isAttributeFilter, normalizeAttributeFilters } from 'crm/List/utils'
-import { isFilterValid } from 'components/Grid/Filters/helpers/is-filter-valid'
-import { Callout } from 'components/Callout'
-import { selectActiveSavedSegment } from 'reducers/filter-segments'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import ImportContactsButton from 'components/ImportContactsButton'
+import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
 
-import { putUserSetting } from 'models/user/put-user-setting'
-
-import ContactsTabs from './Tabs'
-import Table from './Table'
-import TouchReminder from './TouchReminder'
-import { OtherContactsBadge } from './OtherContactsBadge'
+import { Board } from '../Board'
+import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {
   FLOW_FILTER_ID,
@@ -63,14 +56,14 @@ import {
   DUPLICATE_CONTACTS_LIST_ID,
   VIEW_MODE_FIELD_SETTING_KEY
 } from './constants'
-import { CONTACTS_SEGMENT_NAME } from '../constants'
-import { SyncSuccessfulModal } from './SyncSuccesfulModal'
-import { ContactsZeroState } from './ZeroState'
-import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
-
-import { Board } from '../Board'
-
+import { OtherContactsBadge } from './OtherContactsBadge'
 import { ViewMode } from './styled'
+import { SyncSuccessfulModal } from './SyncSuccesfulModal'
+import Table from './Table'
+import ContactsTabs from './Tabs'
+import TouchReminder from './TouchReminder'
+import { getPredefinedContactLists } from './utils/get-predefined-contact-lists'
+import { ContactsZeroState } from './ZeroState'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS

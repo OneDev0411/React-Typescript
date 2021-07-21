@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mdiPencilOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

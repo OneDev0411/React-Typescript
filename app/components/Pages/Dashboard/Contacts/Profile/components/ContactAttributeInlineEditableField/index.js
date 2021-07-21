@@ -7,9 +7,10 @@ import {
   updateTrigger,
   removeTrigger
 } from 'models/instant-marketing/triggers'
-
 import { noop } from 'utils/helpers'
 
+import { TRIGGERABLE_ATTRIBUTES } from './constants'
+import { EditMode } from './EditMode'
 import {
   formatValue,
   getTitle,
@@ -19,13 +20,9 @@ import {
   validation,
   validateTriggerFields
 } from './helpers'
-
-import { EditMode } from './EditMode'
-import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
 import { getTriggerSubject } from './TriggerEditMode/helpers'
-
-import { TRIGGERABLE_ATTRIBUTES } from './constants'
+import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
   return new Date().getTime()

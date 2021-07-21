@@ -1,13 +1,12 @@
 import React from 'react'
 
+import { Box } from '@material-ui/core'
 import { Field, FieldRenderProps } from 'react-final-form'
 
-import { Box } from '@material-ui/core'
-
 import { FileAttachment } from '../../components/Attachment/FileAttachment'
-import UploadingAttachmentsList from '../UploadingAttachments'
-import { EmailFormValues } from '../../types'
 import { isFileAttachment } from '../../helpers/is-file-attachment'
+import { EmailFormValues } from '../../types'
+import UploadingAttachmentsList from '../UploadingAttachments'
 
 export function AttachmentsList(props: FieldRenderProps<any>) {
   const handleRemove = (attachment: EmailFormValues['attachments'][number]) => {
@@ -35,10 +34,10 @@ export function AttachmentsList(props: FieldRenderProps<any>) {
       <Field
         name="uploadingAttachments"
         onFinish={(file: IFile) => {
-          props.input.onChange(([
+          props.input.onChange([
             ...(props.input.value || []),
             file
-          ] as EmailFormValues['attachments']) as any)
+          ] as EmailFormValues['attachments'] as any)
         }}
         component={UploadingAttachmentsList}
       />

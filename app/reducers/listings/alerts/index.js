@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux'
+
+import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 import map from '../map'
-import list from './list'
 import panels from '../panels'
+
 import feed from './alert-feed'
+import list from './list'
 import { loggedAlert } from './logged-alert'
 import selectedAlertId from './selected-alert-id'
-import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 
 const alerts = combineReducers({
   loggedAlert,

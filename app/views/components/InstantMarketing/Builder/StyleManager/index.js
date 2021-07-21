@@ -1,21 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
 
+import ReactDOM from 'react-dom'
 import ReactDOMServer from 'react-dom/server'
+import { Provider } from 'react-redux'
 
 import { AppTheme } from '../../../../../AppTheme'
 import store from '../../../../../stores'
-
 import { loadGrapesjs } from '../utils/load-grapes'
 
-import { Container } from './styled'
+import ColorPicker from './ColorPicker'
 import FontSizePicker from './FontSizePicker'
 import FontWeightPicker from './FontWeightPicker'
-import ColorPicker from './ColorPicker'
+import PaddingPicker from './PaddingPicker'
+import { Container } from './styled'
 import TextAlignPicker from './TextAlignPicker'
 import WidthPicker from './WidthPicker'
-import PaddingPicker from './PaddingPicker'
 
 function renderWithTheme(node, container) {
   ReactDOM.render(

@@ -4,14 +4,8 @@
  * @returns {object} a formated crm_event object
  */
 export async function preSaveFormat(values) {
-  const {
-    title,
-    dueDate,
-    reminder,
-    task_type,
-    assignees,
-    associations
-  } = values
+  const { title, dueDate, reminder, task_type, assignees, associations } =
+    values
 
   const dueDateTimestamp = dueDate.getTime()
 

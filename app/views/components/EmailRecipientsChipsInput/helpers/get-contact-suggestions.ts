@@ -1,9 +1,8 @@
-import { map } from 'rxjs/operators'
-import { of } from 'rxjs/observable/of'
-import { fromPromise } from 'rxjs/observable/fromPromise'
 import Fuse from 'fuse.js'
-
 import { Observable } from 'rxjs'
+import { fromPromise } from 'rxjs/observable/fromPromise'
+import { of } from 'rxjs/observable/of'
+import { map } from 'rxjs/operators'
 
 import { searchContacts } from 'models/contacts/search-contacts'
 

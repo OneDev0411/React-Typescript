@@ -1,13 +1,6 @@
 import React, { useRef, useState, useContext } from 'react'
-import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
-import createAnchorPlugin from 'draft-js-anchor-plugin'
 
 import { Tooltip } from '@material-ui/core'
-
-import { ContentBlock, Editor as DraftEditor } from 'draft-js'
-
-import { DraftJsPlugin } from 'draft-js-plugins-editor'
-
 import {
   mdiLink,
   mdiFormatListNumbered,
@@ -16,26 +9,30 @@ import {
   mdiFormatItalic,
   mdiFormatBold
 } from '@mdi/js'
+import { ContentBlock, Editor as DraftEditor } from 'draft-js'
+import createAnchorPlugin from 'draft-js-anchor-plugin'
+import { DraftJsPlugin } from 'draft-js-plugins-editor'
+import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 
 import { getShortcutTooltip } from 'utils/get-shortcut-tooltip'
 
-import { ToolbarFragment } from '../../components/ToolbarFragment'
-import { EditorContext } from '../../editor-context'
-import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
-import HeadingButtons from './HeadingButtons'
-import { ToolbarIconButton } from '../../components/ToolbarIconButton'
 import { SvgIcon } from '../../../SvgIcons/SvgIcon'
-
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
-import { LinkEditorPopover } from './LinkEditorPopover'
 import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
 } from '../../components/DraftJsSelectionPopover'
-import { LinkPreview } from './LinkPreview'
+import { ToolbarFragment } from '../../components/ToolbarFragment'
+import { ToolbarIconButton } from '../../components/ToolbarIconButton'
+import { ToolbarToggleButton } from '../../components/ToolbarToggleButton'
+import { EditorContext } from '../../editor-context'
+import { useEditorPlugins } from '../../hooks/use-editor-plugins'
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { linkKeyBinding } from '../../utils/link-key-binding'
+
 import createPasteLinkPlugin from './draft-js-paste-link-plugin'
+import HeadingButtons from './HeadingButtons'
+import { LinkEditorPopover } from './LinkEditorPopover'
+import { LinkPreview } from './LinkPreview'
 
 interface Props {
   /**

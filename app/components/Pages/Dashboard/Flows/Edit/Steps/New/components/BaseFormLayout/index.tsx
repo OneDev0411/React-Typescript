@@ -1,4 +1,5 @@
 import React, { ReactNode, memo } from 'react'
+
 import {
   Box,
   Chip,
@@ -9,20 +10,20 @@ import {
   IconButton,
   MenuItem
 } from '@material-ui/core'
-import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
-import cn from 'classnames'
 import { mdiDotsVertical, mdiDrag } from '@mdi/js'
+import cn from 'classnames'
+import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 
+import { BaseDropdown } from 'components/BaseDropdown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { BaseDropdown } from 'components/BaseDropdown'
-
-import { WaitFor } from '../BaseFields/WaitFor'
+import { BaseFormProps } from '../../types'
 import { EventType } from '../BaseFields/EventType'
 import { Time } from '../BaseFields/Time'
+import { WaitFor } from '../BaseFields/WaitFor'
+
 import { useStyles } from './styles'
-import { BaseFormProps } from '../../types'
 
 interface Props extends Omit<BaseFormProps, 'onSubmit'> {
   index: number

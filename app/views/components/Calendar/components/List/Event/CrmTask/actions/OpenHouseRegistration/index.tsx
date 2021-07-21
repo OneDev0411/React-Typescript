@@ -1,11 +1,10 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import Button from '@material-ui/core/Button'
-
-import { getActiveTeamId } from 'utils/user-teams'
+import { useSelector } from 'react-redux'
 
 import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {
   event: ICalendarEvent

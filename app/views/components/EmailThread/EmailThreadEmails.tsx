@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react'
-import { Divider } from '@material-ui/core'
 
+import { Divider } from '@material-ui/core'
 import useMap from 'react-use/lib/useMap'
 
 import { EmailThreadItem } from './components/EmailThreadItem'

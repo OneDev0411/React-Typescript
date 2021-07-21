@@ -1,35 +1,28 @@
 import { useState } from 'react'
-import { Grid, Box, Typography } from '@material-ui/core'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { Grid, Box, Typography } from '@material-ui/core'
 import cn from 'classnames'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   setSelectedTask,
   setExpandTask,
   updateDealNotifications
 } from 'actions/deals'
-
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 import { IAppState } from 'reducers'
-
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
 import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
-import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
-
-import { TaskItems } from '../TaskItems'
+import ActionsButton from '../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../EnvelopeStatus'
 import { TaskNotifications } from '../Notification'
+import { TaskItems } from '../TaskItems'
+
 import { Activity } from './Activity'
-
-import ActionsButton from '../../../../components/ActionsButton'
-
 import { getTaskActions } from './get-task-actions'
-
-import { TaskIcon } from './TaskIcon'
-
 import { useStyles } from './styles'
+import { TaskIcon } from './TaskIcon'
 
 interface Props {
   index: number

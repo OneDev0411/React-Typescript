@@ -7,9 +7,7 @@ export function createList(listName: string) {
 
   cy.getByTestSelector('save-list-button').click()
 
-  cy.getByTestSelector('new-list-name-input')
-    .click()
-    .type(listName)
+  cy.getByTestSelector('new-list-name-input').click().type(listName)
 
   cy.getByTestSelector('save-list-button-modal').click()
 

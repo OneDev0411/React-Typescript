@@ -1,9 +1,9 @@
 import React from 'react'
-import { mdiCheck } from '@mdi/js'
+
 import { makeStyles } from '@material-ui/styles'
+import { mdiCheck } from '@mdi/js'
 
 import { Modal } from 'components/Modal'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(

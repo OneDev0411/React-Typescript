@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Field } from 'react-final-form'
 import { mdiBellOutline } from '@mdi/js'
+import { Field } from 'react-final-form'
 
 import { EventField } from '../EventField'
+
 import { Selector } from './Selector'
 
 interface Props {

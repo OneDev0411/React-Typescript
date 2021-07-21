@@ -1,14 +1,16 @@
 import React from 'react'
+
 import { fireEvent, render } from '@testing-library/react'
 import { keyBy } from 'lodash'
 
-import roleObj from 'fixtures/deal/roles/18284e38-6732-11e9-91b6-0a95998482ac.json'
-import checklistsArray from 'fixtures/deal/checklists.json'
 import dealObj from 'fixtures/deal/164ca424-6732-11e9-82bf-0a95998482ac.json'
+import checklistsArray from 'fixtures/deal/checklists.json'
+import roleObj from 'fixtures/deal/roles/18284e38-6732-11e9-91b6-0a95998482ac.json'
 import tasksArray from 'fixtures/deal/tasks.json'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
 
 import { TestBed } from '../../../../tests/unit/TestBed'
+
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 
 const role = roleObj as IDealRole

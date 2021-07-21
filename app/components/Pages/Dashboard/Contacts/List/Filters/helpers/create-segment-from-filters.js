@@ -1,5 +1,5 @@
-import { normalizeAttributeFilters, isAttributeFilter } from '../../utils'
 import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID } from '../../constants'
+import { normalizeAttributeFilters, isAttributeFilter } from '../../utils'
 
 /**
  * creates a search criteria for contacts filters

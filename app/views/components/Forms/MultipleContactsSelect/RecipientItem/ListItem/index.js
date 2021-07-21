@@ -1,8 +1,8 @@
 import React from 'react'
 
-import TagIcon from 'components/SvgIcons/Tag/TagIcon'
-import ListIcon from 'components/SvgIcons/List/ListIcon'
 import CloseIcon from 'components/SvgIcons/Close/CloseIcon'
+import ListIcon from 'components/SvgIcons/List/ListIcon'
+import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 
 import { Recipient, Title, DeleteButton, IconContainer } from '../styled'
 

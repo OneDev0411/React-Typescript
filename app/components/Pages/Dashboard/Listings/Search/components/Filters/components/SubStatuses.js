@@ -1,12 +1,12 @@
 import React from 'react'
-import { Field } from 'redux-form'
 
 import { mdiCheck } from '@mdi/js'
+import { Field } from 'redux-form'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Flag from '../FiltersListingsStatusRow/Flag'
 import { getStatusColor } from '../../../../../../../../utils/listing'
+import Flag from '../FiltersListingsStatusRow/Flag'
 
 const name = 'listing_statuses'
 

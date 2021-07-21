@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
+
 import { Box, Button } from '@material-ui/core'
-
 import { browserHistory } from 'react-router'
-
-import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
+import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import { useCreationContext } from '../../context/use-creation-context'
-
 import type { IDealSide } from '../../types'
 
 interface Props {

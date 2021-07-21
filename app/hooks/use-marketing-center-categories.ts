@@ -1,7 +1,6 @@
 import _values from 'lodash/values'
 
 import { SectionItem } from 'components/PageSideNav/types'
-
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 
 export function useMarketingCenterCategories(): SectionItem[] {

@@ -1,7 +1,7 @@
+import { CSSProperties } from 'react'
+
 import { Theme } from '@material-ui/core'
 import styled, { ThemeProps } from 'styled-components'
-
-import { CSSProperties } from 'react'
 
 import IconButton from '../../Button/IconButton'
 

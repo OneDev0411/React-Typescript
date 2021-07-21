@@ -1,10 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Field } from 'react-final-form'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+
 import { Box } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { Field } from 'react-final-form'
 
 import { Map } from '../../../Map'
+
 import { Location } from './Location'
 
 function LocationsComponent({ locations, input: { onChange } }) {

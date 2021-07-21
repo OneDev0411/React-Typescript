@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Badge,
   ListItemAvatar,
@@ -8,13 +9,12 @@ import {
 } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
 
-import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
-
-import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { outlookIcon } from 'components/SvgIcons/icons'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { Avatar } from 'components/Avatar'
+import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { outlookIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { GOOGLE_CREDENTIAL } from 'constants/oauth-accounts'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

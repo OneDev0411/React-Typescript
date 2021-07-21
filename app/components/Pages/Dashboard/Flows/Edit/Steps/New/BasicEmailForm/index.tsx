@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react'
-import { Form } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
-
 import { mdiScriptTextOutline } from '@mdi/js'
+import { Form } from 'react-final-form'
 
-import { BaseFormProps, BasicEmailFormData } from '../types'
-import { BaseFormLayout } from '../components/BaseFormLayout'
-import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
+import { Title } from '../components/BaseFields/Title'
+import { BaseFormLayout } from '../components/BaseFormLayout'
 import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
 import { basicEmailFormPreSaveFormat } from '../helpers/pre-save-format'
+import { BaseFormProps, BasicEmailFormData } from '../types'
 
 interface Props extends BaseFormProps {
   defaultSelectedTemplate?: UUID

@@ -5,10 +5,7 @@ export function addTagFilter(index: number = 0) {
 
   // we can add more options for selecting tag and operator
 
-  cy.getByTestSelector('filter-items-list')
-    .children()
-    .eq(index)
-    .click()
+  cy.getByTestSelector('filter-items-list').children().eq(index).click()
 
   return cy.getByTestSelector('filter-done-button').click()
 }
@@ -16,22 +13,18 @@ export function addTagFilter(index: number = 0) {
 export function addOpenHouseFilter(index: number = 0) {
   openNewFilterDropdown('Open House')
 
-  return cy
-    .getByTestSelector('filter-item')
-    .eq(index)
-    .click()
+  return cy.getByTestSelector('filter-item').eq(index).click()
 }
 
 export function addFlowFilter(index: number = 0) {
   openNewFilterDropdown('Flows')
 
-  return cy
-    .getByTestSelector('filter-item')
-    .eq(index)
-    .click()
+  return cy.getByTestSelector('filter-item').eq(index).click()
 }
 
-function openNewFilterDropdown(filterType: 'Tag' | 'Open House' | 'Flows' | 'Origin') {
+function openNewFilterDropdown(
+  filterType: 'Tag' | 'Open House' | 'Flows' | 'Origin'
+) {
   cy.getByTestSelector('add-filter').click()
 
   return cy.getByTestSelector(`add-filter-item-${filterType}`).click()

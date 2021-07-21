@@ -4,11 +4,10 @@ import { isSelling } from 'models/Deal/helpers/context'
 import { hasUserAccessToAgentNetwork } from 'utils/user-teams'
 
 import AgentNetwork from './AgentNetwork'
+import EmailMarketing from './EmailMarketing'
 import MyMarketingMatters from './MyMarketingMatters'
 import OpenHouse from './OpenHouse'
-import EmailMarketing from './EmailMarketing'
 import SocialMarketing from './SocialMarketing'
-
 import { MarketingContainer } from './styled'
 
 interface Props {

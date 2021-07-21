@@ -1,3 +1,4 @@
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 import {
   getField as getDealField,
   getStatus as getDealStatus
@@ -7,7 +8,6 @@ import {
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
-import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 
 /**
  * Normalizing associations

@@ -1,16 +1,16 @@
-import Flex from 'styled-flex-component'
-import { Field } from 'react-final-form'
-
 import * as React from 'react'
-import { mdiTrashCanOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { mdiTrashCanOutline } from '@mdi/js'
+import { Field } from 'react-final-form'
+import Flex from 'styled-flex-component'
 
 import IconButton from 'components/Button/IconButton'
 import { TextInput } from 'components/Forms/TextInput'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { permissions } from '../permissions'
 
 import { PermissionCell } from './PermissionCell'
-import { permissions } from '../permissions'
 
 interface Props {
   fieldName: string

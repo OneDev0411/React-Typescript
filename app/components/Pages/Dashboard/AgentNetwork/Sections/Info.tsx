@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Grid,
   Box,
@@ -15,8 +16,8 @@ import {
   mdiArrowRight
 } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

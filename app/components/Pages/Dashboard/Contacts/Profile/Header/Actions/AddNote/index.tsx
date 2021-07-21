@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core'
-
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-
-import { IAppState } from 'reducers'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { connect } from 'react-redux'
 
 import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { IAppState } from 'reducers'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 
 interface StateProps {
   attributeDefs: any

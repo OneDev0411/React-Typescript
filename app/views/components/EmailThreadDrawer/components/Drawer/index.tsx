@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { useNonBlockingDrawerStyles } from 'utils/../styles/use-non-blocking-drawer-styles'
 import OverlayDrawer, { DrawerProps } from 'components/OverlayDrawer'
+import { useNonBlockingDrawerStyles } from 'utils/../styles/use-non-blocking-drawer-styles'
 
 /**
  * A drawer for showing emails of an email thread.

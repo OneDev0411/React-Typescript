@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react'
+
 import { Helmet } from 'react-helmet'
 
 // import CoverImage from './components/CoverImage'
+import ChangePassword from './components/ChangePassword'
 import PersonalInfo from './components/PersonalInfo'
 import Timezone from './components/Timezone'
-import ChangePassword from './components/ChangePassword'
 
 function Profile() {
   return (

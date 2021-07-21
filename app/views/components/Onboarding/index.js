@@ -5,14 +5,14 @@ import React, {
   useMemo,
   useState
 } from 'react'
-import PropTypes from 'prop-types'
 
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 import Joyride from 'react-joyride'
+import { connect } from 'react-redux'
 
 import { OnboardingStepCard } from 'components/Onboarding/OnboardingStepCard'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 import { putUserSetting } from 'models/user/put-user-setting'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 const ONBOARDING_SETTING_KEY_PREFIX = 'onboarding_'
 

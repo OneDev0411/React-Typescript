@@ -1,10 +1,10 @@
 import React from 'react'
+
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
+import { SectionItem } from 'components/PageSideNav/types'
 import { goTo } from 'utils/go-to'
 import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
-
-import { SectionItem } from 'components/PageSideNav/types'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -21,7 +21,10 @@ const CategoryTypes = ({
         checked={allSelected}
         containerStyle={containerStyle}
         onChange={() =>
-          onSelectOneCategoriesTypes(types.map(type => type.name), allSelected)
+          onSelectOneCategoriesTypes(
+            types.map(type => type.name),
+            allSelected
+          )
         }
       >
         All

@@ -1,7 +1,6 @@
-import preSearchFormat from '../helpers/pre-search-format'
-
 import Fetch from '../../../services/fetch'
 import { associations as defaultAssociations } from '../helpers/default-query'
+import preSearchFormat from '../helpers/pre-search-format'
 
 // TODO: refactor contacts models
 

@@ -4,9 +4,10 @@
  *  - "Display Name <email address>"
  *  - "email address"
  */
-export function parseEmailRecipient(
-  input: string
-): { emailAddress: string; displayName: string } {
+export function parseEmailRecipient(input: string): {
+  emailAddress: string
+  displayName: string
+} {
   const [, displayName = '', emailAddress = input] =
     input.match(/(.*)<(.+)>/) || []
 

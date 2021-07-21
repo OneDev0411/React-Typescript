@@ -1,16 +1,13 @@
-import { Field, Form } from 'react-final-form'
-
 import * as React from 'react'
 
+import { Field, Form } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import { Modal, ModalHeader } from 'components/Modal'
-
-import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
 import { Checkbox } from 'components/Checkbox'
 import { Divider } from 'components/Divider'
-
 import { FieldError } from 'components/final-form-fields/FieldError'
+import { MultipleContactsSelect } from 'components/Forms/MultipleContactsSelect'
+import { Modal, ModalHeader } from 'components/Modal'
 
 import { Button, RolesLabel } from './styled'
 

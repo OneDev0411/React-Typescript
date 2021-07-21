@@ -31,9 +31,7 @@ function getUrlParts(url) {
 function getCurrentLocation() {
   const currentLocation = browserHistory.getCurrentLocation()
 
-  return `${currentLocation.pathname}${currentLocation.search}${
-    currentLocation.hash
-  }`
+  return `${currentLocation.pathname}${currentLocation.search}${currentLocation.hash}`
 }
 
 /**

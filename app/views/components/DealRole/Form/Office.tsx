@@ -1,13 +1,13 @@
 import React from 'react'
-import FinalForm from 'react-final-form'
-import idx from 'idx/lib/idx'
 
 import { Typography, Button, Box } from '@material-ui/core'
-
-import { TextInput } from './form-fields/TextInput'
-import { Address } from './form-fields/Address'
+import idx from 'idx/lib/idx'
+import FinalForm from 'react-final-form'
 
 import Field from '../components/CustomField'
+
+import { Address } from './form-fields/Address'
+import { TextInput } from './form-fields/TextInput'
 
 interface Props {
   initialValues: IDealRole

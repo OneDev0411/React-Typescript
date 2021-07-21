@@ -1,8 +1,8 @@
 import React from 'react'
-import { ContentBlock, EditorState } from 'draft-js'
-import { IconButton, Tooltip } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { IconButton, Tooltip } from '@material-ui/core'
+import { ContentBlock, EditorState } from 'draft-js'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import {
   imageAlignLeft,
@@ -10,11 +10,12 @@ import {
   imageAlignCenter,
   imageAlignDefault
 } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { AtomicBlockEntityData } from '../../../types'
-import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
+import { AtomicBlockEntityData } from '../../../types'
 import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 
 type Alignment = AtomicBlockEntityData['alignment']
 

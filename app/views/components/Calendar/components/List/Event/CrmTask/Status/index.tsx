@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
 
 import { Tooltip } from '@material-ui/core'
-
-import { updateTaskStatus } from 'models/tasks/update-task-status'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { updateTaskStatus } from 'models/tasks/update-task-status'
 
 interface Props {
   event: ICalendarEvent

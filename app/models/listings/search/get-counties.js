@@ -12,6 +12,7 @@ const getCounties = async query => {
       label: title,
       value: title
     }))
+
     return { options }
   } catch (error) {
     // console.log(error.message)

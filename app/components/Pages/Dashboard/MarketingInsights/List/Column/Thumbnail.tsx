@@ -1,8 +1,8 @@
 import React from 'react'
+
 import { mdiEmailOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {

@@ -1,6 +1,5 @@
-import { useSelector } from 'react-redux'
-
 import { makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 

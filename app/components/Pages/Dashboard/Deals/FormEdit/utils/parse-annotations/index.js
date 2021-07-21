@@ -1,9 +1,7 @@
-import { groupBy } from 'views/utils/object-helpers'
-
-import uuid from 'utils/uuid'
 import importPdfJs from 'utils/import-pdf-js'
-
 import { isAddressContext } from 'utils/is-address-context'
+import uuid from 'utils/uuid'
+import { groupBy } from 'views/utils/object-helpers'
 
 import { populateFormValues } from '../populate-form-values'
 

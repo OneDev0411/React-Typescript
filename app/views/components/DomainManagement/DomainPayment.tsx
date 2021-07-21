@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
 import { QuestionForm, QuestionTitle } from 'components/QuestionWizard'
+import { IWizardState } from 'components/QuestionWizard/context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import useAsync from 'hooks/use-async'
 import getStripeCustomers from 'models/payments/get-stripe-customers'
 
-import useAsync from 'hooks/use-async'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-
-import { IWizardState } from 'components/QuestionWizard/context'
-
+import DomainLoading from './DomainLoading'
 import DomainPaymentForm from './DomainPaymentForm'
 import DomainPaymentLastCard from './DomainPaymentLastCard'
-import DomainLoading from './DomainLoading'
 
 interface DomainPaymentProps {
   domainPrice: string
@@ -33,7 +30,11 @@ function DomainPayment({
   const [showForm, setShowForm] = useState(false)
   const wizard = useWizardContext()
 
-  const { data: customers, run, isLoading: isLoadingCustomers } = useAsync({
+  const {
+    data: customers,
+    run,
+    isLoading: isLoadingCustomers
+  } = useAsync({
     data: defaultCustomers
   })
 

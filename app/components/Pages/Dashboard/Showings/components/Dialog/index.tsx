@@ -1,4 +1,5 @@
 import { ReactNode, MouseEvent } from 'react'
+
 import {
   Box,
   Dialog as MDialog,
@@ -9,9 +10,8 @@ import {
   makeStyles,
   Typography
 } from '@material-ui/core'
-import classNames from 'classnames'
-
 import { mdiClose } from '@mdi/js'
+import classNames from 'classnames'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 

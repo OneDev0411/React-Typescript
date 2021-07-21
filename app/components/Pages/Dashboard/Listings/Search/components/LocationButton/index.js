@@ -1,14 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { mdiCrosshairsGps } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiCrosshairsGps } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
 import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
+import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
 
 import { Button } from './styled'
 

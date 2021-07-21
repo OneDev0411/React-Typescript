@@ -1,11 +1,13 @@
 import React from 'react'
+
+import { mdiChevronDown } from '@mdi/js'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
-import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Card from '../Card'
+
 import { Item } from './Item'
 import { SearchInput } from './SearchInput'
 import { Button } from './styles'

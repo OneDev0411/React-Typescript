@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Box, BoxProps } from '@material-ui/core'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'

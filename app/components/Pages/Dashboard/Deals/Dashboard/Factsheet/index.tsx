@@ -1,28 +1,22 @@
 import React from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import { upsertContexts, approveContext } from 'actions/deals'
-
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 import { getContext } from 'models/Deal/helpers/context/get-context'
 import { getContextValue } from 'models/Deal/helpers/context/get-context-value'
-import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { validateContext } from 'models/Deal/helpers/context/validate-context'
-
 import { IAppState } from 'reducers'
-
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
-import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
-
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
-
-import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
-
 import { DateField } from './DateField'
-import { TextField } from './TextField'
-
-import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
 import { isContextApproved } from './helpers/is-context-approved'
+import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
+import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
+import { TextField } from './TextField'
 
 interface Props {
   deal: IDeal

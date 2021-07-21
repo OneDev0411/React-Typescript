@@ -1,27 +1,25 @@
 import React from 'react'
-import { FORM_ERROR } from 'final-form'
-import { browserHistory, WithRouterProps } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { Form, Field } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { FORM_ERROR } from 'final-form'
+import { Form, Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory, WithRouterProps } from 'react-router'
 
+import { updateUser } from 'actions/user'
+import { MUITextInput } from 'components/Forms/MUITextInput'
+import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { editUser } from 'models/user/edit'
+import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 import { isPhoneNumber } from 'utils/validations'
 
-import { IAppState } from 'reducers'
-import { updateUser } from 'actions/user'
-
-import { editUser } from 'models/user/edit'
-
-import { MUITextInput } from 'components/Forms/MUITextInput'
-import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
-import Header from '../Header'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
-import Container from '../Container'
 import { useCommonStyles } from '../common-styles'
+import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
 import { useDocumentTitle } from '../use-document-title'
 
 interface FormValues {

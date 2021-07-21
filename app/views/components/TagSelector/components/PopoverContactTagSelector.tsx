@@ -1,4 +1,5 @@
 import React, { ReactNode, MouseEvent, useState } from 'react'
+
 import {
   Box,
   Button,
@@ -8,27 +9,26 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { mdiCogOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
-import { mdiCogOutline } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getContactsTags } from 'actions/contacts'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { bulkTag } from 'models/contacts/bulk-tag'
 import {
   generateContactFilters,
   ContactFilterGenerator
 } from 'models/contacts/bulk-tag/utils/generate-contact-filters'
-import { getContactsTags } from 'actions/contacts'
-
 import { noop } from 'utils/helpers'
+
+import { SelectorOption } from '../type'
 
 import {
   BaseTagSelector,
   Props as BaseTagSelectorProps
 } from './BaseTagSelector'
-import { SelectorOption } from '../type'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

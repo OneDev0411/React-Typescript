@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
-import cn from 'classnames'
+
 import { MenuItem, Popover, useTheme } from '@material-ui/core'
 import {
   mdiViewGridOutline,
   mdiMapLegend,
   mdiFormatListBulleted
 } from '@mdi/js'
+import cn from 'classnames'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-
-import { useIconStyles } from 'styles/use-icon-styles'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useIconStyles } from 'styles/use-icon-styles'
 
 const listingViewOptions = [
   {

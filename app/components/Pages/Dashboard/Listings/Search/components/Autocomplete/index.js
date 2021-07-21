@@ -1,35 +1,36 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
-import { batchActions } from 'redux-batched-actions'
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 
-import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
-import { getPlace } from 'models/listings/search/get-place'
-import { searchListings } from 'models/listings/search/search-listings'
-import { getBounds } from 'utils/map'
-import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-import { getListingAddress } from 'utils/listing'
-import {
-  loadMapLibraries,
-  isMapLibrariesLoaded
-} from '@app/utils/google-map-api'
-import {
-  reset as resetSearchType,
-  setSearchType
-} from 'actions/listings/search/set-type'
-import searchActions from 'actions/listings/search'
-import { getListingsByQuery } from 'actions/listings/search/get-listings-by-query'
-import { goToPlace, setMapProps } from 'actions/listings/map'
-import resetAreasOptions from 'actions/listings/search/reset-areas-options'
-import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
-import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import {
   SEARCH_BY_GOOGLE_SUGGESTS,
   SEARCH_BY_QUERY
 } from '@app/constants/listings/search'
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
+import { goToPlace, setMapProps } from 'actions/listings/map'
+import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
+import searchActions from 'actions/listings/search'
+import { getListingsByQuery } from 'actions/listings/search/get-listings-by-query'
+import resetAreasOptions from 'actions/listings/search/reset-areas-options'
+import {
+  reset as resetSearchType,
+  setSearchType
+} from 'actions/listings/search/set-type'
+import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
+import { getPlace } from 'models/listings/search/get-place'
+import { searchListings } from 'models/listings/search/search-listings'
+import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
+import { getListingAddress } from 'utils/listing'
+import { getBounds } from 'utils/map'
 
 import {
   SearchContainer,

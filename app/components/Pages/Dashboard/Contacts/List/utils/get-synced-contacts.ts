@@ -1,5 +1,4 @@
 import { IAppState } from 'reducers'
-
 import { isDeletedOrRevoked } from 'utils/oauth-provider'
 
 export interface SyncedContacts {

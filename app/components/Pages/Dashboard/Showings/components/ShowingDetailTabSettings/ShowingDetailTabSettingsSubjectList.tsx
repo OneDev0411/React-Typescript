@@ -1,7 +1,6 @@
 import { Box, makeStyles } from '@material-ui/core'
 
 import { showingDetailSettingsTabs } from './constants'
-
 import ShowingDetailTabSettingsSubjectListItem from './ShowingDetailTabSettingsSubjectListItem'
 import {
   ShowingDetailSettingsTabType,

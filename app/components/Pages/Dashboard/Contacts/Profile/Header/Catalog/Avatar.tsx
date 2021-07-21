@@ -1,20 +1,19 @@
 import React, { useState, useCallback } from 'react'
+
 import { connect } from 'react-redux'
 
-import uploadAttachments from 'models/contacts/upload-attachments'
-import { updateContact } from 'models/contacts/update-contact'
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 import {
   getContactAvatar,
   getContactNameInitials
 } from 'models/contacts/helpers'
-
+import { updateContact } from 'models/contacts/update-contact'
+import uploadAttachments from 'models/contacts/upload-attachments'
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
-
-import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
-import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
+import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
 
 interface Props {
   attributeDefs: IAttributeDefsState

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Tooltip, IconButton } from '@material-ui/core'
-import { Editor } from 'grapesjs'
-import { useTheme } from '@material-ui/core/styles'
 
+import { Tooltip, IconButton } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
 import { mdiUndoVariant, mdiRedoVariant } from '@mdi/js'
+import { Editor } from 'grapesjs'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

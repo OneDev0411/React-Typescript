@@ -1,14 +1,13 @@
 import { Box } from '@material-ui/core'
-
 import { FormProps, FormRenderProps } from 'react-final-form'
 
 import { FormPhoneField, FormTextField } from 'components/final-form-fields'
 
+import { requiredTextValidator } from './helpers'
 import ShowingRoleFormCheckboxGroupField from './ShowingRoleFormCheckboxGroupField'
 import ShowingRoleFormNameField from './ShowingRoleFormNameField'
 import ShowingRoleYesNoRadioGroupField from './ShowingRoleYesNoRadioGroupField'
 import { ShowingRoleFormValues } from './types'
-import { requiredTextValidator } from './helpers'
 
 export interface ShowingRoleFormFieldsProps
   extends Pick<FormProps<ShowingRoleFormValues>, 'initialValues'>,

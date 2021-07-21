@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
+
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import ListingMarketing from '@app/views/components/ListingMarketing'
+import getListing from '@app/models/listings/listing/get-listing'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import ListingHeader from '@app/views/components/ListingHeader'
-
-import getListing from '@app/models/listings/listing/get-listing'
+import ListingMarketing from '@app/views/components/ListingMarketing'
 
 export default function ListingMarketingPage({
   params,

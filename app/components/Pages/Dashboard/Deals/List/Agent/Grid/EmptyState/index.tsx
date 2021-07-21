@@ -1,5 +1,5 @@
-import { browserHistory } from 'react-router'
 import { Button } from '@material-ui/core'
+import { browserHistory } from 'react-router'
 
 import { ZeroState } from 'partials/ZeroState'
 

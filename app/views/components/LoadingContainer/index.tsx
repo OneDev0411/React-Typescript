@@ -1,8 +1,9 @@
 import React, { CSSProperties } from 'react'
+
 import Flex from 'styled-flex-component'
 
-import { primary } from 'views/utils/colors'
 import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { primary } from 'views/utils/colors'
 
 interface Props {
   className?: string

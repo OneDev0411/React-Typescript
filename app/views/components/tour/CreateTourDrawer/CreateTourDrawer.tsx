@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
+
 import { Box, Button, Typography } from '@material-ui/core'
 import { Theme, useTheme } from '@material-ui/core/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
-import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-
-import Drawer from 'components/OverlayDrawer'
-import { TourDrawer } from 'components/tour/TourDrawer'
 import Loading from 'components/LoadingContainer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import Drawer from 'components/OverlayDrawer'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { TourDrawer } from 'components/tour/TourDrawer'
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 
 import TourItem from './TourItem'
 

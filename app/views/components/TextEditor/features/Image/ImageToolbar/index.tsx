@@ -1,6 +1,4 @@
 import React from 'react'
-import { ContentBlock, EditorState } from 'draft-js'
-import { mdiTrashCanOutline } from '@mdi/js'
 
 import {
   Box,
@@ -11,14 +9,17 @@ import {
   Theme,
   Tooltip
 } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
+import { ContentBlock, EditorState } from 'draft-js'
 
-import { ClassesProps } from 'utils/ts-utils'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { ClassesProps } from 'utils/ts-utils'
+
+import { removeBlock } from '../../../modifiers/remove-block'
 
 import { BlockAlignmentButtons } from './AlignmentButtons'
 import { ImageSizeEditor } from './ImageSizeEditor'
-import { removeBlock } from '../../../modifiers/remove-block'
 
 const styles = (theme: Theme) =>
   createStyles({

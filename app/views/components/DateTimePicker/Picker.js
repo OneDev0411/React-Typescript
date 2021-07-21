@@ -1,12 +1,13 @@
 import React from 'react'
-import DatePicker from 'react-day-picker'
+
 import { Button } from '@material-ui/core'
+import DatePicker from 'react-day-picker'
 
 import { Divider } from 'components/Divider'
 import TimeInput from 'components/TimeInput'
 
-import { PickerContent } from './styled'
 import { dateFallback, pickerSaveButtonText } from './helpers'
+import { PickerContent } from './styled'
 
 function Picker(props) {
   const isDateSet = !!props.selectedDate

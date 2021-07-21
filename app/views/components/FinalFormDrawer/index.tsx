@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react'
-import { Form, FormProps, FormRenderProps } from 'react-final-form'
-import arrayMutators from 'final-form-arrays'
+
 import { Tooltip } from '@material-ui/core'
-
 import { FormApi } from 'final-form'
+import arrayMutators from 'final-form-arrays'
+import { Form, FormProps, FormRenderProps } from 'react-final-form'
 
-import Drawer from '../OverlayDrawer'
 import ActionButton from '../Button/ActionButton'
+import Drawer from '../OverlayDrawer'
 
 interface FooterRenderProps {
   isSubmitDisabled: boolean

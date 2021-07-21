@@ -1,20 +1,17 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { Box, Typography, MenuItem } from '@material-ui/core'
-
 import { mdiAccountPlusOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
-import Deal from 'models/Deal'
-import { BaseDropdown } from 'components/BaseDropdown'
 import { Avatar } from 'components/Avatar'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
+import { BaseDropdown } from 'components/BaseDropdown'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import Deal from 'models/Deal'
 
 import { ROLE_NAMES, roleName, isPrimaryAgent } from '../../../utils/roles'
-
+// eslint-disable-next-line import/no-named-as-default
 import RoleAgentIntegration from '../AgentIntegration'
 
 import { Container, RoleButton, MenuContainer } from './styled'

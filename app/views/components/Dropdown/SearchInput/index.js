@@ -1,10 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
+
 import { useTheme } from '@material-ui/core/styles'
 import { mdiMagnify } from '@mdi/js'
+import styled from 'styled-components'
 
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { grey, primary } from '../../../utils/colors'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 const Container = styled.div`
   height: 32px;

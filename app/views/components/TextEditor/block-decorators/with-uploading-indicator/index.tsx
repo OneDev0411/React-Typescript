@@ -1,12 +1,14 @@
 import React from 'react'
+
+import classNames from 'classnames'
 import { ContentBlock, ContentState } from 'draft-js'
 import { wrapDisplayName } from 'recompose'
-import classNames from 'classnames'
 
 import IconCircleSpinner from '../../../SvgIcons/CircleSpinner/IconCircleSpinner'
-import { LoadingWrapper } from './styled'
 import { getAlignmentStyles } from '../../utils/get-alignment-styles'
 import { getSizeStyles } from '../../utils/get-size-styles'
+
+import { LoadingWrapper } from './styled'
 
 interface Props {
   block: ContentBlock

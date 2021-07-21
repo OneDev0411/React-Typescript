@@ -1,41 +1,35 @@
 import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
-
 import { InjectedRouter, Route } from 'react-router'
-
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
-
 import useAsync from 'hooks/use-async'
-
 import createShowing from 'models/showing/create-showing'
-
 import { selectActiveTeamId } from 'selectors/team'
 
-import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+import ShowingCloseButton from '../../components/ShowingCloseButton'
+import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
+import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
+import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
+import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
+import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
-import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
-import ShowingStepInstructions from '../../components/ShowingStepInstructions'
-import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
-import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
-import useShowingAvailabilitiesState from './use-showing-availabilities-state'
-import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
-import ShowingCloseButton from '../../components/ShowingCloseButton'
-
-import useShowingRoles from './use-showing-roles'
+import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 import {
   goAndShowNotificationTypes,
   showingDurationOptions
 } from '../../constants'
-import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
 import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
-import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
+import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
+import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+
+import useShowingAvailabilitiesState from './use-showing-availabilities-state'
+import useShowingRoles from './use-showing-roles'
 
 interface CreateShowingProps {
   router: InjectedRouter

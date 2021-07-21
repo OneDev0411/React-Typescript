@@ -13,21 +13,20 @@ import {
 
 import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 
-import { Undo } from './plugins/Undo'
-import { Redo } from './plugins/Redo'
-import { Delete } from './plugins/Delete'
 import { Crop } from './plugins/Crop'
-import { Draw } from './plugins/Draw'
-import { Text } from './plugins/Text'
-import { Rotate } from './plugins/Rotate'
-import { Image } from './plugins/Image'
-import { Flip } from './plugins/Flip'
-import { Filters } from './plugins/Filters'
 import { CropActions } from './plugins/Crop/CropActions'
+import { Delete } from './plugins/Delete'
+import { Draw } from './plugins/Draw'
 import { DrawActions } from './plugins/Draw/DrawActions'
-import { TextActions } from './plugins/Text/TextActions'
+import { Filters } from './plugins/Filters'
 import { FilterActions } from './plugins/Filters/FilterActions'
-
+import { Flip } from './plugins/Flip'
+import { Image } from './plugins/Image'
+import { Redo } from './plugins/Redo'
+import { Rotate } from './plugins/Rotate'
+import { Text } from './plugins/Text'
+import { TextActions } from './plugins/Text/TextActions'
+import { Undo } from './plugins/Undo'
 import type { Actions, ImageEditor } from './types'
 
 const useStyles = makeStyles(

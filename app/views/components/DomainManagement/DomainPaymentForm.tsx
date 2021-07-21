@@ -1,21 +1,16 @@
 import React, { FormEvent, useState } from 'react'
 
 import { Button } from '@material-ui/core'
-
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js'
-
 import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
+import useAsync from 'hooks/use-async'
+import useSafeDispatch from 'hooks/use-safe-dispatch'
 import createStripeToken, {
   CreateStripeToken
 } from 'models/payments/create-stripe-token'
-import useAsync from 'hooks/use-async'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
-
-import useSafeDispatch from 'hooks/use-safe-dispatch'
 
 import DomainPaymentActions from './DomainPaymentActions'
 import DomainPaymentFormCardField, {
@@ -92,9 +87,10 @@ function DomainPaymentForm({
     )
   }
 
-  const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] = event => {
-    setActiveSubmit(event.complete)
-  }
+  const handleCardChange: DomainPaymentFormCardFieldProps['onChange'] =
+    event => {
+      setActiveSubmit(event.complete)
+    }
 
   const fieldErrorText = data?.error?.message
 

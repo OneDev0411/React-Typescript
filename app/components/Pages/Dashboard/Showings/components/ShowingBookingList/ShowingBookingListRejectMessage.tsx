@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
+
 import { Button, Box } from '@material-ui/core'
 
-import Dialog from '../Dialog'
-import ShowingDialogCard from './ShowingDialogCard'
 import { getShowingRoleLabel } from '../../helpers'
+import Dialog from '../Dialog'
+
+import ShowingDialogCard from './ShowingDialogCard'
 
 interface PersonMessage {
   role: string

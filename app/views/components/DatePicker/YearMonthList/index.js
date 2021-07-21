@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { Container } from './styled'
 import { BasicDropdown } from '../../BasicDropdown'
+
+import { Container } from './styled'
 
 function itemToString(item) {
   return item.label

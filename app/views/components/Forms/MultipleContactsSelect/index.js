@@ -2,12 +2,12 @@ import React from 'react'
 
 import Flex, { FlexItem } from 'styled-flex-component'
 
+import { FieldError } from '../../final-form-fields/FieldError'
 import { InputContainer, InputLabel, InputRequired } from '../styled'
-import { RecipientContainer } from './styled'
 
 import AddRecipient from './AddRecipient'
 import { RecipientItem } from './RecipientItem'
-import { FieldError } from '../../final-form-fields/FieldError'
+import { RecipientContainer } from './styled'
 
 /**
  * @deprecated in favor of {@link EmailRecipientsChipsInput}

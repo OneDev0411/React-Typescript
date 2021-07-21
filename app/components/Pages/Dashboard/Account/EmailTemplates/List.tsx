@@ -1,8 +1,6 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
+
 import {
   makeStyles,
   Theme,
@@ -10,27 +8,26 @@ import {
   Box,
   IconButton
 } from '@material-ui/core'
-import classNames from 'classnames'
-import { mdiTrashCanOutline } from '@mdi/js'
-
 import { Tooltip } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
+import classNames from 'classnames'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
+import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
+import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import Table from 'components/Grid/Table'
+import { TableColumn } from 'components/Grid/Table/types'
+import LoadingContainer from 'components/LoadingContainer'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import {
   selectEmailTemplates,
   selectEmailTemplatesIsFetching
 } from 'reducers/email-templates'
-
-import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
-import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
-
 import { getActiveTeamId } from 'utils/user-teams'
-
-import Table from 'components/Grid/Table'
-import { TableColumn } from 'components/Grid/Table/types'
-import LoadingContainer from 'components/LoadingContainer'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   name: {

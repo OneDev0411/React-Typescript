@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core'
 
+import { makeStyles, Theme } from '@material-ui/core'
 import { mdiWeb, mdiFacebook, mdiInstagram, mdiLinkedin } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

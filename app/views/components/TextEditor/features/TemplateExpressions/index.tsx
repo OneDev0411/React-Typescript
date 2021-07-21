@@ -1,15 +1,16 @@
 import React, { useContext } from 'react'
 
-import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import createTemplateExpressionsPlugin from './template-expressions-plugin'
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup,
   TemplateVariablesButton
 } from '../../../TemplateVariablesButton'
-import { insertTemplateVariable } from './modifiers/insert-template-expression'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
 import { EditorContext } from '../../editor-context'
+import { useEditorPlugins } from '../../hooks/use-editor-plugins'
+
+import { insertTemplateVariable } from './modifiers/insert-template-expression'
+import createTemplateExpressionsPlugin from './template-expressions-plugin'
 
 interface Props {
   /**

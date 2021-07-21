@@ -1,23 +1,20 @@
 import React, { useRef } from 'react'
 
 import { Button, Box } from '@material-ui/core'
+import { makeStyles } from '@material-ui/styles'
 import { Form, FormSpy } from 'react-final-form'
 
-import { makeStyles } from '@material-ui/styles'
-
 import Drawer from 'components/OverlayDrawer'
-
-import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
-
 import { SET_FORM_META } from 'deals/contexts/actions-context/constants'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 import type { FormValues } from '../types'
 
-import { Recipients } from './form/Recipients'
-import { From } from './form/From'
-import { Subject } from './form/Subject'
-import { Message } from './form/Message'
 import { Attachments } from './form/Attachments'
+import { From } from './form/From'
+import { Message } from './form/Message'
+import { Recipients } from './form/Recipients'
+import { Subject } from './form/Subject'
 
 interface Props {
   user: IUser

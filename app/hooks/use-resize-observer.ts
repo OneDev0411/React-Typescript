@@ -8,9 +8,7 @@ import { useMemo, useRef } from 'react'
  *   support it
  */
 
-export function useResizeObserver(
-  callback
-): {
+export function useResizeObserver(callback: () => void): {
   observe: (target: Node) => void
   disconnect: () => void
 } {

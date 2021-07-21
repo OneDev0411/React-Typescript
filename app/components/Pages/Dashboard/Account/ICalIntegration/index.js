@@ -1,23 +1,21 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
+import { Box, Typography } from '@material-ui/core'
 import omit from 'lodash/omit'
 import { Helmet } from 'react-helmet'
-import { Box, Typography } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-
 import getCalenderFeedSetting from 'models/user/calendar-feed-setting'
 import { getTeamAvailableMembers } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
 
-import TeamType from './TeamTypes'
 import SelectedTypes from './AllTypes'
 import GenerateUrl from './GenerateUrl'
-import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
-
 import { ICalContainer, PageDescription } from './styled'
+import TeamType from './TeamTypes'
+import UpdateGenerateUrlInfo from './UpdateGenerateUrlInfo'
 
 class ICalIntegration extends React.Component {
   state = {

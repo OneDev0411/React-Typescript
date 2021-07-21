@@ -1,7 +1,7 @@
-import upload from '../../models/user/upload-cover-image'
 import * as actionsType from '../../constants/user'
+import upload from '../../models/user/upload-cover-image'
 
-const uploadCoverImage = image => async (dispatch, getState) => {
+const uploadCoverImage = image => async dispatch => {
   dispatch({
     type: actionsType.UPLOAD_COVER_IMAGE_REQUEST
   })

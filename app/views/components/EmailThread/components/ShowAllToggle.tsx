@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {
   ButtonBase,
   createStyles,
@@ -5,7 +7,6 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import React from 'react'
 import { ButtonBaseProps } from '@material-ui/core/ButtonBase'
 import classNames from 'classnames'
 

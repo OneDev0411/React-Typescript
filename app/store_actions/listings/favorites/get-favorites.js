@@ -1,6 +1,6 @@
-import { getFetchingStatus } from '../../../reducers/listings'
 import * as listingsTypes from '../../../constants/listings'
 import api from '../../../models/listings/favorites'
+import { getFetchingStatus } from '../../../reducers/listings'
 
 const getFavorites = user => (dispatch, getState) => {
   if (getFetchingStatus(getState().favorites.listings)) {

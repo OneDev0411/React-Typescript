@@ -1,22 +1,22 @@
 import React from 'react'
-import { useField } from 'react-final-form'
+
 import { List, ListItem, Tooltip } from '@material-ui/core'
-import { useDropboxChooser } from 'use-dropbox-chooser'
 import { mdiAttachment, mdiDropbox, mdiProgressUpload } from '@mdi/js'
+import { useField } from 'react-final-form'
+import { useDropboxChooser } from 'use-dropbox-chooser'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import {
   uploadEmailAttachment,
   UploadOrigin
 } from 'models/email/upload-email-attachment'
 
-import { DropdownToggleButton } from '../../../DropdownToggleButton'
-import { BaseDropdown } from '../../../BaseDropdown'
-import { FilePicker } from '../../../FilePicker'
-import AddDealFile from '../AddDealFile'
-import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import config from '../../../../../../config/public'
+import { BaseDropdown } from '../../../BaseDropdown'
+import { DropdownToggleButton } from '../../../DropdownToggleButton'
+import { FilePicker } from '../../../FilePicker'
+import { useUploadAttachment } from '../../helpers/use-upload-attachment'
+import AddDealFile from '../AddDealFile'
 
 interface Props {
   deal?: IDeal

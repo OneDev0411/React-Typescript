@@ -1,6 +1,6 @@
-import isEmail from 'validator/lib/isEmail'
 import { EditorState } from 'draft-js'
 import { getSelectionEntity, getSelectionText } from 'draftjs-utils'
+import isEmail from 'validator/lib/isEmail'
 
 import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 

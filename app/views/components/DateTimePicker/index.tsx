@@ -1,19 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react'
 
+import { Button, Popover } from '@material-ui/core'
 import DayPicker from 'react-day-picker'
 import Flex from 'styled-flex-component'
 
-import { Button, Popover } from '@material-ui/core'
-
 import { getTime } from '../../../utils/get-time'
 import { setTime } from '../../../utils/set-time'
-
 import { Divider } from '../Divider'
-
 import TimeInput from '../TimeInput'
 
-import { PickerContainer } from './styled'
 import { isToday, formatDate } from './helpers'
+import { PickerContainer } from './styled'
 
 interface RenderProps {
   rowDate: Date

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Dialog,
   DialogTitle,
@@ -11,8 +12,8 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   user: IUser

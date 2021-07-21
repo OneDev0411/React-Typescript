@@ -6,9 +6,8 @@ import React, {
   RefObject
 } from 'react'
 
+import { CircularProgress } from '@material-ui/core'
 import debounce from 'lodash/debounce'
-import useDebouncedCallback from 'use-debounce/lib/callback'
-
 import {
   VariableSizeList as List,
   ListOnItemsRenderedProps,
@@ -17,8 +16,7 @@ import {
   VariableSizeListProps,
   Align
 } from 'react-window'
-
-import { CircularProgress } from '@material-ui/core'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { Container, Loading } from './styled'
 
