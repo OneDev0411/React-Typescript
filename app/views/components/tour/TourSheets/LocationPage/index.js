@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/Listings/helpers/prepare-listings-properties'
+import { prepareListingsProperties } from '../../../../../components/Pages/Dashboard/MLS/helpers/prepare-listings-properties'
 import { getUserTitle } from '../../../../../models/user/helpers/get-user-title'
 import {
   joinItemsWithString,

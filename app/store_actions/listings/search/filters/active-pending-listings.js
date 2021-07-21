@@ -1,4 +1,4 @@
-import { pendingStatuses } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/statuses'
+import { pendingStatuses } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/statuses'
 import { ACTIVE_PENDING_STATUSES } from '../../../../constants/listings/search/filters'
 
 import toggleSubStatuses from './toggle-sub-statuses'

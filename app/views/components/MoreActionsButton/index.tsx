@@ -1,8 +1,8 @@
-import React, { ReactNode, ComponentType } from 'react'
+import React, { ComponentType } from 'react'
 
 import {
   Button,
-  ButtonGroup,
+  ButtonProps,
   ClickAwayListener,
   Grow,
   Paper,
@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 import { mdiChevronDown } from '@mdi/js'
+import classNames from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ClassesProps } from 'utils/ts-utils'
@@ -21,26 +22,27 @@ export interface RenderMenuProps {
   closeMenu: (event?: React.MouseEvent<any>) => void
 }
 
-interface Props extends ClassesProps<typeof useStyles> {
-  color?: 'inherit' | 'primary' | 'secondary' | 'default'
-  children: ReactNode
-  disabled?: boolean
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+export interface MoreActionsButtonProps
+  extends ClassesProps<typeof useStyles>,
+    Omit<ButtonProps, 'endIcon' | 'onClick'> {
   RenderMenu: ComponentType<RenderMenuProps>
   popperPlacement?: PopperPlacementType
-  className?: string
-  size?: 'small' | 'medium' | 'large'
-  style?: React.CSSProperties
-  variant?: 'contained' | 'outlined' | undefined
-  tourId?: string
   disablePortal?: boolean
 }
 
-export default function SplitButton(props: Props) {
+function MoreActionsButton({
+  className,
+  RenderMenu,
+  popperPlacement,
+  classes: classesProp,
+  children = 'More Actions',
+  disablePortal,
+  ...otherProps
+}: MoreActionsButtonProps) {
   const [isOpen, setIsOpen] = React.useState(false)
-  const anchorRef = React.useRef<HTMLDivElement>(null)
+  const anchorRef = React.useRef<HTMLButtonElement>(null)
   const theme = useTheme()
-  const classes = useStyles(props)
+  const classes = useStyles({ classes: classesProp })
 
   function handleToggle() {
     setIsOpen(prevOpen => !prevOpen)
@@ -56,37 +58,22 @@ export default function SplitButton(props: Props) {
 
   return (
     <>
-      <ButtonGroup
-        aria-label="split button"
-        color={props.color}
-        disabled={props.disabled}
-        size={props.size}
+      <Button
+        {...otherProps}
+        className={classNames(classes.root, className)}
+        onClick={handleToggle}
+        endIcon={<SvgIcon path={mdiChevronDown} />}
         ref={anchorRef}
-        style={props.style}
-        className={props.className}
-        variant={props.variant}
-        data-tour-id={props.tourId}
       >
-        <Button onClick={props.onClick} className={classes.mainButton}>
-          {props.children}
-        </Button>
-        <Button
-          aria-owns={isOpen ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onClick={handleToggle}
-          size="small"
-          className={props.size === 'small' ? classes.smallArrow : undefined}
-        >
-          <SvgIcon path={mdiChevronDown} />
-        </Button>
-      </ButtonGroup>
+        {children}
+      </Button>
       <Popper
         anchorEl={anchorRef.current}
         open={isOpen}
         style={{ zIndex: theme.zIndex.modal }}
-        placement={props.popperPlacement}
+        placement={popperPlacement}
         transition
-        disablePortal={props.disablePortal}
+        disablePortal={disablePortal}
       >
         {({ TransitionProps, placement }) => (
           <Grow
@@ -98,8 +85,8 @@ export default function SplitButton(props: Props) {
           >
             <div>
               <ClickAwayListener onClickAway={handleClose}>
-                <Paper id="menu-list-grow">
-                  <props.RenderMenu closeMenu={handleClose} />
+                <Paper id="menu-list-grow" className={classes.paper}>
+                  <RenderMenu closeMenu={handleClose} />
                 </Paper>
               </ClickAwayListener>
             </div>
@@ -109,3 +96,5 @@ export default function SplitButton(props: Props) {
     </>
   )
 }
+
+export default MoreActionsButton
