@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { getBrandUsers } from 'utils/user-teams'
 
 import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-permission'
-
 import AutocompleteField, { AutocompleteFieldProps } from '../AutocompleteField'
+
 import { compareLabelsAsc } from './helpers'
 import { ActiveTeamMemberOption } from './types'
 

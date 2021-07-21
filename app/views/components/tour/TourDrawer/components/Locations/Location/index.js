@@ -1,18 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
-import { Draggable } from 'react-beautiful-dnd'
+
 import { Card } from '@material-ui/core'
-
 import { mdiMapMarkerOutline, mdiClose } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { Draggable } from 'react-beautiful-dnd'
+import { Link } from 'react-router'
+import Flex from 'styled-flex-component'
 
-import useRaisedMuiCard from 'hooks/use-raised-mui-card'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { getIndexLabel } from 'utils/helpers'
-import { red } from 'views/utils/colors'
 import { Avatar } from 'components/Avatar'
 import Button from 'components/Button/IconButton'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useRaisedMuiCard from 'hooks/use-raised-mui-card'
+import { getIndexLabel } from 'utils/helpers'
+import { red } from 'views/utils/colors'
 
 import { Container, Listing, Title, Details, CloseIcon } from './styled'
 

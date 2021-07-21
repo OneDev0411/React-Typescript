@@ -1,11 +1,13 @@
 import React from 'react'
-import { Field } from 'redux-form'
+
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import { Field } from 'redux-form'
+
+import { toNumber } from '../../../../../../../../utils/helpers'
 
 import Label from './Label'
-import { toNumber } from '../../../../../../../../utils/helpers'
 
 const turnToNumber = value => {
   if (!value || value == null) {
@@ -37,14 +39,12 @@ const renderField = ({
       className={className}
       placeholder={placeholder}
     />
-    {touched &&
-      (error && (
-        <div className="c-min-max-inputs__alert has-error">{error}</div>
-      ))}
-    {touched &&
-      (warning && (
-        <div className="c-min-max-inputs__alert has-warning">{warning}</div>
-      ))}
+    {touched && error && (
+      <div className="c-min-max-inputs__alert has-error">{error}</div>
+    )}
+    {touched && warning && (
+      <div className="c-min-max-inputs__alert has-warning">{warning}</div>
+    )}
   </div>
 )
 
@@ -103,14 +103,18 @@ const MinMaxInputs = ({
 export default compose(
   withState('minimumValue', 'setMinimumValue', 0),
   withHandlers({
-    onChangeMin: ({ setMinimumValue }) => value => {
-      setMinimumValue(turnToNumber(value))
-    },
-    validateMinValue: ({ minimumValue, humanNumber }) => value =>
-      value && minimumValue && turnToNumber(value) < minimumValue
-        ? `Must be minimum ${
-            humanNumber ? minimumValue.toLocaleString() : minimumValue
-          }`
-        : undefined
+    onChangeMin:
+      ({ setMinimumValue }) =>
+      value => {
+        setMinimumValue(turnToNumber(value))
+      },
+    validateMinValue:
+      ({ minimumValue, humanNumber }) =>
+      value =>
+        value && minimumValue && turnToNumber(value) < minimumValue
+          ? `Must be minimum ${
+              humanNumber ? minimumValue.toLocaleString() : minimumValue
+            }`
+          : undefined
   })
 )(MinMaxInputs)

@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
-
 import { useAsync } from 'react-use'
 
 import { WizardContext, SectionContext } from './context'
-
 import Loading from './Loading'
 
 interface Props {

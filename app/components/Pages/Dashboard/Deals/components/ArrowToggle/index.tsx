@@ -1,6 +1,7 @@
 import React from 'react'
-import { mdiChevronRight } from '@mdi/js'
+
 import { makeStyles } from '@material-ui/core'
+import { mdiChevronRight } from '@mdi/js'
 import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

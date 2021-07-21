@@ -1,5 +1,5 @@
-import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 import { getContactAttributesBySection } from 'models/contacts/helpers'
+import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 export function normalizeAttributes(props) {
   let attributes = []

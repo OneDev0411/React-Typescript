@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { browserHistory } from 'react-router'
-import { useSelector, useDispatch } from 'react-redux'
+
 import { Box } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import idx from 'idx'
-
-import { editUser } from 'models/user/edit'
-import { uploadUserProfileImage } from 'models/user/upload-avatar'
-
-import { IAppState } from 'reducers'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { useSelector, useDispatch } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { updateUser } from 'actions/user'
-
-import { getUserDefaultHomepage } from 'utils/get-default-home-page'
-
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
-
+import { editUser } from 'models/user/edit'
+import { uploadUserProfileImage } from 'models/user/upload-avatar'
+import { IAppState } from 'reducers'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import { selectUserUnsafe } from 'selectors/user'
+import { getUserDefaultHomepage } from 'utils/get-default-home-page'
 
-import Header from '../Header'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
 import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
 import { useDocumentTitle } from '../use-document-title'
 
 import Avatar from './Avatar'

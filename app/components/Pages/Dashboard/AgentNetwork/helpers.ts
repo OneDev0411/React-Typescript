@@ -1,5 +1,5 @@
-import { goTo } from 'utils/go-to'
 import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
+import { goTo } from 'utils/go-to'
 
 export function openListingPage(listing: ICompactListing | IListing): void {
   const listingAddress =

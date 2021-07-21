@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Drawer } from '../Drawer'
 import { EmailThread } from '../../../EmailThread'
 import { DrawerProps } from '../../../OverlayDrawer'
+import { Drawer } from '../Drawer'
 
 interface Props extends DrawerProps {
   thread: IEmailThread<'messages'>

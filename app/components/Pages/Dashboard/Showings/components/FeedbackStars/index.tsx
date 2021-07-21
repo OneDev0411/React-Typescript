@@ -1,7 +1,6 @@
-import ReactStars from 'react-rating-stars-component'
 import { Box, makeStyles, useTheme } from '@material-ui/core'
-
 import { mdiStar, mdiStarHalfFull, mdiStarOutline } from '@mdi/js'
+import ReactStars from 'react-rating-stars-component'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 

@@ -3,12 +3,11 @@ import React, { useState, ReactNode, MouseEvent } from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { selectUser } from 'selectors/user'
-
-import getListing from 'models/listings/listing/get-listing'
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import getListing from 'models/listings/listing/get-listing'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   buttonRenderer?: (props: {
@@ -21,9 +20,8 @@ export function EmailAction({ buttonRenderer }: Props) {
 
   const [isTemplatesModalOpen, setIsTemplatesModalOpen] = useState(false)
   const [listings, setListings] = useState<IListing[]>([])
-  const [template, setTemplate] = useState<Nullable<IBrandMarketingTemplate>>(
-    null
-  )
+  const [template, setTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
   const user = useSelector(selectUser)
 

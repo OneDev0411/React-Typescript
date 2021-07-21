@@ -2,9 +2,8 @@ import produce from 'immer'
 
 import { noop } from 'utils/helpers'
 
-import { SET_CREATE_CALLBACK_HANDLER } from '../constants'
-
 import { StateContextType } from '..'
+import { SET_CREATE_CALLBACK_HANDLER } from '../constants'
 
 export const initialState: StateContextType = {
   onCreateEvent: noop,

@@ -14,6 +14,7 @@ const getSchoolsDistricts = async query => {
       label: district,
       value: district
     }))
+
     return { options }
   } catch (error) {
     // console.log(error.message)

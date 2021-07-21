@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Grid,
   Typography,
@@ -8,17 +8,17 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
+import CardSkeleton from 'components/CardSkeleton'
+import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import TemplateAction from 'components/TemplatesList/TemplateAction'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import CardSkeleton from 'components/CardSkeleton'
-import TemplateAction from 'components/TemplatesList/TemplateAction'
-import MarketingTemplateCard from 'components/MarketingTemplateCard'
-
 import { useTemplates } from '../../../hooks/use-templates'
-import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
+import SectionLayout from '../SectionLayout'
 
 const BRANDING_TEMPLATE_TYPES: IMarketingTemplateType[] = ['Brand', 'NewAgent']
 const SOCIAL_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [

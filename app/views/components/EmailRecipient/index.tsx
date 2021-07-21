@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { getPersonDisplayName } from 'utils/get-person-display-name'
-
 import { isContact } from 'utils/type-guards/is-contact'
 
 import { parseEmailRecipient } from '../EmailRecipientsChipsInput/helpers/parse-email-recipient'

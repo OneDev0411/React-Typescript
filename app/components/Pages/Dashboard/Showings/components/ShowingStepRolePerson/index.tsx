@@ -10,17 +10,16 @@ import {
   useWizardContext
 } from 'components/QuestionWizard'
 
-import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
-
-import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import SmartQuestionForm from '../SmartQuestionForm'
-import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
-
-import { ShowingRoleInput } from '../../types'
-import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
-import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { getShowingRoleAOrAn, getShowingRoleLabel } from '../../helpers'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
+import { ShowingRoleInput } from '../../types'
+import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
+import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import SmartQuestionForm from '../SmartQuestionForm'
+
 import ShowingRoleAutoSubmitAddNewButton from './ShowingRoleAutoSubmitAddNewButton'
+import ShowingStepRolePersonCard from './ShowingStepRolePersonCard'
 
 const useStyles = makeStyles(
   theme => ({

@@ -2,7 +2,6 @@ import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
-import { Avatar } from 'components/Avatar'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { getActiveBrand } from 'utils/user-teams'
 

@@ -1,8 +1,7 @@
 import arrayMove from 'array-move'
 
-import * as actionTypes from '../actions/action-types'
-
 import type { IMediaGallery } from '../../types'
+import * as actionTypes from '../actions/action-types'
 
 export const initialState: IMediaGallery = []
 

@@ -15,9 +15,7 @@ describe('Tag management settings', () => {
   })
 
   it('Create tags', () => {
-    cy.getByTestSelector('icon-text-input')
-      .type(tagName)
-      .type('{enter}')
+    cy.getByTestSelector('icon-text-input').type(tagName).type('{enter}')
     cy.pageShouldContain(`"${tagName}" added.`)
     cy.getByTestSelector(`tag-item-${tagName}`)
       .should('exist')
@@ -25,9 +23,7 @@ describe('Tag management settings', () => {
   })
 
   it('Forbid duplicate tags creation', () => {
-    cy.getByTestSelector('icon-text-input')
-      .type(tagName)
-      .type('{enter}')
+    cy.getByTestSelector('icon-text-input').type(tagName).type('{enter}')
     cy.pageShouldContain(`"${tagName}" already exists.`)
     cy.getByTestSelector(`tag-item-${tagName}`).should('have.length', 1)
   })

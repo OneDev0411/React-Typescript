@@ -1,4 +1,5 @@
 import React, { memo } from 'react'
+
 import {
   Button,
   Popover,
@@ -7,12 +8,10 @@ import {
   FormControlLabel,
   Checkbox
 } from '@material-ui/core'
-
 import { Form, Field } from 'react-final-form'
 
-import { AVAILABLE_FILTERS } from './values'
-
 import { FilterShape } from './type'
+import { AVAILABLE_FILTERS } from './values'
 
 interface Props {
   el: HTMLButtonElement | null

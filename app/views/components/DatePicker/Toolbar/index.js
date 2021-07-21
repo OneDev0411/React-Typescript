@@ -1,7 +1,7 @@
 import React from 'react'
 
-import YearMonthList from '../YearMonthList'
 import MonthNavigator from '../MonthNavigator'
+import YearMonthList from '../YearMonthList'
 
 const Toolbar = props => (
   <YearMonthList {...props}>

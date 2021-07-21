@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   TextField,
   Button,
@@ -6,28 +7,23 @@ import {
   Typography,
   CircularProgress
 } from '@material-ui/core'
-import { useDebounce } from 'react-use'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
+import { useDebounce } from 'react-use'
 import Flex from 'styled-flex-component'
 
-import { getStatusColorClass } from 'utils/listing'
-
 import ListingCard from 'components/ListingCards/ListingCard'
-
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { useSearchLocation } from 'hooks/use-search-location'
+import { getStatusColorClass } from 'utils/listing'
 
 import { ManualAddress } from './ManualAddress'
-
 import { useStyles } from './styles'
 
 interface Address {

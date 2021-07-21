@@ -1,15 +1,14 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
+import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 
+import { confirmation } from 'actions/confirmation'
+import { addNotification as notify } from 'components/notification'
 import SideNavItem from 'components/PageSideNav/SideNavItem'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
-import { addNotification as notify } from 'components/notification'
-
-import { confirmation } from 'actions/confirmation'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 

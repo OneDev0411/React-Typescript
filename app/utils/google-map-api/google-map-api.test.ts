@@ -14,6 +14,7 @@ jest.mock('utils/load-js', () => ({
 
 describe('createGoogleMapApiUrl function', () => {
   let googleMapAPIParams: GoogleMapAPIParams
+
   beforeEach(() => {
     googleMapAPIParams = {
       key: 'some_key',
@@ -142,12 +143,14 @@ describe('isMapLibrariesLoaded function', () => {
       'visualization'
     ]
     const expected = true
+
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
   it('should return true if all libraries are loaded and some are desired', () => {
     const param: GoogleMapLibrary[] = ['places', 'geometry', 'drawing']
     const expected = true
+
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
@@ -157,8 +160,10 @@ describe('isMapLibrariesLoaded function', () => {
         drawing: true
       }
     } as any
+
     const param: GoogleMapLibrary[] = ['places', 'drawing']
     const expected = false
+
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 
@@ -168,8 +173,10 @@ describe('isMapLibrariesLoaded function', () => {
         places: true
       }
     } as any
+
     const param: GoogleMapLibrary[] = ['geometry', 'drawing', 'localContext']
     const expected = false
+
     expect(isMapLibrariesLoaded(param)).toBe(expected)
   })
 })

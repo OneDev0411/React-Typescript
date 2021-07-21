@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction } from 'react'
+
 import { useDispatch } from 'react-redux'
 
 import { decreaseShowingTotalNotificationCount } from 'actions/showings'
 
 import { DismissActionParams } from '../../types'
+
 import { updateShowingsAppointmentState } from './helpers'
 
 type UseShowingsDismissAppointmentNotifications = (

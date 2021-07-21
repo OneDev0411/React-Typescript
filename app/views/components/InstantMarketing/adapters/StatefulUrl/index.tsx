@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
-import { addNotification as notify } from 'components/notification'
+
 import { useDispatch } from 'react-redux'
-
-import { goTo } from 'utils/go-to'
-
-import { getContact } from 'models/contacts/get-contact'
-import getListing from 'models/listings/listing/get-listing'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
+import { addNotification as notify } from 'components/notification'
+import { getContact } from 'models/contacts/get-contact'
+import getListing from 'models/listings/listing/get-listing'
+import { goTo } from 'utils/go-to'
 
 function StatefulUrlAdapter({ location }: WithRouterProps) {
   const [listing, setListing] = useState<Nullable<IListing>>(null)

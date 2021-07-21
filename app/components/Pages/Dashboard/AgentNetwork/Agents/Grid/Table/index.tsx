@@ -1,33 +1,28 @@
 import React from 'react'
 
 import { Button, Tooltip, Theme, useTheme } from '@material-ui/core'
-import Flex from 'styled-flex-component'
 import { mdiEmailOutline } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
-import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
-import { putUserSetting } from 'models/user/put-user-setting'
-
-import { getNameInitials } from 'utils/helpers'
-
+import { Avatar } from 'components/Avatar'
 import { Table } from 'components/Grid/Table'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { RenderProps } from 'components/Grid/Table/types'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { Avatar } from 'components/Avatar'
 import LoadingContainer from 'components/LoadingContainer'
-
-import { SortableColumns } from '../helpers/sortable-columns'
-import { Caption } from '../columns/Caption'
-
-import { TableActions } from '../Actions'
-import { TableToolbar } from '../Toolbar'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { putUserSetting } from 'models/user/put-user-setting'
+import { getNameInitials } from 'utils/helpers'
+import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 
 import {
   AggregatedAgentInfo,
   AgentSide,
   ListingWithProposedAgent
 } from '../../types'
+import { TableActions } from '../Actions'
+import { Caption } from '../columns/Caption'
+import { SortableColumns } from '../helpers/sortable-columns'
+import { TableToolbar } from '../Toolbar'
 
 const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 

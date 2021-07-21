@@ -1,6 +1,7 @@
 import React from 'react'
-import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
+
 import Button, { ButtonProps } from '@material-ui/core/Button'
+import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 

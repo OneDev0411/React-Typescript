@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
-import { IconButtonProps } from '@material-ui/core/IconButton'
 
 import { Tooltip } from '@material-ui/core'
+import { IconButtonProps } from '@material-ui/core/IconButton'
 
 import { ToolbarIconButton } from '../ToolbarIconButton'
 

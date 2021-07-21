@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { FormatterOutputType } from './types'
 import { findContact, getContactData } from './helpers'
 import { formatter } from './MiniContact-formatters'
+import { FormatterOutputType } from './types'
 
 // TODO: attributeDefs can be removed whenever we upgraded redux
 function useProfile(type, initData, attributeDefs): FormatterOutputType {

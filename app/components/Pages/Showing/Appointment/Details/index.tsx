@@ -1,9 +1,9 @@
+import CanceledStatusDetails from './Canceled'
+import CancelReschedule from './CancelReschedule'
+import CompletedStatusDetails from './Completed'
 import ConfirmedStatusDetails from './Confirmed'
 import RequestedStatusDetails from './Requested'
 import RescheduledStatusDetails from './Rescheduled'
-import CanceledStatusDetails from './Canceled'
-import CompletedStatusDetails from './Completed'
-import CancelReschedule from './CancelReschedule'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>

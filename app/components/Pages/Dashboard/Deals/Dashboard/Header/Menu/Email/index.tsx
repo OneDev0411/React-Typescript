@@ -1,16 +1,17 @@
 import React from 'react'
+
 import { Button } from '@material-ui/core'
 
-import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
-import {
-  ADD_ATTACHMENTS,
-  SET_DRAWER_STATUS
-} from 'deals/contexts/actions-context/constants'
 import {
   EMAIL_ENVELOPE,
   EMAIL_FORM,
   EMAIL_FILE
 } from 'deals/components/ActionsButton/data/action-buttons'
+import {
+  ADD_ATTACHMENTS,
+  SET_DRAWER_STATUS
+} from 'deals/contexts/actions-context/constants'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 export function Email() {
   const [, dispatch] = useChecklistActionsContext()

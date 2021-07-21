@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
+
 import { CircularProgress, Button } from '@material-ui/core'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
-import { Neighborhood, NeighborhoodsReport } from './types'
 import { getNeighborhoods, getReport } from './api'
+import { getFormattedReportWithNeededPeriods } from './helpers'
 import NeighborhoodsList from './NeighborhoodsList'
 import ReportSelector from './ReportSelector'
-import { getFormattedReportWithNeededPeriods } from './helpers'
+import { Neighborhood, NeighborhoodsReport } from './types'
 
 const DEFAULT_TITLE = 'Search for a neighborhood'
 
@@ -29,16 +30,13 @@ export default function NeighborhoodsReportDrawer({
   const [isSearching, setIsSearching] = useState(false)
   const [title, setTitle] = useState<string>(DEFAULT_TITLE)
   const [input, setInput] = useState<string>('')
-  const [neighborhoods, setNeighborhoods] = useState<Nullable<Neighborhood[]>>(
-    null
-  )
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState<
-    Nullable<Neighborhood>
-  >(null)
+  const [neighborhoods, setNeighborhoods] =
+    useState<Nullable<Neighborhood[]>>(null)
+  const [selectedNeighborhood, setSelectedNeighborhood] =
+    useState<Nullable<Neighborhood>>(null)
   const [report, setReport] = useState<Nullable<NeighborhoodsReport>>(null)
-  const [selectedReport, setSelectedReport] = useState<
-    Nullable<NeighborhoodsReport>
-  >(null)
+  const [selectedReport, setSelectedReport] =
+    useState<Nullable<NeighborhoodsReport>>(null)
 
   const resetState = useCallback(() => {
     setInput('')
@@ -85,10 +83,11 @@ export default function NeighborhoodsReportDrawer({
       setIsLoading(true)
 
       const fetchedReport = await getReport(selectedNeighborhood.id)
-      const formattedReportWithAggregations = getFormattedReportWithNeededPeriods(
-        fetchedReport,
-        onlyAggregatedReports
-      )
+      const formattedReportWithAggregations =
+        getFormattedReportWithNeededPeriods(
+          fetchedReport,
+          onlyAggregatedReports
+        )
 
       setReport(formattedReportWithAggregations)
       setIsLoading(false)

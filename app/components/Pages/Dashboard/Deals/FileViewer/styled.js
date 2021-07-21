@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components'
 
-import { borderColor, grey } from 'views/utils/colors'
-
 import { Container, Menu, Content } from 'components/SlideMenu'
+import { borderColor, grey } from 'views/utils/colors'
 
 const menuHeight = '5rem'
 export const containerHeight = `calc(100vh - ${menuHeight} - 1rem)`

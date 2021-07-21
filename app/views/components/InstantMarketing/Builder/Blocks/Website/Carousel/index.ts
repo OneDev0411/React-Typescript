@@ -1,7 +1,5 @@
-import { Editor } from 'grapesjs'
-
 import { Model } from 'backbone'
-
+import { Editor } from 'grapesjs'
 import {
   isUndefined,
   isFunction,
@@ -10,20 +8,18 @@ import {
   isString
 } from 'underscore'
 
-import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
-
 import CarouselIcon from 'assets/images/marketing/editor/blocks/carousel.png'
-
+import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 
 import registerBlock from '../../registerBlock'
-import { baseView, isComponent } from '../utils'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
-import Carousel from './template.njk'
+import { baseView, isComponent } from '../utils'
 
 import script from './script'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
+import Carousel from './template.njk'
 
 export const typeCarousel = 'carousel'
 const typeCarouselTrack = `${typeCarousel}-track`

@@ -1,17 +1,18 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
 
-import PopupWindow from './window'
 import ChatNotification from '../../../../../services/notification/chat'
-
-import * as popupActionCreators from '../../../../../store_actions/chatroom/popups'
 import {
   changeActiveRoom,
   toggleInstantMode
 } from '../../../../../store_actions/chatroom'
+import * as popupActionCreators from '../../../../../store_actions/chatroom/popups'
+
+import PopupWindow from './window'
 
 /**
  * when user clicks on minimize icon

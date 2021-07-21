@@ -1,15 +1,14 @@
 import { Editor } from 'grapesjs'
 
 import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
-
 import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
-import { baseView, isComponent } from '../utils'
 import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { baseView, isComponent } from '../utils'
 
 import Button from './button.njk'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeButton = 'button'
 export const buttonBlockName = typeButton

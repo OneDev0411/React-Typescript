@@ -1,7 +1,7 @@
-import { Link as RouterLink, LinkProps } from 'react-router'
-import styled, { ThemeProps, css } from 'styled-components'
 import { Link } from '@material-ui/core'
 import { Theme, fade } from '@material-ui/core/styles'
+import { Link as RouterLink, LinkProps } from 'react-router'
+import styled, { ThemeProps, css } from 'styled-components'
 
 import { appSidenavWidth } from './variables'
 

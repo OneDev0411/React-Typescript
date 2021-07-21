@@ -1,15 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mdiEmailOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
+import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import SendEmailButton from 'components/SendEmailButton'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
-
 import { selectContact } from 'reducers/contacts/list'
-
-import SendEmailButton from 'components/SendEmailButton'
 
 interface Props {
   contacts: INormalizedContact[]

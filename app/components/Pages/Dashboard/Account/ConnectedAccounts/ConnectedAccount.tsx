@@ -1,4 +1,5 @@
 import * as React from 'react'
+
 import {
   Grid,
   Box,
@@ -9,25 +10,21 @@ import {
   Tooltip,
   Theme
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
 import styled, { ThemeProps } from 'styled-components'
 import Flex from 'styled-flex-component'
 
-import { useTheme } from '@material-ui/styles'
-
-import { OAuthProvider } from 'constants/contacts'
-
-import IconPermission from 'components/SvgIcons/Permission/IconPermission'
-
 import { Avatar } from 'components/Avatar'
-import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { DangerButton } from 'components/Button/DangerButton'
+import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
+import IconPermission from 'components/SvgIcons/Permission/IconPermission'
+import { OAuthProvider } from 'constants/contacts'
 import { getContactNameInitials } from 'models/contacts/helpers'
 
 import {
   oAuthAccountTypeToProvider,
   oAuthAccountTypeToTitle
 } from './constants'
-
 import { SyncButton } from './SyncButton'
 
 interface Props {

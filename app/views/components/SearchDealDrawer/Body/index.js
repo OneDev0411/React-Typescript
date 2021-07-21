@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+
 import Downshift from 'downshift'
+import PropTypes from 'prop-types'
 import _ from 'underscore'
 
-import { searchDeals } from 'models/Deal/deal'
 import {
   ListContainer,
   List
 } from 'components/SelectContactModal/components/Body/styled'
+import { searchDeals } from 'models/Deal/deal'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
+import Loading from '../../Spinner'
 
 import { Item } from './Item'
 import SearchInput from './SearchInput'
-import Loading from '../../Spinner'
 
 const propTypes = {
   deals: PropTypes.arrayOf(PropTypes.shape),

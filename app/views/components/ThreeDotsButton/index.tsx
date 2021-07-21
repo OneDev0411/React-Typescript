@@ -1,9 +1,7 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
-
 import * as React from 'react'
-
 import { forwardRef, HTMLProps } from 'react'
 
+import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { ClassesProps } from 'utils/ts-utils'

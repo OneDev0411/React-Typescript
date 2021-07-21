@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Field } from 'react-final-form'
 
-import { TeamContactSelect } from '../../../TeamContact/TeamContactSelect'
 import { Container, Label } from '../../../final-form-fields/styled'
+import { TeamContactSelect } from '../../../TeamContact/TeamContactSelect'
 
 import { SelectButton } from './SelectButton'
 

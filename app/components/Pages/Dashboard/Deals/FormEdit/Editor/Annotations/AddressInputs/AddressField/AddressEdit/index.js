@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
-
 import { AddressPopover } from 'components/inline-editable-fields/InlineAddressField/AddressPopover'
+import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 
 export function AddressEdit({
   rect,

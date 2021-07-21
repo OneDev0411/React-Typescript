@@ -1,35 +1,27 @@
-import { connect } from 'react-redux'
-
 import * as React from 'react'
 import { MutableRefObject, useCallback, useRef, useState } from 'react'
 
+import { debounce } from 'lodash'
 import { Helmet } from 'react-helmet'
-
+import { connect } from 'react-redux'
 import { RouteComponentProps } from 'react-router'
 
-import { debounce } from 'lodash'
-
+import Search from 'components/Grid/Search'
 import { Container, Content, Menu } from 'components/SlideMenu'
-
+import Spinner from 'components/Spinner'
+import { SearchContext } from 'components/TextWithHighlights'
 import TreeView from 'components/TreeView'
 import { H4 } from 'components/Typography/headings'
-import Spinner from 'components/Spinner'
-
-import Search from 'components/Grid/Search'
-
+import { useCaptureTyping } from 'hooks/use-capture-typing'
 import { findNode } from 'utils/tree-utils'
 
-import { SearchContext } from 'components/TextWithHighlights'
-
-import { useCaptureTyping } from 'hooks/use-capture-typing'
-
-import { TeamsSearch } from './styled'
+import { AddEditTeamModal } from './components/AddEditTeamModal'
+import { AddTeamMembersModal } from './components/AddTeamMembersModal'
+import { EditTeamRolesModal } from './components/EditTeamRolesModal'
+import { TeamName } from './components/TeamName'
 import { TeamView } from './components/TeamView'
 import { useTeamsPage } from './hooks/use-teams-page.hook'
-import { TeamName } from './components/TeamName'
-import { AddEditTeamModal } from './components/AddEditTeamModal'
-import { EditTeamRolesModal } from './components/EditTeamRolesModal'
-import { AddTeamMembersModal } from './components/AddTeamMembersModal'
+import { TeamsSearch } from './styled'
 
 type Props = {
   user: any
@@ -55,9 +47,8 @@ function TeamsPage(props: Props) {
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
-  const inputRef: MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(
-    null
-  )
+  const inputRef: MutableRefObject<HTMLInputElement | null> =
+    useRef<HTMLInputElement | null>(null)
 
   // FIXME: move useCaptureTyping into Search component when it's refactored
   // into a function component.

@@ -1,15 +1,12 @@
 import { useState } from 'react'
+
 import { useDispatch } from 'react-redux'
 
-import { OAuthProvider } from 'constants/contacts'
-
-import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
-
-import { useOnRestoredFromPersistedState } from 'hooks/use-on-restored-from-persisted-state'
-
-import { startImportingOAuthContacts } from 'utils/oauth-provider'
-
 import { addNotification } from 'components/notification'
+import { OAuthProvider } from 'constants/contacts'
+import { useOnRestoredFromPersistedState } from 'hooks/use-on-restored-from-persisted-state'
+import { connectOAuthAccount } from 'models/o-auth-accounts/connect-o-auth-account'
+import { startImportingOAuthContacts } from 'utils/oauth-provider'
 
 export function useConnectOAuthAccount(
   provider: OAuthProvider,

@@ -1,4 +1,5 @@
-import styled from "styled-components"
+import styled from 'styled-components'
+
 import IconButton from '../../../../../../../views/components/Button/IconButton'
 
 export const Button = styled(IconButton)`

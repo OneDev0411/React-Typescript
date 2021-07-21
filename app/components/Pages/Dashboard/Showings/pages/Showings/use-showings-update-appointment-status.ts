@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 
 import { ApprovalActionParams } from '../../types'
+
 import { updateShowingsAppointmentState } from './helpers'
 
 type UseShowingsUpdateAppointmentStatusReturn = (

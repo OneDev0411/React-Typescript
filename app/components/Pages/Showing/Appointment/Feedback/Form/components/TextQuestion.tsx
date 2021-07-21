@@ -11,7 +11,6 @@ import {
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
 import useIsMobile from 'hooks/use-is-mobile'
 
 interface Props {

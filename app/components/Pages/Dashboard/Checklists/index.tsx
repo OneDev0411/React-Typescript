@@ -1,27 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
+
+import { Box } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
-import { Box } from '@material-ui/core'
-
-import { PageTabs, TabLink } from 'components/PageTabs'
-import { Container, Content } from 'components/SlideMenu'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import Acl from 'components/Acl'
-
-import { selectUser } from 'selectors/user'
+import { PageTabs, TabLink } from 'components/PageTabs'
+import { Container, Content } from 'components/SlideMenu'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
 
-import { CheckListTable } from './components/ChecklistTable'
 import { ChecklistHeader } from './components/ChecklistHeader'
-import { useChecklistsPage } from './use-checklist-page'
 import { ChecklistsSidenav } from './components/ChecklistsSidenav'
-
-import { getChecklistPageLink } from './helpers/get-checklist-page-link'
-
-import { TabNames } from './constants'
+import { CheckListTable } from './components/ChecklistTable'
 import { PropertyTypeForm } from './components/PropertyTypeForm'
+import { TabNames } from './constants'
+import { getChecklistPageLink } from './helpers/get-checklist-page-link'
+import { useChecklistsPage } from './use-checklist-page'
 
 interface Props extends RouteComponentProps<any, {}> {
   user: IUser

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { mdiDotsHorizontal } from '@mdi/js'
 
 import { IconButton, MenuItem, Typography, Popover } from '@material-ui/core'
+import { mdiDotsHorizontal } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

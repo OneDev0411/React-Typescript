@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Skeleton } from '@material-ui/lab'
+
 import {
   createStyles,
   ListItem,
@@ -8,6 +8,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 
 import { ClassesProps } from 'utils/ts-utils'
 

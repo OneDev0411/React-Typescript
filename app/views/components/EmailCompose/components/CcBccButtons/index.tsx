@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Link from '@material-ui/core/Link'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles(
   (theme: Theme) =>

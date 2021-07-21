@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled, { css } from 'styled-components'
 
-import ActionButton from '../../../../../../views/components/Button/ActionButton'
-import { updateWizardStep } from '../../../../../../store_actions/contacts'
 import { CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS } from '../../../../../../constants/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import { updateWizardStep } from '../../../../../../store_actions/contacts'
+import ActionButton from '../../../../../../views/components/Button/ActionButton'
 
 const FooterContainer = styled.div`
   background-color: #ffffff;
@@ -79,10 +80,7 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    updateWizardStep,
-    confirmation
-  }
-)(Footer)
+export default connect(mapStateToProps, {
+  updateWizardStep,
+  confirmation
+})(Footer)

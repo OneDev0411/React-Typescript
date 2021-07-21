@@ -1,11 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
-import Flex from 'styled-flex-component'
+
 import { Typography, makeStyles } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Avatar } from 'components/Avatar'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Item } from '../../Dropdown/Item'
 

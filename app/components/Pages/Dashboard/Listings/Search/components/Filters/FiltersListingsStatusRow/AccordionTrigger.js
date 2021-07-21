@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { mdiMenuDown } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const AccordionTrigger = ({ onClick, active }) => (
   <button

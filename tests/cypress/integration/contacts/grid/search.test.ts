@@ -10,8 +10,10 @@ describe('Contacts list, search a text', () => {
 
     cy.wait(2000)
 
-    cy.getByTestSelector('contact-link', { timeout: 100 }).should(($el: HTMLAnchorElement): void => {
-      expect($el).to.have.text('Daniel Day-Lewis')
-    })
+    cy.getByTestSelector('contact-link', { timeout: 100 }).should(
+      ($el: HTMLAnchorElement): void => {
+        expect($el).to.have.text('Daniel Day-Lewis')
+      }
+    )
   })
 })

@@ -2,14 +2,12 @@ import SuperAgent from 'superagent'
 
 import { IAppState } from 'reducers'
 
-import store from '../../stores'
-
 import config from '../../../config/public'
+import store from '../../stores'
 import { getActiveTeamId } from '../../utils/user-teams'
 
 import { herokuFix } from './middlewares/heroku-fix'
 import { useReferencedFormat } from './middlewares/x-rechat-format'
-
 import { IOptions, IMiddleware } from './types'
 
 export default class Fetch {

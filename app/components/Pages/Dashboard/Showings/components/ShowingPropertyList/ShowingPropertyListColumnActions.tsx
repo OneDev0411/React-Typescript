@@ -2,8 +2,8 @@ import { MouseEvent } from 'react'
 
 import { mdiCalendar } from '@mdi/js'
 
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import LinkButton from '../LinkButton'
 

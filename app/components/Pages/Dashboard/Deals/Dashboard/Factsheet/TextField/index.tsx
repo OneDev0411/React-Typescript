@@ -8,12 +8,10 @@ import { getContextInputMask } from 'deals/utils/get-context-mask'
 import { getContextProperties } from 'models/Deal/helpers/brand-context/get-context-properties'
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
 
-import { EditButton } from '../ActionButtons/Edit'
-import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
-
+import { DeleteButton } from '../ActionButtons/Delete'
+import { EditButton } from '../ActionButtons/Edit'
 import { Loading } from '../components/Loading'
-
 import {
   Editable as Container,
   Item,

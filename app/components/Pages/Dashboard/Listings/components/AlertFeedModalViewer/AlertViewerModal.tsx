@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+
 import { Box, Typography } from '@material-ui/core'
 
 import Modal from 'components/BareModal'
-import PageHeader from 'components/PageHeader'
-import LoadingContainer from 'components/LoadingContainer'
 import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import LoadingContainer from 'components/LoadingContainer'
+import PageHeader from 'components/PageHeader'
 
 import { formatListing } from '../../helpers/format-listing'
 

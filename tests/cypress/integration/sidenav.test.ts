@@ -16,10 +16,7 @@ describe('SideNav component', () => {
         .should('have.attr', 'href')
         .and('include', 'contacts')
 
-      cy.get('li > a')
-        .eq(2)
-        .should('have.attr', 'href')
-        .and('include', 'deals')
+      cy.get('li > a').eq(2).should('have.attr', 'href').and('include', 'deals')
 
       cy.get('li > a')
         .eq(3)
@@ -31,10 +28,7 @@ describe('SideNav component', () => {
         .should('have.attr', 'href')
         .and('include', 'insights')
 
-      cy.get('li > a')
-        .eq(5)
-        .should('have.attr', 'href')
-        .and('include', 'mls')
+      cy.get('li > a').eq(5).should('have.attr', 'href').and('include', 'mls')
 
       cy.get('li > button').should('have.length', 1)
     })

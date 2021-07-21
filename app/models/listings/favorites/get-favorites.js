@@ -1,5 +1,6 @@
-import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
+
+import Fetch from '../../../services/fetch'
 import * as schema from '../schema'
 
 const getFavorateListingsData = favorites =>
@@ -46,6 +47,7 @@ const getFavorites = async (user = {}) => {
 
     const listings = getFavorateListingsData(data)
     const normilizedListings = normalize(listings, schema.listingsList)
+
     return {
       ...normilizedListings,
       info

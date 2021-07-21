@@ -1,25 +1,27 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { Helmet } from 'react-helmet'
-import memoize from 'lodash/memoize'
 
 import { withStyles } from '@material-ui/core/styles'
+import memoize from 'lodash/memoize'
+import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
-import GlobalPageLayout from 'components/GlobalPageLayout'
-
-import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
+import GlobalPageLayout from 'components/GlobalPageLayout'
+import { putUserSetting } from 'models/user/put-user-setting'
 
-import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { selectListings } from '../../../../../reducers/listings'
-
+import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
+import { normalizeListingLocation } from '../../../../../utils/map'
+import GridView from '../components/GridView'
+import ListView from '../components/ListView'
+import MapView from '../components/MapView'
+import { Header } from '../components/PageHeader'
+import Tabs from '../components/Tabs'
 import {
   formatListing,
   addDistanceFromCenterToListing
 } from '../helpers/format-listing'
-import { normalizeListingLocation } from '../../../../../utils/map'
-
 import {
   parsSortIndex,
   getDefaultSort,
@@ -28,11 +30,6 @@ import {
 } from '../helpers/sort-utils'
 
 import Map from './Map'
-import { Header } from '../components/PageHeader'
-import Tabs from '../components/Tabs'
-import MapView from '../components/MapView'
-import ListView from '../components/ListView'
-import GridView from '../components/GridView'
 
 const styles = () => ({
   mlsContainer: {

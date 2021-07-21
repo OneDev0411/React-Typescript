@@ -1,12 +1,13 @@
-import { makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import * as React from 'react'
 import { MouseEventHandler, Ref } from 'react'
+
+import { makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import { mdiInformationOutline } from '@mdi/js'
 
-import { ClassesProps } from 'utils/ts-utils'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ITemplateVariableSuggestion } from 'components/TemplateVariablesButton'
+import { ClassesProps } from 'utils/ts-utils'
 
 import { styles } from './styles'
 

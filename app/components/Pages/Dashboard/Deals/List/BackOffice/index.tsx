@@ -1,30 +1,23 @@
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-
-import { IAppState } from 'reducers/index'
-
-import PageLayout from 'components/GlobalPageLayout'
-
 import { searchDeals, getDeals } from 'actions/deals'
+import PageLayout from 'components/GlobalPageLayout'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
+import { IAppState } from 'reducers/index'
 import { getActiveTeamId } from 'utils/user-teams'
-
-import TabFilters from './Filters'
-
-import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import { SearchQuery } from './types'
-
-import { getStaticFilterQuery } from './utils/get-static-filter-query'
-
+import TabFilters from './Filters'
 import Grid from './Grid'
+import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
+import { SearchQuery } from './types'
+import { getStaticFilterQuery } from './utils/get-static-filter-query'
 
 interface StateProps {
   user: IUser
@@ -85,7 +78,9 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     }
 
     if (searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, searchQuery.term))
+      dispatch(
+        searchQuery.term ? searchDeals(user, searchQuery.term) : getDeals(user)
+      )
     }
   }, [dispatch, searchQuery, statuses, user])
 

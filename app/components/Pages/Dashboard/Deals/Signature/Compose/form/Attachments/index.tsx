@@ -1,16 +1,15 @@
 import React from 'react'
 
-import { useField } from 'react-final-form'
 import { Box, Button } from '@material-ui/core'
+import { useField } from 'react-final-form'
 
 import { FieldError } from 'components/final-form-fields/FieldError'
 import { ListAttachmentItem } from 'components/ListAttachmentItem'
-import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
-
 import {
   REMOVE_ATTACHMENT,
   SET_DRAWER_STATUS
 } from 'deals/contexts/actions-context/constants'
+import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 
 interface Props {
   isSubmitting: boolean

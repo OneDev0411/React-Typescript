@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { connect } from 'react-redux'
 
 import {
   Button,
@@ -9,13 +8,12 @@ import {
   Theme
 } from '@material-ui/core'
 import fecha from 'fecha'
-
-import { IAppState } from 'reducers/index'
-import { selectUser } from 'selectors/user'
-
-import { selectDealTasks } from 'reducers/deals/tasks'
+import { connect } from 'react-redux'
 
 import { Divider } from 'components/Divider'
+import { selectDealTasks } from 'reducers/deals/tasks'
+import { IAppState } from 'reducers/index'
+import { selectUser } from 'selectors/user'
 
 interface StateProps {
   user: IUser

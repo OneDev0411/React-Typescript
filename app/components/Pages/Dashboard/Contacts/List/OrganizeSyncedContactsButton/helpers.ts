@@ -1,5 +1,4 @@
 import { OAuthProvider } from 'constants/contacts'
-
 import {
   IAttributeDefsState,
   selectDefinitionByName

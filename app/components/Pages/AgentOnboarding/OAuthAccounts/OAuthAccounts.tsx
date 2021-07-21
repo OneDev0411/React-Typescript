@@ -1,34 +1,31 @@
 import React from 'react'
-import cn from 'classnames'
-import { useSelector, useDispatch } from 'react-redux'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import { Box, ButtonBase, Theme, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiCheckCircle } from '@mdi/js'
+import cn from 'classnames'
+import { useSelector, useDispatch } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { outlookIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { OAuthProvider } from 'constants/contacts'
 import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
-
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-
-import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
-
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { outlookIcon } from 'components/SvgIcons/icons'
-import GoogleIcon from 'components/SvgIcons/Google/IconGoogle'
-import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
-import Header from '../Header'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
 import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
 import { useDocumentTitle } from '../use-document-title'
 
 const useStyles = makeStyles(

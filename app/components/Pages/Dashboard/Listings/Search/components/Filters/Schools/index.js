@@ -1,15 +1,16 @@
 import React from 'react'
-import Select from 'react-select'
+
 import { connect } from 'react-redux'
+import Select from 'react-select'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withPropsOnChange from 'recompose/withPropsOnChange'
+import withState from 'recompose/withState'
 import { change as updateField, formValueSelector } from 'redux-form'
 
-import Label from '../components/Label'
 import api from '../../../../../../../../models/listings/search'
+import Label from '../components/Label'
 
 const FORM_NAME = 'filters'
 const selector = formValueSelector(FORM_NAME)
@@ -25,7 +26,6 @@ export const SCHOOLS_TYPE = [
 
 const Schools = ({
   schools = {},
-  districts = [],
   loadingSchools,
   selectedSchools,
   onChangeSchools,
@@ -45,20 +45,19 @@ const Schools = ({
         loadOptions={api.getSchoolsDistricts}
       />
     </Label>
-    {Object.keys(schools).length === 0 &&
-      loadingSchools && (
-        <p
-          style={{
-            padding: '1rem',
-            color: '#fff',
-            lineHeight: '1',
-            fontSize: '1.7rem',
-            backgroundColor: '#2196f3'
-          }}
-        >
-          Loading Schools ...
-        </p>
-      )}
+    {Object.keys(schools).length === 0 && loadingSchools && (
+      <p
+        style={{
+          padding: '1rem',
+          color: '#fff',
+          lineHeight: '1',
+          fontSize: '1.7rem',
+          backgroundColor: '#2196f3'
+        }}
+      >
+        Loading Schools ...
+      </p>
+    )}
     {Object.keys(schools).length > 0 && (
       <div>
         {Object.keys(schools).map(school => {
@@ -111,72 +110,68 @@ export default compose(
   withState('schools', 'setSchools', {}),
   withState('loadingSchools', 'setLoadingSchools', false),
   withHandlers({
-    getSchools: ({
-      setSchools,
-      updateField,
-      loadingSchools,
-      setLoadingSchools
-    }) => districts => {
-      setLoadingSchools(true)
+    getSchools:
+      ({ setSchools, setLoadingSchools }) =>
+      districts => {
+        setLoadingSchools(true)
 
-      api.getSchools(districts).then(schools => {
-        const schoolsByTypes = {}
+        api.getSchools(districts).then(schools => {
+          const schoolsByTypes = {}
 
-        setLoadingSchools(false)
+          setLoadingSchools(false)
 
-        schools.forEach(({ type, name }) => {
-          type = `${type}s`
-          schoolsByTypes[type] = !schoolsByTypes[type]
-            ? [name]
-            : [...schoolsByTypes[type], name]
+          schools.forEach(({ type, name }) => {
+            type = `${type}s`
+            schoolsByTypes[type] = !schoolsByTypes[type]
+              ? [name]
+              : [...schoolsByTypes[type], name]
+          })
+
+          setSchools(schoolsByTypes)
         })
-
-        setSchools(schoolsByTypes)
-      })
-    }
+      }
   }),
   withHandlers({
-    onChangeDistricts: ({
-      getSchools,
-      setSchools,
-      updateField,
-      loadingSchools,
-      selectedSchools
-    }) => (districts = []) => {
-      if (loadingSchools) {
-        return
-      }
-
-      if (districts.length === 0) {
-        setSchools([])
-        updateField(FORM_NAME, 'school_districts', [])
-
-        if (Object.keys(selectedSchools).length > 0) {
-          Object.keys(selectedSchools).forEach(school =>
-            updateField(FORM_NAME, school, [])
-          )
+    onChangeDistricts:
+      ({
+        getSchools,
+        setSchools,
+        updateField,
+        loadingSchools,
+        selectedSchools
+      }) =>
+      (districts = []) => {
+        if (loadingSchools) {
+          return
         }
-      } else {
-        updateField(FORM_NAME, 'school_districts', districts)
-        getSchools(districts)
-      }
-    },
-    onChangeSchools: ({
-      updateField,
-      loadingSchools,
-      selectedSchools,
-      setSelectedSchools
-    }) => (type, schools) => {
-      if (loadingSchools) {
-        return
-      }
 
-      selectedSchools[type] = schools.length === 0 ? [] : schools
+        if (districts.length === 0) {
+          setSchools([])
+          updateField(FORM_NAME, 'school_districts', [])
 
-      Object.keys(selectedSchools).forEach(school =>
-        updateField(FORM_NAME, school, selectedSchools[school])
-      )
-    }
+          if (Object.keys(selectedSchools).length > 0) {
+            Object.keys(selectedSchools).forEach(school =>
+              updateField(FORM_NAME, school, [])
+            )
+          }
+        } else {
+          updateField(FORM_NAME, 'school_districts', districts)
+          getSchools(districts)
+        }
+      },
+    onChangeSchools:
+      ({ updateField, loadingSchools, selectedSchools }) =>
+      (type, schools) => {
+        if (loadingSchools) {
+          return
+        }
+
+        selectedSchools[type] = schools.length === 0 ? [] : schools
+
+        Object.keys(selectedSchools).forEach(school =>
+          updateField(FORM_NAME, school, selectedSchools[school])
+        )
+      }
   }),
   withPropsOnChange(
     ['selectedDistricts'],

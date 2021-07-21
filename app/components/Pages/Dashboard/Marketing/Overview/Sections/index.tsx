@@ -1,13 +1,14 @@
 import React from 'react'
+
 import { Grid } from '@material-ui/core'
 
-import SentEmailsSection from './SentEmailsSection'
 import MyDesignsSection from './MyDesignsSection'
-import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
-import PromoteListingsSection from './PromoteListingsSection'
 import NewsletterBannerSection from './NewsletterBannerSection'
-import WhatsNewInMCSection from './WhatsNewInMCSection'
+import PromoteListingsSection from './PromoteListingsSection'
+import SentEmailsSection from './SentEmailsSection'
 import SomethingToShareSection from './SomethingToShareSection'
+import UpcomingBirthdaysAndAnniversariesSection from './UpcomingBirthdaysAndAnniversariesSection'
+import WhatsNewInMCSection from './WhatsNewInMCSection'
 
 export default function Sections() {
   return (

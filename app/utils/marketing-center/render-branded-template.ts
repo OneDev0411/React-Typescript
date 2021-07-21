@@ -1,8 +1,7 @@
-import { loadTemplateHtml } from "models/instant-marketing"
-
-import { getTemplateRenderData } from "components/InstantMarketing/Builder/utils/get-template-render-data"
+import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-import { renderMjml } from "components/TemplatePreview/helpers"
+import { renderMjml } from 'components/TemplatePreview/helpers'
+import { loadTemplateHtml } from 'models/instant-marketing'
 
 export interface TemplateData {
   user?: IUser
@@ -10,12 +9,16 @@ export interface TemplateData {
   listing?: IListing
   listings?: IListing[]
   crmopenhouse?: {
-    title: string,
+    title: string
     due_date: string
   }
 }
 
-export default async function renderBrandedTemplate(template: IBrandMarketingTemplate, brand: IBrand, data: TemplateData): Promise<string> {
+export default async function renderBrandedTemplate(
+  template: IBrandMarketingTemplate,
+  brand: IBrand,
+  data: TemplateData
+): Promise<string> {
   const renderData = getTemplateRenderData(brand)
 
   const markup = await loadTemplateHtml(template)

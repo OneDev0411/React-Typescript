@@ -1,8 +1,9 @@
 import React, { MouseEvent } from 'react'
+
 import { Box, Typography, makeStyles, Theme } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

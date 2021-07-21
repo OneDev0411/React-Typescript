@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+
 import { mdiBellOutline } from '@mdi/js'
 
-import { grey } from 'views/utils/colors'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { grey } from 'views/utils/colors'
 
 import AlertFeedModalViewer from '../../../Listings/components/AlertFeedModalViewer/AlertFeedModalViewer'
 

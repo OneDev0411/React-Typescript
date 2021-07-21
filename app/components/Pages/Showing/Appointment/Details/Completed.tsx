@@ -12,9 +12,10 @@ import cn from 'classnames'
 import useIsMobile from '@app/hooks/use-is-mobile'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import StepConnector from './StepConnector'
-import { useShowingAppointmentStatusDetailsStyles } from './hooks'
 import { getFormattedAppointmentDateTime } from '../utils'
+
+import { useShowingAppointmentStatusDetailsStyles } from './hooks'
+import StepConnector from './StepConnector'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>

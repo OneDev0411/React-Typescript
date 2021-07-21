@@ -1,5 +1,5 @@
-import { BlockRenderer } from 'draft-js-export-html'
 import { ContentBlock } from 'draft-js'
+import { BlockRenderer } from 'draft-js-export-html'
 
 import { renderAttributes } from './render-attributes'
 

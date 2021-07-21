@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Tooltip,
   IconButton,
@@ -6,20 +7,19 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
-
 import { mdiGiftOutline, mdiEmailOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import SendEmailButton from 'components/SendEmailButton'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
+import SendEmailButton from 'components/SendEmailButton'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
 
-import AddNote from './AddNote'
-import AddEvent from './AddEvent'
-import Chat from '../../../components/ChatButton'
 import { Props } from '..'
+import Chat from '../../../components/ChatButton'
+
+import AddEvent from './AddEvent'
+import AddNote from './AddNote'
 
 const useStyles = makeStyles(
   (theme: Theme) =>

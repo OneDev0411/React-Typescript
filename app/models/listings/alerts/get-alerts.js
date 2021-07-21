@@ -1,5 +1,6 @@
-import Fetch from '../../../services/fetch'
 import { normalize } from 'normalizr'
+
+import Fetch from '../../../services/fetch'
 import * as schema from '../schema'
 
 const getAlerts = async (params = {}) => {

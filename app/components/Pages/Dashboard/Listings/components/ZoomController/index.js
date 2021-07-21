@@ -1,8 +1,8 @@
 import React from 'react'
-import _ from 'underscore'
-import { connect } from 'react-redux'
 
 import { mdiMinus, mdiPlus } from '@mdi/js'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

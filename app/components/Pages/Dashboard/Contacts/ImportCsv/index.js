@@ -1,22 +1,24 @@
 import React from 'react'
+
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import styled from 'styled-components'
-import { Helmet } from 'react-helmet'
 
-import Stepper from '../../../../Partials/Stepper'
-import Footer from './Footer'
-import SelectFile from './SelectFile'
-import Mapper from './Mapper'
-import UploadContacts from './UploadContacts'
-import { resetCsvImport } from '../../../../../store_actions/contacts'
 import {
   CONTACTS__IMPORT_CSV__STEP_SELECT_FILE,
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE,
   CONTACTS__IMPORT_CSV__STEP_MAP_FIELDS,
   CONTACTS__IMPORT_CSV__STEP_UPLOAD_CONTACTS
 } from '../../../../../constants/contacts'
+import { resetCsvImport } from '../../../../../store_actions/contacts'
 import { FullPageHeader } from '../../../../../views/components/FullPageHeader'
+import Stepper from '../../../../Partials/Stepper'
+
+import Footer from './Footer'
+import Mapper from './Mapper'
+import SelectFile from './SelectFile'
+import UploadContacts from './UploadContacts'
 
 const Container = styled.div`
   overflow: auto;
@@ -115,7 +117,4 @@ function mapStateToProps({ user, contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { resetCsvImport }
-)(ImportCsv)
+export default connect(mapStateToProps, { resetCsvImport })(ImportCsv)

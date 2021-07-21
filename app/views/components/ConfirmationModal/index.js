@@ -3,9 +3,9 @@ import React, { useEffect, useContext, useState } from 'react'
 import Modal from '../BareModal'
 
 import ActionBar from './ActionBar'
-import { UserEntry } from './UserEntry'
 import ConfirmationModalContext from './context'
 import { initialConfirmationModal } from './context/initial-confirmation-modal'
+import { UserEntry } from './UserEntry'
 /*
  *
  * This is redux-free confirmation modal.

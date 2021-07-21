@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { mdiLogout, mdiHelpCircleOutline, mdiClose } from '@mdi/js'
+
 import { Tooltip, Button } from '@material-ui/core'
+import { mdiLogout, mdiHelpCircleOutline, mdiClose } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Compose from '../../../../Partials/Compose'
-import { hasRecipients } from '../../../../../utils/helpers'
 import { confirmation } from '../../../../../store_actions/confirmation'
+import { hasRecipients } from '../../../../../utils/helpers'
 import {
   Modal,
   ModalHeader,
   ModalFooter
 } from '../../../../../views/components/Modal'
+import Compose from '../../../../Partials/Compose'
 
 export default function ComposeWrapper({
   TriggerButton,

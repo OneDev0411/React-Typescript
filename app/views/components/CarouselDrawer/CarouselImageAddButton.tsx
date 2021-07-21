@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+
 import { Button, makeStyles } from '@material-ui/core'
 import { AddPhotoAlternateOutlined } from '@material-ui/icons'
 
 import ImageSelectDialog from 'components/ImageSelectDialog'
-
 import { ImageSelectDialogProps } from 'components/ImageSelectDialog/types'
 
 import CarouselImage from './CarouselImage'
