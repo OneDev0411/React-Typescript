@@ -8,7 +8,6 @@ import { useEffectOnce } from 'react-use'
 import { IAppState } from 'reducers'
 
 import { searchDeals, getDeals } from 'actions/deals'
-import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 import PageLayout from 'components/GlobalPageLayout'
 
@@ -53,11 +52,9 @@ export default function AgentTable(props: WithRouterProps) {
 
   const fetch = useCallback(
     (user: IUser, searchCriteria: string) => {
-      if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
-        dispatch(getDeals(user))
-      } else {
-        dispatch(searchDeals(user, searchCriteria))
-      }
+      dispatch(
+        searchCriteria ? searchDeals(user, searchCriteria) : getDeals(user)
+      )
     },
     [dispatch]
   )

@@ -60,7 +60,7 @@ const Filters = {
   drafts: (deal: IDeal) => {
     return deal.is_draft === true
   },
-  listings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+  actives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isActiveDeal(deal, statuses)
   },
   pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
