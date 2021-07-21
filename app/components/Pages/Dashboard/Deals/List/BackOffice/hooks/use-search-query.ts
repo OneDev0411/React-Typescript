@@ -1,14 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
+import { selectUser } from '@app/selectors/user'
 import { searchDeals, getDeals } from 'actions/deals'
 
-import { selectUser } from '@app/selectors/user'
-
 import { getClosingsFilterQuery } from '../../helpers/closings'
-import { getStaticFilterQuery } from '../utils/get-static-filter-query'
-
 import type { SearchQuery } from '../types'
+import { getStaticFilterQuery } from '../utils/get-static-filter-query'
 
 export function useSearchQuery(
   searchQuery: SearchQuery,
