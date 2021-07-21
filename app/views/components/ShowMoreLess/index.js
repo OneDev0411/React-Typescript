@@ -76,7 +76,6 @@ export class ShowMoreLess extends Component {
       <Flex
         column={this.props.column}
         row={this.props.row}
-        className="u-scrollbar"
         style={this.props.style}
       >
         {this.props.children}
@@ -93,7 +92,6 @@ export class ShowMoreLess extends Component {
       <Flex
         column={this.props.column}
         row={this.props.row}
-        className="u-scrollbar"
         style={this.props.style}
       >
         {React.Children.map(this.props.children, (child, i) =>
