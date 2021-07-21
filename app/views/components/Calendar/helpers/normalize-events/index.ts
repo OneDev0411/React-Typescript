@@ -1,5 +1,5 @@
-import uniqBy from 'lodash/uniqBy'
 import { isLeapYear } from 'date-fns'
+import uniqBy from 'lodash/uniqBy'
 
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
