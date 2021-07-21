@@ -57,7 +57,9 @@ export function selectActiveTeam(state: IAppState): IUserTeam {
  * Returns the active team roles for the current user if exists
  * @param state The app state
  */
-export function selectActiveTeamRolesUnsafe(state: IAppState): Optional<IBrandRole[]> {
+export function selectActiveTeamRolesUnsafe(
+  state: IAppState
+): Optional<IBrandRole[]> {
   return selectActiveTeamUnsafe(state)?.brand.roles
 }
 
