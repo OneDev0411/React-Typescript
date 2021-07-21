@@ -571,18 +571,20 @@ class Search extends React.Component {
 
   renderLocateButton() {
     return (
-      <Tooltip title="Get your exact location on the map">
+      <>
         {this.state.isGettingCurrentPosition ? (
           <CircularProgress
             className={this.props.classes.loadingLocateIcon}
             size={21}
           />
         ) : (
-          <IconButton aria-label="locate me" onClick={this.onClickLocate}>
-            <MyLocation />
-          </IconButton>
+          <Tooltip title="Get your exact location on the map">
+            <IconButton aria-label="locate me" onClick={this.onClickLocate}>
+              <MyLocation />
+            </IconButton>
+          </Tooltip>
         )}
-      </Tooltip>
+      </>
     )
   }
 
