@@ -1,23 +1,20 @@
 import { makeStyles } from '@material-ui/core'
 
+import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { Table } from '@app/views/components/Grid/Table'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
-
+import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 
-import LoadingContainer from '@app/views/components/LoadingContainer'
-
-import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
-
-import { ListingRow } from './types'
 import ListingsListColumnActions, {
   ListingsListColumnActionsProps
 } from './ListingsListColumnActions'
+import ListingsListColumnProperty from './ListingsListColumnProperty'
 import ListingsListColumnText from './ListingsListColumnText'
 import ListingsListEmptyState from './ListingsListEmptyState'
-import ListingsListColumnProperty from './ListingsListColumnProperty'
-import useListingsSearchRows from './use-listings-search-rows'
+import { ListingRow } from './types'
 import useListingsListSort from './use-listings-list-sort'
+import useListingsSearchRows from './use-listings-search-rows'
 
 const useStyles = makeStyles(
   theme => ({

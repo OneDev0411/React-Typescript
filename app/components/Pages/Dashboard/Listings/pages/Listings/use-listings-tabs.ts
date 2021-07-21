@@ -2,9 +2,8 @@ import { useSelector } from 'react-redux'
 
 import { selectActiveTeam, selectActiveTeamBrands } from '@app/selectors/team'
 
-import useListingsIsLeafBrand from './use-listings-is-leaf-brand'
-
 import { ListingTab } from './types'
+import useListingsIsLeafBrand from './use-listings-is-leaf-brand'
 
 interface UseListingsTabsReturn {
   tab: Nullable<ListingTab>

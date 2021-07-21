@@ -1,10 +1,9 @@
 import { useState } from 'react'
 
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import TableColumnProperty, {
   TableColumnPropertyProps
 } from '@app/views/components/TableColumnProperty'
-
-import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 
 interface ListingsListColumnPropertyProps
   extends Omit<TableColumnPropertyProps, 'children'> {

@@ -1,19 +1,18 @@
 import { useState } from 'react'
-import { WithRouterProps } from 'react-router'
 
 import { Box } from '@material-ui/core'
-
+import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from '@app/views/components/GlobalPageLayout'
 
 import SearchTextField from '../../components/SearchTextField'
 
-import ListingsTabs from './ListingsTabs'
 import ListingsList from './ListingsList'
-import useListingsTabs from './use-listings-tabs'
-import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
 import ListingsLoading from './ListingsLoading'
+import ListingsOpenHouseProvider from './ListingsOpenHouseProvider'
+import ListingsTabs from './ListingsTabs'
+import useListingsTabs from './use-listings-tabs'
 
 type ListingsProps = WithRouterProps<{ brandId?: UUID }, {}>
 

@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux'
-
 import { useMemo } from 'react'
+
+import { useSelector } from 'react-redux'
 
 import { selectDealsList } from '@app/selectors/deals'
 

@@ -1,11 +1,10 @@
 import { useCallback, useEffect } from 'react'
 
-import { useAcl } from '@app/views/components/Acl/use-acl'
 import { ACL } from '@app/constants/acl'
-
-import { getTasks } from 'models/tasks/get-tasks'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import useAsync from '@app/hooks/use-async'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { getTasks } from 'models/tasks/get-tasks'
 
 import { OpenHouseRow } from './types'
 
