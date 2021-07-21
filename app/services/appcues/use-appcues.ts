@@ -1,71 +1,52 @@
-import moment from 'moment'
+import { useMemo, useEffect } from 'react'
+
 import { useSelector } from 'react-redux'
-import { useDeepCompareEffect } from 'react-use'
+import { useLocation } from 'react-use'
 
-import { ACL } from 'constants/acl'
-import { OAuthProvider } from 'constants/contacts'
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
-import { IAppState } from 'reducers'
-import { selectUserHasAccess } from 'selectors/acl'
-import { selectUserUnsafe } from 'selectors/user'
+import { selectUserAccessList, selectUserUnsafe } from 'selectors/user'
 
-interface Location {
-  pathname: string
-}
+import { prepareAndSendUserData } from './helpers'
+import { AppcuesUserInfo } from './types'
 
 export function useAppcues() {
-  const accessList = useSelector((state: IAppState) =>
-    Object.keys(ACL).reduce((acc, access) => {
-      const hasAccess = selectUserHasAccess(state, ACL[access])
+  const accessList = useSelector(selectUserAccessList)
 
-      return {
-        ...acc,
-        [`has${ACL[access]}Access`]: hasAccess
-      }
-    }, {})
-  )
-
-  const location = useSelector<IAppState, Location | null>(
-    state => state.data.location
-  )
+  const location = useLocation()
   const user = useSelector(selectUserUnsafe)
 
-  const pathname = location ? location.pathname : null
+  interface UserInfoToWatch extends AppcuesUserInfo {
+    id: string
+  }
 
-  useDeepCompareEffect(() => {
-    if (!pathname) {
-      return
-    }
-
-    ;(async function prepareAndSendUserData() {
-      const google = await getOAuthAccounts(OAuthProvider.Google)
-      const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
-
-      if (user && user.id) {
-        const starts = moment(user.created_at * 1000)
-        const ends = moment()
-        const accountAge = moment.duration(ends.diff(starts))
-
-        const userData = {
+  const userInfoToWatch = useMemo<Nullable<UserInfoToWatch>>(() => {
+    return user?.id
+      ? {
+          id: user.id,
           firstName: user.first_name,
           fullName: user.display_name,
           email: user.email,
           userType: user.user_type,
-          accountAgeInDays:
-            accountAge.days() +
-            accountAge.months() * 30 +
-            accountAge.years() * 365,
-          gmailOrOutlookSynced: Boolean(google.length || outlook.length),
-          ...accessList
+          createdAt: user.created_at
         }
+      : null
+  }, [
+    user?.id,
+    user?.first_name,
+    user?.display_name,
+    user?.email,
+    user?.user_type,
+    user?.created_at
+  ])
 
-        // Normally what we should be doing here is to call Appcues.Page(), but
-        // behind the scenes, Appcues.identify() also invokes that function.
-        // Reac more: https://docs.appcues.com/article/161-javascript-api
-        window.AppcuesReady(() => {
-          window.Appcues.identify(user.id, userData)
-        })
-      }
-    })()
-  }, [pathname, user, accessList])
+  const pathname = location.pathname
+
+  useEffect(() => {
+    if (!userInfoToWatch) {
+      return
+    }
+
+    const { id, ...appcuesUserInfo } = userInfoToWatch
+
+    prepareAndSendUserData(accessList, id, appcuesUserInfo)
+  }, [pathname, userInfoToWatch, accessList])
 }
