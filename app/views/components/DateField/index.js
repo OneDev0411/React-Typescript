@@ -6,6 +6,7 @@ import { isLeapYear } from 'date-fns'
 import { months } from 'utils/date-times'
 import Button from 'components/Button/ActionButton'
 import { BasicDropdown } from 'components/BasicDropdown'
+import { addZero } from 'utils/date-times'
 
 import { Input } from './styled'
 
@@ -23,8 +24,10 @@ export function DateField(props) {
 
     const days = [...Array(daysInMonth).keys()].map(day => day + 1)
 
+    console.log({ days, daysInMonth })
+
     return days.map(day => ({
-      label: day < 10 ? `0${day}` : day.toString(),
+      label: addZero(day),
       value: day
     }))
   }, [month.value, year])
@@ -36,8 +39,6 @@ export function DateField(props) {
       })),
     []
   )
-
-  const display = 'flex'
 
   const onChangeDay = value => {
     setDay(value)
@@ -86,7 +87,7 @@ export function DateField(props) {
         items={monthsItems}
         onChange={onChangeMonth}
         selectedItem={month}
-        style={{ display }}
+        style={{ display: 'flex' }}
         buttonRenderer={props.dropdownButtonRenderer}
       />
       <BasicDropdown
@@ -94,7 +95,7 @@ export function DateField(props) {
         items={daysItems}
         selectedItem={day}
         onChange={onChangeDay}
-        style={{ display, margin: '0 0.5rem 0' }}
+        style={{ display: 'flex', margin: '0 0.5rem 0' }}
         buttonRenderer={props.dropdownButtonRenderer}
       />
       {props.showYear ? (
