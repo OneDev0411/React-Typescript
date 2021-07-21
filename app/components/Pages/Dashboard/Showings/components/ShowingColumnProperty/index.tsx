@@ -1,7 +1,6 @@
 import { Badge, Box, Typography, makeStyles } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
-
 // TODO: move this to the global scope
 import { Notification } from 'deals/List/components/Notification'
 

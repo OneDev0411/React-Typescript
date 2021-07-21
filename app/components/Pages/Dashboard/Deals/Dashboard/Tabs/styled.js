@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { Link } from 'react-router'
+import styled, { css } from 'styled-components'
 
 import AbstractCard from 'components/Card'
 

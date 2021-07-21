@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react'
+
 import { Tooltip } from '@material-ui/core'
 
-import Table from 'components/Grid/Table'
 import ContactInfo from 'components/ContactInfo'
+import Table from 'components/Grid/Table'
+import { useGridStyles } from 'components/Grid/Table/styles'
+import { RenderProps } from 'components/Grid/Table/types'
 import MiniContact from 'components/MiniContact'
 
-import { RenderProps } from 'components/Grid/Table/types'
-import { useGridStyles } from 'components/Grid/Table/styles'
+import { hasPixelTracking } from '../List/helpers'
 
+import { contactsList } from './helpers'
 import { SortableColumnsType as SortFieldType } from './SortField'
 import { ContactColumn, StyledBadge } from './styled'
-import { contactsList } from './helpers'
 import { ContactsListType } from './types'
-import { hasPixelTracking } from '../List/helpers'
 
 interface ContactsPropsType {
   item: IEmailCampaign<'from' | 'emails' | 'recipients'>

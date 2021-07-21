@@ -1,8 +1,9 @@
-import toggleSubStatuses from './toggle-sub-statuses'
-import { ACTIVE_PENDING_STATUSES } from '../../../../constants/listings/search/filters'
 import { pendingStatuses } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/statuses'
+import { ACTIVE_PENDING_STATUSES } from '../../../../constants/listings/search/filters'
 
-const activePendingListings = event => (dispatch, getState) => {
+import toggleSubStatuses from './toggle-sub-statuses'
+
+const activePendingListings = event => dispatch => {
   dispatch({
     type: ACTIVE_PENDING_STATUSES
   })

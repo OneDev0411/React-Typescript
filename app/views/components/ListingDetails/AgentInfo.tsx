@@ -1,12 +1,12 @@
 import React from 'react'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme } from '@material-ui/core'
 import { mdiAccount } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { formatPhoneNumber } from 'utils/format'
 
 const useStyles = makeStyles(

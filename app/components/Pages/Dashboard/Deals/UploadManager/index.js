@@ -1,14 +1,14 @@
 // todo: needs refactor
 
 import React from 'react'
-import { connect } from 'react-redux'
-import Dropzone from 'react-dropzone-rechat'
+
 import cn from 'classnames'
+import Dropzone from 'react-dropzone-rechat'
+import { connect } from 'react-redux'
 
-import Deal from 'models/Deal'
-
-import { setUploadFiles } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { setUploadFiles } from 'actions/deals'
+import Deal from 'models/Deal'
 
 class UploadDocument extends React.Component {
   state = {

@@ -1,14 +1,15 @@
 import React from 'react'
+
 import { Box, Grid } from '@material-ui/core'
 
 import { H3 } from 'components/Typography/headings'
 
-import CarouselSelectedImageItem, {
-  CarouselSelectedImageItemProps
-} from './CarouselSelectedImageItem'
 import CarouselImageAddButton, {
   CarouselImageAddButtonProps
 } from './CarouselImageAddButton'
+import CarouselSelectedImageItem, {
+  CarouselSelectedImageItemProps
+} from './CarouselSelectedImageItem'
 
 export interface CarouselSelectedImageListProps
   extends Required<

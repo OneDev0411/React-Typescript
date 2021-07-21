@@ -5,8 +5,7 @@ import React, {
   useRef,
   useState
 } from 'react'
-import { ContentBlock, EditorState } from 'draft-js'
-import { getSelectionEntity } from 'draftjs-utils'
+
 import {
   Grow,
   Popper,
@@ -14,16 +13,19 @@ import {
   PopperProps,
   useTheme
 } from '@material-ui/core'
+import { ContentBlock, EditorState } from 'draft-js'
+import { getSelectionEntity } from 'draftjs-utils'
 import { isEqual } from 'lodash'
 import PopperJs from 'popper.js'
-import usePrevious from 'react-use/lib/usePrevious'
 import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
+import usePrevious from 'react-use/lib/usePrevious'
 
 import { getSelectionAnchorElement } from '../../features/RichText/LinkEditorPopover/utils'
 import { Entity } from '../../types'
-import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
 import { getAtomicBlockEntityData } from '../../utils/get-atomic-block-entity-data'
 import { getBlockElement } from '../../utils/get-block-element'
+import { getSelectedAtomicBlock } from '../../utils/get-selected-atomic-block'
+
 import { useAtomicBlockFocusBugDetector } from './use-atomic-block-focus-bug-detector'
 
 export interface SelectionPopoverRenderProps {

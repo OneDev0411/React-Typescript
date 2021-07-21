@@ -1,7 +1,8 @@
 import React from 'react'
+
 import Input from 'react-text-mask'
-import _ from 'underscore'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+import _ from 'underscore'
 
 import InputErrorMessage from '../components/InputErrorMessage'
 

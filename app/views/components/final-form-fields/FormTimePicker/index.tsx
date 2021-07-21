@@ -1,7 +1,7 @@
 import React from 'react'
-import { Field } from 'react-final-form'
 
 import { FieldState } from 'final-form'
+import { Field } from 'react-final-form'
 
 import TimePicker, { TimePickerProps } from 'components/TimePicker'
 

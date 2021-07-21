@@ -10,6 +10,8 @@ const MEDIUM_LABEL_MAP: {
   Website: 'Website'
 }
 
-export function getTemplateMediumLabel(medium: IMarketingTemplateMedium): string {
+export function getTemplateMediumLabel(
+  medium: IMarketingTemplateMedium
+): string {
   return MEDIUM_LABEL_MAP[medium] ?? medium
 }

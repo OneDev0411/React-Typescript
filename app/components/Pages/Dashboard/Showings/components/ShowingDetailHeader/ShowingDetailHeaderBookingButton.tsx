@@ -2,7 +2,6 @@ import { mdiOpenInNew } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
 import useIsMobile from 'hooks/use-is-mobile'
 
 import LinkButton from '../LinkButton'

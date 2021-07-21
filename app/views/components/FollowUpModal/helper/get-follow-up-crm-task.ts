@@ -1,11 +1,11 @@
 import fecha from 'fecha'
 
-import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { EmailThreadEmail } from 'components/EmailThread/types'
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
-import { FollowUpEmail, FollowUpEmailCampaign } from '../types'
 import { Props as FollowUpProps } from '../FollowUpModal'
+import { FollowUpEmail, FollowUpEmailCampaign } from '../types'
 
 // TODO: should drop specific email association and make it general
 export function getFollowUpCrmTask(

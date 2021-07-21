@@ -6,9 +6,8 @@ export function getSelectedAtomicBlock(
   editorState: EditorState,
   ensureFocused = false
 ): ContentBlock | undefined {
-  const selectedBlocksList: List<ContentBlock> = getSelectedBlocksList(
-    editorState
-  )
+  const selectedBlocksList: List<ContentBlock> =
+    getSelectedBlocksList(editorState)
 
   const firstSelectedBlock = selectedBlocksList.get(0)
 

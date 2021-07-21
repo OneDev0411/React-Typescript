@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { mdiClose, mdiMagnify, mdiChevronDown } from '@mdi/js'
 import Downshift from 'downshift'
 import PropTypes from 'prop-types'
-import { mdiClose, mdiMagnify, mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

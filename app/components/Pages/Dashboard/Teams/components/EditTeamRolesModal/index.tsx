@@ -1,20 +1,17 @@
-import { Form } from 'react-final-form'
-
 import * as React from 'react'
 
-import arrayMutators from 'final-form-arrays'
-import { FieldArray } from 'react-final-form-arrays'
 import { mdiPlus } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { Modal, ModalFooter, ModalHeader } from 'components/Modal'
+import arrayMutators from 'final-form-arrays'
+import { Form } from 'react-final-form'
+import { FieldArray } from 'react-final-form-arrays'
 
 import Button from 'components/Button/ActionButton'
+import { Modal, ModalFooter, ModalHeader } from 'components/Modal'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { EditTeamRolesTable, EditTeamRolesTableHeader } from './styled'
 import { RoleRow } from './components/RoleRow'
 import { permissions } from './permissions'
+import { EditTeamRolesTable, EditTeamRolesTableHeader } from './styled'
 
 interface Props {
   close: () => void

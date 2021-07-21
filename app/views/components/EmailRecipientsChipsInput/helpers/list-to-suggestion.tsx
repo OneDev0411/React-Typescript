@@ -1,10 +1,10 @@
-import { Avatar } from '@material-ui/core'
-
 import React from 'react'
+
+import { Avatar } from '@material-ui/core'
 import { mdiFormatListBulleted } from '@mdi/js'
 
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { Suggestion } from '../../ChipsInput/types'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 export function listToSuggestion(
   recipient: IDenormalizedEmailRecipientListInput

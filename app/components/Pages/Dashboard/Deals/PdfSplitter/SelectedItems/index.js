@@ -1,15 +1,15 @@
 import React from 'react'
-import _ from 'underscore'
-import { DropTarget } from 'react-dnd'
-
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import { DropTarget } from 'react-dnd'
+import Flex from 'styled-flex-component'
+import _ from 'underscore'
 
 import { Page } from 'components/PdfViewer/Page'
 
-import { EmptyState } from './EmptyState'
 import { PageNumber } from '../styled'
+
+import { EmptyState } from './EmptyState'
 
 /**
  * Specifies which props to inject into your component.

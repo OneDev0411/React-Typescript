@@ -1,30 +1,32 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Box, Grid, Button, Container, RootRef } from '@material-ui/core'
 import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
-import listingUtils from 'utils/listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
+import listingUtils from 'utils/listing'
 
 import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
-import { useGetListing, UseGetListing } from './use-get-listing'
-import Header from './Header'
-import Title from './Title'
-import Status from './Status'
-import Gallery from './Gallery'
-import MainFeatures from './MainFeatures'
-import FeaturedImages from './FeaturedImages'
+
 import AgentInfo from './AgentInfo'
-import Description from './Description'
-import FeatureList from './FeatureList'
-import Map from './Map'
-import MLSNote from './MLSNote'
 import ClaimAccountBanner from './ClaimAccountBanner'
+import Description from './Description'
+import FeaturedImages from './FeaturedImages'
+import FeatureList from './FeatureList'
+import Gallery from './Gallery'
+import { getAgentInfo } from './get-agent-info'
 import { getPrice } from './get-price'
 import { getSubAddress } from './get-sub-address'
-import { getAgentInfo } from './get-agent-info'
+import Header from './Header'
+import MainFeatures from './MainFeatures'
+import Map from './Map'
+import MLSNote from './MLSNote'
+import Status from './Status'
+import Title from './Title'
+import { useGetListing, UseGetListing } from './use-get-listing'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -128,10 +130,11 @@ const useStyles = makeStyles(
 
 interface Props {
   id: UUID
+  isWidget?: boolean
   onClose?: () => void
 }
 
-function ListingDetails({ id, onClose }: Props) {
+function ListingDetails({ id, isWidget = false, onClose }: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const user = useSelector(selectUserUnsafe)
@@ -168,6 +171,7 @@ function ListingDetails({ id, onClose }: Props) {
     <Container maxWidth="xl" disableGutters>
       <div className={classes.header}>
         <Header
+          isWidget={isWidget}
           listing={listing}
           handleShare={openShareModal}
           handleClose={onClose}

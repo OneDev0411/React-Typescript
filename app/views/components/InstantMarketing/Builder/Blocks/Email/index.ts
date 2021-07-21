@@ -1,7 +1,25 @@
 import { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
+import { BlockOptions, TemplateBlockOptions } from '../types'
+import { collapseBlockCategories, reorderBlocks } from '../utils'
 
+import registerAgentBlocks, {
+  Options as AgentOptions,
+  agentLeftBlockName,
+  agentGridBlockName,
+  agentMultiBlockName
+} from './Agents'
+import registerArticleBlock, {
+  Options as VideoOptions,
+  articleTopBlockName,
+  articleLeftBlockName,
+  articleRightBlockName
+} from './Articles'
+import registerImageBlock, {
+  Options as ImageOptions,
+  blockName as rechatImageBlockName
+} from './Image'
 import registerListingBlocks, {
   Options as ListingOptions,
   listingImageBlockName,
@@ -11,36 +29,18 @@ import registerListingBlocks, {
   listingLeftBlockName,
   listingRightBlockName
 } from './Listings'
-import registerAgentBlocks, {
-  Options as AgentOptions,
-  agentLeftBlockName,
-  agentGridBlockName,
-  agentMultiBlockName
-} from './Agents'
+import registerNeighborhoodsBlocks, {
+  Options as NeighborhoodsOptions,
+  neighborhoodsBlockName,
+  neighborhoodsGraphsBlockName
+} from './Neighborhoods'
 import registerStaticBlocks, {
   headline1BlockName,
   dividerBlockName,
   spacerBlockName,
   headline2BlockName
 } from './Statics'
-import registerImageBlock, {
-  Options as ImageOptions,
-  blockName as rechatImageBlockName
-} from './Image'
 import registerVideoBlock, { Options as ArticleOptions } from './Video'
-import registerArticleBlock, {
-  Options as VideoOptions,
-  articleTopBlockName,
-  articleLeftBlockName,
-  articleRightBlockName
-} from './Articles'
-import registerNeighborhoodsBlocks, {
-  Options as NeighborhoodsOptions,
-  neighborhoodsBlockName,
-  neighborhoodsGraphsBlockName
-} from './Neighborhoods'
-import { collapseBlockCategories, reorderBlocks } from '../utils'
-import { BlockOptions, TemplateBlockOptions } from '../types'
 
 interface Options {
   listing: ListingOptions

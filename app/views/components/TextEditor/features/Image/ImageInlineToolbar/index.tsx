@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { EditorState } from 'draft-js'
 
 import {
   DraftJsSelectionPopover,
   SelectionPopoverRenderProps
 } from '../../../components/DraftJsSelectionPopover'
-import { ImageToolbar } from '../ImageToolbar'
 import { SelectionPopoverPaper } from '../../../components/SelectionPopoverPaper'
+import { ImageToolbar } from '../ImageToolbar'
 
 interface Props {
   editorState: EditorState

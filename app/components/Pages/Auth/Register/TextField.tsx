@@ -1,6 +1,7 @@
 import React from 'react'
-import { Field } from 'react-final-form'
+
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { MUITextInput } from '../../../../views/components/Forms/MUITextInput'
 

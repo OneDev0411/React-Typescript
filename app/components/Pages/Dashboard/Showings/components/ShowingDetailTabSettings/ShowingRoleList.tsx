@@ -1,29 +1,26 @@
 import { useState, ReactNode } from 'react'
-import { Box } from '@material-ui/core'
 
+import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
-
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
 import addShowingRole from 'models/showing/add-showing-role'
-
 import { selectActiveTeamId } from 'selectors/team'
 
-import useNotify from 'hooks/use-notify'
-
 import { goAndShowNotificationTypes } from '../../constants'
-import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
+import { getShowingRoleLabel } from '../../helpers'
+import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
+import { ShowingRoleFormDialog } from '../ShowingRoleForm'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+
 import ShowingRoleListColumnActions, {
   ShowingRoleListColumnActionsProps
 } from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
-import { ShowingRoleFormDialog } from '../ShowingRoleForm'
-import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
-import { getShowingRoleLabel } from '../../helpers'
-import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 
 export interface ShowingRoleListProps
   extends Pick<
@@ -65,7 +62,7 @@ function ShowingRoleList({
 
       notify({
         status: 'success',
-        message: 'The new participant added successfully.'
+        message: 'A new participant was added successfully.'
       })
     })
   }

@@ -1,5 +1,6 @@
-import store from '.'
 import { updateApp } from '../store_actions/data'
+
+import store from '.'
 
 // hack Flux store to use Redux reducers
 export default {

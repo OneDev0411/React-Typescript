@@ -1,5 +1,6 @@
 // List.js
 import React from 'react'
+
 export default ({ color = '#4E5C6C', width = 20, height = 19 }) => (
   <svg
     width={width}

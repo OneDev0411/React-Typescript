@@ -1,55 +1,47 @@
 import { useMemo } from 'react'
+
+import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { TableCellProps } from '@material-ui/core'
-
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { goTo } from '@app/utils/go-to'
 import Grid from 'components/Grid/Table'
-import { TrProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
+import { TrProps } from 'components/Grid/Table/types'
 import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
-
-import { IAppState } from 'reducers'
-
-import {
-  getStatus,
-  getField,
-  getFormattedPrice
-} from 'models/Deal/helpers/context'
-import { getActiveTeamId } from 'utils/user-teams'
-import { sortDealsStatus } from 'utils/sort-deals-status'
-
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-
 import {
   isActiveDeal,
   isArchivedDeal,
   isClosingDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
-
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
+import {
+  getStatus,
+  getField,
+  getFormattedPrice
+} from 'models/Deal/helpers/context'
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { sortDealsStatus } from 'utils/sort-deals-status'
+import { getActiveTeamId } from 'utils/user-teams'
 
-import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
-
-import { goTo } from '@app/utils/go-to'
-
-import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
-import { getGridSort } from '../../helpers/sorting'
-
-import EmptyState from './EmptyState'
+import onDealOpened from '../../../utils/on-deal-opened'
+import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import LoadingState from '../../components/LoadingState'
-
-import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import { Address } from '../../components/table-columns/Address'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-
-import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
-import onDealOpened from '../../../utils/on-deal-opened'
 import { getClosingDateRange } from '../../helpers/closings'
+import { getGridSort } from '../../helpers/sorting'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import { ClosingDateRange } from '../../types'
+import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
+
+import EmptyState from './EmptyState'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -147,7 +139,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     }
   ]
 
-  const data = useMemo(() => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -163,6 +155,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       filterFn(deal, statuses, closingDateRange)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
+
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {

@@ -8,27 +8,25 @@ import {
   Divider,
   Typography
 } from '@material-ui/core'
-import { spacing } from '@material-ui/system'
 import { styled } from '@material-ui/core/styles'
+import { spacing } from '@material-ui/system'
 
 import { roleName } from 'deals/utils/roles'
 
-import DeleteRole from '../components/DeleteRole'
-
 import Field from '../components/CustomField'
+import DeleteRole from '../components/DeleteRole'
+import { TYPE_PERSON } from '../constants/role-types'
+import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 
-import { TitleInput } from './form-fields/TitleInput'
-import { TypeInput } from './form-fields/TypeInput'
-import { Roles } from './form-fields/Roles'
 import { Address } from './form-fields/Address'
 import { AutoCompleteInput } from './form-fields/AutoCompleteInput'
-import { NameInput } from './form-fields/NameInput'
-import { MlsInput } from './form-fields/MlsInput'
 import { CommissionInput } from './form-fields/CommissionInput'
+import { MlsInput } from './form-fields/MlsInput'
+import { NameInput } from './form-fields/NameInput'
+import { Roles } from './form-fields/Roles'
 import { TextInput } from './form-fields/TextInput'
-
-import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
-import { TYPE_PERSON } from '../constants/role-types'
+import { TitleInput } from './form-fields/TitleInput'
+import { TypeInput } from './form-fields/TypeInput'
 
 const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
@@ -89,19 +87,11 @@ export function RoleForm(props) {
         <>
           {showNameDetails ? (
             <Grid container xs spacing={2} alignItems="center" mt={1}>
-              <Grid item md={compact ? 12 : true} xs={12}>
+              <Grid item md={compact ? 12 : 6} xs={12}>
                 <Field
                   name="legal_prefix"
                   component={TitleInput}
                   isVisible={isVisible('title')}
-                />
-              </Grid>
-              <Grid item md={compact ? 12 : true} xs={12}>
-                <Field
-                  name="legal_middle_name"
-                  label="Mid. Name"
-                  isVisible={isVisible('legal_middle_name')}
-                  component={TextInput}
                 />
               </Grid>
             </Grid>
@@ -118,7 +108,7 @@ export function RoleForm(props) {
       )}
 
       <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
-        <Grid item md={compact ? 12 : true} xs={12}>
+        <Grid item md={compact ? 12 : 6} xs={12}>
           <Field
             name="role"
             label="Role"
@@ -127,8 +117,6 @@ export function RoleForm(props) {
             component={Roles}
           />
         </Grid>
-
-        <Grid item md={compact ? 12 : true} xs={12} />
       </Grid>
 
       {roleType === TYPE_PERSON && (
@@ -146,6 +134,17 @@ export function RoleForm(props) {
               component={NameInput}
             />
           </Grid>
+
+          {showNameDetails && (
+            <Grid item md={compact ? 12 : true} xs={12}>
+              <Field
+                name="legal_middle_name"
+                label="Mid. Name"
+                isVisible={isVisible('legal_middle_name')}
+                component={TextInput}
+              />
+            </Grid>
+          )}
 
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field

@@ -1,20 +1,23 @@
 import React, { ComponentProps, useCallback, useState, memo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+
 import { noop } from 'lodash'
+import { useSelector, useDispatch } from 'react-redux'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
-import { IAppState } from 'reducers'
-import { selectUserUnsafe } from 'selectors/user'
-import { selectListingIsFavorited } from 'selectors/listings'
-
 import ListingCard from 'components/ListingCards/ListingCard'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { IAppState } from 'reducers'
+import { selectListingIsFavorited } from 'selectors/listings'
+import { selectUserUnsafe } from 'selectors/user'
 
 interface Props
-  extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {}
+  extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {
+  isWidget?: boolean
+}
 
 const ListingCardWithFavorite = ({
   listing,
+  isWidget = false,
   tags,
   selected = undefined,
   onToggleSelection = noop,
@@ -69,6 +72,7 @@ const ListingCardWithFavorite = ({
 
       <ListingDetailsModal
         isOpen={isListingOpen}
+        isWidget={isWidget}
         listingId={listing.id}
         closeHandler={closeListing}
       />

@@ -10,9 +10,9 @@ export async function isValidPhoneNumber(
     return true
   }
 
-  const {
-    PhoneNumberUtil
-  } = await import('google-libphonenumber' /* webpackChunkName: "glpn" */)
+  const { PhoneNumberUtil } = await import(
+    'google-libphonenumber' /* webpackChunkName: "glpn" */
+  )
   const phoneUtil = PhoneNumberUtil.getInstance()
 
   try {

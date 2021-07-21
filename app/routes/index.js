@@ -1,24 +1,24 @@
 import React from 'react'
+
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
-
 import { ACL } from 'constants/acl'
 
+import AppLayout from '../components/App'
+import Dashboard from '../components/Pages/Dashboard'
 import {
   showingDetailTabs,
   showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
-
+import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
-import AppLayout from '../components/App'
-import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
-import Load from '../loader'
+
 import { withGuest, withSignedInUser } from './hoc'
 
 const AsyncAuthenticationLayout = Load({
@@ -255,6 +255,15 @@ const AsyncListingSinglePage = Load({
       '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
     )
 })
+
+const AsyncListingMarketing = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Listings/Marketing' /* webpackChunkName: "listing_marketing" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Agent Network
@@ -970,6 +979,10 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route
+          path="/dashboard/mls/:id/marketing"
+          component={AsyncListingMarketing}
+        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />

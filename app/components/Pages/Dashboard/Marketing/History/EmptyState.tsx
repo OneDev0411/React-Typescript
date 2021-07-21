@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Box,
   Button,
@@ -12,11 +12,12 @@ import {
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { mdiPlayCircleOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { hasUserAccessToBrandSettings } from 'utils/user-teams'
-import { IAppState } from 'reducers'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface StylesProps {
   isDesktop: boolean

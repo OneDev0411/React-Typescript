@@ -1,12 +1,12 @@
 import React, { memo } from 'react'
-import { useSelector } from 'react-redux'
+
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-
-import { itemDateText } from 'utils/marketing-center/helpers'
-import { ClassesProps } from 'utils/ts-utils'
+import { useSelector } from 'react-redux'
 
 import { selectUser } from 'selectors/user'
+import { itemDateText } from 'utils/marketing-center/helpers'
+import { ClassesProps } from 'utils/ts-utils'
 
 import { marketingTemplateCardStyles } from './styles'
 import { Thumbnail } from './Thumbnail'

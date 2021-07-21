@@ -1,12 +1,11 @@
 import { Box, IconButton } from '@material-ui/core'
-
 import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import ShowingContactOverviewCard from '../ShowingContactOverviewCard'
 import { getShowingRoleLabel } from '../../helpers'
+import ShowingContactOverviewCard from '../ShowingContactOverviewCard'
 
 interface ShowingStepRolePersonCardProps {
   role: Pick<IShowingRoleInput, 'first_name' | 'last_name' | 'role'>

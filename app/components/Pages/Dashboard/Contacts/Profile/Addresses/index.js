@@ -1,16 +1,16 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
 import { addNotification } from 'components/notification'
-
+import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-bulk-contacts'
 import { getContactAddresses } from 'models/contacts/helpers/get-contact-addresses'
 import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-import { deleteAttributesFromContacts } from 'models/contacts/delete-attributes-bulk-contacts'
-
 import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
-import AddressField from './AddressField'
 import { BasicSection } from '../components/Section/Basic'
+
+import AddressField from './AddressField'
 import { generateEmptyAddress, getAddresses } from './helpers/get-addresses'
 
 class Addresses extends React.Component {
@@ -37,7 +37,7 @@ class Addresses extends React.Component {
         ...normalizedAddresses,
         generateEmptyAddress(
           addressAttributeDefs,
-          addresses,
+          normalizedAddresses,
           false,
           defaultLabel,
           defaultIsPrimary

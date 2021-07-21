@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
+
 import { Grid, Box, Typography } from '@material-ui/core'
 
 import { GridProvider } from 'components/Grid/Table'
-
-import { ListingsDrawer } from './ListingsDrawer'
-import { ListTable } from './Table'
 
 import {
   AggregatedAgentInfo,
   AgentSide,
   ListingWithProposedAgent
 } from '../types'
+
+import { ListingsDrawer } from './ListingsDrawer'
+import { ListTable } from './Table'
 
 interface Props {
   user: IUser
@@ -25,9 +26,8 @@ export default function AgentsGrid({
   agents,
   isLoading
 }: Props) {
-  const [selectedAgentInfo, setSelectedAgentInfo] = useState<
-    Nullable<{ info: AggregatedAgentInfo; side: AgentSide }>
-  >(null)
+  const [selectedAgentInfo, setSelectedAgentInfo] =
+    useState<Nullable<{ info: AggregatedAgentInfo; side: AgentSide }>>(null)
 
   const onCloseDrawer = () => setSelectedAgentInfo(null)
 

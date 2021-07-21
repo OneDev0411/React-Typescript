@@ -1,5 +1,4 @@
 import { INACTIVE_DRAWING } from '../../../constants/listings/map'
-
 import {
   RESET_SEARCH_TYPE,
   SEARCH_BY_QUERY,

@@ -1,9 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import fecha from 'fecha'
 
 import { IconButton, useTheme } from '@material-ui/core'
 import { mdiAttachment, mdiClose } from '@mdi/js'
+import fecha from 'fecha'
+import PropTypes from 'prop-types'
 
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 

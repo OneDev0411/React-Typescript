@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { Theme, Paper, Grid, Button, Typography } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

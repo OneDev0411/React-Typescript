@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button } from '@material-ui/core'
 
+import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
+// eslint-disable-next-line import/no-named-as-default
+import DealRole from 'components/DealRole/Form'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import DealRole from 'components/DealRole/Form'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { deleteRole } from 'models/Deal/role'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
-import { RoleCard } from '../../components/RoleCard'
-import { ContactRoles } from '../../components/ContactRoles'
-
 import { AgentsList } from '../../components/AgentsList'
-
+import { ContactRoles } from '../../components/ContactRoles'
+import { RoleCard } from '../../components/RoleCard'
+import { useCreationContext } from '../../context/use-creation-context'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
@@ -48,13 +43,12 @@ export function DealPrimaryAgent({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
 
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const allowedRoles = getRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
@@ -105,7 +99,6 @@ export function DealPrimaryAgent({
             isOpen
             compact
             deal={deal}
-            user={user}
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}

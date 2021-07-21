@@ -1,4 +1,5 @@
 import React, { useState, ReactNode } from 'react'
+
 import { Tabs, makeStyles, Theme } from '@material-ui/core'
 
 export * from './Tab'
@@ -87,9 +88,8 @@ export function PageTabs({
 }: Props) {
   const classes = useStyles()
   const [selectedTab, setSelectedTab] = useState<SelectedTab>(defaultValue)
-  const [selectedAction, setSelectedAction] = useState<SelectedTab>(
-    defaultAction
-  )
+  const [selectedAction, setSelectedAction] =
+    useState<SelectedTab>(defaultAction)
 
   const activeTab =
     defaultValue && selectedTab !== defaultValue ? defaultValue : selectedTab

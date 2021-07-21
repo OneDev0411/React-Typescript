@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Image } from './types'
 import { Thumbnail as StyledThumbnail } from './styled'
+import { Image } from './types'
 
 interface Props {
   image: Image

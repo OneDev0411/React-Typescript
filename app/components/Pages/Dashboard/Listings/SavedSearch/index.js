@@ -1,22 +1,31 @@
 import React from 'react'
+
+import { withStyles } from '@material-ui/core/styles'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
-import { Helmet } from 'react-helmet'
-import memoize from 'lodash/memoize'
-import { withStyles } from '@material-ui/core/styles'
-import hash from 'object-hash'
-
-import GlobalPageLayout from 'components/GlobalPageLayout'
-
-import { putUserSetting } from 'models/user/put-user-setting'
 
 import { getUserTeams } from 'actions/user/teams'
+import GlobalPageLayout from 'components/GlobalPageLayout'
+import { putUserSetting } from 'models/user/put-user-setting'
 
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
-
+import { normalizeListingLocation } from '../../../../../utils/map'
+import Avatars from '../../../../../views/components/Avatars'
+import GridView from '../components/GridView'
+import ListView from '../components/ListView'
+import MapView from '../components/MapView'
+import { Header } from '../components/PageHeader'
+import Tabs from '../components/Tabs'
+import {
+  formatListing,
+  addDistanceFromCenterToListing
+} from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -24,20 +33,7 @@ import {
   SORT_FIELD_SETTING_KEY
 } from '../helpers/sort-utils'
 
-import Tabs from '../components/Tabs'
-
 import Map from './Map'
-import { Header } from '../components/PageHeader'
-import MapView from '../components/MapView'
-import ListView from '../components/ListView'
-import GridView from '../components/GridView'
-import Avatars from '../../../../../views/components/Avatars'
-
-import {
-  formatListing,
-  addDistanceFromCenterToListing
-} from '../helpers/format-listing'
-import { normalizeListingLocation } from '../../../../../utils/map'
 
 const mappingStatus = status => {
   switch (status) {

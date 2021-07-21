@@ -1,5 +1,5 @@
-import styled, { ThemeProps } from 'styled-components'
 import { Theme } from '@material-ui/core/styles'
+import styled, { ThemeProps } from 'styled-components'
 
 export const ModalContent = styled.div`
   padding: ${({ theme }: ThemeProps<Theme>) => theme.spacing(5)}px;

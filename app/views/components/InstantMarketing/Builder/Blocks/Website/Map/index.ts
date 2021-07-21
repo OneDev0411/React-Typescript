@@ -1,25 +1,22 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 import { debounce } from 'underscore'
 
+import MapIcon from 'assets/images/marketing/editor/blocks/map.png'
+import type { MapInfo } from 'components/MapDrawer'
+import { mapThemes } from 'components/MapDrawer/constants'
 import config from 'config'
 
-import MapIcon from 'assets/images/marketing/editor/blocks/map.png'
-
-import type { MapInfo } from 'components/MapDrawer'
-
-import { mapThemes } from 'components/MapDrawer/constants'
-
-import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
-
-import { baseView, isComponent } from '../utils'
-import { handleBlockDragStopEvent } from '../../utils'
-import template from './template.njk'
-import script, { MapInitEventType } from './script'
-import { TemplateBlockOptions } from '../../types'
+import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+import { baseView, isComponent } from '../utils'
+
+import script, { MapInitEventType } from './script'
+import template from './template.njk'
 
 export const typeEmbedMap = 'embed-map'
 export const embedMapBlockName = typeEmbedMap

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Box,
   makeStyles,
@@ -7,20 +8,18 @@ import {
   Paper,
   CircularProgress
 } from '@material-ui/core'
+import { parseFullName } from 'parse-full-name'
 import { useAsync, useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { parseFullName } from 'parse-full-name'
-
-import { searchContacts } from 'models/contacts/search-contacts'
-import searchAgents from 'models/agent/search'
-
-import VirtualList from 'components/VirtualList'
 
 import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
-
-import { Row, RowItem, RowType } from './Row'
+import VirtualList from 'components/VirtualList'
+import searchAgents from 'models/agent/search'
+import { searchContacts } from 'models/contacts/search-contacts'
 
 import { IDealFormRole } from '../../types'
+
+import { Row, RowItem, RowType } from './Row'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -56,10 +55,8 @@ export function ContactRoles({
   const classes = useStyles()
 
   const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [
-    debouncedSearchCriteria,
-    setDebouncedSearchCriteria
-  ] = useState<string>('')
+  const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
+    useState<string>('')
 
   const [isSearching, setIsSearching] = useState(false)
   const [rows, setRows] = useState<RowItem[]>([])

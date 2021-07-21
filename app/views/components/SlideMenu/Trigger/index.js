@@ -1,7 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { Tooltip } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 import Button from '../../Button/IconButton'
 import IconNav from '../../SvgIcons/NavMenu/IconNav'

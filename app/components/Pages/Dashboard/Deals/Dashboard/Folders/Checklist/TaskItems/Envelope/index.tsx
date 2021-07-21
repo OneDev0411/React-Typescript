@@ -1,15 +1,12 @@
-import fecha from 'fecha'
-
 import { Typography, Box } from '@material-ui/core'
-import { Link } from 'react-router'
-
 import { mdiFileOutline } from '@mdi/js'
+import fecha from 'fecha'
+import { Link } from 'react-router'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../../EnvelopeStatus'
-
 import { getEnvelopeActions } from '../helpers/get-envelope-actions'
 import { useStyles } from '../styles'
 

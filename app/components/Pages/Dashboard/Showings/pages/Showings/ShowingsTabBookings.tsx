@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction } from 'react'
 import ShowingFilteredBookingList, {
   ShowingFilteredBookingListProps
 } from '../../components/ShowingFilteredBookingList'
-
 import { generateAppointmentFilterLink } from '../../helpers'
+
 import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
@@ -17,13 +17,11 @@ function ShowingsTabBookings({
   appointments,
   setShowings
 }: ShowingsTabBookingsProps) {
-  const updateShowingsAppointmentStatus = useShowingsUpdateAppointmentStatus(
-    setShowings
-  )
+  const updateShowingsAppointmentStatus =
+    useShowingsUpdateAppointmentStatus(setShowings)
 
-  const dismissShowingsAppointmentNotifications = useShowingsDismissAppointmentNotifications(
-    setShowings
-  )
+  const dismissShowingsAppointmentNotifications =
+    useShowingsDismissAppointmentNotifications(setShowings)
 
   return (
     <ShowingFilteredBookingList

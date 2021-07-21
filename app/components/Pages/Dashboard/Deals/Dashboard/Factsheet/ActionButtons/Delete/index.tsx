@@ -1,11 +1,11 @@
 import React from 'react'
+
 import { IconButton, useTheme, Theme } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
-
 import { useSelector } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'

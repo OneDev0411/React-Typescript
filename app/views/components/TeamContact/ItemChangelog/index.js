@@ -1,10 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import fecha from 'fecha'
+import PropTypes from 'prop-types'
 import timeago from 'timeago.js'
 
-import { grey } from '../../../utils/colors'
 import { getUserTitle } from '../../../../models/user/helpers'
+import { grey } from '../../../utils/colors'
 
 ItemChangelog.propTypes = {
   item: PropTypes.shape().isRequired,

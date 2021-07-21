@@ -1,4 +1,3 @@
-import { WithRouterProps, browserHistory } from 'react-router'
 import {
   Container,
   Grid,
@@ -11,14 +10,15 @@ import {
   useTheme
 } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
+import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
 import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
 import LoadingContainer from 'components/LoadingContainer'
 
-import InfoSection from '../../Sections/InfoSection'
-import DetailsSection from '../../Sections/DetailsSection'
 import { usePublicShowingAppointment } from '../../hooks'
+import DetailsSection from '../../Sections/DetailsSection'
+import InfoSection from '../../Sections/InfoSection'
 import { getFormattedAppointmentDateTime } from '../utils'
 
 const useStyles = makeStyles(
@@ -57,9 +57,8 @@ export default function ShowingAppointmentCancel({
     mode: 'onChange'
   })
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   const handleSubmitCancelForm = async ({ message }: FormFields) => {
     const normalizedMessage = message.trim() || undefined

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import usePrevious from 'react-use/lib/usePrevious'
+
 import { CircularProgress, Button } from '@material-ui/core'
+import usePrevious from 'react-use/lib/usePrevious'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
+import { sendUrlMetadataRequest } from './send-url-metadata-request'
 import { Image } from './styled'
 import { Metadata } from './types'
-import { sendUrlMetadataRequest } from './send-url-metadata-request'
 
 interface Props {
   isOpen: boolean

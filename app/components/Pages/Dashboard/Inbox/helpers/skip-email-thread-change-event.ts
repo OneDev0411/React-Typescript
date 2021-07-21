@@ -2,7 +2,6 @@ import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from '../../../../../constants/oauth-accounts'
-
 import { EmailThreadChangeEvent } from '../types'
 
 export default function skipEmailThreadChangeEvent(

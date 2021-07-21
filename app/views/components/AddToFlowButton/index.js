@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+
 import Popover from '@material-ui/core/Popover'
+import PropTypes from 'prop-types'
 
 import { noop } from 'utils/helpers'
 
-import Button from './Button'
-
 import AddToFlowForm from '../AddToFlowForm'
+
+import Button from './Button'
 
 const originShape = {
   vertical: PropTypes.string,

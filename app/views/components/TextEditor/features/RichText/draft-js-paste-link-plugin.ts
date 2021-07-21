@@ -1,10 +1,10 @@
-import isURL from 'validator/lib/isURL'
-import isEmail from 'validator/lib/isEmail'
-
 import { DraftHandleValue, EditorState } from 'draft-js'
 import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
+import isEmail from 'validator/lib/isEmail'
+import isURL from 'validator/lib/isURL'
 
 import { createLink } from '../../utils/create-link'
+
 import { normalizeUrl } from './LinkEditorPopover/utils'
 
 export default function createPasteLinkPlugin(): DraftJsPlugin {

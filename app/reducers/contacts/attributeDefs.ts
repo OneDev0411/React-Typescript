@@ -1,5 +1,5 @@
-import _ from 'underscore'
 import { combineReducers } from 'redux'
+import _ from 'underscore'
 
 import * as actionTypes from '../../constants/contacts'
 

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import ReactModal, { Props as ReactModalProps } from 'react-modal'
+
 import cn from 'classnames'
+import ReactModal, { Props as ReactModalProps } from 'react-modal'
 
 if (document.body.querySelector('#app')) {
   ReactModal.setAppElement('#app')

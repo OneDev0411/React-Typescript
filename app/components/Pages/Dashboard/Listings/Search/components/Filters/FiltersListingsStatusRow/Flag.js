@@ -10,7 +10,10 @@ const Flag = ({ icon, color }) => {
   }
 
   return (
-    <span className="c-filters-status__color" style={{ backgroundColor: color }} />
+    <span
+      className="c-filters-status__color"
+      style={{ backgroundColor: color }}
+    />
   )
 }
 

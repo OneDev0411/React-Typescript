@@ -1,14 +1,14 @@
 import React from 'react'
-import { Box, Button, makeStyles } from '@material-ui/core'
 
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 
-import GlobalPageLayout from 'components/GlobalPageLayout'
 import { BaseDropdown } from 'components/BaseDropdown'
+import GlobalPageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Filters from '../components/Filters'
 import Autocomplete from '../components/Autocomplete'
+import Filters from '../components/Filters'
 
 const useStyles = makeStyles(
   theme => ({
@@ -39,14 +39,18 @@ const useStyles = makeStyles(
 
 export function Header(props) {
   const classes = useStyles()
-  const { isFetching, activeView } = props
+  const { isFetching, activeView, isWidget } = props
 
   return (
     <Box className={classes.container}>
       <GlobalPageLayout.Header title="Properties" isHiddenOnMobile={false}>
         <Box className={classes.body}>
           <Box width={500}>
-            <Autocomplete activeView={activeView} fullWidth />
+            <Autocomplete
+              activeView={activeView}
+              fullWidth
+              isWidget={isWidget}
+            />
           </Box>
           <BaseDropdown
             renderDropdownButton={buttonProps => (

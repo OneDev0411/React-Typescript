@@ -2,8 +2,8 @@ import React from 'react'
 
 import { useTheme } from '@material-ui/core'
 
-import { GridContextProvider } from 'components/Grid/Table/context/provider'
 import { StateContext, DispatchContext } from 'components/Grid/Table/context'
+import { GridContextProvider } from 'components/Grid/Table/context/provider'
 
 import Container from './Container'
 

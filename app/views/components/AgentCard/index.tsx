@@ -8,7 +8,6 @@ import {
 
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
-
 import { getNameInitials } from 'utils/helpers'
 
 const useStyles = makeStyles(

@@ -1,13 +1,13 @@
 import React from 'react'
-import cn from 'classnames'
 
+import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
 
-import Messages from '../Messages'
-import Toolbar from './toolbar'
 import ChatNotification from '../../../../../services/notification/chat'
-
 import { appSidenavWidth } from '../../SideNav/variables'
+import Messages from '../Messages'
+
+import Toolbar from './toolbar'
 
 /**
  * on focus popup

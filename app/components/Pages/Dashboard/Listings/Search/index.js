@@ -1,12 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
-import memoize from 'lodash/memoize'
 
-import hash from 'object-hash'
-
-import { withStyles } from '@material-ui/core/styles'
 import {
   Box,
   IconButton,
@@ -14,16 +7,29 @@ import {
   Tooltip,
   CircularProgress
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 import MyLocation from '@material-ui/icons/MyLocation'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { batchActions } from 'redux-batched-actions'
 
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
+import { confirmation } from 'actions/confirmation'
+import { setMapProps } from 'actions/listings/map'
+import searchActions from 'actions/listings/search'
+import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
+import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
+import { getUserTeams } from 'actions/user/teams'
 import GlobalPageLayout from 'components/GlobalPageLayout'
-
 import { DALLAS_POINTS } from 'constants/listings/dallas-points'
-
-import { putUserSetting } from 'models/user/put-user-setting'
 import { getPlace } from 'models/listings/search/get-place'
-
-import { loadJS } from 'utils/load-js'
+import { putUserSetting } from 'models/user/put-user-setting'
+import { selectListings } from 'reducers/listings'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import {
   getBounds,
@@ -31,17 +37,15 @@ import {
   normalizeListingLocation
 } from 'utils/map'
 
-import { selectListings } from 'reducers/listings'
-
-import { getUserTeams } from 'actions/user/teams'
-import searchActions from 'actions/listings/search'
-import { setMapProps } from 'actions/listings/map'
-import getListingsByValert from 'actions/listings/search/get-listings/by-valert'
-import { toggleFilterArea } from 'actions/listings/search/filters/toggle-filters-area'
-import { confirmation } from 'actions/confirmation'
-
-import Autocomplete from './components/Autocomplete'
-
+import GridView from '../components/GridView'
+import ListView from '../components/ListView'
+import MapView from '../components/MapView'
+import CreateAlertModal from '../components/modals/CreateAlertModal'
+import Tabs from '../components/Tabs'
+import {
+  addDistanceFromCenterToListing,
+  formatListing
+} from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -50,22 +54,12 @@ import {
   SORT_FIELD_SETTING_KEY,
   LAST_BROWSING_LOCATION
 } from '../helpers/sort-utils'
-
-import Tabs from '../components/Tabs'
-
-import Map from './components/Map'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 
-import MapView from '../components/MapView'
-import ListView from '../components/ListView'
-import GridView from '../components/GridView'
-import CreateAlertModal from '../components/modals/CreateAlertModal'
-import {
-  addDistanceFromCenterToListing,
-  formatListing
-} from '../helpers/format-listing'
-import { Header } from './Header'
+import Autocomplete from './components/Autocomplete'
 import CreateTourAction from './components/CreateTourAction'
+import Map from './components/Map'
+import { Header } from './Header'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
@@ -101,6 +95,7 @@ class Search extends React.Component {
     const { query } = props.location
 
     this.searchQuery = query.q || ''
+    this.brokerageQuery = query.brokerage || ''
 
     let activeView = query.view
 
@@ -132,20 +127,28 @@ class Search extends React.Component {
   componentDidMount() {
     window.initialize = this.initialize
 
-    if (!window.google) {
-      loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${bootstrapURLKeys.key}&libraries=${bootstrapURLKeys.libraries}&callback=initialize`,
-        'loadJS-mls-search-map'
-      )
-    } else {
+    const googleMapAPIParams = {
+      key: bootstrapURLKeys.key,
+      libraries: bootstrapURLKeys.libraries.split(','),
+      callback: 'initialize'
+    }
+
+    if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
+    } else {
+      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
     }
   }
 
   initialize = () => {
     const { firstRun } = this.state
 
-    if (firstRun) {
+    if (
+      firstRun &&
+      !this.brokerageQuery &&
+      !this.searchQuery &&
+      !this.props.isWidget
+    ) {
       return
     }
 
@@ -155,6 +158,8 @@ class Search extends React.Component {
 
     if (this.searchQuery) {
       this._findPlace(decodeURIComponent(this.searchQuery))
+    } else if (this.brokerageQuery) {
+      this._findBrokerage(this.brokerageQuery)
     } else {
       this.initMap()
     }
@@ -303,6 +308,32 @@ class Search extends React.Component {
     }
   }
 
+  _findBrokerage = brokerage => {
+    const { dispatch, filterOptions } = this.props
+
+    try {
+      batchActions([
+        dispatch(
+          searchActions.getListings.byValert({
+            ...filterOptions,
+            offices: [brokerage],
+            limit: 200
+          })
+        ),
+        dispatch(
+          setMapProps('search', {
+            center: mapInitialState.center,
+            zoom: mapInitialState.zoom
+          })
+        )
+      ])
+    } catch (error) {
+      console.log(error)
+    }
+
+    return this.initMap()
+  }
+
   onChangeView = e => {
     const activeView = e.currentTarget.dataset.view
 
@@ -428,6 +459,7 @@ class Search extends React.Component {
         return (
           <MapView
             {..._props}
+            isWidget={this.props.isWidget}
             tabName="search"
             mapCenter={this.props.mapCenter}
             Map={
@@ -555,12 +587,15 @@ class Search extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, isWidget } = this.props
     const { firstRun } = this.state
+    const hasUrlQuery = !!(this.brokerageQuery || this.searchQuery)
 
     return (
       <GlobalPageLayout className={classes.exploreContainer}>
-        {firstRun ? this.renderLadingPage() : this.renderExplorePage()}
+        {firstRun && !hasUrlQuery && !isWidget
+          ? this.renderLadingPage()
+          : this.renderExplorePage()}
       </GlobalPageLayout>
     )
   }

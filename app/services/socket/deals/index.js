@@ -1,9 +1,8 @@
+import Socket from '..'
 import Deal from '../../../models/Deal'
 import { updateDeal } from '../../../store_actions/deals'
-import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 import store from '../../../stores'
-
-import Socket from '..'
+import { viewAs, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
 
 export default class DealSocket extends Socket {
   constructor(user) {

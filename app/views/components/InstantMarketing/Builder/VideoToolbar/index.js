@@ -1,7 +1,7 @@
 import React from 'react'
 
-import IconPlay from 'components/SvgIcons/Play/IconPlay'
 import IconButton from 'components/Button/IconButton'
+import IconPlay from 'components/SvgIcons/Play/IconPlay'
 
 import { Container, Divider, FrameButton } from './styled'
 

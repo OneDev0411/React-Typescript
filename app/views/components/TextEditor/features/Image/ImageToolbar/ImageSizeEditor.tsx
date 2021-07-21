@@ -1,16 +1,17 @@
 import React from 'react'
+
 import { FormControl, MenuItem, Select } from '@material-ui/core'
 import { ContentBlock, EditorState } from 'draft-js'
 import { findKey } from 'lodash'
 
+import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
+import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
+import { getBlockElement } from '../../../utils/get-block-element'
+import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
 import {
   getImageSizeOptions,
   ImageSizeOptions
 } from '../utils/get-image-size-options'
-import { getBlockElement } from '../../../utils/get-block-element'
-import { updateAtomicBlockEntityData } from '../../../modifiers/update-atomic-block-entity-data'
-import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
-import { getAtomicBlockEntityData } from '../../../utils/get-atomic-block-entity-data'
 
 interface Props {
   editorState: EditorState

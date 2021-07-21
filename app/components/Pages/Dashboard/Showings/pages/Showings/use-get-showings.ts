@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 
-import getShowings from 'models/showing/get-showings'
 import useAsync from 'hooks/use-async'
+import getShowings from 'models/showing/get-showings'
 
 import useSortAppointments from '../../hooks/use-sort-appointments'
+
 import useShowingsUpdateAppointmentNotifications from './use-showings-update-appointment-notifications'
 
 interface UseGetShowingsReturn {
@@ -14,9 +15,12 @@ interface UseGetShowingsReturn {
 }
 
 function useGetShowings(): UseGetShowingsReturn {
-  const { data: rows, isLoading, run, setData } = useAsync<
-    IShowing<'showing'>[]
-  >({
+  const {
+    data: rows,
+    isLoading,
+    run,
+    setData
+  } = useAsync<IShowing<'showing'>[]>({
     data: [],
     status: 'pending'
   })

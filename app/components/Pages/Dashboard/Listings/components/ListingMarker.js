@@ -1,8 +1,9 @@
-import S from 'shorti'
 import React from 'react'
-import PropTypes from 'prop-types'
-import numeral from 'numeral'
+
 import fecha from 'fecha'
+import numeral from 'numeral'
+import PropTypes from 'prop-types'
+import S from 'shorti'
 
 import listing_util from 'utils/listing'
 

@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { Tooltip } from '@material-ui/core'
-
 import { mdiFileImageOutline } from '@mdi/js'
 
 import { FilePicker } from 'components/FilePicker'

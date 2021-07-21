@@ -2,11 +2,11 @@ import { Box, makeStyles } from '@material-ui/core'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
+import Notifications from '../Notifications'
+
 import FoldersPane from './Panes/Folders'
 import MarketingPane from './Panes/Marketing'
 import MediaManagerPane from './Panes/MediaManager'
-
-import Notifications from '../Notifications'
 
 const useStyles = makeStyles(
   () => ({

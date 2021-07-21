@@ -1,20 +1,18 @@
-import { useSelector } from 'react-redux'
-import { withRouter } from 'react-router'
-import { Helmet } from 'react-helmet'
 import { Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline } from '@mdi/js'
-
-import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
-import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
-import { getActiveTeamId, hasUserAccessToBrandSettings } from 'utils/user-teams'
-import { goTo } from 'utils/go-to'
-import { selectUser } from 'selectors/user'
+import { Helmet } from 'react-helmet'
+import { useSelector } from 'react-redux'
+import { withRouter } from 'react-router'
 
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
+import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
+import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
+import { selectUser } from 'selectors/user'
+import { goTo } from 'utils/go-to'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
+import { getActiveTeamId, hasUserAccessToBrandSettings } from 'utils/user-teams'
 
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'

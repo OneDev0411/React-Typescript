@@ -1,6 +1,6 @@
-import { Avatar } from '@material-ui/core'
-
 import React from 'react'
+
+import { Avatar } from '@material-ui/core'
 import { mdiTagOutline } from '@mdi/js'
 
 import { SvgIcon } from '../../SvgIcons/SvgIcon'

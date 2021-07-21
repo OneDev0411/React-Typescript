@@ -1,8 +1,6 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
-import { Box, makeStyles } from '@material-ui/core'
 
+import { Box, makeStyles } from '@material-ui/core'
 import {
   mdiOpenInNew,
   mdiContentCopy,
@@ -11,17 +9,16 @@ import {
   mdiTrashCanOutline,
   mdiPlusCircleOutline
 } from '@mdi/js'
-
-import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
+import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
 import SendEmailButton from 'components/SendEmailButton'
-
-import copy from 'utils/copy-text-to-clipboard'
-
-import { noop } from 'utils/helpers'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
+import copy from 'utils/copy-text-to-clipboard'
+import { noop } from 'utils/helpers'
 
 import {
   Label,

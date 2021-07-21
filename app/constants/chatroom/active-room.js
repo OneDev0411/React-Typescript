@@ -1,3 +1,1 @@
-export default [
-  'CHANGE_ACTIVE_ROOM'
-]
+export default ['CHANGE_ACTIVE_ROOM']

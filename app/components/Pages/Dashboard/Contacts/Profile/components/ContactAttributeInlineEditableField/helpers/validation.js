@@ -1,3 +1,4 @@
+import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 import {
   isLink,
   isEmail,
@@ -5,7 +6,6 @@ import {
   isPhoneNumber,
   validateDateField
 } from 'utils/validations'
-import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
 const validators = {
   email: isEmail,

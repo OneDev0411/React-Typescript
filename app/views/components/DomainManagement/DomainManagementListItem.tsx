@@ -1,17 +1,14 @@
 import React from 'react'
-import classNames from 'classnames'
 
 import { IconButton, Link, makeStyles, Typography } from '@material-ui/core'
-
 import { Close } from '@material-ui/icons'
-
+import classNames from 'classnames'
 import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-
-import { generateWebsiteUrl, isWebsiteOnSubdomain } from 'utils/website'
 import useAsync from 'hooks/use-async'
 import deleteHostnameFromWebsite from 'models/website/delete-hostname-from-website'
+import { generateWebsiteUrl, isWebsiteOnSubdomain } from 'utils/website'
 
 const useStyles = makeStyles(
   theme => ({

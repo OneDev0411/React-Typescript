@@ -1,28 +1,21 @@
-import { WithRouterProps } from 'react-router'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
+import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-
-import { IAppState } from 'reducers/index'
-
+import { IAppState } from '@app/reducers'
 import PageLayout from 'components/GlobalPageLayout'
-
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
-
-import TabFilters from './Filters'
-
-import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import { SearchQuery } from './types'
-
+import TabFilters from './Filters'
 import Grid from './Grid'
+import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 import { useSearchQuery } from './hooks/use-search-query'
+import { SearchQuery } from './types'
 
 interface StateProps {
   user: IUser

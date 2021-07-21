@@ -1,13 +1,13 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import { DateField as Field } from 'components/DateField'
-
+import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 import {
   DropdownButton,
   DropdownArrowIcon
 } from 'components/inline-editable-fields/styled'
-import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
 
 export class DateField extends React.Component {
   static propTypes = {

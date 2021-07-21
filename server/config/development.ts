@@ -1,5 +1,5 @@
-import pb from '../../config/public'
 import pv from '../../config/private'
+import pb from '../../config/public'
 
 export default {
   app_name: pv.app_name,

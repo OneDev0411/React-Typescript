@@ -1,19 +1,18 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+
 import Downshift from 'downshift'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 import { searchContacts } from 'models/contacts/search-contacts'
 
-import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
-
-import SearchInput from '../SearchInput'
-import ContactItem from '../ContactItem'
-import { viewAs } from '../../../../../utils/user-teams'
-import Loading from '../../../../../components/Partials/Loading'
-
 import Alert from '../../../../../components/Pages/Dashboard/Partials/Alert'
+import Loading from '../../../../../components/Partials/Loading'
+import { viewAs } from '../../../../../utils/user-teams'
+import ContactItem from '../ContactItem'
+import SearchInput from '../SearchInput'
 
 import { ListContainer, List } from './styled'
 

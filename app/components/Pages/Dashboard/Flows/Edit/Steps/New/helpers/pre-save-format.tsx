@@ -1,5 +1,4 @@
 import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
-
 import {
   BaseFormData,
   EventFormData,

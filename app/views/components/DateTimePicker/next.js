@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react'
+
 import PropTypes from 'prop-types'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import PickerPopUp from './PickerPopUp'
 import Picker from './Picker'
+import PickerPopUp from './PickerPopUp'
 
 DateTimePicker.defaultProps = {
   mode: 'PopUp',

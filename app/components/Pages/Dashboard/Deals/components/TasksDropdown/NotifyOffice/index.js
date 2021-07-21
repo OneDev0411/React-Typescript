@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Radio from 'components/CheckmarkButton'
+
 import { Label } from './styled'
 
 const isBackupOffer = checklist => checklist.is_deactivated === true

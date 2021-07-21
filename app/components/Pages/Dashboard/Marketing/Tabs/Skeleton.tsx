@@ -1,6 +1,7 @@
 import React from 'react'
-import { Skeleton } from '@material-ui/lab'
+
 import { Typography } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 
 import { PageTabs, Tab } from 'components/PageTabs'
 

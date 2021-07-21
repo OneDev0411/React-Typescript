@@ -1,4 +1,1 @@
-export default [
-  'TOGGLE_CHATBAR',
-  'TOGGLE_INSTANT_MODE'
-]
+export default ['TOGGLE_CHATBAR', 'TOGGLE_INSTANT_MODE']

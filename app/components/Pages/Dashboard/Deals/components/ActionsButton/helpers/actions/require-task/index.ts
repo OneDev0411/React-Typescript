@@ -1,5 +1,4 @@
 import { setTaskRequirement } from 'actions/deals/task/set-task-requirement'
-
 import store from 'store'
 
 interface Arguments {

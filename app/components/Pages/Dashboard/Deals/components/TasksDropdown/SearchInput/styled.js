@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { Button } from '@material-ui/core'
+import styled from 'styled-components'
 
 export const SearchContainer = styled(Button)`
   &:hover > svg {

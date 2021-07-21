@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+
 import sanitizeHtml from 'sanitize-html'
 /**
  * NOTE: we don't use react-sanitized-html because:

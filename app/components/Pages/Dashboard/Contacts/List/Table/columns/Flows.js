@@ -1,13 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Tooltip } from '@material-ui/core'
 
+import { Tooltip } from '@material-ui/core'
 import { mdiLightningBolt } from '@mdi/js'
+import styled from 'styled-components'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 import ALinkToClosable from 'components/ALinkToClosable'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const commonStyle = `
   display: inline-flex;

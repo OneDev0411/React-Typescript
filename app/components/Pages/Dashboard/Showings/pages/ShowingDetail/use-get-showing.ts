@@ -1,12 +1,11 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
 
 import useAsync from 'hooks/use-async'
-
 import getShowing from 'models/showing/get-showing'
 
-import useShowingUpdateAppointmentNotifications from './use-showing-update-appointment-notifications'
-
 import { sortAppointments } from '../../helpers'
+
+import useShowingUpdateAppointmentNotifications from './use-showing-update-appointment-notifications'
 
 interface UseGetShowingReturn {
   showing: Nullable<IShowing<'showing'>>

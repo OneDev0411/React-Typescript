@@ -1,5 +1,5 @@
-import { getTestSelector } from 'helpers/page'
 import { waitForModalToClose } from 'helpers/modal'
+import { getTestSelector } from 'helpers/page'
 
 export function skipOnBoarding() {
   if (Cypress.$(getTestSelector('finish-skip-onboarding')).length > 0) {

@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { Chip, ChipProps, Theme, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiEyeOutline, mdiCursorDefaultClickOutline } from '@mdi/js'
-import pluralize from 'pluralize'
 import classNames from 'classnames'
+import pluralize from 'pluralize'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Status } from './types'
 

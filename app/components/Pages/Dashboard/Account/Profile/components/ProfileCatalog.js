@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+
 import { Button, IconButton, Box, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import styled from 'styled-components'
 
+import { confirmation } from 'actions/confirmation'
 import editUser from 'actions/user/edit'
 import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
-import { confirmation } from 'actions/confirmation'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { ImageUploader } from 'components/ImageUploader'
 import { Avatar } from 'components/Avatar'
-
+import { ImageUploader } from 'components/ImageUploader'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 const Container = styled.div`
@@ -117,29 +116,33 @@ export default compose(
     props => props.user.profile_image_url || null
   ),
   withHandlers({
-    handleOnChange: ({ dispatch, setAvatar, setUploading }) => async file => {
-      try {
-        const dataUrl = await readFileAsDataUrl(file)
+    handleOnChange:
+      ({ dispatch, setAvatar, setUploading }) =>
+      async file => {
+        try {
+          const dataUrl = await readFileAsDataUrl(file)
 
-        setAvatar(dataUrl)
+          setAvatar(dataUrl)
 
-        setUploading(true)
-        await dispatch(uploadUserAvatarAction(file))
-      } catch (error) {
-        setAvatar(null)
-        console.log(error)
-      } finally {
-        setUploading(false)
+          setUploading(true)
+          await dispatch(uploadUserAvatarAction(file))
+        } catch (error) {
+          setAvatar(null)
+          console.log(error)
+        } finally {
+          setUploading(false)
+        }
+      },
+    handleOnDelete:
+      ({ setAvatar, dispatch }) =>
+      async () => {
+        try {
+          await dispatch(editUser({ profile_image_url: '' }))
+          setAvatar(null)
+        } catch (error) {
+          console.log(error)
+        }
       }
-    },
-    handleOnDelete: ({ setAvatar, dispatch }) => async () => {
-      try {
-        await dispatch(editUser({ profile_image_url: '' }))
-        setAvatar(null)
-      } catch (error) {
-        console.log(error)
-      }
-    }
   }),
   connect(null, {
     confirmation

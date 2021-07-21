@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
 import { mdiCalendar } from '@mdi/js'
+import { connect } from 'react-redux'
 
-import { normalizeAssociations } from 'views/utils/association-normalizers'
 import { searchContacts } from 'actions/contacts'
-
 import { EventDrawer } from 'components/EventDrawer'
-import { selectContact } from 'reducers/contacts/list'
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { selectContact } from 'reducers/contacts/list'
+import { normalizeAssociations } from 'views/utils/association-normalizers'
 
 class CreateEvent extends Component {
   constructor(props) {

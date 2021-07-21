@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import classNames from 'classnames'
+
 import {
   Button,
   ButtonProps,
@@ -7,8 +7,10 @@ import {
   makeStyles,
   PropTypes
 } from '@material-ui/core'
+import classNames from 'classnames'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
+
 import ShowingAppointmentRejectFormDialog from './ShowingAppointmentRejectFormDialog'
 import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
 import useShowingHasAppointmentApproved from './use-showing-has-appointment-approved'

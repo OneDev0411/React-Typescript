@@ -1,7 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import { func } from 'prop-types'
+
 import { mdiCheck } from '@mdi/js'
+import { func } from 'prop-types'
+import styled from 'styled-components'
 
 import { blue, grey } from '../../../utils/colors'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'

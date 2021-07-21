@@ -1,12 +1,10 @@
 import { useSelector } from 'react-redux'
 
 import useAsync from 'hooks/use-async'
-
-import { selectContactAttributeDefs } from 'selectors/contacts'
-import { selectUserId } from 'selectors/user'
-
 import { createContacts } from 'models/contacts/create-contacts'
 import { defaultQuery } from 'models/contacts/helpers/default-query'
+import { selectContactAttributeDefs } from 'selectors/contacts'
+import { selectUserId } from 'selectors/user'
 
 import { CreateContactInput } from './types'
 

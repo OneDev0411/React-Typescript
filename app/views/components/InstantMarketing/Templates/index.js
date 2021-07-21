@@ -1,14 +1,16 @@
 import React from 'react'
+
 import { Box, CircularProgress } from '@material-ui/core'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { loadTemplateHtml } from 'models/instant-marketing/load-template'
-import { getActiveTeamId } from 'utils/user-teams'
 import { getTemplateImage } from 'utils/marketing-center/helpers'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { SAVED_TEMPLATE_VARIANT } from '../Builder/AddToMarketingCenter/constants'
+
 import { Container, TemplateItem, Video, Image } from './styled'
 import TemplateTypesSelect from './TemplateTypesSelect'
 

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Box } from '@material-ui/core'
 
-import { noop } from 'utils/helpers'
 import { Checkbox } from 'components/Checkbox'
+import { noop } from 'utils/helpers'
 
 import { Error } from './Error'
 import { Label } from './Label'

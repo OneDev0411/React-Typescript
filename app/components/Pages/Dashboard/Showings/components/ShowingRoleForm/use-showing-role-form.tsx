@@ -1,15 +1,14 @@
 import { FormProps } from 'react-final-form'
 
-import ShowingRoleFormFields, {
-  ShowingRoleFormFieldsProps
-} from './ShowingRoleFormFields'
-import { ShowingRoleFormValues } from './types'
-
 import {
   selectAgentMutator,
   selectContactMutator,
   selectUserMutator
 } from './helpers'
+import ShowingRoleFormFields, {
+  ShowingRoleFormFieldsProps
+} from './ShowingRoleFormFields'
+import { ShowingRoleFormValues } from './types'
 
 export type UseShowingRoleFormProps = Pick<
   ShowingRoleFormFieldsProps,

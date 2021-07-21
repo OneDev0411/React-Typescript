@@ -1,5 +1,4 @@
 import Fetch from 'services/fetch'
-
 import { toEntityAssociation } from 'utils/association-utils'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -11,16 +10,11 @@ export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
   'attachments'
 ]
 
-export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
-  'contact',
-  'list',
-  'brand',
-  'agent'
-]
+export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] =
+  ['contact', 'list', 'brand', 'agent']
 
-export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
-  'email'
-]
+export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] =
+  ['email']
 
 export interface GetEmailCampaignsAssociations<
   A1 extends IEmailCampaignAssociation,

@@ -1,6 +1,7 @@
 import React from 'react'
-import { useTitle } from 'react-use'
+
 import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
 import { ListingDetails } from '../../../../../views/components/ListingDetails'
 

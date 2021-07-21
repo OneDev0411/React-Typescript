@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { browserHistory } from 'react-router'
-import { mdiClose } from '@mdi/js'
 
 import { IconButton } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { browserHistory } from 'react-router'
 
 import { goTo } from '../../../../utils/go-to'
-
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 export class CloseButton extends React.Component {

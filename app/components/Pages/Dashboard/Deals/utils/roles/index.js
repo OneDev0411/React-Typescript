@@ -1,16 +1,14 @@
 import _ from 'underscore'
 
-import {
-  selectDefinitionByName,
-  selectDefinition
-} from 'reducers/contacts/attributeDefs'
-
 import { LEGAL_PREFIXES } from 'components/DealRole/constants/legal_prefixes'
-
 import {
   TYPE_COMPANY,
   TYPE_PERSON
 } from 'components/DealRole/constants/role-types'
+import {
+  selectDefinitionByName,
+  selectDefinition
+} from 'reducers/contacts/attributeDefs'
 
 export const ROLE_NAMES = [
   'BuyerAgent',

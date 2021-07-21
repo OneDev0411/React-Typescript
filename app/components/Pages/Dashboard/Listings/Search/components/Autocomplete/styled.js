@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { grey, borderColor } from '../../../../../../../views/utils/colors'
 import Card from '../../../../../../../views/components/Card'
+import { grey, borderColor } from '../../../../../../../views/utils/colors'
 
 export const SearchContainer = styled.div`
   position: relative;

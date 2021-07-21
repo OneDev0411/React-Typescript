@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { List, Typography } from '@material-ui/core'
 
-import { Neighborhood } from './types'
 import NeighborhoodsListItem from './NeighborhoodsListItem'
+import { Neighborhood } from './types'
 
 interface Props {
   neighborhoods: Neighborhood[]

@@ -1,14 +1,13 @@
 import {
-  getFormEsignAttachments,
-  getFileEsignAttachments,
-  getEnvelopeEsignAttachments
-} from 'views/utils/deal-files/get-esign-attachments'
-
-import {
   getFormEmailAttachments,
   getEnvelopeEmailAttachments,
   getFileEmailAttachments
 } from 'views/utils/deal-files/get-email-attachments'
+import {
+  getFormEsignAttachments,
+  getFileEsignAttachments,
+  getEnvelopeEsignAttachments
+} from 'views/utils/deal-files/get-esign-attachments'
 
 import {
   EDIT_FORM,
