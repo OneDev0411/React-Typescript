@@ -40,10 +40,16 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     .value()
 
   useEffect(() => {
-    if (!props.params.filter && inboxTabs.length > 0) {
+    const params = props.params || {}
+
+    if (
+      params.hasOwnProperty('filter') &&
+      !params.filter &&
+      inboxTabs.length > 0
+    ) {
       props.router.push(`/dashboard/deals/filter/${inboxTabs[0]}`)
     }
-  }, [inboxTabs, props.params.filter, props.router])
+  }, [inboxTabs, props.params, props.router])
 
   const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
