@@ -1,5 +1,3 @@
-import React from 'react'
-
 import api from '../../../../../../../../models/listings/search'
 import AsyncMultiSelect from '../components/AsyncMultiSelect'
 
