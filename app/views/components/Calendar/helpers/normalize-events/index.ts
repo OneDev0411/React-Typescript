@@ -1,4 +1,5 @@
 import uniqBy from 'lodash/uniqBy'
+import { isLeapYear } from 'date-fns'
 
 import { createDayId } from '../create-day-id'
 import { sortEvents } from '../sort-events'
@@ -35,6 +36,21 @@ function getEvents(
   return uniqEvents.reduce((acc: string[], event: ICalendarEvent) => {
     const index = getEventIndex(event, range)
     const [year, month, day] = index.split('/')
+
+    /*
+      since we're recurring all-day event, here we're skipping the event
+      that happened on 29 Feb in a leap year in a non-leap year
+    */
+    if (
+      parseInt(day, 10) === 29 &&
+      parseInt(month, 10) === 2 &&
+      !isLeapYear(
+        new Date(parseInt(year, 10), parseInt(month, 10), parseInt(day, 10))
+      )
+    ) {
+      return acc
+    }
+
     const monthId = `${year}/${month}/1`
     const dayId = `${year}/${month}/${day}`
 
