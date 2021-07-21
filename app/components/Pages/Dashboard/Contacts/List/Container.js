@@ -13,6 +13,7 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import { setUserSetting } from 'actions/user/set-setting'
 import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -748,7 +749,7 @@ class ContactsList extends React.Component {
       viewMode
     })
 
-    putUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+    this.props.setUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
 
     this.reloadContacts()
   }
@@ -1026,6 +1027,7 @@ export default withRouter(
     getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
+    setUserSetting,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )
