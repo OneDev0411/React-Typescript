@@ -6,8 +6,7 @@ import Flex from 'styled-flex-component'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import Button from 'components/Button/ActionButton'
-import { months } from 'utils/date-times'
-import { addZero } from 'utils/date-times'
+import { addZero, months } from 'utils/date-times'
 
 import { Input } from './styled'
 
