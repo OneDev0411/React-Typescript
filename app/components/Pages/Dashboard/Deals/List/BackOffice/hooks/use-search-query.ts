@@ -34,10 +34,14 @@ export function useSearchQuery(
 
     if (type === 'query' && filter === 'closings') {
       dispatch(searchDeals(user, getClosingsFilterQuery(searchQuery.term)))
+
+      return
     }
 
     if (searchQuery.type === 'query') {
       dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+
+      return
     }
 
     if (type === 'inbox') {
