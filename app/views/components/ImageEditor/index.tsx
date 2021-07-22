@@ -152,6 +152,11 @@ export function EditorDialog({ file, dimensions, onClose, onSave }: Props) {
   }
 
   const handleSave = async () => {
+    if (editor && action === 'crop') {
+      await editor.crop(editor.getCropzoneRect())
+      editor.stopDrawingMode()
+    }
+
     const file = await convertUrlToImageFile(
       editor!.toDataURL({
         format: 'jpeg',
