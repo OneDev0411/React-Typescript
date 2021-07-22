@@ -49,7 +49,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       confirm_notification_type: [],
       cancel_notification_type: [],
       deletable: false,
-      mode: 'form'
+      mode: 'form',
+      save_to_contact: true
     }
   ]
 
@@ -71,7 +72,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       deletable: role !== 'SellerAgent',
       can_approve: true,
       confirm_notification_type: [],
-      cancel_notification_type: []
+      cancel_notification_type: [],
+      save_to_contact: true
     }
 
     if (index === -1) {
@@ -145,7 +147,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       confirm_notification_type: [],
       cancel_notification_type: [],
       deletable: true,
-      mode: 'form'
+      mode: 'form',
+      save_to_contact: true
     }
 
     newRoles.splice(index + 1, 0, newRole)
