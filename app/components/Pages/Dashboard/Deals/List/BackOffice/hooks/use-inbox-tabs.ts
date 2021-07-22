@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-export function useInboxTabs(deals: IDeal[]): (string | null)[] {
+export function useInboxTabs(deals: IDeal[]): Nullable<string>[] {
   return _.chain(deals)
     .pluck('inboxes')
     .flatten()
