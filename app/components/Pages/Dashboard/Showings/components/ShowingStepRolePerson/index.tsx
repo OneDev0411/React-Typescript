@@ -16,6 +16,7 @@ import { ShowingRoleInput } from '../../types'
 import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import useShowingRoleFormSubmit from '../ShowingRoleForm/use-showing-role-form-submit'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 import ShowingRoleAutoSubmitAddNewButton from './ShowingRoleAutoSubmitAddNewButton'
@@ -60,10 +61,12 @@ function ShowingStepRolePerson({
   const { step } = useSectionContext()
   const isLastStep = step === wizard.lastVisitedStep
 
-  const handleChange = (values: ShowingRoleFormValues) => {
-    onRoleEdit({ ...role, ...values, mode: 'card' })
-    nextStep(400)
-  }
+  const { handleSubmit, isSavingContact } = useShowingRoleFormSubmit(
+    (values: ShowingRoleFormValues) => {
+      onRoleEdit({ ...role, ...values, mode: 'card' })
+      nextStep(400)
+    }
+  )
 
   const handleRemove = () => {
     onRoleDelete(role.id)
@@ -107,9 +110,11 @@ function ShowingStepRolePerson({
               confirm_notification_type: role.confirm_notification_type,
               cancel_notification_type: role.cancel_notification_type,
               user: role.user,
-              can_approve: role.can_approve
+              can_approve: role.can_approve,
+              save_to_contact: role.save_to_contact,
+              contact: role.contact
             }}
-            onSubmit={handleChange}
+            onSubmit={handleSubmit}
           >
             <div className={classes.formFooter}>
               {role.deletable ? (
@@ -130,6 +135,7 @@ function ShowingStepRolePerson({
                   <ShowingRoleAutoSubmitAddNewButton
                     label="Save and Add new participant"
                     onClick={handleAdd}
+                    disabled={isSavingContact}
                   />
                 </Box>
                 <Button
@@ -137,6 +143,7 @@ function ShowingStepRolePerson({
                   variant="contained"
                   size="small"
                   color="primary"
+                  disabled={isSavingContact}
                 >
                   {isLastStep ? 'Next' : 'Save'}
                 </Button>
