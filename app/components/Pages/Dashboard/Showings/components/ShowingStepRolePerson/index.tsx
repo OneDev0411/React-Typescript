@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -34,7 +34,8 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: theme.spacing(2)
-    }
+    },
+    nextButton: { marginLeft: theme.spacing(1) }
   }),
   { name: 'ShowingStepRolePerson' }
 )
@@ -88,6 +89,10 @@ function ShowingStepRolePerson({
     onRoleEdit({ ...role, ...getPersonFromUser(agent) })
   }
 
+  const handleNext = () => {
+    nextStep()
+  }
+
   const isSelectAgentMode = !role.user && role.role === 'SellerAgent'
   const isFormMode = !isSelectAgentMode && (role.mode === 'form' || !!error)
 
@@ -135,17 +140,16 @@ function ShowingStepRolePerson({
               )}
 
               <div>
-                <Box mr={1} component="span">
-                  <ShowingRoleAutoSubmitAddNewButton
-                    label="Save and Add new participant"
-                    onClick={handleAdd}
-                  />
-                </Box>
+                <ShowingRoleAutoSubmitAddNewButton
+                  label="Save and Add new participant"
+                  onClick={handleAdd}
+                />
                 <Button
                   type="submit"
                   variant="contained"
                   size="small"
                   color="primary"
+                  className={classes.nextButton}
                 >
                   {isLastStep ? 'Next' : 'Save'}
                 </Button>
@@ -165,6 +169,18 @@ function ShowingStepRolePerson({
                 label="Add new participant"
                 onClick={handleAdd}
               />
+              {isLastStep && (
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.nextButton}
+                >
+                  Next
+                </Button>
+              )}
             </div>
           </>
         )}
