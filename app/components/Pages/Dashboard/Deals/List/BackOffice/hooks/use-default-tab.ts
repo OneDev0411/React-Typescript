@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { browserHistory } from 'react-router'
+import { goTo } from '@app/utils/go-to'
 
 export function useDefaultTab(
   params: Record<string, unknown>,
@@ -8,7 +8,7 @@ export function useDefaultTab(
 ) {
   useEffect(() => {
     if (params.hasOwnProperty('filter') && !params.filter && defaultTab) {
-      browserHistory.push(`/dashboard/deals/filter/${defaultTab}`)
+      goTo(`/dashboard/deals/filter/${defaultTab}`)
     }
   }, [defaultTab, params])
 }
