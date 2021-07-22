@@ -1,7 +1,7 @@
 type ReturnType = 'string' | 'number'
 
 export function getTime(
-  date: Date, 
+  date: Date,
   returnType: ReturnType = 'number'
 ): string | number {
   let hours: number = date.getHours()

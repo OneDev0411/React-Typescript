@@ -4,16 +4,16 @@ import {
 } from 'reducers/contacts/attributeDefs'
 
 import { CONTACT_DATE_OBJECT_TYPE } from '../constants'
-
 import { ColumnState, ItemState } from '../types'
 
 export function getContactColumn(
   contactsAttributeDefs: IAttributeDefsState,
   settings: readonly ICalendarReminderNotificationSetting[]
 ): ColumnState {
-  const items = selectDefsBySection(contactsAttributeDefs, 'Dates').map<
-    ItemState
-  >(def => {
+  const items = selectDefsBySection(
+    contactsAttributeDefs,
+    'Dates'
+  ).map<ItemState>(def => {
     const eventType = def.name || def.label
     const setting = settings.find(
       ({ event_type, object_type }) =>

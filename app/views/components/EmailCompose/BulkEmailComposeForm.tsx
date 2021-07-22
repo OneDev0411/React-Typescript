@@ -1,27 +1,28 @@
 import React, { ComponentProps, HTMLProps } from 'react'
-import { Field } from 'react-final-form'
+
 import { TextFieldProps } from '@material-ui/core'
+import { Field } from 'react-final-form'
 import { useSelector } from 'react-redux'
 
-import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
-import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
-
+import { updateEmailCampaign } from 'models/email/update-email-campaign'
 import { selectUser } from 'selectors/user'
+import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 
-import { EmailFormValues } from './types'
-import { normalizeRecipients } from './helpers/normalize-recepients'
-import { getFromData } from './helpers/get-from-data'
+import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
+import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
+
+import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import { From } from './components/From'
 import IndividualModeRecipientLabel from './components/IndividualModeRecipientLabel'
-import EmailRecipientsChipsInput from '../EmailRecipientsChipsInput'
 import EmailComposeForm from './EmailComposeForm'
-import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
-import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
+import { getFromData } from './helpers/get-from-data'
 import { getInitialValues } from './helpers/get-initial-values'
 import { hasAccountSendPermission } from './helpers/has-account-send-permission'
-import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
-import { EmailRecipientQuickSuggestions } from '../EmailRecipientQuickSuggestions'
+import { normalizeRecipients } from './helpers/normalize-recepients'
+import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { EmailFormValues } from './types'
 
 interface Props
   extends Omit<
@@ -57,9 +58,8 @@ export function BulkEmailComposeForm({
   const user = useSelector(selectUser)
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
-  const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
-    filterAccounts
-  )
+  const [allAccounts, isLoadingAccounts] =
+    useGetAllOauthAccounts(filterAccounts)
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,

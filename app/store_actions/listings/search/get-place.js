@@ -1,9 +1,10 @@
 import { batchActions } from 'redux-batched-actions'
 
-import { goToPlace } from '../map'
-import { setSearchLocation } from './set-search-location'
-import api from '../../../models/listings/search'
 import * as actionsType from '../../../constants/listings/search'
+import api from '../../../models/listings/search'
+import { goToPlace } from '../map'
+
+import { setSearchLocation } from './set-search-location'
 
 const getPlace = address => dispatch => {
   if (!address) {

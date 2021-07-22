@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { browserHistory } from 'react-router'
+
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { getUserDefaultHomepage } from '../../../utils/get-default-home-page'
 

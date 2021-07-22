@@ -1,29 +1,27 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
-import addressParser from 'parse-address'
-import { mdiTrashCanOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
+import addressParser from 'parse-address'
+import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
-import IconButton from 'components/Button/IconButton'
 import ActionButton from 'components/Button/ActionButton'
+import IconButton from 'components/Button/IconButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
+import { AutocompleteField } from './fields/AutocompleteField'
+import { Select } from './fields/Select'
+import { TextField } from './fields/TextField'
 import {
   PREFIX_ITEMS,
   SUFFIX_ITEMS,
   STATES_ITEMS,
   COUNTY_ITEMS
 } from './helpers/dropdown-fields-items'
-
 import postLoadFormat from './helpers/post-load-format'
-
 import { Container, Body, Row, Footer } from './styled'
-import { Select } from './fields/Select'
-import { TextField } from './fields/TextField'
-import { AutocompleteField } from './fields/AutocompleteField'
 
 const propTypes = {
   style: PropTypes.shape(),

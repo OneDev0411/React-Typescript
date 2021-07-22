@@ -1,6 +1,7 @@
-import styled from "styled-components"
 import React from 'react'
+
 import { func } from 'prop-types'
+import styled from 'styled-components'
 
 import ShadowButton from '../../Button/ShadowButton'
 

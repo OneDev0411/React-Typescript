@@ -1,10 +1,11 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
-import { mdiLightningBolt } from '@mdi/js'
-import { makeStyles } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { makeStyles } from '@material-ui/core'
+import { mdiLightningBolt } from '@mdi/js'
+import Flex from 'styled-flex-component'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container } from './styled'
 

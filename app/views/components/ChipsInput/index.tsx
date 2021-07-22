@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
+
 import {
   Chip,
   createStyles,
@@ -18,19 +19,18 @@ import classNames from 'classnames'
 import Downshift from 'downshift'
 import PopperJs from 'popper.js'
 import useObservable from 'react-use/lib/useObservable'
-import { of } from 'rxjs/observable/of'
-import { useDebounce } from 'use-debounce'
-
-import { isPromise } from 'rxjs/util/isPromise'
-
 import { fromPromise } from 'rxjs/observable/fromPromise'
+import { of } from 'rxjs/observable/of'
+import { isPromise } from 'rxjs/util/isPromise'
+import { useDebounce } from 'use-debounce'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { ChipsInputProps } from './types'
-import { Avatar } from '../Avatar'
-import { InputWithStartAdornment } from './InputWithStartAdornment'
 import { useChipStyles } from '../../../styles/use-chips-styles'
+import { Avatar } from '../Avatar'
+
+import { InputWithStartAdornment } from './InputWithStartAdornment'
+import { ChipsInputProps } from './types'
 
 const styles = (theme: Theme) =>
   createStyles({

@@ -21,10 +21,6 @@
     $hg: calc(100vh - 110px - 113px);
     height: $hg;
     overflow: auto;
-    &[data-simplebar] {
-      overflow-y: visible;
-      overflow-x: hidden;
-    }
   }
 
   .full-width {

@@ -1,10 +1,10 @@
 import { normalize } from 'normalizr'
 
-import { contactsSchema } from '../../../models/contacts/schema'
 import * as actionTypes from '../../../constants/contacts'
+import { contactsSchema } from '../../../models/contacts/schema'
+import { updateContact as patchContact } from '../../../models/contacts/update-contact'
 import { selectContact } from '../../../reducers/contacts/list'
 import { normalizeContactAttribute } from '../helpers/normalize-contacts'
-import { updateContact as patchContact } from '../../../models/contacts/update-contact'
 
 export function updateContact(contactId, attributes, query) {
   return async (dispatch, getState) => {

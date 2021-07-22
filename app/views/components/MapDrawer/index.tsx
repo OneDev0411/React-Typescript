@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import type { Model } from 'backbone'
 
 import { Button, Box } from '@material-ui/core'
-
-import OverlayDrawer from 'components/OverlayDrawer'
+import type { Model } from 'backbone'
 
 import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
-
 import { SearchResult } from 'components/DealsAndListingsAndPlacesSearchInput/types'
+import OverlayDrawer from 'components/OverlayDrawer'
 
 import { mapThemes } from './constants'
 import MapThemeList from './MapThemeList'

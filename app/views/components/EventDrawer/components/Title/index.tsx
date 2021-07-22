@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react'
-import { Field } from 'react-final-form'
+
 import { InputBase, makeStyles, Theme } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

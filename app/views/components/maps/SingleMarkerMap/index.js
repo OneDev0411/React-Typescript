@@ -1,11 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
-
-import { Container } from '../styled'
 import { DEFAULT_OPTIONS } from '../helpers/default-options'
+import { Container } from '../styled'
 
 const propTypes = {
   id: PropTypes.string.isRequired,

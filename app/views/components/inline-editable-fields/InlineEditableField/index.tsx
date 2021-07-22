@@ -1,10 +1,11 @@
 import React, { ReactNode, useState, useRef } from 'react'
+
 import ClickOutside from 'react-click-outside'
 
 import { noop } from 'utils/helpers'
 
-import { ViewMode } from './ViewMode'
 import { EditMode, Props as EditModeProps } from './EditMode'
+import { ViewMode } from './ViewMode'
 
 interface Props {
   error?: string

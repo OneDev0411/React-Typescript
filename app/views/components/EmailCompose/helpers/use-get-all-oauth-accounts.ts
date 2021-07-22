@@ -1,11 +1,10 @@
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { useDispatch, useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 import { OAuthProvider } from 'constants/contacts'
-
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
 
 export function useGetAllOauthAccounts(
   filterAccounts: (account: IOAuthAccount) => boolean
@@ -21,9 +20,8 @@ export function useGetAllOauthAccounts(
   )
 
   const dispatch = useDispatch()
-  const allAccounts: IOAuthAccount[] = selectAllConnectedAccounts(
-    oAuthAccounts
-  ).filter(filterAccounts)
+  const allAccounts: IOAuthAccount[] =
+    selectAllConnectedAccounts(oAuthAccounts).filter(filterAccounts)
 
   useEffectOnce(() => {
     Object.entries(oAuthAccounts.loading).forEach(

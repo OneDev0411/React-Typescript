@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.23",
+  "version": "86.0.26",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -13,10 +13,11 @@
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
+    "lint:ci": "eslint app/views && eslint app/components && eslint app/constants && eslint app/hooks && eslint app/models && eslint app/reducers && eslint app/routes && eslint app/selectors && eslint app/services && eslint app/store_actions && eslint app/stores && eslint app/utils && eslint server",
     "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
-    "lint:tests": "eslint ./tests --fix",
+    "lint:tests": "eslint ./tests",
     "e2e:start": "npm run e2e:api:update-image && npm run e2e:api:start & npm run e2e:server:start",
     "e2e:server:start": "cross-env NODE_ENV=development E2E=true PORT=8081 notify=true babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "e2e:api:start": "cd tests/services && docker-compose down && docker-compose build --no-cache && docker-compose up",
@@ -69,14 +70,6 @@
     "@stripe/stripe-js": "^1.11.0",
     "@types/cookie-session": "^2.0.41",
     "@types/react-window": "^1.8.0",
-    "@visx/axis": "^1.7.0",
-    "@visx/curve": "^1.7.0",
-    "@visx/group": "^1.7.0",
-    "@visx/marker": "^1.7.0",
-    "@visx/mock-data": "^1.7.0",
-    "@visx/responsive": "^1.7.0",
-    "@visx/scale": "^1.7.0",
-    "@visx/shape": "^1.7.0",
     "array-move": "^2.2.1",
     "axios": "^0.21.0",
     "babel-plugin-dynamic-import-node": "^2.3.3",
@@ -188,6 +181,7 @@
     "react-click-outside": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/tj/react-click-outside#a833ddc5be47490307f9fcc6ed09d8c353108510",
     "react-color": "^2.17.0",
     "react-day-picker": "^7.4.10",
+    "react-device-detect": "^1.17.0",
     "react-dnd": "^7.7.0",
     "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^17.0.2",
@@ -240,7 +234,6 @@
     "sass-loader": "^11.0.1",
     "serve-static": "^1.14.1",
     "shorti": "^1.2.6",
-    "simplebar": "https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/rechat/simplebar#35b9bf51a13adf85e705c972a3d4a5e6e0df5fbd",
     "smoothscroll-polyfill": "^0.4.4",
     "socket.io-client": "^1.7.3",
     "style-loader": "^2.0.0",
@@ -397,6 +390,7 @@
     "jest": "^26.6.3",
     "jest-raw-loader": "^1.0.1",
     "lint-staged": "^10.5.4",
+    "mockdate": "^3.0.5",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "raw-loader": "^4.0.2",
@@ -414,6 +408,6 @@
   },
   "engines": {
     "node": "14.x",
-    "npm": "7.x"
+    "npm": "6.x"
   }
 }

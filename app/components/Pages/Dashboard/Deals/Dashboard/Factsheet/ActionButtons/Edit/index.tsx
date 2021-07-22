@@ -1,6 +1,6 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
 
+import { IconButton } from '@material-ui/core'
 import { mdiPencil } from '@mdi/js'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'

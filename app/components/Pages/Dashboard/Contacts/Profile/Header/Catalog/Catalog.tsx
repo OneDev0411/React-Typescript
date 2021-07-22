@@ -1,13 +1,13 @@
 import React from 'react'
+
 import { Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
+import { Props } from '..'
 import Tags from '../../Tags/TagsSection'
 
 import Avatar from './Avatar'
 import { Social } from './Social'
-
-import { Props } from '..'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

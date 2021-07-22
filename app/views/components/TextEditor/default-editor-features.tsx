@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { RichTextFeature } from './features/RichText'
 import { EmojiFeature } from './features/Emoji'
+import { RichTextFeature } from './features/RichText'
 
 export const DEFAULT_EDITOR_FEATURES = (
   <>

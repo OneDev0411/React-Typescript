@@ -1,19 +1,16 @@
 import React from 'react'
 
+import { Button, IconButton } from '@material-ui/core'
 import Flex from 'styled-flex-component'
 
-import { Button, IconButton } from '@material-ui/core'
-
-import { getDealTitle } from 'deals/utils/get-deal-title'
-import { getDealAddress } from 'deals/utils/get-deal-address'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { closeIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { getDealAddress } from 'deals/utils/get-deal-address'
+import { getDealTitle } from 'deals/utils/get-deal-title'
 
 import PdfSplitter from '../../PdfSplitter'
-
 import { MenuContainer, MenuTitle, MenuSubTitle, MenuDivider } from '../styled'
 
 export class Menu extends React.Component {

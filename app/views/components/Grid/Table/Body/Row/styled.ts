@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled, { css } from 'styled-components'
 
 export const RowContainer = styled.div<{
   index: number
@@ -42,8 +42,8 @@ export const RowContainer = styled.div<{
     }
 
     ${selected &&
-      css`
-        background-color: ${theme.palette.action.selected};
-      `}
+    css`
+      background-color: ${theme.palette.action.selected};
+    `}
   `}
 `

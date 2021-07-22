@@ -1,5 +1,6 @@
-import { InboxState, InboxAction } from './types'
 import * as actionTypes from '../../constants/inbox'
+
+import { InboxState, InboxAction } from './types'
 
 const initialState: InboxState = {
   unreadEmailThreadsCount: {

@@ -1,18 +1,18 @@
 import React, { useState, useMemo, Fragment } from 'react'
-import { mdiPencilOutline } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
-
-import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
-import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
-import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
-import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
-import { isPrimaryAgent } from 'deals/utils/roles'
+import { mdiPencilOutline } from '@mdi/js'
 
 import DealRole from 'components/DealRole'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getRoleTooltip } from 'deals/FormEdit/utils/get-role-tooltip'
+import { getRolesList } from 'deals/FormEdit/utils/get-roles-list'
+import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
+import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
+import { isPrimaryAgent } from 'deals/utils/roles'
 
 import { AddRole } from '../AddRole'
+
 import { RoleItem } from './styled'
 
 export function RoleField(props) {

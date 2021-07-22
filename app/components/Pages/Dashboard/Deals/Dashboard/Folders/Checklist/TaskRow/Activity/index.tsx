@@ -1,12 +1,10 @@
+import { Button, makeStyles, Theme } from '@material-ui/core'
+import { mdiChatOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 
-import { Button, makeStyles, Theme } from '@material-ui/core'
-
-import { mdiChatOutline } from '@mdi/js'
-
-import { IAppState } from 'reducers'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { IAppState } from 'reducers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

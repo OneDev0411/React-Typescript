@@ -1,14 +1,12 @@
 import React, { useRef } from 'react'
 
 import { TextField } from '@material-ui/core'
-
 import { FieldInputProps } from 'react-final-form'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
-
 import { normalizePostgressStdaddr } from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 
-interface Address {
+interface DealRoleAddress {
   city: string
   full: string
   house_num: string
@@ -30,7 +28,7 @@ interface Props {
 export function Address({ name, label, isVisible, input }: Props) {
   const formRef = useRef<any>(null)
 
-  const onAddressSubmit = (address: Address) => {
+  const onAddressSubmit = (address: DealRoleAddress) => {
     formRef.current?.handleClose?.()
 
     input.onChange(address)

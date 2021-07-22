@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
-import { isFetching, errorMessage } from '../shared'
+
 import { FETCH_ALERT_FEED_SUCCESS } from '../../../constants/listings/alerts'
+import { isFetching, errorMessage } from '../shared'
 
 const byAlertId = (state = {}, action) => {
   switch (action.type) {

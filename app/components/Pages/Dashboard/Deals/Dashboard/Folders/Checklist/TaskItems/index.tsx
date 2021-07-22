@@ -1,16 +1,13 @@
 import { Box } from '@material-ui/core'
-
 import sortBy from 'lodash/sortBy'
-
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-
 import { getTaskEnvelopes } from 'views/utils/deal-files/get-task-envelopes'
 
-import { DigitalForm } from './DigitalForm'
 import { Attachment } from './Attachment'
+import { DigitalForm } from './DigitalForm'
 import { Envelope } from './Envelope'
 
 interface Props {

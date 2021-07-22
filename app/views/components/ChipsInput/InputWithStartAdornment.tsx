@@ -1,6 +1,7 @@
 import { HTMLProps, ReactNode, Ref } from 'react'
-import Flex from 'styled-flex-component'
 import * as React from 'react'
+
+import Flex from 'styled-flex-component'
 
 /**
  * A component to be used as InputComponent in in InputProps

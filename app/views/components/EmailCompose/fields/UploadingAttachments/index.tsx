@@ -1,7 +1,7 @@
 import React from 'react'
-import { FieldRenderProps } from 'react-final-form'
-import { Box } from '@material-ui/core'
 
+import { Box } from '@material-ui/core'
+import { FieldRenderProps } from 'react-final-form'
 import { useDispatch } from 'react-redux'
 
 import { addNotification } from 'components/notification'

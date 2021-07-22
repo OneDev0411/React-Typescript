@@ -1,5 +1,6 @@
-import { ContentBlock, EditorState } from 'draft-js'
 import { useEffect, useState } from 'react'
+
+import { ContentBlock, EditorState } from 'draft-js'
 
 import { getContentBlockSelector } from '../../utils/get-content-block-selector'
 

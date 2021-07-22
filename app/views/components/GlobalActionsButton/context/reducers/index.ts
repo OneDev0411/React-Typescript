@@ -2,11 +2,10 @@ import produce from 'immer'
 
 import { noop } from 'utils/helpers'
 
+import { StateContextType } from '..'
 import { SET_CREATE_CALLBACK_HANDLER } from '../constants'
 
-import { StateContext } from '..'
-
-export const initialState: StateContext = {
+export const initialState: StateContextType = {
   onCreateEvent: noop,
   onCreateContact: undefined,
   onCreateAndAddNewContact: undefined,
@@ -19,7 +18,7 @@ export const initialState: StateContext = {
 interface Action {
   type: string
   handlers: RequireAtLeastOne<
-    StateContext,
+    StateContextType,
     | 'onCreateEvent'
     | 'onCreateContact'
     | 'onCreateAndAddNewContact'

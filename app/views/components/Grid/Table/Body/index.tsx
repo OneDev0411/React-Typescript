@@ -5,25 +5,22 @@ import React, {
   useEffect,
   useMemo
 } from 'react'
+
 import { Theme } from '@material-ui/core'
-
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { useWindowSize, useWindowScroll } from 'react-use'
-import useDebouncedCallback from 'use-debounce/lib/callback'
+import { useTheme } from '@material-ui/styles'
 import debounce from 'lodash/debounce'
-
+import { useWindowSize, useWindowScroll } from 'react-use'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   FixedSizeList,
   ListOnItemsRenderedProps,
   ScrollDirection,
   ListOnScrollProps
 } from 'react-window'
-
-import { useTheme } from '@material-ui/styles'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { getColumnsSize } from '../helpers/get-columns-size'
 import { useGridContext } from '../hooks/use-grid-context'
-
 import {
   TableColumn,
   GridClasses,

@@ -1,23 +1,19 @@
 import React from 'react'
-import { connect } from 'react-redux'
-
-import { addNotification as notify } from 'components/notification'
-
-import _ from 'underscore'
-
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
+import _ from 'underscore'
 
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
+import { addNotification as notify } from 'components/notification'
 import Loader from 'components/SvgIcons/BubblesSpinner/IconBubblesSpinner'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import importPdfJs from 'utils/import-pdf-js'
 
 import DraggablePage from '../components/DraggablePage'
+import { SectionCard, PageNumber, Header } from '../styled'
 
 import { PageSelector } from './PageSelector'
-
 import {
   PagesContainer,
   FileInfo,
@@ -26,7 +22,6 @@ import {
   Divider,
   UsedPage
 } from './styled'
-import { SectionCard, PageNumber, Header } from '../styled'
 
 class PdfList extends React.Component {
   state = {
@@ -74,9 +69,7 @@ class PdfList extends React.Component {
         const message =
           e.name === 'PasswordException'
             ? `Sorry "${file.name}" is password protected.`
-            : `Sorry we can't open "${
-                file.name
-              }". it's damaged or not readable. ${e.message}`
+            : `Sorry we can't open "${file.name}". it's damaged or not readable. ${e.message}`
 
         this.props.notify({
           title: 'Cannot open pdf file',
@@ -192,7 +185,4 @@ class PdfList extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { notify }
-)(PdfList)
+export default connect(null, { notify })(PdfList)

@@ -1,16 +1,17 @@
-import types from '../../constants/chatroom'
 import _ from 'underscore'
 import Cookies from 'universal-cookie'
 
+import types from '../../constants/chatroom'
+
 const cookies = new Cookies()
-const initialState = cookies.get('popups')
+// const initialState = cookies.get('popups')
 
 // console.log('initialState: ', initialState)
 
 export default (state = {}, action) => {
   switch (action.type) {
     case types.GET_ROOMS: {
-      let opensPopups = Object.assign({}, cookies.get('popups'), state)
+      let opensPopups = { ...cookies.get('popups'), ...state }
 
       opensPopups &&
         Object.keys(opensPopups).forEach(key => {
@@ -63,7 +64,10 @@ export default (state = {}, action) => {
       return nextState
     }
     case types.REMOVE_POPUP: {
-      const nextState = _.omit(state, (settings, roomId) => roomId === action.roomId)
+      const nextState = _.omit(
+        state,
+        (settings, roomId) => roomId === action.roomId
+      )
 
       cookies.set('popups', nextState)
 

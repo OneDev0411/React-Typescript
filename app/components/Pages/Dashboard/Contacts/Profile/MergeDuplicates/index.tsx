@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { useDispatch } from 'react-redux'
+
 import { Button, useTheme } from '@material-ui/core'
-
 import pluralize from 'pluralize'
-
-import { addNotification } from 'components/notification'
-
-import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
-import { mergeContact } from 'models/contacts/merge-contact'
-import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
-import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
+import { useDispatch } from 'react-redux'
 
 import { Callout } from 'components/Callout'
-import DuplicateContactsDrawer from 'components/DuplicateContacts/DuplicateContactsDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import DuplicateContactsDrawer from 'components/DuplicateContacts/DuplicateContactsDrawer'
+import { addNotification } from 'components/notification'
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
+import { getContactDuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts'
+import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
+import { mergeContact } from 'models/contacts/merge-contact'
 
 import { CallOutContentContainer } from './styled'
 
@@ -28,13 +26,10 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
   const [isOpen, setIsOpen] = useState(true)
   const [masterId, setMasterId] = useState(contact.id)
-  const [isContactsListDrawerOpen, setIsContactsListDrawerOpen] = useState(
-    false
-  )
-  const [
-    duplicateContacts,
-    setDuplicateContacts
-  ] = useState<DuplicateContacts | null>(null)
+  const [isContactsListDrawerOpen, setIsContactsListDrawerOpen] =
+    useState(false)
+  const [duplicateContacts, setDuplicateContacts] =
+    useState<DuplicateContacts | null>(null)
 
   const fetchDuplicates = useCallback(async () => {
     try {

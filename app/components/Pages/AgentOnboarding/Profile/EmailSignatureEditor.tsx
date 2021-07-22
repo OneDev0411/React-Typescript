@@ -1,15 +1,15 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
-import { EditorState } from 'draft-js'
-import { mdiEmailOutline } from '@mdi/js'
 
-import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
+import { Box } from '@material-ui/core'
+import { mdiEmailOutline } from '@mdi/js'
+import { EditorState } from 'draft-js'
 
 import { StyledTextEditor } from 'components/EditEmailSignature'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { EmojiFeature } from 'components/TextEditor/features/Emoji'
 import { ImageFeature } from 'components/TextEditor/features/Image'
 import { RichTextFeature } from 'components/TextEditor/features/RichText'
-import { EmojiFeature } from 'components/TextEditor/features/Emoji'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
 
 interface Props {
   editorState: EditorState

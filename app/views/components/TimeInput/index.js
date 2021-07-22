@@ -1,14 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { mdiClockOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import useTime from './useTime'
 import { twelveFormat, formatNumber } from './helpers'
 import { TimeInputContainer } from './styled'
+import useTime from './useTime'
 
 TimeInput.propTypes = {
   id: PropTypes.string,

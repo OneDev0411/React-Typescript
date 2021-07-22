@@ -1,6 +1,5 @@
-import { getContactOriginalSourceTitle } from 'utils/get-contact-original-source-title'
-
 import { getDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
+import { getContactOriginalSourceTitle } from 'utils/get-contact-original-source-title'
 
 export function getValue(attribute) {
   const { attribute_def } = attribute

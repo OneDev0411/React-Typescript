@@ -1,28 +1,24 @@
 import React, { Component } from 'react'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-
-import { createTask } from 'models/tasks/create-task'
-
-import { EventDrawer } from 'components/EventDrawer'
 import ActionButton from 'components/Button/ActionButton'
+import { EventDrawer } from 'components/EventDrawer'
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import {
   AssociationsList,
   DateTimeField,
   ReminderField
 } from 'components/final-form-fields'
-
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { createTask } from 'models/tasks/create-task'
 import LoadSaveReinitializeForm from 'views/utils/LoadSaveReinitializeForm'
 
-import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
-
-import { preSaveFormat } from './helpers/pre-save-format'
-
-import { Title } from './components/Title'
-import { TaskType } from './components/TaskType'
 import { AssociationsButtons } from './components/AssociationsButtons'
+import { TaskType } from './components/TaskType'
+import { Title } from './components/Title'
+import { preSaveFormat } from './helpers/pre-save-format'
 import { FormContainer, FieldContainer } from './styled'
 
 const propTypes = {

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+
 import {
   Typography,
   Menu,
@@ -6,12 +7,11 @@ import {
   IconButton,
   useTheme
 } from '@material-ui/core'
-
 import { mdiDotsHorizontal } from '@mdi/js'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { deleteTask } from 'models/tasks/delete-task'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 interface Props {
   onEdit: () => void

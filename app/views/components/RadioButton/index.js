@@ -1,10 +1,10 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
-import styled, { css } from 'styled-components'
-import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
-import { useTheme } from '@material-ui/core/styles'
 
 import { Tooltip } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import { mdiRadioboxBlank, mdiRadioboxMarked } from '@mdi/js'
+import styled, { css } from 'styled-components'
+import Flex from 'styled-flex-component'
 
 import { grey } from 'views/utils/colors'
 

@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+
+import { useDeepCompareEffect } from 'react-use'
 
 import {
   useInfiniteScroll,
@@ -29,7 +31,7 @@ export function useInfinitePagination<T>({
       Math.max(loadedItemsCount + pageSize, items.length)
     )
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     setLoadedItemsCount(pageSize)
   }, [pageSize, items])
 

@@ -1,15 +1,13 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { selectDefinitionByName } from '../../../../../../reducers/contacts/attributeDefs'
-import { isAddressField, getAddressFields } from '../helpers/address'
-
-import DropDown from '../components/DropDown'
-
 import ActionButton from '../../../../../../views/components/Button/ActionButton'
-
 import { fieldsOrder as partnerFieldsName } from '../../Profile/Partner'
+import DropDown from '../components/DropDown'
+import { isAddressField, getAddressFields } from '../helpers/address'
 
 class FieldDropDown extends React.Component {
   /**

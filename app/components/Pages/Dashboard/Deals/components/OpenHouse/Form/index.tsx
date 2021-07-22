@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Box,
   Button,
@@ -11,35 +11,27 @@ import {
   FormControlLabel,
   TextField
 } from '@material-ui/core'
-import DayPicker from 'react-day-picker'
 import fecha from 'fecha'
-
+import DayPicker from 'react-day-picker'
+import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { createTaskComment } from 'deals/utils/create-task-comment'
-import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { updateTask, changeNeedsAttention } from 'actions/deals'
-
-import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import TimeInput from 'components/TimeInput'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InputLabel } from 'components/Forms/styled'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
+import TimeInput from 'components/TimeInput'
+import { createTaskComment } from 'deals/utils/create-task-comment'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import getListing from 'models/listings/listing/get-listing'
-
+import { IAppState } from 'reducers'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectUser } from 'selectors/user'
 import { addressTitle } from 'utils/listing'
 import { normalizeListing } from 'views/utils/association-normalizers'
-
-import { useReduxDispatch } from 'hooks/use-redux-dispatch'
-
-import { selectUser } from 'selectors/user'
-
-import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
-
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 import { DatePickerContainer } from './styled'
 
@@ -96,10 +88,8 @@ function OpenHouseForm(props: Props) {
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isVirtual, setIsVirtual] = useState(false)
   const [virtualUrl, setVirtualUrl] = useState('')
-  const [
-    showOHRegistrationDrawer,
-    setShowOHRegistrationDrawer
-  ] = useState<boolean>(false)
+  const [showOHRegistrationDrawer, setShowOHRegistrationDrawer] =
+    useState<boolean>(false)
 
   const [startDate, setStartDate] = useState<Date>(
     props.defaultStartDate
@@ -340,7 +330,6 @@ function OpenHouseForm(props: Props) {
         <OpenHouseDrawer
           isOpen
           dealNotifyOffice={false}
-          user={user}
           associations={{ deal: props.deal }}
           submitCallback={handleCloseOHRegistrationDrawer}
           onClose={handleCloseOHRegistrationDrawer}

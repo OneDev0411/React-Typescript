@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { useSelector } from 'react-redux'
 
-import { selectUserUnsafe } from 'selectors/user'
 import logUserActivity from 'models/user/post-new-activity'
+import { selectUserUnsafe } from 'selectors/user'
 
 export function useLogUserActivity(activityObjectId?: UUID) {
   const user = useSelector(selectUserUnsafe)

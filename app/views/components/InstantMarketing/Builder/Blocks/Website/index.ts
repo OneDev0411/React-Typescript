@@ -1,9 +1,30 @@
 import type { Editor } from 'grapesjs'
 
 import { TemplateRenderData } from '../../utils/get-template-render-data'
-
+import { TemplateBlockOptions } from '../types'
 import { reorderBlocks, collapseBlockCategories } from '../utils'
 
+import registerAgentBlocks, {
+  AgentBlocksOptions,
+  agentLeftBlockName,
+  agentGridBlockName
+} from './Agents'
+import registerArticleBlocks, {
+  ArticleBlocksOptions,
+  articleTopBlockName,
+  articleLeftBlockName,
+  articleRightBlockName
+} from './Articles'
+import registerCarouselBlock, {
+  CarouselBlockOptions,
+  carouselBlockName
+} from './Carousel'
+import registerImageBlock, { ImageBlockOptions, imageBlockName } from './Image'
+import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
+import registerMatterportBlock, {
+  MatterportBlockOptions,
+  embedMatterportBlockName
+} from './Matterport'
 import registerStaticBlocks, {
   StaticBlocksOptions,
   staticBlocksTraits,
@@ -20,28 +41,6 @@ import registerVideoBlock, {
   VideoBlockOptions,
   embedVideoBlockName
 } from './Video'
-import registerImageBlock, { ImageBlockOptions, imageBlockName } from './Image'
-import registerAgentBlocks, {
-  AgentBlocksOptions,
-  agentLeftBlockName,
-  agentGridBlockName
-} from './Agents'
-import registerArticleBlocks, {
-  ArticleBlocksOptions,
-  articleTopBlockName,
-  articleLeftBlockName,
-  articleRightBlockName
-} from './Articles'
-import registerMatterportBlock, {
-  MatterportBlockOptions,
-  embedMatterportBlockName
-} from './Matterport'
-import registerMapBlock, { MapBlockOptions, embedMapBlockName } from './Map'
-import registerCarouselBlock, {
-  CarouselBlockOptions,
-  carouselBlockName
-} from './Carousel'
-import { TemplateBlockOptions } from '../types'
 
 const BLOCK_BUTTONS_ORDER = [
   imageBlockName,

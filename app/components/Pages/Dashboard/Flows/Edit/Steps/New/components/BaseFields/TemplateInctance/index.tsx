@@ -1,6 +1,7 @@
 import React from 'react'
-import { Field } from 'react-final-form'
+
 import { Typography } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { TemplateSelector } from './Selector'
 

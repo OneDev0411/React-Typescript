@@ -1,16 +1,17 @@
 import React from 'react'
+
+import { render, fireEvent } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import { render, fireEvent } from '@testing-library/react'
 
+import forwardedEmailThreadJson from 'fixtures/email-thread/forwarded-email-thread.json'
 import gmailThreadJson from 'fixtures/email-thread/gmail-thread-1.json'
 import outlookThreadJson from 'fixtures/email-thread/outlook-thread-1.json'
-import forwardedEmailThreadJson from 'fixtures/email-thread/forwarded-email-thread.json'
 
 import { AppTheme } from '../../../../AppTheme'
+import { normalizeThreadMessageToThreadEmail } from '../helpers/normalize-to-email-thread-email'
 
 import { EmailThreadItem } from './EmailThreadItem'
-import { normalizeThreadMessageToThreadEmail } from '../helpers/normalize-to-email-thread-email'
 
 const gmailThread: IEmailThread<'messages'> = {
   ...gmailThreadJson,

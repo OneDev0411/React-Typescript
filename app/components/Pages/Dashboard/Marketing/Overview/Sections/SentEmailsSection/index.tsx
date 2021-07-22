@@ -1,12 +1,14 @@
 import React from 'react'
+
 import { Grid, Typography } from '@material-ui/core'
 
 import Link from 'components/ALink'
 import CardSkeleton from 'components/CardSkeleton'
 import EmailInsightCard from 'components/EmailInsightCard'
 
-import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
+import SectionLayout from '../SectionLayout'
+
 import { useEmailCampaigns } from './hooks'
 
 export default function SentEmailsSection() {

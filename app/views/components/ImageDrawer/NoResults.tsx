@@ -1,6 +1,7 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
+
 import { Typography } from '@material-ui/core'
+import Flex from 'styled-flex-component'
 
 export default function NoResults() {
   return (

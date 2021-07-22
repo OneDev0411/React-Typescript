@@ -1,7 +1,8 @@
 import React, { HTMLProps } from 'react'
-import { connect } from 'react-redux'
+
 import cn from 'classnames'
 import Avatar from 'react-avatar'
+import { connect } from 'react-redux'
 
 const Colors = {
   Online: '#35B863',

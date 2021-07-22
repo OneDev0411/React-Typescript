@@ -1,4 +1,5 @@
 import React, { ReactNode, useState, memo } from 'react'
+
 import {
   FormControl,
   Typography,
@@ -85,9 +86,8 @@ const TriggerEditModeComponent = ({
   const [sendBefore, setSendBefore] = useState<number>(
     convertSecondsToDay(sendBeforeProp)
   )
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IMarketingTemplateInstance>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IMarketingTemplateInstance>>(null)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked

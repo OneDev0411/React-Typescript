@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
+
 import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
-
+// eslint-disable-next-line import/no-named-as-default
+import DealRole from 'components/DealRole/Form'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import DealRole from 'components/DealRole/Form'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
-import { useCreationContext } from '../../context/use-creation-context'
-
-import { RoleCard } from '../../components/RoleCard'
 import { AgentsList } from '../../components/AgentsList'
-
+import { RoleCard } from '../../components/RoleCard'
+import { useCreationContext } from '../../context/use-creation-context'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
@@ -39,12 +36,11 @@ export function DealCoAgent({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const { deal, user } = useCreationContext()
+  const { deal } = useCreationContext()
   const dispatch = useDispatch()
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
   const allowedRoles = getAllowedRoles(side)
   const agentRoles = roles.filter(client => allowedRoles.includes(client.role))
 
@@ -86,7 +82,6 @@ export function DealCoAgent({
             isOpen
             compact
             deal={deal}
-            user={user}
             dealSide={side}
             form={selectedRole}
             allowedRoles={allowedRoles}

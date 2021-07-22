@@ -1,4 +1,5 @@
 import _ from 'underscore'
+
 import types from '../../constants/chatroom'
 
 /**
@@ -101,6 +102,7 @@ function acknowledgeRoom(state, action) {
 
   const reversed = Object.keys(messages.list).reverse()
 
+  // eslint-disable-next-line no-restricted-syntax, guard-for-in
   for (let id in reversed) {
     // get message
     const key = reversed[id]

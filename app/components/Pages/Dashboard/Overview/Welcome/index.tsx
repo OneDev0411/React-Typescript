@@ -2,11 +2,10 @@ import { Box } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
 import MetabaseDashboard from 'components/MetabaseIFrame'
-
 import Acl from 'views/components/Acl'
 
-import { Greeting } from './Greetings'
 import { Dailies } from './Dailies'
+import { Greeting } from './Greetings'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { PageTabs, Tab } from 'components/PageTabs'
-
 import { getNotes } from 'models/contacts/helpers/get-notes'
 
 export enum Filters {

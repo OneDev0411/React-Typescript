@@ -10,8 +10,9 @@ import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { useShowingAppointmentStatusDetailsStyles } from './hooks'
 import { getFormattedAppointmentDateTime } from '../utils'
+
+import { useShowingAppointmentStatusDetailsStyles } from './hooks'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>

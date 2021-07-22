@@ -1,11 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
+import PropTypes from 'prop-types'
 import DayPicker, { DateUtils } from 'react-day-picker'
 
-import Toolbar from './Toolbar'
-
 import { Container } from './styled'
+import Toolbar from './Toolbar'
 
 export default class DatePicker extends React.Component {
   constructor(props) {

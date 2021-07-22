@@ -3,16 +3,16 @@ import { Box, makeStyles } from '@material-ui/core'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-
 import { goTo } from 'utils/go-to'
 
-import ShowingColumnProperty from '../ShowingColumnProperty'
-import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
-import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
+import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingEmptyState from '../ShowingEmptyState'
 import ShowingLabeledColumn from '../ShowingLabeledColumn'
+
+import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
+import useGetShowingNotificationCount from './use-get-showing-notification-count'
+import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 
 const useStyles = makeStyles(
   theme => ({

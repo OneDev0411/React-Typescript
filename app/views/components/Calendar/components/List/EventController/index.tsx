@@ -2,13 +2,12 @@ import React, { useContext } from 'react'
 
 import { EditEmailDrawer } from 'components/EmailCompose'
 
-import { ListContext } from '../context'
-
-import { CrmEvents } from '../../CrmEvents'
 import {
   EmailThreadDrawerByThreadKey,
   EmailCampaignThreadByCampaignId
 } from '../../../../EmailThreadDrawer'
+import { CrmEvents } from '../../CrmEvents'
+import { ListContext } from '../context'
 
 interface Props {
   user: IUser
@@ -21,9 +20,11 @@ export function EventController({
   onEventChange,
   onScheduledEmailChange
 }: Props) {
-  const { selectedEvent: event, setSelectedEvent, contact } = useContext(
-    ListContext
-  )
+  const {
+    selectedEvent: event,
+    setSelectedEvent,
+    contact
+  } = useContext(ListContext)
 
   const eventDrawer =
     event && ['crm_task', 'crm_association'].includes(event.object_type) ? (

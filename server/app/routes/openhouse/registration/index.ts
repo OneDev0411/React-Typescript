@@ -1,18 +1,15 @@
+import cheerio from 'cheerio'
 import { Request, Response, NextFunction } from 'express'
 
-import cheerio from 'cheerio'
-
 import config from '../../../../config'
+import type { Session } from '../../../../types'
+import { request } from '../../../libs/request'
 import { getParsedHeaders } from '../../../utils/parse-headers'
 
-import storage from './storage'
-import { getRegisterationScript } from './inject'
-import { offlineSubmitHandler, onlineSubmitHandler } from './handlers'
 import { LOCAL_STORAGE_REGISTERATION_KEY } from './constants'
-
-import { request } from '../../../libs/request'
-
-import type { Session } from '../../../../types'
+import { offlineSubmitHandler, onlineSubmitHandler } from './handlers'
+import { getRegisterationScript } from './inject'
+import storage from './storage'
 
 export default async (
   req: Request & {

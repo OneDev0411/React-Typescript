@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
 
 import { Button } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 import { TourSheets } from '../TourSheets'
 

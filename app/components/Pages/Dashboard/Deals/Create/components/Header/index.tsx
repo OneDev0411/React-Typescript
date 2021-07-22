@@ -1,12 +1,12 @@
 import React from 'react'
+
 import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
-import { mdiClose } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { confirmation } from 'actions/confirmation'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

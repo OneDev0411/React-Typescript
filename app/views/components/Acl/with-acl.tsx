@@ -2,8 +2,8 @@ import React, { ComponentType } from 'react'
 
 import { ACL } from 'constants/acl'
 
-import { useAclRedirect } from './use-acl'
 import { Access } from './types'
+import { useAclRedirect } from './use-acl'
 
 function withAcl<T = {}>(
   Component: ComponentType<T>,

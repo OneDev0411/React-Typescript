@@ -1,12 +1,13 @@
 import React from 'react'
+
 import { Grid, Box, TextField } from '@material-ui/core'
 
 import { TemplateVariableType, TemplateVariable } from '../../types'
 
-import { UploadableFieldProps } from './types'
+import Address from './Address'
 import Image from './Image'
 import SortableImageList from './SortableImageList'
-import Address from './Address'
+import { UploadableFieldProps } from './types'
 
 export default function Field({
   variable,

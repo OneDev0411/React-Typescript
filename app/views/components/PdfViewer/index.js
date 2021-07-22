@@ -1,16 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import { Button } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 require('intersection-observer')
 
 import ProgressBar from 'components/ProgressBar'
-
-import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
+import importPdfJs from 'utils/import-pdf-js'
 
-import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
+import { Container, LoadingDealContainer } from './styled'
 import { Toolbar } from './Toolbar'
 
 export class PdfViewer extends React.Component {
@@ -122,9 +122,8 @@ export class PdfViewer extends React.Component {
   }
 
   goToNextPage = () => {
-    const visiblePage = this.state.visiblePages[
-      this.state.visiblePages.length - 1
-    ]
+    const visiblePage =
+      this.state.visiblePages[this.state.visiblePages.length - 1]
 
     if (!visiblePage) {
       return false

@@ -1,20 +1,19 @@
 import React, { ReactNode, useCallback } from 'react'
 
 import { Link } from '@material-ui/core'
+import { flow } from 'lodash'
+import { useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router'
 
-import { useSelector } from 'react-redux'
-import { flow } from 'lodash'
-
-import { IAppState } from 'reducers/index'
-import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 import {
   GOOGLE_CREDENTIAL,
   MICROSOFT_CREDENTIAL
 } from 'constants/oauth-accounts'
+import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
+import { IAppState } from 'reducers/index'
 
-import { EmailFormValues } from '../types'
 import { validateRecipient } from '../../EmailRecipientsChipsInput/helpers/validate-recipient'
+import { EmailFormValues } from '../types'
 
 export function useEmailFormValidator() {
   const allConnectedAccounts = useSelector(

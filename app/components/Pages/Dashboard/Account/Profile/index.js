@@ -1,24 +1,26 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
+
 import { Helmet } from 'react-helmet'
 
 // import CoverImage from './components/CoverImage'
+import ChangePassword from './components/ChangePassword'
 import PersonalInfo from './components/PersonalInfo'
 import Timezone from './components/Timezone'
-import ChangePassword from './components/ChangePassword'
 
-const Profile = ({ user, brand }) => (
-  <Fragment>
-    <Helmet>
-      <title>Profile | Settings | Rechat</title>
-    </Helmet>
+function Profile() {
+  return (
     <Fragment>
-      <PersonalInfo />
-      <ChangePassword />
-      <Timezone brand={brand} timezone={user.timezone} />
-      {/* {user.user_type === 'Agent' && <CoverImage />} */}
+      <Helmet>
+        <title>Profile | Settings | Rechat</title>
+      </Helmet>
+      <Fragment>
+        <PersonalInfo />
+        <ChangePassword />
+        <Timezone />
+        {/* {user.user_type === 'Agent' && <CoverImage />} */}
+      </Fragment>
     </Fragment>
-  </Fragment>
-)
+  )
+}
 
-export default connect(({ user, brand }) => ({ user, brand }))(Profile)
+export default Profile

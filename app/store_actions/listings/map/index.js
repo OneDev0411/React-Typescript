@@ -1,6 +1,6 @@
 import * as types from '../../../constants/listings/map'
-import { isAutoMove } from '../../../reducers/listings/map'
 import { getFetchingStatus } from '../../../reducers/listings'
+import { isAutoMove } from '../../../reducers/listings/map'
 
 export const setOffMapAutoMove = () => ({
   tabName: 'search',

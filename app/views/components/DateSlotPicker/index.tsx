@@ -1,9 +1,10 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+
 import { makeStyles } from '@material-ui/core'
 import { eachDayOfInterval, isSameDay } from 'date-fns'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import DayCard from './components/DayCard'
 
@@ -38,9 +39,8 @@ export default function DateSlotPicker({
   const classes = useStyles()
   const days = eachDayOfInterval({ start, end })
   const [initialSlide, setInitialSlide] = useState<number>(0)
-  const [controlledSwiper, setControlledSwiper] = useState<
-    Nullable<SwiperCore>
-  >(null)
+  const [controlledSwiper, setControlledSwiper] =
+    useState<Nullable<SwiperCore>>(null)
 
   useDeepCompareEffect(() => {
     if (!active || days.length === 0) {

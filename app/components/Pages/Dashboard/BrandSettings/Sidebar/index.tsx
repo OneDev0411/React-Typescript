@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Grid,
   Divider,
@@ -14,6 +15,7 @@ import { mdiChevronDown } from '@mdi/js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SidebarSection, ImageUploadHandler } from '../types'
+
 import Field from './Field'
 
 const useStyles = makeStyles(

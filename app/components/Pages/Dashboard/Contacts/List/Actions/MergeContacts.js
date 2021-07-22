@@ -1,12 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mdiCallMerge } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
-import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import { mergeContact } from '../../../../../../store_actions/contacts'
 
 class MergeContacts extends React.Component {
   onClick = () => {

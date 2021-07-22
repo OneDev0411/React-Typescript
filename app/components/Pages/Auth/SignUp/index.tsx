@@ -1,19 +1,18 @@
 import React, { useState, ReactNode } from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router'
-import { Form, Field } from 'react-final-form'
 
 import { Button, Typography, Box } from '@material-ui/core'
+import { Form, Field } from 'react-final-form'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router'
 
 import { IAppState } from 'reducers'
 
-import { getFailedMessage, getSucceedMessage } from './getMessage'
-
+import signup from '../../../../models/auth/signup'
+import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 import { validateEmail } from '../Password/Forgot'
 import { getBrandInfo } from '../SignIn/get-brand-info'
-import signup from '../../../../models/auth/signup'
 
-import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
+import { getFailedMessage, getSucceedMessage } from './getMessage'
 
 interface SubmitState {
   message: ReactNode

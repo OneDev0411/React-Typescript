@@ -19,7 +19,7 @@ export function setTimeStringToDate(date, time) {
   )
 
   // if the output is Invalid Date, we have a fallback to default date.
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-restricted-globals
   return isNaN(output) ? date : output
 }
 

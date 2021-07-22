@@ -1,17 +1,17 @@
 import React, { MouseEventHandler, useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import { ListItem } from '@material-ui/core'
 import { mdiCurrencyUsdCircle } from '@mdi/js'
-
-import { useDeepMemo } from 'hooks/use-deep-memo'
-import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { selectDealTasks } from 'reducers/deals/tasks'
-import { notUndefined } from 'utils/ts-utils'
-import { IAppState } from 'reducers'
+import { useSelector } from 'react-redux'
 
 import SearchDealDrawer from 'components/SearchDealDrawer'
 import SelectDealFileDrawer from 'components/SelectDealFileDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useDeepMemo } from 'hooks/use-deep-memo'
+import { IAppState } from 'reducers'
+import { selectDealEnvelopes } from 'reducers/deals/envelopes'
+import { selectDealTasks } from 'reducers/deals/tasks'
+import { notUndefined } from 'utils/ts-utils'
 
 import { getAllDealDocuments } from '../../../SelectDealFileDrawer/helpers/get-all-deal-documents'
 

@@ -1,26 +1,26 @@
 import React, { ComponentProps, useState, useMemo } from 'react'
+
 import { Field } from 'react-final-form'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { confirmation } from 'actions/confirmation'
 import { createEmailCampaign } from 'models/email/create-email-campaign'
+import { updateEmailCampaign } from 'models/email/update-email-campaign'
+import { selectUser } from 'selectors/user'
 import { getBrandUsers, getActiveBrand } from 'utils/user-teams'
 
-import { confirmation } from 'actions/confirmation'
+import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
 
-import { selectUser } from 'selectors/user'
-
-import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
-import { getFromData } from './helpers/get-from-data'
-import { normalizeRecipients } from './helpers/normalize-recepients'
-import { getInitialValues } from './helpers/get-initial-values'
-import { hasAccountSendPermission } from './helpers/has-account-send-permission'
-import { EmailFormValues, EmailComposeFormProps } from './types'
 import { CollapsedEmailRecipients } from './components/CollapsedEmailRecipients'
 import EmailComposeForm from './EmailComposeForm'
 import { EmailRecipientsFields } from './fields/EmailRecipientsFields'
 import { attachmentFormValueToEmailAttachmentInput } from './helpers/attachment-form-value-to-email-attachment-input'
-import { TemplateExpressionContext } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/template-expression-context'
+import { getFromData } from './helpers/get-from-data'
+import { getInitialValues } from './helpers/get-initial-values'
+import { hasAccountSendPermission } from './helpers/has-account-send-permission'
+import { normalizeRecipients } from './helpers/normalize-recepients'
+import { useGetAllOauthAccounts } from './helpers/use-get-all-oauth-accounts'
+import { EmailFormValues, EmailComposeFormProps } from './types'
 
 interface Props
   extends Omit<
@@ -59,9 +59,8 @@ export function SingleEmailComposeForm({
   const activeBrand = getActiveBrand(user)
   const activeBrandUsers = activeBrand ? getBrandUsers(activeBrand) : [user]
 
-  const [allAccounts, isLoadingAccounts] = useGetAllOauthAccounts(
-    filterAccounts
-  )
+  const [allAccounts, isLoadingAccounts] =
+    useGetAllOauthAccounts(filterAccounts)
 
   const initialValues: Partial<EmailFormValues> = getInitialValues({
     allAccounts,
@@ -101,44 +100,42 @@ export function SingleEmailComposeForm({
       : createEmailCampaign(emailData)
   }
 
-  const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] = (
-    template,
-    values
-  ) => {
-    if (!template) {
-      setIndividualMode(false)
+  const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] =
+    (template, values) => {
+      if (!template) {
+        setIndividualMode(false)
 
-      return true
-    }
+        return true
+      }
 
-    const ccBcc = [...(values.cc || []), ...(values.bcc || [])]
+      const ccBcc = [...(values.cc || []), ...(values.bcc || [])]
 
-    if (ccBcc.length === 0) {
-      setIndividualMode(true)
+      if (ccBcc.length === 0) {
+        setIndividualMode(true)
 
-      return true
-    }
+        return true
+      }
 
-    return new Promise(resolve =>
-      dispach(
-        confirmation({
-          message: 'You have recipients in the Cc and Bcc fields',
-          description:
-            'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
-          confirmLabel: 'Yes',
-          cancelLabel: 'Cancel',
-          onConfirm: () => {
-            values.to = [...(values.to || []), ...ccBcc]
-            delete values.cc
-            delete values.bcc
-            setIndividualMode(true)
-            resolve(true)
-          },
-          onCancel: () => resolve(false)
-        })
+      return new Promise(resolve =>
+        dispach(
+          confirmation({
+            message: 'You have recipients in the Cc and Bcc fields',
+            description:
+              'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
+            confirmLabel: 'Yes',
+            cancelLabel: 'Cancel',
+            onConfirm: () => {
+              values.to = [...(values.to || []), ...ccBcc]
+              delete values.cc
+              delete values.bcc
+              setIndividualMode(true)
+              resolve(true)
+            },
+            onCancel: () => resolve(false)
+          })
+        )
       )
-    )
-  }
+    }
 
   const initialToFieldValue = initialValues?.to
   const [toFieldValue, setToFieldValue] = useState(initialToFieldValue)

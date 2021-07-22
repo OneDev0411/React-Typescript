@@ -1,21 +1,17 @@
 import { Grid, Typography, Tooltip } from '@material-ui/core'
-import { Link } from 'react-router'
 import { mdiFileOutline } from '@mdi/js'
-
 import moment from 'moment'
-
+import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
 import {
   MOVE_FILE,
   VIEW_FILE,
   DELETE_FILE,
   SPLIT_PDF
 } from 'deals/components/ActionsButton/data/action-buttons'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../components/ActionsButton'
 import { useStyles } from '../../Checklist/TaskRow/styles'

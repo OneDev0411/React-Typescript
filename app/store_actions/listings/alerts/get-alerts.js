@@ -1,6 +1,6 @@
-import { getFetchingStatus } from '../../../reducers/listings'
 import * as actionsType from '../../../constants/listings/alerts'
 import api from '../../../models/listings/alerts'
+import { getFetchingStatus } from '../../../reducers/listings'
 
 const getAlerts = params => (dispatch, getState) => {
   if (getFetchingStatus(getState().alerts.list)) {

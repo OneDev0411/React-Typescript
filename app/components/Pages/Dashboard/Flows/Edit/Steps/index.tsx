@@ -1,9 +1,10 @@
 import React from 'react'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Box, makeStyles, Theme } from '@material-ui/core'
 
-import { Step } from './Step'
+import { Box, makeStyles, Theme } from '@material-ui/core'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+
 import { NewStep } from './New'
+import { Step } from './Step'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

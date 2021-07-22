@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+
 import {
   Card,
   CardMedia,
@@ -11,12 +12,13 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { useDropzone } from 'dropzone'
 import { mdiProgressUpload, mdiTrashCanOutline } from '@mdi/js'
+import { useDropzone } from 'dropzone'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageUploadHandler } from '../../types'
+
 import { FieldProps } from './types'
 
 const useStyles = makeStyles(

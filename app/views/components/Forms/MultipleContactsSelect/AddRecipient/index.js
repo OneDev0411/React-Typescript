@@ -1,33 +1,27 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import Fuse from 'fuse.js'
 
 import Downshift from 'downshift'
+import Fuse from 'fuse.js'
+import { connect } from 'react-redux'
 import _ from 'underscore'
 
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
+import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
+import { searchContacts } from 'models/contacts/search-contacts'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { getSegments, areListsFetched } from 'reducers/filter-segments'
-
-import { getContactsTags } from 'actions/contacts/get-contacts-tags'
-import { getSavedSegments } from 'actions/filter-segments/get-saved-segment'
-
-import { searchContacts } from 'models/contacts/search-contacts'
-import { getContactAttribute } from 'models/contacts/helpers/get-contact-attribute'
-
-import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
-
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
-
-import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
 import { isEmail } from 'utils/validations'
 
-import { SearchInput, SearchInputContainer } from './styled'
-
 import ContactItem from '../../../SelectContactModal/components/ContactItem'
+
+import { idIsUUID } from './helpers'
 import { ListItem } from './ListItem'
 import SearchResults from './SearchResults'
-import { idIsUUID } from './helpers'
+import { SearchInput, SearchInputContainer } from './styled'
 
 const initialState = {
   isContactsLoading: false,
@@ -381,7 +375,6 @@ function mapStateToProps({ contacts }) {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  { getContactsTags, getSavedSegments }
-)(AddRecipient)
+export default connect(mapStateToProps, { getContactsTags, getSavedSegments })(
+  AddRecipient
+)

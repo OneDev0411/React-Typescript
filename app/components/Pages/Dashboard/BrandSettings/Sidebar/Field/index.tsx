@@ -1,15 +1,17 @@
 import React from 'react'
+
 import { Grid, FormControl } from '@material-ui/core'
 
 import { ImageUploadHandler } from '../../types'
-import { FieldProps } from './types'
-import TextField from './Text'
-import ColorField from './Color'
-import ImageField from './Image'
-import FontField from './Font'
-import PixelField from './Pixel'
-import WeightField from './Weight'
+
 import BorderField from './Border'
+import ColorField from './Color'
+import FontField from './Font'
+import ImageField from './Image'
+import PixelField from './Pixel'
+import TextField from './Text'
+import { FieldProps } from './types'
+import WeightField from './Weight'
 
 interface Props extends FieldProps {
   onImageUpload: ImageUploadHandler

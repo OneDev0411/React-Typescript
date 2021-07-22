@@ -4,11 +4,11 @@ import { mdiCashUsdOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import SearchDealDrawer from '../SearchDealDrawer'
 import { normalizeDeal } from '../../utils/association-normalizers'
+import SearchDealDrawer from '../SearchDealDrawer'
 
-import { AddAssociationProps } from './types'
 import { AddAssociationButton } from './AddAssociationButton'
+import { AddAssociationProps } from './types'
 
 export function AddDealAssociation({
   disabled,

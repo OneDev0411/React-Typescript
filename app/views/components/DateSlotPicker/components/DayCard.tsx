@@ -1,4 +1,3 @@
-import cn from 'classnames'
 import {
   Card,
   CardContent,
@@ -8,6 +7,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import cn from 'classnames'
 
 import { getWeekdayName, getDayNumber, getMonthName } from 'utils/date-utils'
 

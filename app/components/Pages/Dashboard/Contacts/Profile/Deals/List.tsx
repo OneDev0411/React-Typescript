@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+
 import { useTheme, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
-import { getActiveTeamId } from 'utils/user-teams'
-import { sortDealsStatus } from 'utils/sort-deals-status'
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { ShowMoreLess } from 'components/ShowMoreLess'
-
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { selectUser } from 'selectors/user'
+import { sortDealsStatus } from 'utils/sort-deals-status'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { DealItem } from './Item'
 
@@ -20,10 +20,10 @@ export function List({ deals, contact }: Props) {
   const theme: Theme = useTheme()
   const user = useSelector(selectUser)
   const [statuses] = useBrandStatuses(getActiveTeamId(user) || '')
-  const sortedDealsByStatus = useMemo(() => sortDealsStatus(deals, statuses), [
-    deals,
-    statuses
-  ])
+  const sortedDealsByStatus = useMemo(
+    () => sortDealsStatus(deals, statuses),
+    [deals, statuses]
+  )
 
   return (
     <ShowMoreLess
