@@ -1,6 +1,6 @@
 import { FormApi } from 'final-form'
 
-import { ShowingRoleFormValues } from './types'
+import { CreateContactInput, ShowingRoleFormValues } from './types'
 import useCreateContact from './use-create-contact'
 import useUpdateContact from './use-update-contact'
 
@@ -28,7 +28,7 @@ function useShowingRoleFormSubmit(
       return
     }
 
-    const update = {
+    const contactInfo: CreateContactInput = {
       first_name: values.first_name,
       last_name: values.last_name,
       email: values.email,
@@ -36,8 +36,8 @@ function useShowingRoleFormSubmit(
     }
 
     const contact = values.contact
-      ? await updateContact(values.contact, update)
-      : await createContact(update)
+      ? await updateContact(values.contact, contactInfo)
+      : await createContact(contactInfo)
 
     form.mutators.selectContact(contact)
 
