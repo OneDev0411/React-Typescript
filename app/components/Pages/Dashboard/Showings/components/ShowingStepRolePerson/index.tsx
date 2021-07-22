@@ -12,10 +12,12 @@ import {
 
 import { getShowingRoleAOrAn, getShowingRoleLabel } from '../../helpers'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
+import { getPersonFromUser } from '../../pages/CreateShowing/helpers'
 import { ShowingRoleInput } from '../../types'
 import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import ShowingTeamAgentSearchInput from '../ShowingTeamAgentSearchInput'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 import ShowingRoleAutoSubmitAddNewButton from './ShowingRoleAutoSubmitAddNewButton'
@@ -82,7 +84,12 @@ function ShowingStepRolePerson({
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
   const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
-  const isForm = role.mode === 'form' || !!error
+  const handleSelectAgent = (agent: IUser) => {
+    onRoleEdit({ ...role, ...getPersonFromUser(agent) })
+  }
+
+  const isSelectAgentMode = !role.user && role.role === 'SellerAgent'
+  const isFormMode = !isSelectAgentMode && (role.mode === 'form' || !!error)
 
   return (
     <QuestionSection error={error}>
@@ -90,12 +97,14 @@ function ShowingStepRolePerson({
         Select {showingRoleAOrAn} {showingRole} and how they should be notified
       </QuestionTitle>
       <SmartQuestionForm
-        width={isForm ? '100%' : undefined}
+        width={isFormMode ? '100%' : undefined}
         containerProps={
-          isForm ? { maxWidth: 552, marginLeft: 'auto' } : undefined
+          isFormMode ? { maxWidth: 552, marginLeft: 'auto' } : undefined
         }
       >
-        {isForm ? (
+        {isSelectAgentMode ? (
+          <ShowingTeamAgentSearchInput onChange={handleSelectAgent} />
+        ) : isFormMode ? (
           <ShowingRoleForm
             hasNotificationTypeFields={hasNotificationTypeFields}
             initialValues={{
