@@ -9,15 +9,18 @@ export interface ShowingRoleFormDialogProps
     'children' | 'confirmLabel' | 'noValidate' | 'mutators'
   > {
   hasNotificationTypeFields: boolean
+  hideAddToContactCheckbox?: boolean
 }
 
 function ShowingRoleFormDialog({
   initialValues,
   hasNotificationTypeFields,
+  hideAddToContactCheckbox,
   ...otherProps
 }: ShowingRoleFormDialogProps) {
   const showingFormProps = useShowingRoleForm({
     hasNotificationTypeFields,
+    hideAddToContactCheckbox,
     initialValues
   })
 
