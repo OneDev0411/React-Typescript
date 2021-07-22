@@ -34,11 +34,15 @@ function useShowingRoleForm({
     initialValues,
     mutators,
     noValidate: true,
-    children: ({ form }) => (
+    children: ({ form, values }) => (
       <ShowingRoleFormFields
         form={form}
         initialValues={initialValues}
         hasNotificationTypeFields={hasNotificationTypeFields}
+        hasSaveToContactCheckbox={values.role === 'Tenant'}
+        saveToContactCheckboxLabel={
+          values.contact ? 'Update the contact' : 'Add to contact'
+        }
       />
     )
   }
