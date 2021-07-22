@@ -15,8 +15,7 @@ export default class Mention {
     // replacer
     let replacer = (text, user) => {
       const username = `@${user.username}`
-      const replace =
-        `<span style="background-color: rgb(255, 243, 184)">${username}</span>`
+      const replace = `<span style="background-color: rgb(255, 243, 184)">${username}</span>`
 
       return text.replace(new RegExp(username, 'g'), replace)
     }
@@ -49,8 +48,10 @@ export default class Mention {
     }
 
     mentions.forEach(username => {
-      const user = _.find(membersList,
-        member => `@${member.username.toLowerCase()}` === username.toLowerCase())
+      const user = _.find(
+        membersList,
+        member => `@${member.username.toLowerCase()}` === username.toLowerCase()
+      )
 
       if (!user) {
         return false

@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { ACL } from 'constants/acl'
-
 import Acl from 'components/Acl'
 import SideNavItem from 'components/PageSideNav/SideNavItem'
+import { ACL } from 'constants/acl'
 
 interface Props {
   user: IUser

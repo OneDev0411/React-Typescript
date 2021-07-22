@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Drawer,
   Grid,
@@ -11,8 +12,8 @@ import {
   CircularProgress
 } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

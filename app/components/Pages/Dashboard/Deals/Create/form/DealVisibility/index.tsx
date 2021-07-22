@@ -5,10 +5,8 @@ import {
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { RadioGroup } from 'components/RadioGroup'
 
 interface Props {

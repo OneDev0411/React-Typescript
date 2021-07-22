@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
+
 import { useSelector } from 'react-redux'
 
+import { getAgents } from 'models/Deal/agent'
 import { IAppState } from 'reducers'
 
-import { getAgents } from 'models/Deal/agent'
-
 import { getBrand } from './helpers/get-brand'
-
 import type { NormalizedBrand } from './types'
 import useTeamAgentsSearch from './use-team-agents-search'
 

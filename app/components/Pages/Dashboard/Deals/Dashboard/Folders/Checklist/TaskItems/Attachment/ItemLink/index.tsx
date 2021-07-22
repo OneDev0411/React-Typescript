@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
 import { IAppState } from 'reducers'
 import { selectDealEnvelopes } from 'reducers/deals/envelopes'
-import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 import { getFileType } from 'utils/file-utils/get-file-type'
+import { getDocumentEnvelopes } from 'views/utils/deal-files/get-document-envelopes'
 
 import { useStyles } from '../../styles'
 

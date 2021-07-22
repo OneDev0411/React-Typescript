@@ -1,26 +1,24 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
-import { Link, WithRouterProps } from 'react-router'
-import { FORM_ERROR } from 'final-form'
-import { Form, Field } from 'react-final-form'
 import { Box, Typography } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { FORM_ERROR } from 'final-form'
+import { Form, Field } from 'react-final-form'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, WithRouterProps } from 'react-router'
 
-import { IAppState } from 'reducers'
 import { updateUser } from 'actions/user'
-import { upgradeAgent } from 'models/user/upgrade-to-agent'
-
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { upgradeAgent } from 'models/user/upgrade-to-agent'
+import { IAppState } from 'reducers'
 
-import { useDocumentTitle } from '../use-document-title'
-
-import Header from '../Header'
-import Container from '../Container'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
 import { useCommonStyles } from '../common-styles'
+import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
+import { useDocumentTitle } from '../use-document-title'
 
 interface FormValues {
   secret: string

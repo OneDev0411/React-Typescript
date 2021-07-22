@@ -1,27 +1,26 @@
 import React from 'react'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
-import { useDispatch, useSelector } from 'react-redux'
-import { browserHistory, WithRouterProps, Link } from 'react-router'
+
+import { Box, Theme, makeStyles, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form } from 'react-final-form'
-import { Box, Theme, makeStyles, Typography } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory, WithRouterProps, Link } from 'react-router'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { Alert } from '@material-ui/lab'
-
-import { IAppState } from '../../../../reducers'
-import { updateUser } from '../../../../store_actions/user'
-import submitSigninForm from '../../../../store_actions/auth/signin'
 import updatePassword from '../../../../models/auth/password/update'
 import { editUser } from '../../../../models/user/edit'
-
-import OAuthPageLayout from '../../../../views/components/OAuthPageLayout'
+import { IAppState } from '../../../../reducers'
+import submitSigninForm from '../../../../store_actions/auth/signin'
+import { updateUser } from '../../../../store_actions/user'
 import NextButton from '../../../../views/components/OAuthFormNextButton'
+import OAuthPageLayout from '../../../../views/components/OAuthPageLayout'
 import CircleSpinner from '../../../../views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { FormValues } from './types'
-import { validate } from './validate'
 import { TextField } from './TextField'
+import { FormValues } from './types'
 import { UserTypeField } from './UserTypeField'
+import { validate } from './validate'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

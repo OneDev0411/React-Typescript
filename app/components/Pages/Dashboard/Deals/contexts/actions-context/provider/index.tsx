@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 
-import { reducer, initialState } from '../reducers'
 import { StateContext, DispatchContext } from '..'
+import { reducer, initialState } from '../reducers'
 
 interface Props {
   children: React.ReactNode

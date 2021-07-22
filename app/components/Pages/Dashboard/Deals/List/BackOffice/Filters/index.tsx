@@ -1,28 +1,24 @@
 import { useEffect } from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { MenuItem } from '@material-ui/core'
+import { useDispatch, useSelector } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 import _ from 'underscore'
 
-import { putUserSetting } from 'models/user/put-user-setting'
 import { getUserTeams } from 'actions/user/teams'
-import { getActiveBrand } from 'utils/user-teams'
-import { getActiveSort } from 'deals/List/helpers/sorting'
-
 import { SortableColumn } from 'components/Grid/Table/types'
-
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
-
+import { getActiveSort } from 'deals/List/helpers/sorting'
+import { putUserSetting } from 'models/user/put-user-setting'
 import { selectUser } from 'selectors/user'
+import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
-
+import { getGridSortLabel } from '../../helpers/sorting'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
-import { getGridSortLabel } from '../../helpers/sorting'
-
 import { SearchQuery } from '../types'
 
 interface Props {
@@ -72,7 +68,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      value={props.location.query.type === 'query' ? 'all-deals' : null}
+      value={
+        props.location.query.type === 'query' &&
+        ['listing', 'contact'].includes(props.params.filter)
+          ? 'all-deals'
+          : null
+      }
       defaultValue={props.params.filter}
       tabs={[
         ...inboxTabs
@@ -85,6 +86,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               to={`/dashboard/deals/filter/${name}?type=inbox`}
             />
           )),
+        <TabLink
+          key="closings"
+          value="closings"
+          label={<span>Closings</span>}
+          to="/dashboard/deals/filter/closings?type=query"
+        />,
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"

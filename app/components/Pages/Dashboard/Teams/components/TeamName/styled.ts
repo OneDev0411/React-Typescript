@@ -1,14 +1,12 @@
 import styled from 'styled-components'
-
 import Flex from 'styled-flex-component'
 
-import ALink from 'components/ALink'
-import { primary } from 'views/utils/colors'
-import IconButton from 'components/Button/IconButton'
-import Badge from 'components/Badge'
-import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
-
 import { scaleInAnimation } from 'animations/scale-in'
+import ALink from 'components/ALink'
+import Badge from 'components/Badge'
+import IconButton from 'components/Button/IconButton'
+import UserIcon from 'components/SvgIcons/InPerson/IconInPerson'
+import { primary } from 'views/utils/colors'
 
 export const TeamLink = styled(ALink)`
   &.active {

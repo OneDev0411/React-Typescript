@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 
 import { Button, makeStyles } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles(
 )
 
 const propTypes = {
+  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Drawer.propTypes,
   defaultSearchFilter: PropTypes.string,
   onSelect: PropTypes.func.isRequired,

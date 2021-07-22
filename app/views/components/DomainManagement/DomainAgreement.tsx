@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
+
 import { Box, Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
 
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { QuestionForm, QuestionTitle } from 'components/QuestionWizard'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import useAsync from 'hooks/use-async'
 import getDomainAgreements from 'models/domains/get-domain-agreements'
 
@@ -40,7 +41,11 @@ function DomainAgreement({
   const classes = useStyles()
   const wizard = useWizardContext()
   const [checked, setChecked] = useState(false)
-  const { run, data: agreements, isLoading } = useAsync({
+  const {
+    run,
+    data: agreements,
+    isLoading
+  } = useAsync({
     data: defaultAgreementList
   })
 

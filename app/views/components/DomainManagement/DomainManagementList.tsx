@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { Button, Box, makeStyles } from '@material-ui/core'
 
 import { H4 } from 'components/Typography/headings'
 
-import DomainManagementTitle from './DomainManagementTitle'
 import DomainManagementListItem from './DomainManagementListItem'
+import DomainManagementTitle from './DomainManagementTitle'
 
 export interface DomainManagementListProps {
   className: string

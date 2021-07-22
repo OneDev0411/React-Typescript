@@ -1,13 +1,12 @@
 import React from 'react'
+
 import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
+import ActionButton from 'components/Button/ActionButton'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Deal from 'models/Deal'
 import { getStatusColor } from 'utils/listing'
-
-import ActionButton from 'components/Button/ActionButton'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,

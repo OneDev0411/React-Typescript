@@ -1,6 +1,4 @@
 import React, { useMemo } from 'react'
-import { connect } from 'react-redux'
-import Flex from 'styled-flex-component'
 
 import {
   Button,
@@ -11,13 +9,14 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
 import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
-import { IAppState } from 'reducers/index'
-import { selectDealTasks } from 'reducers/deals/tasks'
 import { Divider } from 'components/Divider'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { selectDealTasks } from 'reducers/deals/tasks'
+import { IAppState } from 'reducers/index'
 import { selectUser } from 'selectors/user'
 
 interface StateProps {

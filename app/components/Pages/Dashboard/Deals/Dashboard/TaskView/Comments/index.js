@@ -1,14 +1,14 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
-import TaskRoom from 'services/notification/chat'
 import { addNewRoom } from 'actions/chatroom/room'
+import TaskRoom from 'services/notification/chat'
 
 import Comments from '../../../../Chatroom/Messages/light'
 
 import { EmptyState } from './EmptyState'
 import MessageInput from './MessageInput'
-
 import { Container } from './styled'
 
 class Comment extends React.Component {

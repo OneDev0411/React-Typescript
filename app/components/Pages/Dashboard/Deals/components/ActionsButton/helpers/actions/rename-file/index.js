@@ -1,7 +1,6 @@
-import { addNotification as notify } from 'components/notification'
-
-import { renameTaskFile } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { renameTaskFile } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 
 import store from '../../../../../../../../../stores'
 

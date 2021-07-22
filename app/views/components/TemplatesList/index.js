@@ -1,19 +1,20 @@
 import { useContext, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+
 import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import { isTemplateInstance } from 'utils/marketing-center/helpers'
+import { addNotification as notify } from 'components/notification'
 import { useInfinitePagination } from 'hooks/use-infinite-pagination'
+import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
-import { TemplatesListContainer } from './styled'
 import MarketingTemplateCard from '../MarketingTemplateCard'
-import Fallback from './Fallback'
-import TemplateAction from './TemplateAction'
-import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
+import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
+
+import Fallback from './Fallback'
+import { TemplatesListContainer } from './styled'
+import TemplateAction from './TemplateAction'
 import TemplateCardActions from './TemplateCardActions'
 
 const PAGE_SIZE = 12

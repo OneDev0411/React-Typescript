@@ -2,10 +2,9 @@ import React from 'react'
 
 import { mdiLightningBolt } from '@mdi/js'
 
-import preSearchFormat from 'models/contacts/helpers/pre-search-format'
-
 import AddToFlowButton from 'components/AddToFlowButton'
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import preSearchFormat from 'models/contacts/helpers/pre-search-format'
 
 function AddToFlow({ disabled, ...props }) {
   const { entireMode, selectedRows, filters, parked } = props

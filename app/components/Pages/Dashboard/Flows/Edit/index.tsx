@@ -1,9 +1,5 @@
 import React, { useState, useContext, useCallback, useMemo } from 'react'
-import { useEffectOnce } from 'react-use'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { withRouter, WithRouterProps } from 'react-router'
 import {
   Grid,
   Box,
@@ -15,34 +11,34 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
+import { Helmet } from 'react-helmet'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
+import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PageLayout from 'components/GlobalPageLayout'
+import LoadingContainer from 'components/LoadingContainer'
 import { addNotification as notify } from 'components/notification'
-
 import { getEmailTemplates } from 'models/email-templates/get-email-templates'
-import { getBrandFlow } from 'models/flows/get-brand-flow'
+import { createStep } from 'models/flows/create-step'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
+import { editBrandFlow } from 'models/flows/edit-brand-flow'
 import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
 import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
-import { createStep } from 'models/flows/create-step'
-import { editBrandFlow } from 'models/flows/edit-brand-flow'
+import { getBrandFlow } from 'models/flows/get-brand-flow'
 import { stopFlow } from 'models/flows/stop-flow'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import { goTo } from 'utils/go-to'
-
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import LoadingContainer from 'components/LoadingContainer'
-import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
-
 import { selectUser } from 'selectors/user'
+import { goTo } from 'utils/go-to'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
 
+import Contacts from './Contacts'
 import Header from './Header'
 import Steps from './Steps'
-import Contacts from './Contacts'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

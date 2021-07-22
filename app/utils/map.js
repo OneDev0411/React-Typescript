@@ -29,7 +29,9 @@ export const normalizeListingLocation = listing => {
 }
 
 export const normalizeListingsForMarkers = markers =>
-  markers.filter(marker => marker.location || marker.property).map(normalizeListingLocation)
+  markers
+    .filter(marker => marker.location || marker.property)
+    .map(normalizeListingLocation)
 
 const setCssPosition = buildings => {
   buildings.forEach((building, i) => {
@@ -87,7 +89,7 @@ export const generatePointsFromBounds = bounds => [
   }
 ]
 
-export const getBounds = (bounds) => {
+export const getBounds = bounds => {
   if (bounds == null) {
     return {}
   }

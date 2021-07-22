@@ -1,5 +1,6 @@
-import timeago from 'timeago.js'
 import * as React from 'react'
+
+import timeago from 'timeago.js'
 
 import { useForceRender } from 'hooks/use-force-render'
 import { useInterval } from 'hooks/use-interval'

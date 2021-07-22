@@ -1,21 +1,19 @@
 import { useState, useMemo } from 'react'
-import { Box, Typography, Tooltip, IconButton, Theme } from '@material-ui/core'
-import produce from 'immer'
 
+import { Box, Typography, Tooltip, IconButton, Theme } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
+import { mdiPencilOutline } from '@mdi/js'
 import fecha from 'fecha'
+import produce from 'immer'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
 
-import { useTheme } from '@material-ui/styles'
-import { mdiPencilOutline } from '@mdi/js'
-
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-import { deleteAttribute } from 'models/contacts/delete-attribute'
-import { getNotes } from 'models/contacts/helpers/get-notes'
-
+import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
 import SanitizedHtml from 'components/SanitizedHtml'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import AddOrEditNoteDrawer from 'components/AddOrEditNoteDrawer/AddOrEditNoteDrawer'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
+import { getNotes } from 'models/contacts/helpers/get-notes'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
 import { useStyles } from './styles'
 

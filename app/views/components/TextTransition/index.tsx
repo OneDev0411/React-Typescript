@@ -1,5 +1,6 @@
-import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+
+import { makeStyles, Typography, TypographyProps } from '@material-ui/core'
 
 import './animations.css'
 

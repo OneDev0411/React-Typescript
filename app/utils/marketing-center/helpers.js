@@ -15,7 +15,9 @@ export function getTemplateImage(
 
   return {
     original: template.preview ? template.preview.url : fallbackImage,
-    thumbnail: template.thumbnail ? template.thumbnail.preview_url : fallbackImage
+    thumbnail: template.thumbnail
+      ? template.thumbnail.preview_url
+      : fallbackImage
   }
 }
 
@@ -24,7 +26,9 @@ export function createdAt(date) {
 }
 
 export function getSelectedMediumTemplates(brandTemplates, wantedMedium) {
-  return wantedMedium ? brandTemplates.filter(t => t.template.medium === wantedMedium): brandTemplates
+  return wantedMedium
+    ? brandTemplates.filter(t => t.template.medium === wantedMedium)
+    : brandTemplates
 }
 
 function getTemplateIndex(availableTemplates, selectedTemplate) {
@@ -115,6 +119,7 @@ export function getTemplateType(fallback, template) {
   }
 
   const normalizedTemplate = getTemplateObject(template)
+
   return normalizedTemplate.template_type || fallback
 }
 

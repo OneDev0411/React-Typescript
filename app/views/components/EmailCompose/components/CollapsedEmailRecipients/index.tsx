@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ComponentProps, ReactNode } from 'react'
+
 import { createStyles, Input, makeStyles, Theme } from '@material-ui/core'
 
 import { RecipientList } from './RecipientsList'

@@ -1,18 +1,18 @@
 import { Editor } from 'grapesjs'
 
-import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
-
 import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
 import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
 import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
+import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
 import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
 import { baseView, isComponent } from '../utils'
+
 import GridColumn1 from './grid-column-1.njk'
 import GridColumn2 from './grid-column-2.njk'
 import GridColumn3 from './grid-column-3.njk'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeGridRow = 'grid-row'
 const typeGridColumn = 'grid-column'

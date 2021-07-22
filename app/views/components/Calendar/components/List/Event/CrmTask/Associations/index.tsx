@@ -3,11 +3,10 @@ import React, { useContext } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import MiniContactProfile from 'components/MiniContact'
-
 import { getTrimmedArrayAndOthersText } from 'utils/get-trimmed-array-and-others-text'
 
-import { sharedStyles } from '../../styles'
 import { ListContext } from '../../../context'
+import { sharedStyles } from '../../styles'
 
 interface Props {
   event: ICalendarEvent

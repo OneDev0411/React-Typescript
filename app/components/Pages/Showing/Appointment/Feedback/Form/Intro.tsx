@@ -1,8 +1,8 @@
 import { ReactChild } from 'react'
+
 import { useEffectOnce } from 'react-use'
 
 import { QuestionSection, QuestionTitle } from 'components/QuestionWizard'
-
 import useIsMobile from 'hooks/use-is-mobile'
 
 import { useGoNextStep } from './hooks'

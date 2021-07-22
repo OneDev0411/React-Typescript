@@ -1,7 +1,7 @@
-import { normalizeContacts } from '../helpers/normalize-contacts'
 import * as actionTypes from '../../../constants/contacts'
 import { deleteAttribute as removeAttribute } from '../../../models/contacts/delete-attribute'
 import { getContact as fetchContact } from '../../../models/contacts/get-contact'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function deleteAttributes(contactId, ids, query) {
   return async dispatch => {

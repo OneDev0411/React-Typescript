@@ -2,7 +2,6 @@ import { MenuItem } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
 import { Tab, DropdownTab } from 'components/PageTabs'
-
 import dashboards from 'constants/metabase'
 
 interface Props {

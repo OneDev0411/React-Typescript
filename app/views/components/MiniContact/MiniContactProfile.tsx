@@ -1,16 +1,16 @@
 import React from 'react'
-import useDebouncedCallback from 'use-debounce/lib/callback'
-import Paper from '@material-ui/core/Paper'
 
 import { useTheme } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import { EventDrawer } from 'components/EventDrawer'
+import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
-import ContentSizeAwarePopper from 'components/ContentSizeAwarePopper'
+import { EventDrawer } from 'components/EventDrawer'
 
-import MiniProfile from './MiniProfile'
 import ComponentRenderer from './MiniContactComponenetRenderer'
+import MiniProfile from './MiniProfile'
 import {
   ActionSettingsNamesType,
   ActionSettingsType,
@@ -27,10 +27,8 @@ interface MiniContactPropsType {
 
 function MiniContact(props: MiniContactPropsType) {
   // It should be here because after leaving out the mouse, it will be lost if it's inside the component
-  const [
-    actionSettings,
-    setActionSettings
-  ] = React.useState<ActionSettingsType>({})
+  const [actionSettings, setActionSettings] =
+    React.useState<ActionSettingsType>({})
   const [anchorEl, setAnchorEl] = React.useState(null)
   const theme = useTheme()
 

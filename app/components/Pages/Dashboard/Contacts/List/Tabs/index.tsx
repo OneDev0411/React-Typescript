@@ -1,21 +1,21 @@
 import { useMemo } from 'react'
+
 import { useSelector, useDispatch } from 'react-redux'
 
-import { PageTabs, Tab } from 'components/PageTabs'
-import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import SavedSegments from 'components/Grid/SavedSegments/List'
+import { PageTabs, Tab } from 'components/PageTabs'
 import { IAppState } from 'reducers'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
-import { ViewSwitcher } from '../ViewSwitcher'
-
-import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
+import { SortFields } from '../SortFields'
 import TagsList from '../TagsList'
+import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
+import { ViewSwitcher } from '../ViewSwitcher'
 
 export type ViewModeType = 'table' | 'board'
 

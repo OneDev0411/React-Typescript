@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { Container } from './styled'
-
-import { FormInputs } from './BasicInputs'
 import { AddressInputs } from './AddressInputs'
+import { FormInputs } from './BasicInputs'
 import ContextInputs from './Context'
+// eslint-disable-next-line import/no-named-as-default
 import Roles from './Roles'
+import { Container } from './styled'
 
 export default function Annotations(props) {
   const sharedProps = {

@@ -5,9 +5,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
 import { ListContext } from '../../context'
-
 import { EventContainer } from '../components/EventContainer'
-
 import { sharedStyles } from '../styles'
 
 interface Props {

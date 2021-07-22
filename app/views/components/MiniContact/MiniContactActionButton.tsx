@@ -1,12 +1,11 @@
-import { mdiCalendarOutline } from '@mdi/js'
 import { makeStyles, Theme } from '@material-ui/core'
-
 import Button from '@material-ui/core/Button'
+import { mdiCalendarOutline } from '@mdi/js'
 
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ActionSettingsType,

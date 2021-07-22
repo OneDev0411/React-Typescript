@@ -1,7 +1,7 @@
 import { Dispatch, useCallback, useState } from 'react'
 
-import Members from 'models/BrandConsole/Members'
 import { getBrands } from 'models/BrandConsole/Brands'
+import Members from 'models/BrandConsole/Members'
 
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
 

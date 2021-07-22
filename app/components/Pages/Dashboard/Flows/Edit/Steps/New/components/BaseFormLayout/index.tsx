@@ -1,4 +1,5 @@
 import React, { ReactNode, memo } from 'react'
+
 import {
   Box,
   Chip,
@@ -9,20 +10,20 @@ import {
   IconButton,
   MenuItem
 } from '@material-ui/core'
-import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
-import cn from 'classnames'
 import { mdiDotsVertical, mdiDrag } from '@mdi/js'
+import cn from 'classnames'
+import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 
+import { BaseDropdown } from 'components/BaseDropdown'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { BaseDropdown } from 'components/BaseDropdown'
-
-import { WaitFor } from '../BaseFields/WaitFor'
+import { BaseFormProps } from '../../types'
 import { EventType } from '../BaseFields/EventType'
 import { Time } from '../BaseFields/Time'
+import { WaitFor } from '../BaseFields/WaitFor'
+
 import { useStyles } from './styles'
-import { BaseFormProps } from '../../types'
 
 interface Props extends Omit<BaseFormProps, 'onSubmit'> {
   index: number
@@ -59,7 +60,7 @@ const Layout = ({
 
     return (
       <form onSubmit={onSubmit} className={classes.form} noValidate>
-        <Box className={classes.header}>
+        <header className={classes.header}>
           <Grid container alignItems="center" justify="space-between">
             <Grid container alignItems="center" xs={6}>
               {step && (
@@ -149,28 +150,28 @@ const Layout = ({
               )}
             </Grid>
           </Grid>
-        </Box>
-        <Box className={classes.commonFieldsContainer}>
+        </header>
+        <div className={classes.commonFieldsContainer}>
           <Typography variant="subtitle2" className={classes.commonFieldsTitle}>
             When is this reminder for?
           </Typography>
-          <Box className={classes.commonFields}>
-            <Box className={classes.commonField} width={270}>
-              <WaitFor disabled={disableEdit} />
-            </Box>
-            <Box className={classes.commonField} flexGrow={1} px={0.75}>
-              <EventType disabled={disableEdit} />
-            </Box>
-            <Box className={classes.commonField} flexGrow={0} maxWidth={140}>
+          <div className={classes.waitForContainer}>
+            <WaitFor disabled={disableEdit} />
+          </div>
+          <div className={classes.commonFields}>
+            <div className={cn(classes.commonField, classes.eventType)}>
+              <EventType index={index} disabled={disableEdit} />
+            </div>
+            <div className={cn(classes.commonField, classes.time)}>
               <Time
                 textFieldProps={{
                   disabled: disableEdit
                 }}
               />
-            </Box>
-          </Box>
-        </Box>
-        <Box className={classes.otherFieldsContainer}>{children}</Box>
+            </div>
+          </div>
+        </div>
+        <div className={classes.otherFieldsContainer}>{children}</div>
       </form>
     )
   }
@@ -188,7 +189,7 @@ const Layout = ({
             ref={draggableProvided.innerRef}
             {...draggableProvided.draggableProps}
           >
-            <Box
+            <div
               onMouseOver={raise}
               onFocus={raise}
               onMouseOut={stopRaise}
@@ -198,14 +199,14 @@ const Layout = ({
               })}
             >
               {renderForm({ draggableProvided })}
-            </Box>
+            </div>
           </div>
         )}
       </Draggable>
     )
   }
 
-  return <Box className={classes.container}>{renderForm({})}</Box>
+  return <div className={classes.container}>{renderForm({})}</div>
 }
 
 export const BaseFormLayout = memo(Layout)

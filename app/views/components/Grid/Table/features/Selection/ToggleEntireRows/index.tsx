@@ -1,8 +1,8 @@
 import React from 'react'
+
 import { Tooltip, createStyles, makeStyles, Theme } from '@material-ui/core'
 
 import { SELECTION__TOGGLE_ENTIRE_ROWS } from '../../../context/constants'
-
 import { useGridContext } from '../../../hooks/use-grid-context'
 
 const useStyles = makeStyles((theme: Theme) =>

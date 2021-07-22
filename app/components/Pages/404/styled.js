@@ -7,7 +7,8 @@ const BG_IMAGE_URL = '/static/images/noMatch/'
 export const Container = styled.div`
   color: #fff;
   height: 100vh;
-  background: ${primary} url('${BG_IMAGE_URL}404.png') no-repeat center center fixed;
+  background: ${primary} url('${BG_IMAGE_URL}404.png') no-repeat center center
+    fixed;
   background-size: cover;
 
   @media (max-width: 30em) and (orientation: portrait) {
@@ -33,7 +34,7 @@ export const Container = styled.div`
       font-size: 2rem;
     }
   }
-  
+
   .content {
     padding-top: 12%;
     text-align: center;

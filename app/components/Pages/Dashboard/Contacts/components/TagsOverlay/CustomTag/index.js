@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { mdiTagOutline } from '@mdi/js'
+import styled from 'styled-components'
 
-import { disabledColor, primary } from 'views/utils/colors'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { disabledColor, primary } from 'views/utils/colors'
 
 const borderColor = (inputFocused, error) => {
   if (error) {

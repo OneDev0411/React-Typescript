@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+
 import {
   Checkbox,
   FormControlLabel,
@@ -10,8 +11,8 @@ import {
 } from '@material-ui/core'
 import { mdiBellOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ONE_DAY_IN_SECONDS, ONE_WEEK_IN_SECONDS } from '../constants'
 

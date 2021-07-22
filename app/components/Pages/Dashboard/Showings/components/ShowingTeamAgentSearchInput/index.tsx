@@ -1,7 +1,7 @@
 import { ACL } from 'constants/acl'
 
-import AgentSearchInput, { AgentSearchInputProps } from '../AgentSearchInput'
 import useActiveTeamBrandWithPermission from '../../hooks/use-active-team-brand-with-permission'
+import AgentSearchInput, { AgentSearchInputProps } from '../AgentSearchInput'
 
 export type ShowingTeamAgentSearchInputProps = Omit<
   AgentSearchInputProps,

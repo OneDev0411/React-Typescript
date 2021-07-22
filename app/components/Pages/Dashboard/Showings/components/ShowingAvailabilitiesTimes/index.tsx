@@ -1,13 +1,15 @@
 import { useState, useMemo, memo, ReactNode } from 'react'
+
 import { Box, Button, Typography } from '@material-ui/core'
 
+import { hourToSeconds, findTimeConflicts } from '../../helpers'
+import { ShowingAvailabilityItem } from '../../types'
+import ShowingErrorText from '../ShowingErrorText'
+
+import { findSlotIndexById } from './helpers'
 import ShowingAvailabilitiesTimesRow, {
   ShowingAvailabilitiesTimesRowProps
 } from './ShowingAvailabilitiesTimesRow'
-import { hourToSeconds, findTimeConflicts } from '../../helpers'
-import { findSlotIndexById } from './helpers'
-import ShowingErrorText from '../ShowingErrorText'
-import { ShowingAvailabilityItem } from '../../types'
 
 export interface ShowingAvailabilitiesTimesProps
   extends Pick<ShowingAvailabilitiesTimesRowProps, 'showingDuration'> {
@@ -18,6 +20,7 @@ export interface ShowingAvailabilitiesTimesProps
   onContinue?: () => void
   error?: string
   children?: ReactNode
+  disabledContinue?: boolean
 }
 
 function ShowingAvailabilitiesTimes({
@@ -28,7 +31,8 @@ function ShowingAvailabilitiesTimes({
   onContinue,
   error,
   children,
-  showingDuration
+  showingDuration,
+  disabledContinue = false
 }: ShowingAvailabilitiesTimesProps) {
   const [nextId, setNextId] = useState(0)
 
@@ -123,7 +127,12 @@ function ShowingAvailabilitiesTimes({
             variant="contained"
             size="small"
             color="primary"
-            disabled={!value.length || !!timeConflicts.length || !!error}
+            disabled={
+              value.length === 0 ||
+              timeConflicts.length > 0 ||
+              !!error ||
+              disabledContinue
+            }
             onClick={onContinue}
           >
             Continue

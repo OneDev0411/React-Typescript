@@ -3,20 +3,19 @@ import React, { memo } from 'react'
 import { mdiTrashCanOutline, mdiShoppingOutline } from '@mdi/js'
 
 import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-
-import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import SendMlsListingCard from 'components/InstantMarketing/adapters/SendMlsListingCard'
 
-import Email from '../../Actions/Email'
-import MergeContacts from '../../Actions/MergeContacts'
-import ExportContacts from '../../Actions/ExportContactsButton'
-import { TagContacts } from '../../Actions/TagContacts'
-import CreateEvent from '../../Actions/CreateEvent'
 import AddToFlowAction from '../../Actions/AddToFlow'
+import CreateEvent from '../../Actions/CreateEvent'
+import Email from '../../Actions/Email'
+import ExportContacts from '../../Actions/ExportContactsButton'
+import MergeContacts from '../../Actions/MergeContacts'
+import { TagContacts } from '../../Actions/TagContacts'
 import { UnparkContacts } from '../../Actions/UnparkContacts'
-import { ActionWrapper } from '../components/ActionWrapper'
 import { PARKED_CONTACTS_LIST_ID } from '../../constants'
+import { ActionWrapper } from '../components/ActionWrapper'
 
 interface Props {
   activeSegmentId: string

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import fecha from 'fecha'
-import { Field, FieldRenderProps } from 'react-final-form'
+
 import {
   Box,
   Button,
@@ -14,11 +13,12 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-
 import { mdiClose } from '@mdi/js'
+import fecha from 'fecha'
+import { Field, FieldRenderProps } from 'react-final-form'
 
-import TimeInput from 'components/TimeInput'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import TimeInput from 'components/TimeInput'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

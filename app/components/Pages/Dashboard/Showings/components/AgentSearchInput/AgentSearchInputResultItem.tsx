@@ -1,5 +1,5 @@
-import cn from 'classnames'
 import { Box, Avatar, Typography, makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

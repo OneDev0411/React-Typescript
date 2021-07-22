@@ -1,17 +1,16 @@
-import { Field, FieldProps } from 'react-final-form'
-
 import { ReactNode } from 'react'
 
-import { ACL } from 'constants/acl'
+import { Field, FieldProps } from 'react-final-form'
 
-import AgentAutocompleteField, {
-  AgentAutocompleteFieldProps
-} from '../AgentAutocompleteField'
-import ContactAutocompleteField from '../ContactAutocompleteField'
+import { ACL } from 'constants/acl'
 
 import ActiveTeamAvailableMemberWithPermissionAutocompleteField, {
   ActiveTeamAvailableMemberWithPermissionAutocompleteFieldProps
 } from '../ActiveTeamAvailableMemberWithPermissionAutocompleteField'
+import AgentAutocompleteField, {
+  AgentAutocompleteFieldProps
+} from '../AgentAutocompleteField'
+import ContactAutocompleteField from '../ContactAutocompleteField'
 
 interface ShowingRoleFormNameFieldProps
   extends Pick<FieldProps<string, any>, 'validate'> {

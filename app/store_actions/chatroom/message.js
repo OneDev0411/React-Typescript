@@ -1,5 +1,6 @@
-import _ from 'underscore'
 import moment from 'moment'
+import _ from 'underscore'
+
 import types from '../../constants/chatroom'
 import Chatroom from '../../models/Chatroom'
 
@@ -16,7 +17,12 @@ function messagesReceived(id, messages, { total }, append = null) {
 export function getMessages(id, limit, value, value_type) {
   return async dispatch => {
     try {
-      const { info, data } = await Chatroom.getMessages(id, limit, value, value_type)
+      const { info, data } = await Chatroom.getMessages(
+        id,
+        limit,
+        value,
+        value_type
+      )
 
       // append messages to the end of list if using since_value
       const append = value_type === 'since'

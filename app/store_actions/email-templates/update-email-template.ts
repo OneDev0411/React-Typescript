@@ -5,25 +5,23 @@ import { EmailTemplateAction } from 'reducers/email-templates/types'
 
 import * as actionTypes from '../../constants/email-templates'
 
-export const updateEmailTemplate = (
-  brandId: string,
-  templateId: string,
-  updates: IBrandEmailTemplateInput
-) => async (dispatch: ThunkDispatch<any, any, EmailTemplateAction>) => {
-  try {
-    const template = await update(brandId, templateId, updates)
+export const updateEmailTemplate =
+  (brandId: string, templateId: string, updates: IBrandEmailTemplateInput) =>
+  async (dispatch: ThunkDispatch<any, any, EmailTemplateAction>) => {
+    try {
+      const template = await update(brandId, templateId, updates)
 
-    dispatch({
-      type: actionTypes.UPDATE_EMAIL_TEMPLATE,
-      brandId,
-      template: {
-        ...template,
-        editable: true
-      }
-    })
+      dispatch({
+        type: actionTypes.UPDATE_EMAIL_TEMPLATE,
+        brandId,
+        template: {
+          ...template,
+          editable: true
+        }
+      })
 
-    return template
-  } catch (error) {
-    throw error
+      return template
+    } catch (error) {
+      throw error
+    }
   }
-}

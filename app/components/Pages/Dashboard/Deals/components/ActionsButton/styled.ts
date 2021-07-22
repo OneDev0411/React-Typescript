@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled, { css } from 'styled-components'
 
 interface PrimaryActionProps {
   hasSecondaryActions: boolean

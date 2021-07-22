@@ -1,8 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk'
 
-import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
-
 import { disconnectOAuthAccount as disconnect } from 'models/o-auth-accounts/disconnect-o-auth-account'
+import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
 
 import {
   FETCH_OAUTH_ACCOUNT_SUCCESS,

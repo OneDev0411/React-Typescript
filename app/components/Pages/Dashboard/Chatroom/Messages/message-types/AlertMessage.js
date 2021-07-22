@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+
 import { mdiBellOutline } from '@mdi/js'
 
-import { grey } from 'views/utils/colors'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { grey } from 'views/utils/colors'
 
-import AlertFeedModalViewer from '../../../Listings/components/AlertFeedModalViewer/AlertFeedModalViewer'
+import AlertFeedModalViewer from '../../../MLS/components/AlertFeedModalViewer/AlertFeedModalViewer'
 
 export default function AlertMessage({ alert }) {
   const [isModalOpen, setIsModalOpen] = useState(false)

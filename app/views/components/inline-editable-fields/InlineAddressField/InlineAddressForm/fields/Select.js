@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { mdiChevronDown } from '@mdi/js'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
-import { mdiChevronDown } from '@mdi/js'
 
 import { Dropdown } from 'components/Dropdown'
 import { Item } from 'components/Dropdown/Item'

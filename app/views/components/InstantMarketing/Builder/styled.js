@@ -1,7 +1,6 @@
-import styled from 'styled-components'
-
-import { styled as muiStyled } from '@material-ui/styles'
 import BaseDivider from '@material-ui/core/Divider'
+import { styled as muiStyled } from '@material-ui/styles'
+import styled from 'styled-components'
 
 export const Container = styled.div`
   position: fixed;

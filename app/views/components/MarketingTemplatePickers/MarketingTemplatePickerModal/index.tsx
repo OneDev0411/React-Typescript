@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+
 import {
   Dialog,
   DialogTitle,
@@ -7,8 +8,8 @@ import {
   makeStyles
 } from '@material-ui/core'
 
-import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 import MarketingTemplatePicker from 'components/MarketingTemplatePickers/MarketingTemplatePicker'
+import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
 
 const useStyles = makeStyles(
   () => ({

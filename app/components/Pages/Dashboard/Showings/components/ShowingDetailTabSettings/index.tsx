@@ -1,35 +1,32 @@
 import { useRef, useState, ChangeEvent } from 'react'
+
 import { Box, makeStyles } from '@material-ui/core'
-
 import { withRouter, WithRouterProps } from 'react-router'
-
 import { useDebouncedCallback } from 'use-debounce'
 
 import TabContentSwitch from 'components/TabContentSwitch'
-
-import useNotify from 'hooks/use-notify'
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
 import updateShowing from 'models/showing/update-showing'
 
 import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
 
 import { getValidShowingDetailSettingsTab } from './helpers'
+import ShowingDetailTabSettingsSaveButton, {
+  ShowingDetailTabSettingsSaveButtonProps
+} from './ShowingDetailTabSettingsSaveButton'
 import ShowingDetailTabSettingsSubjectList from './ShowingDetailTabSettingsSubjectList'
+import ShowingDetailTabSettingsTabAdvanceNotice from './ShowingDetailTabSettingsTabAdvanceNotice'
+import ShowingDetailTabSettingsTabAppraisalsAndInspections from './ShowingDetailTabSettingsTabAppraisalsAndInspections'
+import ShowingDetailTabSettingsTabApprovalTypeAndRoles from './ShowingDetailTabSettingsTabApprovalTypeAndRoles'
+import ShowingDetailTabSettingsTabAvailability from './ShowingDetailTabSettingsTabAvailability'
+import ShowingDetailTabSettingsTabFeedback from './ShowingDetailTabSettingsTabFeedback'
+import ShowingDetailTabSettingsTabInstructions from './ShowingDetailTabSettingsTabInstructions'
 import {
   ShowingDetailSettingsTabType,
   ShowingDetailTabSettingsErrors
 } from './types'
-import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
-import ShowingDetailTabSettingsSaveButton, {
-  ShowingDetailTabSettingsSaveButtonProps
-} from './ShowingDetailTabSettingsSaveButton'
-import ShowingDetailTabSettingsTabAvailability from './ShowingDetailTabSettingsTabAvailability'
-import ShowingDetailTabSettingsTabAdvanceNotice from './ShowingDetailTabSettingsTabAdvanceNotice'
-import ShowingDetailTabSettingsTabApprovalTypeAndRoles from './ShowingDetailTabSettingsTabApprovalTypeAndRoles'
-import ShowingDetailTabSettingsTabInstructions from './ShowingDetailTabSettingsTabInstructions'
-import ShowingDetailTabSettingsTabAppraisalsAndInspections from './ShowingDetailTabSettingsTabAppraisalsAndInspections'
-import ShowingDetailTabSettingsTabFeedback from './ShowingDetailTabSettingsTabFeedback'
 
 const useStyles = makeStyles(
   {

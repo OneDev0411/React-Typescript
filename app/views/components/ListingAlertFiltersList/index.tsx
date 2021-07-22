@@ -1,7 +1,8 @@
 import React, { ReactNode, MouseEvent, useState, useEffect } from 'react'
-import pluralize from 'pluralize'
+
 import { Button, Grid, Box } from '@material-ui/core'
 import noop from 'lodash/noop'
+import pluralize from 'pluralize'
 
 interface AlertFilterData<T> {
   label: string

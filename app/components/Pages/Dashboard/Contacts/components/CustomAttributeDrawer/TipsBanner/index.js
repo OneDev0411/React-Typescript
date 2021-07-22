@@ -1,15 +1,13 @@
 import React from 'react'
+
+import { mdiClose } from '@mdi/js'
 import Flex from 'styled-flex-component'
 import Cookies from 'universal-cookie'
-import { mdiClose } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import CloseButton from '../../../../../../../views/components/Button/IconButton'
-import {
-  borderColor,
-  brandBackground
-} from '../../../../../../../views/utils/colors'
+import { brandBackground } from '../../../../../../../views/utils/colors'
 
 export class TipsBanner extends React.Component {
   constructor(props) {

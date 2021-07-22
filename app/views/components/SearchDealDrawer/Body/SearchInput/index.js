@@ -1,10 +1,11 @@
 import React from 'react'
+
+import { mdiMagnify } from '@mdi/js'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { mdiMagnify } from '@mdi/js'
 
-import { grey, primary } from 'views/utils/colors'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { grey, primary } from 'views/utils/colors'
 
 const Container = styled.div`
   display: flex;

@@ -1,13 +1,10 @@
 import { useState } from 'react'
 
 import { Typography } from '@material-ui/core'
-
+import { mdiMapMarker } from '@mdi/js'
 import Flex from 'styled-flex-component'
 
-import { mdiMapMarker } from '@mdi/js'
-
 import { AddressPopover } from 'components/inline-editable-fields/InlineAddressField/AddressPopover'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from './styles'

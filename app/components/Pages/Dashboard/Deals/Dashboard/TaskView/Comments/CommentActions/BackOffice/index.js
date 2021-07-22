@@ -1,14 +1,12 @@
 import React, { Fragment } from 'react'
 
-import Flex from 'styled-flex-component'
-
 import { Button, Tooltip } from '@material-ui/core'
 import { mdiClose, mdiCheck, mdiCircleOutline } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import RequiredAction from './RequiredAction'
-
 import { StatusButton, Loading } from './styled'
 
 export default function BackOffice(props) {

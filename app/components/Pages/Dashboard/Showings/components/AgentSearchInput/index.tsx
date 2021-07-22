@@ -7,7 +7,6 @@ import {
   CircularProgress,
   makeStyles
 } from '@material-ui/core'
-
 import useControllableState from 'react-use-controllable-state'
 
 import useTeamAgentsSearch from '@app/views/components/TeamAgents/use-team-agents-search'

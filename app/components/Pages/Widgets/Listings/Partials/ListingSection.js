@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router'
+
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 
 import ActionButton from 'views/components/Button/ActionButton'
 import { primary } from 'views/utils/colors'
 
-import ListingCard from './ListingCard'
-import Loading from '../../../../Partials/Loading'
 import Brand from '../../../../../controllers/Brand'
 import getListing from '../../../../../store_actions/widgets/listings/get-listings'
+import Loading from '../../../../Partials/Loading'
 
 import { getOptions } from './get-options'
+import ListingCard from './ListingCard'
 
 class Section extends Component {
   componentDidMount() {

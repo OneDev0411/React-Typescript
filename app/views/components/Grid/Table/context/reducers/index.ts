@@ -1,5 +1,6 @@
 import produce from 'immer'
 
+import { StateContext } from '..'
 import {
   SELECTION__TOGGLE_ALL,
   SELECTION__TOGGLE_ROW,
@@ -7,8 +8,6 @@ import {
   SORTING__SET_ACTIVE_SORT,
   SELECTION__TOGGLE_ENTIRE_ROWS
 } from '../constants'
-
-import { StateContext } from '..'
 
 export const initialState: StateContext = {
   selection: {
@@ -96,9 +95,8 @@ export function reducer(state = initialState, action: Pick<Action, any>) {
         let isSelected = draft.selection.selectedRowIds.includes(action.id)
 
         if (isSelected) {
-          draft.selection.selectedRowIds = draft.selection.selectedRowIds.filter(
-            id => id !== action.id
-          )
+          draft.selection.selectedRowIds =
+            draft.selection.selectedRowIds.filter(id => id !== action.id)
 
           draft.selection.isAllRowsSelected = false
 

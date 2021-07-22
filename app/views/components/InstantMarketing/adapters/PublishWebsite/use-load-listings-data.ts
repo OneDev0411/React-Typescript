@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from 'react'
+
 import { useSelector } from 'react-redux'
 
-import { selectActiveTeamId } from 'selectors/team'
-import { selectDealsList } from 'selectors/deals'
-
-import { getBrandListings } from 'models/listings/search/get-brand-listings'
-import useAsync from 'hooks/use-async'
 import { getMlsDrawerInitialDeals } from 'components/InstantMarketing/helpers/get-mls-drawer-initial-deals'
+import useAsync from 'hooks/use-async'
+import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import { selectDealsList } from 'selectors/deals'
+import { selectActiveTeamId } from 'selectors/team'
 
 const defaultList: ICompactListing[] = []
 
@@ -22,9 +22,10 @@ function useLoadListingsData(enable: boolean): [ICompactListing[], any] {
     }
   }, [enable, brandId, run])
 
-  const sortedDealsList = useMemo(() => getMlsDrawerInitialDeals(dealsList), [
-    dealsList
-  ])
+  const sortedDealsList = useMemo(
+    () => getMlsDrawerInitialDeals(dealsList),
+    [dealsList]
+  )
 
   return [brandListings, sortedDealsList]
 }

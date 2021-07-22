@@ -1,9 +1,5 @@
 import React, { Fragment } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { Form, Field } from 'react-final-form'
-import { FORM_ERROR } from 'final-form'
-import moment from 'moment-timezone'
 import {
   TextField,
   Button,
@@ -12,14 +8,16 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-
-import { selectUserTimezone } from 'selectors/user'
-
-import { addNotification as notify } from 'components/notification'
-import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
+import { FORM_ERROR } from 'final-form'
+import moment from 'moment-timezone'
+import { Form, Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
 
 import FormCard from 'components/FormCard'
+import { addNotification as notify } from 'components/notification'
+import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
 import { setUserTimezone } from 'models/user/set-user-timezone'
+import { selectUserTimezone } from 'selectors/user'
 
 const useStyles = makeStyles(
   theme => ({

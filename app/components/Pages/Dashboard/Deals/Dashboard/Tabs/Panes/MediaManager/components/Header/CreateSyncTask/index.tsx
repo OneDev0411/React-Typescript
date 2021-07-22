@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { Button } from '@material-ui/core'
 
+import { Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { setSelectedTask } from 'actions/deals'
+import { createRequestTask } from 'actions/deals/helpers/create-request-task'
+import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectDealTasks } from 'reducers/deals/tasks'
-import { createRequestTask } from 'actions/deals/helpers/create-request-task'
-import { setSelectedTask } from 'actions/deals'
-
-import { IAppState } from 'reducers'
 
 interface Props {
   user: IUser
@@ -32,14 +31,14 @@ export default function CreateSyncTask(props: Props) {
   )
 
   const handleCreateSyncTask = async (): Promise<void> => {
-    const mediaTask = tasks.find((task) => task.task_type === 'Media')
+    const mediaTask = tasks.find(task => task.task_type === 'Media')
 
     // we already have a media task available, we don't create another one.
     if (mediaTask) {
       dispatch(setSelectedTask(mediaTask))
     } else {
       const checklist = checklists.find(
-        (checklist) => checklist.checklist_type === props.deal.deal_type
+        checklist => checklist.checklist_type === props.deal.deal_type
       )!
 
       setIsCreatingTask(true)

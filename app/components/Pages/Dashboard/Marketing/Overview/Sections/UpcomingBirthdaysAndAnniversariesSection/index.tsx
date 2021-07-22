@@ -1,8 +1,7 @@
 import { Grid, Typography } from '@material-ui/core'
 
-import CardSkeleton from 'components/CardSkeleton'
 import CalendarEventCard from 'components/CalendarEvent/Card'
-
+import CardSkeleton from 'components/CardSkeleton'
 import { useCalendarEvents } from 'hooks/use-calendar-events'
 
 import LinkSectionAction from '../LinkSectionAction'
