@@ -1,13 +1,14 @@
 import React, { CSSProperties, ReactElement } from 'react'
-import Flex from 'styled-flex-component'
-import { IconButton } from '@material-ui/core'
 
+import { IconButton } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { Title, Container } from './styled'
 import { useDrawerContext } from '../drawer-context'
+
+import { Title, Container } from './styled'
 
 interface Props {
   title?: string

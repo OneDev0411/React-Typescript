@@ -1,15 +1,15 @@
 import { combineReducers } from 'redux'
 
-import properties from './properties'
-import list from './list'
-import tasks from './tasks'
-import roles from './roles'
-import envelopes from './envelopes'
-import checklists from './checklists'
 import brandChecklists from './brand-checklists'
-import forms from './forms'
-import upload from './upload'
+import checklists from './checklists'
 import contexts from './contexts'
+import envelopes from './envelopes'
+import forms from './forms'
+import list from './list'
+import properties from './properties'
+import roles from './roles'
+import tasks from './tasks'
+import upload from './upload'
 
 export default combineReducers({
   properties,

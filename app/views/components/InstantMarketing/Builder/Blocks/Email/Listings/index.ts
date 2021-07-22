@@ -1,12 +1,11 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
-import GridIcon from 'assets/images/marketing/editor/blocks/listing-grid.png'
-import ImageIcon from 'assets/images/marketing/editor/blocks/listing-image.png'
-import ImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
 import ImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
 import ImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
-
+import ImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
+import GridIcon from 'assets/images/marketing/editor/blocks/listing-grid.png'
+import ImageIcon from 'assets/images/marketing/editor/blocks/listing-image.png'
 import { isLeaseProperty } from 'utils/listing'
 
 import {
@@ -15,16 +14,16 @@ import {
 } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-
-import Image from './image.mjml'
-import Top from './top.mjml'
-import Right from './right.mjml'
-import Left from './left.mjml'
-import Grid from './grid.mjml'
-import GridTwo from './grid-two.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+
+import GridTwo from './grid-two.mjml'
+import Grid from './grid.mjml'
+import Image from './image.mjml'
+import Left from './left.mjml'
+import Right from './right.mjml'
+import Top from './top.mjml'
 
 export const listingImageBlockName = 'rechat-listing-image'
 export const listingTopBlockName = 'rechat-listing-image-top'

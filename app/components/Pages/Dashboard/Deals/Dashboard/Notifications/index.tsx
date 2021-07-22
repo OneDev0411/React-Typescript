@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+
 import { IconButton, makeStyles, Theme, Typography } from '@material-ui/core'
-
 import { useTheme } from '@material-ui/styles'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { mdiClose } from '@mdi/js'
-
-import { nl2br } from 'utils/nl2br'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useDispatch } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { clearDealNotifications } from 'actions/deals'
-
 import { Callout } from 'components/Callout'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { nl2br } from 'utils/nl2br'
 
 interface Props {
   deal: IDeal

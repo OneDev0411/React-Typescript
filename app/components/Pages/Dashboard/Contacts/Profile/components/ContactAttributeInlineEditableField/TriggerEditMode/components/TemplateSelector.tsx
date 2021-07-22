@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
-
-import { selectUser } from 'selectors/user'
-
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
-import { IAppState } from 'reducers'
+import { useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
-
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
-
+import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
+import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
 
@@ -82,9 +79,8 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const currentTemplate = selectedTemplate || currentValue?.campaign?.template

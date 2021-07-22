@@ -13,15 +13,14 @@ import { useForm, useWatch, Controller } from 'react-hook-form'
 import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
-
 import { setTime } from 'utils/set-time'
 
-import { getFormattedAppointmentDateTime } from '../utils'
+import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
 import {
   getBookableDateRange,
   convertLocalTimeToShowingTime
 } from '../../Book/Sections/BookSection/utils'
-import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
+import { getFormattedAppointmentDateTime } from '../utils'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

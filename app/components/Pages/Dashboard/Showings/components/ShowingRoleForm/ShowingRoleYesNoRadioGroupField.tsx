@@ -1,5 +1,5 @@
 import { ReactNode, ChangeEvent } from 'react'
-import { Field, FieldProps } from 'react-final-form'
+
 import {
   FormControl,
   RadioGroup,
@@ -8,6 +8,7 @@ import {
   FormHelperText,
   Typography
 } from '@material-ui/core'
+import { Field, FieldProps } from 'react-final-form'
 
 interface ShowingRoleYesNoRadioGroupFieldProps
   extends Pick<FieldProps<boolean, any>, 'validate'> {

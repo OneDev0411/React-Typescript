@@ -1,10 +1,9 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import cn from 'classnames'
+
 import { makeStyles, Theme } from '@material-ui/core'
-
-import { Swiper, SwiperSlide } from 'swiper/react'
-
+import cn from 'classnames'
 import SwiperCore, { Lazy, Navigation } from 'swiper/core'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 SwiperCore.use([Lazy, Navigation])
 

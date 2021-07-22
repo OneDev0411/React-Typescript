@@ -1,18 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import debounce from 'lodash/debounce'
+import PropTypes from 'prop-types'
 
 import {
   loadMapLibraries,
   isMapLibrariesLoaded
 } from '@app/utils/google-map-api'
 
-import { AddressPopover } from './AddressPopover'
-import { SuggestionsPopover } from './SuggestionsPopover'
-
+import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
-import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
+import { AddressPopover } from './AddressPopover'
+import { SuggestionsPopover } from './SuggestionsPopover'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,

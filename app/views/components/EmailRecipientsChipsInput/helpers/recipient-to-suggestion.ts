@@ -1,7 +1,8 @@
 import { Suggestion } from '../../ChipsInput/types'
+
+import { getDisplayNameForContactEmail } from './get-display-name-for-contact-email'
 import { listToSuggestion } from './list-to-suggestion'
 import { tagToSuggestion } from './tag-to-suggestion'
-import { getDisplayNameForContactEmail } from './get-display-name-for-contact-email'
 
 export function recipientToSuggestion(
   recipient: IDenormalizedEmailRecipientInput

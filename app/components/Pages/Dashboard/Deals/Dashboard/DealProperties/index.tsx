@@ -1,13 +1,13 @@
-import { DealSide } from './Side'
-import { PropertyType } from './PropertyType'
-import { MlsConnect } from './MlsConnect'
-
 import {
   ItemsContainer,
   SectionTitle,
   Item,
   ItemLabel
 } from '../Factsheet/styled'
+
+import { MlsConnect } from './MlsConnect'
+import { PropertyType } from './PropertyType'
+import { DealSide } from './Side'
 
 interface Props {
   deal: IDeal

@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components'
 import Cleave from 'cleave.js/react'
+import styled, { css } from 'styled-components'
 
 import { grey, borderColor } from '../../../utils/colors'
 

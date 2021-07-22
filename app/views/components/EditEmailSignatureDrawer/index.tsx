@@ -1,22 +1,19 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { Box, Button } from '@material-ui/core'
-
-import { addNotification } from 'components/notification'
+import { useDispatch, useSelector } from 'react-redux'
 
 import editUser from 'actions/user/edit'
+import { addNotification } from 'components/notification'
 import { uploadEmailSignatureAttachment } from 'models/user/upload-email-signature-attachment'
-
 import { selectUserEmailSignature } from 'selectors/user'
 
+import { StyledTextEditor } from '../EditEmailSignature'
+import Drawer from '../OverlayDrawer'
+import { EmojiFeature } from '../TextEditor/features/Emoji'
 import { ImageFeature } from '../TextEditor/features/Image'
 import { RichTextFeature } from '../TextEditor/features/RichText'
-import { EmojiFeature } from '../TextEditor/features/Emoji'
 import { useEditorState } from '../TextEditor/hooks/use-editor-state'
-
-import Drawer from '../OverlayDrawer'
-import { StyledTextEditor } from '../EditEmailSignature'
 
 interface Props {
   isOpen: boolean

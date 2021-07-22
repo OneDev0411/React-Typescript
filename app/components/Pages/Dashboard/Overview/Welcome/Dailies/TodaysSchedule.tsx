@@ -1,16 +1,12 @@
 import { Box, Typography, List, Button } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
+import { mdiCalendarToday } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
-import { mdiCalendarToday } from '@mdi/js'
-
-import { InlineBadge } from 'components/InlineBadge'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { AnimatedLoader } from 'components/AnimatedLoader'
-
 import CalendarEventListItem from 'components/CalendarEvent/ListItem'
+import { InlineBadge } from 'components/InlineBadge'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const NUMBER_OF_EVENTS_TO_SHOW = 6
 

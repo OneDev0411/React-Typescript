@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { FieldProps } from './types'
 import ColorField from './Color'
+import { FieldProps } from './types'
 
 // TODO: Implement real border field with type and width
 export default function BorderField({ onChange, value, ...props }: FieldProps) {

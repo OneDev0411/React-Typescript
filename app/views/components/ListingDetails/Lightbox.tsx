@@ -1,13 +1,14 @@
 import React from 'react'
-import ImageGallery from 'react-image-gallery'
-import Modal from '@material-ui/core/Modal'
-import IconButton from '@material-ui/core/IconButton'
-import { mdiClose } from '@mdi/js'
+
 import { makeStyles, useTheme, Theme } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import Modal from '@material-ui/core/Modal'
+import { mdiClose } from '@mdi/js'
+import ImageGallery from 'react-image-gallery'
 import 'react-image-gallery/styles/css/image-gallery.css'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

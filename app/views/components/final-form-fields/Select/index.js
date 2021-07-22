@@ -1,12 +1,12 @@
 import React from 'react'
+
+import { Tooltip } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
-import { Tooltip } from '@material-ui/core'
-
 import { Dropdown } from '../../Dropdown'
-import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 import { Item } from '../../Dropdown/Item'
+import { Container, Label, LabelNote, ErrorMessage } from '../styled'
 
 Select.propTypes = {
   format: PropTypes.func,

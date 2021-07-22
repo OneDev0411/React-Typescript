@@ -1,9 +1,10 @@
 import { ReactNode } from 'react'
+
+import { TextField } from '@material-ui/core'
 import { ChipProps } from '@material-ui/core/Chip'
 import { TextFieldProps } from '@material-ui/core/TextField'
-import { Observable } from 'rxjs'
-import { TextField } from '@material-ui/core'
 import { TextField as FinalFormTextField } from 'final-form-material-ui'
+import { Observable } from 'rxjs'
 
 import { Props as AvatarProps } from 'components/Avatar/type'
 

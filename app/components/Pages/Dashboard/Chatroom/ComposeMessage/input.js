@@ -1,5 +1,7 @@
 import React from 'react'
+
 import Textarea from 'react-textarea-autosize'
+
 import Mentions from './mention'
 import Uploader from './upload'
 

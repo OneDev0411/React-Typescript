@@ -1,9 +1,9 @@
-import styled from 'styled-components'
 import React from 'react'
-import Flex from 'styled-flex-component'
 
 import { Button, createStyles } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
 const useStyles = makeStyles(() =>
   createStyles({

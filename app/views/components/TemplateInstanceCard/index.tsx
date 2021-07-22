@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Box,
   Card,
@@ -11,11 +12,10 @@ import {
 } from '@material-ui/core'
 import timeago from 'timeago.js'
 
-import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
-import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
-import { getFileType } from 'utils/file-utils/get-file-type'
-
 import { PdfThumbnail } from 'components/PdfThumbnail'
+import { getFileType } from 'utils/file-utils/get-file-type'
+import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
+import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

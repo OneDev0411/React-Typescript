@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 
-import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 import { recipientToString } from 'components/EmailRecipientsChipsInput/helpers/recipient-to-string'
+import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 
 import RecipientQuickSuggestion from './components/RecipientQuickSuggestion'
 

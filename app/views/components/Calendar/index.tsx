@@ -7,24 +7,21 @@ import {
   ComponentProps,
   useCallback
 } from 'react'
+
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { IAppState } from 'reducers/index'
-
 import { getCalendar } from 'models/calendar/get-calendar'
-
+import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
 
-import { CalendarRef, ApiOptions, FetchOptions, CrmEventType } from './types'
-
-import { getDateRange, Format } from './helpers/get-date-range'
-import { createListRows } from './helpers/create-list-rows'
-import { upsertCrmEvents } from './helpers/upsert-crm-events'
-import { updateEmailCampaign } from './helpers/update-email-campaign'
-import { normalizeEvents } from './helpers/normalize-events'
-
 import { CalendarList } from './components/List'
+import { createListRows } from './helpers/create-list-rows'
+import { getDateRange, Format } from './helpers/get-date-range'
+import { normalizeEvents } from './helpers/normalize-events'
+import { updateEmailCampaign } from './helpers/update-email-campaign'
+import { upsertCrmEvents } from './helpers/upsert-crm-events'
+import { CalendarRef, ApiOptions, FetchOptions, CrmEventType } from './types'
 
 interface Props {
   filter?: object

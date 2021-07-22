@@ -1,9 +1,9 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
 import DealRole from 'components/DealRole'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
-
 import { convertContactToRole, AGENT_ROLES } from 'deals/utils/roles'
 
 const initialState = {

@@ -3,6 +3,8 @@ import type { Editor, Model } from 'grapesjs'
 import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { TemplateRenderData } from '../utils/get-template-render-data'
+
+import adapt from './adapt'
 import {
   BlockTemplates,
   TemplateRenderDataFunc,
@@ -10,7 +12,6 @@ import {
   BlockDragStopEventReturn,
   TemplateBlockOptions
 } from './types'
-import adapt from './adapt'
 
 export function collapseBlockCategories(editor: Editor) {
   const categories = editor.BlockManager.getCategories() as any

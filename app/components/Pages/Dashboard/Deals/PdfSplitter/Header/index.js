@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Flex from 'styled-flex-component'
 import { mdiClose } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconButton from 'components/Button/IconButton'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { H1 } from 'views/components/Typography/headings'
 
 export function Header(props) {

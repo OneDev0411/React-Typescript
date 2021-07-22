@@ -1,14 +1,14 @@
 import React from 'react'
+
 import addressParser from 'parse-address'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import postLoadFormat from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/post-load-format'
+import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 
 import { EditMode } from './EditMode'
-import { ViewMode } from './ViewMode'
-
 import { preSaveFormat, getUpsertAttributes } from './helpers'
+import { ViewMode } from './ViewMode'
 
 const DEFAULT_LABEL = { label: 'Select', value: null }
 

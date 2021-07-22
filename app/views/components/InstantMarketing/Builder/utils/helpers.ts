@@ -1,8 +1,7 @@
 import { Model } from 'backbone'
 
-import { typeEmbedMap } from '../Blocks/Website/Map'
 import { typeCarousel } from '../Blocks/Website/Carousel'
-
+import { typeEmbedMap } from '../Blocks/Website/Map'
 import {
   IMAGE_TOOLBAR_BUTTONS_PREFIX,
   IMAGE_ELEMENT_TYPES,

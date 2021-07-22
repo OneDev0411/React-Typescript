@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 import { Iframe } from 'components/Iframe'
+import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
 
 import { renderMjml, getTemplatePreviewRenderData } from './helpers'
 

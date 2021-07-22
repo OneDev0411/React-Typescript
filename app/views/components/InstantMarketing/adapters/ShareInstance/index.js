@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react'
+
 import { connect } from 'react-redux'
 
-import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import ActionButton from 'components/Button/ActionButton'
+import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 
 import SocialDrawer from '../../components/SocialDrawer'
+import getTemplateInstancePreviewImage from '../../helpers/get-template-preview-image'
 import hasMarketingAccess from '../../helpers/has-marketing-access'
 
 import { getMedium } from './helpers'
-import getTemplateInstancePreviewImage from '../../helpers/get-template-preview-image'
 
 class ShareInstance extends React.Component {
   state = {

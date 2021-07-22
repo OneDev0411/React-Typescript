@@ -1,13 +1,12 @@
 import React from 'react'
+
+import { mdiLink } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-import { mdiLink } from '@mdi/js'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 import copy from 'utils/copy-text-to-clipboard'
+import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 import { Section } from '../components/Section'
 

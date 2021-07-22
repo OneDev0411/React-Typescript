@@ -1,7 +1,8 @@
 import _ from 'underscore'
-import store from '../../../stores'
+
+import NotificationService from '..'
+// eslint-disable-next-line import/no-cycle
 import Chatroom from '../../../components/Pages/Dashboard/Chatroom/Util/chatroom'
-import NotificationService from '../../../services/notification'
 import {
   fetchAndCreateExistingRoom,
   addMembersToRoom,
@@ -11,6 +12,7 @@ import {
   acknowledgeRoom,
   updateRoomTime
 } from '../../../store_actions/chatroom'
+import store from '../../../stores'
 
 export default class ChatNotification extends NotificationService {
   constructor(user) {

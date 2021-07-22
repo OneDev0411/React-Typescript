@@ -1,5 +1,6 @@
-import { Box } from '@material-ui/core'
 import { MouseEvent } from 'react'
+
+import { Box } from '@material-ui/core'
 
 import {
   getAppointmentDateLabel,
@@ -7,7 +8,6 @@ import {
   getAppointmentTitle
 } from '../../helpers'
 import ShowingLabeledColumn from '../ShowingLabeledColumn'
-
 import ShowingViewFeedbackButton from '../ShowingViewFeedbackButton'
 
 interface ShowingDetailTabVisitorsColumnLatestVisitProps {

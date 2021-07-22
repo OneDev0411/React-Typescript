@@ -1,5 +1,5 @@
 import React, { useMemo, ChangeEvent } from 'react'
-import { Field } from 'react-final-form'
+
 import {
   Box,
   FormControl,
@@ -11,6 +11,7 @@ import {
   FormHelperText,
   makeStyles
 } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 interface Props {
   templates: IBrandEmailTemplate[]

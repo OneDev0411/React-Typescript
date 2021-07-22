@@ -8,10 +8,10 @@ import {
 } from 'components/QuestionWizard'
 
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import SmartQuestionForm from '../SmartQuestionForm'
 import ShowingAdvanceNoticeRadioGroup, {
   ShowingAdvanceNoticeRadioGroupProps
 } from '../ShowingAdvanceNoticeRadioGroup'
+import SmartQuestionForm from '../SmartQuestionForm'
 
 type ShowingStepAdvanceNoticeProps = Omit<
   ShowingAdvanceNoticeRadioGroupProps,

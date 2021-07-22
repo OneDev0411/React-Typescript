@@ -7,7 +7,7 @@ import {
   useRef,
   useState
 } from 'react'
-import { useControllableState } from 'react-use-controllable-state/dist'
+
 import {
   Button,
   createStyles,
@@ -16,12 +16,12 @@ import {
   Theme
 } from '@material-ui/core'
 import { TextFieldProps } from '@material-ui/core/TextField'
-
-import classNames from 'classnames'
 import { mdiPencilOutline } from '@mdi/js'
+import classNames from 'classnames'
+import { useControllableState } from 'react-use-controllable-state/dist'
 
-import { useOnToggledOn } from '../../TextEditor/features/RichText/LinkEditorPopover/hooks/use-on-toggled'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+import { useOnToggledOn } from '../../TextEditor/features/RichText/LinkEditorPopover/hooks/use-on-toggled'
 
 interface Props {
   children?: ReactNode

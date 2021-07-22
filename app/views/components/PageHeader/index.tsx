@@ -1,11 +1,13 @@
 import React, { CSSProperties, ReactNode } from 'react'
+
 import { withRouter, WithRouterProps } from 'react-router'
 import styled from 'styled-components'
+
+import { H1 } from '../Typography/headings'
 
 import Menu from './Menu'
 import { PageTitle } from './PageTitle'
 import { Subtitle } from './PageTitle/Subtitle'
-import { H1 } from '../Typography/headings'
 
 const Container = styled.div<{ isFlat?: boolean }>`
   width: calc(100% - 3em);

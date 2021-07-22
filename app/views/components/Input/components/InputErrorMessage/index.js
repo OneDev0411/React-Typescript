@@ -1,10 +1,10 @@
 import React from 'react'
-import { Tooltip } from '@material-ui/core'
 
+import { Tooltip } from '@material-ui/core'
 import { mdiAlertOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 export default ({ message }) => (
   <Tooltip title={message}>

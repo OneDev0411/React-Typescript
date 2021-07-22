@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react'
+
 import { Typography } from '@material-ui/core'
 import { Variant } from '@material-ui/core/styles/createTypography'
 

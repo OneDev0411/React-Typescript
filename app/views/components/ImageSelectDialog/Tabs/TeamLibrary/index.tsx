@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+
 import {
   Grid,
   Box,
@@ -13,21 +13,22 @@ import {
   useTheme
 } from '@material-ui/core'
 import { useDropzone } from 'dropzone'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { confirmation } from 'actions/confirmation'
+import Masonry from 'components/Masonry'
+import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
-import { confirmation } from 'actions/confirmation'
 
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-import Masonry from 'components/Masonry'
-
-import NoResults from '../../NoResults'
-import Loading from '../../Loading'
-import ImageThumbnail from '../../ImageThumbnail'
-import { SearchableImageTabProps } from '../../types'
 import { isGifImage } from '../../helpers'
-import { useTeamLibrary } from './hooks'
+import ImageThumbnail from '../../ImageThumbnail'
+import Loading from '../../Loading'
+import NoResults from '../../NoResults'
+import { SearchableImageTabProps } from '../../types'
+
 import { DEFAULT_ASSET_LABEL } from './constants'
+import { useTeamLibrary } from './hooks'
 
 const PAGE_SIZE = 16
 

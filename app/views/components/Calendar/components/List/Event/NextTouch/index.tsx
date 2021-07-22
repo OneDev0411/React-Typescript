@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
-
 import MiniContactProfile from 'components/MiniContact'
+import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 
 import { EventContainer } from '../components/EventContainer'
 

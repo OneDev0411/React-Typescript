@@ -1,24 +1,24 @@
 import React from 'react'
+
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
-
 import { ACL } from 'constants/acl'
 
+import AppLayout from '../components/App'
+import Dashboard from '../components/Pages/Dashboard'
 import {
   showingDetailTabs,
   showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
-
+import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
-import AppLayout from '../components/App'
-import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
-import Load from '../loader'
+
 import { withGuest, withSignedInUser } from './hoc'
 
 const AsyncAuthenticationLayout = Load({
@@ -221,46 +221,44 @@ const AsyncDashboardOverview = withAcl(
 //  MLS
 /* ==================================== */
 
-const AsyncListingsLayout = Load({
+const AsyncMLSLayout = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MLS' /* webpackChunkName: "mls" */)
+})
+
+const AsyncMLSSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */
+      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "mls_search" */
     )
 })
 
-const AsyncListingsSearch = Load({
+const AsyncMLSSavedSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
+      '../components/Pages/Dashboard/MLS/SavedSearch' /* webpackChunkName: "alerts" */
     )
 })
 
-const AsyncMlsSavedSearch = Load({
+const AsyncMLSFavorites = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */
+      '../components/Pages/Dashboard/MLS/Favorites' /* webpackChunkName: "fav" */
     )
 })
 
-const AsyncListingsFavorites = Load({
+const AsyncMLSSinglePage = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */
+      '../components/Pages/Dashboard/MLS/Listing' /* webpackChunkName: "list_single" */
     )
 })
 
-const AsyncListingSinglePage = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
-    )
-})
-
-const AsyncListingMarketing = withAcl.marketing(
+const AsyncMLSMarketing = withAcl.marketing(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Listings/Marketing' /* webpackChunkName: "listing_marketing" */
+        '../components/Pages/Dashboard/MLS/Marketing' /* webpackChunkName: "listing_marketing" */
       )
   })
 )
@@ -812,6 +810,20 @@ const AsyncContexts = withAcl.admin(
   })
 )
 
+/* ==================================== */
+//  Listings
+/* ==================================== */
+
+const AsyncListingsList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Listings/pages/Listings' /* webpackChunkName: "listings" */
+      )
+  }),
+  { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
+)
+
 export default (
   <Route>
     <Route path="/">
@@ -972,16 +984,16 @@ export default (
           />
         </Route>
 
-        <Route path="/dashboard/mls" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingsSearch} />
-          <Route path="favorites" component={AsyncListingsFavorites} />
-          <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
+        <Route path="/dashboard/mls" component={AsyncMLSLayout}>
+          <IndexRoute component={AsyncMLSSearch} />
+          <Route path="favorites" component={AsyncMLSFavorites} />
+          <Route path="saved-searches/:id" component={AsyncMLSSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
         <Route
           path="/dashboard/mls/:id/marketing"
-          component={AsyncListingMarketing}
+          component={AsyncMLSMarketing}
         />
 
         <Route path="recents(/:roomId)">
@@ -1053,6 +1065,8 @@ export default (
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />
+
+        <Route path="listings(/:brandId)" component={AsyncListingsList} />
       </Route>
     </Route>
 

@@ -1,6 +1,8 @@
 import { change as updateField } from 'redux-form'
+
 import { allLocationBasedFilterOptions } from '../../../utils/map'
-import setSearchListingsOptions from '../../../store_actions/listings/search/set-options'
+
+import setSearchListingsOptions from './set-options'
 
 const resetAreasOptions = () => (dispatch, getState) => {
   const nullOptions = {}

@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { LinkListSection } from './types'
 import SideNavItem from './SideNavItem'
-import SideNavTitle from './SideNavTitle'
 import SideNavSection from './SideNavSection'
+import SideNavTitle from './SideNavTitle'
+import { LinkListSection } from './types'
 
 interface LinkListProps {
   section: LinkListSection

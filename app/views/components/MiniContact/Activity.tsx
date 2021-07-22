@@ -1,13 +1,12 @@
 import { mdiClockOutline, mdiDotsHorizontalCircleOutline } from '@mdi/js'
 
 import { RelativeTime } from 'components/RelativeTime'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { calendarEventIcons } from 'views/utils/important-dates-icons'
 
-import { ProfileDateType } from './types'
 import { activitiesFormatter, formatDate } from './helpers'
+import { ProfileDateType } from './types'
 
 interface ActivityPropsType {
   dates?: ProfileDateType[]

@@ -1,4 +1,5 @@
 import { getAppointmentDateLabel, getAppointmentTimeLabel } from '../../helpers'
+
 import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
 
 interface ShowingBookingListColumnDateTimeProps {

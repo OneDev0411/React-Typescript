@@ -1,12 +1,9 @@
 import { Button } from '@material-ui/core'
-
 import { mdiContentCopy } from '@mdi/js'
-
 import { useDispatch } from 'react-redux'
 
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { addNotification } from 'components/notification'
 import copyTextToClipboard from 'utils/copy-text-to-clipboard'
 

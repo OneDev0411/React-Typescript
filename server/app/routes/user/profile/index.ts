@@ -1,11 +1,9 @@
+import { AxiosResponse } from 'axios'
 import { Response } from 'express'
 
-import { AxiosResponse } from 'axios'
-
-import { getParsedHeaders } from '../../../utils/parse-headers'
-import { request } from '../../../libs/request'
-
 import type { RequestWithSession } from '../../../../types'
+import { request } from '../../../libs/request'
+import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: RequestWithSession, res: Response) => {
   if (!req.session?.user) {

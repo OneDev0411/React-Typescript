@@ -1,7 +1,6 @@
 import { FieldState } from 'final-form'
 
 import { formatPhoneNumber } from 'utils/format'
-
 import { isValidPhoneNumber } from 'utils/helpers'
 
 import FormTextField, { FormTextFieldProps } from '../FormTextField'

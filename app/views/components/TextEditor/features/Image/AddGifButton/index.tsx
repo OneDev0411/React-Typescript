@@ -1,16 +1,14 @@
 import * as React from 'react'
 
 import { Tooltip } from '@material-ui/core'
-
-import useToggle from 'react-use/lib/useToggle'
-
 import { mdiGif } from '@mdi/js'
+import useToggle from 'react-use/lib/useToggle'
 
 import GifDrawer from 'components/GifDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 import { GifItem } from '../../../../GifDrawer/types'
+import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
 
 interface Props {
   onImageSelected: (url: string, width: number) => void

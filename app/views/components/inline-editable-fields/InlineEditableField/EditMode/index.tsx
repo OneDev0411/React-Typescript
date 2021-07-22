@@ -1,4 +1,5 @@
 import React, { ReactNode, CSSProperties } from 'react'
+
 import {
   Button,
   IconButton,
@@ -8,12 +9,11 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
 import { mdiTrashCanOutline } from '@mdi/js'
 import cn from 'classnames'
 
-import { noop } from 'utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { noop } from 'utils/helpers'
 
 import { EditModeActionBar, EditModeContainer } from '../../styled'
 

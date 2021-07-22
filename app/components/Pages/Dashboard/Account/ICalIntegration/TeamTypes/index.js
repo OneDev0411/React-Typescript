@@ -1,11 +1,13 @@
 import React from 'react'
-import uniqBy from 'lodash/uniqBy'
+
 import flatten from 'lodash/flatten'
+import uniqBy from 'lodash/uniqBy'
 
 import { getBrandUsers } from 'utils/user-teams'
 
 import { Section } from '../styled'
 import Title from '../Title'
+
 import MemberRow from './MemberRow'
 
 const TeamTypes = ({

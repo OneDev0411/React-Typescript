@@ -1,15 +1,17 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+
 import { addNotification as notify } from 'components/notification'
 
-import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
+import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
 import {
   TextField,
   Select,
   TextFieldArray
 } from '../../../../../../views/components/final-form-fields'
-import { createAttributeDefinition } from '../../../../../../store_actions/contacts/create-attribute-definition'
+import { FinalFormDrawer } from '../../../../../../views/components/FinalFormDrawer'
 
 import { preSaveFormat, validate } from './helpers'
 import { TipsBanner } from './TipsBanner'
@@ -91,20 +93,17 @@ class CustomAttributeDrawer extends React.Component {
                 {
                   title: 'Date',
                   value: 'date',
-                  hint:
-                    'For custom fields that are date based when capturing values like a birthday or anniversary'
+                  hint: 'For custom fields that are date based when capturing values like a birthday or anniversary'
                 },
                 {
                   title: 'Number',
                   value: 'number',
-                  hint:
-                    "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
+                  hint: "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
                 },
                 {
                   title: 'Text',
                   value: 'text',
-                  hint:
-                    'For custom fields that can accept words, numbers and characters and have unique values and labels'
+                  hint: 'For custom fields that can accept words, numbers and characters and have unique values and labels'
                 }
               ]}
               label="Type"

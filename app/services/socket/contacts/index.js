@@ -1,17 +1,13 @@
 import Socket from '..'
-
-import store from '../../../stores'
-
+import { OAuthProvider } from '../../../constants/contacts'
 import {
   importDone,
   importFail,
   loginSuccessful,
   setWorkerState
 } from '../../../store_actions/contacts'
-
 import { fetchOAuthAccounts } from '../../../store_actions/contacts/fetch-o-auth-accounts'
-
-import { OAuthProvider } from '../../../constants/contacts'
+import store from '../../../stores'
 
 export default class ContactSocket extends Socket {
   constructor(user) {

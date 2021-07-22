@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { Tooltip, IconButton, useTheme } from '@material-ui/core'
 
 import {
@@ -9,6 +10,7 @@ import {
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ItemTitle, ItemContainer } from '../styled'
+
 import { Row, Column } from './styled'
 
 type Alignment = 'center' | 'left' | 'right'

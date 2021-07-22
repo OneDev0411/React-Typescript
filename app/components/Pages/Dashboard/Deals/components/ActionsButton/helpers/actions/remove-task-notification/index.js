@@ -1,6 +1,5 @@
-import store from 'store'
-
 import { changeNeedsAttention, changeTaskStatus } from 'actions/deals'
+import store from 'store'
 
 export async function removeTaskNotification(props) {
   await store.dispatch(changeTaskStatus(props.task.id, 'Incomplete'))

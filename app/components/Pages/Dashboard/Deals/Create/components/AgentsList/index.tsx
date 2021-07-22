@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import AutoSizer from 'react-virtualized-auto-sizer'
 
 import {
   Box,
@@ -9,16 +8,15 @@ import {
   CircularProgress,
   Paper
 } from '@material-ui/core'
-
-import TeamAgents from 'components/TeamAgents'
-
-import VirtualList from '@app/views/components/VirtualList'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { NormalizedBrand } from '@app/views/components/TeamAgents/types'
-
-import { Row, RowItem, RowType } from './Row'
+import VirtualList from '@app/views/components/VirtualList'
+import TeamAgents from 'components/TeamAgents'
 
 import type { IDealFormRole } from '../../types'
+
+import { Row, RowItem, RowType } from './Row'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
