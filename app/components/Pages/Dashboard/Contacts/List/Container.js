@@ -30,7 +30,6 @@ import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import { putUserSetting } from 'models/user/put-user-setting'
 import {
   selectContacts,
   selectContactsInfo,
