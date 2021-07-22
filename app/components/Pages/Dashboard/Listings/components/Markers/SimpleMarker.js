@@ -30,14 +30,20 @@ const SimpleMarker = ({ listing, isWidget }) => {
   const [isListingOpen, setIsListingOpen] = React.useState(false)
 
   const closeListing = () => {
-    window.history.replaceState({}, '', '/dashboard/mls')
+    if (!isWidget) {
+      window.history.replaceState({}, '', '/dashboard/mls')
+    }
+
     setIsListingOpen(false)
   }
 
   const handleClick = React.useCallback(() => {
-    window.history.replaceState({}, '', `/dashboard/mls/${listing.id}`)
+    if (!isWidget) {
+      window.history.replaceState({}, '', `/dashboard/mls/${listing.id}`)
+    }
+
     setIsListingOpen(true)
-  }, [listing.id])
+  }, [listing.id, isWidget])
 
   return (
     <>
