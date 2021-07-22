@@ -84,7 +84,11 @@ class Dashboard extends Component {
       if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user, decodeURIComponent(searchParamValue)))
+        dispatch(
+          searchParamValue
+            ? searchDeals(user, decodeURIComponent(searchParamValue))
+            : getDeals(user)
+        )
       }
     }
 

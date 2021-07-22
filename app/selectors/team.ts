@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect'
+
 import { IAppState } from 'reducers'
 import {
   getActiveTeam,
@@ -52,6 +54,35 @@ export function selectActiveTeam(state: IAppState): IUserTeam {
 
   return activeTeam
 }
+
+/**
+ * Returns the user teams
+ * @param state The app state
+ */
+export function selectUserTeams(state: IAppState): IUserTeam[] {
+  return selectUser(state)?.teams ?? []
+}
+
+/**
+ * Returns the active user team brands
+ * @param state The app state
+ */
+export const selectActiveTeamBrands = createSelector<
+  IAppState,
+  IUserTeam,
+  IBrand[]
+>(selectActiveTeam, team => {
+  const brands: IBrand[] = []
+
+  let brand: Nullable<IBrand> = team.brand
+
+  while (brand) {
+    brands.push(brand)
+    brand = brand.parent
+  }
+
+  return brands
+})
 
 /**
  * Returns the active team roles for the current user if exists
