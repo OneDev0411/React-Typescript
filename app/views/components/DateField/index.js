@@ -47,7 +47,12 @@ export function DateField(props) {
     setMonth(selectedMonth)
     props.onChangeMonth(selectedMonth)
 
+    /*
+      here we resetting day if the user select the Feb month and the day-input
+      is more than 29 because the Feb is 28 days month (29 in leap year) 
+    */
     if (selectedMonth.value === 1 && day.value >= 29) {
+      // skip the process if year exist and is a leap year and day equal to 29
       if (day.value === 29 && year && isLeapYear(new Date(year))) {
         return
       }
