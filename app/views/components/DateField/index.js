@@ -38,16 +38,16 @@ export function DateField(props) {
     []
   )
 
-  const onChangeDay = day => {
-    setDay(day)
-    props.onChangeDay(day)
+  const onChangeDay = selectedDay => {
+    setDay(selectedDay)
+    props.onChangeDay(selectedDay)
   }
 
-  const onChangeMonth = month => {
-    setMonth(month)
-    props.onChangeMonth(month)
+  const onChangeMonth = selectedMonth => {
+    setMonth(selectedMonth)
+    props.onChangeMonth(selectedMonth)
 
-    if (month.value === 1 && day.value >= 29) {
+    if (selectedMonth.value === 1 && day.value >= 29) {
       if (day.value === 29 && year && isLeapYear(new Date(year))) {
         return
       }
