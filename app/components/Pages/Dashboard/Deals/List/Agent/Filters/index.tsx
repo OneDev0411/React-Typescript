@@ -24,11 +24,11 @@ const TAB_ITEMS = [
     link: ''
   },
   {
-    label: 'Drafts',
+    label: 'Draft',
     link: 'drafts'
   },
   {
-    label: 'Actives',
+    label: 'Active',
     link: 'actives'
   },
   {
