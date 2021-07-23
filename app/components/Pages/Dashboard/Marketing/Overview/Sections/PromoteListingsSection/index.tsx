@@ -3,37 +3,25 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import CardSkeleton from 'components/CardSkeleton'
 import ListingCard from 'components/ListingCards/ListingCard'
-import { useBrandListings, useDealsListings } from 'hooks/use-listings'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 export default function PromoteListingsSection() {
-  const user = useSelector(selectUser)
+  const brandId = useSelector(selectActiveBrandId)
 
-  const brand = getActiveTeamId(user)
-  const brandListings = useBrandListings(brand)
-  const brandListingsIds = brandListings?.map(listing => listing.id)
-  const dealsListings = useDealsListings(brandListingsIds)
-  const [isLoadingBrandListings] = useLoadingEntities(brandListings)
-  const [isLoadingDealsListings] = useLoadingEntities(dealsListings)
-
-  const isLoading = isLoadingBrandListings || isLoadingDealsListings
-
-  const listings =
-    dealsListings && brandListings ? [...dealsListings, ...brandListings] : null
+  const { listings, isLoading } = useBrandAndDealsListings(brandId)
 
   return (
     <SectionLayout
       title="Promote Your Listings"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/agent-network" />
+        <LinkSectionAction title="View all" url="/dashboard/listings" />
       }
     >
       {isLoading && (

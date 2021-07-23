@@ -25,7 +25,7 @@ declare interface IDeal<A extends IDealAssociations = ''>
   brand: IBrand
   property_type: IDealPropertyType
   faired_at: number
-  context: object
+  context: Record<string, IDealContext>
   new_notifications: IChatMessage[] | null
 }
 

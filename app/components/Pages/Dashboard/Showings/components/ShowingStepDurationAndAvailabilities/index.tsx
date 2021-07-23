@@ -46,6 +46,7 @@ function ShowingStepDurationAndAvailabilities({
           value={availabilities}
           onChange={onAvailabilitiesChange}
           hasContinue={isCurrentStep}
+          disabledContinue={!!error}
           onContinue={nextStep}
         />
       </SmartQuestionForm>

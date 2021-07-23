@@ -1,4 +1,4 @@
-import { otherStatuses } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/statuses'
+import { otherStatuses } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/statuses'
 
 import toggleSubStatuses from './toggle-sub-statuses'
 

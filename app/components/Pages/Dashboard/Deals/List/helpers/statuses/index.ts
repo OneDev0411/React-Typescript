@@ -1,7 +1,9 @@
 import { getStatus } from 'models/Deal/helpers/context'
 
+import { ClosingDateRange } from '../../types'
+
 export function isActiveDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
-  if (deal.is_draft || deal.deleted_at) {
+  if (deal.deleted_at) {
     return false
   }
 
@@ -9,7 +11,7 @@ export function isActiveDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
 }
 
 export function isPendingDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
-  if (deal.is_draft || deal.deleted_at) {
+  if (deal.deleted_at) {
     return false
   }
 
@@ -32,4 +34,13 @@ function searchStatusByFlag(
   const status = statuses.find(item => item.label === getStatus(deal))
 
   return !!(status && status[flag] === true)
+}
+
+export function isClosingDeal(
+  deal: IDeal,
+  closingDateRange: ClosingDateRange
+): boolean {
+  const date = deal.context.closing_date?.date
+
+  return !!date && date >= closingDateRange.from && date <= closingDateRange.to
 }

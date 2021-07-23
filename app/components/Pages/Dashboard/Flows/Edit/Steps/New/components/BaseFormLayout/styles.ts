@@ -48,6 +48,16 @@ export const useStyles = makeStyles(
         flexWrap: 'wrap'
       }
     },
+    waitForContainer: {
+      marginBottom: theme.spacing(2)
+    },
+    eventType: {
+      flexGrow: 1,
+      paddingRight: theme.spacing(1)
+    },
+    time: {
+      width: '150px'
+    },
     commonField: {
       [theme.breakpoints.down('sm')]: {
         width: '100%',
