@@ -10,8 +10,8 @@ import {
 import cn from 'classnames'
 import { Controller, Control, FieldValues } from 'react-hook-form'
 
-import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { useActiveTeamId } from 'hooks/use-active-team-id'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

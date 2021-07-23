@@ -20,21 +20,15 @@ import {
   Theme,
   Divider
 } from '@material-ui/core'
-
-import { useForm, Controller } from 'react-hook-form'
-
 import { mdiClose } from '@mdi/js'
-
+import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-
 import { browserHistory } from 'react-router'
 
+import { addNotification } from '@app/views/components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { addNotification } from '@app/views/components/notification'
-
 import { getStatusActiveType, StatusTypes } from './helpers/get-status-types'
-
 import { PropertyChecklistTable } from './PropertyChecklistTable'
 
 const useStyles = makeStyles(

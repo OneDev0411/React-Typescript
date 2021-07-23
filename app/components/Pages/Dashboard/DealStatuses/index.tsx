@@ -9,19 +9,17 @@ import {
   Button
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
-
+import { useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import { useDispatch } from 'react-redux'
-
+import { useActiveTeamId } from '@app/hooks/use-active-team-id'
+import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
+import { confirmation } from '@app/store_actions/confirmation'
+import { getStatusColorClass } from '@app/utils/listing'
+import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
-import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
-import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
-import { useActiveTeamId } from '@app/hooks/use-active-team-id'
-import { getStatusColorClass } from '@app/utils/listing'
-import { confirmation } from '@app/store_actions/confirmation'
 import { addNotification } from '@app/views/components/notification'
 
 import { StatusForm } from './StatusForm'
