@@ -23,7 +23,6 @@ import {
 import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { browserHistory } from 'react-router'
 
 import { addNotification } from '@app/views/components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -86,7 +85,7 @@ export function StatusForm({
         }),
         {}
       ),
-      label: form.label,
+      label: form.label.trim(),
       admin_only: form.admin_only || false,
       checklists: Object.entries(form.checklists)
         .filter(([_, value]) => !!value)
@@ -96,13 +95,7 @@ export function StatusForm({
     try {
       setIsSaving(true)
 
-      const upsertedStatus = await onChange(status?.id, data)
-
-      if (isNewStatus) {
-        browserHistory.push(
-          `/dashboard/statuses/${(upsertedStatus as IDealStatus).id}`
-        )
-      }
+      await onChange(status?.id, data)
 
       dispatch(
         addNotification({
@@ -110,6 +103,8 @@ export function StatusForm({
           message: 'Status Saved'
         })
       )
+
+      onClose()
     } catch (e) {
       console.log(e)
 
@@ -171,7 +166,7 @@ export function StatusForm({
                   name="label"
                   defaultValue={status?.label}
                   rules={{
-                    validate: (val: string) => val.length > 0
+                    validate: (val: string) => val.trim().length > 0
                   }}
                   render={({ value, onChange, onBlur }) => (
                     <TextField
@@ -272,7 +267,7 @@ export function StatusForm({
                 color="primary"
                 type="submit"
                 variant="contained"
-                disabled={isSaving || formState.isValid === false}
+                disabled={isSaving || !formState.isValid || !formState.isDirty}
               >
                 {isSaving ? 'Saving...' : 'Save Status'}
               </Button>

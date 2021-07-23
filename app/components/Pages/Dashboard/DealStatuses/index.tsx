@@ -15,7 +15,7 @@ import { browserHistory } from 'react-router'
 import { useActiveTeamId } from '@app/hooks/use-active-team-id'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
 import { confirmation } from '@app/store_actions/confirmation'
-import { getStatusColorClass } from '@app/utils/listing'
+import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
@@ -32,6 +32,12 @@ const useStyles = makeStyles(
       height: theme.spacing(1.5),
       borderRadius: '100%',
       marginRight: theme.spacing(1)
+    },
+    center: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '90vh'
     }
   }),
   {
@@ -76,7 +82,7 @@ export default function DealStatusesAdmin({ params }: Props) {
             <span
               className={classes.statusColor}
               style={{
-                backgroundColor: getStatusColorClass(status.label)
+                backgroundColor: getDealStatusColor(status)
               }}
             />
 
@@ -173,13 +179,13 @@ export default function DealStatusesAdmin({ params }: Props) {
           rows={statusesList}
           totalRows={statusesList.length}
           virtualize={false}
+          EmptyStateComponent={() => (
+            <Box className={classes.center}>
+              <Typography variant="h4">We did not find any results</Typography>
+            </Box>
+          )}
           LoadingStateComponent={() => (
-            <Box
-              display="flex"
-              height="100vh"
-              alignItems="center"
-              justifyContent="center"
-            >
+            <Box className={classes.center}>
               <CircularProgress />
             </Box>
           )}
