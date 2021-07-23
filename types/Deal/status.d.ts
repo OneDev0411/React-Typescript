@@ -9,6 +9,7 @@ declare interface IDealStatus {
   is_active: boolean
   is_pending: boolean
   is_archived: boolean
+  is_closed: boolean
   deal_types: IDealType[]
   property_types: IDealPropertyType[]
   admin_only: boolean
