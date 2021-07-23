@@ -48,7 +48,7 @@ function useShowingRoleForm({
           (!hideAddToContactCheckbox || !!values.contact)
         }
         saveToContactCheckboxLabel={
-          values.contact ? 'Update the contact' : 'Add to contact'
+          values.contact ? 'Update the contact' : 'Add to my contact'
         }
       />
     )
