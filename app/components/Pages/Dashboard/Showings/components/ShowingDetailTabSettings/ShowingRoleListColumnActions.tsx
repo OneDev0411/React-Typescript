@@ -130,7 +130,8 @@ function ShowingRoleListColumnActions({
           can_approve: role.can_approve,
           confirm_notification_type: role.confirm_notification_type,
           cancel_notification_type: role.cancel_notification_type,
-          user: role.user
+          user: role.user,
+          save_to_contact: true
         }}
         onConfirm={handleEdit}
         hasNotificationTypeFields={hasNotificationTypeFields}
