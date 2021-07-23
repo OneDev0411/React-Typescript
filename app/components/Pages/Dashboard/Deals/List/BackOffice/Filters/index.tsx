@@ -1,9 +1,6 @@
-import { useEffect } from 'react'
-
 import { MenuItem } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import _ from 'underscore'
 
 import { getUserTeams } from 'actions/user/teams'
 import { SortableColumn } from 'components/Grid/Table/types'
@@ -19,6 +16,8 @@ import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
+import { useDefaultTab } from '../hooks/use-default-tab'
+import { useInboxTabs } from '../hooks/use-inbox-tabs'
 import { SearchQuery } from '../types'
 
 interface Props {
@@ -32,18 +31,11 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
-  const inboxTabs = _.chain(props.deals)
-    .pluck('inboxes')
-    .flatten()
-    .uniq()
-    .filter(tab => tab !== null)
-    .value()
 
-  useEffect(() => {
-    if (!props.params.filter && inboxTabs.length > 0) {
-      props.router.push(`/dashboard/deals/filter/${inboxTabs[0]}`)
-    }
-  }, [inboxTabs, props.params.filter, props.router])
+  const inboxTabs = useInboxTabs(props.deals)
+  const defaultTab = Array.isArray(inboxTabs) ? inboxTabs[0] : null
+
+  useDefaultTab(props.params || {}, defaultTab)
 
   const handleChangeSort = async (column: SortableColumn) => {
     props.router.push(
@@ -68,7 +60,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      value={props.location.query.type === 'query' ? 'all-deals' : null}
+      value={
+        props.location.query.type === 'query' &&
+        ['listing', 'contact'].includes(props.params.filter)
+          ? 'all-deals'
+          : null
+      }
       defaultValue={props.params.filter}
       tabs={[
         ...inboxTabs
@@ -81,6 +78,12 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
               to={`/dashboard/deals/filter/${name}?type=inbox`}
             />
           )),
+        <TabLink
+          key="closings"
+          value="closings"
+          label={<span>Closings</span>}
+          to="/dashboard/deals/filter/closings?type=query"
+        />,
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"

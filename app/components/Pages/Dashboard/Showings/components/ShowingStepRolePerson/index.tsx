@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 
 import {
   QuestionSection,
@@ -12,10 +12,12 @@ import {
 
 import { getShowingRoleAOrAn, getShowingRoleLabel } from '../../helpers'
 import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
+import { getPersonFromUser } from '../../pages/CreateShowing/helpers'
 import { ShowingRoleInput } from '../../types'
 import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
 import { ShowingRoleForm, ShowingRoleFormProps } from '../ShowingRoleForm'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import ShowingTeamAgentSearchInput from '../ShowingTeamAgentSearchInput'
 import SmartQuestionForm from '../SmartQuestionForm'
 
 import ShowingRoleAutoSubmitAddNewButton from './ShowingRoleAutoSubmitAddNewButton'
@@ -32,7 +34,8 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'flex-end',
       marginTop: theme.spacing(2)
-    }
+    },
+    nextButton: { marginLeft: theme.spacing(1) }
   }),
   { name: 'ShowingStepRolePerson' }
 )
@@ -82,7 +85,16 @@ function ShowingStepRolePerson({
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
   const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
-  const isForm = role.mode === 'form' || !!error
+  const handleSelectAgent = (agent: IUser) => {
+    onRoleEdit({ ...role, ...getPersonFromUser(agent) })
+  }
+
+  const handleNext = () => {
+    nextStep()
+  }
+
+  const isSelectAgentMode = !role.user && role.role === 'SellerAgent'
+  const isFormMode = !isSelectAgentMode && (role.mode === 'form' || !!error)
 
   return (
     <QuestionSection error={error}>
@@ -90,12 +102,14 @@ function ShowingStepRolePerson({
         Select {showingRoleAOrAn} {showingRole} and how they should be notified
       </QuestionTitle>
       <SmartQuestionForm
-        width={isForm ? '100%' : undefined}
+        width={isFormMode ? '100%' : undefined}
         containerProps={
-          isForm ? { maxWidth: 552, marginLeft: 'auto' } : undefined
+          isFormMode ? { maxWidth: 552, marginLeft: 'auto' } : undefined
         }
       >
-        {isForm ? (
+        {isSelectAgentMode ? (
+          <ShowingTeamAgentSearchInput onChange={handleSelectAgent} />
+        ) : isFormMode ? (
           <ShowingRoleForm
             hasNotificationTypeFields={hasNotificationTypeFields}
             initialValues={{
@@ -126,17 +140,16 @@ function ShowingStepRolePerson({
               )}
 
               <div>
-                <Box mr={1} component="span">
-                  <ShowingRoleAutoSubmitAddNewButton
-                    label="Save and Add new participant"
-                    onClick={handleAdd}
-                  />
-                </Box>
+                <ShowingRoleAutoSubmitAddNewButton
+                  label="Save and Add new participant"
+                  onClick={handleAdd}
+                />
                 <Button
                   type="submit"
                   variant="contained"
                   size="small"
                   color="primary"
+                  className={classes.nextButton}
                 >
                   {isLastStep ? 'Next' : 'Save'}
                 </Button>
@@ -156,6 +169,18 @@ function ShowingStepRolePerson({
                 label="Add new participant"
                 onClick={handleAdd}
               />
+              {isLastStep && (
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.nextButton}
+                >
+                  Next
+                </Button>
+              )}
             </div>
           </>
         )}

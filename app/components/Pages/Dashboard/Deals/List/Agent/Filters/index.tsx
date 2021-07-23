@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { MenuItem } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -26,11 +24,11 @@ const TAB_ITEMS = [
     link: ''
   },
   {
-    label: 'Drafts',
+    label: 'Draft',
     link: 'drafts'
   },
   {
-    label: 'Actives',
+    label: 'Active',
     link: 'actives'
   },
   {
@@ -40,6 +38,10 @@ const TAB_ITEMS = [
   {
     label: 'Archive',
     link: 'archives'
+  },
+  {
+    label: 'Closings',
+    link: 'closings'
   }
 ]
 

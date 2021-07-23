@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   MenuItem,
@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { getContext } from '@app/models/Deal/helpers/context'
+import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { upsertContexts } from 'actions/deals'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { BaseDropdown } from 'components/BaseDropdown'
@@ -24,7 +26,6 @@ import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
-import { getStatusColorClass } from 'utils/listing'
 
 interface Props {
   deal: IDeal
@@ -63,7 +64,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const statusName = getStatusContextKey(deal)
 
   const definition = searchContext(deal, brandChecklists, statusName)
-  const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
+  const dealContext = getContext(deal, statusName)
+  const isDisabled = !!(
+    deal.listing &&
+    definition?.preffered_source === 'MLS' &&
+    dealContext?.source === 'MLS'
+  )
 
   /**
    * updates listing_status context
@@ -132,7 +138,9 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
     )
   }
 
-  const dealStatus = Deal.get.status(deal)
+  const dealStatus = statuses.find(
+    status => status.label === Deal.get.status(deal)
+  )
 
   return (
     <BaseDropdown
@@ -160,34 +168,34 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
                 <span
                   className={classes.bullet}
                   style={{
-                    backgroundColor: getStatusColorClass(dealStatus)
+                    backgroundColor: getDealStatusColor(dealStatus)
                   }}
                 />
               )}
-              {isSaving ? 'Saving...' : dealStatus || 'Change Status'}
+              {isSaving ? 'Saving...' : dealStatus?.label || 'Change Status'}
             </DropdownToggleButton>
           </span>
         </Tooltip>
       )}
       renderMenu={({ close }) => (
         <div>
-          {statuses.map((item, index) => (
+          {statuses.map((status, index) => (
             <MenuItem
               key={index}
               value={index}
-              selected={item.label === dealStatus}
+              selected={status.label === dealStatus?.label}
               onClick={() => {
                 close()
-                updateStatus(item)
+                updateStatus(status)
               }}
             >
               <span
                 className={classes.bullet}
                 style={{
-                  backgroundColor: getStatusColorClass(item.label)
+                  backgroundColor: getDealStatusColor(status)
                 }}
               />
-              {item.label}
+              {status.label}
             </MenuItem>
           ))}
         </div>
