@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { getContext } from '@app/models/Deal/helpers/context'
 import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { upsertContexts } from 'actions/deals'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
