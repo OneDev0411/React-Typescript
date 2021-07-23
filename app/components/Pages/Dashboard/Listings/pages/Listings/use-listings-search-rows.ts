@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
-import { sanitizeSearchTerm } from './helpers'
+import { sanitizeSearchTerm } from '@app/utils/sanitize-string'
+
 import { ListingRow } from './types'
 
 function useListingsSearchRows(
