@@ -146,7 +146,8 @@ export const TagsList = (props: Props) => {
         disabled: isFetching || existingTags.length === 0
       }}
       listPlugin={{
-        style: { width: 220 }
+        style: { width: 220 },
+        className: 'u-scrollbar'
       }}
       morePlugin={{
         count: 7,

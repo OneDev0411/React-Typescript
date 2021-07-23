@@ -37,6 +37,7 @@ const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
+const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
@@ -158,6 +159,12 @@ export function Menu() {
               >
                 Deals
               </InlineBadge>
+            </SideNavLinkItem>
+          </Acl>
+
+          <Acl access={listingsAccess}>
+            <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
+              Listings
             </SideNavLinkItem>
           </Acl>
 

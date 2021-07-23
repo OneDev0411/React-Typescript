@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Link } from 'react-router'
 import branch from 'recompose/branch'
 import renderNothing from 'recompose/renderNothing'

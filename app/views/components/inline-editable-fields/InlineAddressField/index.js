@@ -8,7 +8,7 @@ import {
   isMapLibrariesLoaded
 } from '@app/utils/google-map-api'
 
-import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
+import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
 import { AddressPopover } from './AddressPopover'

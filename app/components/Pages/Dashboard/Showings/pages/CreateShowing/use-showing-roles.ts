@@ -7,7 +7,7 @@ import { selectDealRoles } from 'selectors/deals'
 import { selectActiveTeamId } from 'selectors/team'
 import { getBrandUsers } from 'utils/user-teams'
 
-import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-permission'
+import useActiveTeamBrandWithPermission from '../../hooks/use-active-team-brand-with-permission'
 import {
   ShowingPropertyType,
   ShowingRoleInput,
@@ -30,7 +30,7 @@ interface UseShowingRolesReturn {
 
 function useShowingRoles(): UseShowingRolesReturn {
   const dealRoles = useSelector(selectDealRoles)
-  const activeBrand = useActiveTeamBrandWithShowingsPermission(ACL.SHOWINGS)
+  const activeBrand = useActiveTeamBrandWithPermission(ACL.SHOWINGS)
   const teamMembers = activeBrand ? getBrandUsers(activeBrand) : []
   const teamId = useSelector(selectActiveTeamId)
   const nextRoleId = useRef<number>(1)

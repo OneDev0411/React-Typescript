@@ -63,7 +63,12 @@ export default function DealStatus({ deal, isBackOffice }: Props) {
   const statusName = getStatusContextKey(deal)
 
   const definition = searchContext(deal, brandChecklists, statusName)
-  const isDisabled = !!(deal.listing && definition?.preffered_source === 'MLS')
+  const dealContext = getContext(deal, statusName)
+  const isDisabled = !!(
+    deal.listing &&
+    definition?.preffered_source === 'MLS' &&
+    dealContext?.source === 'MLS'
+  )
 
   /**
    * updates listing_status context

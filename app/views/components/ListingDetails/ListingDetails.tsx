@@ -9,7 +9,7 @@ import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
 import listingUtils from 'utils/listing'
 
-import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
+import ShareModal from '../../../components/Pages/Dashboard/MLS/components/modals/ShareListingModal.js'
 
 import AgentInfo from './AgentInfo'
 import ClaimAccountBanner from './ClaimAccountBanner'

@@ -1,6 +1,6 @@
 import { SubmissionError } from 'redux-form'
 
-import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
+import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/Schools'
 import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
 import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'

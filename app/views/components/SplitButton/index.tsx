@@ -33,6 +33,7 @@ interface Props extends ClassesProps<typeof useStyles> {
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
   tourId?: string
+  disablePortal?: boolean
 }
 
 export default function SplitButton(props: Props) {
@@ -85,6 +86,7 @@ export default function SplitButton(props: Props) {
         style={{ zIndex: theme.zIndex.modal }}
         placement={props.popperPlacement}
         transition
+        disablePortal={props.disablePortal}
       >
         {({ TransitionProps, placement }) => (
           <Grow

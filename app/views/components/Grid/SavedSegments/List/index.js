@@ -96,10 +96,14 @@ class SegmentsList extends React.Component {
           className: classes.dropdownBtn
         }}
         listPlugin={{
-          style: { width: 220 }
+          style: { width: 220 },
+          className: 'u-scrollbar'
         }}
         morePlugin={{
-          count: 5,
+          count: 7,
+          style: {
+            maxHeight: 250
+          },
           textContainer: ({ children }) => (
             <ListItem button>{children}</ListItem>
           )

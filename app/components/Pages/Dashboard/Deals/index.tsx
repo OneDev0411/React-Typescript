@@ -64,7 +64,9 @@ function Container(props: Props) {
       if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !queryParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user, queryParamValue))
+        dispatch(
+          queryParamValue ? searchDeals(user, queryParamValue) : getDeals(user)
+        )
       }
     }
   })
