@@ -1,7 +1,16 @@
+import { Options } from 'rrule'
+
 interface FullCalendarEventDate {
   start: string
   end?: string
+  /*
+    I'm doing this because of wrong type in fullcalendar pkg 
+    and cause confilict between rrule pkg type
+  */
+  rrule?: Partial<Omit<Options, 'freq'>> & { freq?: 'string' }
 }
+
+const RECURRING_FREQUENCY = 'yearly'
 
 /**
  * return the start and end date of an event
@@ -9,13 +18,8 @@ interface FullCalendarEventDate {
  */
 export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
   const { timestamp, end_date, recurring, all_day } = event
-  const current = new Date()
   // Start Date
   const startObject = new Date(Number(timestamp || 0) * 1000)
-
-  if (recurring) {
-    startObject.setUTCFullYear(current.getUTCFullYear())
-  }
 
   // End Date
   const endObject = new Date(Number(end_date || 0) * 1000)
@@ -57,8 +61,21 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
   // Check end_date is available
   const end = end_date ? { end: endObject.toISOString() } : {}
 
+  // Check event is a recurring event
+  const recurringData = recurring
+    ? {
+        rrule: {
+          freq: RECURRING_FREQUENCY,
+          interval: 1,
+          dtstart: startObject
+        }
+      }
+    : {}
+
+  // @ts-ignore
   return {
     start: startObject.toISOString(),
-    ...end
+    ...end,
+    ...recurringData
   }
 }
