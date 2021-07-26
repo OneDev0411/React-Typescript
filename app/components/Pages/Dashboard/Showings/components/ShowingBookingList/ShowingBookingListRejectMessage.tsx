@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
 
-import { Button, Box } from '@material-ui/core'
+import { Box, IconButton, Badge } from '@material-ui/core'
+import { mdiCommentTextMultiple, mdiCommentTextMultipleOutline } from '@mdi/js'
+
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { getShowingRoleLabel } from '../../helpers'
 import Dialog from '../Dialog'
@@ -50,9 +53,7 @@ function ShowingBookingListRejectMessage({
     }
   }, [approvals, buyerMessage, buyerName])
 
-  if (!personMessage || !personMessage.message) {
-    return null
-  }
+  const hasMessage = !!personMessage?.message
 
   const openDialog = () => setOpen(true)
 
@@ -60,35 +61,50 @@ function ShowingBookingListRejectMessage({
 
   return (
     <>
-      <Button
-        size="small"
-        variant="text"
-        color="secondary"
+      <IconButton
+        size="medium"
+        color="inherit"
         onClick={openDialog}
+        disabled={!hasMessage}
       >
-        View Message
-      </Button>
-      <Dialog
-        open={open}
-        onClose={closeDialog}
-        title={
-          <>
-            {personMessage.person}
-            <Box component="span" color="grey.500">
-              , {personMessage.role}
-            </Box>
-          </>
-        }
-        subtitle={appointmentTitle}
-      >
-        <Box my={2}>
-          <ShowingDialogCard
-            question="Comments"
-            answer={personMessage.message}
-            multiline
+        <Badge
+          variant="dot"
+          badgeContent="1"
+          color="error"
+          invisible={!hasMessage}
+        >
+          <SvgIcon
+            path={
+              hasMessage
+                ? mdiCommentTextMultiple
+                : mdiCommentTextMultipleOutline
+            }
           />
-        </Box>
-      </Dialog>
+        </Badge>
+      </IconButton>
+      {personMessage && (
+        <Dialog
+          open={open}
+          onClose={closeDialog}
+          title={
+            <>
+              {personMessage.person}
+              <Box component="span" color="grey.500">
+                , {personMessage.role}
+              </Box>
+            </>
+          }
+          subtitle={appointmentTitle}
+        >
+          <Box my={2}>
+            <ShowingDialogCard
+              question="Comments"
+              answer={personMessage.message ?? ''}
+              multiline
+            />
+          </Box>
+        </Dialog>
+      )}
     </>
   )
 }
