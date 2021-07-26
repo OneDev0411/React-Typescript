@@ -240,7 +240,6 @@ function ShowingBookingList({
             />
           )
         }
-        virtualize={false}
         getTrProps={({ row }) => ({
           className: classNames(
             classes.rowBase,

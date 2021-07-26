@@ -120,7 +120,6 @@ function ShowingPropertyList({
           onClick: () => handleRowClick(row.id)
         })}
         classes={{ row: classes.row }}
-        virtualize={false}
       />
     </Box>
   )
