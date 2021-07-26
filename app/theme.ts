@@ -1,4 +1,4 @@
-import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
 import merge from 'merge'
 
 const white = '#fff'
@@ -236,7 +236,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
     }
   })
 
-  const theme: Theme = createTheme(mergedValue)
+  const theme: Theme = createMuiTheme(mergedValue)
 
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
