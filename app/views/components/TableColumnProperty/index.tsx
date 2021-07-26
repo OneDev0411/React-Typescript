@@ -1,8 +1,10 @@
 import { ReactNode } from 'react'
 
 import { Badge, Box, Typography, makeStyles } from '@material-ui/core'
+import { mdiHomeOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { Notification } from 'deals/List/components/Notification'
 
 const useStyles = makeStyles(
@@ -28,7 +30,11 @@ function TableColumnProperty({
   onClick
 }: TableColumnPropertyProps) {
   const classes = useStyles()
-  const avatar = <Avatar url={image} variant="circular" />
+  const avatar = (
+    <Avatar url={image} variant="circular">
+      <SvgIcon path={mdiHomeOutline} />
+    </Avatar>
+  )
 
   return (
     <Box display="flex" alignItems="center" mr={1} onClick={onClick}>
