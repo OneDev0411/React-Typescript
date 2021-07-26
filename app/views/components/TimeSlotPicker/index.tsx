@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -12,9 +13,18 @@ import { getTimeSlotsInRange } from './utils'
 SwiperCore.use([Navigation, A11y, Mousewheel])
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     slide: {
       width: 'auto !important'
+    },
+    container: {
+      position: 'relative'
+    },
+    swiperButtonPrev: {
+      left: `${theme.spacing(-2)}px !important`
+    },
+    swiperButtonNext: {
+      right: `${theme.spacing(-2)}px !important`
     }
   }),
   {
@@ -86,24 +96,32 @@ export default function TimeSlotPicker({
   }, [controlledSwiper, initialSlide])
 
   return (
-    <Swiper
-      freeMode
-      navigation
-      mousewheel
-      onSwiper={setControlledSwiper}
-      slidesPerView="auto"
-      spaceBetween={16}
-    >
-      {slots.map(slot => (
-        <SwiperSlide key={slot[0]} className={classes.slide}>
-          <TimeCard
-            time={slot[0]}
-            isActive={slot[0] === active?.[0] && slot[1] === active?.[1]}
-            disabled={isSlotDisabled(slot)}
-            onClick={() => onClick(slot)}
-          />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className={classes.container}>
+      <Swiper
+        freeMode
+        mousewheel
+        navigation={{
+          prevEl: `.${classes.swiperButtonPrev}`,
+          nextEl: `.${classes.swiperButtonNext}`
+        }}
+        onSwiper={setControlledSwiper}
+        slidesPerView="auto"
+        spaceBetween={16}
+      >
+        {slots.map(slot => (
+          <SwiperSlide key={slot[0]} className={classes.slide}>
+            <TimeCard
+              time={slot[0]}
+              isActive={slot[0] === active?.[0] && slot[1] === active?.[1]}
+              disabled={isSlotDisabled(slot)}
+              onClick={() => onClick(slot)}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <div className={cn('swiper-button-prev', classes.swiperButtonPrev)} />
+      <div className={cn('swiper-button-next', classes.swiperButtonNext)} />
+    </div>
   )
 }
