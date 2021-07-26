@@ -309,6 +309,14 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
+  const onTouchChange = useCallback(({ contacts }) => {
+    console.log('touch date', { contacts, currentContactId })
+
+    if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
+      updateContact()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffectOnce(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
@@ -322,7 +330,7 @@ const ContactProfile = props => {
       return
     }
 
-    socket.on('contact:touch', updateContact)
+    socket.on('contact:touch', payload => onTouchChange(payload))
     socket.on('crm_task:create', () => fetchTimeline())
     socket.on('email_campaign:create', () => fetchTimeline())
     socket.on('email_campaign:send', () => fetchTimeline())
@@ -344,7 +352,7 @@ const ContactProfile = props => {
       }
 
       window.removeEventListener('resize', detectScreenSize)
-      socket.off('contact:touch', updateContact)
+      socket.off('contact:touch', onTouchChange)
       socket.off('crm_task:create', fetchTimeline)
       socket.off('email_campaign:create', fetchTimeline)
       socket.off('email_campaign:send', fetchTimeline)
@@ -353,6 +361,7 @@ const ContactProfile = props => {
     }
   }, [
     props.params,
+    onTouchChange,
     currentContactId,
     detectScreenSize,
     fetchTimeline,
