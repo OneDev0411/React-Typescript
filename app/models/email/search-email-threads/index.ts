@@ -20,6 +20,7 @@ export async function searchEmailThreads<
     searchQuery: string
     next?: SearchEmailThreadsNext
   },
+  // eslint-disable-next-line max-len
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<{
   emailThreads: IEmailThread<SelectedEmailThreadAssociations>[]

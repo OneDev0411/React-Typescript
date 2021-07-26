@@ -10,7 +10,7 @@ import {
   Grid,
   Chip,
   Box,
-  fade,
+  alpha,
   Theme,
   makeStyles
 } from '@material-ui/core'
@@ -58,7 +58,7 @@ const useStyles = makeStyles(
     },
     cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.7),
+      backgroundColor: alpha(theme.palette.common.white, 0.7),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -195,10 +195,15 @@ export default function ListingCard({
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
   return (
-    <Card variant="outlined" className={classes.card} onClick={onClick}>
-      <CardActionArea>
+    <Card
+      data-test="card"
+      variant="outlined"
+      className={classes.card}
+      onClick={onClick}
+    >
+      <CardActionArea component="div">
         <ListingCardMedia listing={listing}>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item>
               <Grid container item>
                 {selected !== undefined && (
@@ -255,7 +260,12 @@ export default function ListingCard({
         </ListingCardMedia>
         <CardContent className={classes.cardContent}>
           <Grid container direction="column" spacing={1}>
-            <Grid container item alignItems="center" justify="space-between">
+            <Grid
+              container
+              item
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Grid item>
                 <Typography variant="subtitle1">
                   {getFormattedPrice(listing.price, 'currency', 0)}

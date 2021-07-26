@@ -394,6 +394,7 @@ class OpenHouseDrawerInternal extends React.Component {
     this.props.dispatch(
       confirmation({
         message:
+          // eslint-disable-next-line max-len
           'Would you also like to notify your office so they book this on the MLS for you?',
         confirmLabel: 'Notify',
         onConfirm: () => {
@@ -478,6 +479,7 @@ class OpenHouseDrawerInternal extends React.Component {
                         <Title fullWidth placeholder="Untitled Open House" />
                         <Box mt={1}>
                           {shouldShowDescription || values?.description ? (
+                            // eslint-disable-next-line max-len
                             <Description placeholder="Enter any general notes for your clients" />
                           ) : (
                             <Button

@@ -29,6 +29,7 @@ export function AgentConfirm() {
     } catch (errorCode) {
       if (errorCode === 404) {
         return {
+          // eslint-disable-next-line max-len
           [FORM_ERROR]: `Agent corresponding to this MLS ID (${values.mlsId}) not found!`
         }
       }

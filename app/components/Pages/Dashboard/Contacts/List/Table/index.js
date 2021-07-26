@@ -228,6 +228,7 @@ const ContactsList = props => {
           />
         }
         EmptyStateComponent={() => (
+          // eslint-disable-next-line max-len
           <NoSearchResults description="Try typing another name, email, phone or tag." />
         )}
       />

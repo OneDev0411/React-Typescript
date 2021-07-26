@@ -204,6 +204,7 @@ function EmailTemplateSelector({
     <>
       {templateDrawer}
       <FooterBottomDrawerZeroState
+        // eslint-disable-next-line max-len
         description="There is no email templates. Save your time by creating Email Template with variables for common emails"
         actions={
           <>

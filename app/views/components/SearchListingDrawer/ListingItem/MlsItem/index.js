@@ -23,7 +23,7 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, ...props }) {
+export function MlsItem({ item, onClickRemove, ...props }) {
   const getStatus = () => {
     const { status, close_date } = item
 
@@ -81,11 +81,11 @@ export function MlsItem({ item, ...props }) {
             {getStatus()}
           </Status>
 
-          {props.removable && (
+          {props.removable && onClickRemove && (
             <SvgIcon
               path={mdiClose}
               className="delete-icon"
-              onClick={props.onClickRemove}
+              onClick={onClickRemove}
             />
           )}
         </ListItemStatus>

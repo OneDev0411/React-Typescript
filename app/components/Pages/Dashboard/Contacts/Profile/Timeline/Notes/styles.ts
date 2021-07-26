@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -63,7 +63,7 @@ export const useStyles = makeStyles(
       height: '2rem',
       borderRadius: '100%',
       marginRight: '1rem',
-      backgroundColor: fade('#6A7589', 0.2)
+      backgroundColor: alpha('#6A7589', 0.2)
     },
     zeroState: {
       margin: 'auto',

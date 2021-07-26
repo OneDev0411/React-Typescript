@@ -91,8 +91,8 @@ export const EventType = ({ index, disabled = false }: Props) => {
               }}
               label="Trigger"
             >
-              {triggerOptions.map(item => (
-                <MenuItem key={item.value} value={item.value}>
+              {triggerOptions.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
                   {item.label}
                 </MenuItem>
               ))}
