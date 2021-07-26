@@ -1,10 +1,10 @@
 import React from 'react'
-import _findIndex from 'lodash/findIndex'
-import { MenuItem } from '@material-ui/core'
 
-import { putUserSetting } from 'models/user/put-user-setting'
+import { MenuItem } from '@material-ui/core'
+import _findIndex from 'lodash/findIndex'
 
 import { DropdownTab } from 'components/PageTabs'
+import { putUserSetting } from 'models/user/put-user-setting'
 
 import { SORT_FIELD_SETTING_KEY } from '../constants'
 

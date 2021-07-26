@@ -1,8 +1,8 @@
 import React from 'react'
 
+import Button from '../../../../../views/components/Button/LinkButton'
 import RedirectModal from '../RedirectModal'
 import { SigninButton } from '../SigninButton'
-import Button from '../../../../../views/components/Button/LinkButton'
 
 const VerifyRedirectModal = ({ type, params, brandInfo }) => {
   const { email, userInfo, redirectTo, verificationType } = params

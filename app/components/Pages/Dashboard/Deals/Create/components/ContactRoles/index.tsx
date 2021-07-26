@@ -8,17 +8,18 @@ import {
   Paper,
   CircularProgress
 } from '@material-ui/core'
+import { parseFullName } from 'parse-full-name'
 import { useAsync, useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import { searchContacts } from 'models/contacts/search-contacts'
-import searchAgents from 'models/agent/search'
-
+import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
 import VirtualList from 'components/VirtualList'
-
-import { Row, RowItem, RowType } from './Row'
+import searchAgents from 'models/agent/search'
+import { searchContacts } from 'models/contacts/search-contacts'
 
 import { IDealFormRole } from '../../types'
+
+import { Row, RowItem, RowType } from './Row'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -130,11 +131,19 @@ export function ContactRoles({
    * Starts creating a new contact based on the given name
    */
   const createNewContact = () => {
-    const name = debouncedSearchCriteria.split(' ')
+    const { first, last, middle, title } = parseFullName(
+      debouncedSearchCriteria,
+      'all',
+      1,
+      0,
+      0
+    )
 
     handleSelectRole({
-      legal_first_name: name[0],
-      legal_last_name: name[1]
+      legal_prefix: isValidNameTitle(title) ? title : undefined,
+      legal_first_name: first,
+      legal_last_name: last,
+      legal_middle_name: middle
     })
   }
 

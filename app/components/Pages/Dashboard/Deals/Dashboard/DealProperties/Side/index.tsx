@@ -1,20 +1,16 @@
+import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
+import { mdiChevronDown } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
-
-import { mdiChevronDown } from '@mdi/js'
-
 import { upsertContexts } from 'actions/deals'
+import { BaseDropdown } from 'components/BaseDropdown'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getEnderType, getField } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import { BaseDropdown } from 'components/BaseDropdown'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { ItemValue } from '../../Factsheet/styled'
 

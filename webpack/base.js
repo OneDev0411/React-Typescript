@@ -1,8 +1,8 @@
 const path = require('path')
 
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { ESBuildPlugin } = require('esbuild-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'
@@ -112,7 +112,8 @@ module.exports = {
           process.env.CI_COMMIT_REF_SLUG || process.env.SOURCE_VERSION
         ),
         MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
-        STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY)
+        STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY),
+        SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL)
       },
       __DEV__,
       NODE_ENV: env,

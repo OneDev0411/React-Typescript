@@ -1,28 +1,24 @@
 import React, { useState, useMemo, memo } from 'react'
-import cn from 'classnames'
+
 import { Popover, Button, IconButton } from '@material-ui/core'
+import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
+import cn from 'classnames'
 import fecha from 'fecha'
 
-import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
-
-import { deleteTask } from 'models/tasks'
 import { CrmEventType } from 'components/Calendar/types'
-
+import FollowUpModal from 'components/FollowUpModal'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { deleteTask } from 'models/tasks'
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import FollowUpModal from 'components/FollowUpModal'
-
+import { BaseEventProps } from '../..'
 import {
   isCRMEvent,
   isDealEvent,
   isCelebrationEvent
 } from '../../../../helpers/normalize-events/helpers/event-checker'
-
 import { usePopoverStyles } from '../../use-style'
-import { BaseEventProps } from '../..'
 
 import { getFormatDate } from './helper/get-format-date'
 
@@ -95,6 +91,37 @@ const EventCardComponent = ({
     e.stopPropagation()
     onSelect(rowEvent)
     onClose()
+  }
+
+  const renderFollowUpModal = () => {
+    const baseDate = new Date(rowEvent.timestamp * 1000)
+
+    if (rowEvent.all_day) {
+      baseDate.setFullYear(
+        baseDate.getUTCFullYear(),
+        baseDate.getUTCMonth(),
+        baseDate.getUTCDate()
+      )
+      baseDate.setHours(baseDate.getUTCHours(), baseDate.getUTCMinutes(), 0, 0)
+    }
+
+    return (
+      <FollowUpModal
+        isOpen
+        dictionary={{
+          description:
+            'Never forget an event, put a reminder on your calendar now!',
+          taskTitle: () => `Follow Up: ${event.event.title}`,
+          taskDescription: (item, dueDate) =>
+            `This is a follow up reminder ${
+              event.event.title
+            } set in Rechat, on ${fecha.format(dueDate, 'dddd MMMM Do, YYYY')}.`
+        }}
+        baseDate={baseDate}
+        onClose={onCloseFollowUpModal}
+        callback={e => onChange(e, 'created')}
+      />
+    )
   }
 
   return (
@@ -181,26 +208,7 @@ const EventCardComponent = ({
           </footer>
         </div>
       </Popover>
-      {isFollowUpModalOpen && (
-        <FollowUpModal
-          isOpen
-          dictionary={{
-            description:
-              'Never forget an event, put a reminder on your calendar now!',
-            taskTitle: () => `Follow Up: ${event.event.title}`,
-            taskDescription: (item, dueDate) =>
-              `This is a follow up reminder ${
-                event.event.title
-              } set in Rechat, on ${fecha.format(
-                dueDate,
-                'dddd MMMM Do, YYYY'
-              )}.`
-          }}
-          baseDate={new Date(rowEvent.timestamp * 1000)}
-          onClose={onCloseFollowUpModal}
-          callback={e => onChange(e, 'created')}
-        />
-      )}
+      {isFollowUpModalOpen && renderFollowUpModal()}
     </>
   )
 }

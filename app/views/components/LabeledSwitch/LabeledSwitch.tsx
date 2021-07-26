@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   makeStyles,
   Theme,
@@ -6,9 +7,14 @@ import {
   Switch,
   SwitchProps,
   Typography,
-  TypographyProps
+  TypographyProps,
+  Tooltip
 } from '@material-ui/core'
 import classNames from 'classnames'
+
+interface StyleProps {
+  labelMargin: number
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -17,7 +23,7 @@ const useStyles = makeStyles(
       marginRight: 0
     },
     label: {
-      marginRight: theme.spacing(2)
+      marginRight: ({ labelMargin }: StyleProps) => theme.spacing(labelMargin)
     }
   }),
   { name: 'LabeledSwitch' }
@@ -30,12 +36,15 @@ type SwitchSettledProps = 'size'
 
 export interface LabeledSwitchProps
   extends Pick<TypographyProps, TypographyExposedProps>,
-    Pick<SwitchProps, SwitchExposedProps> {
+    Pick<SwitchProps, SwitchExposedProps>,
+    Partial<StyleProps> {
   TypographyProps?: Partial<
     Omit<TypographyProps, TypographySettledProps | TypographyExposedProps>
   >
   SwitchProps?: Partial<
-    Omit<SwitchProps, SwitchSettledProps | SwitchExposedProps>
+    Omit<SwitchProps, SwitchSettledProps | SwitchExposedProps> & {
+      tooltip?: string
+    }
   >
 }
 
@@ -45,20 +54,31 @@ export default function LabeledSwitch({
   TypographyProps,
   checked,
   onChange,
-  SwitchProps
+  SwitchProps,
+  labelMargin = 2
 }: LabeledSwitchProps) {
-  const classes = useStyles()
+  const classes = useStyles({ labelMargin })
+
+  const switchInput = (
+    <Switch
+      {...SwitchProps}
+      size="small"
+      checked={checked}
+      onChange={onChange}
+    />
+  )
 
   return (
     <FormControlLabel
       className={classes.root}
       control={
-        <Switch
-          {...SwitchProps}
-          size="small"
-          checked={checked}
-          onChange={onChange}
-        />
+        SwitchProps?.tooltip ? (
+          <Tooltip title={SwitchProps?.tooltip}>
+            <span>{switchInput}</span>
+          </Tooltip>
+        ) : (
+          switchInput
+        )
       }
       label={
         <Typography

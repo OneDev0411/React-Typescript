@@ -1,3 +1,6 @@
+import { Dispatch } from 'redux'
+import { batchActions } from 'redux-batched-actions'
+
 import {
   FETCH_OAUTH_ACCOUNT_SUCCESS,
   OAuthProvider,
@@ -5,11 +8,6 @@ import {
   SYNC_OAUTH_ACCOUNT_REQUEST,
   SYNC_OAUTH_ACCOUNT_SUCCESS
 } from 'constants/contacts'
-
-import { Dispatch } from 'redux'
-
-import { batchActions } from 'redux-batched-actions'
-
 import { syncOAuthAccount as sync } from 'models/o-auth-accounts/sync-o-auth-account'
 import { IOAuthAccountAction } from 'reducers/contacts/oAuthAccounts'
 

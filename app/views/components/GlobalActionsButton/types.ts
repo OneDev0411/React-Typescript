@@ -1,8 +1,8 @@
 import { ComponentProps, ReactNode } from 'react'
 
+import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { EventDrawer } from 'components/EventDrawer'
-import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
 import CreateOpenHouse from './components/OpenHouse'
@@ -15,6 +15,7 @@ export type ItemType =
   | 'deal'
   | 'openhouse'
   | 'tour'
+  | 'showing'
 
 interface BaseItem<T extends ItemType> {
   title: string
@@ -50,6 +51,10 @@ interface TourItem extends BaseItem<'tour'> {
   render(props: ComponentProps<typeof TourDrawer>): ReactNode
 }
 
+interface ShowingItem extends BaseItem<'showing'> {
+  redirectTo(url: string): void
+}
+
 export type Item =
   | EmailItem
   | EventItem
@@ -58,3 +63,4 @@ export type Item =
   | DealItem
   | OpenHouseItem
   | TourItem
+  | ShowingItem

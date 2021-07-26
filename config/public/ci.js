@@ -38,5 +38,8 @@ export default {
   },
   mapbox: {
     access_token: process.env.MAPBOX_ACCESS_TOKEN
+  },
+  showing: {
+    booking_url: process.env.SHOWING_BOOKING_URL
   }
 }

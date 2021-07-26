@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
+
 import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import Drawer from 'components/OverlayDrawer'
 import { SearchContext } from 'components/TextWithHighlights'
-
 import { getAgents } from 'models/Deal/agent'
 import { getBrandUsers, isBackOffice, getActiveTeam } from 'utils/user-teams'
 
-import Team from './Team'
 import Search from './Search'
+import Team from './Team'
 
 interface BrandWithMembers {
   brand: IBrand

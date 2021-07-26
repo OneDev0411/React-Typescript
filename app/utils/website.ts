@@ -3,5 +3,5 @@ export function isWebsiteOnSubdomain(url: string) {
 }
 
 export function generateWebsiteUrl(hostname: string) {
-  return 'http://' + hostname
+  return `http://${hostname}`
 }

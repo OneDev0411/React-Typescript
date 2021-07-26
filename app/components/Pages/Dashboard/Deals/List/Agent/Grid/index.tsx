@@ -1,47 +1,47 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
+
+import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { TableCellProps } from '@material-ui/core'
-
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { goTo } from '@app/utils/go-to'
 import Grid from 'components/Grid/Table'
-import { TrProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
+import { TrProps } from 'components/Grid/Table/types'
 import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
-
-import { IAppState } from 'reducers'
-
+import {
+  isActiveDeal,
+  isArchivedDeal,
+  isClosingDeal,
+  isPendingDeal
+} from 'deals/List/helpers/statuses'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
-import { getActiveTeamId } from 'utils/user-teams'
-import { sortDealsStatus } from 'utils/sort-deals-status'
-
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-
-import {
-  isActiveDeal,
-  isArchivedDeal,
-  isPendingDeal
-} from 'deals/List/helpers/statuses'
-
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { sortDealsStatus } from 'utils/sort-deals-status'
+import { getActiveTeamId } from 'utils/user-teams'
 
-import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
-import { getGridSort } from '../../helpers/sorting'
-
-import EmptyState from './EmptyState'
+import onDealOpened from '../../../utils/on-deal-opened'
+import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import LoadingState from '../../components/LoadingState'
-
-import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import { Address } from '../../components/table-columns/Address'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
+import { getClosingDateRange } from '../../helpers/closings'
+import { getGridSort } from '../../helpers/sorting'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
+import { ClosingDateRange } from '../../types'
+import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 
-import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
+import EmptyState from './EmptyState'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -55,7 +55,7 @@ const Filters = {
   drafts: (deal: IDeal) => {
     return deal.is_draft === true
   },
-  listings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+  actives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isActiveDeal(deal, statuses)
   },
   pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
@@ -63,7 +63,12 @@ const Filters = {
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isArchivedDeal(deal, statuses)
-  }
+  },
+  closings: (
+    deal: IDeal,
+    _: IDealStatus[],
+    closingDateRange: ClosingDateRange
+  ) => isClosingDeal(deal, closingDateRange)
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -75,70 +80,71 @@ function AgentGrid(props: Props & WithRouterProps) {
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
   const user = useSelector(selectUser)
+  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
   const statuses = useBrandStatuses(getActiveTeamId(user)!)
 
-  const columns = useMemo(() => {
-    return [
-      {
-        id: 'address',
-        width: '30%',
-        accessor: (deal: IDeal) => deal.title,
-        render: ({ row: deal, totalRows, rowIndex }) => (
-          <Address
-            deal={deal}
-            roles={roles}
-            totalRows={totalRows}
-            rowIndex={rowIndex}
-            notificationsCount={
-              deal.new_notifications ? deal.new_notifications.length : 0
-            }
-          />
-        )
-      },
-      {
-        id: 'status',
-        width: '15%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getStatus(deal) || '',
-        render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
-        sortFn: (rows: IDeal[]) => sortDealsStatus(rows, statuses)
-      },
-      {
-        id: 'price',
-        sortType: 'number' as ColumnSortType,
-        width: '10%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getPriceValue(deal),
-        render: ({ row: deal }: { row: IDeal }) =>
-          getFormattedPrice(getPriceValue(deal), 'currency', 0)
-      },
-      {
-        id: 'critical-dates',
-        width: '20%',
-        class: 'opaque',
-        accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
-        render: ({ row: deal, totalRows, rowIndex }) => (
-          <CriticalDate deal={deal} user={user} />
-        )
-      },
-      {
-        id: 'agent-name',
-        width: '10%',
-        class: 'opaque',
-        align: 'right' as TableCellProps['align'],
-        accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
-        render: ({ row: deal }: { row: IDeal }) => {
-          return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
-        }
+  const columns = [
+    {
+      id: 'address',
+      width: '30%',
+      accessor: (deal: IDeal) => deal.title,
+      render: ({ row: deal, totalRows, rowIndex }) => (
+        <Address
+          deal={deal}
+          roles={roles}
+          totalRows={totalRows}
+          rowIndex={rowIndex}
+          notificationsCount={
+            deal.new_notifications ? deal.new_notifications.length : 0
+          }
+        />
+      )
+    },
+    {
+      id: 'status',
+      width: '15%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getStatus(deal) || '',
+      render: ({ row: deal }: { row: IDeal }) => getStatus(deal),
+      sortFn: (rows: IDeal[]) => sortDealsStatus(rows, statuses)
+    },
+    {
+      id: 'price',
+      sortType: 'number' as ColumnSortType,
+      width: '10%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getPriceValue(deal),
+      render: ({ row: deal }: { row: IDeal }) =>
+        getFormattedPrice(getPriceValue(deal), 'currency', 0)
+    },
+    {
+      id: 'critical-dates',
+      width: '20%',
+      class: 'opaque',
+      accessor: (deal: IDeal) => getCriticalDateNextValue(deal),
+      render: ({ row: deal }) => (
+        <CriticalDate deal={deal} brandChecklists={brandChecklists} />
+      )
+    },
+    {
+      id: 'agent-name',
+      width: '10%',
+      class: 'opaque',
+      align: 'right' as TableCellProps['align'],
+      accessor: (deal: IDeal) => getPrimaryAgentName(deal, roles),
+      render: ({ row: deal }: { row: IDeal }) => {
+        return <AgentAvatars agent={getPrimaryAgent(deal, roles)} />
       }
-    ]
-  }, [roles, user, statuses])
+    }
+  ]
 
-  const data = useMemo(() => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
+
+    const closingDateRange = getClosingDateRange()
 
     const filterFn =
       props.activeFilter && Filters[props.activeFilter]
@@ -146,13 +152,18 @@ function AgentGrid(props: Props & WithRouterProps) {
         : Filters.all
 
     return Object.values(deals).filter(deal =>
-      filterFn(deal, statuses)
+      filterFn(deal, statuses, closingDateRange)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
 
+  useDealsListsLuckyMode(data, isFetchingDeals)
+
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
-      onClick: () => props.router.push(`/dashboard/deals/${deal.id}`)
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}`)
+        onDealOpened()
+      }
     }
   }
 

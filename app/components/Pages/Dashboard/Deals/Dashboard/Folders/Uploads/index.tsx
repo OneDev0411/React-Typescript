@@ -1,16 +1,15 @@
 import { useState, useMemo } from 'react'
-import { Grid, Box, Typography, Button } from '@material-ui/core'
 
+import { Grid, Box, Typography, Button } from '@material-ui/core'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import VirtualList from 'components/VirtualList'
 
-import UploadPlaceholder from './UploadPlaceholder'
 import UploadManager from '../../../UploadManager'
+import { useStyles } from '../Checklist/styles'
 
 import { File } from './File'
-
-import { useStyles } from '../Checklist/styles'
+import UploadPlaceholder from './UploadPlaceholder'
 
 interface Props {
   deal: IDeal

@@ -1,9 +1,8 @@
 import { batchActions } from 'redux-batched-actions'
 
-import { getOAuthAccounts } from '../../../models/o-auth-accounts/get-o-auth-accounts'
-
 import * as actionTypes from '../../../constants/contacts'
 import { OAuthProvider } from '../../../constants/contacts'
+import { getOAuthAccounts } from '../../../models/o-auth-accounts/get-o-auth-accounts'
 
 export function fetchOAuthAccounts(provider?: OAuthProvider) {
   if (!provider) {

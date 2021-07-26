@@ -1,22 +1,21 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
-import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
-import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
-import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
-
+import ArticleImageLeftIcon from 'assets/images/marketing/editor/blocks/article-image-left.png'
+import ArticleImageRightIcon from 'assets/images/marketing/editor/blocks/article-image-right.png'
+import ArticleImageTopIcon from 'assets/images/marketing/editor/blocks/article-image-top.png'
 import { Metadata } from 'components/ArticleDrawer/types'
 
-import registerBlock from '../../registerBlock'
 import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
+import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
 
-import ArticleTop from './templates/article-top.mjml'
 import ArticleLeft from './templates/article-left.mjml'
 import ArticleRight from './templates/article-right.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
+import ArticleTop from './templates/article-top.mjml'
 
 export const articleTopBlockName = 'rechat-article-image-top'
 export const articleLeftBlockName = 'rechat-article-image-left'

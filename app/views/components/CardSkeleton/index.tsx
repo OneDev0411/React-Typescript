@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react'
+
 import { Card, CardContent } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 

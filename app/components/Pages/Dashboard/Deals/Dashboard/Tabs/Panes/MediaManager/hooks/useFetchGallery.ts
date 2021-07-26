@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import useThunkReducer from 'react-hook-thunk-reducer'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { getMediaGallery } from 'models/media-manager'
+import { getMediaGallery } from 'models/Deal/media-manager'
 
+import { setGalleryItems } from '../context/actions'
 import { reducer } from '../context/reducers'
 import type { IMediaGallery } from '../types'
-import { setGalleryItems } from '../context/actions'
 
 export default function useFetchData(dealId: string) {
   let initialData: IMediaGallery = []

@@ -1,15 +1,16 @@
 import React from 'react'
+
+import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
-import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   addressTitle,
   getListingAddressObj,
   getStatusColorClass
 } from 'utils/listing'
 import { grey } from 'views/utils/colors'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,

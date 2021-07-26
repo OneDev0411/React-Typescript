@@ -1,8 +1,9 @@
 import React from 'react'
+
 import pluralize from 'pluralize'
 
-import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 import ListIcon from 'components/SvgIcons/List/ListIcon'
+import TagIcon from 'components/SvgIcons/Tag/TagIcon'
 
 import { IconContainer, RowContainer } from '../styled'
 

@@ -1,8 +1,9 @@
 import * as React from 'react'
+import { forwardRef } from 'react'
+
 import { createStyles, FormLabel, makeStyles, Theme } from '@material-ui/core'
 import { FormLabelProps } from '@material-ui/core/FormLabel'
 import classNames from 'classnames'
-import { forwardRef } from 'react'
 
 const useStyles = makeStyles(
   (theme: Theme) =>

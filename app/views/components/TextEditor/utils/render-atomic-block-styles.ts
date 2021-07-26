@@ -1,7 +1,8 @@
 import { AtomicBlockEntityData } from '../types'
+
 import { getAlignmentStyles } from './get-alignment-styles'
-import { stylesToString } from './styles-to-string'
 import { getSizeStyles } from './get-size-styles'
+import { stylesToString } from './styles-to-string'
 
 /**
  * Creates style string based on entity data created by plugins used for

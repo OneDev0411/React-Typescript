@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
 
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { connect } from 'react-redux'
 
 import { setTaskRequirement } from 'actions/deals/task/set-task-requirement'
 
@@ -35,7 +35,6 @@ function RequiredAction({ task, setTaskRequirement }: Props & DispatchProps) {
   )
 }
 
-export default connect<null, DispatchProps, Props>(
-  null,
-  { setTaskRequirement }
-)(RequiredAction)
+export default connect<null, DispatchProps, Props>(null, {
+  setTaskRequirement
+})(RequiredAction)

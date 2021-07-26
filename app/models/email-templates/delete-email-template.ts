@@ -7,8 +7,7 @@ export function deleteEmailTemplate(
   template: UUID
 ): SuperAgentRequest {
   try {
-    return new Fetch()
-      .delete(`/brands/${brand}/emails/templates/${template}`)
+    return new Fetch().delete(`/brands/${brand}/emails/templates/${template}`)
   } catch (error) {
     throw error
   }

@@ -1,54 +1,43 @@
-import React from 'react'
-
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-
-import { selectUserUnsafe } from 'selectors/user'
-
+import { InlineBadge } from 'components/InlineBadge'
 import { ACL } from 'constants/acl'
-import { selectNotificationNewCount } from 'reducers/notifications'
+import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
+import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
+import { IAppState } from 'reducers'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { InboxAction } from 'reducers/inbox/types'
-
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
-
-import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
-import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
-
-import Acl from 'views/components/Acl'
-
-import { ScrollableArea } from 'views/components/ScrollableArea'
-
-import { IAppState } from 'reducers'
-
-import { InlineBadge } from 'components/InlineBadge'
-
+import { selectNotificationNewCount } from 'reducers/notifications'
+import { selectShowingsTotalNotificationCount } from 'selectors/showings'
+import { selectUserUnsafe } from 'selectors/user'
 import { getActiveTeamSettings } from 'utils/user-teams'
+import Acl from 'views/components/Acl'
+import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Logo from './components/Logo'
-import { UserMenu } from './components/UserMenu'
-import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
-import SupportTrigger from './components/SupportTrigger'
 import PoweredBy from './components/PoweredBy'
-
-import { scrollableAreaShadowColor } from './variables'
-
+import SideNavLinkItem from './components/SideNavLinkItem'
+import SupportTrigger from './components/SupportTrigger'
+import { UserMenu } from './components/UserMenu'
 import {
   Sidenav,
   SidenavBlankLink,
   SideNavItem,
   SidenavListGroup
 } from './styled'
+import { scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
+const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
@@ -60,6 +49,10 @@ export function Menu() {
   )
   const dealsNotificationsNumber = useDealsNotificationsNumber()
   const chatRoomsNotificationsNumber = useChatRoomsNotificationsNumber()
+
+  const showingsTotalNotificationCount = useSelector(
+    selectShowingsTotalNotificationCount
+  )
 
   const dispatch = useDispatch<ThunkDispatch<any, any, InboxAction>>()
 
@@ -169,6 +162,12 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
+          <Acl access={listingsAccess}>
+            <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
+              Listings
+            </SideNavLinkItem>
+          </Acl>
+
           <Acl access={ACL.WEBSITES}>
             <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
               Websites
@@ -178,6 +177,17 @@ export function Menu() {
           <Acl access={[ACL.STORE]}>
             <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
               Store
+            </SideNavLinkItem>
+          </Acl>
+
+          <Acl access={ACL.SHOWINGS}>
+            <SideNavLinkItem to="/dashboard/showings">
+              <InlineBadge
+                badgeContent={showingsTotalNotificationCount}
+                color="primary"
+              >
+                Showings
+              </InlineBadge>
             </SideNavLinkItem>
           </Acl>
         </SidenavListGroup>

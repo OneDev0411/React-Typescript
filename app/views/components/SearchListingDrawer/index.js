@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+
 import {
   Button,
   Tooltip,
@@ -10,16 +9,18 @@ import {
   withStyles
 } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
+import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
 import { searchListings } from 'models/Deal/listing'
-import { getMediaGallery } from 'models/media-manager'
+import { getMediaGallery } from 'models/Deal/media-manager'
 
 import Listing from '../../../models/listings/listing'
-import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
-
 import SearchDrawer from '../SearchDrawer'
-import ListingItem from './ListingItem'
+
+import { attachDealDataToListing } from './helpers/attach-deal-to-listing'
 import getMockListing from './helpers/get-mock-listing'
+import ListingItem from './ListingItem'
 
 const styles = theme => ({
   alertAction: {

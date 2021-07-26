@@ -1,18 +1,15 @@
 import React from 'react'
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 
 require('intersection-observer')
-
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+import Flex from 'styled-flex-component'
 import _ from 'underscore'
 
-import Flex from 'styled-flex-component'
-
+import Form from './Form'
 import { Header } from './Header'
 import PdfList from './PdfList'
 import SelectedItems from './SelectedItems'
-import Form from './Form'
-
 import { Container, SectionCard } from './styled'
 
 class PdfSplitter extends React.Component {

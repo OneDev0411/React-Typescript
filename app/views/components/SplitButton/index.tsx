@@ -1,53 +1,42 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, ComponentType } from 'react'
+
 import {
   Button,
   ButtonGroup,
   ClickAwayListener,
-  createStyles,
   Grow,
-  makeStyles,
   Paper,
   Popper,
-  Theme,
   useTheme
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
-
 import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { ClassesProps } from 'utils/ts-utils'
 
-interface RenderMenuProps {
+import useStyles from './styles'
+
+export interface RenderMenuProps {
   closeMenu: (event?: React.MouseEvent<any>) => void
 }
 
-interface Props {
+interface Props extends ClassesProps<typeof useStyles> {
   color?: 'inherit' | 'primary' | 'secondary' | 'default'
   children: ReactNode
   disabled?: boolean
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-  renderMenu: (props: RenderMenuProps) => ReactNode
+  RenderMenu: ComponentType<RenderMenuProps>
   popperPlacement?: PopperPlacementType
   className?: string
   size?: 'small' | 'medium' | 'large'
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
   tourId?: string
+  disablePortal?: boolean
 }
 
-const styles = (theme: Theme) =>
-  createStyles({
-    mainButton: {
-      flex: 1
-    }
-  })
-const useStyles = makeStyles(styles, { name: 'SplitButton' })
-
-export default function SplitButton(
-  props: Props & ClassesProps<typeof styles>
-) {
+export default function SplitButton(props: Props) {
   const [isOpen, setIsOpen] = React.useState(false)
   const anchorRef = React.useRef<HTMLDivElement>(null)
   const theme = useTheme()
@@ -86,6 +75,7 @@ export default function SplitButton(
           aria-haspopup="true"
           onClick={handleToggle}
           size="small"
+          className={props.size === 'small' ? classes.smallArrow : undefined}
         >
           <SvgIcon path={mdiChevronDown} />
         </Button>
@@ -96,6 +86,7 @@ export default function SplitButton(
         style={{ zIndex: theme.zIndex.modal }}
         placement={props.popperPlacement}
         transition
+        disablePortal={props.disablePortal}
       >
         {({ TransitionProps, placement }) => (
           <Grow
@@ -105,11 +96,13 @@ export default function SplitButton(
                 placement === 'bottom' ? 'center top' : 'center bottom'
             }}
           >
-            <ClickAwayListener onClickAway={handleClose}>
-              <Paper id="menu-list-grow">
-                {props.renderMenu({ closeMenu: handleClose })}
-              </Paper>
-            </ClickAwayListener>
+            <div>
+              <ClickAwayListener onClickAway={handleClose}>
+                <Paper id="menu-list-grow">
+                  <props.RenderMenu closeMenu={handleClose} />
+                </Paper>
+              </ClickAwayListener>
+            </div>
           </Grow>
         )}
       </Popper>

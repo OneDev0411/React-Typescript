@@ -1,11 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
-
-import { Container } from '../styled'
 import { DEFAULT_OPTIONS } from '../helpers/default-options'
+import { Container } from '../styled'
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -30,9 +30,7 @@ export class DirectionMap extends React.Component {
 
     if (!window.google) {
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          config.google.api_key
-        }&callback=${id}`
+        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=${id}`
       )
     } else {
       this.initMap()

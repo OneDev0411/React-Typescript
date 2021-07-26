@@ -1,35 +1,31 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
+import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 
-import { Form } from 'react-final-form'
-
-import { addNotification as notify } from 'components/notification'
-
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-
-import { createContacts } from 'models/contacts/create-contacts'
-import { createRoles, updateRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
-
+import { createRoles, updateRole } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 import {
   ROLE_NAMES,
   convertRoleToContact,
   getLegalFullName,
   getContactChangedAttributes
 } from 'deals/utils/roles'
+import { createContacts } from 'models/contacts/create-contacts'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
 
-import { RoleForm } from './Role'
-import { OfficeForm } from './Office'
-
-import { TYPE_PERSON } from '../constants/role-types'
 import { LEGAL_PREFIXES } from '../constants/legal_prefixes'
-
-import { normalizeForm } from '../helpers/normalize-form'
+import { TYPE_PERSON } from '../constants/role-types'
+import { getCommissionAttributes } from '../helpers/get-commission-attributes'
 import getRequiredFields from '../helpers/get-required-fields'
 import getVisibleFields from '../helpers/get-visible-fields'
+import { normalizeForm } from '../helpers/normalize-form'
 import { getFormValidators } from '../validators'
-import { getCommissionAttributes } from '../helpers/get-commission-attributes'
+
+import { OfficeForm } from './Office'
+import { RoleForm } from './Role'
 
 const propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -37,13 +33,16 @@ const propTypes = {
   deal: PropTypes.object,
   checklist: PropTypes.object,
   form: PropTypes.object,
+  defaultRole: PropTypes.string,
   allowedRoles: PropTypes.array,
   isRoleRemovable: PropTypes.bool,
   isCommissionRequired: PropTypes.bool,
   showBrokerageFields: PropTypes.bool,
   compact: PropTypes.bool,
   onUpsertRole: PropTypes.func,
-  onDeleteRole: PropTypes.func
+  onDeleteRole: PropTypes.func,
+  showSaveContactButton: PropTypes.bool,
+  dealSide: PropTypes.string
 }
 
 const defaultProps = {
@@ -53,6 +52,7 @@ const defaultProps = {
   isCommissionRequired: true,
   showBrokerageFields: false,
   compact: false,
+  defaultRole: '',
   allowedRoles: [],
   onUpsertRole: () => null,
   onDeleteRole: () => null
@@ -123,7 +123,7 @@ export class DealRole extends React.Component {
    * preselect role, if there is only one allowed role to select
    */
   get PreselectRole() {
-    const { form } = this.props
+    const { form, defaultRole } = this.props
     const formRole = form && form.role
 
     if (formRole) {
@@ -133,7 +133,10 @@ export class DealRole extends React.Component {
     }
 
     const availableRoles = ROLE_NAMES.filter(name => this.isAllowedRole(name))
-    const preselectedRole = availableRoles.length > 0 && availableRoles[0]
+
+    const preselectedRole = availableRoles.some(name => name === defaultRole)
+      ? defaultRole
+      : availableRoles.length > 0 && availableRoles[0]
 
     return {
       role: preselectedRole || null

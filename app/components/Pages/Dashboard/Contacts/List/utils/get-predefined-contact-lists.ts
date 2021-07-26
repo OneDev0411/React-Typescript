@@ -1,5 +1,5 @@
-import { getDefaultList } from 'reducers/filter-segments'
 import { IAppState } from 'reducers'
+import { getDefaultList } from 'reducers/filter-segments'
 
 import {
   PARKED_CONTACTS_LIST_ID,

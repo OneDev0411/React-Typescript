@@ -3,7 +3,6 @@ import { ThunkDispatch } from 'redux-thunk'
 import { InboxAction } from 'reducers/inbox/types'
 
 import * as actionTypes from '../../constants/inbox'
-
 import { getUnreadEmailThreadsCount } from '../../models/email/get-unread-email-threads-count'
 
 export function fetchUnreadEmailThreadsCount() {

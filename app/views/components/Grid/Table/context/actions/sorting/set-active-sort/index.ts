@@ -1,5 +1,5 @@
-import { SORTING__SET_ACTIVE_SORT } from '../../../constants'
 import { ActiveSort } from '../../../../types'
+import { SORTING__SET_ACTIVE_SORT } from '../../../constants'
 
 export function setActiveSort(activeSort: ActiveSort) {
   return {

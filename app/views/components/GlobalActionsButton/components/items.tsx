@@ -8,24 +8,22 @@ import {
   mdiShoePrint
 } from '@mdi/js'
 
-import { SingleEmailComposeDrawer } from 'components/EmailCompose'
-
-import { goTo } from 'utils/go-to'
-
-import { EventDrawer } from 'components/EventDrawer'
 import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
-import { TourDrawer } from 'components/tour/TourDrawer'
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
+import { EventDrawer } from 'components/EventDrawer'
 import { DONE_STATUS } from 'components/EventDrawer/components/FutureEventDoneConfirmation'
 import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
+import { TourDrawer } from 'components/tour/TourDrawer'
+import { goTo } from 'utils/go-to'
 
 import {
   meetingRoomOutlined,
-  permContactCalendarOutlined
+  permContactCalendarOutlined,
+  showingIcon
 } from '../../SvgIcons/icons'
+import { Item } from '../types'
 
 import CreateOpenHouse from './OpenHouse'
-
-import { Item } from '../types'
 
 const items: Item[] = [
   {
@@ -91,6 +89,14 @@ const items: Item[] = [
     Icon: mdiShoePrint,
     render: props => {
       return <TourDrawer {...props} />
+    }
+  },
+  {
+    title: 'Showing',
+    type: 'showing',
+    Icon: showingIcon,
+    redirectTo: url => {
+      goTo(url)
     }
   }
 ]

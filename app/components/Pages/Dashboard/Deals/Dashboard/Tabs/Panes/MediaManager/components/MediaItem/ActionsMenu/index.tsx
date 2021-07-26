@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+
 import {
   Tooltip,
   Button,
@@ -10,22 +11,16 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
-import { downloadMedias } from 'models/media-manager'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { deleteMedias } from 'models/media-manager'
-
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import DownloadModal from '../../DownloadModal'
-
-import { useStyles } from '../../../styles'
-
-import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
-import type { IMediaItem } from '../../../types'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { downloadMedias } from 'models/Deal/media-manager'
+import { deleteMedias } from 'models/Deal/media-manager'
 
 import { deleteMedia as deleteMediaAction } from '../../../context/actions'
+import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
+import { useStyles } from '../../../styles'
+import type { IMediaItem } from '../../../types'
+import DownloadModal from '../../DownloadModal'
 
 interface Props {
   media: IMediaItem

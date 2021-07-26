@@ -3,13 +3,17 @@ declare type IDealType = 'Selling' | 'Buying'
 declare type IDealVisibility = 'draft' | 'visible'
 declare type IDealEnderType = 'AgentDoubleEnder' | 'OfficeDoubleEnder' | null
 declare type IDealChecklistType = 'Selling' | 'Buying' | 'Offer'
-declare interface IDeal extends IModel<'deal'> {
+
+type IDealAssociations = 'roles' | 'listing'
+
+declare interface IDeal<A extends IDealAssociations = ''>
+  extends IModel<'deal'> {
   title: string
   deal_type: 'Selling' | 'Buying'
   checklists: IDealChecklist[]
   tasks: IDealTask[]
-  roles: IDealRole[]
-  listing: UUID
+  roles: A extends 'roles' ? IDealRole[] : UUID[]
+  listing: A extends 'listing' ? IListing : UUID
   files: IFile[] | null
   inboxes: string[] | null
   attention_requests: number
@@ -21,7 +25,7 @@ declare interface IDeal extends IModel<'deal'> {
   brand: IBrand
   property_type: IDealPropertyType
   faired_at: number
-  context: object
+  context: Record<string, IDealContext>
   new_notifications: IChatMessage[] | null
 }
 
@@ -60,7 +64,7 @@ declare interface IDealRole {
   legal_prefix: string
   mlsid: string | null
   phone_number: string
-  role: string
+  role: IDealRoleType
   role_type: 'Person' | 'Company'
   type: string
   office_phone?: string | null

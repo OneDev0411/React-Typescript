@@ -1,8 +1,8 @@
 import React from 'react'
-import Cookies from 'universal-cookie'
 
-import { Alert } from '@material-ui/lab'
 import { Box } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
+import Cookies from 'universal-cookie'
 
 export default class Info extends React.Component {
   constructor(props) {

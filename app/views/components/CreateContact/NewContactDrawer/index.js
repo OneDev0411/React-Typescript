@@ -1,36 +1,36 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import arrayMutators from 'final-form-arrays'
-import { Form } from 'react-final-form'
-import { browserHistory } from 'react-router'
+
 import { Box, Button } from '@material-ui/core'
+import arrayMutators from 'final-form-arrays'
+import PropTypes from 'prop-types'
+import { Form } from 'react-final-form'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
+import { TextField } from 'components/final-form-fields'
 import { addNotification as notify } from 'components/notification'
-
+import Drawer from 'components/OverlayDrawer'
 import { createContacts } from 'models/contacts/create-contacts'
 import { defaultQuery } from 'models/contacts/helpers/default-query'
-
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
-
-import Drawer from 'components/OverlayDrawer'
-import { TextField } from 'components/final-form-fields'
 
 import Alert from '../../../../components/Pages/Dashboard/Partials/Alert'
 
-import { Tags } from './Tags'
-import { Owner } from './Owner'
 import { Emails } from './Emails'
-import { Phones } from './Phones'
 import { preSaveFormat, submitValidate, getDefaultOptions } from './helpers'
 import { generateInitialValues } from './helpers/generate-initial-values'
+import { Owner } from './Owner'
+import { Phones } from './Phones'
+import { Tags } from './Tags'
 
 const propTypes = {
+  isOpen: PropTypes.bool,
   section: PropTypes.string,
   saveCallback: PropTypes.func,
   saveAndAddNewCallback: PropTypes.func,
   user: PropTypes.shape().isRequired,
-  showAddAnother: PropTypes.bool
+  showAddAnother: PropTypes.bool,
+  onClose: PropTypes.func
 }
 const defaultProps = {
   section: '',

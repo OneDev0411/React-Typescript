@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
@@ -106,7 +107,6 @@ const FieldLabel = ({
 
   return (
     <BasicDropdown
-      isBlock
       items={options}
       buttonStyle={buttonStyle}
       onChange={handleChangeValue}

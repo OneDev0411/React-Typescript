@@ -1,20 +1,19 @@
 import React from 'react'
+
+import { mdiChevronDown } from '@mdi/js'
+import uniqBy from 'lodash/uniqBy'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import uniqBy from 'lodash/uniqBy'
-import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
-
 import { Avatar } from '../../Avatar'
-import { TeamMember } from '../TeamMember'
 import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
-
 import { getMembers } from '../helpers'
+import { TeamMember } from '../TeamMember'
 
 import { ButtonText } from './styled'
 

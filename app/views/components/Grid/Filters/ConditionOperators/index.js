@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { useTheme } from '@material-ui/core/styles'
 
 import { BasicDropdown } from 'components/BasicDropdown'
@@ -21,7 +22,7 @@ export function ConditionOperators(props) {
 
   return (
     <BasicDropdown
-      noBorder
+      buttonVariant="text"
       items={MENU_OPTIONS}
       onChange={selectedItem => props.onChange(selectedItem)}
       menuStyle={{ width: '100%', overflow: 'hidden' }}

@@ -1,4 +1,5 @@
 import React, { CSSProperties, ReactNode, useRef } from 'react'
+
 import cn from 'classnames'
 
 import { useScrollDetector } from '../../../hooks/use-scroll-detector'
@@ -23,6 +24,7 @@ interface Props extends ScrollableWrapperProps {
   offset?: number
   debounce?: number
   children: ReactNode
+  hasInvisibleScrollbar?: boolean
   hasThinnerScrollbar?: boolean
 }
 
@@ -34,6 +36,7 @@ export function ScrollableArea({
   shadowColor = 'grey',
   debounce = 0,
   children,
+  hasInvisibleScrollbar = false,
   hasThinnerScrollbar = false
 }: Props) {
   const contentRef = useRef<HTMLDivElement>(null)
@@ -46,6 +49,7 @@ export function ScrollableArea({
 
   const classes = cn({
     'u-scrollbar--thinner': hasThinnerScrollbar,
+    'u-scrollbar--invisible': hasInvisibleScrollbar,
     'has-bottom-shadow': !reachedEnd,
     'has-top-shadow': !reachedStart
   })

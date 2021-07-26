@@ -1,11 +1,10 @@
+import { EditorState } from 'draft-js'
 import { DraftJsPlugin, PluginFunctions } from 'draft-js-plugins-editor'
 
-import { EditorState } from 'draft-js'
-
+import { insertTextOutsideExpressions } from './insert-text-outside-expressions'
+import { keyBindingFn } from './key-binding-fn'
 import { templateExpressionStrategy } from './template-expression-strategy'
 import { TemplateExpression } from './TemplateExpression'
-import { keyBindingFn } from './key-binding-fn'
-import { insertTextOutsideExpressions } from './insert-text-outside-expressions'
 
 export default function createTemplateExpressionsPlugin(): DraftJsPlugin {
   const store: { fns?: PluginFunctions } = {}

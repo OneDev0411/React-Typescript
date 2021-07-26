@@ -1,16 +1,14 @@
 import _ from 'underscore'
 
-import {
-  selectDefinitionByName,
-  selectDefinition
-} from 'reducers/contacts/attributeDefs'
-
 import { LEGAL_PREFIXES } from 'components/DealRole/constants/legal_prefixes'
-
 import {
   TYPE_COMPANY,
   TYPE_PERSON
 } from 'components/DealRole/constants/role-types'
+import {
+  selectDefinitionByName,
+  selectDefinition
+} from 'reducers/contacts/attributeDefs'
 
 export const ROLE_NAMES = [
   'BuyerAgent',
@@ -122,7 +120,11 @@ export function convertContactToRole(contact) {
     email: contact.email,
     phone_number: contact.phone_number,
     company: contact.company,
-    company_title: contact.company
+    company_title: contact.company,
+    current_address:
+      Array.isArray(contact.address) && contact.address.length > 0
+        ? contact.address[0]
+        : null
   }
 }
 

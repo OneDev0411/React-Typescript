@@ -1,14 +1,15 @@
 import React from 'react'
+
+import { useTheme } from '@material-ui/core/styles'
+import { mdiPlusCircleOutline, mdiMinusCircleOutline } from '@mdi/js'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import Flex from 'styled-flex-component'
-import { mdiPlusCircleOutline, mdiMinusCircleOutline } from '@mdi/js'
-import { useTheme } from '@material-ui/core/styles'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Dropdown } from 'components/Dropdown'
 import IconButton from 'components/Button/IconButton'
+import { Dropdown } from 'components/Dropdown'
 import { Select } from 'components/final-form-fields/Select'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TextField } from './Input'
 

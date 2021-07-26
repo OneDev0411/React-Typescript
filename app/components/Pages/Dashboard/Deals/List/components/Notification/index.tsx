@@ -1,5 +1,5 @@
-import React from 'react'
 import { makeStyles, Theme } from '@material-ui/core'
+import classNames from 'classnames'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -13,7 +13,7 @@ const useStyles = makeStyles(
       height: theme.spacing(2.5),
       top: theme.spacing(1) * -1,
       right: theme.spacing(1) * -1,
-      background: theme.palette.error.light,
+      background: theme.palette.error.main,
       color: theme.palette.common.white,
       borderRadius: '100%',
       border: `2px solid ${theme.palette.common.white}`,
@@ -26,11 +26,12 @@ const useStyles = makeStyles(
 )
 
 interface Props {
+  className?: string
   count: number
 }
 
-export function Notification(props: Props) {
+export function Notification({ className, count }: Props) {
   const classes = useStyles()
 
-  return <div className={classes.root}>{props.count}</div>
+  return <div className={classNames(classes.root, className)}>{count}</div>
 }

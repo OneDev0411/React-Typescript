@@ -34,7 +34,6 @@
 @import 'components/radio-button';
 @import 'components/react-avatar';
 @import 'components/modules/alert';
-@import '../../node_modules/simplebar/dist/simplebar.css';
 
 // Pages
 @import 'components/pages/oops';
@@ -62,3 +61,6 @@
 // Vendor
 @import 'vendor/react-day-picker/style.scss';
 @import 'vendor/react-select/index.scss';
+
+// Swiper
+@import 'vendor/swiper/styles.scss';

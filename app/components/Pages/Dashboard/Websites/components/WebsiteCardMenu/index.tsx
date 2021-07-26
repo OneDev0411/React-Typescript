@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+
 import { Button, Menu, MenuItem } from '@material-ui/core'
 
-import { useIconStyles } from 'views/../styles/use-icon-styles'
-
 import MoreVertIcon from 'components/SvgIcons/MoreVert/IconMoreVert'
+import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 import useStyles from './styles'
 

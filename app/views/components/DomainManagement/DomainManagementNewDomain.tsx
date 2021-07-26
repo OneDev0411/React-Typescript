@@ -1,26 +1,21 @@
 import React, { useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
 import { Box, Button, useTheme } from '@material-ui/core'
 import { ArrowBack } from '@material-ui/icons'
+import { useDispatch } from 'react-redux'
 
 import { addNotification as notify } from 'components/notification'
-
-import useAsync from 'hooks/use-async'
 import { QuestionSection, QuestionWizard } from 'components/QuestionWizard'
-
 import { IWizardState } from 'components/QuestionWizard/context'
-
+import useAsync from 'hooks/use-async'
+import purchaseDomain from 'models/domains/purchase-domain'
 import addHostnameToWebsite from 'models/website/add-hostname-to-website'
 
-import purchaseDomain from 'models/domains/purchase-domain'
-
-import { DomainStatusType } from './DomainStatus'
-import DomainName from './DomainName'
-import DomainSearch from './DomainSearch'
 import DomainAgreement from './DomainAgreement'
+import DomainName from './DomainName'
 import DomainPayment from './DomainPayment'
+import DomainSearch from './DomainSearch'
+import { DomainStatusType } from './DomainStatus'
 
 export interface DomainManagementNewDomainProps {
   className: string

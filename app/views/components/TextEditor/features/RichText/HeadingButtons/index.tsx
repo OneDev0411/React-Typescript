@@ -1,14 +1,14 @@
 import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
-
 import { mdiFormatSize } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { BasicDropdown } from '../../../../BasicDropdown/index'
-import { TextButton } from './TextButton'
 import { ToolbarIconButton } from '../../../components/ToolbarIconButton'
+
+import { TextButton } from './TextButton'
 
 interface HeadingButtonOption {
   title: string

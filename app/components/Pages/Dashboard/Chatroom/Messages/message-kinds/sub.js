@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Message from '../message-types'
 import DeliveryReport from '../components/delivery-report'
 import MessageDate from '../components/message-date'
+import Message from '../message-types'
 
 export default props => (
   <div className="message-subitem">

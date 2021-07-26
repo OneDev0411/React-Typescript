@@ -1,7 +1,6 @@
-import preSearchFormat from '../helpers/pre-search-format'
-
 import Fetch from '../../../services/fetch'
 import { associations as defaultAssociations } from '../helpers/default-query'
+import preSearchFormat from '../helpers/pre-search-format'
 
 // TODO: refactor contacts models
 
@@ -15,7 +14,8 @@ export async function searchContacts(
   },
   users?: UUID[],
   flows?: UUID[],
-  crm_tasks?: UUID[]
+  crm_tasks?: UUID[],
+  showings?: UUID[]
 ): Promise<ApiResponseBody<IContact[]>> {
   try {
     const [payload, query] = preSearchFormat({
@@ -24,7 +24,8 @@ export async function searchContacts(
       flows,
       text,
       users,
-      queryParams
+      queryParams,
+      showings
     })
 
     const response = await new Fetch()

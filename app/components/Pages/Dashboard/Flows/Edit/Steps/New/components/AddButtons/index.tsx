@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box, Typography, makeStyles, Theme } from '@material-ui/core'
 
+import { Box, Typography, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiCalendarMonthOutline,
   mdiNewspaperVariantOutline,

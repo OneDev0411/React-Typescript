@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { makeStyles, Theme } from '@material-ui/core'
 
 import { SharedMediaProps } from './types'

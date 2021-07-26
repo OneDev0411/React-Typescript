@@ -85,8 +85,8 @@ export function getFormattedReportWithNeededPeriods(
     }
   )
 
-  const metricsWithNewPeriods: NeighborhoodReportMetric[] = formattedMetrics.map(
-    metric => {
+  const metricsWithNewPeriods: NeighborhoodReportMetric[] =
+    formattedMetrics.map(metric => {
       const pastYearMetricData = getAggregatedDataOfPastMonths(
         metric,
         12,
@@ -119,8 +119,7 @@ export function getFormattedReportWithNeededPeriods(
         ...metric,
         data
       }
-    }
-  )
+    })
 
   return {
     ...report,

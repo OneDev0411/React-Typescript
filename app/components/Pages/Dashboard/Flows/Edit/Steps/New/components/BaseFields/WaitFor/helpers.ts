@@ -1,5 +1,4 @@
 import { RawWaitFor } from '../../../types'
-import { defaultWaitForValue } from './Fields'
 
 export const convertToServerInput = ({
   value,
@@ -17,7 +16,11 @@ export const convertToWebInput = (
   const flattenValue = Object.entries(value)[0]
 
   if (!flattenValue) {
-    return defaultWaitForValue
+    return {
+      value: 0,
+      unit: 'days',
+      triggerAt: 'after'
+    }
   }
 
   const number = flattenValue[1] || 0

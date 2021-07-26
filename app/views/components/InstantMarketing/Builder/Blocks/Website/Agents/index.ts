@@ -1,23 +1,21 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
+import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
-import DualIcon from 'assets/images/marketing/editor/blocks/dual.png'
-
 import { Agent } from 'components/TeamAgents/types'
-
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
-import registerBlock from '../../registerBlock'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
-
-import { baseView, isComponent } from '../utils'
-import { handleBlockDragStopEvent } from '../../utils'
-import AgentLeft from './agent-left.njk'
-import AgentGrid from './agent-grid.njk'
-import { TemplateBlockOptions } from '../../types'
+import registerBlock from '../../registerBlock'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+import { baseView, isComponent } from '../utils'
+
+import AgentGrid from './agent-grid.njk'
+import AgentLeft from './agent-left.njk'
 
 const typeAgentGroup = 'agent-group'
 const typeAgentList = 'agent-list'
@@ -97,7 +95,7 @@ export default function registerAgentBlocks(
     editor,
     {
       label: 'Grid',
-      icon: DualIcon,
+      icon: AgentGridIcon,
       category: AGENTS_BLOCK_CATEGORY,
       blockName: agentGridBlockName,
       template: agentBlocks[agentGridBlockName]

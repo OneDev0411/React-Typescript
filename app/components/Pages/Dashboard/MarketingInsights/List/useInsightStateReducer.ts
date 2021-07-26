@@ -1,5 +1,5 @@
-import { InsightAction, InsightActionType, InsightState } from './types'
 import { filterInsightList } from './helpers'
+import { InsightAction, InsightActionType, InsightState } from './types'
 
 export const initialState: InsightState = {
   isLoading: false,

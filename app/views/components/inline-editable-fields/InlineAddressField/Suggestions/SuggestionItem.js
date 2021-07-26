@@ -1,4 +1,5 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import { Item } from './styled'
@@ -9,6 +10,10 @@ SuggestionItem.propTypes = {
 }
 
 export function SuggestionItem({ item, onClick }) {
+  const matched = item.matched_substrings[item.matched_substrings.length - 1]
+  const length = matched?.length || 0
+  const offset = matched?.offset || 0
+
   return (
     <Item onClick={onClick}>
       <span className="item__query">
@@ -20,8 +25,7 @@ export function SuggestionItem({ item, onClick }) {
             .join(' ')}
         </span>
         {item.structured_formatting.main_text.substr(
-          item.matched_substrings[item.matched_substrings.length - 1].offset +
-            item.matched_substrings[item.matched_substrings.length - 1].length,
+          length + offset,
           item.structured_formatting.main_text.length - 1
         )}
       </span>

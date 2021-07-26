@@ -1,17 +1,12 @@
 import React, { useContext, useState } from 'react'
+
 import { Typography, Box, Button, Checkbox } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { deleteMedias, downloadMedias } from 'models/media-manager'
-
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DangerButton } from 'components/Button/DangerButton'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { deleteMedias, downloadMedias } from 'models/Deal/media-manager'
 
-import DownloadModal from '../DownloadModal'
-
-import { useStyles } from '../../styles'
-import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import type { IMediaGallery } from '../../types'
 import {
   toggleGallerySelection,
   deleteMedias as deleteMediasAction
@@ -21,6 +16,10 @@ import {
   getSelectedMediaIds,
   getSelectableMedia
 } from '../../context/helpers/selectors'
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
+import { useStyles } from '../../styles'
+import type { IMediaGallery } from '../../types'
+import DownloadModal from '../DownloadModal'
 
 interface Props {
   mediaGallery: IMediaGallery

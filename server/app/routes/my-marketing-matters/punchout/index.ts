@@ -1,14 +1,12 @@
 import path from 'path'
 
 import axios from 'axios'
-
 import { Request, Response, NextFunction } from 'express'
 import nunjucks from 'nunjucks'
 import xml2js from 'xml2js'
 
-import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
-
+import { getParsedHeaders } from '../../../utils/parse-headers'
 import {
   API_URL,
   DUNS,
@@ -158,9 +156,8 @@ export default async (req: Request, res: Response, next: NextFunction) => {
 
     res.json({
       response: {
-        url:
-          parsedResponse.cXML.Response[0].PunchOutSetupResponse[0].StartPage[0]
-            .URL[0]
+        url: parsedResponse.cXML.Response[0].PunchOutSetupResponse[0]
+          .StartPage[0].URL[0]
       }
     })
   } catch (e) {

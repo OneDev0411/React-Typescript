@@ -1,11 +1,12 @@
+/* eslint-disable max-classes-per-file */
 import React from 'react'
+
+import { mdiAttachment } from '@mdi/js'
 import moment from 'moment'
 import Lightbox from 'react-images'
-import { mdiAttachment } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { truncateTextFromMiddle } from 'utils/truncate-text-from-middle'
 
 export default ({ comment, attachments, openFilesInNewTab }) => (

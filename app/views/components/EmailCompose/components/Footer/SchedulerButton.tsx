@@ -1,6 +1,6 @@
 import React from 'react'
-import { Tooltip } from '@material-ui/core'
 
+import { Tooltip } from '@material-ui/core'
 import { mdiClockOutline } from '@mdi/js'
 
 import IconButton from 'components/Button/IconButton'

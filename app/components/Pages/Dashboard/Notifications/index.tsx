@@ -1,31 +1,28 @@
 import React, { useState } from 'react'
+
+import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter, WithRouterProps } from 'react-router'
-import { Helmet } from 'react-helmet'
 
+import { markNotificationAsSeen } from 'actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
-
+import { IAppState } from 'reducers/index'
 import { selectNotificationNewCount } from 'reducers/notifications'
-
 import {
   selectNotifications,
   selectNotificationIsFetching
 } from 'reducers/notifications'
-import { IAppState } from 'reducers/index'
-import { markNotificationAsSeen } from 'actions/notifications'
-
 import { selectUser } from 'selectors/user'
 
-import List from './List'
-import EmptyState from './EmptyState'
-
-import Header from './Header'
 import { CrmEvents } from './CrmEvents'
+import EmptyState from './EmptyState'
+import Header from './Header'
+import List from './List'
 
 function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
-  const user = useSelector((store: IAppState) => selectUser(store))
+  const user = useSelector(selectUser)
   const isFetching = useSelector((store: IAppState) =>
     selectNotificationIsFetching(store.globalNotifications)
   )

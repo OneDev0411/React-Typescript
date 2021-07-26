@@ -1,7 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { mdiCheck } from '@mdi/js'
+import styled from 'styled-components'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

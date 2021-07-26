@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Dialog,
   DialogContent,
@@ -15,8 +16,8 @@ import {
 } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TemplateVariable, TemplateVariableType } from '../types'
 

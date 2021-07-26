@@ -1,7 +1,8 @@
 import React, { ComponentProps } from 'react'
 
-import { BulkEmailComposeForm } from './BulkEmailComposeForm'
 import OverlayDrawer from '../OverlayDrawer'
+
+import { BulkEmailComposeForm } from './BulkEmailComposeForm'
 
 interface Props extends ComponentProps<typeof BulkEmailComposeForm> {
   isOpen: boolean

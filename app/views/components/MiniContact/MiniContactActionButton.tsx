@@ -1,12 +1,11 @@
-import React from 'react'
-import { mdiCalendarOutline } from '@mdi/js'
 import { makeStyles, Theme } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import { mdiCalendarOutline } from '@mdi/js'
 
-import TextIconButton from 'components/Button/TextIconButton'
 import ActionButton from 'components/Button/ActionButton'
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ActionSettingsType,
@@ -65,20 +64,23 @@ function MiniContactActionButton(props: MiniContactActionButtonType) {
     }
 
     return (
-      // @ts-ignore
-      <TextIconButton
-        appearance="outline"
-        iconLeft={() => (
+      <Button
+        startIcon={
           <SvgIcon
             path={mdiCalendarOutline}
             size={muiIconSizes.small}
             className={classes.icon}
           />
-        )}
-        onClick={() => props.setActionSettings(actionSettings)}
+        }
+        onClick={() => {
+          props.setActionSettings(actionSettings)
+        }}
+        variant="outlined"
+        color="secondary"
         size="small"
-        text="Add Event"
-      />
+      >
+        Add Event
+      </Button>
     )
   }
 

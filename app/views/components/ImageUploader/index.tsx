@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Dialog,
   DialogTitle,
@@ -9,8 +10,8 @@ import {
   Divider,
   Button
 } from '@material-ui/core'
-import { useDropzone, DropzoneOptions } from 'dropzone'
 import { makeStyles } from '@material-ui/styles'
+import { useDropzone, DropzoneOptions } from 'dropzone'
 
 import { EditorDialog } from 'components/ImageEditor'
 

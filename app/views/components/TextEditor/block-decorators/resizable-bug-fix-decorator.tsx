@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { wrapDisplayName } from 'recompose'
 
 import { useRerenderOnChange } from 'hooks/use-rerender-on-change'

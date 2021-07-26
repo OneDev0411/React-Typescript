@@ -12,11 +12,12 @@ const data = (state = {}, action) => {
         }
       }
     case actionsType.FETCH_WIDGET_LISTING_SUCCESS: {
-      let currentListing = Object.assign({}, state[action.params.type], {
+      let currentListing = {
+        ...state[action.params.type],
         isFetching: false,
         errorMessage: undefined,
         listingsInfo: action.listingResponse.info
-      })
+      }
 
       if (currentListing.listings) {
         currentListing.listings = currentListing.listings.concat(

@@ -3,6 +3,8 @@ import { createSelector } from 'reselect'
 import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 
+import { selectActiveTeamRolesUnsafe } from './team'
+
 /**
  * Returns the entire user info from the redux store.
  * This selector returns null if the user did not signed in before so
@@ -19,7 +21,7 @@ export const selectUserUnsafe = (state: IAppState) => state.user
  * @param state The app state
  * @returns The user state
  */
-export function selectUser(state: IAppState) {
+export function selectUser(state: IAppState): IUser {
   const user = selectUserUnsafe(state)!
 
   // if (!user) {
@@ -51,9 +53,6 @@ export const selectUserFormattedPhoneNumber = createSelector(
   }
 )
 
-export const selectUserDisplayName = (state: IAppState) =>
-  selectUser(state)?.display_name
-
 /**
  * Returns the email signature for the current user
  * @param state The app state
@@ -75,3 +74,67 @@ export const selectUserIsSignedIn = (state: IAppState) =>
  * @returns The current user id
  */
 export const selectUserId = (state: IAppState) => selectUser(state).id
+
+/**
+ * Returns the user first name
+ * @param state The app state
+ * @returns The current user first name
+ */
+export const selectUserFirstName = (state: IAppState): Nullable<string> =>
+  selectUser(state).first_name
+
+/**
+ * Returns the user display name
+ * @param state The app state
+ * @returns The current user display name
+ */
+export const selectUserDisplayName = (state: IAppState): Nullable<string> =>
+  selectUser(state).display_name
+
+/**
+ * Returns the user email
+ * @param state The app state
+ * @returns The current user email
+ */
+export const selectUserEmail = (state: IAppState): string =>
+  selectUser(state).email
+
+/**
+ * Returns the user type
+ * @param state The app state
+ * @returns The current user type
+ */
+export const selectUserType = (state: IAppState): TUserType =>
+  selectUser(state).user_type
+
+/**
+ * Returns the user created at
+ * @param state The app state
+ * @returns The current user created at
+ */
+export const selectUserCreatedAt = (state: IAppState): number =>
+  selectUser(state).created_at
+
+/**
+ * Returns the user timezone
+ * @param state The app state
+ * @returns The current user timezone
+ */
+export const selectUserTimezone = (state: IAppState) =>
+  selectUser(state).timezone
+
+/**
+ * Returns the list of user's unique access list
+ * @param state The app state
+ * @returns current user access list
+ */
+export const selectUserAccessList = createSelector(
+  selectActiveTeamRolesUnsafe,
+  activeRoles => {
+    if (!activeRoles) {
+      return []
+    }
+
+    return [...new Set(activeRoles.flatMap(role => role.acl))]
+  }
+)

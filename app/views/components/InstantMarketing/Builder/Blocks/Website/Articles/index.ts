@@ -1,24 +1,22 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
+import ArticleLeftIcon from 'assets/images/marketing/editor/blocks/article-image-left.png'
+import ArticleRightIcon from 'assets/images/marketing/editor/blocks/article-image-right.png'
+import ArticleTopIcon from 'assets/images/marketing/editor/blocks/article-image-top.png'
 import { Metadata } from 'components/ArticleDrawer/types'
 
-import ArticleTopIcon from 'assets/images/marketing/editor/blocks/image-top.png'
-import ArticleLeftIcon from 'assets/images/marketing/editor/blocks/image-left.png'
-import ArticleRightIcon from 'assets/images/marketing/editor/blocks/image-right.png'
-
-import registerBlock from '../../registerBlock'
 import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
-
-import { baseView, isComponent } from '../utils'
+import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
+import { baseView, isComponent } from '../utils'
 
-import ArticleTop from './article-top.njk'
 import ArticleLeft from './article-left.njk'
 import ArticleRight from './article-right.njk'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
+import ArticleTop from './article-top.njk'
 
 const typeArticle = 'article'
 

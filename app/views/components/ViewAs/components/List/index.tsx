@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import isEqual from 'lodash/isEqual'
-import { useDispatch } from 'react-redux'
+
 import {
   Box,
   Button,
@@ -10,9 +9,10 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import isEqual from 'lodash/isEqual'
+import { useDispatch } from 'react-redux'
 
 import { setViewAsFilter } from '../../../../../store_actions/user/set-view-as-filter'
-
 import { MemberItem } from '../Item'
 
 const useStyles = makeStyles(
@@ -46,27 +46,43 @@ export const MemberList = ({
 }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const membersId: string[] = teamMembers.map(member => member.id)
+  const membersIds: string[] = teamMembers.map(member => member.id)
+  const [isAllSelected, setIsAllSelected] = useState<boolean>(
+    selectedMembers.length === membersIds.length
+  )
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const handleSelectMember = (id: UUID) => {
     if (selectedMembers.includes(id)) {
+      setIsAllSelected(false)
       onChangeSelectedMembers(selectedMembers.filter(member => member !== id))
 
       return
+    }
+
+    if (selectedMembers.length + 1 === teamMembers.length) {
+      setIsAllSelected(true)
     }
 
     onChangeSelectedMembers([...selectedMembers, id])
   }
 
   const handleSelectAllMembers = () => {
-    if (selectedMembers.length === membersId.length) {
-      onChangeSelectedMembers([])
+    if (isAllSelected) {
+      if (selectedMembers.length >= 1) {
+        onChangeSelectedMembers(membersIds)
+      }
+
+      if (selectedMembers.length === membersIds.length) {
+        onChangeSelectedMembers([])
+        setIsAllSelected(false)
+      }
 
       return
     }
 
-    onChangeSelectedMembers(membersId)
+    setIsAllSelected(true)
+    onChangeSelectedMembers(membersIds)
   }
 
   const handleApplyChanges = async () => {
@@ -77,9 +93,10 @@ export const MemberList = ({
       return
     }
 
-    setIsSubmitting(true)
+    const payload = isAllSelected ? null : selectedMembers
 
-    await dispatch(setViewAsFilter(user, selectedMembers))
+    setIsSubmitting(true)
+    await dispatch(setViewAsFilter(user, payload))
 
     window.location.reload()
   }
@@ -92,7 +109,7 @@ export const MemberList = ({
           title="Everyone on team"
           disabled={isSubmitting || disabled}
           onChange={handleSelectAllMembers}
-          checked={selectedMembers.length === teamMembers.length}
+          checked={isAllSelected}
         />
       )}
       {teamMembers.map((member, index) => {
@@ -106,7 +123,7 @@ export const MemberList = ({
             key={memberId}
             title={title}
             disabled={isSubmitting || disabled}
-            checked={selectedMembers.includes(memberId)}
+            checked={isAllSelected || selectedMembers.includes(memberId)}
             onChange={() => handleSelectMember(memberId)}
           />
         )

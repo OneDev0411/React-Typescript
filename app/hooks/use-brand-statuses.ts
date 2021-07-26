@@ -1,6 +1,6 @@
-import { uniq } from 'lodash'
-
 import { useState } from 'react'
+
+import { uniq } from 'lodash'
 import { useEffectOnce } from 'react-use'
 
 import { getBrandChecklists } from 'models/BrandConsole/Checklists'

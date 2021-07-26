@@ -1,21 +1,18 @@
 import React, { memo, useEffect } from 'react'
 
+import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { RouteComponentProps } from 'react-router'
-
 import PageLayout from 'components/GlobalPageLayout'
-
 import { goTo } from 'utils/go-to'
 
-import WebsiteTabs, { WebsiteTabsProps } from '../../components/WebsiteTabs'
-
 import WebsiteList from '../../components/WebsiteList'
+import WebsiteTabs, { WebsiteTabsProps } from '../../components/WebsiteTabs'
 import WebsiteTemplates from '../../components/WebsiteTemplates'
 import { websiteTabs } from '../../constants'
 import useWebsiteTemplates from '../../hooks/use-website-templates'
 
-type WebsiteProps = RouteComponentProps<{ type?: WebsiteTabsProps['type'] }, {}>
+type WebsiteProps = WithRouterProps<{ type?: WebsiteTabsProps['type'] }, {}>
 
 function Website({ params }: WebsiteProps) {
   useTitle('Websites | Rechat')

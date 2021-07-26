@@ -2,8 +2,8 @@ import React, { ComponentType } from 'react'
 
 import { ACL } from 'constants/acl'
 
-import { useAclRedirect } from './use-acl'
 import { Access } from './types'
+import { useAclRedirect } from './use-acl'
 
 function withAcl<T = {}>(
   Component: ComponentType<T>,
@@ -34,5 +34,6 @@ export default Object.assign(withAcl, {
   marketing: generateWithAcl([ACL.MARKETING]),
   agentNetwork: generateWithAcl([ACL.AGENT_NETWORK]),
   store: generateWithAcl([ACL.STORE]),
-  websites: generateWithAcl([ACL.WEBSITES])
+  websites: generateWithAcl([ACL.WEBSITES]),
+  showings: generateWithAcl([ACL.SHOWINGS])
 })

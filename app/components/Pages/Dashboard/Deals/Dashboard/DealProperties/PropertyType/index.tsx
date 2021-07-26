@@ -1,18 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
-
 import { mdiChevronDown } from '@mdi/js'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updatePropertyType } from 'actions/deals'
-
 import { BaseDropdown } from 'components/BaseDropdown'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
-
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ItemValue } from '../../Factsheet/styled'
 

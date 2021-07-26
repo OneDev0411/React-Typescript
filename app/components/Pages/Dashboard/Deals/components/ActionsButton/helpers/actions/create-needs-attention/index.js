@@ -1,7 +1,7 @@
 import { confirmation } from 'actions/confirmation'
 
-import { notifyOffice } from '../notify-office'
 import store from '../../../../../../../../../stores'
+import { notifyOffice } from '../notify-office'
 
 export async function createNeedsAttention(props) {
   store.dispatch(

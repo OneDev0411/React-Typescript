@@ -1,18 +1,15 @@
-import PropTypes from 'prop-types'
 import { Box, IconButton } from '@material-ui/core'
-
 import { mdiCogOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
 
 import Spinner from 'components/Spinner'
-
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import FactsheetSection from '../Factsheet'
 import Roles from '../../components/Roles'
-import DeleteDeal from '../DeleteDeal'
 import { DealProperties } from '../DealProperties'
+import DeleteDeal from '../DeleteDeal'
+import FactsheetSection from '../Factsheet'
 
 import { Card } from './styled'
 

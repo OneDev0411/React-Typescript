@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import Alert from '@material-ui/lab/Alert'
 
-import { noop } from 'utils/helpers'
-import { getActiveTeamId } from 'utils/user-teams'
+import Alert from '@material-ui/lab/Alert'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import { addToFlow } from 'models/flows/add-to-flow'
 import { getBrandFlows } from 'models/flows/get-brand-flows'
+import { noop } from 'utils/helpers'
+import { getActiveTeamId } from 'utils/user-teams'
 
-import { Container } from './styled'
-import ListView from './ListView'
 import DetailView from './DetailView'
+import ListView from './ListView'
+import { Container } from './styled'
 
 AddToFlowForm.propTypes = {
   alignFrom: PropTypes.string,

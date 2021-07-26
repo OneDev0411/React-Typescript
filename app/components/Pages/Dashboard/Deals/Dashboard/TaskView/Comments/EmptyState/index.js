@@ -1,9 +1,10 @@
 import React from 'react'
-import { mdiCommentOutline } from '@mdi/js'
-import { useTheme } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useTheme } from '@material-ui/core'
+import { mdiCommentOutline } from '@mdi/js'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container } from './styled'
 

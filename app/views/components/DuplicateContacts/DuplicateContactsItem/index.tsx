@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   ListItem,
   createStyles,
@@ -9,13 +10,12 @@ import {
 } from '@material-ui/core'
 import fecha from 'fecha'
 
+import { Avatar } from 'components/Avatar'
+import MiniContact from 'components/MiniContact'
 import {
   getContactSource,
   getContactNameInitials
 } from 'models/contacts/helpers'
-
-import MiniContact from 'components/MiniContact'
-import { Avatar } from 'components/Avatar'
 
 import Dismiss from './Dismiss'
 

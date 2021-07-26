@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   Button,
@@ -9,18 +8,18 @@ import {
   ListItemSecondaryAction,
   Avatar as MuiAvatar,
   withStyles,
+  makeStyles,
   Theme
 } from '@material-ui/core'
-
+import { isToday } from 'date-fns'
+import { useSelector } from 'react-redux'
 import timeago from 'timeago.js'
 
 import Link from 'components/ALink'
-
-import { selectUser } from 'selectors/user'
-
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import { selectUser } from 'selectors/user'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
@@ -36,10 +35,22 @@ const CustomizedMuiAvatar = withStyles((theme: Theme) => ({
   }
 }))(MuiAvatar)
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    listItemWithButton: {
+      paddingRight: theme.spacing(12)
+    }
+  }),
+  { name: 'CalendarListItem' }
+)
+
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
   let linkTitle
+  let secondaryText
+
+  const classes = useStyles()
 
   const user = useSelector(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
@@ -62,6 +73,10 @@ export default function CalendarEventListItem({ event }: Props) {
   linkTitle = event.title
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
+  const eventTime = new Date(event.next_occurence)
+  const humanizedEventTime = isToday(eventTime)
+    ? 'Today'
+    : timeago().format(eventTime)
 
   if (contact) {
     avatarIcon = (
@@ -83,14 +98,17 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
+  if (event.event_type == 'home_anniversary' && contact) {
+    secondaryText = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
+  } else {
+    secondaryText = humanizedEventTime
+  }
+
   return (
     <>
-      <ListItem>
+      <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-        <ListItemText
-          primary={linkTitle}
-          secondary={timeago().format(event.next_occurence)}
-        />
+        <ListItemText primary={linkTitle} secondary={secondaryText} />
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>

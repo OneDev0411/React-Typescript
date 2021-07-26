@@ -1,10 +1,10 @@
-import styled, { css, ThemedStyledProps } from 'styled-components'
 import { Theme, fade } from '@material-ui/core'
+import styled, { css, ThemedStyledProps } from 'styled-components'
 
-import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
-import StarIcon from 'components/SvgIcons/Star/StarIcon'
+import LinkButton from 'components/Button/LinkButton'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import StarIcon from 'components/SvgIcons/Star/StarIcon'
 
 import type { Props as EditModeProps } from './InlineEditableField/EditMode'
 

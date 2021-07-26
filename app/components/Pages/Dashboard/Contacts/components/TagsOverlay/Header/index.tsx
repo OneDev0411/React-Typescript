@@ -1,15 +1,14 @@
 import React from 'react'
+
+import { Tooltip } from '@material-ui/core'
+import { mdiCog, mdiClose } from '@mdi/js'
 import { Link } from 'react-router'
 import Flex from 'styled-flex-component'
 
-import { mdiCog, mdiClose } from '@mdi/js'
-
-import { Tooltip } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { Title } from 'components/OverlayDrawer/Header/styled'
 import IconButton from 'components/Button/IconButton'
+import { Title } from 'components/OverlayDrawer/Header/styled'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { HeaderContainer } from './styled'
 

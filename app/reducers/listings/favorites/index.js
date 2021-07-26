@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
+
+import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 import map from '../map'
 import panels from '../panels'
+
 import listings from './list'
-import { createNamedWrapperReducer } from '../../../utils/redux-utils'
 
 const favorites = combineReducers({
   map: createNamedWrapperReducer(map, 'favorites'),

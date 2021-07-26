@@ -3,11 +3,9 @@ import { batch } from 'react-redux'
 
 import Deal from '../../../../models/Deal'
 import { appendChecklist } from '../../deal/append-checklist'
-import { setTasks } from '../../task'
-
-import { setChecklists } from '../set-checklist'
-
 import * as schema from '../../schema'
+import { setTasks } from '../../task'
+import { setChecklists } from '../set-checklist'
 
 interface Options {
   conditions: {

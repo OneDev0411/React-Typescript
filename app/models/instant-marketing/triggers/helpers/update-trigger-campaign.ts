@@ -1,5 +1,4 @@
 import { updateEmailCampaign } from '../../../email/update-email-campaign'
-
 import { TriggerDataInput } from '../types'
 
 interface Data extends Pick<TriggerDataInput, 'subject'> {

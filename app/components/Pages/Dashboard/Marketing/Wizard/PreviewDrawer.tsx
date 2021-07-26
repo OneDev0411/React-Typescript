@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Drawer,
   Grid,
@@ -10,9 +11,9 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { closeIcon } from 'components/SvgIcons/icons'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
+import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

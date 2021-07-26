@@ -1,20 +1,24 @@
 import React from 'react'
+
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
-
 import { ACL } from 'constants/acl'
 
+import AppLayout from '../components/App'
+import Dashboard from '../components/Pages/Dashboard'
+import {
+  showingDetailTabs,
+  showingsTabs
+} from '../components/Pages/Dashboard/Showings/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
-
+import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
 
 // Containers
-import AppLayout from '../components/App'
-import Dashboard from '../components/Pages/Dashboard'
 
 // Pages
-import Load from '../loader'
+
 import { withGuest, withSignedInUser } from './hoc'
 
 const AsyncAuthenticationLayout = Load({
@@ -81,6 +85,45 @@ const AsyncResetPassword = Load({
   loader: () =>
     import(
       '../components/Pages/Auth/Password/Reset' /* webpackChunkName: "reset_password" */
+    )
+})
+
+/* ==================================== */
+//  Showings Public
+/* ==================================== */
+
+const AsyncBookShowing = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Book' /* webpackChunkName: "book_showing" */
+    )
+})
+
+const AsyncShowingAppointment = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment' /* webpackChunkName: "showing_appointment" */
+    )
+})
+
+const AsyncShowingAppointmentCancel = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Cancel' /* webpackChunkName: "showing_appointment_cancel" */
+    )
+})
+
+const AsyncShowingAppointmentReschedule = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Reschedule' /* webpackChunkName: "showing_appointment_reschedule" */
+    )
+})
+
+const AsyncShowingAppointmentFeedback = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Showing/Appointment/Feedback' /* webpackChunkName: "showing_appointment_feedback" */
     )
 })
 
@@ -178,40 +221,47 @@ const AsyncDashboardOverview = withAcl(
 //  MLS
 /* ==================================== */
 
-const AsyncListingsLayout = Load({
+const AsyncMLSLayout = Load({
+  loader: () =>
+    import('../components/Pages/Dashboard/MLS' /* webpackChunkName: "mls" */)
+})
+
+const AsyncMLSSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings' /* webpackChunkName: "listings" */
+      '../components/Pages/Dashboard/MLS/Search' /* webpackChunkName: "mls_search" */
     )
 })
 
-const AsyncListingsSearch = Load({
+const AsyncMLSSavedSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Search' /* webpackChunkName: "listing_search" */
+      '../components/Pages/Dashboard/MLS/SavedSearch' /* webpackChunkName: "alerts" */
     )
 })
 
-const AsyncMlsSavedSearch = Load({
+const AsyncMLSFavorites = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/SavedSearch' /* webpackChunkName: "alerts" */
+      '../components/Pages/Dashboard/MLS/Favorites' /* webpackChunkName: "fav" */
     )
 })
 
-const AsyncListingsFavorites = Load({
+const AsyncMLSSinglePage = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Listings/Favorites' /* webpackChunkName: "fav" */
+      '../components/Pages/Dashboard/MLS/Listing' /* webpackChunkName: "list_single" */
     )
 })
 
-const AsyncListingSinglePage = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Listings/Listing' /* webpackChunkName: "list_single" */
-    )
-})
+const AsyncMLSMarketing = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MLS/Marketing' /* webpackChunkName: "listing_marketing" */
+      )
+  })
+)
 
 /* ==================================== */
 //  Agent Network
@@ -662,6 +712,37 @@ const AsyncOldWebsite = withAcl.store(
 )
 
 /* ==================================== */
+//  Showings
+/* ==================================== */
+
+const AsyncShowings = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/Showings' /* webpackChunkName: "showings" */
+      )
+  })
+)
+
+const AsyncShowingDetail = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/ShowingDetail' /* webpackChunkName: "showing_detail" */
+      )
+  })
+)
+
+const AsyncCreateShowing = withAcl.showings(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Showings/pages/CreateShowing' /* webpackChunkName: "create_showing" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -729,6 +810,20 @@ const AsyncContexts = withAcl.admin(
   })
 )
 
+/* ==================================== */
+//  Listings
+/* ==================================== */
+
+const AsyncListingsList = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Listings/pages/Listings' /* webpackChunkName: "listings" */
+      )
+  }),
+  { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
+)
+
 export default (
   <Route>
     <Route path="/">
@@ -750,6 +845,24 @@ export default (
 
       <Route path="password/forgot" component={AsyncForgotPassword} />
       <Route path="password/reset" component={AsyncResetPassword} />
+
+      <Route path="showings/:slugAndId/book" component={AsyncBookShowing} />
+      <Route
+        path="showings/appointments/:appointmentToken"
+        component={AsyncShowingAppointment}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/cancel"
+        component={AsyncShowingAppointmentCancel}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/reschedule"
+        component={AsyncShowingAppointmentReschedule}
+      />
+      <Route
+        path="showings/appointments/:appointmentToken/feedback"
+        component={AsyncShowingAppointmentFeedback}
+      />
 
       <Route path="mobile" component={AsyncMobile} />
 
@@ -871,13 +984,17 @@ export default (
           />
         </Route>
 
-        <Route path="/dashboard/mls" component={AsyncListingsLayout}>
-          <IndexRoute component={AsyncListingsSearch} />
-          <Route path="favorites" component={AsyncListingsFavorites} />
-          <Route path="saved-searches/:id" component={AsyncMlsSavedSearch} />
+        <Route path="/dashboard/mls" component={AsyncMLSLayout}>
+          <IndexRoute component={AsyncMLSSearch} />
+          <Route path="favorites" component={AsyncMLSFavorites} />
+          <Route path="saved-searches/:id" component={AsyncMLSSavedSearch} />
         </Route>
 
-        <Route path="/dashboard/mls/:id" component={AsyncListingSinglePage} />
+        <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
+        <Route
+          path="/dashboard/mls/:id/marketing"
+          component={AsyncMLSMarketing}
+        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
@@ -931,7 +1048,25 @@ export default (
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
 
+        <Route path="showings">
+          <IndexRoute component={AsyncShowings} />
+          <Route
+            path={`:id/detail/:tab(${Object.keys(showingDetailTabs).join(
+              '|'
+            )})`}
+            component={AsyncShowingDetail}
+          />
+          <Route path=":id/detail" component={AsyncShowingDetail} />
+          <Route path="create" component={AsyncCreateShowing} />
+          <Route
+            path={`:tab(${Object.keys(showingsTabs).join('|')})`}
+            component={AsyncShowings}
+          />
+        </Route>
+
         <Route path="website" component={AsyncOldWebsite} />
+
+        <Route path="listings(/:brandId)" component={AsyncListingsList} />
       </Route>
     </Route>
 

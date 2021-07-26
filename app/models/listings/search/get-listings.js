@@ -1,7 +1,6 @@
 import { normalize } from 'normalizr'
 
 import Fetch from '../../../services/fetch'
-
 import * as schema from '../schema'
 
 function filterListingsWithoutLocation(listings) {

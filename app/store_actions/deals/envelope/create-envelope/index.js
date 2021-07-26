@@ -1,5 +1,5 @@
-import _ from 'underscore'
 import { batch } from 'react-redux'
+import _ from 'underscore'
 
 import * as actionTypes from '../../../../constants/deals'
 import { setEnvelopes } from '../set-envelopes'

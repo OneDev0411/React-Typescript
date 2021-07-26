@@ -13,7 +13,8 @@ export function getBrandColors(brand: IBrand): string[] {
     return DEFAULT_COLORS
   }
 
-  const brandPalette = flattedBrand.settings.marketing_palette as BrandMarketingPalette
+  const brandPalette = flattedBrand.settings
+    .marketing_palette as BrandMarketingPalette
 
   const colorKeys = Object.keys(brandPalette).filter(key =>
     key.includes('color')

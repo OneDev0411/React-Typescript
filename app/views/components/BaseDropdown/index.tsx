@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ReactNode, RefObject, useRef } from 'react'
+
 import {
   ButtonProps,
   PopperProps,
@@ -9,7 +10,6 @@ import {
   Popper,
   useTheme
 } from '@material-ui/core'
-
 import { useControllableState } from 'react-use-controllable-state/dist'
 
 import { DropdownToggleButton } from '../DropdownToggleButton'

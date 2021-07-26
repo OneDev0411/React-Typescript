@@ -1,4 +1,5 @@
 import { useState, useContext, useRef } from 'react'
+
 import {
   IconButton,
   Dialog,
@@ -14,15 +15,16 @@ import {
 import { mdiClose } from '@mdi/js'
 import { useDebounce } from 'use-debounce'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { EditorDialog } from 'components/ImageEditor'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { EditorDialog } from 'components/ImageEditor'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { ImageSelectDialogProps, TabValue } from './types'
-import Upload from './Tabs/Upload'
-import TeamLibrary from './Tabs/TeamLibrary'
-import PhotoLibrary from './Tabs/PhotoLibrary'
+import { isGifImage } from './helpers'
 import GifLibrary from './Tabs/GifLibrary'
+import PhotoLibrary from './Tabs/PhotoLibrary'
+import TeamLibrary from './Tabs/TeamLibrary'
+import Upload from './Tabs/Upload'
+import { ImageSelectDialogProps, TabValue } from './types'
 
 const SEARCHABLE_IMAGE_TABS: TabValue[] = [
   'team-library',
@@ -60,9 +62,8 @@ export default function ImageSelectDialog({
   const [selectedTab, setSelectedTab] = useState<TabValue>('upload-photo')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
-  const [imageFileToEdit, setImageFileToEdit] = useState<
-    Nullable<File | string>
-  >(null)
+  const [imageFileToEdit, setImageFileToEdit] =
+    useState<Nullable<File | string>>(null)
 
   const isSearchableTabActive = isSearchableTab(selectedTab)
 
@@ -75,16 +76,22 @@ export default function ImageSelectDialog({
     })
   }
 
-  const handleEdit = (file: File | string) => {
+  const handleEdit = async (file: File | string) => {
+    if (isGifImage(file)) {
+      await handleUploadImage(file)
+
+      return
+    }
+
     setImageFileToEdit(file)
   }
 
-  const handleUploadImage = async (file: File) => {
+  const handleUploadImage = async (file: File | string) => {
     if (!onUpload) {
       return
     }
 
-    const fileUrl = await onUpload(file)
+    const fileUrl = typeof file === 'string' ? file : await onUpload(file)
 
     onSelect(fileUrl)
   }

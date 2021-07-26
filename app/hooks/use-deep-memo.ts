@@ -1,6 +1,7 @@
 import { useRef } from 'react'
-import usePrevious from 'react-use/lib/usePrevious'
+
 import { isEqual } from 'lodash'
+import usePrevious from 'react-use/lib/usePrevious'
 
 export function useDeepMemo(fn, deps) {
   const value = useRef<ReturnType<typeof fn> | null>(null)

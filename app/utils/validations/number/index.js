@@ -1,6 +1,6 @@
 export const isNumber = number => {
   if (number) {
-    const regular = /^(\d*\.)?\d+$/igm 
+    const regular = /^(\d*\.)?\d+$/gim
 
     const result = new RegExp(regular).exec(number)
 

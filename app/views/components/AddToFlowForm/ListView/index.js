@@ -1,16 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { Box } from '@material-ui/core'
-
 import { mdiCog } from '@mdi/js'
+import PropTypes from 'prop-types'
 
-import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { ScrollableArea } from 'components/ScrollableArea'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import FlowItem from '../FlowItem'
+
 import { List, Container, EmptyContainer, SettingLink } from './styled'
 
 ListView.propTypes = {

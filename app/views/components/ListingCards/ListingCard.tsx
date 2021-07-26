@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Card,
   CardActionArea,
@@ -13,19 +14,18 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { noop } from 'lodash'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import { noop } from 'lodash'
 import pluralize from 'pluralize'
 
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
 import {
   getListingFeatures,
   getStatusColor,
   isLeaseProperty
 } from 'utils/listing'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import ListingCardMedia from './ListingCardMedia'
 
@@ -44,7 +44,7 @@ const useStyles = makeStyles(
     statusChip: {
       display: 'flex'
     },
-    statusDot: ({ listing }: Props) => ({
+    statusDot: ({ listing }: ListingCardProps) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
       width: theme.spacing(1),
       height: theme.spacing(1),
@@ -94,7 +94,7 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
+export interface ListingCardProps {
   /**
    * The listing or compact listing object
    */
@@ -159,7 +159,7 @@ export default function ListingCard({
   liked = undefined,
   onLikeClick = noop,
   onClick
-}: Props) {
+}: ListingCardProps) {
   const classes = useStyles({ listing })
 
   const address =

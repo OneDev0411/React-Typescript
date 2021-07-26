@@ -1,35 +1,33 @@
 import { Editor } from 'grapesjs'
 
-import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
-import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
+import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
 import OneColIcon from 'assets/images/marketing/editor/blocks/col-1.png'
 import TwoColIcon from 'assets/images/marketing/editor/blocks/col-2.png'
 import ThreeColIcon from 'assets/images/marketing/editor/blocks/col-3.png'
-import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
 import DividerIcon from 'assets/images/marketing/editor/blocks/divider.png'
-import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
-import ButtonIcon from 'assets/images/marketing/editor/blocks/button.png'
+import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
+import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
 import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
-
-import { TemplateRenderData } from '../../../utils/get-template-render-data'
+import SpacerIcon from 'assets/images/marketing/editor/blocks/spacer.png'
+import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
 
-import Headline1 from './headline-1.mjml'
-import Headline2 from './headline-2.mjml'
+import Button from './button.mjml'
 import Column1 from './column-1.mjml'
 import Column2 from './column-2.mjml'
 import Column3 from './column-3.mjml'
-import Button from './button.mjml'
-import Text from './text.mjml'
 import Divider from './divider.mjml'
-import Spacer from './spacer.mjml'
+import Headline1 from './headline-1.mjml'
+import Headline2 from './headline-2.mjml'
 import SocialGroup from './social-group.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { adaptTemplates } from '../utils'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
+import Spacer from './spacer.mjml'
+import Text from './text.mjml'
 
 export const headline1BlockName = 'headline-1'
 export const headline2BlockName = 'headline-2'
@@ -204,5 +202,5 @@ export default function registerStaticBlocks(
     templateBlockOptions.blocks
   )
 
-  handleBlockDragStopEvent(editor, adaptTemplates(allBlocks), renderData)
+  handleBlockDragStopEvent(editor, allBlocks, renderData)
 }

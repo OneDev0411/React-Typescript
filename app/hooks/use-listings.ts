@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
+
+import uniqBy from 'lodash/uniqBy'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
-import uniqBy from 'lodash/uniqBy'
 
-import { IAppState } from 'reducers'
-import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import getListing from 'models/listings/listing/get-listing'
+import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import { IAppState } from 'reducers'
 
 export function useBrandListings(
   brand: Nullable<UUID>
@@ -58,13 +59,14 @@ export function useDealsListings(
         deal => deal.listing
       )
         .filter(
-          deal => deal.listing && !listingIdsToExclude.includes(deal.listing)
+          deal =>
+            deal.listing && !listingIdsToExclude.includes(deal.listing as UUID)
         )
         .map(deal => deal.listing)
 
       try {
         const dealsListings = await Promise.all(
-          uniqDealListingIds.map(listingId => getListing(listingId))
+          uniqDealListingIds.map(listingId => getListing(listingId as UUID))
         )
 
         setListings(dealsListings)

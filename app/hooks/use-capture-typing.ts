@@ -1,4 +1,5 @@
 import { RefObject } from 'react'
+
 import useStartTyping from 'react-use/esm/useStartTyping'
 
 /**

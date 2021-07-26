@@ -1,10 +1,10 @@
 import React, { useState, memo } from 'react'
-import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
-import { getContact } from 'models/contacts/get-contact'
+import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
 
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
+import { getContact } from 'models/contacts/get-contact'
 
 const useStyles = makeStyles(theme =>
   createStyles({

@@ -1,13 +1,13 @@
+import { PARKED_CONTACTS_LIST_ID } from '../../../components/Pages/Dashboard/Contacts/List/constants'
 import * as actionTypes from '../../../constants/contacts'
+import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 import {
   selectContacts,
   selectContactsInfo
 } from '../../../reducers/contacts/list'
-import { searchContacts } from '../search-contacts'
-import { getContacts } from '../get-contacts'
-import { deleteContacts as removeContacts } from '../../../models/contacts/delete-contact'
 import { viewAs } from '../../../utils/user-teams'
-import { PARKED_CONTACTS_LIST_ID } from '../../../components/Pages/Dashboard/Contacts/List/constants'
+import { getContacts } from '../get-contacts'
+import { searchContacts } from '../search-contacts'
 
 export function deleteContacts(contactIds) {
   return async (dispatch, getState) => {

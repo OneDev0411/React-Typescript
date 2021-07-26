@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Link, LinkProps } from 'react-router'
 import styled, { css } from 'styled-components'
 
@@ -24,6 +25,7 @@ const defaultProps = {
 
 const ALink = styled.a<Props>`
   color: #000;
+  cursor: pointer;
 
   ${({ noStyle }) =>
     noStyle

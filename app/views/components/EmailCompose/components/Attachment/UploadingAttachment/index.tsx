@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ComponentProps } from 'react'
+
 import {
   Box,
   createStyles,
@@ -8,10 +9,10 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { IUploadingAttachment } from '../../../types'
-import { useUploadRequest } from './use-upload-request'
-
 import { Attachment } from '..'
+import { IUploadingAttachment } from '../../../types'
+
+import { useUploadRequest } from './use-upload-request'
 
 type AttachmentProps = ComponentProps<typeof Attachment>
 

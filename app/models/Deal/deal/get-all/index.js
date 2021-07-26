@@ -1,5 +1,4 @@
 import Fetch from '../../../../services/fetch'
-
 import { getActiveTeamId, getActiveTeamACL } from '../../../../utils/user-teams'
 
 /**
@@ -31,13 +30,15 @@ export async function getAll(user) {
     params = 'associations[]=deal.brand&'
     params += 'associations[]=deal.created_by&'
     params += 'associations[]=review.updated_by&'
-    params += 'associations[]=deal.new_notifications'
+    params += 'associations[]=deal.new_notifications&'
+    params += 'associations[]=deal.property_type'
   } else {
     endpoint = `/brands/${brandId}/deals`
     params = 'deleted=true&'
     params += 'associations[]=agent.office&'
     params += 'associations[]=deal.new_notifications&'
-    params += 'associations[]=deal.brand'
+    params += 'associations[]=deal.brand&'
+    params += 'associations[]=deal.property_type'
   }
 
   try {

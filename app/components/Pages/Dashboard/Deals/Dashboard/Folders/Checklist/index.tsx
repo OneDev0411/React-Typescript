@@ -1,17 +1,15 @@
 import { Grid, Box, Typography } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { isChecklistExpanded } from 'reducers/deals/checklists'
 import { setExpandChecklist } from 'actions/deals'
-
 import { IAppState } from 'reducers'
+import { isChecklistExpanded } from 'reducers/deals/checklists'
 
 import { ChecklistLabels } from './Labels'
 import { FolderOptionsMenu } from './Menu'
-import { TaskRow } from './TaskRow'
 import NewTaskRow from './NewTaskRow'
-
 import { useStyles } from './styles'
+import { TaskRow } from './TaskRow'
 
 interface Props {
   deal: IDeal

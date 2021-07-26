@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+
 import { Box } from '@material-ui/core'
 
-import { noop } from 'utils/helpers'
 import { Checkbox } from 'components/Checkbox'
+import { noop } from 'utils/helpers'
 
 import { Error } from './Error'
 import { Label } from './Label'
@@ -10,7 +11,6 @@ import { Title } from './Title'
 import { Value } from './Value'
 
 interface Props {
-  children: ReactNode
   attribute: IContactAttributeWithDef
   onEnterKeyPress?: () => void
   onChangeLabel?: () => void
@@ -23,7 +23,6 @@ interface Props {
 export const EditMode = ({
   error,
   attribute,
-  children,
   onChangeValue,
   placeholder = '',
   onEnterKeyPress = noop,

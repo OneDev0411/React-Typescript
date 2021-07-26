@@ -1,84 +1,138 @@
-import React from 'react'
+import React, { useState, useMemo } from 'react'
+
+import { isLeapYear, getDaysInMonth } from 'date-fns'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { days, months } from 'utils/date-times'
-import Button from 'components/Button/ActionButton'
 import { BasicDropdown } from 'components/BasicDropdown'
+import Button from 'components/Button/ActionButton'
+import { addZero, months } from 'utils/date-times'
 
 import { Input } from './styled'
 
-const daysItems = days.map(day => ({
-  label: day < 10 ? `0${day}` : day.toString(),
-  value: day
-}))
-const monthsItems = months.map((month, index) => ({
-  label: month,
-  value: index
-}))
+export function DateField(props) {
+  const [day, setDay] = useState(props.day || { label: 'Day', value: null })
+  const [month, setMonth] = useState(
+    props.month || { label: 'Month', value: null }
+  )
+  const [year, setYear] = useState(props.year || '')
 
-export class DateField extends React.Component {
-  static propTypes = {
-    day: PropTypes.shape().isRequired,
-    month: PropTypes.shape().isRequired,
-    year: PropTypes.any,
-    onChangeDay: PropTypes.func.isRequired,
-    onChangeMonth: PropTypes.func.isRequired,
-    onChangeYear: PropTypes.func,
-    showYear: PropTypes.bool,
-    toggleYearOption: PropTypes.func
+  const daysItems = useMemo(() => {
+    const selectedMonth = month.value ? parseInt(month.value, 10) + 1 : 0
+    const selectedYear = year ? parseInt(year, 10) : 1800
+    const daysInMonth = getDaysInMonth(new Date(selectedYear, selectedMonth, 0))
+
+    const days = [...Array(daysInMonth).keys()].map(day => day + 1)
+
+    return days.map(day => ({
+      label: addZero(day),
+      value: day
+    }))
+  }, [month.value, year])
+  const monthsItems = useMemo(
+    () =>
+      months.map((month, index) => ({
+        label: month,
+        value: index
+      })),
+    []
+  )
+
+  const onChangeDay = selectedDay => {
+    setDay(selectedDay)
+    props.onChangeDay(selectedDay)
   }
 
-  static defaultProps = {
-    showYear: false,
-    onChangeYear() {},
-    toggleYearOption() {},
-    year: ''
-  }
+  const onChangeMonth = selectedMonth => {
+    setMonth(selectedMonth)
+    props.onChangeMonth(selectedMonth)
 
-  onChangeYear = event => {
-    const { value } = event.target
+    /*
+      here we resetting day if the user select the Feb month and the day-input
+      is more than 29 because the Feb is 28 days month (29 in leap year) 
+    */
+    if (selectedMonth.value === 1 && day.value >= 29) {
+      // skip the process if year exist and is a leap year and day equal to 29
+      if (day.value === 29 && year && isLeapYear(new Date(year))) {
+        return
+      }
 
-    if (!value || /^\d+$/.test(value)) {
-      this.props.onChangeYear(value)
+      const alteredDay = { label: '28', value: 28 }
+
+      setDay(alteredDay)
+      props.onChangeDay(alteredDay)
     }
   }
 
-  render() {
-    const { props } = this
-    const display = 'flex'
+  const onChangeYear = event => {
+    const { value } = event.target
 
-    return (
-      <Flex data-test="date-field">
-        <BasicDropdown
-          items={monthsItems}
-          onChange={props.onChangeMonth}
-          selectedItem={props.month}
-          style={{ display }}
-          buttonRenderer={props.dropdownButtonRenderer}
-        />
-        <BasicDropdown
-          items={daysItems}
-          selectedItem={props.day}
-          onChange={props.onChangeDay}
-          style={{ display, margin: '0 0.5rem 0' }}
-          buttonRenderer={props.dropdownButtonRenderer}
-        />
-        {props.showYear ? (
-          <Input
-            type="text"
-            autoComplete="disabled"
-            placeholder="Year"
-            maxLength="4"
-            onChange={this.onChangeYear}
-            value={props.year || ''}
-          />
-        ) : (
-          <Button appearance="link" onClick={props.toggleYearOption}>
-            + Add Year
-          </Button>
-        )}
-      </Flex>
-    )
+    if (!value || /^\d+$/.test(value)) {
+      if (
+        value.length >= 4 &&
+        !isLeapYear(new Date(value)) &&
+        day.value === 29
+      ) {
+        const alteredDay = { label: '28', value: 28 }
+
+        setDay(alteredDay)
+        props.onChangeDay(alteredDay)
+      }
+
+      setYear(value)
+      props.onChangeYear(value)
+    }
   }
+
+  return (
+    <Flex data-test="date-field">
+      <BasicDropdown
+        items={monthsItems}
+        onChange={onChangeMonth}
+        selectedItem={month}
+        style={{ display: 'flex' }}
+        buttonRenderer={props.dropdownButtonRenderer}
+      />
+      <BasicDropdown
+        disabled={!month.value}
+        items={daysItems}
+        selectedItem={day}
+        onChange={onChangeDay}
+        style={{ display: 'flex', margin: '0 0.5rem 0' }}
+        buttonRenderer={props.dropdownButtonRenderer}
+      />
+      {props.showYear ? (
+        <Input
+          type="text"
+          autoComplete="disabled"
+          placeholder="Year"
+          maxLength="4"
+          onChange={onChangeYear}
+          value={year}
+        />
+      ) : (
+        <Button appearance="link" onClick={props.toggleYearOption}>
+          + Add Year
+        </Button>
+      )}
+    </Flex>
+  )
+}
+
+DateField.propTypes = {
+  day: PropTypes.shape().isRequired,
+  month: PropTypes.shape().isRequired,
+  year: PropTypes.any,
+  onChangeDay: PropTypes.func.isRequired,
+  onChangeMonth: PropTypes.func.isRequired,
+  onChangeYear: PropTypes.func,
+  showYear: PropTypes.bool,
+  toggleYearOption: PropTypes.func
+}
+
+DateField.defaultProps = {
+  showYear: false,
+  onChangeYear() {},
+  toggleYearOption() {},
+  year: ''
 }

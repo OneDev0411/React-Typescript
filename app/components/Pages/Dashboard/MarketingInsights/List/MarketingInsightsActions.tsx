@@ -1,20 +1,18 @@
 import React, { useState, useContext } from 'react'
-import { useDispatch } from 'react-redux'
+
 import { IconButton, MenuItem, Typography, Divider } from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
+import { BaseDropdown } from 'components/BaseDropdown'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { EditEmailDrawer } from 'components/EmailCompose'
+import EmailNotificationSetting from 'components/EmailNotificationSetting'
 import { addNotification } from 'components/notification'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 import { setEmailNotificationStatus } from 'models/email/set-email-notification-status'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { BaseDropdown } from 'components/BaseDropdown'
-import { EditEmailDrawer } from 'components/EmailCompose'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import EmailNotificationSetting from 'components/EmailNotificationSetting'
-
-import useLabeledSwitchHandlers from 'hooks/use-labeled-switch-handlers'
 
 interface Props {
   emailCampaign: IEmailCampaign

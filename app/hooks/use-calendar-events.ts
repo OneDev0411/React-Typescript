@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
 
 import { isToday, setYear, compareAsc } from 'date-fns'
-
 import { useSelector } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 
-import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
-import { useLoadingEntities } from 'hooks/use-loading'
 import {
   getDateRange,
   Format
 } from 'components/Calendar/helpers/get-date-range'
+import { useLoadingEntities } from 'hooks/use-loading'
+import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
 import { selectUser } from 'selectors/user'
 
 interface UseCalendarEvents {
@@ -19,7 +18,8 @@ interface UseCalendarEvents {
 }
 
 export function useCalendarEvents(
-  objectTypes: CalendarObjectType[]
+  objectTypes: CalendarObjectType[],
+  days?: number
 ): UseCalendarEvents {
   const [events, setEvents] = useState<Nullable<ICalendarEvent[]>>(null)
 
@@ -28,7 +28,7 @@ export function useCalendarEvents(
 
   useDeepCompareEffect(() => {
     async function fetchEvents() {
-      const range = getDateRange(new Date().getTime(), Format.Next, 7)
+      const range = getDateRange(new Date().getTime(), Format.Next, days)
       const calendarEvents = (await getCalendar({
         range,
         filter: {

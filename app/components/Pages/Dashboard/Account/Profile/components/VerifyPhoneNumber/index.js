@@ -1,17 +1,17 @@
-import styled from 'styled-components'
 import React, { Component, Fragment } from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
 import { Box } from '@material-ui/core'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 
+import { addNotification as notify } from 'components/notification'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 // eslint-disable-next-line
 import VerifyPhoneNumberModal from '../../../../../../..//views/components/VerifyPhoneNumberModal'
 
 import getVerificationCode from '../../../../../../../models/verify/request'
+import ActionButton from '../../../../../../../views/components/Button/ActionButton'
 
 const Button = styled(ActionButton)`
   padding: 0;

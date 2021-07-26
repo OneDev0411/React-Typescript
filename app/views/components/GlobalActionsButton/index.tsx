@@ -1,19 +1,20 @@
 import React, { MouseEvent, useState, useMemo, memo } from 'react'
+
 import { useSelector } from 'react-redux'
 
+import { selectUserUnsafe } from 'selectors/user'
 import {
   hasUserAccessToCrm,
   hasUserAccessToDeals,
-  hasUserAccessToMarketingCenter
+  hasUserAccessToMarketingCenter,
+  hasUserAccessToShowings
 } from 'utils/user-teams'
 
-import { selectUserUnsafe } from 'selectors/user'
-
-import { Item, ItemType } from './types'
 import Button from './components/Button'
 import items from './components/items'
 import Menu from './components/Menu'
 import { useGlobalActionContext } from './hooks/use-global-action-context'
+import { Item, ItemType } from './types'
 
 interface Props {}
 
@@ -35,6 +36,10 @@ export const GlobalActions = (props: Props) => {
 
     if (hasUserAccessToCrm(user) && hasUserAccessToMarketingCenter(user)) {
       actions.push('openhouse')
+    }
+
+    if (hasUserAccessToShowings(user)) {
+      actions.push('showing')
     }
 
     return items.filter(item => actions.includes(item.type))
@@ -114,7 +119,6 @@ export const GlobalActions = (props: Props) => {
 
       case 'contact':
         return selectedItem.render({
-          user,
           isOpen: true,
           onClose: handleCloseRenderedItem,
           saveCallback: state.onCreateContact,
@@ -142,6 +146,12 @@ export const GlobalActions = (props: Props) => {
           onClose: handleCloseRenderedItem,
           submitCallback: handleSubmitTour
         })
+
+      case 'showing':
+        setSelectedItem(null)
+        selectedItem.redirectTo('/dashboard/showings/create')
+
+        return null
     }
   }
 

@@ -1,6 +1,6 @@
 import { SET_USER_SETTING } from '../../constants/user'
-import { putUserSetting } from '../../models/user/put-user-setting'
 import { getTeams } from '../../models/user/get-teams'
+import { putUserSetting } from '../../models/user/put-user-setting'
 
 /**
  * Put a key value data as user settings data under
@@ -26,10 +26,12 @@ export function setUserSetting(key: string, value: any, brand: UUID) {
             ...user,
             teams: user.teams.map(team => {
               if (currentTeamId === team.id) {
+                const currentSettings = team.settings || {}
+
                 return {
                   ...team,
                   settings: {
-                    ...team.settings,
+                    ...currentSettings,
                     [key]: value
                   }
                 }

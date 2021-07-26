@@ -1,30 +1,27 @@
 import React from 'react'
+
 import { Button, makeStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
-import { useSelector } from 'react-redux'
-
-import { getNameInitials } from 'utils/helpers.js'
-
+import { Avatar } from 'components/Avatar'
 import CopyButton from 'components/CopyButton'
 import { EmailComposeFormProps } from 'components/EmailCompose'
-import { Avatar } from 'components/Avatar'
-
-import { selectUser } from 'selectors/user'
-
 import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
+import { getNameInitials } from 'utils/helpers.js'
 
-import { getName } from './helpers'
 import Activity from './Activity'
+import { getName } from './helpers'
+import MiniContactActionButton from './MiniContactActionButton'
+import MiniContactSocialMedias from './MiniContactSocialMedias'
+import { ProfileContainer } from './styled'
 import {
   MiniContactType,
   ActionSettingsType,
   ActionSettingsNamesType
 } from './types'
-import { ProfileContainer } from './styled'
 import useProfile from './useProfile'
-import MiniContactActionButton from './MiniContactActionButton'
-import MiniContactSocialMedias from './MiniContactSocialMedias'
 
 const useStyles = makeStyles((theme: Theme) => ({
   avatar: {
@@ -63,11 +60,7 @@ export default function MiniProfile({
   return (
     <ProfileContainer>
       <div className="head">
-        <Avatar
-          alt={getName(data)}
-          contact={data as IContact}
-          className={classes.avatar}
-        >
+        <Avatar alt={getName(data)} contact={data} className={classes.avatar}>
           {getNameInitials(getName(data))}
         </Avatar>
 

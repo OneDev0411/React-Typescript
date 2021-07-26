@@ -1,8 +1,8 @@
 import { confirmation } from 'actions/confirmation'
 import { deleteTask as deleteTaskItem } from 'actions/deals'
 
-import { notifyOffice } from '../notify-office'
 import store from '../../../../../../../../../stores'
+import { notifyOffice } from '../notify-office'
 
 export async function deleteTask(props) {
   const isTaskRequired =

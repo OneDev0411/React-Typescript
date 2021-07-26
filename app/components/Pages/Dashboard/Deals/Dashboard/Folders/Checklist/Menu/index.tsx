@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { mdiMenu } from '@mdi/js'
+
 import { MenuItem, IconButton, makeStyles, Theme } from '@material-ui/core'
+import { mdiMenu } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
-import { addNotification } from 'components/notification'
-
 import { updateChecklist } from 'actions/deals'
-
 import { BaseDropdown } from 'components/BaseDropdown'
+import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(

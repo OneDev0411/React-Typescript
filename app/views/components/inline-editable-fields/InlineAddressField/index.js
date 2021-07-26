@@ -1,15 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import debounce from 'lodash/debounce'
-import idx from 'idx'
+import PropTypes from 'prop-types'
+
+import {
+  loadMapLibraries,
+  isMapLibrariesLoaded
+} from '@app/utils/google-map-api'
+
+import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
+import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
 import { AddressPopover } from './AddressPopover'
 import { SuggestionsPopover } from './SuggestionsPopover'
-
-import { loadJS } from '../../../../utils/load-js'
-import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
-
-import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
@@ -57,14 +60,18 @@ export class InlineAddressField extends React.Component {
   }
 
   componentDidMount() {
-    if (!window.isLoadingGoogleApi && !idx(window, w => w.google.maps.places)) {
-      window.isLoadingGoogleApi = true
+    const googleMapAPIParams = {
+      key: bootstrapURLKeys.key,
+      libraries: ['places']
+    }
 
-      loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${
-          bootstrapURLKeys.key
-        }&libraries=places`
-      )
+    // Load google maps places if is not loaded yet
+    if (
+      !window.isLoadingGoogleApi &&
+      !isMapLibrariesLoaded(googleMapAPIParams.libraries)
+    ) {
+      window.isLoadingGoogleApi = true
+      loadMapLibraries(googleMapAPIParams, 'loadJS-inline-address-field')
     }
   }
 

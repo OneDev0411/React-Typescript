@@ -1,5 +1,5 @@
 import React from 'react'
-import cn from 'classnames'
+
 import {
   Theme,
   makeStyles,
@@ -8,12 +8,11 @@ import {
   ListItemIcon,
   ListItemText
 } from '@material-ui/core'
-
 import { mdiPlus } from '@mdi/js'
-
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
+import cn from 'classnames'
 
 import { useIconStyles } from '../../../../styles/use-icon-styles'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { Item } from '../types'
 
 const useStyles = makeStyles((theme: Theme) =>
