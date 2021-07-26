@@ -62,10 +62,6 @@ function ShowingBookingListColumnActions({
 
   const handleApprove = () => {
     run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
       const appointment = await approveShowingAppointment(
         showing.id,
         appointmentId
@@ -84,10 +80,6 @@ function ShowingBookingListColumnActions({
 
   const handleReject = (comment?: string) => {
     run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
       const appointment = await rejectShowingAppointment(
         showing.id,
         appointmentId,
