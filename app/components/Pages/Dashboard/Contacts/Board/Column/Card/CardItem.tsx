@@ -27,18 +27,18 @@ import LastTouched from '../../../List/Table/columns/LastTouched'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
-      backgroundColor: '#fff',
       padding: theme.spacing(0.5),
-      height: '100%',
-      '&:hover': {
-        backgroundColor: theme.palette.grey['50']
-      }
+      height: '100%'
     },
     container: {
+      backgroundColor: '#fff',
       padding: theme.spacing(1.5),
       height: '100%',
       border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      borderRadius: theme.shape.borderRadius,
+      '&:hover': {
+        backgroundColor: theme.palette.grey['50']
+      }
     },
     cardAvatar: {
       width: theme.spacing(3),
