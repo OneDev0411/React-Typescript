@@ -203,7 +203,7 @@ export default function ListingCard({
     >
       <CardActionArea component="div">
         <ListingCardMedia listing={listing}>
-          <Grid container justify="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item>
               <Grid container item>
                 {selected !== undefined && (
@@ -260,7 +260,12 @@ export default function ListingCard({
         </ListingCardMedia>
         <CardContent className={classes.cardContent}>
           <Grid container direction="column" spacing={1}>
-            <Grid container item alignItems="center" justify="space-between">
+            <Grid
+              container
+              item
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Grid item>
                 <Typography variant="subtitle1">
                   {getFormattedPrice(listing.price, 'currency', 0)}

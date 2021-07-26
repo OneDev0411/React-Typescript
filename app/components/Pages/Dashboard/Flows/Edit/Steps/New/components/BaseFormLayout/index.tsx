@@ -61,7 +61,7 @@ const Layout = ({
     return (
       <form onSubmit={onSubmit} className={classes.form} noValidate>
         <header className={classes.header}>
-          <Grid container alignItems="center" justify="space-between">
+          <Grid container alignItems="center" justifyContent="space-between">
             <Grid container alignItems="center" item xs={6}>
               {step && (
                 <Box className={classes.dragBtn} {...dragHandleProps}>
@@ -87,7 +87,7 @@ const Layout = ({
                 )}
               </Typography>
             </Grid>
-            <Grid container item xs={6} justify="flex-end">
+            <Grid container item xs={6} justifyContent="flex-end">
               {!disableEdit && (
                 <Button
                   variant="contained"

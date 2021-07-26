@@ -43,7 +43,7 @@ export default function ShowingEmptyState({
     <Grid
       container
       alignItems="center"
-      justify="space-around"
+      justifyContent="space-around"
       direction="row"
       spacing={4}
       className={classes.container}

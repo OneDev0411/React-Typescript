@@ -41,7 +41,7 @@ export default function AgentsGrid({
         item
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
         <Box my={2}>
           <img

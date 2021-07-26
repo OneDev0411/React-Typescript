@@ -346,7 +346,7 @@ function Edit(props: WithRouterProps) {
                 disabled={isLoading}
                 className={classes.tab}
                 label={
-                  <Grid container alignItems="center" justify="center">
+                  <Grid container alignItems="center" justifyContent="center">
                     <span>Contacts</span>
                     <Chip
                       size="small"
