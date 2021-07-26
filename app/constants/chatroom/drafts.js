@@ -1,3 +1,1 @@
-export default [
-  'INSERT_DRAFT'
-]
+export default ['INSERT_DRAFT']

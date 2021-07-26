@@ -11,11 +11,10 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
-import { uppercaseFirstLetter } from 'utils/helpers'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Badge from 'components/Badge'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { uppercaseFirstLetter } from 'utils/helpers'
 
 interface Props {
   item: ISavedSegment

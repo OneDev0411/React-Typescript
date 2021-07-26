@@ -1,9 +1,10 @@
 import React from 'react'
+
 import { Button } from '@material-ui/core'
 import { mdiRotateLeft } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageEditor } from '../../types'
 

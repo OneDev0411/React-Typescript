@@ -1,9 +1,10 @@
 import React from 'react'
+
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
-import { useLoadUser } from 'hooks/use-load-user'
 import { AnimatedLoader } from 'components/AnimatedLoader'
+import { useLoadUser } from 'hooks/use-load-user'
 
 interface Props {
   location: WithRouterProps['location']

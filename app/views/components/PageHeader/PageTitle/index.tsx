@@ -1,18 +1,17 @@
 import React, { ReactNode } from 'react'
+
+import { Theme, makeStyles } from '@material-ui/core'
+import { mdiChevronLeft, mdiClose } from '@mdi/js'
 import { browserHistory } from 'react-router'
 import Flex from 'styled-flex-component'
-import { mdiChevronLeft, mdiClose } from '@mdi/js'
-import { Theme, makeStyles } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import IconButton from '../../Button/IconButton'
-
-import { TextMiddleTruncate } from '../../TextMiddleTruncate'
-
-import { H1 } from '../../Typography/headings'
 import { goTo } from '../../../../utils/go-to'
+import IconButton from '../../Button/IconButton'
+import { TextMiddleTruncate } from '../../TextMiddleTruncate'
+import { H1 } from '../../Typography/headings'
 
 import { Subtitle } from './Subtitle'
 

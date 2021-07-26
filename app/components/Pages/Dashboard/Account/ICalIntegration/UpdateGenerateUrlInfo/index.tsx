@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
-import Cookies from 'universal-cookie'
+
 import { Alert } from '@material-ui/lab'
+import Cookies from 'universal-cookie'
 
 export default function UpdateGenerateUrlInfo() {
   const cookies = useMemo(() => new Cookies(), [])

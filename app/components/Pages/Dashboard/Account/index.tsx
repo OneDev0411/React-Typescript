@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react'
+
+import Box from '@material-ui/core/Box'
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
-import Box from '@material-ui/core/Box'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'

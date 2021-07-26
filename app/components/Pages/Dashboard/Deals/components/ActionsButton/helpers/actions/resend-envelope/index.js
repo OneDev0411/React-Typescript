@@ -1,6 +1,5 @@
-import { addNotification as notify } from 'components/notification'
-
 import { confirmation } from 'actions/confirmation'
+import { addNotification as notify } from 'components/notification'
 import { resendEnvelope as resendEnvelopeDocument } from 'models/Deal/envelope'
 
 import store from '../../../../../../../../../stores'

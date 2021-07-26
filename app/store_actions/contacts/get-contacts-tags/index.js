@@ -1,8 +1,8 @@
 import { normalize } from 'normalizr'
 
 import * as actionTypes from '../../../constants/contacts'
-import { tagsSchema } from '../../../models/contacts/schema'
 import { getContactsTags as fetchTags } from '../../../models/contacts/get-contacts-tags'
+import { tagsSchema } from '../../../models/contacts/schema'
 import { viewAs } from '../../../utils/user-teams'
 
 export function getContactsTags(user_filter) {

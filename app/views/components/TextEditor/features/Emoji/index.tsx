@@ -1,5 +1,9 @@
 import React, { useContext, useMemo, useRef } from 'react'
+
+import 'draft-js-emoji-plugin/lib/plugin.css'
+
 import { Popper, Tooltip } from '@material-ui/core'
+import { mdiEmoticonHappyOutline } from '@mdi/js'
 import createEmojiPlugin from 'draft-js-emoji-plugin'
 import EmojiSelectPopover from 'draft-js-emoji-plugin/lib/components/EmojiSelect/Popover'
 import defaultEmojiGroups from 'draft-js-emoji-plugin/lib/constants/defaultEmojiGroups'
@@ -7,26 +11,18 @@ import createEmojisFromStrategy from 'draft-js-emoji-plugin/lib/utils/createEmoj
 import strategy from 'emojione/emoji.json'
 import { mergeWith } from 'lodash'
 
-import { mdiEmoticonHappyOutline } from '@mdi/js'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
 
+import { BaseDropdown } from '../../../BaseDropdown'
 import { ToolbarFragment } from '../../components/ToolbarFragment'
+import { ToolbarIconButton } from '../../components/ToolbarIconButton'
+import { EditorContext } from '../../editor-context'
 import { useEditorPlugins } from '../../hooks/use-editor-plugins'
+
 import { defaultTheme } from './default-emoji-theme'
 import { useEmojiStyles } from './use-emoji-styles'
-/**
- * NOTE: v2.1.2 works while v2.1.3 has breaking changes and is only compatible
- * with the latest version of draft-js, not the version we use right now
- */
-import 'draft-js-emoji-plugin/lib/plugin.css'
-import { ToolbarIconButton } from '../../components/ToolbarIconButton'
-
-import { BaseDropdown } from '../../../BaseDropdown'
 import { usePopperizedEmojiSuggestions } from './use-popperized-emoji-suggestions'
-import { EditorContext } from '../../editor-context'
 
 const emojis = createEmojisFromStrategy(strategy)
 const imagePath = '//cdn.jsdelivr.net/emojione/assets/svg/' // google: 'https://ssl.gstatic.com/mail/emoji/v7/png48/emoji_u'
@@ -49,11 +45,8 @@ export function EmojiFeature({ closeOnSelection = true }: Props) {
     setEditorState,
     getEditorState: () => editorStateRef.current
   })
-  const {
-    EmojiSuggestionProps,
-    PopperProps,
-    positionSuggestions
-  } = usePopperizedEmojiSuggestions()
+  const { EmojiSuggestionProps, PopperProps, positionSuggestions } =
+    usePopperizedEmojiSuggestions()
 
   const emojiTheme = useEmojiStyles()
   const theme = useMemo(

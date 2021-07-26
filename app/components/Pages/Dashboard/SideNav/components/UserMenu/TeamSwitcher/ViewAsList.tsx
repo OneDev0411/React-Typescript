@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from 'react'
+
+import { Box, Button, List, ListSubheader, makeStyles } from '@material-ui/core'
 import isEqual from 'lodash/isEqual'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Button, List, ListSubheader, makeStyles } from '@material-ui/core'
 
 import { selectUser } from 'selectors/user'
 
+import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 import {
   viewAs,
   isBackOffice,
   getTeamAvailableMembers
 } from '../../../../../../../utils/user-teams'
-
-import { setViewAsFilter } from '../../../../../../../store_actions/user/set-view-as-filter'
 
 import { ViewAsMember } from './ViewAsMember'
 
@@ -35,10 +35,10 @@ export function ViewAsList({ disabled, team }: Props) {
   const user = useSelector(selectUser)
   const brandMembers = getTeamAvailableMembers(team)
   const allMembersId = brandMembers.map(m => m.id)
-  const initialSelectedMembers = useMemo(() => viewAs(user, false, team), [
-    user,
-    team
-  ])
+  const initialSelectedMembers = useMemo(
+    () => viewAs(user, false, team),
+    [user, team]
+  )
   const [selectedMembers, setSelectedMembers] = useState(initialSelectedMembers)
   const [isSubmitting, setIsSubmitting] = useState(false)
 

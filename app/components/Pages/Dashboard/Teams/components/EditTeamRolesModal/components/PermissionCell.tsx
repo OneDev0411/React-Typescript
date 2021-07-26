@@ -1,6 +1,6 @@
-import { Field } from 'react-final-form'
-
 import React from 'react'
+
+import { Field } from 'react-final-form'
 
 import { Checkbox } from 'components/Checkbox'
 
@@ -9,7 +9,7 @@ interface Props {
   fieldName: string
 }
 
-export function PermissionCell({ permission, fieldName }) {
+export function PermissionCell({ permission, fieldName }: Props) {
   const toggle = input => {
     const newValue = input.value.includes(permission)
       ? input.value.filter(item => item !== permission)

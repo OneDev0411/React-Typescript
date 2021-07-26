@@ -6,14 +6,15 @@ import {
   Ref,
   RefObject
 } from 'react'
-import Dropzone from 'react-dropzone-rechat'
+
 import { ContentBlock, ContentState, EditorProps, EditorState } from 'draft-js'
 import { DraftJsPlugin } from 'draft-js-plugins-editor'
+import Dropzone from 'react-dropzone-rechat'
 
 import { ClassesProps } from 'utils/ts-utils'
 
-import { styles } from './styles'
 import { createEditorRef } from './create-editor-ref'
+import { styles } from './styles'
 
 export interface ReferenceObject {
   clientHeight: number

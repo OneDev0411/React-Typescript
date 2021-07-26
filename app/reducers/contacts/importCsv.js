@@ -1,5 +1,4 @@
 import * as types from '../../constants/contacts'
-import _ from 'underscore'
 
 const initialState = {
   file: null,

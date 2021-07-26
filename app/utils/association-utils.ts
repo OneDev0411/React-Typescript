@@ -1,3 +1,3 @@
-export const toEntityAssociation = (entityType: string) => (
-  association: string
-) => `${entityType}.${association}`
+export const toEntityAssociation =
+  (entityType: string) => (association: string) =>
+    `${entityType}.${association}`

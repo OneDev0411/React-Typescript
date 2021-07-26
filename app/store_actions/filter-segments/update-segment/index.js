@@ -1,5 +1,4 @@
 import * as actionTypes from 'constants/filter-segments'
-
 import updateSegment from 'models/filter-segments/update-segment'
 
 export function updateFilterSegment(nameId, segment, query) {

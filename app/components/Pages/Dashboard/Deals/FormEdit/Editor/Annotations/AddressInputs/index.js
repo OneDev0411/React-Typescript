@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
-
-import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
+import { normalizeAddress } from 'models/Deal/helpers/normalize-address'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
 

@@ -1,51 +1,41 @@
-import { WithRouterProps, withRouter } from 'react-router'
-import { useSelector } from 'react-redux'
-import moment from 'moment'
+import { useMemo } from 'react'
 
 import { TableCellProps } from '@material-ui/core'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
+import { WithRouterProps, withRouter } from 'react-router'
 
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { goTo } from '@app/utils/go-to'
+import { getActiveTeamId } from '@app/utils/user-teams'
+import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
-
-import { IAppState } from 'reducers'
-
+import { getGridSort } from 'deals/List/helpers/sorting'
 import {
   getStatus,
   getFormattedPrice,
   getPrice
 } from 'models/Deal/helpers/context'
-
+import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
-import { getGridSort } from 'deals/List/helpers/sorting'
-
-import { selectUser } from 'selectors/user'
-
-import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
-
-import { getActiveTeamId } from '@app/utils/user-teams'
-
-import { TrProps } from '@app/views/components/Grid/Table/types'
-
-import { goTo } from '@app/utils/go-to'
-
-import { SearchQuery } from '../types'
-
+import onDealOpened from '../../../utils/on-deal-opened'
 import { getPrimaryAgentName } from '../../../utils/roles'
-import { ContactsZeroState } from './ZeroState'
 import LoadingState from '../../components/LoadingState'
 import { Address } from '../../components/table-columns/Address'
-
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
+import { SearchQuery } from '../types'
 
-import onDealOpened from '../../../utils/on-deal-opened'
+import { ContactsZeroState } from './ZeroState'
 
 interface Props {
   searchQuery: SearchQuery
@@ -159,7 +149,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   }
 
-  const getData = (): IDeal[] => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -183,9 +173,14 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
 
     return Object.values(deals)
-  }
+  }, [
+    deals,
+    props.searchQuery.filter,
+    props.searchQuery.term.length,
+    props.searchQuery.type
+  ])
 
-  const data = getData()
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
     <Grid<IDeal>

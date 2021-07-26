@@ -1,20 +1,20 @@
 import { SubmissionError } from 'redux-form'
 
-import getListings from '../get-listings'
-import { toNumber } from '../../../../utils/helpers'
-import { generatePointsFromBounds } from '../../../../utils/map'
-import setSearchInput from '../set-search-input'
-import toogleFiltersArea from './toggle-filters-area'
-import { goToPlace } from '../../map'
+import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/Schools'
+import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
 import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
-import { normalizeListingsForMarkers } from '../../../../utils/map'
-import { removePolygon, inactiveDrawing } from '../../map/drawing'
+import { toNumber } from '../../../../utils/helpers'
 import { feetToMeters, acresToMeters } from '../../../../utils/listing'
-import { SCHOOLS_TYPE } from '../../../../components/Pages/Dashboard/Listings/Search/components/Filters/Schools'
-
-import { SEARCH_BY_FILTERS_AREAS } from '../../../../constants/listings/search'
+import { generatePointsFromBounds } from '../../../../utils/map'
+import { normalizeListingsForMarkers } from '../../../../utils/map'
+import { goToPlace } from '../../map'
+import { removePolygon, inactiveDrawing } from '../../map/drawing'
+import getListings from '../get-listings'
+import setSearchInput from '../set-search-input'
 import { setSearchType } from '../set-type'
+
+import toogleFiltersArea from './toggle-filters-area'
 
 // Initial valert options {
 //   limit: '250',
@@ -216,6 +216,7 @@ const normalizeValues = (values, options, state) => {
   if (listing_statuses.length === 0) {
     let alertMsg = 'Please select at least one listing status.'
 
+    // eslint-disable-next-line no-alert
     window.alert(alertMsg)
 
     throw new SubmissionError({

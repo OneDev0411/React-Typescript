@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.0.26",
+  "version": "86.0.27",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -13,10 +13,11 @@
     "styled-svg": "styled-svg app/views/components/SvgIcons/**/*.svg --no-tests --size=24x24",
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
+    "lint:ci": "eslint app/views && eslint app/components && eslint app/constants && eslint app/hooks && eslint app/models && eslint app/reducers && eslint app/routes && eslint app/selectors && eslint app/services && eslint app/store_actions && eslint app/stores && eslint app/utils && eslint server",
     "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
-    "lint:tests": "eslint ./tests --fix",
+    "lint:tests": "eslint ./tests",
     "e2e:start": "npm run e2e:api:update-image && npm run e2e:api:start & npm run e2e:server:start",
     "e2e:server:start": "cross-env NODE_ENV=development E2E=true PORT=8081 notify=true babel-node --extensions \".js,.ts,.tsx\" ./bin/server",
     "e2e:api:start": "cd tests/services && docker-compose down && docker-compose build --no-cache && docker-compose up",
@@ -389,6 +390,7 @@
     "jest": "^26.6.3",
     "jest-raw-loader": "^1.0.1",
     "lint-staged": "^10.5.4",
+    "mockdate": "^3.0.5",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "raw-loader": "^4.0.2",

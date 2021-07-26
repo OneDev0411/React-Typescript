@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import fecha from 'fecha'
-
 import Masked, { conformToMask } from 'react-text-mask'
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 

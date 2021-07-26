@@ -1,18 +1,19 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { WithRouterProps, Link } from 'react-router'
-import { Form } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import idx from 'idx'
+import { Form } from 'react-final-form'
+import { useSelector } from 'react-redux'
+import { WithRouterProps, Link } from 'react-router'
 
-import { IAppState } from 'reducers'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { IAppState } from 'reducers'
 
-import Header from '../Header'
 import Container from '../Container'
-import SkipButton from '../SkipButton'
+import Header from '../Header'
 import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
 import { useDocumentTitle } from '../use-document-title'
 
 import { MlsSelect } from './MlsSelect'

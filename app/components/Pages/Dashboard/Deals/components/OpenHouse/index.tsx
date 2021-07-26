@@ -1,31 +1,26 @@
 import React, { useContext, useState, useRef, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
+
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
 
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import { getActiveTeamSettings } from 'utils/user-teams'
-
-import { createTaskComment } from 'deals/utils/create-task-comment'
 import {
   setSelectedTask,
   updateTask,
   changeNeedsAttention
 } from 'actions/deals'
-
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-
+import { createTaskComment } from 'deals/utils/create-task-comment'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
-
+import { selectUser } from 'selectors/user'
+import { getActiveTeamSettings } from 'utils/user-teams'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { selectUser } from 'selectors/user'
-
-import List from './List'
 import Form from './Form'
+import List from './List'
 
 interface Props {
   deal: IDeal

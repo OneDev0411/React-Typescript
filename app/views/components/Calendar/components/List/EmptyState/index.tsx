@@ -1,11 +1,11 @@
 import React from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { CircularProgress } from '@material-ui/core'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { importantDateIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { importantDateIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

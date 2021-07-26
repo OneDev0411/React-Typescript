@@ -2,10 +2,10 @@ import React from 'react'
 
 import { Box } from '@material-ui/core'
 
-import Drawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 import DomainManagement, {
   DomainManagementProps
 } from 'components/DomainManagement'
+import Drawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
 export type DomainManagementDrawerProps = OverlayDrawerProps &
   DomainManagementProps

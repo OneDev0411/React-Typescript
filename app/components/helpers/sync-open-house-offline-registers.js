@@ -2,8 +2,8 @@ import pluralize from 'pluralize'
 
 import { addNotification as notify } from 'components/notification'
 
-import openHouseStorage from '../../../server/app/routes/openhouse/registration/storage'
 import { onlineSubmitHandler as registerOpenHouse } from '../../../server/app/routes/openhouse/registration/handlers'
+import openHouseStorage from '../../../server/app/routes/openhouse/registration/storage'
 
 export default function syncOpenHouseOfflineRegisters(accessToken) {
   return async dispatch => {

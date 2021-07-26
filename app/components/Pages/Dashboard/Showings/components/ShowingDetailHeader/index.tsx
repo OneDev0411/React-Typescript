@@ -1,16 +1,15 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
-
 import { mdiOpenInNew } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
 import { Avatar } from 'components/Avatar'
 
+import LinkButton from '../LinkButton'
 import ShowingCloseButton from '../ShowingCloseButton'
+
 import ShowingDetailHeaderBookingButton from './ShowingDetailHeaderBookingButton'
 import ShowingDetailHeaderCopyButton from './ShowingDetailHeaderCopyButton'
-import LinkButton from '../LinkButton'
 
 const useStyles = makeStyles(
   theme => ({

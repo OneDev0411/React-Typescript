@@ -6,7 +6,6 @@ import type {
 } from '@stripe/stripe-js'
 
 import createStripeCustomer from './create-stripe-customer'
-
 import deleteStripeCustomer from './delete-stripe-customer'
 
 export interface CreateStripeToken {

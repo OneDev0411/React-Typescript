@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { GifObject, TenorResponse } from './types'
 import { tenorApi } from './helpers'
+import { GifObject, TenorResponse } from './types'
 
 function useTrendsGifs() {
   const [trends, setTrends] = React.useState<GifObject[]>([])

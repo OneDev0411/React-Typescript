@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import uniqBy from 'lodash/uniqBy'
 
 import {
   Box,
@@ -9,24 +8,22 @@ import {
   Theme,
   Avatar
 } from '@material-ui/core'
+import { useTheme } from '@material-ui/styles'
+import uniqBy from 'lodash/uniqBy'
 import { useField } from 'react-final-form'
-
 import { useSelector } from 'react-redux'
 
-import { useTheme } from '@material-ui/styles'
-
-import { IAppState } from 'reducers'
-
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
 import { BaseDropdown } from 'components/BaseDropdown'
 import {
   InputContainer,
   InputLabel,
   InputRequired
 } from 'components/Forms/styled'
+import { getContactNameInitials } from 'models/contacts/helpers'
+import { IAppState } from 'reducers'
 import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
-import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
-import { getContactNameInitials } from 'models/contacts/helpers'
 
 interface Props {
   deal: IDeal

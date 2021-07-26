@@ -1,5 +1,5 @@
 import React from 'react'
-import { Draggable } from 'react-beautiful-dnd'
+
 import {
   Box,
   Grid,
@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { mdiDrag } from '@mdi/js'
 import cn from 'classnames'
+import { Draggable } from 'react-beautiful-dnd'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'

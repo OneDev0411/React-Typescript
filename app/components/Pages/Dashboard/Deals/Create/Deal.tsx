@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react'
+
 import { Box } from '@material-ui/core'
-import { useSelector } from 'react-redux'
-import { useTitle } from 'react-use'
 import { useForm, Controller } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { browserHistory, withRouter, Route, InjectedRouter } from 'react-router'
+import { useTitle } from 'react-use'
 
-import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
-
-import Deal from 'models/Deal'
-
+import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
 import {
   createDeal,
   createRoles,
@@ -16,36 +14,29 @@ import {
   updateListing,
   upsertContexts
 } from 'actions/deals'
-
 import { QuestionWizard } from 'components/QuestionWizard'
-
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
+import Deal from 'models/Deal'
+import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { useReduxDispatch } from 'hooks/use-redux-dispatch'
-
-import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getActiveTeamId } from 'utils/user-teams'
-
-import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
-
-import { getChangedRoles } from './helpers/get-changed-roles'
-
-import { CreateDealIntro } from './form/Intro'
-import { DealType } from './form/DealType'
-import { DealPropertyType } from './form/DealPropertyType'
-import { DealPrimaryAgent } from './form/DealPrimaryAgent'
-import { DealAddress, PropertyAddress } from './form/DealAddress'
-import { DealClient } from './form/DealClient'
-import { DealEnderType } from './form/DealEnderType'
-import { DealCard } from './form/DealCard'
-
-import { useStyles } from './hooks/use-styles'
 
 import { createAddressContext } from '../utils/create-address-context'
 
 import { Header } from './components/Header'
-
 import { Context } from './context'
+import { DealAddress, PropertyAddress } from './form/DealAddress'
+import { DealCard } from './form/DealCard'
+import { DealClient } from './form/DealClient'
+import { DealEnderType } from './form/DealEnderType'
+import { DealPrimaryAgent } from './form/DealPrimaryAgent'
+import { DealPropertyType } from './form/DealPropertyType'
+import { DealType } from './form/DealType'
+import { CreateDealIntro } from './form/Intro'
+import { getChangedRoles } from './helpers/get-changed-roles'
+import { useStyles } from './hooks/use-styles'
 import type { IDealSide } from './types'
 
 interface DealContext {

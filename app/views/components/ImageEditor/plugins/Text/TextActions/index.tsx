@@ -1,27 +1,24 @@
 import React, { useState } from 'react'
+
 import { Box, Theme, Divider, IconButton, makeStyles } from '@material-ui/core'
+import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
+import FontFaceObserver from 'fontfaceobserver'
 import debounce from 'lodash/debounce'
 import pick from 'lodash/pick'
-import { mdiFormatBold, mdiFormatItalic, mdiFormatUnderline } from '@mdi/js'
-import { useEffectOnce } from 'react-use'
-import FontFaceObserver from 'fontfaceobserver'
-
 import { ColorState } from 'react-color'
 import { useSelector } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import { getBrandByType } from 'utils/user-teams'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
-import { getBrandFontFamilies } from 'utils/get-brand-fonts'
 import { getBrandColors } from 'utils/get-brand-colors'
+import { getBrandFontFamilies } from 'utils/get-brand-fonts'
+import { getBrandByType } from 'utils/user-teams'
 
 import FontField from '../../../../../../components/Pages/Dashboard/BrandSettings/Sidebar/Field/Font'
-
-import { Slider } from '../../../components/Slider'
 import { ColorPicker } from '../../../components/ColorPicker'
-
+import { Slider } from '../../../components/Slider'
 import { Actions, ImageEditor } from '../../../types'
 
 const useStyles = makeStyles((theme: Theme) => ({

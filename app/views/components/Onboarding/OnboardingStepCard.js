@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ActionButton from 'components/Button/ActionButton'
 import {
   Actions,
   Container,
@@ -7,7 +8,6 @@ import {
   Spacer,
   Title
 } from 'components/Onboarding/styled'
-import ActionButton from 'components/Button/ActionButton'
 
 /**
  *

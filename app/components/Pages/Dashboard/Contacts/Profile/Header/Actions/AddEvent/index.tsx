@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { Button } from '@material-ui/core'
 
-import { normalizeContact } from 'views/utils/association-normalizers'
+import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
+
 import { EventDrawer } from 'components/EventDrawer'
+import { normalizeContact } from 'views/utils/association-normalizers'
 
 interface StateProps {
   user: IUser

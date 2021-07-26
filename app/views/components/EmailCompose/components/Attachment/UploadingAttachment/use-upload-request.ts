@@ -1,5 +1,6 @@
-import { SuperAgentRequest } from 'superagent'
 import { useEffect, useRef, useState } from 'react'
+
+import { SuperAgentRequest } from 'superagent'
 
 interface UseUploadRequestArgs {
   request: SuperAgentRequest

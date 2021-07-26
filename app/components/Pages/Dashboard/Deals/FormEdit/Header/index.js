@@ -1,7 +1,7 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import Flex from 'styled-flex-component'
 
 import { CloseButton } from 'components/Button/CloseButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'

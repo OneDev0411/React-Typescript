@@ -1,5 +1,6 @@
 import React from 'react'
-import { fireEvent, render } from '@testing-library/react'
+
+import { render } from '@testing-library/react'
 
 // // eslint-disable-next-line import/no-unresolved
 // import user from 'fixtures/users/agent.json'

@@ -1,7 +1,8 @@
 import React, { ComponentPropsWithoutRef } from 'react'
+
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import Flex from 'styled-flex-component'
 import classNames from 'classnames'
+import Flex from 'styled-flex-component'
 
 type Props = ComponentPropsWithoutRef<typeof Flex>
 

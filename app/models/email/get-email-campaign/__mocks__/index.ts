@@ -1,5 +1,5 @@
-import simpleEmailCampaign from 'fixtures/email-campaign/simple-email-campaign.json'
 import mcEmailCampaign from 'fixtures/email-campaign/mc-email-campaign.json'
+import simpleEmailCampaign from 'fixtures/email-campaign/simple-email-campaign.json'
 
 const samples = {
   simple: simpleEmailCampaign,

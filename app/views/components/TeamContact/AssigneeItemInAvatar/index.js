@@ -1,16 +1,15 @@
-import styled from 'styled-components'
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-
-import { mdiClose } from '@mdi/js'
 
 import { Tooltip } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { Avatar } from '../../Avatar'
 import IconButton from '../../Button/IconButton'
-import { SvgIcon } from '../../SvgIcons/SvgIcon'
 import { muiIconSizes } from '../../SvgIcons/icon-sizes'
+import { SvgIcon } from '../../SvgIcons/SvgIcon'
 
 const Icon = styled(SvgIcon)`
   position: absolute;

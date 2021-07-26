@@ -1,5 +1,4 @@
 import * as actionTypes from 'constants/filter-segments'
-
 import getSegments from 'models/filter-segments/get-segments'
 
 export function getSavedSegments(nameId, query) {

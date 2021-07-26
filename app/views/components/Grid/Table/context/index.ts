@@ -1,7 +1,8 @@
 import { createContext } from 'react'
 
-import { initialState } from './reducers'
 import { ActiveSort } from '../types'
+
+import { initialState } from './reducers'
 
 export interface StateContext {
   selection: {
@@ -18,5 +19,7 @@ export interface StateContext {
 }
 
 export type DispatchContext = React.Dispatch<any>
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StateContext = createContext<StateContext>(initialState)
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const DispatchContext = createContext<DispatchContext>(() => null)

@@ -8,14 +8,12 @@ import {
   Theme,
   IconButton
 } from '@material-ui/core'
-
 import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getLegalFullName, roleName } from '../../../utils/roles'
-
 import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(

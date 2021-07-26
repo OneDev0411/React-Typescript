@@ -8,18 +8,15 @@ import React, {
   useCallback
 } from 'react'
 
+import { Typography, TextField, Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import { Typography, TextField, Box } from '@material-ui/core'
-
 import useAsync from 'hooks/use-async'
-
+import updateWebsite from 'models/website/update-website'
 import { selectUserId } from 'selectors/user'
 
-import updateWebsite from 'models/website/update-website'
-
-import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 import useWebsiteCardData from '../WebsiteCardProvider/use-website-card-data'
+import useWebsiteListActions from '../WebsiteListProvider/use-website-list-actions'
 
 const emptyTitle = 'Your Site Title'
 

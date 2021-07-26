@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
 
-import Flex from 'styled-flex-component'
 import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
-import { addNotification, Notification } from 'components/notification'
-
-import { CSSInput, CSSData } from 'models/css/types'
-import connectCSS from 'models/css/connect'
-import getCSS from 'models/css/get'
-import disconnectCSS from 'models/css/disconnect'
-
-import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import FormCard from 'components/FormCard'
+import { addNotification, Notification } from 'components/notification'
+import IconCircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import connectCSS from 'models/css/connect'
+import disconnectCSS from 'models/css/disconnect'
+import getCSS from 'models/css/get'
+import { CSSInput, CSSData } from 'models/css/types'
 
-import Header from './Header'
-import Description from './Description'
 import Connect from './Connect'
-import Disconnect from './Disconnect'
-
-import { CSSLogo, LoadingContainer } from './styled'
-
 import { MARKET_LOCATIONS } from './constants'
+import Description from './Description'
+import Disconnect from './Disconnect'
+import Header from './Header'
+import { CSSLogo, LoadingContainer } from './styled'
 
 interface FormInputData {
   username: string

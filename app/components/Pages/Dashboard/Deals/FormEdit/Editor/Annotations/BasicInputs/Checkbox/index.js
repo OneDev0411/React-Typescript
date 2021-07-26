@@ -2,11 +2,10 @@ import React from 'react'
 
 import { useTheme } from '@material-ui/core'
 
+import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
 import parseAppearanceString from 'deals/FormEdit/utils/appearance'
 import { normalizeCheckboxValue } from 'deals/FormEdit/utils/normalize-checkbox-value'
 import { Types } from 'deals/FormEdit/utils/types'
-
-import { EditTemplateButton } from 'deals/FormEdit/components/EditTemplateButton'
 
 import { CheckboxInput } from './styled'
 

@@ -2,10 +2,11 @@ import { memo } from 'react'
 
 import Masonry from 'components/Masonry'
 
+import ImageThumbnail from '../../ImageThumbnail'
 import Loading from '../../Loading'
 import NoResults from '../../NoResults'
-import ImageThumbnail from '../../ImageThumbnail'
 import { SearchableImageTabProps } from '../../types'
+
 import { usePhotoLibrary } from './hooks'
 
 const DEFAULT_SEARCH_QUERY = 'skyline'

@@ -1,15 +1,14 @@
 import React, { ComponentProps } from 'react'
 
+import { ImagePreviewModal } from 'components/ImagePreviewModal'
+import { PdfViewerModal } from 'components/PdfViewer/Modal'
+import { getFileType } from 'utils/file-utils/get-file-type'
 import {
   getTemplateImage,
   navigateBetweenTemplatesUsingKeyboard,
   selectNextTemplate,
   selectPreviousTemplate
 } from 'utils/marketing-center/helpers'
-import { getFileType } from 'utils/file-utils/get-file-type'
-
-import { ImagePreviewModal } from 'components/ImagePreviewModal'
-import { PdfViewerModal } from 'components/PdfViewer/Modal'
 
 interface Props {
   isOpen: boolean
@@ -31,9 +30,8 @@ function PreviewModal(props: Props) {
     return null
   }
 
-  const { thumbnail: imgSrcTiny, original: imgSrc } = getTemplateImage(
-    selectedTemplate
-  )
+  const { thumbnail: imgSrcTiny, original: imgSrc } =
+    getTemplateImage(selectedTemplate)
 
   let modalProps: ComponentProps<typeof ImagePreviewModal> = {
     isOpen: props.isOpen,

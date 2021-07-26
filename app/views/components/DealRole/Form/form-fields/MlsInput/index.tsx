@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+
 import { FieldInputProps } from 'react-final-form'
 
 import searchAgents from 'models/agent/search'
@@ -26,32 +27,33 @@ export function MlsInput({ label, isVisible, input, mutators }: Props) {
     mutators.populateRole(option)
   }
 
-  const searchByMlsId = useCallback(async (mls: string): Promise<
-    NormalizedAgent[]
-  > => {
-    if (!mls || mls.length < 6) {
-      return []
-    }
+  const searchByMlsId = useCallback(
+    async (mls: string): Promise<NormalizedAgent[]> => {
+      if (!mls || mls.length < 6) {
+        return []
+      }
 
-    try {
-      setIsSearching(true)
+      try {
+        setIsSearching(true)
 
-      const agents: IAgent[] = await searchAgents(mls)
+        const agents: IAgent[] = await searchAgents(mls)
 
-      setIsSearching(false)
+        setIsSearching(false)
 
-      return agents.map(agent => ({
-        ...agent,
-        company: agent.office ? agent.office.name : '',
-        value: agent.mlsid,
-        label: agent.full_name
-      }))
-    } catch (e) {
-      setIsSearching(false)
+        return agents.map(agent => ({
+          ...agent,
+          company: agent.office ? agent.office.name : '',
+          value: agent.mlsid,
+          label: agent.full_name
+        }))
+      } catch (e) {
+        setIsSearching(false)
 
-      return []
-    }
-  }, [])
+        return []
+      }
+    },
+    []
+  )
 
   if (!isVisible) {
     return null

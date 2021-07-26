@@ -1,10 +1,10 @@
 import React from 'react'
-import classnames from 'classnames'
-import usePromise from 'react-use-promise'
-import Flex from 'styled-flex-component'
 
 import { List, ListItem } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
+import classnames from 'classnames'
+import usePromise from 'react-use-promise'
+import Flex from 'styled-flex-component'
 
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
 

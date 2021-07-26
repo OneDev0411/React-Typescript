@@ -1,19 +1,18 @@
 import * as React from 'react'
 import { ComponentProps, useCallback, useEffect, useState } from 'react'
-
 import { useContext } from 'react'
 
+import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
 import { getEmailCampaign } from 'models/email/get-email-campaign'
 
-import { deleteEmailCampaign } from 'models/email/delete-email-campaign'
-
+import ConfirmationModalContext from '../../ConfirmationModal/context'
+import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
 import { BulkEmailComposeDrawer } from '../BulkEmailComposeDrawer'
+import { hasMultipleRecipients } from '../helpers/has-multiple-recipients'
 import { SingleEmailComposeDrawer } from '../SingleEmailComposeDrawer'
 import { EmailFormValues } from '../types'
+
 import { getRecipientsFromRecipientsEntity } from './helpers/get-recipients-from-recipients-entity'
-import getTemplateInstancePreviewImage from '../../InstantMarketing/helpers/get-template-preview-image'
-import ConfirmationModalContext from '../../ConfirmationModal/context'
-import { hasMultipleRecipients } from '../helpers/has-multiple-recipients'
 
 interface Props {
   emailId: string

@@ -1,7 +1,7 @@
 import { composeDecorators } from 'draft-js-plugins-editor'
 
-import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import { createCollapsibleDecorator } from './block-decorators/create-collapsible-decorator'
+import createIframePlugin from './plugins/draft-js-iframe-plugin'
 import createPasteHtmlPlugin from './plugins/draft-js-paste-html'
 import { getHtmlConversionOptions } from './utils/get-html-conversion-options'
 

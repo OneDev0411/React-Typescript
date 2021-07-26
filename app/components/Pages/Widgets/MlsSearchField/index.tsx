@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Grid, TextField } from '@material-ui/core'
 
-import MLSSearch from '../MlsSearchAutocomplete'
 import SearchIcon from '../../../../views/components/SvgIcons/Search/IconSearch'
+import MLSSearch from '../MlsSearchAutocomplete'
 
 export default function Search() {
   return (

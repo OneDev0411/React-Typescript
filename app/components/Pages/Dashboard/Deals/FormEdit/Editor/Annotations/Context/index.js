@@ -5,6 +5,7 @@ import { getGroupValues } from 'deals/FormEdit/utils/get-group-values'
 import { normalizeContextValue } from 'deals/FormEdit/utils/normalize-context-value'
 
 import { AnnotationWrapper } from '../components/AnnotationWrapper'
+
 import { ContextField } from './ContextField'
 
 function Contexts(props) {

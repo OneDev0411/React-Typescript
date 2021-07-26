@@ -1,10 +1,11 @@
 import React from 'react'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 
-import util from 'utils/listing'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import util from 'utils/listing'
 
 /**
  * renders a recommendation(== listing) message

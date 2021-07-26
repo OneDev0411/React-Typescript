@@ -1,15 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
-import { browserHistory } from 'react-router'
-import { connect } from 'react-redux'
 
 import { Tooltip } from '@material-ui/core'
-
-import { blue } from 'views/utils/colors'
+import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
+import styled from 'styled-components'
 
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-
 import { savedSegmentId } from 'reducers/filter-segments'
+import { blue } from 'views/utils/colors'
 
 export const ListItem = styled.div`
   display: flex;

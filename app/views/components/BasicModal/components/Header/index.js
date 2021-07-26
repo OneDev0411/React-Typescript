@@ -1,7 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import PropTypes from 'prop-types'
+
 import { mdiClose } from '@mdi/js'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
 import IconButton from 'components/Button/IconButton'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr'
 
-import { contactsSchema } from '../../../models/contacts/schema'
 import { normalizeContact } from '../../../models/contacts/helpers/normalize-contact'
+import { contactsSchema } from '../../../models/contacts/schema'
 
 export function normalizeContactAttribute({
   data

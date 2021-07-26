@@ -1,12 +1,13 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { Form, Field } from 'react-final-form'
-import { Button } from '@material-ui/core'
 
-import SubmitButton from './SubmitButton'
+import { Button } from '@material-ui/core'
+import { Form, Field } from 'react-final-form'
+import { Link } from 'react-router'
+
 import { Callout } from '../../../../views/components/Callout'
 import SimpleField from '../../Dashboard/Account/Profile/components/SimpleField'
 
+import SubmitButton from './SubmitButton'
 import { SubmitMessage } from './types'
 
 interface Props {

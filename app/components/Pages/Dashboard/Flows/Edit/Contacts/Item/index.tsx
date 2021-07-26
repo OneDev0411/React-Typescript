@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Grid,
   Tooltip,
@@ -7,10 +8,10 @@ import {
   TableRow
 } from '@material-ui/core'
 
-import { getContactNameInitials } from 'models/contacts/helpers'
 import ALink from 'components/ALink'
-import { DangerButton } from 'components/Button/DangerButton'
 import { Avatar } from 'components/Avatar'
+import { DangerButton } from 'components/Button/DangerButton'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 interface Props {
   contact: IContact

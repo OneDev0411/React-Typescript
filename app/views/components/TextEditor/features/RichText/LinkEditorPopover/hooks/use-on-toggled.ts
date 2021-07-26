@@ -1,5 +1,6 @@
-import usePrevious from 'react-use/lib/usePrevious'
 import { useEffect } from 'react'
+
+import usePrevious from 'react-use/lib/usePrevious'
 
 export function useOnToggledOn(value: boolean, cb: () => void) {
   const wasOpen = usePrevious(value)

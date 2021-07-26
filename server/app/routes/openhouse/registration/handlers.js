@@ -3,6 +3,7 @@
 const fetch = require('isomorphic-fetch')
 
 const config = require('../../../../config').default
+
 const storage = require('./storage').default
 
 const API_URL = config.api_url

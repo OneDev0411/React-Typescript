@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Typography } from '@material-ui/core'
 
-import PopOver from 'components/Popover'
 import { Avatar } from 'components/Avatar'
+import PopOver from 'components/Popover'
 import { getSide } from 'models/Deal/helpers/context/get-side'
 
 import { roleName, getLegalFullName } from '../../../../utils/roles'

@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { Box, Container } from '@material-ui/core'
-
 import { Helmet } from 'react-helmet'
 
 import EditEmailSignature from 'components/EditEmailSignature'
