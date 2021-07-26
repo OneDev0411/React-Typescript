@@ -21,6 +21,7 @@ import { Divider } from 'components/Divider'
 import TimeInput from 'components/TimeInput'
 
 interface Props {
+  startDate?: Date
   selectedDate: Date
   showTimePicker?: boolean
   datePickerModifiers?: Partial<Modifiers>
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export function EndDateTimeField({
+  startDate,
   selectedDate,
   showTimePicker = true,
   datePickerModifiers,
@@ -91,6 +93,9 @@ export function EndDateTimeField({
                       <DayPicker
                         initialMonth={endDate}
                         selectedDays={endDate}
+                        disabledDays={{
+                          before: startDate || endDate
+                        }}
                         onDayClick={date => {
                           date.setHours(
                             endDate.getHours(),
