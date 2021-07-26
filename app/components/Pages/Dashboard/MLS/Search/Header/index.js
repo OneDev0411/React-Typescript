@@ -53,7 +53,7 @@ export function Header(props) {
             />
           </Box>
           <BaseDropdown
-            renderDropdownButton={({ isActive, ...buttonProps }) => (
+            renderDropdownButton={buttonProps => (
               <Button
                 className={classes.filtersButton}
                 variant="outlined"

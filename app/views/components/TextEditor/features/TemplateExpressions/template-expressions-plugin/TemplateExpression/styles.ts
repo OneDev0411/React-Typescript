@@ -1,5 +1,5 @@
 import { createStyles, Theme } from '@material-ui/core'
-import { alpha } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles'
 
 export const styles = (theme: Theme) =>
   createStyles({
@@ -14,12 +14,12 @@ export const styles = (theme: Theme) =>
       color: theme.palette.text.secondary,
       '&:hover': {
         color: theme.palette.primary.dark,
-        background: alpha(theme.palette.primary.main, 0.12)
+        background: fade(theme.palette.primary.main, 0.12)
       }
     },
     noFallback: {
       color: theme.palette.error.main,
-      background: alpha(theme.palette.error.main, 0.12)
+      background: fade(theme.palette.error.main, 0.12)
     },
     icon: {
       width: '0.7rem!important', // to overcome default icon size specificity

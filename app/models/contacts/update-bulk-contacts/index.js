@@ -3,8 +3,7 @@ import { defaultQuery } from '../helpers/default-query'
 
 /**
  * Upserting attributes to contacts
- * @param {Array} updatedContacts - array of contacts with attributes
- * which should be updated
+ * @param {Array} updatedContacts - array of contacts with attributes which should be updated
  * @param {Object} attributes - array of attributes to be add or update
  * @returns Returns 204
  */

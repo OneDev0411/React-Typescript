@@ -37,7 +37,7 @@ export default function Info() {
 
   return (
     <Box py={6} mb={3} textAlign="center" className={classes.container}>
-      <Grid container alignItems="center" justifyContent="center">
+      <Grid container alignItems="center" justify="center">
         <Grid item xs={12} md={3}>
           <div>
             <SvgIcon

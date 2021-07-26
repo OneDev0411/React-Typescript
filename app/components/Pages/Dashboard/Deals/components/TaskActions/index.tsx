@@ -2,7 +2,7 @@ import React from 'react'
 
 import {
   Box,
-  alpha,
+  fade,
   Slide,
   Theme,
   MenuItem,
@@ -60,7 +60,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(0, 2),
       background: theme.palette.tertiary.main,
       borderRadius: `${theme.spacing(2)}px`,
-      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
+      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
         theme.palette.common.black,
         0.4
       )}`,

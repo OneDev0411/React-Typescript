@@ -1,5 +1,5 @@
 import { Link } from '@material-ui/core'
-import { Theme, alpha } from '@material-ui/core/styles'
+import { Theme, fade } from '@material-ui/core/styles'
 import { Link as RouterLink, LinkProps } from 'react-router'
 import styled, { ThemeProps, css } from 'styled-components'
 
@@ -37,7 +37,7 @@ const itemStyle = css`
   border-radius: 0;
   border-left: 4px solid transparent;
   color: ${(props: ThemeProps<Theme>) =>
-    alpha(props.theme.palette.navbar.contrastText, 0.7)};
+    fade(props.theme.palette.navbar.contrastText, 0.7)};
   &:hover,
   &:focus {
     text-decoration: none;
@@ -68,10 +68,7 @@ const linkStyle = css`
   ${itemStyle}
 `
 
-const WrappedRouterLink = ({ active, ...rest }: SidenavLinkPorps) => (
-  <RouterLink {...rest} />
-)
-export const SidenavLink = styled(WrappedRouterLink)<SidenavLinkPorps>`
+export const SidenavLink = styled(RouterLink)<SidenavLinkPorps>`
   ${linkStyle}
 `
 

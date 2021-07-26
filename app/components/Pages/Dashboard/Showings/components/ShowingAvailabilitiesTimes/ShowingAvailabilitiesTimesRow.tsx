@@ -112,7 +112,6 @@ function ShowingAvailabilitiesTimesRow({
       getSecondsDifference(values.end, values.start) < showingDuration
     ) {
       errors[FORM_ERROR] =
-        // eslint-disable-next-line max-len
         'The time difference between "From" and "To" values should exceed the Showing duration.'
     }
 

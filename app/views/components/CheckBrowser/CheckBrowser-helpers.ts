@@ -82,7 +82,6 @@ export function getMessage(status: BrowserStatus) {
   }
 
   if (status.isOutdated === true) {
-    // eslint-disable-next-line max-len
     output.text = `Your web browser (${status.meta.browserName} ${status.meta.browserVersion}) is out of date.`
     output.actionText = 'Upgrade'
     output.actionLink =

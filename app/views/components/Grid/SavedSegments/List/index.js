@@ -90,7 +90,6 @@ class SegmentsList extends React.Component {
 
     return (
       <BaseDropdownWithMore
-        component="div"
         buttonLabel="Lists"
         DropdownToggleButtonProps={{
           disabled: props.isFetching || props.list.length === 0,

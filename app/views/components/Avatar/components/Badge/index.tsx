@@ -11,9 +11,6 @@ interface ExtraBadgeProps extends BadgeProps {
   statusColor?: string
 }
 
-const BadgeWrapper = ({ isOnline, statusColor, ...rest }: ExtraBadgeProps) => {
-  return <BaseBadge {...rest} />
-}
 export const Badge = withStyles((theme: Theme) =>
   createStyles({
     badge: {
@@ -37,4 +34,4 @@ export const Badge = withStyles((theme: Theme) =>
           : 'inherit'
     }
   })
-)(BadgeWrapper)
+)(BaseBadge)

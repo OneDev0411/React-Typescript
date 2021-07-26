@@ -120,7 +120,7 @@ export default function ImageSelectDialog({
       }}
     >
       <DialogTitle disableTypography>
-        <Grid container direction="row" justifyContent="space-between">
+        <Grid container direction="row" justify="space-between">
           <Grid item>
             <Tabs
               value={selectedTab}

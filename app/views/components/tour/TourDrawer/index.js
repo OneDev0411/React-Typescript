@@ -207,7 +207,6 @@ export class TourDrawer extends React.Component {
                     <Title fullWidth placeholder="Untitled tour" />
                     <Box mt={1}>
                       {shouldShowDescription || values?.description ? (
-                        // eslint-disable-next-line max-len
                         <Description placeholder="Enter any general notes for your clients" />
                       ) : (
                         <Button
@@ -251,7 +250,10 @@ export class TourDrawer extends React.Component {
                   <Reminder dueDate={values.dueDate} />
 
                   <Box ml={4} mb={2}>
-                    <Locations locations={values.locations} />
+                    <Locations
+                      locations={values.locations}
+                      handleDelete={this.handleDeleteAssociation}
+                    />
                     <Box mt={0.5}>
                       <AddAssociation
                         showTitle
@@ -313,20 +315,15 @@ export class TourDrawer extends React.Component {
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip
-                        placement="top"
-                        title="Preview and print tour sheets"
-                      >
-                        <div>
-                          <PreviewTourSheets
-                            agent={user}
-                            disabled={isDisabled}
-                            listings={values.locations.map(
-                              l => l.listing.original
-                            )}
-                            tour={prePreviewFormat(values, this.state.tour)}
-                          />
-                        </div>
+                      <Tooltip title="Preview and print tour sheets">
+                        <PreviewTourSheets
+                          agent={user}
+                          disabled={isDisabled}
+                          listings={values.locations.map(
+                            l => l.listing.original
+                          )}
+                          tour={prePreviewFormat(values, this.state.tour)}
+                        />
                       </Tooltip>
                       <Button
                         variant="contained"

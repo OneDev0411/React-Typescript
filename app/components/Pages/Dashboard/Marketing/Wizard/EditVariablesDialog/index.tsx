@@ -89,12 +89,7 @@ export default function EditVariablesDialog({
     >
       <DialogTitle>
         <Grid container direction="column">
-          <Grid
-            container
-            item
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Grid container item alignItems="center" justify="space-between">
             <Grid item>
               <IconButton onClick={onClose}>
                 <SvgIcon path={closeIcon} />

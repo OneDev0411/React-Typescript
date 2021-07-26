@@ -42,7 +42,6 @@ export function MlsSelect({ agents, onChange, mlsId, onCancel }: Props) {
       <div>
         <Header
           title="Choose MLS"
-          // eslint-disable-next-line max-len
           description={`You entered ${mlsId} for MLS #, Choose which MLS you are in.`}
         />
         <FormControl variant="filled" color="secondary">

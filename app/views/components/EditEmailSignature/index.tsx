@@ -84,7 +84,7 @@ export default function EditEmailSignature({
       </Box>
 
       {showActions && (
-        <Grid container justifyContent="flex-end">
+        <Grid container justify="flex-end">
           <Button
             color="secondary"
             variant="contained"

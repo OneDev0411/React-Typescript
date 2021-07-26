@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React from 'react'
 
 import styled, { css } from 'styled-components'

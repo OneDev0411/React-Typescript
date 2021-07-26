@@ -58,12 +58,7 @@ export default function ListingAlertFiltersList({
   }, [filters])
 
   return (
-    <Grid
-      container
-      direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
-    >
+    <Grid container direction="row" alignItems="center" justify="flex-end">
       {Object.entries(filtersKeyValueMap)
         .slice(0, limit)
         .map(([key, value]) => (

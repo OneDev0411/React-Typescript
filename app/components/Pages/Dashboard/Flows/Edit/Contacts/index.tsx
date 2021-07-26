@@ -86,7 +86,7 @@ export default function Contacts({ flowId, onStop, onContactClick }: Props) {
         container
         item
         direction="column"
-        justifyContent="center"
+        justify="center"
         alignItems="center"
         style={{ height: '50vh' }}
       >
@@ -101,7 +101,7 @@ export default function Contacts({ flowId, onStop, onContactClick }: Props) {
   }
 
   return (
-    <Grid container item justifyContent="center" alignItems="center" xs={12}>
+    <Grid container item justify="center" alignItems="center" xs={12}>
       <Paper className={classes.paper}>
         <Table>
           <TableHead>

@@ -100,7 +100,6 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
             addNotification({
               status: 'error',
               message:
-                // eslint-disable-next-line max-len
                 'Something went wrong while dismissing the contact. Please try again.'
             })
           )
@@ -134,7 +133,6 @@ export default function MergeDuplicates({ contact, mergeCallback }: Props) {
           dispatch(
             addNotification({
               status: 'success',
-              // eslint-disable-next-line max-len
               message: `${duplicateContacts.contacts.length} contacts merged successfully.`
             })
           )

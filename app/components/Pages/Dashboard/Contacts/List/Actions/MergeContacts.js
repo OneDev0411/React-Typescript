@@ -15,7 +15,6 @@ class MergeContacts extends React.Component {
     confirmation({
       message: 'Merge contacts?',
       description:
-        // eslint-disable-next-line max-len
         'The selected contacts will be merged into the 1st contact you selected. Once merged, it can not be undone. Are you sure you want to continue?',
       confirmLabel: 'Yes, merge',
       onConfirm: async () => {

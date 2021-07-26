@@ -44,7 +44,6 @@ function getNeighborhoodsGraphTemplateReport(
             aggregatedItem => aggregatedItem.label
           )
 
-          // eslint-disable-next-line max-len
           const title = `${metric.name} ${metricData.label} in ${selectedReport.neighborhood.label}`
 
           const datasets = [

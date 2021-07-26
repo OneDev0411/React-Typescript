@@ -29,9 +29,7 @@ const template = `
 
 <body>
   <div class="wrapper">
-    <img src="https://app.rechat.com/static/images/logo.svg"
-      class="logo"
-      alt="Rechat Logo" />
+    <img src="https://app.rechat.com/static/images/logo.svg" class="logo" alt="Rechat Logo" />
     <h1>Sorry. Your browser is not supported by Rechat.</h1>
     <h2>For the best experience on Rechat, we recommend using Chrome.</h2>
     <h2>

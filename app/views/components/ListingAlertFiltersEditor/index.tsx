@@ -74,7 +74,7 @@ export default function ListingAlertFiltersEditor({
             container
             spacing={1}
             direction="row"
-            justifyContent="space-between"
+            justify="space-between"
             alignItems="center"
           >
             <Grid item className={classes.title}>

@@ -25,7 +25,6 @@ export default async (req: Request, res: Response) => {
 
       if (e.response?.status === 400 || e.response?.status === 401) {
         res.send(
-          // eslint-disable-next-line max-len
           'Access denied. This envelope was created by someone else. You cannot amend it'
         )
       }

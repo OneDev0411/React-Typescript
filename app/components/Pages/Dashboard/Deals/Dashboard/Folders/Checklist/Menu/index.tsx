@@ -75,8 +75,8 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
       PopperProps={{
         placement: 'bottom-end'
       }}
-      renderDropdownButton={({ isActive, ...buttonProps }) => (
-        <IconButton size="small" {...buttonProps} className={classes.root}>
+      renderDropdownButton={props => (
+        <IconButton size="small" {...props} className={classes.root}>
           <SvgIcon path={mdiMenu} />
         </IconButton>
       )}

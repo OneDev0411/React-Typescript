@@ -47,7 +47,7 @@ export default function AgentCard({ agent }: Props) {
             </Avatar>
           </Grid>
           <Grid item>
-            <Grid container item direction="column" justifyContent="center">
+            <Grid container item direction="column" justify="center">
               <Grid
                 container
                 item

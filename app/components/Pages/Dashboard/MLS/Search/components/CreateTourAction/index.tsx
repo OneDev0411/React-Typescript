@@ -25,7 +25,6 @@ export default function CreateTourAction(props: Props) {
         message: 'Error',
         // eslint-disable-next-line
         description:
-          // eslint-disable-next-line max-len
           "You can't have more than 27 listings selected for a toursheet. Please deselect some and try again.",
         needsCancel: false,
         confirmLabel: 'Got it'

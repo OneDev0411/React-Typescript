@@ -106,7 +106,6 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
         notify({
           status: 'error',
           message:
-            // eslint-disable-next-line max-len
             'Sorry, something went wrong while sending a new code. Please try again.',
           options: {
             dismissAfter: 6000

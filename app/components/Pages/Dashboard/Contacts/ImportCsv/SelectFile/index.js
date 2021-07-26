@@ -125,7 +125,6 @@ class SelectFile extends React.Component {
             </H1>
             <Tooltip
               placement="right"
-              // eslint-disable-next-line max-len
               title="Not the team you want to import these contacts into? No worries. Go to your team switcher to change your team and then try importing again."
             >
               <SvgIcon

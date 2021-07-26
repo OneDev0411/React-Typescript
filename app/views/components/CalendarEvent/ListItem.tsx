@@ -99,7 +99,6 @@ export default function CalendarEventListItem({ event }: Props) {
   }
 
   if (event.event_type == 'home_anniversary' && contact) {
-    // eslint-disable-next-line max-len
     secondaryText = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
   } else {
     secondaryText = humanizedEventTime

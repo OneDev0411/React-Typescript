@@ -30,7 +30,6 @@ export function CreateTourAction({ buttonRenderer }: Props) {
       modal.setConfirmationModal({
         message: 'Error',
         description:
-          // eslint-disable-next-line max-len
           "You can't have more than 27 listings selected for a toursheet. Please deselect some and try again.",
         confirmLabel: 'Got it'
       })

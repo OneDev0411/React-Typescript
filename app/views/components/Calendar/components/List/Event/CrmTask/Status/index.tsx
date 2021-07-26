@@ -27,7 +27,6 @@ export function CrmStatus({ event, onChange }: Props) {
       context.setConfirmationModal({
         message: 'Heads up!',
         description:
-          // eslint-disable-next-line max-len
           'If you mark this event as done, the event due date will change to now. Are you sure?',
         onConfirm: () => {
           return resolve(['DONE', true])

@@ -43,7 +43,7 @@ export default function MarketingTemplateInstancePicker({
 
   if (isLoading) {
     return (
-      <Grid container justifyContent="center">
+      <Grid container justify="center">
         <LoadingContainer style={{ padding: '20%' }} noPaddings />
       </Grid>
     )
@@ -56,7 +56,7 @@ export default function MarketingTemplateInstancePicker({
         item
         direction="column"
         alignItems="center"
-        justifyContent="center"
+        justify="center"
       >
         <Box my={2} pt={10}>
           <img

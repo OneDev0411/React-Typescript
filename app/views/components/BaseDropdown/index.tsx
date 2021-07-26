@@ -18,7 +18,6 @@ export interface RenderToggleButtonProps {
   isActive: boolean
   ref: RefObject<any>
   onClick: () => void
-  component?: string
   'aria-controls': 'menu-list-grow'
   'aria-haspopup': 'true'
 }
@@ -53,7 +52,6 @@ export interface Props {
 
   disablePortal?: boolean
 
-  component?: string
   placement?: PopperProps['placement']
 }
 
@@ -70,7 +68,6 @@ export function BaseDropdown({
   renderDropdownButton,
   placement = 'bottom-start',
   PopperProps = {},
-  component = 'button',
   disablePortal = false
 }: Props) {
   const anchorRef = useRef<HTMLButtonElement>(null)
@@ -83,7 +80,6 @@ export function BaseDropdown({
   const buttonProps: RenderToggleButtonProps = {
     isActive: open,
     ref: anchorRef,
-    component,
     onClick: () => toggle(),
     'aria-controls': 'menu-list-grow',
     'aria-haspopup': 'true'

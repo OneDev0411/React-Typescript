@@ -140,10 +140,8 @@ export default function EmailComposeForm<T>({
           status: 'warning',
           message:
             numberOfUploadingAttachments === 1
-              ? // eslint-disable-next-line max-len
-                'There is still one uploading attachment. Please, wait until uploading completes, or remove it.'
-              : // eslint-disable-next-line max-len
-                'There are still some uploading attachments. Please, wait until uploading completes, or remove them.'
+              ? 'There is still one uploading attachment. Please, wait until uploading completes, or remove it.'
+              : 'There are still some uploading attachments. Please, wait until uploading completes, or remove them.'
         })
       )
 

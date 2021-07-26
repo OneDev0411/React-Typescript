@@ -29,12 +29,7 @@ export default function Stats({ campaign }: Props) {
   const classes = useStyles()
 
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="space-between"
-      wrap="nowrap"
-    >
+    <Grid container direction="row" justify="space-between" wrap="nowrap">
       <Grid container item direction="column" alignItems="center">
         <Grid item>
           <Tooltip placement="top" title="Sent">

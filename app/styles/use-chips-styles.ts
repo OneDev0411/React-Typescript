@@ -1,11 +1,11 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
-import { alpha } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles'
 
 export const useChipStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       error: {
-        background: alpha(theme.palette.error.light, 0.2)
+        background: fade(theme.palette.error.light, 0.2)
       },
       'margin--small': {
         margin: theme.spacing(0.75, 0.5)

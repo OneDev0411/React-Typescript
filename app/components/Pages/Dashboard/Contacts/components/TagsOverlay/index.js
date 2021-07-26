@@ -134,7 +134,6 @@ class TagsOverlay extends React.Component {
     if (/\S/.test(newTagValue)) {
       return this.props.confirmation({
         description:
-          // eslint-disable-next-line max-len
           "We noticed you have un-added tag. Please select the 'Add' button before saving",
         hideCancelButton: true,
         confirmLabel: 'OK'
