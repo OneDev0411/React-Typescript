@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 
-import { Box, Theme, fade, makeStyles } from '@material-ui/core'
+import { Box, Theme, alpha, makeStyles } from '@material-ui/core'
 import { useDeepCompareEffect } from 'react-use'
 
 import CardSkeleton from 'components/CardSkeleton'
@@ -40,7 +40,7 @@ const useStyles = makeStyles(
       transition: theme.transitions.create('background-color'),
       cursor: 'pointer',
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.black, 0.1)
+        backgroundColor: alpha(theme.palette.common.black, 0.1)
       }
     }
   }),

@@ -1,4 +1,4 @@
-import { Theme, fade } from '@material-ui/core'
+import { Theme, alpha } from '@material-ui/core'
 import styled, { css, ThemedStyledProps } from 'styled-components'
 
 import ActionButton from 'components/Button/ActionButton'
@@ -51,7 +51,7 @@ export const EditModeContainer = styled.div<
       : `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`};
   background: ${({ hasError, theme }) =>
     hasError
-      ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
+      ? alpha(theme.palette.error.main, theme.palette.action.hoverOpacity)
       : theme.palette.action.hover};
 `
 

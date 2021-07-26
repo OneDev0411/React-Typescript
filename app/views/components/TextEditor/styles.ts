@@ -1,5 +1,5 @@
 import { createStyles, Theme } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 
 export const styles = (theme: Theme) =>
   createStyles({
@@ -18,7 +18,7 @@ export const styles = (theme: Theme) =>
     },
     dropzoneActive: {
       '&::after': {
-        border: `${theme.spacing(0.5)}px dashed ${fade(
+        border: `${theme.spacing(0.5)}px dashed ${alpha(
           theme.palette.grey['500'],
           0.5
         )}`,
@@ -29,7 +29,7 @@ export const styles = (theme: Theme) =>
         right: 0,
         top: theme.spacing(6),
         bottom: 0,
-        background: fade(theme.palette.common.white, 0.8),
+        background: alpha(theme.palette.common.white, 0.8),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -38,7 +38,7 @@ export const styles = (theme: Theme) =>
       }
     },
     dropzoneReject: {
-      borderColor: fade(theme.palette.warning.main, 0.7)
+      borderColor: alpha(theme.palette.warning.main, 0.7)
     },
     toolbar: {},
     content: {

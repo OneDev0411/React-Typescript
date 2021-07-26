@@ -10,7 +10,7 @@ import {
   Grid,
   Chip,
   Box,
-  fade,
+  alpha,
   Theme,
   makeStyles
 } from '@material-ui/core'
@@ -58,7 +58,7 @@ const useStyles = makeStyles(
     },
     cardMediaActionContainer: {
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.7),
+      backgroundColor: alpha(theme.palette.common.white, 0.7),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
