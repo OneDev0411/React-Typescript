@@ -81,7 +81,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         <TabLink
           key="closings"
           value="closings"
-          label={<span>Closings</span>}
+          label={<span>Upcoming Closings</span>}
           to="/dashboard/deals/filter/closings?type=query"
         />,
         <Tab
