@@ -143,6 +143,7 @@ class SavedSearch extends React.Component {
 
     this.setState({ activeView }, () => {
       browserHistory.push(
+        // eslint-disable-next-line max-len
         `/dashboard/mls/saved-searches/${this.props.savedSearch.id}?view=${activeView}`
       )
     })

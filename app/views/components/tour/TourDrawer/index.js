@@ -207,6 +207,7 @@ export class TourDrawer extends React.Component {
                     <Title fullWidth placeholder="Untitled tour" />
                     <Box mt={1}>
                       {shouldShowDescription || values?.description ? (
+                        // eslint-disable-next-line max-len
                         <Description placeholder="Enter any general notes for your clients" />
                       ) : (
                         <Button
