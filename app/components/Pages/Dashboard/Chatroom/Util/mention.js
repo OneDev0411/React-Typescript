@@ -15,6 +15,7 @@ export default class Mention {
     // replacer
     let replacer = (text, user) => {
       const username = `@${user.username}`
+      // eslint-disable-next-line max-len
       const replace = `<span style="background-color: rgb(255, 243, 184)">${username}</span>`
 
       return text.replace(new RegExp(username, 'g'), replace)

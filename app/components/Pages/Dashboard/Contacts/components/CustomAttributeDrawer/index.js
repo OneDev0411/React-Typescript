@@ -85,6 +85,7 @@ class CustomAttributeDrawer extends React.Component {
               label="Name"
               name="label"
               required
+              // eslint-disable-next-line max-len
               hint="A custom field name is your unique title name for your custom field. Examples of a custom title name could be Pet Name, Marital Status or Military Service."
             />
 
@@ -93,16 +94,19 @@ class CustomAttributeDrawer extends React.Component {
                 {
                   title: 'Date',
                   value: 'date',
+                  // eslint-disable-next-line max-len
                   hint: 'For custom fields that are date based when capturing values like a birthday or anniversary'
                 },
                 {
                   title: 'Number',
                   value: 'number',
+                  // eslint-disable-next-line max-len
                   hint: "For custom fields that are ONLY number based like 'Age' or 'Years retired'"
                 },
                 {
                   title: 'Text',
                   value: 'text',
+                  // eslint-disable-next-line max-len
                   hint: 'For custom fields that can accept words, numbers and characters and have unique values and labels'
                 }
               ]}
@@ -138,6 +142,7 @@ class CustomAttributeDrawer extends React.Component {
                 label="Add Label"
                 labelNote="(optional)"
                 name="labels"
+                // eslint-disable-next-line max-len
                 hint="Use labels to add dropdown descriptions to the values you want to capture. For example, use the labels work, home & personal when capturing a phone number."
               />
             )}
@@ -147,6 +152,7 @@ class CustomAttributeDrawer extends React.Component {
                 label="Default Values"
                 labelNote="(optional)"
                 name="enum_values"
+                // eslint-disable-next-line max-len
                 hint="Use values to add dropdown options to the custom field you want to capture. For example, use the values Mr., Mrs. or Dr. when capturing a title."
               />
             )}

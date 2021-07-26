@@ -65,7 +65,7 @@ function CategoryItem({
   return (
     <div className={classes.container}>
       <Box className={classes.root}>
-        <Grid container justify="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Grid item xs={12} sm={6} className={classes.tleft}>
             <Box fontWeight="fontWeightBold">
               {title !== 'null' ? title : 'Unorganized'}

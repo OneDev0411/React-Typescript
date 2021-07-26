@@ -52,6 +52,7 @@ export function From({ deal }: Props) {
       return `${user.display_name} <${user.email}>`
     }
 
+    // eslint-disable-next-line max-len
     return `${user.docusign.first_name} ${user.docusign.last_name} <${user.docusign.email}>`
   }
 

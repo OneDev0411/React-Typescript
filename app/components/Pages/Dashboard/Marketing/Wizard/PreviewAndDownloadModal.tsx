@@ -61,7 +61,7 @@ export default function PreviewAndDownloadModal({
             container
             item
             alignItems="center"
-            justify="flex-end"
+            justifyContent="flex-end"
             spacing={2}
           >
             <Grid item>
