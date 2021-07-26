@@ -1,4 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
+
 import {
   TextField,
   InputAdornment,
@@ -6,16 +7,13 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
 import { TextFieldProps } from '@material-ui/core/TextField'
-
+import { useTheme } from '@material-ui/styles'
+import { mdiMagnify, mdiClose } from '@mdi/js'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { mdiMagnify, mdiClose } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {

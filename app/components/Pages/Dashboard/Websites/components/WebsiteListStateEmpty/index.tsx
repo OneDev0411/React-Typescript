@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Box } from '@material-ui/core'
 
-import { H2 } from 'components/Typography/headings'
 import Image from 'components/TemplatesList/EmptyStateImage'
+import { H2 } from 'components/Typography/headings'
 
 function WebsiteListStateEmpty() {
   return (

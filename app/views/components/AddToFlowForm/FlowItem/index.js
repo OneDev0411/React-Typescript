@@ -1,9 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
-import { Container } from './styled'
 import { Name } from '../styled'
+
+import { Container } from './styled'
 
 FlowItem.propTypes = {
   item: PropTypes.shape({

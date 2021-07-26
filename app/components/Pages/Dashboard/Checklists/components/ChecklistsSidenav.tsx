@@ -1,7 +1,7 @@
 import { Button, Typography, Box } from '@material-ui/core'
 
-import SideNavSection from '../../../../../views/components/PageSideNav/SideNavSection'
 import PageSideNav from '../../../../../views/components/PageSideNav'
+import SideNavSection from '../../../../../views/components/PageSideNav/SideNavSection'
 
 import { ChecklistsSidenavItem } from './ChecklistsSidenavItem'
 

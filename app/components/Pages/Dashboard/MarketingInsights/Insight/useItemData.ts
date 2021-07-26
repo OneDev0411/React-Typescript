@@ -28,6 +28,7 @@ export function useItemData(emailCampaignId: string) {
 
   useEffect(() => {
     loadEmailCampaign()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailCampaignId])
 
   return {

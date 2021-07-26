@@ -1,8 +1,8 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
 import { hideConfirmation } from '../../../store_actions/confirmation'
-
 import Modal from '../../../views/components/BareModal'
 import Button from '../../../views/components/Button/ActionButton'
 

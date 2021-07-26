@@ -1,9 +1,8 @@
 import * as actionTypes from '../../../constants/contacts'
-import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { associations as defaultAssociations } from '../../../models/contacts/helpers'
-
-import { normalizeContacts } from '../helpers/normalize-contacts'
+import { searchContacts as search } from '../../../models/contacts/search-contacts'
 import { selectContacts } from '../../../reducers/contacts/list'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
 // TODO: make args an object
 export function searchContacts(

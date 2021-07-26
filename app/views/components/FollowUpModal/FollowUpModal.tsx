@@ -1,21 +1,19 @@
 import React, { useState, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
 import { Button, makeStyles, Theme, Typography } from '@material-ui/core'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
-
-import { createTask } from 'models/tasks/create-task'
+import Dialog from 'components/Dialog'
 import { EventDrawer } from 'components/EventDrawer'
 import { preSaveFormat } from 'components/EventDrawer/helpers/pre-save-format'
-import Dialog from 'components/Dialog'
+import { addNotification as notify } from 'components/notification'
+import { createTask } from 'models/tasks/create-task'
+import { selectUser } from 'selectors/user'
 import { noop } from 'utils/helpers'
 
-import { selectUser } from 'selectors/user'
-
-import { FollowUpEmail } from './types'
 import { getFollowUpCrmTask } from './helper/get-follow-up-crm-task'
 import { getInitialDate } from './helper/get-initial-date'
+import { FollowUpEmail } from './types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {

@@ -1,4 +1,5 @@
 import React, { ReactNode, ComponentType } from 'react'
+
 import {
   Button,
   ButtonGroup,
@@ -9,11 +10,9 @@ import {
   useTheme
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
-
 import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { ClassesProps } from 'utils/ts-utils'
 
 import useStyles from './styles'
@@ -34,6 +33,7 @@ interface Props extends ClassesProps<typeof useStyles> {
   style?: React.CSSProperties
   variant?: 'contained' | 'outlined' | undefined
   tourId?: string
+  disablePortal?: boolean
 }
 
 export default function SplitButton(props: Props) {
@@ -86,6 +86,7 @@ export default function SplitButton(props: Props) {
         style={{ zIndex: theme.zIndex.modal }}
         placement={props.popperPlacement}
         transition
+        disablePortal={props.disablePortal}
       >
         {({ TransitionProps, placement }) => (
           <Grow

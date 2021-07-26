@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import { getActiveTeamId } from 'utils/user-teams'
-import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { deleteBrandAsset } from 'models/brand/delete-brand-asset'
+import { getBrandAssets } from 'models/brand/get-brand-assets'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { DEFAULT_ASSET_LABEL } from './constants'
 

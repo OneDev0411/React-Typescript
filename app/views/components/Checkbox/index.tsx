@@ -1,10 +1,12 @@
 import React, { CSSProperties, ReactNode } from 'react'
-import classNames from 'classnames'
+
 import { mdiCheck } from '@mdi/js'
+import classNames from 'classnames'
 
 import { useCuid } from 'hooks/use-cuid'
 
 import { useVisuallyHiddenStyles } from '../../../styles/visually-hidden.style'
+
 import { CheckMark, CheckMarkBox, Input, Label } from './styled'
 
 interface Props {

@@ -1,8 +1,9 @@
 import { useState } from 'react'
+
 import { useDeepCompareEffect } from 'react-use'
 
-import { getTemplates } from 'models/instant-marketing/get-templates'
 import { deleteBrandTemplate } from 'models/instant-marketing/delete-brand-template'
+import { getTemplates } from 'models/instant-marketing/get-templates'
 
 const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
   'Email',

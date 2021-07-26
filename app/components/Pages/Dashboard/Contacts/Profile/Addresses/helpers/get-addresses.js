@@ -32,15 +32,21 @@ const normalizeAddress = (
   attributes,
   isActive = false,
   defaultLabel = 'Other',
-  isPrimary = false
+  isPrimary = false,
+  allAddressMaxIndex = 0
 ) => {
-  const {
+  let {
     id,
     label,
     index,
     is_primary,
     attribute_def: { labels }
   } = attributes[0]
+
+  if (!index) {
+    index = allAddressMaxIndex ? allAddressMaxIndex + 1 : 1
+    attributes = attributes.map(attr => ({ ...attr, index }))
+  }
 
   return {
     id,
@@ -60,8 +66,8 @@ export const generateEmptyAddress = (
   isActive,
   defaultLabel,
   isPrimary
-) =>
-  normalizeAddress(
+) => {
+  return normalizeAddress(
     normalizeAttributesToFields(
       addressAttributeDefs,
       undefined,
@@ -72,6 +78,7 @@ export const generateEmptyAddress = (
     defaultLabel,
     isPrimary
   )
+}
 
 export function getAddresses(addressesFields, addressAttributeDefs) {
   if (addressesFields.length === 0) {
@@ -81,6 +88,9 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
   let addresses = []
 
   const idxAddresses = _.groupBy(addressesFields, 'index')
+  const maxIndex = Math.max.apply(Math, [
+    ...new Set(addressesFields.map(a => a.index))
+  ])
 
   _.each(idxAddresses, address => {
     const fields = normalizeAttributesToFields(
@@ -91,7 +101,9 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
 
     const defaultLabel = addresses.length === 0 ? 'Home' : 'Other'
 
-    addresses.push(normalizeAddress(fields, false, defaultLabel))
+    addresses.push(
+      normalizeAddress(fields, false, defaultLabel, false, maxIndex)
+    )
   })
 
   return addresses

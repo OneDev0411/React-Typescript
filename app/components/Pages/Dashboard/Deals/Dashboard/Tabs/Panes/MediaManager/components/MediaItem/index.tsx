@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+
 import {
   Box,
   Button,
@@ -6,25 +7,24 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core'
+import { mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
 import ClickOutside from 'react-click-outside'
-
-import { SortableHandle } from 'react-sortable-hoc'
 import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
-import { mdiPencilOutline } from '@mdi/js'
+import { SortableHandle } from 'react-sortable-hoc'
 
+import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { renameMedia } from '../../context/actions'
+import useMediaManagerContext from '../../hooks/useMediaManagerContext'
 import { useStyles } from '../../styles'
+import type { IMediaItem } from '../../types'
+
 import ActionsMenu from './ActionsMenu'
 import SelectCheckbox from './SelectCheckbox'
-import UploadProgessBar from './UploadProgessBar'
 import SortHandle from './SortHandle'
-
-import useMediaManagerContext from '../../hooks/useMediaManagerContext'
-import type { IMediaItem } from '../../types'
-import { renameMedia } from '../../context/actions'
+import UploadProgessBar from './UploadProgessBar'
 
 const EMPTY_NAME_TEXT = 'Caption can go here ...'
 

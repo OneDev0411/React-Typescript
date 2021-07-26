@@ -1,4 +1,5 @@
 import React from 'react'
+
 import styled, { css } from 'styled-components'
 
 const width = '69'
@@ -25,7 +26,7 @@ const defaultProps = {
       <path
         stroke="#000"
         strokeLinecap="round"
-        strokeLinejoin="round" 
+        strokeLinejoin="round"
         strokeWidth="3"
         d="M3.5 2h62A1.5 1.5 0 0 1 67 3.5V67H2V3.5A1.5 1.5 0 0 1 3.5 2zM2 67h65v17.5a1.5 1.5 0 0 1-1.5 1.5h-62A1.5 1.5 0 0 1 2 84.5V67z"
       />

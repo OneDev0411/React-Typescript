@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+
 import * as actionTypes from '../../constants/tasks'
 
 const byId = (state = {}, action) => {

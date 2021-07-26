@@ -1,5 +1,7 @@
 import { formValueSelector, change } from 'redux-form'
+
 import { ACTIVE_OPEN_HOUSES_STATUS } from '../../../../constants/listings/search/filters'
+
 import { getObjectValues } from './submit-filters-form'
 
 const formName = 'filters'

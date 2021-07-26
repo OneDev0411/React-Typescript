@@ -1,5 +1,3 @@
-import { connect } from 'react-redux'
-
 import {
   Box,
   Checkbox,
@@ -8,26 +6,25 @@ import {
   makeStyles
 } from '@material-ui/core'
 import cn from 'classnames'
-
-import { selectTags } from 'reducers/contacts/tags'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
-
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
+import { connect } from 'react-redux'
 
 import Filters from 'components/Grid/Filters'
-import SaveSegment from 'components/Grid/SavedSegments/Create'
-import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import { OperatorAndOperandFilter } from 'components/Grid/Filters/FilterTypes/OparatorAndOperand'
+import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
+import SaveSegment from 'components/Grid/SavedSegments/Create'
+import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
+import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
+import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import { selectTags } from 'reducers/contacts/tags'
 
 import { FLOW_FILTER_ID, OPEN_HOUSE_FILTER_ID, ORIGINS } from '../constants'
+import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
 import createFiltersFromSegment from './helpers/create-filters-from-segment'
 import createSegmentFromFilters from './helpers/create-segment-from-filters'
 import getFlows from './helpers/get-flows'
 import getOpenHouseEvents from './helpers/get-open-house-events'
 import getUniqTags from './helpers/get-uniq-tags'
-import { getPredefinedContactLists } from '../utils/get-predefined-contact-lists'
 
 const useStyles = makeStyles(theme =>
   createStyles({

@@ -1,11 +1,11 @@
-import { goToPlace } from '../map'
+import { SEARCH_BY_POSTAL_CODE } from '../../../constants/listings/search'
+import { selectListings } from '../../../reducers/listings'
 import extendedBounds from '../../../utils/extendedBounds'
 import { normalizeListingsForMarkers } from '../../../utils/map'
+import { goToPlace } from '../map'
 
-import { selectListings } from '../../../reducers/listings'
 import getListingsByPostalCode from './get-listings/by-postal-code'
-import { reset as resetSearchType, setSearchType } from './set-type'
-import { SEARCH_BY_POSTAL_CODE } from '../../../constants/listings/search'
+import { setSearchType } from './set-type'
 
 const searchByPostalCode = postalCode => async (dispatch, getState) => {
   if (!postalCode) {

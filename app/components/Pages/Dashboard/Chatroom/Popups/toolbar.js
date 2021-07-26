@@ -1,9 +1,10 @@
 import React from 'react'
-import cn from 'classnames'
-import { mdiWindowMinimize, mdiArrowTopRight, mdiClose } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { mdiWindowMinimize, mdiArrowTopRight, mdiClose } from '@mdi/js'
+import cn from 'classnames'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import Members from '../Rooms/members'
 

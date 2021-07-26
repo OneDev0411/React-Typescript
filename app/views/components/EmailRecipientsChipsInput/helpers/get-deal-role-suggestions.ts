@@ -12,11 +12,15 @@ export function getDealRoleSuggestions(
   searchTerm: string
 ): Observable<IDenormalizedEmailRecipientEmailInput[]> {
   return of(
-    filterEntities(dealRoles.filter(dealRole => dealRole.email), searchTerm, [
-      'email',
-      'legal_full_name',
-      'user.display_name' as any // typing is not supported for nested casess
-    ]).map(role => ({
+    filterEntities(
+      dealRoles.filter(dealRole => dealRole.email),
+      searchTerm,
+      [
+        'email',
+        'legal_full_name',
+        'user.display_name' as any // typing is not supported for nested casess
+      ]
+    ).map(role => ({
       recipient_type: 'Email',
       email: role.email
     }))

@@ -1,13 +1,11 @@
 import { Box } from '@material-ui/core'
-import { Link } from 'react-router'
-
 import { mdiFilePdfOutline } from '@mdi/js'
+import { Link } from 'react-router'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { getFormActions } from '../helpers/get-form-actions'
-
 import { useStyles } from '../styles'
 
 interface Props {

@@ -1,7 +1,7 @@
 import { Dispatch, useCallback, useState } from 'react'
 
-import { updateRoles } from '../helpers/update-roles'
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
+import { updateRoles } from '../helpers/update-roles'
 
 export function useEditRolesModal(
   setRootTeam: Dispatch<(prevState: IBrand) => IBrand>

@@ -1,10 +1,10 @@
 import React from 'react'
+
 import { Grid, Box } from '@material-ui/core'
 
-import { goTo } from 'utils/go-to'
-
-import Drawer from 'components/OverlayDrawer'
 import ListingCard from 'components/ListingCards/ListingCard'
+import Drawer from 'components/OverlayDrawer'
+import { goTo } from 'utils/go-to'
 
 import { CompactListingWithBothSideAgents } from '../../types'
 

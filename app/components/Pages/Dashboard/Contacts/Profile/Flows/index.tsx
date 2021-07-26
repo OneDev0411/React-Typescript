@@ -4,9 +4,10 @@ import { mdiPlus } from '@mdi/js'
 
 import AddToFlowButton from 'components/AddToFlowButton'
 
-import List from './List/List'
 import { BasicSection } from '../components/Section/Basic'
 import { SectionButton } from '../components/Section/Button'
+
+import List from './List/List'
 
 interface Props {
   addCallback: () => void

@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo } from 'react'
+
 import { createStyles, Drawer, makeStyles, Theme } from '@material-ui/core'
 import { DrawerProps as OriginalDrawerProps } from '@material-ui/core/Drawer'
-
 import { mergeWith } from 'lodash'
 
 import Body from './Body'
-import Header from './Header'
-import Footer from './Footer'
 import { DrawerContext, useDrawerContext } from './drawer-context'
+import Footer from './Footer'
+import Header from './Header'
 import { DrawerContextType, DrawerProps, StyleProps } from './types'
 
 export { useDrawerContext } from './drawer-context'

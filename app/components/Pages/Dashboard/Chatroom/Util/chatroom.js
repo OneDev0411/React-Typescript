@@ -2,8 +2,8 @@ import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
 
-import store from '../../../../../stores'
 import ChatroomModel from '../../../../../models/Chatroom'
+// eslint-disable-next-line import/no-cycle
 import ChatNotification from '../../../../../services/notification/chat'
 import {
   getRooms,
@@ -14,6 +14,7 @@ import {
   removeRoomMessages,
   closeChatPopup
 } from '../../../../../store_actions/chatroom'
+import store from '../../../../../stores'
 
 export default class Chatroom {
   /**

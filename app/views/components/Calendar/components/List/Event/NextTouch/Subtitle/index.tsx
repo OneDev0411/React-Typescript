@@ -1,4 +1,5 @@
 import React from 'react'
+
 import timeago from 'timeago.js'
 
 interface Props {

@@ -1,10 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+
+import { isBackOffice } from '../../../../../utils/user-teams'
 
 import AgentTable from './Agent'
 import BackOfficeTable from './BackOffice'
-import { isBackOffice } from '../../../../../utils/user-teams'
 
 const List = ({ isBackOffice, ...rest }) => (
   <div data-test="deals-list">

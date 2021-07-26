@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useDropzone } from 'dropzone'
+
 import {
   Box,
   CircularProgress,
@@ -8,6 +8,7 @@ import {
   Button,
   useTheme
 } from '@material-ui/core'
+import { useDropzone } from 'dropzone'
 
 import { UploadableImageTabProps } from '../../types'
 

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import EventForm from './EventForm'
 import BasicEmailForm from './BasicEmailForm'
-import MarketingEmailForm from './MarketingEmailForm'
 import { AddButtons } from './components/AddButtons'
+import EventForm from './EventForm'
+import MarketingEmailForm from './MarketingEmailForm'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

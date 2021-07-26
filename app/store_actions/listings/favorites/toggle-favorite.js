@@ -1,9 +1,10 @@
 import { normalize } from 'normalizr'
+
+import * as actionsType from '../../../constants/listings/favorites'
 import api from '../../../models/listings/favorites'
 import * as schema from '../../../models/listings/schema'
 import { selectListings } from '../../../reducers/listings'
 import { getIsFavorite } from '../../../reducers/listings/favorites'
-import * as actionsType from '../../../constants/listings/favorites'
 import { normalizeListingsForMarkers } from '../../../utils/map'
 
 const toggleFavorite = listing => (dispatch, getState) => {
@@ -69,7 +70,7 @@ const toggleFavorite = listing => (dispatch, getState) => {
   }
 
   return api.toggleFavorites(params).then(
-    response => {
+    () => {
       dispatch({
         tabName: 'favorites',
         type: actionsType.TOGGLE_FAVORITE_SUCCESS

@@ -1,5 +1,5 @@
-import { getAttributeFromSummary } from '../get-attribute-from-summary'
 import { getContactOriginalSourceTitle } from '../../../../utils/get-contact-original-source-title'
+import { getAttributeFromSummary } from '../get-attribute-from-summary'
 
 export function getContactSource(contact) {
   if (!contact) {

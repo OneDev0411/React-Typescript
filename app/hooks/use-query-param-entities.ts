@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
+
 import { decode } from 'js-base64'
 
 import { useQueryParamValue } from '@app/hooks/use-query-param'
-import getListing from 'models/listings/listing/get-listing'
-import { getContact } from 'models/contacts/get-contact'
-
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import { getContact } from 'models/contacts/get-contact'
+import getListing from 'models/listings/listing/get-listing'
 
 interface UseEntityById {
   isLoading: boolean

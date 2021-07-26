@@ -1,13 +1,13 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
-import { mdiLightningBolt } from '@mdi/js'
-import { Box } from '@material-ui/core'
 
-import { grey, primary } from 'views/utils/colors'
+import { Box } from '@material-ui/core'
+import { mdiLightningBolt } from '@mdi/js'
+import Flex from 'styled-flex-component'
 
 import ALink from 'components/ALink'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { grey, primary } from 'views/utils/colors'
 
 import { Container } from './styled'
 

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
-import toggleFavorite from '../../../../store_actions/listings/favorites/toggle-favorite'
 import { getIsFavorite } from '../../../../reducers/listings/favorites'
+import toggleFavorite from '../../../../store_actions/listings/favorites/toggle-favorite'
 
 class Heart extends React.Component {
   onToggle = () => this.props.dispatch(toggleFavorite(this.props.listing))

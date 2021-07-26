@@ -1,12 +1,12 @@
 import React from 'react'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme } from '@material-ui/core'
 import { mdiAccount } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { formatPhoneNumber } from 'utils/format'
 
 const useStyles = makeStyles(
@@ -23,9 +23,11 @@ const useStyles = makeStyles(
       height: 120,
       marginRight: theme.spacing(2),
       backgroundColor: theme.palette.grey['500'],
-      '& > img': {
+      '& > div': {
+        height: '100%',
         width: '100%',
-        height: '100%'
+        backgroundPosition: 'center center',
+        backgroundSize: 'cover'
       },
       [theme.breakpoints.up('sm')]: {
         width: 150,
@@ -77,7 +79,7 @@ function AgentInfo({
         className={classes.photoWrapper}
       >
         {image ? (
-          <img alt={name} src={image} />
+          <div style={{ backgroundImage: `url(${image})` }} />
         ) : (
           <SvgIcon
             path={mdiAccount}

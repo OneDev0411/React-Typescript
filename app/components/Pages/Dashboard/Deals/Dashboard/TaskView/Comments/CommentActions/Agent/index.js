@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
 
 import { Button, Tooltip } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
 
 class Agent extends React.Component {
   sendComment = () => {
-    const isBackupChecklist = this.props.checklists[this.props.task.checklist]
-      .is_deactivated
+    const isBackupChecklist =
+      this.props.checklists[this.props.task.checklist].is_deactivated
 
     if (isBackupChecklist) {
       return this.props.confirmation({

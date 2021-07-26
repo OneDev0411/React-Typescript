@@ -1,14 +1,15 @@
 import { useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
-
 import uniq from 'lodash/uniq'
-
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { useDispatch } from 'react-redux'
 import useDeepCompareEffect from 'use-deep-compare-effect'
 
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { bulkTag } from 'models/contacts/bulk-tag'
+
+import { BoardColumn } from './Column'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -30,10 +31,6 @@ const useStyles = makeStyles(
     name: 'Board-Container'
   }
 )
-
-import { updateContactTags } from 'actions/contacts/update-contact-tags'
-
-import { BoardColumn } from './Column'
 
 const Columns = ['Warm', 'Hot', 'Past Client']
 

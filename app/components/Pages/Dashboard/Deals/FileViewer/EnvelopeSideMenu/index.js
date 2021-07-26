@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Envelope from '../../components/Envelope'
-
 import { EnvelopeContainer, SideMenu } from '../styled'
 
 export function EnvelopeSideMenu(props) {

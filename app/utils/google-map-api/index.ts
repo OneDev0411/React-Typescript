@@ -1,6 +1,7 @@
-import { loadJS } from 'utils/load-js'
 import idx from 'idx'
+
 import config from 'config'
+import { loadJS } from 'utils/load-js'
 
 export const DEFAULT_KEY = config.google.api_key
 
@@ -24,6 +25,7 @@ export function isMapLibrariesLoaded(libraries: GoogleMapLibrary[]) {
     if (libraries) {
       for (let i = 0; i < libraries.length; i += 1) {
         const lib = libraries[i]
+
         if (typeof window.google.maps[lib] === 'undefined') {
           return false
         }
@@ -31,9 +33,9 @@ export function isMapLibrariesLoaded(libraries: GoogleMapLibrary[]) {
     }
 
     return true
-  } else {
-    return false
   }
+
+  return false
 }
 
 // Create url of Google map API
@@ -47,6 +49,7 @@ export function createGoogleMapApiUrl({
   const librariesPart =
     libraries && libraries.length ? `&libraries=${libraries.join(',')}` : ''
   const callbackPart = callback ? `&callback=${callback}` : ''
+
   return `${baseUrl}${keyPart}${librariesPart}${callbackPart}`
 }
 

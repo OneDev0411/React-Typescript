@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { useSelector } from 'react-redux'
 import { useMemo, useState } from 'react'
+
 import {
   Box,
   Button,
@@ -11,32 +11,33 @@ import {
   Tooltip,
   Typography
 } from '@material-ui/core'
-import fecha from 'fecha'
-import useBoolean from 'react-use/lib/useBoolean'
 import { mdiReplyAllOutline, mdiReplyOutline, mdiAttachment } from '@mdi/js'
+import fecha from 'fecha'
+import { useSelector } from 'react-redux'
+import useBoolean from 'react-use/lib/useBoolean'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { forwardOutlined } from 'components/SvgIcons/icons'
-import { Iframe } from 'components/Iframe'
-import CampaignStatus from 'components/CampaignStatus'
 import { Avatar } from 'components/Avatar'
+import CampaignStatus from 'components/CampaignStatus'
+import { Iframe } from 'components/Iframe'
+import { forwardOutlined } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { selectUserUnsafe } from 'selectors/user'
 import { getNameInitials } from 'utils/helpers'
 
-import { selectUserUnsafe } from 'selectors/user'
-
-import { EmailItemHeaderActions } from './EmailItemHeaderActions'
-import { EmailItemRecipients } from './EmailItemRecipients'
 import { Attachment } from '../../EmailCompose/components/Attachment'
-import { EmailResponseType, EmailThreadEmail } from '../types'
-import { decodeContentIds } from '../helpers/decode-content-ids'
 import { EmailResponseComposeForm } from '../../EmailCompose/EmailResponseComposeForm'
 import { hasReplyAll } from '../../EmailCompose/helpers/has-reply-all'
 import { EmailRecipient } from '../../EmailRecipient'
 import { ThreeDotsButton } from '../../ThreeDotsButton'
-import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
-import { updateEmailReadStatus } from '../helpers/update-email-read-status'
+import { decodeContentIds } from '../helpers/decode-content-ids'
 import { getEmailAvatar } from '../helpers/get-email-avatar'
 import getStatusFromCampaign from '../helpers/get-status-from-campaign'
+import { trimEmailQuotedContent } from '../helpers/trimEmailQuotedContent'
+import { updateEmailReadStatus } from '../helpers/update-email-read-status'
+import { EmailResponseType, EmailThreadEmail } from '../types'
+
+import { EmailItemHeaderActions } from './EmailItemHeaderActions'
+import { EmailItemRecipients } from './EmailItemRecipients'
 
 interface Props {
   email: EmailThreadEmail

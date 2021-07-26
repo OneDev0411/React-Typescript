@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react'
+
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 import Flex from 'styled-flex-component'
 
-import Button from '../../Button/ActionButton'
 import { AssociationItem } from '../../AssocationItem'
-import EmailAssociation from '../../CRMEmailAssociation'
 import AssociationsDrawer from '../../AssociationsDrawer'
+import Button from '../../Button/ActionButton'
+import EmailAssociation from '../../CRMEmailAssociation'
 
 class List extends React.Component {
   state = {

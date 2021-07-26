@@ -1,9 +1,9 @@
 import React from 'react'
+
+import { mdiCalendarOutline } from '@mdi/js'
 import fecha from 'fecha'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-
-import { mdiCalendarOutline } from '@mdi/js'
 
 import DatePicker from 'components/DateTimePicker/next.js'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

@@ -1,7 +1,8 @@
 import React from 'react'
-import classnames from 'classnames'
+
 import { Box, Typography, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
+import classnames from 'classnames'
 
 import { ClassesProps } from 'utils/ts-utils'
 

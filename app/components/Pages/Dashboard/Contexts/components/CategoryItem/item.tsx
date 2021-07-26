@@ -1,14 +1,14 @@
 import React, { useContext } from 'react'
+
+import IconButton from '@material-ui/core/IconButton'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
-import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
-
 import { mdiTrashCanOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   name: String

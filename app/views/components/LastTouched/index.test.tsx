@@ -1,14 +1,13 @@
 import React from 'react'
+
 import { render } from 'enzyme'
 import toJson from 'enzyme-to-json'
 
 import fullContact from 'fixtures/contacts/full-contact.json'
-
 import mockDate, { RealDate } from 'utils/test-utils/mock-date'
 
-import { AppTheme } from '../../../AppTheme'
-
 import { TestBed } from '../../../../tests/unit/TestBed'
+import { AppTheme } from '../../../AppTheme'
 
 import { LastTouched } from '.'
 

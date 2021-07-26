@@ -1,11 +1,13 @@
 import * as React from 'react'
 import { Fragment } from 'react'
+
 import { Box, Chip, createStyles, makeStyles, Theme } from '@material-ui/core'
 import classNames from 'classnames'
 
-import { validateRecipient } from '../../../EmailRecipientsChipsInput/helpers/validate-recipient'
 import { useChipStyles } from '../../../../../styles/use-chips-styles'
 import { recipientToString } from '../../../EmailRecipientsChipsInput/helpers/recipient-to-string'
+import { validateRecipient } from '../../../EmailRecipientsChipsInput/helpers/validate-recipient'
+
 import { getNumShownRecipients } from './helpers/get-num-visible-recipients'
 import { getRemainingRecipientsLabel } from './helpers/get-remaining-recipients-label'
 

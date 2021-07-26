@@ -1,13 +1,13 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useDeepCompareEffect } from 'react-use'
+
 import { makeStyles } from '@material-ui/core'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 import TimeCard from './components/TimeCard'
-
-import { getTimeSlotsInRange } from './utils'
 import { TimeRange } from './types'
+import { getTimeSlotsInRange } from './utils'
 
 SwiperCore.use([Navigation, A11y, Mousewheel])
 

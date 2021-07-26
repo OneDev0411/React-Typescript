@@ -1,7 +1,7 @@
 import * as actionTypes from '../../../constants/contacts'
-import { normalizeContacts } from '../helpers/normalize-contacts'
-import { selectContactsInfo } from '../../../reducers/contacts/list'
 import { getContact as fetchContact } from '../../../models/contacts/get-contact'
+import { selectContactsInfo } from '../../../reducers/contacts/list'
+import { normalizeContacts } from '../helpers/normalize-contacts'
 
 export function getContact(contactId, query) {
   return async (dispatch, getState) => {

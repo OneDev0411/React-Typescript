@@ -2,9 +2,8 @@
 import { Box, Typography } from '@material-ui/core'
 
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'
-import { UserRow } from '../UserRow'
-
 import type { IDealFormRole } from '../../types'
+import { UserRow } from '../UserRow'
 
 export enum RowType {
   Header,

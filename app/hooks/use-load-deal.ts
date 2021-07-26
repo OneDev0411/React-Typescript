@@ -1,11 +1,10 @@
 import { useState, useMemo } from 'react'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { useSelector, batch } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { getDeal, getForms, getBrandChecklists } from 'actions/deals'
 import { IAppState } from 'reducers'
-
 import { selectDealById } from 'reducers/deals/list'
 
 import { useReduxDispatch } from './use-redux-dispatch'

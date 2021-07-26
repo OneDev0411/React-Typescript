@@ -6,9 +6,7 @@ import Fetch from '../../../services/fetch'
  */
 const changePassword = async params => {
   try {
-    const response = await new Fetch()
-      .patch('/users/self/password')
-      .send(params)
+    await new Fetch().patch('/users/self/password').send(params)
   } catch ({ status }) {
     throw status
   }

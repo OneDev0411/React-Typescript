@@ -1,12 +1,12 @@
 import { useState } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { SIGNIN_SUCCESS } from 'constants/auth/signin'
 import { getUserTeams } from 'actions/user/teams'
-
-import Fetch from 'services/fetch'
+import { SIGNIN_SUCCESS } from 'constants/auth/signin'
 import { selectUserUnsafe } from 'selectors/user'
+import Fetch from 'services/fetch'
 
 export function useLoadUser() {
   const [isLoading, setIsLoading] = useState(false)

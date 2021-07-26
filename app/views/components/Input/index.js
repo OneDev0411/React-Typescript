@@ -2,8 +2,8 @@ import React from 'react'
 
 import CurrencyInput from './CurrencyInput'
 import EmailInput from './EmailInput'
-import NumberInput from './NumericInput'
 import GenericInput from './GenericInput'
+import NumberInput from './NumericInput'
 
 export default props => {
   switch (props['data-type'].toLowerCase()) {

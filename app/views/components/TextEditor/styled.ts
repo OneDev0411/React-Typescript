@@ -1,10 +1,10 @@
+import { ComponentProps, ComponentType, CSSProperties } from 'react'
+
+import { Theme } from '@material-ui/core'
 import styled, { ThemeProps } from 'styled-components'
+import Flex from 'styled-flex-component'
 
 import 'draft-js/dist/Draft.css'
-import { Theme } from '@material-ui/core'
-
-import { ComponentProps, ComponentType, CSSProperties } from 'react'
-import Flex from 'styled-flex-component'
 
 export const Toolbar = styled.div`
   display: flex;
@@ -23,17 +23,17 @@ export const Separator = styled.span`
   background-color: ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
   margin: ${({ theme }: ThemeProps<Theme>) => theme.spacing(0, 0.5)};
 `
-export const EditorContainer = (styled(Flex).attrs({ column: true })<{
+export const EditorContainer = styled(Flex).attrs({ column: true })<{
   minHeight: boolean | CSSProperties['minHeight']
 }>`
   flex: 1 1 0%;
   min-height: ${({ minHeight }) =>
     minHeight === true ? '12.5rem' : minHeight || undefined};
-` as unknown) as (ComponentType<
+` as unknown as ComponentType<
   ComponentProps<typeof Flex> & {
     minHeight: boolean | CSSProperties['minHeight']
   }
->)
+>
 
 export const EditorWrapper = styled.div`
   &.hide-placeholder {

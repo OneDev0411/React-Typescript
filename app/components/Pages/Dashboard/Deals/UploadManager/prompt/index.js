@@ -1,15 +1,11 @@
 // todo: the entire file should re-implement
 
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-import cn from 'classnames'
-import _ from 'underscore'
 
 import { Button, Tooltip } from '@material-ui/core'
-
-import { addNotification as notify } from 'components/notification'
-
-import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
+import cn from 'classnames'
+import { connect } from 'react-redux'
+import _ from 'underscore'
 
 import {
   uploadTaskFile,
@@ -19,16 +15,16 @@ import {
   changeNeedsAttention,
   setExpandChecklist
 } from 'actions/deals'
-
 import Checkbox from 'components/CheckmarkButton'
-
+import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
+import { addNotification as notify } from 'components/notification'
 import Deal from 'models/Deal'
 
-import UploadProgress from './upload-progress'
-
 import TasksDropDown from '../../components/TasksDropdown'
-import FileName from './file-name'
 import PdfSplitter from '../../PdfSplitter'
+
+import FileName from './file-name'
+import UploadProgress from './upload-progress'
 
 const STATUS_UPLOADING = 'uploading'
 const STATUS_UPLOADED = 'uploaded'

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Box, Button, useTheme } from '@material-ui/core'
 
-import { OAuthProvider } from 'constants/contacts'
-import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
+import { Box, Button, useTheme } from '@material-ui/core'
 
 import IconGoogle from 'components/SvgIcons/Google/IconGoogle'
 import { outlookIcon } from 'components/SvgIcons/icons'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { OAuthProvider } from 'constants/contacts'
+import { useConnectOAuthAccount } from 'hooks/use-connect-oauth-account'
 
 interface Props {
   size?: 'small' | 'medium' | 'large'

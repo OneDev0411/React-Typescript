@@ -2,9 +2,9 @@ import React from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 
-import { useWizardContext } from '../hooks/use-wizard-context'
-import { useSectionContext } from '../hooks/use-section-context'
 import { SectionErrorContext } from '../context'
+import { useSectionContext } from '../hooks/use-section-context'
+import { useWizardContext } from '../hooks/use-wizard-context'
 
 interface StyleProps {
   step: number

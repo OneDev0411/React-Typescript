@@ -1,10 +1,11 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import BareModal from '../../BareModal'
 
-import { Header } from './Header'
 import { CoverPage } from './CoverPage'
+import { Header } from './Header'
 import { LocationPage } from './LocationPage'
 import './styles/main.scss'
 

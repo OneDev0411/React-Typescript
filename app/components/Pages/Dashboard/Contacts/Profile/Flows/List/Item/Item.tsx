@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react'
+
 import { Box, Typography, Tooltip, makeStyles, Theme } from '@material-ui/core'
 import { mdiStopCircleOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

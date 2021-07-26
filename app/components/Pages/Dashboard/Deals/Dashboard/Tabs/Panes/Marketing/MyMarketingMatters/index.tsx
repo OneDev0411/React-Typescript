@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
 
 import { Button } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+
+import { addNotification } from 'components/notification'
 
 import {
   Container,
@@ -13,6 +14,7 @@ import {
   RightColumn,
   Image
 } from '../styled'
+
 import { sendPunchOutRequest } from './helpers'
 
 function getDealCostCenter(deal: IDeal): string | null {

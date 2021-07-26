@@ -3,9 +3,10 @@ import {
   renameMedia as renameMediaModel
 } from 'models/Deal/media-manager'
 
-import * as actionTypes from './action-types'
 import type { IMediaGallery } from '../../types'
 import { getMediaSorts } from '../helpers/selectors'
+
+import * as actionTypes from './action-types'
 
 export const setGalleryItems = (gallery: IMediaGallery) => ({
   type: actionTypes.SET_GALLERY_ITEMS,

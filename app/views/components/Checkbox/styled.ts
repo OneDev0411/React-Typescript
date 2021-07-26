@@ -1,5 +1,5 @@
-import styled, { ThemedStyledProps } from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled, { ThemedStyledProps } from 'styled-components'
 
 import { SvgIcon } from '../SvgIcons/SvgIcon'
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { ChartConfiguration } from 'chart.js'
 
 export default function getStaticImageChartUrl(

@@ -1,19 +1,20 @@
 import React, { MouseEvent, useState } from 'react'
-import cn from 'classnames'
+
+import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 import { mdiFullscreen } from '@mdi/js'
+import cn from 'classnames'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Lightbox from './Lightbox'
 import {
   PLACEHOLDER_IMAGES_BASE_URL,
   MAIN_IMAGE_PLACEHOLDER_SRC
 } from './constans'
+import Lightbox from './Lightbox'
 
 const THUMBNAIL_IMAGES_PLACEHOLDER = Array.from({ length: 4 }, (x, i) => i).map(
   i => `${PLACEHOLDER_IMAGES_BASE_URL}small-0${i + 1}.jpg`

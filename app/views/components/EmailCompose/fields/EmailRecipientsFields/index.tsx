@@ -1,13 +1,14 @@
 import React, { ComponentProps, HTMLProps, useState, useEffect } from 'react'
+
 import { TextFieldProps } from '@material-ui/core'
 
-import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
-import { EmailRecipientQuickSuggestions } from 'components/EmailRecipientQuickSuggestions'
 import IndividualModeRecipientLabel from 'components/EmailCompose/components/IndividualModeRecipientLabel'
+import { EmailRecipientQuickSuggestions } from 'components/EmailRecipientQuickSuggestions'
+import EmailRecipientsChipsInput from 'components/EmailRecipientsChipsInput'
 
-import { EmailFormValues } from '../../types'
-import { From } from '../../components/From'
 import { CcBccButtons } from '../../components/CcBccButtons'
+import { From } from '../../components/From'
+import { EmailFormValues } from '../../types'
 
 import { useRecipientFields } from './use-recipient-fields'
 
@@ -39,10 +40,8 @@ export function EmailRecipientsFields({
   const fields = useRecipientFields()
   const [ccVisibility, setCcVisibility] = useState(false)
   const [bccVisibility, setBccVisibility] = useState(false)
-  const [
-    lastFocusedSendType,
-    setLastFocusedSendType
-  ] = useState<IEmailRecipientSendType>('To')
+  const [lastFocusedSendType, setLastFocusedSendType] =
+    useState<IEmailRecipientSendType>('To')
 
   const isCcShown = ccVisibility || (values.cc || []).length > 0
   const isBccShown = bccVisibility || (values.bcc || []).length > 0

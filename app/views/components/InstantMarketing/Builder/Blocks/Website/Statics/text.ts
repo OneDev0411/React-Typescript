@@ -1,14 +1,14 @@
 import { Editor } from 'grapesjs'
 
 import TextIcon from 'assets/images/marketing/editor/blocks/text.png'
-
 import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
-import { baseView, isComponent } from '../utils'
-import Text from './text.njk'
 import registerBlock from '../../registerBlock'
-import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { baseView, isComponent } from '../utils'
+
+import Text from './text.njk'
 
 const typeText = 'text'
 export const textBlockName = typeText

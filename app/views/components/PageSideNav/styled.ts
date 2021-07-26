@@ -1,6 +1,7 @@
 import { CSSProperties } from 'react'
-import styled from 'styled-components'
+
 import { fade } from '@material-ui/core/styles'
+import styled from 'styled-components'
 
 export const BadgeContainer = styled.div`
   color: #1d1f26;

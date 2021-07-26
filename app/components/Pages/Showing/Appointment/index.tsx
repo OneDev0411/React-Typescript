@@ -1,11 +1,11 @@
-import { WithRouterProps } from 'react-router'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
+import { WithRouterProps } from 'react-router'
 
 import LoadingContainer from 'components/LoadingContainer'
 
 import { usePublicShowingAppointment } from '../hooks'
-
 import InfoSection from '../Sections/InfoSection'
+
 import ShowingAppointmentStatusSection from './Sections/StatusSection'
 
 const useStyles = makeStyles(

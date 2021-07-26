@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import styled from 'styled-components'
 
 export const ShowMoreLessText = styled.div`
   display: flex;

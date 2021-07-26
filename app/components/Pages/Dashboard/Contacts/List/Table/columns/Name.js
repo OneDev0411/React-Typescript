@@ -1,17 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import Flex from 'styled-flex-component'
 
 import { Typography, Tooltip } from '@material-ui/core'
 import { mdiSetNone } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { getAttributeFromSummary } from 'models/contacts/helpers'
-
-import { grey } from 'views/utils/colors'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
 import Link from 'components/ALink'
 import MiniContact from 'components/MiniContact'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getAttributeFromSummary } from 'models/contacts/helpers'
+import { grey } from 'views/utils/colors'
 
 const ContactsListName = ({ contact }) => {
   const name = getAttributeFromSummary(contact, 'display_name')

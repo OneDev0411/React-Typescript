@@ -6,7 +6,8 @@ export function getResizeAvatarUrl(full_size_url) {
   }
 
   let image_replace = full_size_url.split('/').slice(-1)[0]
-  const imgix_url = config.images.avatars.imgix_url + '/' + image_replace
+  const imgix_url = `${config.images.avatars.imgix_url}/${image_replace}`
+
   return imgix_url
 }
 

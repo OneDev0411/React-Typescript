@@ -1,6 +1,7 @@
 import React from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
+
 import { Typography, Button } from '@material-ui/core'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import Link from 'components/ALink'
 import BareModal from 'components/BareModal'

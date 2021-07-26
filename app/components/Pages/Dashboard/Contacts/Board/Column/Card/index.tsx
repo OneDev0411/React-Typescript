@@ -7,31 +7,25 @@ import {
   Theme,
   useTheme
 } from '@material-ui/core'
+import { mdiCalendar } from '@mdi/js'
+import cn from 'classnames'
 import {
   Draggable,
   DraggableProvided,
   DraggableStateSnapshot
 } from 'react-beautiful-dnd'
-
-import { mdiCalendar } from '@mdi/js'
-import cn from 'classnames'
-
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
-import { useDispatch } from 'react-redux'
-
-import MiniContact from 'components/MiniContact'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { PopoverContactTagSelector } from 'components/TagSelector'
-import { getContactNameInitials } from 'models/contacts/helpers'
-
-import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
-
-import type { SelectorOption } from 'components/TagSelector/type'
-
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
+import { getAccountAvatar } from 'components/Avatar/helpers/get-avatar'
+import MiniContact from 'components/MiniContact'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { PopoverContactTagSelector } from 'components/TagSelector'
+import type { SelectorOption } from 'components/TagSelector/type'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { getContactNameInitials } from 'models/contacts/helpers'
 
 import LastTouched from '../../../List/Table/columns/LastTouched'
 

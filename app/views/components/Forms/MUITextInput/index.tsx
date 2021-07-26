@@ -1,6 +1,7 @@
 import React from 'react'
-import { FieldRenderProps } from 'react-final-form'
+
 import TextField, { TextFieldProps } from '@material-ui/core/TextField'
+import { FieldRenderProps } from 'react-final-form'
 
 export const MUITextInput: React.FC<
   FieldRenderProps<string, HTMLInputElement | HTMLTextAreaElement> &

@@ -1,24 +1,23 @@
 import React from 'react'
+
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { browserHistory } from 'react-router'
-import { Helmet } from 'react-helmet'
-
-import { IAppState } from 'reducers'
-
 import { getAttributeDefs } from 'actions/contacts'
+import { IAppState } from 'reducers'
 
 import {
   IAttributeDefsState,
   isLoadedContactAttrDefs
 } from '../../../../reducers/contacts/attributeDefs'
-import Loading from '../../../../views/components/Spinner'
 import { hasUserAccess } from '../../../../utils/user-teams'
+import Loading from '../../../../views/components/Spinner'
 
-import ContactsList from './List'
 import { Container } from './components/Container'
+import ContactsList from './List'
 
 interface Props {
   getAttributeDefs: IAsyncActionProp<typeof getAttributeDefs>

@@ -1,18 +1,17 @@
 import React from 'react'
-import { withRouter, WithRouterProps } from 'react-router'
 
 import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
+import { withRouter, WithRouterProps } from 'react-router'
 
 import { CloseButton } from 'components/Button/CloseButton'
-
-import YardSign from 'deals/components/YardSign'
 import OpenHouse from 'deals/components/OpenHouse'
+import YardSign from 'deals/components/YardSign'
 
 import DealStatus from '../../../components/DealStatus'
 
-import RemoveDraft from './RemoveDraft'
 import { Email } from './Email'
+import RemoveDraft from './RemoveDraft'
 
 interface Props {
   deal: IDeal
