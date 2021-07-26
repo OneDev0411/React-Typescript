@@ -13,7 +13,6 @@ export function getRoleText(
   if (annotation.attributes?.includes?.('stamp')) {
     const role = list[0]
 
-    // eslint-disable-next-line max-len
     return `${role.agent?.office?.name}\t\t${role.agent?.office?.address}\t\tPhone: ${role.agent?.office?.phone}\n${role.legal_full_name}`
   }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Slide, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { alpha } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles'
 import { mdiClose } from '@mdi/js'
 
 import { resetRows } from '../../context/actions/selection/reset-rows'
@@ -30,7 +30,7 @@ const useStyles = makeStyles(
         padding: theme.spacing(0, 2),
         background: theme.palette.tertiary.main,
         borderRadius: `${theme.spacing(2)}px`,
-        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
+        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
           theme.palette.common.black,
           0.4
         )}`,

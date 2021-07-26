@@ -144,12 +144,7 @@ function Agents(props: WithRouterProps) {
       onSelectSearchResult={openSearchResultPage}
     >
       <Grid container direction="column">
-        <Grid
-          container
-          item
-          alignItems="flex-end"
-          justifyContent="space-between"
-        >
+        <Grid container item alignItems="flex-end" justify="space-between">
           <Grid item>
             {props.location.query.title && (
               <Typography variant="body1">

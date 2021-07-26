@@ -88,7 +88,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           key={inboxTabs.length + 1}
           value="all-deals"
           label={
-            <DropdownTab component="div" title={staticFiltersTitle}>
+            <DropdownTab title={staticFiltersTitle}>
               {({ toggleMenu }) => (
                 <>
                   <MenuItem
@@ -134,7 +134,6 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           key={1}
           label={
             <DropdownTab
-              component="div"
               title={getGridSortLabel(
                 user,
                 SORTABLE_COLUMNS,

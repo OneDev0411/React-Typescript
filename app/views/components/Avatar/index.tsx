@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { memo, useMemo } from 'react'
 
-import { Avatar as MUIAvatar, withStyles, Theme } from '@material-ui/core'
+import {
+  Avatar as MUIAvatar,
+  AvatarProps,
+  withStyles,
+  Theme
+} from '@material-ui/core'
 import LazyLoad from 'react-lazy-load'
 
 import { Badge } from './components/Badge'
 import { getAccountAvatar, getEmailAvatar } from './helpers/get-avatar'
 import { getSize } from './helpers/get-size'
-import { Props } from './type'
+import { BaseProps, Props } from './type'
 
 const BaseAvatar = withStyles((theme: Theme) => ({
   root: (props: Props) => {
@@ -21,18 +25,7 @@ const BaseAvatar = withStyles((theme: Theme) => ({
       }
     }
   }
-}))((props: Props & { src?: string }) => {
-  const {
-    disableLazyLoad,
-    isOnline,
-    showStatus,
-    statusColor,
-    placeHolderImage,
-    ...rest
-  } = props
-
-  return <MUIAvatar {...rest} />
-})
+}))((props: AvatarProps & Pick<BaseProps, 'size'>) => <MUIAvatar {...props} />)
 
 const AvatarComponent = (props: Props) => {
   const {

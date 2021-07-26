@@ -162,7 +162,6 @@ export default function Duplicates({
       clusterLengthWithoutMaster
     )
 
-    // eslint-disable-next-line max-len
     return `${masterTitle} and ${clusterLengthWithoutMaster} other ${possiblePluralizedContactWord}`
   }
 
@@ -181,7 +180,6 @@ export default function Duplicates({
       addNotification({
         status: 'error',
         message:
-          // eslint-disable-next-line max-len
           'Something went wrong while dismissing duplicate contacts. Please try again.'
       })
     )
@@ -311,7 +309,6 @@ export default function Duplicates({
             addNotification({
               status: 'success',
               message:
-                // eslint-disable-next-line max-len
                 'All duplicate contacts lists will be merged. It may take a few minutes.'
             })
           )
@@ -337,7 +334,6 @@ export default function Duplicates({
             addNotification({
               status: 'success',
               message:
-                // eslint-disable-next-line max-len
                 'All duplicate contacts lists will be dismissed. It may take a few minutes.'
             })
           )

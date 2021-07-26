@@ -32,7 +32,6 @@ export default function ConfirmAgentId(props: WithRouterProps) {
 
   const onSubmit = async (values: FormValues) => {
     const notFoundError = {
-      // eslint-disable-next-line max-len
       [FORM_ERROR]: `We were not able to find an agent matching MLS ID (${values.mlsId})). You can go back to try a different number or skip this step for now.`
     }
 

@@ -176,7 +176,6 @@ function OpenHouseForm(props: Props) {
       return
     }
 
-    // eslint-disable-next-line max-len
     const taskComment = `Please create an open house for this date:\n${taskTitle}\n${virtualUrl}`
 
     const task = await dispatch(

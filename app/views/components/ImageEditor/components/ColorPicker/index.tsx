@@ -35,7 +35,7 @@ export function ColorPicker({ color = '#000', colors, onChange }: Props) {
       PopperProps={{
         placement: 'top'
       }}
-      renderDropdownButton={({ isActive, ...props }) => (
+      renderDropdownButton={props => (
         <span
           {...props}
           className={classes.color}

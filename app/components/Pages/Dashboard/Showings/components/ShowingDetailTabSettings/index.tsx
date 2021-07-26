@@ -232,8 +232,6 @@ function ShowingDetailTabSettings({
               ListingInfo {/* TODO: Implement this step */}
             </TabContentSwitch.Item>
           )}
-
-          {/* eslint-disable-next-line max-len */}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
             <ShowingDetailTabSettingsTabApprovalTypeAndRoles
               approvalType={showing.approval_type}
@@ -259,7 +257,6 @@ function ShowingDetailTabSettings({
               />
             </ShowingDetailTabSettingsTabInstructions>
           </TabContentSwitch.Item>
-          {/* eslint-disable-next-line max-len */}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
             <ShowingDetailTabSettingsTabAppraisalsAndInspections
               allowAppraisalDefaultValue={

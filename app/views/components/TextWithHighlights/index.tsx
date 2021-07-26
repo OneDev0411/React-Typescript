@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createContext, ElementType, useContext, useMemo } from 'react'
+import { createContext, ReactType, useContext, useMemo } from 'react'
 
 import styled from 'styled-components'
 
@@ -30,9 +30,8 @@ interface Props {
    * component or tag to use for rendering matches. Defaults to
    * {@link DefaultHighlightComponent}
    */
-  // eslint-disable-next-line max-len
   // refine type to only accept strings or a component which accepts string as children
-  HighlightComponent?: ElementType
+  HighlightComponent?: ReactType
 
   /**
    * props to be passed to HighlightComponent
@@ -84,20 +83,19 @@ export function TextWithHighlights({
 
   if (!searchTerm) {
     // why wrapping in fragment? see this:
-    // eslint-disable-next-line max-len
     // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20544#issuecomment-459665668
     return <>{children}</>
   }
 
   return (
     <>
-      {splitByMatches(regExp!, children).map(({ match, text }, index) =>
+      {splitByMatches(regExp!, children).map(({ match, text }) =>
         match ? (
-          <HighlightComponent key={index} {...highlightProps}>
+          <HighlightComponent {...highlightProps}>
             {encodeEdgeSpaces(text)}
           </HighlightComponent>
         ) : (
-          <span key={index}>{encodeEdgeSpaces(text)}</span>
+          <span>{encodeEdgeSpaces(text)}</span>
         )
       )}
     </>

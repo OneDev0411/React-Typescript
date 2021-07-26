@@ -64,7 +64,7 @@ export default function DownloadDrawer({ file, onShare, onClose }: Props) {
             item
             spacing={3}
             alignItems="center"
-            justifyContent="space-between"
+            justify="space-between"
           >
             <Grid item>
               <Typography variant="h6">Share</Typography>
@@ -84,7 +84,7 @@ export default function DownloadDrawer({ file, onShare, onClose }: Props) {
               onLoad={handleLoadComplete}
             />
           </Grid>
-          <Grid container item justifyContent="space-between">
+          <Grid container item justify="space-between">
             <Grid item xs>
               <Box p={2} textAlign="center">
                 {isLoading && <CircularProgress />}

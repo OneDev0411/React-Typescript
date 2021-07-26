@@ -34,7 +34,7 @@ export const SortFields = ({ onChange, currentOrder }: Props) => {
     activeOrder >= 0 ? sortableColumns[activeOrder].label : 'A - Z'
 
   return (
-    <DropdownTab component="div" title={buttonLabel}>
+    <DropdownTab title={buttonLabel}>
       {({ toggleMenu }) => (
         <>
           {sortableColumns.map((item, index) => (

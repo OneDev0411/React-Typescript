@@ -69,8 +69,7 @@ class PdfList extends React.Component {
         const message =
           e.name === 'PasswordException'
             ? `Sorry "${file.name}" is password protected.`
-            : // eslint-disable-next-line max-len
-              `Sorry we can't open "${file.name}". it's damaged or not readable. ${e.message}`
+            : `Sorry we can't open "${file.name}". it's damaged or not readable. ${e.message}`
 
         this.props.notify({
           title: 'Cannot open pdf file',

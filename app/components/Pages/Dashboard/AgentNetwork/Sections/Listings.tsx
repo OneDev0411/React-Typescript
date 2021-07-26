@@ -22,7 +22,7 @@ export default function Listings({
       <Box py={4} display="flex" flexDirection="column">
         <Grid container spacing={3}>
           {isLoading && (
-            <Grid container item xs alignItems="center" justifyContent="center">
+            <Grid container item xs alignItems="center" justify="center">
               <LoadingContainer noPaddings />
             </Grid>
           )}

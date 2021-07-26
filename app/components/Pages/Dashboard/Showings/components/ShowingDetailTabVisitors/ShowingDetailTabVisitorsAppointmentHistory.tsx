@@ -30,7 +30,6 @@ const useStyles = makeStyles(
         height: '1em',
         '&::before': {
           borderWidth: '0 1em 1em 1em',
-          // eslint-disable-next-line max-len
           borderColor: `transparent transparent ${theme.palette.background.paper} transparent`
         }
       },
@@ -42,7 +41,6 @@ const useStyles = makeStyles(
         height: '1em',
         '&::before': {
           borderWidth: '1em 1em 0 1em',
-          // eslint-disable-next-line max-len
           borderColor: `${theme.palette.background.paper} transparent transparent transparent`
         }
       },
@@ -53,7 +51,6 @@ const useStyles = makeStyles(
         width: '1em',
         '&::before': {
           borderWidth: '1em 1em 1em 0',
-          // eslint-disable-next-line max-len
           borderColor: `transparent ${theme.palette.background.paper} transparent transparent`
         }
       },
@@ -64,7 +61,6 @@ const useStyles = makeStyles(
         width: '1em',
         '&::before': {
           borderWidth: '1em 0 1em 1em',
-          // eslint-disable-next-line max-len
           borderColor: `transparent transparent transparent ${theme.palette.background.paper}`
         }
       }

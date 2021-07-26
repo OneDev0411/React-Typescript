@@ -10,11 +10,9 @@ export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
   'attachments'
 ]
 
-// eslint-disable-next-line max-len
 export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] =
   ['contact', 'list', 'brand', 'agent']
 
-// eslint-disable-next-line max-len
 export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] =
   ['email']
 
@@ -39,7 +37,6 @@ export async function getEmailCampaigns<
   const {
     emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
-    // eslint-disable-next-line max-len
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
   } = associations
 

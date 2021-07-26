@@ -100,7 +100,7 @@ export default function New({ flow, onClose, onSubmit }: Props) {
 
                   <Divider />
 
-                  <Grid container item xs={12} justifyContent="flex-end">
+                  <Grid container item xs={12} justify="flex-end">
                     <Button
                       variant="contained"
                       color="primary"

@@ -118,7 +118,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                 item
                 xs={12}
                 alignItems="center"
-                justifyContent="flex-start"
+                justify="flex-start"
               >
                 <Grid
                   container
@@ -126,7 +126,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                   xs={4}
                   wrap="nowrap"
                   alignItems="center"
-                  justifyContent="flex-start"
+                  justify="flex-start"
                 >
                   <Grid item className={classes.stepTypeContainer}>
                     <StepTypeIcon

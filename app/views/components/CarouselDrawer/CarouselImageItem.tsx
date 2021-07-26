@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 
-import { makeStyles, alpha } from '@material-ui/core'
+import { makeStyles, fade } from '@material-ui/core'
 import classNames from 'classnames'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.grey[300]}`
     },
     name: {
-      background: alpha(theme.palette.common.black, 0.65),
+      background: fade(theme.palette.common.black, 0.65),
       color: theme.palette.common.white,
       display: 'flex',
       alignItems: 'center',

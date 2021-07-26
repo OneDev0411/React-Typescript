@@ -8,7 +8,7 @@ export default function ZeroState() {
       container
       item
       direction="column"
-      justifyContent="center"
+      justify="center"
       alignItems="center"
       style={{ height: '50vh' }}
     >

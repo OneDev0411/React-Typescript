@@ -23,8 +23,7 @@ function useAppointmentApprovalAccessMessage(
   }, [roles])
 
   return hasApproved
-    ? // eslint-disable-next-line max-len
-      `You've already approved this appointment. It's waiting for approval from ${names}.`
+    ? `You've already approved this appointment. It's waiting for approval from ${names}.`
     : `${names} ${count > 1 ? 'have' : 'has'} access to do this.`
 }
 

@@ -197,7 +197,6 @@ export default function ListingMarketing({
               <Grid item xs={12} sm={6} md={4}>
                 <Link
                   noStyle
-                  // eslint-disable-next-line max-len
                   to={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listing.property.address.street_address}`}
                 >
                   <MarketingButton

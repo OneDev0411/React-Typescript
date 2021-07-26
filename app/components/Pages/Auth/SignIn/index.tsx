@@ -59,7 +59,6 @@ export default function Signin(props: Props) {
           await signup(username)
           setLookUpFormSubmitMsg({
             type: 'info',
-            // eslint-disable-next-line max-len
             text: "Your email already has been signed up in Rechat. But you didn't complete the registration. We resent a new activation email. Please check your inbox."
           })
         } else if (response.password) {

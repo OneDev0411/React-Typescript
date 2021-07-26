@@ -65,7 +65,7 @@ export default function InfoSection({ showing }: Props) {
   return (
     <Grid item xs={12} sm={6} md={5} className={classes.container}>
       <Hidden smUp>
-        <Grid container item justifyContent="center">
+        <Grid container item justify="center">
           <Grid item xs={4}>
             <Box pb={2} pt={3}>
               <img alt="logo" src="/static/images/logo.svg" />

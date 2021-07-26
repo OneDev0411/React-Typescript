@@ -47,7 +47,7 @@ const propTypes = {
   addRoleActionRenderer: PropTypes.func,
   onCloseAddRoleDrawer: PropTypes.func,
   onTriggerRequiredEmail: PropTypes.func,
-  onSelect: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
   onUpsertRole: PropTypes.func,
   onCreateRole: PropTypes.func
 }

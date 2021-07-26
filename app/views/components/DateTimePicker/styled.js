@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import styled, { css } from 'styled-components'
 
 import { grey, primary } from '../../utils/colors'

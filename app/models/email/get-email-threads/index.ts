@@ -27,7 +27,6 @@ export async function getEmailThreads<
     hasAttachments?: boolean
     ids?: UUID[]
   },
-  // eslint-disable-next-line max-len
   associations: SelectedEmailThreadAssociations[] = defaultEmailThreadAssociations as SelectedEmailThreadAssociations[]
 ): Promise<IEmailThread<SelectedEmailThreadAssociations>[]> {
   const response = await new Fetch().post('/emails/threads/filter').query({

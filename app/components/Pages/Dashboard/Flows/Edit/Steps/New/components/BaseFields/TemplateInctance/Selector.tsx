@@ -292,7 +292,7 @@ export const TemplateSelector = ({
                   container
                   spacing={2}
                   alignItems="center"
-                  justifyContent="center"
+                  justify="center"
                 >
                   <Grid item>
                     <Button

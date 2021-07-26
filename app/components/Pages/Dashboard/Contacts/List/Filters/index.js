@@ -90,7 +90,6 @@ function ContactFilters(props) {
           <OperatorAndOperandFilter {...props} options={getUniqTags(tags)} />
         ),
         tooltip:
-          // eslint-disable-next-line max-len
           'A group a person belongs to, based on a tag you’ve manually applied to them.'
       },
       {

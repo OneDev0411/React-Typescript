@@ -106,7 +106,6 @@ export const Tabs = ({
       label={
         <>
           <ButtonBase
-            component="div"
             className={classes.saveSearch}
             disabled={isFetching}
             onClick={saveSearchHandler}

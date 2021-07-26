@@ -50,7 +50,6 @@ export function MarketingTemplateSelector(props: Props) {
   if (templates && templates.length === 0 && !isLoading) {
     return (
       <FooterBottomDrawerZeroState
-        // eslint-disable-next-line max-len
         description="There is no saved templates. Your previously used marketing email templates will appear here."
         actions={
           <Link color="secondary" target="_blank" href="/dashboard/marketing">

@@ -108,13 +108,9 @@ class EventsList extends React.Component {
                   fullHeight
                   pullTo="right"
                   selectedItem={null}
-                  buttonRenderer={({
-                    isBlock,
-                    noBorder,
-                    isOpen,
-                    selectedItem,
-                    ...props
-                  }) => <SvgIcon path={mdiDotsVertical} {...props} />}
+                  buttonRenderer={props => (
+                    <SvgIcon path={mdiDotsVertical} {...props} />
+                  )}
                   items={this.menuItems}
                   onSelect={item => item.onClick(event)}
                 />

@@ -64,7 +64,6 @@ class CommentInput extends React.Component {
         if (deal.is_draft) {
           this.props.confirmation({
             description:
-              // eslint-disable-next-line max-len
               'We have captured your Notify Office request. As soon as this deal goes live, we will forward it on to your back office.',
             confirmLabel: 'Got it. Thanks.',
             hideCancelButton: true

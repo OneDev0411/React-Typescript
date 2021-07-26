@@ -86,7 +86,6 @@ class VerifyPhoneNumber extends Component {
         () =>
           this.notify(
             'error',
-            // eslint-disable-next-line max-len
             'Sorry, something went wrong while sending a new code. Please try again.',
             6000
           )

@@ -151,7 +151,6 @@ function ToursList(props: { user: IUser }) {
         <ZeroState
           imageUrl="/static/images/zero-state/tours.png"
           title="No tours are scheduled, yet."
-          // eslint-disable-next-line max-len
           subTitle="Make touring homes easier on buyers and yourself with Tours. Pick the right properties for your client, and we do the rest of the work."
           ctaNode={
             <Button

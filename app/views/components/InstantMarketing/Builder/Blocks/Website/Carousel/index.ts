@@ -129,9 +129,7 @@ export default function registerCarouselBlock(
             image =>
               `
                 <li data-type="carousel-slide" class="splide__slide">
-                  <img data-type="carousel-image" 
-                    class="splide__image"
-                    src="${image}"/>
+                  <img data-type="carousel-image" class="splide__image" src="${image}"/>
                 </li>
               `
           )
@@ -185,12 +183,7 @@ export default function registerCarouselBlock(
 
         this.model.get('images').forEach(image => {
           this.splideInstance.add(
-            `<li data-type="carousel-slide"
-               class="splide__slide">
-                <img data-type="carousel-image"
-                   class="splide__image"
-                  src="${image}"/>
-              </li>`
+            `<li data-type="carousel-slide" class="splide__slide"><img data-type="carousel-image" class="splide__image" src="${image}"/></li>`
           )
         })
       },

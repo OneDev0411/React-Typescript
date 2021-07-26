@@ -20,7 +20,6 @@ interface Props extends BaseProps {
     textStyle?: object
     style?: object
   }
-  component?: string
 }
 
 export function BaseDropdownWithMore({

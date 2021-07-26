@@ -31,7 +31,7 @@ export default function NewsletterBannerSection() {
     <Grid
       container
       alignItems="center"
-      justifyContent="space-around"
+      justify="space-around"
       direction="row"
       spacing={4}
       className={classes.container}
