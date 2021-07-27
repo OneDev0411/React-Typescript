@@ -40,7 +40,7 @@ const TAB_ITEMS = [
     link: 'archives'
   },
   {
-    label: 'Closings',
+    label: 'Upcoming Closings',
     link: 'closings'
   }
 ]
