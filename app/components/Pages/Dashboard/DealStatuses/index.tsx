@@ -180,7 +180,7 @@ export default function DealStatusesAdmin({ params }: Props) {
           virtualize={false}
           EmptyStateComponent={() => (
             <Box className={classes.center}>
-              <Typography variant="h4">We did not find any results</Typography>
+              <Typography variant="h4">No results found</Typography>
             </Box>
           )}
           LoadingStateComponent={() => (
