@@ -57,6 +57,7 @@ export function PhoneNumber({ location }: WithRouterProps) {
         message = error
       } else if (error.message === 'Conflict') {
         message =
+          // eslint-disable-next-line max-len
           'This number is verified by a current user, please check your number and try again.'
       } else if (error.message) {
         message = error.message

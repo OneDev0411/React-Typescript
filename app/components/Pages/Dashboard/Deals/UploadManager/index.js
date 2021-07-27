@@ -52,6 +52,7 @@ class UploadDocument extends React.Component {
 
       return this.props.confirmation({
         message: 'Cannot Upload this File',
+        // eslint-disable-next-line max-len
         description: `Some file formats are not supported. You can upload: ${acceptedFiles}`,
         onConfirm: () => null,
         hideCancelButton: true,

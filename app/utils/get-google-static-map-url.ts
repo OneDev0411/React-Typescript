@@ -50,6 +50,7 @@ export function getGoogleMapStaticImageSrc({
     )
     .join('&')
 
+  // eslint-disable-next-line max-len
   const src = `https://maps.googleapis.com/maps/api/staticmap?center=${center}&zoom=${zoom}&size=${width}x${height}&maptype=${mapType}
     &${encodedMarkers}&key=${config.google.api_key}`
 

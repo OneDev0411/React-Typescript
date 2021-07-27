@@ -31,6 +31,7 @@ function ShowingsTabBookings({
       onApprovalAction={updateShowingsAppointmentStatus}
       onDismissAction={dismissShowingsAppointmentNotifications}
       stackDateAndTimeColumns
+      // eslint-disable-next-line max-len
       emptyDescription="Create your first showing for your off-market or MLS listings under 2 minutes."
     />
   )

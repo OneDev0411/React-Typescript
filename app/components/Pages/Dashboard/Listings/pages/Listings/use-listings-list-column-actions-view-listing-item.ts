@@ -7,6 +7,7 @@ interface UseListingsListColumnActionsViewListingItemReturn {
   closeListingsModal: () => void
 }
 
+// eslint-disable-next-line max-len
 function useListingsListColumnActionsViewListingItem(): UseListingsListColumnActionsViewListingItemReturn {
   const [isListingModalOpen, setIsListingsModalOpen] = useState(false)
   const viewListingLabel = 'View Listing'
