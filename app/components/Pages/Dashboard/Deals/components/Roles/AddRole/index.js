@@ -98,7 +98,7 @@ class AddRoleForm extends React.Component {
               }
             }}
             disablePortal
-            renderDropdownButton={buttonProps => (
+            renderDropdownButton={({ isActive, ...buttonProps }) => (
               <RoleButton {...buttonProps}>
                 <Box mr={1}>
                   <Avatar

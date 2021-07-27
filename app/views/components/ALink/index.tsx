@@ -1,4 +1,6 @@
-import { Link } from 'react-router'
+import React from 'react'
+
+import { Link, LinkProps } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { grey, primary } from '../../utils/colors'
@@ -45,7 +47,10 @@ const ALink = styled.a<Props>`
     color: ${grey.A300};
   }
 `
+const LinkWrapper = ({ noStyle, disabled, ...rest }: Props & LinkProps) => {
+  return <Link {...rest} />
+}
 
-export default Object.assign(ALink.withComponent(Link), {
+export default Object.assign(ALink.withComponent(LinkWrapper), {
   defaultProps
 })

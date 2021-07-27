@@ -83,12 +83,12 @@ export default function CalendarEventCard({ event }: Props) {
         <Grid
           container
           direction="column"
-          justify="space-between"
+          justifyContent="space-between"
           className={classes.contentContainer}
         >
           <Grid container item direction="column">
             {contact && (
-              <Grid container item justify="center">
+              <Grid container item justifyContent="center">
                 <Link noStyle to={`/dashboard/contacts/${contact.id}`}>
                   <Box pb={1}>
                     <Tooltip placement="top" title={contact.display_name}>

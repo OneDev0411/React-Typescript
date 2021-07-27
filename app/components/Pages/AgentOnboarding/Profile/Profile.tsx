@@ -123,6 +123,7 @@ export function Profile() {
       <Header
         brand={brand}
         title="Let’s make it feel more like home!"
+        // eslint-disable-next-line max-len
         subtitle="Personalize your account and make your communications more connected."
       />
       <Box marginBottom={6} width="100%">

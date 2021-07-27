@@ -14,6 +14,7 @@ import { getBrandInfo } from '../../Auth/SignIn/get-brand-info'
 import Alert from '../../Dashboard/Partials/Alert'
 
 const ERROR_MESSAGE =
+  // eslint-disable-next-line max-len
   "You have encountered an unknown system issue. We're working on it. In the meantime, connect with our support."
 
 const confirmVerify = ({
@@ -116,6 +117,7 @@ export default compose(
             setIsSubmitting(false)
             setUserMessage({
               type: 'success',
+              // eslint-disable-next-line max-len
               text: `Your previous activation code has expired. We\'ve sent a new verification link to ${to}.`
             })
           })

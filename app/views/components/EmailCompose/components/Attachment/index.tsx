@@ -8,7 +8,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 import { mdiAttachment, mdiCloseCircleOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -29,7 +29,7 @@ const useAttachmentStyles = makeStyles(
     createStyles({
       root: {
         padding: `${theme.spacing(0.5, 1)}`,
-        background: fade(theme.palette.primary.light, 0.1),
+        background: alpha(theme.palette.primary.light, 0.1),
         borderRadius: theme.shape.borderRadius
       }
     }),

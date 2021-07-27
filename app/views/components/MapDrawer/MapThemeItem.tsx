@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ButtonBase, Box, makeStyles, fade } from '@material-ui/core'
+import { ButtonBase, Box, makeStyles, alpha } from '@material-ui/core'
 import classNames from 'classnames'
 
 import config from 'config'
@@ -35,7 +35,7 @@ const useStyles = makeStyles(
     },
     selected: { borderColor: theme.palette.primary.main },
     name: {
-      background: fade(theme.palette.common.black, 0.65),
+      background: alpha(theme.palette.common.black, 0.65),
       color: 'white',
       display: 'flex',
       alignItems: 'center',

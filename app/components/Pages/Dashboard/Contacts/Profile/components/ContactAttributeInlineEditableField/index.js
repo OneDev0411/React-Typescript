@@ -390,6 +390,7 @@ class MasterField extends React.Component {
       message: `Delete ${title}`,
       onConfirm: this.delete,
       onCancel: () => this.setState({ disabled: false }),
+      // eslint-disable-next-line max-len
       description: `You have made changes, are you sure about deleting "${title}" field?`
     }
 
@@ -398,6 +399,7 @@ class MasterField extends React.Component {
     } else if (this.props.attribute[this.attribute_def.data_type]) {
       this.context.setConfirmationModal({
         ...options,
+        // eslint-disable-next-line max-len
         description: `Are you sure about deleting "${title}" field, you will lose it forever?`
       })
     } else {

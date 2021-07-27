@@ -177,6 +177,7 @@ function EmailTemplatesList({
 
                   modal.setConfirmationModal({
                     message: 'Delete Email Template!',
+                    // eslint-disable-next-line max-len
                     description: `Are you sure about deleting "${row.name}" template?`,
                     confirmLabel: 'Yes, I am sure',
                     onConfirm: () => handleDelete(row.id)
