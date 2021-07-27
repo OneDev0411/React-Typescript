@@ -1,14 +1,7 @@
 import addDays from 'date-fns/addDays'
 import startOfDay from 'date-fns/startOfDay'
 
-import { ClosingDateRange, ClosingsFilterQuery } from '../types'
-
-export function getClosingDateRange(days: number = 14): ClosingDateRange {
-  return {
-    from: new Date().getTime() / 1000,
-    to: addDays(new Date(), days).getTime() / 1000
-  }
-}
+import { ClosingsFilterQuery } from '../types'
 
 export function getClosingsFilterQuery(
   query: string,
