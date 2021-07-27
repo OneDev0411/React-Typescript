@@ -25,6 +25,9 @@ export function getClosingsFilterQuery(
           to: addDays(today, days).toISOString()
         }
       }
+    },
+    status: {
+      is_archived: false
     }
   }
 }
