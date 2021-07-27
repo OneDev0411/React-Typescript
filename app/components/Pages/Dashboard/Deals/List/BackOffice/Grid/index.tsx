@@ -154,9 +154,14 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       return []
     }
 
-    // when user searching something in backoffice, we should show all
-    // deals except draft items
-    if (props.searchQuery.term.length > 0) {
+    /**
+     * when user searching something in backoffice and he is not on the closings tab,
+     * we should show all deals except draft items
+     */
+    if (
+      props.searchQuery.filter !== 'closings' &&
+      props.searchQuery.term.length > 0
+    ) {
       return (Object.values(deals) as IDeal[]).filter(
         (deal: IDeal) => deal.is_draft === false
       )
