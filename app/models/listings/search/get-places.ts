@@ -4,6 +4,7 @@ export async function getPlaces(
   address: string
 ): Promise<google.maps.GeocoderResult[]> {
   try {
+    // eslint-disable-next-line max-len
     const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.google.api_key}&address=${address}`
     const response = await fetch(url)
 

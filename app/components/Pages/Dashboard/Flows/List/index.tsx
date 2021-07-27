@@ -161,7 +161,7 @@ function List(props: Props & WithRouterProps) {
             PopperProps={{
               placement: 'bottom-end'
             }}
-            renderDropdownButton={buttonProps => (
+            renderDropdownButton={({ isActive, ...buttonProps }) => (
               <IconButton
                 {...buttonProps}
                 style={{
@@ -248,6 +248,7 @@ function List(props: Props & WithRouterProps) {
 
             <CtaBar
               label="Create new flow"
+              // eslint-disable-next-line max-len
               description="Create a custom flow for your specific needs – We’ll take care of the rest!"
               onClick={() => setIsModalOpen(true)}
             />
