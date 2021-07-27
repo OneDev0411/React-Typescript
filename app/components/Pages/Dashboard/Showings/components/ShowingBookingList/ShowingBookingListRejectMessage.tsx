@@ -79,9 +79,10 @@ function ShowingBookingListRejectMessage({
             </Box>
           </>
         }
+        hasDialogContent={false}
         subtitle={appointmentTitle}
       >
-        <Box my={2}>
+        <Box m={2}>
           <ShowingDialogQuote
             question="Comments"
             answer={personMessage.message}
