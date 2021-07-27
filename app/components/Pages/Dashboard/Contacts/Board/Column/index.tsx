@@ -168,7 +168,7 @@ export const BoardColumn = React.memo(function BoardColumn({
               renderClone={(provided, snapshot, rubric) => (
                 <CardItem
                   provided={provided}
-                  isDragging
+                  isDragging={snapshot.isDragging}
                   contact={list[rubric.source.index]}
                 />
               )}
