@@ -5,7 +5,7 @@ import { Button, Box } from '@material-ui/core'
 import { getShowingRoleLabel } from '../../helpers'
 import Dialog from '../Dialog'
 
-import ShowingDialogCard from './ShowingDialogCard'
+import ShowingDialogQuote from './ShowingDialogQuote'
 
 interface PersonMessage {
   role: string
@@ -82,10 +82,9 @@ function ShowingBookingListRejectMessage({
         subtitle={appointmentTitle}
       >
         <Box my={2}>
-          <ShowingDialogCard
+          <ShowingDialogQuote
             question="Comments"
             answer={personMessage.message}
-            multiline
           />
         </Box>
       </Dialog>
