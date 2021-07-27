@@ -36,6 +36,7 @@ const useStyles = makeStyles(
       height: '100%',
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
+      overflow: 'auto',
       '&:hover': {
         backgroundColor: theme.palette.grey['50']
       }
@@ -108,16 +109,20 @@ export function CardItem({ provided, contact, isDragging, style = {} }) {
       {...provided.draggableProps}
       style={{
         ...provided.draggableProps.style,
-        ...style,
-        ...(isDragging
-          ? {
-              borderColor: theme.palette.success.main
-            }
-          : {})
+        ...style
       }}
       className={classes.root}
     >
-      <div className={classes.container}>
+      <div
+        className={classes.container}
+        style={{
+          ...(isDragging
+            ? {
+                borderColor: theme.palette.success.main
+              }
+            : {})
+        }}
+      >
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <div className={classes.flexCenter}>
             <Avatar

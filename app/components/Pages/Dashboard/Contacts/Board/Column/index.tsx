@@ -11,7 +11,7 @@ import {
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
-import VirtualList from '@app/views/components/VirtualList'
+import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { CardItem } from './Card/CardItem'
@@ -70,20 +70,49 @@ interface Props {
   id: string
   title: string
   droppable?: boolean
-  isLoading: boolean
+  isFetchingContacts?: boolean
+  isFetchingNextContacts?: boolean
+  isFetchingPreviousContacts?: boolean
   list: IContact[]
+  onReachStart?: () => void
+  onReachEnd?: () => void
 }
 
 export const BoardColumn = React.memo(function BoardColumn({
   id,
   title,
   list,
-  isLoading,
-  droppable = true
+  isFetchingContacts = false,
+  isFetchingNextContacts = false,
+  isFetchingPreviousContacts = false,
+  droppable = true,
+  onReachStart = () => {},
+  onReachEnd = () => {}
 }: Props) {
   const classes = useStyles()
 
   const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
+
+  const isInitialLoading = list.length === 0 && isFetchingContacts
+
+  const isLoading =
+    isFetchingContacts || isFetchingNextContacts || isFetchingPreviousContacts
+
+  const getLoadingPosition = () => {
+    if (isInitialLoading) {
+      return LoadingPosition.Middle
+    }
+
+    if (isFetchingNextContacts) {
+      return LoadingPosition.Bottom
+    }
+
+    if (isFetchingPreviousContacts) {
+      return LoadingPosition.Top
+    }
+
+    return undefined
+  }
 
   return (
     <div className={classes.root}>
@@ -113,7 +142,7 @@ export const BoardColumn = React.memo(function BoardColumn({
         </Box>
       </div>
 
-      {isLoading && (
+      {isInitialLoading && (
         <div className={classes.body}>
           {new Array(randomNumber).fill(null).map((_, index) => (
             <Skeleton
@@ -139,7 +168,7 @@ export const BoardColumn = React.memo(function BoardColumn({
               renderClone={(provided, snapshot, rubric) => (
                 <CardItem
                   provided={provided}
-                  isDragging={snapshot.isDragging}
+                  isDragging
                   contact={list[rubric.source.index]}
                 />
               )}
@@ -148,13 +177,7 @@ export const BoardColumn = React.memo(function BoardColumn({
                 provided: DroppableProvided,
                 snapshot: DroppableStateSnapshot
               ) => (
-                <div
-                  ref={provided.innerRef}
-                  style={{
-                    backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey'
-                  }}
-                  {...provided.droppableProps}
-                >
+                <div ref={provided.innerRef} {...provided.droppableProps}>
                   <VirtualList
                     width={width}
                     height={height}
@@ -171,9 +194,15 @@ export const BoardColumn = React.memo(function BoardColumn({
                         typeof DraggableCardItem
                       >['data']
                     }
-                    threshold={2}
-                    itemSize={() => 100}
-                    overscanCount={3}
+                    threshold={5}
+                    itemSize={() => 112}
+                    overscanCount={10}
+                    onReachStart={onReachStart}
+                    onReachEnd={onReachEnd}
+                    isLoading={
+                      isFetchingNextContacts || isFetchingPreviousContacts
+                    }
+                    loadingPosition={getLoadingPosition()}
                   >
                     {DraggableCardItem}
                   </VirtualList>
