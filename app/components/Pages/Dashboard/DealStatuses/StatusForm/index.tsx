@@ -22,10 +22,9 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
 
-import { addNotification } from '@app/views/components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useNotify from 'hooks/use-notify'
 
 import { getStatusActiveType, StatusTypes } from './helpers/get-status-types'
 import { PropertyChecklistTable } from './PropertyChecklistTable'
@@ -67,7 +66,7 @@ export function StatusForm({
   onDelete
 }: Props) {
   const classes = useStyles()
-  const dispatch = useDispatch()
+  const notify = useNotify()
 
   const [isSaving, setIsSaving] = useState(false)
   const { handleSubmit, control, watch, formState } = useForm({
@@ -97,23 +96,19 @@ export function StatusForm({
 
       await onChange(status?.id, data)
 
-      dispatch(
-        addNotification({
-          status: 'success',
-          message: 'Status Saved'
-        })
-      )
+      notify({
+        status: 'success',
+        message: 'Status Saved'
+      })
 
       onClose()
     } catch (e) {
       console.log(e)
 
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Could not save the status'
-        })
-      )
+      notify({
+        status: 'error',
+        message: 'Could not save the status'
+      })
     } finally {
       setIsSaving(false)
     }
@@ -166,11 +161,11 @@ export function StatusForm({
                   name="label"
                   defaultValue={status?.label}
                   rules={{
-                    validate: (val: string) => val.trim().length > 0
+                    validate: (val: string) => val?.trim().length > 0
                   }}
                   render={({ value, onChange, onBlur }) => (
                     <TextField
-                      value={value}
+                      value={value || ''}
                       variant="outlined"
                       size="small"
                       onBlur={onBlur}

@@ -9,8 +9,9 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 import { Controller, Control, FieldValues } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 
-import { useActiveTeamId } from 'hooks/use-active-team-id'
+import { selectActiveTeamId } from '@app/selectors/team'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 const useStyles = makeStyles(
@@ -36,7 +37,7 @@ interface Props {
 export function PropertyChecklistTable({ status, formControl }: Props) {
   const classes = useStyles()
 
-  const teamId = useActiveTeamId()
+  const teamId = useSelector(selectActiveTeamId)
   const { propertyTypes } = useBrandPropertyTypes(teamId)
 
   if (propertyTypes.length === 0) {

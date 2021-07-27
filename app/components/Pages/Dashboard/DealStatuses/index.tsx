@@ -9,18 +9,18 @@ import {
   Button
 } from '@material-ui/core'
 import Fuse from 'fuse.js'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import { useActiveTeamId } from '@app/hooks/use-active-team-id'
 import { useBrandStatuses } from '@app/hooks/use-brand-statuses'
+import useNotify from '@app/hooks/use-notify'
+import { selectActiveTeamId } from '@app/selectors/team'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getDealStatusColor } from '@app/utils/get-deal-status-color'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
-import { addNotification } from '@app/views/components/notification'
 
 import { StatusForm } from './StatusForm'
 
@@ -55,8 +55,9 @@ export default function DealStatusesAdmin({ params }: Props) {
   const gridClasses = useGridStyles()
   const classes = useStyles()
   const dispatch = useDispatch()
+  const notify = useNotify()
 
-  const teamId = useActiveTeamId()
+  const teamId = useSelector(selectActiveTeamId)
 
   const [statuses, upsertStatus, deleteStatus] = useBrandStatuses(teamId)
   const [criteria, setCriteria] = useState('')
@@ -139,12 +140,10 @@ export default function DealStatusesAdmin({ params }: Props) {
           deleteStatus(selectedStatus.id)
           handleClose()
 
-          dispatch(
-            addNotification({
-              status: 'success',
-              message: 'Status Deleted'
-            })
-          )
+          notify({
+            status: 'success',
+            message: 'Status Deleted'
+          })
         }
       })
     )
