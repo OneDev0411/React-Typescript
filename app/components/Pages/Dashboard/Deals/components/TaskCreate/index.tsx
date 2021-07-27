@@ -23,7 +23,7 @@ import { ListItem } from './styled'
 interface Props {
   isOpen: boolean
   deal: IDeal
-  checklist: IDealChecklist | null
+  checklist: Nullable<IDealChecklist>
   onClose: () => void
 }
 
