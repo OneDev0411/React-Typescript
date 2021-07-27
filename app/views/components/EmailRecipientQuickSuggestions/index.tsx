@@ -136,6 +136,7 @@ export function EmailRecipientQuickSuggestions({
       if (allContactsCount > 1) {
         return confirmationModal.setConfirmationModal({
           message: 'Send to all your contacts?',
+          // eslint-disable-next-line max-len
           description: `You are about to send this email to ${allContactsCount} of your contacts. Are you sure?`,
           cancelLabel: 'No',
           confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,

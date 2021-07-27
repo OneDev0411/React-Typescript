@@ -85,6 +85,7 @@ class LoadSaveReinitializeForm extends React.Component {
 
       return {
         [FORM_ERROR]:
+          // eslint-disable-next-line max-len
           'Something is wrong in our system. We are sorry about this. Please connect to support for resolving it.'
       }
     }

@@ -172,6 +172,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
       }
     } else {
       console.warn(
+        // eslint-disable-next-line max-len
         '[Editor]: dataURL image is inserted by no uploadImage passed. data urls will be preserved in the output'
       )
     }

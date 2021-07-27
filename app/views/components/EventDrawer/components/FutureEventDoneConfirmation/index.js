@@ -33,6 +33,7 @@ export function FutureEventDoneConfirmation() {
     confirmation.setConfirmationModal({
       message: 'Heads up!',
       description:
+        // eslint-disable-next-line max-len
         'If you mark this event as done, the event due date will change to now. Are you sure?',
       onConfirm: () => {
         const now = new Date()

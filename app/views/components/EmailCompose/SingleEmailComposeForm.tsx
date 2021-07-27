@@ -100,6 +100,7 @@ export function SingleEmailComposeForm({
       : createEmailCampaign(emailData)
   }
 
+  // eslint-disable-next-line max-len
   const handleSelectMarketingTemplate: EmailComposeFormProps['onSelectMarketingTemplate'] =
     (template, values) => {
       if (!template) {
@@ -121,6 +122,7 @@ export function SingleEmailComposeForm({
           confirmation({
             message: 'You have recipients in the Cc and Bcc fields',
             description:
+              // eslint-disable-next-line max-len
               'Marketing templates will only be sent individually. Are you willing to send it directly to all of them?',
             confirmLabel: 'Yes',
             cancelLabel: 'Cancel',
