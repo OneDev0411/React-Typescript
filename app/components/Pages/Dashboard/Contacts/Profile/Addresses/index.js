@@ -22,7 +22,7 @@ class Addresses extends React.Component {
       'Addresses'
     )
 
-    let defaultLabel = 'Other'
+    let defaultLabel
     let defaultIsPrimary = false
     const addresses = getContactAddresses(props.contact)
     const normalizedAddresses = getAddresses(addresses, addressAttributeDefs)

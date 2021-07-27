@@ -16,7 +16,7 @@ function destructuringAddress(address) {
   let { label, full_address, is_primary } = address
 
   if (!label) {
-    label = address.id ? DEFAULT_LABEL : { label: 'Other', value: 'Other' }
+    label = DEFAULT_LABEL
   } else {
     label = { label, value: label }
   }
