@@ -108,6 +108,10 @@ declare interface IContact extends IContactBase {
   type: string
 
   company: Nullable<string>
+
+  first_name: Nullable<string>
+  middle_name: Nullable<string>
+  last_name: Nullable<string>
 }
 
 declare interface INormalizedContact extends IContact {
