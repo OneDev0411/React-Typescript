@@ -104,7 +104,7 @@ function TemplatesList({
             key={template.id}
             container
             item
-            justify="flex-start"
+            justifyContent="flex-start"
             xs={12}
             sm={6}
             md={3}

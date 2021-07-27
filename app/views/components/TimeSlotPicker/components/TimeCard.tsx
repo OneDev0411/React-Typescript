@@ -77,7 +77,7 @@ export default function TimeCard({
             container
             direction="column"
             alignItems="center"
-            justify="center"
+            justifyContent="center"
             className={classes.cardContentContainer}
           >
             <Grid item>

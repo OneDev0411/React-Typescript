@@ -152,6 +152,7 @@ function Edit(props: WithRouterProps) {
         )
       } else if (flowData.active_flows > 0) {
         setWarning(
+          // eslint-disable-next-line max-len
           'This Flow is in use! All of your changes will happen to the future steps and contacts.'
         )
       } else if (flowData.active_flows === 0) {
@@ -345,7 +346,7 @@ function Edit(props: WithRouterProps) {
                 disabled={isLoading}
                 className={classes.tab}
                 label={
-                  <Grid container alignItems="center" justify="center">
+                  <Grid container alignItems="center" justifyContent="center">
                     <span>Contacts</span>
                     <Chip
                       size="small"

@@ -28,8 +28,8 @@ export function AddNewRecipient({
 
   return (
     <BaseDropdown
-      renderDropdownButton={props => (
-        <Button color="secondary" {...props}>
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
+        <Button color="secondary" {...buttonProps}>
           <SvgIcon
             path={mdiPlusCircleOutline}
             rightMargined

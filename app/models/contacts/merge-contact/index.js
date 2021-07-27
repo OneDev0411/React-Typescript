@@ -2,7 +2,8 @@ import Fetch from '../../../services/fetch'
 
 /**
  * Merging contacts to a contact.
- * @param {string} contactId The parent contact's id that other contact will be merged it.
+ * @param {string} contactId The parent contact's id
+ * that other contact will be merged it.
  * @param {array} childIds Ids of the contacts which will be merged to the parent.
  * @returns {object} Returns merged contact.
  */

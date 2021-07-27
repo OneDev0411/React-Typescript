@@ -17,6 +17,7 @@ export const defaultTheme = {
   emojiSuggestions: 'draftJsEmojiPlugin__emojiSuggestions__2ffcV',
   emojiSuggestionsEntry: 'draftJsEmojiPlugin__emojiSuggestionsEntry__2-2p_',
   emojiSuggestionsEntryFocused:
+    // eslint-disable-next-line max-len
     'draftJsEmojiPlugin__emojiSuggestionsEntryFocused__XDntY draftJsEmojiPlugin__emojiSuggestionsEntry__2-2p_',
   emojiSuggestionsEntryText:
     'draftJsEmojiPlugin__emojiSuggestionsEntryText__2sPjk',

@@ -61,8 +61,8 @@ const Layout = ({
     return (
       <form onSubmit={onSubmit} className={classes.form} noValidate>
         <header className={classes.header}>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid container alignItems="center" xs={6}>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Grid container alignItems="center" item xs={6}>
               {step && (
                 <Box className={classes.dragBtn} {...dragHandleProps}>
                   <Tooltip
@@ -75,7 +75,7 @@ const Layout = ({
                 </Box>
               )}
               <SvgIcon path={stepIcon} className={classes.stepTypeIcon} />
-              <Typography variant="body1">
+              <Typography variant="body1" component="div">
                 {index}. {title}{' '}
                 {!step && (
                   <Chip
@@ -87,7 +87,7 @@ const Layout = ({
                 )}
               </Typography>
             </Grid>
-            <Grid container xs={6} justify="flex-end">
+            <Grid container item xs={6} justifyContent="flex-end">
               {!disableEdit && (
                 <Button
                   variant="contained"
@@ -106,7 +106,7 @@ const Layout = ({
                     PopperProps={{
                       placement: 'bottom-end'
                     }}
-                    renderDropdownButton={buttonProps => (
+                    renderDropdownButton={({ isActive, ...buttonProps }) => (
                       <IconButton {...buttonProps} size="small">
                         <SvgIcon
                           path={mdiDotsVertical}

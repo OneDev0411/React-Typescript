@@ -81,7 +81,7 @@ export default function PreviewDrawer({
             item
             spacing={3}
             alignItems="center"
-            justify="space-between"
+            justifyContent="space-between"
           >
             <Grid item>
               <Typography variant="h6">Preview</Typography>
@@ -95,7 +95,7 @@ export default function PreviewDrawer({
           <Grid container item>
             <Thumbnail user={user} template={template} listing={listing} />
           </Grid>
-          <Grid container item justify="space-between">
+          <Grid container item justifyContent="space-between">
             <Grid item xs>
               <Box p={2}>
                 <Button
