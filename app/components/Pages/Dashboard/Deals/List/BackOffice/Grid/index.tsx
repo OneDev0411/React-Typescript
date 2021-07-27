@@ -159,6 +159,8 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
      * we should show all deals except draft items
      */
     if (
+      // TODO: find another solution for this to do not hard code this kind of logic
+      // here
       props.searchQuery.filter !== 'closings' &&
       props.searchQuery.term.length > 0
     ) {
