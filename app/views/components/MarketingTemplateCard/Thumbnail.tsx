@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, ComponentProps } from 'react'
+import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
@@ -42,7 +42,7 @@ export function Thumbnail({
   onClick
 }: Props) {
   const { ref, inView } = useInView({ delay: 100 })
-  const alreadyLoaded = useRef<boolean>(false)
+  const [isAlreadyLoaded, setIsAlreadyLoaded] = useState<boolean>(false)
   const classes = useStyles()
   const brand = getActiveBrand(user)
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
@@ -65,13 +65,13 @@ export function Thumbnail({
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (!alreadyLoaded.current && inView) {
-        alreadyLoaded.current = true
+      if (!isAlreadyLoaded && inView) {
+        setIsAlreadyLoaded(true)
       }
     }, 500)
 
     return () => clearTimeout(timeout)
-  }, [inView])
+  }, [inView, isAlreadyLoaded])
 
   if (
     template.type === 'template_instance' &&
@@ -88,7 +88,7 @@ export function Thumbnail({
     return null
   }
 
-  const shouldRender = alreadyLoaded.current || inView
+  const shouldRender = isAlreadyLoaded || inView
 
   if (useStaticImage) {
     const { thumbnail } = getTemplateImage(template)
