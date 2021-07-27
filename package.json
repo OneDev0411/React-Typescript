@@ -196,6 +196,7 @@
     "react-image-gallery": "^1.0.9",
     "react-images": "^0.5.11",
     "react-input-mask": "^1.1.0",
+    "react-intersection-observer": "^8.32.0",
     "react-joyride": "^2.0.0-15",
     "react-lazy-load": "^3.1.13",
     "react-loadable": "^5.4.0",
