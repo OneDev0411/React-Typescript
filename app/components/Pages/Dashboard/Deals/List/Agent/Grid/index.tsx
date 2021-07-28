@@ -60,7 +60,7 @@ const Filters = {
     return isPendingDeal(deal, statuses)
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isArchivedDeal(deal, statuses)
+    return isArchivedDeal(deal, statuses) || isClosedDeal(deal, statuses)
   }
 }
 
