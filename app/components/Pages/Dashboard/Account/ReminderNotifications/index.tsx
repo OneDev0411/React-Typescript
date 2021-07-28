@@ -150,7 +150,7 @@ export default function ReminderNotifications() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Grid container justify="space-around" spacing={4}>
+        <Grid container justifyContent="space-around" spacing={4}>
           {columns.map((column, index) => (
             <Grid item key={index}>
               <Column

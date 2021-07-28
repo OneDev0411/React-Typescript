@@ -25,7 +25,13 @@ export default function HeadingButtons(props: Props) {
         label: item.title,
         Component: item.component
       }))}
-      buttonRenderer={props => (
+      buttonRenderer={({
+        isBlock,
+        noBorder,
+        isOpen,
+        selectedItem,
+        ...props
+      }) => (
         <Tooltip title="Size">
           <ToolbarIconButton {...props}>
             <SvgIcon path={mdiFormatSize} />

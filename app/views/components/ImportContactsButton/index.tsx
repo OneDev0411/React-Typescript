@@ -95,7 +95,7 @@ export function ImportContactsButton({
         className={classes.popover}
         caption={<p>{tooltip}</p>}
       >
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <GoogleIcon size={iconSizes.medium} className={classes.buttonIcon} />
           <OutlookIcon size={iconSizes.medium} className={classes.buttonIcon} />
           {hasCSVButton && (

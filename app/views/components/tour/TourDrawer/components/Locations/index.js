@@ -71,7 +71,7 @@ function LocationsComponent({ locations, input: { onChange } }) {
 
 Locations.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape()),
-  handleDelete: PropTypes.func.isRequired
+  handleDelete: PropTypes.func
 }
 
 Locations.defaultProps = {

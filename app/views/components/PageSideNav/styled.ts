@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react'
 
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 import styled from 'styled-components'
 
 export const BadgeContainer = styled.div`
@@ -84,7 +84,7 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
   }
 
   .section-item.is-selected {
-    background: ${props => fade(props.theme.palette.primary.main, 0.12)};
+    background: ${props => alpha(props.theme.palette.primary.main, 0.12)};
     color: ${props => props.theme.palette.primary.main};
 
     & > span {
@@ -92,7 +92,7 @@ export const SideNavContainer = styled.div<SideNavContainerProps>`
     }
 
     &:hover {
-      background: ${props => fade(props.theme.palette.primary.main, 0.12)};
+      background: ${props => alpha(props.theme.palette.primary.main, 0.12)};
     }
 
     .section-item__icon > svg {

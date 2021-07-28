@@ -113,6 +113,7 @@ function ShowingPropertyList({
         EmptyStateComponent={() => (
           <ShowingEmptyState
             title="There are no Showings."
+            // eslint-disable-next-line max-len
             description="Create your first showing for your off-market or MLS listings under 2 minutes."
           />
         )}

@@ -52,6 +52,7 @@ function SendSMS({ instance }: SendSMSProps) {
       await shareInstance(
         instance.id,
         [phone],
+        // eslint-disable-next-line max-len
         `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
       )
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import fecha from 'fecha'
 import escape from 'lodash/escape'
 
