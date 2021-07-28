@@ -103,7 +103,7 @@ export class TeamContactSelect extends React.Component {
             return renderedButton
           }
 
-          const title = buttonProps.selectedItem.label
+          const title = selectedItem.label
 
           return (
             <ActionButton
@@ -119,14 +119,11 @@ export class TeamContactSelect extends React.Component {
               <Flex alignCenter style={{ width: '100%' }}>
                 <Avatar
                   alt={title}
-                  url={buttonProps.selectedItem.value.profile_image_url}
+                  url={selectedItem.value.profile_image_url}
                 />
                 <ButtonText>{title}</ButtonText>
               </Flex>
-              <SvgIcon
-                path={mdiChevronDown}
-                rotate={buttonProps.isOpen ? 180 : 0}
-              />
+              <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
             </ActionButton>
           )
         }}
