@@ -430,7 +430,14 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({ parked: undefined }, true)
+
+      if (value) {
+        this.order = '-rank'
+      } else {
+        this.order = '-updated_at'
+      }
+
+      this.handleFilterChange({ parked: undefined }, true, this.order)
     })
   }
 
@@ -754,7 +761,7 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { selectedShortcutFilter } = this.state
+    const { selectedShortcutFilter, searchInputValue } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -784,7 +791,8 @@ class ContactsList extends React.Component {
         }}
         sortProps={{
           onChange: this.handleChangeOrder,
-          currentOrder: this.order
+          currentOrder: this.order,
+          searchValue: searchInputValue
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
