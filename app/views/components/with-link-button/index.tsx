@@ -8,6 +8,7 @@ const useStyles = makeStyles(
   {
     // TODO: remove this when the bootstrap styles got removed
     override: {
+      color: 'white',
       '&:hover, &:focus': { color: 'white' }
     }
   },
