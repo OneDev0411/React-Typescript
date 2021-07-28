@@ -24,10 +24,18 @@ export function isArchivedDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
   return searchStatusByFlag(deal, statuses, 'is_archived')
 }
 
+export function isClosedDeal(deal: IDeal, statuses: IDealStatus[]): boolean {
+  if (deal.deleted_at) {
+    return true
+  }
+
+  return searchStatusByFlag(deal, statuses, 'is_closed')
+}
+
 function searchStatusByFlag(
   deal: IDeal,
   statuses: IDealStatus[],
-  flag: 'is_active' | 'is_pending' | 'is_archived'
+  flag: 'is_active' | 'is_pending' | 'is_archived' | 'is_closed'
 ): boolean {
   const status = statuses.find(item => item.label === getStatus(deal))
 

@@ -13,6 +13,7 @@ import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
 import {
   isActiveDeal,
   isArchivedDeal,
+  isClosedDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
@@ -47,7 +48,7 @@ interface Props {
 
 const Filters = {
   all: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return !isArchivedDeal(deal, statuses)
+    return !isArchivedDeal(deal, statuses) && !isClosedDeal(deal, statuses)
   },
   drafts: (deal: IDeal) => {
     return deal.is_draft === true
@@ -59,7 +60,7 @@ const Filters = {
     return isPendingDeal(deal, statuses)
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isArchivedDeal(deal, statuses)
+    return isArchivedDeal(deal, statuses) || isClosedDeal(deal, statuses)
   }
 }
 
