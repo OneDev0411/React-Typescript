@@ -84,8 +84,20 @@ export class TeamContactSelect extends React.Component {
         onSelect={this.props.onSelect}
         isFetching={this.state.isFetching}
         selectedItem={{ label: getUserTitle(owner), value: owner }}
-        buttonRenderer={buttonProps => {
-          const renderedButton = this.props.buttonRenderer(buttonProps)
+        buttonRenderer={({
+          isBlock,
+          noBorder,
+          isOpen,
+          selectedItem,
+          ...buttonProps
+        }) => {
+          const renderedButton = this.props.buttonRenderer({
+            isBlock,
+            noBorder,
+            isOpen,
+            selectedItem,
+            ...buttonProps
+          })
 
           if (renderedButton) {
             return renderedButton
