@@ -5,7 +5,6 @@ import ShowingFilteredBookingList, {
 } from '../../components/ShowingFilteredBookingList'
 import { generateAppointmentFilterLink } from '../../helpers'
 
-import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
 interface ShowingsTabBookingsProps
@@ -20,16 +19,12 @@ function ShowingsTabBookings({
   const updateShowingsAppointmentStatus =
     useShowingsUpdateAppointmentStatus(setShowings)
 
-  const dismissShowingsAppointmentNotifications =
-    useShowingsDismissAppointmentNotifications(setShowings)
-
   return (
     <ShowingFilteredBookingList
       appointments={appointments}
       hasPropertyColumn
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={updateShowingsAppointmentStatus}
-      onDismissAction={dismissShowingsAppointmentNotifications}
       stackDateAndTimeColumns
       emptyDescription="Create your first showing for your off-market or MLS listings under 2 minutes."
     />

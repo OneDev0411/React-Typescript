@@ -39,12 +39,10 @@ export interface AppointmentFilterInfo {
   ) => IShowingAppointment<'showing'>[]
 }
 
-export interface DismissActionParams {
+export interface ApprovalActionParams {
   appointmentId: UUID
   showingId: UUID
   notificationCount: number
-}
-export interface ApprovalActionParams extends DismissActionParams {
   appointment: IShowingAppointment
 }
 

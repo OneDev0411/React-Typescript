@@ -45,10 +45,7 @@ const useStyles = makeStyles(
 )
 
 export interface ShowingBookingListProps
-  extends Pick<
-    ShowingBookingListColumnActionsProps,
-    'onApprovalAction' | 'onDismissAction'
-  > {
+  extends Pick<ShowingBookingListColumnActionsProps, 'onApprovalAction'> {
   rows: IShowingAppointment<'showing'>[]
   emptyMessage: string
   hasPropertyColumn?: boolean
@@ -66,7 +63,6 @@ function ShowingBookingList({
   emptyMessage,
   onApprovalAction,
   hasPropertyColumn = false,
-  onDismissAction,
   hasPastBookingsFilter = false,
   stackDateAndTimeColumns = false,
   hasTextEmptyState = true,
@@ -185,7 +181,6 @@ function ShowingBookingList({
           onApprovalAction={onApprovalAction}
           contact={row.contact}
           feedback={row.feedback}
-          onDismissAction={onDismissAction}
           buyerName={row.contact.display_name}
           buyerMessage={row.buyer_message}
           appointmentTitle={getAppointmentTitle(row)}

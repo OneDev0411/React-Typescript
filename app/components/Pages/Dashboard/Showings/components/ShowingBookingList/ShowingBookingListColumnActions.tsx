@@ -9,7 +9,7 @@ import { ackNotifications } from 'models/notifications'
 import approveShowingAppointment from 'models/showing/approve-showing-appointment'
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
-import { ApprovalActionParams, DismissActionParams } from '../../types'
+import { ApprovalActionParams } from '../../types'
 import ShowingViewFeedbackButton, {
   ShowingViewFeedbackButtonProps
 } from '../ShowingViewFeedbackButton'
@@ -38,7 +38,6 @@ export interface ShowingBookingListColumnActionsProps
   status: IShowingAppointmentStatus
   notifications: Nullable<INotification[]>
   onApprovalAction?: (params: ApprovalActionParams) => void
-  onDismissAction?: (params: DismissActionParams) => void
 }
 
 function ShowingBookingListColumnActions({
@@ -52,7 +51,6 @@ function ShowingBookingListColumnActions({
   onApprovalAction,
   approvals,
   notifications,
-  onDismissAction,
   buyerMessage,
   buyerName
 }: ShowingBookingListColumnActionsProps) {
@@ -105,22 +103,6 @@ function ShowingBookingListColumnActions({
     })
   }
 
-  const handleDismiss = async () => {
-    run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
-      await onDismissAction?.({
-        showingId: showing.id,
-        appointmentId,
-        notificationCount: notifications?.length ?? 0
-      })
-
-      return null
-    })
-  }
-
   const sharedButtonProps: Partial<Omit<ButtonProps, 'color'>> = {
     className: classes.button,
     size: 'small',
@@ -170,15 +152,6 @@ function ShowingBookingListColumnActions({
           label="Cancel"
           hasConfirmation
           confirmationAction="Cancel booking"
-        />
-      )}
-      {!!notifications?.length && status === 'Canceled' && (
-        <ShowingBookingListApprovalButton
-          {...sharedButtonProps}
-          showing={showing}
-          onClick={handleDismiss}
-          disabled={isLoading}
-          label="Dismiss"
         />
       )}
       {feedback && (
