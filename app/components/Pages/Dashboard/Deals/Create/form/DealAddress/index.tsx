@@ -8,9 +8,11 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
-import { useDebounce } from 'react-use'
+import { useAsync, useDebounce } from 'react-use'
 import Flex from 'styled-flex-component'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
+import getListing from '@app/models/listings/listing/get-listing'
 import ListingCard from 'components/ListingCards/ListingCard'
 import {
   QuestionSection,
@@ -58,6 +60,7 @@ export function DealAddress({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
+  const [queryListingId] = useQueryParam('listingId')
 
   const classes = useStyles()
 
@@ -85,6 +88,20 @@ export function DealAddress({
   const { isSearching, listings, places, getParsedPlace } = useSearchLocation(
     debouncedSearchCriteria
   )
+
+  useAsync(async () => {
+    if (!queryListingId) {
+      return
+    }
+
+    try {
+      const listing = await getListing(queryListingId)
+
+      handleSelectListing(listing)
+    } catch (e) {
+      console.log(e)
+    }
+  }, [queryListingId])
 
   const getAddressString = (
     fields: (string | undefined)[],
@@ -133,7 +150,7 @@ export function DealAddress({
     goNext()
   }
 
-  const handleSelectListing = (listing: ICompactListing) => {
+  const handleSelectListing = (listing: IListing | ICompactListing) => {
     setListing(listing)
 
     onChange?.({
