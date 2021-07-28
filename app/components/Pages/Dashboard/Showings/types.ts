@@ -33,6 +33,7 @@ export type AppointmentFilter = 'All' | IShowingAppointmentStatus | 'Feedback'
 export interface AppointmentFilterInfo {
   label: string
   icon?: ReactNode
+  filterIcon?: ReactNode
   filter?: (
     appointments: IShowingAppointment<'showing'>[]
   ) => IShowingAppointment<'showing'>[]

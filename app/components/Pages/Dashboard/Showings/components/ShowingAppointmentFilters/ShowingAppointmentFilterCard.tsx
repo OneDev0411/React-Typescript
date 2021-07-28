@@ -32,9 +32,13 @@ const useStyles = makeStyles(
     icon: {
       display: 'inline-flex',
       verticalAlign: 'middle',
-      marginBottom: theme.spacing(0.5),
-      '& > svg': { fontSize: theme.spacing(3) }
-    }
+      marginRight: theme.spacing(0.5)
+    },
+    info: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    label: { marginLeft: theme.spacing(0.5) }
   }),
   { name: 'ShowingAppointmentFilterCard' }
 )
@@ -53,6 +57,7 @@ interface ShowingAppointmentFilterCardProps extends BookingFilterType {
 
 function ShowingAppointmentFilterCard({
   count,
+  filterIcon,
   icon,
   label,
   onClick,
@@ -69,19 +74,13 @@ function ShowingAppointmentFilterCard({
         variant="outlined"
         onClick={onClick}
       >
-        {icon ? (
-          <span className={classes.icon}>{icon}</span>
-        ) : (
-          <Typography variant="subtitle1">{count}</Typography>
-        )}
-        <Typography variant="body2" component="div">
-          {icon && (
-            <Typography variant="subtitle2" component="span">
-              {count}{' '}
-            </Typography>
-          )}
-          {label}
-        </Typography>
+        <Typography variant="subtitle1">{count}</Typography>
+        <div className={classes.info}>
+          {filterIcon || icon}
+          <Typography className={classes.label} variant="body2">
+            {label}
+          </Typography>
+        </div>
       </Card>
     </Badge>
   )
