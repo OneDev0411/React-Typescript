@@ -13,7 +13,6 @@ import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
 import {
   isActiveDeal,
   isArchivedDeal,
-  isClosingDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
@@ -35,10 +34,8 @@ import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-import { getClosingDateRange } from '../../helpers/closings'
 import { getGridSort } from '../../helpers/sorting'
 import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
-import { ClosingDateRange } from '../../types'
 import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 
 import EmptyState from './EmptyState'
@@ -63,12 +60,7 @@ const Filters = {
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isArchivedDeal(deal, statuses)
-  },
-  closings: (
-    deal: IDeal,
-    _: IDealStatus[],
-    closingDateRange: ClosingDateRange
-  ) => isClosingDeal(deal, closingDateRange)
+  }
 }
 
 function AgentGrid(props: Props & WithRouterProps) {
@@ -144,15 +136,13 @@ function AgentGrid(props: Props & WithRouterProps) {
       return []
     }
 
-    const closingDateRange = getClosingDateRange()
-
     const filterFn =
       props.activeFilter && Filters[props.activeFilter]
         ? Filters[props.activeFilter]
         : Filters.all
 
     return Object.values(deals).filter(deal =>
-      filterFn(deal, statuses, closingDateRange)
+      filterFn(deal, statuses)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
 
