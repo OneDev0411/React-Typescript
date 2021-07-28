@@ -73,13 +73,15 @@ export function Thumbnail({
     return () => clearTimeout(timeout)
   }, [inView, isAlreadyLoaded])
 
+  const shouldRender = isAlreadyLoaded || inView
+
   if (
     template.type === 'template_instance' &&
     getFileType(template.file) === 'pdf'
   ) {
     return (
       <div ref={ref}>
-        <PdfThumbnail url={template.file.url} />
+        {shouldRender && <PdfThumbnail url={template.file.url} />}
       </div>
     )
   }
@@ -87,8 +89,6 @@ export function Thumbnail({
   if (!brand) {
     return null
   }
-
-  const shouldRender = isAlreadyLoaded || inView
 
   if (useStaticImage) {
     const { thumbnail } = getTemplateImage(template)
