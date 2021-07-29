@@ -67,6 +67,10 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
       startObject.getMonth() + 1
     )}${addZero(startObject.getDate())}T103000Z`
 
+    /*
+      the reason we're doing this is we're using a plugin for fullcalendar
+      for showing recurring events which accepts this format.
+    */
     dates.rrule = `DTSTART:${DTSTART}\nRRULE:FREQ=${RECURRING_FREQUENCY};INTERVAL=1;UNTIL=20400601`
   }
 
