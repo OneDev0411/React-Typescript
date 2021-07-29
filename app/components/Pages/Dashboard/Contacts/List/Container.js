@@ -431,9 +431,11 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
 
+      const relevanceValue = '-last_touch_rank'
+
       if (value) {
-        this.order = '-rank'
-      } else {
+        this.order = relevanceValue
+      } else if (this.order === relevanceValue) {
         this.order = '-updated_at'
       }
 

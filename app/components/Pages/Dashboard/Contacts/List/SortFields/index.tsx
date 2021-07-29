@@ -26,7 +26,7 @@ const sortableColumns: SortableColumnsType[] = [
   { label: 'Created At', value: '-created_at', ascending: false },
   {
     label: 'Relevance',
-    value: '-rank',
+    value: '-last_touch_rank',
     ascending: false,
     shouldShow: data => !!data.searchValue
   }
