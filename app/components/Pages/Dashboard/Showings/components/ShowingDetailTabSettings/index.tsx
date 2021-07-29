@@ -1,6 +1,7 @@
 import { useRef, useState, ChangeEvent } from 'react'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 import { withRouter, WithRouterProps } from 'react-router'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -29,9 +30,26 @@ import {
 } from './types'
 
 const useStyles = makeStyles(
-  {
-    content: { overflowX: 'hidden' }
-  },
+  theme => ({
+    root: {
+      display: 'flex',
+      minHeight: 'calc(100vh - 161px)'
+    },
+    padding: { padding: theme.spacing(3, 0) },
+    content: {
+      overflowX: 'hidden',
+      flexGrow: 1,
+      flexShrink: 1
+    },
+    sidebar: {
+      marginRight: theme.spacing(4),
+      flexBasis: theme.spacing(41),
+      flexGrow: 0,
+      flexShrink: 0,
+      backgroundColor: theme.palette.grey[50],
+      paddingLeft: theme.spacing(4)
+    }
+  }),
   { name: 'ShowingDetailTabSettings' }
 )
 
@@ -194,15 +212,15 @@ function ShowingDetailTabSettings({
   }
 
   return (
-    <Box display="flex">
-      <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
+    <div className={classes.root}>
+      <div className={classNames(classes.padding, classes.sidebar)}>
         <ShowingDetailTabSettingsSubjectList
           tab={tab}
           errors={errors}
           hasListingInfo={!!showing.address}
         />
-      </Box>
-      <Box flexGrow="1" flexShrink="1" className={classes.content}>
+      </div>
+      <div className={classNames(classes.padding, classes.content)}>
         <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
             <ShowingDetailTabSettingsTabAvailability
@@ -283,8 +301,8 @@ function ShowingDetailTabSettings({
             </ShowingDetailTabSettingsTabFeedback>
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 
