@@ -64,9 +64,6 @@ function MiniContact(props: MiniContactPropsType) {
             placement="bottom-start"
             style={{ zIndex: theme.zIndex.modal }}
           >
-            {/* Disable the animation temporarily  */}
-            {/* {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}> */}
             <Paper>
               <MiniProfile
                 initData={props.data}
@@ -76,8 +73,6 @@ function MiniContact(props: MiniContactPropsType) {
                 onSubmit={props.onEventChange}
               />
             </Paper>
-            {/* </Fade>
-            )} */}
           </ContentSizeAwarePopper>
         )}
       </ComponentRenderer>

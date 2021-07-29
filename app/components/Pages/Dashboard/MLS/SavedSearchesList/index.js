@@ -98,7 +98,7 @@ class SavedSearchesList extends Component {
         renderDropdownButton={({ isActive, ...props }) => (
           <span {...props}>
             Saved Searches{' '}
-            {props.isActive ? (
+            {isActive ? (
               <SvgIcon
                 path={mdiChevronUp}
                 style={{ verticalAlign: 'middle' }}

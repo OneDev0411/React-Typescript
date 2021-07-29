@@ -1,27 +1,28 @@
 import addDays from 'date-fns/addDays'
 
-import { ClosingDateRange, ClosingsFilterQuery } from '../types'
+import { getUTCStartOfCurrentDayTimestamp } from '@app/utils/date-utils'
 
-export function getClosingDateRange(days: number = 14): ClosingDateRange {
-  return {
-    from: new Date().getTime() / 1000,
-    to: addDays(new Date(), days).getTime() / 1000
-  }
-}
+import { ClosingsFilterQuery } from '../types'
 
 export function getClosingsFilterQuery(
   query: string,
   days: number = 14
 ): ClosingsFilterQuery {
+  const fromDate = new Date(getUTCStartOfCurrentDayTimestamp())
+  const toDate = addDays(fromDate, days)
+
   return {
     query,
     contexts: {
       closing_date: {
         date: {
-          from: new Date().toISOString(),
-          to: addDays(new Date(), days).toISOString()
+          from: fromDate.toISOString(),
+          to: toDate.toISOString()
         }
       }
+    },
+    status: {
+      is_archived: false
     }
   }
 }
