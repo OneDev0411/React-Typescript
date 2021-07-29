@@ -86,7 +86,7 @@ export default function DayCard({
             container
             direction="column"
             alignItems="center"
-            justify="space-between"
+            justifyContent="space-between"
             className={classes.cardContentContainer}
           >
             <Grid item>

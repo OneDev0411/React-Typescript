@@ -31,7 +31,7 @@ const normalizeAttributesToFields = (
 const normalizeAddress = (
   attributes,
   isActive = false,
-  defaultLabel = 'Other',
+  defaultLabel,
   isPrimary = false,
   allAddressMaxIndex = 0
 ) => {
@@ -99,7 +99,7 @@ export function getAddresses(addressesFields, addressAttributeDefs) {
       address
     ).filter(field => field.attribute_def.show)
 
-    const defaultLabel = addresses.length === 0 ? 'Home' : 'Other'
+    const defaultLabel = addresses.length === 0 ? 'Home' : null
 
     addresses.push(
       normalizeAddress(fields, false, defaultLabel, false, maxIndex)

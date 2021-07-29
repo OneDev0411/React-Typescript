@@ -53,7 +53,8 @@ async function getFormattedDealMediaPictures(req: Request, dealId: string) {
     })
   } catch (err) {
     console.error(
-      'Error fetching deal photso for MyMarketingMatters (getFormattedDealMediaPictures):',
+      // eslint-disable-next-line max-len
+      'Error fetching deal photos for MyMarketingMatters (getFormattedDealMediaPictures):',
       err
     )
 

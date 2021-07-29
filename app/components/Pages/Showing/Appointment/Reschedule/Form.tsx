@@ -177,7 +177,6 @@ export default function ShowingAppointmentRescheduleForm({
                 multiline
                 fullWidth
                 rows={4}
-                placeholder="You can write some message or explanation here if you want to"
                 variant="outlined"
                 label="Message"
               />

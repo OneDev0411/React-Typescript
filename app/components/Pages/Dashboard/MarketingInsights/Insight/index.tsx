@@ -313,8 +313,12 @@ function Insight({ location, params: { id } }: Props & WithRouterProps) {
             {summaryItems.map(
               ({ icon, value, label, tooltip, hidden }, index) =>
                 hidden ? null : (
-                  <Tooltip title={tooltip || ''} placement="bottom-start">
-                    <div key={index} className={classes.summaryItem}>
+                  <Tooltip
+                    key={index}
+                    title={tooltip || ''}
+                    placement="bottom-start"
+                  >
+                    <div className={classes.summaryItem}>
                       <MUIAvatar
                         className={classNames(
                           classes.avatar,

@@ -23,3 +23,17 @@ export function getSecondsSinceStartOfDay(date: Date = new Date()): number {
 
   return differenceInSeconds(date, startOfThatDay)
 }
+
+export function getUTCStartOfCurrentDayTimestamp(): number {
+  const now = new Date()
+
+  return Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    0,
+    0,
+    0,
+    0
+  )
+}

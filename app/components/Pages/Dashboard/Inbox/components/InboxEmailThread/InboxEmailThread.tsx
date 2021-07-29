@@ -172,6 +172,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             const name =
               (contact &&
                 (contact.display_name ||
+                  // eslint-disable-next-line max-len
                   `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
               r.name ||
               ''

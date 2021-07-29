@@ -8,7 +8,7 @@ interface Props {
 
 export default function NoResults({ children }: Props) {
   return (
-    <Grid container justify="center">
+    <Grid container justifyContent="center">
       <Grid item>
         <Box py={3}>
           <Typography variant="body1">

@@ -1,8 +1,3 @@
-export interface ClosingDateRange {
-  from: number
-  to: number
-}
-
 export interface ClosingsFilterQuery {
   query: string
   contexts: {
@@ -12,5 +7,8 @@ export interface ClosingsFilterQuery {
         to: string
       }
     }
+  }
+  status: {
+    is_archived: boolean
   }
 }

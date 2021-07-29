@@ -47,7 +47,7 @@ export function ViewMode(props: Props) {
   let label = address.label
 
   if (!address.label) {
-    label = address.id ? '' : 'Home'
+    label = address.id ? '' : 'Add New One'
   }
 
   return (

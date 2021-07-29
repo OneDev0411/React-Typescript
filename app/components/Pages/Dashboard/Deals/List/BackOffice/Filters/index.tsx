@@ -81,14 +81,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         <TabLink
           key="closings"
           value="closings"
-          label={<span>Closings</span>}
+          label={<span>Upcoming Closings</span>}
           to="/dashboard/deals/filter/closings?type=query"
         />,
         <Tab
           key={inboxTabs.length + 1}
           value="all-deals"
           label={
-            <DropdownTab title={staticFiltersTitle}>
+            <DropdownTab component="div" title={staticFiltersTitle}>
               {({ toggleMenu }) => (
                 <>
                   <MenuItem
@@ -134,6 +134,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           key={1}
           label={
             <DropdownTab
+              component="div"
               title={getGridSortLabel(
                 user,
                 SORTABLE_COLUMNS,
