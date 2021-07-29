@@ -94,7 +94,7 @@ export function DateField(props) {
         buttonRenderer={props.dropdownButtonRenderer}
       />
       <BasicDropdown
-        disabled={!month.value}
+        disabled={!(Number.isInteger(month.value) && month.value >= 0)}
         items={daysItems}
         selectedItem={day}
         onChange={onChangeDay}
