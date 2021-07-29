@@ -199,8 +199,8 @@ export default MainFeatures
 function getBathroomsTooltip(listing: IListing): string {
   const fullCounts = listing.property.full_bathroom_count
   const halfCounts = listing.property.half_bathroom_count
-  const fullText = fullCounts != null ? `${fullCounts} Full Bath` : ''
-  const halfText = halfCounts != null ? `${halfCounts} Half Bath` : ''
+  const fullText = fullCounts ? `${fullCounts} Full Bath` : ''
+  const halfText = halfCounts ? `${halfCounts} Half Bath` : ''
 
   return [fullText, halfText].filter(Boolean).join(' + ')
 }
