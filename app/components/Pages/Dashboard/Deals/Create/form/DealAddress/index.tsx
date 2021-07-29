@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   TextField,
@@ -8,11 +8,9 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { mdiMapMarker, mdiHome } from '@mdi/js'
-import { useAsync, useDebounce } from 'react-use'
+import { useDebounce } from 'react-use'
 import Flex from 'styled-flex-component'
 
-import { useQueryParam } from '@app/hooks/use-query-param'
-import getListing from '@app/models/listings/listing/get-listing'
 import ListingCard from 'components/ListingCards/ListingCard'
 import {
   QuestionSection,
@@ -22,11 +20,11 @@ import {
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
 import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useSearchLocation } from 'hooks/use-search-location'
 import { getStatusColorClass } from 'utils/listing'
 
 import { ManualAddress } from './ManualAddress'
 import { useStyles } from './styles'
+import { useSearchAddress } from './use-search-address'
 
 interface Address {
   city?: string
@@ -60,19 +58,35 @@ export function DealAddress({
 }: Props) {
   const wizard = useWizardContext()
   const { step } = useSectionContext()
-  const [queryListingId] = useQueryParam('listingId')
+  const { next: goNextStep, currentStep } = wizard
 
   const classes = useStyles()
 
   const [place, setPlace] =
     useState<Nullable<Partial<google.maps.places.AutocompletePrediction>>>(null)
-  const [listing, setListing] =
+  const [selectedListing, setSelectedListing] =
     useState<Nullable<ICompactListing | IListing>>(null)
   const [address, setAddress] = useState<Address | null>(null)
 
   const [searchCriteria, setSearchCriteria] = useState('')
   const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
     useState<string>('')
+
+  const { isSearching, listing, listings, places, getParsedPlace } =
+    useSearchAddress(debouncedSearchCriteria)
+
+  useEffect(() => {
+    if (listing?.id && currentStep === step) {
+      setSelectedListing(listing)
+
+      onChange?.({
+        type: 'Listing',
+        address: listing.id
+      })
+
+      goNextStep()
+    }
+  }, [listing, onChange, goNextStep, currentStep, step])
 
   /**
    * debounce search criteria to don't search contacts on input change
@@ -84,24 +98,6 @@ export function DealAddress({
     700,
     [searchCriteria]
   )
-
-  const { isSearching, listings, places, getParsedPlace } = useSearchLocation(
-    debouncedSearchCriteria
-  )
-
-  useAsync(async () => {
-    if (!queryListingId) {
-      return
-    }
-
-    try {
-      const listing = await getListing(queryListingId)
-
-      handleSelectListing(listing)
-    } catch (e) {
-      console.log(e)
-    }
-  }, [queryListingId])
 
   const getAddressString = (
     fields: (string | undefined)[],
@@ -118,7 +114,7 @@ export function DealAddress({
 
   const handleRemove = () => {
     setPlace(null)
-    setListing(null)
+    setSelectedListing(null)
     setAddress(null)
     setDebouncedSearchCriteria('')
     setSearchCriteria('')
@@ -150,8 +146,18 @@ export function DealAddress({
     goNext()
   }
 
+  const goNext = () => {
+    if (concurrentMode) {
+      wizard.setStep(step)
+    }
+
+    if (!concurrentMode && currentStep === step) {
+      setTimeout(() => wizard.next(), 700)
+    }
+  }
+
   const handleSelectListing = (listing: IListing | ICompactListing) => {
-    setListing(listing)
+    setSelectedListing(listing)
 
     onChange?.({
       type: 'Listing',
@@ -178,16 +184,6 @@ export function DealAddress({
     goNext()
   }
 
-  const goNext = () => {
-    if (concurrentMode) {
-      wizard.setStep(step)
-    }
-
-    if (!concurrentMode && wizard.currentStep === step) {
-      setTimeout(() => wizard.next(), 700)
-    }
-  }
-
   if (wizard.lastVisitedStep < step) {
     return null
   }
@@ -196,7 +192,7 @@ export function DealAddress({
     <QuestionSection error={error}>
       <QuestionTitle>What is the address for the property?</QuestionTitle>
       <QuestionForm>
-        {!listing && !place && !address && (
+        {!selectedListing && !place && !address && (
           <div className={classes.root}>
             <div className={classes.searchContainer}>
               <div>
@@ -211,7 +207,7 @@ export function DealAddress({
                 />
               </div>
 
-              {skippable && wizard.currentStep === step && (
+              {skippable && currentStep === step && (
                 <div className={classes.skipContainer}>
                   <Button
                     variant="outlined"
@@ -326,7 +322,7 @@ export function DealAddress({
           </div>
         )}
 
-        {listing && <ListingCard listing={listing} />}
+        {selectedListing && <ListingCard listing={selectedListing} />}
 
         {(place || address) && (
           <Flex alignCenter className={classes.place}>
@@ -355,7 +351,7 @@ export function DealAddress({
         )}
 
         <Flex alignCenter justifyEnd className={classes.actions}>
-          {(listing || place || address) && (
+          {(selectedListing || place || address) && (
             <Button onClick={handleRemove}>Change Property</Button>
           )}
         </Flex>
