@@ -13,6 +13,7 @@ import {
   mdiRelativeScale,
   mdiCalendarMonthOutline
 } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import listingUtils from 'utils/listing'
@@ -199,8 +200,12 @@ export default MainFeatures
 function getBathroomsTooltip(listing: IListing): string {
   const fullCounts = listing.property.full_bathroom_count
   const halfCounts = listing.property.half_bathroom_count
-  const fullText = fullCounts ? `${fullCounts} Full Bath` : ''
-  const halfText = halfCounts ? `${halfCounts} Half Bath` : ''
+  const fullText = fullCounts
+    ? `${fullCounts} Full ${pluralize('Bath', fullCounts)}`
+    : ''
+  const halfText = halfCounts
+    ? `${halfCounts} Half ${pluralize('Bath', halfCounts)}`
+    : ''
 
   return [fullText, halfText].filter(Boolean).join(' + ')
 }
