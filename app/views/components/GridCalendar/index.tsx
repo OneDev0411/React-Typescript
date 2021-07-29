@@ -426,10 +426,10 @@ export const GridCalendarPresentation = ({
             list: 'List'
           }}
           plugins={[
+            rrulePlugin,
             dayGridPlugin,
             timeGridPlugin,
-            interactionPlugin,
-            rrulePlugin
+            interactionPlugin
           ]}
           events={events}
           datesSet={handleDatesRender}
