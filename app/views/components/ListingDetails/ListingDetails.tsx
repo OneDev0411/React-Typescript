@@ -1,7 +1,16 @@
 import React, { useRef } from 'react'
 
-import { Box, Grid, Button, Container, RootRef } from '@material-ui/core'
-import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
+import {
+  Box,
+  Grid,
+  Button,
+  Container,
+  RootRef,
+  makeStyles,
+  Theme,
+  useTheme,
+  useMediaQuery
+} from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'

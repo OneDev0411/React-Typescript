@@ -1,14 +1,13 @@
-import React from 'react'
-import { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import {
   makeStyles,
   Theme,
   Typography,
   Box,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
-import { Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
 import { connect } from 'react-redux'

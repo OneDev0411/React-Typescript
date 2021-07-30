@@ -10,8 +10,10 @@ import {
 import { updateContact } from 'models/contacts/update-contact'
 import uploadAttachments from 'models/contacts/upload-attachments'
 import { IAppState } from 'reducers'
-import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
-import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
+import {
+  IAttributeDefsState,
+  selectDefinitionByName
+} from 'reducers/contacts/attributeDefs'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 import { AvatarUploader as Uploader } from 'views/components/AvatarUploader'
 

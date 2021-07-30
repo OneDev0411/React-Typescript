@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
-import { mdiTrashCanOutline } from '@mdi/js'
 import {
+  mdiTrashCanOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline

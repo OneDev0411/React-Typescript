@@ -6,8 +6,10 @@ import { selectListings } from '../../../../reducers/listings'
 import extendedBounds from '../../../../utils/extendedBounds'
 import { toNumber } from '../../../../utils/helpers'
 import { feetToMeters, acresToMeters } from '../../../../utils/listing'
-import { generatePointsFromBounds } from '../../../../utils/map'
-import { normalizeListingsForMarkers } from '../../../../utils/map'
+import {
+  generatePointsFromBounds,
+  normalizeListingsForMarkers
+} from '../../../../utils/map'
 import { goToPlace } from '../../map'
 import { removePolygon, inactiveDrawing } from '../../map/drawing'
 import getListings from '../get-listings'

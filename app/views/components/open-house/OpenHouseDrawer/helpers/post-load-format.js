@@ -3,8 +3,10 @@ import {
   normalizeListing,
   normalizeAssociations
 } from 'views/utils/association-normalizers'
-import { getReminderItem } from 'views/utils/reminder'
-import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
+import {
+  getReminderItem,
+  REMINDER_DROPDOWN_OPTIONS
+} from 'views/utils/reminder'
 
 /**
  * Format form data for api model

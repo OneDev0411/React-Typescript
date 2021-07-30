@@ -25,7 +25,11 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 // List of full calendar assets
 
-import { CrmEventType } from 'components/Calendar/types'
+import {
+  CrmEventType,
+  ApiOptions,
+  FetchOptions
+} from 'components/Calendar/types'
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { updateTask } from 'models/tasks'
@@ -33,7 +37,6 @@ import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
 
 import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
-import { ApiOptions, FetchOptions } from '../Calendar/types'
 
 import { Event } from './components/Event'
 import { EventController } from './components/EventController'
