@@ -40,6 +40,7 @@ const useStyles = makeStyles(
       zIndex: 1
     },
     body: {
+      // calc(height of the entire column - heading height)
       height: `calc(100% - ${theme.spacing(6)}px)`
     },
     placeholder: {
