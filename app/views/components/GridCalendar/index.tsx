@@ -16,6 +16,7 @@ import FullCalendar, {
 } from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
+import rrulePlugin from '@fullcalendar/rrule'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { makeStyles, Theme } from '@material-ui/core'
 import _map from 'lodash/map'
@@ -424,7 +425,12 @@ export const GridCalendarPresentation = ({
             day: 'Day',
             list: 'List'
           }}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[
+            rrulePlugin,
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin
+          ]}
           events={events}
           datesSet={handleDatesRender}
           dateClick={handleDayClick}

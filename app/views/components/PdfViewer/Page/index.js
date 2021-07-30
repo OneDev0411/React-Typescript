@@ -57,17 +57,19 @@ export class Page extends React.Component {
     canvas.width = width
     canvas.height = height
 
-    this.renderTask = page
-      .render({
+    try {
+      this.renderTask = page.render({
         canvasContext: context,
         viewport
       })
-      .then(() => {
-        this.setState({
-          isLoading: false,
-          isPageRendered: isVisible
-        })
+
+      this.setState({
+        isPageRendered: isVisible,
+        isLoading: false
       })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   handleCanvasRef = ref => {

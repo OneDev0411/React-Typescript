@@ -8,6 +8,7 @@ export const TOOLBAR_BUTTONS_PREFIX = 'rechat'
 
 export const IMAGE_TOOLBAR_BUTTONS_PREFIX = 'rechat-image'
 export const EDIT_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}-edit`
+// eslint-disable-next-line max-len
 export const CHANGE_IMAGE_TOOLBAR_BUTTON_NAME = `${IMAGE_TOOLBAR_BUTTONS_PREFIX}-change`
 
 export const IMAGE_ELEMENT_TYPES: string[] = [
@@ -25,7 +26,9 @@ export const BACKGROUND_IMAGE_ALLOWED_ELEMENT_TYPES: string[] = [
 export const BACKGROUND_URL_ALLOWED_ELEMENT_TYPES: string[] = ['mj-hero']
 
 export const MAP_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-map`
+// eslint-disable-next-line max-len
 export const CHANGE_MAP_THEME_TOOLBAR_BUTTON_NAME = `${MAP_TOOLBAR_BUTTONS_PREFIX}-change-theme`
 
 export const CAROUSEL_TOOLBAR_BUTTONS_PREFIX = `${TOOLBAR_BUTTONS_PREFIX}-carousel`
+// eslint-disable-next-line max-len
 export const MANAGE_CAROUSEL_TOOLBAR_BUTTON_NAME = `${CAROUSEL_TOOLBAR_BUTTONS_PREFIX}-manage`

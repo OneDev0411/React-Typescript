@@ -261,7 +261,7 @@ function MarketingWizard(props: WithRouterProps) {
   if (isLoadingTemplates || isLoadingListing) {
     return (
       <Grid container alignItems="center" className={classes.loadingContainer}>
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <CircularProgress />
         </Grid>
       </Grid>
@@ -345,7 +345,7 @@ function MarketingWizard(props: WithRouterProps) {
                 key={template.id}
                 container
                 item
-                justify="center"
+                justifyContent="center"
                 xs={6}
                 lg={3}
               >

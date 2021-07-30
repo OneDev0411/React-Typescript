@@ -13,6 +13,7 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import { setUserSetting } from 'actions/user/set-setting'
 import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -29,7 +30,6 @@ import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import { putUserSetting } from 'models/user/put-user-setting'
 import {
   selectContacts,
   selectContactsInfo,
@@ -748,7 +748,7 @@ class ContactsList extends React.Component {
       viewMode
     })
 
-    putUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+    this.props.setUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
 
     this.reloadContacts()
   }
@@ -1026,6 +1026,7 @@ export default withRouter(
     getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
+    setUserSetting,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )
