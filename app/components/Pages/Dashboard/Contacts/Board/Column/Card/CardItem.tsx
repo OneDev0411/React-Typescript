@@ -182,7 +182,7 @@ export function CardItem({ provided, contact, isDragging, style = {} }: Props) {
               {(contact.tags || []).length > 0 ? (
                 contact.tags?.map((tag, index) => (
                   <Chip
-                    key={index}
+                    key={tag}
                     label={tag}
                     size="small"
                     className={classes.tag}
