@@ -3,9 +3,12 @@ import { useMemo, useState } from 'react'
 import { Box, IconButton, Badge } from '@material-ui/core'
 import { mdiCommentTextMultiple, mdiCommentTextMultipleOutline } from '@mdi/js'
 
+import useAsync from '@app/hooks/use-async'
+import { ackNotification } from '@app/models/notifications'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { getShowingRoleLabel } from '../../helpers'
+import { AckActionParams } from '../../types'
 import Dialog from '../Dialog'
 
 import ShowingDialogCard from './ShowingDialogCard'
@@ -23,6 +26,9 @@ export interface ShowingBookingListRejectMessageProps {
   buyerMessage: Nullable<string>
   appointmentTitle?: string
   notifications: Nullable<INotification[]>
+  showingId: UUID
+  appointmentId: UUID
+  onAckAction?: (params: AckActionParams) => void
 }
 
 function ShowingBookingListRejectMessage({
@@ -30,7 +36,10 @@ function ShowingBookingListRejectMessage({
   buyerName,
   buyerMessage,
   appointmentTitle,
-  notifications
+  notifications,
+  onAckAction,
+  showingId,
+  appointmentId
 }: ShowingBookingListRejectMessageProps) {
   const [open, setOpen] = useState(false)
 
@@ -60,10 +69,26 @@ function ShowingBookingListRejectMessage({
   const { isMessageRead, notificationId } =
     useAppointmentMessageReadStatus(notifications)
 
-  // TODO: Use the notificationId to ack the notification when message was opened
-  console.log('################ notificationId', notificationId)
+  const { isLoading, run } = useAsync()
 
-  const openDialog = () => setOpen(true)
+  const ackAppointmentNotification = async () => {
+    if (!notificationId) {
+      return
+    }
+
+    await run(() => ackNotification(notificationId))
+
+    onAckAction?.({
+      showingId,
+      appointmentId,
+      notificationId
+    })
+  }
+
+  const openDialog = () => {
+    setOpen(true)
+    ackAppointmentNotification()
+  }
 
   const closeDialog = () => setOpen(false)
 
@@ -78,7 +103,7 @@ function ShowingBookingListRejectMessage({
           variant="dot"
           badgeContent="1"
           color="error"
-          invisible={isMessageRead}
+          invisible={isMessageRead || isLoading}
         >
           <SvgIcon
             path={
