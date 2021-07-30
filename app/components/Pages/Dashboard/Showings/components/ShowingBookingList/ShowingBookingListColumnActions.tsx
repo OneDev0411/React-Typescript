@@ -127,6 +127,7 @@ function ShowingBookingListColumnActions({
           buyerName={buyerName}
           buyerMessage={buyerMessage}
           appointmentTitle={appointmentTitle}
+          notifications={notifications}
         />
       )}
       {(status === 'Requested' || status === 'Rescheduled') && (

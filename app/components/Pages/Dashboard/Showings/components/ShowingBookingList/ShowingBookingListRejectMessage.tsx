@@ -9,6 +9,7 @@ import { getShowingRoleLabel } from '../../helpers'
 import Dialog from '../Dialog'
 
 import ShowingDialogCard from './ShowingDialogCard'
+import useAppointmentMessageReadStatus from './use-appointment-message-read-status'
 
 interface PersonMessage {
   role: string
@@ -21,13 +22,15 @@ export interface ShowingBookingListRejectMessageProps {
   buyerName: string
   buyerMessage: Nullable<string>
   appointmentTitle?: string
+  notifications: Nullable<INotification[]>
 }
 
 function ShowingBookingListRejectMessage({
   approvals,
   buyerName,
   buyerMessage,
-  appointmentTitle
+  appointmentTitle,
+  notifications
 }: ShowingBookingListRejectMessageProps) {
   const [open, setOpen] = useState(false)
 
@@ -54,24 +57,28 @@ function ShowingBookingListRejectMessage({
   }, [approvals, buyerMessage, buyerName])
 
   const hasMessage = !!personMessage?.message
+  const { isMessageRead, notificationId } =
+    useAppointmentMessageReadStatus(notifications)
+
+  // TODO: Use the notificationId to ack the notification when message was opened
+  console.log('################ notificationId', notificationId)
 
   const openDialog = () => setOpen(true)
 
   const closeDialog = () => setOpen(false)
 
+  if (!personMessage) {
+    return null
+  }
+
   return (
     <>
-      <IconButton
-        size="medium"
-        color="inherit"
-        onClick={openDialog}
-        disabled={!hasMessage}
-      >
+      <IconButton size="medium" color="inherit" onClick={openDialog}>
         <Badge
           variant="dot"
           badgeContent="1"
           color="error"
-          invisible={!hasMessage}
+          invisible={isMessageRead}
         >
           <SvgIcon
             path={
@@ -82,29 +89,27 @@ function ShowingBookingListRejectMessage({
           />
         </Badge>
       </IconButton>
-      {personMessage && (
-        <Dialog
-          open={open}
-          onClose={closeDialog}
-          title={
-            <>
-              {personMessage.person}
-              <Box component="span" color="grey.500">
-                , {personMessage.role}
-              </Box>
-            </>
-          }
-          subtitle={appointmentTitle}
-        >
-          <Box my={2}>
-            <ShowingDialogCard
-              question="Comments"
-              answer={personMessage.message ?? ''}
-              multiline
-            />
-          </Box>
-        </Dialog>
-      )}
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        title={
+          <>
+            {personMessage.person}
+            <Box component="span" color="grey.500">
+              , {personMessage.role}
+            </Box>
+          </>
+        }
+        subtitle={appointmentTitle}
+      >
+        <Box my={2}>
+          <ShowingDialogCard
+            question="Comments"
+            answer={personMessage.message ?? ''}
+            multiline
+          />
+        </Box>
+      </Dialog>
     </>
   )
 }
