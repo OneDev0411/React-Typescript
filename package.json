@@ -14,6 +14,7 @@
     "types:check": "tsc",
     "lint": "npm run lint:app && npm run lint:server && npm run lint:tests",
     "lint:ci": "eslint app/views && eslint app/components && eslint app/constants && eslint app/hooks && eslint app/models && eslint app/reducers && eslint app/routes && eslint app/selectors && eslint app/services && eslint app/store_actions && eslint app/stores && eslint app/utils && eslint server",
+    "lint:fix": "eslint app/views --fix && eslint app/components --fix && eslint app/constants --fix && eslint app/hooks --fix && eslint app/models --fix && eslint app/reducers --fix && eslint app/routes --fix && eslint app/selectors --fix && eslint app/services --fix && eslint app/store_actions --fix && eslint app/stores --fix && eslint app/utils --fix && eslint server --fix",
     "lint:fix-staged": "lint-staged",
     "lint:app": "eslint ./app",
     "lint:server": "eslint ./server",
