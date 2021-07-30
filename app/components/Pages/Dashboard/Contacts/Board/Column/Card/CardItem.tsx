@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import { mdiCalendar } from '@mdi/js'
 import cn from 'classnames'
+import { DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router'
 
@@ -88,7 +89,14 @@ const useStyles = makeStyles(
   }
 )
 
-export function CardItem({ provided, contact, isDragging, style = {} }) {
+interface Props {
+  provided: DraggableProvided
+  contact: IContact
+  isDragging: boolean
+  style?: React.CSSProperties
+}
+
+export function CardItem({ provided, contact, isDragging, style = {} }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
