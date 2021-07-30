@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import getListing from '../../../models/listings/listing/get-listing'
+import { useAsync } from 'react-use'
+
+import getListing from '@app/models/listings/listing/get-listing'
 
 type Status = 'error' | 'loading' | 'success' | 'pending'
 
@@ -17,23 +19,23 @@ export function useGetListing(id: UUID): UseGetListing {
   const [status, setStatus] = useState<Status>('pending')
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    async function fetchListing() {
-      try {
-        setStatus('loading')
-
-        const response = await getListing(id)
-
-        setListing(response)
-
-        setStatus('success')
-      } catch (error) {
-        setStatus('error')
-        setError(error.message)
-      }
+  useAsync(async () => {
+    if (!id) {
+      return
     }
 
-    fetchListing()
+    try {
+      setStatus('loading')
+
+      const response = await getListing(id)
+
+      setListing(response)
+
+      setStatus('success')
+    } catch (error) {
+      setStatus('error')
+      setError(error.message)
+    }
   }, [id])
 
   return { listing, status, error }
