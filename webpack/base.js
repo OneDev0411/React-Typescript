@@ -1,8 +1,8 @@
 const path = require('path')
 
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { ESBuildPlugin } = require('esbuild-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'

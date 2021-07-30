@@ -39,7 +39,7 @@ export function getFormattedAppointmentDateTime(
 
   const isShowingToday = isToday(start)
 
-  const startTimeFormat: string = isShowingToday ? 'h:mm' : 'MMMM D, h:mm'
+  const startTimeFormat: string = isShowingToday ? 'h:mm' : 'dddd, MMMM D, h:mm'
 
   return `${isShowingToday ? 'Today,' : ''} ${fecha.format(
     convertShowingTimeToLocalTime(appointment.showing, start),

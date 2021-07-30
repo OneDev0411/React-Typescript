@@ -14,7 +14,7 @@ import { mdiArrowDown } from '@mdi/js'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
 
-import { BaseDropdown, RenderToggleButtonProps } from 'components/BaseDropdown'
+import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
@@ -128,7 +128,7 @@ export function ExportDeals(props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={(buttonProps: RenderToggleButtonProps) => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <Tooltip placement="bottom" title="Export Deals">
           <Button
             className={classes.exportButton}

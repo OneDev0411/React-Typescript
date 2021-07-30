@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 

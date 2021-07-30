@@ -205,6 +205,7 @@ function OpenHousesList() {
         <ZeroState
           imageUrl="/static/images/zero-state/open-house.png"
           title="No open houses are scheduled, yet."
+          // eslint-disable-next-line max-len
           subTitle="Impress sellers with additional marketing exposure while attracting new buyers and adding contacts. Holding an open house has never been easier!"
           ctaNode={<CreateNewOpenHouse onOpenDrawer={onOpenOHDrawer} />}
         />

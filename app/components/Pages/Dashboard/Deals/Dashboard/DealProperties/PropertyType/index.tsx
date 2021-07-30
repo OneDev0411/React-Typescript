@@ -50,7 +50,7 @@ export function PropertyType(props: Props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={buttonProps => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <Button
           {...buttonProps}
           size="small"

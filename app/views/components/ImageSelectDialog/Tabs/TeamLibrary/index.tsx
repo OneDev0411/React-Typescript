@@ -17,7 +17,6 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
 import Masonry from 'components/Masonry'
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -29,8 +28,6 @@ import { SearchableImageTabProps } from '../../types'
 
 import { DEFAULT_ASSET_LABEL } from './constants'
 import { useTeamLibrary } from './hooks'
-
-const PAGE_SIZE = 16
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -80,14 +77,6 @@ function TeamLibrary({
   } = useTeamLibrary(activeBrandId, user, query)
 
   const theme = useTheme()
-
-  const currentPageResults = useInfinitePagination({
-    items: results,
-    pageSize: PAGE_SIZE,
-    infiniteScrollProps: {
-      container: containerRef ?? undefined
-    }
-  })
 
   const onDrop = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -184,7 +173,7 @@ function TeamLibrary({
     return <Loading />
   }
 
-  if (query && currentPageResults.length === 0) {
+  if (query && results.length === 0) {
     return (
       <NoResults>
         <Box py={2}>{renderLabels()}</Box>
@@ -202,7 +191,7 @@ function TeamLibrary({
       }
       {...{ ...getRootProps(), css: {} }}
     >
-      {currentPageResults.length === 0 && (
+      {results.length === 0 && (
         <Box
           display="flex"
           flexDirection="column"
@@ -243,7 +232,7 @@ function TeamLibrary({
           </Button>
         </Box>
       )}
-      {currentPageResults.length > 0 && (
+      {results.length > 0 && (
         <Grid container direction="column">
           {renderLabels()}
           <Grid container item>
@@ -279,7 +268,7 @@ function TeamLibrary({
                   </>
                 )}
               </Box>
-              {currentPageResults.map(item => {
+              {results.map(item => {
                 const imageUrl = item.file.url
                 const canDelete = hasDeleteAccess(item.id)
 

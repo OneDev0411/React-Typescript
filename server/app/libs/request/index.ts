@@ -33,6 +33,7 @@ export function request(req: Request, requestConfig: AxiosRequestConfig) {
             session.user.refresh_token
           )
 
+          // eslint-disable-next-line max-len
           originalRequest.headers.authorization = `Bearer ${nextSession.access_token}`
 
           req.session!.user = nextSession
@@ -63,6 +64,7 @@ function log(response: AxiosResponse) {
     new Date().getTime() - response.config.headers['x-request-time']
 
   console.log(
+    // eslint-disable-next-line max-len
     `(${duration}ms) HTTP\t${response.status} ${response.statusText}\t${method}\t${response.config.url}`
   )
 }

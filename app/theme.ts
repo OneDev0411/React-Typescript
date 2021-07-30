@@ -1,4 +1,4 @@
-import { createMuiTheme, Theme, ThemeOptions } from '@material-ui/core'
+import { createTheme, Theme, ThemeOptions } from '@material-ui/core'
 import merge from 'merge'
 
 const white = '#fff'
@@ -226,6 +226,16 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
       modal: 1001,
       gridAction: 100,
       sideNavDrawer: 100
+    },
+    overrides: {
+      // Latest version of Safari (Safari 14.1.1 and on iPhone with iOS 14.5.1) has some issues
+      // with color and it doesn't update the text color correctly.
+      // See: https://github.com/mui-org/material-ui/issues/26251
+      MuiButton: {
+        root: {
+          transition: 'color 0.01s'
+        }
+      }
     }
   }
 
@@ -236,7 +246,7 @@ const themeGenerator = (brandTheme: ThemeOptions = {}): Theme => {
     }
   })
 
-  const theme: Theme = createMuiTheme(mergedValue)
+  const theme: Theme = createTheme(mergedValue)
 
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
