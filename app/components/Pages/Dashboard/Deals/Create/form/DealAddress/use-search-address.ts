@@ -1,30 +1,10 @@
-import { useEffect, useState } from 'react'
-
+import { useGetListing } from '@app/hooks/use-get-listing'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { useSearchLocation } from '@app/hooks/use-search-location'
-import getListing from '@app/models/listings/listing/get-listing'
 
 export function useSearchAddress(criteria: string) {
-  const [listing, setListing] = useState<IListing | null>(null)
   const [queryListingId] = useQueryParam('listingId')
-
-  const listingId = listing?.id
-
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const listing = await getListing(queryListingId)
-
-        setListing(listing)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    if (queryListingId && !listingId) {
-      fetch()
-    }
-  }, [queryListingId, listingId])
+  const { listing } = useGetListing(queryListingId)
 
   const { isSearching, listings, places, getParsedPlace } =
     useSearchLocation(criteria)
