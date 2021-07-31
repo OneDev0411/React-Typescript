@@ -30,7 +30,9 @@ export function selectUser(state: IAppState): IUser {
  * @param state The app state
  * @returns The user state
  */
-export function selectUserSettings(state: IAppState): StringMap<any> {
+export function selectUserSettingsInActiveTeam(
+  state: IAppState
+): StringMap<any> {
   return getSettingsFromActiveTeam(team => team?.settings)(selectUser(state))
 }
 

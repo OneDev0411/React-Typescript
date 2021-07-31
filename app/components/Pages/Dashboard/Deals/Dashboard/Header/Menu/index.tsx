@@ -9,8 +9,7 @@ import { mdiClose } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { selectUser } from '@app/selectors/user'
-import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
+import { selectUserSettingsInActiveTeam } from '@app/selectors/user'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OpenHouse from 'deals/components/OpenHouse'
 import YardSign from 'deals/components/YardSign'
@@ -44,13 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
     const classes = useStyles()
-    const user = useSelector(selectUser)
+    const userSettings = useSelector(selectUserSettingsInActiveTeam)
 
     const handleClose = () => {
-      const query = getUserSettingsInActiveTeam(
-        user,
-        DEAL_GRID_FILTER_SETTING_KEY
-      )
+      const query = userSettings[DEAL_GRID_FILTER_SETTING_KEY]
 
       router.push(`/dashboard/deals?q=${query?.term || ''}`)
     }
