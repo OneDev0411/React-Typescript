@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 
+import { getSettingsFromActiveTeam } from '@app/utils/user-teams'
 import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 
@@ -17,20 +18,20 @@ export const selectUserUnsafe = (state: IAppState) => state.user
 
 /**
  * Returns the entire user info from the redux store.
- * It raises an error if the user did not sign in before.
  * @param state The app state
  * @returns The user state
  */
 export function selectUser(state: IAppState): IUser {
-  const user = selectUserUnsafe(state)!
+  return selectUserUnsafe(state)!
+}
 
-  // if (!user) {
-  //   throw new Error(
-  //     'This selector must be called when the user is signed in before'
-  //   )
-  // }
-
-  return user
+/**
+ * Returns the given user's settings
+ * @param state The app state
+ * @returns The user state
+ */
+export function selectUserSettings(state: IAppState): StringMap<any> {
+  return getSettingsFromActiveTeam(team => team?.settings)(selectUser(state))
 }
 
 /**
