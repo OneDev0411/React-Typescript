@@ -190,6 +190,10 @@ export class PdfViewer extends React.Component {
       })
   }
 
+  handleOpenInNewWindow = () => {
+    window.open(this.props.url)
+  }
+
   handleKeyboardShortcuts = event => {
     if (!this.state.document) {
       return false
@@ -263,6 +267,7 @@ export class PdfViewer extends React.Component {
           onZoomIn={this.handleZoomIn}
           onZoomOut={this.handleZoomOut}
           onRotate={this.handleRotate}
+          onNewWindow={this.handleOpenInNewWindow}
         />
         <Container ref={ref => (this.pdfContainer = ref)}>
           {Array.apply(null, { length: this.state.document.numPages }).map(
