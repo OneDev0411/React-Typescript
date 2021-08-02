@@ -51,7 +51,7 @@ export interface ApprovalActionParams extends DismissActionParams {
 export interface AckActionParams {
   appointmentId: UUID
   showingId: UUID
-  notificationId: UUID
+  notificationIds: UUID[]
 }
 
 export type CreateShowingErrors = Record<string, string>

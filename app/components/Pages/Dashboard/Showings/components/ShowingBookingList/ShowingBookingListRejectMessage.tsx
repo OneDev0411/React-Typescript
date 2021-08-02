@@ -4,7 +4,7 @@ import { Box, IconButton, Badge } from '@material-ui/core'
 import { mdiCommentTextMultiple, mdiCommentTextMultipleOutline } from '@mdi/js'
 
 import useAsync from '@app/hooks/use-async'
-import { ackNotification } from '@app/models/notifications'
+import { ackNotifications } from '@app/models/notifications'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { getShowingRoleLabel } from '../../helpers'
@@ -66,22 +66,22 @@ function ShowingBookingListRejectMessage({
   }, [approvals, buyerMessage, buyerName])
 
   const hasMessage = !!personMessage?.message
-  const { isMessageRead, notificationId } =
+  const { isMessageRead, notificationIds } =
     useAppointmentMessageReadStatus(notifications)
 
   const { isLoading, run } = useAsync()
 
   const ackAppointmentNotification = async () => {
-    if (!notificationId) {
+    if (!notificationIds.length) {
       return
     }
 
-    await run(() => ackNotification(notificationId))
+    run(() => ackNotifications(notificationIds))
 
     onAckAction?.({
       showingId,
       appointmentId,
-      notificationId
+      notificationIds
     })
   }
 

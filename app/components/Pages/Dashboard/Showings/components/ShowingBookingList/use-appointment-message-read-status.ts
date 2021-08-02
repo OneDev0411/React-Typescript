@@ -1,18 +1,21 @@
 interface UseAppointmentMessageReadStatus {
   isMessageRead: boolean
-  notificationId: Nullable<UUID>
+  notificationIds: UUID[]
 }
 
 function useAppointmentMessageReadStatus(
   notifications: Nullable<INotification[]>
 ): UseAppointmentMessageReadStatus {
-  const notification = notifications?.find(notification =>
-    ['Rescheduled', 'Canceled'].includes(notification.action)
-  )
+  const notificationIds: UUID[] =
+    notifications
+      ?.filter(notification =>
+        ['Rescheduled', 'Canceled'].includes(notification.action)
+      )
+      .map(notification => notification.id) ?? []
 
   return {
-    isMessageRead: !notification,
-    notificationId: notification?.id ?? null
+    isMessageRead: notificationIds.length === 0,
+    notificationIds
   }
 }
 

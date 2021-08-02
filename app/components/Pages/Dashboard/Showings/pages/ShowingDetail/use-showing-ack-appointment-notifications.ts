@@ -8,23 +8,23 @@ import { AckActionParams } from '../../types'
 
 import { updateAppointmentState } from './helpers'
 
-type UseShowingAckAppointmentNotification = (params: AckActionParams) => void
+type UseShowingAckAppointmentNotifications = (params: AckActionParams) => void
 
-function useShowingAckAppointmentNotification(
+function useShowingAckAppointmentNotifications(
   setShowing: Dispatch<SetStateAction<IShowing<'showing'>>>
-): UseShowingAckAppointmentNotification {
+): UseShowingAckAppointmentNotifications {
   const dispatch = useDispatch()
 
-  return ({ appointmentId, notificationId }: AckActionParams) => {
+  return ({ appointmentId, notificationIds }: AckActionParams) => {
     updateAppointmentState(setShowing, appointmentId, appointment => ({
       ...appointment,
       notifications:
         appointment.notifications?.filter(
-          notification => notification.id !== notificationId
+          notification => !notificationIds.includes(notification.id)
         ) ?? null
     }))
-    dispatch(decreaseShowingTotalNotificationCount(1))
+    dispatch(decreaseShowingTotalNotificationCount(notificationIds.length))
   }
 }
 
-export default useShowingAckAppointmentNotification
+export default useShowingAckAppointmentNotifications

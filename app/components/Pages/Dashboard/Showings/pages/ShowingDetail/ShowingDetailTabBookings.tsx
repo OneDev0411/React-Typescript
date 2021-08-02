@@ -6,7 +6,7 @@ import ShowingDetailEmptyStateDescription from '../../components/ShowingDetailTa
 import ShowingFilteredBookingList from '../../components/ShowingFilteredBookingList'
 import { AppointmentFilter } from '../../types'
 
-import useShowingAckAppointmentNotification from './use-showing-ack-appointment-notification'
+import useShowingAckAppointmentNotifications from './use-showing-ack-appointment-notifications'
 import useShowingDismissAppointmentNotifications from './use-showing-dismiss-appointment-notifications'
 import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
 
@@ -32,8 +32,8 @@ function ShowingDetailTabBookings({
   const dismissShowingAppointmentNotifications =
     useShowingDismissAppointmentNotifications(setShowing)
 
-  const ackShowingAppointmentNotification =
-    useShowingAckAppointmentNotification(setShowing)
+  const ackShowingAppointmentNotifications =
+    useShowingAckAppointmentNotifications(setShowing)
 
   return (
     <ShowingFilteredBookingList
@@ -41,7 +41,7 @@ function ShowingDetailTabBookings({
       onApprovalAction={updateShowingAppointmentStatus}
       generateLink={generateAppointmentFilterLink}
       onDismissAction={dismissShowingAppointmentNotifications}
-      onAckAction={ackShowingAppointmentNotification}
+      onAckAction={ackShowingAppointmentNotifications}
       emptyButtonLabel="Open Booking Page"
       emptyButtonLink={showingBookingUrl}
       emptyButtonTarget="_blank"

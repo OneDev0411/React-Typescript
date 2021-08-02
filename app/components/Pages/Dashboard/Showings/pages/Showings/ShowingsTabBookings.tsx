@@ -5,7 +5,7 @@ import ShowingFilteredBookingList, {
 } from '../../components/ShowingFilteredBookingList'
 import { generateAppointmentFilterLink } from '../../helpers'
 
-import useShowingsAckAppointmentNotification from './use-showings-ack-appointment-notification'
+import useShowingsAckAppointmentNotifications from './use-showings-ack-appointment-notifications'
 import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
@@ -25,7 +25,7 @@ function ShowingsTabBookings({
     useShowingsDismissAppointmentNotifications(setShowings)
 
   const ackShowingsAppointmentNotifications =
-    useShowingsAckAppointmentNotification(setShowings)
+    useShowingsAckAppointmentNotifications(setShowings)
 
   return (
     <ShowingFilteredBookingList
