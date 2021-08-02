@@ -19,7 +19,7 @@ interface Props {
 export function List({ deals, contact }: Props) {
   const theme: Theme = useTheme()
   const user = useSelector(selectUser)
-  const statuses = useBrandStatuses(getActiveTeamId(user) || '')
+  const [statuses] = useBrandStatuses(getActiveTeamId(user) || '')
   const sortedDealsByStatus = useMemo(
     () => sortDealsStatus(deals, statuses),
     [deals, statuses]
