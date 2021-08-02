@@ -39,7 +39,6 @@ export interface AppointmentFilterInfo {
 export interface ApprovalActionParams {
   appointmentId: UUID
   showingId: UUID
-  notificationCount: number
   appointment: IShowingAppointment
 }
 
