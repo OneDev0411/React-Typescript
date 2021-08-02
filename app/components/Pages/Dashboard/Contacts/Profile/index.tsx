@@ -310,8 +310,6 @@ const ContactProfile = props => {
     }
   }
   const onTouchChange = useCallback(({ contacts }) => {
-    console.log('touch date', { contacts, currentContactId })
-
     if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
       updateContact()
     }
