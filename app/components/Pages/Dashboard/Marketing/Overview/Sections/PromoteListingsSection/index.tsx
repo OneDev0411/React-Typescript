@@ -1,13 +1,11 @@
-import React from 'react'
-
 import { Grid } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { selectActiveBrandId } from '@app/selectors/brand'
-import CardSkeleton from 'components/CardSkeleton'
-import ListingCard from 'components/ListingCards/ListingCard'
-import { goTo } from 'utils/go-to'
+import Link from '@app/views/components/ALink'
+import CardSkeleton from '@app/views/components/CardSkeleton'
+import ListingCard from '@app/views/components/ListingCards/ListingCard'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
@@ -43,13 +41,13 @@ export default function PromoteListingsSection() {
       {!isLoading &&
         listings?.slice(0, 4).map(listing => (
           <Grid key={listing.id} item xs={12} sm={6} md={3}>
-            <ListingCard
-              hideFeatures
-              listing={listing}
-              onClick={() => {
-                goTo(`/dashboard/mls/${listing.id}/marketing`)
-              }}
-            />
+            <Link
+              noStyle
+              to={`/dashboard/marketing/mls/${listing.id}`}
+              target="_blank"
+            >
+              <ListingCard hideFeatures listing={listing} />
+            </Link>
           </Grid>
         ))}
     </SectionLayout>

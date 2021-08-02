@@ -14,7 +14,7 @@ function ListingsListColumnActionsMarketListingButton({
   return (
     <LinkButton
       {...otherProps}
-      to={`/dashboard/mls/${listingId}/marketing`}
+      to={`/dashboard/marketing/mls/${listingId}`}
       target="_blank"
     >
       Market Listing
