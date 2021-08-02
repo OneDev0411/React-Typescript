@@ -1,7 +1,5 @@
 import React from 'react'
 
-import Spinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
 import { Container, PageNumber } from './styled'
 
 export class Page extends React.Component {
@@ -28,10 +26,8 @@ export class Page extends React.Component {
     }
   }
 
-  getScale(isVisible) {
-    const quality = this.props.quailtyScale || window.devicePixelRatio * 1.5
-
-    return isVisible ? quality : 0.01
+  getScale() {
+    return this.props.quailtyScale || window.devicePixelRatio * 1.5
   }
 
   renderPage = async (isVisible = false) => {
@@ -43,7 +39,7 @@ export class Page extends React.Component {
     const page = await this.props.document.getPage(this.props.pageNumber)
 
     const viewport = page.getViewport({
-      scale: this.getScale(isVisible)
+      scale: this.getScale()
     })
     const { width, height } = viewport
     const canvas = this.canvas
@@ -57,19 +53,22 @@ export class Page extends React.Component {
     canvas.width = width
     canvas.height = height
 
-    try {
-      this.renderTask = page.render({
+    this.renderTask = page
+      .render({
         canvasContext: context,
         viewport
       })
-
-      this.setState({
-        isPageRendered: isVisible,
-        isLoading: false
-      })
-    } catch (e) {
-      console.log(e)
-    }
+      .promise.then(
+        () => {
+          this.setState({
+            isPageRendered: isVisible,
+            isLoading: false
+          })
+        },
+        e => {
+          console.log(e)
+        }
+      )
   }
 
   handleCanvasRef = ref => {
@@ -108,7 +107,6 @@ export class Page extends React.Component {
         id={`page-${this.props.pageNumber}`}
         ref={ref => (this.pageContainer = ref)}
         style={this.props.pageStyle}
-        isLoading={this.state.isLoading}
         data-page={this.props.pageNumber}
         data-pdf={this.props.pdfId}
       >
@@ -117,8 +115,6 @@ export class Page extends React.Component {
             pageNumber: this.props.pageNumber,
             pagesCount: this.props.totalPages
           })}
-
-        {this.state.isLoading && <Spinner />}
 
         <canvas
           id="page-canvas"
