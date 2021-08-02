@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 export type ShowingDetailTabType = 'Bookings' | 'Visitors' | 'Settings'
 
 export type ShowingsTabType = 'Properties' | 'Bookings'
@@ -32,8 +30,7 @@ export type AppointmentFilter = 'All' | IShowingAppointmentStatus | 'Feedback'
 
 export interface AppointmentFilterInfo {
   label: string
-  icon?: ReactNode
-  filterIcon?: ReactNode
+  icon?: string
   filter?: (
     appointments: IShowingAppointment<'showing'>[]
   ) => IShowingAppointment<'showing'>[]

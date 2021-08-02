@@ -2,6 +2,9 @@ import { Card, Typography, makeStyles, Badge } from '@material-ui/core'
 import classNames from 'classnames'
 import { Link } from 'react-router'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
 const useStyles = makeStyles(
@@ -57,7 +60,6 @@ interface ShowingAppointmentFilterCardProps extends BookingFilterType {
 
 function ShowingAppointmentFilterCard({
   count,
-  filterIcon,
   icon,
   label,
   onClick,
@@ -76,7 +78,7 @@ function ShowingAppointmentFilterCard({
       >
         <Typography variant="subtitle1">{count}</Typography>
         <div className={classes.info}>
-          {filterIcon || icon}
+          {icon && <SvgIcon path={icon} size={muiIconSizes.small} />}
           <Typography className={classes.label} variant="body2">
             {label}
           </Typography>
