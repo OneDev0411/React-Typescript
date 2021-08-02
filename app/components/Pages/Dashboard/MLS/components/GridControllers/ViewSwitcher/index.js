@@ -62,7 +62,7 @@ const ViewSwitcher = ({ onChangeView, activeView }) => {
         onClick={handleViewSwitcherToggle}
       >
         {listingViewOptions[selectedIndex].icon({
-          color: theme.palette.primary.main,
+          color: theme.palette.text.primary,
           className: iconClasses.small
         })}
       </DropdownToggleButton>

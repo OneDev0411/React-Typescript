@@ -98,7 +98,7 @@ export default function ShowingAppointmentCancel({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Typography variant="h6">
-                  You’re going to cancel{' '}
+                  You’re canceling your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
@@ -122,8 +122,6 @@ export default function ShowingAppointmentCancel({
                       multiline
                       fullWidth
                       rows={4}
-                      // eslint-disable-next-line max-len
-                      placeholder="You can write some message or explanation here if you want to"
                       variant="outlined"
                       label="Message"
                     />

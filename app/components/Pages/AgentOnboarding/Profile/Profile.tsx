@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { Box } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import idx from 'idx'
 import { useSelector, useDispatch } from 'react-redux'

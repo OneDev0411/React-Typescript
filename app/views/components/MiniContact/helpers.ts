@@ -130,12 +130,22 @@ export async function findContact(email: string, base_output, attributeDefs) {
 
     if (res.data.length > 0) {
       const foundContact = res.data[0]
+      const contactAssociation = normalizeContactForAssociation(foundContact)
+      const association = {
+        association_type: 'contact',
+        contact: contactAssociation,
+        id: contactAssociation.id,
+        disableDefaultAssociationChecking: true
+      }
 
       return {
         ...base_output,
         contact_id: foundContact.id,
         contact_status: 'finished',
-        data: extractRequiredDataFromContact(foundContact, attributeDefs)
+        data: extractRequiredDataFromContact(foundContact, attributeDefs),
+        meta: {
+          association
+        }
       }
     }
 

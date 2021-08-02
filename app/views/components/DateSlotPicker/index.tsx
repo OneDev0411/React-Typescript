@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import cn from 'classnames'
 import { eachDayOfInterval, isSameDay } from 'date-fns'
 import { useDeepCompareEffect } from 'react-use'
 import SwiperCore, { Navigation, A11y, Mousewheel } from 'swiper'
@@ -11,9 +12,18 @@ import DayCard from './components/DayCard'
 SwiperCore.use([Navigation, A11y, Mousewheel])
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     slide: {
       width: 'auto !important'
+    },
+    container: {
+      position: 'relative'
+    },
+    swiperButtonPrev: {
+      left: `${theme.spacing(-2)}px !important`
+    },
+    swiperButtonNext: {
+      right: `${theme.spacing(-2)}px !important`
     }
   }),
   {
@@ -74,24 +84,32 @@ export default function DateSlotPicker({
   )
 
   return (
-    <Swiper
-      freeMode
-      navigation
-      mousewheel
-      onSwiper={setControlledSwiper}
-      slidesPerView="auto"
-      spaceBetween={16}
-    >
-      {days.map(day => (
-        <SwiperSlide key={day.getTime()} className={classes.slide}>
-          <DayCard
-            date={day}
-            disabled={isDateDisabled(day)}
-            isActive={active ? isSameDay(day, active) : undefined}
-            onClick={() => onClick(day)}
-          />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className={classes.container}>
+      <Swiper
+        freeMode
+        mousewheel
+        navigation={{
+          prevEl: `.${classes.swiperButtonPrev}`,
+          nextEl: `.${classes.swiperButtonNext}`
+        }}
+        onSwiper={setControlledSwiper}
+        slidesPerView="auto"
+        spaceBetween={16}
+      >
+        {days.map(day => (
+          <SwiperSlide key={day.getTime()} className={classes.slide}>
+            <DayCard
+              date={day}
+              disabled={isDateDisabled(day)}
+              isActive={active ? isSameDay(day, active) : undefined}
+              onClick={() => onClick(day)}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      <div className={cn('swiper-button-prev', classes.swiperButtonPrev)} />
+      <div className={cn('swiper-button-next', classes.swiperButtonNext)} />
+    </div>
   )
 }

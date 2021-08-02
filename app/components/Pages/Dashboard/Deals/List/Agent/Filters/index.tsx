@@ -38,10 +38,6 @@ const TAB_ITEMS = [
   {
     label: 'Archive',
     link: 'archives'
-  },
-  {
-    label: 'Closings',
-    link: 'closings'
   }
 ]
 
