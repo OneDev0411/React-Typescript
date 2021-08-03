@@ -93,6 +93,7 @@ function ShowingPropertyList({
         <ShowingPropertyListColumnActions
           className={classes.actions}
           bookingUrl={getShowingBookingPageUrl(row)}
+          listingId={row.listing?.id || row.deal?.listing?.id}
         />
       )
     }
