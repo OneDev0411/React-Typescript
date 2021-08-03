@@ -13,7 +13,7 @@ import { InboxAction } from 'reducers/inbox/types'
 import { selectNotificationNewCount } from 'reducers/notifications'
 import { selectShowingsTotalNotificationCount } from 'selectors/showings'
 import { selectUserUnsafe } from 'selectors/user'
-import { getActiveTeamSettings } from 'utils/user-teams'
+import { getBrandHelpCenterURL } from 'utils/brand'
 import Acl from 'views/components/Acl'
 import { ScrollableArea } from 'views/components/ScrollableArea'
 
@@ -41,6 +41,9 @@ const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
+  const brand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
   )
@@ -62,9 +65,7 @@ export function Menu() {
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
-  const activeBrandSettings = getActiveTeamSettings(user, true)
-  const brandHelpCenterLink =
-    activeBrandSettings.help_center || 'https://help.rechat.com'
+  const brandHelpCenterURL = getBrandHelpCenterURL(brand)
 
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
@@ -217,7 +218,7 @@ export function Menu() {
             <SidenavBlankLink
               target="_blank"
               rel="noopener noreferrer"
-              href={brandHelpCenterLink}
+              href={brandHelpCenterURL}
             >
               Help Center
             </SidenavBlankLink>

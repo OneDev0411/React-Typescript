@@ -105,6 +105,7 @@ declare interface IBrandSettings extends IModel<'brand_settings'> {
     BrandMarketingPalette
   } | null
   theme: IBrandTheme | null
+  help_center
 }
 
 declare interface IBrandMessage {
