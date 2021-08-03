@@ -31,7 +31,10 @@ const ListingCardWithFavorite = ({
   const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
 
   const closeListing = () => {
-    window.history.pushState({}, '', '/dashboard/mls')
+    if (!isWidget) {
+      window.history.pushState({}, '', '/dashboard/mls')
+    }
+
     setIsListingOpen(false)
   }
 
@@ -42,9 +45,12 @@ const ListingCardWithFavorite = ({
       return
     }
 
-    window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
+    if (!isWidget) {
+      window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
+    }
+
     setIsListingOpen(true)
-  }, [onClick, listing.id])
+  }, [onClick, listing.id, isWidget])
 
   const handleToggleSelection = useCallback(onToggleSelection, [
     onToggleSelection

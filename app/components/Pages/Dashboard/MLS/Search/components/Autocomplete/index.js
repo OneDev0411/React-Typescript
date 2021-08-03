@@ -10,10 +10,6 @@ import {
   SEARCH_BY_GOOGLE_SUGGESTS,
   SEARCH_BY_QUERY
 } from '@app/constants/listings/search'
-import {
-  loadMapLibraries,
-  isMapLibrariesLoaded
-} from '@app/utils/google-map-api'
 import { goToPlace, setMapProps } from 'actions/listings/map'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 import searchActions from 'actions/listings/search'
@@ -59,15 +55,6 @@ class MlsAutocompleteSearch extends Component {
     }
 
     return null
-  }
-
-  componentDidMount() {
-    const googleMapAPIParams = { libraries: ['places'] }
-
-    // Load google maps places if is not loaded yet
-    if (!isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
-      loadMapLibraries(googleMapAPIParams, 'google-maps-places')
-    }
   }
 
   componentWillUnmount() {
@@ -233,7 +220,10 @@ class MlsAutocompleteSearch extends Component {
   handleItemToString = item => (item == null ? '' : item.description)
 
   handleSelectedListing = item => {
-    window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+    if (!this.props.isWidget) {
+      window.history.replaceState({}, '', `/dashboard/mls/${item.id}`)
+    }
+
     this.setState({
       isListingDetailsModalOpen: true,
       selectedListingId: item.id
@@ -241,7 +231,10 @@ class MlsAutocompleteSearch extends Component {
   }
 
   closeListingDetailsModal = () => {
-    window.history.replaceState({}, '', '/dashboard/mls')
+    if (!this.props.isWidget) {
+      window.history.replaceState({}, '', '/dashboard/mls')
+    }
+
     this.setState({
       isListingDetailsModalOpen: false,
       selectedListingId: null

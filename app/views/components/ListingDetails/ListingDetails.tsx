@@ -1,9 +1,19 @@
 import React, { useRef } from 'react'
 
-import { Box, Grid, Button, Container, RootRef } from '@material-ui/core'
-import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
+import {
+  Box,
+  Grid,
+  Button,
+  Container,
+  RootRef,
+  makeStyles,
+  Theme,
+  useTheme,
+  useMediaQuery
+} from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
@@ -26,7 +36,6 @@ import Map from './Map'
 import MLSNote from './MLSNote'
 import Status from './Status'
 import Title from './Title'
-import { useGetListing, UseGetListing } from './use-get-listing'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

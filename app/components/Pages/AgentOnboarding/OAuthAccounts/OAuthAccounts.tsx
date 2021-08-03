@@ -102,6 +102,7 @@ export function OAuthAccounts() {
       <Header
         brand={brand}
         title="Be Connected"
+        // eslint-disable-next-line max-len
         subtitle="To get the best experience select the accounts you would like to connect"
       />
       <Box marginBottom={6} width="100%" display="flex">

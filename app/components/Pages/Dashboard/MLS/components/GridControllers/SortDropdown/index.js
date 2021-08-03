@@ -50,6 +50,7 @@ const SortDropdown = ({ onChangeSort, activeSort }) => {
   return (
     <>
       <DropdownToggleButton
+        component="div"
         isActive={Boolean(sortDropdownAnchorEl)}
         onClick={handleViewSwitcherToggle}
       >

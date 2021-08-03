@@ -7,7 +7,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 import { mdiChevronDown } from '@mdi/js'
 import classNames from 'classnames'
 
@@ -28,7 +28,7 @@ const styles = (theme: Theme) => {
     },
     buttonActive: {
       '&, &:hover': {
-        background: fade(
+        background: alpha(
           theme.palette.secondary.main,
           theme.palette.action.hoverOpacity
         )

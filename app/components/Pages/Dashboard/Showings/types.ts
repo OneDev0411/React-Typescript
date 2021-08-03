@@ -42,6 +42,12 @@ export interface ApprovalActionParams {
   appointment: IShowingAppointment
 }
 
+export interface AckActionParams {
+  appointmentId: UUID
+  showingId: UUID
+  notificationIds: UUID[]
+}
+
 export type CreateShowingErrors = Record<string, string>
 
 export interface ShowingAvailabilityItem extends IShowingAvailabilityInput {

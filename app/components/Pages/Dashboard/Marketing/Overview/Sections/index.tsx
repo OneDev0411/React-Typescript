@@ -13,7 +13,13 @@ import WhatsNewInMCSection from './WhatsNewInMCSection'
 export default function Sections() {
   return (
     <Grid container item direction="column">
-      <Grid container item spacing={2} direction="row" justify="space-between">
+      <Grid
+        container
+        item
+        spacing={2}
+        direction="row"
+        justifyContent="space-between"
+      >
         <SentEmailsSection />
         <MyDesignsSection />
         <UpcomingBirthdaysAndAnniversariesSection />

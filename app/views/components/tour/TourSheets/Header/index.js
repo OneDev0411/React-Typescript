@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { IconButton } from '@material-ui/core'
-import { Tooltip } from '@material-ui/core'
+import { IconButton, Tooltip } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import { mdiClose } from '@mdi/js'
 import PropTypes from 'prop-types'

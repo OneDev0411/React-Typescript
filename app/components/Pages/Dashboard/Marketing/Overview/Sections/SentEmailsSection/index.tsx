@@ -50,6 +50,7 @@ export default function SentEmailsSection() {
             <Grid key={campaign.id} item xs={12} sm={6}>
               <Link
                 noStyle
+                // eslint-disable-next-line max-len
                 to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
               >
                 <EmailInsightCard campaign={campaign} />

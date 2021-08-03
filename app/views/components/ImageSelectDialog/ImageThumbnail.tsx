@@ -1,7 +1,8 @@
-import { MouseEvent, ImgHTMLAttributes, useState } from 'react'
+import { useState, MouseEvent, ImgHTMLAttributes } from 'react'
 
 import { Box, Button, Theme, makeStyles } from '@material-ui/core'
-import { Skeleton } from '@material-ui/lab'
+import cn from 'classnames'
+import { useInView } from 'react-intersection-observer'
 
 import { DangerButton } from 'components/Button/DangerButton'
 
@@ -9,6 +10,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       cursor: 'pointer',
+      padding: theme.spacing(1),
+      margin: theme.spacing(1),
       transition: 'all 0.5s',
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
@@ -25,6 +28,9 @@ const useStyles = makeStyles(
       width: '100%',
       height: 'auto'
     },
+    imageLoading: {
+      height: 200
+    },
     actionsContainer: {
       width: '100%',
       padding: theme.spacing(0, 1),
@@ -39,7 +45,7 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'ImageSelectDialogImage'
+    name: 'ImageSelectDialogImageThumbnail'
   }
 )
 
@@ -59,6 +65,7 @@ export default function ImageThumbnail({
 }: Props) {
   const classes = useStyles()
   const [isLoading, setIsLoading] = useState(true)
+  const { ref, inView } = useInView({ delay: 100 })
 
   const handleEdit = (e: MouseEvent) => {
     if (!onEditClick) {
@@ -78,48 +85,48 @@ export default function ImageThumbnail({
     onDeleteClick()
   }
 
+  const shouldRender = inView || !isLoading
+
   return (
-    <Box m={1} p={1} className={classes.container} onClick={onClick}>
-      <img
-        alt={alt}
-        src={src}
-        {...otherImgProps}
-        className={classes.image}
-        onLoad={() => setIsLoading(false)}
-        style={{
-          display: isLoading ? 'none' : 'block'
-        }}
-      />
-      {isLoading && (
-        <Skeleton animation="wave" variant="rect" height={200} width="100%" />
+    <div ref={ref} className={classes.container} onClick={onClick}>
+      {shouldRender && (
+        <>
+          <img
+            alt={alt}
+            src={src}
+            {...otherImgProps}
+            onLoad={() => setIsLoading(false)}
+            className={cn(classes.image, { [classes.imageLoading]: isLoading })}
+          />
+          <Box
+            display="flex"
+            flexDirection="row"
+            className={classes.actionsContainer}
+          >
+            {onEditClick && (
+              <Button
+                size="small"
+                variant="contained"
+                className={classes.actionButton}
+                color="secondary"
+                onClick={handleEdit}
+              >
+                Edit
+              </Button>
+            )}
+            {onDeleteClick && (
+              <DangerButton
+                size="small"
+                variant="contained"
+                className={classes.actionButton}
+                onClick={handleDelete}
+              >
+                Delete
+              </DangerButton>
+            )}
+          </Box>
+        </>
       )}
-      <Box
-        display="flex"
-        flexDirection="row"
-        className={classes.actionsContainer}
-      >
-        {onEditClick && (
-          <Button
-            size="small"
-            variant="contained"
-            className={classes.actionButton}
-            color="secondary"
-            onClick={handleEdit}
-          >
-            Edit
-          </Button>
-        )}
-        {onDeleteClick && (
-          <DangerButton
-            size="small"
-            variant="contained"
-            className={classes.actionButton}
-            onClick={handleDelete}
-          >
-            Delete
-          </DangerButton>
-        )}
-      </Box>
-    </Box>
+    </div>
   )
 }

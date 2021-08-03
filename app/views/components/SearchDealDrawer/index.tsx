@@ -3,12 +3,11 @@ import React, { ComponentProps } from 'react'
 import { connect } from 'react-redux'
 
 import Drawer from 'components/OverlayDrawer'
-import OverlayDrawer from 'components/OverlayDrawer'
 import { selectDeals } from 'reducers/deals/list'
 
 import Body from './Body'
 
-interface Props extends Pick<ComponentProps<typeof OverlayDrawer>, 'onClose'> {
+interface Props extends Pick<ComponentProps<typeof Drawer>, 'onClose'> {
   defaultSearchFilter?: string
   onSelect: (deal: IDeal) => void
   user: IUser

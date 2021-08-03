@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-import { Box, Button, Typography } from '@material-ui/core'
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, Button, Typography, makeStyles, Theme } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
@@ -106,6 +105,7 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
         notify({
           status: 'error',
           message:
+            // eslint-disable-next-line max-len
             'Sorry, something went wrong while sending a new code. Please try again.',
           options: {
             dismissAfter: 6000

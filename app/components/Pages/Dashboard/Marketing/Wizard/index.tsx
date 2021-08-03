@@ -91,7 +91,7 @@ function MarketingWizard(props: WithRouterProps) {
     const listingId = props.location.query[LISTING_ID_QUERY_KEY]
 
     if (isDesktop && listingId) {
-      props.router.replace(`/dashboard/mls/${listingId}/marketing`)
+      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
     }
   }, [props.location.query, props.router])
 
@@ -261,7 +261,7 @@ function MarketingWizard(props: WithRouterProps) {
   if (isLoadingTemplates || isLoadingListing) {
     return (
       <Grid container alignItems="center" className={classes.loadingContainer}>
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <CircularProgress />
         </Grid>
       </Grid>
@@ -345,7 +345,7 @@ function MarketingWizard(props: WithRouterProps) {
                 key={template.id}
                 container
                 item
-                justify="center"
+                justifyContent="center"
                 xs={6}
                 lg={3}
               >

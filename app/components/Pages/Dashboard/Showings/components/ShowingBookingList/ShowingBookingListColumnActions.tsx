@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useAsync from 'hooks/use-async'
-import { ackNotifications } from 'models/notifications'
 import approveShowingAppointment from 'models/showing/approve-showing-appointment'
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
@@ -31,10 +30,12 @@ const useStyles = makeStyles(
 
 export interface ShowingBookingListColumnActionsProps
   extends Pick<ShowingBookingListApprovalButtonProps, 'showing' | 'approvals'>,
-    Pick<ShowingBookingListRejectMessageProps, 'buyerName' | 'buyerMessage'>,
+    Pick<
+      ShowingBookingListRejectMessageProps,
+      'buyerName' | 'buyerMessage' | 'onAckAction' | 'appointmentId'
+    >,
     ShowingViewFeedbackButtonProps {
   className?: string
-  appointmentId: UUID
   status: IShowingAppointmentStatus
   notifications: Nullable<INotification[]>
   onApprovalAction?: (params: ApprovalActionParams) => void
@@ -51,6 +52,7 @@ function ShowingBookingListColumnActions({
   onApprovalAction,
   approvals,
   notifications,
+  onAckAction,
   buyerMessage,
   buyerName
 }: ShowingBookingListColumnActionsProps) {
@@ -60,10 +62,6 @@ function ShowingBookingListColumnActions({
 
   const handleApprove = () => {
     run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
       const appointment = await approveShowingAppointment(
         showing.id,
         appointmentId
@@ -81,10 +79,6 @@ function ShowingBookingListColumnActions({
 
   const handleReject = (comment?: string) => {
     run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
       const appointment = await rejectShowingAppointment(
         showing.id,
         appointmentId,
@@ -115,6 +109,10 @@ function ShowingBookingListColumnActions({
           buyerName={buyerName}
           buyerMessage={buyerMessage}
           appointmentTitle={appointmentTitle}
+          notifications={notifications}
+          onAckAction={onAckAction}
+          showingId={showing.id}
+          appointmentId={appointmentId}
         />
       )}
       {(status === 'Requested' || status === 'Rescheduled') && (

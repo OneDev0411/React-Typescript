@@ -154,16 +154,21 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       return []
     }
 
+    const dealsList = Object.values(deals) as IDeal[]
+
+    // TODO: find another solution to do not hard code this kind of logic here
+    if (props.searchQuery.filter === 'closings') {
+      return dealsList
+    }
+
     // when user searching something in backoffice, we should show all
     // deals except draft items
     if (props.searchQuery.term.length > 0) {
-      return (Object.values(deals) as IDeal[]).filter(
-        (deal: IDeal) => deal.is_draft === false
-      )
+      return dealsList.filter((deal: IDeal) => deal.is_draft === false)
     }
 
     if (props.searchQuery.type === 'inbox') {
-      return (Object.values(deals) as IDeal[]).filter(
+      return dealsList.filter(
         (deal: IDeal) =>
           deal.attention_requests > 0 &&
           deal.is_draft === false &&
@@ -172,7 +177,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       )
     }
 
-    return Object.values(deals)
+    return dealsList
   }, [
     deals,
     props.searchQuery.filter,

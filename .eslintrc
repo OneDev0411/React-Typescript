@@ -54,7 +54,9 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "no-redeclare": "off",
-    "@typescript-eslint/no-redeclare": ["error"],
+    "@typescript-eslint/no-redeclare": [
+      "error"
+    ],
     "import/no-unresolved": [
       2,
       {
@@ -83,7 +85,9 @@
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["internal"],
+        "pathGroupsExcludedImportTypes": [
+          "internal"
+        ],
         "groups": [
           // Built-in modules first (fs, path, etc)
           "builtin",
@@ -115,6 +119,11 @@
       "warn",
       {
         "code": 85,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreComments": true,
+        "ignoreUrls": true,
         "ignorePattern": "^import [^,]+ from"
       }
     ],
@@ -191,7 +200,7 @@
     "react/no-array-index-key": 0,
     "import/no-extraneous-dependencies": 0,
     "no-empty": 0,
-    "import/no-duplicates": 0,
+    "import/no-duplicates": "error",
     "default-case": 0,
     "no-undef": 2,
     "no-case-declarations": 0,

@@ -1,14 +1,13 @@
-import React from 'react'
-import { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 
 import {
   makeStyles,
   Theme,
   Typography,
   Box,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
-import { Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 import classNames from 'classnames'
 import { connect } from 'react-redux'
@@ -177,6 +176,7 @@ function EmailTemplatesList({
 
                   modal.setConfirmationModal({
                     message: 'Delete Email Template!',
+                    // eslint-disable-next-line max-len
                     description: `Are you sure about deleting "${row.name}" template?`,
                     confirmLabel: 'Yes, I am sure',
                     onConfirm: () => handleDelete(row.id)

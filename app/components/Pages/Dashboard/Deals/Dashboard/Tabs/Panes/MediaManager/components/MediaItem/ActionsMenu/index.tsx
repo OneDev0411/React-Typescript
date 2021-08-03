@@ -13,8 +13,7 @@ import { mdiDotsVertical, mdiDownload } from '@mdi/js'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { downloadMedias } from 'models/Deal/media-manager'
-import { deleteMedias } from 'models/Deal/media-manager'
+import { downloadMedias, deleteMedias } from 'models/Deal/media-manager'
 
 import { deleteMedia as deleteMediaAction } from '../../../context/actions'
 import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
