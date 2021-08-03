@@ -94,11 +94,14 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    const { parkedContactsCount } = this.state
+    const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    this.order =
-      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
+    this.order = searchInputValue
+      ? '-last_touch_rank'
+      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
+        '-last_touch'
+
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
