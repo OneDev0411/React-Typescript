@@ -58,17 +58,15 @@ export class Page extends React.Component {
         canvasContext: context,
         viewport
       })
-      .promise.then(
-        () => {
-          this.setState({
-            isPageRendered: isVisible,
-            isLoading: false
-          })
-        },
-        e => {
-          console.log(e)
-        }
-      )
+      .promise.then(() => {
+        this.setState({
+          isPageRendered: isVisible,
+          isLoading: false
+        })
+      })
+      .catch(e => {
+        console.log(e)
+      })
   }
 
   handleCanvasRef = ref => {
