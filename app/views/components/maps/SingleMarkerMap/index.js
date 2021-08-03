@@ -2,8 +2,9 @@ import React from 'react'
 
 import PropTypes from 'prop-types'
 
+import { loadMapLibraries } from '@app/utils/google-map-api'
+
 import config from '../../../../../config/public'
-import { loadJS } from '../../../../utils/load-js'
 import { DEFAULT_OPTIONS } from '../helpers/default-options'
 import { Container } from '../styled'
 
@@ -26,12 +27,14 @@ export class SingleMarkerMap extends React.Component {
 
     window[id] = this.initMap
 
+    const googleMapAPIParams = {
+      key: config.google.api_key,
+      callback: id
+    }
+
+    // Load google maps places if is not loaded yet
     if (!window.google) {
-      // TODO: use loadMapLibraries form `app/utils/google-map-api/index.ts` to load google map libraries
-      loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=${id}`,
-        'google-map-script'
-      )
+      loadMapLibraries(googleMapAPIParams)
     } else {
       this.initMap()
     }
