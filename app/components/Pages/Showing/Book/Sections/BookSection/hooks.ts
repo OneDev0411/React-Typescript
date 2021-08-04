@@ -16,8 +16,7 @@ import {
 } from './utils'
 
 interface UseBookTimeRange {
-  startTime: number
-  endTime: number
+  availableRanges: TimeRange[]
   defaultSelectedTimeRange?: TimeRange
   unavailableTimes: number[]
 }
@@ -26,16 +25,16 @@ export function useBookTimeRange(
   showing: IPublicShowing,
   date?: Date
 ): UseBookTimeRange {
-  const [startTime, setStartTime] = useState<number>(0)
-  const [endTime, setEndTime] = useState<number>(0)
+  // const [startTime, setStartTime] = useState<number>(0)
+  // const [endTime, setEndTime] = useState<number>(0)
+  const [availableRanges, setAvailableRanges] = useState<TimeRange[]>([])
   const [defaultSelectedTimeRange, setDefaultSelectedTimeRange] =
     useState<Optional<TimeRange>>(undefined)
   const [unavailableTimes, setUnavailableTimes] = useState<number[]>([])
 
   useDeepCompareEffect(() => {
     if (!date) {
-      setStartTime(0)
-      setEndTime(0)
+      setAvailableRanges([])
       setDefaultSelectedTimeRange(undefined)
       setUnavailableTimes([])
 
@@ -45,30 +44,31 @@ export function useBookTimeRange(
     const weekdayAvailabilities = getDateAvailabilities(showing, date)
 
     if (weekdayAvailabilities.length === 0) {
-      setStartTime(0)
-      setEndTime(0)
+      setAvailableRanges([])
       setDefaultSelectedTimeRange(undefined)
       setUnavailableTimes([])
 
       return
     }
 
-    const availabilityStart = Math.min(
-      ...weekdayAvailabilities.map(item => item.availability[0])
-    )
-    const availabilityEnd = Math.max(
-      ...weekdayAvailabilities.map(item => item.availability[1])
+    // const availabilityStart = Math.min(
+    //   ...weekdayAvailabilities.map(item => item.availability[0])
+    // )
+    // const availabilityEnd = Math.max(
+    //   ...weekdayAvailabilities.map(item => item.availability[1])
+    // )
+
+    // setStartTime(availabilityStart)
+    // setEndTime(availabilityEnd)
+
+    const ranges: TimeRange[] = weekdayAvailabilities.map(
+      ({ availability }) => [availability[0], availability[1]]
     )
 
-    setStartTime(availabilityStart)
-    setEndTime(availabilityEnd)
+    setAvailableRanges(ranges)
 
-    const timeSlots = weekdayAvailabilities.flatMap(item =>
-      getTimeSlotsInRange(
-        item.availability[0],
-        item.availability[1],
-        showing.duration
-      )
+    const timeSlots = ranges.flatMap(range =>
+      getTimeSlotsInRange(range[0], range[1], showing.duration)
     )
 
     const pastSlots = isToday(date) ? getPastTimeSlots(showing) : []
@@ -101,8 +101,7 @@ export function useBookTimeRange(
   }, [date, showing.availabilities])
 
   return {
-    startTime,
-    endTime,
+    availableRanges,
     defaultSelectedTimeRange,
     unavailableTimes
   }
