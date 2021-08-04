@@ -165,7 +165,7 @@
     "parse-address": "^1.1.0",
     "parse-full-name": "^1.2.5",
     "path-browserify": "^1.0.1",
-    "pdfjs-dist": "git+https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/rechat/pdfjs-dist.git",
+    "pdfjs-dist": "git+https://emilsedgh:09c4811f0d62635f7f777cab41c228352c2b2235@github.com/rechat/pdfjs-dist.git#98bbbce84735fbb5ef5d3548bb7a98f8bacc869b",
     "pluralize": "^8.0.0",
     "points-cluster": "^0.1.4",
     "postcss": "^8.2.8",
