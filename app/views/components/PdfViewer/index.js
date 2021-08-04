@@ -176,7 +176,7 @@ export class PdfViewer extends React.Component {
       })
     }
 
-    pdfDocument
+    pdfDocument.promise
       .then(document => {
         this.setState({
           isLoading: false,
