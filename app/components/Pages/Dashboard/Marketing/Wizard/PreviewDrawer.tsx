@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Drawer,
   Grid,
@@ -10,9 +11,9 @@ import {
   Theme
 } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { closeIcon } from 'components/SvgIcons/icons'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
+import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -80,7 +81,7 @@ export default function PreviewDrawer({
             item
             spacing={3}
             alignItems="center"
-            justify="space-between"
+            justifyContent="space-between"
           >
             <Grid item>
               <Typography variant="h6">Preview</Typography>
@@ -94,7 +95,7 @@ export default function PreviewDrawer({
           <Grid container item>
             <Thumbnail user={user} template={template} listing={listing} />
           </Grid>
-          <Grid container item justify="space-between">
+          <Grid container item justifyContent="space-between">
             <Grid item xs>
               <Box p={2}>
                 <Button

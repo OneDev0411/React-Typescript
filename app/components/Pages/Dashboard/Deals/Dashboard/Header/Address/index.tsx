@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import {
   Box,
@@ -11,16 +10,15 @@ import {
   createStyles,
   Theme
 } from '@material-ui/core'
-
-import { getField } from 'models/Deal/helpers/context/get-field'
-import { createAddressContext } from 'deals/utils/create-address-context'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { upsertContexts } from 'actions/deals'
-
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
-import { getDealChecklists } from 'reducers/deals/checklists'
+import { createAddressContext } from 'deals/utils/create-address-context'
+import { getField } from 'models/Deal/helpers/context/get-field'
 import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

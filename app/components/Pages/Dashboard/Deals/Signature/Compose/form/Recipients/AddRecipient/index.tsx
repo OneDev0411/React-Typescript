@@ -3,8 +3,8 @@ import { useTheme } from '@material-ui/styles'
 import { mdiPlusCircleOutline } from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import Roles from 'deals/components/Roles'
 
 interface Props {
@@ -28,8 +28,8 @@ export function AddNewRecipient({
 
   return (
     <BaseDropdown
-      renderDropdownButton={props => (
-        <Button color="secondary" {...props}>
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
+        <Button color="secondary" {...buttonProps}>
           <SvgIcon
             path={mdiPlusCircleOutline}
             rightMargined

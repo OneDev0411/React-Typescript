@@ -2,9 +2,10 @@ import React from 'react'
 
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
-import { getSelectedAgents } from './get-selected-agents'
 import { AggregatedAgentInfo, ListingWithProposedAgent } from '../../types'
+
 import AddToContacts from './AddToContacts'
+import { getSelectedAgents } from './get-selected-agents'
 import PromoteListing from './PromoteListing'
 
 interface Props {

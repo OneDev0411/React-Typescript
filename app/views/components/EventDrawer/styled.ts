@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled from 'styled-components'
 import Flex from 'styled-flex-component'
 
 interface Props {

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import {
   Popover,
   Button,
@@ -10,12 +11,11 @@ import {
   ListItemText
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { v4 as uuidv4 } from 'uuid'
 import { connect } from 'react-redux'
+import { v4 as uuidv4 } from 'uuid'
 
 import { addNotification, Notification } from 'components/notification'
 import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
-
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
 import { createTemplate } from 'models/instant-marketing/create-template'
 
@@ -59,13 +59,10 @@ export function AddToMarketingCenter({
   notify,
   disabled = false
 }: Props & ConnectedProps) {
-  const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<IMarketingTemplateType>
-  >(undefined)
-  const [
-    isTeamsSelectorDrawerOpen,
-    setIsTeamsSelectorDrawerOpen
-  ] = useState<boolean>(false)
+  const [selectedTemplateType, setSelectedTemplateType] =
+    useState<Optional<IMarketingTemplateType>>(undefined)
+  const [isTeamsSelectorDrawerOpen, setIsTeamsSelectorDrawerOpen] =
+    useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const categories = useMarketingCenterCategories()
   const classes = useStyles()

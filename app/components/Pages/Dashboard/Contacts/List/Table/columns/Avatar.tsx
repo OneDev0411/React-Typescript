@@ -1,17 +1,15 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
 import { Avatar } from 'components/Avatar'
-
 import {
   getAttributeFromSummary,
-  getContactNameInitials
+  getContactNameInitials,
+  getContactOnlineStatus
 } from 'models/contacts/helpers'
-
 import { IAppState } from 'reducers'
 import { IAttributeDefsState } from 'reducers/contacts/attributeDefs'
-
-import { getContactOnlineStatus } from 'models/contacts/helpers'
 
 interface StateProps {
   attributeDefs: IAttributeDefsState

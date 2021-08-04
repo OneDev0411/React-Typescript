@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+
 import addressParser from 'parse-address'
 
 import { searchListings } from 'models/listings/search/search-listings'
@@ -15,9 +16,7 @@ interface GoogleLocation {
   unit: string
 }
 
-export function useSearchLocation(
-  criteria: string
-): {
+export function useSearchLocation(criteria: string): {
   isSearching: boolean
   isEmptyState: boolean
   places: google.maps.places.AutocompletePrediction[]

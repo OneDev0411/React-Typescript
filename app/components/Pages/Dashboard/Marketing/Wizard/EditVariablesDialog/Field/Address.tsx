@@ -1,11 +1,11 @@
 import React from 'react'
+
 import { Grid, TextField, Typography } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
+import { mdiMapMarker } from '@mdi/js'
+import addressParser from 'parse-address'
 import { useEffectOnce } from 'react-use'
 import usePlacesAutocomplete, { Suggestion } from 'use-places-autocomplete'
-import addressParser from 'parse-address'
-
-import { mdiMapMarker } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

@@ -1,13 +1,12 @@
 import React from 'react'
 
 import { EmptyState } from './components/EmptyState'
-
-import { CrmTask } from './CrmTask'
 import { ContactAttribute } from './ContactAttribute'
+import { CrmTask } from './CrmTask'
 import { DealContext } from './DealContext'
-import { NextTouch } from './NextTouch'
 import { EmailCampaign } from './EmailCampaign'
 import { EmailThread } from './EmailThread'
+import { NextTouch } from './NextTouch'
 
 interface Props {
   event: ICalendarEvent

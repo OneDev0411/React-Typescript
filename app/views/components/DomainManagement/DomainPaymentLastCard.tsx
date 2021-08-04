@@ -1,4 +1,5 @@
 import React, { FormEvent } from 'react'
+
 import { Button, makeStyles, Typography } from '@material-ui/core'
 
 import DomainPaymentActions from './DomainPaymentActions'

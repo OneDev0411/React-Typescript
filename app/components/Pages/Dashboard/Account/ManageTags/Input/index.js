@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { mdiTagOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconTextInput from 'components/Input/IconTextInput'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TextInputPrefix, TextInputSuffix } from './styled'
 

@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
 
-import cuid from 'cuid'
 import { useTheme } from '@material-ui/core'
 import { ClickAwayListenerProps } from '@material-ui/core/ClickAwayListener'
+import cuid from 'cuid'
 
 /**
  * Maintains state for popovers and menus and provides required utilities

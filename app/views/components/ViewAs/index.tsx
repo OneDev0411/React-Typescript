@@ -1,11 +1,11 @@
 import React, { useState, useMemo, ReactNode, CSSProperties } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
-
-import { selectUser } from 'selectors/user'
+import { useSelector } from 'react-redux'
 
 import { getContactNameInitials } from 'models/contacts/helpers'
+import { selectUser } from 'selectors/user'
 
 import {
   viewAs,

@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-import { mdiPlusCircleOutline } from '@mdi/js'
+
 import { Button } from '@material-ui/core'
+import { mdiPlusCircleOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
-import { selectForms } from 'reducers/deals/forms'
 import { createFormTask } from 'actions/deals'
-
-import LoadingContainer from 'components/LoadingContainer'
 import Search from 'components/Grid/Search'
+import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { selectForms } from 'reducers/deals/forms'
 
 import CreateCustomTask from './CustomTask'
 import { ListItem } from './styled'

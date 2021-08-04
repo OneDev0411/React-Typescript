@@ -1,10 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { mdiClose, mdiPencilOutline } from '@mdi/js'
+
 import { IconButton } from '@material-ui/core'
+import { mdiClose, mdiPencilOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { updateTask } from 'actions/deals'
-
 import Spinner from 'components/Spinner'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'

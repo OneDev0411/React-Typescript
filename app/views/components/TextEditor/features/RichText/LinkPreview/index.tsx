@@ -1,6 +1,6 @@
 import React from 'react'
+
 import { Box, Grid, IconButton, Tooltip, Typography } from '@material-ui/core'
-import { EditorState } from 'draft-js'
 import {
   mdiContentCopy,
   mdiPencilOutline,
@@ -8,13 +8,14 @@ import {
   mdiLink,
   mdiEmail
 } from '@mdi/js'
+import { EditorState } from 'draft-js'
 
-import copyTextToClipboard from 'utils/copy-text-to-clipboard'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import copyTextToClipboard from 'utils/copy-text-to-clipboard'
 
-import { removeLink } from '../../../utils/remove-link'
 import { SelectionPopoverPaper } from '../../../components/SelectionPopoverPaper'
+import { removeLink } from '../../../utils/remove-link'
 
 interface Props {
   url: string

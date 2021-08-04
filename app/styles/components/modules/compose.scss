@@ -22,15 +22,6 @@
         @extend %compose--suggestions-dropdown;
       }
     }
-    &[data-simplebar] {
-      height: 220px;
-      overflow: hidden;
-      .suggestions {
-        min-height: initial;
-        max-height: initial;
-        overflow: auto;
-      }
-    }
   }
 }
 

@@ -1,7 +1,8 @@
 import React, { ReactNode, MouseEvent, useState, useEffect } from 'react'
-import pluralize from 'pluralize'
+
 import { Button, Grid, Box } from '@material-ui/core'
 import noop from 'lodash/noop'
+import pluralize from 'pluralize'
 
 interface AlertFilterData<T> {
   label: string
@@ -57,7 +58,12 @@ export default function ListingAlertFiltersList({
   }, [filters])
 
   return (
-    <Grid container direction="row" alignItems="center" justify="flex-end">
+    <Grid
+      container
+      direction="row"
+      alignItems="center"
+      justifyContent="flex-end"
+    >
       {Object.entries(filtersKeyValueMap)
         .slice(0, limit)
         .map(([key, value]) => (

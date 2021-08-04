@@ -1,14 +1,13 @@
 import React, { useReducer } from 'react'
 
+import { StateContext, DispatchContext } from '..'
 import { reducer, initialState } from '../reducers'
 
-import { StateContext, DispatchContext } from '..'
-
-interface Props<Row> {
+interface Props {
   children: React.ReactNode
 }
 
-export function GridContextProvider<Row>({ children }: Props<Row>) {
+export function GridContextProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react'
-import timeago from 'timeago.js'
+
 import { makeStyles, createStyles, Theme, Tooltip } from '@material-ui/core'
+import timeago from 'timeago.js'
 
 interface Props {
   title?: string

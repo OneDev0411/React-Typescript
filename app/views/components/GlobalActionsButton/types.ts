@@ -1,8 +1,8 @@
 import { ComponentProps, ReactNode } from 'react'
 
+import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { EventDrawer } from 'components/EventDrawer'
-import NewContactDrawer from 'components/CreateContact/NewContactDrawer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 
 import CreateOpenHouse from './components/OpenHouse'

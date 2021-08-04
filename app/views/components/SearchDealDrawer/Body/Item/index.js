@@ -1,7 +1,10 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
 
+import { Avatar } from 'components/Avatar'
+import { Container } from 'components/SelectContactModal/components/ContactItem'
 import {
   getField,
   getStatus,
@@ -9,10 +12,6 @@ import {
   getAddress,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
-
-import { Avatar } from 'components/Avatar'
-
-import { Container } from 'components/SelectContactModal/components/ContactItem'
 
 import { Details, Status } from './styled'
 

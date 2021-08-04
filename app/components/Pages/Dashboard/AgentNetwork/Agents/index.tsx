@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react'
+
+import { Box, Divider, Grid, Typography } from '@material-ui/core'
+import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
-import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
-import { Box, Divider, Grid, Typography } from '@material-ui/core'
 
+import ListingAlertFilters from 'components/ListingAlertFilters'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
 import { useLoadingEntities } from 'hooks/use-loading'
 import getListing from 'models/listings/listing/get-listing'
-
-import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
-import ListingAlertFilters from 'components/ListingAlertFilters'
-
 import { selectUser } from 'selectors/user'
 
-import Layout from '../Layout'
 import { openSearchResultPage } from '../helpers'
-import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
+import Layout from '../Layout'
+
+import AgentsGrid from './Grid'
 import {
   aggregateListingsAgents,
   getListingsWithBothSidesAgents,
   getListingVAlertFilters,
   getLocationVAlertFilters
 } from './helpers'
-import AgentsGrid from './Grid'
+import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
 
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
@@ -33,15 +33,13 @@ function Agents(props: WithRouterProps) {
     libraries: GOOGLE_MAPS_LIBRARIES
   })
 
-  const [listing, setListing] = useState<Nullable<ListingWithProposedAgent>>(
-    null
-  )
+  const [listing, setListing] =
+    useState<Nullable<ListingWithProposedAgent>>(null)
   const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
-  const [filters, setFilters] = useState<
-    Nullable<AlertFiltersWithRadiusAndCenter>
-  >(null)
+  const [filters, setFilters] =
+    useState<Nullable<AlertFiltersWithRadiusAndCenter>>(null)
 
   useEffect(() => {
     async function fetchListingBasedData() {
@@ -97,7 +95,8 @@ function Agents(props: WithRouterProps) {
 
       setFilters(placeBasedFilters)
 
-      const mockedListing = ((await getMockListing()) as unknown) as ListingWithProposedAgent
+      const mockedListing =
+        (await getMockListing()) as unknown as ListingWithProposedAgent
 
       setListing(mockedListing)
     }
@@ -145,7 +144,12 @@ function Agents(props: WithRouterProps) {
       onSelectSearchResult={openSearchResultPage}
     >
       <Grid container direction="column">
-        <Grid container item alignItems="flex-end" justify="space-between">
+        <Grid
+          container
+          item
+          alignItems="flex-end"
+          justifyContent="space-between"
+        >
           <Grid item>
             {props.location.query.title && (
               <Typography variant="body1">

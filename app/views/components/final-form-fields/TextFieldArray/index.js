@@ -1,12 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { FieldArray } from 'react-final-form-arrays'
+
 import { useTheme } from '@material-ui/core/styles'
 import { mdiPlusCircleOutline, mdiMinusCircleOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { FieldArray } from 'react-final-form-arrays'
 
-import { TextField } from '../TextField'
 import IconButton from '../../Button/IconButton'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+import { TextField } from '../TextField'
 
 TextFieldArray.propTypes = {
   hint: PropTypes.string,

@@ -1,15 +1,12 @@
-import fecha from 'fecha'
-
 import { Typography, Box } from '@material-ui/core'
-import { Link } from 'react-router'
-
 import { mdiFileOutline } from '@mdi/js'
+import fecha from 'fecha'
+import { Link } from 'react-router'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import ActionsButton from '../../../../../components/ActionsButton'
 import { EnvelopeStatus } from '../../EnvelopeStatus'
-
 import { getEnvelopeActions } from '../helpers/get-envelope-actions'
 import { useStyles } from '../styles'
 
@@ -36,6 +33,7 @@ export function Envelope({ deal, task, envelope }: Props) {
               <Box display="flex" alignItems="center" className={classes.title}>
                 <Link
                   className={classes.link}
+                  // eslint-disable-next-line max-len
                   to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
                 >
                   {envelope.title}

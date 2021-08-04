@@ -1,5 +1,5 @@
-import ReactGA from 'react-ga'
 import idx from 'idx'
+import ReactGA from 'react-ga'
 
 import Brand from '../../controllers/Brand'
 

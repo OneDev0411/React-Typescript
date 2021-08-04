@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+
 import { Box, Backdrop } from '@material-ui/core'
 import { Theme, makeStyles } from '@material-ui/core/styles'
 
@@ -32,6 +33,7 @@ export default function Delete(props: Props) {
     confirmation.setConfirmationModal({
       message: 'Delete contact?',
       description:
+        // eslint-disable-next-line max-len
         'Deleting this contact will remove it from your contacts list, but it will not be removed from any deals.',
       confirmLabel: 'Delete',
       onConfirm: props.handleDelete

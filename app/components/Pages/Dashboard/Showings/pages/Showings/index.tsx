@@ -1,21 +1,18 @@
 import { memo } from 'react'
 
+import { Box } from '@material-ui/core'
+import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { Box } from '@material-ui/core'
-
-import { WithRouterProps } from 'react-router'
-
 import PageLayout from 'components/GlobalPageLayout'
-
+import LoadingContainer from 'components/LoadingContainer'
 import TabContentSwitch from 'components/TabContentSwitch'
 
-import LoadingContainer from 'components/LoadingContainer'
-
 import { showingsTabs } from '../../constants'
+
+import ShowingsTabBookings from './ShowingsTabBookings'
 import ShowingsTabProperties from './ShowingsTabProperties'
 import ShowingsTabs, { ShowingsTabsProps } from './ShowingsTabs'
-import ShowingsTabBookings from './ShowingsTabBookings'
 import useGetShowings from './use-get-showings'
 
 type ShowingsProps = WithRouterProps<{

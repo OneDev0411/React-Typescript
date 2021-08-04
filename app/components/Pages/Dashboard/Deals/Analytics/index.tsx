@@ -1,18 +1,13 @@
 import { Typography } from '@material-ui/core'
-
+import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
-import { useSelector } from 'react-redux'
-
 import PageLayout from 'components/GlobalPageLayout'
-import { PageTabs } from 'components/PageTabs'
-
 import MetabaseDashboard from 'components/MetabaseIFrame'
-
+import { PageTabs } from 'components/PageTabs'
+import dashboards, { IDashboard } from 'constants/metabase'
 import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
-
-import dashboards, { IDashboard } from 'constants/metabase'
 
 import AnalyticsDropdownTab from './DropdownTab'
 

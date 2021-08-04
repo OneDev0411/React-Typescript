@@ -1,8 +1,9 @@
 import React from 'react'
+
+import { useTheme, makeStyles, Tooltip } from '@material-ui/core'
+import { mdiBellOutline } from '@mdi/js'
 import moment from 'moment'
 import Flex from 'styled-flex-component'
-import { mdiBellOutline } from '@mdi/js'
-import { useTheme, makeStyles, Tooltip } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

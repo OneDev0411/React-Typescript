@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, IconButton, Tooltip } from '@material-ui/core'
 
+import { Box, IconButton, Tooltip } from '@material-ui/core'
 import { mdiCog, mdiPencilOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 interface Props {
   onEdit?: () => void

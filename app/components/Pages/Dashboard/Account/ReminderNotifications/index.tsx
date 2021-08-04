@@ -1,44 +1,36 @@
 import React, { useState } from 'react'
-import { useDispatch, useStore, useSelector } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { useEffectOnce } from 'react-use'
+
 import { Grid, Theme, useTheme } from '@material-ui/core'
+import { Helmet } from 'react-helmet'
+import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
+import { getContextsByBrand } from 'actions/deals'
+import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
-
+import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
+import {
+  ReminderNotificationSetting,
+  updateReminderNotificationSettings
+} from 'models/reminder-notifications/update-reminder-notification-settings'
+import Loading from 'partials/Loading'
+import { IAppState } from 'reducers'
+import { selectBrandContexts } from 'reducers/deals/contexts'
+import { selectUser } from 'selectors/user'
 import {
   getActiveTeamId,
   hasUserAccessToCrm,
   hasUserAccessToDeals
 } from 'utils/user-teams'
 
-import {
-  ReminderNotificationSetting,
-  updateReminderNotificationSettings
-} from 'models/reminder-notifications/update-reminder-notification-settings'
-import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
-
-import { getContextsByBrand } from 'actions/deals'
-
-import { IAppState } from 'reducers'
-import { selectBrandContexts } from 'reducers/deals/contexts'
-
-import ActionButton from 'components/Button/ActionButton'
-import Loading from 'partials/Loading'
-
-import { selectUser } from 'selectors/user'
-
-import { RENDER_FORCE_PUSH_BUTTON } from './constants'
-
 import Column from './components/Column'
-
-import { ColumnState } from './types'
-
-import { getSettings } from './helpers/get-settings'
-import { getDealColumn } from './helpers/get-deal-column'
+import { RENDER_FORCE_PUSH_BUTTON } from './constants'
 import { getContactColumn } from './helpers/get-contact-column'
+import { getDealColumn } from './helpers/get-deal-column'
+import { getSettings } from './helpers/get-settings'
 import { getSettingsFromColumns } from './helpers/get-settings-from-columns'
 import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns'
+import { ColumnState } from './types'
 
 export default function ReminderNotifications() {
   const store = useStore<IAppState>()
@@ -158,7 +150,7 @@ export default function ReminderNotifications() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Grid container justify="space-around" spacing={4}>
+        <Grid container justifyContent="space-around" spacing={4}>
           {columns.map((column, index) => (
             <Grid item key={index}>
               <Column

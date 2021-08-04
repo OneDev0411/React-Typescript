@@ -1,11 +1,10 @@
 import clip from 'text-clipper'
 
-import { EmailThreadEmail } from '../types'
-
 import {
   isGoogleMessage,
   isMicrosoftMessage
 } from '../../EmailCompose/helpers/type-guards'
+import { EmailThreadEmail } from '../types'
 
 export function normalizeThreadMessageToThreadEmail(
   message: IEmailThreadMessage

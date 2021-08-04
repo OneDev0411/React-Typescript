@@ -1,14 +1,14 @@
 import React, { ReactNode, useState } from 'react'
-import classNames from 'classnames'
-import { makeStyles, fade } from '@material-ui/core'
 
+import { makeStyles, alpha } from '@material-ui/core'
+import classNames from 'classnames'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 
 import useSafeDispatch from 'hooks/use-safe-dispatch'
 
+import CarouselImage from './CarouselImage'
 import { CAROUSEL_IMAGE_ITEM_TYPE } from './constants'
 import { CarouselImageItemEdge, ImageDragObject } from './types'
-import CarouselImage from './CarouselImage'
 
 const useStyles = makeStyles(
   theme => ({
@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.grey[300]}`
     },
     name: {
-      background: fade(theme.palette.common.black, 0.65),
+      background: alpha(theme.palette.common.black, 0.65),
       color: theme.palette.common.white,
       display: 'flex',
       alignItems: 'center',

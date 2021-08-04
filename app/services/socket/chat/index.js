@@ -1,13 +1,13 @@
 import Socket from '..'
-import ChatNotification from '../../notification/chat'
-import Message from '../../../components/Pages/Dashboard/Chatroom/Util/message'
 import Chatroom from '../../../components/Pages/Dashboard/Chatroom/Util/chatroom'
-import store from '../../../stores'
+import Message from '../../../components/Pages/Dashboard/Chatroom/Util/message'
 import {
   addMessageTyping,
   removeMessageTyping,
   initialStates
 } from '../../../store_actions/chatroom'
+import store from '../../../stores'
+import ChatNotification from '../../notification/chat'
 
 export default class ChatSocket extends Socket {
   constructor(user) {

@@ -1,12 +1,11 @@
 import { normalize } from 'normalizr'
 import { batch } from 'react-redux'
 
-import { setTasks } from '../../task'
+import * as actionTypes from '../../../../constants/deals'
 import { setChecklists } from '../../checklist'
 import { setRoles } from '../../role'
-
 import * as schema from '../../schema'
-import * as actionTypes from '../../../../constants/deals'
+import { setTasks } from '../../task'
 
 export function createDeal(deal) {
   return dispatch => {

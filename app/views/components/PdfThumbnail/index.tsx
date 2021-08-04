@@ -23,7 +23,7 @@ export function PdfThumbnail({ url, style = {} }: Props) {
         url,
         disableStream: true,
         disableAutoFetch: true
-      })
+      }).promise
 
       const page = await document.getPage(1)
 
@@ -38,6 +38,12 @@ export function PdfThumbnail({ url, style = {} }: Props) {
       }
 
       const context = canvas.current.getContext('2d')
+
+      if (!context) {
+        setIsLoading(false)
+
+        return
+      }
 
       canvas.current.width = width
       canvas.current.height = height

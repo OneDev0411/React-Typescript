@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+
 import PropTypes from 'prop-types'
 
-import { ImageUploader } from 'components/ImageUploader'
 import { Avatar } from 'components/Avatar'
+import { ImageUploader } from 'components/ImageUploader'
 
 import { getNameInitials } from '../../../utils/helpers'
 

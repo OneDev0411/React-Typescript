@@ -1,7 +1,7 @@
-import { IAppState } from 'reducers'
-import { selectUserUnsafe } from 'selectors/user'
 import { hasAccess } from 'components/Acl/helpers'
 import { Access } from 'components/Acl/types'
+import { IAppState } from 'reducers'
+import { selectUserUnsafe } from 'selectors/user'
 
 export const selectUserHasAccess = (
   state: IAppState,

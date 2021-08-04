@@ -1,16 +1,15 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-const getUser = function (list, index = 0) {
+const getUser = function getUser(list, index = 0) {
   const key = Object.keys(list)[index]
 
   return list[key].abbreviated_display_name
 }
 
-const MessageTyping = ({
-  typing = {}
-}) => {
+const MessageTyping = ({ typing = {} }) => {
   // get count of typers
   const count = _.size(typing)
 
@@ -18,7 +17,9 @@ const MessageTyping = ({
 
   if (count === 0) {
     return false
-  } else if (count === 1) {
+  }
+
+  if (count === 1) {
     message = `${getUser(typing, 0)} is typing`
   } else if (count === 2) {
     message = `${getUser(typing, 0)} and ${getUser(typing, 1)} are typing`

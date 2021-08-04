@@ -1,8 +1,7 @@
 import { increaseShowingTotalNotificationCount } from 'actions/showings'
 
-import store from '../../../stores'
-
 import Socket from '..'
+import store from '../../../stores'
 
 export default class ShowingSocket extends Socket {
   constructor(user) {

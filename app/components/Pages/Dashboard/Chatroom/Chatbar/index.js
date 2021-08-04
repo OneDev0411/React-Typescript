@@ -1,8 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
 import { slide as Menu } from 'react-burger-menu'
-import Rooms from '../Rooms'
+import { connect } from 'react-redux'
+
 import { toggleChatbar } from '../../../../../store_actions/chatroom'
+import Rooms from '../Rooms'
 import Chatroom from '../Util/chatroom'
 
 const Chatbar = ({
@@ -15,7 +17,7 @@ const Chatbar = ({
     isOpen={showChatbar}
     customBurgerIcon={false}
     customCrossIcon={false}
-    width={'330px'}
+    width="330px"
     onStateChange={({ isOpen }) => {
       if (showChatbar !== isOpen) {
         toggleChatbar()
@@ -34,6 +36,9 @@ const Chatbar = ({
   </Menu>
 )
 
-export default connect(({ chatroom }) => ({
-  showChatbar: chatroom.showChatbar
-}), ({ toggleChatbar }))(Chatbar)
+export default connect(
+  ({ chatroom }) => ({
+    showChatbar: chatroom.showChatbar
+  }),
+  { toggleChatbar }
+)(Chatbar)

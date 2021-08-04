@@ -1,40 +1,29 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-
-import Flex from 'styled-flex-component'
 
 import { Box, Button } from '@material-ui/core'
-
 import { mdiPencilOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
-import { addNotification as notify } from 'components/notification'
-
-import { Avatar } from 'components/Avatar'
-import { createRoles, deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { createRoles, deleteRole } from 'actions/deals'
+import { Avatar } from 'components/Avatar'
+import DealRole from 'components/DealRole'
+import DeleteRole from 'components/DealRole/components/DeleteRole'
+import { addNotification as notify } from 'components/notification'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { getContactNameInitials } from 'models/contacts/helpers'
+import { selectDealRoles } from 'reducers/deals/roles'
 import { getNameInitials } from 'utils/helpers'
 
-import DeleteRole from 'components/DealRole/components/DeleteRole'
-
-import { selectDealRoles } from 'reducers/deals/roles'
-
-import DealRole from 'components/DealRole'
-
-import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
+import { SectionTitle } from '../../Dashboard/Factsheet/styled'
 import { getAvatarTitle } from '../../utils/get-avatar-title'
+import { roleName, getLegalFullName, isPrimaryAgent } from '../../utils/roles'
 
 import AddRole from './AddRole'
-
-import { SectionTitle } from '../../Dashboard/Factsheet/styled'
-
 import {
   RolesContainer,
   RoleItem,
@@ -58,7 +47,7 @@ const propTypes = {
   addRoleActionRenderer: PropTypes.func,
   onCloseAddRoleDrawer: PropTypes.func,
   onTriggerRequiredEmail: PropTypes.func,
-  onSelect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func,
   onUpsertRole: PropTypes.func,
   onCreateRole: PropTypes.func
 }

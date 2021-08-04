@@ -1,12 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
 import { mdiCallMerge } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 
-import { mergeContact } from '../../../../../../store_actions/contacts'
 import { confirmation } from '../../../../../../store_actions/confirmation'
+import { mergeContact } from '../../../../../../store_actions/contacts'
 
 class MergeContacts extends React.Component {
   onClick = () => {
@@ -15,6 +15,7 @@ class MergeContacts extends React.Component {
     confirmation({
       message: 'Merge contacts?',
       description:
+        // eslint-disable-next-line max-len
         'The selected contacts will be merged into the 1st contact you selected. Once merged, it can not be undone. Are you sure you want to continue?',
       confirmLabel: 'Yes, merge',
       onConfirm: async () => {

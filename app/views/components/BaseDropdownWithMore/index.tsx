@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ReactNode } from 'react'
+
 import { List, ListProps } from '@material-ui/core'
 
 import { BaseDropdown, Props as BaseProps } from '../BaseDropdown'
@@ -19,6 +20,7 @@ interface Props extends BaseProps {
     textStyle?: object
     style?: object
   }
+  component?: string
 }
 
 export function BaseDropdownWithMore({
@@ -27,7 +29,10 @@ export function BaseDropdownWithMore({
   morePlugin,
   ...props
 }: Props) {
-  const basicShowMoreStyle = { maxHeight: 350, overflow: 'auto' }
+  const basicShowMoreStyle = {
+    maxHeight: 350,
+    overflow: 'auto scroll'
+  }
   const showMoreStyle =
     morePlugin && morePlugin.style
       ? { ...basicShowMoreStyle, ...morePlugin.style }

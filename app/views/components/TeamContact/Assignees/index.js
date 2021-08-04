@@ -1,18 +1,16 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
+import uniqBy from 'lodash/uniqBy'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import uniqBy from 'lodash/uniqBy'
-import { Button } from '@material-ui/core'
 
-import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { getUserTitle } from '../../../../models/user/helpers'
-
-import { TeamMember } from '../TeamMember'
-
+import { isSoloActiveTeam } from '../../../../utils/user-teams'
 import { BasicDropdown } from '../../BasicDropdown'
-
-import { getMembers } from '../helpers'
 import { AssigneeItemInAvatar } from '../AssigneeItemInAvatar'
+import { getMembers } from '../helpers'
+import { TeamMember } from '../TeamMember'
 
 const propTypes = {
   assignees: PropTypes.arrayOf(PropTypes.shape()).isRequired,
@@ -78,7 +76,13 @@ export class Assignees extends React.Component {
           onChange={this.props.onChangeHandler}
           itemToString={getUserTitle}
           style={{ marginRight: '0.5rem', display: 'inline-flex' }}
-          buttonRenderer={buttonProps => (
+          buttonRenderer={({
+            isBlock,
+            noBorder,
+            isOpen,
+            selectedItem,
+            ...buttonProps
+          }) => (
             <Button
               {...buttonProps}
               size="small"

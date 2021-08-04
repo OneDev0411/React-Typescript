@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { Theme, IconButton, makeStyles } from '@material-ui/core'
-
 import { mdiMenu } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useSideNavContext } from 'hooks/use-sidenav-context'
 
 const useStyles = makeStyles(

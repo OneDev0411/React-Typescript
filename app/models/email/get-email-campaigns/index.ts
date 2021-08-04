@@ -1,5 +1,4 @@
 import Fetch from 'services/fetch'
-
 import { toEntityAssociation } from 'utils/association-utils'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -11,16 +10,13 @@ export const DEFAULT_EMAIL_ASSOCIATIONS: IEmailCampaignAssociation[] = [
   'attachments'
 ]
 
-export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] = [
-  'contact',
-  'list',
-  'brand',
-  'agent'
-]
+// eslint-disable-next-line max-len
+export const DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS: IEmailCampaignRecipientAssociation[] =
+  ['contact', 'list', 'brand', 'agent']
 
-export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] = [
-  'email'
-]
+// eslint-disable-next-line max-len
+export const DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS: IEmailCampaignEmailAssociation[] =
+  ['email']
 
 export interface GetEmailCampaignsAssociations<
   A1 extends IEmailCampaignAssociation,
@@ -43,6 +39,7 @@ export async function getEmailCampaigns<
   const {
     emailCampaignAssociations = DEFAULT_EMAIL_ASSOCIATIONS as A1[],
     emailRecipientsAssociations = DEFAULT_EMAIL_RECIPIENT_ASSOCIATIONS as A2[],
+    // eslint-disable-next-line max-len
     emailCampaignEmailsAssociation = DEFAULT_EMAIL_CAMPAIGN_EMAIL_ASSOCIATIONS as A3[]
   } = associations
 

@@ -1,29 +1,29 @@
 import React, { memo, useState } from 'react'
 
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
+import {
+  SearchResult,
+  SearchResultType
+} from 'components/DealsAndListingsAndPlacesSearchInput/types'
 import {
   QuestionSection,
   QuestionSectionProps,
   QuestionTitle
 } from 'components/QuestionWizard'
-import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 
-import {
-  SearchResult,
-  SearchResultType
-} from 'components/DealsAndListingsAndPlacesSearchInput/types'
-
+import { getFullAddressFromSrdAddr } from '../../helpers'
+import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
 import { ShowingPropertyType } from '../../types'
+import ListingHipPocketCard from '../ListingHipPocketCard'
+import SmartQuestionForm from '../SmartQuestionForm'
+
 import { getStdAddrFromAddressComponents } from './helpers'
+import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
+import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
 import ShowingStepPropertyForm, {
   ShowingStepPropertyFormProps
 } from './ShowingStepPropertyForm'
 import ShowingStepPropertyListingCard from './ShowingStepPropertyListingCard'
-import ShowingStepPropertyDealListingCard from './ShowingStepPropertyDealListingCard'
-import useQuestionWizardSmartNext from '../../hooks/use-question-wizard-smart-next'
-import SmartQuestionForm from '../SmartQuestionForm'
-import ListingHipPocketCard from '../ListingHipPocketCard'
-import ShowingStepPropertyChangeButton from './ShowingStepPropertyChangeButton'
-import { getFullAddressFromSrdAddr } from '../../helpers'
 
 export interface ShowingStepPropertyProps
   extends Pick<QuestionSectionProps, 'error'> {
@@ -68,14 +68,15 @@ function ShowingStepProperty({
     setIsSearchMode(true)
   }
 
-  const handlePropertyFormConfirm: ShowingStepPropertyFormProps['onConfirm'] = formData => {
-    onPropertyChange({
-      type: 'place',
-      ...formData
-    })
-    setIsEditMode(false)
-    nextStep()
-  }
+  const handlePropertyFormConfirm: ShowingStepPropertyFormProps['onConfirm'] =
+    formData => {
+      onPropertyChange({
+        type: 'place',
+        ...formData
+      })
+      setIsEditMode(false)
+      nextStep()
+    }
 
   const handlePropertyFormCancel = () => {
     setIsEditMode(false)

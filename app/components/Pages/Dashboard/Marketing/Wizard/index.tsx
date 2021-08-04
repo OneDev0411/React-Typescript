@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useTitle } from 'react-use'
-import fileSaver from 'file-saver'
+import { useState, useEffect } from 'react'
+
 import {
   makeStyles,
   useMediaQuery,
@@ -17,40 +14,42 @@ import {
   CircularProgress,
   IconButton
 } from '@material-ui/core'
-
 import { mdiPencilOutline } from '@mdi/js'
+import fileSaver from 'file-saver'
+import { isDesktop } from 'react-device-detect'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
-import { addNotification } from 'components/notification'
-
-import { useListingById } from 'hooks/use-query-param-entities'
-import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
-import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
-
-import uploadAsset from 'models/instant-marketing/upload-asset'
-
-import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import PageLayout from 'components/GlobalPageLayout'
+import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
+import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
-import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
+import {
+  useListingById,
+  LISTING_ID_QUERY_KEY
+} from 'hooks/use-query-param-entities'
+import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { useWebShareApi } from 'hooks/use-web-share-api'
-
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import uploadAsset from 'models/instant-marketing/upload-asset'
 import { selectUser } from 'selectors/user'
+import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
+import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { useTemplates } from '../hooks/use-templates'
 
-import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
-import EditVariablesDialog from './EditVariablesDialog'
-import PreviewAndDownloadModal from './PreviewAndDownloadModal'
-import PreviewDrawer from './PreviewDrawer'
+import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import DownloadDrawer from './DownloadDrawer'
+import EditVariablesDialog from './EditVariablesDialog'
 import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
+import PreviewAndDownloadModal from './PreviewAndDownloadModal'
+import PreviewDrawer from './PreviewDrawer'
 import { TemplateVariable, TemplateVariableType } from './types'
 
 const useStyles = makeStyles(
@@ -84,7 +83,17 @@ function MarketingWizard(props: WithRouterProps) {
   useTitle('Marketing | Rechat')
 
   const classes = useStyles()
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('xs'))
+  const isMobileView = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down('xs')
+  )
+
+  useEffect(() => {
+    const listingId = props.location.query[LISTING_ID_QUERY_KEY]
+
+    if (isDesktop && listingId) {
+      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
+    }
+  }, [props.location.query, props.router])
 
   useGoogleMapsPlaces()
 
@@ -93,29 +102,23 @@ function MarketingWizard(props: WithRouterProps) {
   const activeBrand = getActiveTeamId(rawUser)
   const brand = getActiveBrand(rawUser)
 
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
 
-  const [selectedTemplateType, setSelectedTemplateType] = useState<
-    Optional<IMarketingTemplateType>
-  >(undefined)
+  const [selectedTemplateType, setSelectedTemplateType] =
+    useState<Optional<IMarketingTemplateType>>(undefined)
 
-  const [generatedTemplateFile, setGeneratedTemplateFile] = useState<
-    Optional<IFile>
-  >(undefined)
+  const [generatedTemplateFile, setGeneratedTemplateFile] =
+    useState<Optional<IFile>>(undefined)
 
-  const [generatedFileBlob, setGeneratedFileBlob] = useState<Optional<File>>(
-    undefined
-  )
+  const [generatedFileBlob, setGeneratedFileBlob] =
+    useState<Optional<File>>(undefined)
 
-  const [templatesLimit, setTemplatesLimit] = useState<number>(
-    TEMPLATES_PAGE_SIZE
-  )
+  const [templatesLimit, setTemplatesLimit] =
+    useState<number>(TEMPLATES_PAGE_SIZE)
 
-  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] = useState<
-    boolean
-  >(false)
+  const [isEditVariablesDialogOpen, setIsEditVariablesDialogOpen] =
+    useState<boolean>(false)
 
   const {
     templates,
@@ -127,7 +130,7 @@ function MarketingWizard(props: WithRouterProps) {
     listing: rawListing,
     isLoading: isLoadingListing,
     error: errorListing
-  } = useListingById(props.location)
+  } = useListingById()
 
   const [{ user, listing }, setTemplateVariables] = useEntityWithSetter<{
     user: IUser
@@ -237,7 +240,7 @@ function MarketingWizard(props: WithRouterProps) {
 
       handleClosePreviewDrawer()
 
-      if (isMobile) {
+      if (isMobileView) {
         handleOpenDownloadDrawer(templateInstance.file)
 
         return
@@ -258,7 +261,7 @@ function MarketingWizard(props: WithRouterProps) {
   if (isLoadingTemplates || isLoadingListing) {
     return (
       <Grid container alignItems="center" className={classes.loadingContainer}>
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <CircularProgress />
         </Grid>
       </Grid>
@@ -275,8 +278,11 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   return (
-    <PageLayout gutter={isMobile ? 0 : undefined} className={classes.container}>
-      {isMobile && (
+    <PageLayout
+      gutter={isMobileView ? 0 : undefined}
+      className={classes.container}
+    >
+      {isMobileView && (
         <AppBar
           position="static"
           color="transparent"
@@ -306,7 +312,7 @@ function MarketingWizard(props: WithRouterProps) {
           />
         </AppBar>
       )}
-      {!isMobile && (
+      {!isMobileView && (
         <PageLayout.Header title="Browse Templates">
           <div>
             <Tooltip title="Edit Info">
@@ -319,7 +325,7 @@ function MarketingWizard(props: WithRouterProps) {
       )}
       <PageLayout.Main mt={1}>
         <Grid container spacing={2} className={classes.container}>
-          {!isMobile && (
+          {!isMobileView && (
             <Grid container item>
               <Box mt={2}>
                 <CategoriesTabs
@@ -339,7 +345,7 @@ function MarketingWizard(props: WithRouterProps) {
                 key={template.id}
                 container
                 item
-                justify="center"
+                justifyContent="center"
                 xs={6}
                 lg={3}
               >
@@ -361,7 +367,7 @@ function MarketingWizard(props: WithRouterProps) {
 
       {listing &&
         selectedTemplate &&
-        (isMobile ? (
+        (isMobileView ? (
           <PreviewDrawer
             template={selectedTemplate}
             listing={listing}
@@ -386,7 +392,7 @@ function MarketingWizard(props: WithRouterProps) {
           onSave={handleSaveVariables}
         />
       )}
-      {generatedTemplateFile && isMobile && (
+      {generatedTemplateFile && isMobileView && (
         <DownloadDrawer
           file={generatedTemplateFile}
           onClose={handleCloseDownloadDrawer}

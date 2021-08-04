@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Field } from 'react-final-form'
 
-import { Button } from '@material-ui/core'
-import { TextFieldProps } from '@material-ui/core'
+import { Button, TextFieldProps } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 

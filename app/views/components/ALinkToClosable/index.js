@@ -31,9 +31,8 @@ function getUrlParts(url) {
 function getCurrentLocation() {
   const currentLocation = browserHistory.getCurrentLocation()
 
-  return `${currentLocation.pathname}${currentLocation.search}${
-    currentLocation.hash
-  }`
+  // eslint-disable-next-line max-len
+  return `${currentLocation.pathname}${currentLocation.search}${currentLocation.hash}`
 }
 
 /**

@@ -1,37 +1,39 @@
 import React, { useContext } from 'react'
-import { useDispatch } from 'react-redux'
-import { composeDecorators } from 'draft-js-plugins-editor'
-import createImagePlugin from 'draft-js-image-plugin'
+
 import 'draft-js-image-plugin/lib/plugin.css'
-import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import 'draft-js-alignment-plugin/lib/plugin.css'
-import createResizeablePlugin from 'draft-js-resizeable-plugin'
+
+import createAlignmentPlugin from 'draft-js-alignment-plugin'
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin'
 import createFocusPlugin from 'draft-js-focus-plugin'
+import createImagePlugin from 'draft-js-image-plugin'
+import { composeDecorators } from 'draft-js-plugins-editor'
+import createResizeablePlugin from 'draft-js-resizeable-plugin'
+import { useDispatch } from 'react-redux'
 
-import { isImageFile } from 'utils/file-utils/is-image-file'
-import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
-import { useLatestValueRef } from 'hooks/use-latest-value-ref'
-
-import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
 import { addNotification } from 'components/notification'
 import { removeBlock } from 'components/TextEditor/modifiers/remove-block'
 import { doesContainBlock } from 'components/TextEditor/utils/does-contain-block'
+import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
+import { useLatestValueRef } from 'hooks/use-latest-value-ref'
+import { isImageFile } from 'utils/file-utils/is-image-file'
+import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
-import { useEditorPlugins } from '../../hooks/use-editor-plugins'
-import { withUploadingIndicator } from '../../block-decorators/with-uploading-indicator'
-import { resizableBugFixDecorator } from '../../block-decorators/resizable-bug-fix-decorator'
 import { atomicBlockLinkDecorator } from '../../block-decorators/atomic-block-link-decorator'
-import { getImageSizeOptions } from './utils/get-image-size-options'
-import { getImageDimensions } from './utils/get-image-dimensions'
+import { resizableBugFixDecorator } from '../../block-decorators/resizable-bug-fix-decorator'
+import { withUploadingIndicator } from '../../block-decorators/with-uploading-indicator'
+import { ToolbarFragment } from '../../components/ToolbarFragment'
+import { EditorContext } from '../../editor-context'
+import { useDropzonePropsInterceptor } from '../../hooks/use-dropzone-props-interceptor'
+import { useEditorPlugins } from '../../hooks/use-editor-plugins'
 import { removeUnwantedEmptyLineBeforeAtomic } from '../../modifiers/remove-unwanted-empty-block-before-atomic'
 import { updateEntityData } from '../../modifiers/update-entity-data'
-import { EditorContext } from '../../editor-context'
-import { InlineImageToolbar } from './ImageInlineToolbar'
-import { AddImageButton } from './AddImageButton'
+
 import { AddGifButton } from './AddGifButton'
-import { ToolbarFragment } from '../../components/ToolbarFragment'
-import { useDropzonePropsInterceptor } from '../../hooks/use-dropzone-props-interceptor'
+import { AddImageButton } from './AddImageButton'
+import { InlineImageToolbar } from './ImageInlineToolbar'
+import { getImageDimensions } from './utils/get-image-dimensions'
+import { getImageSizeOptions } from './utils/get-image-size-options'
 
 interface Props {
   /**
@@ -170,6 +172,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
       }
     } else {
       console.warn(
+        // eslint-disable-next-line max-len
         '[Editor]: dataURL image is inserted by no uploadImage passed. data urls will be preserved in the output'
       )
     }

@@ -1,14 +1,13 @@
-import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
-import { mdiCardsOutline } from '@mdi/js'
-import Skeleton from '@material-ui/lab/Skeleton'
+import { useMemo } from 'react'
 
+import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
+import Skeleton from '@material-ui/lab/Skeleton'
+import { mdiCardsOutline } from '@mdi/js'
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
-
-import { useMemo } from 'react'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

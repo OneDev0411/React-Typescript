@@ -7,9 +7,10 @@ import {
   updateTrigger,
   removeTrigger
 } from 'models/instant-marketing/triggers'
-
 import { noop } from 'utils/helpers'
 
+import { TRIGGERABLE_ATTRIBUTES } from './constants'
+import { EditMode } from './EditMode'
 import {
   formatValue,
   getTitle,
@@ -19,13 +20,9 @@ import {
   validation,
   validateTriggerFields
 } from './helpers'
-
-import { EditMode } from './EditMode'
-import { ViewMode } from './ViewMode'
 import { TriggerEditMode } from './TriggerEditMode'
 import { getTriggerSubject } from './TriggerEditMode/helpers'
-
-import { TRIGGERABLE_ATTRIBUTES } from './constants'
+import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
   return new Date().getTime()
@@ -393,6 +390,7 @@ class MasterField extends React.Component {
       message: `Delete ${title}`,
       onConfirm: this.delete,
       onCancel: () => this.setState({ disabled: false }),
+      // eslint-disable-next-line max-len
       description: `You have made changes, are you sure about deleting "${title}" field?`
     }
 
@@ -401,6 +399,7 @@ class MasterField extends React.Component {
     } else if (this.props.attribute[this.attribute_def.data_type]) {
       this.context.setConfirmationModal({
         ...options,
+        // eslint-disable-next-line max-len
         description: `Are you sure about deleting "${title}" field, you will lose it forever?`
       })
     } else {

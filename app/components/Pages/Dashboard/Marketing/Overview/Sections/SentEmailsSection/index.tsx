@@ -1,12 +1,14 @@
 import React from 'react'
+
 import { Grid, Typography } from '@material-ui/core'
 
 import Link from 'components/ALink'
 import CardSkeleton from 'components/CardSkeleton'
 import EmailInsightCard from 'components/EmailInsightCard'
 
-import SectionLayout from '../SectionLayout'
 import LinkSectionAction from '../LinkSectionAction'
+import SectionLayout from '../SectionLayout'
+
 import { useEmailCampaigns } from './hooks'
 
 export default function SentEmailsSection() {
@@ -48,6 +50,7 @@ export default function SentEmailsSection() {
             <Grid key={campaign.id} item xs={12} sm={6}>
               <Link
                 noStyle
+                // eslint-disable-next-line max-len
                 to={`/dashboard/insights/${campaign.id}?backUrl=/dashboard/marketing`}
               >
                 <EmailInsightCard campaign={campaign} />

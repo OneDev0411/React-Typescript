@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { Box, BoxProps } from '@material-ui/core'
 
-import { Header, HeaderProps } from './Header'
 import { Container, ContainerProps } from './Container'
+import { Header, HeaderProps } from './Header'
 
 interface Props extends ContainerProps {
   children: React.ReactNode

@@ -1,12 +1,13 @@
 import React from 'react'
-import { Field } from 'react-final-form'
+
 import { Theme, makeStyles } from '@material-ui/core'
 import { mdiBellOutline } from '@mdi/js'
+import { Field } from 'react-final-form'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { Dropdown } from 'components/Dropdown'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { REMINDER_DROPDOWN_OPTIONS } from 'views/utils/reminder'
 
 const useStyles = makeStyles(

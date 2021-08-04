@@ -1,15 +1,14 @@
 import React from 'react'
+
+import { mdiProgressUpload, mdiPlus } from '@mdi/js'
 import Dropzone from 'react-dropzone-rechat'
 import { connect } from 'react-redux'
 
-import { mdiProgressUpload, mdiPlus } from '@mdi/js'
-
 import { addNotification as notify } from 'components/notification'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Message from '../Util/message'
 import Model from '../../../../../models/Chatroom'
+import Message from '../Util/message'
 
 const acceptableFileTypes = 'application/pdf,image/*'
 

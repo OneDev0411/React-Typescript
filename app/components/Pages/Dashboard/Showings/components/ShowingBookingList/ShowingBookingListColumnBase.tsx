@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+
 import { Typography } from '@material-ui/core'
 
 interface ShowingBookingListColumnBaseProps {

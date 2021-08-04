@@ -1,13 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addNotification as notify } from 'components/notification'
 
-import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
+import { connect } from 'react-redux'
+
 import { confirmation } from 'actions/confirmation'
+import { changeTaskStatus, changeNeedsAttention } from 'actions/deals'
+import { addNotification as notify } from 'components/notification'
 import { blue } from 'views/utils/colors'
 
 import Message from '../../../../../Chatroom/Util/message'
-
 import CommentActions from '../CommentActions'
 
 import { Container, Actions, Textarea, Divider } from './styled'
@@ -21,6 +21,7 @@ class CommentInput extends React.Component {
   }
 
   onHeightChangeHandler = height => {
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(height)) {
       return false
     }
@@ -33,13 +34,8 @@ class CommentInput extends React.Component {
    * also change attention_requested flag and change status of task if requests by BO
    */
   sendComment = async (attention_requested = null, task_status = null) => {
-    const {
-      deal,
-      task,
-      user,
-      changeTaskStatus,
-      changeNeedsAttention
-    } = this.props
+    const { deal, task, user, changeTaskStatus, changeNeedsAttention } =
+      this.props
 
     const { comment } = this.state
 
@@ -68,6 +64,7 @@ class CommentInput extends React.Component {
         if (deal.is_draft) {
           this.props.confirmation({
             description:
+              // eslint-disable-next-line max-len
               'We have captured your Notify Office request. As soon as this deal goes live, we will forward it on to your back office.',
             confirmLabel: 'Got it. Thanks.',
             hideCancelButton: true

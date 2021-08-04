@@ -1,14 +1,14 @@
 import React from 'react'
-import usePromise from 'react-use-promise'
+
 import { Popover } from '@material-ui/core'
+import usePromise from 'react-use-promise'
 
 import { IUserState } from 'reducers/user'
 
-import { getActiveTeamId } from '../../../../../../utils/user-teams'
 import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
+import { getActiveTeamId } from '../../../../../../utils/user-teams'
 
 import ToggleButton from './ToggleButton'
-
 import { UserMenuContent } from './UserMenuContent'
 
 export function UserMenu({ user }: { user: IUserState }) {
@@ -28,11 +28,11 @@ export function UserMenu({ user }: { user: IUserState }) {
    * UserMenuContent is rendered). But it introduces a delay in showing
    * the link which may be seen as a UX problem.
    */
-  const [checklists] = usePromise(() => {
-    const teamId = user && getActiveTeamId(user)
 
+  const teamId = user && getActiveTeamId(user)
+  const [checklists] = usePromise(() => {
     return (teamId && getBrandChecklists(teamId)) || Promise.reject()
-  }, [user])
+  }, [teamId])
 
   const [anchorEl, setAnchorEl] = React.useState(null)
 

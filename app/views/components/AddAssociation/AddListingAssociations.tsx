@@ -4,11 +4,11 @@ import { mdiMapSearchOutline } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import SearchListingsDrawer from '../SearchListingDrawer'
 import { normalizeListing } from '../../utils/association-normalizers'
+import SearchListingsDrawer from '../SearchListingDrawer'
 
-import { AddAssociationProps } from './types'
 import { AddAssociationButton } from './AddAssociationButton'
+import { AddAssociationProps } from './types'
 
 export function AddListingAssociation({
   disabled,

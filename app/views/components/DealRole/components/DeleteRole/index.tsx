@@ -1,19 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { Tooltip, IconButton, IconButtonProps } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
-
-import { deleteRole } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
-
-import { getLegalFullName } from 'deals/utils/roles'
-
+import { deleteRole } from 'actions/deals'
 import Spinner from 'components/LoadingContainer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { addNotification as notify } from 'components/notification'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getLegalFullName } from 'deals/utils/roles'
 
 interface Props {
   role: IDealRole

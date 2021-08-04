@@ -1,36 +1,33 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
-import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
-import { mdiTrashCanOutline } from '@mdi/js'
 
+import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
 import {
+  mdiTrashCanOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline
 } from '@mdi/js'
+import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
-import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
-import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
-import { isSoloActiveTeam } from 'utils/user-teams'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { getTask, updateTask, createTask, deleteTask } from 'models/tasks'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
+import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
+import AddAssociation from '../../AddAssociation'
 import { Divider } from '../../Divider'
-import Drawer from '../../OverlayDrawer'
-import { ItemChangelog } from '../../TeamContact/ItemChangelog'
-
-import { Title } from '../../EventDrawer/components/Title'
 import { Description } from '../../EventDrawer/components/Description'
-import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { EventField } from '../../EventDrawer/components/EventField'
+import Reminder from '../../EventDrawer/components/Reminder/Reminder'
+import { Title } from '../../EventDrawer/components/Title'
 import {
   FormContainer,
   FieldContainer,
   AssociationContainer
 } from '../../EventDrawer/styled'
-
-import AddAssociation from '../../AddAssociation'
 import {
   AssigneesField,
   AssociationsList,
@@ -38,19 +35,19 @@ import {
   EndTimeField,
   FieldError
 } from '../../final-form-fields'
-import LoadSaveReinitializeForm from '../../../utils/LoadSaveReinitializeForm'
-
-import { validate } from './helpers/validate'
-import { preSaveFormat } from './helpers/pre-save-format'
-import { prePreviewFormat } from './helpers/pre-preview-format'
-import { postLoadFormat } from './helpers/post-load-format'
-
-import { Locations } from './components/Locations'
+import Drawer from '../../OverlayDrawer'
+import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 import { PreviewTourSheets } from '../PreviewTourSheets'
 
+import { Locations } from './components/Locations'
+import { postLoadFormat } from './helpers/post-load-format'
+import { prePreviewFormat } from './helpers/pre-preview-format'
+import { preSaveFormat } from './helpers/pre-save-format'
+import { validate } from './helpers/validate'
 import { Footer } from './styled'
 
 const propTypes = {
+  // eslint-disable-next-line react/forbid-foreign-prop-types
   ...Drawer.propTypes,
   tour: PropTypes.any,
   tourId: PropTypes.any,
@@ -210,6 +207,7 @@ export class TourDrawer extends React.Component {
                     <Title fullWidth placeholder="Untitled tour" />
                     <Box mt={1}>
                       {shouldShowDescription || values?.description ? (
+                        // eslint-disable-next-line max-len
                         <Description placeholder="Enter any general notes for your clients" />
                       ) : (
                         <Button
@@ -253,10 +251,7 @@ export class TourDrawer extends React.Component {
                   <Reminder dueDate={values.dueDate} />
 
                   <Box ml={4} mb={2}>
-                    <Locations
-                      locations={values.locations}
-                      handleDelete={this.handleDeleteAssociation}
-                    />
+                    <Locations locations={values.locations} />
                     <Box mt={0.5}>
                       <AddAssociation
                         showTitle
@@ -318,15 +313,20 @@ export class TourDrawer extends React.Component {
                       )}
                     </Flex>
                     <Flex alignCenter>
-                      <Tooltip title="Preview and print tour sheets">
-                        <PreviewTourSheets
-                          agent={user}
-                          disabled={isDisabled}
-                          listings={values.locations.map(
-                            l => l.listing.original
-                          )}
-                          tour={prePreviewFormat(values, this.state.tour)}
-                        />
+                      <Tooltip
+                        placement="top"
+                        title="Preview and print tour sheets"
+                      >
+                        <div>
+                          <PreviewTourSheets
+                            agent={user}
+                            disabled={isDisabled}
+                            listings={values.locations.map(
+                              l => l.listing.original
+                            )}
+                            tour={prePreviewFormat(values, this.state.tour)}
+                          />
+                        </div>
                       </Tooltip>
                       <Button
                         variant="contained"

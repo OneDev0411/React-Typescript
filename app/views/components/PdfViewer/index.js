@@ -1,16 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import { Button } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 require('intersection-observer')
 
 import ProgressBar from 'components/ProgressBar'
-
-import importPdfJs from 'utils/import-pdf-js'
 import { getPdfSize } from 'models/Deal/form'
+import importPdfJs from 'utils/import-pdf-js'
 
-import { Container, LoadingDealContainer } from './styled'
 import { Page } from './Page'
+import { Container, LoadingDealContainer } from './styled'
 import { Toolbar } from './Toolbar'
 
 export class PdfViewer extends React.Component {
@@ -122,9 +122,8 @@ export class PdfViewer extends React.Component {
   }
 
   goToNextPage = () => {
-    const visiblePage = this.state.visiblePages[
-      this.state.visiblePages.length - 1
-    ]
+    const visiblePage =
+      this.state.visiblePages[this.state.visiblePages.length - 1]
 
     if (!visiblePage) {
       return false
@@ -177,7 +176,7 @@ export class PdfViewer extends React.Component {
       })
     }
 
-    pdfDocument
+    pdfDocument.promise
       .then(document => {
         this.setState({
           isLoading: false,
@@ -189,6 +188,10 @@ export class PdfViewer extends React.Component {
         console.log(e)
         this.setState({ isLoading: false, isFailed: true })
       })
+  }
+
+  handleOpenInNewWindow = () => {
+    window.open(this.props.url)
   }
 
   handleKeyboardShortcuts = event => {
@@ -264,6 +267,7 @@ export class PdfViewer extends React.Component {
           onZoomIn={this.handleZoomIn}
           onZoomOut={this.handleZoomOut}
           onRotate={this.handleRotate}
+          onNewWindow={this.handleOpenInNewWindow}
         />
         <Container ref={ref => (this.pdfContainer = ref)}>
           {Array.apply(null, { length: this.state.document.numPages }).map(

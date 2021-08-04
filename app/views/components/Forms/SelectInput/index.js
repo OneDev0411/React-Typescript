@@ -1,14 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import { mdiChevronDown } from '@mdi/js'
+import PropTypes from 'prop-types'
 
 import { BasicDropdown } from 'components/BasicDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { FieldError } from '../../final-form-fields/FieldError'
 import { InputContainer, InputLabel, InputRequired } from '../styled'
 
 import { MenuButton } from './styled'
-import { FieldError } from '../../final-form-fields/FieldError'
 
 SelectInput.propTypes = {
   items: PropTypes.arrayOf(

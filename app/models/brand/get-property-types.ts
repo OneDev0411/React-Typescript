@@ -7,7 +7,8 @@ export async function getBrandPropertyTypes(brandId: UUID) {
       .query({
         associations: [
           'brand_checklist.required_contexts',
-          'brand_checklist.optional_contexts'
+          'brand_checklist.optional_contexts',
+          'brand_checklist.statuses'
         ]
       })
 

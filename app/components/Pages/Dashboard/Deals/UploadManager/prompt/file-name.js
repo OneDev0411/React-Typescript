@@ -1,14 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import cn from 'classnames'
-import Flex from 'styled-flex-component'
-
-import styled from 'styled-components'
 
 import { Button } from '@material-ui/core'
+import cn from 'classnames'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
 import { setUploadAttributes } from 'actions/deals'
-
 import { grey } from 'views/utils/colors'
 
 const Container = styled(Flex)`
@@ -121,7 +119,4 @@ class FileName extends React.Component {
   }
 }
 
-export default connect(
-  null,
-  { setUploadAttributes }
-)(FileName)
+export default connect(null, { setUploadAttributes })(FileName)

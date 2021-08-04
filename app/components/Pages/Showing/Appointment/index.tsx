@@ -1,11 +1,11 @@
-import { WithRouterProps } from 'react-router'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
+import { WithRouterProps } from 'react-router'
 
 import LoadingContainer from 'components/LoadingContainer'
 
 import { usePublicShowingAppointment } from '../hooks'
-
 import InfoSection from '../Sections/InfoSection'
+
 import ShowingAppointmentStatusSection from './Sections/StatusSection'
 
 const useStyles = makeStyles(
@@ -34,9 +34,8 @@ export default function ShowingAppointment({
 }: WithRouterProps<RouteParams>) {
   const classes = useStyles()
 
-  const { isLoading, appointment } = usePublicShowingAppointment(
-    appointmentToken
-  )
+  const { isLoading, appointment } =
+    usePublicShowingAppointment(appointmentToken)
 
   if (isLoading || !appointment) {
     return <LoadingContainer noPaddings style={{ paddingTop: '10%' }} />

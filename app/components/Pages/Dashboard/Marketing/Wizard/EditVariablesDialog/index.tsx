@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Dialog,
   DialogContent,
@@ -15,8 +16,8 @@ import {
 } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TemplateVariable, TemplateVariableType } from '../types'
 
@@ -88,7 +89,12 @@ export default function EditVariablesDialog({
     >
       <DialogTitle>
         <Grid container direction="column">
-          <Grid container item alignItems="center" justify="space-between">
+          <Grid
+            container
+            item
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Grid item>
               <IconButton onClick={onClose}>
                 <SvgIcon path={closeIcon} />

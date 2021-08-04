@@ -1,32 +1,28 @@
 import React, { useState, useMemo, useContext } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Box, List, ListItem, ListItemText } from '@material-ui/core'
 
+import { Box, List, ListItem, ListItemText } from '@material-ui/core'
+import { useSelector, useDispatch } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { BaseDropdown } from 'components/BaseDropdown'
+import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 import { addNotification } from 'components/notification'
-
+import { getBrands } from 'models/BrandConsole/Brands'
+import { getContactsCount } from 'models/contacts/get-contacts-count'
+import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectDealRoles } from 'reducers/deals/roles'
-
-import { getRootBrand } from 'utils/user-teams'
-import { getBrands } from 'models/BrandConsole/Brands'
-
-import Loading from 'partials/Loading'
-import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
-import { BaseDropdown } from 'components/BaseDropdown'
-
 import { selectUser } from 'selectors/user'
+import { getRootBrand } from 'utils/user-teams'
 
-import { getContactsCount } from 'models/contacts/get-contacts-count'
+import ConfirmationModalContext from '../ConfirmationModal/context'
 
+import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
 import extractMoreQuickSuggestions, {
   MoreQuickSuggestion
 } from './helpers/extract-more-quick-suggestions'
-import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
-import ConfirmationModalContext from '../ConfirmationModal/context'
 
 interface Props {
   deal?: IDeal
@@ -140,6 +136,7 @@ export function EmailRecipientQuickSuggestions({
       if (allContactsCount > 1) {
         return confirmationModal.setConfirmationModal({
           message: 'Send to all your contacts?',
+          // eslint-disable-next-line max-len
           description: `You are about to send this email to ${allContactsCount} of your contacts. Are you sure?`,
           cancelLabel: 'No',
           confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
@@ -239,7 +236,9 @@ export function EmailRecipientQuickSuggestions({
                       <ListItemText
                         primary={
                           text ||
-                          (recipient as IDenormalizedEmailRecipientBrandInput).brand.name.trim()
+                          (
+                            recipient as IDenormalizedEmailRecipientBrandInput
+                          ).brand.name.trim()
                         }
                       />
                     </ListItem>

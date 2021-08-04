@@ -1,8 +1,8 @@
 import React from 'react'
+
 import fecha from 'fecha'
 
 import LinkButton from 'components/Button/LinkButton'
-
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import { Container, NameContainer, Title, DateTime } from './styled'

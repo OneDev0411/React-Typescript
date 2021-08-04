@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
 
 import { Box } from '@material-ui/core'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 import { addNotification as notify } from 'components/notification'
 
-import getVerificationCode from '../../../models/verify/request'
 import VerifyPhoneNumber from '../../../models/verify/confirm'
-
-import CircleSpinner from '../SvgIcons/CircleSpinner/IconCircleSpinner'
+import getVerificationCode from '../../../models/verify/request'
 import BareModal from '../BareModal'
 import ActionButton from '../Button/ActionButton'
 import IntercomTriger from '../IntercomTrigger'
+import CircleSpinner from '../SvgIcons/CircleSpinner/IconCircleSpinner'
 
-import { Title } from './components/Title'
-import { Container } from './components/Container'
 import { CloseButton } from './components/CloseButton'
+import { Container } from './components/Container'
+import { Title } from './components/Title'
 
 const LinkButton = styled(ActionButton)`
   padding: 0;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import {
   Dialog,
   DialogTitle,
@@ -16,17 +17,13 @@ import {
   DialogActions,
   IconButton
 } from '@material-ui/core'
-
+import { mdiClose } from '@mdi/js'
 import cn from 'classnames'
 
-import { mdiClose } from '@mdi/js'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import TreeView from 'components/TreeView'
 import { useBrandTree } from 'components/TeamTreeView/use-brand-tree'
-
+import TreeView from 'components/TreeView'
 import { Types } from 'deals/FormEdit/utils/types'
-
 import {
   getBrandFormTemplateValues,
   saveBrandFormTemplateValues,
@@ -88,12 +85,8 @@ export function DefaultValues({ formId }: Props) {
     IFormTemplateValue[]
   >([])
 
-  const {
-    rootTeam,
-    isLoading,
-    getChildNodes,
-    initialExpandedNodes
-  } = useBrandTree()
+  const { rootTeam, isLoading, getChildNodes, initialExpandedNodes } =
+    useBrandTree()
   const { annotation, annotationType, setAnnotation } = useDefaultValueContext()
 
   useEffect(() => {

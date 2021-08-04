@@ -1,8 +1,5 @@
 import React, { Fragment } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { Form, Field } from 'react-final-form'
-import moment from 'moment-timezone'
 import {
   TextField,
   Button,
@@ -11,14 +8,16 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-
-import { selectUserTimezone } from 'selectors/user'
-
-import { addNotification as notify } from 'components/notification'
-import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
+import { FORM_ERROR } from 'final-form'
+import moment from 'moment-timezone'
+import { Form, Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
 
 import FormCard from 'components/FormCard'
+import { addNotification as notify } from 'components/notification'
+import { EDIT_USER_REQUEST, EDIT_USER_SUCCESS } from 'constants/user'
 import { setUserTimezone } from 'models/user/set-user-timezone'
+import { selectUserTimezone } from 'selectors/user'
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,16 +36,23 @@ function Timezone() {
   const timezone = useSelector(selectUserTimezone)
   const dispatch = useDispatch()
 
-  let submitError = null
   const classes = useStyles()
 
   const time_zone = timezone ? { title: timezone, value: timezone } : null
 
-  const onSubmit = async ({ time_zone }) => {
-    if (!time_zone || time_zone.value === timezone) {
-      return
+  const validate = ({ time_zone }) => {
+    if (!time_zone || !time_zone.value) {
+      return { time_zone: 'Required!' }
     }
 
+    if (time_zone.value === timezone) {
+      return { time_zone: 'No change' }
+    }
+
+    return {}
+  }
+
+  const onSubmit = async ({ time_zone }) => {
     try {
       dispatch({
         type: EDIT_USER_REQUEST
@@ -65,9 +71,15 @@ function Timezone() {
         })
       )
     } catch (error) {
-      console.log(error)
-      submitError = error && error.message
-      throw error
+      let message = 'Something went wrong. Please try again.'
+
+      if (typeof error === 'string') {
+        message = error
+      } else if (error.message) {
+        message = error.message
+      }
+
+      return { [FORM_ERROR]: message }
     }
   }
 
@@ -80,62 +92,66 @@ function Timezone() {
         // TODO: we have a major re-rendering issue related to redux-form here
         keepDirtyOnReinitialize
         onSubmit={onSubmit}
+        validate={validate}
         initialValues={{ time_zone }}
-        render={({ handleSubmit, submitFailed, submitting }) => (
-          <form onSubmit={handleSubmit} className="c-account__form clearfix">
-            <Field
-              name="time_zone"
-              render={({ input }) => (
-                <Fragment>
-                  <Box marginBottom={1} style={{ cursor: 'pointer' }}>
-                    <Typography variant="body2">Timezones</Typography>
-                  </Box>
-                  <Autocomplete
-                    value={input.value || null}
-                    onChange={(event, newValue) => {
-                      input.onChange(newValue)
-                    }}
-                    getOptionLabel={option =>
-                      option.title ? option.title : ''
-                    }
-                    getOptionSelected={(option, selectedValue) => {
-                      return option.value === selectedValue.value
-                    }}
-                    options={timezones}
-                    disableClearable
-                    data-test="timezone-dropdown"
-                    disabled={submitting}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        placeholder="Select a timezone"
-                        className={classes.input}
-                        variant="outlined"
-                        size="small"
-                      />
-                    )}
-                  />
-                </Fragment>
+        render={({ handleSubmit, form }) => {
+          const { submitError, submitting } = form.getState()
+
+          return (
+            <form onSubmit={handleSubmit} className="c-account__form clearfix">
+              <Field
+                name="time_zone"
+                render={({ input }) => (
+                  <Fragment>
+                    <Box marginBottom={1} style={{ cursor: 'pointer' }}>
+                      <Typography variant="body2">Timezones</Typography>
+                    </Box>
+                    <Autocomplete
+                      value={input.value || null}
+                      onChange={(event, newValue) => {
+                        input.onChange(newValue)
+                      }}
+                      getOptionLabel={option =>
+                        option.title ? option.title : ''
+                      }
+                      getOptionSelected={(option, selectedValue) => {
+                        return option.value === selectedValue.value
+                      }}
+                      options={timezones}
+                      disableClearable
+                      data-test="timezone-dropdown"
+                      disabled={submitting}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          placeholder="Select a timezone"
+                          className={classes.input}
+                          variant="outlined"
+                          size="small"
+                        />
+                      )}
+                    />
+                  </Fragment>
+                )}
+              />
+              {submitError && !submitting && (
+                <div className="c-auth__submit-error-alert">{submitError}</div>
               )}
-            />
-            {submitFailed && (
-              <div className="c-auth__submit-error-alert">
-                {submitError.message}
+
+              <div style={{ textAlign: 'right' }}>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  type="submit"
+                  disabled={submitting}
+                  data-test="timezone-form-submit-button"
+                >
+                  {submitting ? 'Updating...' : 'Update'}
+                </Button>
               </div>
-            )}
-            <div style={{ textAlign: 'right' }}>
-              <Button
-                color="secondary"
-                variant="contained"
-                type="submit"
-                disabled={submitting}
-                data-test="timezone-form-submit-button"
-              >
-                {submitting ? 'Updating...' : 'Update'}
-              </Button>
-            </div>
-          </form>
-        )}
+            </form>
+          )
+        }}
       />
     </FormCard>
   )

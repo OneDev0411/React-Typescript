@@ -7,7 +7,7 @@ const templates = {
 
 function Loader() {}
 
-Loader.prototype.getSource = function (name) {
+Loader.prototype.getSource = function getSource(name: string) {
   if (!templates[name]) {
     throw new Error(`Template ${name} not found`)
   }

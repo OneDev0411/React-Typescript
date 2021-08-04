@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { useTitle } from 'react-use'
+
+import { Box, Button, Container, Typography } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
-import { Alert } from '@material-ui/lab'
-import { Box, Button, Container, Typography } from '@material-ui/core'
+import { useTitle } from 'react-use'
 
-import searchAgent from 'models/agent/search'
 import { MUITextInput } from 'components/Forms/MUITextInput'
+import searchAgent from 'models/agent/search'
 
 import SecretQuestionModal from './SecretQuestionModal/index'
 
@@ -28,9 +29,8 @@ export function AgentConfirm() {
     } catch (errorCode) {
       if (errorCode === 404) {
         return {
-          [FORM_ERROR]: `Agent corresponding to this MLS ID (${
-            values.mlsId
-          }) not found!`
+          // eslint-disable-next-line max-len
+          [FORM_ERROR]: `Agent corresponding to this MLS ID (${values.mlsId}) not found!`
         }
       }
 

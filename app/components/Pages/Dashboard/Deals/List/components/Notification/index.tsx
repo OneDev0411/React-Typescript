@@ -1,5 +1,5 @@
-import classNames from 'classnames'
 import { makeStyles, Theme } from '@material-ui/core'
+import classNames from 'classnames'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

@@ -1,19 +1,15 @@
 import React, { useEffect } from 'react'
 
+import { useSelector } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
 
-import { useSelector } from 'react-redux'
-
+import { AnimatedLoader } from 'components/AnimatedLoader'
 import { useLoadUser } from 'hooks/use-load-user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
-
-import { setupGoogleAnalytics } from 'services/google-analytics'
-import { setupFullStory } from 'services/fullstory'
-import { setupSentry } from 'services/sentry'
-
 import { IAppState } from 'reducers'
-
-import { AnimatedLoader } from 'components/AnimatedLoader'
+import { setupFullStory } from 'services/fullstory'
+import { setupGoogleAnalytics } from 'services/google-analytics'
+import { setupSentry } from 'services/sentry'
 
 import getBrand from '../store_actions/brand'
 

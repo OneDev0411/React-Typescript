@@ -1,10 +1,10 @@
 import React from 'react'
-import Box from '@material-ui/core/Box'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import List from '@material-ui/core/List'
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
+import Box from '@material-ui/core/Box'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
 
 import ContextItem from './item'
 
@@ -65,7 +65,7 @@ function CategoryItem({
   return (
     <div className={classes.container}>
       <Box className={classes.root}>
-        <Grid container justify="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Grid item xs={12} sm={6} className={classes.tleft}>
             <Box fontWeight="fontWeightBold">
               {title !== 'null' ? title : 'Unorganized'}

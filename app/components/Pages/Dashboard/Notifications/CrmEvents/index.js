@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { TourDrawer } from 'components/tour/TourDrawer'
 import { EventDrawer } from 'components/EventDrawer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
+import { TourDrawer } from 'components/tour/TourDrawer'
 
 export function CrmEvents(props) {
   const { selectedEvent, isOpen } = props

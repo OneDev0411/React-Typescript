@@ -7,26 +7,22 @@ import {
   IconButton,
   makeStyles
 } from '@material-ui/core'
-
 import { mdiTrashCanOutline } from '@mdi/js'
-
-import { Form, FormSpy } from 'react-final-form'
-
 import { FormState, FORM_ERROR } from 'final-form'
-
+import { Form, FormSpy } from 'react-final-form'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
 import { WeekdaySelect, FormTimePicker } from 'components/final-form-fields'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import { ShowingAvailabilityItem } from '../../types'
 
 import {
   getSecondsDifference,
   humanTimeToTimestamp,
   timestampToHumanTime
 } from './helpers'
-import { ShowingAvailabilityItem } from '../../types'
 import ShowingAvailabilitiesTimesRowInsert from './ShowingAvailabilitiesTimesRowInsert'
 
 const useStyles = makeStyles(
@@ -109,14 +105,15 @@ function ShowingAvailabilitiesTimesRow({
 
     if (values.end <= values.start) {
       errors[FORM_ERROR] =
-        'The "From" value must be earlier than the "To" value'
+        'The "From" value must be earlier than the "To" value.'
     } else if (
       values.start &&
       values.end &&
       getSecondsDifference(values.end, values.start) < showingDuration
     ) {
       errors[FORM_ERROR] =
-        'The "From" and "To" difference must be more than showing duration'
+        // eslint-disable-next-line max-len
+        'The time difference between "From" and "To" values should exceed the Showing duration.'
     }
 
     return errors

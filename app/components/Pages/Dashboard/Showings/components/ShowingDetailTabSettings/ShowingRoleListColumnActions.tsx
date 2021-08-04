@@ -1,24 +1,20 @@
 import { useState } from 'react'
-import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
 
+import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
+import deleteShowingRole from 'models/showing/delete-showing-role'
 import updateShowingRole from 'models/showing/update-showing-role'
 
-import deleteShowingRole from 'models/showing/delete-showing-role'
-
-import useNotify from 'hooks/use-notify'
-
+import { goAndShowNotificationTypes } from '../../constants'
+import { getShowingRoleLabel } from '../../helpers'
 import {
   ShowingRoleFormDialog,
   ShowingRoleFormDialogProps
 } from '../ShowingRoleForm'
-import { getShowingRoleLabel } from '../../helpers'
-import { goAndShowNotificationTypes } from '../../constants'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
 
 const useStyles = makeStyles(
@@ -80,7 +76,7 @@ function ShowingRoleListColumnActions({
       })
       notify({
         status: 'success',
-        message: 'The participant updated successfully.'
+        message: 'The participant information was updated successfully.'
       })
     })
   }
@@ -91,7 +87,7 @@ function ShowingRoleListColumnActions({
       onDelete(role.id)
       notify({
         status: 'success',
-        message: 'The participant deleted successfully.'
+        message: 'The participant was deleted successfully.'
       })
     })
   }

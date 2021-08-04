@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
 import IconAdd from 'components/SvgIcons/AddCircleOutline/IconAddCircleOutline'
@@ -7,7 +8,6 @@ import { selectChecklistTasks } from 'reducers/deals/tasks'
 import CreateTask from '../CreateTask'
 
 import { Item } from './Item'
-
 import { Container, Header, Title, NewChecklistItem } from './styled'
 
 class Checklist extends React.Component {

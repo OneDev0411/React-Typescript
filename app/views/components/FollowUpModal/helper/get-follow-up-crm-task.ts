@@ -1,11 +1,11 @@
 import fecha from 'fecha'
 
-import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { EmailThreadEmail } from 'components/EmailThread/types'
+import { initialValueGenerator } from 'components/EventDrawer/helpers/initial-value-generator'
 import { normalizeAssociations } from 'views/utils/association-normalizers'
 
-import { FollowUpEmail, FollowUpEmailCampaign } from '../types'
 import { Props as FollowUpProps } from '../FollowUpModal'
+import { FollowUpEmail, FollowUpEmailCampaign } from '../types'
 
 // TODO: should drop specific email association and make it general
 export function getFollowUpCrmTask(
@@ -59,12 +59,14 @@ function getCrmTaskFromEmailCampaign(
     }))
   const title = getCrmTaskTitle(
     contactAssociations[0]?.contact.display_name,
-    dictionary?.taskTitle
+    dictionary?.taskTitle,
+    email
   )
   const description = getCrmTaskDescription(
     owner.display_name,
     email.due_at * 1000,
-    dictionary?.taskDescription
+    dictionary?.taskDescription,
+    email
   )
 
   const values = initialValueGenerator(
@@ -116,12 +118,36 @@ function getCrmTaskFromEmailThreadEmail(
   return values
 }
 
-function getCrmTaskTitle(item?: string, getter?: (item?: string) => string) {
+function getCrmTaskTitle(
+  item?: string,
+  getter?: (item?: string) => string,
+  email?: FollowUpEmailCampaign
+) {
   if (getter) {
     return getter(item)
   }
 
   let title = 'Follow up'
+
+  if (email) {
+    title = 'Follow up Email'
+
+    const recipientType: IEmailRecipientType =
+      email.recipients[0]?.recipient_type
+
+    switch (recipientType) {
+      case 'Email':
+        return `${title}: ${
+          email.recipients[0].contact?.display_name || email.recipients[0].email
+        }`
+      case 'Tag':
+        return `${title}: ${email.recipients[0].tag}'s Tag`
+      case 'AllContacts':
+        return `${title}: All Contacts`
+      default:
+        return title
+    }
+  }
 
   if (item) {
     return `${title}: ${item}`
@@ -133,7 +159,8 @@ function getCrmTaskTitle(item?: string, getter?: (item?: string) => string) {
 function getCrmTaskDescription(
   item: string,
   dueDate: Date | number,
-  getter?: (item: string, dueDate: Date | number) => string
+  getter?: (item: string, dueDate: Date | number) => string,
+  email?: FollowUpEmailCampaign
 ) {
   if (getter) {
     return getter(item, dueDate)

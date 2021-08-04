@@ -1,15 +1,16 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { withRouter, WithRouterProps, browserHistory } from 'react-router'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles, Theme } from '@material-ui/core'
 import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
+import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 
-import { selectUserUnsafe } from 'selectors/user'
-import { useFavorite } from 'hooks/use-favorite'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useFavorite } from 'hooks/use-favorite'
+import { selectUserUnsafe } from 'selectors/user'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,12 +37,14 @@ const useStyles = makeStyles(
 
 interface Props {
   listing: IListing
+  isWidget?: boolean
   handleClose?: () => void
   handleShare: () => void
 }
 
 function Header({
   listing,
+  isWidget = false,
   handleShare,
   location,
   handleClose
@@ -113,7 +116,7 @@ function Header({
                 Share
               </Button>
             )}
-            {!user && (
+            {!isWidget && !user && (
               <Button variant="contained" color="primary" onClick={handleLogin}>
                 Login
               </Button>

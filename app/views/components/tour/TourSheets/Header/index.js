@@ -1,18 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
+import { IconButton, Tooltip } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import { IconButton } from '@material-ui/core'
-
 import { mdiClose } from '@mdi/js'
-
-import { Tooltip } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { printOutlined } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import PageHeader from '../../../PageHeader'
 import { Divider } from '../../../Divider'
+import PageHeader from '../../../PageHeader'
 
 Header.propTypes = {
   ...PageHeader.propTypes,

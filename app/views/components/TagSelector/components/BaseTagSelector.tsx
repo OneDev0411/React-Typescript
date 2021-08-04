@@ -1,21 +1,23 @@
 import React, { useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Typography,
   TextField,
   TextFieldProps,
   ChipProps
 } from '@material-ui/core'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete'
+import { useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import { getContactsTags } from 'models/contacts/get-contacts-tags'
 import { selectExistingTags } from 'selectors/contacts'
 
-import { normalizeTags, getTagKeys } from './utils'
 import { SelectorOption } from '../type'
+
+import { normalizeTags, getTagKeys } from './utils'
 
 const filter = createFilterOptions<SelectorOption>({
   ignoreCase: true,

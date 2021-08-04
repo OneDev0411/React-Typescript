@@ -1,24 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import { useInView } from 'react-intersection-observer'
+import { useDeepCompareEffect } from 'react-use'
 
-import { getTemplateImage } from 'utils/marketing-center/helpers'
-import { getFileType } from 'utils/file-utils/get-file-type'
-import { getActiveBrand } from 'utils/user-teams'
-import { loadTemplateHtml } from 'models/instant-marketing'
-
-import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { PdfThumbnail } from 'components/PdfThumbnail'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplateThumbnail from 'components/TemplateThumbnail'
+import { getFileType } from 'utils/file-utils/get-file-type'
+import { getTemplateImage } from 'utils/marketing-center/helpers'
+import { getActiveBrand } from 'utils/user-teams'
 
-const useStyles = makeStyles(() => ({
-  image: {
-    width: '100%'
-  },
-  templateThumbnailWrapper: {
-    margin: '0 auto'
+const useStyles = makeStyles(
+  () => ({
+    image: {
+      width: '100%'
+    },
+    templateThumbnailWrapper: {
+      margin: '0 auto'
+    }
+  }),
+  {
+    name: 'MarketingTemplateCardThumbnail'
   }
-}))
+)
 
 interface Props {
   user: IUser
@@ -26,7 +31,7 @@ interface Props {
   listing?: IListing
   useStaticImage?: boolean
 
-  onClick?: React.ComponentProps<typeof TemplateThumbnail>['onClick']
+  onClick?: ComponentProps<typeof TemplateThumbnail>['onClick']
 }
 
 export function Thumbnail({
@@ -36,31 +41,13 @@ export function Thumbnail({
   useStaticImage,
   onClick
 }: Props) {
+  const { ref, inView } = useInView({ delay: 100 })
+  const [isAlreadyLoaded, setIsAlreadyLoaded] = useState<boolean>(false)
   const classes = useStyles()
   const brand = getActiveBrand(user)
-  const [templateMarkup, setTemplateMarkup] = useState<string>('')
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
-  useEffect(() => {
-    async function fetchTemplateMarkup() {
-      if (template.type === 'template_instance') {
-        return
-      }
-
-      try {
-        const markup = await loadTemplateHtml(template)
-
-        setTemplateMarkup(markup)
-      } catch (err) {
-        console.error(err)
-        setTemplateMarkup('')
-      }
-    }
-
-    fetchTemplateMarkup()
-  }, [template])
-
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     async function fetchListingIfNeeded() {
       if (receivedListing) {
         setListing(receivedListing)
@@ -70,17 +57,33 @@ export function Thumbnail({
 
       const listing = await getMockListing()
 
-      setListing((listing as unknown) as IListing)
+      setListing(listing as unknown as IListing)
     }
 
     fetchListingIfNeeded()
   }, [receivedListing])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!isAlreadyLoaded && inView) {
+        setIsAlreadyLoaded(true)
+      }
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [inView, isAlreadyLoaded])
+
+  const shouldRender = isAlreadyLoaded || inView
+
   if (
     template.type === 'template_instance' &&
     getFileType(template.file) === 'pdf'
   ) {
-    return <PdfThumbnail url={template.file.url} />
+    return (
+      <div ref={ref}>
+        {shouldRender && <PdfThumbnail url={template.file.url} />}
+      </div>
+    )
   }
 
   if (!brand) {
@@ -91,25 +94,32 @@ export function Thumbnail({
     const { thumbnail } = getTemplateImage(template)
 
     return template.template.video ? (
-      <video src={thumbnail} muted autoPlay />
+      <div ref={ref}>
+        {shouldRender && <video src={thumbnail} muted autoPlay />}
+      </div>
     ) : (
-      <img
-        alt={template.template.name}
-        src={thumbnail}
-        className={classes.image}
-      />
+      <div ref={ref}>
+        {shouldRender && (
+          <img
+            alt={template.template.name}
+            src={thumbnail}
+            className={classes.image}
+          />
+        )}
+      </div>
     )
   }
 
   return (
-    <div className={classes.templateThumbnailWrapper}>
-      <TemplateThumbnail
-        template={templateMarkup}
-        mjml={template.template.mjml}
-        brand={brand}
-        data={{ listing, user }}
-        onClick={onClick}
-      />
+    <div className={classes.templateThumbnailWrapper} ref={ref}>
+      {shouldRender && (
+        <TemplateThumbnail
+          template={template}
+          brand={brand}
+          data={{ listing, user }}
+          onClick={onClick}
+        />
+      )}
     </div>
   )
 }

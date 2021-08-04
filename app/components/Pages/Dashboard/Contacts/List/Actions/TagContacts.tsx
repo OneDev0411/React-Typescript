@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import intersection from 'lodash/intersection'
 
 import { mdiTagOutline } from '@mdi/js'
+import intersection from 'lodash/intersection'
+import { useSelector } from 'react-redux'
 
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
-
-import { selectContact } from 'reducers/contacts/list'
-
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
+import { selectContact } from 'reducers/contacts/list'
 import { selectContactListStore } from 'selectors/contacts'
 
 interface Props {

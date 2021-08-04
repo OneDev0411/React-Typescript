@@ -1,9 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux'
 
-import { IAppState } from 'reducers'
-import { getIsFavorite } from 'reducers/listings/favorites'
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
+import { IAppState } from 'reducers'
+import { getIsFavorite } from 'reducers/listings/favorites'
 
 export function useFavorite(listing: IListing | ICompactListing) {
   const dispatch = useDispatch()

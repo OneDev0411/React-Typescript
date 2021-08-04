@@ -1,21 +1,18 @@
 import React from 'react'
-import Flex from 'styled-flex-component'
-import { connect } from 'react-redux'
 
 import { mdiDotsVertical } from '@mdi/js'
 import fecha from 'fecha'
+import { connect } from 'react-redux'
+import Flex from 'styled-flex-component'
 
-import { addNotification as notify } from 'components/notification'
-
-import LinkButton from 'components/Button/LinkButton'
-
-import Spinner from 'components/Spinner'
 import { BasicDropdown } from 'components/BasicDropdown'
+import LinkButton from 'components/Button/LinkButton'
+import { addNotification as notify } from 'components/notification'
+import Spinner from 'components/Spinner'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import copy from 'utils/copy-text-to-clipboard'
 import config from 'config'
+import copy from 'utils/copy-text-to-clipboard'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import {
   Container,
@@ -111,9 +108,13 @@ class EventsList extends React.Component {
                   fullHeight
                   pullTo="right"
                   selectedItem={null}
-                  buttonRenderer={props => (
-                    <SvgIcon path={mdiDotsVertical} {...props} />
-                  )}
+                  buttonRenderer={({
+                    isBlock,
+                    noBorder,
+                    isOpen,
+                    selectedItem,
+                    ...props
+                  }) => <SvgIcon path={mdiDotsVertical} {...props} />}
                   items={this.menuItems}
                   onSelect={item => item.onClick(event)}
                 />

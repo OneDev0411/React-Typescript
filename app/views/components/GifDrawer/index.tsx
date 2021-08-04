@@ -1,15 +1,16 @@
 import React from 'react'
-import Masonry from 'react-masonry-css'
+
 import { CircularProgress } from '@material-ui/core'
+import Masonry from 'react-masonry-css'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
-import { GifLayout, Gif } from './styles'
-import useTrendsGifs from './useTrendsGifs'
-import useSearchGif from './useSearchGif'
 import { getGifUrl, gifOutput } from './helpers'
+import { GifLayout, Gif } from './styles'
 import { GifItem } from './types'
+import useSearchGif from './useSearchGif'
+import useTrendsGifs from './useTrendsGifs'
 
 interface Props {
   isOpen: boolean

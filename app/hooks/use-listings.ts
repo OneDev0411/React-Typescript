@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
+
+import uniqBy from 'lodash/uniqBy'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
-import uniqBy from 'lodash/uniqBy'
 
-import { IAppState } from 'reducers'
-import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import getListing from 'models/listings/listing/get-listing'
+import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import { IAppState } from 'reducers'
 
 export function useBrandListings(
   brand: Nullable<UUID>

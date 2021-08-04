@@ -473,5 +473,3 @@ export const COUNTIES = [
   'Zapata',
   'Zavala'
 ]
-
-

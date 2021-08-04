@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/user-teams'
 import { PageTabs, TabLink } from 'components/PageTabs'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/user-teams'
 
 interface ItemsShape {
   label: string

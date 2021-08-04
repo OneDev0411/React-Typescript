@@ -1,7 +1,7 @@
 import React from 'react'
 
-import cn from 'classnames'
 import { Box, Avatar, Typography, makeStyles, Theme } from '@material-ui/core'
+import cn from 'classnames'
 
 import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+
 import {
   Box,
   Button,
@@ -14,27 +14,28 @@ import {
   Tooltip,
   Typography
 } from '@material-ui/core'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
 import { mdiPlusCircleOutline, mdiPencilOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
-import { getActiveTeamId } from 'utils/user-teams'
+import AddOrEditEmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
+import { ServerError } from 'components/ServerError'
+import { ListSkeleton } from 'components/Skeletons/List'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
 import {
   selectEmailTemplates,
   selectEmailTemplatesError,
   selectEmailTemplatesIsFetching
 } from 'reducers/email-templates'
-import { ServerError } from 'components/ServerError'
-import { ListSkeleton } from 'components/Skeletons/List'
-import AddOrEditEmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useIconStyles } from '../../../../../styles/use-icon-styles'
+import { ScrollableArea } from '../../../ScrollableArea'
 
 import { FooterBottomDrawerZeroState } from './FooterBottomDrawerZeroState'
-import { ScrollableArea } from '../../../ScrollableArea'
 
 interface Props {
   onTemplateSelected: (emailTemplate: IBrandEmailTemplate) => void
@@ -78,10 +79,8 @@ function EmailTemplateSelector({
   const classes = useStyles()
   const iconClasses = useIconStyles()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
-  const [
-    editingTemplate,
-    setEditingTemplate
-  ] = useState<IBrandEmailTemplate | null>(null)
+  const [editingTemplate, setEditingTemplate] =
+    useState<IBrandEmailTemplate | null>(null)
 
   const openNewTemplateDrawer = () => {
     setEditingTemplate(null)
@@ -205,6 +204,7 @@ function EmailTemplateSelector({
     <>
       {templateDrawer}
       <FooterBottomDrawerZeroState
+        // eslint-disable-next-line max-len
         description="There is no email templates. Save your time by creating Email Template with variables for common emails"
         actions={
           <>

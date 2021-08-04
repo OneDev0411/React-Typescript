@@ -1,20 +1,18 @@
-import path from 'path'
 import os from 'os'
+import path from 'path'
 
-import throng from 'throng'
-import express, { Request, Response, NextFunction } from 'express'
 import compress from 'compression'
-import cookieSession from 'cookie-session'
-import enforce from 'express-sslify'
-import timeout from 'connect-timeout'
-import serveStatic from 'serve-static'
-
-import webpack from 'webpack'
 import history from 'connect-history-api-fallback'
+import timeout from 'connect-timeout'
+import cookieSession from 'cookie-session'
+import express, { Request, Response, NextFunction } from 'express'
+import enforce from 'express-sslify'
+import serveStatic from 'serve-static'
+import throng from 'throng'
+import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
-
 import routes from './routes'
 
 const port = process.env.PORT || 8080

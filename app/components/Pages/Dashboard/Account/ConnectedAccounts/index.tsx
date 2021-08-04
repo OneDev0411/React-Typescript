@@ -1,24 +1,24 @@
 import React, { useContext } from 'react'
-import { AnyAction } from 'redux'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
+import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
-
-import LoadingContainer from 'components/LoadingContainer'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import ConnectAccount from './ConnectAccount'
-import ConnectedAccount from './ConnectedAccount'
 import ConnectAccountButtons from './ConnectAccountButtons'
+import ConnectedAccount from './ConnectedAccount'
 
 interface Props {
   accounts: IOAuthAccount[]

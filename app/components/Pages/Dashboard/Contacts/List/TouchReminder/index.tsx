@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
-import { connect } from 'react-redux'
+
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiBellOutline } from '@mdi/js'
+import { connect } from 'react-redux'
 
 import { addNotification, Notification } from 'components/notification'
-
-import useInput from 'hooks/use-input'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useInput from 'hooks/use-input'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

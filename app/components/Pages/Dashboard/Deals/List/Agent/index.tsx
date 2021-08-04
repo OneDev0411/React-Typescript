@@ -1,28 +1,22 @@
 import { useCallback } from 'react'
+
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
-
 import { useEffectOnce } from 'react-use'
 
-import { IAppState } from 'reducers'
-
+import { useQueryParam } from '@app/hooks/use-query-param'
 import { searchDeals, getDeals } from 'actions/deals'
-import { viewAsEveryoneOnTeam } from 'utils/user-teams'
-
 import PageLayout from 'components/GlobalPageLayout'
-
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
-import { useQueryParam } from '@app/hooks/use-query-param'
-
+import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
-
-import Grid from './Grid'
 import TabFilters from './Filters'
-import { ExportDeals } from '../components/ExportDeals'
+import Grid from './Grid'
+import { SORTABLE_COLUMNS } from './helpers/agent-sorting'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,11 +47,9 @@ export default function AgentTable(props: WithRouterProps) {
 
   const fetch = useCallback(
     (user: IUser, searchCriteria: string) => {
-      if (searchCriteria.length === 0 && viewAsEveryoneOnTeam(user)) {
-        dispatch(getDeals(user))
-      } else {
-        dispatch(searchDeals(user, searchCriteria))
-      }
+      dispatch(
+        searchCriteria ? searchDeals(user, searchCriteria) : getDeals(user)
+      )
     },
     [dispatch]
   )

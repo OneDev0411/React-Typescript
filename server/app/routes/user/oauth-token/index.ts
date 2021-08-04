@@ -1,13 +1,10 @@
+import { AxiosError, AxiosResponse } from 'axios'
 import { Response } from 'express'
 
-import { AxiosError, AxiosResponse } from 'axios'
-
 import config from '../../../../config'
-
-import { getParsedHeaders } from '../../../utils/parse-headers'
-import { request } from '../../../libs/request'
-
 import type { RequestWithSession } from '../../../../types'
+import { request } from '../../../libs/request'
+import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: RequestWithSession, res: Response) => {
   request(req, {

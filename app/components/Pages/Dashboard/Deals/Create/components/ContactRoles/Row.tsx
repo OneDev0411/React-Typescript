@@ -1,13 +1,11 @@
 import { Box, Avatar, Typography, Theme, makeStyles } from '@material-ui/core'
-import cn from 'classnames'
 import { mdiPlus } from '@mdi/js'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import cn from 'classnames'
 
 import { TextMiddleTruncate } from '@app/views/components/TextMiddleTruncate'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { convertContactToRole, convertAgentToRole } from '../../../utils/roles'
-
 import type { IDealFormRole } from '../../types'
 
 export enum RowType {

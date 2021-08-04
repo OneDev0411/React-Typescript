@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { mdiLogout } from '@mdi/js'
+
 import {
   Box,
   Tooltip,
@@ -9,12 +8,14 @@ import {
   Popover,
   makeStyles
 } from '@material-ui/core'
+import { mdiLogout } from '@mdi/js'
+import { connect } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Chatroom from '../Util/chatroom'
 import MoreIcon from '../../Partials/Svgs/MoreIcon'
+import Chatroom from '../Util/chatroom'
 
 const useStyles = makeStyles(theme => ({
   paper: { marginTop: theme.spacing(1) }
