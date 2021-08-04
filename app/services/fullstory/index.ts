@@ -9,8 +9,8 @@ export function setupFullStory(user: IUser) {
     })
 
     if (
-      process.env.NODE_ENV === 'production' &&
-      process.env.APP_URL === 'https://app.rechat.com'
+      process.env.NODE_ENV !== 'production' &&
+      process.env.APP_URL !== 'https://app.rechat.com'
     ) {
       window.FS.shutdown()
     }
