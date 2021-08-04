@@ -133,6 +133,10 @@ module.exports = {
         }
       },
       {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
+      },
+      {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         use: {
