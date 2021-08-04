@@ -25,8 +25,8 @@ export async function createTrigger(
     })
 
     // step2: setup a trigger for a field
-    const response = await new Fetch().post('/triggers').send({
-      user: contact.user.id,
+    const payload = {
+      user: triggerData.sender?.id ?? contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
@@ -34,7 +34,11 @@ export async function createTrigger(
       time: triggerData.time,
       campaign: campaign.id,
       contact: contact.id
-    })
+    }
+
+    console.log({ payload, sender: triggerData.sender })
+
+    const response = await new Fetch().post('/triggers').send(payload)
 
     return response.body
   } catch (e) {

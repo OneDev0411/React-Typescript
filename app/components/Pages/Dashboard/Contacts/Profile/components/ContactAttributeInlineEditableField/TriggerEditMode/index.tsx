@@ -2,21 +2,25 @@ import React, { ReactNode, useState, memo } from 'react'
 
 import {
   FormControl,
+  makeStyles,
   Typography,
   InputLabel,
   TextField,
   MenuItem,
+  Tooltip,
   Select,
   Switch,
-  makeStyles,
   Theme
 } from '@material-ui/core'
 import pluralize from 'pluralize'
+
+import { TeamContactSelect } from '../../../../../../../../views/components/TeamContact/TeamContactSelect'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { convertSecondsToDay } from './helpers'
 
 interface Props {
+  sender: IUser
   disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
@@ -27,6 +31,7 @@ interface Props {
   sendBefore: number
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
+  onChangeSender: (value: IContact) => void
   onChangeSendBefore: (value: number) => void
   onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
 }
@@ -61,6 +66,19 @@ const useStyles = makeStyles(
     inputField: {
       width: '100%',
       marginTop: theme.spacing(2)
+    },
+    senderContainer: {
+      marginBottom: theme.spacing(1.25)
+    },
+    sender: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      opacity: ({ disabled }: Pick<Props, 'disabled'>) => (disabled ? 0.6 : 1)
+    },
+    senderLabel: {
+      marginLeft: theme.spacing(0.5),
+      color: theme.palette.grey[500]
     }
   }),
   { name: 'TriggerEditMode' }
@@ -74,13 +92,16 @@ const TriggerEditModeComponent = ({
   renderAttributeFields,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = 0,
+  sender: senderProp,
   subject: subjectProp = '',
+  onChangeSender,
   onChangeActive,
   onChangeSubject,
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
-  const classes = useStyles()
+  const classes = useStyles({ disabled })
+  const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(
@@ -115,6 +136,13 @@ const TriggerEditModeComponent = ({
     onChangeSendBefore(waitFor)
   }
 
+  const handleSenderChange = sender => {
+    const user = sender.value
+
+    setSender(user)
+    onChangeSender(user)
+  }
+
   const handleSelectTemplate = (
     templateInstance: IMarketingTemplateInstance
   ) => {
@@ -131,6 +159,35 @@ const TriggerEditModeComponent = ({
       <div className={classes.containerItem}>
         {renderAttributeFields()}
         <div className={classes.triggerFields}>
+          <div className={classes.senderContainer}>
+            <TeamContactSelect
+              owner={sender}
+              user={sender}
+              onSelect={handleSenderChange}
+              buttonRenderer={buttonProps => {
+                const title = buttonProps.selectedItem.label
+
+                return (
+                  <Tooltip title="Click to Change Sender">
+                    <div
+                      className={classes.sender}
+                      onClick={buttonProps.onClick}
+                    >
+                      <Typography variant="body2">{title}</Typography>
+                      <Typography
+                        variant="caption"
+                        className={classes.senderLabel}
+                      >
+                        Sender
+                      </Typography>
+                    </div>
+                  </Tooltip>
+                )
+              }}
+              upsideDown
+              fullWidth
+            />
+          </div>
           <div className={classes.switch}>
             <div className={classes.switchContainer}>
               <Typography component="span" variant="subtitle2">
