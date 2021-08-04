@@ -1,16 +1,9 @@
 import React from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
 import Dialog from '@material-ui/core/Dialog'
+import { useTheme, Theme } from '@material-ui/core/styles'
 
 import { ListingDetails } from '../ListingDetails'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    dialog: { zIndex: theme.zIndex.modal + 2 }
-  }),
-  { name: 'ListingDetailsModal' }
-)
 
 interface Props {
   listingId: UUID | null
@@ -25,23 +18,26 @@ function ListingDetailsModal({
   closeHandler,
   isWidget = false
 }: Props) {
-  const classes = useStyles()
+  const theme: Theme = useTheme()
 
   return (
     <Dialog
       open={isOpen}
       fullScreen
-      className={classes.dialog}
+      scroll="paper"
       classes={{
         root: 'u-scrollbar'
       }}
+      style={{ zIndex: theme.zIndex.modal + 2 }}
     >
       {listingId && (
-        <ListingDetails
-          isWidget={isWidget}
-          id={listingId}
-          onClose={closeHandler}
-        />
+        <>
+          <ListingDetails
+            isWidget={isWidget}
+            id={listingId}
+            onClose={closeHandler}
+          />
+        </>
       )}
     </Dialog>
   )
