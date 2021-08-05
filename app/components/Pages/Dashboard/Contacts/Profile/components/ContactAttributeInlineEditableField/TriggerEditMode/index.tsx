@@ -12,6 +12,7 @@ import {
   Switch,
   Theme
 } from '@material-ui/core'
+import cn from 'classnames'
 import pluralize from 'pluralize'
 
 import { TeamContactSelect } from '../../../../../../../../views/components/TeamContact/TeamContactSelect'
@@ -73,9 +74,9 @@ const useStyles = makeStyles(
     sender: {
       display: 'inline-flex',
       alignItems: 'center',
-      cursor: 'pointer',
-      opacity: ({ disabled }: Pick<Props, 'disabled'>) => (disabled ? 0.6 : 1)
+      cursor: 'pointer'
     },
+    isSenderDiabled: { opacity: 0.6 },
     senderLabel: {
       marginLeft: theme.spacing(0.5),
       color: theme.palette.grey[500]
@@ -100,7 +101,7 @@ const TriggerEditModeComponent = ({
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
-  const classes = useStyles({ disabled })
+  const classes = useStyles()
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
@@ -161,6 +162,7 @@ const TriggerEditModeComponent = ({
         <div className={classes.triggerFields}>
           <div className={classes.senderContainer}>
             <TeamContactSelect
+              disabled={disabled || !isActive}
               owner={sender}
               user={sender}
               onSelect={handleSenderChange}
@@ -168,9 +170,17 @@ const TriggerEditModeComponent = ({
                 const title = buttonProps.selectedItem.label
 
                 return (
-                  <Tooltip title="Click to Change Sender">
+                  <Tooltip
+                    title={
+                      !buttonProps.disabled
+                        ? 'Click to Change Sender'
+                        : 'Trigger is not Active'
+                    }
+                  >
                     <div
-                      className={classes.sender}
+                      className={cn(classes.sender, {
+                        [classes.isSenderDiabled]: buttonProps.disabled
+                      })}
                       onClick={buttonProps.onClick}
                     >
                       <Typography variant="body2">{title}</Typography>
