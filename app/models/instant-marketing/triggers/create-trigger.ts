@@ -21,12 +21,13 @@ export async function createTrigger(
 
     // step1: create a email campaign
     const campaign = await getTriggerCampaign(contact, templateInstance.id, {
-      subject: triggerData.subject
+      subject: triggerData.subject,
+      sender: triggerData.sender
     })
 
     // step2: setup a trigger for a field
     const payload = {
-      user: triggerData.sender?.id ?? contact.user.id,
+      user: contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
       wait_for: triggerData.wait_for,
