@@ -1,8 +1,9 @@
-import { Grid, Box, useTheme, useMediaQuery } from '@material-ui/core'
+import { Grid, Box, useTheme } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 
-import { QuestionWizard } from 'components/QuestionWizard'
-import { ScrollableArea } from 'views/components/ScrollableArea'
+import useIsMobile from '@app/hooks/use-is-mobile'
+import { QuestionWizard } from '@app/views/components/QuestionWizard'
+import { ScrollableArea } from '@app/views/components/ScrollableArea'
 
 import { getFormattedAppointmentDateTime } from '../../utils'
 
@@ -32,7 +33,7 @@ export default function ShowingAppointmentFeedbackForm({
   onSubmit
 }: Props) {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
+  const isMobile = useIsMobile()
 
   const { handleSubmit, control } = useForm<FormFields>({
     mode: 'onChange'
@@ -45,10 +46,11 @@ export default function ShowingAppointmentFeedbackForm({
           <ScrollableArea
             hasInvisibleScrollbar
             shadowColor="transparent"
-            style={{ position: 'absolute', height: '100%' }}
+            style={
+              isMobile ? undefined : { position: 'absolute', height: '100%' }
+            }
           >
             <QuestionWizard
-              onFinish={console.log}
               styles={isMobile ? undefined : { paddingRight: '2rem' }}
             >
               <IntroStep>

@@ -71,7 +71,7 @@ export class InlineAddressField extends React.Component {
       !isMapLibrariesLoaded(googleMapAPIParams.libraries)
     ) {
       window.isLoadingGoogleApi = true
-      loadMapLibraries(googleMapAPIParams, 'loadJS-inline-address-field')
+      loadMapLibraries(googleMapAPIParams)
     }
   }
 
