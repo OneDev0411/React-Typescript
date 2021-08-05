@@ -137,7 +137,7 @@ class Search extends React.Component {
     if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
     } else {
-      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
+      loadMapLibraries(googleMapAPIParams)
     }
   }
 

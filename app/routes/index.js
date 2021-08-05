@@ -255,15 +255,6 @@ const AsyncMLSSinglePage = Load({
     )
 })
 
-const AsyncMLSMarketing = withAcl.marketing(
-  Load({
-    loader: () =>
-      import(
-        '../components/Pages/Dashboard/MLS/Marketing' /* webpackChunkName: "listing_marketing" */
-      )
-  })
-)
-
 /* ==================================== */
 //  Agent Network
 /* ==================================== */
@@ -483,6 +474,15 @@ const AsyncMarketingWizard = withAcl.marketing(
     loader: () =>
       import(
         '../components/Pages/Dashboard/Marketing/Wizard' /* webpackChunkName: "marketing_wizard" */
+      )
+  })
+)
+
+const AsyncMarketingMls = withAcl.marketing(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Marketing/Mls' /* webpackChunkName: "marketing_listing" */
       )
   })
 )
@@ -939,6 +939,7 @@ export default (
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
         <Route path="marketing/wizard" component={AsyncMarketingWizard} />
         <Route path="marketing/editor" component={AsyncMarketingEditor} />
+        <Route path="marketing/mls/:id" component={AsyncMarketingMls} />
         <Route
           path="marketing/:types(/:medium)"
           component={AsyncMarketingTemplates}
@@ -1003,10 +1004,6 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
-        <Route
-          path="/dashboard/mls/:id/marketing"
-          component={AsyncMLSMarketing}
-        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
