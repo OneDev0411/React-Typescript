@@ -1,13 +1,12 @@
 export function setupFullStory(user: IUser) {
-  // We only record sessions on FullStory if it's not on development environment
-  // That includes beta.rechat.com
-
   if (window?.FS && user) {
     window.FS.identify(user.id, {
       name: user.display_name,
       email: user.email
     })
 
+    // We check for an ENV variable (ENABLE_FULLSTORY) which is set on deployed
+    // Heroku instances. If it's set, we continue recording, otherwise we stop
     if (!process.env.ENABLE_FULLSTORY) {
       window.FS.shutdown()
     }
