@@ -1,4 +1,5 @@
 import React, { MouseEvent } from 'react'
+
 import {
   IconButton,
   Typography,
@@ -18,8 +19,6 @@ const useStyles = makeStyles(
       alignItems: 'center',
       justifyContent: 'start',
       padding: theme.spacing(1.5),
-      // transition: 'box-shadow 1s ease-in',
-      // box-shadow: 0 0 0 1px theme.palette.primary.main inset
       '&:nth-child(even)': {
         background: theme.palette.grey[50]
       }
@@ -70,11 +69,7 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
   }
 
   return (
-    <div
-      className={classes.container}
-      // highlight={tag.highlight}
-      // data-test={`tag-item-${tag.text}`}
-    >
+    <div className={classes.container}>
       <Typography variant="body2" className={classes.title}>
         {tag.text}
       </Typography>
