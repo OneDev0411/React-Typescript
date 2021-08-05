@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Theme, makeStyles } from '@material-ui/core'
 
 import Item from './Item'
@@ -15,8 +16,8 @@ const useStyles = makeStyles(
     },
     rowTitle: {
       color: theme.palette.tertiary.dark,
+      width: theme.spacing(5),
       marginTop: theme.spacing(2),
-      marginRight: theme.spacing(3),
       ...theme.typography.subtitle1
     },
     itemContainer: {
