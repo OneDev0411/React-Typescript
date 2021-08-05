@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import {
   Theme,
   Button,
@@ -143,7 +144,10 @@ export function EditMode({
                     ? pluralize('Day', touchDate)
                     : 'Day'}
                 </InputAdornment>
-              )
+              ),
+              inputProps: {
+                min: 0
+              }
             }}
             variant="outlined"
             className={classes.inputField}
