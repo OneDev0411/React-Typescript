@@ -62,7 +62,7 @@ class PdfList extends React.Component {
 
     this.props.files.forEach(async file => {
       try {
-        const doc = await PDFJS.getDocument(file.url)
+        const doc = await PDFJS.getDocument(file.url).promise
 
         await this.props.onDocumentLoad(file.id, doc)
       } catch (e) {
