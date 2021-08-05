@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       field so it looks inconsistent, so I made this change
       to have consistent design
     */
-    '&:after,&:before': {
+    '&:after, &:before': {
       borderBottom: 0
     },
     '&:hover': {

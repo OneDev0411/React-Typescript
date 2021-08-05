@@ -1,8 +1,9 @@
 import React, { useState, MouseEvent } from 'react'
 
-import { ViewMode } from './ViewMode'
-import { EditMode } from './EditMode'
 import { Props as BaseProps } from '../Row'
+
+import { EditMode } from './EditMode'
+import { ViewMode } from './ViewMode'
 
 interface Props extends Pick<BaseProps, 'onChange' | 'onDelete'> {
   tag: IContactTag & { highlight: boolean }
@@ -26,8 +27,6 @@ export default function ManageTagsItem(props: Props) {
     if (loading) {
       return
     }
-
-    console.log({ text, touchDate })
 
     try {
       setLoading(true)
