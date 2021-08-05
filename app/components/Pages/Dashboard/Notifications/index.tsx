@@ -8,8 +8,8 @@ import { markNotificationAsSeen } from 'actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers/index'
-import { selectNotificationNewCount } from 'reducers/notifications'
 import {
+  selectNotificationNewCount,
   selectNotifications,
   selectNotificationIsFetching
 } from 'reducers/notifications'

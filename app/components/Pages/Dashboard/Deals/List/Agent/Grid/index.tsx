@@ -8,8 +8,11 @@ import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
 import { goTo } from '@app/utils/go-to'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
-import { TrProps } from 'components/Grid/Table/types'
-import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
+import {
+  TrProps,
+  SortableColumn,
+  ColumnSortType
+} from 'components/Grid/Table/types'
 import {
   isActiveDeal,
   isArchivedDeal,
@@ -75,7 +78,7 @@ function AgentGrid(props: Props & WithRouterProps) {
   const user = useSelector(selectUser)
   const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
-  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
 
   const columns = [
     {

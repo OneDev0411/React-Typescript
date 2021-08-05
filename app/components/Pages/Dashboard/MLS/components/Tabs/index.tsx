@@ -1,7 +1,12 @@
 import React, { ReactNode } from 'react'
 
-import { Box } from '@material-ui/core'
-import { Theme, ButtonBase, makeStyles, createStyles } from '@material-ui/core'
+import {
+  Box,
+  Theme,
+  ButtonBase,
+  makeStyles,
+  createStyles
+} from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import { withRouter, WithRouterProps } from 'react-router'
 

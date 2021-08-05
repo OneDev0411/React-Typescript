@@ -5,6 +5,7 @@ import ShowingFilteredBookingList, {
 } from '../../components/ShowingFilteredBookingList'
 import { generateAppointmentFilterLink } from '../../helpers'
 
+import useShowingsAckAppointmentNotifications from './use-showings-ack-appointment-notifications'
 import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
@@ -23,6 +24,9 @@ function ShowingsTabBookings({
   const dismissShowingsAppointmentNotifications =
     useShowingsDismissAppointmentNotifications(setShowings)
 
+  const ackShowingsAppointmentNotifications =
+    useShowingsAckAppointmentNotifications(setShowings)
+
   return (
     <ShowingFilteredBookingList
       appointments={appointments}
@@ -30,6 +34,7 @@ function ShowingsTabBookings({
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={updateShowingsAppointmentStatus}
       onDismissAction={dismissShowingsAppointmentNotifications}
+      onAckAction={ackShowingsAppointmentNotifications}
       stackDateAndTimeColumns
       // eslint-disable-next-line max-len
       emptyDescription="Create your first showing for your off-market or MLS listings under 2 minutes."
