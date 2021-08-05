@@ -101,7 +101,7 @@ export default function ShowingApprovalAppointmentReject({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Typography variant="h6">
-                  You’re rejecting your{' '}
+                  You are rejecting your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}

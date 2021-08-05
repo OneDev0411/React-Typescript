@@ -101,7 +101,7 @@ export default function ShowingApprovalAppointmentCancel({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Typography variant="h6">
-                  You’re canceling your{' '}
+                  You are canceling your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
