@@ -1,10 +1,9 @@
-import pdfjs from 'pdfjs-dist'
-
 export default async function importPdfJs() {
-  /* eslint-disable max-len */
-  // const pdfjs = await import('pdfjs-dist' /* webpackChunkName: "pdfviewjs" */)
-  pdfjs.GlobalWorkerOptions.workerSrc =
-    'https://pdfjs-dist.surge.sh/pdf.worker.da7d4a6.min.js?hash=da7d4a6'
+  const PDFJS = await import('pdfjs-dist')
+  // const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry')
 
-  return pdfjs
+  PDFJS.GlobalWorkerOptions.workerSrc =
+    'https://pdfjs-dist.surge.sh/pdf.worker.min.98bbbce.js'
+
+  return PDFJS
 }

@@ -176,7 +176,7 @@ export class PdfViewer extends React.Component {
       })
     }
 
-    pdfDocument
+    pdfDocument.promise
       .then(document => {
         this.setState({
           isLoading: false,
@@ -188,6 +188,10 @@ export class PdfViewer extends React.Component {
         console.log(e)
         this.setState({ isLoading: false, isFailed: true })
       })
+  }
+
+  handleOpenInNewWindow = () => {
+    window.open(this.props.url)
   }
 
   handleKeyboardShortcuts = event => {
@@ -263,6 +267,7 @@ export class PdfViewer extends React.Component {
           onZoomIn={this.handleZoomIn}
           onZoomOut={this.handleZoomOut}
           onRotate={this.handleRotate}
+          onNewWindow={this.handleOpenInNewWindow}
         />
         <Container ref={ref => (this.pdfContainer = ref)}>
           {Array.apply(null, { length: this.state.document.numPages }).map(

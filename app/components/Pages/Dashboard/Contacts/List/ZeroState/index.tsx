@@ -1,5 +1,4 @@
-import { Button } from '@material-ui/core'
-import { Theme, makeStyles } from '@material-ui/core'
+import { Button, Theme, makeStyles } from '@material-ui/core'
 import { browserHistory } from 'react-router'
 
 import { CreateContact } from 'components/CreateContact'

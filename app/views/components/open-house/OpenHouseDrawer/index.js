@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
-import { mdiTrashCanOutline } from '@mdi/js'
 import {
+  mdiTrashCanOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline
@@ -34,14 +34,18 @@ import { Description } from '../../EventDrawer/components/Description'
 import { EventField } from '../../EventDrawer/components/EventField'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { Title } from '../../EventDrawer/components/Title'
-import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { AssociationContainer } from '../../EventDrawer/styled'
+import {
+  FormContainer,
+  FieldContainer,
+  AssociationContainer
+} from '../../EventDrawer/styled'
 import {
   AssigneesField,
   DateTimeField,
-  FieldError
+  FieldError,
+  AssociationsList,
+  EndTimeField
 } from '../../final-form-fields'
-import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Drawer from '../../OverlayDrawer'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 

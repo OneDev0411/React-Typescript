@@ -2,51 +2,34 @@ import {
   Stepper,
   Step,
   StepLabel,
+  StepContent,
   Typography,
   useTheme
 } from '@material-ui/core'
-import { mdiCheck } from '@mdi/js'
-import cn from 'classnames'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getFormattedAppointmentDateTime } from '../utils'
-
-import { useShowingAppointmentStatusDetailsStyles } from './hooks'
 
 interface Props {
   appointment: IPublicShowingAppointment<'showing'>
 }
 
 export default function ShowingAppointmentConfirmed({ appointment }: Props) {
-  const classes = useShowingAppointmentStatusDetailsStyles()
   const theme = useTheme()
 
   return (
-    <Stepper orientation="vertical" className={classes.stepper}>
-      <Step>
-        <StepLabel
-          className={classes.stepLabel}
-          StepIconComponent={() => (
-            <div
-              className={cn(
-                classes.stepIconContainer,
-                classes.activeStepIconContainer
-              )}
-            >
-              <SvgIcon color={theme.palette.common.white} path={mdiCheck} />
-            </div>
-          )}
-        >
+    <Stepper orientation="vertical">
+      <Step active>
+        <StepLabel>
           <Typography variant="h6">You're All Set!</Typography>
-
+        </StepLabel>
+        <StepContent>
           <Typography variant="body1" color="textSecondary">
             You set an appointment for{' '}
             <span style={{ color: theme.palette.text.primary }}>
               {getFormattedAppointmentDateTime(appointment)}
             </span>
           </Typography>
-        </StepLabel>
+        </StepContent>
       </Step>
     </Stepper>
   )
