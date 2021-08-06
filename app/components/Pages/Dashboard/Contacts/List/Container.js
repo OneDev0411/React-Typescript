@@ -94,11 +94,14 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    const { parkedContactsCount } = this.state
+    const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    this.order =
-      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
+    this.order = searchInputValue
+      ? '-last_touch_rank'
+      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
+        '-last_touch'
+
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
@@ -430,7 +433,16 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({ parked: undefined }, true)
+
+      const relevanceValue = '-last_touch_rank'
+
+      if (value) {
+        this.order = relevanceValue
+      } else if (this.order === relevanceValue) {
+        this.order = '-updated_at'
+      }
+
+      this.handleFilterChange({ parked: undefined }, true, this.order)
     })
   }
 
@@ -754,7 +766,7 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { selectedShortcutFilter } = this.state
+    const { selectedShortcutFilter, searchInputValue } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -784,7 +796,8 @@ class ContactsList extends React.Component {
         }}
         sortProps={{
           onChange: this.handleChangeOrder,
-          currentOrder: this.order
+          currentOrder: this.order,
+          searchValue: searchInputValue
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
