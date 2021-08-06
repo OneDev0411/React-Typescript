@@ -9,8 +9,7 @@ import {
   Button,
   Fade,
   Typography,
-  useTheme,
-  Tooltip
+  useTheme
 } from '@material-ui/core'
 import { mdiCalendar } from '@mdi/js'
 import { CalendarEvent } from 'calendar-link'
@@ -74,28 +73,24 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
               <Grid item>
                 <Fade in={isCalendarButtonsVisible} mountOnEnter>
                   <div>
-                    <Tooltip title="Add To Google Calendar" placement="top">
-                      <AddToCalendarButton
-                        calendar="Google"
-                        {...addTocalendarButtonProps}
-                      >
-                        Google
-                      </AddToCalendarButton>
-                    </Tooltip>
+                    <AddToCalendarButton
+                      calendar="Google"
+                      {...addTocalendarButtonProps}
+                    >
+                      Google
+                    </AddToCalendarButton>
                   </div>
                 </Fade>
               </Grid>
               <Grid item>
                 <Fade in={isCalendarButtonsVisible} mountOnEnter>
                   <div>
-                    <Tooltip title="Add To Outlook Calendar" placement="top">
-                      <AddToCalendarButton
-                        calendar="Outlook"
-                        {...addTocalendarButtonProps}
-                      >
-                        Outlook
-                      </AddToCalendarButton>
-                    </Tooltip>
+                    <AddToCalendarButton
+                      calendar="Outlook"
+                      {...addTocalendarButtonProps}
+                    >
+                      Outlook
+                    </AddToCalendarButton>
                   </div>
                 </Fade>
               </Grid>
