@@ -31,6 +31,7 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
 
   const addTocalendarButtonProps: CalendarEvent = {
     title: appointment.showing.title,
+    description: `Showing appointment, ${appointment.showing.title}`,
     location: appointment.showing.listing?.property.address.full_address,
     start: appointment.time,
     duration: [appointment.showing.duration, 'seconds']
