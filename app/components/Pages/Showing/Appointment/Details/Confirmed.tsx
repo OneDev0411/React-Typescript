@@ -9,7 +9,8 @@ import {
   Button,
   Fade,
   Typography,
-  useTheme
+  useTheme,
+  Tooltip
 } from '@material-ui/core'
 import { mdiCalendar } from '@mdi/js'
 import { CalendarEvent } from 'calendar-link'
@@ -58,36 +59,42 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
               alignItems="center"
               spacing={2}
             >
-              <Grid item>
-                <Button
-                  variant="text"
-                  onClick={() => setIsCalendarButtonsVisible(true)}
-                >
-                  <SvgIcon path={mdiCalendar} />
-                  &nbsp;Add To Calendar
-                </Button>
-              </Grid>
+              {!isCalendarButtonsVisible && (
+                <Grid item>
+                  <Button
+                    variant="text"
+                    onClick={() => setIsCalendarButtonsVisible(true)}
+                  >
+                    <SvgIcon path={mdiCalendar} />
+                    &nbsp;Add To Calendar
+                  </Button>
+                </Grid>
+              )}
               <Grid item>
                 <Fade in={isCalendarButtonsVisible} mountOnEnter>
                   <div>
-                    <AddToCalendarButton
-                      calendar="Google"
-                      {...addTocalendarButtonProps}
-                    >
-                      Google
-                    </AddToCalendarButton>
+                    <Tooltip title="Add To Google Calendar" placement="top">
+                      <AddToCalendarButton
+                        calendar="Google"
+                        {...addTocalendarButtonProps}
+                      >
+                        Google
+                      </AddToCalendarButton>
+                    </Tooltip>
                   </div>
                 </Fade>
               </Grid>
               <Grid item>
                 <Fade in={isCalendarButtonsVisible} mountOnEnter>
                   <div>
-                    <AddToCalendarButton
-                      calendar="Outlook"
-                      {...addTocalendarButtonProps}
-                    >
-                      Outlook
-                    </AddToCalendarButton>
+                    <Tooltip title="Add To Outlook Calendar" placement="top">
+                      <AddToCalendarButton
+                        calendar="Outlook"
+                        {...addTocalendarButtonProps}
+                      >
+                        Outlook
+                      </AddToCalendarButton>
+                    </Tooltip>
                   </div>
                 </Fade>
               </Grid>
