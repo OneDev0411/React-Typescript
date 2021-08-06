@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
@@ -7,10 +7,12 @@ import { useEffectOnce } from 'react-use'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { searchDeals, getDeals } from 'actions/deals'
+import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
+import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
@@ -37,8 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
-
   const dispatch = useDispatch()
+
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
@@ -59,6 +61,14 @@ export default function AgentTable(props: WithRouterProps) {
       fetch(user, searchCriteria)
     }
   })
+
+  useEffect(() => {
+    dispatch(
+      setUserSetting(DEAL_GRID_FILTER_SETTING_KEY, {
+        term: searchCriteria
+      })
+    )
+  }, [searchCriteria, dispatch])
 
   const handleQueryChange = (value: string) => {
     if (isFetchingDeals) {
