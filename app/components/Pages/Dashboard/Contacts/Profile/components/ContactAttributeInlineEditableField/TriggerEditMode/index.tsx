@@ -194,7 +194,6 @@ const TriggerEditModeComponent = ({
                   </Tooltip>
                 )
               }}
-              upsideDown
               fullWidth
             />
           </div>
