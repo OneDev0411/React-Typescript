@@ -37,8 +37,6 @@ export async function createTrigger(
       contact: contact.id
     }
 
-    console.log({ payload, sender: triggerData.sender })
-
     const response = await new Fetch().post('/triggers').send(payload)
 
     return response.body
