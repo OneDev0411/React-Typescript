@@ -50,12 +50,11 @@ function getStateFromAttribute(attribute) {
 function getStateFromTrigger(trigger, contact, attribute) {
   const attributeName = attribute?.attribute_def?.name || ''
 
-  console.log('getStateFromTrigger', { trigger })
-
   if (trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
+      triggerSender: trigger.campaign?.from ?? contact.user,
       triggerSubject:
         trigger.campaign?.subject || getTriggerSubject(attributeName),
       triggerSendBefore: trigger.wait_for || 0,
