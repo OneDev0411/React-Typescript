@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
+import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 import { Table } from '@app/views/components/Grid/Table'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
@@ -30,6 +31,10 @@ const useStyles = makeStyles(
   { name: 'ListingsList' }
 )
 
+const OPTIONS: GetBrandListingsOptions = {
+  status: ['Active']
+}
+
 interface ListingsListProps
   extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
   brandId: UUID
@@ -38,7 +43,10 @@ interface ListingsListProps
 
 function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
   const classes = useStyles()
-  const { listings: rows, isLoading } = useBrandAndDealsListings(brandId)
+  const { listings: rows, isLoading } = useBrandAndDealsListings(
+    brandId,
+    OPTIONS
+  )
 
   const resultRows = useListingsSearchRows(rows, searchTerm)
   const sortedRows = useListingsListSort(resultRows)
