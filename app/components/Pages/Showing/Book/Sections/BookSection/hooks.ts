@@ -25,8 +25,6 @@ export function useBookTimeRange(
   showing: IPublicShowing,
   date?: Date
 ): UseBookTimeRange {
-  // const [startTime, setStartTime] = useState<number>(0)
-  // const [endTime, setEndTime] = useState<number>(0)
   const [availableRanges, setAvailableRanges] = useState<TimeRange[]>([])
   const [defaultSelectedTimeRange, setDefaultSelectedTimeRange] =
     useState<Optional<TimeRange>>(undefined)
@@ -50,16 +48,6 @@ export function useBookTimeRange(
 
       return
     }
-
-    // const availabilityStart = Math.min(
-    //   ...weekdayAvailabilities.map(item => item.availability[0])
-    // )
-    // const availabilityEnd = Math.max(
-    //   ...weekdayAvailabilities.map(item => item.availability[1])
-    // )
-
-    // setStartTime(availabilityStart)
-    // setEndTime(availabilityEnd)
 
     const ranges: TimeRange[] = weekdayAvailabilities.map(
       ({ availability }) => [availability[0], availability[1]]
