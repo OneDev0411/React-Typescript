@@ -2,13 +2,15 @@ import React, { Fragment } from 'react'
 
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
+import { reorder } from '@app/utils/dnd-reorder'
+
 export class Body extends React.Component {
   onDragEnd = result => {
     if (!result.destination) {
       return false
     }
 
-    const newList = this.reorder(
+    const newList = reorder(
       this.props.list,
       result.source.index,
       result.destination.index
@@ -21,15 +23,6 @@ export class Body extends React.Component {
     const newList = this.props.list.filter(row => row.id !== item.id)
 
     this.props.onUpdateList(newList, 'remove')
-  }
-
-  reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-
-    result.splice(endIndex, 0, removed)
-
-    return result
   }
 
   getListStyle = () => ({

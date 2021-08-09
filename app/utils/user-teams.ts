@@ -205,7 +205,7 @@ type GetSettings = (
   includesParents?: boolean
 ) => StringMap<any>
 
-const getSettingsFromActiveTeam =
+export const getSettingsFromActiveTeam =
   (getSettings: GetSettings) =>
   (user: IUser | null, includesParents?: boolean) => {
     const team = getActiveTeam(user)
