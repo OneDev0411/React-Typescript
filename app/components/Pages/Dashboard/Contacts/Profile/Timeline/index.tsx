@@ -7,8 +7,8 @@ import React, {
 
 import { makeStyles, Theme } from '@material-ui/core'
 
-import List from 'components/Calendar'
-import { CalendarRef } from 'components/Calendar/types'
+import List from 'components/ContactProfileTimeline'
+import { CalendarRef } from 'components/ContactProfileTimeline/types'
 
 import { Filters } from '../Tabs'
 
