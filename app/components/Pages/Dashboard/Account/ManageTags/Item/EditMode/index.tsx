@@ -79,8 +79,10 @@ export function EditMode({
   const open = Boolean(anchorEl)
   const id = open ? 'popover-edit-tag' : undefined
 
-  const handleOnSave: SubmitHandler<FormData> = ({ text, touchDate = '0' }) => {
-    onSave(text, parseInt(touchDate!, 10))
+  const handleOnSave: SubmitHandler<FormData> = ({ text, touchDate }) => {
+    const numberTouchDate = parseInt(touchDate! || '0', 10)
+
+    onSave(text, numberTouchDate)
   }
 
   return (
