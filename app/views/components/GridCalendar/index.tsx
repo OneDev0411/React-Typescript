@@ -194,7 +194,8 @@ export const GridCalendarPresentation = ({
 
     await fetchEvents(
       {
-        range: query
+        range: query,
+        position: 'Middle'
       },
       {
         reset: true
@@ -253,7 +254,8 @@ export const GridCalendarPresentation = ({
 
       setCalendarRange(nextCalendarRange)
       fetchEvents({
-        range: query
+        range: query,
+        position: 'Next'
       })
     },
     [createRanges, fetchEvents, isLoading]
