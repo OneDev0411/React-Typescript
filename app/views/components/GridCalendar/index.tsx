@@ -8,14 +8,14 @@ import React, {
 } from 'react'
 
 // eslint-disable-next-line import/order
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import FullCalendar, {
   EventApi,
   EventInput,
   DatesSetArg,
   EventContentArg
 } from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import rrulePlugin from '@fullcalendar/rrule'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { makeStyles, Theme } from '@material-ui/core'
@@ -23,20 +23,18 @@ import _map from 'lodash/map'
 import { connect } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-// List of full calendar assets
-
 import {
   CrmEventType,
   ApiOptions,
   FetchOptions
-} from 'components/Calendar/types'
+} from 'components/ContactProfileTimeline/types'
 import { getCalendar, FilterQuery } from 'models/calendar/get-calendar'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
 import { updateTask } from 'models/tasks'
 import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
 
-import { upsertCrmEvents } from '../Calendar/helpers/upsert-crm-events'
+import { upsertCrmEvents } from '../ContactProfileTimeline/helpers/upsert-crm-events'
 
 import { Event } from './components/Event'
 import { EventController } from './components/EventController'
