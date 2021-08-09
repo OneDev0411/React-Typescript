@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import {
   Theme,
@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import pluralize from 'pluralize'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
@@ -51,6 +52,11 @@ interface Props {
   onSave: (text: string, touchDate: Nullable<number>) => void
 }
 
+interface FormData {
+  text: string
+  touchDate: Nullable<string>
+}
+
 export function EditMode({
   tag,
   loading,
@@ -59,36 +65,23 @@ export function EditMode({
   handleClose
 }: Props) {
   const classes = useStyles()
-  const [isDirty, setIsDirty] = useState<boolean>(false)
-  const [text, setText] = useState<string>(tag.text || '')
-  const [touchDate, setTouchDate] = useState<Nullable<number>>(
-    tag.touch_freq || 0
-  )
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isDirty }
+  } = useForm<FormData>({
+    defaultValues: {
+      text: tag.text || '',
+      touchDate: tag.touch_freq?.toString() || '0'
+    }
+  })
+
   const open = Boolean(anchorEl)
   const id = open ? 'popover-edit-tag' : undefined
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-
-    setText(value)
+  const handleOnSave: SubmitHandler<FormData> = ({ text, touchDate = '0' }) => {
+    onSave(text, parseInt(touchDate!, 10))
   }
-  const handleTouchDateChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = parseInt(event.target.value, 10)
-
-    setTouchDate(value)
-  }
-
-  const handleOnSave = () => onSave(text, touchDate)
-
-  useEffect(() => {
-    if (text !== tag.text || touchDate !== tag.touch_freq) {
-      setIsDirty(true)
-    } else {
-      setIsDirty(false)
-    }
-  }, [tag.text, tag.touch_freq, text, touchDate])
 
   return (
     <Popover
@@ -105,66 +98,98 @@ export function EditMode({
         horizontal: 'center'
       }}
     >
-      <div className={classes.container}>
-        <div className={classes.header}>
-          <Typography variant="h6">Edit Tag</Typography>
-          <div className={classes.close} onClick={handleClose}>
-            <SvgIcon path={mdiClose} />
+      <form onSubmit={handleSubmit(handleOnSave)} noValidate>
+        <div className={classes.container}>
+          <div className={classes.header}>
+            <Typography variant="h6">Edit Tag</Typography>
+            <div className={classes.close} onClick={handleClose}>
+              <SvgIcon path={mdiClose} />
+            </div>
+          </div>
+          <div className={classes.fields}>
+            <Controller
+              name="text"
+              control={control}
+              rules={{
+                required: 'Required'
+              }}
+              render={({ ...props }) => {
+                const error: string | undefined =
+                  errors[props.name]?.message ?? undefined
+
+                return (
+                  <TextField
+                    {...props}
+                    type="text"
+                    size="small"
+                    label="Title"
+                    color="secondary"
+                    error={!!error}
+                    helperText={error}
+                    variant="outlined"
+                    className={classes.inputField}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                )
+              }}
+            />
+            <Controller
+              name="touchDate"
+              control={control}
+              rules={{
+                min: {
+                  value: 0,
+                  message: 'Touch Date must be grater than 0 or equal.'
+                }
+              }}
+              render={({ ref, value, ...props }) => {
+                const error: string | undefined =
+                  errors[props.name]?.message ?? undefined
+
+                return (
+                  <TextField
+                    {...props}
+                    type="number"
+                    label="Touch Date"
+                    size="small"
+                    color="secondary"
+                    value={value}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {value && value > 0 ? pluralize('Day', value) : 'Day'}
+                        </InputAdornment>
+                      ),
+                      inputProps: {
+                        min: 0
+                      }
+                    }}
+                    error={!!error}
+                    helperText={error}
+                    variant="outlined"
+                    className={classes.inputField}
+                  />
+                )
+              }}
+            />
+
+            <Button
+              color="secondary"
+              variant="contained"
+              type="submit"
+              disabled={loading || !isDirty}
+              className={classes.inputField}
+            >
+              Save
+            </Button>
           </div>
         </div>
-        <div className={classes.fields}>
-          <TextField
-            id="title"
-            label="Title"
-            type="text"
-            size="small"
-            color="secondary"
-            defaultValue={text}
-            InputLabelProps={{
-              shrink: true
-            }}
-            variant="outlined"
-            className={classes.inputField}
-            onChange={handleTitleChange}
-          />
-          <TextField
-            id="touch-date"
-            label="Touch Date"
-            type="number"
-            size="small"
-            color="secondary"
-            defaultValue={touchDate}
-            InputLabelProps={{
-              shrink: true
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  {touchDate && touchDate > 0
-                    ? pluralize('Day', touchDate)
-                    : 'Day'}
-                </InputAdornment>
-              ),
-              inputProps: {
-                min: 0
-              }
-            }}
-            variant="outlined"
-            className={classes.inputField}
-            onChange={handleTouchDateChange}
-          />
-
-          <Button
-            color="secondary"
-            variant="contained"
-            disabled={loading || !isDirty}
-            className={classes.inputField}
-            onClick={handleOnSave}
-          >
-            Save
-          </Button>
-        </div>
-      </div>
+      </form>
     </Popover>
   )
 }
