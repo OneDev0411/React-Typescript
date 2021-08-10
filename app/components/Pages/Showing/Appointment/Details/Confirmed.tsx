@@ -28,7 +28,7 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
   const [isCalendarButtonsVisible, setIsCalendarButtonsVisible] =
     useState<boolean>(false)
 
-  const addTocalendarButtonProps: CalendarEvent = {
+  const addToCalendarButtonProps: CalendarEvent = {
     title: appointment.showing.title,
     description: `Showing appointment, ${appointment.showing.title}`,
     location: appointment.showing.listing?.property.address.full_address,
@@ -75,7 +75,7 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
                   <div>
                     <AddToCalendarButton
                       calendar="Google"
-                      {...addTocalendarButtonProps}
+                      {...addToCalendarButtonProps}
                     >
                       Google
                     </AddToCalendarButton>
@@ -87,7 +87,7 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
                   <div>
                     <AddToCalendarButton
                       calendar="Outlook"
-                      {...addTocalendarButtonProps}
+                      {...addToCalendarButtonProps}
                     >
                       Outlook
                     </AddToCalendarButton>
