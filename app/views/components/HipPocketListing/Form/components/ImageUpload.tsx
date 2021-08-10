@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+
 import {
   Grid,
   Box,
@@ -8,8 +9,8 @@ import {
   useTheme
 } from '@material-ui/core'
 import { mdiImageMultipleOutline } from '@mdi/js'
-import { useDropzone } from 'dropzone'
 import cn from 'classnames'
+import { useDropzone } from 'dropzone'
 
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -99,6 +100,8 @@ export default function HipPocketListingFormImageUpload({
     multiple: true
   })
 
+  const dropzoneRootProps = getRootProps()
+
   return (
     <>
       {isImageSelectDialogOpen && (
@@ -112,7 +115,7 @@ export default function HipPocketListingFormImageUpload({
         item
         className={classes.wrapper}
         style={isDragActive ? { background: theme.palette.grey[400] } : {}}
-        {...{ ...getRootProps(), css: {} }}
+        {...{ ...dropzoneRootProps, css: {} }}
       >
         {isUploading && (
           <Box className={classes.uploadingSpinnerContainer}>

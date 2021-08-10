@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+
 import {
   Grid,
   Button,
@@ -10,17 +11,9 @@ import {
 } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
 
+import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
-import DealsAndListingsAndPlacesSearchInput from 'components/DealsAndListingsAndPlacesSearchInput'
-
-import ImageGallery from './components/ImageGallery'
-import ImageUpload from './components/ImageUpload'
-import {
-  HipPocketListingField,
-  HipPocketListingFormFields,
-  HipPocketListingFormProps
-} from '../types'
 import {
   getFormattedUrl,
   validateListingUrl,
@@ -28,6 +21,14 @@ import {
   getListingUrlTypeFieldPlaceholder,
   getListingFullAddress
 } from '../helpers'
+import {
+  HipPocketListingField,
+  HipPocketListingFormFields,
+  HipPocketListingFormProps
+} from '../types'
+
+import ImageGallery from './components/ImageGallery'
+import ImageUpload from './components/ImageUpload'
 
 const useStyles = makeStyles(
   () => ({

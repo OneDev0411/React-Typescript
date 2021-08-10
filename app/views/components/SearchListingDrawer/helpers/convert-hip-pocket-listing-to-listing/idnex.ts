@@ -2,9 +2,8 @@ import addressParser from 'parse-address'
 
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
-import { feetToMeters } from 'utils/listing'
-
 import { HipPocketListing } from 'components/HipPocketListing'
+import { feetToMeters } from 'utils/listing'
 
 function getPropertyAddress(address?: string): Partial<Address> {
   if (!address) {
