@@ -33,8 +33,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  start: number
-  end: number
+  availableRanges: TimeRange[]
   duration: number
   active?: TimeRange
   unavailableTimes?: number[]
@@ -42,8 +41,7 @@ interface Props {
 }
 
 export default function TimeSlotPicker({
-  start,
-  end,
+  availableRanges,
   duration,
   active,
   unavailableTimes = [],
@@ -51,7 +49,9 @@ export default function TimeSlotPicker({
 }: Props) {
   const classes = useStyles()
 
-  const slots = getTimeSlotsInRange(start, end, duration)
+  const slots = availableRanges.flatMap(([start, end]) =>
+    getTimeSlotsInRange(start, end, duration)
+  )
   const [initialSlide, setInitialSlide] = useState<number>(0)
   const [controlledSwiper, setControlledSwiper] =
     useState<Nullable<SwiperCore>>(null)
