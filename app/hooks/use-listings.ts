@@ -5,11 +5,15 @@ import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
 import getListing from 'models/listings/listing/get-listing'
-import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import {
+  getBrandListings,
+  GetBrandListingsOptions
+} from 'models/listings/search/get-brand-listings'
 import { IAppState } from 'reducers'
 
 export function useBrandListings(
-  brand: Nullable<UUID>
+  brand: Nullable<UUID>,
+  options?: GetBrandListingsOptions
 ): Nullable<ICompactListing[]> {
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
 
@@ -20,7 +24,7 @@ export function useBrandListings(
       }
 
       try {
-        const brandListings = await getBrandListings(brand)
+        const brandListings = await getBrandListings(brand, options)
 
         setListings(brandListings)
       } catch (error) {
@@ -30,7 +34,7 @@ export function useBrandListings(
     }
 
     fetchBrandListings()
-  }, [brand])
+  }, [brand, options])
 
   return listings
 }

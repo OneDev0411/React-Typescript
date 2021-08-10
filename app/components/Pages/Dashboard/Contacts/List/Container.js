@@ -936,7 +936,16 @@ class ContactsList extends React.Component {
                 })}
               >
                 <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board contacts={contacts} isLoading={isFetchingContacts} />
+                  <Board
+                    contacts={contacts}
+                    isFetchingContacts={isFetchingContacts}
+                    isFetchingNextContacts={state.isFetchingMoreContacts}
+                    isFetchingPreviousContacts={
+                      state.isFetchingMoreContactsBefore
+                    }
+                    onColumnReachStart={this.handleLoadMoreBefore}
+                    onColumnReachEnd={this.handleLoadMore}
+                  />
                 </ViewMode>
 
                 <ViewMode enabled={this.state.viewMode === 'table'}>

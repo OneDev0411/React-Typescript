@@ -409,8 +409,7 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-notifier": "^1.11.0",
     "webpackbar": "^5.0.0-3",
-    "whatwg-fetch": "^3.6.2",
-    "worker-loader": "^3.0.8"
+    "whatwg-fetch": "^3.6.2"
   },
   "engines": {
     "node": "14.x",
