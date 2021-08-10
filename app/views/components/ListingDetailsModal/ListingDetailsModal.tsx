@@ -1,7 +1,6 @@
 import React from 'react'
 
-import Dialog from '@material-ui/core/Dialog'
-import { useTheme, Theme } from '@material-ui/core/styles'
+import { Dialog, useTheme, Theme } from '@material-ui/core'
 
 import { ListingDetails } from '../ListingDetails'
 
