@@ -153,7 +153,8 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
               render={({ onChange }) => (
                 <DealsAndListingsAndPlacesSearchInput
                   textFieldProps={{
-                    label: 'Address'
+                    label: 'Address',
+                    variant: 'outlined'
                   }}
                   searchTypes={['listing', 'place']}
                   onSelect={async result => {
