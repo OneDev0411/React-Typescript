@@ -65,8 +65,8 @@ export default function ShowingAppointmentConfirmed({ appointment }: Props) {
                     variant="text"
                     onClick={() => setIsCalendarButtonsVisible(true)}
                   >
-                    <SvgIcon path={mdiCalendar} />
-                    &nbsp;Add To Calendar
+                    <SvgIcon path={mdiCalendar} rightMargined />
+                    Add To Calendar
                   </Button>
                 </Grid>
               )}
