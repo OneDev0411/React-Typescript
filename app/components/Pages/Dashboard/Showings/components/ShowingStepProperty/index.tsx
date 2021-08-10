@@ -92,6 +92,9 @@ function ShowingStepProperty({
       <SmartQuestionForm>
         {isSearchMode ? (
           <DealsAndListingsAndPlacesSearchInput
+            textFieldProps={{
+              autoFocus: true
+            }}
             onSelect={handleSearchResultSelect}
             searchTypes={SEARCH_RESULT_TYPES}
           />
