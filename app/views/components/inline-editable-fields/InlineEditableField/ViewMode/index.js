@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import {
@@ -12,8 +12,8 @@ import {
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { addNotification as notify } from 'components/notification'
-import SendEmailButton from 'components/SendEmailButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
@@ -114,8 +114,9 @@ export function ViewMode({
   handleDelete,
   attributeName
 }) {
-  const dispatch = useDispatch()
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
 
   const getEmailRecipient = () => {
     if (!contact) {
@@ -142,6 +143,11 @@ export function ViewMode({
     }
 
     return normalizeContactsForEmailCompose([contact])
+  }
+
+  const handleOpenEmailDrawer = e => {
+    e.stopPropagation()
+    setIsEmailDrawerOpen(true)
   }
 
   const handleCopy = e => {
@@ -186,22 +192,14 @@ export function ViewMode({
 
     if (value && attributeName === 'email') {
       actions.push(
-        <SendEmailButton
-          recipients={getEmailRecipient()}
-          render={({ onClick }) => (
-            <div
-              key={`email-${value}`}
-              onClick={e => {
-                e.stopPropagation()
-                onClick()
-              }}
-              className={classes.action}
-            >
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Email</span>
-            </div>
-          )}
-        />
+        <div
+          key={`email-${value}`}
+          onClick={handleOpenEmailDrawer}
+          className={classes.action}
+        >
+          <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Email</span>
+        </div>
       )
     }
 
@@ -261,18 +259,31 @@ export function ViewMode({
   }
 
   return (
-    <ViewModeContainer onClick={toggleMode} style={style}>
-      {renderBody() == null ? (
-        <React.Fragment>
-          <Label>{label}</Label>
-          <Value>{value}</Value>
-        </React.Fragment>
-      ) : (
-        renderBody({ label, value, toggleMode })
+    <>
+      <ViewModeContainer onClick={toggleMode} style={style}>
+        {renderBody() == null ? (
+          <React.Fragment>
+            <Label>{label}</Label>
+            <Value>{value}</Value>
+          </React.Fragment>
+        ) : (
+          renderBody({ label, value, toggleMode })
+        )}
+        <ViewModeActionBar className="action-bar">
+          <div className={classes.actionContainer}>{renderActions()}</div>
+        </ViewModeActionBar>
+      </ViewModeContainer>
+      {value && attributeName === 'email' && isEmailDrawerOpen && (
+        <SingleEmailComposeDrawer
+          isOpen={isEmailDrawerOpen}
+          initialValues={{
+            attachments: [],
+            to: getEmailRecipient()
+          }}
+          onClose={() => setIsEmailDrawerOpen(false)}
+          onSent={() => setIsEmailDrawerOpen(false)}
+        />
       )}
-      <ViewModeActionBar className="action-bar">
-        <div className={classes.actionContainer}>{renderActions()}</div>
-      </ViewModeActionBar>
-    </ViewModeContainer>
+    </>
   )
 }
