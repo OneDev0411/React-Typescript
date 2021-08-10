@@ -311,7 +311,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                         <InputAdornment position="start">
                           <Controller
                             control={control}
-                            defaultValue="url"
                             name="url_type"
                             rules={{
                               setValueAs: value => {
@@ -358,7 +357,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={12}>
               <Controller
                 control={control}
-                defaultValue=""
                 name="description"
                 as={
                   <TextField
