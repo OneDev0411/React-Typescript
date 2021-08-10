@@ -1,5 +1,5 @@
 export const sortOptions = {
-  defaultSort: { label: 'Price (Low-High)', value: 'price', ascending: false },
+  defaultSort: { label: 'Price (High-Low)', value: 'price', ascending: false },
   columns: [
     { label: 'Price (High-Low)', value: 'price', ascending: false },
     { label: 'Price (Low-High)', value: 'price', ascending: true },
