@@ -5,10 +5,13 @@ import {
   Box,
   Typography,
   Fade,
-  fade,
+  alpha,
   makeStyles
 } from '@material-ui/core'
 import cn from 'classnames'
+import pluralize from 'pluralize'
+
+import { DangerButton } from '@app/views/components/Button/DangerButton'
 
 import { ImageGalleryProps } from '../../types'
 
@@ -22,7 +25,13 @@ const useStyles = makeStyles(
       paddingTop: '100%',
       overflow: 'hidden',
       border: `1px solid ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
+      borderRadius: theme.shape.borderRadius,
+
+      '&:hover': {
+        '& $imageActionsContainer': {
+          opacity: 1
+        }
+      }
     },
     loadMoreContainer: {
       position: 'absolute',
@@ -36,13 +45,13 @@ const useStyles = makeStyles(
       height: '100%',
       textAlign: 'center',
       color: theme.palette.common.white,
-      backgroundColor: fade(theme.palette.common.black, 0.75),
+      backgroundColor: alpha(theme.palette.common.black, 0.75),
       cursor: 'pointer',
       zIndex: 1,
       transition: theme.transitions.create('background-color'),
 
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.black, 0.5)
+        backgroundColor: alpha(theme.palette.common.black, 0.5)
       }
     },
     image: {
@@ -57,6 +66,18 @@ const useStyles = makeStyles(
     },
     uploadingImage: {
       opacity: 0.7
+    },
+    imageActionsContainer: {
+      position: 'absolute',
+      display: 'flex',
+      flexDirection: 'column-reverse',
+      opacity: 0,
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      zIndex: 1,
+      padding: theme.spacing(1),
+      transition: theme.transitions.create('opacity')
     }
   }),
   {
@@ -66,7 +87,8 @@ const useStyles = makeStyles(
 
 export default function HipPocketListingFormImageGallery({
   images,
-  uploadingImages
+  uploadingImages,
+  onImageRemove
 }: ImageGalleryProps) {
   const classes = useStyles()
   const [loadedItemsCount, setLoadedItemsCount] = useState<number>(PAGE_SIZE)
@@ -109,7 +131,20 @@ export default function HipPocketListingFormImageGallery({
                       onClick={handleClickLoadMore}
                     >
                       <Typography variant="h6">{moreImagesToShow}</Typography>
-                      <Typography variant="body2">More Photos</Typography>
+                      <Typography variant="body2">
+                        {pluralize('More Photo', moreImagesToShow)}
+                      </Typography>
+                    </Box>
+                  )}
+                  {!shouldShowLoadMore && !isUploading && (
+                    <Box className={classes.imageActionsContainer}>
+                      <DangerButton
+                        variant="contained"
+                        size="small"
+                        onClick={() => onImageRemove(image)}
+                      >
+                        Delete
+                      </DangerButton>
                     </Box>
                   )}
                   <img

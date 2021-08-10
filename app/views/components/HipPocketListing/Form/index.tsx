@@ -50,9 +50,21 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
   onSave
 }: HipPocketListingFormProps<T>) {
   const classes = useStyles()
-  const { control, formState, errors, watch, trigger, handleSubmit } =
+  const { control, formState, errors, watch, trigger, handleSubmit, setValue } =
     useForm<HipPocketListingFormFields>({
-      mode: 'onChange'
+      mode: 'onChange',
+      defaultValues: {
+        images: [],
+        address: '',
+        price: undefined,
+        sqft: undefined,
+        bedrooms: undefined,
+        full_baths: undefined,
+        half_baths: undefined,
+        description: '',
+        url: '',
+        url_type: 'url'
+      }
     })
 
   const urlType = watch('url_type')
@@ -89,6 +101,12 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
     return onSave({ ...fields })
   }
 
+  const handleRemoveImage = (imageUrl: string) => {
+    const newImages = images.filter(image => image !== imageUrl)
+
+    setValue('images', newImages)
+  }
+
   const isFieldEnabled = useCallback(
     (fieldName: HipPocketListingField) => {
       return !disabledFields.includes(fieldName as T)
@@ -105,13 +123,13 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
         {isFieldEnabled('images') && onImageUpload && (
           <Controller
             control={control}
-            defaultValue={[]}
             name="images"
             render={({ onChange, value }) => (
               <>
                 <ImageGallery
                   images={value}
                   uploadingImages={uploadingImages}
+                  onImageRemove={handleRemoveImage}
                 />
                 <ImageUpload
                   onImageUpload={async (files: File[]) => {
@@ -131,13 +149,13 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
           <Grid item xs={12}>
             <Controller
               control={control}
-              defaultValue=""
               name="address"
               render={({ onChange }) => (
                 <DealsAndListingsAndPlacesSearchInput
                   textFieldProps={{
                     label: 'Address'
                   }}
+                  searchTypes={['listing', 'place']}
                   onSelect={async result => {
                     const address =
                       result.type === 'place'
@@ -158,7 +176,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={6}>
               <Controller
                 control={control}
-                defaultValue={null}
                 name="price"
                 rules={{
                   valueAsNumber: true,
@@ -181,7 +198,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={6}>
               <Controller
                 control={control}
-                defaultValue={null}
                 name="sqft"
                 rules={{
                   valueAsNumber: true,
@@ -206,7 +222,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
-                defaultValue={null}
                 name="bedrooms"
                 rules={{
                   valueAsNumber: true,
@@ -228,7 +243,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
-                defaultValue={null}
                 name="full_baths"
                 rules={{
                   valueAsNumber: true,
@@ -250,7 +264,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={4}>
               <Controller
                 control={control}
-                defaultValue={null}
                 name="half_baths"
                 rules={{
                   valueAsNumber: true,
@@ -275,7 +288,6 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
             <Grid item xs={12}>
               <Controller
                 control={control}
-                defaultValue=""
                 name="url"
                 rules={{
                   validate: (value: string) =>
