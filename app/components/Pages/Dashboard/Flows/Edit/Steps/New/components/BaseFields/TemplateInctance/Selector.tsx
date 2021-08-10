@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Box,
   makeStyles,
@@ -8,24 +8,18 @@ import {
   Grid,
   Typography
 } from '@material-ui/core'
-import cn from 'classnames'
-
 import { mdiEyeOutline } from '@mdi/js'
-
-import { selectUser } from 'selectors/user'
-
-import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
-
-import { IAppState } from 'reducers'
+import cn from 'classnames'
+import { useSelector } from 'react-redux'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
-import { getActiveBrand } from 'utils/user-teams'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
+import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
+import { getActiveBrand } from 'utils/user-teams'
 
 import { MarketingEmailFormData } from '../../../types'
 
@@ -141,14 +135,12 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [selectedBrandTemplate, setSelectedBrandTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(currentBrandTemplate)
+  const [selectedBrandTemplate, setSelectedBrandTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(currentBrandTemplate)
   const [selectedTemplateInstance, setSelectedTemplateInstace] = useState<
     Nullable<IMarketingTemplateInstance>
   >(currentTemplateInstance)
@@ -300,7 +292,7 @@ export const TemplateSelector = ({
                   container
                   spacing={2}
                   alignItems="center"
-                  justify="center"
+                  justifyContent="center"
                 >
                   <Grid item>
                     <Button

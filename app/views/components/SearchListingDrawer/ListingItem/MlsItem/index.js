@@ -1,15 +1,16 @@
 import React from 'react'
+
+import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
-import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   addressTitle,
   getListingAddressObj,
   getStatusColorClass
 } from 'utils/listing'
 import { grey } from 'views/utils/colors'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import {
   ListItem,
@@ -22,7 +23,7 @@ import {
   IconContainer
 } from '../styled'
 
-export function MlsItem({ item, ...props }) {
+export function MlsItem({ item, onClickRemove, ...props }) {
   const getStatus = () => {
     const { status, close_date } = item
 
@@ -80,11 +81,11 @@ export function MlsItem({ item, ...props }) {
             {getStatus()}
           </Status>
 
-          {props.removable && (
+          {props.removable && onClickRemove && (
             <SvgIcon
               path={mdiClose}
               className="delete-icon"
-              onClick={props.onClickRemove}
+              onClick={onClickRemove}
             />
           )}
         </ListItemStatus>

@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { Typography, MenuItem, Box } from '@material-ui/core'
 import cn from 'classnames'
 import { Link } from 'react-router'
-import { Typography, MenuItem, Box } from '@material-ui/core'
 
 import TrashIcon from 'components/SvgIcons/Trash/TrashIcon'
 

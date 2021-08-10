@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 
-import Card from 'components/Card'
 import ActionButton from 'components/Button/ActionButton'
-
+import Card from 'components/Card'
 import { borderColor, primary, grey } from 'views/utils/colors'
 
 export const Container = styled.div`

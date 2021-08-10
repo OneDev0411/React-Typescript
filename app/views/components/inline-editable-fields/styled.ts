@@ -1,10 +1,10 @@
+import { Theme, alpha } from '@material-ui/core'
 import styled, { css, ThemedStyledProps } from 'styled-components'
-import { Theme, fade } from '@material-ui/core'
 
-import LinkButton from 'components/Button/LinkButton'
 import ActionButton from 'components/Button/ActionButton'
-import StarIcon from 'components/SvgIcons/Star/StarIcon'
+import LinkButton from 'components/Button/LinkButton'
 import ArrowIcon from 'components/SvgIcons/KeyboardArrowDown/IconKeyboardArrowDown'
+import StarIcon from 'components/SvgIcons/Star/StarIcon'
 
 import type { Props as EditModeProps } from './InlineEditableField/EditMode'
 
@@ -51,7 +51,7 @@ export const EditModeContainer = styled.div<
       : `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`};
   background: ${({ hasError, theme }) =>
     hasError
-      ? fade(theme.palette.error.main, theme.palette.action.hoverOpacity)
+      ? alpha(theme.palette.error.main, theme.palette.action.hoverOpacity)
       : theme.palette.action.hover};
 `
 

@@ -4,7 +4,6 @@ import { TextField, CircularProgress } from '@material-ui/core'
 import Autocomplete, {
   AutocompleteInputChangeReason
 } from '@material-ui/lab/Autocomplete'
-
 import { useAsync, useDebounce } from 'react-use'
 
 export type Option = Record<string, any> & {
@@ -43,7 +42,7 @@ export function AutoComplete({
   const [debouncedCriteria, setDebouncedCriteria] = useState('')
 
   useEffect(() => {
-    setInputValue(value)
+    setInputValue(value.trim())
   }, [value])
 
   useDebounce(
@@ -75,9 +74,11 @@ export function AutoComplete({
       return
     }
 
-    setInputValue(value)
-    setCriteria(value)
-    onInputChange(value)
+    const trimmedValue = value.trim()
+
+    setInputValue(trimmedValue)
+    setCriteria(trimmedValue)
+    onInputChange(trimmedValue)
   }
 
   const handleChange = (_: React.ChangeEvent<{}>, option: Option) => {

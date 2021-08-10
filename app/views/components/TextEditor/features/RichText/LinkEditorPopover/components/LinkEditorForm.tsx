@@ -1,8 +1,7 @@
-import { Box, Button, Grid, TextField } from '@material-ui/core'
-
 import * as React from 'react'
 import { useRef } from 'react'
 
+import { Box, Button, Grid, TextField } from '@material-ui/core'
 import { PaperProps } from '@material-ui/core/Paper'
 
 import { useInViewportAutofocus } from 'hooks/use-in-viewport-autofocus'

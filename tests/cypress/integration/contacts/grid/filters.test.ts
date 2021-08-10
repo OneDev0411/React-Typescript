@@ -12,9 +12,11 @@ describe('Contacts list, filters', () => {
 
     cy.wait(2000)
 
-    cy.getByTestSelector('grid-body', { timeout: 100 }).should(($els: NodeList) => {
-      expect($els.length).to.be.eq(0)
-    })
+    cy.getByTestSelector('grid-body', { timeout: 100 }).should(
+      ($els: NodeList) => {
+        expect($els.length).to.be.eq(0)
+      }
+    )
   })
 
   it('Apply a flow filter that the flow should be selected on the flows list in the sidebar', () => {
@@ -22,9 +24,11 @@ describe('Contacts list, filters', () => {
 
     cy.wait(2000)
 
-    cy.getByTestSelector('flow-item', { timeout: 100 }).first().should(($el: JQuery) => {
-      expect($el).to.have.text('Appointment Missed')
-      expect($el.find('input[type=checkbox]')).to.have.value('on')
-    })
+    cy.getByTestSelector('flow-item', { timeout: 100 })
+      .first()
+      .should(($el: JQuery) => {
+        expect($el).to.have.text('Appointment Missed')
+        expect($el.find('input[type=checkbox]')).to.have.value('on')
+      })
   })
 })

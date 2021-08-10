@@ -1,20 +1,15 @@
 import React from 'react'
+
 import { Grid } from '@material-ui/core'
 
-import RedirectModal from '../RedirectModal'
-import LinkButton from '../../../../../views/components/Button/LinkButton'
 import ActionButton from '../../../../../views/components/Button/ActionButton'
+import LinkButton from '../../../../../views/components/Button/LinkButton'
+import RedirectModal from '../RedirectModal'
 import { SigninButton } from '../SigninButton'
 
 const ConflictModal = ({ params, brandInfo }) => {
-  let {
-    to,
-    email,
-    userInfo,
-    redirectTo,
-    messageText,
-    actionButtonProps
-  } = params
+  let { to, email, userInfo, redirectTo, messageText, actionButtonProps } =
+    params
   let is_shadow
 
   if (userInfo) {

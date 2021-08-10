@@ -1,31 +1,28 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { useEffectOnce } from 'react-use'
 
 import { Button } from '@material-ui/core'
+import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
-import { IAppState } from 'reducers/index'
-import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
-import { useGridStyles } from 'components/Grid/Table/styles'
-
-import Table from 'components/Grid/Table'
+import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
+import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
 import PageLayout from 'components/GlobalPageLayout'
+import Table from 'components/Grid/Table'
+import { useGridStyles } from 'components/Grid/Table/styles'
+import { RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import { TourDrawer } from 'components/tour/TourDrawer'
 import { TourSheets } from 'components/tour/TourSheets'
-
-import { RenderProps } from 'components/Grid/Table/types'
-import { SET_CREATE_CALLBACK_HANDLER } from 'components/GlobalActionsButton/context/constants'
-import { useGlobalActionContext } from 'components/GlobalActionsButton/hooks/use-global-action-context'
-
+import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { ZeroState } from 'partials/ZeroState'
+import { IAppState } from 'reducers/index'
 
-import DueDate from './columns/DueDate'
-import Title from './columns/Title'
-import Participants from './columns/Participants'
-import ViewToursheet from './columns/ViewToursheet'
 import Actions from './columns/Actions'
+import DueDate from './columns/DueDate'
+import Participants from './columns/Participants'
+import Title from './columns/Title'
+import ViewToursheet from './columns/ViewToursheet'
 
 type TableRow = ICRMTask<CRMTaskAssociation, CRMTaskAssociationType>
 
@@ -42,9 +39,8 @@ function ToursList(props: { user: IUser }) {
     }
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
-  const [isOpenToursheetViewer, setIsOpenToursheetViewer] = useState<boolean>(
-    false
-  )
+  const [isOpenToursheetViewer, setIsOpenToursheetViewer] =
+    useState<boolean>(false)
   const [selectedTour, setSelectedTour] = useState<ICRMTask<
     CRMTaskAssociation,
     CRMTaskAssociationType
@@ -155,6 +151,7 @@ function ToursList(props: { user: IUser }) {
         <ZeroState
           imageUrl="/static/images/zero-state/tours.png"
           title="No tours are scheduled, yet."
+          // eslint-disable-next-line max-len
           subTitle="Make touring homes easier on buyers and yourself with Tours. Pick the right properties for your client, and we do the rest of the work."
           ctaNode={
             <Button

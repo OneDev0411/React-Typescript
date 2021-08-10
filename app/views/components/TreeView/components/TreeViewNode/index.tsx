@@ -31,10 +31,10 @@ export const TreeViewNode = React.memo(function TreeViewNode<
 
   const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
 
-  const toggle = useCallback(() => onToggleExpanded(node), [
-    node,
-    onToggleExpanded
-  ])
+  const toggle = useCallback(
+    () => onToggleExpanded(node),
+    [node, onToggleExpanded]
+  )
 
   const expandable = childNodes.length > 0
   const arrow = expandable ? (

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import _ from 'underscore'
 
-import { ListContainer, ListTitle } from '../styled'
 import { Body } from '../components/Body'
+import { ListContainer, ListTitle } from '../styled'
 
 export function SelectedItems(props) {
   if (

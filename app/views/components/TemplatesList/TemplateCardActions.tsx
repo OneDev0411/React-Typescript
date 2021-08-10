@@ -1,10 +1,7 @@
 import React from 'react'
 
-import { createStyles, makeStyles } from '@material-ui/core'
-
+import { createStyles, makeStyles, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
-
-import { Tooltip } from '@material-ui/core'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

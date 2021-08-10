@@ -1,23 +1,22 @@
-import { Editor } from 'grapesjs'
 import { Model } from 'backbone'
+import { Editor } from 'grapesjs'
 
+import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import AgentLeftIcon from 'assets/images/marketing/editor/blocks/agent-left.png'
 import AgentMultiIcon from 'assets/images/marketing/editor/blocks/multi-agent.png'
-import AgentGridIcon from 'assets/images/marketing/editor/blocks/agent-grid.png'
 import { Agent } from 'components/TeamAgents/types'
-
 import { getNameInitialsPlaceholderImage } from 'utils/helpers'
 
-import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import { AGENTS_BLOCK_CATEGORY } from '../../../constants'
+import { TemplateRenderData } from '../../../utils/get-template-render-data'
 import registerBlock from '../../registerBlock'
-
-import Left from './left.mjml'
-import Grid from './grid.mjml'
-import Multi from './multi.mjml'
-import { handleBlockDragStopEvent } from '../../utils'
-import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { handleBlockDragStopEvent } from '../../utils'
+
+import Grid from './grid.mjml'
+import Left from './left.mjml'
+import Multi from './multi.mjml'
 
 export const agentLeftBlockName = 'rechat-agent-left'
 export const agentGridBlockName = 'rechat-agent-grid'

@@ -1,11 +1,9 @@
-import { Request } from 'express'
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
-
-import { requestRefreshToken } from '../refresh-token'
+import { Request } from 'express'
 
 import config from '../../../config'
-
 import type { RequestWithSession } from '../../../types'
+import { requestRefreshToken } from '../refresh-token'
 
 export function request(req: Request, requestConfig: AxiosRequestConfig) {
   const instance = axios.create()
@@ -35,6 +33,7 @@ export function request(req: Request, requestConfig: AxiosRequestConfig) {
             session.user.refresh_token
           )
 
+          // eslint-disable-next-line max-len
           originalRequest.headers.authorization = `Bearer ${nextSession.access_token}`
 
           req.session!.user = nextSession
@@ -65,6 +64,7 @@ function log(response: AxiosResponse) {
     new Date().getTime() - response.config.headers['x-request-time']
 
   console.log(
+    // eslint-disable-next-line max-len
     `(${duration}ms) HTTP\t${response.status} ${response.statusText}\t${method}\t${response.config.url}`
   )
 }

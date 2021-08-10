@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { mdiMagnify } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

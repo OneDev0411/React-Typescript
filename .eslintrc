@@ -5,13 +5,17 @@
     "jest/globals": true,
     "node": true
   },
+  "globals": {
+    "_": "readonly",
+    "google": "readonly"
+  },
   "extends": [
     "airbnb",
-    "prettier",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "prettier"
   ],
   "plugins": [
     "import",
@@ -46,11 +50,13 @@
   },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "error",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "no-redeclare": "off",
-    "@typescript-eslint/no-redeclare": ["error"],
+    "@typescript-eslint/no-redeclare": [
+      "error"
+    ],
     "import/no-unresolved": [
       2,
       {
@@ -65,20 +71,36 @@
     "import/order": [
       "error",
       {
-        "newlines-between": "always-and-inside-groups",
+        // Always insert nl between groups
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc", /* sort in ascending order */
+          "caseInsensitive": true /* ignore case */
+        },
+        // We want to import react before the other externals
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": [
+          "internal"
+        ],
         "groups": [
+          // Built-in modules first (fs, path, etc)
           "builtin",
+          // Externals are next (react, redux, etc)
           "external",
-          // Built-in & external types are first
+          // Internals are next (@app/**/*, etc)
           "internal",
-          [
-            "sibling",
-            "parent"
-          ],
-          // Then sibling and parent types. They can be mingled together
+          // Parent directories imports are the next (../**/*)
+          "parent",
+          // Same directory imports are the next (./foo)
+          "sibling",
+          // And the index is the final one ('./')
           "index"
-          // Then the index file
-          // Then the rest: internal and external type
         ]
       }
     ],
@@ -97,6 +119,11 @@
       "warn",
       {
         "code": 85,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreComments": true,
+        "ignoreUrls": true,
         "ignorePattern": "^import [^,]+ from"
       }
     ],
@@ -173,7 +200,7 @@
     "react/no-array-index-key": 0,
     "import/no-extraneous-dependencies": 0,
     "no-empty": 0,
-    "import/no-duplicates": 0,
+    "import/no-duplicates": "error",
     "default-case": 0,
     "no-undef": 2,
     "no-case-declarations": 0,

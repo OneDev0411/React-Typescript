@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import {
   Grid,
   Typography,
@@ -8,13 +8,13 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useSelector } from 'react-redux'
 
 import CardSkeleton from 'components/CardSkeleton'
-import TemplateAction from 'components/TemplatesList/TemplateAction'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
+import TemplateAction from 'components/TemplatesList/TemplateAction'
+import { selectUser } from 'selectors/user'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import SectionLayout from '../SectionLayout'
@@ -46,9 +46,8 @@ export default function WhatsNewInMCSection() {
   const classes = useStyles()
   const user = useSelector(selectUser)
   const activeBrand = getActiveTeamId(user)
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IBrandMarketingTemplate>
-  >(null)
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(null)
   const [isTemplateClicked, setIsTemplateClicked] = useState<boolean>(false)
 
   const { templates, isLoading } = useTemplates(
@@ -71,16 +70,22 @@ export default function WhatsNewInMCSection() {
         <>
           {isLoading && (
             <>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
-              <Grid item xs sm={3}>
+              <Grid item xs={12} sm={6} md={2}>
+                <CardSkeleton />
+              </Grid>
+              <Grid item xs={12} sm={6} md={2}>
+                <CardSkeleton />
+              </Grid>
+              <Grid item xs={12} sm={6} md={2}>
                 <CardSkeleton />
               </Grid>
             </>
@@ -89,14 +94,14 @@ export default function WhatsNewInMCSection() {
             <Typography variant="h6">No designs to show</Typography>
           )}
           {!isLoading &&
-            templates.slice(0, 4).map(template => (
+            templates.slice(0, 6).map(template => (
               <Grid
                 key={template.id}
                 className={classes.templateCardContainer}
                 item
                 xs={12}
                 sm={6}
-                md={3}
+                md={2}
               >
                 <MarketingTemplateCard
                   template={template}

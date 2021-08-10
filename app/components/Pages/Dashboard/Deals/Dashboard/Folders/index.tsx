@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import _ from 'underscore'
 
 import { Box, Button, Theme } from '@material-ui/core'
 import { useTheme } from '@material-ui/styles'
+import { useSelector } from 'react-redux'
+import _ from 'underscore'
 
 import { useDeepMemo } from 'hooks/use-deep-memo'
-
-import { selectChecklistTasks } from 'reducers/deals/tasks'
-
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectChecklistTasks } from 'reducers/deals/tasks'
 
 import { ChecklistFolder } from './Checklist'
-
-import { UploadFolder } from './Uploads'
 import MarketingChecklist from './Marketing'
+import { UploadFolder } from './Uploads'
 
 type Tasks = Record<UUID, IDealTask>
 type Checklists = Record<UUID, IDealChecklist>
@@ -39,13 +36,11 @@ export default function FoldersTab({ deal, isBackOffice }: Props) {
     checklists: deals.checklists
   }))
 
-  const [showTerminatedFolders, setShowTerminatedFolders] = useState<boolean>(
-    false
-  )
+  const [showTerminatedFolders, setShowTerminatedFolders] =
+    useState<boolean>(false)
 
-  const [showDeactivatedFolders, setShowDeactivatedFolders] = useState<boolean>(
-    false
-  )
+  const [showDeactivatedFolders, setShowDeactivatedFolders] =
+    useState<boolean>(false)
 
   useEffect(() => {
     const hasNotifications = (checklist: IDealChecklist, tasks: Tasks) => {

@@ -1,18 +1,24 @@
-import React from 'react'
+import {
+  Button,
+  createStyles,
+  IconButton,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
+import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { Button, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { useTheme } from '@material-ui/styles'
-
-import { CloseButton } from 'components/Button/CloseButton'
-
-import YardSign from 'deals/components/YardSign'
+import { selectUserSettingsInActiveTeam } from '@app/selectors/user'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OpenHouse from 'deals/components/OpenHouse'
+import YardSign from 'deals/components/YardSign'
 
 import DealStatus from '../../../components/DealStatus'
+import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 
-import RemoveDraft from './RemoveDraft'
 import { Email } from './Email'
+import RemoveDraft from './RemoveDraft'
 
 interface Props {
   deal: IDeal
@@ -36,8 +42,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
-    const theme = useTheme<Theme>()
     const classes = useStyles()
+    const userSettings = useSelector(selectUserSettingsInActiveTeam)
+
+    const handleClose = () => {
+      const query = userSettings[DEAL_GRID_FILTER_SETTING_KEY]
+
+      router.push(`/dashboard/deals?q=${query?.term || ''}`)
+    }
 
     return (
       <div className={classes.container}>
@@ -66,15 +78,9 @@ export const Menu = withRouter(
 
         <DealStatus deal={deal} isBackOffice={isBackOffice} />
 
-        <CloseButton
-          backUrl="/dashboard/deals"
-          buttonProps={{
-            size: 'small'
-          }}
-          iconProps={{
-            color: theme.palette.grey[600]
-          }}
-        />
+        <IconButton size="small" onClick={handleClose}>
+          <SvgIcon path={mdiClose} />
+        </IconButton>
       </div>
     )
   }

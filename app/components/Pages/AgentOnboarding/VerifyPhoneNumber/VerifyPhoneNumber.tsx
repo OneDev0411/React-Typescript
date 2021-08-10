@@ -1,31 +1,26 @@
 import React, { useState } from 'react'
-import { WithRouterProps, Link } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
+
+import { Box, Button, Typography, makeStyles, Theme } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { FORM_ERROR } from 'final-form'
 import { Form, Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { WithRouterProps, Link } from 'react-router'
 
-import { Box, Button, Typography } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { makeStyles, Theme } from '@material-ui/core'
-
+import { updateUser } from 'actions/user'
+import { MUITextInput } from 'components/Forms/MUITextInput'
 import { addNotification as notify } from 'components/notification'
-
+import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import verify from 'models/verify/confirm'
+import getVerificationCode from 'models/verify/request'
+import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
 
-import { IAppState } from 'reducers'
-import { updateUser } from 'actions/user'
-
-import getVerificationCode from 'models/verify/request'
-import verify from 'models/verify/confirm'
-
-import { MUITextInput } from 'components/Forms/MUITextInput'
-import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
-import Header from '../Header'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
-import Container from '../Container'
 import { useCommonStyles } from '../common-styles'
+import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
 import { useDocumentTitle } from '../use-document-title'
 
 const useStyles = makeStyles(
@@ -110,6 +105,7 @@ export function VerifyPhoneNumber(props: WithRouterProps) {
         notify({
           status: 'error',
           message:
+            // eslint-disable-next-line max-len
             'Sorry, something went wrong while sending a new code. Please try again.',
           options: {
             dismissAfter: 6000

@@ -11,11 +11,11 @@ import {
   useTheme
 } from '@material-ui/core'
 
+import { DropdownToggleButton } from '../DropdownToggleButton'
 import {
   ITemplateVariableSuggestion,
   ITemplateVariableSuggestionGroup
 } from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'
-import { DropdownToggleButton } from '../DropdownToggleButton'
 
 interface Props {
   suggestions: ITemplateVariableSuggestionGroup[]
@@ -86,4 +86,5 @@ export function TemplateVariablesButton({
     </>
   )
 }
+// eslint-disable-next-line max-len
 export * from '../TextEditor/features/TemplateExpressions/template-expressions-plugin/types'

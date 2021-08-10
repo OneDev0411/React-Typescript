@@ -5,6 +5,7 @@ import { Box, Typography } from '@material-ui/core'
 import ShowingApprovalTypeRadioGroup, {
   ShowingApprovalTypeRadioGroupProps
 } from '../ShowingApprovalTypeRadioGroup'
+
 import ShowingRoleList, { ShowingRoleListProps } from './ShowingRoleList'
 
 interface ShowingDetailTabSettingsTabApprovalTypeAndRolesProps

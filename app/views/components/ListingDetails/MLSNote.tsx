@@ -1,6 +1,7 @@
 import React from 'react'
-import fecha from 'fecha'
+
 import { makeStyles, Theme } from '@material-ui/core'
+import fecha from 'fecha'
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -27,12 +28,14 @@ export default function MLSNote({ mls, mlsName }: Props) {
     <div className={classes.container}>
       <div>
         {mlsName && (
+          // eslint-disable-next-line max-len
           <span>{`Listing information provided in part by the ${mlsName}, for personal, non-commercial use by viewers of
         this site and may not be reproduced or redistributed. All information is
         deemed reliable but not guaranteed.`}</span>
         )}
         {mls && (
           <span>
+            {/* eslint-disable-next-line max-len */}
             {` Copyright © ${mls} ${lastUpdateDate.getFullYear()}. All rights reserved. Last updated at ${fecha.format(
               lastUpdateDate,
               'MMM DD, YYYY hh:mm A'
@@ -42,6 +45,7 @@ export default function MLSNote({ mls, mlsName }: Props) {
       </div>
 
       {mlsName && (
+        // eslint-disable-next-line max-len
         <div>{`The data relating to real estate for sale on this website appears in part through the ${mlsName} Internet Data Exchange program, a voluntary cooperative exchange of property listing data between licensed real estate brokerage firms in which participates, and is provided by ${mlsName} through a licensing agreement.`}</div>
       )}
 

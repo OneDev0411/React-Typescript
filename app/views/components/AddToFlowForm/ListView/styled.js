@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { Link } from 'react-router'
+import styled from 'styled-components'
 
 import { CONTAINER_HEIGHT, SETTING_HEIGHT } from '../constants'
 

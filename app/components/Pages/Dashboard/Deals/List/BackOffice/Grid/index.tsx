@@ -1,46 +1,41 @@
-import React from 'react'
-import { WithRouterProps, withRouter } from 'react-router'
-import { useSelector } from 'react-redux'
-import moment from 'moment'
+import { useMemo } from 'react'
 
 import { TableCellProps } from '@material-ui/core'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
+import { WithRouterProps, withRouter } from 'react-router'
 
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { goTo } from '@app/utils/go-to'
+import { getActiveTeamId } from '@app/utils/user-teams'
+import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
-
-import { IAppState } from 'reducers'
-
+import { getGridSort } from 'deals/List/helpers/sorting'
 import {
   getStatus,
   getFormattedPrice,
   getPrice
 } from 'models/Deal/helpers/context'
-
+import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
-import { getGridSort } from 'deals/List/helpers/sorting'
-
-import { selectUser } from 'selectors/user'
-
-import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
-
-import { getActiveTeamId } from '@app/utils/user-teams'
-
-import { SearchQuery } from '../types'
-
+import onDealOpened from '../../../utils/on-deal-opened'
 import { getPrimaryAgentName } from '../../../utils/roles'
-import { ContactsZeroState } from './ZeroState'
 import LoadingState from '../../components/LoadingState'
 import { Address } from '../../components/table-columns/Address'
-
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
-
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
 } from '../helpers/backoffice-sorting'
+import { SearchQuery } from '../types'
+
+import { ContactsZeroState } from './ZeroState'
 
 interface Props {
   searchQuery: SearchQuery
@@ -145,21 +140,35 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   ]
 
-  const getData = (): IDeal[] => {
+  const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
+    return {
+      onClick: () => {
+        goTo(`/dashboard/deals/${deal.id}`)
+        onDealOpened()
+      }
+    }
+  }
+
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
+    }
+
+    const dealsList = Object.values(deals) as IDeal[]
+
+    // TODO: find another solution to do not hard code this kind of logic here
+    if (props.searchQuery.filter === 'closings') {
+      return dealsList
     }
 
     // when user searching something in backoffice, we should show all
     // deals except draft items
     if (props.searchQuery.term.length > 0) {
-      return (Object.values(deals) as IDeal[]).filter(
-        (deal: IDeal) => deal.is_draft === false
-      )
+      return dealsList.filter((deal: IDeal) => deal.is_draft === false)
     }
 
     if (props.searchQuery.type === 'inbox') {
-      return (Object.values(deals) as IDeal[]).filter(
+      return dealsList.filter(
         (deal: IDeal) =>
           deal.attention_requests > 0 &&
           deal.is_draft === false &&
@@ -168,10 +177,15 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       )
     }
 
-    return Object.values(deals)
-  }
+    return dealsList
+  }, [
+    deals,
+    props.searchQuery.filter,
+    props.searchQuery.term.length,
+    props.searchQuery.type
+  ])
 
-  const data = getData()
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   return (
     <Grid<IDeal>
@@ -191,6 +205,7 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       LoadingStateComponent={LoadingState}
       EmptyStateComponent={ContactsZeroState}
       loading={isFetchingDeals ? 'middle' : null}
+      getTrProps={getRowProps}
       classes={{
         row: gridClasses.row
       }}

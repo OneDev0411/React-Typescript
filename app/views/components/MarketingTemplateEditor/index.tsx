@@ -1,11 +1,10 @@
 import React, { ReactNode } from 'react'
 
-import { TemplateData } from 'utils/marketing-center/render-branded-template'
-import { convertToTemplate } from 'utils/marketing-center/helpers'
-
 import InstantMarketing, {
   InstantMarketingProps
 } from 'components/InstantMarketing'
+import { convertToTemplate } from 'utils/marketing-center/helpers'
+import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 interface Props
   extends Pick<

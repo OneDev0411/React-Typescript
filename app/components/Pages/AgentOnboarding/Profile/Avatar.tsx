@@ -1,10 +1,10 @@
 import React from 'react'
+
 import { Box, Button, Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
-import { ImageUploader } from 'components/ImageUploader'
 import { Avatar } from 'components/Avatar'
-
+import { ImageUploader } from 'components/ImageUploader'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 import { Avatar as AvatarType } from './types'
@@ -46,6 +46,7 @@ export default function ProfileAvatar({ onChange, data }: Props) {
             <Typography variant="h6">Your profile image</Typography>
             {data.type && (
               <Typography variant="body2">
+                {/* eslint-disable-next-line max-len */}
                 {`To make it easier for you we’ve used your ${data.type} account's image.`}
               </Typography>
             )}

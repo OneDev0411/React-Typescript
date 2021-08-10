@@ -1,7 +1,8 @@
 import React from 'react'
+
 import fileSaver from 'file-saver'
-import superagent from 'superagent'
 import { connect } from 'react-redux'
+import superagent from 'superagent'
 
 import removeSpecialCharacters from 'utils/remove-special-characters'
 import { getActiveTeamId } from 'utils/user-teams'

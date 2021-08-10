@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, Theme, useTheme } from '@material-ui/core'
-
 import { useAsync } from 'react-use'
 
 import { WizardContext, SectionContext } from './context'
-
 import Loading from './Loading'
 
 interface Props {
@@ -99,9 +97,21 @@ export function QuestionWizard({
     setLastVisitedStep(step)
   }
 
+  // Update the last visited value if the current step was increased
   useEffect(() => {
-    setLastVisitedStep(Math.max(currentStep, lastVisitedStep))
-  }, [currentStep, lastVisitedStep])
+    setLastVisitedStep(lastVisitedStep =>
+      Math.max(currentStep, lastVisitedStep)
+    )
+  }, [currentStep])
+
+  // Make sure the current step and last visited step values are in the range if
+  // the sectionsCount is changed
+  useEffect(() => {
+    setLastVisitedStep(lastVisitedStep =>
+      Math.min(lastVisitedStep, sectionsCount)
+    )
+    setCurrentStep(currentStep => Math.min(currentStep, sectionsCount))
+  }, [sectionsCount])
 
   useEffect(() => {
     onStepChange(currentStep)

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import classNames from 'classnames'
+
 import {
   Button,
   ButtonProps,
@@ -7,8 +7,10 @@ import {
   makeStyles,
   PropTypes
 } from '@material-ui/core'
+import classNames from 'classnames'
 
 import useShowingHasApprovalAccess from '../../hooks/use-showing-has-approval-access'
+
 import ShowingAppointmentRejectFormDialog from './ShowingAppointmentRejectFormDialog'
 import useAppointmentApprovalAccessMessage from './use-appointment-approval-access-message'
 import useShowingHasAppointmentApproved from './use-showing-has-appointment-approved'
@@ -16,7 +18,8 @@ import useShowingHasAppointmentApproved from './use-showing-has-appointment-appr
 const useStyles = makeStyles(
   theme => ({
     red: { color: theme.palette.error.main },
-    green: { color: theme.palette.primary.main }
+    green: { color: theme.palette.primary.main },
+    wrapper: { display: 'inline-block' }
   }),
   { name: 'ShowingBookingListApprovalButton' }
 )
@@ -69,7 +72,7 @@ function ShowingBookingListApprovalButton({
   return (
     <>
       <Tooltip title={message} open={!hasApprovalAccess ? undefined : false}>
-        <span>
+        <span className={classes.wrapper}>
           <Button
             {...otherProps}
             className={classNames(color && classes[color], className)}

@@ -1,3 +1,4 @@
+import { fillEmailComposeDrawer, waitForDrawerToClose } from 'helpers/drawer'
 import { setInlineDateField, setDateFieldToFuture } from 'helpers/fields'
 import {
   acceptConfirmationModal,
@@ -5,7 +6,6 @@ import {
   waitForModalToClose
 } from 'helpers/modal'
 import { getTestSelector } from 'helpers/page'
-import { fillEmailComposeDrawer, waitForDrawerToClose } from 'helpers/drawer'
 
 import { addTask } from './helpers'
 

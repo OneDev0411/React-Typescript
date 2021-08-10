@@ -1,10 +1,12 @@
 import React from 'react'
-import { useTitle } from 'react-use'
+
 import { Box, Grid } from '@material-ui/core'
+import { useTitle } from 'react-use'
 
 import LoadingContainer from 'components/LoadingContainer'
 
 import Layout from '..'
+
 import Sections from './Sections'
 
 export default function MarketingOverview() {

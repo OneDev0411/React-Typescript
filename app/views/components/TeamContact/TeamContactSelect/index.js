@@ -1,20 +1,19 @@
 import React from 'react'
+
+import { mdiChevronDown } from '@mdi/js'
+import uniqBy from 'lodash/uniqBy'
 import PropTypes from 'prop-types'
 import Flex from 'styled-flex-component'
-import uniqBy from 'lodash/uniqBy'
-import { mdiChevronDown } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { getUserTitle } from '../../../../models/user/helpers'
 import { isSoloActiveTeam } from '../../../../utils/user-teams'
-
 import { Avatar } from '../../Avatar'
-import { TeamMember } from '../TeamMember'
 import { BasicDropdown } from '../../BasicDropdown'
 import ActionButton from '../../Button/ActionButton'
-
 import { getMembers } from '../helpers'
+import { TeamMember } from '../TeamMember'
 
 import { ButtonText } from './styled'
 
@@ -85,14 +84,26 @@ export class TeamContactSelect extends React.Component {
         onSelect={this.props.onSelect}
         isFetching={this.state.isFetching}
         selectedItem={{ label: getUserTitle(owner), value: owner }}
-        buttonRenderer={buttonProps => {
-          const renderedButton = this.props.buttonRenderer(buttonProps)
+        buttonRenderer={({
+          isBlock,
+          noBorder,
+          isOpen,
+          selectedItem,
+          ...buttonProps
+        }) => {
+          const renderedButton = this.props.buttonRenderer({
+            isBlock,
+            noBorder,
+            isOpen,
+            selectedItem,
+            ...buttonProps
+          })
 
           if (renderedButton) {
             return renderedButton
           }
 
-          const title = buttonProps.selectedItem.label
+          const title = selectedItem.label
 
           return (
             <ActionButton
@@ -108,14 +119,11 @@ export class TeamContactSelect extends React.Component {
               <Flex alignCenter style={{ width: '100%' }}>
                 <Avatar
                   alt={title}
-                  url={buttonProps.selectedItem.value.profile_image_url}
+                  url={selectedItem.value.profile_image_url}
                 />
                 <ButtonText>{title}</ButtonText>
               </Flex>
-              <SvgIcon
-                path={mdiChevronDown}
-                rotate={buttonProps.isOpen ? 180 : 0}
-              />
+              <SvgIcon path={mdiChevronDown} rotate={isOpen ? 180 : 0} />
             </ActionButton>
           )
         }}

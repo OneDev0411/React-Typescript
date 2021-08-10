@@ -1,7 +1,7 @@
 import { difference, differenceBy, differenceWith, isEqual } from 'lodash'
 
-import Roles from 'models/BrandConsole/Roles'
 import { getBrands } from 'models/BrandConsole/Brands'
+import Roles from 'models/BrandConsole/Roles'
 
 export async function updateRoles(
   team: IBrand,

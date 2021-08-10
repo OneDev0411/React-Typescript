@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import {
   IconButton,
@@ -8,16 +7,16 @@ import {
   useTheme,
   Theme
 } from '@material-ui/core'
-
 import { mdiTrashCanOutline, mdiPencil, mdiOpenInNew } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
-import SearchListingDrawer from 'components/SearchListingDrawer'
 import { updateListing } from 'actions/deals'
-import { getField } from 'models/Deal/helpers/context'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import LoadingContainer from 'components/LoadingContainer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import SearchListingDrawer from 'components/SearchListingDrawer'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { getField } from 'models/Deal/helpers/context'
 
 import { ItemValue, ItemActions } from '../../Factsheet/styled'
 

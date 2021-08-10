@@ -1,13 +1,16 @@
 import React from 'react'
-import { List, useTheme } from '@material-ui/core'
-import { mdiAt, mdiProgressDownload, mdiEmailOutline } from '@mdi/js'
 
-import { mdiExportVariant } from '@mdi/js'
+import { List, useTheme } from '@material-ui/core'
+import {
+  mdiAt,
+  mdiProgressDownload,
+  mdiEmailOutline,
+  mdiExportVariant
+} from '@mdi/js'
 
 import { BaseDropdown } from 'components/BaseDropdown'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Item } from './Item'
 import { DownloadType, ExportType } from './types'

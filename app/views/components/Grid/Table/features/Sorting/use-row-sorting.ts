@@ -1,8 +1,8 @@
 import sortData from 'lodash/sortBy'
 
-import { TableColumn, GridSortingOption, ActiveSort } from '../../types'
-import { useGridContext } from '../../hooks/use-grid-context'
 import { resolveAccessor } from '../../helpers/resolve-accessor'
+import { useGridContext } from '../../hooks/use-grid-context'
+import { TableColumn, GridSortingOption, ActiveSort } from '../../types'
 
 export function useRowsSorting<Row>(
   columns: TableColumn<Row>[],

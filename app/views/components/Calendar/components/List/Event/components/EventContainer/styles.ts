@@ -1,5 +1,4 @@
-import { Theme } from '@material-ui/core/styles'
-import { createStyles } from '@material-ui/core/styles'
+import { Theme, createStyles } from '@material-ui/core/styles'
 
 import { ClassesProps } from 'utils/ts-utils'
 

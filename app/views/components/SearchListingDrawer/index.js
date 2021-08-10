@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Flex from 'styled-flex-component'
+
 import {
   Button,
   Tooltip,
@@ -10,17 +9,18 @@ import {
   withStyles
 } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab'
+import PropTypes from 'prop-types'
+import Flex from 'styled-flex-component'
 
+import { HipPocketListingDrawer } from 'components/HipPocketListing'
 import { searchListings } from 'models/Deal/listing'
 import { getMediaGallery } from 'models/Deal/media-manager'
 
-import { HipPocketListingDrawer } from 'components/HipPocketListing'
-
 import Listing from '../../../models/listings/listing'
-
 import SearchDrawer from '../SearchDrawer'
-import ListingItem from './ListingItem'
+
 import { convertHipPokcetListingToListing } from './helpers/convert-hip-pocket-listing-to-listing/idnex'
+import ListingItem from './ListingItem'
 
 const styles = theme => ({
   alertAction: {

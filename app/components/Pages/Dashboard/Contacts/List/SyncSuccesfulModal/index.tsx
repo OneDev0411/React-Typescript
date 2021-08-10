@@ -1,10 +1,8 @@
-import { OAuthProvider } from 'constants/contacts'
-
 import React from 'react'
 
 import BareModal from 'components/BareModal'
-
 import ActionButton from 'components/Button/ActionButton'
+import { OAuthProvider } from 'constants/contacts'
 
 import OrganizeSyncedContactsButton from '../OrganizeSyncedContactsButton'
 

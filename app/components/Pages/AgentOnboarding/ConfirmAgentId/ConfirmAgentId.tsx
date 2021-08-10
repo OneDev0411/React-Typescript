@@ -1,24 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
-import { FORM_ERROR } from 'final-form'
-import { Form, Field } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-
-import { IAppState } from 'reducers'
-
-import searchAgent from 'models/agent/search'
+import { FORM_ERROR } from 'final-form'
+import { Form, Field } from 'react-final-form'
+import { useSelector } from 'react-redux'
+import { WithRouterProps } from 'react-router'
 
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import searchAgent from 'models/agent/search'
+import { IAppState } from 'reducers'
 
-import Header from '../Header'
-import Container from '../Container'
-import SkipButton from '../SkipButton'
-import NextButton from '../NextButton'
-import { useDocumentTitle } from '../use-document-title'
 import { useCommonStyles } from '../common-styles'
+import Container from '../Container'
+import Header from '../Header'
+import NextButton from '../NextButton'
+import SkipButton from '../SkipButton'
+import { useDocumentTitle } from '../use-document-title'
 
 interface FormValues {
   mlsId: string
@@ -33,6 +32,7 @@ export default function ConfirmAgentId(props: WithRouterProps) {
 
   const onSubmit = async (values: FormValues) => {
     const notFoundError = {
+      // eslint-disable-next-line max-len
       [FORM_ERROR]: `We were not able to find an agent matching MLS ID (${values.mlsId})). You can go back to try a different number or skip this step for now.`
     }
 

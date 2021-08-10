@@ -1,12 +1,13 @@
 import React from 'react'
-import { Form, Field } from 'react-final-form'
+
 import { Grid, Box, Button, Divider } from '@material-ui/core'
 import { TextField } from 'final-form-material-ui'
+import { Form, Field } from 'react-final-form'
 
 import { Modal, ModalHeader } from 'components/Modal'
 
-import { validateStringInput } from '../helpers'
 import { MAX_FLOW_NAME_LENGTH, MAX_FLOW_DESCRIPTION_LENGTH } from '../constants'
+import { validateStringInput } from '../helpers'
 
 import { ContentContainer } from './styled'
 
@@ -99,7 +100,7 @@ export default function New({ flow, onClose, onSubmit }: Props) {
 
                   <Divider />
 
-                  <Grid container item xs={12} justify="flex-end">
+                  <Grid container item xs={12} justifyContent="flex-end">
                     <Button
                       variant="contained"
                       color="primary"

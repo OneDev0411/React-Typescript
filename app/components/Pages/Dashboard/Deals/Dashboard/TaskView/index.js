@@ -1,13 +1,13 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
-import Drawer from 'components/OverlayDrawer'
-import { Callout } from 'components/Callout'
-
 import { setSelectedTask } from 'actions/deals'
+import { Callout } from 'components/Callout'
+import Drawer from 'components/OverlayDrawer'
 
-import Header from './Header'
 import Comments from './Comments'
+import Header from './Header'
 
 function TaskView(props) {
   const { task } = props

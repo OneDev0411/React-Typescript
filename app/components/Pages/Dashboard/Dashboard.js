@@ -1,42 +1,37 @@
 import React, { Component } from 'react'
+
 import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import { fetchShowingTotalNotificationCount } from 'actions/showings'
-
 import ShowingSocket from 'services/socket/showings'
 
 import asyncComponentLoader from '../../../loader'
+import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
+import { selectListings } from '../../../reducers/listings'
+import ChatSocket from '../../../services/socket/chat'
+import ContactSocket from '../../../services/socket/contacts'
+import DealSocket from '../../../services/socket/deals'
+import NotificationSocket from '../../../services/socket/Notifications'
+import { getRooms } from '../../../store_actions/chatroom'
+import { getAttributeDefs } from '../../../store_actions/contacts'
+import { getDeals, searchDeals } from '../../../store_actions/deals'
+import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
+import { deactivateIntercom } from '../../../store_actions/intercom'
+import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
+import { getAllNotifications } from '../../../store_actions/notifications'
+import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
+import CheckBrowser from '../../../views/components/CheckBrowser'
+import EmailVerificationBanner from '../../../views/components/EmailVerificationBanner'
+import Intercom from '../../../views/components/Intercom'
+import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
+
+import { DashboardLayout } from './DashboardLayout'
 
 const InstantChat = asyncComponentLoader({
   loader: () => import('./Chatroom/InstantChat')
 })
-
-import ChatSocket from '../../../services/socket/chat'
-import DealSocket from '../../../services/socket/deals'
-import ContactSocket from '../../../services/socket/contacts'
-import NotificationSocket from '../../../services/socket/Notifications'
-
-import { selectListings } from '../../../reducers/listings'
-
-import { deactivateIntercom } from '../../../store_actions/intercom'
-import { getRooms } from '../../../store_actions/chatroom'
-import { getAttributeDefs } from '../../../store_actions/contacts'
-import { getDeals, searchDeals } from '../../../store_actions/deals'
-import { getAllNotifications } from '../../../store_actions/notifications'
-import { isLoadedContactAttrDefs } from '../../../reducers/contacts/attributeDefs'
-import getFavorites from '../../../store_actions/listings/favorites/get-favorites'
-import { fetchUnreadEmailThreadsCount } from '../../../store_actions/inbox'
-
-import CheckBrowser from '../../../views/components/CheckBrowser'
-import Intercom from '../../../views/components/Intercom'
-import EmailVerificationBanner from '../../../views/components/EmailVerificationBanner'
-
-import { hasUserAccess, viewAsEveryoneOnTeam } from '../../../utils/user-teams'
-
-import syncOpenHouseData from '../../helpers/sync-open-house-offline-registers'
-import { DashboardLayout } from './DashboardLayout'
 
 class Dashboard extends Component {
   UNSAFE_componentWillMount() {
@@ -44,12 +39,6 @@ class Dashboard extends Component {
 
     if (user) {
       new ChatSocket(user)
-    }
-
-    if (typeof window !== 'undefined') {
-      if (!('WebkitAppearance' in document.documentElement.style)) {
-        import('simplebar')
-      }
     }
   }
 
@@ -88,10 +77,18 @@ class Dashboard extends Component {
       Object.keys(deals).length === 0 &&
       !this.props.isFetchingDeals
     ) {
-      if (isBackOffice || viewAsEveryoneOnTeam(user)) {
+      const searchParamValue =
+        this.props.location.pathname.startsWith('/dashboard/deals') &&
+        new URLSearchParams(this.props.location.search).get('q')
+
+      if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
         dispatch(getDeals(user))
       } else {
-        dispatch(searchDeals(user))
+        dispatch(
+          searchParamValue
+            ? searchDeals(user, decodeURIComponent(searchParamValue))
+            : getDeals(user)
+        )
       }
     }
 

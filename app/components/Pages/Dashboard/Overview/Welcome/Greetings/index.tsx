@@ -1,13 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+
 import { Box } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-
 import fecha from 'fecha'
+import { useSelector } from 'react-redux'
 
-import { selectUser } from 'selectors/user'
 import { Avatar } from 'components/Avatar'
+import { selectUser } from 'selectors/user'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

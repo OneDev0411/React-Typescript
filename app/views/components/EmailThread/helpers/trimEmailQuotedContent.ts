@@ -94,6 +94,7 @@ function extractImages(
       htmlContent.slice(0, imgPosition) +
       dummyHtmlTagInstance +
       htmlContent.slice(imgPosition + 3)
+    // eslint-disable-next-line no-constant-condition
   } while (true)
 
   return [htmlContent, images]

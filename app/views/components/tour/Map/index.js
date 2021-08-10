@@ -1,6 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import isEqual from 'lodash/isEqual'
+import PropTypes from 'prop-types'
 
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
@@ -39,8 +40,10 @@ export class Map extends React.Component {
     window.initTourDrawerMap = this.initMap
 
     if (!window.google) {
+      // TODO: use loadMapLibraries form `app/utils/google-map-api/index.ts` to load google map libraries
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=initTourDrawerMap`
+        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=initTourDrawerMap`,
+        'google-map-script'
       )
     } else {
       this.initMap()

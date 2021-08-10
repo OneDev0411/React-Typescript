@@ -1,11 +1,4 @@
-import React, { RefObject, useContext } from 'react'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import type {
-  DroppableProvided,
-  DraggableProvided,
-  DraggableStateSnapshot,
-  DropResult
-} from 'react-beautiful-dnd'
+import { RefObject, useContext } from 'react'
 
 import {
   Checkbox,
@@ -19,17 +12,22 @@ import {
   Theme,
   Tooltip
 } from '@material-ui/core'
-import classNames from 'classnames'
-
 import { useTheme } from '@material-ui/styles'
 import { mdiDrag, mdiTrashCanOutline } from '@mdi/js'
+import classNames from 'classnames'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import type {
+  DroppableProvided,
+  DraggableProvided,
+  DraggableStateSnapshot,
+  DropResult
+} from 'react-beautiful-dnd'
 
+import { reorder } from '@app/utils/dnd-reorder'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { useDictionary } from 'hooks/use-dictionary'
-
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useDictionary } from 'hooks/use-dictionary'
 
 import { useTableStyles } from '../../../../../styles/table.style'
 import { dealTaskTypeToString } from '../constants'
@@ -57,19 +55,6 @@ export function CheckListTable({
 
   const confirmationModal = useContext(ConfirmationModalContext)
 
-  const reorder = (
-    list: IBrandChecklistTask[],
-    startIndex: number,
-    endIndex: number
-  ) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-
-    result.splice(endIndex, 0, removed)
-
-    return result
-  }
-
   const onDragEnd = (result: DropResult) => {
     if (
       !result.destination ||
@@ -78,7 +63,7 @@ export function CheckListTable({
       return
     }
 
-    const reorderedTasks = reorder(
+    const reorderedTasks = reorder<IBrandChecklistTask>(
       checklist.tasks || [],
       result.source.index,
       result.destination.index

@@ -1,3 +1,5 @@
+import { ChangeEvent } from 'react'
+
 import {
   FormControl,
   FormControlLabel,
@@ -6,7 +8,6 @@ import {
   Typography,
   FormHelperText
 } from '@material-ui/core'
-import { ChangeEvent } from 'react'
 import { Field } from 'react-final-form'
 
 interface ShowingRoleFormCheckboxGroupFieldProps {

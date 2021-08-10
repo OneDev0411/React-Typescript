@@ -1,25 +1,25 @@
 import React, { useMemo, useEffect } from 'react'
-import { connect } from 'react-redux'
+
 import { makeStyles } from '@material-ui/core'
-import pluralize from 'pluralize'
 import classNames from 'classnames'
+import pluralize from 'pluralize'
+import { connect } from 'react-redux'
 
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 
-import { EmailInsightsZeroState } from './ZeroState'
-
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
 
-import Layout from './Layout'
-import Actions from './MarketingInsightsActions'
-import ThumbnailColumn from './Column/Thumbnail'
-import TitleColumn from './Column/Title'
 import RecipientsColumn from './Column/Recipients'
 import StatsColumn from './Column/Stats'
-import useListData from './useListData'
-import { InsightFilterType } from './types'
+import ThumbnailColumn from './Column/Thumbnail'
+import TitleColumn from './Column/Title'
 import { valueAndPercent, hasPixelTracking } from './helpers'
+import Layout from './Layout'
+import Actions from './MarketingInsightsActions'
+import { InsightFilterType } from './types'
+import useListData from './useListData'
+import { EmailInsightsZeroState } from './ZeroState'
 
 const useCustomGridStyles = makeStyles(
   theme => ({
@@ -48,14 +48,8 @@ function List(props) {
     ? InsightFilterType.SCHEDULED
     : InsightFilterType.SENT
 
-  const {
-    isLoading,
-    hasError,
-    list,
-    counts,
-    reloadList,
-    reloadItem
-  } = useListData(props.user, filterType)
+  const { isLoading, hasError, list, counts, reloadList, reloadItem } =
+    useListData(props.user, filterType)
 
   useEffect(() => {
     function handleEmailCampaignSentEvent(event) {
@@ -195,7 +189,7 @@ function List(props) {
         )
       }
     ],
-    []
+    [reloadItem, reloadList]
   )
 
   const renderContent = ({ sortBy, onChangeSort }) => {

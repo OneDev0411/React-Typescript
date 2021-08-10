@@ -2,10 +2,10 @@ import React from 'react'
 
 import { makeStyles } from '@material-ui/core'
 
-import PDFPage from './PdfPage'
 import Annotations from './Annotations'
 import { DefaultValues } from './DefaultValues'
 import { DefaultValuesContextProvider } from './DefaultValues/Provider'
+import PDFPage from './PdfPage'
 
 const useStyles = makeStyles(
   () => ({

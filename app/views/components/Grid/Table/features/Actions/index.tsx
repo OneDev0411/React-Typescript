@@ -1,13 +1,11 @@
 import React from 'react'
 
 import { Slide, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
-
+import { alpha } from '@material-ui/core/styles'
 import { mdiClose } from '@mdi/js'
 
-import { useGridContext } from '../../hooks/use-grid-context'
-
 import { resetRows } from '../../context/actions/selection/reset-rows'
+import { useGridContext } from '../../hooks/use-grid-context'
 
 import { GridActionButton } from './Button'
 
@@ -32,7 +30,7 @@ const useStyles = makeStyles(
         padding: theme.spacing(0, 2),
         background: theme.palette.tertiary.main,
         borderRadius: `${theme.spacing(2)}px`,
-        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
+        boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
           theme.palette.common.black,
           0.4
         )}`,

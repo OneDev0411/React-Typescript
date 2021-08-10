@@ -1,10 +1,10 @@
 import React from 'react'
+
 import { Box } from '@material-ui/core'
 
-import { Checkbox } from 'components/Checkbox'
 import { BasicDropdown } from 'components/BasicDropdown'
+import { Checkbox } from 'components/Checkbox'
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
-
 import {
   Input,
   DropdownButton,

@@ -1,15 +1,17 @@
-import { Editor, EditorState } from 'draft-js'
-import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
 import * as React from 'react'
 import { RefObject, useState } from 'react'
 
-import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
-import { useOnToggledOn } from './hooks/use-on-toggled'
+import { ClickAwayListener, Popper, useTheme } from '@material-ui/core'
+import { Editor, EditorState } from 'draft-js'
+
 import { createLink } from '../../../utils/create-link'
-import { getCurrentLinkText, getCurrentLinkUrl, stopPropagation } from './utils'
-import { LinkEditorForm } from './components/LinkEditorForm'
 import { getExpandedSelectionByEntityType } from '../../../utils/get-expanded-selection-by-entity-type'
 import { getSelectedAtomicBlock } from '../../../utils/get-selected-atomic-block'
+
+import { LinkEditorForm } from './components/LinkEditorForm'
+import { useEditorSelectionAnchor } from './hooks/use-editor-selection-anchor'
+import { useOnToggledOn } from './hooks/use-on-toggled'
+import { getCurrentLinkText, getCurrentLinkUrl, stopPropagation } from './utils'
 
 interface Props {
   open: boolean

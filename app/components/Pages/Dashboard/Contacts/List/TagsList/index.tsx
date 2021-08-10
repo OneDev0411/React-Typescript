@@ -1,6 +1,5 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import cn from 'classnames'
+
 import {
   ListItem,
   ListItemText,
@@ -8,25 +7,25 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import cn from 'classnames'
+import { connect } from 'react-redux'
 
 import {
   updateActiveFilter,
   resetActiveFilters
 } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-
-import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-import { selectContactsInfo } from 'reducers/contacts/list'
+import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import {
   IAttributeDefsState,
   selectDefinitionByName
 } from 'reducers/contacts/attributeDefs'
+import { selectContactsInfo } from 'reducers/contacts/list'
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-
-import { normalizeAttributeFilters } from '../utils'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
+import { normalizeAttributeFilters } from '../utils'
 
 interface Props {
   attributeDefs: IAttributeDefsState
@@ -141,13 +140,15 @@ export const TagsList = (props: Props) => {
 
   return (
     <BaseDropdownWithMore
+      component="div"
       buttonLabel="Tags"
       DropdownToggleButtonProps={{
         className: classes.dropdownBtn,
         disabled: isFetching || existingTags.length === 0
       }}
       listPlugin={{
-        style: { width: 220 }
+        style: { width: 220 },
+        className: 'u-scrollbar'
       }}
       morePlugin={{
         count: 7,

@@ -1,6 +1,7 @@
 import React, { useRef, ReactNode } from 'react'
+
 import { TabProps, createStyles, makeStyles, Theme } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
+import { alpha } from '@material-ui/core/styles'
 
 import { Tab } from '../Tab'
 
@@ -25,7 +26,7 @@ const useStyles = makeStyles(
             visibility: 'visible'
           },
           '& .MuiTab-root': {
-            background: fade(
+            background: alpha(
               theme.palette.primary.main,
               theme.palette.action.hoverOpacity
             )
@@ -48,7 +49,7 @@ const useStyles = makeStyles(
         '&:hover': {
           visibility: 'visible',
           '& + .MuiTab-root': {
-            background: fade(
+            background: alpha(
               theme.palette.primary.main,
               theme.palette.action.hoverOpacity
             ),

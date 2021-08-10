@@ -1,14 +1,12 @@
 import React, { Fragment } from 'react'
-import { connect } from 'react-redux'
-
-import Dropzone from 'react-dropzone-rechat'
 
 import { Button } from '@material-ui/core'
+import Dropzone from 'react-dropzone-rechat'
+import { connect } from 'react-redux'
 
-import OverlayDrawer from 'components/OverlayDrawer'
-
-import Deal from 'models/Deal'
 import { setUploadFiles } from 'actions/deals'
+import OverlayDrawer from 'components/OverlayDrawer'
+import Deal from 'models/Deal'
 
 import { Label, Note, Input } from './styled'
 

@@ -2,9 +2,8 @@ import { AxiosError } from 'axios'
 import { Request, Response } from 'express'
 
 import { URL_PATTERN } from '../../../constants'
-
-import { getParsedHeaders } from '../../../utils/parse-headers'
 import { request } from '../../../libs/request'
+import { getParsedHeaders } from '../../../utils/parse-headers'
 
 export default async (req: Request, res: Response) => {
   await request(req, {
@@ -26,6 +25,7 @@ export default async (req: Request, res: Response) => {
 
       if (e.response?.status === 400 || e.response?.status === 401) {
         res.send(
+          // eslint-disable-next-line max-len
           'Access denied. This envelope was created by someone else. You cannot amend it'
         )
       }

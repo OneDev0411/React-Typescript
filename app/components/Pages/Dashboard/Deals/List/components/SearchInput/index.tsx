@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
 interface Props {
   placeholder: string
-  defaultValue?: string
+  value: string | null
   onChange: (value: string) => void
 }
 
-export function DebouncedSearchInput(props: Props) {
-  const [value, setValue] = useState(props.defaultValue || '')
-  const [debouncedOnChange] = useDebouncedCallback(props.onChange, 500)
+export function DebouncedSearchInput({
+  value = '',
+  placeholder,
+  onChange
+}: Props) {
+  const [debouncedOnChange] = useDebouncedCallback(onChange, 500)
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(target.value)
     debouncedOnChange(target.value)
   }
 
   return (
     <SearchInput
-      value={value}
-      placeholder={props.placeholder}
+      defaultValue={value}
+      placeholder={placeholder}
       onChange={handleChange}
     />
   )

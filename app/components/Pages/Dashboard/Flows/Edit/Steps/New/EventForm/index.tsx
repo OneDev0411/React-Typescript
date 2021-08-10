@@ -1,16 +1,17 @@
 import React from 'react'
-import { Form } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { mdiCalendarMonthOutline } from '@mdi/js'
+import { Form } from 'react-final-form'
 
 import { EventType } from 'components/EventDrawer/components/EventType'
 
-import { BaseFormProps, EventFormData } from '../types'
-import { BaseFormLayout } from '../components/BaseFormLayout'
-import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
+import { Title } from '../components/BaseFields/Title'
+import { BaseFormLayout } from '../components/BaseFormLayout'
 import { getEventInitialValues } from '../helpers/get-initial-values'
 import { eventFormPreSaveFormat } from '../helpers/pre-save-format'
+import { BaseFormProps, EventFormData } from '../types'
 
 export default function EventForm({
   index,

@@ -1,27 +1,22 @@
 import React, { useState } from 'react'
+
 import { Box, Button } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 
 import { deleteRole } from 'actions/deals'
-
+import DealRoleForm from 'components/DealRole/Form'
 import {
   QuestionSection,
   QuestionTitle,
   QuestionForm
 } from 'components/QuestionWizard'
-
-import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 import { useSectionContext } from 'components/QuestionWizard/hooks/use-section-context'
-
-import DealRoleForm from 'components/DealRole/Form'
-
-import { RoleCard } from '../../components/RoleCard'
-
-import { useCreationContext } from '../../context/use-creation-context'
+import { useWizardContext } from 'components/QuestionWizard/hooks/use-wizard-context'
 
 import { ContactRoles } from '../../components/ContactRoles'
+import { RoleCard } from '../../components/RoleCard'
+import { useCreationContext } from '../../context/use-creation-context'
 import { BUYER_ROLES, SELLER_ROLES } from '../../helpers/roles'
-
 import type { IDealFormRole } from '../../types'
 
 interface Props {
@@ -47,7 +42,7 @@ export function DealClient({
   skippable = false,
   onChange
 }: Props) {
-  const { user, checklist } = useCreationContext()
+  const { checklist } = useCreationContext()
   const wizard = useWizardContext()
   const { step } = useSectionContext()
 
@@ -65,9 +60,8 @@ export function DealClient({
    * list of all existence roles
    */
 
-  const [selectedRole, setSelectedRole] = useState<
-    Nullable<Partial<IDealFormRole>>
-  >(null)
+  const [selectedRole, setSelectedRole] =
+    useState<Nullable<Partial<IDealFormRole>>>(null)
 
   const getDefaultRole = () => {
     if (side === 'Selling') {
@@ -121,7 +115,6 @@ export function DealClient({
             isOpen
             compact
             showSaveContactButton
-            user={user}
             checklist={checklist}
             dealSide={side}
             form={selectedRole}

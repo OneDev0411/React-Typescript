@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import {
   Button,
@@ -12,18 +11,15 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
+import { isToday } from 'date-fns'
+import { useSelector } from 'react-redux'
 import timeago from 'timeago.js'
 
-import { isToday } from 'date-fns'
-
 import Link from 'components/ALink'
-
-import { selectUser } from 'selectors/user'
-
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
+import { selectUser } from 'selectors/user'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
@@ -103,6 +99,7 @@ export default function CalendarEventListItem({ event }: Props) {
   }
 
   if (event.event_type == 'home_anniversary' && contact) {
+    // eslint-disable-next-line max-len
     secondaryText = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
   } else {
     secondaryText = humanizedEventTime

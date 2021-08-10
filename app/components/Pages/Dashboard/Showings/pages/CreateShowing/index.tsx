@@ -1,41 +1,35 @@
 import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
-
 import { useSelector } from 'react-redux'
-
 import { InjectedRouter, Route } from 'react-router'
-
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
 import { QuestionWizard } from 'components/QuestionWizard'
-
 import useAsync from 'hooks/use-async'
-
 import createShowing from 'models/showing/create-showing'
-
 import { selectActiveTeamId } from 'selectors/team'
 
-import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+import ShowingCloseButton from '../../components/ShowingCloseButton'
+import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
+import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
+import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
+import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
+import ShowingStepInstructions from '../../components/ShowingStepInstructions'
 import ShowingStepIntro from '../../components/ShowingStepIntro'
 import ShowingStepProperty from '../../components/ShowingStepProperty'
-import ShowingStepApprovalType from '../../components/ShowingStepApprovalType'
-import ShowingStepInstructions from '../../components/ShowingStepInstructions'
-import ShowingStepAdvanceNotice from '../../components/ShowingStepAdvanceNotice'
-import ShowingStepDurationAndAvailabilities from '../../components/ShowingStepDurationAndAvailabilities'
-import useShowingAvailabilitiesState from './use-showing-availabilities-state'
-import ShowingStepFinalResult from '../../components/ShowingStepFinalResult'
-import ShowingCloseButton from '../../components/ShowingCloseButton'
-
-import useShowingRoles from './use-showing-roles'
+import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
 import {
   goAndShowNotificationTypes,
   showingDurationOptions
 } from '../../constants'
-import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
 import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
-import ShowingStepRolePerson from '../../components/ShowingStepRolePerson'
+import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
+import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+
+import useShowingAvailabilitiesState from './use-showing-availabilities-state'
+import useShowingRoles from './use-showing-roles'
 
 interface CreateShowingProps {
   router: InjectedRouter
@@ -80,21 +74,20 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     const errors: CreateShowingErrors = {}
 
     if (!property) {
-      errors.property = 'You need to select a property'
+      errors.property = 'Please choose a property.'
     }
 
     if (hasTimeConflicts(availabilities)) {
-      errors.availabilities = 'The time slots have conflicts'
+      errors.availabilities = 'Selected time ranges have conflicts.'
     } else if (hasInvalidTimeRange(availabilities, duration)) {
-      errors.availabilities = 'Invalid time ranges'
+      errors.availabilities = 'Invalid time ranges.'
     }
 
     const roleCache: Record<string, boolean> = {}
 
     roles.forEach(role => {
       if (role.role === 'SellerAgent' && !role.user) {
-        errors[`role-${role.id}`] =
-          'You need to select one of the available people from the menu.'
+        errors[`role-${role.id}`] = 'Please choose a person from the menu.'
 
         return
       }
@@ -107,7 +100,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         role.mode === 'form'
       ) {
         errors[`role-${role.id}`] =
-          'Please complete the form and click on the Save button'
+          'Please complete the form and click on Save button.'
 
         return
       }
@@ -123,7 +116,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         .trim()
 
       if (roleCache[roleCacheKey]) {
-        errors[`role-${role.id}`] = 'Role information is duplicated'
+        errors[`role-${role.id}`] = 'Role information is duplicated.'
       }
 
       roleCache[roleCacheKey] = true
@@ -183,7 +176,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   }
 
   const validationError: Nullable<string> = showingValidationErrors
-    ? 'You need to fix the validation errors to continue the process'
+    ? 'Please fix the errors above to continue.'
     : null
 
   return (

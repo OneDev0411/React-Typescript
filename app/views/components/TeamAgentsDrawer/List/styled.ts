@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 
-import { grey, primary } from 'views/utils/colors'
-
 import LinkButton from 'components/Button/LinkButton'
+import { grey, primary } from 'views/utils/colors'
 
 export const Card = styled.div`
   border: solid 1px ${grey.A300};

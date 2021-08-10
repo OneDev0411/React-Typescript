@@ -13,16 +13,16 @@ import {
   Checkbox,
   FormControlLabel
 } from '@material-ui/core'
+import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { mdiClose } from '@mdi/js'
 
-import { selectUser } from 'selectors/user'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   createPropertyType,
   PropertyTypeData
 } from 'models/property-types/create-property-type'
+import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
 interface Props {

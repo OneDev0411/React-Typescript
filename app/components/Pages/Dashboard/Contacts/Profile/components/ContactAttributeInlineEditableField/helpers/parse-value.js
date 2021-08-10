@@ -1,6 +1,5 @@
-import { isNumeric } from 'utils/helpers'
-
 import { parseDateValues } from 'components/inline-editable-fields/InlineDateField/helpers'
+import { isNumeric } from 'utils/helpers'
 
 export function parseValue(value, attribute_def) {
   // parsing number fields value to a number

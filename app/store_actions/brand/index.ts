@@ -1,6 +1,6 @@
 import * as actionsType from '../../constants/brand'
-import { getBrandById } from '../../models/brand/get-brand-by-id'
 import { getBrandByHostname } from '../../models/brand/get-brand-by-hostname'
+import { getBrandById } from '../../models/brand/get-brand-by-id'
 
 const getBrand = (brandId?: UUID) => async (dispatch, getState) => {
   let brand = getState().brand

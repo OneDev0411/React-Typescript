@@ -31,7 +31,7 @@ declare interface IDealContext extends IModel<'deal_context_item'> {
   checklist: UUID
   created_by: UUID
   data_type: string // requires better typing
-  date: string | null
+  date: number | null
   deal: UUID
   definition: UUID
   id: UUID

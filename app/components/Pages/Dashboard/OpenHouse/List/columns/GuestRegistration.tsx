@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Button } from '@material-ui/core'
 
 import config from '../../../../../../../config/public'
@@ -9,9 +10,8 @@ interface Props {
 }
 
 export default function GuestRegistration({ activeBrandId, openHouse }: Props) {
-  const registerPageURL = `${config.app.url}/openhouse/${
-    openHouse.id
-  }/${activeBrandId}/register`
+  // eslint-disable-next-line max-len
+  const registerPageURL = `${config.app.url}/openhouse/${openHouse.id}/${activeBrandId}/register`
 
   return (
     <Button variant="outlined" onClick={() => window.open(registerPageURL)}>

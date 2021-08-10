@@ -1,5 +1,5 @@
 import React from 'react'
-import { Draggable } from 'react-beautiful-dnd'
+
 import {
   Box,
   Grid,
@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { mdiDrag } from '@mdi/js'
 import cn from 'classnames'
+import { Draggable } from 'react-beautiful-dnd'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useRaisedMuiCard from 'hooks/use-raised-mui-card'
@@ -117,7 +118,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                 item
                 xs={12}
                 alignItems="center"
-                justify="flex-start"
+                justifyContent="flex-start"
               >
                 <Grid
                   container
@@ -125,7 +126,7 @@ export function View({ disableEdit, index, step, setIsEditing }: Props) {
                   xs={4}
                   wrap="nowrap"
                   alignItems="center"
-                  justify="flex-start"
+                  justifyContent="flex-start"
                 >
                   <Grid item className={classes.stepTypeContainer}>
                     <StepTypeIcon

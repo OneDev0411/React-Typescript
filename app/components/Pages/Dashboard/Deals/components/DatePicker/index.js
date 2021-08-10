@@ -1,9 +1,9 @@
 import React from 'react'
-import DatePicker from 'react-day-picker'
-import ClickOutSide from 'react-click-outside'
-import Flex from 'styled-flex-component'
 
 import { Button } from '@material-ui/core'
+import ClickOutSide from 'react-click-outside'
+import DatePicker from 'react-day-picker'
+import Flex from 'styled-flex-component'
 
 import { PickerContainer } from 'components/DateTimePicker/styled'
 import { Divider } from 'components/Divider'

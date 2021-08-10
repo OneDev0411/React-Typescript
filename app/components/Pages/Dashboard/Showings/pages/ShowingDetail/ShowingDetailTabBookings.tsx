@@ -2,11 +2,13 @@ import { Dispatch, SetStateAction } from 'react'
 
 import { Location } from 'history'
 
+import ShowingDetailEmptyStateDescription from '../../components/ShowingDetailTabVisitors/ShowingDetailEmptyStateDescription'
 import ShowingFilteredBookingList from '../../components/ShowingFilteredBookingList'
 import { AppointmentFilter } from '../../types'
-import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
+
+import useShowingAckAppointmentNotifications from './use-showing-ack-appointment-notifications'
 import useShowingDismissAppointmentNotifications from './use-showing-dismiss-appointment-notifications'
-import ShowingDetailEmptyStateDescription from '../../components/ShowingDetailTabVisitors/ShowingDetailEmptyStateDescription'
+import useShowingUpdateAppointmentStatus from './use-showing-update-appointment-status'
 
 const generateAppointmentFilterLink = (
   filter: AppointmentFilter,
@@ -30,12 +32,16 @@ function ShowingDetailTabBookings({
   const dismissShowingAppointmentNotifications =
     useShowingDismissAppointmentNotifications(setShowing)
 
+  const ackShowingAppointmentNotifications =
+    useShowingAckAppointmentNotifications(setShowing)
+
   return (
     <ShowingFilteredBookingList
       appointments={appointments}
       onApprovalAction={updateShowingAppointmentStatus}
       generateLink={generateAppointmentFilterLink}
       onDismissAction={dismissShowingAppointmentNotifications}
+      onAckAction={ackShowingAppointmentNotifications}
       emptyButtonLabel="Open Booking Page"
       emptyButtonLink={showingBookingUrl}
       emptyButtonTarget="_blank"

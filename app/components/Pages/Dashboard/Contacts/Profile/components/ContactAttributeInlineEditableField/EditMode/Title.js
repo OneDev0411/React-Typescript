@@ -1,6 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import { Box } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 import { Label } from 'components/inline-editable-fields/styled'
 

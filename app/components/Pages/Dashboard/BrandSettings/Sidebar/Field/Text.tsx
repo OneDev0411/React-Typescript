@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import useDebouncedCallback from 'use-debounce/lib/callback'
+
 import { TextField as MuiTextField } from '@material-ui/core'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { FieldProps } from './types'
 

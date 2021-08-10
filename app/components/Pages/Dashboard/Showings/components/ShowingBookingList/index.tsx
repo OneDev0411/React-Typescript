@@ -1,32 +1,31 @@
 import { useState, useMemo, ReactNode } from 'react'
-import classNames from 'classnames'
-import { Box, Button, makeStyles } from '@material-ui/core'
 
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
+import classNames from 'classnames'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
-import ShowingColumnProperty from '../ShowingColumnProperty'
-import ShowingBookingListColumnActions, {
-  ShowingBookingListColumnActionsProps
-} from './ShowingBookingListColumnActions'
-import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
-import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
-import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
 import {
   getShowingImage,
   getAppointmentDateLabel,
   getAppointmentTimeLabel,
   getAppointmentTitle
 } from '../../helpers'
-import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
-
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
-import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
+import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingEmptyState from '../ShowingEmptyState'
+
+import ShowingBookingListColumnActions, {
+  ShowingBookingListColumnActionsProps
+} from './ShowingBookingListColumnActions'
+import ShowingBookingListColumnBase from './ShowingBookingListColumnBase'
+import ShowingBookingListColumnDateTime from './ShowingBookingListColumnDateTime'
+import ShowingBookingListColumnNew from './ShowingBookingListColumnNew'
+import ShowingBookingListColumnPerson from './ShowingBookingListColumnPerson'
+import ShowingBookingListColumnStatus from './ShowingBookingListColumnStatus'
 import ShowingBookingListEmptyState from './ShowingBookingListEmptyState'
 
 const useStyles = makeStyles(
@@ -48,7 +47,7 @@ const useStyles = makeStyles(
 export interface ShowingBookingListProps
   extends Pick<
     ShowingBookingListColumnActionsProps,
-    'onApprovalAction' | 'onDismissAction'
+    'onApprovalAction' | 'onDismissAction' | 'onAckAction'
   > {
   rows: IShowingAppointment<'showing'>[]
   emptyMessage: string
@@ -68,6 +67,7 @@ function ShowingBookingList({
   onApprovalAction,
   hasPropertyColumn = false,
   onDismissAction,
+  onAckAction,
   hasPastBookingsFilter = false,
   stackDateAndTimeColumns = false,
   hasTextEmptyState = true,
@@ -187,6 +187,7 @@ function ShowingBookingList({
           contact={row.contact}
           feedback={row.feedback}
           onDismissAction={onDismissAction}
+          onAckAction={onAckAction}
           buyerName={row.contact.display_name}
           buyerMessage={row.buyer_message}
           appointmentTitle={getAppointmentTitle(row)}

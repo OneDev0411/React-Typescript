@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Box, LinearProgress } from '@material-ui/core'
 
 import { useStyles } from '../../../styles'

@@ -1,7 +1,6 @@
 import { Response } from 'superagent'
 
 import Fetch from '../../../services/fetch'
-
 import { API_PATH } from '../constants'
 
 export default async function disconnect(): Promise<Response> {

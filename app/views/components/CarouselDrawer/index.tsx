@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 import { Button, Box } from '@material-ui/core'
-
 import type { Model } from 'backbone'
-
 import { DragDropContextProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-
 import { createChildContext } from 'react-dnd/lib/cjs/DragDropContext'
 
 import OverlayDrawer from 'components/OverlayDrawer'

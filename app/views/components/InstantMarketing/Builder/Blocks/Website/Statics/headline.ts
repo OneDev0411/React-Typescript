@@ -1,18 +1,16 @@
 import { Editor } from 'grapesjs'
 
-import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
-
 import Headline1Icon from 'assets/images/marketing/editor/blocks/h1.png'
 import Headline2Icon from 'assets/images/marketing/editor/blocks/h2.png'
+import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
+import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
 import { isComponent } from '../utils'
 
 import Headline1 from './headline1.njk'
 import Headline2 from './headline2.njk'
-
-import registerBlock from '../../registerBlock'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeHeadline = 'headline'
 export const headline1BlockName = `${typeHeadline}-1`

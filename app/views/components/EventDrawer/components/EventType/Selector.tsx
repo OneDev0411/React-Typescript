@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FieldInputProps } from 'react-final-form'
+
 import {
   Button,
   Popover,
@@ -10,12 +10,12 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import cn from 'classnames'
-
 import { mdiDotsVertical, mdiChevronDown } from '@mdi/js'
+import cn from 'classnames'
+import { FieldInputProps } from 'react-final-form'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 const SHORTHAND_ITEMS = [

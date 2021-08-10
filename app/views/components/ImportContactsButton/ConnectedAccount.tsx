@@ -1,11 +1,12 @@
 import React from 'react'
-import { mdiCogOutline } from '@mdi/js'
+
 import { Grid, Tooltip, IconButton, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { mdiCogOutline } from '@mdi/js'
 
+import { Avatar } from 'components/Avatar'
 import { ConnectedAccountSyncStatus } from 'components/ConnectedAccountSyncStatus'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/Avatar'
 
 interface Props {
   account: IOAuthAccount

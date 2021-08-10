@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 import styled, { css } from 'styled-components'
 
-import Card from '../Card'
 import { grey, primary } from '../../utils/colors'
+import Card from '../Card'
 
 // modes
 const sharedModeStyles = css`

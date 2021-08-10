@@ -1,4 +1,3 @@
-import { WithRouterProps, browserHistory } from 'react-router'
 import {
   Container,
   Grid,
@@ -11,14 +10,15 @@ import {
   useTheme
 } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
+import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
 import { cancelAppointmentRequest } from '@app/models/showing/cancel-appointment-request'
 import LoadingContainer from 'components/LoadingContainer'
 
-import InfoSection from '../../Sections/InfoSection'
-import DetailsSection from '../../Sections/DetailsSection'
 import { usePublicShowingAppointment } from '../../hooks'
+import DetailsSection from '../../Sections/DetailsSection'
+import InfoSection from '../../Sections/InfoSection'
 import { getFormattedAppointmentDateTime } from '../utils'
 
 const useStyles = makeStyles(
@@ -98,7 +98,7 @@ export default function ShowingAppointmentCancel({
             <Grid item xs={12}>
               <Box mt={3}>
                 <Typography variant="h6">
-                  You’re going to cancel{' '}
+                  You’re canceling your{' '}
                   <span style={{ color: theme.palette.primary.main }}>
                     {getFormattedAppointmentDateTime(appointment)}
                   </span>{' '}
@@ -122,7 +122,6 @@ export default function ShowingAppointmentCancel({
                       multiline
                       fullWidth
                       rows={4}
-                      placeholder="You can write some message or explanation here if you want to"
                       variant="outlined"
                       label="Message"
                     />

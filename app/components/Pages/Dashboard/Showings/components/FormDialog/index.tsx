@@ -1,12 +1,12 @@
 import { MouseEvent } from 'react'
-import isEqual from 'lodash/isEqual'
+
 import {
   DialogContent,
   DialogActions,
   Button,
   makeStyles
 } from '@material-ui/core'
-
+import isEqual from 'lodash/isEqual'
 import { Form, FormProps } from 'react-final-form'
 
 import Dialog, { DialogProps } from '../Dialog'

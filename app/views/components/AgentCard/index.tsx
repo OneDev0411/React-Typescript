@@ -8,7 +8,6 @@ import {
 
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
-
 import { getNameInitials } from 'utils/helpers'
 
 const useStyles = makeStyles(
@@ -48,7 +47,7 @@ export default function AgentCard({ agent }: Props) {
             </Avatar>
           </Grid>
           <Grid item>
-            <Grid container item direction="column" justify="center">
+            <Grid container item direction="column" justifyContent="center">
               <Grid
                 container
                 item

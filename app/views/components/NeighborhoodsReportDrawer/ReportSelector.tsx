@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+
 import { Divider } from '@material-ui/core'
 
-import { NeighborhoodsReport } from './types'
-import ReportPeriodSelector from './ReportPeriodSelector'
-import ReportMetricsList from './ReportMetricsList'
 import { getReportWithSpceficMetricsAndPeriod } from './helpers'
+import ReportMetricsList from './ReportMetricsList'
+import ReportPeriodSelector from './ReportPeriodSelector'
+import { NeighborhoodsReport } from './types'
 
 interface Props {
   neighborhoodReport: NeighborhoodsReport

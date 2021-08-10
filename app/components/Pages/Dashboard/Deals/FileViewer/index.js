@@ -1,33 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
 
+import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 
-import { addNotification as notify } from 'components/notification'
-
 import { getDeal } from 'actions/deals'
-
+import LoadingContainer from 'components/LoadingContainer'
+import { addNotification as notify } from 'components/notification'
 import { selectDealById } from 'reducers/deals/list'
 import { selectTaskById } from 'reducers/deals/tasks'
-
-import { isBackOffice } from 'utils/user-teams'
 import { getFileType } from 'utils/file-utils/get-file-type'
-
-import LoadingContainer from 'components/LoadingContainer'
-
+import { isBackOffice } from 'utils/user-teams'
 import { getEnvelopeFile } from 'views/utils/deal-files/get-envelope-file'
 
+import LoadDeal from '../components/LoadDeal'
+import TaskView from '../Dashboard/TaskView'
 import { getFileById } from '../utils/files/get-file-by-id'
 
-import TaskView from '../Dashboard/TaskView'
-
-import { Menu } from './Menu'
-import { FactsheetSideMenu } from './FactsheetSideMenu'
 import { EnvelopeSideMenu } from './EnvelopeSideMenu'
+import { FactsheetSideMenu } from './FactsheetSideMenu'
 import { FileDisplay } from './FileDisplay'
-
+import { Menu } from './Menu'
 import { LayoutContainer, PageContainer } from './styled'
-import LoadDeal from '../components/LoadDeal'
 
 class FileViewer extends React.Component {
   state = {

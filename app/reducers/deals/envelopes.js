@@ -1,5 +1,3 @@
-import _ from 'underscore'
-
 import * as actionTypes from '../../constants/deals'
 
 export default (state = null, action) => {

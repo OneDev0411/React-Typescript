@@ -1,4 +1,5 @@
 import { useContext, useRef, useEffect } from 'react'
+
 import { useField } from 'react-final-form'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -32,6 +33,7 @@ export function FutureEventDoneConfirmation() {
     confirmation.setConfirmationModal({
       message: 'Heads up!',
       description:
+        // eslint-disable-next-line max-len
         'If you mark this event as done, the event due date will change to now. Are you sure?',
       onConfirm: () => {
         const now = new Date()

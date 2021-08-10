@@ -21,7 +21,6 @@ import {
   meetingRoomOutlined,
   importantDateIcon
 } from 'components/SvgIcons/icons'
-
 import { SvgIcon, Props as SvgIconProps } from 'components/SvgIcons/SvgIcon'
 
 export interface EventTypeIcon {

@@ -1,6 +1,7 @@
 import React from 'react'
-import fecha from 'fecha'
+
 import { Typography } from '@material-ui/core'
+import fecha from 'fecha'
 
 interface Props {
   dueDate: number

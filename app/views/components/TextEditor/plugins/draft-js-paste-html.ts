@@ -1,7 +1,6 @@
 import { DraftHandleValue, EditorState, Modifier } from 'draft-js'
-import { PluginFunctions } from 'draft-js-plugins-editor'
-
 import { stateFromHTML, Options } from 'draft-js-import-html'
+import { PluginFunctions } from 'draft-js-plugins-editor'
 
 import { fixImageBlockTypes } from '../utils/fix-image-block-types'
 

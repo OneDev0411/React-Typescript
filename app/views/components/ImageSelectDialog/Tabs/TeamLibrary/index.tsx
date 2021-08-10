@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+
 import {
   Grid,
   Box,
@@ -13,23 +13,21 @@ import {
   useTheme
 } from '@material-ui/core'
 import { useDropzone } from 'dropzone'
+import { useSelector, useDispatch } from 'react-redux'
 
+import { confirmation } from 'actions/confirmation'
+import Masonry from 'components/Masonry'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
-import { confirmation } from 'actions/confirmation'
 
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-import Masonry from 'components/Masonry'
-
-import NoResults from '../../NoResults'
-import Loading from '../../Loading'
-import ImageThumbnail from '../../ImageThumbnail'
-import { SearchableImageTabProps } from '../../types'
 import { isGifImage } from '../../helpers'
-import { useTeamLibrary } from './hooks'
-import { DEFAULT_ASSET_LABEL } from './constants'
+import ImageThumbnail from '../../ImageThumbnail'
+import Loading from '../../Loading'
+import NoResults from '../../NoResults'
+import { SearchableImageTabProps } from '../../types'
 
-const PAGE_SIZE = 16
+import { DEFAULT_ASSET_LABEL } from './constants'
+import { useTeamLibrary } from './hooks'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -79,14 +77,6 @@ function TeamLibrary({
   } = useTeamLibrary(activeBrandId, user, query)
 
   const theme = useTheme()
-
-  const currentPageResults = useInfinitePagination({
-    items: results,
-    pageSize: PAGE_SIZE,
-    infiniteScrollProps: {
-      container: containerRef ?? undefined
-    }
-  })
 
   const onDrop = async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -183,7 +173,7 @@ function TeamLibrary({
     return <Loading />
   }
 
-  if (query && currentPageResults.length === 0) {
+  if (query && results.length === 0) {
     return (
       <NoResults>
         <Box py={2}>{renderLabels()}</Box>
@@ -201,7 +191,7 @@ function TeamLibrary({
       }
       {...{ ...getRootProps(), css: {} }}
     >
-      {currentPageResults.length === 0 && (
+      {results.length === 0 && (
         <Box
           display="flex"
           flexDirection="column"
@@ -242,7 +232,7 @@ function TeamLibrary({
           </Button>
         </Box>
       )}
-      {currentPageResults.length > 0 && (
+      {results.length > 0 && (
         <Grid container direction="column">
           {renderLabels()}
           <Grid container item>
@@ -278,7 +268,7 @@ function TeamLibrary({
                   </>
                 )}
               </Box>
-              {currentPageResults.map(item => {
+              {results.map(item => {
                 const imageUrl = item.file.url
                 const canDelete = hasDeleteAccess(item.id)
 

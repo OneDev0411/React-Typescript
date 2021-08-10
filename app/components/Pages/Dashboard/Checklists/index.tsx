@@ -1,27 +1,26 @@
 import { useEffect, useRef, useState } from 'react'
+
+import { Box } from '@material-ui/core'
+import { DropResult } from 'react-beautiful-dnd'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
-import { Box } from '@material-ui/core'
 
+import { reorder } from '@app/utils/dnd-reorder'
+import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
+import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
+import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import Acl from 'components/Acl'
-
-import { selectUser } from 'selectors/user'
-import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
-
-import { CheckListTable } from './components/ChecklistTable'
 import { ChecklistHeader } from './components/ChecklistHeader'
-import { useChecklistsPage } from './use-checklist-page'
 import { ChecklistsSidenav } from './components/ChecklistsSidenav'
-
-import { getChecklistPageLink } from './helpers/get-checklist-page-link'
-
-import { TabNames } from './constants'
+import { CheckListTable } from './components/ChecklistTable'
 import { PropertyTypeForm } from './components/PropertyTypeForm'
+import { TabNames } from './constants'
+import { getChecklistPageLink } from './helpers/get-checklist-page-link'
+import { useChecklistsPage } from './use-checklist-page'
 
 interface Props extends RouteComponentProps<any, {}> {
   user: IUser
@@ -53,9 +52,8 @@ export default function ChecklistsPage({ location }: Props) {
     reorderTasks
   } = useChecklistsPage(activeTeamId)
 
-  const { propertyTypes, addPropertyTypes } = useBrandPropertyTypes(
-    activeTeamId!
-  )
+  const { propertyTypes, addPropertyTypes, reorderPropertyTypes } =
+    useBrandPropertyTypes(activeTeamId!)
 
   const checklist = checklists?.find(
     checklist =>
@@ -78,6 +76,20 @@ export default function ChecklistsPage({ location }: Props) {
     setIsFormOpen(false)
   }
 
+  const onReorderPropertyTypes = (result: DropResult): void => {
+    if (!result.destination) {
+      return
+    }
+
+    const list = reorder<IDealPropertyType>(
+      propertyTypes,
+      result.source.index,
+      result.destination.index
+    )
+
+    reorderPropertyTypes(list)
+  }
+
   return (
     <Acl.Admin fallbackUrl="/dashboard/mls">
       <Helmet>
@@ -88,6 +100,7 @@ export default function ChecklistsPage({ location }: Props) {
           propertyTypes={propertyTypes}
           checklistType={checklistType}
           onClickNewProperty={() => setIsFormOpen(true)}
+          onReorder={onReorderPropertyTypes}
         />
 
         <Content isSideMenuOpen>

@@ -1,10 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Field } from 'react-final-form'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+
 import { Box } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { Field } from 'react-final-form'
 
 import { Map } from '../../../Map'
+
 import { Location } from './Location'
 
 function LocationsComponent({ locations, input: { onChange } }) {
@@ -69,7 +71,7 @@ function LocationsComponent({ locations, input: { onChange } }) {
 
 Locations.propTypes = {
   locations: PropTypes.arrayOf(PropTypes.shape()),
-  handleDelete: PropTypes.func.isRequired
+  handleDelete: PropTypes.func
 }
 
 Locations.defaultProps = {

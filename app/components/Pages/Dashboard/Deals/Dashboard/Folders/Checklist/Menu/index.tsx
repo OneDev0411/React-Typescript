@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { mdiMenu } from '@mdi/js'
+
 import { MenuItem, IconButton, makeStyles, Theme } from '@material-ui/core'
+import { mdiMenu } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
-import { addNotification } from 'components/notification'
-
 import { updateChecklist } from 'actions/deals'
-
 import { BaseDropdown } from 'components/BaseDropdown'
+import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
@@ -76,8 +75,8 @@ export function FolderOptionsMenu({ deal, checklist, isBackOffice }: Props) {
       PopperProps={{
         placement: 'bottom-end'
       }}
-      renderDropdownButton={props => (
-        <IconButton size="small" {...props} className={classes.root}>
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
+        <IconButton size="small" {...buttonProps} className={classes.root}>
           <SvgIcon path={mdiMenu} />
         </IconButton>
       )}

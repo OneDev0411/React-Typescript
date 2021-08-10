@@ -1,29 +1,26 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { batchActions } from 'redux-batched-actions'
 
 import CsvParser from 'papaparse'
+import { connect } from 'react-redux'
+import { batchActions } from 'redux-batched-actions'
 import _ from 'underscore'
 
-import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from 'constants/contacts'
-
+import { confirmation as showMessageModal } from 'actions/confirmation'
 import {
   updateCsvFieldsMap,
   updateCsvInfo,
   updateWizardStep,
   setCurrentStepValidation
 } from 'actions/contacts'
-
+import { CONTACTS__IMPORT_CSV__STEP_UPLOAD_FILE } from 'constants/contacts'
 import { selectDefinition } from 'reducers/contacts/attributeDefs'
 
-import { confirmation as showMessageModal } from 'actions/confirmation'
-
-import { automaticMapping } from './auto-map'
-
+import Loading from '../../../../../Partials/Loading'
+import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
 import FieldDropDown from '../FieldDropDown'
 import FieldLabel from '../FieldLabel'
-import CustomAttributeDrawer from '../../components/CustomAttributeDrawer'
-import Loading from '../../../../../Partials/Loading'
+
+import { automaticMapping } from './auto-map'
 
 class Mapper extends React.Component {
   state = {

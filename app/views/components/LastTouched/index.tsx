@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
-import timeago from 'timeago.js'
+
 import { Typography, Box, Theme } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/styles'
+import timeago from 'timeago.js'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

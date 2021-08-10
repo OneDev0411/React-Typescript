@@ -9,19 +9,25 @@ import { browserHistory } from 'react-router'
  */
 
 export function goTo(url, pageTitle = null, query = {}, state = {}) {
-  const previousPage = pageTitle ? {
-    previousPage: {
-      url: window && window.location.pathname,
-      title: pageTitle
-    }
-  } : {}
+  const previousPage = pageTitle
+    ? {
+        previousPage: {
+          url: window && window.location.pathname,
+          title: pageTitle
+        }
+      }
+    : {}
 
-  const [pathname, embeddedSearch] = url.split('?');
+  const [pathname, embeddedSearch] = url.split('?')
 
-  const search = Object.keys(query).reduce((acc, curr) => {
-    const mark = !acc ? '?' : '&'
-    return `${acc}${mark}${curr}=${query[curr]}`
-  }, embeddedSearch ? `?${embeddedSearch}` : '')
+  const search = Object.keys(query).reduce(
+    (acc, curr) => {
+      const mark = !acc ? '?' : '&'
+
+      return `${acc}${mark}${curr}=${query[curr]}`
+    },
+    embeddedSearch ? `?${embeddedSearch}` : ''
+  )
 
   browserHistory.push({
     pathname,

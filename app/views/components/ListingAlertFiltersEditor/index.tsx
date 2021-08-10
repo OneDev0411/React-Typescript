@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import isEqual from 'lodash/isEqual'
+
 import {
   Button,
   Grid,
@@ -10,6 +10,7 @@ import {
   Divider,
   Slider
 } from '@material-ui/core'
+import isEqual from 'lodash/isEqual'
 
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
@@ -39,9 +40,8 @@ export default function ListingAlertFiltersEditor({
   onApply
 }: Props) {
   const classes = useStyles()
-  const [filters, setFilters] = useState<AlertFiltersWithRadiusAndCenter>(
-    originalFilters
-  )
+  const [filters, setFilters] =
+    useState<AlertFiltersWithRadiusAndCenter>(originalFilters)
 
   function handleRadiusChange(newValue: number) {
     const newPoints = getMapBoundsInCircle(
@@ -74,7 +74,7 @@ export default function ListingAlertFiltersEditor({
             container
             spacing={1}
             direction="row"
-            justify="space-between"
+            justifyContent="space-between"
             alignItems="center"
           >
             <Grid item className={classes.title}>

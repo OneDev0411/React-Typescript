@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
 
 import IframeResizer from 'iframe-resizer-react'
-
 import { useSelector } from 'react-redux'
+import { useDeepCompareEffect } from 'react-use'
 
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'

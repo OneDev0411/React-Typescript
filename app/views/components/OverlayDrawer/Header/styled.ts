@@ -1,6 +1,5 @@
-import styled, { ThemeProps } from 'styled-components'
-
 import { Theme } from '@material-ui/core'
+import styled, { ThemeProps } from 'styled-components'
 
 import { LatoFamilyStyle } from '../../Typography/styles'
 

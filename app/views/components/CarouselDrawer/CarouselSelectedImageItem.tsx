@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Close } from '@material-ui/icons'
 
 import CarouselImageItem, { CarouselImageItemProps } from './CarouselImageItem'

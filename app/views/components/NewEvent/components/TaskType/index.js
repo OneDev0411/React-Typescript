@@ -1,15 +1,14 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Field } from 'react-final-form'
-import Flex from 'styled-flex-component'
 
 import { mdiChevronDown } from '@mdi/js'
+import { Field } from 'react-final-form'
+import styled from 'styled-components'
+import Flex from 'styled-flex-component'
 
-import { Dropdown } from 'components/Dropdown'
-import LinkButton from 'components/Button/LinkButton'
 import { eventTypesIcons } from 'components/../utils/event-types-icons'
+import LinkButton from 'components/Button/LinkButton'
+import { Dropdown } from 'components/Dropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { grey, primary } from 'views/utils/colors'
 
 export const Button = styled(LinkButton)`

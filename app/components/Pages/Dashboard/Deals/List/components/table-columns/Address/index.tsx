@@ -1,18 +1,15 @@
 import React from 'react'
-import { makeStyles, Theme, Typography } from '@material-ui/core'
 
+import { makeStyles, Theme, Typography } from '@material-ui/core'
 import { mdiHomeOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import ALinkToClosable from 'components/ALinkToClosable'
-import { getField, getEnderType } from 'models/Deal/helpers/context'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { getField, getEnderType } from 'models/Deal/helpers/context'
 
-import { Side } from '../Side'
-
-import onDealOpened from '../../../../utils/on-deal-opened'
 import { Notification } from '../../Notification'
+import { Side } from '../Side'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -74,13 +71,9 @@ export function Address({
       </div>
 
       <div className={classes.title}>
-        <ALinkToClosable
-          className="underline-on-hover"
-          onClick={onDealOpened}
-          to={`/dashboard/deals/${deal.id}`}
-        >
+        <div className="underline-on-hover">
           <TextMiddleTruncate text={deal.title} maxLength={40} />
-        </ALinkToClosable>
+        </div>
 
         <div className={classes.container}>
           <Typography variant="caption" className={classes.enderType}>

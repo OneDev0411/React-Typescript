@@ -1,8 +1,7 @@
 import React from 'react'
 
-import EventForm from '../New/EventForm'
-
 import BasicEmailForm from '../New/BasicEmailForm'
+import EventForm from '../New/EventForm'
 import MarketingEmailForm from '../New/MarketingEmailForm'
 
 interface Props {

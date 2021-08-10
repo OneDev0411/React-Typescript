@@ -1,30 +1,27 @@
 import React, { useCallback } from 'react'
-import { FORM_ERROR } from 'final-form'
-import { browserHistory } from 'react-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { Form, Field } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
-
-import { getActiveBrand } from 'utils/user-teams'
-
-import { getTeams } from 'models/user/get-teams'
-import { addBrand } from 'models/BrandConsole/Brands'
-import getVerificationCode from 'models/verify/request'
-import { putUserSetting } from 'models/user/put-user-setting'
+import { FORM_ERROR } from 'final-form'
+import { Form, Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import { updateUser } from 'actions/user'
-
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-
+import { addBrand } from 'models/BrandConsole/Brands'
+import { getTeams } from 'models/user/get-teams'
+import { putUserSetting } from 'models/user/put-user-setting'
+import getVerificationCode from 'models/verify/request'
 import { selectUser } from 'selectors/user'
+import { getActiveBrand } from 'utils/user-teams'
 
+import { useCommonStyles } from '../common-styles'
+import Container from '../Container'
 import Header from '../Header'
 import NextButton from '../NextButton'
-import Container from '../Container'
 import { useDocumentTitle } from '../use-document-title'
-import { useCommonStyles } from '../common-styles'
 
 interface FormValues {
   name: string

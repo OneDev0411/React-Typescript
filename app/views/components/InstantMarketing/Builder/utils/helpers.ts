@@ -1,8 +1,7 @@
 import { Model } from 'backbone'
 
-import { typeEmbedMap } from '../Blocks/Website/Map'
 import { typeCarousel } from '../Blocks/Website/Carousel'
-
+import { typeEmbedMap } from '../Blocks/Website/Map'
 import {
   IMAGE_TOOLBAR_BUTTONS_PREFIX,
   IMAGE_ELEMENT_TYPES,
@@ -108,6 +107,18 @@ export function getImage(model: Model): string {
   }
 
   return ''
+}
+
+export function isBrandTemplate(
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
+): template is IBrandMarketingTemplate {
+  return template.type === 'brand_template'
+}
+
+export function isTemplateInstance(
+  template: IBrandMarketingTemplate | IMarketingTemplateInstance
+): template is IMarketingTemplateInstance {
+  return template.type === 'template_instance'
 }
 
 export function isMap(model: Model): boolean {

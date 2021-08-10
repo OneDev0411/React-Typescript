@@ -1,39 +1,25 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
 import { Grid } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
-import { goTo } from 'utils/go-to'
-import { getActiveTeamId } from 'utils/user-teams'
-import { useLoadingEntities } from 'hooks/use-loading'
-import { useBrandListings, useDealsListings } from 'hooks/use-listings'
-import { selectUser } from 'selectors/user'
-
-import CardSkeleton from 'components/CardSkeleton'
-import ListingCard from 'components/ListingCards/ListingCard'
+import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
+import Link from '@app/views/components/ALink'
+import CardSkeleton from '@app/views/components/CardSkeleton'
+import ListingCard from '@app/views/components/ListingCards/ListingCard'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 export default function PromoteListingsSection() {
-  const user = useSelector(selectUser)
+  const brandId = useSelector(selectActiveBrandId)
 
-  const brand = getActiveTeamId(user)
-  const brandListings = useBrandListings(brand)
-  const brandListingsIds = brandListings?.map(listing => listing.id)
-  const dealsListings = useDealsListings(brandListingsIds)
-  const [isLoadingBrandListings] = useLoadingEntities(brandListings)
-  const [isLoadingDealsListings] = useLoadingEntities(dealsListings)
-
-  const isLoading = isLoadingBrandListings || isLoadingDealsListings
-
-  const listings =
-    dealsListings && brandListings ? [...dealsListings, ...brandListings] : null
+  const { listings, isLoading } = useBrandAndDealsListings(brandId)
 
   return (
     <SectionLayout
       title="Promote Your Listings"
       actionNode={
-        <LinkSectionAction title="View all" url="/dashboard/agent-network" />
+        <LinkSectionAction title="View all" url="/dashboard/listings" />
       }
     >
       {isLoading && (
@@ -55,13 +41,13 @@ export default function PromoteListingsSection() {
       {!isLoading &&
         listings?.slice(0, 4).map(listing => (
           <Grid key={listing.id} item xs={12} sm={6} md={3}>
-            <ListingCard
-              hideFeatures
-              listing={listing}
-              onClick={() => {
-                goTo(`/dashboard/marketing/wizard?listingId=${listing.id}`)
-              }}
-            />
+            <Link
+              noStyle
+              to={`/dashboard/marketing/mls/${listing.id}`}
+              target="_blank"
+            >
+              <ListingCard hideFeatures listing={listing} />
+            </Link>
           </Grid>
         ))}
     </SectionLayout>

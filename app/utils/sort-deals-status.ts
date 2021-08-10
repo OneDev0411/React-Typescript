@@ -1,5 +1,5 @@
-import sortBy from 'lodash/sortBy'
 import keyBy from 'lodash/keyBy'
+import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
 
 import { getStatus } from 'models/Deal/helpers/context'

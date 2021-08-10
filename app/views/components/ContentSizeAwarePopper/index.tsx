@@ -1,10 +1,9 @@
-import { PopperProps } from '@material-ui/core/Popper'
 import { useCallback, useRef } from 'react'
-import PopperJs from 'popper.js'
+import * as React from 'react'
 
 import { Popper } from '@material-ui/core'
-
-import * as React from 'react'
+import { PopperProps } from '@material-ui/core/Popper'
+import PopperJs from 'popper.js'
 
 import { usePopoverResize } from 'hooks/use-popover-resize'
 

@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react'
+
 import { groupBy } from 'lodash'
 
+import { Separator } from '../styled'
 import {
   ToolbarFragment,
   toolbarFragmentGroups,
   ToolbarFragmentGroup
 } from '../types'
-import { Separator } from '../styled'
 
 interface Props {
   segments: Record<string, ToolbarFragment>

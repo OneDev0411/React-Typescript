@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { cleanup } from '@testing-library/react'
 
 import { emailCampaignEmail as emailCampaignEmailObj } from 'fixtures/insights/insight'
 
-import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 import { renderWithTheme } from '../../../../tests/unit/utils/render-with-theme'
+import { ContactsListType } from '../../../components/Pages/Dashboard/MarketingInsights/Insight/types'
 
 import ContactInfo from '.'
 

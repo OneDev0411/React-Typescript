@@ -1,5 +1,5 @@
-import superagent from 'superagent'
 import _get from 'lodash/get'
+import superagent from 'superagent'
 
 import { TemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 

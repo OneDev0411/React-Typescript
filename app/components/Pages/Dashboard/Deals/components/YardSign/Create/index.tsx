@@ -1,7 +1,4 @@
 import React, { useState, ChangeEvent } from 'react'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import { AnyAction } from 'redux'
 
 import {
   Button,
@@ -11,15 +8,17 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
+import { connect } from 'react-redux'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
 import { createTaskComment } from 'deals/utils/create-task-comment'
-
+import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
 import { IAppState } from 'reducers'
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
-import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 const ITEMS = [
   'Coming soon',

@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { Theme, Tooltip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiLockOutline } from '@mdi/js'
 
-import { SvgIcon } from 'views/components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   lockIcon: {

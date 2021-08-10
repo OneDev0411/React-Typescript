@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+
 import { connect } from 'react-redux'
 
 import { IAppState } from 'reducers'
-
 import { selectDealTasks } from 'reducers/deals/tasks'
 
 import { ChecklistFolder } from '../Checklist'

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { makeStyles, Theme, Hidden } from '@material-ui/core'
 
-import { appSidenavWidth } from './variables'
-
 import { Menu } from './Menu'
+import { appSidenavWidth } from './variables'
 
 const useStyles = makeStyles((theme: Theme) => ({
   drawer: {

@@ -2,8 +2,9 @@ import { Dispatch, SetStateAction } from 'react'
 
 import useShowingNotifications from 'hooks/use-showing-notifications'
 
-import { updateAppointmentState } from './helpers'
 import { sortAppointments } from '../../helpers'
+
+import { updateAppointmentState } from './helpers'
 
 function useShowingUpdateAppointmentNotifications(
   setShowing: Dispatch<SetStateAction<IShowing<'showing'>>>

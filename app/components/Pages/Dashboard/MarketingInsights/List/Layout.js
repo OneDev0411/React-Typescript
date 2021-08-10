@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffectOnce } from 'react-use'
-import { Helmet } from 'react-helmet'
-import { browserHistory } from 'react-router'
 
 import { Box, Button, Chip, makeStyles } from '@material-ui/core'
+import { Helmet } from 'react-helmet'
+import { useSelector, useDispatch } from 'react-redux'
+import { browserHistory } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
-import PageLayout from 'components/GlobalPageLayout'
-
-import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
-import { selectUser } from 'selectors/user'
 import { setUserSetting } from 'actions/user/set-setting'
+import PageLayout from 'components/GlobalPageLayout'
+import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import { selectUser } from 'selectors/user'
+import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
 
@@ -112,6 +111,7 @@ function InsightsLayout({
                 key="sort-field"
                 label={
                   <SortField
+                    component="div"
                     sortLabel={sortField.label}
                     onChange={handleSortChange}
                   />

@@ -1,8 +1,7 @@
 import { ReactNode } from 'react'
+
 import { Box, Typography } from '@material-ui/core'
-
 import { mdiArrowRight } from '@mdi/js'
-
 import { Link } from 'react-router'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
