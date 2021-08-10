@@ -113,7 +113,8 @@ module.exports = {
         ),
         MAPBOX_ACCESS_TOKEN: JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
         STRIPE_PUBLIC_KEY: JSON.stringify(process.env.STRIPE_PUBLIC_KEY),
-        SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL)
+        SHOWING_BOOKING_URL: JSON.stringify(process.env.SHOWING_BOOKING_URL),
+        ENABLE_FULLSTORY: JSON.stringify(process.env.ENABLE_FULLSTORY)
       },
       __DEV__,
       NODE_ENV: env,
@@ -131,10 +132,6 @@ module.exports = {
         resolve: {
           fullySpecified: false
         }
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' }
       },
       {
         test: /\.jsx?$/,

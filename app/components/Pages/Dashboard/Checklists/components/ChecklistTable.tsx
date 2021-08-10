@@ -1,4 +1,4 @@
-import React, { RefObject, useContext } from 'react'
+import { RefObject, useContext } from 'react'
 
 import {
   Checkbox,
@@ -23,6 +23,7 @@ import type {
   DropResult
 } from 'react-beautiful-dnd'
 
+import { reorder } from '@app/utils/dnd-reorder'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -54,19 +55,6 @@ export function CheckListTable({
 
   const confirmationModal = useContext(ConfirmationModalContext)
 
-  const reorder = (
-    list: IBrandChecklistTask[],
-    startIndex: number,
-    endIndex: number
-  ) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-
-    result.splice(endIndex, 0, removed)
-
-    return result
-  }
-
   const onDragEnd = (result: DropResult) => {
     if (
       !result.destination ||
@@ -75,7 +63,7 @@ export function CheckListTable({
       return
     }
 
-    const reorderedTasks = reorder(
+    const reorderedTasks = reorder<IBrandChecklistTask>(
       checklist.tasks || [],
       result.source.index,
       result.destination.index

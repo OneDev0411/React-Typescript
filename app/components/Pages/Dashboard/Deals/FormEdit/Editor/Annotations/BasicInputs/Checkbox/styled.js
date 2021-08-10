@@ -23,7 +23,8 @@ export const CheckboxInput = styled.input`
   :checked {
     :before {
       position: absolute;
-      content: '╳';
+      content: 'X';
+      line-height: 1;
       font-weight: bold;
       font-size: ${props => props.box.height}px;
       width: 100%;
