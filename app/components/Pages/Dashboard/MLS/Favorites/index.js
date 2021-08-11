@@ -86,8 +86,7 @@ class Favorites extends React.Component {
     return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
   })
 
-  onChangeSort = async e => {
-    let sort = e.currentTarget.dataset.sort
+  onChangeSort = async sort => {
     const { index, ascending } = parsSortIndex(sort)
 
     this.setState({
