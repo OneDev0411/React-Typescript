@@ -16,10 +16,9 @@ import cn from 'classnames'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
 
+import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
 import { selectUser } from 'selectors/user'
 import { isSoloActiveTeam } from 'utils/user-teams'
-
-import { TeamContactSelect } from '../../../../../../../../views/components/TeamContact/TeamContactSelect'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { convertSecondsToDay } from './helpers'
@@ -80,7 +79,7 @@ const useStyles = makeStyles(
       alignItems: 'center',
       cursor: 'pointer'
     },
-    isSenderDiabled: { opacity: 0.6 },
+    disabledSender: { opacity: 0.6 },
     senderLabel: {
       marginLeft: theme.spacing(0.5),
       color: theme.palette.grey[500]
@@ -185,7 +184,7 @@ const TriggerEditModeComponent = ({
               >
                 <div
                   className={cn(classes.sender, {
-                    [classes.isSenderDiabled]: buttonProps.disabled
+                    [classes.disabledSender]: buttonProps.disabled
                   })}
                   onClick={buttonProps.onClick}
                 >

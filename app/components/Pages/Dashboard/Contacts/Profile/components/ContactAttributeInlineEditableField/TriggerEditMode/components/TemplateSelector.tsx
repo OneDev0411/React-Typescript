@@ -85,7 +85,7 @@ export const TemplateSelector = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const currentTemplate = selectedTemplate || currentValue?.campaign?.template
 
-  const handleCreatingInstance = async (template: IBrandMarketingTemplate) => {
+  const createTemplateInstance = async (template: IBrandMarketingTemplate) => {
     if (!brand) {
       return
     }
@@ -120,7 +120,7 @@ export const TemplateSelector = ({
       const isBrandTemplate = template.type === 'brand_template'
 
       if (isBrandTemplate) {
-        templateInstance = await handleCreatingInstance(
+        templateInstance = await createTemplateInstance(
           template as IBrandMarketingTemplate
         )
       } else {
