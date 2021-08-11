@@ -116,16 +116,10 @@ export const TemplateSelector = ({
       setIsTemplatePickerOpen(false)
       setIsLoading(true)
 
-      let templateInstance: IMarketingTemplateInstance | undefined
-      const isBrandTemplate = template.type === 'brand_template'
-
-      if (isBrandTemplate) {
-        templateInstance = await createTemplateInstance(
-          template as IBrandMarketingTemplate
-        )
-      } else {
-        templateInstance = template as IMarketingTemplateInstance
-      }
+      const templateInstance =
+        template.type === 'template_instance'
+          ? template
+          : await createTemplateInstance(template)
 
       if (templateInstance) {
         onSelectTemplate(templateInstance)
