@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useBrandListings, useDealsListings } from '@app/hooks/use-listings'
+import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 
 type ListingRow = IListing | ICompactListing
 
@@ -11,8 +12,11 @@ interface UseBrandAndDealsListings {
   listings: ListingRow[]
 }
 
-function useBrandAndDealsListings(brandId: UUID): UseBrandAndDealsListings {
-  const brandListings = useBrandListings(brandId)
+function useBrandAndDealsListings(
+  brandId: UUID,
+  options?: GetBrandListingsOptions
+): UseBrandAndDealsListings {
+  const brandListings = useBrandListings(brandId, options)
   const brandListingsIds = useMemo(
     () => brandListings?.map(listing => listing.id),
     [brandListings]

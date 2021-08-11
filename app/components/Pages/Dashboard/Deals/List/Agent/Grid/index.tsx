@@ -78,7 +78,7 @@ function AgentGrid(props: Props & WithRouterProps) {
   const user = useSelector(selectUser)
   const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
-  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
 
   const columns = [
     {

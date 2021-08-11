@@ -64,8 +64,6 @@ export default function BookShowing({
     }
   }
 
-  console.log({ showing })
-
   return (
     <Container className={classes.pageContainer}>
       <Grid container direction="row" className={classes.container}>
