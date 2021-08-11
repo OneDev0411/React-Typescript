@@ -32,20 +32,12 @@ import { getPlace } from 'models/listings/search/get-place'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { selectListings } from 'reducers/listings'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
-import {
-  getBounds,
-  getLocationErrorMessage,
-  normalizeListingLocation
-} from 'utils/map'
+import { getBounds, getLocationErrorMessage } from 'utils/map'
 
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import Tabs from '../components/Tabs'
-import {
-  addDistanceFromCenterToListing,
-  formatListing
-} from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -391,12 +383,6 @@ class Search extends React.Component {
     }
   ]
 
-  formatAndAddDistance = (listing, center, user) =>
-    addDistanceFromCenterToListing(
-      formatListing(normalizeListingLocation(listing), user),
-      center
-    )
-
   onChangeSort = async sort => {
     const { index, ascending } = parsSortIndex(sort)
 
@@ -412,17 +398,7 @@ class Search extends React.Component {
 
   sortListings = memoize(
     (listings, index, ascending) => {
-      const formattedListings = listings.data.map(listing =>
-        this.formatAndAddDistance(
-          listing,
-          this.props.mapCenter,
-          this.props.user
-        )
-      )
-
-      return formattedListings.sort((a, b) =>
-        sortByIndex(a, b, index, ascending)
-      )
+      return listings.data.sort((a, b) => sortByIndex(a, b, index, ascending))
     },
     (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
   )

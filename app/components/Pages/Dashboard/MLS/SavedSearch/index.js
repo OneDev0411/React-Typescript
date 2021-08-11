@@ -15,16 +15,11 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { getSavedSearchListings } from '../../../../../models/listings/alerts/get-alert-listings'
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
-import { normalizeListingLocation } from '../../../../../utils/map'
 import Avatars from '../../../../../views/components/Avatars'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
-import {
-  formatListing,
-  addDistanceFromCenterToListing
-} from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -148,12 +143,6 @@ class SavedSearch extends React.Component {
     })
   }
 
-  formatAndAddDistance = (listing, center, user) =>
-    addDistanceFromCenterToListing(
-      formatListing(normalizeListingLocation(listing), user),
-      center
-    )
-
   onChangeSort = async sort => {
     const { index, ascending } = parsSortIndex(sort)
 
@@ -169,17 +158,7 @@ class SavedSearch extends React.Component {
 
   sortListings = memoize(
     (listings, index, ascending) => {
-      const formattedListings = listings.data.map(listing =>
-        this.formatAndAddDistance(
-          listing,
-          this.props.mapCenter,
-          this.props.user
-        )
-      )
-
-      return formattedListings.sort((a, b) =>
-        sortByIndex(a, b, index, ascending)
-      )
+      return listings.data.sort((a, b) => sortByIndex(a, b, index, ascending))
     },
     // Since listings are equal during renders and are read from this.state
     // in order to make memoization work properly, we need to build a custom
