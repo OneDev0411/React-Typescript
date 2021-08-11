@@ -81,7 +81,7 @@ const ViewSwitcher = ({ onChangeView, activeView }) => {
             onClick={event => handleViewSwitcherItemClick(event, index)}
           >
             {option.icon({
-              color: theme.palette.primary,
+              color: theme.palette.text.primary,
               className: cn(iconClasses.small, iconClasses.rightMargin)
             })}
             {option.label}
