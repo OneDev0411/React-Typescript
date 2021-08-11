@@ -14,6 +14,10 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 import pluralize from 'pluralize'
+import { useSelector } from 'react-redux'
+
+import { selectUser } from 'selectors/user'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TeamContactSelect } from '../../../../../../../../views/components/TeamContact/TeamContactSelect'
 
@@ -102,6 +106,7 @@ const TriggerEditModeComponent = ({
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
+  const user = useSelector(selectUser)
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
@@ -155,48 +160,55 @@ const TriggerEditModeComponent = ({
     }
   }
 
+  const renderSenderSwitcher = () => {
+    if (user && isSoloActiveTeam(user)) {
+      return null
+    }
+
+    return (
+      <div className={classes.senderContainer}>
+        <TeamContactSelect
+          disabled={disabled || !isActive}
+          owner={sender}
+          user={sender}
+          onSelect={handleSenderChange}
+          buttonRenderer={buttonProps => {
+            const title = buttonProps.selectedItem.label
+
+            return (
+              <Tooltip
+                title={
+                  !buttonProps.disabled
+                    ? 'Click to Change Sender'
+                    : 'Trigger is not Active'
+                }
+              >
+                <div
+                  className={cn(classes.sender, {
+                    [classes.isSenderDiabled]: buttonProps.disabled
+                  })}
+                  onClick={buttonProps.onClick}
+                >
+                  <Typography variant="body2">{title}</Typography>
+                  <Typography variant="caption" className={classes.senderLabel}>
+                    Sender
+                  </Typography>
+                </div>
+              </Tooltip>
+            )
+          }}
+          fullWidth
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.containerItem}>
         {renderAttributeFields()}
         <div className={classes.triggerFields}>
-          <div className={classes.senderContainer}>
-            <TeamContactSelect
-              disabled={disabled || !isActive}
-              owner={sender}
-              user={sender}
-              onSelect={handleSenderChange}
-              buttonRenderer={buttonProps => {
-                const title = buttonProps.selectedItem.label
-
-                return (
-                  <Tooltip
-                    title={
-                      !buttonProps.disabled
-                        ? 'Click to Change Sender'
-                        : 'Trigger is not Active'
-                    }
-                  >
-                    <div
-                      className={cn(classes.sender, {
-                        [classes.isSenderDiabled]: buttonProps.disabled
-                      })}
-                      onClick={buttonProps.onClick}
-                    >
-                      <Typography variant="body2">{title}</Typography>
-                      <Typography
-                        variant="caption"
-                        className={classes.senderLabel}
-                      >
-                        Sender
-                      </Typography>
-                    </div>
-                  </Tooltip>
-                )
-              }}
-              fullWidth
-            />
-          </div>
+          {renderSenderSwitcher()}
           <div className={classes.switch}>
             <div className={classes.switchContainer}>
               <Typography component="span" variant="subtitle2">
