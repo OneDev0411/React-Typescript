@@ -17,7 +17,6 @@ import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import { normalizeListingLocation } from '../../../../../utils/map'
 import Avatars from '../../../../../views/components/Avatars'
-import GridView from '../components/GridView'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
@@ -213,11 +212,6 @@ class SavedSearch extends React.Component {
               />
             }
           />
-        )
-
-      case 'grid':
-        return (
-          <GridView isFetching={isFetching} sortedListings={sortedListings} />
         )
 
       default:

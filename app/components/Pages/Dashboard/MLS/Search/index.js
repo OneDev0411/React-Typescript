@@ -38,7 +38,6 @@ import {
   normalizeListingLocation
 } from 'utils/map'
 
-import GridView from '../components/GridView'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
@@ -472,9 +471,6 @@ class Search extends React.Component {
             }
           />
         )
-
-      case 'grid':
-        return <GridView {..._props} />
 
       default:
         return (

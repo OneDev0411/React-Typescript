@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
 
 import { MenuItem, Popover, useTheme } from '@material-ui/core'
-import {
-  mdiViewGridOutline,
-  mdiMapLegend,
-  mdiFormatListBulleted
-} from '@mdi/js'
+import { mdiMapLegend, mdiFormatListBulleted } from '@mdi/js'
 import cn from 'classnames'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
@@ -17,11 +13,6 @@ const listingViewOptions = [
     label: 'Map View',
     value: 'map',
     icon: props => <SvgIcon path={mdiMapLegend} {...props} />
-  },
-  {
-    label: 'Grid View',
-    value: 'grid',
-    icon: props => <SvgIcon path={mdiViewGridOutline} {...props} />
   },
   {
     label: 'List View',

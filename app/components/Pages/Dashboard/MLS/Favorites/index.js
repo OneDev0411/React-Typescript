@@ -13,7 +13,6 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { selectListings } from '../../../../../reducers/listings'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
 import { normalizeListingLocation } from '../../../../../utils/map'
-import GridView from '../components/GridView'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
@@ -116,15 +115,6 @@ class Favorites extends React.Component {
             tabName="favorites"
             sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
-          />
-        )
-
-      case 'grid':
-        return (
-          <GridView
-            isFetching={isFetching}
-            sortedListings={sortedListings}
-            user={user}
           />
         )
 
