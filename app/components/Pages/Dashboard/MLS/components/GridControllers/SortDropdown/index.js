@@ -1,24 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { MenuItem, Popover, useTheme } from '@material-ui/core'
 
+import { sortOptions as sorts } from '@app/components/Pages/Dashboard/MLS/helpers/sort-plugin-options'
+import { SORT_FIELD_DEFAULT } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 
-import { sortOptions as sorts } from '../../../helpers/sort-plugin-options'
-
-const sortOptions = [
-  ...sorts.columns,
-  {
-    label: 'Distance (High-Low)',
-    value: 'distanceFromCenter',
-    ascending: true
-  },
-  {
-    label: 'Distance (Low-High)',
-    value: 'distanceFromCenter',
-    ascending: false
-  }
-]
+const sortOptions = [...sorts.columns]
 
 const SortDropdown = ({ onChangeSort, activeSort }) => {
   const theme = useTheme()
@@ -27,9 +15,17 @@ const SortDropdown = ({ onChangeSort, activeSort }) => {
     item =>
       item.value === activeSort.index && item.ascending === activeSort.ascending
   )
+
   const [selectedSortIndex, setSelectedSortIndex] = useState(
-    activeSortIndex || 0
+    activeSortIndex && activeSortIndex !== -1 ? activeSortIndex : 0
   )
+
+  useEffect(() => {
+    // reset sort item if current selected item is removed.
+    if (activeSortIndex === -1) {
+      onChangeSort(SORT_FIELD_DEFAULT)
+    }
+  }, [activeSortIndex, onChangeSort])
 
   const handleViewSwitcherToggle = event => {
     if (sortDropdownAnchorEl) {
@@ -42,7 +38,7 @@ const SortDropdown = ({ onChangeSort, activeSort }) => {
   }
 
   const handleSortDropdownItemClick = (event, index) => {
-    onChangeSort(event)
+    onChangeSort(event.currentTarget.dataset.sort)
     setSelectedSortIndex(index)
     setSortDropdownAnchorEl(null)
   }
