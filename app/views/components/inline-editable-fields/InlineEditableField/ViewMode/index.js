@@ -27,37 +27,40 @@ import {
   ViewModeActionBar
 } from '../../styled'
 
-const useStyles = makeStyles(theme => ({
-  actionContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    background: theme.palette.background.paper,
-    padding: theme.spacing(0.5),
-    borderRadius: `${theme.shape.borderRadius}px`,
-    boxShadow:
-      '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
-  },
-  action: {
-    padding: theme.spacing(0, 2),
-    background: theme.palette.background.paper,
-    borderRadius: `${theme.shape.borderRadius}px`,
-    textAlign: 'center',
-    color: theme.palette.grey[800],
-    '& svg': {
-      color: theme.palette.grey[800],
-      margin: 'auto'
+const useStyles = makeStyles(
+  theme => ({
+    actionContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      background: theme.palette.background.paper,
+      padding: theme.spacing(0.5),
+      borderRadius: `${theme.shape.borderRadius}px`,
+      boxShadow:
+        '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
     },
-    '&:hover': {
-      background: theme.palette.action.hover,
-      textDecoration: 'none'
+    action: {
+      padding: theme.spacing(0, 2),
+      background: theme.palette.background.paper,
+      borderRadius: `${theme.shape.borderRadius}px`,
+      textAlign: 'center',
+      color: theme.palette.grey[800],
+      '& svg': {
+        color: theme.palette.grey[800],
+        margin: 'auto'
+      },
+      '&:hover': {
+        background: theme.palette.action.hover,
+        textDecoration: 'none'
+      }
+    },
+    actionLabel: {
+      display: 'block',
+      color: theme.palette.grey[800],
+      ...theme.typography.caption
     }
-  },
-  actionLabel: {
-    display: 'block',
-    color: theme.palette.grey[800],
-    ...theme.typography.caption
-  }
-}))
+  }),
+  { name: 'InlineEditFieldViewMode' }
+)
 
 ViewMode.propTypes = {
   label: PropTypes.string,
