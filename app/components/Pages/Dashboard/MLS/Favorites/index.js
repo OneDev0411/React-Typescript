@@ -9,6 +9,7 @@ import { browserHistory } from 'react-router'
 import { getUserTeams } from 'actions/user/teams'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { putUserSetting } from 'models/user/put-user-setting'
+import { normalizeListingLocation } from 'utils/map'
 
 import { selectListings } from '../../../../../reducers/listings'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
@@ -16,6 +17,7 @@ import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
+import { formatListing } from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -67,7 +69,11 @@ class Favorites extends React.Component {
   }
 
   sortListings = memoize((listings, index, ascending) => {
-    return listings.data.sort((a, b) => sortByIndex(a, b, index, ascending))
+    const formattedListings = listings.data.map(listing =>
+      formatListing(normalizeListingLocation(listing), this.props.user)
+    )
+
+    return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
   })
 
   onChangeSort = async sort => {
