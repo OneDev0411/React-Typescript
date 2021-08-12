@@ -122,6 +122,7 @@ const ContactProfile = props => {
             'contact.triggers',
             'trigger.campaign',
             'flow_step.crm_task',
+            'email_campaign.from',
             'email_campaign.template',
             'template_instance.template'
           ]
