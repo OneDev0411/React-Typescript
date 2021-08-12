@@ -4,13 +4,30 @@ export const SORT_FIELD_DEFAULT = '-price'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
-export const parsSortIndex = (sort: string) => {
-  let index = sort
-  const isDescending = index.charAt(0) === '-'
+export const sortOptions = {
+  created_at: 'Listed Date',
+  price: 'Price',
+  beds: 'Bedrooms',
+  baths: 'Bathrooms',
+  sqft: 'Square Feet',
+  lotSizeArea: 'Lot Size',
+  builtYear: 'Year Built'
+}
 
-  if (isDescending) {
-    index = index.slice(1)
-  }
+export type SortIndex = keyof typeof sortOptions
+export type SortPrefix = '' | '-'
+export type SortString = `${SortPrefix}${SortIndex}`
+
+export const createSortString = (index: SortIndex, ascending: boolean) => {
+  const sortPrefix: SortPrefix = ascending ? '' : '-'
+  const sortString: SortString = `${sortPrefix}${index}`
+
+  return sortString
+}
+
+export const parsSortIndex = (sort: SortString) => {
+  const isDescending = sort.charAt(0) === '-'
+  let index = (isDescending ? sort.slice(1) : sort) as SortIndex
 
   return {
     index,
