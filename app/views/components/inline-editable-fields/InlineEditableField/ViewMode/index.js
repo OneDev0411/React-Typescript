@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import {
   mdiOpenInNew,
   mdiContentCopy,
@@ -12,8 +12,8 @@ import {
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
+import { SingleEmailComposeDrawer } from 'components/EmailCompose'
 import { addNotification as notify } from 'components/notification'
-import SendEmailButton from 'components/SendEmailButton'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { normalizeContactsForEmailCompose } from 'models/email/helpers/normalize-contact'
@@ -27,37 +27,40 @@ import {
   ViewModeActionBar
 } from '../../styled'
 
-const useStyles = makeStyles(theme => ({
-  actionContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    background: theme.palette.background.paper,
-    padding: theme.spacing(0.5),
-    borderRadius: `${theme.shape.borderRadius}px`,
-    boxShadow:
-      '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
-  },
-  action: {
-    padding: theme.spacing(0, 2),
-    background: theme.palette.background.paper,
-    borderRadius: `${theme.shape.borderRadius}px`,
-    textAlign: 'center',
-    color: theme.palette.grey[800],
-    '& svg': {
-      color: theme.palette.grey[800],
-      margin: 'auto'
+const useStyles = makeStyles(
+  theme => ({
+    actionContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      background: theme.palette.background.paper,
+      padding: theme.spacing(0.5),
+      borderRadius: `${theme.shape.borderRadius}px`,
+      boxShadow:
+        '0px 0px 8px rgba(0, 0, 0, 0.25), 0px 16px 16px -8px rgba(0, 0, 0, 0.25)'
     },
-    '&:hover': {
-      background: theme.palette.action.hover,
-      textDecoration: 'none'
+    action: {
+      padding: theme.spacing(0, 2),
+      background: theme.palette.background.paper,
+      borderRadius: `${theme.shape.borderRadius}px`,
+      textAlign: 'center',
+      color: theme.palette.grey[800],
+      '& svg': {
+        color: theme.palette.grey[800],
+        margin: 'auto'
+      },
+      '&:hover': {
+        background: theme.palette.action.hover,
+        textDecoration: 'none'
+      }
+    },
+    actionLabel: {
+      display: 'block',
+      color: theme.palette.grey[800],
+      ...theme.typography.caption
     }
-  },
-  actionLabel: {
-    display: 'block',
-    color: theme.palette.grey[800],
-    ...theme.typography.caption
-  }
-}))
+  }),
+  { name: 'InlineEditFieldViewMode' }
+)
 
 ViewMode.propTypes = {
   label: PropTypes.string,
@@ -65,6 +68,7 @@ ViewMode.propTypes = {
   value: PropTypes.string,
   style: PropTypes.shape(),
   showEdit: PropTypes.bool,
+  isPartner: PropTypes.bool,
   contact: PropTypes.shape(),
   showDelete: PropTypes.bool,
   renderBody: PropTypes.func,
@@ -105,6 +109,7 @@ export function ViewMode({
   contact,
   showAdd,
   showEdit,
+  isPartner,
   showDelete,
   toggleMode,
   renderBody,
@@ -112,11 +117,12 @@ export function ViewMode({
   handleDelete,
   attributeName
 }) {
-  const dispatch = useDispatch()
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const [isEmailDrawerOpen, setIsEmailDrawerOpen] = useState(false)
 
   const getEmailRecipient = () => {
-    if (!contact || contact.email !== value) {
+    if (!contact) {
       return [
         {
           recipient_type: 'Email',
@@ -125,7 +131,26 @@ export function ViewMode({
       ]
     }
 
+    if (isPartner) {
+      return [
+        {
+          recipient_type: 'Email',
+          email: value,
+          contact: {
+            partner_email: value,
+            display_name: contact.partner_name,
+            partner_name: contact.partner_name
+          }
+        }
+      ]
+    }
+
     return normalizeContactsForEmailCompose([contact])
+  }
+
+  const handleOpenEmailDrawer = e => {
+    e.stopPropagation()
+    setIsEmailDrawerOpen(true)
   }
 
   const handleCopy = e => {
@@ -157,7 +182,11 @@ export function ViewMode({
 
     if (value && linkableAttribute.includes(attributeName)) {
       actions.push(
-        <div key="open" onClick={handleLink} className={classes.action}>
+        <div
+          key={`open-${value}`}
+          onClick={handleLink}
+          className={classes.action}
+        >
           <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Open</span>
         </div>
@@ -166,62 +195,66 @@ export function ViewMode({
 
     if (value && attributeName === 'email') {
       actions.push(
-        <SendEmailButton
-          recipients={getEmailRecipient()}
-          render={({ onClick }) => (
-            <Box
-              key="email"
-              onClick={e => {
-                e.stopPropagation()
-                onClick()
-              }}
-              className={classes.action}
-            >
-              <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
-              <span className={classes.actionLabel}>Email</span>
-            </Box>
-          )}
-        />
+        <div
+          key={`email-${value}`}
+          onClick={handleOpenEmailDrawer}
+          className={classes.action}
+        >
+          <SvgIcon path={mdiEmailOutline} size={muiIconSizes.small} />
+          <span className={classes.actionLabel}>Email</span>
+        </div>
       )
     }
 
     if (value && copyAttribute.includes(attributeName)) {
       actions.push(
-        <Box key="copy" onClick={handleCopy} className={classes.action}>
+        <div
+          key={`copy-${value}`}
+          onClick={handleCopy}
+          className={classes.action}
+        >
           <SvgIcon path={mdiContentCopy} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Copy</span>
-        </Box>
+        </div>
       )
     }
 
     if (showDelete) {
       actions.push(
-        <Box
-          key="handleDelete"
+        <div
+          key={`handleDelete-${value}"`}
           onClick={handleDelete}
           className={classes.action}
         >
           <SvgIcon path={mdiTrashCanOutline} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Delete</span>
-        </Box>
+        </div>
       )
     }
 
     if (showEdit) {
       actions.push(
-        <Box key="showEdit" onClick={toggleMode} className={classes.action}>
+        <div
+          key={`showEdit-${value}`}
+          onClick={toggleMode}
+          className={classes.action}
+        >
           <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Edit</span>
-        </Box>
+        </div>
       )
     }
 
     if (showAdd) {
       actions.push(
-        <Box key="showEdit" onClick={handleAddNew} className={classes.action}>
+        <div
+          key={`showEdit-${value}`}
+          onClick={handleAddNew}
+          className={classes.action}
+        >
           <SvgIcon path={mdiPlusCircleOutline} size={muiIconSizes.small} />
           <span className={classes.actionLabel}>Add</span>
-        </Box>
+        </div>
       )
     }
 
@@ -229,18 +262,31 @@ export function ViewMode({
   }
 
   return (
-    <ViewModeContainer onClick={toggleMode} style={style}>
-      {renderBody() == null ? (
-        <React.Fragment>
-          <Label>{label}</Label>
-          <Value>{value}</Value>
-        </React.Fragment>
-      ) : (
-        renderBody({ label, value, toggleMode })
+    <>
+      <ViewModeContainer onClick={toggleMode} style={style}>
+        {renderBody() == null ? (
+          <React.Fragment>
+            <Label>{label}</Label>
+            <Value>{value}</Value>
+          </React.Fragment>
+        ) : (
+          renderBody({ label, value, toggleMode })
+        )}
+        <ViewModeActionBar className="action-bar">
+          <div className={classes.actionContainer}>{renderActions()}</div>
+        </ViewModeActionBar>
+      </ViewModeContainer>
+      {value && attributeName === 'email' && isEmailDrawerOpen && (
+        <SingleEmailComposeDrawer
+          isOpen={isEmailDrawerOpen}
+          initialValues={{
+            attachments: [],
+            to: getEmailRecipient()
+          }}
+          onClose={() => setIsEmailDrawerOpen(false)}
+          onSent={() => setIsEmailDrawerOpen(false)}
+        />
       )}
-      <ViewModeActionBar className="action-bar">
-        <Box className={classes.actionContainer}>{renderActions()}</Box>
-      </ViewModeActionBar>
-    </ViewModeContainer>
+    </>
   )
 }
