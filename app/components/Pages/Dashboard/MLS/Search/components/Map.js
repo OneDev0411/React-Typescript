@@ -34,7 +34,6 @@ let mapOnChangeDebounce = 0
 const map = ({
   map,
   user,
-  brand,
   isWidget,
   onChange,
   markers,
@@ -62,8 +61,6 @@ const map = ({
           <SimpleMarker
             lat={marker.location.latitude}
             lng={marker.location.longitude}
-            user={user}
-            barnd={brand}
             listing={marker}
             isWidget={isWidget}
             key={`SIMPLE_MARKER_${marker.id}`}
