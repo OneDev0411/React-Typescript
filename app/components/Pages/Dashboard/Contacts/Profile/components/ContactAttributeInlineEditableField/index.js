@@ -194,6 +194,10 @@ class MasterField extends React.Component {
     )
   }
 
+  get isPartner() {
+    return this.props.attribute?.is_partner
+  }
+
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
 
   setInitialState = () => {
@@ -498,6 +502,7 @@ class MasterField extends React.Component {
         showDelete
         isEditModeStatic
         cancelOnOutsideClick
+        isPartner={this.isPartner}
         error={error}
         contact={contact}
         label={label}
