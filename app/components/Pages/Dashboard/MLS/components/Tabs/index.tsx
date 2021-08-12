@@ -14,6 +14,7 @@ import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { SortIndex } from '../../helpers/sort-utils'
 import SavedSearchesList from '../../SavedSearchesList'
 import SortDropdown from '../GridControllers/SortDropdown'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
@@ -26,7 +27,7 @@ interface Props {
   isWidget: boolean
   isFetching: boolean
   user: IUser
-  activeSort: string
+  activeSort: { index: SortIndex; ascending: boolean }
   showSavedSearchButton?: false
 }
 

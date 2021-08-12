@@ -18,11 +18,13 @@ export type SortIndex = keyof typeof sortOptions
 export type SortPrefix = '' | '-'
 export type SortString = `${SortPrefix}${SortIndex}`
 
-export const createSortString = (index: SortIndex, ascending: boolean) => {
+export const createSortString = (
+  index: SortIndex,
+  ascending: boolean
+): SortString => {
   const sortPrefix: SortPrefix = ascending ? '' : '-'
-  const sortString: SortString = `${sortPrefix}${index}`
 
-  return sortString
+  return `${sortPrefix}${index}` as SortString
 }
 
 export const parsSortIndex = (sort: SortString) => {
