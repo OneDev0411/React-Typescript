@@ -16,7 +16,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SortIndex } from '../../helpers/sort-utils'
 import SavedSearchesList from '../../SavedSearchesList'
-import SortDropdown from '../GridControllers/SortDropdown'
+import { SortDropdown } from '../GridControllers/SortDropdown'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
 
 interface Props {
