@@ -51,7 +51,7 @@ interface Props {
   activeSort: { index: SortIndex; ascending: boolean }
 }
 
-const SortDropdown = ({ onChangeSort, activeSort }: Props) => {
+export function SortDropdown({ onChangeSort, activeSort }: Props) {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef<Nullable<HTMLButtonElement>>(null)
@@ -162,5 +162,3 @@ const SortDropdown = ({ onChangeSort, activeSort }: Props) => {
     </>
   )
 }
-
-export default SortDropdown
