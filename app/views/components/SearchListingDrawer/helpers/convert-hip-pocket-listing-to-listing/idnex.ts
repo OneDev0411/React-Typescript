@@ -53,17 +53,17 @@ export function convertHipPokcetListingToListing(
   return {
     type: 'listing',
     gallery_image_urls: getArrayWithFallbackAccessor(
-      hipPocketListing.images ?? [],
+      hipPocketListing.images || [],
       PLACEHOLDER_IMAGE_URL
     ),
-    url: hipPocketListing.url ?? '',
-    price: hipPocketListing.price ?? 0,
+    url: hipPocketListing.url || '',
+    price: hipPocketListing.price || 0,
     property: {
-      bedroom_count: hipPocketListing.bedrooms ?? 0,
-      full_bathroom_count: hipPocketListing.full_baths ?? 0,
-      half_bathroom_count: hipPocketListing.half_baths ?? 0,
-      square_meters: feetToMeters(hipPocketListing.sqft ?? 0),
-      description: hipPocketListing.description ?? '',
+      bedroom_count: hipPocketListing.bedrooms || 0,
+      full_bathroom_count: hipPocketListing.full_baths || 0,
+      half_bathroom_count: hipPocketListing.half_baths || 0,
+      square_meters: feetToMeters(hipPocketListing.sqft || 0),
+      description: hipPocketListing.description || '',
       address: getPropertyAddress(hipPocketListing.address)
     }
   }
