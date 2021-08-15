@@ -15,6 +15,7 @@ import { MarketingEmailFormData } from '../../../types'
 
 interface Props {
   disabled?: boolean
+  hasError?: boolean
   currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
   currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
   onChange: (value: MarketingEmailFormData['template']) => void
@@ -107,6 +108,9 @@ const useStyles = makeStyles(
       '& $templateHandler, & $container': {
         cursor: 'default'
       }
+    },
+    hasError: {
+      border: `1px solid ${theme.palette.error.main}`
     }
   }),
   { name: 'FlowTemplateSelector' }
@@ -114,6 +118,7 @@ const useStyles = makeStyles(
 
 export const TemplateSelector = ({
   disabled = false,
+  hasError = false,
   currentBrandTemplate = null,
   currentTemplateInstance = null,
   onChange
@@ -260,7 +265,12 @@ export const TemplateSelector = ({
 
   return (
     <>
-      <Box className={cn(classes.container, { [classes.disabled]: disabled })}>
+      <Box
+        className={cn(classes.container, {
+          [classes.disabled]: disabled,
+          [classes.hasError]: hasError
+        })}
+      >
         <Box
           className={classes.container}
           onClick={() =>
