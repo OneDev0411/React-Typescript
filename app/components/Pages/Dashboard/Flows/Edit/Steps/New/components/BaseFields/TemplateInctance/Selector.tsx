@@ -1,21 +1,11 @@
 import React, { useState, useMemo } from 'react'
 
-import {
-  Box,
-  makeStyles,
-  Theme,
-  Button,
-  Grid,
-  Typography
-} from '@material-ui/core'
-import { mdiEyeOutline } from '@mdi/js'
+import { Box, makeStyles, Theme, Button, Grid } from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
@@ -99,10 +89,6 @@ const useStyles = makeStyles(
       transition: 'all 0.2s linear',
       visibility: 'hidden',
       opacity: 0
-    },
-    containerPreviewTitle: {
-      marginBottom: theme.spacing(2),
-      color: theme.palette.primary.contrastText
     },
     templateAction: {
       background: theme.palette.background.paper,
@@ -283,39 +269,33 @@ export const TemplateSelector = ({
         >
           {!isLoading && currentTemplate && !disabled && (
             <Box className={classes.containerPreview}>
-              <Box>
-                <Box className={classes.containerPreviewTitle}>
-                  <SvgIcon path={mdiEyeOutline} size={muiIconSizes.large} />
-                  <Typography variant="subtitle1">View Template</Typography>
-                </Box>
-                <Grid
-                  container
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      className={classes.templateAction}
-                      onClick={() => handleShowBuilder(true)}
-                    >
-                      Edit
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      className={classes.templateAction}
-                      onClick={() => handleShowTemplatePicker(true)}
-                    >
-                      Change
-                    </Button>
-                  </Grid>
+              <Grid
+                container
+                spacing={2}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className={classes.templateAction}
+                    onClick={() => handleShowBuilder(true)}
+                  >
+                    Edit Template
+                  </Button>
                 </Grid>
-              </Box>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className={classes.templateAction}
+                    onClick={() => handleShowTemplatePicker(true)}
+                  >
+                    Change Template
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
           )}
           {renderPreview()}
