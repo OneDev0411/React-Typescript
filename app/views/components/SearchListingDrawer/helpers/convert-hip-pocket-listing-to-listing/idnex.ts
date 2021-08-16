@@ -50,8 +50,9 @@ function getPropertyAddress(address?: string): Partial<Address> {
 
 export function convertHipPokcetListingToListing(
   hipPocketListing: Partial<HipPocketListing>
-): DeepPartial<IListing> {
+): DeepPartial<IListing> & { isMock: true } {
   return {
+    isMock: true,
     id: uuidv4(),
     type: 'listing',
     gallery_image_urls: getArrayWithFallbackAccessor(
