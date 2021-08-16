@@ -27,7 +27,6 @@ function CreateNewOpenHouse(props: Props) {
       </Button>
 
       <SearchListingDrawer
-        allowHipPocket
         isOpen={isSearchDrawerOpen}
         defaultLists={[
           {
