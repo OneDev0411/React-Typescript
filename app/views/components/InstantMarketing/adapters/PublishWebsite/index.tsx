@@ -159,33 +159,35 @@ function PublishWebsite({
           )}
         />
       )}
-      <SearchListingDrawer
-        allowHipPocket
-        onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
-          selectedTemplate.template.id
-        )}
-        withMlsDisclaimer
-        isOpen={isListingTriggered && !isBuilderOpen}
-        title="Select a Listing"
-        searchPlaceholder="Enter MLS# or an address"
-        defaultLists={[
-          {
-            title: 'Add from your deals',
-            items: dealsList
-          },
-          {
-            title: 'Add from your MLS listings',
-            items: brandListings
-          }
-        ]}
-        onClose={handleListingDrawerClose}
-        onSelectListingsCallback={handleSelectListings}
-        renderAction={props => (
-          <Button {...props.buttonProps}>
-            {`Next (${props.selectedItemsCount} Listings Selected)`}
-          </Button>
-        )}
-      />
+      {isListingTriggered && !isBuilderOpen && selectedTemplate && (
+        <SearchListingDrawer
+          allowHipPocket
+          onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
+            selectedTemplate.template.id
+          )}
+          withMlsDisclaimer
+          isOpen
+          title="Select a Listing"
+          searchPlaceholder="Enter MLS# or an address"
+          defaultLists={[
+            {
+              title: 'Add from your deals',
+              items: dealsList
+            },
+            {
+              title: 'Add from your MLS listings',
+              items: brandListings
+            }
+          ]}
+          onClose={handleListingDrawerClose}
+          onSelectListingsCallback={handleSelectListings}
+          renderAction={props => (
+            <Button {...props.buttonProps}>
+              {`Next (${props.selectedItemsCount} Listings Selected)`}
+            </Button>
+          )}
+        />
+      )}
       {websiteData && (
         <DomainManagementDrawer
           open={isDomainManagementOpen}
