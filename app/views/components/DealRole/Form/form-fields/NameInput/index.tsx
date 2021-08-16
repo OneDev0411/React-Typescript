@@ -29,6 +29,7 @@ interface Props {
   isVisible: boolean
   isRequired: boolean
   crmSearch: boolean
+  autoTrim?: boolean
   input: FieldInputProps<any, HTMLElement>
   meta: FieldMetaState<any>
   mutators: any // TODO: fix mutators types
@@ -43,7 +44,8 @@ export function NameInput({
   isRequired,
   input,
   meta,
-  mutators
+  mutators,
+  autoTrim = true
 }: Props) {
   const [isSearching, setIsSearching] = useState(false)
 
@@ -123,6 +125,7 @@ export function NameInput({
       noOptionsText={getNoOptionsText()}
       getOptionLabel={option => option.full_name || option.value}
       isLoading={isSearching}
+      autoTrim={autoTrim}
       options={searchByName}
       onChange={handleSelectSuggestion}
       onInputChange={input.onChange}
