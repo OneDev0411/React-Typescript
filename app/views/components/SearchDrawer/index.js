@@ -63,7 +63,7 @@ class SearchDrawer extends React.Component {
         searchResults,
         error: searchResults.length === 0 && {
           type: 'warning',
-          message: this.props.notFoundMessage || 'Nothing Found'
+          message: this.props.notFoundMessage
         }
       })
     } catch (e) {
