@@ -1,4 +1,5 @@
 import addressParser from 'parse-address'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
@@ -51,6 +52,7 @@ export function convertHipPokcetListingToListing(
   hipPocketListing: Partial<HipPocketListing>
 ): DeepPartial<IListing> {
   return {
+    id: uuidv4(),
     type: 'listing',
     gallery_image_urls: getArrayWithFallbackAccessor(
       hipPocketListing.images || [],
