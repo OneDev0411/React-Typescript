@@ -7,6 +7,7 @@ import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
 } from 'components/InstantMarketing'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 import usePublishWebsite from 'hooks/use-publish-website'
@@ -159,8 +160,10 @@ function PublishWebsite({
         />
       )}
       <SearchListingDrawer
-        mockListings
-        allowSkip
+        allowHipPocket
+        onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
+          selectedTemplate.template.id
+        )}
         withMlsDisclaimer
         isOpen={isListingTriggered && !isBuilderOpen}
         title="Select a Listing"

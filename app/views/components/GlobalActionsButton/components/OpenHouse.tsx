@@ -26,7 +26,7 @@ export default function CreateOpenHouse(
   if (isListingsDrawerOpen) {
     return (
       <SearchListingDrawer
-        mockListings
+        allowHipPocket
         isOpen={isListingsDrawerOpen}
         defaultLists={[
           {
