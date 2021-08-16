@@ -5,6 +5,7 @@ import {
   Button,
   TextField,
   Select,
+  TextareaAutosize,
   MenuItem,
   InputAdornment,
   makeStyles
@@ -368,6 +369,9 @@ export default function HipPocketListingForm<T extends HipPocketListingField>({
                     variant="outlined"
                     size="small"
                     label="Description"
+                    InputProps={{
+                      inputComponent: TextareaAutosize
+                    }}
                   />
                 }
               />
