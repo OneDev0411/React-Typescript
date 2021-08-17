@@ -133,6 +133,7 @@ class SectionWithFields extends React.Component {
           ...updateContactQuery.associations,
           'contact.triggers',
           'trigger.campaign',
+          'email_campaign.from',
           'email_campaign.template',
           'template_instance.template'
         ]

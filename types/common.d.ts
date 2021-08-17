@@ -13,6 +13,10 @@ declare type Optional<T> = T | undefined
 
 declare type OptionalNullable<T> = Optional<T> | Nullable<T>
 
+declare type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
 declare interface StringMap<T> {
   [key: string]: T
 }
@@ -37,9 +41,6 @@ declare interface IIdCollectionResponse {
 }
 
 declare type RequireProp<T, K extends keyof T> = { [P in K]-?: T[P] } & T
-declare type TIsPropertyPresent<T, P extends T, K extends keyof P> = (
-  x: T
-) => x is P
 declare type TIsRequirePropPresent<T, K extends keyof T> = TIsPropertyPresent<
   T,
   T & RequireProp<T, K>,
