@@ -4,7 +4,7 @@ import { useTeamsFilterHook } from '@app/components/Pages/Dashboard/Teams/hooks/
 import { getBrands } from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 
-export function useTeam(user: IUser, searchTerm: string = '') {
+export function useTeam(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [error, setError] = useState<any>(null)
   const [loading, setLoading] = useState(false)
