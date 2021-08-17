@@ -1,12 +1,21 @@
 import React, { useState } from 'react'
 
 import { Box, Button } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
 import Drawer from 'components/OverlayDrawer'
+import { selectUser } from 'selectors/user'
+
+import { useTeam } from './hooks/use-team'
 
 interface Props {}
 
 export function BrandSelector(props: Props) {
+  const user = useSelector(selectUser)
+  const team = useTeam(user)
+
+  console.log({ team })
+
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
