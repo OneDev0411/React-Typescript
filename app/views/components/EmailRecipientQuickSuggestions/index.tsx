@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 
 import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
 import { getContactsCount } from 'models/contacts/get-contacts-count'
-// import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectDealRoles } from 'reducers/deals/roles'
 
