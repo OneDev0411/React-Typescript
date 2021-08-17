@@ -12,12 +12,12 @@ import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 
 interface Props {
   value: unknown
-  field: IDealBrandContext
+  brandContext: IDealBrandContext
   deal: IDeal
   onClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void
 }
 
-export function DeleteButton({ value, field, deal, onClick }: Props) {
+export function DeleteButton({ value, brandContext, deal, onClick }: Props) {
   const theme = useTheme<Theme>()
 
   const brandChecklists = useSelector(({ deals }: IAppState) =>
@@ -26,7 +26,7 @@ export function DeleteButton({ value, field, deal, onClick }: Props) {
 
   const hasValue = value || value === 0
   const isRequired =
-    isRequiredContext(deal, brandChecklists, field.key) && !deal.is_draft
+    isRequiredContext(deal, brandChecklists, brandContext.key) && !deal.is_draft
 
   if (isRequired || !hasValue) {
     return null
