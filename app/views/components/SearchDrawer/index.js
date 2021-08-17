@@ -63,7 +63,7 @@ class SearchDrawer extends React.Component {
         searchResults,
         error: searchResults.length === 0 && {
           type: 'warning',
-          message: 'No MLS Listing Found'
+          message: this.props.notFoundMessage
         }
       })
     } catch (e) {
@@ -244,12 +244,14 @@ SearchDrawer.defaultProps = {
   searchInputOptions: {},
   defaultLists: [],
   multipleSelection: false,
-  forceRenderFooter: false
+  forceRenderFooter: false,
+  notFoundMessage: 'Nothing Found'
 }
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
   multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
+  notFoundMessage: PropTypes.string,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   defaultLists: PropTypes.arrayOf(

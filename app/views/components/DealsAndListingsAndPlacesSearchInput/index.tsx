@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import {
   List,
@@ -6,15 +6,17 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
-  InputAdornment,
   TextField,
+  TextFieldProps,
+  InputAdornment,
   makeStyles,
   Theme
 } from '@material-ui/core'
 import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
-import { mdiHomeOutline, mdiMagnify, mdiMapMarkerOutline } from '@mdi/js'
+import { mdiMapMarkerOutline, mdiMagnify, mdiHomeOutline } from '@mdi/js'
+import { merge } from 'lodash'
 import { useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 
@@ -42,20 +44,31 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
   }
 )
 
-interface Props {
-  placeholder?: string
-  onSelect: (result: SearchResult) => void
-  autoFocus?: boolean
-  searchTypes?: SearchResultType[]
+const DEFAULT_SEARCH_TYPES: SearchResultType[] = ['listing', 'place']
+const DEFAULT_TEXT_FIELD_PROPS: TextFieldProps = {
+  placeholder: 'Search address or MLS#',
+  autoComplete: 'new-password',
+  variant: 'outlined',
+  size: 'small',
+  InputProps: {
+    startAdornment: (
+      <InputAdornment position="start">
+        <SvgIcon path={mdiMagnify} />
+      </InputAdornment>
+    )
+  }
 }
 
-const DEFAULT_SEARCH_TYPES: SearchResultType[] = ['listing', 'place']
+interface Props {
+  textFieldProps?: TextFieldProps
+  searchTypes?: SearchResultType[]
+  onSelect: (result: SearchResult) => void
+}
 
 export default function DealsAndListingsAndPlacesSearchInput({
-  placeholder = 'Search address or MLS#',
-  onSelect,
-  autoFocus = false,
-  searchTypes = DEFAULT_SEARCH_TYPES
+  textFieldProps = DEFAULT_TEXT_FIELD_PROPS,
+  searchTypes = DEFAULT_SEARCH_TYPES,
+  onSelect
 }: Props) {
   const [inputValue, setInputValue] = useState<string>('')
   const classes = useStyles({ inputValue })
@@ -208,25 +221,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
   }
 
   function renderInput(params: AutocompleteRenderInputParams) {
-    return (
-      <TextField
-        {...params}
-        placeholder={placeholder}
-        variant="outlined"
-        autoComplete="new-password"
-        size="small"
-        InputProps={{
-          ...params.inputProps,
-          ...params.InputProps,
-          startAdornment: (
-            <InputAdornment position="start">
-              <SvgIcon path={mdiMagnify} />
-            </InputAdornment>
-          )
-        }}
-        autoFocus={autoFocus}
-      />
-    )
+    return <TextField {...merge(params, textFieldProps)} />
   }
 
   function groupBy(option: SearchResult) {

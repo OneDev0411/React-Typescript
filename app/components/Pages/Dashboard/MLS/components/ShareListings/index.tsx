@@ -133,7 +133,6 @@ export function ShareListings() {
           isOpen
           withMlsDisclaimer
           title="Manage Listings"
-          allowSkip={false}
           multipleSelection
           // @ts-ignore
           defaultSelectedItems={getDefaultSelectedItems()}
