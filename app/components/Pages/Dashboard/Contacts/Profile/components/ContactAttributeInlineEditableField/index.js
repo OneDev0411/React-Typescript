@@ -47,13 +47,14 @@ function getStateFromAttribute(attribute) {
     value: ''
   }
 }
-function getStateFromTrigger(trigger, attribute) {
+function getStateFromTrigger(trigger, contact, attribute) {
   const attributeName = attribute?.attribute_def?.name || ''
 
   if (trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
+      triggerSender: trigger.campaign?.from ?? contact.user,
       triggerSubject:
         trigger.campaign?.subject || getTriggerSubject(attributeName),
       triggerSendBefore: trigger.wait_for || 0,
@@ -86,6 +87,7 @@ function getStateFromTrigger(trigger, attribute) {
   return {
     currentTrigger: null,
     isTriggerActive: isActive,
+    triggerSender: contact.user,
     triggerSubject: getTriggerSubject(attributeName),
     triggerSendBefore: 0,
     triggerSelectedTemplate: null
@@ -120,7 +122,7 @@ const getInitialState = ({ contact, attribute, trigger }) => {
     isTriggerFieldDirty: false,
     isTriggerSaving: false,
     disabled: false,
-    ...getStateFromTrigger(trigger, attribute),
+    ...getStateFromTrigger(trigger, contact, attribute),
     ...getStateFromAttribute(attribute)
   }
 }
@@ -194,6 +196,10 @@ class MasterField extends React.Component {
     )
   }
 
+  get isPartner() {
+    return this.props.attribute?.is_partner
+  }
+
   toggleMode = () => this.props.handleToggleMode(this.props.attribute)
 
   setInitialState = () => {
@@ -219,6 +225,13 @@ class MasterField extends React.Component {
       isDirty: true,
       isTriggerFieldDirty: true,
       triggerSubject: value
+    })
+
+  onChangeSender = value =>
+    this.setState({
+      isDirty: true,
+      isTriggerFieldDirty: true,
+      triggerSender: value
     })
 
   onChangeSendBefore = value =>
@@ -275,6 +288,7 @@ class MasterField extends React.Component {
       currentTrigger,
       isTriggerFieldDirty,
       isTriggerActive,
+      triggerSender,
       triggerSubject,
       triggerSendBefore,
       triggerSelectedTemplate
@@ -335,6 +349,7 @@ class MasterField extends React.Component {
           {
             recurring: true,
             time: '08:00:00', // it's hard coded base api team comment
+            sender: triggerSender,
             subject: triggerSubject,
             wait_for: triggerSendBefore,
             event_type: this.attribute_def.name
@@ -420,6 +435,7 @@ class MasterField extends React.Component {
   renderEditMode = props => {
     const { trigger: triggerFromParent, contact, attribute } = this.props
     const {
+      triggerSender,
       currentTrigger,
       isTriggerActive,
       isTriggerSaving,
@@ -454,10 +470,12 @@ class MasterField extends React.Component {
           isActive={isTriggerActive}
           isSaving={isTriggerSaving}
           subject={triggerSubject}
+          sender={triggerSender}
           sendBefore={triggerSendBefore}
           selectedTemplate={triggerSelectedTemplate}
           onChangeActive={this.onChangeTriggerActive}
           onChangeSubject={this.onChangeSubject}
+          onChangeSender={this.onChangeSender}
           onChangeSendBefore={this.onChangeSendBefore}
           onChangeTemplate={this.onChangeTemplate}
           disabled={!contact?.email}
@@ -498,6 +516,7 @@ class MasterField extends React.Component {
         showDelete
         isEditModeStatic
         cancelOnOutsideClick
+        isPartner={this.isPartner}
         error={error}
         contact={contact}
         label={label}

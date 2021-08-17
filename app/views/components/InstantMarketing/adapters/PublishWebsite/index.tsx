@@ -7,6 +7,7 @@ import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
 } from 'components/InstantMarketing'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 import usePublishWebsite from 'hooks/use-publish-website'
@@ -158,31 +159,35 @@ function PublishWebsite({
           )}
         />
       )}
-      <SearchListingDrawer
-        mockListings
-        allowSkip
-        withMlsDisclaimer
-        isOpen={isListingTriggered && !isBuilderOpen}
-        title="Select a Listing"
-        searchPlaceholder="Enter MLS# or an address"
-        defaultLists={[
-          {
-            title: 'Add from your deals',
-            items: dealsList
-          },
-          {
-            title: 'Add from your MLS listings',
-            items: brandListings
-          }
-        ]}
-        onClose={handleListingDrawerClose}
-        onSelectListingsCallback={handleSelectListings}
-        renderAction={props => (
-          <Button {...props.buttonProps}>
-            {`Next (${props.selectedItemsCount} Listings Selected)`}
-          </Button>
-        )}
-      />
+      {isListingTriggered && !isBuilderOpen && selectedTemplate && (
+        <SearchListingDrawer
+          allowHipPocket
+          onHipPocketImageUpload={getHipPocketTemplateImagesUploader(
+            selectedTemplate.template.id
+          )}
+          withMlsDisclaimer
+          isOpen
+          title="Select a Listing"
+          searchPlaceholder="Enter MLS# or an address"
+          defaultLists={[
+            {
+              title: 'Add from your deals',
+              items: dealsList
+            },
+            {
+              title: 'Add from your MLS listings',
+              items: brandListings
+            }
+          ]}
+          onClose={handleListingDrawerClose}
+          onSelectListingsCallback={handleSelectListings}
+          renderAction={props => (
+            <Button {...props.buttonProps}>
+              {`Next (${props.selectedItemsCount} Listings Selected)`}
+            </Button>
+          )}
+        />
+      )}
       {websiteData && (
         <DomainManagementDrawer
           open={isDomainManagementOpen}

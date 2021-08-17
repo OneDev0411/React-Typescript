@@ -2,21 +2,29 @@ import React, { ReactNode, useState, memo } from 'react'
 
 import {
   FormControl,
+  makeStyles,
   Typography,
   InputLabel,
   TextField,
   MenuItem,
+  Tooltip,
   Select,
   Switch,
-  makeStyles,
   Theme
 } from '@material-ui/core'
+import cn from 'classnames'
 import pluralize from 'pluralize'
+import { useSelector } from 'react-redux'
+
+import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
+import { selectUser } from 'selectors/user'
+import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { convertSecondsToDay } from './helpers'
 
 interface Props {
+  sender: IUser
   disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
@@ -27,6 +35,7 @@ interface Props {
   sendBefore: number
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
+  onChangeSender: (value: IContact) => void
   onChangeSendBefore: (value: number) => void
   onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
 }
@@ -61,6 +70,19 @@ const useStyles = makeStyles(
     inputField: {
       width: '100%',
       marginTop: theme.spacing(2)
+    },
+    senderContainer: {
+      marginBottom: theme.spacing(1.25)
+    },
+    sender: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer'
+    },
+    disabledSender: { opacity: 0.6 },
+    senderLabel: {
+      marginLeft: theme.spacing(0.5),
+      color: theme.palette.grey[500]
     }
   }),
   { name: 'TriggerEditMode' }
@@ -74,13 +96,17 @@ const TriggerEditModeComponent = ({
   renderAttributeFields,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = 0,
+  sender: senderProp,
   subject: subjectProp = '',
+  onChangeSender,
   onChangeActive,
   onChangeSubject,
   onChangeSendBefore,
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
+  const user = useSelector(selectUser)
+  const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [sendBefore, setSendBefore] = useState<number>(
@@ -115,6 +141,13 @@ const TriggerEditModeComponent = ({
     onChangeSendBefore(waitFor)
   }
 
+  const handleSenderChange = sender => {
+    const user = sender.value
+
+    setSender(user)
+    onChangeSender(user)
+  }
+
   const handleSelectTemplate = (
     templateInstance: IMarketingTemplateInstance
   ) => {
@@ -126,11 +159,55 @@ const TriggerEditModeComponent = ({
     }
   }
 
+  const renderSenderSwitcher = () => {
+    if (user && isSoloActiveTeam(user)) {
+      return null
+    }
+
+    return (
+      <div className={classes.senderContainer}>
+        <TeamContactSelect
+          disabled={disabled || !isActive}
+          owner={sender}
+          user={sender}
+          onSelect={handleSenderChange}
+          buttonRenderer={buttonProps => {
+            const title = buttonProps.selectedItem.label
+
+            return (
+              <Tooltip
+                title={
+                  !buttonProps.disabled
+                    ? 'Click to Change Sender'
+                    : 'Trigger is not Active'
+                }
+              >
+                <div
+                  className={cn(classes.sender, {
+                    [classes.disabledSender]: buttonProps.disabled
+                  })}
+                  onClick={buttonProps.onClick}
+                >
+                  <Typography variant="body2">{title}</Typography>
+                  <Typography variant="caption" className={classes.senderLabel}>
+                    Sender
+                  </Typography>
+                </div>
+              </Tooltip>
+            )
+          }}
+          fullWidth
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.containerItem}>
         {renderAttributeFields()}
         <div className={classes.triggerFields}>
+          {renderSenderSwitcher()}
           <div className={classes.switch}>
             <div className={classes.switchContainer}>
               <Typography component="span" variant="subtitle2">

@@ -15,6 +15,7 @@ interface Props {
   showAdd?: boolean
   isEditing: boolean
   showEdit?: boolean
+  isPartner?: boolean
   showDelete?: boolean
   isDisabled?: boolean
   attributeName?: string
@@ -42,6 +43,7 @@ export const InlineEditableField = (props: Props) => {
     label = 'Label',
     showAdd = false,
     showEdit = true,
+    isPartner = false,
     showDelete = true,
     attributeName = '',
     isDisabled = false,
@@ -145,6 +147,7 @@ export const InlineEditableField = (props: Props) => {
       contact,
       showAdd,
       showEdit,
+      isPartner,
       showDelete,
       attributeName,
       handleDelete,

@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
@@ -398,8 +399,14 @@ class SendMlsListingCard extends React.Component {
           })}
 
         <SearchListingDrawer
-          mockListings
-          allowSkip
+          allowHipPocket
+          onHipPocketImageUpload={
+            this.props.selectedTemplate
+              ? getHipPocketTemplateImagesUploader(
+                  this.props.selectedTemplate.template.id
+                )
+              : undefined
+          }
           isOpen={
             (this.state.isListingsModalOpen || this.state.isEditingListings) &&
             !this.props.isEdit
