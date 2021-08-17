@@ -47,6 +47,21 @@ function TeamsPage(props: Props) {
     initialExpandedNodes
   } = useTeamsPage(props.user, searchTerm)
 
+  console.log({
+    rootTeam,
+    error,
+    loading,
+    updatingUserIds,
+    updateRoles,
+    deleteTeam,
+    getChildNodes,
+    resultGetChildNodes: getChildNodes(),
+    addEditModal,
+    addMembersModal,
+    editRolesModal,
+    initialExpandedNodes
+  })
+
   const inputRef: MutableRefObject<HTMLInputElement | null> =
     useRef<HTMLInputElement | null>(null)
 
