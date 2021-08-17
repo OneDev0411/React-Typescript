@@ -119,7 +119,7 @@ export function EmailRecipientQuickSuggestions({
         }
       />
 
-      <Box ml={1}>
+      <Box ml={1} display="inline-block">
         <BrandSelector />
       </Box>
     </Box>
