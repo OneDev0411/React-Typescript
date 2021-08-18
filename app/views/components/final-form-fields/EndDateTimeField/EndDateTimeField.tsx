@@ -1,5 +1,5 @@
 // TODO: should be removed and use standard DateTimeField component
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   Box,
@@ -52,6 +52,10 @@ export function EndDateTimeField({
 
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    setEndDate(selectedDate)
+  }, [selectedDate])
 
   return (
     <Field
