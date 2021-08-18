@@ -17,13 +17,19 @@ import { goTo } from 'utils/go-to'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 
+import MarketingSearch from './components/Search'
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   headerActionsContainer: {
     display: 'flex',
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
+    alignItems: 'center'
+  },
+  searchContainer: {
+    width: 300,
+    marginLeft: theme.spacing(2)
   }
 }))
 
@@ -50,6 +56,7 @@ export function MarketingLayout({
 
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
+
   const templateTypes = params.types
 
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
@@ -108,8 +115,8 @@ export function MarketingLayout({
       <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Marketing Center">
           <div className={classes.headerActionsContainer}>
-            <div>
-              <p>HEEEEY</p>
+            <div className={classes.searchContainer}>
+              <MarketingSearch sections={sections} />
             </div>
             {hasAccessToBrandSettings && (
               <div>
