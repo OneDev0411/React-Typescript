@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ReactNode, useCallback } from 'react'
 
+import { Typography } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
 
 import { TreeViewNode } from './components/TreeViewNode'
@@ -64,6 +65,14 @@ export default React.memo(function TreeView<NodeType = any>({
   const onToggleExpanded = useCallback(node => toggleNode(node), [toggleNode])
 
   const root = getChildNodes()
+
+  if (root.length === 0) {
+    return (
+      <Typography variant="body1" color="textSecondary">
+        There is nothing to show!
+      </Typography>
+    )
+  }
 
   return (
     <>
