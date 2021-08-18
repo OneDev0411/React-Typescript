@@ -116,7 +116,10 @@ export function MarketingLayout({
         <PageLayout.Header title="Marketing Center">
           <div className={classes.headerActionsContainer}>
             <div className={classes.searchContainer}>
-              <MarketingSearch sections={sections} />
+              <MarketingSearch
+                sections={sections}
+                templateTypeMediums={mediums}
+              />
             </div>
             {hasAccessToBrandSettings && (
               <div>
