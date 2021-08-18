@@ -53,7 +53,18 @@ interface Props {
   ) => void
 }
 
-export function CalendarList(props: Props) {
+export function CalendarList({
+  user,
+  contact,
+  rows,
+  isLoading,
+  isReachedEnd,
+  isReachedStart,
+  onLoadNextEvents,
+  onLoadPreviousEvents,
+  onCrmEventChange,
+  onScheduledEmailChange
+}: Props) {
   const classes = useStyles()
 
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
@@ -66,7 +77,7 @@ export function CalendarList(props: Props) {
    * @param type - type of action
    */
   const handleEventChange = (event: IEvent, type: CrmEventType) => {
-    props.onCrmEventChange(event, type)
+    onCrmEventChange(event, type)
     setSelectedEvent(null)
   }
 
@@ -76,11 +87,9 @@ export function CalendarList(props: Props) {
    * @param emailCampaign - the updated email camapign
    */
   const handleScheduledEmailChange = (emailCampaign: IEmailCampaign) => {
-    props.onScheduledEmailChange(selectedEvent as ICalendarEvent, emailCampaign)
+    onScheduledEmailChange(selectedEvent as ICalendarEvent, emailCampaign)
     setSelectedEvent(null)
   }
-
-  const { contact } = props
 
   return (
     <ListContext.Provider
@@ -90,22 +99,22 @@ export function CalendarList(props: Props) {
         setSelectedEvent
       }}
     >
-      <EmptyState rowsCount={props.rows.length} isLoading={props.isLoading} />
+      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
 
-      {!props.isReachedStart && props.rows.length > 0 && (
+      {!isReachedStart && rows.length > 0 && (
         <Box my={1} textAlign="center">
           <Button
             size="small"
-            disabled={props.isLoading}
-            onClick={props.onLoadPreviousEvents}
+            disabled={isLoading}
+            onClick={onLoadPreviousEvents}
           >
-            {props.isLoading ? 'Loading...' : 'Previous Events'}
+            {isLoading ? 'Loading...' : 'More Upcoming Events'}
           </Button>
         </Box>
       )}
 
       <Box>
-        {props.rows.map((section, index) => (
+        {rows.map((section, index) => (
           <Box className={classes.section} key={index}>
             <Box className={classes.header}>
               <EventHeader item={section.header} />
@@ -122,20 +131,16 @@ export function CalendarList(props: Props) {
         ))}
       </Box>
 
-      {!props.isReachedEnd && props.rows.length > 0 && (
+      {!isReachedEnd && rows.length > 0 && (
         <Box my={1} textAlign="center">
-          <Button
-            size="small"
-            disabled={props.isLoading}
-            onClick={props.onLoadNextEvents}
-          >
-            {props.isLoading ? 'Loading...' : 'Next Events'}
+          <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
+            {isLoading ? 'Loading...' : 'More Past Events'}
           </Button>
         </Box>
       )}
 
       <EventController
-        user={props.user}
+        user={user}
         onEventChange={handleEventChange}
         onScheduledEmailChange={handleScheduledEmailChange}
       />
