@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import { Box } from '@material-ui/core'
+import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
@@ -14,6 +14,25 @@ import { BrandSelector } from './components/BrandSelector'
 import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      padding: theme.spacing(0.5, 0, 1),
+      flexGrow: 0,
+      flexShrink: 0,
+      flexBasis: '100%',
+      lineHeight: 1.5
+    },
+    item: {
+      display: 'inline-block',
+      '&:not(:last-child)': {
+        marginRight: theme.spacing(1)
+      }
+    }
+  }),
+  { name: 'EmailRecipientQuickSuggestions' }
+)
 
 interface Props {
   deal?: IDeal
@@ -39,6 +58,7 @@ export function EmailRecipientQuickSuggestions({
   currentRecipients = [],
   onSelect
 }: Props) {
+  const classes = useStyles()
   const { dealRoles, contactsInfo } = useSelector<
     IAppState,
     { dealRoles: IDealRole[]; contactsInfo: any }
@@ -94,33 +114,27 @@ export function EmailRecipientQuickSuggestions({
     onSelect(recipient, sendType)
   }
 
-  if (!showQuickSuggestions) {
-    return null
-  }
-
   return (
-    <Box
-      pb={1}
-      pt={0.5}
-      flexGrow={0}
-      flexShrink={0}
-      flexBasis="100%"
-      lineHeight={1.5}
-    >
-      <Box display="inline-block" color="text.secondary" mr={1}>
+    <div className={classes.container}>
+      <Typography color="textSecondary" className={classes.item}>
         Suggestions
-      </Box>
+      </Typography>
 
-      <RecipientQuickSuggestions
-        quickSuggestions={unusedQuickSuggestions}
-        onSelect={({ recipient, sendType }) =>
-          handleSelectSuggestion(recipient, sendType)
-        }
+      {showQuickSuggestions && (
+        <div className={classes.item}>
+          <RecipientQuickSuggestions
+            quickSuggestions={unusedQuickSuggestions}
+            onSelect={({ recipient, sendType }) =>
+              handleSelectSuggestion(recipient, sendType)
+            }
+          />
+        </div>
+      )}
+
+      <BrandSelector
+        onSelect={onSelect}
+        currentRecipients={currentRecipients}
       />
-
-      <Box ml={1} display="inline-block">
-        <BrandSelector />
-      </Box>
-    </Box>
+    </div>
   )
 }
