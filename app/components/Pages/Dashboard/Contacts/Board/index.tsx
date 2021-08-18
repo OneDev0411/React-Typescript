@@ -36,6 +36,7 @@ const Columns = ['Warm', 'Hot', 'Past Client']
 
 interface Props {
   contacts: IContact[]
+  totalContacts: number
   isFetchingContacts: boolean
   isFetchingNextContacts: boolean
   isFetchingPreviousContacts: boolean
@@ -45,6 +46,7 @@ interface Props {
 
 export function Board({
   contacts,
+  totalContacts,
   isFetchingContacts,
   isFetchingNextContacts,
   isFetchingPreviousContacts,
@@ -106,6 +108,7 @@ export function Board({
             isFetchingPreviousContacts={isFetchingPreviousContacts}
             id={(-1).toString()}
             title="All Contacts"
+            listCount={totalContacts}
             list={sort(
               list.filter(
                 contact =>

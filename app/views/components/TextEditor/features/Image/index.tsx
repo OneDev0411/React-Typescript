@@ -16,6 +16,7 @@ import { removeBlock } from 'components/TextEditor/modifiers/remove-block'
 import { doesContainBlock } from 'components/TextEditor/utils/does-contain-block'
 import { getLastAddedImageBlock } from 'components/TextEditor/utils/get-last-added-image-block'
 import { useLatestValueRef } from 'hooks/use-latest-value-ref'
+import { getLocalFileType } from 'utils/file-utils/get-file-type'
 import { isImageFile } from 'utils/file-utils/is-image-file'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
@@ -82,10 +83,12 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
     }
   }, [])
 
-  function showNotificationForUnsupportedImage(): void {
+  function showNotificationForUnsupportedImage(file: File): void {
+    const fileType = getLocalFileType(file)
+
     dispatch(
       addNotification({
-        message: 'Only acceptable files are JPG, JPEG, PNG, GIF, and SVG.',
+        message: `Please use Attachment feature to upload ${fileType}, You can only drag and drop JPG, JPEG, PNG, GIF, and SVG.`,
         status: 'error'
       })
     )
@@ -109,7 +112,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
    */
   const addImage = async (file: File) => {
     if (!isImageFile(file)) {
-      return showNotificationForUnsupportedImage()
+      return showNotificationForUnsupportedImage(file)
     }
 
     // We first convert image to data url and show it.
@@ -188,7 +191,7 @@ export function ImageFeature({ uploadImage, allowGif = true }: Props) {
 
       if (file) {
         if (!isImageFile(file)) {
-          return showNotificationForUnsupportedImage()
+          return showNotificationForUnsupportedImage(file)
         }
 
         return addImageRef.current(file)

@@ -26,7 +26,6 @@ export default function CreateOpenHouse(
   if (isListingsDrawerOpen) {
     return (
       <SearchListingDrawer
-        mockListings
         isOpen={isListingsDrawerOpen}
         defaultLists={[
           {

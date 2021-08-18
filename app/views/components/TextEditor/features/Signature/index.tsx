@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect } from 'react'
+import React, { useState, useContext, useLayoutEffect } from 'react'
 
 import { Box } from '@material-ui/core'
 import { ContentBlock } from 'draft-js'
@@ -43,7 +43,7 @@ export function SignatureFeature({
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
   const { editorState, setEditorState } = useContext(EditorContext)
-
+  const [isWaitingToActive, setIsaitingToActive] = useState(false)
   const signatureRef = useLatestValueRef(signature)
 
   const { signaturePlugin } = useEditorPlugins(
@@ -58,6 +58,11 @@ export function SignatureFeature({
   )
 
   useLayoutEffect(() => {
+    if (isWaitingToActive && signature && !signaturePlugin.hasSignature()) {
+      signaturePlugin.toggleSignature()
+      setIsaitingToActive(false)
+    }
+
     if (
       hasSignatureByDefault &&
       signature &&
@@ -77,17 +82,23 @@ export function SignatureFeature({
     })
   }
 
+  const handleOnChange = () => {
+    if (!signature) {
+      setIsaitingToActive(true)
+
+      return showNoSignatureModal()
+    }
+
+    signaturePlugin.toggleSignature()
+  }
+
   return (
     <ToolbarFragment group="signature">
       <Box pl={0.5}>
         <Checkbox
           inputProps={{ tabIndex: 1 }}
           checked={signaturePlugin.hasSignature()}
-          onChange={() =>
-            signature
-              ? signaturePlugin.toggleSignature()
-              : showNoSignatureModal()
-          }
+          onChange={handleOnChange}
         >
           Signature
         </Checkbox>

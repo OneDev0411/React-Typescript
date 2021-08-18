@@ -1,13 +1,9 @@
 import React from 'react'
 
 import Map from 'google-map-react'
-import isEmpty from 'lodash/isEmpty'
-import isEqual from 'lodash/isEqual'
-import supercluster from 'points-cluster'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import withPropsOnChange from 'recompose/withPropsOnChange'
 import withState from 'recompose/withState'
 
 import * as mapActions from 'actions/listings/map'
@@ -15,22 +11,12 @@ import * as drawingActions from 'actions/listings/map/drawing'
 import getListingsByMapBounds from 'actions/listings/search/get-listings/by-map-bounds'
 import { reset as resetSearchType } from 'actions/listings/search/set-type'
 import SearchPinMarker from 'components/SearchPinMarker'
-import {
-  setCssPositionToListingsWithSameBuilding,
-  normalizeListingsForMarkers,
-  getBounds
-} from 'utils/map'
+import { normalizeListingsForMarkers, getBounds } from 'utils/map'
 
-import ClusterMarker from '../../components/Markers/ClusterMarker'
 import SimpleMarker from '../../components/Markers/SimpleMarker'
 import NotLoggedInMessage from '../../components/NotLoggedInMessage'
 import ZoomController from '../../components/ZoomController'
-import {
-  bootstrapURLKeys,
-  mapOptions,
-  mapInitialState,
-  DECLUSTER_ZOOM_LEVEL
-} from '../../mapOptions'
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
 
 import DrawingButton from './DrawingButton'
 import { DrawingRemoveButton } from './DrawingRemoveButton'
@@ -48,15 +34,13 @@ let mapOnChangeDebounce = 0
 const map = ({
   map,
   user,
-  brand,
   isWidget,
   onChange,
-  clusters,
+  markers,
   searchText,
   searchLocation,
   onGoogleApiLoaded,
   onClickRemovePolygon,
-  fitBoundsByPoints,
   lastBrowsingLocation
 }) => (
   <>
@@ -72,30 +56,14 @@ const map = ({
       onGoogleApiLoaded={onGoogleApiLoaded}
       style={{ height: '100%', width: '100%' }}
     >
-      {clusters.map(({ points, lat, lng }, index) => {
-        if (points.length === 1) {
-          const { id } = points[0]
-
-          return (
-            <SimpleMarker
-              lat={lat}
-              lng={lng}
-              user={user}
-              barnd={brand}
-              listing={points[0]}
-              isWidget={isWidget}
-              key={`SIMPLE_MARKER_${id}`}
-            />
-          )
-        }
-
+      {markers.map(marker => {
         return (
-          <ClusterMarker
-            lat={lat}
-            lng={lng}
-            text={points.length}
-            key={`CLUSTER_MARKER_${index}`}
-            onClickHandler={() => fitBoundsByPoints(points)}
+          <SimpleMarker
+            lat={marker.location.latitude}
+            lng={marker.location.longitude}
+            listing={marker}
+            isWidget={isWidget}
+            key={`SIMPLE_MARKER_${marker.id}`}
           />
         )
       })}
@@ -129,7 +97,6 @@ const mapHOC = compose(
     actions
   ),
   withState('isInit', 'setIsInit', false),
-  withState('clusters', 'setClusters', []),
   withHandlers({
     fitBoundsByPoints: () => points => {
       const googleMaps = window.google.maps
@@ -140,31 +107,6 @@ const mapHOC = compose(
 
       window.currentMap.fitBounds(bounds)
     }
-  }),
-  withHandlers({
-    generateClusters:
-      ({ setClusters }) =>
-      (markers = [], mapProps) => {
-        const getCluster = supercluster(markers, {
-          // min zoom to generate clusters on
-          minZoom: 12,
-          // max zoom level to cluster the points on
-          maxZoom: DECLUSTER_ZOOM_LEVEL - 1,
-          radius: 60 // cluster radius in pixels
-        })
-
-        let clusters = getCluster(mapProps).map(({ wx, wy, points }) => ({
-          points,
-          lat: wy,
-          lng: wx
-        }))
-
-        if (mapProps.zoom >= DECLUSTER_ZOOM_LEVEL) {
-          clusters = setCssPositionToListingsWithSameBuilding(clusters)
-        }
-
-        setClusters(clusters)
-      }
   }),
   withHandlers({
     onChange:
@@ -276,17 +218,7 @@ const mapHOC = compose(
         inactiveDrawing()
         getListingsByMapBounds(map.props.marginBounds || map.props.bounds)
       }
-  }),
-  withPropsOnChange(
-    (props, nextProps) =>
-      !isEqual(props.mapProps, nextProps.mapProps) ||
-      !isEqual(props.markers, nextProps.markers),
-    ({ mapProps, markers, generateClusters, isFetching }) => {
-      if (!isFetching && !isEmpty(mapProps) && mapProps.bounds) {
-        generateClusters(normalizeListingsForMarkers(markers), mapProps)
-      }
-    }
-  )
+  })
 )
 
 export default mapHOC(map)

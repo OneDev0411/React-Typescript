@@ -71,6 +71,7 @@ interface Props {
   id: string
   title: string
   droppable?: boolean
+  listCount?: number
   isFetchingContacts?: boolean
   isFetchingNextContacts?: boolean
   isFetchingPreviousContacts?: boolean
@@ -83,6 +84,7 @@ export const BoardColumn = React.memo(function BoardColumn({
   id,
   title,
   list,
+  listCount,
   isFetchingContacts = false,
   isFetchingNextContacts = false,
   isFetchingPreviousContacts = false,
@@ -136,7 +138,9 @@ export const BoardColumn = React.memo(function BoardColumn({
               {isLoading ? (
                 <Skeleton animation="wave" width="16px" />
               ) : (
-                <Typography variant="subtitle1">{list.length}</Typography>
+                <Typography variant="subtitle1">
+                  {listCount || list.length}
+                </Typography>
               )}
             </Box>
           </Box>

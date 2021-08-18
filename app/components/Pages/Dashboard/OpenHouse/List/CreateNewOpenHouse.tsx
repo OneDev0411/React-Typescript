@@ -27,7 +27,6 @@ function CreateNewOpenHouse(props: Props) {
       </Button>
 
       <SearchListingDrawer
-        mockListings
         isOpen={isSearchDrawerOpen}
         defaultLists={[
           {
