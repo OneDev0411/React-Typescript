@@ -48,7 +48,6 @@ class SendMlsListingCard extends React.Component {
     listings: [],
     listingDrawerListings: [],
     isListingsModalOpen: false,
-    isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSocialDrawerOpen: false,
@@ -211,10 +210,7 @@ class SendMlsListingCard extends React.Component {
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
   closeListingModal = () =>
-    this.setState(
-      { isListingsModalOpen: false, isEditingListings: false },
-      this.props.handleTrigger
-    )
+    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
 
   toggleComposeEmail = () =>
     this.setState(state => ({
@@ -226,7 +222,6 @@ class SendMlsListingCard extends React.Component {
       {
         listings,
         isListingsModalOpen: false,
-        isEditingListings: false,
         isInstantMarketingBuilderOpen: true
       },
       this.props.handleTrigger
@@ -285,11 +280,6 @@ class SendMlsListingCard extends React.Component {
   closeSocialDrawer = () =>
     this.setState({
       isSocialDrawerOpen: false
-    })
-
-  handleEditListings = () =>
-    this.setState({
-      isEditingListings: true
     })
 
   get TemplateInstanceData() {
@@ -407,10 +397,7 @@ class SendMlsListingCard extends React.Component {
                 )
               : undefined
           }
-          isOpen={
-            (this.state.isListingsModalOpen || this.state.isEditingListings) &&
-            !this.props.isEdit
-          }
+          isOpen={this.state.isListingsModalOpen && !this.props.isEdit}
           withMlsDisclaimer
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
@@ -429,9 +416,7 @@ class SendMlsListingCard extends React.Component {
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
             <Button {...props.buttonProps}>
-              {this.state.isEditingListings
-                ? 'Apply Changes'
-                : `Next (${props.selectedItemsCount} Listings Selected)`}
+              {`Next (${props.selectedItemsCount} Listings Selected)`}
             </Button>
           )}
         />
@@ -447,7 +432,6 @@ class SendMlsListingCard extends React.Component {
             assets={this.Assets}
             mediums={this.props.mediums}
             defaultTemplate={this.props.selectedTemplate}
-            onShowEditListings={this.handleEditListings}
             isEdit={this.props.isEdit}
             hideTemplatesColumn={this.props.hideTemplatesColumn}
             isTemplatesColumnHiddenDefault={
