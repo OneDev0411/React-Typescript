@@ -8,14 +8,14 @@ import React, {
 } from 'react'
 
 // eslint-disable-next-line import/order
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import FullCalendar, {
   EventApi,
   EventInput,
   DatesSetArg,
   EventContentArg
 } from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import rrulePlugin from '@fullcalendar/rrule'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { makeStyles, Theme } from '@material-ui/core'
