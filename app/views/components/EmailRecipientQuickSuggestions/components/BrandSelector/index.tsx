@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-import { Button, Theme, makeStyles } from '@material-ui/core'
+import {
+  Button,
+  Typography,
+  CircularProgress,
+  Theme,
+  makeStyles
+} from '@material-ui/core'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
-import Search from 'components/Grid/Search'
-import Drawer from 'components/OverlayDrawer'
-import TreeView from 'components/TreeView'
-import Loading from 'partials/Loading'
+import Search from '@app/views/components/Grid/Search'
+import Drawer from '@app/views/components/OverlayDrawer'
+import TreeView from '@app/views/components/TreeView'
 import { selectUser } from 'selectors/user'
 
 import { Brand } from './components/Brand'
@@ -17,12 +22,16 @@ const getNodeId = (team: IBrand) => team.id
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    searchContaoner: {
+    searchContainer: {
       margin: theme.spacing(2, 0)
     },
     team: {
       padding: theme.spacing(1, 0),
       cursor: 'pointer'
+    },
+    loading: {
+      textAlign: 'center',
+      marginTop: theme.spacing(3)
     }
   }),
   { name: 'BrandSelector' }
@@ -40,24 +49,24 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
   const user = useSelector(selectUser)
   const classes = useStyles()
 
-  const [searchKey, setSearchKey] = useState<string>('')
+  const [query, setQuery] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const { error, loading, initialExpandedNodes, getChildNodes } = useTeam(
     user,
-    searchKey
+    query
   )
 
   const hanldeOpenDrawer = () => setIsOpen(true)
   const hanldeCloseDrawer = () => {
-    if (searchKey) {
-      setSearchKey('')
+    if (query) {
+      setQuery('')
     }
 
     setIsOpen(false)
   }
 
-  const debouncedSetSearchKey = debounce(setSearchKey, 400)
+  const debouncedSetQuery = debounce(setQuery, 400)
 
   const handleOnClickBrand = (brand: IBrand) => {
     const recipient: IDenormalizedEmailRecipientBrandInput = {
@@ -71,11 +80,19 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
 
   const renderTreeView = () => {
     if (loading) {
-      return <Loading />
+      return (
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      )
     }
 
     if (error) {
-      return <span>Somthing Went Wrong!</span>
+      return (
+        <Typography variant="body1" color="textSecondary">
+          Somthing Went Wrong!
+        </Typography>
+      )
     }
 
     return (
@@ -103,10 +120,10 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
       <Drawer open={isOpen} onClose={hanldeCloseDrawer}>
         <Drawer.Header title="Select Team" />
         <Drawer.Body>
-          <div className={classes.searchContaoner}>
+          <div className={classes.searchContainer}>
             <Search
               placeholder="Search for teams and agents"
-              onChange={value => debouncedSetSearchKey(value)}
+              onChange={value => debouncedSetQuery(value)}
             />
           </div>
 

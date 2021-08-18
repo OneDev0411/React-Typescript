@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react'
+import { useMemo, memo } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
@@ -28,9 +28,9 @@ interface Props {
 function RawBrand({ brand, currentRecipients = [], onClick }: Props) {
   const classes = useStyles()
 
-  const isUsed: boolean = useMemo(() => {
+  const isSelected: boolean = useMemo(() => {
     if (Array.isArray(currentRecipients) && currentRecipients.length > 0) {
-      return !!currentRecipients.find(
+      return currentRecipients.some(
         areRecipientsEqual({ recipient_type: 'Brand', brand })
       )
     }
@@ -39,7 +39,7 @@ function RawBrand({ brand, currentRecipients = [], onClick }: Props) {
   }, [brand, currentRecipients])
 
   const handleOnClick = () => {
-    if (isUsed) {
+    if (isSelected) {
       return null
     }
 
@@ -48,7 +48,7 @@ function RawBrand({ brand, currentRecipients = [], onClick }: Props) {
 
   return (
     <div
-      className={cn(classes.name, { [classes.disabled]: isUsed })}
+      className={cn(classes.name, { [classes.disabled]: isSelected })}
       onClick={handleOnClick}
     >
       <Typography variant="body2">{brand.name}</Typography>

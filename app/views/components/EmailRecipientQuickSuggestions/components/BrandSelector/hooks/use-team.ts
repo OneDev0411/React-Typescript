@@ -5,12 +5,12 @@ import { getBrands } from 'models/BrandConsole/Brands'
 import { getActiveTeamId } from 'utils/user-teams'
 
 export function useTeam(user: IUser, searchTerm: string) {
-  const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
-  const [error, setError] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
+  const [rootTeam, setRootTeam] = useState<Nullable<IBrand>>(null)
+  const [error, setError] = useState<Nullable<Error>>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    const fetchBrands = async (brandId: string) => {
+    const fetchBrands = async (brandId: UUID) => {
       setLoading(true)
 
       try {
