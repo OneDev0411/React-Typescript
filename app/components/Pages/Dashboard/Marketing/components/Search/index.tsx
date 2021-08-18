@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { TextField } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
@@ -34,8 +34,6 @@ export default function MarketingSearch({ sections }: Props) {
       })
   }, [sections])
 
-  const [searchResults, setSearchResults] = useState<Option[]>(options)
-
   const handleSelect = (option: Nullable<Option | string>) => {
     if (!option || typeof option === 'string') {
       return
@@ -44,31 +42,28 @@ export default function MarketingSearch({ sections }: Props) {
     goTo(option.url)
   }
 
-  const handleInputChange = (value: string) => {
-    if (!value) {
-      setSearchResults(options)
-
-      return
-    }
-
-    const results = new Fuse(options, {
-      keys: ['label', 'section']
-    }).search(value)
-
-    setSearchResults(results)
-  }
-
   return (
     <Autocomplete<Option, false, true, true>
       freeSolo
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
-      options={searchResults}
+      options={options}
       onChange={(e, option) => handleSelect(option)}
-      onInputChange={(e, value) => handleInputChange(value)}
       getOptionLabel={option => option.label}
       groupBy={option => option.section}
       noOptionsText="No results"
+      filterOptions={(options, state) => {
+        if (!state.inputValue) {
+          return options
+        }
+
+        return new Fuse(options, {
+          keys: ['label', 'section'],
+          threshold: 0.3
+        })
+          .search(state.inputValue)
+          .sort((a, b) => a.section.localeCompare(b.section))
+      }}
       renderInput={params => (
         <TextField
           {...params}
