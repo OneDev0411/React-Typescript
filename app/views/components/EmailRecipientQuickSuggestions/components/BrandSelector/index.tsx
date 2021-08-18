@@ -1,18 +1,16 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 
-import { Button, Typography, Theme, makeStyles } from '@material-ui/core'
+import { Button, Theme, makeStyles } from '@material-ui/core'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
 
-// import useNotify from '@app/hooks/use-notify'
 import Search from 'components/Grid/Search'
 import Drawer from 'components/OverlayDrawer'
 import TreeView from 'components/TreeView'
 import Loading from 'partials/Loading'
 import { selectUser } from 'selectors/user'
 
-import { areRecipientsEqual } from '../../helpers/are-recipients-equal'
-
+import { Brand } from './components/Brand'
 import { useTeam } from './hooks/use-team'
 
 const getNodeId = (team: IBrand) => team.id
@@ -32,16 +30,6 @@ const useStyles = makeStyles(
 
 interface Props {
   currentRecipients?: IDenormalizedEmailRecipientInput[]
-  /**
-   * Callback to be called when a quick suggestion in selected.
-   * The selected suggestion may have a forced
-   * {@link IEmailRecipientSendType send type}. Right now the type is
-   * forced to `Bcc` for some suggestions like "All contacts" and "All Agents"
-   * @param recipient: the recipient associated with this quick suggestion
-   * @param sendType: the {@link IEmailRecipientSendType send type} associated
-   * with this suggestion. It can be undefined and in this case, the recipient
-   * is to be added to the currently (or lastly) focused input.
-   */
   onSelect: (
     recipient: IDenormalizedEmailRecipientInput,
     sendType: IEmailRecipientSendType | undefined
@@ -51,7 +39,6 @@ interface Props {
 export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
   const user = useSelector(selectUser)
   const classes = useStyles()
-  // const notify = useNotify()
 
   const [searchKey, setSearchKey] = useState<string>('')
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -61,7 +48,6 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
     searchKey
   )
 
-  // console.log({ error, loading, rootTeam, initialExpandedNodes, getChildNodes })
   const hanldeOpenDrawer = () => setIsOpen(true)
   const hanldeCloseDrawer = () => {
     if (searchKey) {
@@ -73,32 +59,15 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
 
   const debouncedSetSearchKey = debounce(setSearchKey, 400)
 
-  const handleClickBrand = (brand: IBrand) => {
+  const handleOnClickBrand = (brand: IBrand) => {
     const recipient: IDenormalizedEmailRecipientBrandInput = {
       recipient_type: 'Brand',
       brand
     }
 
-    const isUnused =
-      !currentRecipients ||
-      !currentRecipients.find(areRecipientsEqual(recipient))
-
-    console.log({ brand, currentRecipients, isUnused })
-
     onSelect(recipient, 'BCC')
     hanldeCloseDrawer()
   }
-
-  const teamRenderer = useCallback((team: IBrand) => {
-    // console.log({ team })
-
-    return (
-      <div className={classes.team} onClick={() => handleClickBrand(team)}>
-        <Typography variant="body2">{team.name}</Typography>
-      </div>
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const renderTreeView = () => {
     if (loading) {
@@ -115,7 +84,13 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
         selectable
         initialExpandedNodes={initialExpandedNodes}
         getNodeId={getNodeId}
-        renderNode={teamRenderer}
+        renderNode={(brand: IBrand) => (
+          <Brand
+            brand={brand}
+            currentRecipients={currentRecipients}
+            onClick={handleOnClickBrand}
+          />
+        )}
       />
     )
   }

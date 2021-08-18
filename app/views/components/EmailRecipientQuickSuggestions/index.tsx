@@ -132,7 +132,7 @@ export function EmailRecipientQuickSuggestions({
       )}
 
       <BrandSelector
-        onSelect={onSelect}
+        onSelect={handleSelectSuggestion}
         currentRecipients={currentRecipients}
       />
     </div>
