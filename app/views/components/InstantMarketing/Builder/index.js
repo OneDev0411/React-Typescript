@@ -1025,18 +1025,6 @@ class Builder extends React.Component {
     return this.props.bareMode === true
   }
 
-  get shouldShowEditListingsButton() {
-    if (this.isBareMode) {
-      return false
-    }
-
-    return (
-      this.state.originalTemplate &&
-      this.props.templateTypes.includes('Listings') &&
-      this.props.templateData.listings
-    )
-  }
-
   get isEmailMedium() {
     if (this.selectedTemplate) {
       return this.selectedTemplate.medium === 'Email'
@@ -1448,18 +1436,6 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.shouldShowEditListingsButton && !this.props.isEdit && (
-                <Button
-                  style={{ marginLeft: '0.5rem' }}
-                  variant="outlined"
-                  color="secondary"
-                  onClick={this.props.onShowEditListings}
-                  disabled={this.props.actionButtonsDisabled}
-                >
-                  Edit Listings ({this.props.templateData.listings.length})
-                </Button>
-              )}
-
               {(this.shouldShowPrintableActions ||
                 this.shouldShowSocialShareActions) && (
                 <Button
@@ -1535,7 +1511,6 @@ Builder.propTypes = {
   mediums: PropTypes.string,
   assets: PropTypes.arrayOf(PropTypes.object),
   defaultTemplate: PropTypes.object,
-  onShowEditListings: PropTypes.func,
   containerStyle: PropTypes.object,
   isTemplatesColumnHiddenDefault: PropTypes.bool,
   bareMode: PropTypes.bool,
