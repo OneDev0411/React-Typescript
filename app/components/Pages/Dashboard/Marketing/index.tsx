@@ -1,9 +1,12 @@
+import { useMemo, memo } from 'react'
+
 import { Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline } from '@mdi/js'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
-import { withRouter } from 'react-router'
+import { withRouter, WithRouterProps } from 'react-router'
 
+import { selectActiveTeamId } from '@app/selectors/team'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -12,7 +15,7 @@ import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
-import { getActiveTeamId, hasUserAccessToBrandSettings } from 'utils/user-teams'
+import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
@@ -24,36 +27,56 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-export function MarketingLayout({ render, ...props }) {
+interface Props {
+  render: (props: {
+    items: IBrandMarketingTemplate[]
+    isLoading: boolean
+    types: string
+    medium: IMarketingTemplateMedium
+    defaultSelectedTemplate: UUID
+    onSelectTemplate: (template: IBrandMarketingTemplate) => void
+    onDeleteTemplate: (template: IBrandMarketingTemplate) => void
+  }) => JSX.Element
+}
+
+export function MarketingLayout({
+  render,
+  ...props
+}: Props &
+  WithRouterProps<{ types: string; medium: IMarketingTemplateMedium }>) {
   const classes = useStyles()
+  const activeBrand = useSelector(selectActiveTeamId)
+  const user = useSelector(selectUser)
+
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
-  const user = useSelector(state => selectUser(state))
-
   const templateTypes = params.types
-
-  const activeBrand = getActiveTeamId(user)
-  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
-  const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
-
   const currentMedium = params.medium
-  const currentPageItems = templates.filter(item => {
-    const mediumMatches = currentMedium
-      ? item.template.medium === currentMedium
-      : true
-    const typeMatches =
-      splittedTemplateTypes.length > 0
-        ? splittedTemplateTypes.includes(item.template.template_type)
+  const currentPageItems = useMemo(() => {
+    const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
+
+    return templates.filter(item => {
+      const mediumMatches = currentMedium
+        ? item.template.medium === currentMedium
         : true
+      const typeMatches =
+        splittedTemplateTypes.length > 0
+          ? splittedTemplateTypes.includes(item.template.template_type)
+          : true
 
-    return mediumMatches && typeMatches
-  })
+      return mediumMatches && typeMatches
+    })
+  }, [currentMedium, templateTypes, templates])
 
-  const onSelectTemplate = template => {
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
+
+  const onSelectTemplate = (
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+  ) => {
     const newQuery = { ...location.query }
 
     if (!template || (template && isTemplateInstance(template))) {
@@ -84,26 +107,29 @@ export function MarketingLayout({ render, ...props }) {
 
       <PageLayout position="relative" overflow="hidden">
         <PageLayout.Header title="Marketing Center">
-          {hasAccessToBrandSettings && (
-            <div className={classes.headerActionsContainer}>
-              <Tooltip title="Brand Setup">
-                <IconButton onClick={() => goTo('/dashboard/brand-settings')}>
-                  <SvgIcon path={mdiCogOutline} />
-                </IconButton>
-              </Tooltip>
+          <div className={classes.headerActionsContainer}>
+            <div>
+              <p>HEEEEY</p>
             </div>
-          )}
+            {hasAccessToBrandSettings && (
+              <div>
+                <Tooltip title="Brand Setup">
+                  <IconButton onClick={() => goTo('/dashboard/brand-settings')}>
+                    <SvgIcon path={mdiCogOutline} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            )}
+          </div>
         </PageLayout.Header>
         <PageLayout.Main minHeight="100vh">
           <Tabs
             sections={sections}
             mediums={mediums}
             templateTypes={templateTypes}
-            isOverviewActive={
-              router.location.pathname === '/dashboard/marketing'
-            }
+            isOverviewActive={location.pathname === '/dashboard/marketing'}
             isMyDesignsActive={
-              router.location.pathname === '/dashboard/marketing/designs'
+              location.pathname === '/dashboard/marketing/designs'
             }
           />
           {render &&
@@ -122,4 +148,4 @@ export function MarketingLayout({ render, ...props }) {
   )
 }
 
-export default withRouter(MarketingLayout)
+export default withRouter(memo(MarketingLayout))
