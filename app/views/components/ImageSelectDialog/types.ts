@@ -12,6 +12,7 @@ export interface ImageSelectDialogProps {
   onSelect: (imageUrl: string) => void
   onUpload?: (file: File) => Promise<string>
   onClose: () => void
+  disabledTabs?: TabValue[]
   dialogProps?: DialogProps
 }
 
