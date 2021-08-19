@@ -21,7 +21,7 @@ import {
   SortIndex,
   SortString,
   SORT_FIELD_DEFAULT
-} from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+} from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
 
 const useStyles = makeStyles(
   theme => ({
