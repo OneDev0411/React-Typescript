@@ -83,14 +83,11 @@ class Search extends React.Component {
     if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
     } else {
-      console.log('[ ] loading map libraries')
       loadMapLibraries(googleMapAPIParams)
     }
   }
 
   initialize = () => {
-    console.log('[ ] initialize')
-
     if (!this.brokerageQuery && !this.searchQuery && !this.props.isWidget) {
       return this.initMap()
     }
