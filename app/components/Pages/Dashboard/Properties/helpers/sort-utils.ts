@@ -14,6 +14,10 @@ export const sortOptions = {
   builtYear: 'Year Built'
 }
 
+export interface LastBrowsingLocation {
+  center: { lat: number; lng: number }
+  zoom: number
+}
 export type SortIndex = keyof typeof sortOptions
 export type SortPrefix = '' | '-'
 export type SortString = `${SortPrefix}${SortIndex}`
@@ -51,5 +55,8 @@ export const sortByIndex = (
 ) => (ascending ? a[index] - b[index] : b[index] - a[index])
 
 export const getUserLastBrowsingLocation = (user: IUser) => {
-  return getUserSettingsInActiveTeam(user, LAST_BROWSING_LOCATION)
+  return getUserSettingsInActiveTeam(
+    user,
+    LAST_BROWSING_LOCATION
+  ) as Optional<LastBrowsingLocation>
 }
