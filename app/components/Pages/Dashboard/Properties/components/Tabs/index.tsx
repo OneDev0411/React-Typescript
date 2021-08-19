@@ -14,21 +14,21 @@ import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { SortIndex } from '../../helpers/sort-utils'
+import { SortIndex, SortString } from '../../helpers/sort-utils'
 import SavedSearchesList from '../../SavedSearchesList'
 import { SortDropdown } from '../GridControllers/SortDropdown'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
 
 interface Props {
-  onChangeView: () => void
-  onChangeSort: () => void
+  onChangeView: (e: any) => void
+  onChangeSort: (sort: SortString) => void
   saveSearchHandler: () => void
-  activeView: 'map' | 'grid' | 'list'
+  activeView: 'map' | 'list'
   isWidget: boolean
   isFetching: boolean
   user: IUser
   activeSort: { index: SortIndex; ascending: boolean }
-  showSavedSearchButton?: false
+  showSavedSearchButton?: boolean
 }
 
 interface TabsShape {
