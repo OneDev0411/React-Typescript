@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useTeamsFilterHook } from '@app/components/Pages/Dashboard/Teams/hooks/use-teams-filter.hook'
 import { getBrands } from 'models/BrandConsole/Brands'
-import { getActiveTeamId } from 'utils/user-teams'
+import { getRootBrand } from 'utils/user-teams'
 
 export function useTeam(user: IUser, searchTerm: string) {
   const [rootTeam, setRootTeam] = useState<Nullable<IBrand>>(null)
@@ -25,10 +25,10 @@ export function useTeam(user: IUser, searchTerm: string) {
       }
     }
 
-    const activeTeamId = getActiveTeamId(user)
+    const rootBrand = getRootBrand(user)
 
-    if (activeTeamId) {
-      fetchBrands(activeTeamId)
+    if (rootBrand) {
+      fetchBrands(rootBrand.id)
     }
   }, [user])
 
