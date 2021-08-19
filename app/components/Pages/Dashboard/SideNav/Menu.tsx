@@ -125,6 +125,10 @@ export function Menu() {
             Properties
           </SideNavLinkItem>
 
+          <SideNavLinkItem to="/dashboard/properties" tourId="nav-properties2">
+            Properties v2
+          </SideNavLinkItem>
+
           <Acl.AgentNetwork>
             <SideNavLinkItem
               to="/dashboard/agent-network"

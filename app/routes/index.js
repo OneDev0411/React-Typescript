@@ -256,6 +256,45 @@ const AsyncMLSSinglePage = Load({
 })
 
 /* ==================================== */
+//  Properties
+/* ==================================== */
+
+const AsyncPropertiesLayout = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Properties' /* webpackChunkName: "properties" */
+    )
+})
+
+const AsyncPropertiesSearch = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Properties/Search' /* webpackChunkName: "properties_search" */
+    )
+})
+
+const AsyncPropertiesSavedSearch = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Properties/SavedSearch' /* webpackChunkName: "properties_alerts" */
+    )
+})
+
+const AsyncPropertiesFavorites = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Properties/Favorites' /* webpackChunkName: "properties_fav" */
+    )
+})
+
+const AsyncPropertiesSinglePage = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Properties/Listing' /* webpackChunkName: "properties_list_single" */
+    )
+})
+
+/* ==================================== */
 //  Agent Network
 /* ==================================== */
 
@@ -1004,6 +1043,20 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
+
+        <Route path="/dashboard/properties" component={AsyncPropertiesLayout}>
+          <IndexRoute component={AsyncPropertiesSearch} />
+          <Route path="favorites" component={AsyncPropertiesFavorites} />
+          <Route
+            path="saved-searches/:id"
+            component={AsyncPropertiesSavedSearch}
+          />
+        </Route>
+
+        <Route
+          path="/dashboard/properties/:id"
+          component={AsyncPropertiesSinglePage}
+        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />
