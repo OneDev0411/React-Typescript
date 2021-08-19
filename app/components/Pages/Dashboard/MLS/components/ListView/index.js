@@ -1,19 +1,11 @@
 import React, { useCallback, useState, memo, useEffect } from 'react'
 
-import {
-  Grid,
-  Checkbox,
-  useTheme,
-  makeStyles,
-  Typography
-} from '@material-ui/core'
+import { Grid, Checkbox, useTheme, makeStyles } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
 
-import {
-  getListingsPage,
-  getResultsCountText
-} from '@app/components/Pages/Dashboard/MLS/helpers/pagination-utils'
+import { ResultsCount } from '@app/components/Pages/Dashboard/MLS/components/ResultsCount'
+import { getListingsPage } from '@app/components/Pages/Dashboard/MLS/helpers/pagination-utils'
 import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
@@ -32,11 +24,6 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       marginBottom: theme.spacing(1)
-    },
-    resultsCountContainer: {
-      paddingLeft: theme.spacing(1),
-      marginBottom: theme.spacing(2),
-      color: theme.palette.text.secondary
     },
     paginationContainer: {
       display: 'flex',
@@ -201,17 +188,13 @@ const ListView = ({ sortedListings, isFetching }) => {
   return (
     <>
       <Grid className={classes.container}>
-        <Grid container className={classes.resultsCountContainer}>
-          {isListingsDisplayed ? (
-            <Typography variant="body3">
-              {getResultsCountText(
-                sortedListings.length,
-                currentPage,
-                PAGE_SIZE
-              )}
-            </Typography>
-          ) : null}
-        </Grid>
+        {isListingsDisplayed ? (
+          <ResultsCount
+            currentPage={currentPage}
+            pageSize={PAGE_SIZE}
+            resultsCounts={sortedListings.length}
+          />
+        ) : null}
         {renderTable()}
         {isListingsDisplayed ? (
           <Grid container className={classes.paginationContainer}>

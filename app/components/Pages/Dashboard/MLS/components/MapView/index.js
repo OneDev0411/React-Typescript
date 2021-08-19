@@ -1,13 +1,11 @@
 import React, { useState, useRef, memo, useEffect } from 'react'
 
-import { Grid, Box, makeStyles, Typography } from '@material-ui/core'
+import { Grid, Box, makeStyles } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import cn from 'classnames'
 
-import {
-  getListingsPage,
-  getResultsCountText
-} from '@app/components/Pages/Dashboard/MLS/helpers/pagination-utils'
+import { ResultsCount } from '@app/components/Pages/Dashboard/MLS/components/ResultsCount'
+import { getListingsPage } from '@app/components/Pages/Dashboard/MLS/helpers/pagination-utils'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import LoadingComponent from 'components/Spinner'
 
@@ -30,11 +28,6 @@ const useStyles = makeStyles(
       flexBasis: '50%',
       minHeight: '100%',
       position: 'relative'
-    },
-    resultsCountContainer: {
-      paddingLeft: theme.spacing(1),
-      marginBottom: theme.spacing(2),
-      color: theme.palette.text.secondary
     },
     cardsContainer: {
       flexBasis: '50%',
@@ -124,17 +117,13 @@ const MapView = props => {
         display={{ xs: 'none', md: 'block' }}
       >
         <Grid container className={classes.cardsGridContainer}>
-          <Grid container className={classes.resultsCountContainer}>
-            {isListingsDisplayed ? (
-              <Typography variant="body3">
-                {getResultsCountText(
-                  props.sortedListings.length,
-                  currentPage,
-                  PAGE_SIZE
-                )}
-              </Typography>
-            ) : null}
-          </Grid>
+          {isListingsDisplayed ? (
+            <ResultsCount
+              currentPage={currentPage}
+              pageSize={PAGE_SIZE}
+              resultsCounts={props.sortedListings.length}
+            />
+          ) : null}
           {renderCards()}
           {isListingsDisplayed ? (
             <Grid container className={classes.paginationContainer}>
