@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { selectActiveTeamId } from '@app/selectors/team'
+import MarketingSearchInput, {
+  MarketingSearchInputOption
+} from '@app/views/components/MarketingSearchInput'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -17,7 +20,6 @@ import { goTo } from 'utils/go-to'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 
-import MarketingSearch from './components/Search'
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
 
@@ -106,6 +108,10 @@ export function MarketingLayout({
     })
   }
 
+  const handleSelectSearchResult = (result: MarketingSearchInputOption) => {
+    goTo(result.url)
+  }
+
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
       <Helmet>
@@ -116,9 +122,10 @@ export function MarketingLayout({
         <PageLayout.Header title="Marketing Center">
           <div className={classes.headerActionsContainer}>
             <div className={classes.searchContainer}>
-              <MarketingSearch
+              <MarketingSearchInput
                 sections={sections}
                 templateTypeMediums={mediums}
+                onSelect={handleSelectSearchResult}
               />
             </div>
             {hasAccessToBrandSettings && (

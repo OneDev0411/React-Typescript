@@ -4,31 +4,18 @@ import { TextField } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
 import Fuse from 'fuse.js'
 
-import { TemplateTypeToMediumsMap } from '@app/hooks/use-marketing-center-mediums'
-import { SectionCollection } from '@app/hooks/use-marketing-center-sections'
-import { goTo } from '@app/utils/go-to'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
+
+import { MarketingSearchInputOption, MarketingSearchInputProps } from './types'
 
 const HIDDEN_SECTIONS = ['overview', 'designs']
 
-interface Option {
-  label: string
-  url: string
-  section: string
-}
-
-interface Props {
-  sections: SectionCollection
-  templateTypeMediums: TemplateTypeToMediumsMap
-}
-
-export default function MarketingSearch({
+export default function MarketingSearchInput({
   sections,
-  templateTypeMediums
-}: Props) {
-  console.log({ sections, templateTypeMediums })
-
-  const options: Option[] = useMemo(() => {
+  templateTypeMediums,
+  onSelect
+}: MarketingSearchInputProps) {
+  const options: MarketingSearchInputOption[] = useMemo(() => {
     return Object.keys(sections)
       .filter(sectionName => !HIDDEN_SECTIONS.includes(sectionName))
       .flatMap(sectionName => {
@@ -55,16 +42,18 @@ export default function MarketingSearch({
       })
   }, [sections, templateTypeMediums])
 
-  const handleSelect = (option: Nullable<Option | string>) => {
+  const handleSelect = (
+    option: Nullable<MarketingSearchInputOption | string>
+  ) => {
     if (!option || typeof option === 'string') {
       return
     }
 
-    goTo(option.url)
+    onSelect(option)
   }
 
   return (
-    <Autocomplete<Option, false, true, true>
+    <Autocomplete<MarketingSearchInputOption, false, true, true>
       freeSolo
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
