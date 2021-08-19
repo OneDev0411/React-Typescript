@@ -1,14 +1,6 @@
 import React from 'react'
 
-import {
-  Box,
-  IconButton,
-  Typography,
-  Tooltip,
-  CircularProgress
-} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import MyLocation from '@material-ui/icons/MyLocation'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
 import { connect } from 'react-redux'
@@ -53,35 +45,21 @@ import {
 } from '../helpers/sort-utils'
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 
-import Autocomplete from './components/Autocomplete'
 import CreateTourAction from './components/CreateTourAction'
 import Map from './components/Map'
 import { Header } from './Header'
+import { LandingPage } from './landingPage'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2
 
-const styles = theme => ({
+const styles = () => ({
   exploreContainer: {
     display: 'flex',
     minHeight: '100vh',
     flexDirection: 'column',
     paddingTop: 0,
     paddingBottom: 0
-  },
-  landingContainer: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center'
-  },
-  landingSearchBox: {
-    width: '80%',
-    maxWidth: 600,
-    marginTop: theme.spacing(10)
-  },
-  loadingLocateIcon: {
-    marginLeft: theme.spacing(3),
-    marginTop: theme.spacing(1.5)
   }
 })
 
@@ -515,59 +493,9 @@ class Search extends React.Component {
     )
   }
 
-  renderLadingPage() {
-    const { classes } = this.props
-
-    return (
-      <Box className={classes.landingContainer}>
-        <Box className={classes.landingSearchBox}>
-          <Box my={4}>
-            <Typography variant="h4" align="center">
-              Where do you want to start?
-            </Typography>
-          </Box>
-          <Box display="flex">
-            <Box flexGrow={1}>
-              <Autocomplete
-                fullWidth
-                landingPageSearch
-                onSelectPlace={() => {
-                  this.searchQuery = window.location.search.substring(3)
-                  this.setState({ firstRun: false }, this.initialize)
-                }}
-              />
-            </Box>
-            {this.renderLocateButton()}
-          </Box>
-          <Box mt={1} textAlign="center">
-            <img
-              src="/static/images/properties/search-landing-bg.jpg"
-              width="450"
-              alt="Search properties"
-            />
-          </Box>
-        </Box>
-      </Box>
-    )
-  }
-
-  renderLocateButton() {
-    return (
-      <>
-        {this.state.isGettingCurrentPosition ? (
-          <CircularProgress
-            className={this.props.classes.loadingLocateIcon}
-            size={21}
-          />
-        ) : (
-          <Tooltip title="Get your exact location on the map">
-            <IconButton aria-label="locate me" onClick={this.onClickLocate}>
-              <MyLocation />
-            </IconButton>
-          </Tooltip>
-        )}
-      </>
-    )
+  onSelectPlace = () => {
+    this.searchQuery = window.location.search.substring(3)
+    this.setState({ firstRun: false }, this.initialize)
   }
 
   render() {
@@ -577,9 +505,15 @@ class Search extends React.Component {
 
     return (
       <GlobalPageLayout className={classes.exploreContainer}>
-        {firstRun && !hasUrlQuery && !isWidget
-          ? this.renderLadingPage()
-          : this.renderExplorePage()}
+        {firstRun && !hasUrlQuery && !isWidget ? (
+          <LandingPage
+            isGettingCurrentPosition={this.props.isGettingCurrentPosition}
+            onClickLocate={this.onClickLocate}
+            onSelectPlace={this.onSelectPlace}
+          />
+        ) : (
+          this.renderExplorePage()
+        )}
       </GlobalPageLayout>
     )
   }
