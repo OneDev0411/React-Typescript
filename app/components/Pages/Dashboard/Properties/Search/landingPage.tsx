@@ -7,8 +7,12 @@ import {
   Typography
 } from '@material-ui/core'
 import { MyLocation } from '@material-ui/icons'
+import { useEffectOnce } from 'react-use'
 
-import Autocomplete from '@app/components/Pages/Dashboard/MLS/Search/components/Autocomplete'
+import Autocomplete from '@app/components/Pages/Dashboard/Properties/Search/components/Autocomplete'
+import { GoogleMapLibrary, loadMapLibraries } from '@app/utils/google-map-api'
+
+import { bootstrapURLKeys } from '../mapOptions'
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {
@@ -39,6 +43,15 @@ export function LandingPage({
   onSelectPlace
 }: Props) {
   const classes = useStyles()
+
+  useEffectOnce(() => {
+    const googleMapAPIParams = {
+      key: bootstrapURLKeys.key,
+      libraries: bootstrapURLKeys.libraries.split(',') as GoogleMapLibrary[]
+    }
+
+    loadMapLibraries(googleMapAPIParams)
+  })
 
   return (
     <Box className={classes.landingContainer}>
