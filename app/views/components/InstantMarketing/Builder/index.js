@@ -1017,6 +1017,12 @@ class Builder extends React.Component {
     return this.selectedTemplate && this.selectedTemplate.medium === 'Website'
   }
 
+  get isDynamicTemplate() {
+    return (
+      this.isEmailTemplate || this.isWebsiteTemplate || this.isVideoTemplate
+    )
+  }
+
   get isTemplateLoaded() {
     return this.selectedTemplate && this.selectedTemplate.markup
   }
@@ -1268,6 +1274,9 @@ class Builder extends React.Component {
 
                 this.setState({ isImageSelectDialogOpen: false })
               }}
+              disabledTabs={
+                this.isDynamicTemplate ? undefined : ['gif-library']
+              }
               onUpload={this.uploadFile}
             />
           )}
