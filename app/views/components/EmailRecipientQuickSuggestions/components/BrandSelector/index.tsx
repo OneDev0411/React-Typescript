@@ -115,10 +115,14 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
   return (
     <>
       <Button size="small" onClick={hanldeOpenDrawer}>
-        More
+        Our Agents
       </Button>
-      <Drawer open={isOpen} onClose={hanldeCloseDrawer}>
-        <Drawer.Header title="Select Team" />
+      {/*
+        I set the drawer width to the 43rem manually bacause in our email drawer we set this
+        value and base on shayan request we want the brand selector drawer cover the email drawer
+      */}
+      <Drawer open={isOpen} onClose={hanldeCloseDrawer} width="43rem">
+        <Drawer.Header title="Select Agents" />
         <Drawer.Body>
           <div className={classes.searchContainer}>
             <Search
