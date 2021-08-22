@@ -179,7 +179,7 @@ class Builder extends React.Component {
     const brandColors = getBrandColors(brand)
 
     await Promise.all([
-      loadAssetManagerPlugin(),
+      loadAssetManagerPlugin(this.getPossibleMimeTypesForUpload),
       loadStyleManagerPlugin(brandColors)
     ])
 
@@ -1109,6 +1109,14 @@ class Builder extends React.Component {
         image: this.props.user[attr],
         avatar: true
       }))
+  }
+
+  getPossibleMimeTypesForUpload = () => {
+    if (this.isDynamicTemplate) {
+      return ['image/jpeg', 'image/png', 'image/gif']
+    }
+
+    return ['image/jpeg', 'image/png']
   }
 
   regenerateTemplate = newData => {
