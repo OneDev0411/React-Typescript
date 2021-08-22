@@ -3,18 +3,20 @@ import { Actions } from '../actions'
 export interface ListingsState {
   search: {
     bounds: Nullable<{
-      ne: { lat: number; lng: number }
-      sw: { lat: number; lng: number }
+      ne: IPoint
+      sw: IPoint
     }>
-    drawing: Nullable<Points>
+    drawing: Nullable<IPoint[]>
     filters: Nullable<AlertFilters>
   }
+  map: { center: Optional<IPoint>; zoom: Optional<number> }
   results: ICompactListingWithUIState[]
   isLoading: boolean
 }
 
 export const initialState: ListingsState = {
   search: { bounds: null, drawing: null, filters: null },
+  map: { center: undefined, zoom: undefined },
   results: [],
   isLoading: false
 }
@@ -99,6 +101,12 @@ export function reducer(state: ListingsState, action: Actions) {
       return { ...state, search }
     }
 
+    case 'SET_MAP_PROPS': {
+      const { center, zoom } = action.payload
+
+      return { ...state, map: { center, zoom } }
+    }
+
     case 'SET_IS_LOADING': {
       const { isLoading } = action.payload
 
@@ -111,7 +119,7 @@ export function reducer(state: ListingsState, action: Actions) {
       const search = {
         bounds,
         filters,
-        drawing: []
+        drawing: null
       }
 
       return { ...state, search }

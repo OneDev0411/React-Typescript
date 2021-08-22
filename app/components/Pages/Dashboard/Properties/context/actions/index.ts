@@ -24,7 +24,7 @@ export const setOffAllClickedStates = () => ({
   payload: {}
 })
 
-export const setMapDrawing = (points: Points) => ({
+export const setMapDrawing = (points: IPoint[]) => ({
   type: 'SET_MAP_DRAWING' as 'SET_MAP_DRAWING',
   payload: {
     points
@@ -36,6 +36,14 @@ export const setMapBounds = (ne: number, sw: number) => ({
   payload: {
     ne,
     sw
+  }
+})
+
+export const setMapProps = (center: IPoint, zoom: number) => ({
+  type: 'SET_MAP_PROPS' as 'SET_MAP_PROPS',
+  payload: {
+    center,
+    zoom
   }
 })
 
@@ -58,6 +66,7 @@ export type Actions = ReturnType<
   | typeof setOffAllClickedStates
   | typeof setMapDrawing
   | typeof setMapBounds
+  | typeof setMapProps
   | typeof setIsLoading
   | typeof removeMapDrawing
 >
