@@ -1285,6 +1285,9 @@ class Builder extends React.Component {
               disabledTabs={
                 this.isDynamicTemplate ? undefined : ['gif-library']
               }
+              acceptableMimeType={this.getPossibleMimeTypesForUpload().join(
+                ','
+              )}
               onUpload={this.uploadFile}
             />
           )}
