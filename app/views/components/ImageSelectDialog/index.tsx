@@ -62,6 +62,7 @@ export default function ImageSelectDialog({
   onSelect,
   onUpload,
   onClose,
+  acceptableMimeType = 'image/*',
   disabledTabs = [],
   dialogProps
 }: ImageSelectDialogProps) {
@@ -183,7 +184,10 @@ export default function ImageSelectDialog({
       <DialogContent className={classes.dialogContent}>
         <Grid container>
           {selectedTab === 'upload-photo' && (
-            <Upload onSelectFile={handleEdit} />
+            <Upload
+              onSelectFile={handleEdit}
+              acceptableMimeType={acceptableMimeType}
+            />
           )}
           {selectedTab === 'team-library' && (
             <TeamLibrary
