@@ -37,10 +37,15 @@ export function useTeam(user: IUser, searchTerm: string) {
     [rootTeam]
   )
 
-  const initialExpandedNodes = useMemo(
-    () => (rootTeam ? [rootTeam.id] : []),
-    [rootTeam]
-  )
+  const initialExpandedNodes = useMemo(() => {
+    if (rootTeam) {
+      return searchTerm
+        ? [rootTeam.id, ...(rootTeam.children || []).map(team => team.id)]
+        : [rootTeam.id]
+    }
+
+    return []
+  }, [rootTeam, searchTerm])
 
   return {
     error,
