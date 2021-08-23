@@ -21,13 +21,9 @@ const styles = (theme: Theme) => ({
 })
 
 export const Caption = withStyles(styles)(
-  ({ children, variant, classes }: Props) => (
+  ({ children, variant = 'caption', classes }: Props) => (
     <Tooltip title={children}>
-      <Typography
-        noWrap
-        variant={variant || 'caption'}
-        className={classes.root}
-      >
+      <Typography noWrap variant={variant} className={classes.root}>
         {children}
       </Typography>
     </Tooltip>
