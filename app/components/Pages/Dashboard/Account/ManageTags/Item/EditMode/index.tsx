@@ -62,8 +62,6 @@ export function EditMode({
   onSave,
   handleClose
 }: Props) {
-  console.log('EditMode', { tag })
-
   const classes = useStyles()
   const {
     control,
