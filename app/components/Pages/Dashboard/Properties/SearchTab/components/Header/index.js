@@ -7,8 +7,8 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Autocomplete from '../components/Autocomplete'
-import Filters from '../components/Filters'
+import Autocomplete from '../Autocomplete'
+import Filters from '../Filters'
 
 const useStyles = makeStyles(
   theme => ({

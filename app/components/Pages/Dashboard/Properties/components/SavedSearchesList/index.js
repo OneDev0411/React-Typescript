@@ -11,16 +11,15 @@ import { mdiChevronDown, mdiChevronUp, mdiClose } from '@mdi/js'
 import { connect } from 'react-redux'
 import { withRouter, browserHistory } from 'react-router'
 
+import { selectListings as selectAlerts } from '@app/reducers/listings'
+import { confirmation } from '@app/store_actions/confirmation'
+import deleteAlert from '@app/store_actions/listings/alerts/delete-alert'
+import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
+import { uppercaseFirstLetter } from '@app/utils/helpers'
+import Loading from '@app/views/components/Spinner'
 import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { selectListings as selectAlerts } from '../../../../../reducers/listings'
-import { confirmation } from '../../../../../store_actions/confirmation'
-import deleteAlert from '../../../../../store_actions/listings/alerts/delete-alert'
-import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
-import { uppercaseFirstLetter } from '../../../../../utils/helpers'
-import Loading from '../../../../../views/components/Spinner'
 
 const styles = theme => ({
   savedSearchItem: {

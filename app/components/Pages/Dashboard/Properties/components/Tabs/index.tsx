@@ -15,9 +15,9 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SortIndex, SortString } from '../../helpers/sort-utils'
-import SavedSearchesList from '../../SavedSearchesList'
 import { SortDropdown } from '../GridControllers/SortDropdown'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
+import SavedSearchesList from '../SavedSearchesList'
 
 interface Props {
   onChangeView: (e: any) => void

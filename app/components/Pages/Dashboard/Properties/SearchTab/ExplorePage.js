@@ -37,8 +37,8 @@ import {
 import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
 
 import CreateTourAction from './components/CreateTourAction'
+import { Header } from './components/Header'
 import Map from './components/Map'
-import { Header } from './Header'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2

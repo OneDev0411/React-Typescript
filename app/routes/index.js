@@ -269,28 +269,28 @@ const AsyncPropertiesLayout = Load({
 const AsyncPropertiesSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Properties/Search' /* webpackChunkName: "properties_search" */
+      '../components/Pages/Dashboard/Properties/SearchTab' /* webpackChunkName: "properties_search" */
     )
 })
 
 const AsyncPropertiesSavedSearch = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Properties/SavedSearch' /* webpackChunkName: "properties_alerts" */
+      '../components/Pages/Dashboard/Properties/SavedSearchTab' /* webpackChunkName: "properties_alerts" */
     )
 })
 
 const AsyncPropertiesFavorites = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Properties/Favorites' /* webpackChunkName: "properties_fav" */
+      '../components/Pages/Dashboard/Properties/FavoritesTab' /* webpackChunkName: "properties_fav" */
     )
 })
 
 const AsyncPropertiesSinglePage = Load({
   loader: () =>
     import(
-      '../components/Pages/Dashboard/Properties/Listing' /* webpackChunkName: "properties_list_single" */
+      '../components/Pages/Dashboard/Properties/ListingPage' /* webpackChunkName: "properties_list_single" */
     )
 })
 
