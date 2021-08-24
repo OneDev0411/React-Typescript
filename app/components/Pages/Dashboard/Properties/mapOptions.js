@@ -4,6 +4,7 @@ import { DALLAS_POINTS } from '../../../../constants/listings/dallas-points'
 export const DECLUSTER_ZOOM_LEVEL = 16
 export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8
+export const QUERY_LIMIT = 200
 
 export const property_subtypes = {
   condo: 'RES-Condo',
@@ -50,7 +51,7 @@ export const mapInitialState = {
 }
 
 export const queryOptions = {
-  limit: 200,
+  limit: QUERY_LIMIT,
   open_house: false,
   property_types: ['Residential'],
   listing_statuses: ['Active'],
