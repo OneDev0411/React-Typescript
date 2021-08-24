@@ -8,16 +8,17 @@ export interface ListingsState {
     filters: Nullable<AlertFilters>
   }
   map: { center: Optional<IPoint>; zoom: Optional<number> }
-  results: ICompactListingWithUIState[]
-  info: Nullable<IListingInfo>
+  result: {
+    listings: ICompactListingWithUIState[]
+    info: Nullable<IListingInfo>
+  }
   isLoading: boolean
 }
 
 export const initialState: ListingsState = {
   search: { bounds: null, office: null, drawing: [], filters: null },
   map: { center: undefined, zoom: undefined },
-  results: [],
-  info: null,
+  result: { listings: [], info: null },
   isLoading: false
 }
 
@@ -31,13 +32,13 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
         clicked: false
       }))
 
-      return { ...state, results: mapReadyListings, info }
+      return { ...state, result: { listings: mapReadyListings, info } }
     }
 
     case 'TOGGLE_LISTING_HOVER_STATE': {
       const { id } = action.payload
 
-      const newResults = state.results.map(listing => {
+      const newListings = state.result.listings.map(listing => {
         if (listing.id === id) {
           return { ...listing, hover: !listing.hover }
         }
@@ -45,13 +46,13 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
         return listing
       })
 
-      return { ...state, results: newResults }
+      return { ...state, result: { ...state.result, listings: newListings } }
     }
 
     case 'TOGGLE_LISTING_CLICKED_STATE': {
       const { id } = action.payload
 
-      const newResults = state.results.map(listing => {
+      const newListings = state.result.listings.map(listing => {
         if (listing.id === id) {
           return { ...listing, clicked: !listing.clicked }
         }
@@ -59,15 +60,15 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
         return { ...listing, clicked: false }
       })
 
-      return { ...state, results: newResults }
+      return { ...state, result: { ...state.result, listings: newListings } }
     }
 
     case 'SET_OFF_ALL_CLICKED_STATES': {
-      const newResults = state.results.map(listing => {
+      const newListings = state.result.listings.map(listing => {
         return { ...listing, clicked: false }
       })
 
-      return { ...state, results: newResults }
+      return { ...state, result: { ...state.result, listings: newListings } }
     }
 
     case 'SET_MAP_DRAWING': {
