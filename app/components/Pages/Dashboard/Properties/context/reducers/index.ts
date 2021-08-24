@@ -2,36 +2,36 @@ import { Actions } from '../actions'
 
 export interface ListingsState {
   search: {
-    bounds: Nullable<{
-      ne: IPoint
-      sw: IPoint
-    }>
-    drawing: Nullable<IPoint[]>
+    bounds: Nullable<IBounds>
+    office: Nullable<string>
+    drawing: IPoint[]
     filters: Nullable<AlertFilters>
   }
   map: { center: Optional<IPoint>; zoom: Optional<number> }
   results: ICompactListingWithUIState[]
+  info: Nullable<IListingInfo>
   isLoading: boolean
 }
 
 export const initialState: ListingsState = {
-  search: { bounds: null, drawing: null, filters: null },
+  search: { bounds: null, office: null, drawing: [], filters: null },
   map: { center: undefined, zoom: undefined },
   results: [],
+  info: null,
   isLoading: false
 }
 
-export function reducer(state: ListingsState, action: Actions) {
+export function reducer(state: ListingsState, action: Actions): ListingsState {
   switch (action.type) {
     case 'SET_LISTINGS': {
-      const { listings } = action.payload
+      const { listings, info } = action.payload
       const mapReadyListings = listings.map(listing => ({
         ...listing,
         hover: false,
         clicked: false
       }))
 
-      return { ...state, results: mapReadyListings }
+      return { ...state, results: mapReadyListings, info }
     }
 
     case 'TOGGLE_LISTING_HOVER_STATE': {
@@ -71,37 +71,29 @@ export function reducer(state: ListingsState, action: Actions) {
     }
 
     case 'SET_MAP_DRAWING': {
-      const { filters, bounds } = state.search
       const { points } = action.payload
 
-      const search = {
-        // We don't clear bounds in this case since we need to
-        // have the current bounds in case user clicks on remove
-        // drawing and we need to do a general search in that bounds
-        // logic for picking up the right model for searching should
-        // be defined in hook `useFetchListings`
-        bounds,
-        drawing: points,
-        filters
-      }
-
-      return { ...state, search }
+      /*
+       * We don't clear bounds in this case since we need to
+       * have the current bounds in case user clicks on remove
+       * drawing and we need to do a general search in that bounds
+       * logic for picking up the right model for searching should
+       * be defined in hook `useFetchListings`
+       */
+      return { ...state, search: { ...state.search, drawing: points } }
     }
 
     case 'SET_MAP_BOUNDS': {
-      const { filters, drawing } = state.search
-      const { ne, sw } = action.payload
+      const { center, zoom, bounds } = action.payload
 
-      const search = {
-        bounds: { ne, sw },
-        drawing,
-        filters
+      return {
+        ...state,
+        search: { ...state.search, bounds },
+        map: { center, zoom }
       }
-
-      return { ...state, search }
     }
 
-    case 'SET_MAP_PROPS': {
+    case 'SET_MAP_LOCATION': {
       const { center, zoom } = action.payload
 
       return { ...state, map: { center, zoom } }
@@ -114,15 +106,7 @@ export function reducer(state: ListingsState, action: Actions) {
     }
 
     case 'REMOVE_MAP_DRAWING': {
-      const { bounds, filters } = state.search
-
-      const search = {
-        bounds,
-        filters,
-        drawing: null
-      }
-
-      return { ...state, search }
+      return { ...state, search: { ...state.search, drawing: [] } }
     }
 
     default:

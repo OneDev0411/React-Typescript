@@ -1,7 +1,11 @@
-export const setListings = (listings: ICompactListing[]) => ({
+export const setListings = (
+  listings: ICompactListing[],
+  info: IListingInfo
+) => ({
   type: 'SET_LISTINGS' as 'SET_LISTINGS',
   payload: {
-    listings
+    listings,
+    info
   }
 })
 
@@ -31,16 +35,21 @@ export const setMapDrawing = (points: IPoint[]) => ({
   }
 })
 
-export const setMapBounds = (ne: number, sw: number) => ({
+export const setMapBounds = (
+  center: IPoint,
+  zoom: number,
+  bounds: IBounds
+) => ({
   type: 'SET_MAP_BOUNDS' as 'SET_MAP_BOUNDS',
   payload: {
-    ne,
-    sw
+    center,
+    zoom,
+    bounds
   }
 })
 
-export const setMapProps = (center: IPoint, zoom: number) => ({
-  type: 'SET_MAP_PROPS' as 'SET_MAP_PROPS',
+export const setMapLocation = (center: IPoint, zoom: number) => ({
+  type: 'SET_MAP_LOCATION' as 'SET_MAP_LOCATION',
   payload: {
     center,
     zoom
@@ -66,7 +75,7 @@ export type Actions = ReturnType<
   | typeof setOffAllClickedStates
   | typeof setMapDrawing
   | typeof setMapBounds
-  | typeof setMapProps
+  | typeof setMapLocation
   | typeof setIsLoading
   | typeof removeMapDrawing
 >
