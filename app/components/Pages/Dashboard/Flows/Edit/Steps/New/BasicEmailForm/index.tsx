@@ -72,7 +72,10 @@ export default function BasicEmailForm({
             onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
-              <Title textFieldProps={{ disabled: disableEdit }} />
+              <Title
+                label="Email Subject"
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <Description
