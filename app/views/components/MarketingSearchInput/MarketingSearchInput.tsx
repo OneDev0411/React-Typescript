@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import { TextField } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
 import Fuse from 'fuse.js'
 
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
+import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 
 import { MarketingSearchInputOption, MarketingSearchInputProps } from './types'
 
@@ -75,12 +75,13 @@ export default function MarketingSearchInput({
           .sort((a, b) => a.section.localeCompare(b.section))
       }}
       renderInput={params => (
-        <TextField
+        <SearchInput
           {...params}
           fullWidth
+          color="primary"
+          variant="outlined"
           size="small"
           label="Search by category or topic"
-          variant="outlined"
         />
       )}
     />
