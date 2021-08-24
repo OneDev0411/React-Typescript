@@ -45,7 +45,8 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
       alignItems: 'flex-end'
     },
     listingStatus: {
-      width: 'fit-content'
+      width: 'fit-content',
+      marginBottom: theme.spacing(1)
     }
   }),
   {
