@@ -257,7 +257,6 @@ export default function DealsAndListingsAndPlacesSearchInput({
   return (
     <Autocomplete<SearchResult, false, true>
       fullWidth
-      open
       disableClearable
       clearOnBlur={false}
       forcePopupIcon={false}
