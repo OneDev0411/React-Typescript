@@ -4,7 +4,7 @@ export function normalizePostgressStdaddr(address) {
   return {
     city: address.city,
     name: address.street_name,
-    unit: address.unit_number,
+    unit: `Unit ${address.unit_number}`,
     state: address.state,
     predir: address.street_prefix.value,
     suftype: address.street_suffix,
