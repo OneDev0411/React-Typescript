@@ -11,7 +11,6 @@ export function getStaticFilterQuery(
 ): object {
   if (searchQuery.filter === 'listing') {
     return {
-      is_draft: false,
       deal_type: ['Selling'],
       query: searchQuery.term,
       contexts: {
@@ -27,7 +26,6 @@ export function getStaticFilterQuery(
 
   if (searchQuery.filter === 'contract') {
     return {
-      is_draft: false,
       deal_type: ['Buying'],
       query: searchQuery.term,
       contexts: {
