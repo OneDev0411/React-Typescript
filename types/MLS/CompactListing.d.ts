@@ -83,3 +83,9 @@ declare type ICompactListingWithUIState<
   clicked: boolean
   hover: boolen
 }
+
+declare interface IListingInfo {
+  count: number
+  proposed_title: string
+  total: number
+}
