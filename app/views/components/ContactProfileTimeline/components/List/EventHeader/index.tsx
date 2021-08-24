@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import fecha from 'fecha'
 
@@ -25,6 +27,12 @@ export function EventHeader({ item }: Props) {
     today: item.isToday
   })
 
+  const date = useMemo(() => new Date(item.date), [item.date])
+  const isCurrentYear = useMemo(
+    () => fecha.format(date, 'YYYY') === fecha.format(new Date(), 'YYYY'),
+    [date]
+  )
+
   return (
     <div className={classes.root}>
       <>
@@ -32,7 +40,11 @@ export function EventHeader({ item }: Props) {
         {item.isTomorrow && <div>Tomorrow</div>}
       </>
 
-      <div>{fecha.format(new Date(item.date), 'D MMM, ddd')}</div>
+      <div>
+        {isCurrentYear
+          ? fecha.format(date, 'D MMM, ddd')
+          : fecha.format(date, 'D MMM YYYY')}
+      </div>
     </div>
   )
 }
