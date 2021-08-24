@@ -112,7 +112,11 @@ export function EditMode({
               control={control}
               rules={{
                 validate: (value: string) =>
-                  !!value.trim() || 'this is a Required field.'
+                  !!value.trim() || 'this is a Required field.',
+                maxLength: {
+                  value: 100,
+                  message: 'Please use a short name for tag.'
+                }
               }}
               render={({ ...props }) => {
                 const error: string | undefined = errors.text?.message
@@ -142,6 +146,10 @@ export function EditMode({
                 min: {
                   value: 0,
                   message: 'Touch Date must be grater than 0 or equal.'
+                },
+                max: {
+                  value: 1000,
+                  message: 'Touch Date must be less than 1000 or equal'
                 }
               }}
               render={({ ref, value, ...props }) => {

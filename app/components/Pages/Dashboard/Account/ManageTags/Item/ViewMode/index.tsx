@@ -67,7 +67,7 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
 
   return (
     <div className={classes.container}>
-      <Typography variant="body2" className={classes.title}>
+      <Typography noWrap variant="body2" className={classes.title}>
         {tag.text}
       </Typography>
       <div className={classes.touchDate}>
