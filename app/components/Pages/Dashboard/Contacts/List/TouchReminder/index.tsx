@@ -35,7 +35,7 @@ const useStyles = makeStyles(
       margin: theme.spacing(0, 1),
       ...theme.typography.body2
     },
-    inputPosifix: {
+    inputSuffix: {
       margin: 0,
       fontWeight: 'bold'
     }
@@ -106,7 +106,7 @@ function TouchReminder({
       />
       <Typography
         variant="body2"
-        className={classes.inputPosifix}
+        className={classes.inputSuffix}
         data-test="touch-reminder-days"
       >
         Days

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   Theme,
   Button,
@@ -13,7 +11,7 @@ import { mdiClose } from '@mdi/js'
 import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -49,7 +47,7 @@ interface Props {
   loading: boolean
   anchorEl: Nullable<HTMLElement>
   handleClose: () => void
-  onSave: (text: string, touchDate: Nullable<number>) => void
+  onSave: (text: string, touchDate: Nullable<number>) => Promise<void>
 }
 
 interface FormData {
@@ -113,11 +111,11 @@ export function EditMode({
               name="text"
               control={control}
               rules={{
-                required: 'Required'
+                validate: (value: string) =>
+                  !!value.trim() || 'this is a Required field.'
               }}
               render={({ ...props }) => {
-                const error: string | undefined =
-                  errors[props.name]?.message ?? undefined
+                const error: string | undefined = errors.text?.message
 
                 return (
                   <TextField
@@ -147,8 +145,7 @@ export function EditMode({
                 }
               }}
               render={({ ref, value, ...props }) => {
-                const error: string | undefined =
-                  errors[props.name]?.message ?? undefined
+                const error: string | undefined = errors.touchDate?.message
 
                 return (
                   <TextField
@@ -164,7 +161,7 @@ export function EditMode({
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          {value && value > 0 ? pluralize('Day', value) : 'Day'}
+                          {pluralize('Day', value ?? 0)}
                         </InputAdornment>
                       ),
                       inputProps: {

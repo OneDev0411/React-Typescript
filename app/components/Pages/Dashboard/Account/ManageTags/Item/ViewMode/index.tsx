@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 
 import {
   IconButton,
@@ -8,8 +8,9 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { mdiPencilOutline, mdiTrashCanOutline } from '@mdi/js'
+import pluralize from 'pluralize'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -38,7 +39,7 @@ const useStyles = makeStyles(
       marginRight: theme.spacing(0.5)
     },
     touchDateValue: {
-      color: ({ tag }: Props) =>
+      color: ({ tag }: Pick<Props, 'tag'>) =>
         tag.touch_freq ? theme.palette.tertiary.dark : theme.palette.grey[500]
     },
     actions: {
@@ -53,18 +54,14 @@ const useStyles = makeStyles(
 interface Props {
   tag: IContactTag & { highlight: boolean }
   loading: boolean
-  onEdit: (e: MouseEvent<HTMLElement>) => void
+  onEdit: (event: MouseEvent<HTMLElement>) => void
   onDelete: (tag: IContactTag) => void
 }
 
 export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
-  const classes = useStyles({ tag, loading, onEdit, onDelete })
+  const classes = useStyles({ tag })
 
-  const onDeleteClick = event => {
-    if (event && event.stopPropagation) {
-      event.stopPropagation()
-    }
-
+  const onDeleteClick = () => {
     onDelete(tag)
   }
 
@@ -81,7 +78,7 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
         )}
         <Typography variant="body2" className={classes.touchDateValue}>
           {tag.touch_freq
-            ? `every ${tag.touch_freq} days`
+            ? `every ${tag.touch_freq} ${pluralize('day', tag.touch_freq)}`
             : 'No touch reminder'}
         </Typography>
       </div>

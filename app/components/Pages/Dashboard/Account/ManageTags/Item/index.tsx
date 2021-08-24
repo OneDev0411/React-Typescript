@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react'
+import { useState, MouseEvent } from 'react'
 
 import { Props as BaseProps } from '../Row'
 
@@ -21,7 +21,10 @@ export default function ManageTagsItem(props: Props) {
     setEditAnchorEl(null)
   }
 
-  const handleSave = async (text, touchDate) => {
+  const handleSave = async (
+    text: string,
+    touchDate: Nullable<number>
+  ): Promise<void> => {
     handleCloseEdit()
 
     if (loading) {
@@ -43,7 +46,7 @@ export default function ManageTagsItem(props: Props) {
     }
   }
 
-  const handleDelete = async (tag: IContactTag) => {
+  const handleDelete = async (tag: IContactTag): Promise<void> => {
     setLoading(true)
 
     await props.onDelete(tag)

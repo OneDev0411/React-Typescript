@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Theme, makeStyles } from '@material-ui/core'
 
 import Item from './Item'
@@ -11,8 +9,7 @@ const useStyles = makeStyles(
       alignItems: 'flex-start',
       background: ({ highlight }: { highlight: boolean }) =>
         highlight ? theme.palette.grey[50] : 'inherit',
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      transition: 'background-color 1s ease-in'
+      borderBottom: `1px solid ${theme.palette.divider}`
     },
     rowTitle: {
       color: theme.palette.tertiary.dark,
@@ -27,11 +24,11 @@ const useStyles = makeStyles(
   { name: 'ManageTagsRow' }
 )
 
-type Items = IContactTag & { highlight: boolean }
+type TagWithHighlight = IContactTag & { highlight: boolean }
 
 export interface Props {
   title: string
-  items: Items[]
+  items: TagWithHighlight[]
   onChange: (payload: {
     oldText: string
     newText: string
