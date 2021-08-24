@@ -2,6 +2,8 @@ import config from '../../../../../config/public'
 import { DALLAS_POINTS } from '../../../../constants/listings/dallas-points'
 
 export const DECLUSTER_ZOOM_LEVEL = 16
+export const PROPOSED_AGENT_ZOOM_LEVEL = 16
+export const MINIMAL_MARKER_ZOOM_LEVEL = 8
 
 export const property_subtypes = {
   condo: 'RES-Condo',
