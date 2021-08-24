@@ -17,7 +17,7 @@ export function SyncButton({ account, onSync }: Props) {
   }
 
   if ((account.jobs || []).some(job => job.status !== 'success')) {
-    return <>Syncing ...</>
+    return <>Syncing... This might take a few minutes.</>
   }
 
   return (
