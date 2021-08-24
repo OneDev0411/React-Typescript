@@ -125,9 +125,16 @@ export function Menu() {
             Properties
           </SideNavLinkItem>
 
-          <SideNavLinkItem to="/dashboard/properties" tourId="nav-properties2">
-            Properties v2
-          </SideNavLinkItem>
+          <Acl.Beta>
+            <SideNavLinkItem
+              to="/dashboard/properties"
+              tourId="nav-properties2"
+            >
+              <InlineBadge badgeContent="Beta" color="secondary">
+                Properties v.2
+              </InlineBadge>
+            </SideNavLinkItem>
+          </Acl.Beta>
 
           <Acl.AgentNetwork>
             <SideNavLinkItem

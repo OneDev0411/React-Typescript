@@ -259,40 +259,55 @@ const AsyncMLSSinglePage = Load({
 //  Properties
 /* ==================================== */
 
-const AsyncPropertiesLayout = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Properties' /* webpackChunkName: "properties" */
-    )
-})
+const AsyncPropertiesLayout = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties' /* webpackChunkName: "properties" */
+      )
+  }),
+  [ACL.BETA]
+)
 
-const AsyncPropertiesSearch = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Properties/SearchTab' /* webpackChunkName: "properties_search" */
-    )
-})
+const AsyncPropertiesSearch = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/SearchTab' /* webpackChunkName: "properties_search" */
+      )
+  }),
+  [ACL.BETA]
+)
 
-const AsyncPropertiesSavedSearch = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Properties/SavedSearchTab' /* webpackChunkName: "properties_alerts" */
-    )
-})
+const AsyncPropertiesSavedSearch = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/SavedSearchTab' /* webpackChunkName: "properties_alerts" */
+      )
+  }),
+  [ACL.BETA]
+)
 
-const AsyncPropertiesFavorites = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Properties/FavoritesTab' /* webpackChunkName: "properties_fav" */
-    )
-})
+const AsyncPropertiesFavorites = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/FavoritesTab' /* webpackChunkName: "properties_fav" */
+      )
+  }),
+  [ACL.BETA]
+)
 
-const AsyncPropertiesSinglePage = Load({
-  loader: () =>
-    import(
-      '../components/Pages/Dashboard/Properties/ListingPage' /* webpackChunkName: "properties_list_single" */
-    )
-})
+const AsyncPropertiesSinglePage = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/ListingPage' /* webpackChunkName: "properties_list_single" */
+      )
+  }),
+  [ACL.BETA]
+)
 
 /* ==================================== */
 //  Agent Network
