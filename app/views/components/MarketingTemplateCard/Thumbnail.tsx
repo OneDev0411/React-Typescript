@@ -2,7 +2,6 @@ import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useInView } from 'react-intersection-observer'
-import { useDeepCompareEffect } from 'react-use'
 
 import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
@@ -47,7 +46,7 @@ export function Thumbnail({
   const brand = getActiveBrand(user)
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchListingIfNeeded() {
       if (receivedListing) {
         setListing(receivedListing)

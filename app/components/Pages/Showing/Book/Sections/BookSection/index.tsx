@@ -92,7 +92,7 @@ export default function BookSection({ showing, onBook }: Props) {
     defaultValue: defaultSelectedDate
   })
 
-  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+  const { availableRanges, defaultSelectedTimeRange, unavailableTimes } =
     useBookTimeRange(showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
@@ -182,8 +182,7 @@ export default function BookSection({ showing, onBook }: Props) {
             render={({ onChange, value }) => {
               return (
                 <TimeSlotPicker
-                  start={startTime}
-                  end={endTime}
+                  availableRanges={availableRanges}
                   duration={showing.duration}
                   active={value}
                   unavailableTimes={unavailableTimes}
