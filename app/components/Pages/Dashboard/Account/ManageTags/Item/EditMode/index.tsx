@@ -62,17 +62,14 @@ export function EditMode({
   onSave,
   handleClose
 }: Props) {
+  console.log('EditMode', { tag })
+
   const classes = useStyles()
   const {
     control,
     handleSubmit,
     formState: { errors, isDirty }
-  } = useForm<FormData>({
-    defaultValues: {
-      text: tag.text || '',
-      touchDate: tag.touch_freq?.toString() || '0'
-    }
-  })
+  } = useForm<FormData>()
 
   const open = Boolean(anchorEl)
   const id = open ? 'popover-edit-tag' : undefined
@@ -110,6 +107,7 @@ export function EditMode({
             <Controller
               name="text"
               control={control}
+              defaultValue={tag.text ?? ''}
               rules={{
                 validate: (value: string) =>
                   !!value.trim() || 'this is a Required field.',
@@ -142,6 +140,7 @@ export function EditMode({
             <Controller
               name="touchDate"
               control={control}
+              defaultValue={tag.touch_freq?.toString() ?? '0'}
               rules={{
                 min: {
                   value: 0,
