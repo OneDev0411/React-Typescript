@@ -73,7 +73,7 @@ export function EditMode({
   const id = open ? 'popover-edit-tag' : undefined
 
   const handleOnSave: SubmitHandler<FormData> = ({ text, touchDate }) => {
-    const numberTouchDate = parseInt(touchDate! || '0', 10)
+    const numberTouchDate = parseInt(touchDate ?? '0', 10)
 
     onSave(text, numberTouchDate)
   }
@@ -108,7 +108,7 @@ export function EditMode({
               defaultValue={tag.text ?? ''}
               rules={{
                 validate: (value: string) =>
-                  !!value.trim() || 'this is a Required field.',
+                  !!value.trim() || 'This is a required field.',
                 maxLength: {
                   value: 100,
                   message: 'Please use a short name for tag.'
@@ -142,7 +142,7 @@ export function EditMode({
               rules={{
                 min: {
                   value: 0,
-                  message: 'Touch Date must be grater than 0 or equal.'
+                  message: 'Touch Date must be greater than 0 or equal.'
                 },
                 max: {
                   value: 1000,
