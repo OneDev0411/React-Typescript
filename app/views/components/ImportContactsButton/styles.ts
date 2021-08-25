@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 
 export const useStyles = makeStyles((theme: Theme) => ({
   button: {
-    marginLeft: theme.spacing(2)
+    height: '42px'
   },
   buttonIcon: { margin: theme.spacing(0.5, 1) },
   listItem: { padding: theme.spacing(1, 0.5) },
