@@ -108,7 +108,7 @@ export function EditMode({
               defaultValue={tag.text ?? ''}
               rules={{
                 validate: (value: string) =>
-                  !!value.trim() || 'This is a required field.',
+                  !!value.trim() || 'This field is required.',
                 maxLength: {
                   value: 100,
                   message: 'Please use a short name for tag.'
@@ -142,7 +142,7 @@ export function EditMode({
               rules={{
                 min: {
                   value: 0,
-                  message: 'Touch Date must be greater than 0 or equal.'
+                  message: 'Touch date must be equal or greater than 0.'
                 },
                 max: {
                   value: 1000,
