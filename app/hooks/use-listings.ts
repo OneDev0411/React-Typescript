@@ -54,11 +54,11 @@ export function useDealsListings(
         const dealsListings = await getDealsListings(brandId)
 
         // We're removing duplicate listings that we already have them
-        const uniqueDealsListins = dealsListings.filter(
+        const uniqueDealsListings = dealsListings.filter(
           listing => !listingIdsToExclude.includes(listing.id)
         )
 
-        setListings(uniqueDealsListins)
+        setListings(uniqueDealsListings)
       } catch (error) {
         console.error('error fetching deals listings', error)
         setListings([])
