@@ -6,6 +6,22 @@ import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { batchActions } from 'redux-batched-actions'
 
+import ListView from '@app/components/Pages/Dashboard/Properties/components/ListView'
+import MapView from '@app/components/Pages/Dashboard/Properties/components/MapView'
+import CreateAlertModal from '@app/components/Pages/Dashboard/Properties/components/modals/CreateAlertModal'
+import Tabs from '@app/components/Pages/Dashboard/Properties/components/Tabs'
+import { formatListing } from '@app/components/Pages/Dashboard/Properties/helpers/format-listing'
+import {
+  parsSortIndex,
+  getDefaultSort,
+  sortByIndex,
+  SORT_FIELD_SETTING_KEY,
+  LAST_BROWSING_LOCATION
+} from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
+import {
+  bootstrapURLKeys,
+  mapInitialState
+} from '@app/components/Pages/Dashboard/Properties/mapOptions'
 import {
   loadMapLibraries,
   isMapLibrariesLoaded
@@ -22,23 +38,9 @@ import { selectListings } from 'reducers/listings'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getBounds, normalizeListingLocation } from 'utils/map'
 
-import ListView from '../components/ListView'
-import MapView from '../components/MapView'
-import CreateAlertModal from '../components/modals/CreateAlertModal'
-import Tabs from '../components/Tabs'
-import { formatListing } from '../helpers/format-listing'
-import {
-  parsSortIndex,
-  getDefaultSort,
-  sortByIndex,
-  SORT_FIELD_SETTING_KEY,
-  LAST_BROWSING_LOCATION
-} from '../helpers/sort-utils'
-import { bootstrapURLKeys, mapInitialState } from '../mapOptions'
-
-import CreateTourAction from './components/CreateTourAction'
-import { Header } from './components/Header'
-import Map from './components/Map'
+import CreateTourAction from '../CreateTourAction'
+import { Header } from '../Header'
+import Map from '../Map'
 
 // Golden ratio
 const RADIUS = 1.61803398875 / 2

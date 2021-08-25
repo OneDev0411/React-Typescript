@@ -12,7 +12,7 @@ import { useEffectOnce } from 'react-use'
 import Autocomplete from '@app/components/Pages/Dashboard/Properties/SearchTab/components/Autocomplete'
 import { GoogleMapLibrary, loadMapLibraries } from '@app/utils/google-map-api'
 
-import { bootstrapURLKeys } from '../mapOptions'
+import { bootstrapURLKeys } from '../../../mapOptions'
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {

@@ -10,8 +10,8 @@ import { getLocationErrorMessage } from 'utils/map'
 
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
-import ExplorePage from './ExplorePage'
-import { LandingPage } from './LandingPage'
+import ExplorePage from './components/ExplorePage'
+import { LandingPage } from './components/LandingPage'
 
 const useStyles = makeStyles(() => ({
   exploreContainer: {
