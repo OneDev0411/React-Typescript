@@ -51,6 +51,7 @@ declare type ICompactListing<
   close_price: number | null
   status: IListingStatus
   mls_number: string
+  mls_display_name: string
   buyers_agency_commission: string
   sub_agency_commission: string
   list_office_name: string
