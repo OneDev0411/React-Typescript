@@ -9,6 +9,7 @@ import { batchActions } from 'redux-batched-actions'
 import ListView from '@app/components/Pages/Dashboard/Properties/components/ListView'
 import MapView from '@app/components/Pages/Dashboard/Properties/components/MapView'
 import CreateAlertModal from '@app/components/Pages/Dashboard/Properties/components/modals/CreateAlertModal'
+import { Header } from '@app/components/Pages/Dashboard/Properties/components/PageHeader'
 import Tabs from '@app/components/Pages/Dashboard/Properties/components/Tabs'
 import { formatListing } from '@app/components/Pages/Dashboard/Properties/helpers/format-listing'
 import {
@@ -39,7 +40,6 @@ import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getBounds, normalizeListingLocation } from 'utils/map'
 
 import CreateTourAction from '../CreateTourAction'
-import { Header } from '../Header'
 import Map from '../Map'
 
 // Golden ratio
@@ -345,27 +345,12 @@ class Search extends React.Component {
   onClickFilter = () => this.props.dispatch(toggleFilterArea())
 
   render() {
-    const { user, isWidget } = this.props
+    const { user, isWidget, location } = this.props
 
     return (
       <>
-        <Header
-          isWidget={this.props.isWidget}
-          isFetching={this.props.isFetching}
-          activeView={this.state.activeView}
-          onChangeView={this.onChangeView}
-          hasData={this.props.listings.data.length > 0}
-        />
-        <Tabs
-          user={user}
-          onChangeView={this.onChangeView}
-          onChangeSort={this.onChangeSort}
-          activeView={this.state.activeView}
-          isWidget={isWidget}
-          activeSort={this.state.activeSort}
-          saveSearchHandler={this.handleSaveSearch}
-          showSavedSearchButton
-        />
+        <Header title="Properties" />
+        <Tabs user={user} isWidget={isWidget} location={location} />
         {this.renderMain()}
         <CreateAlertModal
           user={user}

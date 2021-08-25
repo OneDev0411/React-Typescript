@@ -273,7 +273,7 @@ const AsyncPropertiesSearch = withAcl(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Properties/SearchTab' /* webpackChunkName: "properties_search" */
+        '../components/Pages/Dashboard/Properties/ExploreTab' /* webpackChunkName: "properties_search" */
       )
   }),
   [ACL.BETA]

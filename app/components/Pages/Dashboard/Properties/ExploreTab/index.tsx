@@ -110,6 +110,8 @@ function Search({ isWidget, user, location: { query } }: Props) {
         />
       ) : (
         <ExplorePage
+          // eslint-disable-next-line no-restricted-globals
+          location={location}
           query={query}
           userLastBrowsingLocation={state.userLastBrowsingLocation}
         />
