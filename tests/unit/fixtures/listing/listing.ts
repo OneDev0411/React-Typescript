@@ -2,6 +2,7 @@ export const listing: IListing & any = {
   type: 'listing',
   id: 'fb403302-b062-11e8-8aa6-0a95998482ac',
   property_id: 'fb3f066c-b062-11e8-8aa5-0a95998482ac',
+  mls_display_name: 'NTRIES',
   alerting_agent_id: null,
   listing_agent_id: null,
   listing_agency_id: null,
