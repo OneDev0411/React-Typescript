@@ -5,6 +5,7 @@ import Flex from 'styled-flex-component'
 
 import {
   addressTitle,
+  getListingAddressLine2,
   getListingAddressObj,
   getStatusColorClass
 } from '@app/utils/listing'
@@ -63,9 +64,7 @@ export function MlsItem({ item, onClickRemove, ...props }) {
 
             <Address style={{ color: grey.A550 }}>
               {typeof address === 'object' && (
-                <>
-                  {address.city}, {address.state}, {address.postal_code},
-                </>
+                <>{getListingAddressLine2(address)},</>
               )}{' '}
               ${item.price.toLocaleString()}
             </Address>
