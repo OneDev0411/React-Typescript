@@ -5,7 +5,7 @@ import { useTheme } from '@material-ui/styles'
 
 import ConnectAccountButtons from './ConnectAccountButtons'
 
-export default function ConnectAccount() {
+export default function ZeroState() {
   const theme = useTheme<Theme>()
 
   return (
