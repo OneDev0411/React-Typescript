@@ -122,7 +122,7 @@ class Favorites extends React.Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, location } = this.props
 
     return (
       <>
@@ -131,13 +131,7 @@ class Favorites extends React.Component {
         </Helmet>
         <GlobalPageLayout className={classes.mlsContainer}>
           <Header title="Favorites" />
-          <Tabs
-            onChangeView={this.onChangeView}
-            activeView={this.state.activeView}
-            onChangeSort={this.onChangeSort}
-            activeSort={this.state.activeSort}
-            user={this.props.user}
-          />
+          <Tabs user={this.props.user} location={location} />
           {this.renderMain()}
         </GlobalPageLayout>
       </>

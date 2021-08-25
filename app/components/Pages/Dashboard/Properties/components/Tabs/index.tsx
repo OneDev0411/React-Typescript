@@ -1,34 +1,15 @@
 import React, { ReactNode } from 'react'
 
-import {
-  Box,
-  Theme,
-  ButtonBase,
-  makeStyles,
-  createStyles
-} from '@material-ui/core'
-import { mdiPlus } from '@mdi/js'
+import { Box } from '@material-ui/core'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { SortIndex, SortString } from '../../helpers/sort-utils'
-import { SortDropdown } from '../GridControllers/SortDropdown'
-import ViewSwitcher from '../GridControllers/ViewSwitcher'
 import SavedSearchesList from '../SavedSearchesList'
 
-interface Props {
-  onChangeView: (e: any) => void
-  onChangeSort: (sort: SortString) => void
-  saveSearchHandler: () => void
-  activeView: 'map' | 'list'
+interface Props extends WithRouterProps {
   isWidget: boolean
-  isFetching: boolean
   user: IUser
-  activeSort: { index: SortIndex; ascending: boolean }
-  showSavedSearchButton?: boolean
 }
 
 interface TabsShape {
@@ -38,30 +19,9 @@ interface TabsShape {
   allowAnonymousAccess: boolean
 }
 
-const useStyle = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      saveSearch: {
-        color: theme.palette.secondary.main,
-        '&:disabled': {
-          opacity: 0.6
-        }
-      },
-      boxSwitcher: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        display: 'flex',
-        flexGrow: 1,
-        justifyContent: 'flex-end',
-        marginBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(5)
-      }
-    }),
-  { name: 'TabParts' }
-)
-
 const tabLinks: TabsShape[] = [
   {
-    label: 'All Properties',
+    label: 'Explore',
     to: '/dashboard/properties',
     allowAnonymousAccess: true
   },
@@ -72,20 +32,8 @@ const tabLinks: TabsShape[] = [
   }
 ]
 
-export const Tabs = ({
-  user,
-  onChangeView,
-  activeView,
-  isWidget,
-  onChangeSort,
-  activeSort,
-  isFetching,
-  saveSearchHandler,
-  showSavedSearchButton,
-  location
-}: Props & WithRouterProps) => {
+export const Tabs = ({ user, isWidget, location }: Props) => {
   const currentUrl = location.pathname
-  const classes = useStyle()
 
   let availableTabs: React.ReactNode[]
 
@@ -97,37 +45,34 @@ export const Tabs = ({
   })
 
   if (user && !isWidget) {
-    availableTabs.push(
+    availableTabs = [
+      ...availableTabs,
       <Tab
         key="saved-list"
         value="saved-searches"
         label={<SavedSearchesList />}
       />
-    )
+    ]
   }
 
-  const saveSearchTab = (
-    <Tab
-      key="save"
-      label={
-        <>
-          <ButtonBase
-            component="div"
-            className={classes.saveSearch}
-            disabled={isFetching}
-            onClick={saveSearchHandler}
-          >
-            <SvgIcon path={mdiPlus} size={muiIconSizes.small} rightMargined />
-            Save Search
-          </ButtonBase>
-        </>
-      }
-    />
-  )
-
-  if (showSavedSearchButton && !isWidget && user && !isFetching) {
-    availableTabs.push(saveSearchTab)
-  }
+  // const saveSearchTab = (
+  //   <Tab
+  //     key="save"
+  //     label={
+  //       <>
+  //         <ButtonBase
+  //           component="div"
+  //           className={classes.saveSearch}
+  //           disabled={isFetching}
+  //           onClick={saveSearchHandler}
+  //         >
+  //           <SvgIcon path={mdiPlus} size={muiIconSizes.small} rightMargined />
+  //           Save Search
+  //         </ButtonBase>
+  //       </>
+  //     }
+  //   />
+  // )
 
   return (
     <Box display={{ xs: 'none', md: 'flex' }}>
@@ -140,12 +85,12 @@ export const Tabs = ({
           }
         />
       </Box>
-      <Box className={classes.boxSwitcher}>
+      {/* <Box className={classes.boxSwitcher}>
         <SortDropdown onChangeSort={onChangeSort} activeSort={activeSort} />
         {!isWidget && user && (
           <ViewSwitcher onChangeView={onChangeView} activeView={activeView} />
         )}
-      </Box>
+      </Box> */}
     </Box>
   )
 }
