@@ -1,14 +1,13 @@
-import * as React from 'react'
-
 import {
   Grid,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  Theme
+  Theme,
+  makeStyles,
+  createStyles
 } from '@material-ui/core'
-import styled, { ThemeProps } from 'styled-components'
 import Flex from 'styled-flex-component'
 
 import { Avatar } from 'components/Avatar'
@@ -20,14 +19,19 @@ interface Props {
   onDisconnect: () => void
 }
 
-const ConnectedAccountListItem = styled(ListItem)`
-  border-bottom: 1px solid
-    ${({ theme }: ThemeProps<Theme>) => theme.palette.divider};
-`
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    bordered: {
+      borderBottom: '1px solid #f00'
+    }
+  })
+)
 
 export default function ConnectedAccount({ user, onDisconnect }: Props) {
+  const classes = useStyles()
+
   return (
-    <ConnectedAccountListItem button>
+    <ListItem className={classes.bordered} button>
       <ListItemAvatar>
         <Avatar user={user} style={{ marginRight: '1rem' }}>
           {getContactNameInitials(user)}
@@ -51,6 +55,6 @@ export default function ConnectedAccount({ user, onDisconnect }: Props) {
           </DangerButton>
         </ListItemSecondaryAction>
       </Grid>
-    </ConnectedAccountListItem>
+    </ListItem>
   )
 }

@@ -32,7 +32,9 @@ export default function ConnectAccountButtons({ size }: Props) {
         size={size}
         data-tour-id="outlook-import"
       />
-      {/* &nbsp;
+      {/*
+      TODO: Should be implemented later
+      &nbsp;
       <DocuSignConnectButton
         // disabled={outlook.connecting}
         onClick={outlook.connect}
