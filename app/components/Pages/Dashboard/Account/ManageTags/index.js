@@ -71,7 +71,11 @@ class ManageTags extends Component {
     }
   }
 
-  getTag = text => {
+  getTag = (text, oldText = null) => {
+    if (oldText && text.toLowerCase() === oldText.toLowerCase()) {
+      return null
+    }
+
     return this.state.rawTags.find(
       item => item.text.toLowerCase() === text.toLowerCase()
     )
@@ -149,7 +153,7 @@ class ManageTags extends Component {
       return false
     }
 
-    const foundTag = this.getTag(text)
+    const foundTag = this.getTag(text, oldText)
 
     if (foundTag && foundTag.touch_freq === touchDate) {
       this.handleDuplicateTag(foundTag)
