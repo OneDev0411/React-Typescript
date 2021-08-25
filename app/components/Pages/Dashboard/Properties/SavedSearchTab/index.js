@@ -215,7 +215,7 @@ class SavedSearch extends React.Component {
 
   render() {
     const { title } = this.props.savedSearch
-    const { classes, location } = this.props
+    const { classes } = this.props
 
     return (
       <>
@@ -234,7 +234,7 @@ class SavedSearch extends React.Component {
               />
             )}
           />
-          <Tabs user={this.props.user} location={location} />
+          <Tabs user={this.props.user} />
           {this.renderMain()}
         </GlobalPageLayout>
       </>
