@@ -28,7 +28,7 @@ export function ChecklistCreate({
       const checklist = await addBrandChecklist(brandId, {
         brand: brandId,
         title: checklistType,
-        tab_name: checklistType,
+        tab_name: '',
         checklist_type: checklistType,
         property_type: propertyTypeId,
         is_terminatable: false,
