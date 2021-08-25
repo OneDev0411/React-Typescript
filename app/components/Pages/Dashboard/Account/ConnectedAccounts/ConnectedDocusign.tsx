@@ -19,12 +19,14 @@ interface Props {
   onDisconnect: () => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    bordered: {
-      borderBottom: '1px solid #f00'
-    }
-  })
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      bordered: {
+        borderBottom: '1px solid #f00'
+      }
+    }),
+  { name: 'ConnectedDocuSignListItem' }
 )
 
 export default function ConnectedAccount({ user, onDisconnect }: Props) {
