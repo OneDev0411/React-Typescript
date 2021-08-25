@@ -135,6 +135,15 @@ export const getListingAddress = (
   return result
 }
 
+export const getListingAddressLine2 = (
+  listing: IListing | ICompactListing
+): string => {
+  const address = getListingAddressObj(listing)
+  const neighborhood = address.neighborhood ? `${address.neighborhood}, ` : ''
+
+  return `${neighborhood}${address.city}, ${address.state} ${address.postal_code}`
+}
+
 export const getDaysOnMarket = (
   listing: IListing | ICompactListing
 ): number => {
@@ -197,6 +206,7 @@ export default {
   feetToMeters,
   localAddress,
   addressTitle,
+  getListingAddressLine2,
   getDaysOnMarket,
   getCurrentDaysOnMarket,
   getResizeUrl,
