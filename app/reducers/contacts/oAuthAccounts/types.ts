@@ -52,13 +52,3 @@ export type IOAuthAccountAction =
       accountId: string
       error: any
     }
-  | {
-      type: typeof actionTypes.DISCONNECT_DOCUSIGN_REQUEST
-    }
-  | {
-      type: typeof actionTypes.DISCONNECT_DOCUSIGN_SUCCESS
-    }
-  | {
-      type: typeof actionTypes.DISCONNECT_DOCUSIGN_FAILURE
-      error: any
-    }
