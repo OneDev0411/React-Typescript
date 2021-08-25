@@ -18,7 +18,12 @@ import { CONTACTS_SEGMENT_NAME } from '../../Contacts/constants'
 
 import { Input } from './Input'
 import Row from './Row'
-import { Container, Description } from './styled'
+import {
+  Container,
+  Description,
+  AddTagContainer,
+  AddTagInputContainer
+} from './styled'
 
 const HIGHLIGHT_SECONDS = 4
 const INVALID_TAG_PATTERN = /^\.+$/
@@ -52,8 +57,8 @@ class ManageTags extends Component {
     try {
       const response = await getContactsTags()
 
-      const rawTags = response.data.map(({ text }) => ({
-        text,
+      const rawTags = response.data.map(tag => ({
+        ...tag,
         highlight: false
       }))
 
@@ -66,7 +71,11 @@ class ManageTags extends Component {
     }
   }
 
-  getTag = text => {
+  getTag = (text, oldText = null) => {
+    if (oldText && text.toLowerCase() === oldText.toLowerCase()) {
+      return null
+    }
+
     return this.state.rawTags.find(
       item => item.text.toLowerCase() === text.toLowerCase()
     )
@@ -105,15 +114,16 @@ class ManageTags extends Component {
   highlightTag = (tag, highlight = true, delay = 0) => {
     setTimeout(() => {
       this.setState(prevState => ({
-        rawTags: [
-          ...prevState.rawTags.filter(
-            item => item.text.toLowerCase() !== tag.text.toLowerCase()
-          ),
-          {
-            ...tag,
-            highlight
+        rawTags: prevState.rawTags.map(item => {
+          if (item.text.toLowerCase() === tag.text.toLowerCase()) {
+            return {
+              ...item,
+              highlight
+            }
           }
-        ]
+
+          return item
+        })
       }))
     }, delay)
   }
@@ -127,7 +137,7 @@ class ManageTags extends Component {
     this.highlightTag(tag, false, HIGHLIGHT_SECONDS * 1000)
   }
 
-  handleChange = async ({ oldText, newText: rawNewText }) => {
+  handleChange = async ({ oldText, newText: rawNewText, touchDate }) => {
     const text = rawNewText.trim()
 
     if (!text) {
@@ -143,30 +153,34 @@ class ManageTags extends Component {
       return false
     }
 
-    const foundTag = this.getTag(text)
+    const foundTag = this.getTag(text, oldText)
 
-    if (foundTag) {
+    if (foundTag && foundTag.touch_freq === touchDate) {
       this.handleDuplicateTag(foundTag)
 
       return false
     }
 
-    await updateContactsTags(oldText, text)
+    await updateContactsTags(oldText, text, touchDate)
     await this.reloadStoreTags()
     await this.resetContactsFilters()
     this.props.notify({
       status: 'success',
       message: `"${text}" updated.`
     })
+
     this.setState(prevState => ({
-      rawTags: [
-        ...prevState.rawTags.filter(
-          item => item.text.toLowerCase() !== oldText.toLowerCase()
-        ),
-        {
-          text
+      rawTags: prevState.rawTags.map(item => {
+        if (item.text.toLowerCase() === oldText.toLowerCase()) {
+          return {
+            ...item,
+            touch_freq: touchDate,
+            text
+          }
         }
-      ]
+
+        return item
+      })
     }))
 
     return true
@@ -230,7 +244,7 @@ class ManageTags extends Component {
           })
           this.setState(
             prevState => ({
-              rawTags: [...prevState.rawTags.filter(item => item.text !== text)]
+              rawTags: prevState.rawTags.filter(item => item.text !== text)
             }),
             resolve
           )
@@ -260,17 +274,22 @@ class ManageTags extends Component {
             <Loading />
           ) : (
             <Fragment>
-              <Description>
-                Start typing tags and hit Return/Enter to add.
-              </Description>
-              <Input
-                onChange={this.handleCreateTagInputChange}
-                onSubmit={this.handleAdd}
-                value={this.state.createTagInputValue}
-                isDisabled={
-                  this.state.isSaving || !this.state.createTagInputValue.trim()
-                }
-              />
+              <AddTagContainer>
+                <Description>
+                  Start typing tags and hit Return/Enter to add.
+                </Description>
+                <AddTagInputContainer>
+                  <Input
+                    onChange={this.handleCreateTagInputChange}
+                    onSubmit={this.handleAdd}
+                    value={this.state.createTagInputValue}
+                    isDisabled={
+                      this.state.isSaving ||
+                      !this.state.createTagInputValue.trim()
+                    }
+                  />
+                </AddTagInputContainer>
+              </AddTagContainer>
               {Object.keys(rows)
                 .sort()
                 .map((title, rowIndex) => (
