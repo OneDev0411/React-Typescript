@@ -71,14 +71,14 @@ export function ViewMode({ tag, loading, onEdit, onDelete }: Props) {
         {tag.text}
       </Typography>
       <div className={classes.touchDate}>
-        {tag.touch_freq && (
+        {Number(tag.touch_freq) > 0 && (
           <Typography variant="caption" className={classes.touchDateCaption}>
             Touch:
           </Typography>
         )}
         <Typography variant="body2" className={classes.touchDateValue}>
-          {tag.touch_freq
-            ? `every ${tag.touch_freq} ${pluralize('day', tag.touch_freq)}`
+          {Number(tag.touch_freq) > 0
+            ? `every ${tag.touch_freq} ${pluralize('day', tag.touch_freq!)}`
             : 'No touch reminder'}
         </Typography>
       </div>
