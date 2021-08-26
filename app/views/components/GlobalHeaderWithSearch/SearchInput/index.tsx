@@ -17,13 +17,27 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
-    backgroundColor: theme.palette.grey['100'],
+    backgroundColor: theme.palette.grey[100],
     border: 'none',
     borderRadius: theme.shape.borderRadius,
-    color: theme.palette.grey[600],
+    color: theme.palette.action.active,
     height: theme.spacing(5.25),
     lineHeight: 'initial',
-    padding: theme.spacing(0, 1.5)
+    padding: theme.spacing(0, 1.5),
+    /*
+      I'm doing this because action btn across the different pages
+      in the header has a different design with the search text
+      field so it looks inconsistent, so I made this change
+      to have consistent design
+    */
+    '&:after, &:before': {
+      borderBottom: 0
+    },
+    '&:hover': {
+      '&:not(.Mui-disabled):after, &:not(.Mui-disabled):before': {
+        borderBottom: 0
+      }
+    }
   }
 }))
 
@@ -125,7 +139,7 @@ export const SearchInput = forwardRef(
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SvgIcon path={mdiMagnify} color={theme.palette.grey[600]} />
+              <SvgIcon path={mdiMagnify} color={theme.palette.action.active} />
             </InputAdornment>
           ),
           endAdornment: (
@@ -133,7 +147,10 @@ export const SearchInput = forwardRef(
               {isLoading && <Loading />}
               {nonEmpty && (
                 <IconButton size="small" onClick={clearInput}>
-                  <SvgIcon path={mdiClose} color={theme.palette.grey[600]} />
+                  <SvgIcon
+                    path={mdiClose}
+                    color={theme.palette.action.active}
+                  />
                 </IconButton>
               )}
             </>
