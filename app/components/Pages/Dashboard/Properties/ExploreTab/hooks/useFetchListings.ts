@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-import useThunkReducer from 'react-hook-thunk-reducer'
+import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
 
 import { createValertQueryString } from '@app/components/Pages/Dashboard/Properties/helpers/get-listings-helpers'
@@ -10,20 +10,29 @@ import {
   QUERY_LIMIT
 } from '@app/components/Pages/Dashboard/Properties/mapOptions'
 import api from '@app/models/listings/search'
+import { normalizeListingLocation } from '@app/utils/map'
 import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 
-import { setListings, setIsLoading } from '../context/actions'
+import { formatListing } from '../../helpers/format-listing'
+import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
+
+export type ListingsContext = [
+  ListingsState,
+  React.Dispatch<Actions | Thunk<ListingsState, Actions>>
+]
 
 export default function useFetchListings(
   userInitialState: Partial<ListingsState>
-) {
+): ListingsContext {
   const [state, dispatch] = useThunkReducer(reducer, {
     ...initialState,
     ...userInitialState
   })
 
   const brand = useSelector<IAppState, IBrand>(({ brand }) => brand)
+  const user = useSelector(selectUser)
 
   // TO fix calling GoogleMap onChange at initialization
   // https://github.com/google-map-react/google-map-react/blob/master/DOC.md
@@ -32,7 +41,11 @@ export default function useFetchListings(
   // Upon each change in search we fetch new results
   useEffect(() => {
     async function fetchResults() {
-      console.log("Some params in search changed. Let's fetch new results!")
+      // TODO: remove this log
+      console.log(
+        "Some params in search changed. Let's fetch new results!",
+        state.search
+      )
 
       /* if state.search.drawing is present
        *  it means user has drawn a polygon, so we search in that area only
@@ -68,7 +81,13 @@ export default function useFetchListings(
         valertQueryString
       )
 
-      dispatch(setListings(response.data, response.info))
+      const listings = response.entities.listings
+        ? Object.values(response.entities.listings).map(listing =>
+            formatListing(normalizeListingLocation(listing), user)
+          )
+        : []
+
+      dispatch(setListings(listings, response.info))
       dispatch(setIsLoading(false))
     }
 
