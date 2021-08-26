@@ -63,7 +63,7 @@ export const AddressContainer = styled.div`
 `
 
 export const Address = styled.div`
-  font-size: 1rem;
+  font-size: 0.75rem;
 `
 
 export const IconContainer = styled(Flex)`
