@@ -2,16 +2,22 @@ import React, { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
-import { RouteComponentProps } from 'react-router'
+import { WithRouterProps } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
+import { getPlace } from '@app/models/listings/search/get-place'
 import { confirmation } from 'actions/confirmation'
+import { AnimatedLoader } from 'components/AnimatedLoader'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
-import ExplorePage from './components/ExplorePage'
+import { ExplorePage } from './components/ExplorePage'
 import { LandingPage } from './components/LandingPage'
+import { ListingsContext } from './context'
+import { setMapLocation } from './context/actions'
+import useFetchListings from './hooks/useFetchListings'
 
 const useStyles = makeStyles(() => ({
   exploreContainer: {
@@ -23,23 +29,37 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-interface Props extends RouteComponentProps<any, {}> {
+interface Props extends WithRouterProps {
   user: IUser
   isWidget: boolean
 }
 
-function Search({ isWidget, user, location: { query } }: Props) {
+function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
 
-  const dispatch = useDispatch()
-  const [searchQuery, setSearchQuery] = useState<string>(query.q || '')
-  const brokerageQuery = query.brokerage || ''
+  const reduxDispatch = useDispatch()
+  const [searchQuery, setSearchQuery] = useState<string>(location.query.q || '')
+  const brokerageQuery = location.query.brokerage || ''
 
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
 
-  const [state, setState] = useState({
+  const initialState = {
+    search: {
+      bounds: null,
+      office: brokerageQuery ?? null,
+      drawing: [],
+      filters: null
+    },
+    map: userLastBrowsingLocation
+  }
+
+  const [state, dispatch] = useFetchListings(initialState)
+
+  const [isLoadingPlace, setIsLoadingPlace] = useState(false)
+
+  const [userLocationState, setUserLocationState] = useState({
     isGettingCurrentPosition: false,
     userLastBrowsingLocation,
     firstRun:
@@ -49,7 +69,7 @@ function Search({ isWidget, user, location: { query } }: Props) {
 
   const onClickLocate = () => {
     if (!window.navigator.geolocation) {
-      return dispatch(
+      return reduxDispatch(
         confirmation({
           confirmLabel: 'OK',
           message: 'Your device does not support Geolocation',
@@ -58,7 +78,7 @@ function Search({ isWidget, user, location: { query } }: Props) {
       )
     }
 
-    setState(prev => ({ ...prev, isGettingCurrentPosition: true }))
+    setUserLocationState(prev => ({ ...prev, isGettingCurrentPosition: true }))
 
     navigator.geolocation.getCurrentPosition(
       ({ coords: { latitude: lat, longitude: lng } }) => {
@@ -67,8 +87,11 @@ function Search({ isWidget, user, location: { query } }: Props) {
       error => {
         console.log(error)
         console.log(getLocationErrorMessage(error))
-        setState(prev => ({ ...prev, isGettingCurrentPosition: false }))
-        dispatch(
+        setUserLocationState(prev => ({
+          ...prev,
+          isGettingCurrentPosition: false
+        }))
+        reduxDispatch(
           confirmation({
             confirmLabel: 'OK',
             message: 'Your location is disabled',
@@ -84,7 +107,7 @@ function Search({ isWidget, user, location: { query } }: Props) {
   }
 
   const initUserLocation = (lat: number, lng: number) => {
-    setState(prev => ({
+    setUserLocationState(prev => ({
       ...prev,
       firstRun: false,
       isGettingCurrentPosition: false,
@@ -95,29 +118,62 @@ function Search({ isWidget, user, location: { query } }: Props) {
     }))
   }
 
-  const onSelectPlace = () => {
+  const onSelectPlace = (center: ICoord, zoom: number) => {
     setSearchQuery(window.location.search.substring(3))
-    setState(prev => ({ ...prev, firstRun: false }))
+    setUserLocationState(prev => ({ ...prev, firstRun: false }))
+    dispatch(setMapLocation(center, zoom))
   }
+
+  useEffectOnce(() => {
+    async function parseSearchParam(searchParamQuery: string) {
+      setIsLoadingPlace(true)
+
+      try {
+        const placeResponse = await getPlace(searchParamQuery, false)
+
+        // @types/googlemaps describe the Javascript API not the JSON object on the response
+        // there a sublte difference like lat/lng beeing number not functions,
+        // So making this `as any as ICoord` cast necessary
+        let center = placeResponse.geometry.location as any as ICoord
+
+        // TODO: Calculate zoom from bound and center and map width
+        // https://stackoverflow.com/a/6055653/10326226
+        const zoom = 16
+
+        // TODO: We need to call api.getPlace(searchQuery) here
+        dispatch(setMapLocation(center, zoom))
+      } finally {
+        setIsLoadingPlace(false)
+      }
+    }
+
+    // In the case of a search query, we must first get the correct location.
+    if (searchQuery) {
+      parseSearchParam(searchQuery)
+    }
+  })
 
   return (
     <GlobalPageLayout className={classes.exploreContainer}>
-      {state.firstRun && !hasUrlQuery && !isWidget ? (
-        <LandingPage
-          isGettingCurrentPosition={state.isGettingCurrentPosition}
-          onClickLocate={onClickLocate}
-          onSelectPlace={onSelectPlace}
-        />
+      {!isLoadingPlace ? (
+        <ListingsContext.Provider value={[state, dispatch]}>
+          {userLocationState.firstRun && !hasUrlQuery && !isWidget ? (
+            <LandingPage
+              isGettingCurrentPosition={
+                userLocationState.isGettingCurrentPosition
+              }
+              onClickLocate={onClickLocate}
+              onSelectPlace={onSelectPlace}
+            />
+          ) : (
+            <ExplorePage user={user} isWidget={isWidget} />
+          )}
+        </ListingsContext.Provider>
       ) : (
-        <ExplorePage
-          // eslint-disable-next-line no-restricted-globals
-          location={location}
-          query={query}
-          userLastBrowsingLocation={state.userLastBrowsingLocation}
-        />
+        <AnimatedLoader />
       )}
     </GlobalPageLayout>
   )
 }
 
-export default Search
+export default ExploreTab
