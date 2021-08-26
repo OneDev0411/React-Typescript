@@ -93,10 +93,42 @@ export async function attachCKEditor(
   }
 
   // https://github.com/artf/grapesjs/issues/1338#issuecomment-410727775
+  // https://stackoverflow.com/questions/64347477/inline-ckeditor-not-working-in-some-html-tags
   // @ts-ignore
   CKEDITOR.dtd.$editable.span = 1
   // @ts-ignore
   CKEDITOR.dtd.$editable.a = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.strong = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.em = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.s = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.u = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.i = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.p = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.sub = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.sup = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h1 = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h2 = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h3 = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h4 = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h5 = 1
+  // @ts-ignore
+  CKEDITOR.dtd.$editable.h6 = 1
+
+  // @ts-ignore
+  CKEDITOR.disableAutoInline = true
 
   editor.setCustomRte({
     enable(el, rte) {
