@@ -248,6 +248,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   mls_area_major: string
   mls_area_minor: string
   mls_name: string
+  mls_display_name: string
   matrix_modified_dt: string
   showing_instructions_type: string
   tax_legal_description: string

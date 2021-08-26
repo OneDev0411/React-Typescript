@@ -43,7 +43,13 @@ export const ListItemAddress = styled.div`
   padding-left: 1rem;
 `
 
-export const ListItemStatus = styled.div`
+export const MlsDetailsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`
+
+export const DetailsContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: right;
@@ -55,6 +61,8 @@ export const Status = styled.span`
   font-size: 0.75rem;
   border-radius: 3px;
   font-weight: 500;
+  width: fit-content;
+  margin-bottom: 0.5rem;
 `
 
 export const AddressContainer = styled.div`
