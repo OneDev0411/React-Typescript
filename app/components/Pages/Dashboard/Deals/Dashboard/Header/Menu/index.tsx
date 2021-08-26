@@ -1,11 +1,13 @@
 import {
   Button,
+  Box,
+  Tooltip,
   createStyles,
   IconButton,
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { mdiClose } from '@mdi/js'
+import { mdiClose, mdiEye } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -18,7 +20,7 @@ import DealStatus from '../../../components/DealStatus'
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 
 import { Email } from './Email'
-import RemoveDraft from './RemoveDraft'
+// import RemoveDraft from './RemoveDraft'
 
 interface Props {
   deal: IDeal
@@ -53,7 +55,14 @@ export const Menu = withRouter(
 
     return (
       <div className={classes.container}>
-        {deal.is_draft === true && <RemoveDraft deal={deal} />}
+        {/* {deal.is_draft === true && <RemoveDraft deal={deal} />} */}
+        <Box mr={1}>
+          <Tooltip title="The deal is currently visible to admin">
+            <Box display="flex">
+              <SvgIcon path={mdiEye} />
+            </Box>
+          </Tooltip>
+        </Box>
 
         {deal.deal_type === 'Selling' && (
           <OpenHouse
