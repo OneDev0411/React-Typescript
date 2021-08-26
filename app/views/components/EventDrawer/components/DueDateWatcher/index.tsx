@@ -1,13 +1,25 @@
-import React from 'react'
-
 import { FieldWatcher } from 'components/final-form-fields'
 
 interface Props {
   dueDate: Date
   endDate: Nullable<Date>
+  onUpdateEndDate: (date: Date) => void
+  isEndDateTouchedManually: boolean
+  isEndTimeTouchedManually: boolean
 }
 
-export const DueDateWatcher = ({ dueDate, endDate }: Props) => {
+export const DueDateWatcher = ({
+  dueDate,
+  endDate,
+  onUpdateEndDate,
+  isEndDateTouchedManually,
+  isEndTimeTouchedManually
+}: Props) => {
+  const handleEndDateChane = (value: Date, callback: (date: Date) => void) => {
+    onUpdateEndDate(value)
+    callback(value)
+  }
+
   if (endDate == null) {
     return null
   }
@@ -17,11 +29,26 @@ export const DueDateWatcher = ({ dueDate, endDate }: Props) => {
       set="endDate"
       watch="dueDate"
       setter={onChange => {
-        if (dueDate.getTime() >= endDate.getTime()) {
-          // 1 hour after
-          const newEndDate = new Date(dueDate.getTime() + 3600000)
+        console.log({ dueDate, endDate })
 
-          onChange(newEndDate)
+        const isDueDateAfterEndDate = dueDate.getTime() >= endDate.getTime()
+
+        if (isDueDateAfterEndDate) {
+          if (!isEndDateTouchedManually) {
+            endDate.setFullYear(
+              dueDate.getFullYear(),
+              dueDate.getMonth(),
+              dueDate.getDate()
+            )
+
+            // onChange(endDate)
+            handleEndDateChane(endDate, onChange)
+          } else {
+            // 1 hour after
+            const newEndDate = new Date(dueDate.getTime() + 3600000)
+
+            handleEndDateChane(newEndDate, onChange)
+          }
         }
       }}
     />
