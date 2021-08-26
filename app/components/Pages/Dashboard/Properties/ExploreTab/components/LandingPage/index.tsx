@@ -9,10 +9,10 @@ import {
 import { MyLocation } from '@material-ui/icons'
 import { useEffectOnce } from 'react-use'
 
-import Autocomplete from '@app/components/Pages/Dashboard/Properties/ExploreTab/components/Autocomplete'
 import { GoogleMapLibrary, loadMapLibraries } from '@app/utils/google-map-api'
 
 import { bootstrapURLKeys } from '../../../mapOptions'
+import Autocomplete from '../Autocomplete'
 
 const useStyles = makeStyles(theme => ({
   landingContainer: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   isGettingCurrentPosition: boolean
   onClickLocate: () => void
-  onSelectPlace: () => void
+  onSelectPlace: (center: ICoord, zoom: number, bounds: IBounds) => void
 }
 
 export function LandingPage({
@@ -64,6 +64,7 @@ export function LandingPage({
         <Box display="flex">
           <Box flexGrow={1}>
             <Autocomplete
+              isMapView
               fullWidth
               landingPageSearch
               onSelectPlace={onSelectPlace}
