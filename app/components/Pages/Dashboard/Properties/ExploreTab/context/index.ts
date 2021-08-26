@@ -1,12 +1,5 @@
 import { createContext } from 'react'
 
-import { Thunk } from 'react-hook-thunk-reducer'
-
-import { Actions } from './actions'
-
-export type Context = [
-  ICompactListing[],
-  React.Dispatch<Actions | Thunk<ICompactListing[], Actions>>
-]
+import { ListingsContext as Context } from '../hooks/useFetchListings'
 
 export const ListingsContext = createContext<Optional<Context>>(undefined)
