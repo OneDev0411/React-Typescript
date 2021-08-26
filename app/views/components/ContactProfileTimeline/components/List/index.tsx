@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
-import { useWindowScroll } from 'react-use'
+import { Box, Button, makeStyles, Theme } from '@material-ui/core'
 
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import { ListContext } from './context'
 import { EmptyState } from './EmptyState'
@@ -43,8 +42,10 @@ interface Props {
   contact: IContact | undefined
   rows: ICalendarListRow[]
   isLoading: boolean
-  onReachStart?(): void
-  onReachEnd?(): void
+  isReachedStart: boolean
+  isReachedEnd: boolean
+  onLoadNextEvents: () => void
+  onLoadPreviousEvents: () => void
   onCrmEventChange: (event: IEvent, type: CrmEventType) => void
   onScheduledEmailChange: (
     event: ICalendarEvent,
@@ -52,15 +53,19 @@ interface Props {
   ) => void
 }
 
-export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
+export function CalendarList({
+  user,
+  contact,
+  rows,
+  isLoading,
+  isReachedEnd,
+  isReachedStart,
+  onLoadNextEvents,
+  onLoadPreviousEvents,
+  onCrmEventChange,
+  onScheduledEmailChange
+}: Props) {
   const classes = useStyles()
-  const { y } = useWindowScroll()
-
-  useEffect(() => {
-    if (y > document.body.offsetHeight) {
-      onReachEnd?.()
-    }
-  }, [y, onReachStart, onReachEnd])
 
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
@@ -72,7 +77,7 @@ export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
    * @param type - type of action
    */
   const handleEventChange = (event: IEvent, type: CrmEventType) => {
-    props.onCrmEventChange(event, type)
+    onCrmEventChange(event, type)
     setSelectedEvent(null)
   }
 
@@ -82,11 +87,9 @@ export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
    * @param emailCampaign - the updated email camapign
    */
   const handleScheduledEmailChange = (emailCampaign: IEmailCampaign) => {
-    props.onScheduledEmailChange(selectedEvent as ICalendarEvent, emailCampaign)
+    onScheduledEmailChange(selectedEvent as ICalendarEvent, emailCampaign)
     setSelectedEvent(null)
   }
-
-  const { contact } = props
 
   return (
     <ListContext.Provider
@@ -96,10 +99,22 @@ export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
         setSelectedEvent
       }}
     >
-      <EmptyState rowsCount={props.rows.length} isLoading={props.isLoading} />
+      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
+
+      {!isReachedStart && rows.length > 0 && (
+        <Box my={1} textAlign="center">
+          <Button
+            size="small"
+            disabled={isLoading}
+            onClick={onLoadPreviousEvents}
+          >
+            {isLoading ? 'Loading...' : 'More Upcoming Events'}
+          </Button>
+        </Box>
+      )}
 
       <Box>
-        {props.rows.map((section, index) => (
+        {rows.map((section, index) => (
           <Box className={classes.section} key={index}>
             <Box className={classes.header}>
               <EventHeader item={section.header} />
@@ -116,14 +131,16 @@ export function CalendarList({ onReachStart, onReachEnd, ...props }: Props) {
         ))}
       </Box>
 
-      {props.rows.length > 0 && props.isLoading && (
-        <Box textAlign="center" py={4}>
-          <CircularProgress />
+      {!isReachedEnd && rows.length > 0 && (
+        <Box my={1} textAlign="center">
+          <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
+            {isLoading ? 'Loading...' : 'More Past Events'}
+          </Button>
         </Box>
       )}
 
       <EventController
-        user={props.user}
+        user={user}
         onEventChange={handleEventChange}
         onScheduledEmailChange={handleScheduledEmailChange}
       />

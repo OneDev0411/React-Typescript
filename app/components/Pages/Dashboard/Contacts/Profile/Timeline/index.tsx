@@ -5,8 +5,8 @@ import React, {
   useRef
 } from 'react'
 
-import List from 'components/Calendar'
-import { CalendarRef } from 'components/Calendar/types'
+import List from 'components/ContactProfileTimeline'
+import { CalendarRef } from 'components/ContactProfileTimeline/types'
 
 import { Filters } from '../Tabs'
 
