@@ -4,10 +4,10 @@ export interface ListingsState {
   search: {
     bounds: Nullable<IBounds>
     office: Nullable<string>
-    drawing: IPoint[]
+    drawing: ICoord[]
     filters: Nullable<AlertFilters>
   }
-  map: { center: Optional<IPoint>; zoom: Optional<number> }
+  map: { center: Optional<ICoord>; zoom: Optional<number> }
   result: {
     listings: ICompactListingWithUIState[]
     info: Nullable<IListingInfo>

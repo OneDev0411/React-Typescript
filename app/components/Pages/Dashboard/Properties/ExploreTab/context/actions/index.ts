@@ -28,7 +28,7 @@ export const setOffAllClickedStates = () => ({
   payload: {}
 })
 
-export const setMapDrawing = (points: IPoint[]) => ({
+export const setMapDrawing = (points: ICoord[]) => ({
   type: 'SET_MAP_DRAWING' as 'SET_MAP_DRAWING',
   payload: {
     points
@@ -36,7 +36,7 @@ export const setMapDrawing = (points: IPoint[]) => ({
 })
 
 export const setMapBounds = (
-  center: IPoint,
+  center: ICoord,
   zoom: number,
   bounds: IBounds
 ) => ({
@@ -48,7 +48,7 @@ export const setMapBounds = (
   }
 })
 
-export const setMapLocation = (center: IPoint, zoom: number) => ({
+export const setMapLocation = (center: ICoord, zoom: number) => ({
   type: 'SET_MAP_LOCATION' as 'SET_MAP_LOCATION',
   payload: {
     center,

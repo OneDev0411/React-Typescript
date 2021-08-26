@@ -36,9 +36,16 @@ declare interface IPoint {
   longitude: number
 }
 
+declare interface ICoord {
+  lat: number
+  lng: number
+}
+
 declare interface IBounds {
-  ne: IPoint
-  sw: IPoint
+  ne: ICoord
+  nw: ICoord
+  se: ICoord
+  sw: ICoord
 }
 
 interface ListingAgent extends IModel<'agent'> {

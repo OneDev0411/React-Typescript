@@ -50,16 +50,16 @@ export const pointsFromPolygon = (polygon: google.maps.Polygon): Coords[] => {
 
 export const pointFromBounds = (
   bounds?: Nullable<IBounds>
-): Nullable<Coords[]> => {
+): Nullable<IPoint[]> => {
   if (!bounds) {
     return null
   }
 
   return [
-    { lat: bounds.ne.latitude, lng: bounds.ne.longitude },
-    { lat: bounds.sw.latitude, lng: bounds.ne.longitude },
-    { lat: bounds.sw.latitude, lng: bounds.sw.longitude },
-    { lat: bounds.ne.latitude, lng: bounds.sw.longitude },
-    { lat: bounds.ne.latitude, lng: bounds.ne.longitude }
+    { latitude: bounds.ne.lat, longitude: bounds.ne.lng },
+    { latitude: bounds.se.lat, longitude: bounds.se.lng },
+    { latitude: bounds.sw.lat, longitude: bounds.sw.lng },
+    { latitude: bounds.nw.lat, longitude: bounds.nw.lng },
+    { latitude: bounds.ne.lat, longitude: bounds.ne.lng }
   ]
 }
