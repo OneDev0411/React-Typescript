@@ -2,31 +2,21 @@ import React, { Component } from 'react'
 
 import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
-import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import { batchActions } from 'redux-batched-actions'
 
-import {
-  SEARCH_BY_GOOGLE_SUGGESTS,
-  SEARCH_BY_QUERY
-} from '@app/constants/listings/search'
-import { goToPlace, setMapProps } from 'actions/listings/map'
-import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
-import searchActions from 'actions/listings/search'
-import { getListingsByQuery } from 'actions/listings/search/get-listings-by-query'
-import resetAreasOptions from 'actions/listings/search/reset-areas-options'
-import {
-  reset as resetSearchType,
-  setSearchType
-} from 'actions/listings/search/set-type'
 import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
-import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 import { getListingAddress } from 'utils/listing'
-import { getBounds } from 'utils/map'
+
+import {
+  AUTOCOMPLETE_RADIUS_IN_M,
+  AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH,
+  AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS,
+  AUTOCOMPLETE_LISTINGS_ITEM_LIMIT
+} from '../../../mapOptions'
 
 import {
   SearchContainer,
@@ -40,25 +30,11 @@ class MlsAutocompleteSearch extends Component {
   state = {
     isLoading: false,
     isOpen: false,
-    isSearchingByQuery: false,
     places: [],
     listings: [],
     input: '',
-    isDrity: false,
     selectedListingId: null,
     isListingDetailsModalOpen: false
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (!state.input && !state.isDrity && props.searchInput !== state.input) {
-      return { input: props.searchInput }
-    }
-
-    return null
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(searchActions.setSearchInput(this.state.input))
   }
 
   inputRef = React.createRef()
@@ -66,85 +42,11 @@ class MlsAutocompleteSearch extends Component {
   handleChangeInput = e => {
     const { value } = e.target
 
-    this.setState({ input: value, isDrity: true }, () => this.search(value))
-  }
-
-  handleKeyDownInput = e => {
-    if (e.keyCode === 13) {
-      this.handleEnterKey()
-    }
-  }
-
-  handleInputBlur = () => {
-    if (this.state.isSearchingByQuery) {
-      this.setState({
-        isLoading: false,
-        isOpen: false,
-        isSearchingByQuery: false
-      })
-    }
+    this.setState({ input: value }, () => this.search(value))
   }
 
   onClear = () => {
-    const { dispatch } = this.props
-
-    this.setState({ input: '', isOpen: false }, () =>
-      batchActions([
-        dispatch(resetSearchType()),
-        dispatch(searchActions.setSearchInput('')),
-        dispatch(searchActions.setSearchLocation(null))
-      ])
-    )
-  }
-
-  disableDrawing = () => {
-    const { drawing, dispatch } = this.props
-
-    if (drawing.points.length > 2) {
-      batchActions([
-        dispatch(removePolygon(drawing.shape)),
-        dispatch(inactiveDrawing())
-      ])
-    }
-  }
-
-  goToAddress = async address => {
-    const { dispatch } = this.props
-
-    const place = await getPlace(address.description, false)
-
-    this.setState({ isOpen: false })
-
-    const zoom = 16
-    let center = place.geometry.location
-
-    if (this.props.activeView === 'map') {
-      dispatch(goToPlace({ center, zoom }))
-    } else {
-      const { points, bounds } = getMapBoundsInCircle(
-        center,
-        1.61803398875 / 2,
-        true
-      )
-
-      batchActions([
-        dispatch(
-          searchActions.getListings.byValert({
-            ...this.props.filterOptions,
-            limit: 200,
-            points
-          })
-        ),
-        dispatch(
-          setMapProps('search', { center, zoom, bounds: getBounds(bounds) })
-        )
-      ])
-    }
-
-    batchActions([
-      dispatch(searchActions.setSearchLocation(center)),
-      dispatch(searchActions.setSearchInput(this.state.input))
-    ])
+    this.setState({ input: '', isOpen: false })
   }
 
   autocompleteAddress(input) {
@@ -156,7 +58,7 @@ class MlsAutocompleteSearch extends Component {
       input,
       componentRestrictions: { country: 'us' },
       location: new google.maps.LatLng(this.props.mapCenter),
-      radius: 100000 // in meters
+      radius: AUTOCOMPLETE_RADIUS_IN_M // in meters
     }
 
     return new Promise(resolve => {
@@ -173,7 +75,10 @@ class MlsAutocompleteSearch extends Component {
   search = debounce(async input => {
     input = input.trim()
 
-    if (input.length <= 3 || this.state.isSearchingByQuery) {
+    if (
+      input.length <= AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH ||
+      this.state.isSearchingByQuery
+    ) {
       return
     }
 
@@ -182,7 +87,7 @@ class MlsAutocompleteSearch extends Component {
 
       const [places, listings] = await Promise.all([
         this.autocompleteAddress(input),
-        searchListings(input, { limit: 5 })
+        searchListings(input, { limit: AUTOCOMPLETE_LISTINGS_ITEM_LIMIT })
       ])
 
       // For cancel search after starting search by query
@@ -203,18 +108,33 @@ class MlsAutocompleteSearch extends Component {
       console.log(error)
       this.setState({ isLoading: false, isOpen: false })
     }
-  }, 300)
+  }, AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS)
 
   handleSelectedPlace = async place => {
-    const { dispatch } = this.props
+    this.setState({
+      isLoading: true
+    })
 
-    batchActions([
-      dispatch(resetAreasOptions()),
-      this.disableDrawing(),
-      dispatch(setSearchType(SEARCH_BY_GOOGLE_SUGGESTS))
-    ])
+    try {
+      const placeResponse = await getPlace(place.description, false)
 
-    return this.goToAddress(place)
+      const center = placeResponse.geometry.location
+
+      const bounds = {
+        ne: placeResponse.geometry.viewport.northeast,
+        sw: placeResponse.geometry.viewport.southwest
+      }
+
+      // TODO: Calculate zoom from bound and center and map width
+      // https://stackoverflow.com/a/6055653/10326226
+      const zoom = 16
+
+      this.props.onSelectPlace(center, zoom, bounds)
+    } finally {
+      this.setState({
+        isLoading: false
+      })
+    }
   }
 
   handleItemToString = item => (item == null ? '' : item.description)
@@ -258,42 +178,19 @@ class MlsAutocompleteSearch extends Component {
 
     if (item.type === 'compact_listing') {
       // It's a listing
+
       this.handleSelectedListing(item)
     } else if (this.props.landingPageSearch) {
       // It's a place and we are in search landing page
       const query = encodeURIComponent(item.description)
 
       browserHistory.push(`/dashboard/properties?q=${query}`)
-      this.props.onSelectPlace()
+      this.handleSelectedPlace(item)
     } else {
       this.handleSelectedPlace(item)
     }
-  }
 
-  handleEnterKey = async () => {
-    const { dispatch } = this.props
-
-    if (this.state.input.trim().length < 3) {
-      return
-    }
-
-    this.setState({ isSearchingByQuery: true, isLoading: true })
-
-    try {
-      batchActions([
-        dispatch(resetAreasOptions()),
-        this.disableDrawing(),
-        dispatch(setSearchType(SEARCH_BY_QUERY))
-      ])
-
-      await dispatch(getListingsByQuery(this.state.input, { limit: 200 }))
-      this.setState({ isLoading: false })
-    } catch (error) {
-      console.log(error)
-      this.setState({ isLoading: false })
-    } finally {
-      this.inputRef.current.blur()
-    }
+    this.setState({ isOpen: false })
   }
 
   renderPlacesItem = item => (
@@ -334,11 +231,10 @@ class MlsAutocompleteSearch extends Component {
                     ref={this.inputRef}
                     value={this.state.input}
                     onChange={this.handleChangeInput}
-                    onKeyDown={this.handleKeyDownInput}
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
                     // eslint-disable-next-line max-len
-                    placeholder="Enter an address, neighborhood, city, ZIP code or MLS #"
+                    placeholder="Search by MLS, City ..."
                     onClear={this.onClear}
                     isLoading={this.state.isLoading}
                     fullWidth={this.props.fullWidth}
@@ -403,16 +299,4 @@ class MlsAutocompleteSearch extends Component {
   }
 }
 
-function mapStateToProps({ search }) {
-  const { input, map, options, listings } = search
-
-  return {
-    searchInput: input,
-    drawing: map.drawing,
-    filterOptions: options,
-    mapCenter: map.props.center,
-    isFetching: listings.isFetching
-  }
-}
-
-export default connect(mapStateToProps)(MlsAutocompleteSearch)
+export default MlsAutocompleteSearch
