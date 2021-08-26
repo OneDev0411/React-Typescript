@@ -7,7 +7,7 @@ import { useDeepCompareEffect } from 'react-use'
 import {
   getDateRange,
   Format
-} from 'components/Calendar/helpers/get-date-range'
+} from 'components/ContactProfileTimeline/helpers/get-date-range'
 import { useLoadingEntities } from 'hooks/use-loading'
 import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
 import { selectUser } from 'selectors/user'

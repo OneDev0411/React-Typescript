@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import useNotify from '@app/hooks/use-notify'
 import { getCalendar } from 'models/calendar/get-calendar'
 import { IAppState } from 'reducers/index'
 import { viewAs } from 'utils/user-teams'
@@ -30,7 +31,6 @@ interface Props {
   calendarRef?: RefObject<CalendarRef>
   initialRange?: NumberRange
   contrariwise?: boolean
-  onChangeActiveDate?: (activeDate: Date) => void
   onLoadEvents?: (events: ICalendarEventsList, range: NumberRange) => void
 }
 
@@ -46,15 +46,16 @@ export function Calendar({
   filter = {},
   contrariwise = false,
   associations = [],
-  onLoadEvents = () => null,
-  onChangeActiveDate = () => null
+  onLoadEvents = () => null
 }: Props) {
+  const notify = useNotify()
   const [isLoading, setIsLoading] = useState(false)
   const [events, setEvents] = useState<ICalendarEvent[]>([])
   const [listRows, setListRows] = useState<ICalendarListRow[]>([])
   const [calendarRange, setCalendarRange] = useState<NumberRange>(
     getDateRange()
   )
+  const [isReachedStart, setIsReachedStart] = useState(false)
   const [isReachedEnd, setIsReachedEnd] = useState(false)
 
   const { user, viewAsUsers } = useSelector<
@@ -92,7 +93,20 @@ export function Calendar({
           ...apiOptions
         })
 
-        setIsReachedEnd(fetchedEvents.length === 0)
+        if (fetchedEvents.length === 0 && apiOptions.position !== 'Middle') {
+          notify({
+            status: 'success',
+            message: 'There is no more events to load'
+          })
+
+          if (apiOptions.position === 'Next') {
+            setIsReachedEnd(true)
+          }
+
+          if (apiOptions.position === 'Previous') {
+            setIsReachedStart(true)
+          }
+        }
 
         const nextEvents: ICalendarEvent[] = options.reset
           ? fetchedEvents
@@ -113,7 +127,7 @@ export function Calendar({
         setIsLoading(false)
       }
     },
-    [associations, events, filter, viewAsUsers, onLoadEvents]
+    [associations, events, filter, viewAsUsers, notify, onLoadEvents]
   )
 
   const handleLoadEvents = async (
@@ -128,7 +142,8 @@ export function Calendar({
 
     await fetchEvents(
       {
-        range: query
+        range: query,
+        position: 'Middle'
       },
       {
         reset: true
@@ -208,7 +223,8 @@ export function Calendar({
     setCalendarRange(nextCalendarRange)
     fetchEvents(
       {
-        range: query
+        range: query,
+        position: 'Next'
       },
       {
         calendarRange: nextCalendarRange
@@ -217,7 +233,7 @@ export function Calendar({
   }, [createRanges, fetchEvents, isLoading, isReachedEnd])
 
   const handleLoadPreviousEvents = useCallback((): void => {
-    if (isLoading) {
+    if (isLoading || isReachedStart) {
       return
     }
 
@@ -226,13 +242,14 @@ export function Calendar({
     setCalendarRange(nextCalendarRange)
     fetchEvents(
       {
-        range: query
+        range: query,
+        position: 'Previous'
       },
       {
         calendarRange: nextCalendarRange
       }
     )
-  }, [createRanges, fetchEvents, isLoading])
+  }, [createRanges, fetchEvents, isLoading, isReachedStart])
 
   /**
    * exposes below methods to be accessible outside of the component
@@ -284,8 +301,10 @@ export function Calendar({
       user={user}
       contact={contact}
       isLoading={isLoading}
-      onReachEnd={handleLoadNextEvents}
-      onReachStart={handleLoadPreviousEvents}
+      isReachedStart={isReachedStart}
+      isReachedEnd={isReachedEnd}
+      onLoadNextEvents={handleLoadNextEvents}
+      onLoadPreviousEvents={handleLoadPreviousEvents}
       onCrmEventChange={handleCrmEventChange}
       onScheduledEmailChange={handleScheduledEmailChange}
     />
