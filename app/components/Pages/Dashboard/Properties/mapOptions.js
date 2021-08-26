@@ -5,6 +5,10 @@ export const DECLUSTER_ZOOM_LEVEL = 16
 export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8
 export const QUERY_LIMIT = 200
+export const AUTOCOMPLETE_RADIUS_IN_M = 100000
+export const AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH = 3
+export const AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS = 500
+export const AUTOCOMPLETE_LISTINGS_ITEM_LIMIT = 4
 
 export const property_subtypes = {
   condo: 'RES-Condo',
