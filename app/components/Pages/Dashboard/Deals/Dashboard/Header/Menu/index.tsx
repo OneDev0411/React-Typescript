@@ -20,7 +20,6 @@ import DealStatus from '../../../components/DealStatus'
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 
 import { Email } from './Email'
-// import RemoveDraft from './RemoveDraft'
 
 interface Props {
   deal: IDeal

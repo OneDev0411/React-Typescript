@@ -1,10 +1,14 @@
+import { useState } from 'react'
+
 import { Button, Tooltip } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
+import MakeVisibleToAdmin from '@app/components/Pages/Dashboard/Deals/Create/MakeVisibleToAdmin'
 import { IAppState } from '@app/reducers'
 import { confirmation } from 'actions/confirmation'
 
 interface Props {
+  deal: IDeal
   task: IDealTask
   hasComment: boolean
   isSaving: boolean
@@ -12,12 +16,16 @@ interface Props {
 }
 
 export default function Agent({
+  deal,
   task,
   hasComment,
   isSaving,
   onSendComment
 }: Props) {
   const dispatch = useDispatch()
+  const [isMakeVisibleToAdminFormOpen, setIsMakeVisibleToAdminFormOpen] =
+    useState(false)
+
   const checklist = useSelector<IAppState, IDealChecklist | null>(
     ({ deals }) => {
       return deals.checklists ? deals.checklists[task.checklist] : null
@@ -43,6 +51,16 @@ export default function Agent({
       return
     }
 
+    // if (deal.is_draft) {
+    //   setIsMakeVisibleToAdminFormOpen(true)
+    // } else {
+    //   onSendComment(true)
+    // }
+    setIsMakeVisibleToAdminFormOpen(true)
+  }
+
+  const onDealVisible = () => {
+    setIsMakeVisibleToAdminFormOpen(false)
     onSendComment(true)
   }
 
@@ -61,6 +79,14 @@ export default function Agent({
 
   return (
     <>
+      {isMakeVisibleToAdminFormOpen && (
+        <MakeVisibleToAdmin
+          dealId={deal.id}
+          onClose={() => setIsMakeVisibleToAdminFormOpen(false)}
+          onComplete={onDealVisible}
+        />
+      )}
+
       <Tooltip title={hasComment ? '' : 'Notify office to Review'}>
         <Button
           color="secondary"

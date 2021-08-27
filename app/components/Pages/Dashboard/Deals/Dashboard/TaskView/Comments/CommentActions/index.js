@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Agent from './Agent'
 import BackOffice from './BackOffice'
 
