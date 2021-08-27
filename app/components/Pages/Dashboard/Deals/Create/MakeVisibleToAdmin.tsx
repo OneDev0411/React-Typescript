@@ -5,14 +5,17 @@ import {
   Button,
   Dialog,
   DialogActions,
+  DialogContent,
   DialogTitle,
-  IconButton
+  IconButton,
+  Typography
 } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTitle } from 'react-use'
 
+import { Callout } from '@app/views/components/Callout'
 import {
   createRoles,
   publishDeal,
@@ -311,7 +314,7 @@ export default function MakeVisibleToAdmin({
               alignItems="center"
               justifyContent="space-between"
             >
-              <div>[ Title - Product Team]</div>
+              <div>Notify Office</div>
 
               <IconButton color="secondary" size="medium" onClick={onClose}>
                 <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
@@ -319,123 +322,134 @@ export default function MakeVisibleToAdmin({
             </Box>
           </DialogTitle>
 
-          <Box className={classes.root}>
-            <QuestionWizard
-              concurrent
-              useWindowScrollbar
-              questionPositionOffset={80}
-            >
-              {!hasAddress && (
-                <Controller
-                  key="address"
-                  name="address"
-                  control={control}
-                  render={({ onChange }) => (
-                    <DealAddress
-                      concurrentMode
-                      error={errors.address}
-                      skippable={false}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              )}
+          <DialogContent>
+            <Callout type="info" style={{ margin: 0 }}>
+              <Typography variant="subtitle1">
+                Your office admin requires you to provide some more informations
+                before you can notify them.
+              </Typography>
+            </Callout>
 
-              {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
-                <Controller
-                  key="buyers"
-                  name="buying_clients"
-                  control={control}
-                  render={({ value = [], onChange }) => (
-                    <DealClient
-                      concurrentMode
-                      error={errors.buying_clients}
-                      side="Buying"
-                      propertyType={deal.property_type}
-                      title={
-                        <div>
-                          What's the{' '}
-                          <span className={classes.brandedTitle}>
-                            {propertyType?.is_lease ? 'Tenant' : 'Buyer'}
-                            's Legal Name
-                          </span>
-                          ?
-                        </div>
-                      }
-                      roles={value}
-                      onChange={(role, type) =>
-                        onChange(getChangedRoles(value, role, type))
-                      }
-                    />
-                  )}
-                />
-              )}
-
-              {sellerRoles.length === 0 && (
-                <Controller
-                  key="sellers"
-                  name="selling_clients"
-                  control={control}
-                  render={({ value = [], onChange }) => (
-                    <DealClient
-                      concurrentMode
-                      side="Selling"
-                      error={errors.selling_clients}
-                      propertyType={deal.property_type}
-                      title={
-                        <div>
-                          What's the{' '}
-                          <span className={classes.brandedTitle}>
-                            {propertyType?.is_lease ? 'Landlord' : 'Seller'}
-                            's Legal Name
-                          </span>
-                          ?
-                        </div>
-                      }
-                      roles={value}
-                      onChange={(role, type) =>
-                        onChange(getChangedRoles(value, role, type))
-                      }
-                    />
-                  )}
-                />
-              )}
-
-              {isStatusVisible && !getStatus(deal) && statusList.length > 0 && (
-                <Controller
-                  key="status"
-                  name={`context:${statusContextKey}`}
-                  control={control}
-                  defaultValue={getStatus(deal)}
-                  render={({ onChange }) => (
-                    <DealStatus
-                      list={statusList}
-                      error={errors.status}
-                      onChange={onChange}
-                    />
-                  )}
-                />
-              )}
-
-              {requiredContexts.length > 0 &&
-                requiredContexts.map((context: IDealBrandContext) => (
+            <Box className={classes.root}>
+              <QuestionWizard
+                concurrent
+                useWindowScrollbar
+                questionPositionOffset={80}
+              >
+                {!hasAddress && (
                   <Controller
-                    key={context.id}
-                    name={`context:${context.key}`}
+                    key="address"
+                    name="address"
                     control={control}
-                    defaultValue={getField(deal, context.key)}
                     render={({ onChange }) => (
-                      <DealContext
+                      <DealAddress
                         concurrentMode
-                        error={errors[context.key]}
-                        context={context}
+                        error={errors.address}
+                        skippable={false}
                         onChange={onChange}
                       />
                     )}
                   />
-                ))}
-            </QuestionWizard>
-          </Box>
+                )}
+
+                {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
+                  <Controller
+                    key="buyers"
+                    name="buying_clients"
+                    control={control}
+                    render={({ value = [], onChange }) => (
+                      <DealClient
+                        concurrentMode
+                        error={errors.buying_clients}
+                        side="Buying"
+                        propertyType={deal.property_type}
+                        title={
+                          <div>
+                            What's the{' '}
+                            <span className={classes.brandedTitle}>
+                              {propertyType?.is_lease ? 'Tenant' : 'Buyer'}
+                              's Legal Name
+                            </span>
+                            ?
+                          </div>
+                        }
+                        roles={value}
+                        onChange={(role, type) =>
+                          onChange(getChangedRoles(value, role, type))
+                        }
+                      />
+                    )}
+                  />
+                )}
+
+                {sellerRoles.length === 0 && (
+                  <Controller
+                    key="sellers"
+                    name="selling_clients"
+                    control={control}
+                    render={({ value = [], onChange }) => (
+                      <DealClient
+                        concurrentMode
+                        side="Selling"
+                        error={errors.selling_clients}
+                        propertyType={deal.property_type}
+                        title={
+                          <div>
+                            What's the{' '}
+                            <span className={classes.brandedTitle}>
+                              {propertyType?.is_lease ? 'Landlord' : 'Seller'}
+                              's Legal Name
+                            </span>
+                            ?
+                          </div>
+                        }
+                        roles={value}
+                        onChange={(role, type) =>
+                          onChange(getChangedRoles(value, role, type))
+                        }
+                      />
+                    )}
+                  />
+                )}
+
+                {isStatusVisible &&
+                  !getStatus(deal) &&
+                  statusList.length > 0 && (
+                    <Controller
+                      key="status"
+                      name={`context:${statusContextKey}`}
+                      control={control}
+                      defaultValue={getStatus(deal)}
+                      render={({ onChange }) => (
+                        <DealStatus
+                          list={statusList}
+                          error={errors.status}
+                          onChange={onChange}
+                        />
+                      )}
+                    />
+                  )}
+
+                {requiredContexts.length > 0 &&
+                  requiredContexts.map((context: IDealBrandContext) => (
+                    <Controller
+                      key={context.id}
+                      name={`context:${context.key}`}
+                      control={control}
+                      defaultValue={getField(deal, context.key)}
+                      render={({ onChange }) => (
+                        <DealContext
+                          concurrentMode
+                          error={errors[context.key]}
+                          context={context}
+                          onChange={onChange}
+                        />
+                      )}
+                    />
+                  ))}
+              </QuestionWizard>
+            </Box>
+          </DialogContent>
 
           <DialogActions>
             <Box textAlign="right" my={2} mr={4}>

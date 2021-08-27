@@ -7,7 +7,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { mdiClose, mdiEye } from '@mdi/js'
+import { mdiClose, mdiEyeOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -54,11 +54,10 @@ export const Menu = withRouter(
 
     return (
       <div className={classes.container}>
-        {/* {deal.is_draft === true && <RemoveDraft deal={deal} />} */}
         <Box mr={1}>
-          <Tooltip title="The deal is currently visible to admin">
+          <Tooltip title="This deal is visible to your admin back office">
             <Box display="flex">
-              <SvgIcon path={mdiEye} />
+              <SvgIcon path={mdiEyeOutline} />
             </Box>
           </Tooltip>
         </Box>
