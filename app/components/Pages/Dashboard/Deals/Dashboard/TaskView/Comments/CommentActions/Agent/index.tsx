@@ -51,12 +51,11 @@ export default function Agent({
       return
     }
 
-    // if (deal.is_draft) {
-    //   setIsMakeVisibleToAdminFormOpen(true)
-    // } else {
-    //   onSendComment(true)
-    // }
-    setIsMakeVisibleToAdminFormOpen(true)
+    if (deal.is_draft) {
+      setIsMakeVisibleToAdminFormOpen(true)
+    } else {
+      onSendComment(true)
+    }
   }
 
   const onDealVisible = () => {
