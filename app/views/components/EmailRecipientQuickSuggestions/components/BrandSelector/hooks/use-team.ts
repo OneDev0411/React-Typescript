@@ -14,7 +14,7 @@ export function useTeam(user: IUser, searchTerm: string) {
       setLoading(true)
 
       try {
-        const { data: brandTree } = await getBrands(brandId)
+        const { data: brandTree } = await getBrands(brandId, true, [])
 
         setRootTeam(brandTree)
         setLoading(false)
