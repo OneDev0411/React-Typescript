@@ -99,7 +99,6 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
       <TreeView
         selectable
         getChildNodes={getChildNodes}
-        expandedNodes={initialExpandedNodes}
         initialExpandedNodes={initialExpandedNodes}
         getNodeId={getNodeId}
         renderNode={(brand: IBrand) => (
