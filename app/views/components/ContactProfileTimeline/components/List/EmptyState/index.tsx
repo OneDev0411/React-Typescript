@@ -35,7 +35,7 @@ interface Props {
 export function EmptyState({ rowsCount, isLoading }: Props) {
   const classes = useStyles()
 
-  if (!isLoading && rowsCount > 0) {
+  if (rowsCount > 0) {
     return null
   }
 

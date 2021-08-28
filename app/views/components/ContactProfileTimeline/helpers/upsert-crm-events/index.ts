@@ -1,4 +1,4 @@
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import { convertTaskToCalendarEvent } from '../convert-task-to-calendar'
 

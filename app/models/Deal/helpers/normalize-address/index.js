@@ -1,5 +1,6 @@
 import _ from 'underscore'
 
+import { createFullAddress } from '@app/utils/create-full-address'
 import { STATES } from 'utils/address'
 
 export function normalizeAddress(address) {
@@ -14,22 +15,10 @@ export function normalizeAddress(address) {
     unit_number: address.unit_number,
     street_dir_prefix: address.street_prefix,
     state_code: stateToAbbreviated(address.state),
-    full_address: [
-      address.street_number || '',
-      address.street_prefix && address.street_prefix.value
-        ? address.street_prefix.title
-        : '',
-      address.street_name || '',
-      address.street_suffix || '',
-      address.unit_number ? `, Unit ${address.unit_number},` : '',
-      address.city ? `, ${address.city}` : '',
-      address.state ? `, ${address.state}` : '',
-      address.postal_code ? `, ${address.postal_code}` : ''
-    ]
-      .join(' ')
-      .trim()
-      .replace(/(\s)+,/gi, ',')
-      .replace(/,,/gi, ','),
+    full_address: createFullAddress({
+      ...address,
+      street_prefix: address.street_prefix ? address.street_prefix.value : ''
+    }),
     street_address: [
       address.street_number || '',
       address.street_prefix && address.street_prefix.value

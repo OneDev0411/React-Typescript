@@ -14,6 +14,7 @@ import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { ChecklistCreate } from './components/ChecklistCreate'
 import { ChecklistHeader } from './components/ChecklistHeader'
 import { ChecklistsSidenav } from './components/ChecklistsSidenav'
 import { CheckListTable } from './components/ChecklistTable'
@@ -104,20 +105,20 @@ export default function ChecklistsPage({ location }: Props) {
         />
 
         <Content isSideMenuOpen>
-          {checklist && (
-            <Box m={3}>
-              <PageTabs
-                defaultValue={checklistType || TabNames[0].type}
-                tabs={TabNames.map((tab, index) => (
-                  <TabLink
-                    key={index}
-                    label={tab.title}
-                    value={tab.type}
-                    to={getChecklistPageLink(propertyTypeId, tab.type)}
-                  />
-                ))}
-              />
+          <Box m={3}>
+            <PageTabs
+              defaultValue={checklistType || TabNames[0].type}
+              tabs={TabNames.map((tab, index) => (
+                <TabLink
+                  key={index}
+                  label={tab.title}
+                  value={tab.type}
+                  to={getChecklistPageLink(propertyTypeId, tab.type)}
+                />
+              ))}
+            />
 
+            {checklist ? (
               <Box mb={5}>
                 <ChecklistHeader
                   checklist={checklist}
@@ -161,8 +162,17 @@ export default function ChecklistsPage({ location }: Props) {
                   />
                 </Box>
               </Box>
-            </Box>
-          )}
+            ) : (
+              <Box my={3}>
+                <ChecklistCreate
+                  brandId={activeTeamId!}
+                  propertyTypeId={propertyTypeId}
+                  checklistType={checklistType}
+                  onCreateChecklist={checklist => addChecklists([checklist])}
+                />
+              </Box>
+            )}
+          </Box>
         </Content>
 
         <PropertyTypeForm

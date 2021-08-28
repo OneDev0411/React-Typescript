@@ -3,6 +3,7 @@ export const compactListing: ICompactListing = {
   id: '033840ba-a9c0-11e5-8893-f23c91c841bd',
   created_at: 1450907785.74911,
   updated_at: 1454953119.21239,
+  mls_display_name: 'NTRIES',
   deleted_at: null,
   close_date: null,
   price: 599990,
