@@ -114,17 +114,25 @@ export default function Factsheet({
     }
   }
 
-  const getTooltipTitle = (context: IDealBrandContext, isDisabledByMls) => {
+  const getTooltipTitle = (
+    brandContext: IDealBrandContext,
+    dealContext: Nullable<IDealContext>,
+    isDisabledByMls: boolean
+  ) => {
     if (isDisabledByMls) {
       return (
         <div>
-          <b>{context.label}</b> can only be changed on MLS. Once changed, the
-          update will be reflected here.
+          <b>{brandContext.label}</b> can only be changed on MLS. Once changed,
+          the update will be reflected here.
         </div>
       )
     }
 
-    if (!isContextApproved(deal, context) && !isBackOffice) {
+    if (
+      dealContext?.id &&
+      !isContextApproved(deal, brandContext) &&
+      !isBackOffice
+    ) {
       return 'Pending Office Approval'
     }
 
@@ -138,38 +146,44 @@ export default function Factsheet({
       <ItemsContainer>
         {section === 'Dates' && <TimelineSplitter />}
 
-        {table.map((context, index) => {
-          const value = getFieldValue(getContextValue(deal, context))
+        {table.map((brandContext, index) => {
+          const dealContext = getContext(deal, brandContext.key)
+          const value = getFieldValue(getContextValue(deal, brandContext))
           const hasMlsValue =
             value != null &&
             value !== '' &&
-            deal.context[context.key]?.source === 'MLS'
+            deal.context[brandContext.key]?.source === 'MLS'
 
           const isDisabledByMls = !!(
             deal.listing &&
-            context.preffered_source === 'MLS' &&
+            brandContext.preffered_source === 'MLS' &&
             hasMlsValue
           )
 
           const sharedProps = {
             index,
             total: table.length - 1,
-            field: context,
+            brandContext,
+            dealContext,
             value,
             deal,
             isBackOffice,
             isDisabled: disableEditing || isDisabledByMls,
-            tooltip: getTooltipTitle(context, isDisabledByMls),
+            tooltip: getTooltipTitle(
+              brandContext,
+              dealContext,
+              isDisabledByMls
+            ),
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,
             onApprove: handleApproveField
           }
 
-          if (context.data_type === 'Date') {
-            return <DateField key={context.key} {...sharedProps} />
+          if (brandContext.data_type === 'Date') {
+            return <DateField key={brandContext.key} {...sharedProps} />
           }
 
-          return <TextField key={context.key} {...sharedProps} />
+          return <TextField key={brandContext.key} {...sharedProps} />
         })}
       </ItemsContainer>
     </>
