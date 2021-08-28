@@ -190,6 +190,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
       const listing = option.listing
 
       const address = [
+        listing.address.neighborhood,
         listing.address.city,
         listing.address.state,
         listing.address.postal_code,

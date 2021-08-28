@@ -7,6 +7,7 @@ export interface CalendarRef {
 
 export interface ApiOptions {
   range: NumberRange
+  position: 'Next' | 'Previous' | 'Middle'
   filter?: FilterQuery
   associations?: string[]
   users?: UUID[]

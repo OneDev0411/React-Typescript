@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { EventContentArg } from '@fullcalendar/react'
 
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import {
   isDealEvent,

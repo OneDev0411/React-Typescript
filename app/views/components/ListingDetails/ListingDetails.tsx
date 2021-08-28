@@ -29,7 +29,6 @@ import FeatureList from './FeatureList'
 import Gallery from './Gallery'
 import { getAgentInfo } from './get-agent-info'
 import { getPrice } from './get-price'
-import { getSubAddress } from './get-sub-address'
 import Header from './Header'
 import MainFeatures from './MainFeatures'
 import Map from './Map'
@@ -173,7 +172,10 @@ function ListingDetails({ id, isWidget = false, onClose }: Props) {
   const agent = getAgentInfo(listing)
   const title = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
-  const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
+  const subtitle2 = [
+    listingUtils.getListingAddressLine2(listing),
+    `MLS#: ${listing.mls_number}`
+  ].join(' | ')
   const images = listing.gallery_image_urls || []
 
   return (
