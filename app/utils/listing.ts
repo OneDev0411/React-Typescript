@@ -1,3 +1,5 @@
+import numeral from 'numeral'
+
 import { LEASE_PROPERTY_SUBTYPES } from '../constants/listings/property-subtypes'
 import { LEASE_PROPERTY_TYPES } from '../constants/listings/property-types'
 
@@ -190,6 +192,24 @@ export const getListingFeatures = (
   }
 }
 
+export const getListingPrice = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>,
+  isShortFormat: boolean = true
+): string => {
+  let price = listing.price
+
+  if (user && listing.close_price && user.user_type === 'Agent') {
+    price = listing.close_price
+  }
+
+  if (isShortFormat) {
+    return numeral(price).format('0.[00]a')
+  }
+
+  return price.toString()
+}
+
 export default {
   getStatusColor,
   getStatusColorClass,
@@ -201,5 +221,6 @@ export default {
   getCurrentDaysOnMarket,
   getResizeUrl,
   squareMetersToAcres,
-  isLeaseProperty
+  isLeaseProperty,
+  getListingPrice
 }
