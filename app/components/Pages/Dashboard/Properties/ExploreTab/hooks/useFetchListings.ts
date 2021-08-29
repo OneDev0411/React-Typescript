@@ -4,7 +4,10 @@ import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
 
 import { createValertQueryString } from '@app/components/Pages/Dashboard/Properties/helpers/get-listings-helpers'
-import { pointFromBounds } from '@app/components/Pages/Dashboard/Properties/helpers/map-helpers'
+import {
+  pointFromBounds,
+  coordToPoint
+} from '@app/components/Pages/Dashboard/Properties/helpers/map-helpers'
 import {
   PROPOSED_AGENT_ZOOM_LEVEL,
   QUERY_LIMIT
@@ -65,7 +68,7 @@ export default function useFetchListings(
 
       const points =
         state.search.drawing.length > 0
-          ? state.search.drawing
+          ? state.search.drawing.map(coordToPoint)
           : pointFromBounds(state.search.bounds)
 
       const valertOptions = {

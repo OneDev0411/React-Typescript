@@ -48,6 +48,10 @@ export const pointsFromPolygon = (polygon: google.maps.Polygon): Coords[] => {
   return [...points, points[0]]
 }
 
+export const coordToPoint = (coord: Coords): IPoint => {
+  return { latitude: coord.lat, longitude: coord.lng }
+}
+
 export const pointFromBounds = (
   bounds?: Nullable<IBounds>
 ): Nullable<IPoint[]> => {
