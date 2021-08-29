@@ -10,7 +10,7 @@ export interface ListingsState {
   map: { center: Optional<ICoord>; zoom: Optional<number> }
   result: {
     listings: ICompactListingWithUIState[]
-    info: Nullable<IListingInfo>
+    info: Nullable<ICompactListingInfo>
   }
   isLoading: boolean
 }

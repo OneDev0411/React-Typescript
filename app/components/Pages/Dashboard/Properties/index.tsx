@@ -12,7 +12,7 @@ function Listings({ children, ...rest }: Props) {
   useTitle('Properties v.2 | Rechat')
 
   return (
-    <ListSelection<IListing>>
+    <ListSelection<ICompactListing>>
       <>{cloneElement(children, rest)}</>
     </ListSelection>
   )

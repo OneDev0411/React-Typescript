@@ -56,7 +56,7 @@ export function ShareListings() {
 
   const getDefaultSelectedItems = () => {
     return selections.reduce(
-      (acc: Record<string, IListing>, listing: IListing) => ({
+      (acc: Record<string, ICompactListing>, listing: ICompactListing) => ({
         ...acc,
         [listing.id]: listing
       }),
@@ -64,7 +64,7 @@ export function ShareListings() {
     )
   }
 
-  const handleUpdateSelectedListings = (listings: IListing[]) => {
+  const handleUpdateSelectedListings = (listings: ICompactListing[]) => {
     setIsListingDrawerOpen(false)
     reinitialize(listings)
   }

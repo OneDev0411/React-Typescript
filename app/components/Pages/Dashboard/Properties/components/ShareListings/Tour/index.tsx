@@ -42,7 +42,7 @@ export function CreateTourAction({ buttonRenderer }: Props) {
 
     try {
       const listings = await Promise.all(
-        selections.map(async (selection: IListing) => {
+        selections.map(async (selection: ICompactListing) => {
           return getListing(selection.id)
         })
       )

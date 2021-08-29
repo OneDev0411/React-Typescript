@@ -1,6 +1,6 @@
 export const setListings = (
   listings: ICompactListing[],
-  info: IListingInfo
+  info: ICompactListingInfo
 ) => ({
   type: 'SET_LISTINGS' as 'SET_LISTINGS',
   payload: {

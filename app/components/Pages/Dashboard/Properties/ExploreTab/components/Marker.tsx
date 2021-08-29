@@ -70,10 +70,15 @@ interface Props {
   lat?: number
   lng?: number
   listing: ICompactListingWithUIState
-  zoom: number
+  zoom?: number
 }
 
-const Marker = ({ lat, lng, listing, zoom }: Props) => {
+const Marker = ({
+  lat,
+  lng,
+  listing,
+  zoom = MINIMAL_MARKER_ZOOM_LEVEL
+}: Props) => {
   const classes = useStyles()
 
   if (!lat || !lng) {

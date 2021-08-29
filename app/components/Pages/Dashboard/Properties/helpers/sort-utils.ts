@@ -48,8 +48,8 @@ export const getDefaultSort = (user: IUser) => {
 }
 
 export const sortByIndex = (
-  a: IListing,
-  b: IListing,
+  a: ICompactListing,
+  b: ICompactListing,
   index: string,
   ascending: boolean
 ) => (ascending ? a[index] - b[index] : b[index] - a[index])
