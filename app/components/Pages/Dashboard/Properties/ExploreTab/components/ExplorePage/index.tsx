@@ -52,7 +52,7 @@ const useStyles = makeStyles(
       overflow: 'hidden'
     },
     map: {
-      flexBasis: '60%',
+      flexBasis: '50%',
       minHeight: '100%',
       position: 'relative'
     },
@@ -73,7 +73,7 @@ const useStyles = makeStyles(
       zIndex: 3
     },
     results: {
-      flexBasis: '40%',
+      flexBasis: '50%',
       minHeight: '100%',
       padding: '0 10px',
       display: 'flex',
