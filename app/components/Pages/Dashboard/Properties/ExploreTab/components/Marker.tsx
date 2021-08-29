@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
-import numeral from 'numeral'
+import { useSelector } from 'react-redux'
 
-import listing_util from 'utils/listing'
+import { selectUserUnsafe } from '@app/selectors/user'
+import { getListingPrice, getStatusColorClass } from 'utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../mapOptions'
 
@@ -39,7 +40,7 @@ const useStyles = makeStyles(
       '&.hover, &.selected': {
         height: 25,
         width: 55,
-        backgroundColor: theme.palette.grey[800],
+        backgroundColor: `${theme.palette.grey[800]} !important`,
         transform: 'translate(-28px, -28px)', // Marker Anchor
         padding: 3,
         zIndex: 3
@@ -55,7 +56,7 @@ const useStyles = makeStyles(
       boxShadow: '0px 10px 18px -6px rgba(0,0,0,0.42)',
       cursor: 'pointer',
       '&.hover, &.selected': {
-        backgroundColor: theme.palette.grey[800],
+        backgroundColor: `${theme.palette.grey[800]} !important`,
         height: 15,
         width: 15,
         transform: 'translate(-8px, -8px)', // Marker Anchor
@@ -80,14 +81,14 @@ const Marker = ({
   zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
   const classes = useStyles()
+  const user = useSelector(selectUserUnsafe)
 
   if (!lat || !lng) {
     return null
   }
 
-  const price_small: string = numeral(listing.price).format('0.[00]a')
-
-  const status_color = listing_util.getStatusColorClass(listing.status)
+  const formatedPrice = getListingPrice(listing, user, true)
+  const statusColor = getStatusColorClass(listing.status)
 
   // We render markers differently based on the current zoom level...
   return (
@@ -98,9 +99,9 @@ const Marker = ({
             hover: listing.hover,
             selected: listing.clicked
           })}
-          style={{ backgroundColor: status_color }}
+          style={{ backgroundColor: statusColor }}
         >
-          {`${price_small}`}
+          {`${formatedPrice}`}
           {(listing.hover || listing.clicked) && (
             <MarkerPopup listing={listing} />
           )}
@@ -112,7 +113,7 @@ const Marker = ({
             hover: listing.hover,
             selected: listing.clicked
           })}
-          style={{ backgroundColor: status_color }}
+          style={{ backgroundColor: statusColor }}
         >
           {(listing.hover || listing.clicked) && (
             <MarkerPopup listing={listing} />
