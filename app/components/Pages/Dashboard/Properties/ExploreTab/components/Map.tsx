@@ -144,17 +144,13 @@ export const Map = ({
     >
       {!drawingMode &&
         state.result.listings.map(listing => (
-          <>
-            {listing.location ? (
-              <Marker
-                key={listing.id}
-                lat={listing.location.latitude}
-                lng={listing.location.longitude}
-                listing={listing}
-                zoom={state.map.zoom}
-              />
-            ) : null}
-          </>
+          <Marker
+            key={listing.id}
+            lat={listing.location?.latitude}
+            lng={listing.location?.longitude}
+            listing={listing}
+            zoom={state.map.zoom}
+          />
         ))}
     </GoogleMap>
   )

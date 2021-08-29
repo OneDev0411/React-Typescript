@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
+import numeral from 'numeral'
 
 import MarkerPopup from './MarkerPopup'
 
@@ -66,6 +67,12 @@ const useStyles = makeStyles(
 const Marker = ({ lat, lng, listing, zoom }) => {
   const classes = useStyles()
 
+  if (!lat || !lng) {
+    return null
+  }
+
+  const price_small = numeral(listing.price).format('0.[00]a')
+
   // We render markers differently based on the current zoom level...
   return (
     <>
@@ -78,7 +85,7 @@ const Marker = ({ lat, lng, listing, zoom }) => {
             selected: listing.clicked
           })}
         >
-          {`${listing.price}K`}
+          {`${price_small}`}
           {(listing.hover || listing.clicked) && (
             <MarkerPopup listing={listing} />
           )}
