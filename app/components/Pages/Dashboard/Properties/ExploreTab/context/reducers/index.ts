@@ -19,7 +19,7 @@ export const initialState: ListingsState = {
   search: { bounds: null, office: null, drawing: [], filters: null },
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
-  isLoading: false
+  isLoading: true
 }
 
 export function reducer(state: ListingsState, action: Actions): ListingsState {
