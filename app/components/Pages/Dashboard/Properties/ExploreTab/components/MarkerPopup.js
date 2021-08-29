@@ -1,4 +1,5 @@
 import { makeStyles, Chip } from '@material-ui/core'
+import numeral from 'numeral'
 
 const useStyles = makeStyles(
   () => ({
@@ -32,6 +33,7 @@ const useStyles = makeStyles(
 
 const MarkerPopup = ({ listing }) => {
   const classes = useStyles()
+  const price_small = numeral(listing.price).format('0.[00]a')
 
   return (
     <div className={classes.container}>
@@ -40,7 +42,7 @@ const MarkerPopup = ({ listing }) => {
         style={{ backgroundImage: `url(${listing.cover_image_url})` }}
       />
       <div className={classes.info}>
-        <Chip label={`${listing.price}K`} /> {listing.address.street_address}
+        <Chip label={price_small} /> {listing.address.street_address}
       </div>
     </div>
   )
