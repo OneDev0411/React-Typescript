@@ -1,5 +1,6 @@
 import { makeStyles, Chip } from '@material-ui/core'
 import cn from 'classnames'
+import numeral from 'numeral'
 
 import { toggleListingHoverState } from '../context/actions'
 import useListingsContext from '../hooks/useListingsContext'
@@ -29,6 +30,8 @@ export const Card = ({ listing }) => {
     dispatch(toggleListingHoverState(listingId))
   }
 
+  const price_small = numeral(listing.price).format('0.[00]a')
+
   return (
     <div
       id={listing.id}
@@ -40,7 +43,7 @@ export const Card = ({ listing }) => {
       })}
     >
       <h3>
-        {listing.address.street_address} <Chip label={`${listing.price}K`} />
+        {listing.address.street_address} <Chip label={price_small} />
       </h3>
     </div>
   )

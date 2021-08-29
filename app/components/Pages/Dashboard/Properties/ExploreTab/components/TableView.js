@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   Table,
   TableBody,
@@ -11,6 +9,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 import cn from 'classnames'
+import numeral from 'numeral'
 
 import { toggleListingHoverState } from '../context/actions'
 import useListingsContext from '../hooks/useListingsContext'
@@ -59,7 +58,7 @@ export const TableView = ({ listings, mapIsShown }) => {
               })}
             >
               <TableCell>{listing.address.street_address}</TableCell>
-              <TableCell>{listing.price}</TableCell>
+              <TableCell>{numeral(listing.price).format('0.[00]a')}</TableCell>
               {/* // TODO: add other columns */}
               {!mapIsShown && <TableCell>Other</TableCell>}
             </TableRow>
