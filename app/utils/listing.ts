@@ -207,7 +207,7 @@ export const getListingPrice = (
     return numeral(price).format('0.[00]a')
   }
 
-  return price.toString()
+  return price.toLocaleString('en-US')
 }
 
 export default {
