@@ -27,7 +27,7 @@ const useStyles = makeStyles(
   { name: 'ListingsTable' }
 )
 
-export const TableView = ({ result, mapIsShown }) => {
+export const TableView = ({ listings, mapIsShown }) => {
   const classes = useStyles()
   const [, dispatch] = useListingsContext()
 
@@ -47,7 +47,7 @@ export const TableView = ({ result, mapIsShown }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {result.listings.map(listing => (
+          {listings.map(listing => (
             <TableRow
               key={listing.id}
               id={listing.id}

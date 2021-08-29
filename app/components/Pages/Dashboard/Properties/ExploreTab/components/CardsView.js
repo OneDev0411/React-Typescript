@@ -4,10 +4,10 @@ import { Grid, Box } from '@material-ui/core'
 
 import { Card } from './Card'
 
-export const CardsView = ({ result, mapIsShown }) => {
+export const CardsView = ({ listings, mapIsShown }) => {
   return (
     <Grid container>
-      {result.listings.map(listing => (
+      {listings.map(listing => (
         <Grid
           item
           key={listing.id}
