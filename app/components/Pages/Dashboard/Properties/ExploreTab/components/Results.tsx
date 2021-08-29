@@ -82,6 +82,7 @@ export const Results = ({
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   const paginationIsShown = useMemo(() => {
+    // Hide pagination and results count if there is loading and listings are not loaded yet
     return state.result.listings.length > 0 || !state.isLoading
   }, [state.result.listings.length, state.isLoading])
 
@@ -113,10 +114,14 @@ export const Results = ({
             {!mapIsShown && (
               <MapToggler checked={mapIsShown} onChange={onMapToggle} />
             )}
-            {getResultsCountText(
-              state.result.listings.length,
-              currentPage,
-              PAGE_SIZE
+            {paginationIsShown && (
+              <>
+                {getResultsCountText(
+                  state.result.listings.length,
+                  currentPage,
+                  PAGE_SIZE
+                )}
+              </>
             )}
           </Box>
         </Grid>
