@@ -13,6 +13,8 @@ import {
 } from '@material-ui/core'
 import { Field } from 'react-final-form'
 
+import { Iframe } from '@app/views/components/Iframe'
+
 interface Props {
   templates: IBrandEmailTemplate[]
   currentTemplateId?: Nullable<UUID>
@@ -52,6 +54,8 @@ export const EmailTemplate = ({
   disabled,
   onNewTemplateClick
 }: Props) => {
+  console.log({ templates, currentTemplateId })
+
   const classes = useStyles()
   const emailTemplatesOptions = useMemo(
     () =>
@@ -79,7 +83,7 @@ export const EmailTemplate = ({
     return defaultValue
   }, [currentTemplateId, emailTemplatesOptions])
 
-  const reviewTemplateData = useMemo(() => {
+  const reviewTemplateData: Nullable<IBrandEmailTemplate> = useMemo(() => {
     if (!currentTemplateId) {
       return null
     }
@@ -91,6 +95,8 @@ export const EmailTemplate = ({
     if (!selectedTemplate) {
       return null
     }
+
+    console.log({ selectedTemplate })
 
     return selectedTemplate
   }, [currentTemplateId, templates])
@@ -173,9 +179,13 @@ export const EmailTemplate = ({
                       Subject: {reviewTemplateData.subject}
                     </Typography>
                   </Box>
-                  <Typography variant="body2">
-                    {reviewTemplateData.text}
-                  </Typography>
+                  <Iframe
+                    fullWidth
+                    title="Email body"
+                    srcDoc={
+                      reviewTemplateData.body ?? reviewTemplateData.text ?? ''
+                    }
+                  />
                 </Box>
               )}
             </Box>
