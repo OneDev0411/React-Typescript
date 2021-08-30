@@ -27,12 +27,11 @@ import { TableView } from './TableView'
 
 const useStyles = makeStyles(
   () => ({
-    resultsHeader: {
-      padding: '10px 0',
-      zIndex: 2
-    },
-    resultsContainer: {
-      flexGrow: 1,
+    root: {
+      width: '100%',
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
       position: 'relative'
     },
     loaderContainer: {
@@ -42,8 +41,15 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: alpha('#fff', 0.65),
-      zIndex: 1
+      backgroundColor: alpha('#fff', 0.7),
+      zIndex: 3
+    },
+    resultsHeader: {
+      padding: '10px 0',
+      zIndex: 2
+    },
+    resultsContainer: {
+      flexGrow: 1
     },
     scrollableContent: {
       position: 'absolute',
@@ -107,7 +113,12 @@ export const Results = ({
   }, [state.isLoading, state.result.listings.length])
 
   return (
-    <>
+    <Grid container className={classes.root}>
+      {state.isLoading && (
+        <Grid container className={classes.loaderContainer}>
+          <AnimatedLoader />
+        </Grid>
+      )}
       <Grid container className={classes.resultsHeader}>
         <Grid item xs={6}>
           <Box display="flex" alignItems="center" height={1}>
@@ -154,11 +165,6 @@ export const Results = ({
         </Grid>
       </Grid>
       <div className={classes.resultsContainer}>
-        {state.isLoading && (
-          <Grid container className={classes.loaderContainer}>
-            <AnimatedLoader />
-          </Grid>
-        )}
         <Grid
           ref={cardsContainerRef}
           container
@@ -185,6 +191,6 @@ export const Results = ({
           )}
         </Grid>
       </div>
-    </>
+    </Grid>
   )
 }
