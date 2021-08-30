@@ -33,7 +33,7 @@ const useStyles = makeStyles(
   theme => ({
     root: {
       display: 'flex',
-      minHeight: 'calc(100vh - 161px)'
+      minHeight: 'calc(100vh - 161px)' // 161px because tabs height is 51px and header height is 104px
     },
     padding: { padding: theme.spacing(3, 0) },
     content: {
