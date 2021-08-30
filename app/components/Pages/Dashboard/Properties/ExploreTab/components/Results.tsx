@@ -13,6 +13,7 @@ import cn from 'classnames'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
+import ZeroState from '../../components/ZeroState'
 import {
   getListingsPage,
   getResultsCountText
@@ -99,9 +100,14 @@ export const Results = ({
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
 
-  const paginationIsShown = useMemo(() => {
+  const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
-    return state.result.listings.length > 0 || !state.isLoading
+    return state.result.listings.length > 0 && !state.isLoading
+  }, [state.result.listings.length, state.isLoading])
+
+  const zeroStateShouldShown = useMemo(() => {
+    // Show zero state if there is not loading and listings are empty
+    return state.result.listings.length === 0 && !state.isLoading
   }, [state.result.listings.length, state.isLoading])
 
   const listingsPage = useMemo(() => {
@@ -137,7 +143,7 @@ export const Results = ({
             {!mapIsShown && (
               <MapToggler checked={mapIsShown} onChange={onMapToggle} />
             )}
-            {paginationIsShown && (
+            {paginationShouldShown && (
               <>
                 {getResultsCountText(
                   state.result.listings.length,
@@ -149,31 +155,33 @@ export const Results = ({
           </Box>
         </Grid>
         <Grid item xs={6}>
-          <Box display="flex" flexDirection="row-reverse">
-            <Sort />
-            &nbsp;
-            <ButtonGroup
-              size="small"
-              aria-label="outlined primary button group"
-            >
-              <Button
-                onClick={() => onToggleView('cards')}
-                className={cn(classes.viewSwitcher, {
-                  active: viewType === 'cards'
-                })}
+          {!zeroStateShouldShown && (
+            <Box display="flex" flexDirection="row-reverse">
+              <Sort />
+              &nbsp;
+              <ButtonGroup
+                size="small"
+                aria-label="outlined primary button group"
               >
-                Cards
-              </Button>
-              <Button
-                onClick={() => onToggleView('table')}
-                className={cn(classes.viewSwitcher, {
-                  active: viewType === 'table'
-                })}
-              >
-                Table
-              </Button>
-            </ButtonGroup>
-          </Box>
+                <Button
+                  onClick={() => onToggleView('cards')}
+                  className={cn(classes.viewSwitcher, {
+                    active: viewType === 'cards'
+                  })}
+                >
+                  Cards
+                </Button>
+                <Button
+                  onClick={() => onToggleView('table')}
+                  className={cn(classes.viewSwitcher, {
+                    active: viewType === 'table'
+                  })}
+                >
+                  Table
+                </Button>
+              </ButtonGroup>
+            </Box>
+          )}
         </Grid>
       </Grid>
       <div className={classes.resultsContainer}>
@@ -182,17 +190,23 @@ export const Results = ({
           container
           className={classes.scrollableContent}
         >
-          {viewType === 'cards' && (
-            <CardsView
-              mapIsShown={mapIsShown}
-              listings={listingsPage}
-              isWidget={isWidget}
-            />
+          {zeroStateShouldShown ? (
+            <ZeroState />
+          ) : (
+            <>
+              {viewType === 'cards' && (
+                <CardsView
+                  mapIsShown={mapIsShown}
+                  listings={listingsPage}
+                  isWidget={isWidget}
+                />
+              )}
+              {viewType === 'table' && (
+                <TableView mapIsShown={mapIsShown} listings={listingsPage} />
+              )}
+            </>
           )}
-          {viewType === 'table' && (
-            <TableView mapIsShown={mapIsShown} listings={listingsPage} />
-          )}
-          {paginationIsShown && (
+          {paginationShouldShown && (
             <Box className={classes.paginationContainer}>
               <Pagination
                 page={currentPage}
