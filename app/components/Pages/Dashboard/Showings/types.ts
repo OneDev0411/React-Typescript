@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 export type ShowingDetailTabType = 'Bookings' | 'Visitors' | 'Settings'
 
 export type ShowingsTabType = 'Properties' | 'Bookings'
@@ -32,19 +30,15 @@ export type AppointmentFilter = 'All' | IShowingAppointmentStatus | 'Feedback'
 
 export interface AppointmentFilterInfo {
   label: string
-  icon?: ReactNode
+  icon?: string
   filter?: (
     appointments: IShowingAppointment<'showing'>[]
   ) => IShowingAppointment<'showing'>[]
 }
 
-export interface DismissActionParams {
+export interface ApprovalActionParams {
   appointmentId: UUID
   showingId: UUID
-  notificationCount: number
-}
-
-export interface ApprovalActionParams extends DismissActionParams {
   appointment: IShowingAppointment
 }
 
