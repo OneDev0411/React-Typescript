@@ -7,16 +7,14 @@ import Table from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
-import LoadingComponent from 'components/Spinner'
 
 const BASE_URL = '/dashboard/properties'
 
 import { ShareListings } from '../ShareListings'
-import ZeroState from '../ZeroState'
 
 import { Address } from './columns/Address'
 
-const ListView = ({ sortedListings, listings, isFetching }) => {
+const ListView = ({ sortedListings, listings }) => {
   const theme = useTheme()
   const gridClasses = useGridStyles()
   const { selections, toggleItem } = useListSelection()
@@ -115,39 +113,33 @@ const ListView = ({ sortedListings, listings, isFetching }) => {
 
   return (
     <>
-      {!sortedListings.length ? (
-        <ZeroState />
-      ) : (
-        <Box pb={1}>
-          <Table
-            columns={columns}
-            rows={sortedListings}
-            totalRows={listings.info.total}
-            loading={isFetching ? 'middle' : null}
-            LoadingStateComponent={LoadingComponent}
-            selection={{
-              render: ({ row: listing }) => (
-                <Checkbox
-                  checked={selections.some(item => item.id === listing.id)}
-                  onChange={() => toggleItem(listing)}
-                />
-              ),
-              columnProps: {
-                width: theme.spacing(4)
-              }
-            }}
-            classes={{
-              row: gridClasses.row
-            }}
-          />
-          <ListingDetailsModal
-            isOpen={isListingDetailsModalOpen}
-            listingId={selectedListingId}
-            closeHandler={closeListingDetailsModal}
-          />
-          <ShareListings />
-        </Box>
-      )}
+      <Box pb={1}>
+        <Table
+          columns={columns}
+          rows={sortedListings}
+          totalRows={listings.info.total}
+          selection={{
+            render: ({ row: listing }) => (
+              <Checkbox
+                checked={selections.some(item => item.id === listing.id)}
+                onChange={() => toggleItem(listing)}
+              />
+            ),
+            columnProps: {
+              width: theme.spacing(4)
+            }
+          }}
+          classes={{
+            row: gridClasses.row
+          }}
+        />
+        <ListingDetailsModal
+          isOpen={isListingDetailsModalOpen}
+          listingId={selectedListingId}
+          closeHandler={closeListingDetailsModal}
+        />
+        <ShareListings />
+      </Box>
     </>
   )
 }

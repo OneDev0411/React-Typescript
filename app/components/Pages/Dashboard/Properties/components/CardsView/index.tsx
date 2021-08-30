@@ -2,9 +2,9 @@ import { Grid, Box } from '@material-ui/core'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
-import ListingCard from '../../components/ListingCardWithFavorite'
-import { toggleListingHoverState } from '../context/actions'
-import useListingsContext from '../hooks/useListingsContext'
+import { toggleListingHoverState } from '../../ExploreTab/context/actions'
+import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
+import ListingCard from '../ListingCardWithFavorite'
 
 interface Props {
   listings: ICompactListing[]

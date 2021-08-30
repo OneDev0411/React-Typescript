@@ -13,6 +13,8 @@ import cn from 'classnames'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
+import { CardsView } from '../../components/CardsView'
+import { TableView } from '../../components/TableView'
 import ZeroState from '../../components/ZeroState'
 import {
   getListingsPage,
@@ -21,11 +23,9 @@ import {
 import { PAGE_SIZE } from '../../mapOptions'
 import useListingsContext from '../hooks/useListingsContext'
 
-import { CardsView } from './CardsView'
 import { ViewType } from './ExplorePage'
 import { MapToggler } from './MapToggler'
 import { Sort } from './Sort'
-import { TableView } from './TableView'
 
 const useStyles = makeStyles(
   () => ({

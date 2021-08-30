@@ -11,8 +11,8 @@ import {
 import cn from 'classnames'
 import numeral from 'numeral'
 
-import { toggleListingHoverState } from '../context/actions'
-import useListingsContext from '../hooks/useListingsContext'
+import { toggleListingHoverState } from '../../ExploreTab/context/actions'
+import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
 
 const useStyles = makeStyles(
   () => ({
