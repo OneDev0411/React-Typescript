@@ -8,7 +8,7 @@ import { Link } from 'react-router'
 
 import { isLeaseProperty } from 'utils/listing'
 
-import Listing from '../../Listing'
+import Listing from '../../ListingPage'
 import FavoriteHeart from '../FavoriteHeart'
 import './style.scss'
 
