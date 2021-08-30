@@ -21,11 +21,11 @@ const useStyles = makeStyles(
     container: {
       position: 'absolute',
       bottom: 30,
-      left: -120,
-      width: 300,
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 230,
       backgroundColor: 'white',
       boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
-      fontSize: 14,
       zIndex: theme.zIndex.modal,
       borderRadius: 5,
       overflow: 'hidden'
@@ -35,7 +35,7 @@ const useStyles = makeStyles(
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundColor: '#ccc',
-      height: 150
+      height: 110
     },
     info: {
       padding: '10px 15px',
@@ -43,24 +43,28 @@ const useStyles = makeStyles(
       textAlign: 'left'
     },
     price: {
-      fontSize: theme.typography.h6.fontSize,
+      fontSize: 15,
       marginBottom: theme.spacing(1)
     },
     status: { color: '#fff', fontSize: 12, marginTop: theme.spacing(-1) },
     address: {
+      fontSize: 13,
       color: theme.palette.grey[500],
       display: 'flex',
       alignItems: 'center',
       marginTop: theme.spacing(1)
     },
     addressIcon: {
-      marginRight: theme.spacing(1),
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(0.5),
       marginLeft: theme.spacing(-0.5)
     },
     details: {
-      margin: theme.spacing(2, 0)
+      margin: theme.spacing(1, 0)
     },
     detailItem: {
+      fontSize: 12,
       display: 'flex',
       alignItems: 'center',
       '&:not(:last-child)': {
@@ -70,7 +74,9 @@ const useStyles = makeStyles(
       }
     },
     icon: {
-      marginRight: theme.spacing(1)
+      maxWidth: 14,
+      maxHeight: 14,
+      marginRight: theme.spacing(0.5)
     }
   }),
   { name: 'MarkerPopup' }
