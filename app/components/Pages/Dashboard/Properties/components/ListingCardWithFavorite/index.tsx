@@ -13,6 +13,7 @@ import { selectUserUnsafe } from 'selectors/user'
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {
   isWidget?: boolean
+  onToggleHoverState?: (id: UUID) => void
 }
 
 const ListingCardWithFavorite = ({
@@ -21,6 +22,7 @@ const ListingCardWithFavorite = ({
   tags,
   selected = undefined,
   onToggleSelection = noop,
+  onToggleHoverState,
   onClick
 }: Props) => {
   const dispatch = useDispatch()
@@ -67,6 +69,7 @@ const ListingCardWithFavorite = ({
   return (
     <>
       <ListingCard
+        onToggleHoverState={onToggleHoverState}
         listing={listing}
         selected={user ? selected : undefined}
         liked={user ? isFavorited : undefined}

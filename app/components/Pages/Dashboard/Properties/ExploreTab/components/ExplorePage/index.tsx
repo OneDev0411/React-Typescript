@@ -227,6 +227,7 @@ export function ExplorePage({ user, isWidget }: Props) {
               onMapToggle={toggleMap}
               viewType={viewType}
               onToggleView={onToggleView}
+              isWidget={isWidget}
             />
           </Box>
         </Box>

@@ -15,6 +15,7 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import cn from 'classnames'
 import { noop } from 'lodash'
 import pluralize from 'pluralize'
 
@@ -75,6 +76,22 @@ const useStyles = makeStyles(
     cardContent: {
       padding: theme.spacing(1)
     },
+    cardHighlightRoot: {
+      opacity: 0,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      overflow: 'hidden',
+      position: 'absolute',
+      transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+      borderRadius: 'inherit',
+      pointerEvents: 'none',
+      backgroundColor: 'currentcolor'
+    },
+    cardHighlightActive: {
+      opacity: 0.1
+    },
     listingFeature: {
       ...theme.typography.subtitle3,
       marginRight: theme.spacing(0.5)
@@ -98,7 +115,7 @@ export interface ListingCardProps {
   /**
    * The listing or compact listing object
    */
-  listing: IListing | ICompactListing
+  listing: IListing | ICompactListing | ICompactListingWithUIState
 
   /**
    * Shows the passed items in separate chips at the top right of the listing card
@@ -148,6 +165,11 @@ export interface ListingCardProps {
    * The click handler of listing card
    */
   onClick?: () => void
+
+  /**
+   * The onMouseEnter / onMouseLeave handler of listing card
+   */
+  onToggleHoverState?: (id: UUID) => void
 }
 
 export default function ListingCard({
@@ -156,6 +178,7 @@ export default function ListingCard({
   hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
+  onToggleHoverState,
   liked = undefined,
   onLikeClick = noop,
   onClick
@@ -194,11 +217,23 @@ export default function ListingCard({
     !hideFeatures &&
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
+  const handleToggleHoverState = () => {
+    if (typeof onToggleHoverState === 'function') {
+      onToggleHoverState(listing.id)
+    }
+  }
+
+  const shouldHighlightCard =
+    (listing as ICompactListingWithUIState).hover ||
+    (listing as ICompactListingWithUIState).clicked
+
   return (
     <Card
       data-test="card"
       variant="outlined"
       className={classes.card}
+      onMouseEnter={handleToggleHoverState}
+      onMouseLeave={handleToggleHoverState}
       onClick={onClick}
     >
       <CardActionArea component="div">
@@ -356,6 +391,12 @@ export default function ListingCard({
             )}
           </Grid>
         </CardContent>
+        <span
+          className={cn({
+            [classes.cardHighlightRoot]: true,
+            [classes.cardHighlightActive]: shouldHighlightCard
+          })}
+        />
       </CardActionArea>
     </Card>
   )

@@ -21,6 +21,7 @@ import { PAGE_SIZE } from '../../mapOptions'
 import useListingsContext from '../hooks/useListingsContext'
 
 import { CardsView } from './CardsView'
+import { ViewType } from './ExplorePage'
 import { MapToggler } from './MapToggler'
 import { Sort } from './Sort'
 import { TableView } from './TableView'
@@ -77,12 +78,21 @@ const useStyles = makeStyles(
   { name: 'PropertiesResults' }
 )
 
+interface Props {
+  mapIsShown: boolean
+  onMapToggle: () => void
+  viewType: ViewType
+  onToggleView: (to: ViewType) => void
+  isWidget: boolean
+}
+
 export const Results = ({
   mapIsShown,
   onMapToggle,
   viewType,
-  onToggleView
-}) => {
+  onToggleView,
+  isWidget
+}: Props) => {
   const classes = useStyles()
   const [state] = useListingsContext()
   const [currentPage, setCurrentPage] = useState(1)
@@ -172,7 +182,11 @@ export const Results = ({
           className={classes.scrollableContent}
         >
           {viewType === 'cards' && (
-            <CardsView mapIsShown={mapIsShown} listings={listingsPage} />
+            <CardsView
+              mapIsShown={mapIsShown}
+              listings={listingsPage}
+              isWidget={isWidget}
+            />
           )}
           {viewType === 'table' && (
             <TableView mapIsShown={mapIsShown} listings={listingsPage} />
