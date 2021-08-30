@@ -4,46 +4,29 @@ import { Autocomplete } from '@material-ui/lab'
 import Fuse from 'fuse.js'
 
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 
-import { MarketingSearchInputOption, MarketingSearchInputProps } from './types'
+import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
 
-const HIDDEN_SECTIONS = ['overview', 'designs']
+interface TemplateTypeWithMediumAndCategory extends TemplateTypeWithMedium {
+  category: string
+}
 
 export default function MarketingSearchInput({
-  sections,
-  templateTypeMediums,
+  types,
   onSelect
 }: MarketingSearchInputProps) {
-  const options: MarketingSearchInputOption[] = useMemo(() => {
-    return Object.keys(sections)
-      .filter(sectionName => !HIDDEN_SECTIONS.includes(sectionName))
-      .flatMap(sectionName => {
-        const section = sections[sectionName]
-
-        return section.items.flatMap(sectionItem => {
-          const sectionMediums =
-            sectionItem.value &&
-            typeof sectionItem.value === 'string' &&
-            templateTypeMediums[sectionItem.value]
-              ? templateTypeMediums[sectionItem.value]
-              : null
-
-          if (!sectionMediums) {
-            return []
-          }
-
-          return sectionMediums.map(medium => ({
-            label: `${sectionItem.title} ${getTemplateMediumLabel(medium)}`,
-            url: `${sectionItem.link}/${medium}`,
-            section: section.title.split(':')[0]
-          }))
-        })
-      })
-  }, [sections, templateTypeMediums])
-
+  const typesWithCategory: TemplateTypeWithMediumAndCategory[] = useMemo(
+    () =>
+      types.map(data => ({
+        ...data,
+        category: getTemplateTypeLabel(data.type)
+      })),
+    [types]
+  )
   const handleSelect = (
-    option: Nullable<MarketingSearchInputOption | string>
+    option: Nullable<TemplateTypeWithMediumAndCategory | string>
   ) => {
     if (!option || typeof option === 'string') {
       return
@@ -52,15 +35,21 @@ export default function MarketingSearchInput({
     onSelect(option)
   }
 
+  const getOptionLabel = (option: TemplateTypeWithMediumAndCategory) => {
+    return `${getTemplateTypeLabel(option.type)}${
+      option.medium ? ` ${getTemplateMediumLabel(option.medium)}` : ''
+    }`
+  }
+
   return (
-    <Autocomplete<MarketingSearchInputOption, false, true, true>
+    <Autocomplete<TemplateTypeWithMediumAndCategory, false, true, true>
       freeSolo
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
-      options={options}
+      options={typesWithCategory}
       onChange={(e, option) => handleSelect(option)}
-      getOptionLabel={option => option.label}
-      groupBy={option => option.section}
+      getOptionLabel={getOptionLabel}
+      groupBy={option => option.category}
       noOptionsText="No results"
       filterOptions={(options, state) => {
         if (!state.inputValue) {
@@ -68,11 +57,11 @@ export default function MarketingSearchInput({
         }
 
         return new Fuse(options, {
-          keys: ['label', 'section'],
+          keys: ['type', 'medium', 'category'],
           threshold: 0.3
         })
           .search(state.inputValue)
-          .sort((a, b) => a.section.localeCompare(b.section))
+          .sort((a, b) => a.type.localeCompare(b.type))
       }}
       renderInput={params => (
         <SearchInput
