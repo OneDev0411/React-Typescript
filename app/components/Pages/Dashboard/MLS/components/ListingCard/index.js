@@ -28,12 +28,19 @@ const ListingCard = ({
 
   const openListing = e => {
     e.preventDefault()
-    window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
+
+    if (!isWidget) {
+      window.history.pushState({}, '', `/dashboard/mls/${listing.id}`)
+    }
+
     setIsListingOpen(true)
   }
 
   const closeListing = () => {
-    window.history.pushState({}, '', '/dashboard/mls')
+    if (!isWidget) {
+      window.history.pushState({}, '', '/dashboard/mls')
+    }
+
     setIsListingOpen(false)
   }
 

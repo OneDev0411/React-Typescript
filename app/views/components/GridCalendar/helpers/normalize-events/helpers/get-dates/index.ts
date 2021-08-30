@@ -1,7 +1,12 @@
+import { addZero } from 'utils/date-times'
+
 interface FullCalendarEventDate {
   start: string
   end?: string
+  rrule?: string
 }
+
+const RECURRING_FREQUENCY = 'YEARLY'
 
 /**
  * return the start and end date of an event
@@ -9,13 +14,8 @@ interface FullCalendarEventDate {
  */
 export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
   const { timestamp, end_date, recurring, all_day } = event
-  const current = new Date()
   // Start Date
   const startObject = new Date(Number(timestamp || 0) * 1000)
-
-  if (recurring) {
-    startObject.setUTCFullYear(current.getUTCFullYear())
-  }
 
   // End Date
   const endObject = new Date(Number(end_date || 0) * 1000)
@@ -54,11 +54,25 @@ export const getDates = (event: ICalendarEvent): FullCalendarEventDate => {
     }
   }
 
-  // Check end_date is available
-  const end = end_date ? { end: endObject.toISOString() } : {}
+  const dates: FullCalendarEventDate = { start: startObject.toISOString() }
 
-  return {
-    start: startObject.toISOString(),
-    ...end
+  // Check end_date is available
+  if (end_date) {
+    dates.end = endObject.toISOString()
   }
+
+  // Check event is a recurring event
+  if (recurring) {
+    const DTSTART = `${startObject.getFullYear()}${addZero(
+      startObject.getMonth() + 1
+    )}${addZero(startObject.getDate())}T103000Z`
+
+    /*
+      the reason we're doing this is we're using a plugin for fullcalendar
+      for showing recurring events which accepts this format.
+    */
+    dates.rrule = `DTSTART:${DTSTART}\nRRULE:FREQ=${RECURRING_FREQUENCY};INTERVAL=1;UNTIL=20400601`
+  }
+
+  return dates
 }

@@ -4,9 +4,11 @@ import {
   FormControl,
   FormControlLabel,
   Radio,
-  RadioGroup
+  RadioGroup,
+  createStyles,
+  makeStyles,
+  Theme
 } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core'
 import { Field } from 'react-final-form'
 
 const useStyles = makeStyles((theme: Theme) =>

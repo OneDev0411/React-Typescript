@@ -120,7 +120,7 @@ Are you sure?`,
 
       <PageLayout>
         <PageLayout.Header title="Brand Settings">
-          <Grid container justify="flex-end" spacing={2}>
+          <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
               <Button
                 disabled={isLoading || !defaultSettings}
@@ -164,7 +164,7 @@ Are you sure?`,
               onUpdate={handleUpdateSettings}
               onImageUpload={handleImageUpload}
             >
-              <Grid container item justify="center">
+              <Grid container item justifyContent="center">
                 <Box my={2}>
                   {preferredSideBarView === 'simple' ? (
                     <Button

@@ -47,7 +47,7 @@ const propTypes = {
   addRoleActionRenderer: PropTypes.func,
   onCloseAddRoleDrawer: PropTypes.func,
   onTriggerRequiredEmail: PropTypes.func,
-  onSelect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func,
   onUpsertRole: PropTypes.func,
   onCreateRole: PropTypes.func
 }
@@ -115,6 +115,7 @@ class Roles extends React.Component {
 
     const role = {
       user: user.id,
+      brand: user.brand_id,
       email: user.email,
       legal_last_name: user.last_name,
       legal_first_name: user.first_name,

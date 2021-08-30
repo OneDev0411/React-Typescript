@@ -1,5 +1,5 @@
 // TODO: should be removed and use standard DateTimeField component
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   Box,
@@ -21,6 +21,7 @@ import { Divider } from 'components/Divider'
 import TimeInput from 'components/TimeInput'
 
 interface Props {
+  startDate?: Date
   selectedDate: Date
   showTimePicker?: boolean
   datePickerModifiers?: Partial<Modifiers>
@@ -28,6 +29,7 @@ interface Props {
 }
 
 export function EndDateTimeField({
+  startDate,
   selectedDate,
   showTimePicker = true,
   datePickerModifiers,
@@ -50,6 +52,10 @@ export function EndDateTimeField({
 
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    setEndDate(selectedDate)
+  }, [selectedDate])
 
   return (
     <Field
@@ -91,6 +97,9 @@ export function EndDateTimeField({
                       <DayPicker
                         initialMonth={endDate}
                         selectedDays={endDate}
+                        disabledDays={{
+                          before: startDate || endDate
+                        }}
                         onDayClick={date => {
                           date.setHours(
                             endDate.getHours(),

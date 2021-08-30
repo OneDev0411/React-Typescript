@@ -22,7 +22,8 @@ import {
 
 interface Props {
   deal: IDeal
-  field: IDealBrandContext
+  brandContext: IDealBrandContext
+  dealContext: Nullable<IDealContext>
   value: unknown
   isBackOffice: boolean
   isDisabled: boolean
@@ -44,7 +45,8 @@ const useStyles = makeStyles(() =>
 
 export function TextField({
   deal,
-  field,
+  brandContext,
+  dealContext,
   value,
   isBackOffice,
   isDisabled,
@@ -58,7 +60,7 @@ export function TextField({
   const [fieldValue, setFieldValue] = useState<unknown>(value)
   const classes = useStyles()
 
-  const properties = getContextProperties(field.key)
+  const properties = getContextProperties(brandContext.key)
 
   const toggleEditing = () => {
     if (isDisabled) {
@@ -76,7 +78,7 @@ export function TextField({
   const handleSave = async (): Promise<void> => {
     setIsSaving(true)
 
-    await onChange(field, fieldValue)
+    await onChange(brandContext, fieldValue)
 
     setIsSaving(false)
     setIsEditing(false)
@@ -85,7 +87,7 @@ export function TextField({
   const handleDelete = async (): Promise<void> => {
     setIsSaving(true)
 
-    await onDelete(field)
+    await onDelete(brandContext)
 
     setIsSaving(false)
     setFieldValue(null)
@@ -110,12 +112,12 @@ export function TextField({
         >
           <Container>
             <Input
-              data-type={field.format || field.data_type}
+              data-type={brandContext.format || brandContext.data_type}
               autoFocus
               maxLength={40}
               value={fieldValue}
-              mask={getContextInputMask(field)}
-              placeholder={properties.placeholder || field.label}
+              mask={getContextInputMask(brandContext)}
+              placeholder={properties.placeholder || brandContext.label}
               onKeyPress={handleKeyPress}
               onChange={(
                 e: React.FormEvent<HTMLInputElement>,
@@ -149,23 +151,24 @@ export function TextField({
     <>
       <Tooltip title={tooltip}>
         <Item disableHover={isDisabled}>
-          <ItemLabel onClick={toggleEditing}>{field.label}</ItemLabel>
-          <ItemValue>{getFormattedValue(field, value)}</ItemValue>
+          <ItemLabel onClick={toggleEditing}>{brandContext.label}</ItemLabel>
+          <ItemValue>{getFormattedValue(brandContext, value)}</ItemValue>
 
           {!isDisabled && (
             <ItemActions>
               <EditButton onClick={toggleEditing} />
               <DeleteButton
                 deal={deal}
-                field={field}
+                brandContext={brandContext}
                 value={value}
                 onClick={handleDelete}
               />
               <ApproveButton
                 deal={deal}
-                context={field}
+                brandContext={brandContext}
+                dealContext={dealContext}
                 isBackOffice={isBackOffice}
-                onClick={() => onApprove(field)}
+                onClick={() => onApprove(brandContext)}
               />
             </ItemActions>
           )}

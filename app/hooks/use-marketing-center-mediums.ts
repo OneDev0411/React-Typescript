@@ -14,7 +14,7 @@ function getFormattedUniqueMediums(
     .reverse()
 }
 
-type TemplateTypeToMediumsMap = {
+export type TemplateTypeToMediumsMap = {
   [key: string]: IMarketingTemplateMedium[]
 }
 

@@ -9,19 +9,15 @@ import { browserHistory } from 'react-router'
 import { getUserTeams } from 'actions/user/teams'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { putUserSetting } from 'models/user/put-user-setting'
+import { normalizeListingLocation } from 'utils/map'
 
 import { selectListings } from '../../../../../reducers/listings'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
-import { normalizeListingLocation } from '../../../../../utils/map'
-import GridView from '../components/GridView'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
 import Tabs from '../components/Tabs'
-import {
-  formatListing,
-  addDistanceFromCenterToListing
-} from '../helpers/format-listing'
+import { formatListing } from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -72,22 +68,15 @@ class Favorites extends React.Component {
     })
   }
 
-  formatAndAddDistance = (listing, center, user) =>
-    addDistanceFromCenterToListing(
-      formatListing(normalizeListingLocation(listing), user),
-      center
-    )
-
   sortListings = memoize((listings, index, ascending) => {
     const formattedListings = listings.data.map(listing =>
-      this.formatAndAddDistance(listing, this.props.mapCenter, this.props.user)
+      formatListing(normalizeListingLocation(listing), this.props.user)
     )
 
     return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
   })
 
-  onChangeSort = async e => {
-    let sort = e.currentTarget.dataset.sort
+  onChangeSort = async sort => {
     const { index, ascending } = parsSortIndex(sort)
 
     this.setState({
@@ -117,15 +106,6 @@ class Favorites extends React.Component {
             tabName="favorites"
             sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
-          />
-        )
-
-      case 'grid':
-        return (
-          <GridView
-            isFetching={isFetching}
-            sortedListings={sortedListings}
-            user={user}
           />
         )
 

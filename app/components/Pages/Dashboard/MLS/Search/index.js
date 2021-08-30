@@ -38,15 +38,11 @@ import {
   normalizeListingLocation
 } from 'utils/map'
 
-import GridView from '../components/GridView'
 import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import CreateAlertModal from '../components/modals/CreateAlertModal'
 import Tabs from '../components/Tabs'
-import {
-  addDistanceFromCenterToListing,
-  formatListing
-} from '../helpers/format-listing'
+import { formatListing } from '../helpers/format-listing'
 import {
   parsSortIndex,
   getDefaultSort,
@@ -137,7 +133,7 @@ class Search extends React.Component {
     if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
       this.initialize()
     } else {
-      loadMapLibraries(googleMapAPIParams, 'loadJS-mls-search-map')
+      loadMapLibraries(googleMapAPIParams)
     }
   }
 
@@ -392,14 +388,7 @@ class Search extends React.Component {
     }
   ]
 
-  formatAndAddDistance = (listing, center, user) =>
-    addDistanceFromCenterToListing(
-      formatListing(normalizeListingLocation(listing), user),
-      center
-    )
-
-  onChangeSort = async e => {
-    let sort = e.currentTarget.dataset.sort
+  onChangeSort = async sort => {
     const { index, ascending } = parsSortIndex(sort)
 
     this.setState({
@@ -415,11 +404,7 @@ class Search extends React.Component {
   sortListings = memoize(
     (listings, index, ascending) => {
       const formattedListings = listings.data.map(listing =>
-        this.formatAndAddDistance(
-          listing,
-          this.props.mapCenter,
-          this.props.user
-        )
+        formatListing(normalizeListingLocation(listing), this.props.user)
       )
 
       return formattedListings.sort((a, b) =>
@@ -473,9 +458,6 @@ class Search extends React.Component {
             }
           />
         )
-
-      case 'grid':
-        return <GridView {..._props} />
 
       default:
         return (

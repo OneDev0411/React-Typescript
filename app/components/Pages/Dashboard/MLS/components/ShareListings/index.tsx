@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Slide, Box, Button, Theme, makeStyles, fade } from '@material-ui/core'
+import { Slide, Box, Button, Theme, makeStyles, alpha } from '@material-ui/core'
 import { mdiClose, mdiShoePrint, mdiEmailOutline } from '@mdi/js'
 
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
@@ -26,7 +26,7 @@ const useStyles = makeStyles(
       padding: theme.spacing(0, 2),
       background: theme.palette.tertiary.main,
       borderRadius: `${theme.spacing(2)}px`,
-      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${fade(
+      boxShadow: `0 ${theme.spacing(0.5)}px ${theme.spacing(2)}px ${alpha(
         theme.palette.common.black,
         0.4
       )}`
@@ -133,7 +133,6 @@ export function ShareListings() {
           isOpen
           withMlsDisclaimer
           title="Manage Listings"
-          allowSkip={false}
           multipleSelection
           // @ts-ignore
           defaultSelectedItems={getDefaultSelectedItems()}

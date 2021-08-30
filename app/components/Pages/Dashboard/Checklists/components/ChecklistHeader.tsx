@@ -163,6 +163,7 @@ export function ChecklistHeader({
       {formPickerOpen && (
         <SearchDrawer
           title="Select a form"
+          notFoundMessage="No form was found"
           searchFunction={q => formSearchFuse.search(q)}
           onSelectItems={async (items: Record<UUID, IDealForm>) => {
             setFormPickerOpen(false)

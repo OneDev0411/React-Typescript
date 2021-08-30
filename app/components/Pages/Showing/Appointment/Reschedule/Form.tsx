@@ -65,7 +65,7 @@ export default function ShowingAppointmentRescheduleForm({
     defaultValue: defaultSelectedDate
   })
 
-  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+  const { availableRanges, defaultSelectedTimeRange, unavailableTimes } =
     useBookTimeRange(appointment.showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
@@ -150,8 +150,7 @@ export default function ShowingAppointmentRescheduleForm({
           render={({ onChange, value }) => {
             return (
               <TimeSlotPicker
-                start={startTime}
-                end={endTime}
+                availableRanges={availableRanges}
                 duration={appointment.showing.duration}
                 active={value}
                 unavailableTimes={unavailableTimes}
@@ -177,7 +176,6 @@ export default function ShowingAppointmentRescheduleForm({
                 multiline
                 fullWidth
                 rows={4}
-                placeholder="You can write some message or explanation here if you want to"
                 variant="outlined"
                 label="Message"
               />

@@ -29,8 +29,10 @@ export class DirectionMap extends React.Component {
     window[id] = this.initMap
 
     if (!window.google) {
+      // TODO: use loadMapLibraries form `app/utils/google-map-api/index.ts` to load google map libraries
       loadJS(
-        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=${id}`
+        `https://maps.googleapis.com/maps/api/js?key=${config.google.api_key}&callback=${id}`,
+        'google-map-script'
       )
     } else {
       this.initMap()

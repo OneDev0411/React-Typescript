@@ -33,6 +33,7 @@ export function Envelope({ deal, task, envelope }: Props) {
               <Box display="flex" alignItems="center" className={classes.title}>
                 <Link
                   className={classes.link}
+                  // eslint-disable-next-line max-len
                   to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
                 >
                   {envelope.title}

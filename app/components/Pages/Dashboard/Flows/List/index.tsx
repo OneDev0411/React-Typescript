@@ -1,7 +1,14 @@
 import React, { useContext, useState } from 'react'
 
-import { Typography, Theme, IconButton, MenuItem } from '@material-ui/core'
-import { Box, makeStyles, useTheme } from '@material-ui/core'
+import {
+  Typography,
+  Theme,
+  IconButton,
+  MenuItem,
+  Box,
+  makeStyles,
+  useTheme
+} from '@material-ui/core'
 import { mdiDotsHorizontal } from '@mdi/js'
 import { Helmet } from 'react-helmet'
 import { connect, useDispatch } from 'react-redux'
@@ -161,7 +168,7 @@ function List(props: Props & WithRouterProps) {
             PopperProps={{
               placement: 'bottom-end'
             }}
-            renderDropdownButton={buttonProps => (
+            renderDropdownButton={({ isActive, ...buttonProps }) => (
               <IconButton
                 {...buttonProps}
                 style={{
@@ -248,6 +255,7 @@ function List(props: Props & WithRouterProps) {
 
             <CtaBar
               label="Create new flow"
+              // eslint-disable-next-line max-len
               description="Create a custom flow for your specific needs – We’ll take care of the rest!"
               onClick={() => setIsModalOpen(true)}
             />

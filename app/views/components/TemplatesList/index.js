@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { addNotification as notify } from 'components/notification'
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
 import MarketingTemplateCard from '../MarketingTemplateCard'
@@ -17,19 +16,12 @@ import { TemplatesListContainer } from './styled'
 import TemplateAction from './TemplateAction'
 import TemplateCardActions from './TemplateCardActions'
 
-const PAGE_SIZE = 12
-
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
-
-  const currentPageItems = useInfinitePagination({
-    items: props.items,
-    pageSize: PAGE_SIZE
-  })
 
   useEffect(() => {
     if (!props.defaultSelected || !props.items || props.items.length === 0) {
@@ -116,7 +108,7 @@ function TemplatesList(props) {
             568: 1
           }}
         >
-          {currentPageItems.map(template => (
+          {props.items.map(template => (
             <MarketingTemplateCard
               key={template.id}
               template={template}

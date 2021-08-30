@@ -13,6 +13,7 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import { setUserSetting } from 'actions/user/set-setting'
 import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -29,7 +30,6 @@ import { getContactsCount as getParkedContactsCount } from 'models/contacts/get-
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { CRM_LIST_DEFAULT_ASSOCIATIONS } from 'models/contacts/helpers/default-query'
 import { updateTagTouchReminder } from 'models/contacts/update-tag-touch-reminder'
-import { putUserSetting } from 'models/user/put-user-setting'
 import {
   selectContacts,
   selectContactsInfo,
@@ -94,11 +94,14 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    const { parkedContactsCount } = this.state
+    const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    this.order =
-      getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) || '-last_touch'
+    this.order = searchInputValue
+      ? '-last_touch_rank'
+      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
+        '-last_touch'
+
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
 
@@ -430,7 +433,16 @@ class ContactsList extends React.Component {
   handleSearch = value => {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
-      this.handleFilterChange({ parked: undefined }, true)
+
+      const relevanceValue = '-last_touch_rank'
+
+      if (value) {
+        this.order = relevanceValue
+      } else if (this.order === relevanceValue) {
+        this.order = '-updated_at'
+      }
+
+      this.handleFilterChange({ parked: undefined }, true, this.order)
     })
   }
 
@@ -748,13 +760,13 @@ class ContactsList extends React.Component {
       viewMode
     })
 
-    putUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+    this.props.setUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
 
     this.reloadContacts()
   }
 
   renderTabs = (props = {}) => {
-    const { selectedShortcutFilter } = this.state
+    const { selectedShortcutFilter, searchInputValue } = this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -784,7 +796,8 @@ class ContactsList extends React.Component {
         }}
         sortProps={{
           onChange: this.handleChangeOrder,
-          currentOrder: this.order
+          currentOrder: this.order,
+          searchValue: searchInputValue
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
@@ -866,9 +879,7 @@ class ContactsList extends React.Component {
               )}
             </Box>
           )}
-          <Box ml={1.5}>
-            <ViewAs />
-          </Box>
+          <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
           {...(this.state.viewMode === 'board' && {
@@ -923,7 +934,17 @@ class ContactsList extends React.Component {
                 })}
               >
                 <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board contacts={contacts} isLoading={isFetchingContacts} />
+                  <Board
+                    contacts={contacts}
+                    totalContacts={props.listInfo.total || 0}
+                    isFetchingContacts={isFetchingContacts}
+                    isFetchingNextContacts={state.isFetchingMoreContacts}
+                    isFetchingPreviousContacts={
+                      state.isFetchingMoreContactsBefore
+                    }
+                    onColumnReachStart={this.handleLoadMoreBefore}
+                    onColumnReachEnd={this.handleLoadMore}
+                  />
                 </ViewMode>
 
                 <ViewMode enabled={this.state.viewMode === 'table'}>
@@ -1026,6 +1047,7 @@ export default withRouter(
     getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
+    setUserSetting,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )

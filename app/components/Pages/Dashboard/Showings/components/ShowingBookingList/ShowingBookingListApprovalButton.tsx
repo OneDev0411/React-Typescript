@@ -18,7 +18,8 @@ import useShowingHasAppointmentApproved from './use-showing-has-appointment-appr
 const useStyles = makeStyles(
   theme => ({
     red: { color: theme.palette.error.main },
-    green: { color: theme.palette.primary.main }
+    green: { color: theme.palette.primary.main },
+    wrapper: { display: 'inline-block' }
   }),
   { name: 'ShowingBookingListApprovalButton' }
 )
@@ -71,7 +72,7 @@ function ShowingBookingListApprovalButton({
   return (
     <>
       <Tooltip title={message} open={!hasApprovalAccess ? undefined : false}>
-        <span>
+        <span className={classes.wrapper}>
           <Button
             {...otherProps}
             className={classNames(color && classes[color], className)}

@@ -14,8 +14,7 @@ import { Tasks } from './ChecklistTasks'
 import { CreateTaskForm } from './CreateTask/Form'
 import { CreateTaskItem } from './CreateTask/NewItem'
 import { SearchInput } from './SearchInput'
-import { ChecklistTitle } from './styled'
-import { DropDownContainer, DropDownMenu } from './styled'
+import { ChecklistTitle, DropDownContainer, DropDownMenu } from './styled'
 
 class DropDownTasks extends React.Component {
   state = {

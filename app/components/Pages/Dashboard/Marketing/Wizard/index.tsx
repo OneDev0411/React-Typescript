@@ -34,7 +34,7 @@ import {
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { useWebShareApi } from 'hooks/use-web-share-api'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { selectUser } from 'selectors/user'
 import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
@@ -91,7 +91,7 @@ function MarketingWizard(props: WithRouterProps) {
     const listingId = props.location.query[LISTING_ID_QUERY_KEY]
 
     if (isDesktop && listingId) {
-      props.router.replace(`/dashboard/mls/${listingId}/marketing`)
+      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
     }
   }, [props.location.query, props.router])
 
@@ -217,7 +217,7 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handleUploadAsset = (file: File) => {
-    return uploadAsset(file, currentTabTemplates[0].template.id)
+    return uploadAsset(currentTabTemplates[0].template.id, file)
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {
@@ -261,7 +261,7 @@ function MarketingWizard(props: WithRouterProps) {
   if (isLoadingTemplates || isLoadingListing) {
     return (
       <Grid container alignItems="center" className={classes.loadingContainer}>
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <CircularProgress />
         </Grid>
       </Grid>
@@ -345,7 +345,7 @@ function MarketingWizard(props: WithRouterProps) {
                 key={template.id}
                 container
                 item
-                justify="center"
+                justifyContent="center"
                 xs={6}
                 lg={3}
               >

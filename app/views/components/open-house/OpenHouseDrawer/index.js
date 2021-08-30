@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Box, Button, IconButton, Tooltip } from '@material-ui/core'
-import { mdiTrashCanOutline } from '@mdi/js'
 import {
+  mdiTrashCanOutline,
   mdiNoteTextOutline,
   mdiAccountPlusOutline,
   mdiClockTimeFourOutline
@@ -34,14 +34,18 @@ import { Description } from '../../EventDrawer/components/Description'
 import { EventField } from '../../EventDrawer/components/EventField'
 import Reminder from '../../EventDrawer/components/Reminder/Reminder'
 import { Title } from '../../EventDrawer/components/Title'
-import { FormContainer, FieldContainer } from '../../EventDrawer/styled'
-import { AssociationContainer } from '../../EventDrawer/styled'
+import {
+  FormContainer,
+  FieldContainer,
+  AssociationContainer
+} from '../../EventDrawer/styled'
 import {
   AssigneesField,
   DateTimeField,
-  FieldError
+  FieldError,
+  AssociationsList,
+  EndTimeField
 } from '../../final-form-fields'
-import { AssociationsList, EndTimeField } from '../../final-form-fields'
 import Drawer from '../../OverlayDrawer'
 import { ItemChangelog } from '../../TeamContact/ItemChangelog'
 
@@ -394,6 +398,7 @@ class OpenHouseDrawerInternal extends React.Component {
     this.props.dispatch(
       confirmation({
         message:
+          // eslint-disable-next-line max-len
           'Would you also like to notify your office so they book this on the MLS for you?',
         confirmLabel: 'Notify',
         onConfirm: () => {
@@ -478,6 +483,7 @@ class OpenHouseDrawerInternal extends React.Component {
                         <Title fullWidth placeholder="Untitled Open House" />
                         <Box mt={1}>
                           {shouldShowDescription || values?.description ? (
+                            // eslint-disable-next-line max-len
                             <Description placeholder="Enter any general notes for your clients" />
                           ) : (
                             <Button

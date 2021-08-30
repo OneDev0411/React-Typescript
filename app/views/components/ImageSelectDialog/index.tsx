@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react'
+import { useState, useContext } from 'react'
 
 import {
   IconButton,
@@ -57,9 +57,10 @@ export default function ImageSelectDialog({
   dialogProps
 }: ImageSelectDialogProps) {
   const classes = useStyles()
-  const dialogContentRef = useRef<HTMLDivElement>(null)
   const confirmation = useContext(ConfirmationModalContext)
-  const [selectedTab, setSelectedTab] = useState<TabValue>('upload-photo')
+  const [selectedTab, setSelectedTab] = useState<TabValue>(
+    onUpload ? 'upload-photo' : 'team-library'
+  )
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
   const [imageFileToEdit, setImageFileToEdit] =
@@ -120,7 +121,7 @@ export default function ImageSelectDialog({
       }}
     >
       <DialogTitle disableTypography>
-        <Grid container direction="row" justify="space-between">
+        <Grid container direction="row" justifyContent="space-between">
           <Grid item>
             <Tabs
               value={selectedTab}
@@ -156,7 +157,7 @@ export default function ImageSelectDialog({
           </Grid>
         </Grid>
       </DialogTitle>
-      <DialogContent className={classes.dialogContent} ref={dialogContentRef}>
+      <DialogContent className={classes.dialogContent}>
         <Grid container>
           {selectedTab === 'upload-photo' && (
             <Upload onSelectFile={handleEdit} />
@@ -167,7 +168,6 @@ export default function ImageSelectDialog({
               onSelect={onSelect}
               query={debouncedSearchQuery}
               setQuery={setSearchQuery}
-              containerRef={dialogContentRef}
             />
           )}
           {selectedTab === 'photo-library' && (

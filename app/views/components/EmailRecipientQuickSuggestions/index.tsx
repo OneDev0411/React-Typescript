@@ -1,28 +1,38 @@
-import React, { useState, useMemo, useContext } from 'react'
+import React, { useContext } from 'react'
 
-import { Box, List, ListItem, ListItemText } from '@material-ui/core'
-import { useSelector, useDispatch } from 'react-redux'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { Typography, Theme, makeStyles } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
-import { BaseDropdown } from 'components/BaseDropdown'
 import { QuickSuggestion } from 'components/EmailRecipientsChipsInput/types'
-import { addNotification } from 'components/notification'
-import { getBrands } from 'models/BrandConsole/Brands'
 import { getContactsCount } from 'models/contacts/get-contacts-count'
-import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectDealRoles } from 'reducers/deals/roles'
-import { selectUser } from 'selectors/user'
-import { getRootBrand } from 'utils/user-teams'
 
 import ConfirmationModalContext from '../ConfirmationModal/context'
 
+import { BrandSelector } from './components/BrandSelector'
 import RecipientQuickSuggestions from './components/RecipientQuickSuggestions'
 import { areRecipientsEqual } from './helpers/are-recipients-equal'
 import { dealRoleToSuggestion } from './helpers/deal-role-to-suggestion'
-import extractMoreQuickSuggestions, {
-  MoreQuickSuggestion
-} from './helpers/extract-more-quick-suggestions'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      padding: theme.spacing(0.5, 0, 1),
+      flexGrow: 0,
+      flexShrink: 0,
+      flexBasis: '100%',
+      lineHeight: 1.5
+    },
+    item: {
+      display: 'inline-block',
+      '&:not(:last-child)': {
+        marginRight: theme.spacing(1)
+      }
+    }
+  }),
+  { name: 'EmailRecipientQuickSuggestions' }
+)
 
 interface Props {
   deal?: IDeal
@@ -48,7 +58,7 @@ export function EmailRecipientQuickSuggestions({
   currentRecipients = [],
   onSelect
 }: Props) {
-  const user = useSelector(selectUser)
+  const classes = useStyles()
   const { dealRoles, contactsInfo } = useSelector<
     IAppState,
     { dealRoles: IDealRole[]; contactsInfo: any }
@@ -58,13 +68,6 @@ export function EmailRecipientQuickSuggestions({
   }))
 
   const confirmationModal = useContext(ConfirmationModalContext)
-
-  const [brandTreeStatus, setBrandTreeStatus] = useState<
-    'empty' | 'fetching' | 'error' | 'fetched'
-  >('empty')
-  const [brandTree, setBrandTree] = useState<IBrand | null>(null)
-
-  const dispatch = useDispatch()
 
   const quickSuggestions: QuickSuggestion[] = [
     ...dealRoles.filter(({ email }) => !!email).map(dealRoleToSuggestion),
@@ -80,45 +83,6 @@ export function EmailRecipientQuickSuggestions({
       !currentRecipients.find(areRecipientsEqual(suggestion.recipient))
   )
   const showQuickSuggestions = unusedQuickSuggestions.length > 0
-  const visibleMoreQuickSuggestions = useMemo<MoreQuickSuggestion[] | null>(
-    () =>
-      brandTreeStatus === 'fetched'
-        ? extractMoreQuickSuggestions(brandTree!, currentRecipients).filter(
-            ({ visible }) => visible
-          )
-        : null,
-    [brandTreeStatus, brandTree, currentRecipients]
-  )
-  const showMoreQuickSuggestions =
-    brandTreeStatus === 'fetching' ||
-    brandTreeStatus === 'error' ||
-    (visibleMoreQuickSuggestions && visibleMoreQuickSuggestions.length > 0)
-
-  const fetchBrandTree = async () => {
-    const rootBrand = getRootBrand(user)
-
-    if (!rootBrand) {
-      return
-    }
-
-    setBrandTreeStatus('fetching')
-
-    try {
-      const { data: brandTree } = await getBrands(rootBrand.id, true)
-
-      setBrandTree(brandTree)
-      setBrandTreeStatus('fetched')
-    } catch (reason) {
-      console.error(reason)
-      dispatch(
-        addNotification({
-          status: 'error',
-          message: 'Something went wrong when fetching offices information.'
-        })
-      )
-      setBrandTreeStatus('error')
-    }
-  }
 
   const handleSelectSuggestion = async (recipient, sendType) => {
     const isSendingToAllContacts = recipient?.recipient_type === 'AllContacts'
@@ -136,6 +100,7 @@ export function EmailRecipientQuickSuggestions({
       if (allContactsCount > 1) {
         return confirmationModal.setConfirmationModal({
           message: 'Send to all your contacts?',
+          // eslint-disable-next-line max-len
           description: `You are about to send this email to ${allContactsCount} of your contacts. Are you sure?`,
           cancelLabel: 'No',
           confirmLabel: `Yes, add all my ${allContactsCount} contacts as recipients`,
@@ -149,105 +114,27 @@ export function EmailRecipientQuickSuggestions({
     onSelect(recipient, sendType)
   }
 
-  useEffectOnce(() => {
-    fetchBrandTree()
-  })
-
-  if (!showQuickSuggestions && !showMoreQuickSuggestions) {
-    return null
-  }
-
   return (
-    <Box
-      pb={1}
-      pt={0.5}
-      flexGrow={0}
-      flexShrink={0}
-      flexBasis="100%"
-      lineHeight={1.5}
-    >
-      <Box display="inline-block" color="text.secondary" mr={1}>
+    <div className={classes.container}>
+      <Typography color="textSecondary" className={classes.item}>
         Suggestions
-      </Box>
+      </Typography>
 
-      <RecipientQuickSuggestions
-        quickSuggestions={unusedQuickSuggestions}
-        onSelect={({ recipient, sendType }) =>
-          handleSelectSuggestion(recipient, sendType)
-        }
-      />
-
-      {showQuickSuggestions && showMoreQuickSuggestions && ','}
-
-      {showMoreQuickSuggestions && (
-        <BaseDropdown
-          buttonLabel="More"
-          PopperProps={{ keepMounted: true }}
-          renderMenu={({ close }) => {
-            if (brandTreeStatus === 'error') {
-              return (
-                <List>
-                  <ListItem button>
-                    <Box width="8em">
-                      <ListItemText
-                        primary="No Offices"
-                        secondary="Click to retry"
-                        secondaryTypographyProps={{ color: 'primary' }}
-                        onClick={() => fetchBrandTree()}
-                      />
-                    </Box>
-                  </ListItem>
-                </List>
-              )
+      {showQuickSuggestions && (
+        <div className={classes.item}>
+          <RecipientQuickSuggestions
+            quickSuggestions={unusedQuickSuggestions}
+            onSelect={({ recipient, sendType }) =>
+              handleSelectSuggestion(recipient, sendType)
             }
-
-            if (
-              brandTreeStatus === 'fetching' ||
-              !visibleMoreQuickSuggestions
-            ) {
-              return (
-                <List>
-                  <ListItem disabled>
-                    <Box width="8em">
-                      <Loading />
-                    </Box>
-                  </ListItem>
-                </List>
-              )
-            }
-
-            return (
-              <List>
-                {visibleMoreQuickSuggestions.map(
-                  (
-                    { quickSuggestion: { recipient, text, sendType }, enabled },
-                    index
-                  ) => (
-                    <ListItem
-                      key={index}
-                      button
-                      disabled={!enabled}
-                      onClick={() => {
-                        onSelect(recipient, sendType)
-                        close()
-                      }}
-                    >
-                      <ListItemText
-                        primary={
-                          text ||
-                          (
-                            recipient as IDenormalizedEmailRecipientBrandInput
-                          ).brand.name.trim()
-                        }
-                      />
-                    </ListItem>
-                  )
-                )}
-              </List>
-            )
-          }}
-        />
+          />
+        </div>
       )}
-    </Box>
+
+      <BrandSelector
+        onSelect={handleSelectSuggestion}
+        currentRecipients={currentRecipients}
+      />
+    </div>
   )
 }

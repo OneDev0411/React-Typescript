@@ -12,6 +12,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { EditorDialog } from 'components/ImageEditor'
 import ImageSelectDialog from 'components/ImageSelectDialog'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import MapDrawer from 'components/MapDrawer'
 import MatterportDrawer from 'components/MatterportDrawer'
 import NeighborhoodsReportDrawer from 'components/NeighborhoodsReportDrawer'
@@ -21,7 +22,7 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import VideoDrawer from 'components/VideoDrawer'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
@@ -1024,18 +1025,6 @@ class Builder extends React.Component {
     return this.props.bareMode === true
   }
 
-  get shouldShowEditListingsButton() {
-    if (this.isBareMode) {
-      return false
-    }
-
-    return (
-      this.state.originalTemplate &&
-      this.props.templateTypes.includes('Listings') &&
-      this.props.templateData.listings
-    )
-  }
-
   get isEmailMedium() {
     if (this.selectedTemplate) {
       return this.selectedTemplate.medium === 'Email'
@@ -1172,7 +1161,7 @@ class Builder extends React.Component {
 
   uploadFile = async file => {
     const templateId = this.selectedTemplate.id
-    const uploadedAsset = await uploadAsset(file, templateId)
+    const uploadedAsset = await uploadAsset(templateId, file)
 
     return uploadedAsset.file.url
   }
@@ -1212,8 +1201,18 @@ class Builder extends React.Component {
         >
           {this.state.isListingDrawerOpen && (
             <SearchListingDrawer
-              mockListings
+              allowHipPocket
+              onHipPocketImageUpload={
+                this.selectedTemplate
+                  ? getHipPocketTemplateImagesUploader(this.selectedTemplate.id)
+                  : undefined
+              }
               multipleSelection
+              renderAction={props => (
+                <Button {...props.buttonProps}>
+                  Next ({props.selectedItemsCount} Listings Selected)
+                </Button>
+              )}
               withMlsDisclaimer
               isOpen
               title="Select Listing"
@@ -1288,7 +1287,7 @@ class Builder extends React.Component {
               }}
               onSave={async file => {
                 const templateId = this.selectedTemplate.id
-                const uploadedAsset = await uploadAsset(file, templateId)
+                const uploadedAsset = await uploadAsset(templateId, file)
 
                 this.editor.runCommand('set-image', {
                   value: uploadedAsset.file.url
@@ -1437,18 +1436,6 @@ class Builder extends React.Component {
                 />
               )}
 
-              {this.shouldShowEditListingsButton && !this.props.isEdit && (
-                <Button
-                  style={{ marginLeft: '0.5rem' }}
-                  variant="outlined"
-                  color="secondary"
-                  onClick={this.props.onShowEditListings}
-                  disabled={this.props.actionButtonsDisabled}
-                >
-                  Edit Listings ({this.props.templateData.listings.length})
-                </Button>
-              )}
-
               {(this.shouldShowPrintableActions ||
                 this.shouldShowSocialShareActions) && (
                 <Button
@@ -1524,7 +1511,6 @@ Builder.propTypes = {
   mediums: PropTypes.string,
   assets: PropTypes.arrayOf(PropTypes.object),
   defaultTemplate: PropTypes.object,
-  onShowEditListings: PropTypes.func,
   containerStyle: PropTypes.object,
   isTemplatesColumnHiddenDefault: PropTypes.bool,
   bareMode: PropTypes.bool,

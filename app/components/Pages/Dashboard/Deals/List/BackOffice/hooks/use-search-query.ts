@@ -2,8 +2,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
 import { selectUser } from '@app/selectors/user'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { searchDeals, getDeals } from 'actions/deals'
 
+import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 import { getClosingsFilterQuery } from '../../helpers/closings'
 import type { SearchQuery } from '../types'
 import { getStaticFilterQuery } from '../utils/get-static-filter-query'
@@ -34,18 +36,12 @@ export function useSearchQuery(
 
     if (type === 'query' && filter === 'closings') {
       dispatch(searchDeals(user, getClosingsFilterQuery(searchQuery.term)))
-
-      return
-    }
-
-    if (searchQuery.type === 'query') {
+    } else if (searchQuery.type === 'query') {
       dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
-
-      return
-    }
-
-    if (type === 'inbox') {
+    } else if (type === 'inbox') {
       dispatch(term ? searchDeals(user, term) : getDeals(user))
     }
-  }, [listKey, searchQuery.term, statuses, user])
+
+    dispatch(setUserSetting(DEAL_GRID_FILTER_SETTING_KEY, searchQuery))
+  }, [listKey, searchQuery.term, statuses])
 }

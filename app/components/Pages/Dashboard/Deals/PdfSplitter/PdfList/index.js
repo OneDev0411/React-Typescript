@@ -62,14 +62,15 @@ class PdfList extends React.Component {
 
     this.props.files.forEach(async file => {
       try {
-        const doc = await PDFJS.getDocument(file.url)
+        const doc = await PDFJS.getDocument(file.url).promise
 
         await this.props.onDocumentLoad(file.id, doc)
       } catch (e) {
         const message =
           e.name === 'PasswordException'
             ? `Sorry "${file.name}" is password protected.`
-            : `Sorry we can't open "${file.name}". it's damaged or not readable. ${e.message}`
+            : // eslint-disable-next-line max-len
+              `Sorry we can't open "${file.name}". it's damaged or not readable. ${e.message}`
 
         this.props.notify({
           title: 'Cannot open pdf file',

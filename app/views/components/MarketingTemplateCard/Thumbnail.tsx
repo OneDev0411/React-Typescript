@@ -1,7 +1,7 @@
-import { useState, ComponentProps } from 'react'
+import { useState, useEffect, ComponentProps } from 'react'
 
 import { makeStyles } from '@material-ui/core'
-import { useDeepCompareEffect } from 'react-use'
+import { useInView } from 'react-intersection-observer'
 
 import { PdfThumbnail } from 'components/PdfThumbnail'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
@@ -40,11 +40,13 @@ export function Thumbnail({
   useStaticImage,
   onClick
 }: Props) {
+  const { ref, inView } = useInView({ delay: 100 })
+  const [isAlreadyLoaded, setIsAlreadyLoaded] = useState<boolean>(false)
   const classes = useStyles()
   const brand = getActiveBrand(user)
   const [listing, setListing] = useState<Optional<IListing>>(undefined)
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchListingIfNeeded() {
       if (receivedListing) {
         setListing(receivedListing)
@@ -60,11 +62,27 @@ export function Thumbnail({
     fetchListingIfNeeded()
   }, [receivedListing])
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!isAlreadyLoaded && inView) {
+        setIsAlreadyLoaded(true)
+      }
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [inView, isAlreadyLoaded])
+
+  const shouldRender = isAlreadyLoaded || inView
+
   if (
     template.type === 'template_instance' &&
     getFileType(template.file) === 'pdf'
   ) {
-    return <PdfThumbnail url={template.file.url} />
+    return (
+      <div ref={ref}>
+        {shouldRender && <PdfThumbnail url={template.file.url} />}
+      </div>
+    )
   }
 
   if (!brand) {
@@ -75,24 +93,32 @@ export function Thumbnail({
     const { thumbnail } = getTemplateImage(template)
 
     return template.template.video ? (
-      <video src={thumbnail} muted autoPlay />
+      <div ref={ref}>
+        {shouldRender && <video src={thumbnail} muted autoPlay />}
+      </div>
     ) : (
-      <img
-        alt={template.template.name}
-        src={thumbnail}
-        className={classes.image}
-      />
+      <div ref={ref}>
+        {shouldRender && (
+          <img
+            alt={template.template.name}
+            src={thumbnail}
+            className={classes.image}
+          />
+        )}
+      </div>
     )
   }
 
   return (
-    <div className={classes.templateThumbnailWrapper}>
-      <TemplateThumbnail
-        template={template}
-        brand={brand}
-        data={{ listing, user }}
-        onClick={onClick}
-      />
+    <div className={classes.templateThumbnailWrapper} ref={ref}>
+      {shouldRender && (
+        <TemplateThumbnail
+          template={template}
+          brand={brand}
+          data={{ listing, user }}
+          onClick={onClick}
+        />
+      )}
     </div>
   )
 }

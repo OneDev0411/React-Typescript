@@ -6,8 +6,7 @@ import Flex from 'styled-flex-component'
 
 import { Avatar } from 'components/Avatar'
 import { Table } from 'components/Grid/Table'
-import { SortableColumn } from 'components/Grid/Table/types'
-import { RenderProps } from 'components/Grid/Table/types'
+import { SortableColumn, RenderProps } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -52,7 +51,7 @@ export function ListTable({
       render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
         <>
           <div>{agentData.agent.full_name}</div>
-          <Caption variant="body2">{agentData.officeName}</Caption>
+          <Caption variant="body2">{agentData.officeName ?? ''}</Caption>
         </>
       )
     },

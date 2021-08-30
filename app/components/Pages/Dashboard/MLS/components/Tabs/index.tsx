@@ -1,7 +1,12 @@
 import React, { ReactNode } from 'react'
 
-import { Box } from '@material-ui/core'
-import { Theme, ButtonBase, makeStyles, createStyles } from '@material-ui/core'
+import {
+  Box,
+  Theme,
+  ButtonBase,
+  makeStyles,
+  createStyles
+} from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 import { withRouter, WithRouterProps } from 'react-router'
 
@@ -9,8 +14,9 @@ import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
+import { SortIndex } from '../../helpers/sort-utils'
 import SavedSearchesList from '../../SavedSearchesList'
-import SortDropdown from '../GridControllers/SortDropdown'
+import { SortDropdown } from '../GridControllers/SortDropdown'
 import ViewSwitcher from '../GridControllers/ViewSwitcher'
 
 interface Props {
@@ -21,7 +27,7 @@ interface Props {
   isWidget: boolean
   isFetching: boolean
   user: IUser
-  activeSort: string
+  activeSort: { index: SortIndex; ascending: boolean }
   showSavedSearchButton?: false
 }
 
@@ -106,6 +112,7 @@ export const Tabs = ({
       label={
         <>
           <ButtonBase
+            component="div"
             className={classes.saveSearch}
             disabled={isFetching}
             onClick={saveSearchHandler}
