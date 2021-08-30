@@ -15,9 +15,10 @@ export async function deprecatedGetBrands(brandId) {
 
 export async function getBrands(
   brandId: string,
-  fetchChildren = true
+  fetchChildren: boolean = true,
+  customeAssociations: string[] = defaultAssociations
 ): Promise<ApiResponseBody<IBrand>> {
-  const associations = [...defaultAssociations]
+  const associations = [...customeAssociations]
 
   if (fetchChildren) {
     associations.push('brand.children')
