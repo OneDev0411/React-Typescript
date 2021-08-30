@@ -11,7 +11,7 @@ import { getShowingRoleLabel } from '../../helpers'
 import { AckActionParams } from '../../types'
 import Dialog from '../Dialog'
 
-import ShowingDialogCard from './ShowingDialogCard'
+import ShowingDialogQuote from './ShowingDialogQuote'
 import useAppointmentMessageReadStatus from './use-appointment-message-read-status'
 
 interface PersonMessage {
@@ -125,13 +125,13 @@ function ShowingBookingListRejectMessage({
             </Box>
           </>
         }
+        hasDialogContent={false}
         subtitle={appointmentTitle}
       >
-        <Box my={2}>
-          <ShowingDialogCard
+        <Box m={2}>
+          <ShowingDialogQuote
             question="Comments"
             answer={personMessage.message ?? ''}
-            multiline
           />
         </Box>
       </Dialog>

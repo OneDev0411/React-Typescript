@@ -58,7 +58,9 @@ export default function ImageSelectDialog({
 }: ImageSelectDialogProps) {
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
-  const [selectedTab, setSelectedTab] = useState<TabValue>('upload-photo')
+  const [selectedTab, setSelectedTab] = useState<TabValue>(
+    onUpload ? 'upload-photo' : 'team-library'
+  )
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
   const [imageFileToEdit, setImageFileToEdit] =

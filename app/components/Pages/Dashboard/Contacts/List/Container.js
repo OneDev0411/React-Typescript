@@ -879,9 +879,7 @@ class ContactsList extends React.Component {
               )}
             </Box>
           )}
-          <Box ml={1.5}>
-            <ViewAs />
-          </Box>
+          <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
           {...(this.state.viewMode === 'board' && {
@@ -938,6 +936,7 @@ class ContactsList extends React.Component {
                 <ViewMode enabled={this.state.viewMode === 'board'}>
                   <Board
                     contacts={contacts}
+                    totalContacts={props.listInfo.total || 0}
                     isFetchingContacts={isFetchingContacts}
                     isFetchingNextContacts={state.isFetchingMoreContacts}
                     isFetchingPreviousContacts={

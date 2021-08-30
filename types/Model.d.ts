@@ -6,5 +6,5 @@ declare interface IModel<T extends string> {
 
   // not sure if it's nullable or optional. One example where it doesn't exist
   // at all : brand_flow_step.
-  deleted_at?: number | null
+  deleted_at?: Nullable<number>
 }

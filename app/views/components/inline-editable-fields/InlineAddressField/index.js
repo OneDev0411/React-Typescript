@@ -56,6 +56,15 @@ export class InlineAddressField extends React.Component {
       return { address: props.address, isDirty: true }
     }
 
+    if (
+      !state.isDirty &&
+      state.address &&
+      props.address &&
+      props.address !== state.address
+    ) {
+      return { address: props.address }
+    }
+
     return null
   }
 
@@ -222,6 +231,7 @@ export class InlineAddressField extends React.Component {
 
   handleClose = () => {
     this.setState({
+      isDirty: false,
       isAddressFormOpen: false,
       isSuggestionsOpen: false
     })

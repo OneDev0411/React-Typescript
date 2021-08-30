@@ -34,7 +34,7 @@ import {
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
 import { useWebShareApi } from 'hooks/use-web-share-api'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { selectUser } from 'selectors/user'
 import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
@@ -217,7 +217,7 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handleUploadAsset = (file: File) => {
-    return uploadAsset(file, currentTabTemplates[0].template.id)
+    return uploadAsset(currentTabTemplates[0].template.id, file)
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {

@@ -40,7 +40,7 @@ function ShowingColumnProperty({
           avatar
         )}
       </Box>
-      <Typography noWrap variant="body2">
+      <Typography className="underline-on-hover" noWrap variant="body2">
         {address}
       </Typography>
     </Box>
