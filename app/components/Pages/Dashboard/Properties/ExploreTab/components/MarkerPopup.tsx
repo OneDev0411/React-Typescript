@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core'
+import { Chip, Grid, makeStyles, Typography } from '@material-ui/core'
 import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
 import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined'
 import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
@@ -46,11 +46,7 @@ const useStyles = makeStyles(
       fontSize: theme.typography.h6.fontSize,
       marginBottom: theme.spacing(1)
     },
-    status: {
-      fontSize: 12,
-      padding: '2px 4px',
-      borderRadius: theme.shape.borderRadius
-    },
+    status: { color: '#fff', fontSize: 12, marginTop: theme.spacing(-1) },
     address: {
       color: theme.palette.grey[500],
       display: 'flex',
@@ -108,15 +104,17 @@ const MarkerPopup = ({ listing }: Props) => {
         style={{ backgroundImage: `url(${coverImageURL})` }}
       />
       <div className={classes.info}>
-        <Typography variant="subtitle1" className={classes.price}>
-          ${price}{' '}
-          <small
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Typography variant="subtitle1" className={classes.price}>
+            ${price}
+          </Typography>
+          <Chip
+            size="small"
             className={classes.status}
             style={{ backgroundColor: statusColor }}
-          >
-            {status}
-          </small>
-        </Typography>
+            label={status}
+          />
+        </Grid>
 
         <Grid className={classes.details} container>
           <Grid className={classes.detailItem} item>
