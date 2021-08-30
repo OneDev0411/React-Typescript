@@ -81,7 +81,7 @@ declare type ICompactListingWithUIState<
   Associations extends ICompactListingAssociation = ''
 > = ICompactListing<Associations> & {
   clicked: boolean
-  hover: boolen
+  hover: boolean
 }
 
 declare interface ICompactListingInfo {
