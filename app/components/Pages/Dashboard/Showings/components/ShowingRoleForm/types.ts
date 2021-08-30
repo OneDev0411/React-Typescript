@@ -1,5 +1,7 @@
+import { ShowingRoleInput } from '../../types'
+
 export type ShowingRoleFormValues = Pick<
-  IShowingRole,
+  ShowingRoleInput,
   | 'role'
   | 'first_name'
   | 'last_name'
@@ -9,6 +11,8 @@ export type ShowingRoleFormValues = Pick<
   | 'cancel_notification_type'
   | 'user'
   | 'can_approve'
+  | 'contact'
+  | 'save_to_contact'
 >
 
 export interface CreateContactInput {

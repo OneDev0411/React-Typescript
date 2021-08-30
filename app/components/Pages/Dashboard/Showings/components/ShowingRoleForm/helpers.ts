@@ -46,6 +46,7 @@ export const selectContactMutator: Mutator<ShowingRoleFormValues> = (
   changeValue(state, 'email', () => attributes?.email || '')
   changeValue(state, 'phone_number', () => attributes?.phone_number || '')
   changeValue(state, 'user', () => undefined)
+  changeValue(state, 'contact', () => contact)
 }
 
 export const requiredTextValidator = (value: string) =>

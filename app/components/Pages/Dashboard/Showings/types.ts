@@ -60,6 +60,8 @@ export interface ShowingRoleInput extends IShowingRoleInput {
   id: UUID
   mode: ShowingRoleInputMode
   deletable: boolean
+  contact?: IContact
+  save_to_contact: boolean
 }
 
 export type ShowingRoleInputPerson = Pick<
