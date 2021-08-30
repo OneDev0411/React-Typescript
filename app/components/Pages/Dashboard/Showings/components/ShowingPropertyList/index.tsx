@@ -1,5 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 
+import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
@@ -38,6 +40,7 @@ function ShowingPropertyList({
   showings: rows
 }: ShowingPropertyListProps) {
   const classes = useStyles()
+  const gridClasses = useGridStyles()
 
   const showingNotificationCount = useGetShowingNotificationCount(rows)
 
@@ -90,6 +93,7 @@ function ShowingPropertyList({
         <ShowingPropertyListColumnActions
           className={classes.actions}
           bookingUrl={getShowingBookingPageUrl(row)}
+          listingId={row.listing?.id || row.deal?.listing?.id}
         />
       )
     }
@@ -120,8 +124,7 @@ function ShowingPropertyList({
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)
         })}
-        classes={{ row: classes.row }}
-        virtualize={false}
+        classes={{ row: classNames(classes.row, gridClasses.row) }}
       />
     </Box>
   )

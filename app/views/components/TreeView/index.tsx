@@ -43,8 +43,6 @@ export default React.memo(function TreeView<NodeType = any>({
   getChildNodes = (node => node.children) as any,
   ...props
 }: Props<NodeType>) {
-  // console.log('render tree', { getNodeId, getChildNodes, ...props })
-
   const [expandedNodes, setExpandedNodes] = useControllableState(
     props.expandedNodes,
     props.onExpandedNodesChanged,
