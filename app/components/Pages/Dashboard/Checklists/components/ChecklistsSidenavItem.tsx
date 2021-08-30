@@ -1,27 +1,88 @@
 import { useState } from 'react'
 
+import {
+  Box,
+  IconButton,
+  makeStyles,
+  Theme,
+  Typography
+} from '@material-ui/core'
+import { mdiDrag, mdiTrashCan } from '@mdi/js'
+import {
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot
+} from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
-import { browserHistory } from 'react-router'
+import { browserHistory, Link } from 'react-router'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { addNotification as notify } from 'components/notification'
-import SideNavItem from 'components/PageSideNav/SideNavItem'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: theme.spacing(0.5, 1.5),
+      width: '100%',
+      borderRadius: `${theme.shape.borderRadius}px 0 0 ${theme.shape.borderRadius}px`,
+      '&:hover': {
+        backgroundColor: theme.palette.action.hover
+      },
+      '&:hover $deleteIcon': {
+        visibility: 'visible'
+      },
+      '& .active': {
+        backgroundColor: theme.palette.success.light
+      }
+    },
+    dragHandler: {
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: theme.spacing(0.5),
+      color: theme.palette.grey['500']
+    },
+    link: {
+      color: '#000',
+      '&:hover': {
+        color: theme.palette.info.main
+      }
+    },
+    deleteIcon: {
+      color: theme.palette.error.main,
+      visibility: 'hidden'
+    }
+  }),
+  {
+    name: 'ChecklistSideNavItem'
+  }
+)
+
 interface Props {
+  index: number
   checklistType: IDealChecklistType
   propertyType: IDealPropertyType
 }
 
-export function ChecklistsSidenavItem({ checklistType, propertyType }: Props) {
+export function ChecklistsSidenavItem({
+  index,
+  checklistType,
+  propertyType
+}: Props) {
   const [isDeleted, setIsDeleted] = useState(false)
 
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
+  const classes = useStyles()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
     if (propertyType.brand !== getActiveTeamId(user)) {
@@ -79,10 +140,39 @@ export function ChecklistsSidenavItem({ checklistType, propertyType }: Props) {
   }
 
   return (
-    <SideNavItem
-      title={propertyType.label}
-      link={getChecklistPageLink(propertyType.id, checklistType)}
-      onDelete={() => requestDelete(propertyType)}
-    />
+    <Draggable draggableId={propertyType.id} index={index}>
+      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+        <div ref={provided.innerRef} {...provided.draggableProps}>
+          <div className={classes.root}>
+            <Box display="flex" alignItems="center">
+              <div
+                {...provided.dragHandleProps}
+                className={classes.dragHandler}
+              >
+                <SvgIcon path={mdiDrag} />
+              </div>
+
+              <Link
+                to={getChecklistPageLink(propertyType.id, checklistType)}
+                className={classes.link}
+              >
+                <Typography variant="body2">{propertyType.label}</Typography>
+              </Link>
+            </Box>
+
+            <IconButton
+              size="small"
+              onClick={() => requestDelete(propertyType)}
+            >
+              <SvgIcon
+                path={mdiTrashCan}
+                className={classes.deleteIcon}
+                size={muiIconSizes.small}
+              />
+            </IconButton>
+          </div>
+        </div>
+      )}
+    </Draggable>
   )
 }

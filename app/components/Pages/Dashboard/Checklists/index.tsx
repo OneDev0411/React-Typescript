@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Box } from '@material-ui/core'
+import { DropResult } from 'react-beautiful-dnd'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
 
+import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
@@ -12,6 +14,7 @@ import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { ChecklistCreate } from './components/ChecklistCreate'
 import { ChecklistHeader } from './components/ChecklistHeader'
 import { ChecklistsSidenav } from './components/ChecklistsSidenav'
 import { CheckListTable } from './components/ChecklistTable'
@@ -50,9 +53,8 @@ export default function ChecklistsPage({ location }: Props) {
     reorderTasks
   } = useChecklistsPage(activeTeamId)
 
-  const { propertyTypes, addPropertyTypes } = useBrandPropertyTypes(
-    activeTeamId!
-  )
+  const { propertyTypes, addPropertyTypes, reorderPropertyTypes } =
+    useBrandPropertyTypes(activeTeamId!)
 
   const checklist = checklists?.find(
     checklist =>
@@ -75,6 +77,20 @@ export default function ChecklistsPage({ location }: Props) {
     setIsFormOpen(false)
   }
 
+  const onReorderPropertyTypes = (result: DropResult): void => {
+    if (!result.destination) {
+      return
+    }
+
+    const list = reorder<IDealPropertyType>(
+      propertyTypes,
+      result.source.index,
+      result.destination.index
+    )
+
+    reorderPropertyTypes(list)
+  }
+
   return (
     <Acl.Admin fallbackUrl="/dashboard/mls">
       <Helmet>
@@ -85,23 +101,24 @@ export default function ChecklistsPage({ location }: Props) {
           propertyTypes={propertyTypes}
           checklistType={checklistType}
           onClickNewProperty={() => setIsFormOpen(true)}
+          onReorder={onReorderPropertyTypes}
         />
 
         <Content isSideMenuOpen>
-          {checklist && (
-            <Box m={3}>
-              <PageTabs
-                defaultValue={checklistType || TabNames[0].type}
-                tabs={TabNames.map((tab, index) => (
-                  <TabLink
-                    key={index}
-                    label={tab.title}
-                    value={tab.type}
-                    to={getChecklistPageLink(propertyTypeId, tab.type)}
-                  />
-                ))}
-              />
+          <Box m={3}>
+            <PageTabs
+              defaultValue={checklistType || TabNames[0].type}
+              tabs={TabNames.map((tab, index) => (
+                <TabLink
+                  key={index}
+                  label={tab.title}
+                  value={tab.type}
+                  to={getChecklistPageLink(propertyTypeId, tab.type)}
+                />
+              ))}
+            />
 
+            {checklist ? (
               <Box mb={5}>
                 <ChecklistHeader
                   checklist={checklist}
@@ -145,8 +162,17 @@ export default function ChecklistsPage({ location }: Props) {
                   />
                 </Box>
               </Box>
-            </Box>
-          )}
+            ) : (
+              <Box my={3}>
+                <ChecklistCreate
+                  brandId={activeTeamId!}
+                  propertyTypeId={propertyTypeId}
+                  checklistType={checklistType}
+                  onCreateChecklist={checklist => addChecklists([checklist])}
+                />
+              </Box>
+            )}
+          </Box>
         </Content>
 
         <PropertyTypeForm

@@ -19,7 +19,7 @@ import { ViewSwitcher } from '../ViewSwitcher'
 
 export type ViewModeType = 'table' | 'board'
 
-interface Props {
+export interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
   handleChangeSavedSegment: (savedSegment: object) => void
   handleResetShortcutFilter: () => void
@@ -39,6 +39,7 @@ interface Props {
   sortProps: {
     onChange: (item) => void
     currentOrder: string
+    searchValue: string
   }
   onChangeView: (viewMode: ViewModeType) => void
   viewMode: ViewModeType
@@ -78,11 +79,11 @@ export const ContactsTabs = ({
   handleChangeSavedSegment,
   handleFilterChange,
   savedListProps,
+  onChangeView,
   activeSegment,
   contactCount,
   tagListProps,
   sortProps,
-  onChangeView,
   viewMode,
   filter,
   users

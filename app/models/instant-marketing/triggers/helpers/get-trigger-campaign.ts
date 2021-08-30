@@ -4,7 +4,7 @@ import { TriggerDataInput } from '../types'
 export const getTriggerCampaign = async (
   contact: IContact & { user: IUser },
   templateId: UUID,
-  data: Pick<TriggerDataInput, 'subject'>
+  data: Pick<TriggerDataInput, 'subject' | 'sender'>
 ): Promise<
   IEmailCampaign<
     'emails' | 'template' | 'from' | 'recipients',
@@ -23,7 +23,7 @@ export const getTriggerCampaign = async (
 
     const campaign = await createEmailCampaign({
       due_at: null,
-      from: contact.user.id,
+      from: data.sender.id ?? contact.user.id,
       to: [
         {
           recipient_type: 'Email',

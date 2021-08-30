@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react'
 
-import uniqBy from 'lodash/uniqBy'
 import { useSelector } from 'react-redux'
-import { useDeepCompareEffect } from 'react-use'
 
-import getListing from 'models/listings/listing/get-listing'
-import { getBrandListings } from 'models/listings/search/get-brand-listings'
-import { IAppState } from 'reducers'
+import { getDealsListings } from '@app/models/listings/listing/get-deals-listings'
+import {
+  getBrandListings,
+  GetBrandListingsOptions
+} from '@app/models/listings/search/get-brand-listings'
+import { selectActiveBrandId } from '@app/selectors/brand'
 
 export function useBrandListings(
-  brand: Nullable<UUID>
+  brand: Nullable<UUID>,
+  options?: GetBrandListingsOptions
 ): Nullable<ICompactListing[]> {
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
 
@@ -20,7 +22,7 @@ export function useBrandListings(
       }
 
       try {
-        const brandListings = await getBrandListings(brand)
+        const brandListings = await getBrandListings(brand, options)
 
         setListings(brandListings)
       } catch (error) {
@@ -30,7 +32,7 @@ export function useBrandListings(
     }
 
     fetchBrandListings()
-  }, [brand])
+  }, [brand, options])
 
   return listings
 }
@@ -40,36 +42,23 @@ export function useDealsListings(
 ): Nullable<IListing[]> {
   const [listings, setListings] = useState<Nullable<IListing[]>>(null)
 
-  const deals = useSelector<IAppState, Record<UUID, IDeal>>(
-    state => state.deals.list
-  )
+  const brandId = useSelector(selectActiveBrandId)
 
-  const isFetchingDeals = useSelector<IAppState, boolean>(
-    state => state.deals.properties.isFetchingDeals
-  )
-
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     async function fetchDealsListings() {
-      if (isFetchingDeals || !listingIdsToExclude) {
+      if (!listingIdsToExclude) {
         return
       }
 
-      const uniqDealListingIds = uniqBy(
-        Object.values(deals),
-        deal => deal.listing
-      )
-        .filter(
-          deal =>
-            deal.listing && !listingIdsToExclude.includes(deal.listing as UUID)
-        )
-        .map(deal => deal.listing)
-
       try {
-        const dealsListings = await Promise.all(
-          uniqDealListingIds.map(listingId => getListing(listingId as UUID))
+        const dealsListings = await getDealsListings(brandId)
+
+        // We're removing duplicate listings that we already have them
+        const uniqueDealsListings = dealsListings.filter(
+          listing => !listingIdsToExclude.includes(listing.id)
         )
 
-        setListings(dealsListings)
+        setListings(uniqueDealsListings)
       } catch (error) {
         console.error('error fetching deals listings', error)
         setListings([])
@@ -77,7 +66,7 @@ export function useDealsListings(
     }
 
     fetchDealsListings()
-  }, [listingIdsToExclude, deals, isFetchingDeals])
+  }, [listingIdsToExclude, brandId])
 
   return listings
 }

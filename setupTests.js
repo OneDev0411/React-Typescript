@@ -1,11 +1,14 @@
-import Enzyme, { ShallowWrapper } from 'enzyme'
+import React from 'react'
+
+import { configure } from '@testing-library/react'
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17'
+import Enzyme, { ShallowWrapper } from 'enzyme'
 
 import 'whatwg-fetch'
 import '@testing-library/react/cleanup-after-each'
-import { configure } from '@testing-library/react'
 
 process.env.DISABLE_MODAL = 'true'
+window.React = React
 
 const originalConsoleError = console.error
 

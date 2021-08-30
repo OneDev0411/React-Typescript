@@ -35,7 +35,7 @@ export default function Listings({
             </Grid>
           ))}
         </Grid>
-        {listings?.length === 0 && <AgentNetworksZeroState />}
+        {!isLoading && listings?.length === 0 && <AgentNetworksZeroState />}
       </Box>
     </>
   )

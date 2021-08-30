@@ -18,6 +18,7 @@ interface Props {
   isLoading?: boolean
   value?: string
   error?: string
+  autoTrim?: boolean
   getOptionLabel?: (option: Option) => string
   onChange: (value: Option) => void
   onInputChange?: (value: string) => void
@@ -28,6 +29,7 @@ export function AutoComplete({
   options,
   value = '',
   error = '',
+  autoTrim = true,
   onChange = () => {},
   onInputChange = () => {},
   getOptionLabel = option => option.label,
@@ -42,8 +44,8 @@ export function AutoComplete({
   const [debouncedCriteria, setDebouncedCriteria] = useState('')
 
   useEffect(() => {
-    setInputValue(value)
-  }, [value])
+    setInputValue(autoTrim ? value.trim() : value)
+  }, [value, autoTrim])
 
   useDebounce(
     () => {
@@ -74,9 +76,11 @@ export function AutoComplete({
       return
     }
 
-    setInputValue(value)
-    setCriteria(value)
-    onInputChange(value)
+    const normalizedValue = autoTrim ? value.trim() : value
+
+    setInputValue(normalizedValue)
+    setCriteria(normalizedValue)
+    onInputChange(normalizedValue)
   }
 
   const handleChange = (_: React.ChangeEvent<{}>, option: Option) => {

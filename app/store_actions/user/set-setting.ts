@@ -10,7 +10,7 @@ import { putUserSetting } from '../../models/user/put-user-setting'
  * @param {UUID} [brand] The active brand id
  */
 
-export function setUserSetting(key: string, value: any, brand: UUID) {
+export function setUserSetting(key: string, value: any, brand?: UUID) {
   return async (dispatch, getState) => {
     const user = getState().user
 
