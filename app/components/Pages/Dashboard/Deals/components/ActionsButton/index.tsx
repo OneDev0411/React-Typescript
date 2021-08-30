@@ -5,6 +5,7 @@ import { mdiChevronDown } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import { confirmation } from 'actions/confirmation'
 import { setSelectedTask } from 'actions/deals'
 import { Portal } from 'components/Portal'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
@@ -34,6 +35,7 @@ import {
   getFileEsignAttachments
 } from 'views/utils/deal-files/get-esign-attachments'
 
+import MakeVisibleToAdmin from '../../Create/MakeVisibleToAdmin'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
@@ -50,7 +52,6 @@ import { normalizeActions } from './data/normalize-actions'
 import {
   approveTask,
   requireTask,
-  createNeedsAttention,
   declineTask,
   deleteFile,
   deleteTask,
@@ -62,7 +63,8 @@ import {
   reviewEnvelope,
   voidEnvelope,
   viewForm,
-  viewFile
+  viewFile,
+  notifyOffice
 } from './helpers/actions'
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
@@ -84,6 +86,7 @@ interface State {
   isMenuOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
+  isMakeVisibleToAdminFormOpen: boolean
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -96,6 +99,7 @@ interface StateProps {
   user: IUser
   envelopes: IDealEnvelope[]
   isBackOffice: boolean
+  confirmation: (data: object) => void
   setSelectedTask(task: any): {
     type: string
     task: any
@@ -113,6 +117,7 @@ class ActionsButton extends React.Component<
       isMenuOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isMakeVisibleToAdminFormOpen: false,
       multipleItemsSelection: null
     }
 
@@ -125,7 +130,7 @@ class ActionsButton extends React.Component<
       'rename-file': renameFile,
       'edit-form': editForm,
       'delete-task': deleteTask,
-      'notify-task': createNeedsAttention,
+      'notify-task': this.createNeedsAttention,
       'approve-task': approveTask,
       'decline-task': declineTask,
       'require-task': requireTask,
@@ -215,6 +220,32 @@ class ActionsButton extends React.Component<
     )
 
     this.updateEmailList(attachments)
+  }
+
+  createNeedsAttention = () => {
+    if (this.props.deal.is_draft) {
+      this.setState({
+        isMakeVisibleToAdminFormOpen: true
+      })
+
+      return
+    }
+
+    this.props.confirmation({
+      message: 'Notify Office?',
+      confirmLabel: 'Notify Office',
+      needsUserEntry: true,
+      inputDefaultValue: '',
+      onConfirm: comment =>
+        notifyOffice(
+          {
+            deal: this.props.deal,
+            task: this.props.task,
+            user: this.props.user
+          },
+          comment
+        )
+    })
   }
 
   emailForm = () => {
@@ -469,6 +500,16 @@ class ActionsButton extends React.Component<
             onClose={this.handleCloseMultipleItemsSelectionDrawer}
           />
         )}
+
+        {this.state.isMakeVisibleToAdminFormOpen && (
+          <MakeVisibleToAdmin
+            dealId={this.props.deal.id}
+            onClose={() =>
+              this.setState({ isMakeVisibleToAdminFormOpen: false })
+            }
+            onComplete={this.createNeedsAttention}
+          />
+        )}
       </div>
     )
   }
@@ -492,5 +533,6 @@ const withContext =
   }
 
 export default connect(mapStateToProps, {
-  setSelectedTask
+  setSelectedTask,
+  confirmation
 })(withContext(ActionsButton))
