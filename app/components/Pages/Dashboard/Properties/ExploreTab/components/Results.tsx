@@ -55,6 +55,7 @@ const useStyles = makeStyles(
     },
     scrollableContent: {
       position: 'absolute',
+      paddingBottom: 80,
       maxHeight: '100%',
       overflowY: 'auto',
       width: '100%',

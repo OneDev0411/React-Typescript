@@ -14,6 +14,7 @@ import {
 } from '@app/utils/google-map-api'
 
 import { Header } from '../../../components/PageHeader'
+import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { LAST_BROWSING_LOCATION } from '../../../helpers/sort-utils'
 import {
@@ -79,6 +80,12 @@ const useStyles = makeStyles(
       display: 'flex',
       flexDirection: 'column',
       flexGrow: 1
+    },
+    selectionActionBar: {
+      position: 'absolute',
+      bottom: 20,
+      right: 0,
+      width: 'calc(100% - 192px)'
     }
   }),
   { name: 'PropertiesMainLayout' }
@@ -231,6 +238,9 @@ export function ExplorePage({ user, isWidget }: Props) {
             />
           </Box>
         </Box>
+      </Box>
+      <Box className={classes.selectionActionBar}>
+        <ShareListings />
       </Box>
     </>
   )
