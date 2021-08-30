@@ -1,13 +1,11 @@
 import {
-  mdiAlertOctagramOutline,
-  mdiCheckCircleOutline,
   mdiRotateRight,
-  mdiCloseCircleOutline,
-  mdiStarOutline,
-  mdiFlagCheckered
+  mdiFlagCheckered,
+  mdiExclamation,
+  mdiCheck,
+  mdiClose,
+  mdiPlus
 } from '@mdi/js'
-
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { AppointmentFilter, AppointmentFilterInfo } from '../../types'
 
@@ -25,32 +23,32 @@ export const appointmentStatusInfo: Record<
   },
   Requested: {
     label: 'Requested',
-    icon: <SvgIcon path={mdiAlertOctagramOutline} />,
+    icon: mdiExclamation,
     filter: createStatusFilter('Requested')
   },
   Confirmed: {
     label: 'Approved',
-    icon: <SvgIcon path={mdiCheckCircleOutline} />,
+    icon: mdiCheck,
     filter: createStatusFilter('Confirmed')
   },
   Rescheduled: {
     label: 'Rescheduled',
-    icon: <SvgIcon path={mdiRotateRight} />,
+    icon: mdiRotateRight,
     filter: createStatusFilter('Rescheduled')
   },
   Canceled: {
     label: 'Canceled',
-    icon: <SvgIcon path={mdiCloseCircleOutline} />,
+    icon: mdiClose,
     filter: createStatusFilter('Canceled')
   },
   Completed: {
     label: 'Finished',
-    icon: <SvgIcon path={mdiFlagCheckered} />,
+    icon: mdiFlagCheckered,
     filter: createStatusFilter('Completed')
   },
   Feedback: {
     label: 'Feedback',
-    icon: <SvgIcon path={mdiStarOutline} />,
+    icon: mdiPlus,
     filter: appointments =>
       appointments.filter(appointment => !!appointment.feedback)
   }
