@@ -15,6 +15,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTitle } from 'react-use'
 
+import { selectDealById } from '@app/reducers/deals/list'
 import { Callout } from '@app/views/components/Callout'
 import {
   createRoles,
@@ -77,7 +78,9 @@ export default function MakeVisibleToAdmin({
   const [isAutoPublishing, setIsAutoPublishing] = useState(false)
 
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
-  const deal = useSelector<IAppState, IDeal>(({ deals }) => deals.list[dealId])
+  const deal = useSelector<IAppState, IDeal>(({ deals }) =>
+    selectDealById(deals.list, dealId)
+  )
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
