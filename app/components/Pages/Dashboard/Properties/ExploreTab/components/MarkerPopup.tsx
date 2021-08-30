@@ -26,7 +26,7 @@ const useStyles = makeStyles(
       backgroundColor: 'white',
       boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
       fontSize: 14,
-      zIndex: 2,
+      zIndex: theme.zIndex.modal,
       borderRadius: 5,
       overflow: 'hidden'
     },
