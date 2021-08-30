@@ -49,7 +49,8 @@ const useStyles = makeStyles(
       zIndex: 2
     },
     resultsContainer: {
-      flexGrow: 1
+      flexGrow: 1,
+      position: 'relative'
     },
     scrollableContent: {
       position: 'absolute',
