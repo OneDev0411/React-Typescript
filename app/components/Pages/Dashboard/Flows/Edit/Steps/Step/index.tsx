@@ -65,52 +65,34 @@ export function Step({
       return null
     }
 
+    const commonProps = {
+      step,
+      index,
+      disableEdit,
+      prevStepOrder,
+      onMoveUpStep,
+      onMoveDownStep,
+      onSubmit: onUpdate,
+      onDelete: () => onDelete(step)
+    }
+
     if (step.event) {
-      return (
-        <EventForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
-        />
-      )
+      return <EventForm {...commonProps} />
     }
 
     if (step.email) {
       return (
         <BasicEmailForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
           templates={emailTemplates}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
           defaultSelectedTemplate={defaultSelectedEmailTemplate}
           onNewTemplateClick={onNewEmailTemplateClick}
+          {...commonProps}
         />
       )
     }
 
     if (step.template || step.template_instance) {
-      return (
-        <MarketingEmailForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
-        />
-      )
+      return <MarketingEmailForm {...commonProps} />
     }
   }
 

@@ -168,9 +168,7 @@ function Edit(props: WithRouterProps) {
       return
     }
 
-    const fetchedTemplates = await getEmailTemplates(brand, {
-      'omit[]': ['brand_email.body']
-    })
+    const fetchedTemplates = await getEmailTemplates(brand)
 
     setEmailTemplates(fetchedTemplates)
   }, [brand])
