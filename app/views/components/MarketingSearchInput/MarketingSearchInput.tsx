@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Autocomplete } from '@material-ui/lab'
 import Fuse from 'fuse.js'
 
+import { useTemplateTypeSections } from '@app/hooks/use-template-type-sections'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
@@ -17,13 +18,14 @@ export default function MarketingSearchInput({
   types,
   onSelect
 }: MarketingSearchInputProps) {
+  const { getSection } = useTemplateTypeSections()
   const typesWithCategory: TemplateTypeWithMediumAndCategory[] = useMemo(
     () =>
       types.map(data => ({
         ...data,
-        category: getTemplateTypeLabel(data.type)
+        category: getSection(data.type).title
       })),
-    [types]
+    [types, getSection]
   )
   const handleSelect = (
     option: Nullable<TemplateTypeWithMediumAndCategory | string>

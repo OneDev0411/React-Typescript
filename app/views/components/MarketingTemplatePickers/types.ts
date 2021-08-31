@@ -3,6 +3,7 @@ import { RefObject } from 'react'
 interface BaseMarketingPickerProps {
   templateTypes: IMarketingTemplateType[]
   mediums?: IMarketingTemplateMedium[]
+  selectedTab?: IMarketingTemplateType
   containerRef?: RefObject<HTMLElement>
 }
 
