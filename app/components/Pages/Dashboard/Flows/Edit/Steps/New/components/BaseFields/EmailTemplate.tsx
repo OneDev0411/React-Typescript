@@ -1,4 +1,4 @@
-import { useMemo, ChangeEvent } from 'react'
+import { useState, useMemo, ChangeEvent } from 'react'
 
 import {
   Box,
@@ -18,6 +18,7 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import { selectActiveBrandId } from '@app/selectors/brand'
 import { Iframe } from '@app/views/components/Iframe'
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
+import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
 import { IAppState } from 'reducers'
 import {
   selectEmailTemplates,
@@ -27,7 +28,6 @@ import {
 interface Props {
   currentTemplateId?: Nullable<UUID>
   disabled: boolean
-  // onNewTemplateClick: () => void
 }
 
 type EmailTemplates = {
@@ -68,6 +68,8 @@ export const EmailTemplate = ({
 Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] =
+    useState(false)
   const brandId: UUID = useSelector(selectActiveBrandId)
   const { templates, isFetching } = useSelector<IAppState, EmailTemplates>(
     ({ emailTemplates }) => ({
@@ -75,13 +77,6 @@ Props) => {
       isFetching: selectEmailTemplatesIsFetching(emailTemplates, brandId)
     })
   )
-
-  console.log('EmailTemplate', { brandId, templates, isFetching })
-
-  // const defaultTemplate = useMemo(
-  //   () => (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id,
-  //   [defaultSelectedTemplate, templates]
-  // )
 
   const emailTemplatesOptions = useMemo(
     () =>
@@ -92,24 +87,7 @@ Props) => {
     [templates]
   )
 
-  const selectedItem = useMemo(() => {
-    const defaultValue = {
-      label: 'Select a Template',
-      value: 0
-    }
-
-    if (currentTemplateId) {
-      const template = emailTemplatesOptions.find(
-        item => item.value === currentTemplateId
-      )
-
-      return template || defaultValue
-    }
-
-    return defaultValue
-  }, [currentTemplateId, emailTemplatesOptions])
-
-  const reviewTemplateData: Nullable<IBrandEmailTemplate> = useMemo(() => {
+  const selectedTemplate: Nullable<IBrandEmailTemplate> = useMemo(() => {
     if (!currentTemplateId) {
       return null
     }
@@ -121,8 +99,6 @@ Props) => {
     if (!selectedTemplate) {
       return null
     }
-
-    console.log({ selectedTemplate })
 
     return selectedTemplate
   }, [currentTemplateId, templates])
@@ -136,93 +112,93 @@ Props) => {
   }
 
   useEffectOnce(() => {
-    dispatch(fetchEmailTemplates(brandId))
+    if (templates.length === 0) {
+      dispatch(fetchEmailTemplates(brandId))
+    }
   })
 
   return (
-    <Box>
-      <Field
-        isRequired
-        name="email_template"
-        label="Email Template"
-        text="Select an email template"
-        items={emailTemplatesOptions}
-        validate={handleValidation}
-        render={({ input: { name, onChange, value }, meta }) => {
-          const showError = Boolean(meta.submitFailed && meta.error)
+    <Field
+      isRequired
+      name="email_template"
+      label="Email Template"
+      text="Select an email template"
+      items={emailTemplatesOptions}
+      validate={handleValidation}
+      render={({ input: { name, onChange, value }, meta }) => {
+        const showError = Boolean(meta.submitFailed && meta.error)
 
-          return (
-            <Box>
-              <FormControl
-                fullWidth
-                variant="outlined"
-                size="small"
-                color="secondary"
-                error={showError}
+        return (
+          <>
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              color="secondary"
+              error={showError}
+            >
+              <InputLabel id="email_template">Template</InputLabel>
+              <Select
+                labelId="email_template"
+                id="email_template-select"
+                name={name}
+                value={selectedTemplate?.id ?? 0}
+                disabled={disabled || isFetching}
+                onChange={(event: ChangeEvent<{ value: string | number }>) => {
+                  const value = event.target.value
+
+                  if (value === 'new') {
+                    return setIsEmailTemplateDrawerOpen(true)
+                  }
+
+                  onChange(value)
+                }}
+                label="Template"
               >
-                <InputLabel id="email_template">Template</InputLabel>
-                <Select
-                  labelId="email_template"
-                  id="email_template-select"
-                  name={name}
-                  value={selectedItem.value}
-                  disabled={disabled || isFetching}
-                  onChange={(
-                    event: ChangeEvent<{ value: string | number }>
-                  ) => {
-                    const value = event.target.value
-
-                    if (value === 'new') {
-                      // return onNewTemplateClick()
-                      return null
-                    }
-
-                    onChange(value)
-                  }}
-                  label="Template"
-                >
-                  <MenuItem key="default" value={0}>
-                    Select a Template
+                <MenuItem key="default" value={0}>
+                  {isFetching ? 'Loading...' : 'Select a Template'}
+                </MenuItem>
+                <MenuItem key="new" value="new" className={classes.newTemplate}>
+                  Create a New Template
+                </MenuItem>
+                {emailTemplatesOptions.map(item => (
+                  <MenuItem key={item.value} value={item.value}>
+                    {item.label}
                   </MenuItem>
-                  <MenuItem
-                    key="new"
-                    value="new"
-                    className={classes.newTemplate}
-                  >
-                    Create a New Template
-                  </MenuItem>
-                  {emailTemplatesOptions.map(item => (
-                    <MenuItem key={item.value} value={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {showError && (
-                  <FormHelperText variant="standard">
-                    {meta.error}
-                  </FormHelperText>
-                )}
-              </FormControl>
-              {reviewTemplateData && (
-                <Box className={classes.reviewContainer}>
-                  <Box className={classes.reviewContainerHeader}>
-                    <Typography variant="body2">
-                      Subject: {reviewTemplateData.subject}
-                    </Typography>
-                  </Box>
-                  <Iframe
-                    fullWidth
-                    title="Email body"
-                    srcDoc={
-                      reviewTemplateData.body ?? reviewTemplateData.text ?? ''
-                    }
-                  />
-                </Box>
+                ))}
+              </Select>
+              {showError && (
+                <FormHelperText variant="standard">{meta.error}</FormHelperText>
               )}
-            </Box>
-          )
-        }}
-      />
-    </Box>
+            </FormControl>
+            {selectedTemplate && (
+              <Box className={classes.reviewContainer}>
+                <Box className={classes.reviewContainerHeader}>
+                  <Typography variant="body2">
+                    Subject: {selectedTemplate.subject}
+                  </Typography>
+                </Box>
+                <Iframe
+                  fullWidth
+                  title="Email body"
+                  srcDoc={selectedTemplate.body ?? selectedTemplate.text ?? ''}
+                />
+              </Box>
+            )}
+            {isEmailTemplateDrawerOpen && (
+              <EmailTemplateDrawer
+                isOpen
+                onClose={() => {
+                  setIsEmailTemplateDrawerOpen(false)
+                }}
+                submitCallback={(template: IBrandEmailTemplate) => {
+                  onChange(template.id)
+                }}
+              />
+            )}
+          </>
+        )
+      }}
+    />
   )
 }
