@@ -202,7 +202,11 @@ export const Results = ({
                 />
               )}
               {viewType === 'table' && (
-                <TableView mapIsShown={mapIsShown} listings={listingsPage} />
+                <TableView
+                  mapIsShown={mapIsShown}
+                  listings={listingsPage}
+                  isWidget={isWidget}
+                />
               )}
             </>
           )}
