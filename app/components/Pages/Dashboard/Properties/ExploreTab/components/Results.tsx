@@ -2,6 +2,8 @@ import { useRef, useState, useEffect, useMemo } from 'react'
 
 import { Grid, Box, makeStyles, alpha } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
+import memoize from 'lodash/memoize'
+import hash from 'object-hash'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
@@ -14,7 +16,7 @@ import {
   getListingsPage,
   getResultsCountText
 } from '../../helpers/pagination-utils'
-import { SortIndex, SortString } from '../../helpers/sort-utils'
+import { sortByIndex, SortIndex, SortString } from '../../helpers/sort-utils'
 import { PAGE_SIZE } from '../../mapOptions'
 import useListingsContext from '../hooks/useListingsContext'
 
@@ -76,6 +78,19 @@ const useStyles = makeStyles(
   { name: 'PropertiesResults' }
 )
 
+// TODO: remove this function after API sorting is ready
+// https://gitlab.com/rechat/server/-/issues/1839
+const sortListings = memoize(
+  (
+    listings: ICompactListingWithUIState[],
+    index: SortIndex,
+    ascending: boolean
+  ) => {
+    return listings.sort((a, b) => sortByIndex(a, b, index, ascending))
+  },
+  (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
+)
+
 interface Props {
   mapIsShown: boolean
   onMapToggle: () => void
@@ -111,8 +126,21 @@ export const Results = ({
   }, [state.result.listings.length, state.isLoading])
 
   const listingsPage = useMemo(() => {
-    return getListingsPage(state.result.listings, currentPage, PAGE_SIZE)
-  }, [state.result.listings, currentPage])
+    return getListingsPage(
+      sortListings(
+        state.result.listings,
+        activeSort.index,
+        activeSort.ascending
+      ),
+      currentPage,
+      PAGE_SIZE
+    )
+  }, [
+    state.result.listings,
+    activeSort.index,
+    activeSort.ascending,
+    currentPage
+  ])
 
   const scrollToTop = () => {
     if (cardsContainerRef.current) {
