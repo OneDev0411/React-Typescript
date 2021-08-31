@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 import { mdiCalendarMonthOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
@@ -16,11 +14,13 @@ import { BaseFormProps, EventFormData } from '../types'
 export default function EventForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -44,6 +44,10 @@ export default function EventForm({
       }}
       initialValues={getEventInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}

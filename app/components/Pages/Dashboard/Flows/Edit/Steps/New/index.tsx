@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import { useState, useContext } from 'react'
 
 import { Box, Theme, makeStyles } from '@material-ui/core'
+
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import BasicEmailForm from './BasicEmailForm'
 import { AddButtons } from './components/AddButtons'
@@ -36,6 +38,8 @@ interface Props {
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
 }
 
+type Forms = Nullable<'event' | 'basic_email' | 'marketing_email'>
+
 export const NewStep = ({
   index,
   miniMode = false,
@@ -43,25 +47,61 @@ export const NewStep = ({
   onSubmit
 }: Props) => {
   const classes = useStyles()
+  const modal = useContext(ConfirmationModalContext)
   const [isMiniMode, setIsMiniMode] = useState(miniMode)
-  const [openForm, setOpenForm] = useState<
-    Nullable<'event' | 'basic_email' | 'marketing_email'>
-  >(shouldShowDefaultForm ? 'event' : null)
+  const [hasDirtyStep, setHasDirtyStep] = useState(false)
+  const [openForm, setOpenForm] = useState<Forms>(
+    shouldShowDefaultForm ? 'event' : null
+  )
 
-  async function submitHandler(data: IBrandFlowStepInput) {
+  const submitHandler = async (data: IBrandFlowStepInput) => {
     await onSubmit(data)
     setOpenForm(null)
   }
 
+  const creatNewStep = (type: Forms) => {
+    if (hasDirtyStep) {
+      return modal.setConfirmationModal({
+        message: 'Warning!',
+        description: 'You will lose your work.',
+        confirmLabel: "It's Ok",
+        onConfirm: () => {
+          setOpenForm(type)
+        }
+      })
+    }
+
+    setOpenForm(type)
+  }
+
+  const makeDirtyStep = () => {
+    setHasDirtyStep(true)
+  }
+
   const renderEventForm = () => (
-    <EventForm index={index} onSubmit={submitHandler} />
+    <EventForm
+      index={index}
+      isDirty={openForm === 'event' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
+      onSubmit={submitHandler}
+    />
   )
 
   const rebderBasicEmailForm = () => (
-    <BasicEmailForm index={index} onSubmit={submitHandler} />
+    <BasicEmailForm
+      index={index}
+      isDirty={openForm === 'basic_email' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
+      onSubmit={submitHandler}
+    />
   )
   const rebderTemplateEmailForm = () => (
-    <MarketingEmailForm index={index} onSubmit={submitHandler} />
+    <MarketingEmailForm
+      index={index}
+      isDirty={openForm === 'marketing_email' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
+      onSubmit={submitHandler}
+    />
   )
 
   const renderForm = () => {
@@ -95,9 +135,9 @@ export const NewStep = ({
     return (
       <Box className={classes.container} mt={openForm ? 2 : 0}>
         <AddButtons
-          onNewEventClick={() => setOpenForm('event')}
-          onNewMarketingEmailClick={() => setOpenForm('marketing_email')}
-          onNewBasicEmailClick={() => setOpenForm('basic_email')}
+          onNewEventClick={() => creatNewStep('event')}
+          onNewMarketingEmailClick={() => creatNewStep('marketing_email')}
+          onNewBasicEmailClick={() => creatNewStep('basic_email')}
         />
       </Box>
     )

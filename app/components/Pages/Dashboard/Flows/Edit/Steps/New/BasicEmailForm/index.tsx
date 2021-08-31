@@ -13,11 +13,13 @@ import { BaseFormProps, BasicEmailFormData } from '../types'
 export default function BasicEmailForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -41,6 +43,10 @@ export default function BasicEmailForm({
       }}
       initialValues={getBasicEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}

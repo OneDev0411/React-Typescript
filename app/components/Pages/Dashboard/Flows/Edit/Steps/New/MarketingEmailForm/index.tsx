@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box } from '@material-ui/core'
 import { mdiNewspaperVariantOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
@@ -15,11 +13,13 @@ import { BaseFormProps, MarketingEmailFormData } from '../types'
 export default function MarketingEmailForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -43,6 +43,10 @@ export default function MarketingEmailForm({
       }}
       initialValues={getMarketingEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}

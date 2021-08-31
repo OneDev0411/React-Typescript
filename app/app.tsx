@@ -1,34 +1,30 @@
 import React from 'react'
+
+import { useDispatch } from 'react-redux'
 import { browserHistory, Router } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
-import smoothscroll from 'smoothscroll-polyfill'
-import { useDispatch } from 'react-redux'
-
 import { IntercomProvider } from 'react-use-intercom'
+import smoothscroll from 'smoothscroll-polyfill'
 
-import { useAppcues } from 'services/appcues/use-appcues'
-
+import ConfirmationModal from 'components/ConfirmationModal'
 import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 import { GlobalActionsProvider } from 'components/GlobalActionsButton/context/provider'
-// This is our new confirmation modal. use this please.
-import ConfirmationModal from 'components/ConfirmationModal'
-
-import { activateIntercom } from './store_actions/intercom'
-
-// This is a redux-based confirmation and will be deprecate asap.
-
-import ReduxConfirmationModal from './components/Partials/Confirmation'
-// import styles
-import './styles/main.scss'
-// Routes config
-import routes from './routes'
-// store
-import store from './stores'
-import { AppTheme } from './AppTheme'
+import { useAppcues } from 'services/appcues/use-appcues'
 
 import config from '../config/public'
 
+import { AppTheme } from './AppTheme'
+// This is our new confirmation modal. use this please.
+import ReduxConfirmationModal from './components/Partials/Confirmation'
 import { Notifications } from './Notifications'
+// Routes config
+import routes from './routes'
+import { activateIntercom } from './store_actions/intercom'
+// This is a redux-based confirmation and will be deprecate asap.
+// import styles
+import './styles/main.scss'
+// store
+import store from './stores'
 
 // history
 const history = syncHistoryWithStore(browserHistory, store)
