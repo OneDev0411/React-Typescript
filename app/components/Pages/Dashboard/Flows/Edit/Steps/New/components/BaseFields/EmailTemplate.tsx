@@ -1,4 +1,4 @@
-import React, { useMemo, ChangeEvent } from 'react'
+import { useMemo, ChangeEvent } from 'react'
 
 import {
   Box,
@@ -12,14 +12,27 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { Field } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { Iframe } from '@app/views/components/Iframe'
+import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
+import { IAppState } from 'reducers'
+import {
+  selectEmailTemplates,
+  selectEmailTemplatesIsFetching
+} from 'reducers/email-templates'
 
 interface Props {
-  templates: IBrandEmailTemplate[]
   currentTemplateId?: Nullable<UUID>
   disabled: boolean
-  onNewTemplateClick: () => void
+  // onNewTemplateClick: () => void
+}
+
+type EmailTemplates = {
+  templates: IBrandEmailTemplate[]
+  isFetching: boolean
 }
 
 const useStyles = makeStyles(
@@ -49,14 +62,27 @@ const useStyles = makeStyles(
 )
 
 export const EmailTemplate = ({
-  templates,
   currentTemplateId,
-  disabled,
-  onNewTemplateClick
-}: Props) => {
-  console.log({ templates, currentTemplateId })
-
+  disabled
+}: // onNewTemplateClick
+Props) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const brandId: UUID = useSelector(selectActiveBrandId)
+  const { templates, isFetching } = useSelector<IAppState, EmailTemplates>(
+    ({ emailTemplates }) => ({
+      templates: selectEmailTemplates(emailTemplates, brandId),
+      isFetching: selectEmailTemplatesIsFetching(emailTemplates, brandId)
+    })
+  )
+
+  console.log('EmailTemplate', { brandId, templates, isFetching })
+
+  // const defaultTemplate = useMemo(
+  //   () => (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id,
+  //   [defaultSelectedTemplate, templates]
+  // )
+
   const emailTemplatesOptions = useMemo(
     () =>
       templates.map(template => ({
@@ -109,6 +135,10 @@ export const EmailTemplate = ({
     return 'No email template selected'
   }
 
+  useEffectOnce(() => {
+    dispatch(fetchEmailTemplates(brandId))
+  })
+
   return (
     <Box>
       <Field
@@ -136,14 +166,15 @@ export const EmailTemplate = ({
                   id="email_template-select"
                   name={name}
                   value={selectedItem.value}
-                  disabled={disabled}
+                  disabled={disabled || isFetching}
                   onChange={(
                     event: ChangeEvent<{ value: string | number }>
                   ) => {
                     const value = event.target.value
 
                     if (value === 'new') {
-                      return onNewTemplateClick()
+                      // return onNewTemplateClick()
+                      return null
                     }
 
                     onChange(value)
