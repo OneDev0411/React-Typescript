@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Grid, Tabs, Tab } from '@material-ui/core'
 
-import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
-import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+import { MarketingTemplatePickerProps } from '@app/views/components/MarketingTemplatePickers/types'
 
 import TemplatesList from './TemplatesList'
 
 export default function MarketingTemplatePicker({
   templateTypes,
+  selectedTab: passedSelectedTab,
   ...templatesListProps
 }: MarketingTemplatePickerProps) {
   const [selectedTab, setSelectedTab] = useState<IMarketingTemplateType>(
-    templateTypes[0]
+    passedSelectedTab ?? templateTypes[0]
   )
+
+  useEffect(() => {
+    if (!passedSelectedTab) {
+      return
+    }
+
+    setSelectedTab(passedSelectedTab)
+  }, [passedSelectedTab])
 
   if (templateTypes.length === 1) {
     return (

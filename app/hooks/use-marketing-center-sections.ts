@@ -9,7 +9,7 @@ import { selectUser } from 'selectors/user'
 import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 import { hasUserAccess } from 'utils/user-teams'
 
-interface ExtendedSection extends Section {
+export interface ExtendedSection extends Section {
   key: string
 }
 
