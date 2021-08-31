@@ -12,7 +12,10 @@ import {
 
 import MarketingSearchInput from '@app/views/components/MarketingSearchInput'
 import MarketingTemplateAndTemplateInstancePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePicker'
-import { MarketingTemplateAndTemplateInstancePickerProps } from '@app/views/components/MarketingTemplatePickers/types'
+import {
+  MarketingTemplateAndTemplateInstancePickerProps,
+  MyDesignsOrTemplateType
+} from '@app/views/components/MarketingTemplatePickers/types'
 
 const useStyles = makeStyles(
   () => ({
@@ -43,7 +46,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
   const classes = useStyles()
   const dialogRef = useRef<HTMLElement>(null)
   const [selectedTab, setSelectedTab] =
-    useState<Optional<IMarketingTemplateType>>(undefined)
+    useState<Optional<MyDesignsOrTemplateType>>(undefined)
 
   return (
     <Dialog
@@ -76,6 +79,7 @@ export default function MarketingTemplateAndTemplateInstancePickerModal({
         <MarketingTemplateAndTemplateInstancePicker
           {...pickerProps}
           selectedTab={selectedTab}
+          onSelectTab={setSelectedTab}
           containerRef={dialogRef}
         />
       </DialogContent>

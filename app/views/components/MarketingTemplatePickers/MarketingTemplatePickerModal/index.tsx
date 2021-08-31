@@ -78,6 +78,7 @@ export default function MarketingTemplatePickerModal({
         <MarketingTemplatePicker
           {...marketingTemplatePickerProps}
           selectedTab={selectedTab}
+          onSelectTab={setSelectedTab}
           containerRef={dialogRef}
         />
       </DialogContent>
