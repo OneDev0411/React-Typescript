@@ -51,8 +51,6 @@ export function AddOrEditEmailTemplateDrawer({
   })
   const dispatch = useDispatch()
 
-  console.log('AddOrEditEmailTemplateDrawer', { emailTemplate })
-
   const [editorState, setEditorState, bodyEditor] = useEditorState(
     (emailTemplate && emailTemplate.body) || ''
   )

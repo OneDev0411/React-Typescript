@@ -2,14 +2,15 @@ import { useState, useMemo, ChangeEvent } from 'react'
 
 import {
   Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
   Theme,
-  FormHelperText,
-  makeStyles
+  Select,
+  Button,
+  MenuItem,
+  makeStyles,
+  Typography,
+  InputLabel,
+  FormControl,
+  FormHelperText
 } from '@material-ui/core'
 import { Field } from 'react-final-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -68,8 +69,8 @@ export const EmailTemplate = ({
 Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] =
-    useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const brandId: UUID = useSelector(selectActiveBrandId)
   const { templates, isFetching } = useSelector<IAppState, EmailTemplates>(
     ({ emailTemplates }) => ({
@@ -148,7 +149,7 @@ Props) => {
                   const value = event.target.value
 
                   if (value === 'new') {
-                    return setIsEmailTemplateDrawerOpen(true)
+                    return setIsDrawerOpen(true)
                   }
 
                   onChange(value)
@@ -177,6 +178,18 @@ Props) => {
                   <Typography variant="body2">
                     Subject: {selectedTemplate.subject}
                   </Typography>
+                  {selectedTemplate.editable && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        setIsEditing(true)
+                        setIsDrawerOpen(true)
+                      }}
+                    >
+                      Edit Template
+                    </Button>
+                  )}
                 </Box>
                 <Iframe
                   fullWidth
@@ -185,14 +198,27 @@ Props) => {
                 />
               </Box>
             )}
-            {isEmailTemplateDrawerOpen && (
+            {isDrawerOpen && (
               <EmailTemplateDrawer
                 isOpen
+                emailTemplate={
+                  isEditing && selectedTemplate?.editable
+                    ? selectedTemplate
+                    : undefined
+                }
                 onClose={() => {
-                  setIsEmailTemplateDrawerOpen(false)
+                  setIsDrawerOpen(false)
+
+                  if (isEditing) {
+                    setIsEditing(false)
+                  }
                 }}
                 submitCallback={(template: IBrandEmailTemplate) => {
                   onChange(template.id)
+
+                  if (isEditing) {
+                    setIsEditing(false)
+                  }
                 }}
               />
             )}
