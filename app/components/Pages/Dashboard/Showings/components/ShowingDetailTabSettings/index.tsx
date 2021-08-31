@@ -10,7 +10,11 @@ import useAsync from 'hooks/use-async'
 import useNotify from 'hooks/use-notify'
 import updateShowing from 'models/showing/update-showing'
 
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import {
+  hasTimeConflicts,
+  hasInvalidTimeRange,
+  sortShowingAvailabilities
+} from '../../helpers'
 import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
 
 import { getValidShowingDetailSettingsTab } from './helpers'
@@ -148,7 +152,7 @@ function ShowingDetailTabSettings({
   const handleAvailabilitiesChange = (availabilities: IShowingAvailability[]) =>
     handleShowingUpdate({
       ...showing,
-      availabilities
+      availabilities: sortShowingAvailabilities(availabilities)
     })
 
   const handleDurationChange = (duration: number) =>
