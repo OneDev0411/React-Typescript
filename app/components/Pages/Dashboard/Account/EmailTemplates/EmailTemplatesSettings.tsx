@@ -31,8 +31,6 @@ function EmailTemplatesSettings() {
 
       <List
         onItemClick={(template: IBrandEmailTemplate) => {
-          console.log('onItemClick', { template })
-
           setSelectedTemplate(template)
           setIsOpen(true)
         }}
