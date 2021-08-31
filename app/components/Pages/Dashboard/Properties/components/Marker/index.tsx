@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
@@ -26,6 +28,7 @@ const useStyles = makeStyles(
       boxShadow: '0px 10px 18px -6px rgba(0,0,0,0.42)',
       transition: 'width .1s, height .1s, transform .1s, padding .1s',
       padding: 2,
+      zIndex: 1,
       '&::before': {
         content: '""',
         position: 'absolute',
@@ -54,12 +57,13 @@ const useStyles = makeStyles(
       display: 'inline-block',
       boxShadow: '0px 10px 18px -6px rgba(0,0,0,0.42)',
       cursor: 'pointer',
+      zIndex: 1,
       '&.hover, &.clicked': {
         backgroundColor: `${theme.palette.grey[800]} !important`,
         height: 15,
         width: 15,
         transform: 'translate(-8px, -8px)', // Marker Anchor
-        zIndex: 2
+        zIndex: 3
       }
     }
   }),
@@ -81,7 +85,8 @@ const Marker = ({
   listing,
   hover,
   clicked,
-  zoom = MINIMAL_MARKER_ZOOM_LEVEL
+  zoom = MINIMAL_MARKER_ZOOM_LEVEL,
+  ...rest
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -93,34 +98,27 @@ const Marker = ({
   const formatedPrice = getListingFormatedPrice(listing, user, true)
   const statusColor = getStatusColorClass(listing.status)
 
+  const isShowBubble = zoom >= MINIMAL_MARKER_ZOOM_LEVEL
+
   // We render markers differently based on the current zoom level...
   return (
     <>
-      {zoom >= MINIMAL_MARKER_ZOOM_LEVEL && (
-        <div
-          className={cn(classes.bubble, {
-            hover,
-            clicked
-          })}
-          style={{ backgroundColor: statusColor }}
-        >
-          {`${formatedPrice}`}
-          {(hover || clicked) && <MarkerPopup listing={listing} />}
-        </div>
-      )}
-      {zoom < MINIMAL_MARKER_ZOOM_LEVEL && (
-        <div
-          className={cn(classes.dot, {
-            hover,
-            clicked
-          })}
-          style={{ backgroundColor: statusColor }}
-        >
-          {(hover || clicked) && <MarkerPopup listing={listing} />}
-        </div>
-      )}
+      <div
+        className={cn({
+          [classes.bubble]: isShowBubble,
+          [classes.dot]: !isShowBubble,
+          hover,
+          clicked
+        })}
+        style={{ backgroundColor: statusColor }}
+      >
+        {isShowBubble && formatedPrice}
+        {(hover || clicked) && isShowBubble && (
+          <MarkerPopup listing={listing} />
+        )}
+      </div>
     </>
   )
 }
 
-export default Marker
+export default memo(Marker)
