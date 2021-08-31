@@ -1,15 +1,10 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 
-import {
-  Grid,
-  Box,
-  makeStyles,
-  ButtonGroup,
-  Button,
-  alpha
-} from '@material-ui/core'
+import { Grid, Box, makeStyles, alpha } from '@material-ui/core'
+import ListRoundedIcon from '@material-ui/icons/ListRounded'
+import ViewModuleRoundedIcon from '@material-ui/icons/ViewModuleRounded'
 import Pagination from '@material-ui/lab/Pagination'
-import cn from 'classnames'
+import ToggleButton from '@material-ui/lab/ToggleButton'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
@@ -28,7 +23,7 @@ import { MapToggler } from './MapToggler'
 import { Sort } from './Sort'
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     root: {
       width: '100%',
       minHeight: '100%',
@@ -54,6 +49,14 @@ const useStyles = makeStyles(
       flexGrow: 1,
       position: 'relative'
     },
+    toggleViewButton: {
+      margin: theme.spacing(0, 0.5),
+      '&.Mui-selected': {
+        borderColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
+        backgroundColor: 'unset'
+      }
+    },
     scrollableContent: {
       position: 'absolute',
       paddingBottom: 80,
@@ -61,13 +64,6 @@ const useStyles = makeStyles(
       overflowY: 'auto',
       width: '100%',
       scrollBehavior: 'smooth'
-    },
-    viewSwitcher: {
-      '&.active': {
-        boxShadow: 'inset 0px 0px 11px -7px #000000',
-        backgroundColor: '#00B286',
-        color: '#fff'
-      }
     },
     paginationContainer: {
       display: 'flex',
@@ -158,28 +154,28 @@ export const Results = ({
           {!zeroStateShouldShown && (
             <Box display="flex" flexDirection="row-reverse">
               <Sort />
-              &nbsp;
-              <ButtonGroup
-                size="small"
-                aria-label="outlined primary button group"
+              <ToggleButton
+                className={classes.toggleViewButton}
+                value="check"
+                color="primary"
+                selected={viewType === 'cards'}
+                onChange={() => {
+                  onToggleView('cards')
+                }}
               >
-                <Button
-                  onClick={() => onToggleView('cards')}
-                  className={cn(classes.viewSwitcher, {
-                    active: viewType === 'cards'
-                  })}
-                >
-                  Cards
-                </Button>
-                <Button
-                  onClick={() => onToggleView('table')}
-                  className={cn(classes.viewSwitcher, {
-                    active: viewType === 'table'
-                  })}
-                >
-                  Table
-                </Button>
-              </ButtonGroup>
+                <ViewModuleRoundedIcon />
+              </ToggleButton>
+              <ToggleButton
+                className={classes.toggleViewButton}
+                value="check"
+                color="primary"
+                selected={viewType === 'table'}
+                onChange={() => {
+                  onToggleView('table')
+                }}
+              >
+                <ListRoundedIcon />
+              </ToggleButton>
             </Box>
           )}
         </Grid>
