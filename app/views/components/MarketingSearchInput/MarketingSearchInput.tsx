@@ -63,7 +63,7 @@ export default function MarketingSearchInput({
           threshold: 0.3
         })
           .search(state.inputValue)
-          .sort((a, b) => a.type.localeCompare(b.type))
+          .sort((a, b) => a.category.localeCompare(b.category))
       }}
       renderInput={params => (
         <SearchInput
