@@ -26,7 +26,7 @@ const useStyles = makeStyles(
       borderBottom: `1px solid ${theme.palette.grey[200]}`,
       paddingRight: theme.spacing(1)
     },
-    title: { width: 'calc(100% - 48px)' } // 48px is the close button width
+    title: { flex: 1 }
   }),
   { name: 'Dialog' }
 )
