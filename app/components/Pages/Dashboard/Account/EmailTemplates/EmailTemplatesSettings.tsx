@@ -12,7 +12,7 @@ import List from './List'
 function EmailTemplatesSettings() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] =
-    useState<IBrandEmailTemplate | null>(null)
+    useState<Nullable<IBrandEmailTemplate>>(null)
 
   return (
     <>
@@ -31,6 +31,8 @@ function EmailTemplatesSettings() {
 
       <List
         onItemClick={(template: IBrandEmailTemplate) => {
+          console.log('onItemClick', { template })
+
           setSelectedTemplate(template)
           setIsOpen(true)
         }}

@@ -10,8 +10,6 @@ interface Props {
   prevStep?: Nullable<IBrandFlowStep>
   disableEdit: boolean
   isLastStep: boolean
-  emailTemplates: IBrandEmailTemplate[]
-  defaultSelectedEmailTemplate?: UUID
   onDelete: (step: IBrandFlowStep) => Promise<any>
   onUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onStepMove: (
@@ -19,7 +17,6 @@ interface Props {
     sourceIndex: number,
     destinationIndex: number
   ) => Promise<any>
-  onNewEmailTemplateClick: () => void
 }
 
 export function Step({
@@ -28,12 +25,9 @@ export function Step({
   prevStep,
   isLastStep,
   disableEdit,
-  emailTemplates,
-  defaultSelectedEmailTemplate,
   onDelete,
   onUpdate,
-  onStepMove,
-  onNewEmailTemplateClick
+  onStepMove
 }: Props) {
   const prevStepOrder = prevStep ? prevStep.order : null
 
@@ -81,14 +75,7 @@ export function Step({
     }
 
     if (step.email) {
-      return (
-        <BasicEmailForm
-          templates={emailTemplates}
-          defaultSelectedTemplate={defaultSelectedEmailTemplate}
-          onNewTemplateClick={onNewEmailTemplateClick}
-          {...commonProps}
-        />
-      )
+      return <BasicEmailForm {...commonProps} />
     }
 
     if (step.template || step.template_instance) {
