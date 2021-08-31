@@ -159,6 +159,8 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
     dispatch(changeListingHoverState(hover ? listingId : null))
   }
 
+  const handleToggleSelection = useCallback(toggleItem, [toggleItem])
+
   const columns = mapIsShown
     ? [...primaryColumns]
     : [...primaryColumns, ...secondaryColumns]
@@ -194,7 +196,7 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
                     checked={selections.some(
                       (item: ICompactListing) => item.id === listing.id
                     )}
-                    onChange={() => toggleItem(listing)}
+                    onChange={() => handleToggleSelection(listing)}
                     inputProps={{ 'aria-labelledby': listing.id }}
                   />
                 </TableCell>
