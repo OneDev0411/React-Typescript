@@ -1,26 +1,25 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 
 import { Grid, Box, makeStyles, alpha } from '@material-ui/core'
-import ListRoundedIcon from '@material-ui/icons/ListRounded'
-import ViewModuleRoundedIcon from '@material-ui/icons/ViewModuleRounded'
 import Pagination from '@material-ui/lab/Pagination'
-import ToggleButton from '@material-ui/lab/ToggleButton'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
 import { CardsView } from '../../components/CardsView'
+import { SortDropdown } from '../../components/GridControllers/SortDropdown'
+import ViewSwitcher from '../../components/GridControllers/ViewSwitcher'
 import { TableView } from '../../components/TableView'
 import ZeroState from '../../components/ZeroState'
 import {
   getListingsPage,
   getResultsCountText
 } from '../../helpers/pagination-utils'
+import { SortIndex, SortString } from '../../helpers/sort-utils'
 import { PAGE_SIZE } from '../../mapOptions'
 import useListingsContext from '../hooks/useListingsContext'
 
 import { ViewType } from './ExplorePage'
 import { MapToggler } from './MapToggler'
-import { Sort } from './Sort'
 
 const useStyles = makeStyles(
   theme => ({
@@ -63,7 +62,8 @@ const useStyles = makeStyles(
       maxHeight: '100%',
       overflowY: 'auto',
       width: '100%',
-      scrollBehavior: 'smooth'
+      scrollBehavior: 'smooth',
+      zIndex: 1
     },
     paginationContainer: {
       display: 'flex',
@@ -82,6 +82,8 @@ interface Props {
   viewType: ViewType
   onToggleView: (to: ViewType) => void
   isWidget: boolean
+  onChangeSort: (sort: SortString) => void
+  activeSort: { index: SortIndex; ascending: boolean }
 }
 
 export const Results = ({
@@ -89,6 +91,8 @@ export const Results = ({
   onMapToggle,
   viewType,
   onToggleView,
+  activeSort,
+  onChangeSort,
   isWidget
 }: Props) => {
   const classes = useStyles()
@@ -153,29 +157,11 @@ export const Results = ({
         <Grid item xs={6}>
           {!zeroStateShouldShown && (
             <Box display="flex" flexDirection="row-reverse">
-              <Sort />
-              <ToggleButton
-                className={classes.toggleViewButton}
-                value="check"
-                color="primary"
-                selected={viewType === 'cards'}
-                onChange={() => {
-                  onToggleView('cards')
-                }}
-              >
-                <ViewModuleRoundedIcon />
-              </ToggleButton>
-              <ToggleButton
-                className={classes.toggleViewButton}
-                value="check"
-                color="primary"
-                selected={viewType === 'table'}
-                onChange={() => {
-                  onToggleView('table')
-                }}
-              >
-                <ListRoundedIcon />
-              </ToggleButton>
+              <SortDropdown
+                onChangeSort={onChangeSort}
+                activeSort={activeSort}
+              />
+              <ViewSwitcher onToggleView={onToggleView} viewType={viewType} />
             </Box>
           )}
         </Grid>

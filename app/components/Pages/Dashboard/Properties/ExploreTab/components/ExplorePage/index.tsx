@@ -16,7 +16,12 @@ import {
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { LAST_BROWSING_LOCATION } from '../../../helpers/sort-utils'
+import {
+  getDefaultSort,
+  LAST_BROWSING_LOCATION,
+  parseSortIndex,
+  SortString
+} from '../../../helpers/sort-utils'
 import {
   setMapDrawing,
   removeMapDrawing,
@@ -112,6 +117,13 @@ export function ExplorePage({ user, isWidget }: Props) {
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [drawingMode, setDrawingMode] = useState(false)
   const [viewType, setViewType] = useState<ViewType>('cards')
+  const [activeSort, setActiveSort] = useState(
+    parseSortIndex(getDefaultSort(user))
+  )
+
+  const onChangeSort = (sort: SortString) => {
+    setActiveSort(parseSortIndex(sort))
+  }
 
   const onToggleView = (to: ViewType) => {
     setViewType(to)
@@ -233,6 +245,8 @@ export function ExplorePage({ user, isWidget }: Props) {
               mapIsShown={mapIsShown}
               onMapToggle={toggleMap}
               viewType={viewType}
+              onChangeSort={onChangeSort}
+              activeSort={activeSort}
               onToggleView={onToggleView}
               isWidget={isWidget}
             />
