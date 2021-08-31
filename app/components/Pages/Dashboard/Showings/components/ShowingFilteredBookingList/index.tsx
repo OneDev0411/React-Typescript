@@ -16,7 +16,6 @@ export interface ShowingFilteredBookingListProps
   extends Pick<
       ShowingBookingListProps,
       | 'onApprovalAction'
-      | 'onDismissAction'
       | 'onAckAction'
       | 'hasPropertyColumn'
       | 'stackDateAndTimeColumns'
@@ -33,7 +32,6 @@ export interface ShowingFilteredBookingListProps
 function ShowingFilteredBookingList({
   appointments,
   onApprovalAction,
-  onDismissAction,
   onAckAction,
   hasPropertyColumn,
   location,
@@ -72,7 +70,6 @@ function ShowingFilteredBookingList({
         rows={filteredAppointments}
         emptyMessage={emptyMessage}
         onApprovalAction={onApprovalAction}
-        onDismissAction={onDismissAction}
         onAckAction={onAckAction}
         hasPropertyColumn={hasPropertyColumn}
         hasPastBookingsFilter

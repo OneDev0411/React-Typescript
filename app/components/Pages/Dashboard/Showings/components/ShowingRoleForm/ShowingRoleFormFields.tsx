@@ -1,7 +1,11 @@
 import { Box } from '@material-ui/core'
 import { FormProps, FormRenderProps } from 'react-final-form'
 
-import { FormPhoneField, FormTextField } from 'components/final-form-fields'
+import {
+  FormPhoneField,
+  FormTextField,
+  FormCheckbox
+} from 'components/final-form-fields'
 
 import { requiredTextValidator } from './helpers'
 import ShowingRoleFormCheckboxGroupField from './ShowingRoleFormCheckboxGroupField'
@@ -13,12 +17,16 @@ export interface ShowingRoleFormFieldsProps
   extends Pick<FormProps<ShowingRoleFormValues>, 'initialValues'>,
     Pick<FormRenderProps<ShowingRoleFormValues>, 'form'> {
   hasNotificationTypeFields: boolean
+  hasSaveToContactCheckbox: boolean
+  saveToContactCheckboxLabel: string
 }
 
 function ShowingRoleFormFields({
   form,
   initialValues,
-  hasNotificationTypeFields
+  hasNotificationTypeFields,
+  hasSaveToContactCheckbox,
+  saveToContactCheckboxLabel
 }: ShowingRoleFormFieldsProps) {
   return (
     <>
@@ -77,6 +85,12 @@ function ShowingRoleFormFields({
             label="Notify on confirmations and cancelations"
           />
         </>
+      )}
+      {hasSaveToContactCheckbox && (
+        <FormCheckbox
+          name="save_to_contact"
+          label={saveToContactCheckboxLabel}
+        />
       )}
     </>
   )

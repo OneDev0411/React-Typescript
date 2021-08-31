@@ -115,6 +115,7 @@ class Roles extends React.Component {
 
     const role = {
       user: user.id,
+      brand: user.brand_id,
       email: user.email,
       legal_last_name: user.last_name,
       legal_first_name: user.first_name,

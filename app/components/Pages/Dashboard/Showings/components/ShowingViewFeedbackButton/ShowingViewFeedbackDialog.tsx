@@ -1,10 +1,12 @@
-import { Box, Grid } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 
 import Dialog, { DialogProps } from '../Dialog'
-import ShowingDialogCard from '../ShowingBookingList/ShowingDialogCard'
+import ShowingDialogQuote from '../ShowingBookingList/ShowingDialogQuote'
+
+import ShowingViewFeedbackDialogResult from './ShowingViewFeedbackDialogResult'
 
 export interface ShowingViewFeedbackDialogProps
-  extends Omit<DialogProps, 'title' | 'children'>,
+  extends Omit<DialogProps, 'title' | 'children' | 'hasDialogContent'>,
     Pick<IShowingAppointment, 'contact' | 'feedback'> {}
 
 function ShowingViewFeedbackDialog({
@@ -19,42 +21,31 @@ function ShowingViewFeedbackDialog({
         <>
           {contact.display_name}
           {contact.company && (
-            <Box component="span" color="grey.500">
-              , {contact.company}
-            </Box>
+            <>
+              {' '}
+              <Box component="span" color="grey.500">
+                from
+              </Box>{' '}
+              {contact.company}
+            </>
           )}
         </>
       }
+      hasDialogContent={false}
     >
-      <Box my={2}>
-        <Grid container spacing={1}>
-          {feedback?.questions.map((question, idx) => {
-            const answer = feedback?.answers[idx]
-
-            if (!answer) {
-              return null
-            }
-
-            return (
-              <Grid item key={idx} sm={6}>
-                <ShowingDialogCard
-                  question={question}
-                  answer={answer}
-                  minHeight={90}
-                />
-              </Grid>
-            )
-          })}
-          {feedback?.comment && (
-            <Grid item sm={12}>
-              <ShowingDialogCard
-                question="Comments or recommendations"
-                answer={feedback?.comment}
-                multiline
-              />
-            </Grid>
-          )}
-        </Grid>
+      <Box m={2}>
+        {feedback && (
+          <ShowingViewFeedbackDialogResult
+            questions={feedback.questions}
+            answers={feedback.answers}
+          />
+        )}
+        {feedback?.comment && (
+          <ShowingDialogQuote
+            question={`${contact.first_name}\'s feedback`}
+            answer={feedback.comment}
+          />
+        )}
       </Box>
     </Dialog>
   )

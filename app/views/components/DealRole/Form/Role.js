@@ -130,6 +130,7 @@ export function RoleForm(props) {
               isVisible={isVisible('legal_first_name')}
               isRequired={isRequired('legal_first_name')}
               crmSearch={!isVisible('mls_id')}
+              autoTrim={false}
               mutators={props.form.mutators}
               component={NameInput}
             />
@@ -155,6 +156,7 @@ export function RoleForm(props) {
               isVisible={isVisible('legal_last_name')}
               isRequired={isRequired('legal_last_name')}
               crmSearch={!isVisible('mls_id')}
+              autoTrim={false}
               component={NameInput}
               mutators={props.form.mutators}
             />
@@ -198,6 +200,7 @@ export function RoleForm(props) {
               isVisible={isVisible('company_title')}
               isRequired={isRequired('company_title')}
               component={NameInput}
+              autoTrim={false}
               crmSearch // always search company in crm contacts
               mutators={props.form.mutators}
             />
