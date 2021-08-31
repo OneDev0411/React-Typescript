@@ -2,7 +2,7 @@ import { Grid, Box } from '@material-ui/core'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 
-import { toggleListingHoverState } from '../../ExploreTab/context/actions'
+import { changeListingHoverState } from '../../ExploreTab/context/actions'
 import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
 import ListingCard from '../ListingCardWithFavorite'
 
@@ -16,8 +16,8 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
   const { selections, toggleItem } = useListSelection()
   const [, dispatch] = useListingsContext()
 
-  const handleToggleHoverState = (listingId: UUID) => {
-    dispatch(toggleListingHoverState(listingId))
+  const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(listingId, hover))
   }
 
   return (
@@ -33,7 +33,7 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
             <ListingCard
               isWidget={isWidget}
               listing={listing}
-              onToggleHoverState={handleToggleHoverState}
+              onChangeHoverState={handleChangeHoverState}
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}

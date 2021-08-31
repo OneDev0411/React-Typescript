@@ -25,7 +25,7 @@ import { useListSelection } from '@app/views/components/ListSelection/use-list-s
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { selectUserUnsafe } from 'selectors/user'
 
-import { toggleListingHoverState } from '../../ExploreTab/context/actions'
+import { changeListingHoverState } from '../../ExploreTab/context/actions'
 import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
 
 const useStyles = makeStyles(
@@ -158,8 +158,8 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
     [isWidget]
   )
 
-  const toggleHoverState = (listingId: UUID) => {
-    dispatch(toggleListingHoverState(listingId))
+  const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(listingId, hover))
   }
 
   const columns = mapIsShown
@@ -185,8 +185,8 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
               <TableRow
                 key={listing.id}
                 id={listing.id}
-                onMouseEnter={() => toggleHoverState(listing.id)}
-                onMouseLeave={() => toggleHoverState(listing.id)}
+                onMouseEnter={() => handleChangeHoverState(listing.id, true)}
+                onMouseLeave={() => handleChangeHoverState(listing.id, false)}
                 className={cn(classes.row, {
                   hover: listing.hover,
                   selected: listing.clicked

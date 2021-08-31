@@ -9,10 +9,11 @@ export const setListings = (
   }
 })
 
-export const toggleListingHoverState = (id: UUID) => ({
-  type: 'TOGGLE_LISTING_HOVER_STATE' as 'TOGGLE_LISTING_HOVER_STATE',
+export const changeListingHoverState = (id: UUID, hover: boolean) => ({
+  type: 'CHANGE_LISTING_HOVER_STATE' as 'CHANGE_LISTING_HOVER_STATE',
   payload: {
-    id
+    id,
+    hover
   }
 })
 
@@ -70,7 +71,7 @@ export const removeMapDrawing = () => ({
 
 export type Actions = ReturnType<
   | typeof setListings
-  | typeof toggleListingHoverState
+  | typeof changeListingHoverState
   | typeof toggleListingClickedState
   | typeof setOffAllClickedStates
   | typeof setMapDrawing

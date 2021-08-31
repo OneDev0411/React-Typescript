@@ -7,7 +7,7 @@ import Marker from '../../components/Marker'
 import { pointsFromPolygon, createMapOptions } from '../../helpers/map-helpers'
 import { bootstrapURLKeys } from '../../mapOptions'
 import {
-  toggleListingHoverState,
+  changeListingHoverState,
   toggleListingClickedState,
   setOffAllClickedStates,
   setMapBounds
@@ -35,7 +35,10 @@ export const Map = ({
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
 
-  const toggleHoverState = (key: UUID) => dispatch(toggleListingHoverState(key))
+  const toggleHoverState = (id: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(id, hover))
+  }
+
   const toggleClickedState = (key: UUID) => {
     const resultElement = document.getElementById(key)
 
@@ -132,8 +135,12 @@ export const Map = ({
       bootstrapURLKeys={bootstrapURLKeys}
       // we show/hide map controls based on drawing/normal mode
       options={maps => createMapOptions(maps, drawingMode)}
-      onChildMouseEnter={toggleHoverState}
-      onChildMouseLeave={toggleHoverState}
+      onChildMouseEnter={(id: UUID) => {
+        toggleHoverState(id, true)
+      }}
+      onChildMouseLeave={(id: UUID) => {
+        toggleHoverState(id, false)
+      }}
       onChildClick={toggleClickedState}
       onClick={onMapClick}
       onChange={handleChange}

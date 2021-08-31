@@ -169,7 +169,7 @@ export interface ListingCardProps {
   /**
    * The onMouseEnter / onMouseLeave handler of listing card
    */
-  onToggleHoverState?: (id: UUID) => void
+  onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
 export default function ListingCard({
@@ -178,7 +178,7 @@ export default function ListingCard({
   hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
-  onToggleHoverState,
+  onChangeHoverState,
   liked = undefined,
   onLikeClick = noop,
   onClick
@@ -217,9 +217,9 @@ export default function ListingCard({
     !hideFeatures &&
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
-  const handleToggleHoverState = () => {
-    if (typeof onToggleHoverState === 'function') {
-      onToggleHoverState(listing.id)
+  const handleChangeHoverState = (id: UUID, hover: boolean) => {
+    if (typeof onChangeHoverState === 'function') {
+      onChangeHoverState(id, hover)
     }
   }
 
@@ -232,8 +232,12 @@ export default function ListingCard({
       data-test="card"
       variant="outlined"
       className={classes.card}
-      onMouseEnter={handleToggleHoverState}
-      onMouseLeave={handleToggleHoverState}
+      onMouseEnter={() => {
+        handleChangeHoverState(listing.id, true)
+      }}
+      onMouseLeave={() => {
+        handleChangeHoverState(listing.id, false)
+      }}
       onClick={onClick}
     >
       <CardActionArea component="div">

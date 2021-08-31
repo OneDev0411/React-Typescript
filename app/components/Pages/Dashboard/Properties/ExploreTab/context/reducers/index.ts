@@ -35,12 +35,12 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
       return { ...state, result: { listings: mapReadyListings, info } }
     }
 
-    case 'TOGGLE_LISTING_HOVER_STATE': {
-      const { id } = action.payload
+    case 'CHANGE_LISTING_HOVER_STATE': {
+      const { id, hover } = action.payload
 
       const newListings = state.result.listings.map(listing => {
         if (listing.id === id) {
-          return { ...listing, hover: !listing.hover }
+          return { ...listing, hover }
         }
 
         return listing
