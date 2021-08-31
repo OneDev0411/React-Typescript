@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { Grid, Box } from '@material-ui/core'
 
 import { useListSelection } from 'components/ListSelection/use-list-selection'
@@ -14,11 +16,15 @@ interface Props {
 
 export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
   const { selections, toggleItem } = useListSelection()
-  const [, dispatch] = useListingsContext()
+  const [state, dispatch] = useListingsContext()
 
-  const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(listingId, hover))
-  }
+  const handleChangeHoverState = useCallback(
+    (listingId: UUID, hover: boolean) => {
+      dispatch(changeListingHoverState(hover ? listingId : null))
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
 
   return (
     <Grid container>
@@ -33,6 +39,8 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
             <ListingCard
               isWidget={isWidget}
               listing={listing}
+              hover={state.listingStates.hover === listing.id}
+              clicked={state.listingStates.click === listing.id}
               onChangeHoverState={handleChangeHoverState}
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id

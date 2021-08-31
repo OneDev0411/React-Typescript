@@ -41,7 +41,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  listings: ICompactListingWithUIState[]
+  listings: ICompactListing[]
   mapIsShown: boolean
   isWidget: boolean
 }
@@ -52,10 +52,7 @@ const MLS_BASE_URL = '/dashboard/properties'
 interface TableColumnItem {
   header: string
   id: string
-  render: (
-    listing: ICompactListingWithUIState,
-    user: Nullable<IUser>
-  ) => React.ReactNode
+  render: (listing: ICompactListing, user: Nullable<IUser>) => React.ReactNode
 }
 
 const primaryColumns: TableColumnItem[] = [
@@ -131,7 +128,7 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const { selections, toggleItem } = useListSelection()
-  const [, dispatch] = useListingsContext()
+  const [state, dispatch] = useListingsContext()
   const [selectedListingId, setSelectedListingId] =
     useState<Nullable<UUID>>(null)
   const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] =
@@ -159,7 +156,7 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
   )
 
   const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(listingId, hover))
+    dispatch(changeListingHoverState(hover ? listingId : null))
   }
 
   const columns = mapIsShown
@@ -188,8 +185,8 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
                 onMouseEnter={() => handleChangeHoverState(listing.id, true)}
                 onMouseLeave={() => handleChangeHoverState(listing.id, false)}
                 className={cn(classes.row, {
-                  hover: listing.hover,
-                  selected: listing.clicked
+                  hover: state.listingStates.hover === listing.id,
+                  selected: state.listingStates.click === listing.id
                 })}
               >
                 <TableCell padding="checkbox">

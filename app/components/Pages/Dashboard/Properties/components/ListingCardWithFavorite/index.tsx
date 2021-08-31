@@ -12,6 +12,8 @@ import { selectUserUnsafe } from 'selectors/user'
 
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {
+  clicked?: boolean
+  hover?: boolean
   isWidget?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
@@ -19,6 +21,8 @@ interface Props
 const ListingCardWithFavorite = ({
   listing,
   isWidget = false,
+  clicked = false,
+  hover = false,
   tags,
   selected = undefined,
   onToggleSelection = noop,
@@ -71,6 +75,8 @@ const ListingCardWithFavorite = ({
       <ListingCard
         onChangeHoverState={onChangeHoverState}
         listing={listing}
+        clicked={clicked}
+        hover={hover}
         selected={user ? selected : undefined}
         liked={user ? isFavorited : undefined}
         tags={tags}

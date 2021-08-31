@@ -77,14 +77,6 @@ declare type ICompactListing<
   dom: number | null
 } & Association<'list_agent', Nullable<IAgent>, Associations> &
   Association<'selling_agent', Nullable<IAgent>, Associations>
-
-declare type ICompactListingWithUIState<
-  Associations extends ICompactListingAssociation = ''
-> = ICompactListing<Associations> & {
-  clicked: boolean
-  hover: boolean
-}
-
 declare interface ICompactListingInfo {
   count: number
   proposed_title: string

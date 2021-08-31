@@ -115,7 +115,7 @@ export interface ListingCardProps {
   /**
    * The listing or compact listing object
    */
-  listing: IListing | ICompactListing | ICompactListingWithUIState
+  listing: IListing | ICompactListing
 
   /**
    * Shows the passed items in separate chips at the top right of the listing card
@@ -167,6 +167,16 @@ export interface ListingCardProps {
   onClick?: () => void
 
   /**
+   * The card hover state
+   */
+  hover?: boolean
+
+  /**
+   * The card clicked state
+   */
+  clicked?: boolean
+
+  /**
    * The onMouseEnter / onMouseLeave handler of listing card
    */
   onChangeHoverState?: (id: UUID, hover: boolean) => void
@@ -175,6 +185,8 @@ export interface ListingCardProps {
 export default function ListingCard({
   listing,
   tags,
+  clicked = false,
+  hover = false,
   hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
@@ -223,9 +235,7 @@ export default function ListingCard({
     }
   }
 
-  const shouldHighlightCard =
-    (listing as ICompactListingWithUIState).hover ||
-    (listing as ICompactListingWithUIState).clicked
+  const shouldHighlightCard = hover || clicked
 
   return (
     <Card

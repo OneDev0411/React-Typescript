@@ -8,8 +8,7 @@ import { pointsFromPolygon, createMapOptions } from '../../helpers/map-helpers'
 import { bootstrapURLKeys } from '../../mapOptions'
 import {
   changeListingHoverState,
-  toggleListingClickedState,
-  setOffAllClickedStates,
+  changeListingClickedState,
   setMapBounds
 } from '../context/actions'
 import useListingsContext from '../hooks/useListingsContext'
@@ -35,8 +34,8 @@ export const Map = ({
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
 
-  const toggleHoverState = (id: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(id, hover))
+  const changeHoverState = (id: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(hover ? id : null))
   }
 
   const toggleClickedState = (key: UUID) => {
@@ -47,10 +46,10 @@ export const Map = ({
       resultElement.scrollIntoView({ behavior: 'smooth' })
     }
 
-    dispatch(toggleListingClickedState(key))
+    dispatch(changeListingClickedState(key))
   }
 
-  const onMapClick = () => dispatch(setOffAllClickedStates())
+  const onMapClick = () => dispatch(changeListingClickedState(null))
 
   const handleChange = ({ center, zoom, bounds }: ChangeEventValue) => {
     dispatch(setMapBounds(center, zoom, bounds))
@@ -136,10 +135,10 @@ export const Map = ({
       // we show/hide map controls based on drawing/normal mode
       options={maps => createMapOptions(maps, drawingMode)}
       onChildMouseEnter={(id: UUID) => {
-        toggleHoverState(id, true)
+        changeHoverState(id, true)
       }}
       onChildMouseLeave={(id: UUID) => {
-        toggleHoverState(id, false)
+        changeHoverState(id, false)
       }}
       onChildClick={toggleClickedState}
       onClick={onMapClick}
@@ -151,6 +150,8 @@ export const Map = ({
       {!drawingMode &&
         state.result.listings.map(listing => (
           <Marker
+            hover={state.listingStates.hover === listing.id}
+            clicked={state.listingStates.click === listing.id}
             key={listing.id}
             lat={listing.location?.latitude}
             lng={listing.location?.longitude}

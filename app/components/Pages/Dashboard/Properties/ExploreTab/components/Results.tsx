@@ -81,11 +81,7 @@ const useStyles = makeStyles(
 // TODO: remove this function after API sorting is ready
 // https://gitlab.com/rechat/server/-/issues/1839
 const sortListings = memoize(
-  (
-    listings: ICompactListingWithUIState[],
-    index: SortIndex,
-    ascending: boolean
-  ) => {
+  (listings: ICompactListing[], index: SortIndex, ascending: boolean) => {
     return listings.sort((a, b) => sortByIndex(a, b, index, ascending))
   },
   (...args) => `${hash(args[0])}_${args[1]}_${args[2]}`
@@ -156,7 +152,7 @@ export const Results = ({
   useEffect(() => {
     setCurrentPage(1)
     scrollToTop()
-  }, [state.isLoading, state.result.listings.length])
+  }, [state.result.listings])
 
   return (
     <Grid container className={classes.root}>

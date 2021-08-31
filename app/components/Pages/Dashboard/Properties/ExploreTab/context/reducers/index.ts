@@ -9,9 +9,10 @@ export interface ListingsState {
   }
   map: { center: Optional<ICoord>; zoom: Optional<number> }
   result: {
-    listings: ICompactListingWithUIState[]
+    listings: ICompactListing[]
     info: Nullable<ICompactListingInfo>
   }
+  listingStates: { hover: Nullable<UUID>; click: Nullable<UUID> }
   isLoading: boolean
 }
 
@@ -19,6 +20,7 @@ export const initialState: ListingsState = {
   search: { bounds: null, office: null, drawing: [], filters: null },
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
+  listingStates: { hover: null, click: null },
   isLoading: true
 }
 
@@ -26,49 +28,30 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
   switch (action.type) {
     case 'SET_LISTINGS': {
       const { listings, info } = action.payload
-      const mapReadyListings = listings.map(listing => ({
-        ...listing,
-        hover: false,
-        clicked: false
-      }))
 
-      return { ...state, result: { listings: mapReadyListings, info } }
+      return {
+        ...state,
+        result: { listings, info },
+        listingStates: { hover: null, click: null }
+      }
     }
 
     case 'CHANGE_LISTING_HOVER_STATE': {
-      const { id, hover } = action.payload
-
-      const newListings = state.result.listings.map(listing => {
-        if (listing.id === id) {
-          return { ...listing, hover }
-        }
-
-        return listing
-      })
-
-      return { ...state, result: { ...state.result, listings: newListings } }
-    }
-
-    case 'TOGGLE_LISTING_CLICKED_STATE': {
       const { id } = action.payload
 
-      const newListings = state.result.listings.map(listing => {
-        if (listing.id === id) {
-          return { ...listing, clicked: !listing.clicked }
-        }
-
-        return { ...listing, clicked: false }
-      })
-
-      return { ...state, result: { ...state.result, listings: newListings } }
+      return {
+        ...state,
+        listingStates: { ...state.listingStates, hover: id }
+      }
     }
 
-    case 'SET_OFF_ALL_CLICKED_STATES': {
-      const newListings = state.result.listings.map(listing => {
-        return { ...listing, clicked: false }
-      })
+    case 'CHANGE_LISTING_CLICKED_STATE': {
+      const { id } = action.payload
 
-      return { ...state, result: { ...state.result, listings: newListings } }
+      return {
+        ...state,
+        listingStates: { ...state.listingStates, click: id }
+      }
     }
 
     case 'SET_MAP_DRAWING': {

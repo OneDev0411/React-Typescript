@@ -36,7 +36,7 @@ const useStyles = makeStyles(
         background: 'inherit',
         clipPath: 'polygon(0 0, 100% 0, 50% 100%)'
       },
-      '&.hover, &.selected': {
+      '&.hover, &.clicked': {
         height: 25,
         width: 55,
         backgroundColor: `${theme.palette.grey[800]} !important`,
@@ -54,7 +54,7 @@ const useStyles = makeStyles(
       display: 'inline-block',
       boxShadow: '0px 10px 18px -6px rgba(0,0,0,0.42)',
       cursor: 'pointer',
-      '&.hover, &.selected': {
+      '&.hover, &.clicked': {
         backgroundColor: `${theme.palette.grey[800]} !important`,
         height: 15,
         width: 15,
@@ -69,7 +69,9 @@ const useStyles = makeStyles(
 interface Props {
   lat?: number
   lng?: number
-  listing: ICompactListingWithUIState
+  hover?: boolean
+  clicked?: boolean
+  listing: ICompactListing
   zoom?: number
 }
 
@@ -77,6 +79,8 @@ const Marker = ({
   lat,
   lng,
   listing,
+  hover,
+  clicked,
   zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
   const classes = useStyles()
@@ -95,28 +99,24 @@ const Marker = ({
       {zoom >= MINIMAL_MARKER_ZOOM_LEVEL && (
         <div
           className={cn(classes.bubble, {
-            hover: listing.hover,
-            selected: listing.clicked
+            hover,
+            clicked
           })}
           style={{ backgroundColor: statusColor }}
         >
           {`${formatedPrice}`}
-          {(listing.hover || listing.clicked) && (
-            <MarkerPopup listing={listing} />
-          )}
+          {(hover || clicked) && <MarkerPopup listing={listing} />}
         </div>
       )}
       {zoom < MINIMAL_MARKER_ZOOM_LEVEL && (
         <div
           className={cn(classes.dot, {
-            hover: listing.hover,
-            selected: listing.clicked
+            hover,
+            clicked
           })}
           style={{ backgroundColor: statusColor }}
         >
-          {(listing.hover || listing.clicked) && (
-            <MarkerPopup listing={listing} />
-          )}
+          {(hover || clicked) && <MarkerPopup listing={listing} />}
         </div>
       )}
     </>

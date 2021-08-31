@@ -9,24 +9,18 @@ export const setListings = (
   }
 })
 
-export const changeListingHoverState = (id: UUID, hover: boolean) => ({
+export const changeListingHoverState = (id: Nullable<UUID>) => ({
   type: 'CHANGE_LISTING_HOVER_STATE' as 'CHANGE_LISTING_HOVER_STATE',
-  payload: {
-    id,
-    hover
-  }
-})
-
-export const toggleListingClickedState = (id: UUID) => ({
-  type: 'TOGGLE_LISTING_CLICKED_STATE' as 'TOGGLE_LISTING_CLICKED_STATE',
   payload: {
     id
   }
 })
 
-export const setOffAllClickedStates = () => ({
-  type: 'SET_OFF_ALL_CLICKED_STATES' as 'SET_OFF_ALL_CLICKED_STATES',
-  payload: {}
+export const changeListingClickedState = (id: Nullable<UUID>) => ({
+  type: 'CHANGE_LISTING_CLICKED_STATE' as 'CHANGE_LISTING_CLICKED_STATE',
+  payload: {
+    id
+  }
 })
 
 export const setMapDrawing = (points: ICoord[]) => ({
@@ -72,8 +66,7 @@ export const removeMapDrawing = () => ({
 export type Actions = ReturnType<
   | typeof setListings
   | typeof changeListingHoverState
-  | typeof toggleListingClickedState
-  | typeof setOffAllClickedStates
+  | typeof changeListingClickedState
   | typeof setMapDrawing
   | typeof setMapBounds
   | typeof setMapLocation
