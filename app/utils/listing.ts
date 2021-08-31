@@ -194,20 +194,51 @@ export const getListingFeatures = (
 
 export const getListingPrice = (
   listing: ICompactListing | IListing,
-  user: Nullable<IUser>,
-  isShortFormat: boolean = true
-): string => {
+  user: Nullable<IUser>
+): number => {
   let price = listing.price
 
   if (user && listing.close_price && user.user_type === 'Agent') {
     price = listing.close_price
   }
 
+  return price || 0
+}
+
+export const getListingFormatedPrice = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>,
+  isShortFormat: boolean = true
+): string => {
+  const price = getListingPrice(listing, user)
+
   if (isShortFormat) {
     return numeral(price).format('0.[00]a')
   }
 
-  return price.toLocaleString('en-US')
+  return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
+}
+
+export const getListingPricePerSquareFoot = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>,
+  fallback: Nullable<string> = null
+): Nullable<string> => {
+  const price = getListingPrice(listing, user)
+  const squareMeters =
+    listing.type === 'compact_listing'
+      ? listing.compact_property.square_meters
+      : listing.property.square_meters
+
+  const squareFeet = metersToFeet(squareMeters)
+
+  if (squareFeet === 0) {
+    return fallback
+  }
+
+  return (price / squareFeet).toLocaleString('en-US', {
+    maximumFractionDigits: 2
+  })
 }
 
 export default {
@@ -222,5 +253,5 @@ export default {
   getResizeUrl,
   squareMetersToAcres,
   isLeaseProperty,
-  getListingPrice
+  getListingPrice: getListingFormatedPrice
 }
