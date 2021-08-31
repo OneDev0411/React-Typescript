@@ -26,6 +26,8 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
     []
   )
 
+  const handleToggleSelection = useCallback(toggleItem, [toggleItem])
+
   return (
     <Grid container>
       {listings.map(listing => (
@@ -45,7 +47,7 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}
-              onToggleSelection={() => toggleItem(listing)}
+              onToggleSelection={() => handleToggleSelection(listing)}
             />
           </Box>
         </Grid>
