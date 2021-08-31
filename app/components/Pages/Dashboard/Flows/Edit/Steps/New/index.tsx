@@ -38,7 +38,7 @@ interface Props {
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
 }
 
-type Forms = Nullable<'event' | 'basic_email' | 'marketing_email'>
+export type Forms = Nullable<'event' | 'basic_email' | 'marketing_email'>
 
 export const NewStep = ({
   index,
@@ -135,6 +135,7 @@ export const NewStep = ({
     return (
       <Box className={classes.container} mt={openForm ? 2 : 0}>
         <AddButtons
+          activeForm={openForm}
           onNewEventClick={() => creatNewStep('event')}
           onNewMarketingEmailClick={() => creatNewStep('marketing_email')}
           onNewBasicEmailClick={() => creatNewStep('basic_email')}
