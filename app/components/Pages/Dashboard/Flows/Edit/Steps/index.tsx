@@ -1,4 +1,4 @@
-import React from 'react'
+import { Fragment } from 'react'
 
 import { Box, makeStyles, Theme } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -89,7 +89,7 @@ export default function Steps({
                   const isLastStep = stepIndex === items.length
 
                   return (
-                    <React.Fragment key={item.id}>
+                    <Fragment key={item.id}>
                       <Box
                         mb={
                           draggableSnapshot.isDraggingOver || disableEdit
@@ -120,7 +120,7 @@ export default function Steps({
                             />
                           </Box>
                         )}
-                    </React.Fragment>
+                    </Fragment>
                   )
                 })}
               </div>
