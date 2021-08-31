@@ -13,9 +13,9 @@ import { normalizeListingLocation } from 'utils/map'
 
 import { selectListings } from '../../../../../reducers/listings'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
-import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
+import { TableView } from '../components/TableView'
 import Tabs from '../components/Tabs'
 import { formatListing } from '../helpers/format-listing'
 import {
@@ -111,7 +111,7 @@ class Favorites extends React.Component {
 
       default:
         return (
-          <ListView
+          <TableView
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}

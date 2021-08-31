@@ -17,9 +17,9 @@ import { getSavedSearchListings } from '../../../../../models/listings/alerts/ge
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import Avatars from '../../../../../views/components/Avatars'
-import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
+import { TableView } from '../components/TableView'
 import Tabs from '../components/Tabs'
 import { formatListing } from '../helpers/format-listing'
 import {
@@ -203,7 +203,7 @@ class SavedSearch extends React.Component {
 
       default:
         return (
-          <ListView
+          <TableView
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
