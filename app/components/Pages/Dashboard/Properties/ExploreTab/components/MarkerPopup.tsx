@@ -6,7 +6,7 @@ import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import { useSelector } from 'react-redux'
 
 import {
-  getListingPrice,
+  getListingFormatedPrice,
   addressTitle,
   metersToFeet,
   getResizeUrl,
@@ -91,7 +91,7 @@ const MarkerPopup = ({ listing }: Props) => {
   const user = useSelector(selectUserUnsafe)
 
   const statusColor = getStatusColorClass(listing.status)
-  const price = getListingPrice(listing, user, false)
+  const price = getListingFormatedPrice(listing, user, false)
   const squareFeet = Math.floor(
     metersToFeet(listing.compact_property.square_meters)
   ).toLocaleString()
