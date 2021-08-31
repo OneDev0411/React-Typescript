@@ -6,8 +6,7 @@ import { selectUserUnsafe } from '@app/selectors/user'
 import { getListingFormatedPrice, getStatusColorClass } from 'utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../mapOptions'
-
-import MarkerPopup from './MarkerPopup'
+import MarkerPopup from '../MarkerPopup'
 
 const useStyles = makeStyles(
   theme => ({
