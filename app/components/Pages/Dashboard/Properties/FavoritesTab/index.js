@@ -19,7 +19,7 @@ import { TableView } from '../components/TableView'
 import Tabs from '../components/Tabs'
 import { formatListing } from '../helpers/format-listing'
 import {
-  parsSortIndex,
+  parseSortIndex,
   getDefaultSort,
   sortByIndex,
   SORT_FIELD_SETTING_KEY
@@ -41,7 +41,7 @@ class Favorites extends React.Component {
   constructor(props) {
     super(props)
 
-    const { index, ascending } = parsSortIndex(getDefaultSort(this.props.user))
+    const { index, ascending } = parseSortIndex(getDefaultSort(this.props.user))
 
     this.state = {
       activeView: props.location.query.view || 'map',
@@ -77,7 +77,7 @@ class Favorites extends React.Component {
   })
 
   onChangeSort = async sort => {
-    const { index, ascending } = parsSortIndex(sort)
+    const { index, ascending } = parseSortIndex(sort)
 
     this.setState({
       activeSort: {

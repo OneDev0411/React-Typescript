@@ -31,7 +31,7 @@ export const createSortString = (
   return `${sortPrefix}${index}` as SortString
 }
 
-export const parsSortIndex = (sort: SortString) => {
+export const parseSortIndex = (sort: SortString) => {
   const isDescending = sort.charAt(0) === '-'
   let index = (isDescending ? sort.slice(1) : sort) as SortIndex
 
@@ -41,10 +41,12 @@ export const parsSortIndex = (sort: SortString) => {
   }
 }
 
-export const getDefaultSort = (user: IUser) => {
+export const getDefaultSort = (user: IUser): SortString => {
   const sortIndex = getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY)
 
-  return typeof sortIndex === 'string' ? sortIndex : SORT_FIELD_DEFAULT
+  return (
+    typeof sortIndex === 'string' ? sortIndex : SORT_FIELD_DEFAULT
+  ) as SortString
 }
 
 export const sortByIndex = (
