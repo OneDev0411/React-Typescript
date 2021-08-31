@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Box, CircularProgress, makeStyles, Theme } from '@material-ui/core'
 import { useWindowScroll } from 'react-use'
 
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import { ListContext } from './context'
 import { EmptyState } from './EmptyState'
