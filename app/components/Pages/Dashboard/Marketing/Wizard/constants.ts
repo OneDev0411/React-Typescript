@@ -16,7 +16,10 @@ export const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
   'InstagramStory',
   'LinkedInCover',
   'FacebookCover',
-  'Letter'
+  'Letter',
+  'RealtorComCover',
+  'TwitterCover',
+  'YouTubeCover'
 ]
 
 export const TEMPLATES_PAGE_SIZE = 8
