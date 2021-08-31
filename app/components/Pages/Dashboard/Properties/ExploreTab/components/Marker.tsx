@@ -3,7 +3,7 @@ import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
-import { getListingPrice, getStatusColorClass } from 'utils/listing'
+import { getListingFormatedPrice, getStatusColorClass } from 'utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../mapOptions'
 
@@ -87,7 +87,7 @@ const Marker = ({
     return null
   }
 
-  const formatedPrice = getListingPrice(listing, user, true)
+  const formatedPrice = getListingFormatedPrice(listing, user, true)
   const statusColor = getStatusColorClass(listing.status)
 
   // We render markers differently based on the current zoom level...
