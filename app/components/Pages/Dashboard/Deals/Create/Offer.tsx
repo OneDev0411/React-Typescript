@@ -52,6 +52,7 @@ function CreateOffer({ router, route, params }: Props) {
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
 
   const [isCreatingOffer, setIsCreatingOffer] = useState(false)
+  const [isOfferCreated, setIsOfferCreated] = useState(false)
 
   const dispatch = useReduxDispatch()
   const user = useSelector<IAppState, IUser>(({ user }) => user!)
@@ -64,11 +65,11 @@ function CreateOffer({ router, route, params }: Props) {
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
-      if (!deal.has_active_offer) {
+      if (!isOfferCreated) {
         return 'By canceling you will lose your work. Continue?'
       }
     })
-  }, [deal?.has_active_offer, router, route])
+  }, [isOfferCreated, router, route])
 
   useEffect(() => {
     deal?.has_active_offer &&
@@ -141,6 +142,8 @@ function CreateOffer({ router, route, params }: Props) {
           is_deactivated: false
         })
       )
+
+      setIsOfferCreated(true)
 
       const roles = agents.concat(clients).map(role => ({
         ...role,

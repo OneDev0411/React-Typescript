@@ -1,14 +1,7 @@
-import React, {
-  forwardRef,
-  RefObject,
-  useImperativeHandle,
-  useRef
-} from 'react'
+import { forwardRef, RefObject, useImperativeHandle, useRef } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
-
-import List from 'components/Calendar'
-import { CalendarRef } from 'components/Calendar/types'
+import List from 'components/ContactProfileTimeline'
+import { CalendarRef } from 'components/ContactProfileTimeline/types'
 
 import { Filters } from '../Tabs'
 
@@ -28,23 +21,7 @@ interface Props {
 
 const associations = ['calendar_event.full_thread']
 
-export const useStyles = makeStyles(
-  (theme: Theme) => ({
-    container: {
-      display: 'flex',
-      flexFlow: 'column',
-      height: '100vh',
-      maxHeight: '100vh',
-      overflow: 'hidden'
-    }
-  }),
-  {
-    name: 'ContactProfileTimeline'
-  }
-)
-
 function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
-  const classes = useStyles()
   const localTimelineRef = useRef<CalendarRef>(null)
 
   const handleReload = (filter = activeFilter) => {
@@ -82,7 +59,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
   }
 
   return (
-    <div className={classes.container}>
+    <div>
       {activeFilter === Filters.Events && (
         <List
           contrariwise

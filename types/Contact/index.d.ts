@@ -108,6 +108,10 @@ declare interface IContact extends IContactBase {
   type: string
 
   company: Nullable<string>
+
+  first_name: Nullable<string>
+  middle_name: Nullable<string>
+  last_name: Nullable<string>
 }
 
 declare interface INormalizedContact extends IContact {
@@ -156,6 +160,14 @@ declare interface IContactAttributeInput {
   label?: string
   is_primary?: boolean
   is_partner?: boolean
+}
+
+declare interface IContactTag extends IModel<'crm_tag'> {
+  created_by: Nullable<UUID>
+  updated_by: Nullable<UUID>
+  tag: string
+  text: string
+  touch_freq: Nullable<number>
 }
 
 declare interface IContactAttributeInputWithContact
@@ -266,14 +278,6 @@ declare interface IContactDuplicateCluster {
 declare interface IContactDuplicateClusterInput {
   parent: UUID
   sub_contacts: UUID[]
-}
-
-declare interface IContactTag {
-  id: UUID
-  text: string
-  created_at: number
-  updated_at: number
-  type: 'crm_tag'
 }
 
 type TContactAssociation =

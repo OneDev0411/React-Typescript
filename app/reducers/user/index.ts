@@ -61,6 +61,11 @@ const userReducer = (state: IUserState = null, action) => {
         ...state,
         ...action.user
       }
+    case actionTypes.DISCONNECT_DOCUSIGN:
+      return {
+        ...state,
+        docusign: null
+      }
     default:
       return state
   }

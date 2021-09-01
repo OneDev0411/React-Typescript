@@ -1,22 +1,23 @@
-import React from 'react'
-
+import { Typography } from '@material-ui/core'
 import { mdiHomeOutline, mdiDrag, mdiClose } from '@mdi/js'
 import fecha from 'fecha'
 import Flex from 'styled-flex-component'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   addressTitle,
+  getAddressLine2,
   getListingAddressObj,
   getStatusColorClass
-} from 'utils/listing'
-import { grey } from 'views/utils/colors'
+} from '@app/utils/listing'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { grey } from '@app/views/utils/colors'
 
 import {
   ListItem,
   ListItemImage,
   ListItemAddress,
-  ListItemStatus,
+  MlsDetailsContainer,
+  DetailsContainer,
   AddressContainer,
   Status,
   Address,
@@ -62,24 +63,25 @@ export function MlsItem({ item, onClickRemove, ...props }) {
             </Address>
 
             <Address style={{ color: grey.A550 }}>
-              {typeof address === 'object' && (
-                <>
-                  {address.city}, {address.state}, {address.postal_code},
-                </>
-              )}{' '}
+              {typeof address === 'object' && <>{getAddressLine2(address)},</>}{' '}
               ${item.price.toLocaleString()}
             </Address>
           </ListItemAddress>
         </AddressContainer>
 
-        <ListItemStatus>
-          <Status
-            style={{
-              backgroundColor: getStatusColorClass(item.status)
-            }}
-          >
-            {getStatus()}
-          </Status>
+        <DetailsContainer>
+          <MlsDetailsContainer>
+            <Status
+              style={{
+                backgroundColor: getStatusColorClass(item.status)
+              }}
+            >
+              {getStatus()}
+            </Status>
+            <Typography component="p" variant="caption" color="textSecondary">
+              Listed by: {item.mls_display_name}
+            </Typography>
+          </MlsDetailsContainer>
 
           {props.removable && onClickRemove && (
             <SvgIcon
@@ -88,7 +90,7 @@ export function MlsItem({ item, onClickRemove, ...props }) {
               onClick={onClickRemove}
             />
           )}
-        </ListItemStatus>
+        </DetailsContainer>
       </Flex>
     </ListItem>
   )

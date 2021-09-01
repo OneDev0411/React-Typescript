@@ -55,15 +55,22 @@ export async function updateBrandChecklist(
   return response.body.data
 }
 
-export async function addBrandChecklist(brand, checklist) {
+export async function addBrandChecklist(
+  brand: UUID,
+  checklist: Partial<IBrandChecklist>
+): Promise<IBrandChecklist> {
   try {
-    return await new Fetch().post(`/brands/${brand}/checklists`).send(checklist)
+    const response = await new Fetch()
+      .post(`/brands/${brand}/checklists`)
+      .send(checklist)
+
+    return response.body.data
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 
-export async function deleteChecklist(checklist) {
+export async function deleteChecklist(checklist: IBrandChecklist) {
   try {
     return await new Fetch().delete(
       `/brands/${checklist.brand}/checklists/${checklist.id}`

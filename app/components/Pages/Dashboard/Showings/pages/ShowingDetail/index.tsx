@@ -14,6 +14,7 @@ import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import { showingDetailTabs } from '../../constants'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 
+import ShowingDetailLayout from './ShowingDetailLayout'
 import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
 import useGetShowing from './use-get-showing'
@@ -47,8 +48,8 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         listing={showing?.listing || showing?.deal?.listing}
         bookingUrl={showingBookingUrl}
       />
-      <PageLayout.Main gutter={4} mt={0} pt={0}>
-        <Box mb={3}>
+      <PageLayout.Main gutter={0} mt={0}>
+        <Box mx={4}>
           <ShowingDetailTabs value={tab} id={showingId} />
         </Box>
         {isLoading || !showing ? (
@@ -66,18 +67,22 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         ) : (
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-              <ShowingDetailTabBookings
-                appointments={showing.appointments ?? defaultAppointments}
-                setShowing={setShowing}
-                showingBookingUrl={showingBookingUrl}
-              />
+              <ShowingDetailLayout>
+                <ShowingDetailTabBookings
+                  appointments={showing.appointments ?? defaultAppointments}
+                  setShowing={setShowing}
+                  showingBookingUrl={showingBookingUrl}
+                />
+              </ShowingDetailLayout>
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-              <ShowingDetailTabVisitors
-                showing={showing}
-                appointments={showing.appointments ?? defaultAppointments}
-                showingBookingUrl={showingBookingUrl}
-              />
+              <ShowingDetailLayout>
+                <ShowingDetailTabVisitors
+                  showing={showing}
+                  appointments={showing.appointments ?? defaultAppointments}
+                  showingBookingUrl={showingBookingUrl}
+                />
+              </ShowingDetailLayout>
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>
               <ShowingDetailTabSettings
