@@ -65,9 +65,9 @@ export function ContactRoles({
         <AutoComplete<IAgent>
           placeholder={placeholder}
           onFooterClick={createNewContact}
-          debug={false}
+          debug
           model={searchAgentsModel}
-          minChars={2}
+          minChars={3}
           getOptionLabel={(option: IAgent) => option.full_name}
           renderFooter={inputValue => (
             <>

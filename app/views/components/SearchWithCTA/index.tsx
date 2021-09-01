@@ -12,7 +12,7 @@ const useStyles = makeStyles(
       border: 'none',
       borderRadius: theme.shape.borderRadius,
       color: theme.palette.action.active,
-      height: theme.spacing(5.25),
+      height: theme.spacing(5),
       lineHeight: 'initial',
       padding: theme.spacing(0, 1.5)
     },
@@ -21,7 +21,7 @@ const useStyles = makeStyles(
       flexDirection: 'column',
       zIndex: 1,
       position: 'absolute',
-      borderRadius: 4,
+      borderRadius: theme.shape.borderRadius,
       overflow: 'hidden',
       boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.22)',
       fontFamily: 'Lato'
@@ -29,13 +29,13 @@ const useStyles = makeStyles(
     listBoxFooter: {
       borderTop: '1px solid #e4e4e4',
       backgroundColor: '#F9FAFC',
-      padding: 10,
+      padding: theme.spacing(1),
       textTransform: 'none',
       textAlign: 'left'
     },
     listBoxFooterLabel: {
       justifyContent: 'start',
-      color: '#00B286'
+      color: theme.palette.primary.main
     },
     listbox: {
       padding: 0,
@@ -45,7 +45,7 @@ const useStyles = makeStyles(
       overflow: 'auto',
       maxHeight: 270,
       '& li': {
-        padding: 8
+        padding: theme.spacing(1)
       },
       '& li[data-focus="true"]': {
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
@@ -58,7 +58,8 @@ const useStyles = makeStyles(
       }
     },
     noResults: {
-      padding: 8
+      padding: theme.spacing(2),
+      backgroundColor: theme.palette.background.paper
     }
   }),
   { name: 'AutoComplete' }
@@ -194,7 +195,7 @@ export default function AutoComplete<T>({
           style={widthStyle}
         />
       </div>
-      {open && !isLoading && (
+      {open && !isLoading && inputValue.length >= minChars && (
         <div className={classes.listboxContainer} style={widthStyle}>
           {options.length > 0 && inputValue.length > 0 && (
             <List className={classes.listbox} {...getListboxProps()}>
@@ -215,7 +216,9 @@ export default function AutoComplete<T>({
             <Button
               className={classes.listBoxFooter}
               classes={{ label: classes.listBoxFooterLabel }}
-              onClick={() => onFooterClick(inputValue)}
+              onMouseDown={() => {
+                onFooterClick(inputValue)
+              }}
             >
               {renderFooter(inputValue)}
             </Button>
