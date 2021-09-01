@@ -45,7 +45,6 @@ export default function MarketingSearchInput({
 
   return (
     <Autocomplete<TemplateTypeWithMediumAndCategory, false, true, true>
-      freeSolo
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
       options={typesWithCategory}
