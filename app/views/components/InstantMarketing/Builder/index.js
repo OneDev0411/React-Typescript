@@ -1113,7 +1113,7 @@ class Builder extends React.Component {
 
   getPossibleMimeTypesForUpload = () => {
     if (this.isDynamicTemplate) {
-      return ['image/jpeg', 'image/png', 'image/gif']
+      return ['image/*']
     }
 
     return ['image/jpeg', 'image/png']
