@@ -4,7 +4,7 @@ export function isContextApproved(
   deal: IDeal,
   field: IDealBrandContext
 ): boolean {
-  const context: IDealContext = getContext(deal, field.key)
+  const context: Nullable<IDealContext> = getContext(deal, field.key)
 
   if (!context) {
     return true

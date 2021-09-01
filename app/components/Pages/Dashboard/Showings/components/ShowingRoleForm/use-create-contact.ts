@@ -48,14 +48,14 @@ function useCreateContact(): CreateContactReturn {
       })
 
       return run(async () => {
-        const contacts = await createContacts([newContact], {
+        const response = await createContacts([newContact], {
           ...defaultQuery,
           // @ts-ignore
           // TODO: fix the `get` type issue
           get: true
         })
 
-        return contacts[0]
+        return response.data[0]
       })
     },
     contact: data,
