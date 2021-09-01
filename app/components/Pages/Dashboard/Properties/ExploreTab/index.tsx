@@ -12,6 +12,7 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
+import { property_subtypes } from '../mapOptions'
 
 import { ExplorePage } from './components/ExplorePage'
 import { LandingPage } from './components/LandingPage'
@@ -45,12 +46,19 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
 
+  // TODO: fix initial state
   const initialState = {
     search: {
       bounds: null,
-      office: brokerageQuery ?? null,
+      ...(brokerageQuery ? { office: brokerageQuery } : {}),
       drawing: [],
-      filters: null
+      // TODO: get initial filters from utils
+      filters: {
+        open_house: false,
+        property_types: ['Residential'],
+        listing_statuses: ['Active'],
+        property_subtypes: Object.values(property_subtypes)
+      }
     },
     map: userLastBrowsingLocation
   }

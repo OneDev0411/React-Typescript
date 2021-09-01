@@ -96,10 +96,8 @@ const CreateAlertModal = ({
 
 export default compose(
   connect(
-    ({ data, search }) => ({
-      user: data.user,
-      searchOptions: search.options,
-      drawingPoints: search.map.drawing.points
+    ({ data }) => ({
+      user: data.user
     }),
     { createAlert }
   ),

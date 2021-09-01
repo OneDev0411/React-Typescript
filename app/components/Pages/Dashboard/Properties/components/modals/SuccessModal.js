@@ -28,7 +28,7 @@ const Icon = ({ type }) => {
         <img
           alt="bell"
           className={classes.bellIcon}
-          src="/static/images/dashboard/properties/alert-bell-saved.svg"
+          src="/static/images/dashboard/mls/alert-bell-saved.svg"
         />
       )
     default:

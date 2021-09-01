@@ -3,9 +3,10 @@ import { Actions } from '../actions'
 export interface ListingsState {
   search: {
     bounds: Nullable<IBounds>
-    office: Nullable<string>
+    office?: Nullable<string>
     drawing: ICoord[]
-    filters: Nullable<AlertFilters>
+    // TODO: change filters model
+    filters: Nullable<any>
   }
   map: { center: Optional<ICoord>; zoom: Optional<number> }
   result: {
@@ -17,7 +18,7 @@ export interface ListingsState {
 }
 
 export const initialState: ListingsState = {
-  search: { bounds: null, office: null, drawing: [], filters: null },
+  search: { bounds: null, drawing: [], filters: null },
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
   listingStates: { hover: null, click: null },

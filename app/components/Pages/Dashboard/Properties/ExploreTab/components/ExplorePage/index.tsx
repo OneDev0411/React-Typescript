@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
@@ -12,16 +12,20 @@ import {
   isMapLibrariesLoaded,
   loadMapLibraries
 } from '@app/utils/google-map-api'
+import { confirmation } from 'actions/confirmation'
 
+import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
+import { coordToPoint, pointFromBounds } from '../../../helpers/map-helpers'
 import {
   getDefaultSort,
   LAST_BROWSING_LOCATION,
   parseSortIndex,
   SortString
 } from '../../../helpers/sort-utils'
+import { QUERY_LIMIT } from '../../../mapOptions'
 import {
   setMapDrawing,
   removeMapDrawing,
@@ -116,6 +120,7 @@ export function ExplorePage({ user, isWidget }: Props) {
   const [mapIsShown, setMapIsShown] = useState(true)
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [drawingMode, setDrawingMode] = useState(false)
+  const [isShowAlertModal, setIsShowAlertModal] = useState(false)
   const [viewType, setViewType] = useState<ViewType>('cards')
   const [activeSort, setActiveSort] = useState(
     parseSortIndex(getDefaultSort(user))
@@ -189,6 +194,26 @@ export function ExplorePage({ user, isWidget }: Props) {
     [user, reduxDispatch]
   )
 
+  const handleSaveSearch = () => {
+    if (state.result.info && state.result.info.total < 400) {
+      setIsShowAlertModal(true)
+    } else {
+      reduxDispatch(
+        confirmation({
+          confirmLabel: 'Ok',
+          description:
+            'Please zoom in or set more filters. You can save max 400 listings.',
+          hideCancelButton: true,
+          message: 'Too many matches!'
+        })
+      )
+    }
+  }
+
+  const onCloseAlertModal = () => {
+    setIsShowAlertModal(false)
+  }
+
   return (
     <>
       <Box className={classes.container}>
@@ -196,7 +221,18 @@ export function ExplorePage({ user, isWidget }: Props) {
         <Tabs user={user} isWidget={isWidget} />
         <Box className={classes.searchBar}>
           <Autocomplete isMapView={mapIsShown} onSelectPlace={onSelectPlace} />
-          <Filters />
+          <Box>
+            <Filters />
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              disabled={state.isLoading}
+              onClick={handleSaveSearch}
+            >
+              Save Search
+            </Button>
+          </Box>
         </Box>
 
         <Box className={classes.main}>
@@ -256,6 +292,23 @@ export function ExplorePage({ user, isWidget }: Props) {
       <Box className={classes.selectionActionBar}>
         <ShareListings />
       </Box>
+      <CreateAlertModal
+        user={user}
+        onHide={onCloseAlertModal}
+        isActive={isShowAlertModal}
+        alertProposedTitle={state.result.info?.proposed_title}
+        searchOptions={{
+          ...state.search.filters,
+          points:
+            state.search.drawing.length > 0
+              ? state.search.drawing.map(coordToPoint)
+              : pointFromBounds(state.search.bounds),
+          offices: state.search.office ?? [state.search.office],
+          postal_codes: null,
+          limit: QUERY_LIMIT
+        }}
+        drawingPoints={state.search.drawing.map(coordToPoint)}
+      />
     </>
   )
 }
