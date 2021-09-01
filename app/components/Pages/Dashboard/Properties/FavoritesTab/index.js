@@ -13,9 +13,9 @@ import { normalizeListingLocation } from 'utils/map'
 
 import { selectListings } from '../../../../../reducers/listings'
 import getFavorites from '../../../../../store_actions/listings/favorites/get-favorites'
+import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
-import { TableView } from '../components/TableView'
 import Tabs from '../components/Tabs'
 import { formatListing } from '../helpers/format-listing'
 import {
@@ -44,7 +44,7 @@ class Favorites extends React.Component {
     const { index, ascending } = parseSortIndex(getDefaultSort(this.props.user))
 
     this.state = {
-      activeView: props.location.query.view || 'map',
+      activeView: props.location.query.view || 'cards',
       activeSort: {
         index,
         ascending
@@ -60,10 +60,10 @@ class Favorites extends React.Component {
     }
   }
 
-  onChangeView = e => {
-    const activeView = e.currentTarget.dataset.view
+  onToggleView = to => {
+    const activeView = to
 
-    this.setState({ activeView }, () => {
+    this.setState({ activeView: to }, () => {
       browserHistory.push(`/dashboard/properties/favorites?view=${activeView}`)
     })
   }
@@ -99,30 +99,36 @@ class Favorites extends React.Component {
     )
 
     switch (this.state.activeView) {
-      case 'map':
+      case 'cards':
         return (
           <MapView
             user={user}
             tabName="favorites"
             sortedListings={sortedListings}
             Map={<Map markers={listings.data} isFetching={isFetching} />}
+            onToggleView={this.onToggleView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
           />
         )
 
       default:
         return (
-          <TableView
+          <ListView
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
             user={user}
+            onToggleView={this.onToggleView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
           />
         )
     }
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, user, isWidget } = this.props
 
     return (
       <>
@@ -131,7 +137,7 @@ class Favorites extends React.Component {
         </Helmet>
         <GlobalPageLayout className={classes.mlsContainer}>
           <Header title="Favorites" />
-          <Tabs user={this.props.user} />
+          <Tabs user={user} isWidget={isWidget} />
           {this.renderMain()}
         </GlobalPageLayout>
       </>

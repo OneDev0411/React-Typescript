@@ -8,20 +8,15 @@ import hash from 'object-hash'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
 import { CardsView } from '../../components/CardsView'
-import { SortDropdown } from '../../components/GridControllers/SortDropdown'
-import ViewSwitcher from '../../components/GridControllers/ViewSwitcher'
+import { ResultsHeader } from '../../components/ResultsHeader'
 import { TableView } from '../../components/TableView'
 import ZeroState from '../../components/ZeroState'
-import {
-  getListingsPage,
-  getResultsCountText
-} from '../../helpers/pagination-utils'
+import { getListingsPage } from '../../helpers/pagination-utils'
 import { sortByIndex, SortIndex, SortString } from '../../helpers/sort-utils'
 import { PAGE_SIZE } from '../../mapOptions'
 import useListingsContext from '../hooks/useListingsContext'
 
 import { ViewType } from './ExplorePage'
-import { MapToggler } from './MapToggler'
 
 const useStyles = makeStyles(
   theme => ({
@@ -41,10 +36,6 @@ const useStyles = makeStyles(
       alignItems: 'center',
       backgroundColor: alpha('#fff', 0.7),
       zIndex: 3
-    },
-    resultsHeader: {
-      padding: '10px 0',
-      zIndex: 2
     },
     resultsContainer: {
       flexGrow: 1,
@@ -161,35 +152,17 @@ export const Results = ({
           <AnimatedLoader />
         </Grid>
       )}
-      <Grid container className={classes.resultsHeader}>
-        <Grid item xs={6}>
-          <Box display="flex" alignItems="center" height={1}>
-            {!mapIsShown && (
-              <MapToggler checked={mapIsShown} onChange={onMapToggle} />
-            )}
-            {paginationShouldShown && (
-              <>
-                {getResultsCountText(
-                  state.result.listings.length,
-                  currentPage,
-                  PAGE_SIZE
-                )}
-              </>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={6}>
-          {!zeroStateShouldShown && (
-            <Box display="flex" flexDirection="row-reverse">
-              <SortDropdown
-                onChangeSort={onChangeSort}
-                activeSort={activeSort}
-              />
-              <ViewSwitcher onToggleView={onToggleView} viewType={viewType} />
-            </Box>
-          )}
-        </Grid>
-      </Grid>
+      <ResultsHeader
+        isLoading={state.isLoading}
+        mapIsShown={mapIsShown}
+        currentPage={currentPage}
+        resultsCount={state.result.listings.length}
+        viewType={viewType}
+        onMapToggle={onMapToggle}
+        onToggleView={onToggleView}
+        onChangeSort={onChangeSort}
+        activeSort={activeSort}
+      />
       <div className={classes.resultsContainer}>
         <Grid
           ref={cardsContainerRef}

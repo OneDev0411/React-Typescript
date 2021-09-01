@@ -17,9 +17,9 @@ import { getSavedSearchListings } from '../../../../../models/listings/alerts/ge
 import { selectAlert } from '../../../../../reducers/listings/alerts/list'
 import getAlerts from '../../../../../store_actions/listings/alerts/get-alerts'
 import Avatars from '../../../../../views/components/Avatars'
+import ListView from '../components/ListView'
 import MapView from '../components/MapView'
 import { Header } from '../components/PageHeader'
-import { TableView } from '../components/TableView'
 import Tabs from '../components/Tabs'
 import { formatListing } from '../helpers/format-listing'
 import {
@@ -94,7 +94,7 @@ class SavedSearch extends React.Component {
         ascending
       },
       isFetching: false,
-      activeView: props.location.query.view || 'map'
+      activeView: props.location.query.view || 'cards'
     }
   }
 
@@ -134,10 +134,10 @@ class SavedSearch extends React.Component {
     }
   }
 
-  onChangeView = e => {
-    const activeView = e.currentTarget.dataset.view
+  onToggleView = to => {
+    const activeView = to
 
-    this.setState({ activeView }, () => {
+    this.setState({ activeView: to }, () => {
       browserHistory.push(
         // eslint-disable-next-line max-len
         `/dashboard/properties/saved-searches/${this.props.savedSearch.id}?view=${activeView}`
@@ -187,10 +187,14 @@ class SavedSearch extends React.Component {
     )
 
     switch (this.state.activeView) {
-      case 'map':
+      case 'cards':
         return (
           <MapView
+            isFetching={isFetching}
             sortedListings={sortedListings}
+            onToggleView={this.onToggleView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
             Map={
               <Map
                 savedSearch={this.props.savedSearch}
@@ -203,11 +207,14 @@ class SavedSearch extends React.Component {
 
       default:
         return (
-          <TableView
+          <ListView
             isFetching={isFetching}
             sortedListings={sortedListings}
             listings={listings}
             user={user}
+            onToggleView={this.onToggleView}
+            onChangeSort={this.onChangeSort}
+            activeSort={this.state.activeSort}
           />
         )
     }
@@ -234,7 +241,14 @@ class SavedSearch extends React.Component {
               />
             )}
           />
-          <Tabs user={this.props.user} />
+          <Tabs
+            user={this.props.user}
+            onToggleView={this.onToggleView}
+            onChangeSort={this.onChangeSort}
+            activeView={this.state.activeView}
+            isWidget={this.props.isWidget}
+            activeSort={this.state.activeSort}
+          />
           {this.renderMain()}
         </GlobalPageLayout>
       </>
