@@ -12,7 +12,10 @@ import { useDropzone } from 'dropzone'
 
 import { UploadableImageTabProps } from '../../types'
 
-export default function Upload({ onSelectFile }: UploadableImageTabProps) {
+export default function Upload({
+  onSelectFile,
+  acceptableMimeType
+}: UploadableImageTabProps) {
   const theme = useTheme()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -34,7 +37,7 @@ export default function Upload({ onSelectFile }: UploadableImageTabProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
-    accept: 'image/*'
+    accept: acceptableMimeType
   })
 
   if (isLoading) {

@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  RefObject,
-  useImperativeHandle,
-  useRef
-} from 'react'
+import { forwardRef, RefObject, useImperativeHandle, useRef } from 'react'
 
 import List from 'components/ContactProfileTimeline'
 import { CalendarRef } from 'components/ContactProfileTimeline/types'

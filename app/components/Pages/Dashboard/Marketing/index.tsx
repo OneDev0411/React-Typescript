@@ -42,7 +42,7 @@ interface Props {
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
-    defaultSelectedTemplate: UUID
+    defaultSelectedTemplate: Optional<UUID>
     onSelectTemplate: (template: IBrandMarketingTemplate) => void
     onDeleteTemplate: (template: IBrandMarketingTemplate) => void
   }) => JSX.Element
@@ -52,7 +52,10 @@ export function MarketingLayout({
   render,
   ...props
 }: Props &
-  WithRouterProps<{ types: string; medium: IMarketingTemplateMedium }>) {
+  WithRouterProps<
+    { types: string; medium: IMarketingTemplateMedium },
+    { templateId?: UUID }
+  >) {
   const classes = useStyles()
   const activeBrand = useSelector(selectActiveTeamId)
   const user = useSelector(selectUser)
@@ -107,7 +110,7 @@ export function MarketingLayout({
       ...location,
       query: {
         ...newQuery,
-        templateId: template.id
+        templateId: template.template.id
       }
     })
   }
