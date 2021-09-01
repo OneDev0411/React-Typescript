@@ -1,7 +1,7 @@
 /**
  * a helper that extracts a field from context or proposed values
  */
-export function getContext(deal, field) {
+export function getContext(deal: IDeal, field: string): Nullable<IDealContext> {
   if (!deal) {
     return null
   }

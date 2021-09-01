@@ -1,5 +1,6 @@
 import { format } from 'fecha'
 
+import { getIndexOfWeekday } from '@app/utils/weekday'
 import config from 'config'
 import Deal from 'models/Deal'
 
@@ -214,4 +215,34 @@ export function getAppointmentTitle(
     ', ',
     getAppointmentTimeLabel(appointment.time, appointment.showing.duration)
   ].join('')
+}
+
+export function sortShowingAvailabilities<T extends IShowingAvailabilityInput>(
+  availabilities: T[]
+): T[] {
+  return [...availabilities].sort((time1, time2) => {
+    const time1WeekdayIndex = getIndexOfWeekday(time1.weekday)
+    const time2WeekdayIndex = getIndexOfWeekday(time2.weekday)
+
+    if (time1WeekdayIndex < time2WeekdayIndex) {
+      return -1
+    }
+
+    if (time1WeekdayIndex > time2WeekdayIndex) {
+      return 1
+    }
+
+    // I'm sure the date ranges do not have any conflicts because of the
+    // available validations on the form. So I relied on this fact and just
+    // use the start value of the range for doing the comparison.
+    if (time1.availability[0] < time2.availability[0]) {
+      return -1
+    }
+
+    if (time1.availability[0] > time2.availability[0]) {
+      return 1
+    }
+
+    return 0
+  })
 }

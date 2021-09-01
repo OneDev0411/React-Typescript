@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import useAsync from 'hooks/use-async'
 import getShowing from 'models/showing/get-showing'
 
-import { sortAppointments } from '../../helpers'
+import { sortAppointments, sortShowingAvailabilities } from '../../helpers'
 
 import useShowingUpdateAppointmentNotifications from './use-showing-update-appointment-notifications'
 
@@ -28,6 +28,7 @@ function useGetShowing(showingId: UUID): UseGetShowingReturn {
 
         return {
           ...showing,
+          availabilities: sortShowingAvailabilities(showing.availabilities),
           appointments: showing.appointments
             ? sortAppointments(
                 showing.appointments.map(appointment => ({

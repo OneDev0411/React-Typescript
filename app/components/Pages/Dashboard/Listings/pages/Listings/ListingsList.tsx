@@ -1,8 +1,10 @@
 import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 
 import useBrandAndDealsListings from '@app/hooks/use-brand-and-deals-listings'
 import { GetBrandListingsOptions } from '@app/models/listings/search/get-brand-listings'
 import { Table } from '@app/views/components/Grid/Table'
+import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import LoadingContainer from '@app/views/components/LoadingContainer'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
@@ -43,6 +45,7 @@ interface ListingsListProps
 
 function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
   const classes = useStyles()
+  const gridClasses = useGridStyles()
   const { listings: rows, isLoading } = useBrandAndDealsListings(
     brandId,
     OPTIONS
@@ -120,7 +123,9 @@ function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
       LoadingStateComponent={() => (
         <LoadingContainer style={{ padding: '10% 0' }} />
       )}
-      getTrProps={() => ({ className: classes.row })}
+      getTrProps={() => ({
+        className: classNames(classes.row, gridClasses.row)
+      })}
       EmptyStateComponent={() => (
         <ListingsListEmptyState
           message={searchTerm ? 'No results' : 'There are no listings.'}

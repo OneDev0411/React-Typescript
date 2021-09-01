@@ -1,6 +1,9 @@
 import { Box, Typography, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
 import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
 
 const useStyles = makeStyles(
@@ -8,8 +11,7 @@ const useStyles = makeStyles(
     root: {
       height: theme.spacing(3),
       padding: theme.spacing(0, 0.5),
-      borderRadius: theme.spacing(1.5),
-      '& > svg': { fontSize: theme.spacing(2) }
+      borderRadius: theme.spacing(1.5)
     },
     label: { marginLeft: theme.spacing(0.5) },
     requested: {
@@ -52,7 +54,7 @@ function ShowingBookingListColumnStatus({
       display="inline-flex"
       alignItems="center"
     >
-      {icon}
+      {icon && <SvgIcon path={icon} size={muiIconSizes.small} />}
       <Typography className={classes.label} variant="body2" component="span">
         {label}
       </Typography>

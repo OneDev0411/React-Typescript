@@ -42,20 +42,20 @@ function ShowingColumnContactActions({
 
   return (
     <Box className={className} onClick={handleClick}>
-      {contact.email && (
-        <ShowingColumnContactIconLabel
-          icon={<SvgIcon path={mdiEmailOutline} />}
-          label="Email"
-          marginRight={contact.phone_number ? spacing : 0}
-          onClick={openEmailDrawer}
-          compact={compact}
-        />
-      )}
       {contact.phone_number && (
         <ShowingColumnContactIconLabel
           icon={<SvgIcon path={mdiPhoneOutline} />}
           label="Phone"
+          marginRight={contact.phone_number ? spacing : 0}
           onClick={handleCopy}
+          compact={compact}
+        />
+      )}
+      {contact.email && (
+        <ShowingColumnContactIconLabel
+          icon={<SvgIcon path={mdiEmailOutline} />}
+          label="Email"
+          onClick={openEmailDrawer}
           compact={compact}
         />
       )}
