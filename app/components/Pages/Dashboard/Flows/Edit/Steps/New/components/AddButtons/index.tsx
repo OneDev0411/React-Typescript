@@ -84,7 +84,7 @@ export const AddButtons = ({
   return (
     <Box className={classes.container} position="relative">
       <Typography variant="body1" className={classes.title}>
-        Add a New Step
+        Select a Step
       </Typography>
       <Box className={classes.buttonContainer}>
         <Box
