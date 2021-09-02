@@ -173,13 +173,14 @@ class ActionsButton extends React.Component<
 
     if (
       ['view-envelope', 'view-form', 'view-file'].includes(type) &&
-      this.props.type === 'task'
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
     ) {
       this.props.actionsDispatch({
         type: SET_MODE,
         mode: {
           type: 'viewer',
-          taskId: this.props.task.id
+          taskId: this.props.task?.id
         }
       })
 
@@ -379,6 +380,20 @@ class ActionsButton extends React.Component<
         taskId: null
       }
     })
+  }
+
+  getViewableFilesCount = () => {
+    let count = this.props.task?.room.attachments?.length ?? 0
+
+    if (this.props.envelope) {
+      count += 1
+    }
+
+    if (this.props.task?.form) {
+      count += 1
+    }
+
+    return count
   }
 
   render() {

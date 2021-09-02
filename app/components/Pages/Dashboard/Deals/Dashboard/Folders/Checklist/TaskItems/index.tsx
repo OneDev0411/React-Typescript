@@ -60,7 +60,6 @@ export function TaskItems({ deal, task, isBackOffice, isOpen }: Props) {
 
         return (
           <Attachment
-            type="attachment"
             key={index}
             deal={deal}
             task={task}
