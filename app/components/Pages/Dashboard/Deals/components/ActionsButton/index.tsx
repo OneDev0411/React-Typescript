@@ -69,7 +69,7 @@ import {
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
-  type: 'task' | 'submission' | 'attachment' | 'envelope'
+  type: 'task' | 'submission' | 'file' | 'envelope'
   deal: IDeal
   task: IDealTask | null
   file?: IFile | undefined
@@ -399,7 +399,7 @@ class ActionsButton extends React.Component<
   render() {
     const isViewActionActive =
       this.props.actionsState.mode.type === 'viewer' &&
-      this.props.actionsState.mode.taskId === this.props.task.id
+      this.props.actionsState.mode.taskId === this.props.task?.id
 
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actionsState.actions,
