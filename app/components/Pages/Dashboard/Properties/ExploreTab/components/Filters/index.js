@@ -7,7 +7,7 @@ import actions from 'actions/listings/search/filters'
 import ActionButton from 'components/Button/ActionButton'
 import { getStatusColor } from 'utils/listing'
 
-import { property_subtypes, architectural_styles } from '../../../mapOptions'
+import { property_subtypes, architectural_styles } from '../../../constants'
 
 import GroupRadios from './components/GroupRadios'
 import MinMaxInputs from './components/MinMaxInputs'
