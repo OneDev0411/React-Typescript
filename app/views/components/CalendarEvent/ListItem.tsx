@@ -47,8 +47,8 @@ const useStyles = makeStyles(
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
-  let linkTitle
-  let secondaryText
+  let eventTitle
+  let eventSubTitle
 
   const classes = useStyles()
 
@@ -70,7 +70,7 @@ export default function CalendarEventListItem({ event }: Props) {
       ? event.people[0]
       : null
 
-  linkTitle = event.title
+  eventTitle = event.title
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
   const eventTime = new Date(event.next_occurence)
@@ -84,8 +84,8 @@ export default function CalendarEventListItem({ event }: Props) {
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
     )
-    linkTitle = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>{linkTitle}</Link>
+    eventTitle = (
+      <Link to={`/dashboard/contacts/${contact.id}`}>{eventTitle}</Link>
     )
   } else if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
@@ -98,18 +98,34 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
-  if (event.event_type == 'home_anniversary' && contact) {
-    // eslint-disable-next-line max-len
-    secondaryText = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
-  } else {
-    secondaryText = humanizedEventTime
+  switch (event.event_type) {
+    case 'closing_date':
+    case 'contract_date':
+    case 'inspection_date':
+    case 'possession_date':
+    case 'expiration_date':
+    case 'option_period':
+      eventTitle = (
+        <Link to={`/dashboard/deals/${event.deal}`}>
+          {event.type_label} of {eventTitle}
+        </Link>
+      )
+      break
+    case 'home_anniversary':
+      if (contact) {
+        eventSubTitle = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
+      }
+
+      break
+    default:
+      eventSubTitle = humanizedEventTime
   }
 
   return (
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-        <ListItemText primary={linkTitle} secondary={secondaryText} />
+        <ListItemText primary={eventTitle} secondary={eventSubTitle} />
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>
