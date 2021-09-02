@@ -11,14 +11,19 @@ import {
   CANCEL,
   REMOVE_ATTACHMENT,
   SET_DRAWER_STATUS,
-  SET_FORM_META
+  SET_FORM_META,
+  SET_MODE
 } from '../constants'
 
 export const initialState: StateContext = {
   isDrawerOpen: false,
   actions: [],
   attachments: [],
-  form: undefined
+  form: undefined,
+  mode: {
+    type: null,
+    taskId: null
+  }
 }
 
 export function reducer(state = initialState, action: any): StateContext {
@@ -85,6 +90,13 @@ export function reducer(state = initialState, action: any): StateContext {
         ...state,
         ...initialState
       }
+
+    case SET_MODE: {
+      return {
+        ...state,
+        mode: action.mode
+      }
+    }
 
     default:
       return state
