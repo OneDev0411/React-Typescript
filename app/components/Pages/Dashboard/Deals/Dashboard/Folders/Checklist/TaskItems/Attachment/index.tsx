@@ -75,7 +75,7 @@ export function Attachment({ deal, task, file, isBackOffice }: Props) {
           </Box>
 
           <ActionsButton
-            type="attachment"
+            type="file"
             deal={deal}
             task={task}
             file={file}
