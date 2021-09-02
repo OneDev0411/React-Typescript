@@ -5,7 +5,6 @@ import EditIcon from '@material-ui/icons/Edit'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { bootstrapURLKeys } from '@app/components/Pages/Dashboard/MLS/mapOptions'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
 import {
   GoogleMapLibrary,
@@ -18,7 +17,7 @@ import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { QUERY_LIMIT } from '../../../constants'
+import { QUERY_LIMIT, bootstrapURLKeys } from '../../../constants'
 import { coordToPoint, pointFromBounds } from '../../../helpers/map-helpers'
 import {
   getDefaultSort,
