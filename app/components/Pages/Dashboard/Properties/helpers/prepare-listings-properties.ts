@@ -1,18 +1,20 @@
-import { numberWithCommas } from '../../../../../utils/helpers'
-import listingUtils from '../../../../../utils/listing'
+import { numberWithCommas } from 'utils/helpers'
+import listingUtils from 'utils/listing'
 
-export const prepareListingsProperties = (user, listing) => {
+export const prepareListingsProperties = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>
+) => {
   const statusColor = listingUtils.getStatusColor(listing.status)
-  let property = listing.compact_property
-  let address = listing.address
 
-  if (!property) {
-    property = listing.property
-  }
-
-  if (!address) {
-    address = property.address
-  }
+  const property =
+    listing.type === 'compact_listing'
+      ? listing.compact_property
+      : listing.property
+  const address =
+    listing.type === 'compact_listing'
+      ? listing.address
+      : listing.property.address
 
   const sqft = numberWithCommas(
     Math.round(listingUtils.metersToFeet(property.square_meters))
@@ -39,10 +41,10 @@ export const prepareListingsProperties = (user, listing) => {
   const lotSizeArea = property.lot_size_area || 0
   const baths = property.bathroom_count || '-'
 
-  price = numberWithCommas(Math.floor(price))
+  let formatedPrice = numberWithCommas(Math.floor(price))
 
   if (property && property.property_type === 'Residential Lease') {
-    price += '/mo'
+    formatedPrice += '/mo'
   }
 
   const addressTitle = listingUtils.addressTitle(address)
@@ -52,7 +54,7 @@ export const prepareListingsProperties = (user, listing) => {
     statusColor,
     address: addressTitle,
     zipCode,
-    price,
+    price: formatedPrice,
     beds,
     baths,
     sqft,
