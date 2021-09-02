@@ -3,21 +3,15 @@ import { useEffect, useRef } from 'react'
 import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
 
-import { createValertQueryString } from '@app/components/Pages/Dashboard/Properties/helpers/get-listings-helpers'
-import {
-  pointFromBounds,
-  coordToPoint
-} from '@app/components/Pages/Dashboard/Properties/helpers/map-helpers'
-import {
-  PROPOSED_AGENT_ZOOM_LEVEL,
-  QUERY_LIMIT
-} from '@app/components/Pages/Dashboard/Properties/mapOptions'
 import api from '@app/models/listings/search'
 import { normalizeListingLocation } from '@app/utils/map'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
+import { PROPOSED_AGENT_ZOOM_LEVEL, QUERY_LIMIT } from '../../constans'
 import { formatListing } from '../../helpers/format-listing'
+import { createValertQueryString } from '../../helpers/get-listings-helpers'
+import { pointFromBounds, coordToPoint } from '../../helpers/map-helpers'
 import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 

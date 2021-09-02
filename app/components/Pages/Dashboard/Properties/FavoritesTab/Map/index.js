@@ -10,7 +10,7 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import * as actions from '../../../../../../store_actions/listings/map'
 import Marker from '../../components/Markers/SimpleMarker'
 import ZoomController from '../../components/ZoomController'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../mapOptions'
+import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../constans'
 
 const map = ({
   brand,
