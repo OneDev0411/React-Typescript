@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
@@ -11,7 +11,7 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
-import { property_subtypes } from '../constants'
+import { FILTERS_INITIAL_VALUES } from '../constants'
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
 import { ExplorePage } from './components/ExplorePage'
@@ -46,19 +46,12 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
 
-  // TODO: fix initial state
   const initialState = {
     search: {
       bounds: null,
       ...(brokerageQuery ? { office: brokerageQuery } : {}),
       drawing: [],
-      // TODO: get initial filters from utils
-      filters: {
-        open_house: false,
-        property_types: ['Residential'],
-        listing_statuses: ['Active'],
-        property_subtypes: Object.values(property_subtypes)
-      }
+      filters: FILTERS_INITIAL_VALUES
     },
     map: userLastBrowsingLocation
   }
@@ -120,6 +113,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
       firstRun: false,
       isGettingCurrentPosition: false,
       userLastBrowsingLocation: {
+        // TODO: Calculate zoom from bound and center and map width
+        // https://stackoverflow.com/a/6055653/10326226
         zoom: 15,
         center: { lat, lng }
       }
@@ -148,7 +143,6 @@ function ExploreTab({ isWidget, user, location }: Props) {
         // https://stackoverflow.com/a/6055653/10326226
         const zoom = 16
 
-        // TODO: We need to call api.getPlace(searchQuery) here
         dispatch(setMapLocation(center, zoom))
       } finally {
         setIsLoadingPlace(false)

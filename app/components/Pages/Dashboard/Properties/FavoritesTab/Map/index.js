@@ -9,8 +9,8 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 
 import * as actions from '../../../../../../store_actions/listings/map'
 import Marker from '../../components/Markers/SimpleMarker'
-import ZoomController from '../../components/ZoomController'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../constants'
+import { bootstrapURLKeys, mapInitialState } from '../../constants'
+import { createMapOptions } from '../../helpers/map-helpers'
 
 const map = ({
   brand,
@@ -53,7 +53,6 @@ const map = ({
         )
       })}
     </Map>
-    <ZoomController tabName="favorites" />
   </>
 )
 
@@ -61,7 +60,7 @@ const mapHOC = compose(
   defaultProps({
     defaultZoom: 11,
     bootstrapURLKeys,
-    options: mapOptions,
+    options: maps => createMapOptions(maps, false),
     defaultCenter: mapInitialState.center,
     style: {
       position: 'relative',

@@ -1,11 +1,7 @@
-import config from '../../../../../config/public'
-import { DALLAS_POINTS } from '../../../../constants/listings/dallas-points'
-
-export const MINIMAL_MARKER_ZOOM_LEVEL = 8
-export const QUERY_LIMIT = 200
+import config from 'config'
 
 // Autocomplete search component constanst
-export const AUTOCOMPLETE_RADIUS_IN_M = 100000
+export const AUTOCOMPLETE_RADIUS_M = 100000
 export const AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH = 3
 export const AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS = 500
 export const AUTOCOMPLETE_LISTINGS_ITEM_LIMIT = 4
@@ -14,7 +10,27 @@ export const AUTOCOMPLETE_LISTINGS_ITEM_LIMIT = 4
 export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const PAGE_SIZE = 30
 
-export const property_subtypes = {
+// Map constants
+export const MINIMAL_MARKER_ZOOM_LEVEL = 8
+export const QUERY_LIMIT = 200
+export const bootstrapURLKeys = {
+  key: config.google.api_key,
+  libraries: ['drawing', 'places', 'geometry'].join(',')
+}
+// TODO: Remove this const after refactoring fav/saved tab
+export const mapInitialState = {
+  zoom: 5,
+  center: {
+    // United States Center
+    lat: 37.2755783,
+    lng: -104.6571311
+  },
+  size: null,
+  bounds: null
+}
+
+// Filters constants
+export const FILTER_PROPERTY_SUBTYPES = {
   condo: 'RES-Condo',
   farm: 'RES-Farm/Ranch',
   duplex: 'RES-Half Duplex',
@@ -22,7 +38,15 @@ export const property_subtypes = {
   single_family: 'RES-Single Family'
 }
 
-export const architectural_styles = {
+export const FILTERS_INITIAL_VALUES = {
+  open_house: false,
+  property_types: ['Residential'],
+  listing_statuses: ['Active'],
+  property_subtypes: Object.values(FILTER_PROPERTY_SUBTYPES)
+}
+
+// TODO: Refactor this after refactoring Filters component
+export const ARCHITECTURAL_STYLES = {
   southwestern: 'Southwestern',
   ranch: 'Ranch',
   spanish: 'Spanish',
@@ -40,48 +64,4 @@ export const architectural_styles = {
   loft: 'Loft',
   french: 'French',
   tudor: 'Tudor'
-}
-
-export const bootstrapURLKeys = {
-  key: config.google.api_key,
-  libraries: ['drawing', 'places', 'geometry'].join(',')
-}
-
-export const mapInitialState = {
-  zoom: 5,
-  center: {
-    // United States Center
-    lat: 37.2755783,
-    lng: -104.6571311
-  },
-  size: null,
-  bounds: null
-}
-
-export const queryOptions = {
-  limit: QUERY_LIMIT,
-  open_house: false,
-  property_types: ['Residential'],
-  listing_statuses: ['Active'],
-  points: DALLAS_POINTS,
-  property_subtypes: Object.values(property_subtypes)
-}
-
-export const mapOptions = {
-  minZoom: 3,
-  maxZoom: 25,
-  // zoomControl: false,
-  disableDefaultUI: true
-  // draggable: true,
-  // mapTypeControl: false,
-  // scaleControl: boolean,
-  // rotateControl: boolean,
-  // fullscreenControl: false,
-  // streetViewControl: boolean
-}
-
-export default {
-  mapOptions,
-  queryOptions,
-  mapInitialState
 }

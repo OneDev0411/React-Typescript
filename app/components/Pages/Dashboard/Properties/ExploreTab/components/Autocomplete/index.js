@@ -12,7 +12,7 @@ import { searchListings } from 'models/listings/search/search-listings'
 import { getListingAddress } from 'utils/listing'
 
 import {
-  AUTOCOMPLETE_RADIUS_IN_M,
+  AUTOCOMPLETE_RADIUS_M,
   AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH,
   AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS,
   AUTOCOMPLETE_LISTINGS_ITEM_LIMIT
@@ -58,7 +58,7 @@ class MlsAutocompleteSearch extends Component {
       input,
       componentRestrictions: { country: 'us' },
       location: new google.maps.LatLng(this.props.mapCenter),
-      radius: AUTOCOMPLETE_RADIUS_IN_M // in meters
+      radius: AUTOCOMPLETE_RADIUS_M // in meters
     }
 
     return new Promise(resolve => {

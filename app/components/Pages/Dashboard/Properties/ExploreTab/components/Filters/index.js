@@ -7,7 +7,11 @@ import actions from 'actions/listings/search/filters'
 import ActionButton from 'components/Button/ActionButton'
 import { getStatusColor } from 'utils/listing'
 
-import { property_subtypes, architectural_styles } from '../../../constants'
+import {
+  FILTERS_INITIAL_VALUES,
+  property_subtypes,
+  architectural_styles
+} from '../../../constants'
 
 import GroupRadios from './components/GroupRadios'
 import MinMaxInputs from './components/MinMaxInputs'
@@ -24,20 +28,6 @@ import SoldStatusChildrens from './SoldStatusChildrens'
 import { pendingStatuses, otherStatuses } from './statuses'
 import Subdivision from './Subdivision'
 import YearBuilt from './YearBuilt'
-
-const INITIAL_VALUES = {
-  pool: 'either',
-  open_house: false,
-  listing_statuses: {
-    active: 'Active'
-  },
-  property_subtypes,
-  minimum_sold_date: '3', // unit is month but it need to timestamp
-  priceZeroCleaner: false,
-  minimum_bedrooms: 'any',
-  minimum_bathrooms: 'any',
-  minimum_parking_spaces: 'any'
-}
 
 const Filters = ({
   resetHandler,
@@ -171,7 +161,7 @@ export default compose(
 
       return {
         initialValues: {
-          ...INITIAL_VALUES,
+          ...FILTERS_INITIAL_VALUES,
           priceZeroCleaner
         }
       }

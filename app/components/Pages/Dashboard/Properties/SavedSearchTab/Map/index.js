@@ -21,7 +21,8 @@ import {
   generatePointsFromBounds
 } from '../../../../../../utils/map'
 import Marker from '../../components/Markers/SimpleMarker'
-import { bootstrapURLKeys, mapOptions, mapInitialState } from '../../constants'
+import { bootstrapURLKeys, mapInitialState } from '../../constants'
+import { createMapOptions } from '../../helpers/map-helpers'
 
 const map = ({
   user,
@@ -89,7 +90,7 @@ const mapHOC = compose(
   defaultProps({
     defaultZoom: 13,
     bootstrapURLKeys,
-    options: mapOptions,
+    options: maps => createMapOptions(maps, false),
     defaultCenter: mapInitialState.center
   }),
   connect(
