@@ -18,7 +18,7 @@ import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { QUERY_LIMIT } from '../../../constans'
+import { QUERY_LIMIT } from '../../../constants'
 import { coordToPoint, pointFromBounds } from '../../../helpers/map-helpers'
 import {
   getDefaultSort,

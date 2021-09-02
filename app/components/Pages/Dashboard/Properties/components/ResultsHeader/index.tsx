@@ -7,7 +7,7 @@ import {
   SortString
 } from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
 
-import { PAGE_SIZE } from '../../constans'
+import { PAGE_SIZE } from '../../constants'
 import { ViewType } from '../../ExploreTab/components/ExplorePage'
 import { MapToggler } from '../../ExploreTab/components/MapToggler'
 import { getResultsCountText } from '../../helpers/pagination-utils'

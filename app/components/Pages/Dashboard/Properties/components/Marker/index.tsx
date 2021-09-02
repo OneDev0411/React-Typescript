@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import { selectUserUnsafe } from '@app/selectors/user'
 import { getListingFormatedPrice, getStatusColorClass } from 'utils/listing'
 
-import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../constans'
+import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../constants'
 import MarkerPopup from '../MarkerPopup'
 
 const useStyles = makeStyles(

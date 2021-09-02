@@ -16,7 +16,7 @@ import {
   AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH,
   AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS,
   AUTOCOMPLETE_LISTINGS_ITEM_LIMIT
-} from '../../../constans'
+} from '../../../constants'
 
 import {
   SearchContainer,

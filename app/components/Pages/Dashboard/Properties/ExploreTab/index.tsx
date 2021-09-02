@@ -11,7 +11,7 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
-import { property_subtypes } from '../constans'
+import { property_subtypes } from '../constants'
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
 import { ExplorePage } from './components/ExplorePage'

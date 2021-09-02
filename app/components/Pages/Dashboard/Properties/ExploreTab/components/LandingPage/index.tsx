@@ -11,7 +11,7 @@ import { useEffectOnce } from 'react-use'
 
 import { GoogleMapLibrary, loadMapLibraries } from '@app/utils/google-map-api'
 
-import { bootstrapURLKeys } from '../../../constans'
+import { bootstrapURLKeys } from '../../../constants'
 import Autocomplete from '../Autocomplete'
 
 const useStyles = makeStyles(theme => ({
