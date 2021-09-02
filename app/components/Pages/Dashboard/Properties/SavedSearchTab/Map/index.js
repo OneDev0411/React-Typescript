@@ -21,7 +21,7 @@ import {
   generatePointsFromBounds
 } from '../../../../../../utils/map'
 import Marker from '../../components/Markers/SimpleMarker'
-import { bootstrapURLKeys, mapInitialState } from '../../constants'
+import { bootstrapURLKeys, mapInitialState } from '../../helpers/constants'
 import { createMapOptions } from '../../helpers/map-helpers'
 
 const map = ({

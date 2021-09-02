@@ -8,7 +8,7 @@ import { normalizeListingLocation } from '@app/utils/map'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
-import { PROPOSED_AGENT_ZOOM_LEVEL, QUERY_LIMIT } from '../../constants'
+import { PROPOSED_AGENT_ZOOM_LEVEL, QUERY_LIMIT } from '../../helpers/constants'
 import { formatListing } from '../../helpers/format-listing'
 import { createValertQueryString } from '../../helpers/get-listings-helpers'
 import { pointFromBounds, coordToPoint } from '../../helpers/map-helpers'
