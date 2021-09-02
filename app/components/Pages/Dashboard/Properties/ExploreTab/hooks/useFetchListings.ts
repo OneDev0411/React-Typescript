@@ -68,7 +68,7 @@ export default function useFetchListings(
       const valertOptions = {
         ...state.search.filters,
         points,
-        ...(state.search.office ? { office: state.search.office } : {}),
+        ...(state.search.office ? { offices: [state.search.office] } : {}),
         postal_codes: null,
         limit: QUERY_LIMIT
       }

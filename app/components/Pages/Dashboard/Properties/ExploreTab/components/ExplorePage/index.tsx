@@ -303,7 +303,7 @@ export function ExplorePage({ user, isWidget }: Props) {
             state.search.drawing.length > 0
               ? state.search.drawing.map(coordToPoint)
               : pointFromBounds(state.search.bounds),
-          offices: state.search.office ?? [state.search.office],
+          ...(state.search.office ? { offices: [state.search.office] } : {}),
           postal_codes: null,
           limit: QUERY_LIMIT
         }}
