@@ -118,6 +118,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
             )}
 
             <ActionsButton
+              type="task"
               deal={deal}
               task={task}
               envelope={envelope}
@@ -126,6 +127,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
               className={cn({
                 'visible-on-hover': !isTaskExpanded && !isBulkMode
               })}
+              onViewActionActivate={() => !isTaskExpanded && toggleTaskOpen()}
             />
           </Box>
 

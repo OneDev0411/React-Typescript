@@ -1,3 +1,4 @@
+// TODO: reimplement is required
 import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
@@ -16,7 +17,8 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  SET_DRAWER_STATUS
+  SET_DRAWER_STATUS,
+  SET_MODE
 } from 'deals/contexts/actions-context/constants'
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 import { IAppState } from 'reducers'
@@ -67,12 +69,14 @@ import {
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
+  type: 'task' | 'submission' | 'attachment' | 'envelope'
   deal: IDeal
   task: IDealTask | null
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
   className?: string
+  onViewActionActivate?: () => void
 }
 
 interface ContextProps {
@@ -165,6 +169,23 @@ class ActionsButton extends React.Component<
         task: this.props.task,
         isBackOffice: this.props.isBackOffice
       })
+    }
+
+    if (
+      ['view-envelope', 'view-form', 'view-file'].includes(type) &&
+      this.props.type === 'task'
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'viewer',
+          taskId: this.props.task.id
+        }
+      })
+
+      this.props.onViewActionActivate?.()
+
+      return
     }
 
     this.actions[type] && this.actions[type](this.props)
@@ -350,10 +371,25 @@ class ActionsButton extends React.Component<
     return button.label
   }
 
+  resetViewMode = () => {
+    this.props.actionsDispatch({
+      type: SET_MODE,
+      mode: {
+        type: null,
+        taskId: null
+      }
+    })
+  }
+
   render() {
+    const isViewActionActive =
+      this.props.actionsState.mode.type === 'viewer' &&
+      this.props.actionsState.mode.taskId === this.props.task.id
+
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actionsState.actions,
-      this.props.actions
+      this.props.actions,
+      isViewActionActive
     )
 
     if (secondaryActions.length === 0) {
@@ -361,6 +397,19 @@ class ActionsButton extends React.Component<
     }
 
     const primaryAction: ActionButton = secondaryActions.shift()!
+
+    if (isViewActionActive && this.props.type === 'task') {
+      return (
+        <Container>
+          <PrimaryAction
+            hasSecondaryActions={false}
+            onClick={this.resetViewMode}
+          >
+            Cancel
+          </PrimaryAction>
+        </Container>
+      )
+    }
 
     return (
       <div
@@ -385,7 +434,7 @@ class ActionsButton extends React.Component<
             })
           }
           renderDropdownButton={({ isActive, ...props }) => (
-            <Container hasSecondaryActions={secondaryActions.length > 0}>
+            <Container>
               <PrimaryAction
                 hasSecondaryActions={secondaryActions.length > 0}
                 className={this.getButtonLabel(primaryAction)}
