@@ -26,8 +26,7 @@ const useStyles = makeStyles(
       borderBottom: `1px solid ${theme.palette.grey[200]}`,
       paddingRight: theme.spacing(1)
     },
-    title: { marginBottom: theme.spacing(0.5) },
-    subtitle: { color: theme.palette.grey[500] }
+    title: { flex: 1 }
   }),
   { name: 'Dialog' }
 )
@@ -64,18 +63,9 @@ function Dialog({
       }}
     >
       <Box className={classes.header}>
-        <DialogTitle disableTypography>
-          <Typography
-            variant="h6"
-            className={subtitle ? classes.title : undefined}
-          >
-            {title}
-          </Typography>
-          {subtitle && (
-            <Typography variant="body2" className={classes.subtitle}>
-              {subtitle}
-            </Typography>
-          )}
+        <DialogTitle className={classes.title} disableTypography>
+          <Typography variant="subtitle1">{title}</Typography>
+          {subtitle && <Typography variant="body2">{subtitle}</Typography>}
         </DialogTitle>
         <IconButton onClick={handleClose}>
           <SvgIcon path={mdiClose} />

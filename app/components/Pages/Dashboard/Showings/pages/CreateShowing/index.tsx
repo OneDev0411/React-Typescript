@@ -24,9 +24,17 @@ import {
   goAndShowNotificationTypes,
   showingDurationOptions
 } from '../../constants'
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import {
+  hasTimeConflicts,
+  hasInvalidTimeRange,
+  sortShowingAvailabilities
+} from '../../helpers'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
-import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+import {
+  CreateShowingErrors,
+  ShowingAvailabilityItem,
+  ShowingPropertyType
+} from '../../types'
 
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import useShowingRoles from './use-showing-roles'
@@ -64,6 +72,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
   const handlePropertyChange = (property: Nullable<ShowingPropertyType>) => {
     fillRolesWithPropertyRoles(property)
     setProperty(property)
+  }
+
+  const handleAvailabilitiesChange = (
+    availabilities: ShowingAvailabilityItem[]
+  ) => {
+    setAvailabilities(sortShowingAvailabilities(availabilities))
   }
 
   const { isLoading, data: showing, run, error, reset } = useAsync<IShowing>()
@@ -233,7 +247,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               duration={duration}
               onDurationChange={setDuration}
               availabilities={availabilities}
-              onAvailabilitiesChange={setAvailabilities}
+              onAvailabilitiesChange={handleAvailabilitiesChange}
               error={showingValidationErrors?.availabilities}
             />
             <ShowingStepFinalResult

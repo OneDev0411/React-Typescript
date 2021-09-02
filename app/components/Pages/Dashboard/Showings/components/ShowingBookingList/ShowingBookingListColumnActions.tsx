@@ -5,11 +5,10 @@ import classNames from 'classnames'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import useAsync from 'hooks/use-async'
-import { ackNotifications } from 'models/notifications'
 import approveShowingAppointment from 'models/showing/approve-showing-appointment'
 import rejectShowingAppointment from 'models/showing/reject-showing-appointment'
 
-import { ApprovalActionParams, DismissActionParams } from '../../types'
+import { ApprovalActionParams } from '../../types'
 import ShowingViewFeedbackButton, {
   ShowingViewFeedbackButtonProps
 } from '../ShowingViewFeedbackButton'
@@ -40,7 +39,6 @@ export interface ShowingBookingListColumnActionsProps
   status: IShowingAppointmentStatus
   notifications: Nullable<INotification[]>
   onApprovalAction?: (params: ApprovalActionParams) => void
-  onDismissAction?: (params: DismissActionParams) => void
 }
 
 function ShowingBookingListColumnActions({
@@ -54,7 +52,6 @@ function ShowingBookingListColumnActions({
   onApprovalAction,
   approvals,
   notifications,
-  onDismissAction,
   onAckAction,
   buyerMessage,
   buyerName
@@ -73,8 +70,7 @@ function ShowingBookingListColumnActions({
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        appointment,
-        notificationCount: notifications?.length ?? 0
+        appointment
       })
 
       return appointment
@@ -92,27 +88,10 @@ function ShowingBookingListColumnActions({
       onApprovalAction?.({
         showingId: showing.id,
         appointmentId,
-        appointment,
-        notificationCount: notifications?.length ?? 0
+        appointment
       })
 
       return appointment
-    })
-  }
-
-  const handleDismiss = async () => {
-    run(async () => {
-      await ackNotifications(
-        notifications?.map(notification => notification.id)
-      )
-
-      await onDismissAction?.({
-        showingId: showing.id,
-        appointmentId,
-        notificationCount: notifications?.length ?? 0
-      })
-
-      return null
     })
   }
 
@@ -169,15 +148,6 @@ function ShowingBookingListColumnActions({
           label="Cancel"
           hasConfirmation
           confirmationAction="Cancel booking"
-        />
-      )}
-      {!!notifications?.length && status === 'Canceled' && (
-        <ShowingBookingListApprovalButton
-          {...sharedButtonProps}
-          showing={showing}
-          onClick={handleDismiss}
-          disabled={isLoading}
-          label="Dismiss"
         />
       )}
       {feedback && (

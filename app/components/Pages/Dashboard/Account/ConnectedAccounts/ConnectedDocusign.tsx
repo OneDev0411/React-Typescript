@@ -23,7 +23,7 @@ const useStyles = makeStyles(
   (theme: Theme) =>
     createStyles({
       bordered: {
-        borderBottom: '1px solid #f00'
+        borderBottom: `1px solid ${theme.palette.divider}`
       }
     }),
   { name: 'ConnectedDocuSignListItem' }

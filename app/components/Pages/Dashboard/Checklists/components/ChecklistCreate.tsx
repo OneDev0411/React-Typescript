@@ -24,11 +24,21 @@ export function ChecklistCreate({
   const createChecklist = async () => {
     setIsCreating(true)
 
+    let tabName = ''
+
+    if (checklistType === 'Selling') {
+      tabName = 'Listing Inbox'
+    }
+
+    if (['Buying', 'Offer'].includes(checklistType)) {
+      tabName = 'Contract Inbox'
+    }
+
     try {
       const checklist = await addBrandChecklist(brandId, {
         brand: brandId,
         title: checklistType,
-        tab_name: '',
+        tab_name: tabName,
         checklist_type: checklistType,
         property_type: propertyTypeId,
         is_terminatable: false,

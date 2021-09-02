@@ -10,10 +10,13 @@ import ShowingRoleFormFields, {
 } from './ShowingRoleFormFields'
 import { ShowingRoleFormValues } from './types'
 
-export type UseShowingRoleFormProps = Pick<
-  ShowingRoleFormFieldsProps,
-  'hasNotificationTypeFields' | 'initialValues'
->
+export interface UseShowingRoleFormProps
+  extends Pick<
+    ShowingRoleFormFieldsProps,
+    'hasNotificationTypeFields' | 'initialValues'
+  > {
+  hideAddToContactCheckbox?: boolean
+}
 
 type UseShowingRoleFormReturn = Pick<
   FormProps<ShowingRoleFormValues>,
@@ -28,17 +31,25 @@ const mutators: FormProps<ShowingRoleFormValues>['mutators'] = {
 
 function useShowingRoleForm({
   hasNotificationTypeFields,
-  initialValues
+  initialValues,
+  hideAddToContactCheckbox = false
 }: UseShowingRoleFormProps): UseShowingRoleFormReturn {
   return {
     initialValues,
     mutators,
     noValidate: true,
-    children: ({ form }) => (
+    children: ({ form, values }) => (
       <ShowingRoleFormFields
         form={form}
         initialValues={initialValues}
         hasNotificationTypeFields={hasNotificationTypeFields}
+        hasSaveToContactCheckbox={
+          values.role === 'Tenant' &&
+          (!hideAddToContactCheckbox || !!values.contact)
+        }
+        saveToContactCheckboxLabel={
+          values.contact ? 'Update the contact' : 'Add to my contact'
+        }
       />
     )
   }
