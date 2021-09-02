@@ -2,20 +2,22 @@ import {
   getStatusColor,
   addressTitle as getAddressTitle,
   metersToFeet
-} from '../../../../../utils/listing'
+} from 'utils/listing'
 
-export const formatListing = (listing, user) => {
+export const formatListing = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>
+) => {
   const statusColor = getStatusColor(listing.status)
-  let property = listing.compact_property
-  let address = listing.address
 
-  if (!property) {
-    property = listing.property
-  }
-
-  if (!address) {
-    address = property.address
-  }
+  const property =
+    listing.type === 'compact_listing'
+      ? listing.compact_property
+      : listing.property
+  const address =
+    listing.type === 'compact_listing'
+      ? listing.address
+      : listing.property.address
 
   const addressTitle = getAddressTitle(address)
   const baths = property.bathroom_count || 0
