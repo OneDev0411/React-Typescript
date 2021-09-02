@@ -108,23 +108,27 @@ function ExploreTab({ isWidget, user, location }: Props) {
   }
 
   const initUserLocation = (lat: number, lng: number) => {
+    // TODO: Calculate zoom from bound and center and map width
+    // https://stackoverflow.com/a/6055653/10326226
+    const zoom = 15
+    const center = { lat, lng }
+
+    dispatch(setMapLocation(center, zoom))
     setUserLocationState(prev => ({
       ...prev,
       firstRun: false,
       isGettingCurrentPosition: false,
       userLastBrowsingLocation: {
-        // TODO: Calculate zoom from bound and center and map width
-        // https://stackoverflow.com/a/6055653/10326226
-        zoom: 15,
-        center: { lat, lng }
+        zoom,
+        center
       }
     }))
   }
 
   const onSelectPlace = (center: ICoord, zoom: number) => {
+    dispatch(setMapLocation(center, zoom))
     setSearchQuery(window.location.search.substring(3))
     setUserLocationState(prev => ({ ...prev, firstRun: false }))
-    dispatch(setMapLocation(center, zoom))
   }
 
   useEffectOnce(() => {
