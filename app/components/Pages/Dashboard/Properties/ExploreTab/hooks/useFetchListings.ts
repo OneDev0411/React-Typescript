@@ -80,7 +80,10 @@ export default function useFetchListings(
 
       const listings = response.entities.listings
         ? Object.values(response.entities.listings).map(listing =>
-            formatListing(normalizeListingLocation(listing), user)
+            formatListing(
+              normalizeListingLocation(listing) as ICompactListing,
+              user
+            )
           )
         : []
 
