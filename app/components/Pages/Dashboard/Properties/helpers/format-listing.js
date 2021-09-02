@@ -4,32 +4,17 @@ import {
   metersToFeet
 } from 'utils/listing'
 
-export interface ICompactListingExtras {
-  backgroundImage: Nullable<
-    | ''
-    | {
-        backgroundImage: string
-      }
-  >
-  statusColor: string
-  addressTitle: string
-  zipCode: string
-  beds: number
-  baths: number
-  sqft: number
-  pricePerSquareFoot: number
-  builtYear: number
-  lotSizeArea: Nullable<number>
-}
-
-export function formatListing(
-  listing: ICompactListing,
-  user?: Nullable<IUser>
-): ICompactListing & ICompactListingExtras {
+export function formatListing(listing, user) {
   const statusColor = getStatusColor(listing.status)
 
-  const property = listing.compact_property
-  const address = listing.address
+  const property =
+    listing.type === 'compact_listing'
+      ? listing.compact_property
+      : listing.property
+  const address =
+    listing.type === 'compact_listing'
+      ? listing.address
+      : listing.property.address
 
   const addressTitle = getAddressTitle(address)
   const baths = property.bathroom_count || 0

@@ -1,10 +1,7 @@
 import { numberWithCommas } from 'utils/helpers'
 import listingUtils from 'utils/listing'
 
-export const prepareListingsProperties = (
-  listing: ICompactListing | IListing,
-  user: Nullable<IUser>
-) => {
+export const prepareListingsProperties = (user, listing) => {
   const statusColor = listingUtils.getStatusColor(listing.status)
 
   const property =
@@ -41,10 +38,10 @@ export const prepareListingsProperties = (
   const lotSizeArea = property.lot_size_area || 0
   const baths = property.bathroom_count || '-'
 
-  let formatedPrice = numberWithCommas(Math.floor(price))
+  price = numberWithCommas(Math.floor(price))
 
   if (property && property.property_type === 'Residential Lease') {
-    formatedPrice += '/mo'
+    price += '/mo'
   }
 
   const addressTitle = listingUtils.addressTitle(address)
@@ -54,7 +51,7 @@ export const prepareListingsProperties = (
     statusColor,
     address: addressTitle,
     zipCode,
-    price: formatedPrice,
+    price,
     beds,
     baths,
     sqft,
