@@ -10,7 +10,7 @@
   add it some extra code base on Shayan request.
 */
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 import {
   Box,
@@ -52,8 +52,6 @@ export function EndDateTimeField({
 }: Props) {
   const theme = useTheme()
 
-  console.log('EndDateTimeField', { dueDate, endDateProp })
-
   const anchorRef = useRef<HTMLButtonElement>(null)
 
   const [endDate, setEndDate] = useState(endDateProp)
@@ -74,14 +72,15 @@ export function EndDateTimeField({
     setIsOpen(false)
   }
 
-  useEffect(() => {
-    console.log('useEffect', { endDateProp })
-
-    setEndDate(endDateProp)
-  }, [endDateProp])
-
   return (
     <>
+      <DueDateWatcher
+        dueDate={dueDate}
+        endDate={endDateProp}
+        onEndDateChange={setEndDate}
+        isEndDateTouchedManually={isEndDateTouchedManually}
+        isEndTimeTouchedManually={isEndTimeTouchedManually}
+      />
       <Field
         name="endDate"
         initialValue={endDateProp}
@@ -183,13 +182,6 @@ export function EndDateTimeField({
             </Box>
           )
         }}
-      />
-      <DueDateWatcher
-        dueDate={dueDate}
-        endDate={endDateProp}
-        onUpdateEndDate={setEndDate}
-        isEndDateTouchedManually={isEndDateTouchedManually}
-        isEndTimeTouchedManually={isEndTimeTouchedManually}
       />
     </>
   )
