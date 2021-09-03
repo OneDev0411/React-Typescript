@@ -76,7 +76,7 @@ interface Props {
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
   className?: string
-  onViewActionActivate?: () => void
+  onTaskActionActivate?: () => void
 }
 
 interface ContextProps {
@@ -184,12 +184,32 @@ class ActionsButton extends React.Component<
         }
       })
 
-      this.props.onViewActionActivate?.()
+      this.props.onTaskActionActivate?.()
+
+      return
+    }
+
+    if (
+      ['docusign-envelope', 'docusign-form', 'docusign-file'].includes(type) &&
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'docusign',
+          taskId: this.props.task?.id
+        }
+      })
+
+      this.props.onTaskActionActivate?.()
 
       return
     }
 
     this.actions[type] && this.actions[type](this.props)
+
+    this.resetTaskActionMode()
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -372,7 +392,7 @@ class ActionsButton extends React.Component<
     return button.label
   }
 
-  resetViewMode = () => {
+  resetTaskActionMode = () => {
     this.props.actionsDispatch({
       type: SET_MODE,
       mode: {
@@ -397,14 +417,24 @@ class ActionsButton extends React.Component<
   }
 
   render() {
-    const isViewActionActive =
+    const isTaskViewActionActive =
       this.props.actionsState.mode.type === 'viewer' &&
       this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskDocusignActionActive =
+      this.props.actionsState.mode.type === 'docusign' &&
+      this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskActionActive =
+      isTaskViewActionActive || isTaskDocusignActionActive
 
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actionsState.actions,
       this.props.actions,
-      isViewActionActive
+      {
+        isTaskViewActionActive,
+        isTaskDocusignActionActive
+      }
     )
 
     if (secondaryActions.length === 0) {
@@ -413,16 +443,18 @@ class ActionsButton extends React.Component<
 
     const primaryAction: ActionButton = secondaryActions.shift()!
 
-    if (isViewActionActive && this.props.type === 'task') {
+    if (isTaskActionActive && this.props.type === 'task') {
       return (
-        <Container>
-          <PrimaryAction
-            hasSecondaryActions={false}
-            onClick={this.resetViewMode}
-          >
-            Cancel
-          </PrimaryAction>
-        </Container>
+        <Tooltip title="[ Tooltip Caption ]" placement="top" open>
+          <Container>
+            <PrimaryAction
+              hasSecondaryActions={false}
+              onClick={this.resetTaskActionMode}
+            >
+              Cancel
+            </PrimaryAction>
+          </Container>
+        </Tooltip>
       )
     }
 

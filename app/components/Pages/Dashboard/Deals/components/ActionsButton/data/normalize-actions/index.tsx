@@ -4,10 +4,15 @@ import { StateContext } from 'deals/contexts/actions-context'
 
 import { actionsDefaultProperties } from '../default-properties'
 
+interface TaskActions {
+  isTaskViewActionActive: boolean
+  isTaskDocusignActionActive: boolean
+}
+
 export function normalizeActions(
   stateActions: StateContext['actions'],
   actions: ActionButtonId[],
-  isViewActionActive: boolean
+  { isTaskViewActionActive, isTaskDocusignActionActive }: TaskActions
 ): ActionButton[] {
   if (stateActions.length > 0) {
     return stateActions
@@ -27,15 +32,17 @@ export function normalizeActions(
     }
   })
 
-  if (isViewActionActive) {
-    return sortBy<ActionButton>(nextActions, (action, index) => {
-      const isViewAction = ['view-file', 'view-form', 'view-envelope'].includes(
-        action.type
-      )
+  let preferredActions: string[] = []
 
-      return isViewAction ? -1 : index
-    })
+  if (isTaskViewActionActive) {
+    preferredActions = ['view-file', 'view-form', 'view-envelope']
   }
 
-  return nextActions
+  if (isTaskDocusignActionActive) {
+    preferredActions = ['docusign-file', 'docusign-form', 'docusign-envelope']
+  }
+
+  return sortBy<ActionButton>(nextActions, (action, index) =>
+    preferredActions.includes(action.type) ? -1 : index
+  )
 }

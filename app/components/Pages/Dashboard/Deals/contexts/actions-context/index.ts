@@ -13,7 +13,7 @@ export interface StateContext {
   form?: EmailFormValues | FormValues
   isDrawerOpen: boolean
   mode: {
-    type: Nullable<'viewer'>
+    type: Nullable<'viewer' | 'docusign'>
     taskId: Nullable<UUID>
   }
 }
