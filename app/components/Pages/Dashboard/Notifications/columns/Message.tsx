@@ -1,45 +1,54 @@
-import React from 'react'
+import { Typography, Theme, makeStyles } from '@material-ui/core'
 
-import { Typography, Theme } from '@material-ui/core'
-import { makeStyles, createStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
-      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
       cursor: 'pointer'
     },
     badge: {
-      width: theme.spacing(1.5),
-      height: theme.spacing(1.5),
-      position: 'absolute',
-      transform: 'translateY(-50%)',
-      top: '50%',
+      marginLeft: theme.spacing(2),
+      width: theme.spacing(1),
+      height: theme.spacing(1),
       borderRadius: '50%',
-      backgroundColor: theme.palette.secondary.main,
-      left: theme.spacing(2)
+      backgroundColor: theme.palette.secondary.main
     },
     text: {
-      paddingLeft: theme.spacing(5.5)
+      paddingLeft: theme.spacing(3)
+    },
+    title: {
+      marginBottom: theme.spacing(0.5)
     }
-  })
+  }),
+  { name: 'NotificationMessage' }
 )
 
 interface Props {
   isSeen: boolean
+  title: string
   message: string
   onClick: () => void
 }
 
-export default function Message({ isSeen, message, onClick }: Props) {
+export default function Message({ isSeen, title, message, onClick }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container} onClick={onClick}>
       {!isSeen && <div className={classes.badge} />}
-      <Typography variant="body2" color="textPrimary" className={classes.text}>
-        {message}
-      </Typography>
+      <div className={classes.text}>
+        <Typography
+          variant="body2"
+          color="textPrimary"
+          className={classes.title}
+        >
+          {title}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {message}
+        </Typography>
+      </div>
     </div>
   )
 }

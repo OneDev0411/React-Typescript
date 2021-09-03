@@ -27,6 +27,7 @@ export default function List({
       render: ({ row }: RenderProps<INotification>) => (
         <Message
           onClick={() => handleNotifClick(row)}
+          title={row.title}
           message={row.message}
           isSeen={row.seen}
         />

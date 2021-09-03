@@ -79,11 +79,7 @@ function Notifications({ params }: WithRouterProps) {
         openCRMTaskDrawer(notification.objects[0])
         break
       case 'ListingPriceDroppedUser':
-        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-        break
       case 'ListingStatusChangedUser':
-        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-        break
       case 'ListingBecameAvailableUser':
         browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
         break
@@ -109,9 +105,9 @@ function Notifications({ params }: WithRouterProps) {
 
     return (
       <List
-        handleNotifClick={handleNotifClick}
         isFetching={isFetching}
         notifications={notifications}
+        handleNotifClick={handleNotifClick}
       />
     )
   }
