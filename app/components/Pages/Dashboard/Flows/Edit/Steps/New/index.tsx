@@ -63,8 +63,10 @@ export const NewStep = ({
     if (hasDirtyStep) {
       return modal.setConfirmationModal({
         message: 'Warning!',
-        description: 'You will lose your work.',
-        confirmLabel: "It's Ok",
+        description:
+          'You have not saved your work yet, are you sure you want to cancel it?',
+        confirmLabel: 'Cancel',
+        cancelLabel: "Don't Cancel",
         onConfirm: () => {
           setOpenForm(type)
         }
