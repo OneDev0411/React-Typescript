@@ -96,11 +96,17 @@ class ContactsList extends React.Component {
 
     const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+    const relevanceSortKey = '-last_touch_rank'
 
     this.order = searchInputValue
-      ? '-last_touch_rank'
-      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
-        '-last_touch'
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
 
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
@@ -434,12 +440,12 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
 
-      const relevanceValue = '-last_touch_rank'
+      const relevanceSortKey = '-last_touch_rank'
 
       if (value) {
-        this.order = relevanceValue
-      } else if (this.order === relevanceValue) {
-        this.order = '-updated_at'
+        this.order = relevanceSortKey
+      } else if (this.order === relevanceSortKey) {
+        this.order = '-last_touch'
       }
 
       this.handleFilterChange({ parked: undefined }, true, this.order)
