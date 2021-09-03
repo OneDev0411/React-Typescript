@@ -60,6 +60,10 @@ export const NewStep = ({
   }
 
   const creatNewStep = (type: Forms) => {
+    if (type === openForm) {
+      return
+    }
+
     if (hasDirtyStep) {
       return modal.setConfirmationModal({
         message: 'Warning!',
