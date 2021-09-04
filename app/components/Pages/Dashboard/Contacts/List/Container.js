@@ -943,13 +943,6 @@ class ContactsList extends React.Component {
                   <Board
                     contacts={contacts}
                     totalContacts={props.listInfo.total || 0}
-                    isFetchingContacts={isFetchingContacts}
-                    isFetchingNextContacts={state.isFetchingMoreContacts}
-                    isFetchingPreviousContacts={
-                      state.isFetchingMoreContactsBefore
-                    }
-                    onColumnReachStart={this.handleLoadMoreBefore}
-                    onColumnReachEnd={this.handleLoadMore}
                   />
                 </ViewMode>
 

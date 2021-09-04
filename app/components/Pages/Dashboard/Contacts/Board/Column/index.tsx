@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -8,14 +8,18 @@ import {
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
+import { useAsync } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
+import { searchContacts } from '@app/models/contacts/search-contacts'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
+
+const loadingLimit = 10
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -72,10 +76,7 @@ interface Props {
   title: string
   droppable?: boolean
   listCount?: number
-  isFetchingContacts?: boolean
-  isFetchingNextContacts?: boolean
-  isFetchingPreviousContacts?: boolean
-  list: IContact[]
+  tag?: string
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -83,38 +84,63 @@ interface Props {
 export const BoardColumn = React.memo(function BoardColumn({
   id,
   title,
-  list,
+  tag,
   listCount,
-  isFetchingContacts = false,
-  isFetchingNextContacts = false,
-  isFetchingPreviousContacts = false,
-  droppable = true,
-  onReachStart = () => {},
-  onReachEnd = () => {}
+  droppable = true
 }: Props) {
   const classes = useStyles()
-
+  const [loadingOffset, setLoadingOffset] = useState(0)
+  const [list, setList] = useState<IContact[]>([])
+  const [loading, setLoading] = useState<Nullable<'initial' | 'more'>>(null)
   const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
 
-  const isInitialLoading = list.length === 0 && isFetchingContacts
-
-  const isLoading =
-    isFetchingContacts || isFetchingNextContacts || isFetchingPreviousContacts
+  const isInitialLoading = list.length === 0 && loading === 'initial'
+  const isLoading = loading !== null
 
   const getLoadingPosition = () => {
-    if (isInitialLoading) {
+    if (loading === 'initial') {
       return LoadingPosition.Middle
     }
 
-    if (isFetchingNextContacts) {
+    if (loading === 'more') {
       return LoadingPosition.Bottom
     }
 
-    if (isFetchingPreviousContacts) {
-      return LoadingPosition.Top
+    return undefined
+  }
+
+  useAsync(async () => {
+    if (loading) {
+      return
     }
 
-    return undefined
+    setLoading(loadingOffset === 0 ? 'initial' : 'more')
+
+    let filters: IContactFilter[] | undefined
+
+    if (tag) {
+      filters = [
+        {
+          attribute_def: 'eea884bb-729c-4eb4-ae83-b168fe9a6548',
+          invert: false,
+          value: tag
+        }
+      ]
+    }
+
+    const { data } = await searchContacts('', filters, {
+      start: loadingOffset,
+      limit: loadingLimit
+    })
+
+    setLoading(null)
+
+    setList(data)
+  }, [loadingOffset])
+
+  const handleReachEnd = () => {
+    console.log('++++++')
+    setLoadingOffset(offset => offset + loadingLimit)
   }
 
   return (
@@ -202,11 +228,8 @@ export const BoardColumn = React.memo(function BoardColumn({
                     threshold={5}
                     itemSize={() => 112}
                     overscanCount={10}
-                    onReachStart={onReachStart}
-                    onReachEnd={onReachEnd}
-                    isLoading={
-                      isFetchingNextContacts || isFetchingPreviousContacts
-                    }
+                    onReachEnd={handleReachEnd}
+                    isLoading={loading !== null}
                     loadingPosition={getLoadingPosition()}
                   >
                     {DraggableCardItem}

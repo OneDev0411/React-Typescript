@@ -32,27 +32,27 @@ const useStyles = makeStyles(
   }
 )
 
-const Columns = ['Warm', 'Hot', 'Past Client']
+const Columns = [
+  {
+    title: 'Warm',
+    tag: 'Warm'
+  },
+  {
+    title: 'Hot',
+    tag: 'Hot'
+  },
+  {
+    title: 'Past Client',
+    tag: 'Past Client'
+  }
+]
 
 interface Props {
   contacts: IContact[]
   totalContacts: number
-  isFetchingContacts: boolean
-  isFetchingNextContacts: boolean
-  isFetchingPreviousContacts: boolean
-  onColumnReachStart: () => void
-  onColumnReachEnd: () => void
 }
 
-export function Board({
-  contacts,
-  totalContacts,
-  isFetchingContacts,
-  isFetchingNextContacts,
-  isFetchingPreviousContacts,
-  onColumnReachStart,
-  onColumnReachEnd
-}: Props) {
+export function Board({ contacts, totalContacts }: Props) {
   const classes = useStyles()
   const [list, setList] = useState(contacts)
   const dispatch = useDispatch()
@@ -94,39 +94,24 @@ export function Board({
     dispatch(updateContactTags(contact.id, tags))
   }
 
-  const sort = (contacts: IContact[]) => {
-    return contacts.sort((a, b) => b.updated_at - a.updated_at)
-  }
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={classes.root}>
         <div className={classes.container}>
           <BoardColumn
-            isFetchingContacts={isFetchingContacts && list.length === 0}
-            isFetchingNextContacts={isFetchingNextContacts}
-            isFetchingPreviousContacts={isFetchingPreviousContacts}
             id={(-1).toString()}
             title="All Contacts"
             listCount={totalContacts}
-            list={sort(
-              list.filter(
-                contact =>
-                  (contact.tags || []).length === 0 ||
-                  contact.tags?.every(tag => !Columns.includes(tag))
-              )
-            )}
             onReachStart={onColumnReachStart}
             onReachEnd={onColumnReachEnd}
           />
 
-          {Columns.map((name, index) => (
+          {Columns.map(({ title, tag }, index) => (
             <BoardColumn
               key={index}
               id={index.toString()}
-              title={name}
-              isFetchingContacts={isFetchingContacts && list.length === 0}
-              list={sort(list.filter(contact => contact.tags?.includes(name)))}
+              title={title}
+              tag={tag}
             />
           ))}
         </div>
