@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -8,18 +8,25 @@ import {
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
 import { useAsync } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
 import { searchContacts } from '@app/models/contacts/search-contacts'
+import { IAppState } from '@app/reducers'
+import { selectUser } from '@app/selectors/user'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { viewAs } from 'utils/user-teams'
+
+import { Tags } from '../constants'
+import { useColumnList } from '../hooks/use-column-list'
 
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
 
-const loadingLimit = 10
+const loadingLimit = 100
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -74,9 +81,8 @@ const useStyles = makeStyles(
 interface Props {
   id: string
   title: string
-  droppable?: boolean
-  listCount?: number
   tag?: string
+  searchTerm: string
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -84,15 +90,19 @@ interface Props {
 export const BoardColumn = React.memo(function BoardColumn({
   id,
   title,
-  tag,
-  listCount,
-  droppable = true
+  searchTerm,
+  tag
 }: Props) {
   const classes = useStyles()
+  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
+  const [list, updateList] = useColumnList(tag)
   const [loadingOffset, setLoadingOffset] = useState(0)
-  const [list, setList] = useState<IContact[]>([])
   const [loading, setLoading] = useState<Nullable<'initial' | 'more'>>(null)
-  const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
+  const [isReachedEnd, setIsReachedEnd] = useState(false)
+  const user = useSelector(selectUser)
+  const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
+    ({ contacts }) => contacts.attributeDefs.byName.tag
+  )
 
   const isInitialLoading = list.length === 0 && loading === 'initial'
   const isLoading = loading !== null
@@ -110,7 +120,7 @@ export const BoardColumn = React.memo(function BoardColumn({
   }
 
   useAsync(async () => {
-    if (loading) {
+    if (loading || (searchTerm === currentSearchTerm && isReachedEnd)) {
       return
     }
 
@@ -121,27 +131,41 @@ export const BoardColumn = React.memo(function BoardColumn({
     if (tag) {
       filters = [
         {
-          attribute_def: 'eea884bb-729c-4eb4-ae83-b168fe9a6548',
+          attribute_def: tagAttributeDefinitionId,
           invert: false,
           value: tag
         }
       ]
+    } else {
+      filters = Tags.map(tag => ({
+        attribute_def: tagAttributeDefinitionId,
+        invert: true,
+        value: tag
+      }))
     }
 
-    const { data } = await searchContacts('', filters, {
-      start: loadingOffset,
-      limit: loadingLimit
-    })
+    const { data, info } = await searchContacts(
+      searchTerm,
+      filters,
+      {
+        start: loadingOffset,
+        limit: loadingLimit
+      },
+      viewAs(user)
+    )
 
     setLoading(null)
+    setIsReachedEnd(data.length + list.length === info?.total)
 
-    setList(data)
-  }, [loadingOffset])
+    updateList(
+      searchTerm === currentSearchTerm ? [...list, ...data] : data,
+      tag
+    )
 
-  const handleReachEnd = () => {
-    console.log('++++++')
-    setLoadingOffset(offset => offset + loadingLimit)
-  }
+    setCurrentSearchTerm(searchTerm)
+  }, [loadingOffset, searchTerm, tagAttributeDefinitionId])
+
+  const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
   return (
     <div className={classes.root}>
@@ -164,9 +188,7 @@ export const BoardColumn = React.memo(function BoardColumn({
               {isLoading ? (
                 <Skeleton animation="wave" width="16px" />
               ) : (
-                <Typography variant="subtitle1">
-                  {listCount || list.length}
-                </Typography>
+                <Typography variant="subtitle1">{list.length}</Typography>
               )}
             </Box>
           </Box>
@@ -175,7 +197,7 @@ export const BoardColumn = React.memo(function BoardColumn({
 
       {isInitialLoading && (
         <div className={classes.body}>
-          {new Array(randomNumber).fill(null).map((_, index) => (
+          {new Array(3).fill(null).map((_, index) => (
             <Skeleton
               key={index}
               animation="wave"
@@ -193,7 +215,6 @@ export const BoardColumn = React.memo(function BoardColumn({
               type="column"
               mode="virtual"
               direction="vertical"
-              isDropDisabled={!droppable}
               ignoreContainerClipping
               isCombineEnabled={false}
               renderClone={(provided, snapshot, rubric) => (

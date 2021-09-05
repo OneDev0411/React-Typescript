@@ -1,15 +1,16 @@
-import { useState } from 'react'
+import { useState, memo, useCallback } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import uniq from 'lodash/uniq'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
-import useDeepCompareEffect from 'use-deep-compare-effect'
 
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { bulkTag } from 'models/contacts/bulk-tag'
 
 import { BoardColumn } from './Column'
+import { Columns } from './constants'
+import { BoardContext } from './context'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -32,60 +33,46 @@ const useStyles = makeStyles(
   }
 )
 
-const Columns = [
-  {
-    title: 'Warm',
-    tag: 'Warm'
-  },
-  {
-    title: 'Hot',
-    tag: 'Hot'
-  },
-  {
-    title: 'Past Client',
-    tag: 'Past Client'
-  }
-]
-
 interface Props {
-  contacts: IContact[]
-  totalContacts: number
+  isActive: boolean
+  searchTerm: string
 }
 
-export function Board({ contacts, totalContacts }: Props) {
+function Board({ searchTerm }: Props) {
   const classes = useStyles()
-  const [list, setList] = useState(contacts)
+  const [list, setList] = useState<Record<string, IContact[]>>({})
   const dispatch = useDispatch()
 
-  useDeepCompareEffect(() => {
-    setList(contacts)
-  }, [contacts])
-
   const onDragEnd = (result: DropResult) => {
-    if (!result.destination) {
+    if (
+      !result.destination ||
+      result.source.droppableId === result.destination.droppableId
+    ) {
       return
     }
 
     const [, contactId] = result.draggableId.split(':')
-    const oldTag = Columns[result.source.droppableId]
-    const newTag = Columns[result.destination?.droppableId ?? -1]
+    const oldTag = Columns.find(
+      ({ tag }) => tag === result.source.droppableId
+    )?.tag
+    const newTag = Columns.find(
+      ({ tag }) => tag === result.destination?.droppableId
+    )?.tag
 
-    const contact = list.find(contact => contact.id === contactId)!
+    const fromList = oldTag || 'all'
+    const toList = newTag || 'all'
+
+    const contact = list[fromList].find(contact => contact.id === contactId)!
+
     const tags = uniq(
       (contact.tags || []).filter(tag => tag !== oldTag).concat(newTag || [])
     )
 
-    setList(
-      list.map(row =>
-        row.id !== contactId
-          ? row
-          : {
-              ...row,
-              tags,
-              updated_at: Date.now() / 1000
-            }
-      )
-    )
+    setList(list => ({
+      ...list,
+      [fromList]: list[fromList].filter(({ id }) => id !== contactId),
+      [toList]: [{ ...contact, tags }, ...list[toList]]
+    }))
 
     bulkTag(tags, {
       ids: [contactId]
@@ -94,28 +81,40 @@ export function Board({ contacts, totalContacts }: Props) {
     dispatch(updateContactTags(contact.id, tags))
   }
 
-  return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className={classes.root}>
-        <div className={classes.container}>
-          <BoardColumn
-            id={(-1).toString()}
-            title="All Contacts"
-            listCount={totalContacts}
-            onReachStart={onColumnReachStart}
-            onReachEnd={onColumnReachEnd}
-          />
+  const handleUpdateList = useCallback(
+    (contacts: IContact[], listName = 'all') => {
+      setList(list => ({
+        ...list,
+        [listName]: contacts
+      }))
+    },
+    []
+  )
 
-          {Columns.map(({ title, tag }, index) => (
-            <BoardColumn
-              key={index}
-              id={index.toString()}
-              title={title}
-              tag={tag}
-            />
-          ))}
+  return (
+    <BoardContext.Provider
+      value={{
+        list,
+        updateList: handleUpdateList
+      }}
+    >
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={classes.root}>
+          <div className={classes.container}>
+            {Columns.map(({ title, tag }, index) => (
+              <BoardColumn
+                key={index}
+                id={tag || '-1'}
+                title={title}
+                tag={tag}
+                searchTerm={searchTerm}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+    </BoardContext.Provider>
   )
 }
+
+export default memo(Board)

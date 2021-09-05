@@ -76,7 +76,6 @@ const getActiveTab = ({
 
 export const ContactsTabs = ({
   handleResetShortcutFilter,
-  handleChangeSavedSegment,
   handleFilterChange,
   savedListProps,
   onChangeView,
@@ -130,21 +129,27 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
-          <Tab
-            key="saved-list"
-            value="saved-list"
-            data-tour-id="saved-list"
-            label={<SavedSegments {...savedListProps} />}
-          />,
-          <Tab
-            key="tag-list"
-            value="tag-list"
-            data-tour-id="tags-list"
-            label={<TagsList onFilterChange={tagListProps.onClick} />}
-          />
+          ...(viewMode === 'table'
+            ? [
+                <Tab
+                  key="saved-list"
+                  value="saved-list"
+                  data-tour-id="saved-list"
+                  label={<SavedSegments {...savedListProps} />}
+                />,
+                <Tab
+                  key="tag-list"
+                  value="tag-list"
+                  data-tour-id="tags-list"
+                  label={<TagsList onFilterChange={tagListProps.onClick} />}
+                />
+              ]
+            : [])
         ]}
         actions={[
-          <Tab key={1} label={<SortFields {...sortProps} />} />,
+          ...(viewMode === 'table'
+            ? [<Tab key={1} label={<SortFields {...sortProps} />} />]
+            : []),
           <ViewSwitcher
             key={2}
             onChangeView={onChangeView}
