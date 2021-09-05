@@ -179,7 +179,7 @@ class ActionsButton extends React.Component<
       this.props.actionsDispatch({
         type: SET_MODE,
         mode: {
-          type: 'viewer',
+          type: 'View/Print',
           taskId: this.props.task?.id
         }
       })
@@ -197,7 +197,7 @@ class ActionsButton extends React.Component<
       this.props.actionsDispatch({
         type: SET_MODE,
         mode: {
-          type: 'docusign',
+          type: 'Docusign',
           taskId: this.props.task?.id
         }
       })
@@ -418,11 +418,11 @@ class ActionsButton extends React.Component<
 
   render() {
     const isTaskViewActionActive =
-      this.props.actionsState.mode.type === 'viewer' &&
+      this.props.actionsState.mode.type === 'View/Print' &&
       this.props.actionsState.mode.taskId === this.props.task?.id
 
     const isTaskDocusignActionActive =
-      this.props.actionsState.mode.type === 'docusign' &&
+      this.props.actionsState.mode.type === 'Docusign' &&
       this.props.actionsState.mode.taskId === this.props.task?.id
 
     const isTaskActionActive =
@@ -445,7 +445,11 @@ class ActionsButton extends React.Component<
 
     if (isTaskActionActive && this.props.type === 'task') {
       return (
-        <Tooltip title="[ Tooltip Caption ]" placement="top" open>
+        <Tooltip
+          title={`There are multiple copies of this form available. Please choose which copy you like to ${this.props.actionsState.mode?.type}`}
+          placement="top"
+          open
+        >
           <Container>
             <PrimaryAction
               hasSecondaryActions={false}
