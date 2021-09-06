@@ -25,7 +25,17 @@ function WebsiteList() {
   const isEmpty = !isLoading && instances.length === 0
 
   useEffect(() => {
-    run(getWebsiteList)
+    run(async () => {
+      const websites = await getWebsiteList()
+
+      /**
+       * We are heavily relied on `template_instance` on the new website builder but
+       * the old websites do not have this property on their records.
+       * To avoid white screen error, I have to skip the old websites on this list and
+       * keep just the new ones.
+       */
+      return websites.filter(website => !!website.template_instance)
+    })
   }, [run])
 
   if (isLoading || isEmpty) {

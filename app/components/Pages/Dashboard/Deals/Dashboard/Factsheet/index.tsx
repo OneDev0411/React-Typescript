@@ -108,7 +108,9 @@ export default function Factsheet({
     try {
       const context = getContext(deal, field.key)
 
-      await dispatch(approveContext(deal.id, context.id))
+      if (context) {
+        await dispatch(approveContext(deal.id, context.id))
+      }
     } catch (e) {
       console.log(e)
     }
