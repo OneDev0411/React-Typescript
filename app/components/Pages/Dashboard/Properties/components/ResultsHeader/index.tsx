@@ -18,7 +18,7 @@ import ViewSwitcher from './ViewSwitcher'
 const useStyles = makeStyles(
   theme => ({
     resultsHeader: {
-      padding: '10px 0',
+      paddingBottom: theme.spacing(2),
       zIndex: 2
     }
   }),

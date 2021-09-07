@@ -240,8 +240,8 @@ export function ExplorePage({ user, isWidget }: Props) {
               <Box className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
-                    <GoogleMapsButton top={9} left={5}>
-                      <MapToggler checked={mapIsShown} onChange={toggleMap} />
+                    <GoogleMapsButton top={9} left={5} onClick={toggleMap}>
+                      <MapToggler checked={mapIsShown} />
                     </GoogleMapsButton>
                     <GoogleMapsButton
                       top={9}

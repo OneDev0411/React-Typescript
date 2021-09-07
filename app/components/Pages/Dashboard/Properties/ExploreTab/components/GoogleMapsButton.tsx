@@ -11,24 +11,23 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     padding: 0,
     height: 'auto',
     backgroundColor: '#fff',
-    borderRadius: 1,
-    boxShadow: '0 1px 3px rgba(0,0,0,.2)',
+    borderRadius: 2,
+    boxShadow: 'rgb(0 0 0 / 30%) 0px 1px 4px -1px',
     '&.active': {
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      '&:hover': {
-        backgroundColor: '#000'
-      }
+      backgroundColor: theme.palette.grey[200],
+      color: theme.palette.grey[900]
     },
     '&:hover': {
-      backgroundColor: theme.palette.primary.main
+      color: theme.palette.grey[900],
+      backgroundColor: theme.palette.grey[200]
     }
   },
   label: {
     padding: '6px 15px',
-    fontSize: 16,
+    fontSize: theme.typography.button.fontSize,
     textTransform: 'capitalize',
-    fontWeight: 'normal'
+    color: theme.palette.grey[800],
+    fontWeight: theme.typography.fontWeightRegular
   }
 }))(Button)
 
@@ -55,6 +54,7 @@ export const GoogleMapsButton = ({
 }: Props) => {
   return (
     <CustomizedGoogleMapsButton
+      size="small"
       style={{ top, left, right, bottom }}
       startIcon={startIcon}
       onClick={onClick}

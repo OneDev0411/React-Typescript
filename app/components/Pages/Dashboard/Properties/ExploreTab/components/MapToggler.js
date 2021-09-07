@@ -1,12 +1,11 @@
 import { Switch } from '@material-ui/core'
 
-export const MapToggler = ({ checked, onChange }) => {
+export const MapToggler = ({ checked }) => {
   return (
     <>
       Show Map
       <Switch
         checked={checked}
-        onChange={onChange}
         name="map-switcher"
         color="primary"
         size="small"
