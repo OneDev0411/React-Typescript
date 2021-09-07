@@ -53,9 +53,6 @@ export function ContactRoles({
   }
 
   const handleSelectRole = (role: Partial<IDealFormRole>) => {
-    // setSearchCriteria('')
-    // setRows([])
-
     onSelectRole(role)
   }
 
