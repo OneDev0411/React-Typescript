@@ -1,11 +1,19 @@
 import { Switch } from '@material-ui/core'
 
-export const MapToggler = ({ checked }) => {
+import { noop } from '@app/utils/helpers'
+
+interface Props {
+  checked: boolean
+  onChange?: () => void
+}
+
+export const MapToggler = ({ checked, onChange = noop }: Props) => {
   return (
     <>
       Show Map
       <Switch
         checked={checked}
+        onChange={onChange}
         name="map-switcher"
         color="primary"
         size="small"
