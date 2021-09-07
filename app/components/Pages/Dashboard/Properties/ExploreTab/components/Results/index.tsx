@@ -7,16 +7,15 @@ import hash from 'object-hash'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
-import { CardsView } from '../../components/CardsView'
-import { ResultsHeader } from '../../components/ResultsHeader'
-import { TableView } from '../../components/TableView'
-import ZeroState from '../../components/ZeroState'
-import { PAGE_SIZE } from '../../helpers/constants'
-import { getListingsPage } from '../../helpers/pagination-utils'
-import { sortByIndex, SortIndex, SortString } from '../../helpers/sort-utils'
-import useListingsContext from '../hooks/useListingsContext'
-
-import { ViewType } from './ExplorePage'
+import { CardsView } from '../../../components/CardsView'
+import { ResultsHeader } from '../../../components/ResultsHeader'
+import { TableView } from '../../../components/TableView'
+import ZeroState from '../../../components/ZeroState'
+import { PAGE_SIZE } from '../../../helpers/constants'
+import { getListingsPage } from '../../../helpers/pagination-utils'
+import { sortByIndex, SortIndex, SortString } from '../../../helpers/sort-utils'
+import useListingsContext from '../../hooks/useListingsContext'
+import { ViewType } from '../ExplorePage'
 
 const useStyles = makeStyles(
   theme => ({

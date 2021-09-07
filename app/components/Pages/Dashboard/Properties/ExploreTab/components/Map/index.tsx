@@ -3,15 +3,18 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { useTheme } from '@material-ui/core'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
 
-import Marker from '../../components/Marker'
-import { bootstrapURLKeys } from '../../helpers/constants'
-import { pointsFromPolygon, createMapOptions } from '../../helpers/map-helpers'
+import Marker from '../../../components/Marker'
+import { bootstrapURLKeys } from '../../../helpers/constants'
+import {
+  pointsFromPolygon,
+  createMapOptions
+} from '../../../helpers/map-helpers'
 import {
   changeListingHoverState,
   changeListingClickedState,
   setMapBounds
-} from '../context/actions'
-import useListingsContext from '../hooks/useListingsContext'
+} from '../../context/actions'
+import useListingsContext from '../../hooks/useListingsContext'
 
 interface Props {
   drawingMode?: boolean
