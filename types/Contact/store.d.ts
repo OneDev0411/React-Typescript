@@ -19,6 +19,5 @@ declare interface IContactReduxListState {
   isFetching: boolean
 }
 
-declare type IContactReduxFilterSegmentState = IReduxFilterSegmentState<
-  IContactList
->
+declare type IContactReduxFilterSegmentState =
+  IReduxFilterSegmentState<IContactList>

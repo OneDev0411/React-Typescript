@@ -33,3 +33,19 @@ declare type ITrigger = IModel<'trigger'> &
   ITriggerRaw & {
     executed_at: number
   }
+
+declare type IGlobalTriggerRaw = Omit<
+  ITriggerBase,
+  'user' | 'time' | 'recurring'
+> &
+  Pick<IContactTrigger, 'event_type'>
+
+declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {
+  template?: UUID
+  template_instance?: UUID
+}
+
+declare interface IGlobalTrigger extends IModel<'trigger'>, IGlobalTriggerRaw {
+  template: Nullable<IBrandMarketingTemplate>
+  template_instance: Nullable<IMarketingTemplateInstance>
+}

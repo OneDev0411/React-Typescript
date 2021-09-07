@@ -1,5 +1,9 @@
 import { Typography, Theme, makeStyles } from '@material-ui/core'
-import { useTitle } from 'react-use'
+import { useSelector } from 'react-redux'
+import { useTitle, useEffectOnce } from 'react-use'
+
+import { getTriggers } from '@app/models/instant-marketing/global-triggers'
+import { selectActiveBrandId } from '@app/selectors/brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -16,6 +20,17 @@ export default function Trigger(props: Props) {
   useTitle('Trigger | Settings | Rechat')
 
   const classes = useStyles()
+  const brandId = useSelector(selectActiveBrandId)
+
+  useEffectOnce(() => {
+    const loadTriggers = async () => {
+      const cc = await getTriggers(brandId)
+
+      console.log({ cc })
+    }
+
+    loadTriggers()
+  })
 
   return (
     <>

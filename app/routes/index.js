@@ -1028,7 +1028,7 @@ export default (
 
           <Route path="exportCalendar" component={ExportCalendar} />
           <Route path="manage-tags" component={ManageTags} />
-          <Route path="trigger" component={GlobalTriggers} />
+          <Route path="triggers" component={GlobalTriggers} />
           <Route
             path="reminder-notifications"
             component={ReminderNotifications}
