@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-import { IAppState } from '@app/reducers'
+import { selectUser } from '@app/selectors/user'
 import PageLayout from 'components/GlobalPageLayout'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -42,11 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BackofficeTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
-
-  const { user, deals } = useSelector(({ user, deals }: IAppState) => ({
-    user,
-    deals: deals.list
-  }))
+  const user = useSelector(selectUser)
 
   const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
@@ -75,7 +71,6 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
       <PageLayout.Main>
         <div className={classes.filtersContainer}>
           <TabFilters
-            deals={deals}
             activeFilter={props.params.filter}
             searchQuery={searchQuery}
             sortableColumns={SORTABLE_COLUMNS}
