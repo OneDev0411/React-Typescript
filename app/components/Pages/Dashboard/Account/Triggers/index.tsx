@@ -5,6 +5,8 @@ import { useTitle, useEffectOnce } from 'react-use'
 import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
+import { TriggerItem } from './components/Item'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     description: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles(
 
 interface Props {}
 
-export default function Trigger(props: Props) {
+export default function Triggers(props: Props) {
   useTitle('Trigger | Settings | Rechat')
 
   const classes = useStyles()
@@ -42,6 +44,7 @@ export default function Trigger(props: Props) {
         anniversaries. It is possible to opt out contacts or change the template
         in their profile.
       </Typography>
+      <TriggerItem />
     </>
   )
 }
