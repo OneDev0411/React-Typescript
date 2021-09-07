@@ -138,16 +138,18 @@ function ExploreTab({ isWidget, user, location }: Props) {
       try {
         const placeResponse = await getPlace(searchParamQuery, false)
 
-        // @types/googlemaps describe the Javascript API not the JSON object on the response
-        // there a sublte difference like lat/lng beeing number not functions,
-        // So making this `as any as ICoord` cast necessary
-        let center = placeResponse.geometry.location as any as ICoord
+        if (placeResponse) {
+          // @types/googlemaps describe the Javascript API not the JSON object on the response
+          // there a sublte difference like lat/lng beeing number not functions,
+          // So making this `as any as ICoord` cast necessary
+          let center = placeResponse.geometry.location as any as ICoord
 
-        // TODO: Calculate zoom from bound and center and map width
-        // https://stackoverflow.com/a/6055653/10326226
-        const zoom = 16
+          // TODO: Calculate zoom from bound and center and map width
+          // https://stackoverflow.com/a/6055653/10326226
+          const zoom = 16
 
-        dispatch(setMapLocation(center, zoom))
+          dispatch(setMapLocation(center, zoom))
+        }
       } finally {
         setIsLoadingPlace(false)
       }
