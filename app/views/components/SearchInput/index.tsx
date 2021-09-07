@@ -2,18 +2,17 @@ import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 
 import {
   TextField,
-  InputAdornment,
-  IconButton,
   makeStyles,
-  Theme
+  Theme,
+  CircularProgress,
+  IconButton
 } from '@material-ui/core'
+import { InputProps } from '@material-ui/core/Input'
+import { InputBaseProps } from '@material-ui/core/InputBase'
 import { TextFieldProps } from '@material-ui/core/TextField'
-import { useTheme } from '@material-ui/styles'
-import { mdiMagnify, mdiClose } from '@mdi/js'
+import CloseIcon from '@material-ui/icons/Close'
+import SearchIcon from '@material-ui/icons/Search'
 import { useDebouncedCallback } from 'use-debounce'
-
-import Loading from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles((theme: Theme) => ({
   input: {
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     border: 'none',
     borderRadius: theme.shape.borderRadius,
     color: theme.palette.action.active,
-    height: theme.spacing(5.25),
+    height: theme.spacing(5),
     lineHeight: 'initial',
     padding: theme.spacing(0, 1.5),
     /*
@@ -44,44 +43,63 @@ const useStyles = makeStyles((theme: Theme) => ({
 export type SearchInputProps = TextFieldProps & {
   isLoading?: boolean
   debounceTime?: number
-  onClear?: () => void
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>, value?: string) => void
+  minChars?: number
+  onClearHandler?: () => void
+  onChangeHandler?: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value?: string
+  ) => void
+  // Be aware that for MUI's TextField component, 'inputProps' and 'InputProps'
+  // are different. The former is used for TextField's HTML input arttibutes,
+  // while the latter is props applied to the MUI's Input element.
+  // More info on: https://material-ui.com/api/text-field/
+  InputProps?: InputProps
+  inputProps?: InputBaseProps
+  disableClearButton?: boolean
+}
+export type Ref = {
+  focus: () => void
+  blur: () => void
+  clear: () => void
 }
 
 export const SearchInput = forwardRef(
   (
     {
-      fullWidth,
-      onClear,
       isLoading,
       debounceTime = 0,
+      onClearHandler,
+      onChangeHandler = () => {},
+      fullWidth,
       defaultValue,
-      onChange = () => {},
-      ...others
+      InputProps,
+      inputProps,
+      disableClearButton = false,
+      minChars = 0,
+      ...textFieldProps
     }: SearchInputProps,
     ref
   ) => {
     const classes = useStyles()
-    const theme = useTheme<Theme>()
     const [nonEmpty, setNonEmpty] = useState(Boolean(defaultValue))
     const inputEl = useRef<HTMLInputElement | null>(null)
     const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
 
-    const [debouncedOnChange] = useDebouncedCallback(onChange, debounceTime, {
-      maxWait: 2000
-    })
+    const [debouncedOnChange] = useDebouncedCallback(
+      onChangeHandler,
+      debounceTime,
+      {
+        maxWait: 2000
+      }
+    )
 
     // Exposing some methods for the input el
     useImperativeHandle(ref, () => ({
       focus: () => {
-        if (inputEl && inputEl.current) {
-          inputEl.current.focus()
-        }
+        inputEl.current?.focus()
       },
       blur: () => {
-        if (inputEl && inputEl.current) {
-          inputEl.current.blur()
-        }
+        inputEl.current?.blur()
       },
       clear: () => {
         if (inputEl && inputEl.current) {
@@ -96,23 +114,25 @@ export const SearchInput = forwardRef(
 
       setNonEmpty(!!value)
 
-      if (debounceTime > 0) {
-        // https://stackoverflow.com/questions/49081149
-        debouncedOnChange(e, value)
+      if (value.length >= minChars) {
+        if (debounceTime > 0) {
+          // https://stackoverflow.com/questions/49081149
+          debouncedOnChange(e, value)
 
-        return
+          return
+        }
+
+        onChangeHandler(e, value)
       }
-
-      onChange(e, value)
     }
 
     const clearInput = () => {
       if (inputEl && inputEl.current) {
         inputEl.current.value = ''
 
-        if (typeof onClear === 'function') {
+        if (typeof onClearHandler === 'function') {
           // A custom `onClear` routine may also be provided as a prop
-          onClear()
+          onClearHandler()
           setNonEmpty(false)
         } else {
           // Since components using this TextField may rely on an standard `onChange`
@@ -136,21 +156,21 @@ export const SearchInput = forwardRef(
       <TextField
         defaultValue={defaultValue}
         color="secondary"
+        inputProps={inputProps}
+        // eslint-disable-next-line react/jsx-no-duplicate-props
         InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SvgIcon path={mdiMagnify} color={theme.palette.action.active} />
-            </InputAdornment>
-          ),
+          ...InputProps,
+          startAdornment: <SearchIcon />,
           endAdornment: (
             <>
-              {isLoading && <Loading />}
-              {nonEmpty && (
-                <IconButton size="small" onClick={clearInput}>
-                  <SvgIcon
-                    path={mdiClose}
-                    color={theme.palette.action.active}
-                  />
+              {isLoading && <CircularProgress size={20} thickness={6} />}
+              {nonEmpty && !disableClearButton && (
+                <IconButton
+                  size="small"
+                  aria-label="clear"
+                  onClick={clearInput}
+                >
+                  <CloseIcon />
                 </IconButton>
               )}
             </>
@@ -160,7 +180,7 @@ export const SearchInput = forwardRef(
         style={widthStyle}
         inputRef={inputEl}
         onInput={handleInput}
-        {...others}
+        {...textFieldProps}
       />
     )
   }

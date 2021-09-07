@@ -5,7 +5,7 @@ import Downshift from 'downshift'
 import PropTypes from 'prop-types'
 import _ from 'underscore'
 
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
+import { SearchInput } from '@app/views/components/SearchInput'
 
 import Loading from '../../../components/Partials/Loading'
 import Drawer from '../OverlayDrawer'
@@ -185,8 +185,8 @@ class SearchDrawer extends React.Component {
                     fullWidth
                     ref={this.inputRef}
                     onClick={this.handleClickSearchInput}
-                    onChange={this.handleSearch}
-                    onClear={this.handleClear}
+                    onChangeHandler={this.handleSearch}
+                    onClearHandler={this.handleClear}
                     {...this.props.searchInputOptions}
                   />
                 </Box>

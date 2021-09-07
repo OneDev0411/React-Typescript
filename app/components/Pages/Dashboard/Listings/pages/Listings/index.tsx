@@ -1,12 +1,9 @@
 import { useState } from 'react'
 
-import { Box } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from '@app/views/components/GlobalPageLayout'
-
-import SearchTextField from '../../components/SearchTextField'
 
 import ListingsList from './ListingsList'
 import ListingsLoading from './ListingsLoading'
@@ -24,11 +21,11 @@ function Listings({ params }: ListingsProps) {
 
   return (
     <PageLayout position="relative" overflow="hidden">
-      <PageLayout.Header title="Listings">
-        <Box width="100%" maxWidth={360}>
-          <SearchTextField onChange={setSearchTerm} />
-        </Box>
-      </PageLayout.Header>
+      <PageLayout.HeaderWithSearch
+        title="Listings"
+        onSearch={setSearchTerm}
+        searchInputProps={{ placeholder: 'Search listings' }}
+      />
       <PageLayout.Main>
         {tab ? (
           <>

@@ -1,6 +1,6 @@
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
+import { SearchInput } from '@app/views/components/SearchInput'
 
 interface Props {
   placeholder: string

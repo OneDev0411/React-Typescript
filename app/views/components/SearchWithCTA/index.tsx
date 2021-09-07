@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-import { TextField, CircularProgress, List, Button } from '@material-ui/core'
+import { List, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import SearchIcon from '@material-ui/icons/Search'
 import useAutocomplete from '@material-ui/lab/useAutocomplete'
+import { useDebouncedCallback } from 'use-debounce'
+
+import { SearchInput } from '@app/views/components/SearchInput'
 
 const useStyles = makeStyles(
   theme => ({
-    input: {
-      backgroundColor: theme.palette.grey[100],
-      border: 'none',
-      borderRadius: theme.shape.borderRadius,
-      color: theme.palette.action.active,
-      height: theme.spacing(5),
-      lineHeight: 'initial',
-      padding: theme.spacing(0, 1.5)
-    },
     listboxContainer: {
       display: 'flex',
       flexDirection: 'column',
@@ -103,6 +96,7 @@ interface Props<T> {
   model: T[] | ((value: string) => Promise<T[]>)
   debug?: boolean
   minChars?: number
+  debounce?: number
 }
 
 export default function AutoComplete<T>({
@@ -112,12 +106,12 @@ export default function AutoComplete<T>({
   renderFooter,
   onFooterClick,
   getOptionLabel,
-  model,
   debug = false,
-  minChars = 2
+  model,
+  minChars = 2,
+  debounce = 200
 }: Props<T>) {
   const classes = useStyles()
-
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<T[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -134,9 +128,10 @@ export default function AutoComplete<T>({
   } = useAutocomplete<T>({
     id: 'auto-complete',
     autoComplete: true,
+    autoHighlight: true,
     options,
     getOptionLabel,
-    autoHighlight: true,
+    clearOnBlur: false,
     open,
     debug,
     onOpen: () => {
@@ -144,58 +139,50 @@ export default function AutoComplete<T>({
     },
     onClose: () => {
       setOpen(false)
-      setOptions([])
+    },
+    onInputChange: (e, value, reason) => {
+      // console.log(e, value, reason);
     }
   })
 
-  useEffect(() => {
-    const fetchResults = async (value: string) => {
-      let response
+  const [fetchResults] = useDebouncedCallback(async (value: string) => {
+    let response
 
-      setOpen(true)
-      setIsLoading(true)
-
-      // Either model is an object or a promise which gets us the
-      // results with an ajax call
-      if (typeof model === 'function') {
-        response = await model(value)
-      } else {
-        response = model
-      }
-
-      setIsLoading(false)
-      setOptions(response)
+    // Either model is an object or a promise which gets us the
+    // results with an ajax call
+    if (typeof model === 'function') {
+      response = await model(value)
+    } else {
+      response = model
     }
 
-    if (inputValue && inputValue.length >= minChars) {
-      fetchResults(inputValue)
-    }
-  }, [inputValue, model, minChars])
-
-  useEffect(() => {
-    if (!open) {
-      setOptions([])
-    }
-  }, [open])
+    setOptions(response)
+    setIsLoading(false)
+    setOpen(true)
+  }, debounce)
 
   return (
     <div>
       <div {...getRootProps()}>
-        <TextField
+        <SearchInput
           placeholder={placeholder}
-          variant="outlined"
-          InputProps={{
-            ...getInputProps(),
-            className: classes.input,
-            startAdornment: <SearchIcon />,
-            endAdornment: (
-              <>{isLoading && <CircularProgress color="inherit" size={20} />}</>
-            )
+          inputProps={{ ...getInputProps() }}
+          isLoading={isLoading}
+          disableClearButton={false}
+          onChangeHandler={(e, value = '') => {
+            // since our input is "controlled" we want to set the input value
+            // on onChange event
+            setIsLoading(true)
+
+            if (value && value.length >= minChars) {
+              fetchResults(value)
+            } else {
+              setIsLoading(false)
+            }
           }}
-          style={widthStyle}
         />
       </div>
-      {open && !isLoading && inputValue.length >= minChars && (
+      {open && inputValue.length >= minChars && (
         <div className={classes.listboxContainer} style={widthStyle}>
           {options.length > 0 && inputValue.length > 0 && (
             <List className={classes.listbox} {...getListboxProps()}>
@@ -216,7 +203,7 @@ export default function AutoComplete<T>({
             <Button
               className={classes.listBoxFooter}
               classes={{ label: classes.listBoxFooterLabel }}
-              onMouseDown={() => {
+              onClick={e => {
                 onFooterClick(inputValue)
               }}
             >

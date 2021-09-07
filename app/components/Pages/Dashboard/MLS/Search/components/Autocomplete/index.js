@@ -10,6 +10,7 @@ import {
   SEARCH_BY_GOOGLE_SUGGESTS,
   SEARCH_BY_QUERY
 } from '@app/constants/listings/search'
+import { SearchInput } from '@app/views/components/SearchInput'
 import { goToPlace, setMapProps } from 'actions/listings/map'
 import { removePolygon, inactiveDrawing } from 'actions/listings/map/drawing'
 import searchActions from 'actions/listings/search'
@@ -19,7 +20,6 @@ import {
   reset as resetSearchType,
   setSearchType
 } from 'actions/listings/search/set-type'
-import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { getPlace } from 'models/listings/search/get-place'
@@ -333,13 +333,15 @@ class MlsAutocompleteSearch extends Component {
                   <SearchInput
                     ref={this.inputRef}
                     value={this.state.input}
-                    onChange={this.handleChangeInput}
-                    onKeyDown={this.handleKeyDownInput}
-                    onFocus={this.handleInputFocus}
-                    onBlur={this.handleInputBlur}
+                    onChangeHandler={this.handleChangeInput}
+                    inputProps={{
+                      onKeyDown: this.handleKeyDownInput,
+                      onFocus: this.handleInputFocus,
+                      onBlur: this.handleInputBlur
+                    }}
                     // eslint-disable-next-line max-len
                     placeholder="Enter an address, neighborhood, city, ZIP code or MLS #"
-                    onClear={this.onClear}
+                    onClearHandler={this.onClear}
                     isLoading={this.state.isLoading}
                     fullWidth={this.props.fullWidth}
                   />

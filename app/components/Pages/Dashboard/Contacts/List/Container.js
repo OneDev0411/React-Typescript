@@ -860,7 +860,7 @@ class ContactsList extends React.Component {
           flex="0 1 auto"
           title={title}
           onSearch={this.handleSearch}
-          SearchInputProps={{
+          searchInputProps={{
             defaultValue: this.state.searchInputValue || '',
             placeholder: 'Search Contacts'
           }}

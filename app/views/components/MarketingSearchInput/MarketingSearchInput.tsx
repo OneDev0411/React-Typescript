@@ -3,32 +3,47 @@ import { useMemo } from 'react'
 import { Autocomplete } from '@material-ui/lab'
 import Fuse from 'fuse.js'
 
-import { useTemplateTypeSections } from '@app/hooks/use-template-type-sections'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
-import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
-import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
+import { SearchInput } from '@app/views/components/SearchInput'
 
-import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
+import { MarketingSearchInputOption, MarketingSearchInputProps } from './types'
 
-interface TemplateTypeWithMediumAndCategory extends TemplateTypeWithMedium {
-  category: string
-}
+const HIDDEN_SECTIONS = ['overview', 'designs']
 
 export default function MarketingSearchInput({
-  types,
+  sections,
+  templateTypeMediums,
   onSelect
 }: MarketingSearchInputProps) {
-  const { getSection } = useTemplateTypeSections()
-  const typesWithCategory: TemplateTypeWithMediumAndCategory[] = useMemo(
-    () =>
-      types.map(data => ({
-        ...data,
-        category: getSection(data.type).title
-      })),
-    [types, getSection]
-  )
+  const options: MarketingSearchInputOption[] = useMemo(() => {
+    return Object.keys(sections)
+      .filter(sectionName => !HIDDEN_SECTIONS.includes(sectionName))
+      .flatMap(sectionName => {
+        const section = sections[sectionName]
+
+        return section.items.flatMap(sectionItem => {
+          const sectionMediums =
+            sectionItem.value &&
+            typeof sectionItem.value === 'string' &&
+            templateTypeMediums[sectionItem.value]
+              ? templateTypeMediums[sectionItem.value]
+              : null
+
+          if (!sectionMediums) {
+            return []
+          }
+
+          return sectionMediums.map(medium => ({
+            label: `${sectionItem.title} ${getTemplateMediumLabel(medium)}`,
+            url: `${sectionItem.link}/${medium}`,
+            section: section.title.split(':')[0]
+          }))
+        })
+      })
+  }, [sections, templateTypeMediums])
+
   const handleSelect = (
-    option: Nullable<TemplateTypeWithMediumAndCategory | string>
+    option: Nullable<MarketingSearchInputOption | string>
   ) => {
     if (!option || typeof option === 'string') {
       return
@@ -37,20 +52,15 @@ export default function MarketingSearchInput({
     onSelect(option)
   }
 
-  const getOptionLabel = (option: TemplateTypeWithMediumAndCategory) => {
-    return `${getTemplateTypeLabel(option.type)}${
-      option.medium ? ` ${getTemplateMediumLabel(option.medium)}` : ''
-    }`
-  }
-
   return (
-    <Autocomplete<TemplateTypeWithMediumAndCategory, false, true, true>
+    <Autocomplete<MarketingSearchInputOption, false, true, true>
+      freeSolo
       openOnFocus
       ListboxProps={{ style: { maxHeight: '50vh' } }}
-      options={typesWithCategory}
+      options={options}
       onChange={(e, option) => handleSelect(option)}
-      getOptionLabel={getOptionLabel}
-      groupBy={option => option.category}
+      getOptionLabel={option => option.label}
+      groupBy={option => option.section}
       noOptionsText="No results"
       filterOptions={(options, state) => {
         if (!state.inputValue) {
@@ -58,20 +68,17 @@ export default function MarketingSearchInput({
         }
 
         return new Fuse(options, {
-          keys: ['type', 'medium', 'category'],
+          keys: ['label', 'section'],
           threshold: 0.3
         })
           .search(state.inputValue)
-          .sort((a, b) => a.category.localeCompare(b.category))
+          .sort((a, b) => a.section.localeCompare(b.section))
       }}
       renderInput={params => (
         <SearchInput
           {...params}
           fullWidth
-          color="primary"
-          variant="outlined"
-          size="small"
-          label="Search by category or topic"
+          placeholder="Search by category or topic"
         />
       )}
     />
