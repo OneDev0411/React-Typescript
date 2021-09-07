@@ -107,6 +107,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     )
   }
 
+  // Initialize user location on click Locate
   const initUserLocation = (lat: number, lng: number) => {
     // TODO: Calculate zoom from bound and center and map width
     // https://stackoverflow.com/a/6055653/10326226
@@ -131,6 +132,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     setUserLocationState(prev => ({ ...prev, firstRun: false }))
   }
 
+  // Get google geo place if query is set
   useEffectOnce(() => {
     async function parseSearchParam(searchParamQuery: string) {
       setIsLoadingPlace(true)
