@@ -10,8 +10,10 @@ import { selectUser } from 'selectors/user'
 
 import { PROPOSED_AGENT_ZOOM_LEVEL, QUERY_LIMIT } from '../../helpers/constants'
 import { formatListing } from '../../helpers/format-listing'
-import { createValertQueryString } from '../../helpers/get-listings-helpers'
-import { pointFromBounds, coordToPoint } from '../../helpers/map-helpers'
+import {
+  createValertOptions,
+  createValertQueryString
+} from '../../helpers/get-listings-helpers'
 import { Actions, setListings, setIsLoading } from '../context/actions'
 import { reducer, initialState, ListingsState } from '../context/reducers'
 
@@ -59,19 +61,7 @@ export default function useFetchListings(
         PROPOSED_AGENT_ZOOM_LEVEL,
         brand
       )
-
-      const points =
-        state.search.drawing.length > 0
-          ? state.search.drawing.map(coordToPoint)
-          : pointFromBounds(state.search.bounds)
-
-      const valertOptions = {
-        ...state.search.filters,
-        points,
-        ...(state.search.office ? { offices: [state.search.office] } : {}),
-        postal_codes: null,
-        limit: QUERY_LIMIT
-      }
+      const valertOptions = createValertOptions(state.search, null, QUERY_LIMIT)
 
       const response = await api.getListings.byValert(
         valertOptions,

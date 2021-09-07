@@ -18,7 +18,8 @@ import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { QUERY_LIMIT, bootstrapURLKeys } from '../../../helpers/constants'
-import { coordToPoint, pointFromBounds } from '../../../helpers/map-helpers'
+import { createValertOptions } from '../../../helpers/get-listings-helpers'
+import { coordToPoint } from '../../../helpers/map-helpers'
 import {
   getDefaultSort,
   LAST_BROWSING_LOCATION,
@@ -96,9 +97,10 @@ const useStyles = makeStyles(
       width: 'calc(100% - 192px)'
     }
   }),
-  { name: 'PropertiesMainLayout' }
+  { name: 'PropertiesExplorePage' }
 )
 
+// Add initialize to window type to avoid TS error on google map callback
 declare const window: Window &
   typeof globalThis & {
     initialize: () => void
@@ -144,8 +146,7 @@ export function ExplorePage({ user, isWidget }: Props) {
     dispatch(removeMapDrawing())
   }
 
-  const searchArea = useCallback((points: ICoord[]) => {
-    console.log(points)
+  const onDoneDrawing = useCallback((points: ICoord[]) => {
     setDrawingMode(false)
     dispatch(setMapDrawing(points))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,7 +172,6 @@ export function ExplorePage({ user, isWidget }: Props) {
     }
 
     if (isMapLibrariesLoaded(googleMapAPIParams.libraries)) {
-      console.log('already loaded')
       initialize()
     } else {
       loadMapLibraries(googleMapAPIParams)
@@ -269,7 +269,7 @@ export function ExplorePage({ user, isWidget }: Props) {
                 )}
                 <Map
                   drawingMode={drawingMode}
-                  drawingModeCallBack={searchArea}
+                  drawingModeCallBack={onDoneDrawing}
                   onChange={updateUserLocation}
                 />
               </Box>
@@ -296,16 +296,7 @@ export function ExplorePage({ user, isWidget }: Props) {
         onHide={onCloseAlertModal}
         isActive={isShowAlertModal}
         alertProposedTitle={state.result.info?.proposed_title}
-        searchOptions={{
-          ...state.search.filters,
-          points:
-            state.search.drawing.length > 0
-              ? state.search.drawing.map(coordToPoint)
-              : pointFromBounds(state.search.bounds),
-          ...(state.search.office ? { offices: [state.search.office] } : {}),
-          postal_codes: null,
-          limit: QUERY_LIMIT
-        }}
+        searchOptions={createValertOptions(state.search, null, QUERY_LIMIT)}
         drawingPoints={state.search.drawing.map(coordToPoint)}
       />
     </>

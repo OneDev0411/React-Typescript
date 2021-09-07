@@ -1,13 +1,14 @@
 import { Actions } from '../actions'
 
+export interface ListingSearchOptions {
+  bounds: Nullable<IBounds>
+  office?: Nullable<string>
+  drawing: ICoord[]
+  // TODO: change filters model
+  filters: Nullable<any>
+}
 export interface ListingsState {
-  search: {
-    bounds: Nullable<IBounds>
-    office?: Nullable<string>
-    drawing: ICoord[]
-    // TODO: change filters model
-    filters: Nullable<any>
-  }
+  search: ListingSearchOptions
   map: { center: Optional<ICoord>; zoom: Optional<number> }
   result: {
     listings: ICompactListing[]

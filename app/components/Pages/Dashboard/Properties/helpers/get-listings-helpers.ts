@@ -1,3 +1,7 @@
+import { ListingSearchOptions } from '../ExploreTab/context/reducers'
+
+import { coordToPoint, pointFromBounds } from './map-helpers'
+
 export function createValertQueryString(
   zoom: Optional<number>,
   proposedAgentZoomLevel: number,
@@ -16,4 +20,23 @@ export function createValertQueryString(
   }
 
   return query
+}
+
+export function createValertOptions(
+  search: ListingSearchOptions,
+  postalCodes: Nullable<string[]>,
+  limit: number
+) {
+  const points =
+    search.drawing.length > 0
+      ? search.drawing.map(coordToPoint)
+      : pointFromBounds(search.bounds)
+
+  return {
+    ...search.filters,
+    points,
+    ...(search.office ? { offices: [search.office] } : {}),
+    postal_codes: postalCodes,
+    limit
+  }
 }
