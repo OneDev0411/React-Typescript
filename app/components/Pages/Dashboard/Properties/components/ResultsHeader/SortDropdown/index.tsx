@@ -26,7 +26,7 @@ import {
 const useStyles = makeStyles(
   theme => ({
     button: {
-      margin: theme.spacing(0, 0.5)
+      marginLeft: theme.spacing(0.5)
     },
     menu: {
       zIndex: theme.zIndex.modal
