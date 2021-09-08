@@ -1,20 +1,51 @@
-import { Avatar, ListItemText, ListItemAvatar } from '@material-ui/core'
+import {
+  ListItem,
+  Avatar,
+  ListItemText,
+  ListItemAvatar
+} from '@material-ui/core'
+
+import { convertAgentToRole } from '../../../utils/roles'
+import { IDealFormRole } from '../../types'
 
 interface Props {
-  agent: IAgent
-  primaryText: React.ReactNode
+  index: number
+  style: React.CSSProperties
+  data: {
+    options: IAgent[]
+    getHighlightedText: (text: string, highlight: string) => React.ReactNode
+    inputValue: string
+    getOptionProps: ({ option, index }: { option: IAgent; index: number }) => {}
+    onSelectRole: (role: Partial<IDealFormRole>) => void
+  }
 }
 
-export function AgentRow({ agent, primaryText }: Props) {
+export function AgentRow({
+  index,
+  style,
+  data: {
+    options,
+    getHighlightedText,
+    inputValue,
+    getOptionProps,
+    onSelectRole
+  }
+}: Props) {
+  const option = options[index]
+
   return (
-    <>
+    <ListItem
+      {...getOptionProps({ option, index })}
+      style={style}
+      onClick={() => onSelectRole(convertAgentToRole(option))}
+    >
       <ListItemAvatar>
-        <Avatar src={agent.profile_image_url!} />
+        <Avatar src={option.profile_image_url!} />
       </ListItemAvatar>
       <ListItemText
-        primary={primaryText}
-        secondary={agent.mlsid || agent.email}
+        primary={getHighlightedText(option.full_name, inputValue)}
+        secondary={option.mlsid || option.email}
       />
-    </>
+    </ListItem>
   )
 }

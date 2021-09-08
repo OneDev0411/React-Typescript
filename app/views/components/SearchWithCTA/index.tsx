@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { List, Button } from '@material-ui/core'
+import { Button, Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useAutocomplete from '@material-ui/lab/useAutocomplete'
 import { useDebouncedCallback } from 'use-debounce'
@@ -10,33 +10,24 @@ import { SearchInput } from '@app/views/components/SearchInput'
 const useStyles = makeStyles(
   theme => ({
     listboxContainer: {
+      position: 'absolute',
       display: 'flex',
       flexDirection: 'column',
-      zIndex: 1,
-      position: 'absolute',
-      borderRadius: theme.shape.borderRadius,
       overflow: 'hidden',
+      borderRadius: theme.shape.borderRadius,
       boxShadow: '1px 1px 5px 1px rgba(0,0,0,0.22)',
-      fontFamily: 'Lato'
-    },
-    listBoxFooter: {
-      borderTop: '1px solid #e4e4e4',
-      backgroundColor: '#F9FAFC',
-      padding: theme.spacing(1),
-      textTransform: 'none',
-      textAlign: 'left'
-    },
-    listBoxFooterLabel: {
-      justifyContent: 'start',
-      color: theme.palette.primary.main
+      zIndex: 1
     },
     listbox: {
-      padding: 0,
-      margin: 0,
-      listStyle: 'none',
       backgroundColor: theme.palette.background.paper,
-      overflow: 'auto',
       maxHeight: 270,
+      // For the sake of consistency someone would use
+      // ul li as for the list in the future
+      '& ul': {
+        padding: 0,
+        margin: 0,
+        listStyle: 'none'
+      },
       '& li': {
         padding: theme.spacing(1)
       },
@@ -49,6 +40,17 @@ const useStyles = makeStyles(
         backgroundColor: 'rgba(0, 0, 0, 0.08)',
         color: '#000'
       }
+    },
+    listBoxFooter: {
+      borderTop: '1px solid #e4e4e4',
+      backgroundColor: '#F9FAFC',
+      padding: theme.spacing(1),
+      textTransform: 'none',
+      textAlign: 'left'
+    },
+    listBoxFooterLabel: {
+      justifyContent: 'start',
+      color: theme.palette.primary.main
     },
     noResults: {
       padding: theme.spacing(2),
@@ -97,6 +99,7 @@ interface Props<T> {
   debug?: boolean
   minChars?: number
   debounce?: number
+  disableClearButton: boolean
 }
 
 export default function AutoComplete<T>({
@@ -109,7 +112,8 @@ export default function AutoComplete<T>({
   debug = false,
   model,
   minChars = 2,
-  debounce = 200
+  debounce = 200,
+  disableClearButton
 }: Props<T>) {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
@@ -168,7 +172,7 @@ export default function AutoComplete<T>({
           placeholder={placeholder}
           inputProps={{ ...getInputProps() }}
           isLoading={isLoading}
-          disableClearButton={false}
+          disableClearButton={disableClearButton}
           onChangeHandler={(e, value = '') => {
             // since our input is "controlled" we want to set the input value
             // on onChange event
@@ -185,14 +189,14 @@ export default function AutoComplete<T>({
       {open && inputValue.length >= minChars && (
         <div className={classes.listboxContainer} style={widthStyle}>
           {options.length > 0 && inputValue.length > 0 && (
-            <List className={classes.listbox} {...getListboxProps()}>
+            <Box className={classes.listbox} {...getListboxProps()}>
               {renderOption(
                 groupedOptions,
                 getOptionProps,
                 getHighlightedText,
                 { inputValue }
               )}
-            </List>
+            </Box>
           )}
           {groupedOptions.length === 0 &&
             inputValue.length > 0 &&
