@@ -131,11 +131,11 @@ function ShowingDetailTabSettings({
     showing: IShowing<'showing'>,
     updateShowingRef: boolean = false
   ) => {
-    setShowing(showing)
-
     if (updateShowingRef) {
       showingRef.current = showing
     }
+
+    setShowing(showing)
 
     const errors: ShowingDetailTabSettingsErrors = {}
 
@@ -231,7 +231,7 @@ function ShowingDetailTabSettings({
 
   const isShowingDirty = showing !== showingRef.current
 
-  // Reset the showing state if it is dirty and the user leaves the settings
+  // Restore the showing state if it is dirty and the user leaves the settings
   useEffect(() => {
     return () => {
       if (isShowingDirty) {
