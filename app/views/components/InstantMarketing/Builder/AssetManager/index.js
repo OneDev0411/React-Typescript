@@ -12,9 +12,7 @@ import { loadGrapesjs } from '../utils/load-grapes'
 
 import { AssetImage } from './AssetImage'
 
-export const load = async (
-  getPossibleMimeTypesForUpload = () => ['image/*']
-) => {
+export const load = async () => {
   const { Grapesjs, Backbone } = await loadGrapesjs()
 
   Grapesjs.plugins.add('asset-blocks', async editor => {
@@ -49,13 +47,11 @@ export const load = async (
 
     const AssetUploadButtonView = Backbone.View.extend({
       render() {
-        const acceptableMimeTypes = getPossibleMimeTypesForUpload().join(',')
-
         ReactDOM.render(
           <Provider store={store}>
             <AppTheme>
               <Uploader
-                accept={acceptableMimeTypes}
+                accept="image/*"
                 uploadHandler={async files => {
                   try {
                     const { templateId } = await getStorageData('templateId')

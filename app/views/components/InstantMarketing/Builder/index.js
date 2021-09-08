@@ -179,7 +179,7 @@ class Builder extends React.Component {
     const brandColors = getBrandColors(brand)
 
     await Promise.all([
-      loadAssetManagerPlugin(this.getPossibleMimeTypesForUpload),
+      loadAssetManagerPlugin(),
       loadStyleManagerPlugin(brandColors)
     ])
 
@@ -1017,12 +1017,6 @@ class Builder extends React.Component {
     return this.selectedTemplate && this.selectedTemplate.medium === 'Website'
   }
 
-  get isDynamicTemplate() {
-    return (
-      this.isEmailTemplate || this.isWebsiteTemplate || this.isVideoTemplate
-    )
-  }
-
   get isTemplateLoaded() {
     return this.selectedTemplate && this.selectedTemplate.markup
   }
@@ -1109,14 +1103,6 @@ class Builder extends React.Component {
         image: this.props.user[attr],
         avatar: true
       }))
-  }
-
-  getPossibleMimeTypesForUpload = () => {
-    if (this.isDynamicTemplate) {
-      return ['image/*']
-    }
-
-    return ['image/jpeg', 'image/png']
   }
 
   regenerateTemplate = newData => {
@@ -1282,12 +1268,6 @@ class Builder extends React.Component {
 
                 this.setState({ isImageSelectDialogOpen: false })
               }}
-              disabledTabs={
-                this.isDynamicTemplate ? undefined : ['gif-library']
-              }
-              acceptableMimeType={this.getPossibleMimeTypesForUpload().join(
-                ','
-              )}
               onUpload={this.uploadFile}
             />
           )}
