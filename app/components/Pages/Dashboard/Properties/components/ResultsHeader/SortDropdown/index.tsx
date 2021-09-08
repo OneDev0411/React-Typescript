@@ -25,6 +25,9 @@ import {
 
 const useStyles = makeStyles(
   theme => ({
+    button: {
+      marginLeft: theme.spacing(0.5)
+    },
     menu: {
       zIndex: theme.zIndex.modal
     },
@@ -90,6 +93,10 @@ export function SortDropdown({ onChangeSort, activeSort }: Props) {
   return (
     <>
       <Button
+        className={classes.button}
+        variant="outlined"
+        size="small"
+        color="primary"
         ref={anchorRef}
         aria-controls={open ? 'menu-list-grow' : undefined}
         aria-haspopup="true"

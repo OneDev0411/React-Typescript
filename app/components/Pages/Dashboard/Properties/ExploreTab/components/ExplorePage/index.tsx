@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, Button, Grid, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
@@ -42,7 +42,7 @@ import { MapToggler } from '../MapToggler'
 import { Results } from '../Results'
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     container: {
       minHeight: '100vh',
       display: 'flex',
@@ -50,8 +50,8 @@ const useStyles = makeStyles(
       overflow: 'hidden'
     },
     searchBar: {
-      paddingTop: '10px',
-      paddingBottom: '30px',
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(4),
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between'
@@ -62,8 +62,9 @@ const useStyles = makeStyles(
       overflow: 'hidden'
     },
     map: {
-      flexBasis: '50%',
+      flex: 1,
       minHeight: '100%',
+      marginRight: theme.spacing(2),
       position: 'relative'
     },
     mapCanvas: {
@@ -77,23 +78,23 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: 5,
       left: 5,
-      backgroundColor: 'white',
-      padding: '3px 10px',
+      backgroundColor: '#fff',
+      padding: theme.spacing(1, 2),
       borderRadius: 3,
       zIndex: 3
     },
     results: {
-      flexBasis: '50%',
+      flex: 1,
       minHeight: '100%',
-      padding: '0 10px',
       display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1
+      flexDirection: 'column'
     },
     selectionActionBar: {
       position: 'absolute',
       bottom: 20,
       right: 0,
+      // The width of app sidebar is 192px
+      // TODO: probably need to be changed if sidebar is changed
       width: 'calc(100% - 192px)'
     }
   }),
@@ -234,9 +235,9 @@ export function ExplorePage({ user, isWidget }: Props) {
           </Box>
         </Box>
 
-        <Box className={classes.main}>
+        <Grid container className={classes.main}>
           {mapIsShown && mapIsInitialized && (
-            <Box className={classes.map}>
+            <Grid item className={classes.map}>
               <Box className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
@@ -273,9 +274,9 @@ export function ExplorePage({ user, isWidget }: Props) {
                   onChange={updateUserLocation}
                 />
               </Box>
-            </Box>
+            </Grid>
           )}
-          <Box className={classes.results}>
+          <Grid item className={classes.results}>
             <Results
               mapIsShown={mapIsShown}
               onMapToggle={toggleMap}
@@ -285,8 +286,8 @@ export function ExplorePage({ user, isWidget }: Props) {
               onToggleView={onToggleView}
               isWidget={isWidget}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </Box>
       <Box className={classes.selectionActionBar}>
         <ShareListings />

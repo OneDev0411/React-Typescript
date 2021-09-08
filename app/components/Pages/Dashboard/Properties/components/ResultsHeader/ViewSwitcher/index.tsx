@@ -32,6 +32,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
       <ToggleButton
         className={classes.toggleViewButton}
         value="check"
+        size="small"
         color="primary"
         selected={viewType === 'cards'}
         onChange={() => {
@@ -44,6 +45,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
         className={classes.toggleViewButton}
         value="check"
         color="primary"
+        size="small"
         selected={viewType === 'table'}
         onChange={() => {
           onToggleView('table')

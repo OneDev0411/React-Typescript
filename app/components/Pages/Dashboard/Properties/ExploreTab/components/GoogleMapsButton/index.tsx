@@ -14,12 +14,12 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     borderRadius: 2,
     boxShadow: 'rgb(0 0 0 / 30%) 0px 1px 4px -1px',
     '&.active': {
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.grey[300],
       color: theme.palette.grey[900]
     },
     '&:hover': {
       color: theme.palette.grey[900],
-      backgroundColor: theme.palette.grey[200]
+      backgroundColor: theme.palette.grey[300]
     }
   },
   label: {
