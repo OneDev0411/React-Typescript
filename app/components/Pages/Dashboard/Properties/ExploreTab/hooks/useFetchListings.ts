@@ -84,7 +84,8 @@ export default function useFetchListings(
       if (response.info?.total > QUERY_LIMIT) {
         notify({
           status: 'warning',
-          message: `We can show max ${QUERY_LIMIT} listings. Please zoom in or set more filters.`
+          message: `We can show max ${QUERY_LIMIT} listings. Please zoom in or set more filters.`,
+          options: { id: 'properties-too-much-response-warning' }
         })
       }
 
