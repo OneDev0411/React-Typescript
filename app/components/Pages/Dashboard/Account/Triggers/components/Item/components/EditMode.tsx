@@ -5,6 +5,7 @@ import {
   InputLabel,
   TextField,
   MenuItem,
+  Popover,
   Button,
   Select,
   Theme,
@@ -17,7 +18,10 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 // import { TemplateSelector } from './components/TemplateSelector'
 // import { convertSecondsToDay } from './helpers'
 
-interface Props {}
+interface Props {
+  anchor: Nullable<HTMLElement>
+  handleClose: () => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -57,95 +61,141 @@ const useStyles = makeStyles(
   { name: 'TriggerEditMode' }
 )
 
-export function TriggerEditMode(props: Props) {
+export function TriggerEditMode({ anchor, handleClose }: Props) {
   const classes = useStyles()
-  const { control, handleSubmit } = useForm<IGlobalTriggerInput>()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<IGlobalTriggerInput>()
+  const open = Boolean(anchor)
+  const id = open ? 'edit-mode-popover' : undefined
 
   const handleOnSave: SubmitHandler<IGlobalTriggerInput> = data => {
     console.log({ data })
   }
 
   return (
-    <form onSubmit={handleSubmit(handleOnSave)} noValidate>
-      <div className={classes.container}>
-        <div className={classes.fieldsContainer}>
-          <div className={classes.fieldsColumn}>
-            <div className={classes.triggerFields}>
-              <div className={classes.titleContainer}>
-                <Typography component="span" variant="subtitle2">
-                  Automate Email
-                </Typography>
-                <Typography
-                  component="p"
-                  variant="body2"
-                  className={classes.description}
-                >
-                  Send automate email to the contacts and don’t miss any
-                  important date ever.
-                </Typography>
-              </div>
-              <>
-                <TextField
-                  id="subject"
-                  label="Subject"
-                  type="text"
-                  size="small"
-                  // disabled={disabled || !isActive || isSaving}
-                  defaultValue="dddd"
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  variant="outlined"
-                  className={classes.inputField}
-                />
-                <FormControl
-                  variant="outlined"
-                  size="small"
-                  className={classes.inputField}
-                  // disabled={disabled || !isActive || isSaving}
-                >
-                  <InputLabel id="trigger-send-before">Deliver in</InputLabel>
-                  <Select
-                    labelId="trigger-send-before"
-                    id="trigger-send-before-select"
-                    value={0}
-                    defaultValue={0}
-                    // onChange={handleSendBeforeChange}
-                    label="Deliver in"
+    <Popover
+      id={id}
+      open={open}
+      anchorEl={anchor}
+      onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center'
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center'
+      }}
+    >
+      <form onSubmit={handleSubmit(handleOnSave)} noValidate>
+        <div className={classes.container}>
+          <div className={classes.fieldsContainer}>
+            <div className={classes.fieldsColumn}>
+              <div className={classes.triggerFields}>
+                <div className={classes.titleContainer}>
+                  <Typography component="span" variant="subtitle2">
+                    Automate Email
+                  </Typography>
+                  <Typography
+                    component="p"
+                    variant="body2"
+                    className={classes.description}
                   >
-                    <MenuItem value={0}>Same Day</MenuItem>
-                    {[1, 2, 3, 4].map(item => (
-                      <MenuItem key={item} value={item}>
-                        {pluralize('day', item, true)} earlier
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </>
+                    Send automate email to the contacts and don’t miss any
+                    important date ever.
+                  </Typography>
+                </div>
+                <>
+                  <Controller
+                    name="subject"
+                    control={control}
+                    defaultValue="ddd"
+                    rules={{
+                      validate: (value: string) =>
+                        !!value.trim() || 'This field is required.'
+                    }}
+                    render={({ ...props }) => {
+                      const error: string | undefined = errors.subject?.message
+
+                      return (
+                        <TextField
+                          {...props}
+                          label="Subject"
+                          size="small"
+                          variant="outlined"
+                          disabled={isSubmitting}
+                          error={!!error}
+                          helperText={error}
+                          className={classes.inputField}
+                          InputLabelProps={{
+                            shrink: true
+                          }}
+                        />
+                      )
+                    }}
+                  />
+                  <Controller
+                    name="wait_for"
+                    type="number"
+                    control={control}
+                    defaultValue={0}
+                    render={({ value, onChange }) => {
+                      return (
+                        <FormControl
+                          variant="outlined"
+                          size="small"
+                          disabled={isSubmitting}
+                          className={classes.inputField}
+                        >
+                          <InputLabel id="trigger-send-before">
+                            Deliver in
+                          </InputLabel>
+                          <Select
+                            labelId="trigger-send-before"
+                            id="trigger-send-before-select"
+                            disabled={isSubmitting}
+                            value={value}
+                            onChange={event => onChange(event.target.value)}
+                            label="Deliver in"
+                          >
+                            <MenuItem value={0}>Same Day</MenuItem>
+                            {[1, 2, 3, 4].map(item => (
+                              <MenuItem key={item} value={item}>
+                                {pluralize('day', item, true)} earlier
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      )
+                    }}
+                  />
+                </>
+              </div>
             </div>
+            <div className={classes.fieldsColumn}>dddd</div>
           </div>
-          <div className={classes.fieldsColumn}>dddd</div>
-        </div>
-        <div className={classes.actions}>
-          <Box mr={1}>
+          <div className={classes.actions}>
+            <Box mr={1}>
+              <Button size="small" disabled={isSubmitting}>
+                Cancel
+              </Button>
+            </Box>
             <Button
-              size="small" /* disabled={isDisabled} onClick={handleCancel} */
+              type="submit"
+              variant="contained"
+              color="secondary"
+              size="small"
+              disabled={isSubmitting}
             >
-              Cancel
+              Save
+              {/* {isSaving ? 'Saving...' : 'Save'} */}
             </Button>
-          </Box>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            // disabled={isDisabled}
-            // onClick={handleSave}
-          >
-            Save
-            {/* {isSaving ? 'Saving...' : 'Save'} */}
-          </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </Popover>
   )
 }

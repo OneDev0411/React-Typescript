@@ -38,7 +38,7 @@ declare type IGlobalTriggerRaw = Omit<
   ITriggerBase,
   'user' | 'time' | 'recurring'
 > &
-  Pick<IContactTrigger, 'event_type'>
+  Pick<IContactTrigger, 'event_type'> & { subject: string }
 
 declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {
   template?: UUID
