@@ -28,7 +28,11 @@ const useStyles = makeStyles(
   { name: 'DrawingModeBar' }
 )
 
-export const DrawingModeBar = ({ onCancel }) => {
+interface Props {
+  onCancel: () => void
+}
+
+export const DrawingModeBar = ({ onCancel }: Props) => {
   const classes = useStyles()
 
   return (
