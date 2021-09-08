@@ -26,14 +26,10 @@ import {
 const useStyles = makeStyles(
   theme => ({
     button: {
-      marginLeft: theme.spacing(0.5)
+      margin: theme.spacing(0, 0.5)
     },
     menu: {
       zIndex: theme.zIndex.modal
-    },
-    sortedBy: {
-      color: theme.palette.grey[600],
-      marginRight: theme.spacing(0.5)
     },
     buttonGroup: {
       margin: theme.spacing(2)
@@ -105,8 +101,7 @@ export function SortDropdown({ onChangeSort, activeSort }: Props) {
           activeSort.ascending ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />
         }
       >
-        <span className={classes.sortedBy}>Sorted by: </span>
-        <span>{sortOptions[activeSort.index]}</span>
+        {sortOptions[activeSort.index]}
       </Button>
       <Popper
         className={classes.menu}
