@@ -7,9 +7,6 @@ import React, {
   RefObject
 } from 'react'
 
-// eslint-disable-next-line import/order
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import FullCalendar, {
   EventApi,
   EventInput,
@@ -18,6 +15,11 @@ import FullCalendar, {
 } from '@fullcalendar/react'
 import rrulePlugin from '@fullcalendar/rrule'
 import timeGridPlugin from '@fullcalendar/timegrid'
+// eslint-disable-next-line import/order
+import dayGridPlugin from '@fullcalendar/daygrid'
+// eslint-disable-next-line import/order
+import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
+
 import { makeStyles, Theme } from '@material-ui/core'
 import _map from 'lodash/map'
 import { connect } from 'react-redux'
