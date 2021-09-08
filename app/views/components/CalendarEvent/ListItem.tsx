@@ -11,10 +11,12 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { isToday } from 'date-fns'
+import { isToday, isTomorrow } from 'date-fns'
 import { useSelector } from 'react-redux'
 import timeago from 'timeago.js'
 
+import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
+import { getTitle } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/get-title'
 import Link from 'components/ALink'
 import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
@@ -47,8 +49,9 @@ const useStyles = makeStyles(
 export default function CalendarEventListItem({ event }: Props) {
   let avatarIcon
   let Icon
-  let eventTitle
   let eventSubTitle
+  let eventTitleLink
+  const eventTitle = getTitle(event)
 
   const classes = useStyles()
 
@@ -69,23 +72,20 @@ export default function CalendarEventListItem({ event }: Props) {
     event.people[0].type === 'contact'
       ? event.people[0]
       : null
-
-  eventTitle = event.title
-
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
   const eventTime = new Date(event.next_occurence)
   const humanizedEventTime = isToday(eventTime)
     ? 'Today'
+    : isTomorrow(eventTime)
+    ? 'Tomorrow'
     : timeago().format(eventTime)
 
+  // Build avatars
   if (contact) {
     avatarIcon = (
       <Link to={`/dashboard/contacts/${contact.id}`}>
         <Avatar disableLazyLoad size="medium" contact={contact} />
       </Link>
-    )
-    eventTitle = (
-      <Link to={`/dashboard/contacts/${contact.id}`}>{eventTitle}</Link>
     )
   } else if (eventTypesIcons[event.event_type]) {
     Icon = eventTypesIcons[event.event_type].icon
@@ -98,34 +98,34 @@ export default function CalendarEventListItem({ event }: Props) {
     avatarIcon = <CustomizedMuiAvatar />
   }
 
-  switch (event.event_type) {
-    case 'closing_date':
-    case 'contract_date':
-    case 'inspection_date':
-    case 'possession_date':
-    case 'expiration_date':
-    case 'option_period':
-      eventTitle = (
-        <Link to={`/dashboard/deals/${event.deal}`}>
-          {event.type_label} of {eventTitle}
-        </Link>
-      )
-      break
-    case 'home_anniversary':
-      if (contact) {
-        eventSubTitle = `Home anniversary of ${contact.display_name} ${humanizedEventTime}`
-      }
+  // Build titles
+  if (isDealEvent(event)) {
+    eventTitleLink = (
+      <Link to={`/dashboard/deals/${event.deal}`}>{eventTitle}</Link>
+    )
+  }
 
-      break
-    default:
-      eventSubTitle = humanizedEventTime
+  if (contact) {
+    eventTitleLink = (
+      <Link to={`/dashboard/contacts/${contact.id}`}>{eventTitle}</Link>
+    )
+  }
+
+  // Build subTitles
+  eventSubTitle = `${humanizedEventTime}`
+
+  if (event.type === 'home_anniversary' && contact) {
+    eventSubTitle = `${eventTitle} ${humanizedEventTime}`
   }
 
   return (
     <>
       <ListItem classes={{ secondaryAction: classes.listItemWithButton }}>
         <ListItemAvatar>{avatarIcon}</ListItemAvatar>
-        <ListItemText primary={eventTitle} secondary={eventSubTitle} />
+        <ListItemText
+          primary={eventTitleLink || eventTitle}
+          secondary={eventSubTitle}
+        />
         <ListItemSecondaryAction>
           {cardTemplateTypes && (
             <div>

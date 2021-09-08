@@ -40,10 +40,10 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(1)
     }
   }),
-  { name: 'TodaysSchedule' }
+  { name: 'ThisWeeksSchedule' }
 )
 
-export function TodaysSchedule({ isLoading, events }: Props) {
+export function ThisWeeksSchedule({ isLoading, events }: Props) {
   const classes = useStyles()
 
   const celebrationsEventTypes = [
@@ -63,7 +63,7 @@ export function TodaysSchedule({ isLoading, events }: Props) {
       <Typography variant="h6" className={classes.boxTitle}>
         <SvgIcon path={mdiCalendarToday} rightMargined />
         <InlineBadge badgeContent={filteredEvents.length} color="primary">
-          Today's Schedule
+          This Week's Schedule
         </InlineBadge>
       </Typography>
       <Box className={classes.boxContainer}>
@@ -79,9 +79,7 @@ export function TodaysSchedule({ isLoading, events }: Props) {
             justifyContent="center"
             height={1}
           >
-            <Typography variant="body1">
-              You're all caught up for today!
-            </Typography>
+            <Typography variant="body1">You're all caught up!</Typography>
           </Box>
         )}
         {!isLoading && (
