@@ -1,3 +1,6 @@
+// TODO: implement Filter section using generic filter builder
+// https://gitlab.com/rechat/web/-/issues/5476
+
 import { Button } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
