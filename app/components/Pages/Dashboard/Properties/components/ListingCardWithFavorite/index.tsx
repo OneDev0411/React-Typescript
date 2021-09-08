@@ -15,6 +15,8 @@ interface Props
   clicked?: boolean
   hover?: boolean
   isWidget?: boolean
+  reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
+  onToggleLike?: () => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
@@ -27,14 +29,25 @@ const ListingCardWithFavorite = ({
   selected = undefined,
   onToggleSelection = noop,
   onChangeHoverState,
+  reduxToggleFavorite = true,
+  onToggleLike = noop,
   onClick
 }: Props) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUserUnsafe)
-  const isFavorited = useSelector((state: IAppState) =>
+  const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
+
+  // TODO: remove this after refactoring fav/saved tab
+  const isFavoritedInRedux = useSelector((state: IAppState) =>
     selectListingIsFavorited(state, listing.id)
   )
-  const [isListingOpen, setIsListingOpen] = useState<boolean>(false)
+  // TODO: After refactoring fav/saved tab, Change it to:
+  // const liked = user ? listing.favorited : undefined
+  const liked = user
+    ? reduxToggleFavorite
+      ? isFavoritedInRedux
+      : listing.favorited
+    : undefined
 
   const closeListing = () => {
     if (!isWidget) {
@@ -78,10 +91,12 @@ const ListingCardWithFavorite = ({
         clicked={clicked}
         hover={hover}
         selected={user ? selected : undefined}
-        liked={user ? isFavorited : undefined}
+        liked={liked}
         tags={tags}
         onClick={handleClick}
-        onLikeClick={handleLikeClick}
+        // TODO: After refactoring fav/saved tab, Change it to:
+        // onLikeClick={onToggleLike}
+        onLikeClick={reduxToggleFavorite ? handleLikeClick : onToggleLike}
         onToggleSelection={handleToggleSelection}
       />
 

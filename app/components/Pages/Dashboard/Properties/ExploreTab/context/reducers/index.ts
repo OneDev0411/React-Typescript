@@ -56,6 +56,24 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
       }
     }
 
+    case 'TOGGLE_LISTING_FAVORITE_STATE': {
+      const { id } = action.payload
+
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          listings: state.result.listings.map(listing => {
+            if (listing.id === id) {
+              return { ...listing, favorited: !listing.favorited }
+            }
+
+            return listing
+          })
+        }
+      }
+    }
+
     case 'SET_MAP_DRAWING': {
       const { points } = action.payload
 

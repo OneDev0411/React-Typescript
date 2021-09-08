@@ -23,6 +23,13 @@ export const changeListingClickedState = (id: Nullable<UUID>) => ({
   }
 })
 
+export const toggleListingFavoriteState = (id: UUID) => ({
+  type: 'TOGGLE_LISTING_FAVORITE_STATE' as 'TOGGLE_LISTING_FAVORITE_STATE',
+  payload: {
+    id
+  }
+})
+
 export const setMapDrawing = (points: ICoord[]) => ({
   type: 'SET_MAP_DRAWING' as 'SET_MAP_DRAWING',
   payload: {
@@ -67,6 +74,7 @@ export type Actions = ReturnType<
   | typeof setListings
   | typeof changeListingHoverState
   | typeof changeListingClickedState
+  | typeof toggleListingFavoriteState
   | typeof setMapDrawing
   | typeof setMapBounds
   | typeof setMapLocation
