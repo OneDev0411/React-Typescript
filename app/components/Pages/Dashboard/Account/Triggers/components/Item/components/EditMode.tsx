@@ -20,69 +20,46 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      padding: theme.spacing(1)
     },
     containerItem: {
       width: '305px',
       padding: theme.spacing(0, 1)
     },
-    triggerFields: {
-      marginTop: theme.spacing(1.5),
-      paddingTop: theme.spacing(1.5),
-      borderTop: `1px solid ${theme.palette.divider}`
-    },
-    switch: {
+    triggerFields: {},
+    titleContainer: {
       marginBottom: theme.spacing(1)
     },
-    switchContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    },
-    switchDesc: {
+    description: {
       marginTop: theme.spacing(0.5),
       color: theme.palette.grey[500]
     },
     inputField: {
       width: '100%',
       marginTop: theme.spacing(2)
-    },
-    senderContainer: {
-      marginBottom: theme.spacing(1.25)
-    },
-    sender: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      cursor: 'pointer'
-    },
-    disabledSender: { opacity: 0.6 },
-    senderLabel: {
-      marginLeft: theme.spacing(0.5),
-      color: theme.palette.grey[500]
     }
   }),
   { name: 'TriggerEditMode' }
 )
 
-export function TriggerItem(props: Props) {
+export function TriggerEditMode(props: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
       <div className={classes.containerItem}>
         <div className={classes.triggerFields}>
-          <div className={classes.switch}>
-            <div className={classes.switchContainer}>
-              <Typography component="span" variant="subtitle2">
-                Automate Email
-              </Typography>
-            </div>
+          <div className={classes.titleContainer}>
+            <Typography component="span" variant="subtitle2">
+              Automate Email
+            </Typography>
             <Typography
               component="p"
               variant="body2"
-              className={classes.switchDesc}
+              className={classes.description}
             >
-              Send automate email to this contact and don’t miss any important
+              Send automate email to the contacts and don’t miss any important
               date ever.
             </Typography>
           </div>

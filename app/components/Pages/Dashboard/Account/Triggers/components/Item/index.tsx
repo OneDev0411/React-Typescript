@@ -1,12 +1,8 @@
 import { useState } from 'react'
 
-import {
-  Button,
-  Popover,
-  Theme,
-  makeStyles,
-  Typography
-} from '@material-ui/core'
+import { Button, Popover, Theme, makeStyles } from '@material-ui/core'
+
+import { TriggerEditMode as EditMode } from './components/EditMode'
 
 const useStyles = makeStyles((theme: Theme) => ({}), {
   name: 'GlobalTriggerItem'
@@ -18,11 +14,11 @@ export function TriggerItem(props: Props) {
   // const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleShowEditMode = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleCloseEditMode = () => {
     setAnchorEl(null)
   }
 
@@ -35,7 +31,7 @@ export function TriggerItem(props: Props) {
         aria-describedby={id}
         variant="contained"
         color="primary"
-        onClick={handleClick}
+        onClick={handleShowEditMode}
       >
         Item
       </Button>
@@ -43,7 +39,7 @@ export function TriggerItem(props: Props) {
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onClose={handleClose}
+        onClose={handleCloseEditMode}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'center'
@@ -53,7 +49,7 @@ export function TriggerItem(props: Props) {
           horizontal: 'center'
         }}
       >
-        <Typography>Edit</Typography>
+        <EditMode />
       </Popover>
     </div>
   )
