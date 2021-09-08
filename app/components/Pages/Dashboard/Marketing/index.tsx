@@ -6,9 +6,10 @@ import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import { selectActiveTeamId } from '@app/selectors/team'
 import MarketingSearchInput, {
-  MarketingSearchInputOption
+  TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
@@ -67,6 +68,9 @@ export function MarketingLayout({
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
+  const templateTypesWithMediums =
+    useMarketingTemplateTypesWithMediums(templates)
+
   const currentMedium = params.medium
   const currentPageItems = useMemo(() => {
     const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
@@ -111,8 +115,12 @@ export function MarketingLayout({
     })
   }
 
-  const handleSelectSearchResult = (result: MarketingSearchInputOption) => {
-    goTo(result.url)
+  const handleSelectSearchResult = (result: TemplateTypeWithMedium) => {
+    goTo(
+      `/dashboard/marketing/${result.type}${
+        result.medium ? `/${result.medium}` : ''
+      }`
+    )
   }
 
   return (
@@ -126,8 +134,7 @@ export function MarketingLayout({
           <div className={classes.headerActionsContainer}>
             <div className={classes.searchContainer}>
               <MarketingSearchInput
-                sections={sections}
-                templateTypeMediums={mediums}
+                types={templateTypesWithMediums}
                 onSelect={handleSelectSearchResult}
               />
             </div>
