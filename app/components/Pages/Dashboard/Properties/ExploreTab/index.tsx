@@ -11,7 +11,7 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
-import { FILTERS_INITIAL_VALUES } from '../helpers/constants'
+import { FILTERS_INITIAL_VALUES } from '../constants/constants'
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
 import { ExplorePage } from './components/ExplorePage'
@@ -20,15 +20,18 @@ import { ListingsContext } from './context'
 import { setMapLocation } from './context/actions'
 import useFetchListings from './hooks/useFetchListings'
 
-const useStyles = makeStyles(() => ({
-  exploreContainer: {
-    display: 'flex',
-    minHeight: '100vh',
-    flexDirection: 'column',
-    paddingTop: 0,
-    paddingBottom: 0
-  }
-}))
+const useStyles = makeStyles(
+  () => ({
+    exploreContainer: {
+      display: 'flex',
+      minHeight: '100vh',
+      flexDirection: 'column',
+      paddingTop: 0,
+      paddingBottom: 0
+    }
+  }),
+  { name: 'ExploreTab' }
+)
 
 interface Props extends WithRouterProps {
   user: IUser
@@ -149,6 +152,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
           // TODO: Calculate zoom from bound and center and map width
           // https://stackoverflow.com/a/6055653/10326226
           const zoom = 16
+
+          console.log(placeResponse)
 
           dispatch(setMapLocation(center, zoom))
         }

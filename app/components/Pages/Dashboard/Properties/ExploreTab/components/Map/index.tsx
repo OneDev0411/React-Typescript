@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/core'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
 
 import Marker from '../../../components/Marker'
-import { bootstrapURLKeys } from '../../../helpers/constants'
+import { bootstrapURLKeys } from '../../../constants/constants'
 import {
   pointsFromPolygon,
   createMapOptions
