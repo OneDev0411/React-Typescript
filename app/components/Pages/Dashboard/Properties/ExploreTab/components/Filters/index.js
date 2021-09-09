@@ -11,7 +11,7 @@ import {
   FILTERS_INITIAL_VALUES,
   property_subtypes,
   architectural_styles
-} from '../../../constants'
+} from '../../../constants/constants'
 
 import GroupRadios from './components/GroupRadios'
 import MinMaxInputs from './components/MinMaxInputs'
