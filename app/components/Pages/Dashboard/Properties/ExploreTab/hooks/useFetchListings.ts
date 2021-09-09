@@ -3,13 +3,15 @@ import { useEffect, useRef } from 'react'
 import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
 
-import useNotify from '@app/hooks/use-notify'
 import api from '@app/models/listings/search'
 import { normalizeListingLocation } from '@app/utils/map'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
-import { PROPOSED_AGENT_ZOOM_LEVEL, QUERY_LIMIT } from '../../helpers/constants'
+import {
+  PROPOSED_AGENT_ZOOM_LEVEL,
+  QUERY_LIMIT
+} from '../../constants/constants'
 import { formatListing } from '../../helpers/format-listing'
 import {
   createValertOptions,
@@ -26,8 +28,6 @@ export type ListingsContext = [
 export default function useFetchListings(
   userInitialState: Partial<ListingsState>
 ): ListingsContext {
-  const notify = useNotify()
-
   const [state, dispatch] = useThunkReducer(reducer, {
     ...initialState,
     ...userInitialState
@@ -79,15 +79,6 @@ export default function useFetchListings(
             )
           )
         : []
-
-      // Display a warning if there are too many results
-      if (response.info?.total > QUERY_LIMIT) {
-        notify({
-          status: 'warning',
-          message: `We can show max ${QUERY_LIMIT} listings. Please zoom in or set more filters.`,
-          options: { id: 'properties-too-much-response-warning' }
-        })
-      }
 
       dispatch(setListings(listings, response.info))
       dispatch(setIsLoading(false))
