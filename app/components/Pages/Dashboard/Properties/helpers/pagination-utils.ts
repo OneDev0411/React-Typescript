@@ -1,7 +1,8 @@
 export function getResultsCountText(
   resultsCount: number,
   currentPage: number,
-  pageSize: number
+  pageSize: number,
+  total?: number
 ): string {
   const start = (currentPage - 1) * pageSize + 1
   const end = start + pageSize - 1
@@ -10,10 +11,9 @@ export function getResultsCountText(
     return 'Showing 1 of 1 listing.'
   }
 
-  return `Showing ${start} - ${Math.min(
-    end,
-    resultsCount
-  )} of ${resultsCount} listings.`
+  return `Showing ${start} - ${Math.min(end, resultsCount)} of ${
+    total || resultsCount
+  } listings.`
 }
 
 export function getListingsPage<T>(

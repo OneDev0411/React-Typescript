@@ -29,6 +29,7 @@ interface Props {
   isLoading: boolean
   mapIsShown: boolean
   resultsCount: number
+  total?: number
   currentPage: number
   pageSize?: number
   viewType: ViewType
@@ -43,6 +44,7 @@ export function ResultsHeader({
   mapIsShown,
   currentPage,
   resultsCount,
+  total,
   viewType,
   onMapToggle,
   onToggleView,
@@ -70,7 +72,9 @@ export function ResultsHeader({
             <MapToggler checked={mapIsShown} onChange={onMapToggle} />
           )}
           {resultsCountShouldShown && (
-            <>{getResultsCountText(resultsCount, currentPage, pageSize)}</>
+            <>
+              {getResultsCountText(resultsCount, currentPage, pageSize, total)}
+            </>
           )}
         </Box>
       </Grid>

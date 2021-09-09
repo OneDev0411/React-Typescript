@@ -153,8 +153,6 @@ function ExploreTab({ isWidget, user, location }: Props) {
           // https://stackoverflow.com/a/6055653/10326226
           const zoom = 16
 
-          console.log(placeResponse)
-
           dispatch(setMapLocation(center, zoom))
         }
       } finally {
