@@ -5,7 +5,7 @@ export const styles = (theme: Theme) =>
   createStyles({
     row: {
       '& .column': {
-        '& a': {
+        '& a:not([role="button"])': {
           color: theme.palette.text.primary
         },
         '&.opaque': {

@@ -48,8 +48,8 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         listing={showing?.listing || showing?.deal?.listing}
         bookingUrl={showingBookingUrl}
       />
-      <PageLayout.Main gutter={0} mt={0}>
-        <Box mx={4}>
+      <PageLayout.Main gutter={0} mt={0} mr={4}>
+        <Box ml={4}>
           <ShowingDetailTabs value={tab} id={showingId} />
         </Box>
         {isLoading || !showing ? (
