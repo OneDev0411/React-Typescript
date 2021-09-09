@@ -15,16 +15,11 @@ import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
+import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { TemplateSelector } from './TemplateSelector'
-
-interface Props {
-  anchor: Nullable<HTMLElement>
-  trigger?: IGlobalTrigger
-  handleClose: () => void
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -64,24 +59,44 @@ const useStyles = makeStyles(
   { name: 'TriggerEditMode' }
 )
 
-export function TriggerEditMode({ anchor, handleClose }: Props) {
+interface Props {
+  anchor: Nullable<HTMLElement>
+  trigger?: IGlobalTrigger
+  handleClose: () => void
+}
+
+export function TriggerEditMode({ trigger, anchor, handleClose }: Props) {
   const classes = useStyles()
   const brand = useSelector(selectActiveBrandId)
+
+  console.log('TriggerEditMode', { trigger })
 
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm<IGlobalTriggerInput>()
+  } = useForm<IGlobalTriggerFormData>()
   const open = Boolean(anchor)
   const id = open ? 'edit-mode-popover' : undefined
 
-  const handleOnSave: SubmitHandler<IGlobalTriggerInput> = async data => {
+  const handleOnSave: SubmitHandler<IGlobalTriggerFormData> = async ({
+    template,
+    ...data
+  }) => {
     console.log({ data })
+
+    const selectedTepmlate = template.isInstance
+      ? {
+          template_instance: template.id
+        }
+      : {
+          template: template.id
+        }
 
     try {
       await createTrigger({
         ...data,
+        ...selectedTepmlate,
         brand,
         event_type: 'wedding_anniversary'
       })
@@ -128,7 +143,7 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
                   <Controller
                     name="subject"
                     control={control}
-                    defaultValue="ddd"
+                    defaultValue={trigger?.subject ?? 'Hi'}
                     rules={{
                       validate: (value: string) =>
                         !!value.trim() || 'This field is required.'
@@ -157,7 +172,9 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
                     name="wait_for"
                     type="number"
                     control={control}
-                    defaultValue={0}
+                    defaultValue={
+                      trigger ? convertSecondsToDay(trigger.wait_for) : 0
+                    }
                     render={({ value, onChange }) => {
                       return (
                         <FormControl
@@ -200,20 +217,18 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
             </div>
             <div className={classes.fieldsColumn}>
               <Controller
-                name="template_instance"
-                type="number"
+                name="template"
                 control={control}
-                defaultValue={0}
                 render={({ value, onChange }) => {
-                  const error: string | undefined = errors.subject?.message
+                  // const error: string | undefined = errors.template
 
                   return (
                     <TemplateSelector
-                      hasError={!!error}
+                      // hasError={!!error}
                       disabled={isSubmitting}
                       templateType={['Birthday', 'WeddingAnniversary']}
-                      // currentBrandTemplate={currentBrandTemplate}
-                      // currentTemplateInstance={currentTemplateInstance}
+                      currentBrandTemplate={trigger?.template}
+                      currentTemplateInstance={trigger?.template_instance}
                       onChange={onChange}
                     />
                   )

@@ -40,6 +40,13 @@ declare type IGlobalTriggerRaw = Omit<
 > &
   Pick<IContactTrigger, 'event_type'> & { subject: string }
 
+declare interface IGlobalTriggerFormData extends IGlobalTriggerRaw {
+  template: {
+    isInstance: boolean
+    id: UUID
+  }
+}
+
 declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {
   template?: UUID
   template_instance?: UUID

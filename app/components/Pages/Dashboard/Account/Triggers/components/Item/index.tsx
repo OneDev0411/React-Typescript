@@ -8,9 +8,11 @@ import { TriggerEditMode as EditMode } from './components/EditMode'
 //   name: 'GlobalTriggerItem'
 // })
 
-interface Props {}
+interface Props {
+  data: Nullable<IGlobalTrigger[]>
+}
 
-export function TriggerItem(props: Props) {
+export function TriggerItem({ data }: Props) {
   // const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
 
@@ -28,7 +30,11 @@ export function TriggerItem(props: Props) {
         Item
       </Button>
 
-      <EditMode anchor={anchorEl} handleClose={handleCloseEditMode} />
+      <EditMode
+        trigger={data ? data[0] : undefined}
+        anchor={anchorEl}
+        handleClose={handleCloseEditMode}
+      />
     </div>
   )
 }

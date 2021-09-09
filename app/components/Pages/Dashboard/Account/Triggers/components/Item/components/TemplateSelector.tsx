@@ -10,7 +10,6 @@ import MarketingTemplateAndTemplateInstancePickerModal from 'components/Marketin
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
 import { getActiveBrand } from 'utils/user-teams'
 
 interface Props {
@@ -19,7 +18,7 @@ interface Props {
   templateType: IMarketingTemplateType[]
   currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
   currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
-  onChange: (value: IGlobalTriggerInput['template_instance']) => void
+  onChange: (value: IGlobalTriggerFormData['template']) => void
 }
 
 const useStyles = makeStyles(
@@ -106,35 +105,12 @@ export const TemplateSelector = ({
     [selectedBrandTemplate, selectedTemplateInstance]
   )
 
-  const createTemplateInstance = async (template: IBrandMarketingTemplate) => {
-    if (!brand) {
-      return
-    }
-
-    try {
-      // render the nunjuks template
-      const templateMarkup: string = await renderBrandedNunjucksTemplate(
-        template,
-        brand,
-        { user }
-      )
-
-      const instance = await getTemplateInstance(
-        template.template.id,
-        templateMarkup
-      )
-
-      return instance
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => {
     try {
       setIsTemplatePickerOpen(false)
+      setIsLoading(true)
 
       if (!brand) {
         return notify({
@@ -143,21 +119,26 @@ export const TemplateSelector = ({
         })
       }
 
-      setIsLoading(true)
+      const isTemplateInstance = template.type === 'template_instance'
 
-      const templateInstance =
-        template.type === 'template_instance'
-          ? template
-          : await createTemplateInstance(template)
+      if (isTemplateInstance) {
+        if (selectedBrandTemplate) {
+          setSelectedBrandTemplate(null)
+        }
 
-      console.log({ templateInstance })
+        setSelectedTemplateInstace(template as IMarketingTemplateInstance)
+      } else {
+        if (selectedTemplateInstance) {
+          setSelectedTemplateInstace(null)
+        }
 
-      if (templateInstance) {
-        setSelectedTemplateInstace(
-          templateInstance as IMarketingTemplateInstance
-        )
-        onChange(templateInstance.id)
+        setSelectedBrandTemplate(template as IBrandMarketingTemplate)
       }
+
+      onChange({
+        isInstance: isTemplateInstance,
+        id: template.id
+      })
     } catch (error) {
       console.error(error)
     } finally {
@@ -181,7 +162,10 @@ export const TemplateSelector = ({
       const templateInstance = await getTemplateInstance(templateId, markup)
 
       setSelectedTemplateInstace(templateInstance)
-      onChange(templateInstance.id)
+      onChange({
+        isInstance: true,
+        id: templateInstance.id
+      })
     } catch (error) {
       console.error(error)
     } finally {

@@ -2,6 +2,7 @@ import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle, useEffectOnce } from 'react-use'
 
+import useAsync from '@app/hooks/use-async'
 import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
@@ -23,16 +24,12 @@ export default function Triggers(props: Props) {
 
   const classes = useStyles()
   const brandId = useSelector(selectActiveBrandId)
+  const { isLoading, data: triggers, run } = useAsync<IGlobalTrigger[]>()
 
   useEffectOnce(() => {
-    const loadTriggers = async () => {
-      const cc = await getTriggers(brandId)
-
-      console.log({ cc })
-    }
-
-    loadTriggers()
+    run(() => getTriggers(brandId))
   })
+  console.log({ isLoading, triggers })
 
   return (
     <>
@@ -44,7 +41,7 @@ export default function Triggers(props: Props) {
         anniversaries. It is possible to opt out contacts or change the template
         in their profile.
       </Typography>
-      <TriggerItem />
+      <TriggerItem data={triggers} />
     </>
   )
 }
