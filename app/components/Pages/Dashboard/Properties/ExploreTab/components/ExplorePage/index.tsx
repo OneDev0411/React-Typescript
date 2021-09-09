@@ -50,7 +50,7 @@ const useStyles = makeStyles(
       overflow: 'hidden'
     },
     searchBar: {
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(4),
       display: 'flex',
       alignItems: 'center',
@@ -72,7 +72,9 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       height: '100%',
-      width: '100%'
+      width: '100%',
+      borderRadius: theme.shape.borderRadius,
+      overflow: 'hidden'
     },
     mapToggler: {
       position: 'absolute',
@@ -80,8 +82,11 @@ const useStyles = makeStyles(
       left: 5,
       backgroundColor: '#fff',
       padding: theme.spacing(1, 2),
-      borderRadius: 3,
+      borderRadius: theme.shape.borderRadius,
       zIndex: 3
+    },
+    saveButton: {
+      padding: theme.spacing(1, 2)
     },
     results: {
       flex: 1,
@@ -224,7 +229,8 @@ export function ExplorePage({ user, isWidget }: Props) {
           <Box>
             <Filters />
             <Button
-              size="small"
+              className={classes.saveButton}
+              size="medium"
               variant="contained"
               color="primary"
               disabled={state.isLoading}
