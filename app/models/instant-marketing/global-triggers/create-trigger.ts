@@ -19,7 +19,7 @@ export async function createTrigger(
     }
 
     const response = await new Fetch()
-      .put(`/brands/${payload.brand}}/triggers/${payload.event_type}`)
+      .put(`/brands/${payload.brand}/triggers/${payload.event_type}`)
       .send(payload)
 
     return response.body

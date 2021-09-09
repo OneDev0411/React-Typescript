@@ -13,13 +13,16 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
-// import cn from 'classnames'
+import { useSelector } from 'react-redux'
 
-// import { TemplateSelector } from './components/TemplateSelector'
-// import { convertSecondsToDay } from './helpers'
+import { createTrigger } from '@app/models/instant-marketing/global-triggers'
+import { selectActiveBrandId } from '@app/selectors/brand'
+
+import { TemplateSelector } from './TemplateSelector'
 
 interface Props {
   anchor: Nullable<HTMLElement>
+  trigger?: IGlobalTrigger
   handleClose: () => void
 }
 
@@ -63,6 +66,8 @@ const useStyles = makeStyles(
 
 export function TriggerEditMode({ anchor, handleClose }: Props) {
   const classes = useStyles()
+  const brand = useSelector(selectActiveBrandId)
+
   const {
     control,
     handleSubmit,
@@ -71,8 +76,19 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
   const open = Boolean(anchor)
   const id = open ? 'edit-mode-popover' : undefined
 
-  const handleOnSave: SubmitHandler<IGlobalTriggerInput> = data => {
+  const handleOnSave: SubmitHandler<IGlobalTriggerInput> = async data => {
     console.log({ data })
+
+    try {
+      await createTrigger({
+        ...data,
+        brand,
+        event_type: 'wedding_anniversary'
+      })
+      handleClose()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -158,7 +174,14 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
                             id="trigger-send-before-select"
                             disabled={isSubmitting}
                             value={value}
-                            onChange={event => onChange(event.target.value)}
+                            onChange={event => {
+                              const value = event.target.value
+
+                              // -86400 number of millisecond of a day
+                              const waitFor = Number(value) * -86400
+
+                              onChange(waitFor)
+                            }}
                             label="Deliver in"
                           >
                             <MenuItem value={0}>Same Day</MenuItem>
@@ -175,7 +198,28 @@ export function TriggerEditMode({ anchor, handleClose }: Props) {
                 </>
               </div>
             </div>
-            <div className={classes.fieldsColumn}>dddd</div>
+            <div className={classes.fieldsColumn}>
+              <Controller
+                name="template_instance"
+                type="number"
+                control={control}
+                defaultValue={0}
+                render={({ value, onChange }) => {
+                  const error: string | undefined = errors.subject?.message
+
+                  return (
+                    <TemplateSelector
+                      hasError={!!error}
+                      disabled={isSubmitting}
+                      templateType={['Birthday', 'WeddingAnniversary']}
+                      // currentBrandTemplate={currentBrandTemplate}
+                      // currentTemplateInstance={currentTemplateInstance}
+                      onChange={onChange}
+                    />
+                  )
+                }}
+              />
+            </div>
           </div>
           <div className={classes.actions}>
             <Box mr={1}>
