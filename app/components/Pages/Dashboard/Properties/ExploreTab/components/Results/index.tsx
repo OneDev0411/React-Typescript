@@ -156,6 +156,7 @@ export const Results = ({
         mapIsShown={mapIsShown}
         currentPage={currentPage}
         resultsCount={state.result.listings.length}
+        total={state.result.info?.total}
         viewType={viewType}
         onMapToggle={onMapToggle}
         onToggleView={onToggleView}
