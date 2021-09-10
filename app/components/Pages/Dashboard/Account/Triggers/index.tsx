@@ -1,6 +1,11 @@
 import { useMemo } from 'react'
 
-import { Typography, Theme, makeStyles } from '@material-ui/core'
+import {
+  CircularProgress,
+  Typography,
+  makeStyles,
+  Theme
+} from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTitle, useEffectOnce } from 'react-use'
 
@@ -15,6 +20,10 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     description: {
       marginTop: theme.spacing(1)
+    },
+    loading: {
+      marginTop: theme.spacing(3),
+      textAlign: 'center'
     }
   }),
   { name: 'GlobalTrigger' }
@@ -39,6 +48,23 @@ export default function Triggers(props: Props) {
   })
   console.log({ isLoading, triggers })
 
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      )
+    }
+
+    return (
+      <>
+        <ActivateButtons activeTriggers={activeTriggers} />
+        <TriggerItem data={triggers} />
+      </>
+    )
+  }
+
   return (
     <>
       <Typography variant="subtitle1">
@@ -49,8 +75,7 @@ export default function Triggers(props: Props) {
         anniversaries. It is possible to opt out contacts or change the template
         in their profile.
       </Typography>
-      <ActivateButtons activeTriggers={activeTriggers} />
-      <TriggerItem data={triggers} />
+      {renderContent()}
     </>
   )
 }

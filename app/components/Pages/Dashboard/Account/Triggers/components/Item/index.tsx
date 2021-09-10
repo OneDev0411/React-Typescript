@@ -26,9 +26,9 @@ export function TriggerItem({ data }: Props) {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleShowEditMode}>
+      {/* <Button variant="contained" color="primary" onClick={handleShowEditMode}>
         Item
-      </Button>
+      </Button> */}
 
       <EditMode
         trigger={data ? data[0] : undefined}

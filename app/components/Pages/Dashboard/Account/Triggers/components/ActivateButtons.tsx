@@ -1,10 +1,26 @@
 import { useState, useMemo } from 'react'
 
 import { Button, Theme, makeStyles } from '@material-ui/core'
+import { mdiCheckCircle } from '@mdi/js'
+
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { TriggerEditMode } from './EditMode'
 
-const useStyles = makeStyles((theme: Theme) => ({}), { name: 'GlobalTrigger' })
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      marginTop: theme.spacing(2)
+    },
+    button: {
+      '&:not(:last-child)': {
+        margin: theme.spacing(0.5)
+      }
+    }
+  }),
+  { name: 'GlobalTriggerActivateButtons' }
+)
 
 type AvailbaleTrigger = {
   type: TriggerContactEventTypes
@@ -58,10 +74,19 @@ export function ActivateButtons({ activeTriggers }: Props) {
   )
 
   return (
-    <>
+    <div className={classes.container}>
       {availableTriggers.map(({ type, label }) => (
-        <Button key={type} onClick={e => handleShowEditMode(e, type)}>
-          Active {label}
+        <Button
+          key={type}
+          size="small"
+          variant="outlined"
+          className={classes.button}
+          startIcon={
+            <SvgIcon path={mdiCheckCircle} size={muiIconSizes.small} />
+          }
+          onClick={e => handleShowEditMode(e, type)}
+        >
+          Activate for {label}
         </Button>
       ))}
       {selectedType && anchorEl && (
@@ -71,6 +96,6 @@ export function ActivateButtons({ activeTriggers }: Props) {
           handleClose={handleCloseEditMode}
         />
       )}
-    </>
+    </div>
   )
 }
