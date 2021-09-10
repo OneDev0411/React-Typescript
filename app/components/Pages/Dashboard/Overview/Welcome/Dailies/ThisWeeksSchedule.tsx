@@ -8,7 +8,7 @@ import CalendarEventListItem from 'components/CalendarEvent/ListItem'
 import { InlineBadge } from 'components/InlineBadge'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-const NUMBER_OF_EVENTS_TO_SHOW = 6
+const NUMBER_OF_EVENTS_TO_SHOW = 50
 
 interface Props {
   isLoading: boolean
