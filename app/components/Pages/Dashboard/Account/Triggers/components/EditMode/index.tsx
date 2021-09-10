@@ -65,7 +65,7 @@ interface Props {
   anchor: Nullable<HTMLElement>
   eventType?: TriggerContactEventTypes
   trigger?: IGlobalTrigger
-  callback: () => void
+  callback?: () => void
   handleClose: () => void
 }
 

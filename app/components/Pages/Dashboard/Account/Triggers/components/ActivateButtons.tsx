@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 
 import { Button, Theme, makeStyles } from '@material-ui/core'
-import { mdiCheckCircle } from '@mdi/js'
+import { mdiRing, mdiHomeHeart, mdiCakeVariant } from '@mdi/js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -24,24 +24,29 @@ const useStyles = makeStyles(
 
 type AvailbaleTrigger = {
   type: TriggerContactEventTypes
+  icon: string
   label: string
 }
 
 const Items: AvailbaleTrigger[] = [
   {
     type: 'birthday',
+    icon: mdiCakeVariant,
     label: 'Birthday'
   },
   {
     type: 'wedding_anniversary',
+    icon: mdiRing,
     label: 'Wedding Anniversary'
   },
   {
     type: 'home_anniversary',
+    icon: mdiHomeHeart,
     label: 'Home Anniversary'
   },
   {
     type: 'child_birthday',
+    icon: mdiCakeVariant,
     label: 'Child Birthday'
   }
 ]
@@ -76,15 +81,13 @@ export function ActivateButtons({ activeTriggers, onActive }: Props) {
 
   return (
     <div className={classes.container}>
-      {availableTriggers.map(({ type, label }) => (
+      {availableTriggers.map(({ type, icon, label }) => (
         <Button
           key={type}
           size="small"
           variant="outlined"
           className={classes.button}
-          startIcon={
-            <SvgIcon path={mdiCheckCircle} size={muiIconSizes.small} />
-          }
+          startIcon={<SvgIcon path={icon} size={muiIconSizes.small} />}
           onClick={e => handleShowEditMode(e, type)}
         >
           Activate for {label}
