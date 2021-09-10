@@ -45,7 +45,9 @@ export default function GlobalHeaderWithSearch({
         <div className={classes.searchContainer}>
           <SearchInput
             debounceTime={searchDebounceTime}
-            onChangeHandler={(e, value) => value && onSearch(value)}
+            onChangeHandler={(e, value) =>
+              value ? onSearch(value) : onSearch('')
+            }
             {...searchInputProps}
           />
         </div>
