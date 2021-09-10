@@ -6,6 +6,7 @@ import { FilterEditor } from '../filterEditor'
 import { useStyles } from '../styles'
 
 import { LotSizeGroup } from './lotSizeGroup'
+import { MlsAreaGroup } from './MlsAreaGroup'
 import { OpenHouseGroup } from './openHouseGroup'
 import { ParkingGroup } from './parkingGroup'
 import { PoolGroup } from './poolGroup'
@@ -44,6 +45,7 @@ export const OtherEditor = () => {
             <Grid container direction="column">
               <StatusGroup />
               <OpenHouseGroup />
+              <MlsAreaGroup />
               <ParkingGroup />
               <PoolGroup />
               <SquareFootageGroup />

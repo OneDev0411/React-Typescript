@@ -67,6 +67,10 @@ export const useStyles = makeStyles(
     switchIcon: {
       fontSize: 14,
       marginRight: theme.spacing(0.5)
+    },
+    select: {
+      width: '100%',
+      marginBottom: theme.spacing(2)
     }
   }),
   { name: 'PropertiesFilters' }
