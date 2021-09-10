@@ -191,7 +191,7 @@ export function ContactRoles({
                         itemSize={index => autocompleteRowHeight}
                         overscanCount={3}
                       >
-                        {AgentRow}
+                        {ContactRow}
                       </VirtualList>
                     )
                   }}
