@@ -65,6 +65,7 @@ interface Props {
   anchor: Nullable<HTMLElement>
   eventType?: TriggerContactEventTypes
   trigger?: IGlobalTrigger
+  callback: () => void
   handleClose: () => void
 }
 
@@ -72,6 +73,7 @@ export function TriggerEditMode({
   eventType,
   trigger,
   anchor,
+  callback,
   handleClose
 }: Props) {
   const classes = useStyles()
@@ -116,6 +118,10 @@ export function TriggerEditMode({
         event_type: currentEventType
       })
       handleClose()
+
+      if (callback) {
+        callback()
+      }
     } catch (err) {
       console.error(err)
     }
@@ -267,8 +273,7 @@ export function TriggerEditMode({
               size="small"
               disabled={isSubmitting}
             >
-              Save
-              {/* {isSaving ? 'Saving...' : 'Save'} */}
+              {isSubmitting ? 'Saving...' : 'Save'}
             </Button>
           </div>
         </div>

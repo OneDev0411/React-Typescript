@@ -9,10 +9,10 @@ import { TriggerEditMode as EditMode } from '../EditMode'
 // })
 
 interface Props {
-  data: Nullable<IGlobalTrigger[]>
+  list: Nullable<IGlobalTrigger[]>
 }
 
-export function TriggerItem({ data }: Props) {
+export function TriggerItem({ list }: Props) {
   // const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
 
@@ -29,9 +29,13 @@ export function TriggerItem({ data }: Props) {
       {/* <Button variant="contained" color="primary" onClick={handleShowEditMode}>
         Item
       </Button> */}
-
+      {list?.map(i => (
+        <span key={i.event_type}>
+          {i.subject}-{i.event_type}
+        </span>
+      ))}
       <EditMode
-        trigger={data ? data[0] : undefined}
+        trigger={list ? list[0] : undefined}
         anchor={anchorEl}
         handleClose={handleCloseEditMode}
       />

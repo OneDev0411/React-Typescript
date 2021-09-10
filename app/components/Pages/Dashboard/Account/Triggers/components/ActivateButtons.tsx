@@ -48,9 +48,10 @@ const Items: AvailbaleTrigger[] = [
 
 interface Props {
   activeTriggers: TriggerContactEventTypes[]
+  onActive: () => void
 }
 
-export function ActivateButtons({ activeTriggers }: Props) {
+export function ActivateButtons({ activeTriggers, onActive }: Props) {
   const classes = useStyles()
   const [selectedType, setSelectedType] =
     useState<Nullable<TriggerContactEventTypes>>(null)
@@ -93,6 +94,7 @@ export function ActivateButtons({ activeTriggers }: Props) {
         <TriggerEditMode
           eventType={selectedType}
           anchor={anchorEl}
+          callback={onActive}
           handleClose={handleCloseEditMode}
         />
       )}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 
 import {
   CircularProgress,
@@ -29,14 +29,16 @@ const useStyles = makeStyles(
   { name: 'GlobalTrigger' }
 )
 
-interface Props {}
-
-export default function Triggers(props: Props) {
+export default function Triggers() {
   useTitle('Trigger | Settings | Rechat')
 
   const classes = useStyles()
   const brandId = useSelector(selectActiveBrandId)
   const { isLoading, data: triggers, run } = useAsync<IGlobalTrigger[]>()
+  const loadTriggers = useCallback(
+    () => run(() => getTriggers(brandId)),
+    [brandId, run]
+  )
 
   const activeTriggers = useMemo(
     () => (triggers || []).map(trigger => trigger.event_type),
@@ -44,9 +46,8 @@ export default function Triggers(props: Props) {
   )
 
   useEffectOnce(() => {
-    run(() => getTriggers(brandId))
+    loadTriggers()
   })
-  console.log({ isLoading, triggers })
 
   const renderContent = () => {
     if (isLoading) {
@@ -59,8 +60,11 @@ export default function Triggers(props: Props) {
 
     return (
       <>
-        <ActivateButtons activeTriggers={activeTriggers} />
-        <TriggerItem data={triggers} />
+        <ActivateButtons
+          activeTriggers={activeTriggers}
+          onActive={loadTriggers}
+        />
+        <TriggerItem list={triggers} />
       </>
     )
   }
