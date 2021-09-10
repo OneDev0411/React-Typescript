@@ -2,14 +2,13 @@
 // https://gitlab.com/rechat/web/-/issues/5476
 
 import { Button } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-import TuneIcon from '@material-ui/icons/Tune'
 import cn from 'classnames'
 
 import { BathsEditor } from './bathsEditor'
 import { BedsEditor } from './bedsEditor'
+import { OtherEditor } from './otherEditor'
 import { PriceEditor } from './priceEditor'
 import { useStyles } from './styles'
 
@@ -33,15 +32,8 @@ export const Filters = () => {
       <PriceEditor />
       <BedsEditor />
       <BathsEditor />
-      <Button
-        className={classes.button}
-        variant="outlined"
-        size="medium"
-        startIcon={<TuneIcon fontSize="small" />}
-        endIcon={<AddIcon fontSize="small" />}
-      >
-        More Filters
-      </Button>
+      <OtherEditor />
+
       <Button
         className={classes.resetButton}
         variant="outlined"

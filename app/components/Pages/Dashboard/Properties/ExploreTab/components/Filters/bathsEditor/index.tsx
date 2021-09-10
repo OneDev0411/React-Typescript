@@ -5,8 +5,8 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import { FilterEditor } from '../filterEditor'
 import { useStyles } from '../styles'
 
-const MAX_BEDROOMS = 5
-const numbersArray = [...Array(MAX_BEDROOMS).keys()]
+const MAX_BATH = 5
+const numbersArray = [...Array(MAX_BATH).keys()]
 
 export const BathsEditor = () => {
   const classes = useStyles()
@@ -39,21 +39,21 @@ export const BathsEditor = () => {
               value={0}
               className={classes.ToggleButtonGroup}
               exclusive
-              aria-label="bedrooms"
+              aria-label="bathroom"
             >
               <ToggleButton
-                className={classes.ToggleButton}
+                className={classes.FullToggleButton}
                 value={0}
-                aria-label="any bedrooms"
+                aria-label="any bathrooms"
               >
                 Any
               </ToggleButton>
               {numbersArray.map(i => (
                 <ToggleButton
-                  className={classes.ToggleButton}
+                  className={classes.FullToggleButton}
                   key={i + 1}
                   value={i + 1}
-                  aria-label={`${i + 1} bedroom(s)`}
+                  aria-label={`${i + 1} bathroom(s)`}
                 >
                   {i + 1}+
                 </ToggleButton>

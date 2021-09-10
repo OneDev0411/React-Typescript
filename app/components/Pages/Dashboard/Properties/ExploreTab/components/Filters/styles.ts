@@ -30,9 +30,18 @@ export const useStyles = makeStyles(
       width: '100%',
       margin: 0
     },
+    switchControlButton: {
+      '& > .MuiSwitch-switchBase': {
+        color: '#fff'
+      },
+      '& > .MuiSwitch-colorPrimary.Mui-checked': {
+        color: theme.palette.primary.main
+      }
+    },
     subheader: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(1)
+      fontSize: 14,
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(2)
     },
     subtitle: {
       fontSize: theme.typography.subtitle2.fontSize,
@@ -43,11 +52,21 @@ export const useStyles = makeStyles(
     },
     ToggleButtonGroup: { width: '100%' },
     ToggleButton: {
+      '&.Mui-selected': {
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText
+      }
+    },
+    FullToggleButton: {
       flex: 1,
       '&.Mui-selected': {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText
       }
+    },
+    switchIcon: {
+      fontSize: 14,
+      marginRight: theme.spacing(0.5)
     }
   }),
   { name: 'PropertiesFilters' }
