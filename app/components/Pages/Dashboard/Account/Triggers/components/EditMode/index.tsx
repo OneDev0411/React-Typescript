@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   FormControl,
   makeStyles,
@@ -19,7 +21,7 @@ import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Pr
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
-import { TemplateSelector } from './TemplateSelector'
+import { TemplateSelector } from './components/TemplateSelector'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -61,11 +63,17 @@ const useStyles = makeStyles(
 
 interface Props {
   anchor: Nullable<HTMLElement>
+  eventType?: TriggerContactEventTypes
   trigger?: IGlobalTrigger
   handleClose: () => void
 }
 
-export function TriggerEditMode({ trigger, anchor, handleClose }: Props) {
+export function TriggerEditMode({
+  eventType,
+  trigger,
+  anchor,
+  handleClose
+}: Props) {
   const classes = useStyles()
   const brand = useSelector(selectActiveBrandId)
 
@@ -76,8 +84,15 @@ export function TriggerEditMode({ trigger, anchor, handleClose }: Props) {
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<IGlobalTriggerFormData>()
-  const open = Boolean(anchor)
-  const id = open ? 'edit-mode-popover' : undefined
+
+  const currentEventType = useMemo(
+    () => eventType ?? trigger?.event_type ?? null,
+    [eventType, trigger?.event_type]
+  )
+
+  if (!currentEventType) {
+    return null
+  }
 
   const handleOnSave: SubmitHandler<IGlobalTriggerFormData> = async ({
     template,
@@ -98,13 +113,16 @@ export function TriggerEditMode({ trigger, anchor, handleClose }: Props) {
         ...data,
         ...selectedTepmlate,
         brand,
-        event_type: 'wedding_anniversary'
+        event_type: currentEventType
       })
       handleClose()
     } catch (err) {
       console.error(err)
     }
   }
+
+  const open = Boolean(anchor)
+  const id = open ? 'edit-mode-popover' : undefined
 
   return (
     <Popover

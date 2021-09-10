@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Button } from '@material-ui/core'
 
-import { TriggerEditMode as EditMode } from './components/EditMode'
+import { TriggerEditMode as EditMode } from '../EditMode'
 
 // const useStyles = makeStyles((theme: Theme) => ({}), {
 //   name: 'GlobalTriggerItem'
