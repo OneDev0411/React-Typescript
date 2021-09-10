@@ -455,7 +455,7 @@ class Builder extends React.Component {
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
     this.setupRTEMerge()
-    this.fixToolbarPosition()
+    this.setupFixToolbarPosition()
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
@@ -721,6 +721,8 @@ class Builder extends React.Component {
       }
 
       richTextToolbar.style.display = 'flex'
+
+      setTimeout(this.resetToolbarPosition, 200)
     }, 100)
   }
 
@@ -734,24 +736,24 @@ class Builder extends React.Component {
     })
   }
 
-  fixToolbarPosition = () => {
-    const resetToolbarPosition = () => {
-      const selected = this.editor.getSelected()
+  resetToolbarPosition = () => {
+    const selected = this.editor.getSelected()
 
-      if (!selected) {
-        return
-      }
-
-      this.editor.selectRemove(selected)
-      this.editor.select(selected)
+    if (!selected) {
+      return
     }
 
+    this.editor.selectRemove(selected)
+    this.editor.select(selected)
+  }
+
+  setupFixToolbarPosition = () => {
     this.editor.on('component:drag:end', () => {
-      setTimeout(resetToolbarPosition, 200)
+      setTimeout(this.resetToolbarPosition, 200)
     })
 
-    this.editor.on('undo', resetToolbarPosition)
-    this.editor.on('redo', resetToolbarPosition)
+    this.editor.on('undo', this.resetToolbarPosition)
+    this.editor.on('redo', this.resetToolbarPosition)
 
     const iframe = this.editor.Canvas.getFrameEl()
 
@@ -768,7 +770,7 @@ class Builder extends React.Component {
           clearTimeout(timeoutHandler)
         }
 
-        timeoutHandler = setTimeout(resetToolbarPosition, 100)
+        timeoutHandler = setTimeout(this.resetToolbarPosition, 100)
       },
       {
         passive: true

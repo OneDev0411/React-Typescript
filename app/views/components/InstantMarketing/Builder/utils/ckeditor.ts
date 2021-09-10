@@ -132,11 +132,10 @@ export async function attachCKEditor(
 
   editor.setCustomRte({
     enable(el, rte) {
-      // If already exists I'll just focus on it
+      // If already exists we need to destory it
+      // Not doing this causes some errors in CKEditor emoji and table plugins
       if (rte && rte.status !== 'destroyed') {
-        this.focus(el, rte)
-
-        return rte
+        rte.destroy()
       }
 
       el.contentEditable = true
@@ -230,32 +229,6 @@ export async function attachCKEditor(
 
       el.contentEditable = true
       rte && rte.focus()
-    }
-  })
-
-  // Update RTE toolbar position
-  editor.on('rteToolbarPosUpdate', pos => {
-    // Update by position
-    switch (c.position) {
-      case 'center':
-        let diff = pos.elementWidth / 2 - pos.targetWidth / 2
-
-        pos.left = pos.elementLeft + diff
-        break
-      case 'right':
-        let width = pos.targetWidth
-
-        pos.left = pos.elementLeft + pos.elementWidth - width
-        break
-    }
-
-    if (pos.top <= pos.canvasTop) {
-      pos.top = pos.elementTop + pos.elementHeight
-    }
-
-    // Check if not outside of the canvas
-    if (pos.left < pos.canvasLeft) {
-      pos.left = pos.canvasLeft
     }
   })
 }
