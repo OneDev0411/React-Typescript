@@ -1,200 +1,92 @@
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import { reduxForm } from 'redux-form'
+// TODO: implement Filter section using generic filter builder
+// https://gitlab.com/rechat/web/-/issues/5476
 
-import actions from 'actions/listings/search/filters'
-import ActionButton from 'components/Button/ActionButton'
-import { getStatusColor } from 'utils/listing'
+import { Button } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
+import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import HotelOutlinedIcon from '@material-ui/icons/HotelOutlined'
+import TuneIcon from '@material-ui/icons/Tune'
+import { makeStyles } from '@material-ui/styles'
+import cn from 'classnames'
 
-import {
-  FILTERS_INITIAL_VALUES,
-  property_subtypes,
-  architectural_styles
-} from '../../../constants/constants'
-
-import GroupRadios from './components/GroupRadios'
-import MinMaxInputs from './components/MinMaxInputs'
-import SubStatuses from './components/SubStatuses'
-import Tags from './components/Tags'
-import Counties from './Counties'
-import FiltersListingsStatusRow from './FiltersListingsStatusRow'
-import { yesNoEitherFieldItems } from './helpers/yes-no-either-field-items'
-import MasterBedroom from './MasterBedroom'
-import MlsAreaSelects from './MlsAreaSelects'
-import Price from './Price'
-import Schools from './Schools'
-import SoldStatusChildrens from './SoldStatusChildrens'
-import { pendingStatuses, otherStatuses } from './statuses'
-import Subdivision from './Subdivision'
-import YearBuilt from './YearBuilt'
-
-const Filters = ({
-  resetHandler,
-  pristine,
-  activeSold,
-  handleSubmit,
-  isSubmitting,
-  onSubmitHandler,
-  activeOpenHouses,
-  activeOtherListings,
-  activePendingListings
-}) => (
-  <div className="c-filters">
-    <div className="c-filters__inner-wrapper u-scrollbar--thinner">
-      <form
-        onSubmit={handleSubmit(onSubmitHandler)}
-        className="c-filters__content"
-      >
-        <div>
-          <FiltersListingsStatusRow
-            name="listing_statuses.sold"
-            title="Sold"
-            hasAccordion
-            isField
-            hasSwitchToggle
-            color={`#${getStatusColor('Sold')}`}
-            onChangeSwitchToggle={activeSold}
-          >
-            <SoldStatusChildrens name="minimum_sold_date" />
-          </FiltersListingsStatusRow>
-
-          <FiltersListingsStatusRow
-            name="listing_statuses.active"
-            title="Active"
-            isField
-            hasSwitchToggle
-            color={`#${getStatusColor('Active')}`}
-          />
-
-          <FiltersListingsStatusRow
-            title="Pending"
-            hasAccordion
-            hasSwitchToggle
-            name="pending-statuses"
-            fields={pendingStatuses}
-            color={`#${getStatusColor('Pending')}`}
-            onChangeSwitchToggle={activePendingListings}
-          >
-            <SubStatuses fields={pendingStatuses} />
-          </FiltersListingsStatusRow>
-
-          <FiltersListingsStatusRow
-            name="open_house"
-            title="Open House Only"
-            icon="OH"
-            isField
-            hasSwitchToggle
-            color={`#${getStatusColor('Active')}`}
-            onChangeSwitchToggle={activeOpenHouses}
-          />
-
-          <FiltersListingsStatusRow
-            title="Other Listing Statuses"
-            hasAccordion
-            hasSwitchToggle
-            name="other-statuses"
-            fields={otherStatuses}
-            color={`#${getStatusColor('Sold')}`}
-            onChangeSwitchToggle={activeOtherListings}
-          >
-            <SubStatuses fields={otherStatuses} />
-          </FiltersListingsStatusRow>
-        </div>
-        <div style={{ padding: '2rem 1rem 5rem', backgroundColor: '#fff' }}>
-          <MlsAreaSelects />
-          <Counties />
-          <Price />
-          <Tags
-            name="property_subtypes"
-            label="Property Subtypes"
-            fields={property_subtypes}
-          />
-          <Tags
-            label="Style of Home"
-            name="architectural_styles"
-            fields={architectural_styles}
-          />
-          <GroupRadios name="minimum_bedrooms" label="Bedrooms" />
-          <MasterBedroom />
-          <GroupRadios name="minimum_bathrooms" label="Bathrooms" />
-          <GroupRadios name="minimum_parking_spaces" label="Parking Spaces" />
-          <Subdivision />
-          <Schools />
-          <MinMaxInputs name="square_meters" label="Square Footage" />
-          <MinMaxInputs name="lot_square_meters" label="Lot Size Area (Acre)" />
-          <GroupRadios
-            label="Pool"
-            name="pool"
-            fields={yesNoEitherFieldItems}
-          />
-          <YearBuilt />
-        </div>
-      </form>
-      <div className="c-filters__form-cta-buttons">
-        <ActionButton
-          size="large"
-          style={{ marginRight: '1rem' }}
-          appearance="outline"
-          onClick={resetHandler}
-          disabled={isSubmitting || pristine}
-        >
-          Reset Filters
-        </ActionButton>
-        <ActionButton
-          appearance="secondary"
-          size="large"
-          disabled={isSubmitting}
-          onClick={handleSubmit(onSubmitHandler)}
-        >
-          {isSubmitting ? 'Updating...' : 'Update Filters'}
-        </ActionButton>
-      </div>
-    </div>
-  </div>
+const useStyles = makeStyles(
+  theme => ({
+    button: {
+      padding: theme.spacing(1, 2),
+      margin: theme.spacing(0, 0.5)
+    },
+    resetButton: {
+      padding: theme.spacing(1, 2),
+      margin: theme.spacing(0, 1, 0, 1.5)
+    }
+  }),
+  { name: 'FiltersBadge' }
 )
 
-export default compose(
-  connect(
-    ({ user }) => {
-      const priceZeroCleaner = user && user.user_type === 'Agent'
+export const Filters = () => {
+  const classes = useStyles()
 
-      return {
-        initialValues: {
-          ...FILTERS_INITIAL_VALUES,
-          priceZeroCleaner
-        }
-      }
-    },
-    { ...actions }
-  ),
-  reduxForm({
-    form: 'filters',
-    destroyOnUnmount: false
-  }),
-  withHandlers({
-    onSubmitHandler:
-      ({ submitFiltersForm }) =>
-      values => {
-        submitFiltersForm(values)
-      }
-  }),
-  withHandlers({
-    resetHandler:
-      ({
-        reset,
-        initialValues,
-        submitFiltersForm,
-        submitSucceeded,
-        submitFailed
-      }) =>
-      () => {
-        if (submitSucceeded || submitFailed) {
-          reset()
-          submitFiltersForm(initialValues)
-        } else {
-          reset()
-        }
-      }
-  })
-)(Filters)
+  return (
+    <>
+      <Button
+        variant="outlined"
+        size="medium"
+        className={cn({
+          [classes.button]: true,
+          active: true
+        })}
+        startIcon={<FiberManualRecordIcon fontSize="small" color="primary" />}
+        endIcon={<ExpandMoreIcon fontSize="small" />}
+      >
+        Sale
+      </Button>
+      <Button
+        variant="outlined"
+        size="medium"
+        className={cn({
+          [classes.button]: true,
+          active: true
+        })}
+        startIcon={<AttachMoneyOutlinedIcon fontSize="small" />}
+      >
+        Any Price
+      </Button>
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="medium"
+        startIcon={<HotelOutlinedIcon fontSize="small" />}
+      >
+        Beds
+      </Button>
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="medium"
+        startIcon={<BathtubOutlinedIcon fontSize="small" />}
+      >
+        Baths
+      </Button>
+      <Button
+        className={classes.button}
+        variant="outlined"
+        size="medium"
+        startIcon={<TuneIcon fontSize="small" />}
+        endIcon={<AddIcon fontSize="small" />}
+      >
+        More Filters
+      </Button>
+      <Button
+        className={classes.resetButton}
+        variant="outlined"
+        disabled
+        size="medium"
+      >
+        Reset Search
+      </Button>
+    </>
+  )
+}
