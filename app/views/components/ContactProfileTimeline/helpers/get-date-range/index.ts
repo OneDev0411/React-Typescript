@@ -20,7 +20,15 @@ export function getDateRange(
 
   const start =
     format === Format.Next
-      ? timestamp
+      ? Date.UTC(
+          day.getUTCFullYear(),
+          day.getUTCMonth(),
+          day.getUTCDate(),
+          0,
+          0,
+          0,
+          0
+        )
       : Date.UTC(
           day.getUTCFullYear(),
           day.getUTCMonth(),
@@ -33,7 +41,15 @@ export function getDateRange(
 
   const end =
     format === Format.Previous
-      ? timestamp
+      ? Date.UTC(
+          day.getUTCFullYear(),
+          day.getUTCMonth(),
+          day.getUTCDate(),
+          0,
+          0,
+          0,
+          0
+        )
       : Date.UTC(
           day.getUTCFullYear(),
           day.getUTCMonth(),
