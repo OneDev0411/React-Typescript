@@ -2,7 +2,7 @@ import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { InjectedRouter, Route } from 'react-router'
+import { InjectedRouter, PlainRoute } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
@@ -24,16 +24,24 @@ import {
   goAndShowNotificationTypes,
   showingDurationOptions
 } from '../../constants'
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import {
+  hasTimeConflicts,
+  hasInvalidTimeRange,
+  sortShowingAvailabilities
+} from '../../helpers'
 import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
-import { CreateShowingErrors, ShowingPropertyType } from '../../types'
+import {
+  CreateShowingErrors,
+  ShowingAvailabilityItem,
+  ShowingPropertyType
+} from '../../types'
 
 import useShowingAvailabilitiesState from './use-showing-availabilities-state'
 import useShowingRoles from './use-showing-roles'
 
 interface CreateShowingProps {
   router: InjectedRouter
-  route: Route
+  route: PlainRoute
 }
 
 function CreateShowing({ router, route }: CreateShowingProps) {
@@ -66,9 +74,20 @@ function CreateShowing({ router, route }: CreateShowingProps) {
     setProperty(property)
   }
 
+  const handleAvailabilitiesChange = (
+    availabilities: ShowingAvailabilityItem[]
+  ) => {
+    setAvailabilities(sortShowingAvailabilities(availabilities))
+  }
+
   const { isLoading, data: showing, run, error, reset } = useAsync<IShowing>()
 
-  useLoseYourWorkAlert(router, route, !showing)
+  useLoseYourWorkAlert(
+    router,
+    route,
+    !showing,
+    'By canceling you will lose your work. Continue?'
+  )
 
   const showingValidationErrors = useMemo<Nullable<CreateShowingErrors>>(() => {
     const errors: CreateShowingErrors = {}
@@ -233,7 +252,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
               duration={duration}
               onDurationChange={setDuration}
               availabilities={availabilities}
-              onAvailabilitiesChange={setAvailabilities}
+              onAvailabilitiesChange={handleAvailabilitiesChange}
               error={showingValidationErrors?.availabilities}
             />
             <ShowingStepFinalResult

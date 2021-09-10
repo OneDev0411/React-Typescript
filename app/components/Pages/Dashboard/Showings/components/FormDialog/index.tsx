@@ -6,6 +6,7 @@ import {
   Button,
   makeStyles
 } from '@material-ui/core'
+import { FormApi } from 'final-form'
 import isEqual from 'lodash/isEqual'
 import { Form, FormProps } from 'react-final-form'
 
@@ -23,7 +24,7 @@ export interface FormDialogProps<FormValues>
     Pick<FormProps<FormValues>, 'initialValues' | 'mutators' | 'children'> {
   title: string
   confirmLabel?: string
-  onConfirm: (values: FormValues) => void
+  onConfirm: FormProps<FormValues>['onSubmit']
   cancelLabel?: string
   noValidate?: boolean
 }
@@ -46,11 +47,11 @@ function FormDialog<FormValues>({
     onClose?.(event, 'backdropClick')
   }
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = (values: FormValues, form: FormApi<FormValues>) => {
     onClose?.({}, 'backdropClick')
 
     if (!isEqual(initialValues, values)) {
-      onConfirm(values)
+      onConfirm(values, form)
     }
   }
 

@@ -18,8 +18,7 @@ export default {
   get: {
     // eslint-disable-next-line import/namespace
     status: contextHelpers.getStatus,
-    field: contextHelpers.getField,
-    context: contextHelpers.getContext
+    field: contextHelpers.getField
   },
   upload: {
     ...uploadHelpers
