@@ -79,7 +79,7 @@ export function TriggerEditMode({
   const classes = useStyles()
   const brand = useSelector(selectActiveBrandId)
 
-  console.log('TriggerEditMode', { trigger })
+  // console.log('TriggerEditMode', { trigger })
 
   const {
     control,

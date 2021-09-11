@@ -14,7 +14,7 @@ import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { ActivateButtons } from './components/ActivateButtons'
-import { TriggerItem } from './components/Item'
+import { TriggerItems } from './components/Items'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles(
       marginTop: theme.spacing(1)
     },
     loading: {
-      marginTop: theme.spacing(3),
+      marginTop: theme.spacing(4),
       textAlign: 'center'
     }
   }),
@@ -64,7 +64,7 @@ export default function Triggers() {
           activeTriggers={activeTriggers}
           onActive={loadTriggers}
         />
-        <TriggerItem list={triggers} />
+        <TriggerItems list={triggers} />
       </>
     )
   }
