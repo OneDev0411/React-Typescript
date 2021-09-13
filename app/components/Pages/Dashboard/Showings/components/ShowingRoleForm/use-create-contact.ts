@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 
+import { selectDefinitionByName } from '@app/reducers/contacts/attributeDefs'
 import useAsync from 'hooks/use-async'
 import { createContacts } from 'models/contacts/create-contacts'
 import { defaultQuery } from 'models/contacts/helpers/default-query'
@@ -22,6 +23,8 @@ function useCreateContact(): CreateContactReturn {
   const attributeDefs = useSelector(selectContactAttributeDefs)
   const userId = useSelector(selectUserId)
 
+  const sourceTypeDef = selectDefinitionByName(attributeDefs, 'source_type')
+
   const { isLoading, run, data } = useAsync<IContact>()
 
   return {
@@ -32,6 +35,13 @@ function useCreateContact(): CreateContactReturn {
       } = {
         user: userId,
         attributes: []
+      }
+
+      if (sourceTypeDef) {
+        newContact.attributes.push({
+          text: 'ExplicitlyCreated',
+          attribute_def: sourceTypeDef.id
+        })
       }
 
       Object.keys(attributes).forEach((attribute: keyof CreateContactInput) => {

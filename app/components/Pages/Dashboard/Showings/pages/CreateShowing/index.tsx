@@ -2,7 +2,7 @@ import { memo, useState, useMemo } from 'react'
 
 import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { InjectedRouter, Route } from 'react-router'
+import { InjectedRouter, PlainRoute } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
@@ -41,7 +41,7 @@ import useShowingRoles from './use-showing-roles'
 
 interface CreateShowingProps {
   router: InjectedRouter
-  route: Route
+  route: PlainRoute
 }
 
 function CreateShowing({ router, route }: CreateShowingProps) {
@@ -82,7 +82,12 @@ function CreateShowing({ router, route }: CreateShowingProps) {
 
   const { isLoading, data: showing, run, error, reset } = useAsync<IShowing>()
 
-  useLoseYourWorkAlert(router, route, !showing)
+  useLoseYourWorkAlert(
+    router,
+    route,
+    !showing,
+    'By canceling you will lose your work. Continue?'
+  )
 
   const showingValidationErrors = useMemo<Nullable<CreateShowingErrors>>(() => {
     const errors: CreateShowingErrors = {}
