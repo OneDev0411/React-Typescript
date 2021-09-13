@@ -1,4 +1,4 @@
-import { useState, useMemo, ChangeEvent } from 'react'
+import { useState, useMemo, ChangeEvent, MouseEvent } from 'react'
 
 import {
   FormControlLabel,
@@ -14,6 +14,8 @@ import {
   disableTrigger
 } from '@app/models/instant-marketing/global-triggers'
 
+import { TriggerEditMode as EditMode } from '../../EditMode'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -28,6 +30,9 @@ const useStyles = makeStyles(
     switchState: {
       margin: theme.spacing(0),
       paddingBottom: theme.spacing(0.5)
+    },
+    cover: {
+      cursor: 'pointer'
     },
     templatePreviewContainer: {
       padding: theme.spacing(1),
@@ -49,7 +54,8 @@ const useStyles = makeStyles(
       display: 'block'
     },
     disabled: {
-      opacity: 0.5
+      opacity: 0.5,
+      cursor: 'not-allowed'
     }
   }),
   {
@@ -64,8 +70,9 @@ interface Props {
 export function Item({ trigger: triggerProp }: Props) {
   const classes = useStyles()
   const [trigger, setTrigger] = useState<IGlobalTrigger>(triggerProp)
-  const [isEanable, setIsEanable] = useState<boolean>(!trigger.deleted_at)
+  const [isEnable, setIsEnable] = useState<boolean>(!trigger.deleted_at)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
 
   const templatePreview: Nullable<string> = useMemo(() => {
     if (trigger.template) {
@@ -78,6 +85,18 @@ export function Item({ trigger: triggerProp }: Props) {
 
     return null
   }, [trigger.template, trigger.template_instance])
+
+  const handleShowEdit = (event: MouseEvent<HTMLElement>) => {
+    if (isLoading || !isEnable) {
+      return
+    }
+
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleCloseEdit = () => {
+    setAnchorEl(null)
+  }
 
   const toggleStatus = async (event: ChangeEvent<HTMLInputElement>) => {
     if (isLoading) {
@@ -95,7 +114,7 @@ export function Item({ trigger: triggerProp }: Props) {
         : await disableTrigger(id, brand)
 
       setTrigger(res)
-      setIsEanable(!res.deleted_at)
+      setIsEnable(!res.deleted_at)
     } catch (error) {
       console.error(error)
     } finally {
@@ -104,41 +123,53 @@ export function Item({ trigger: triggerProp }: Props) {
   }
 
   return (
-    <div className={classes.container}>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={isEanable}
-            onChange={toggleStatus}
-            size="small"
-            color="primary"
-            name="event_type"
-          />
-        }
-        label={trigger.event_type}
-        className={classes.switchState}
-      />
-      <div className={cn({ [classes.disabled]: !isEanable || isLoading })}>
-        <div className={classes.templatePreviewContainer}>
-          {templatePreview && (
-            <img
-              src={templatePreview}
-              alt="Selected Template"
-              className={classes.templatePreview}
+    <>
+      <div className={classes.container}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isEnable}
+              onChange={toggleStatus}
+              size="small"
+              color="primary"
+              name="event_type"
             />
-          )}
-        </div>
-        <Typography variant="caption" color="textSecondary">
-          Email Subject
-        </Typography>
-        <Typography
-          variant="body2"
-          color="textPrimary"
-          className={classes.subject}
+          }
+          label={trigger.event_type}
+          className={classes.switchState}
+        />
+        <div
+          className={cn(classes.cover, {
+            [classes.disabled]: !isEnable || isLoading
+          })}
+          onClick={handleShowEdit}
         >
-          {trigger.subject}
-        </Typography>
+          <div className={classes.templatePreviewContainer}>
+            {templatePreview && (
+              <img
+                src={templatePreview}
+                alt="Selected Template"
+                className={classes.templatePreview}
+              />
+            )}
+          </div>
+          <Typography variant="caption" color="textSecondary">
+            Email Subject
+          </Typography>
+          <Typography
+            variant="body2"
+            color="textPrimary"
+            className={classes.subject}
+          >
+            {trigger.subject}
+          </Typography>
+        </div>
       </div>
-    </div>
+      <EditMode
+        trigger={trigger}
+        anchor={anchorEl}
+        handleClose={handleCloseEdit}
+      />
+    </>
   )
 }

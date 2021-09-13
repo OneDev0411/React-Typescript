@@ -1,8 +1,4 @@
-import { useState } from 'react'
-
 import { Grid, Typography, Theme, makeStyles } from '@material-ui/core'
-
-import { TriggerEditMode as EditMode } from '../EditMode'
 
 import { Item } from './components/Item'
 
@@ -27,21 +23,8 @@ interface Props {
 export function TriggerItems({ list }: Props) {
   const classes = useStyles()
 
-  // const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
-
-  // const handleShowEditMode = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-
-  // const handleCloseEditMode = () => {
-  //   setAnchorEl(null)
-  // }
-
   return (
     <div className={classes.container}>
-      {/* <Button variant="contained" color="primary" onClick={handleShowEditMode}>
-        Item
-      </Button> */}
       <Typography variant="subtitle2" className={classes.title}>
         Default Templates
       </Typography>
@@ -52,11 +35,6 @@ export function TriggerItems({ list }: Props) {
           </Grid>
         ))}
       </Grid>
-      {/* <EditMode
-        trigger={list ? list[0] : undefined}
-        anchor={anchorEl}
-        handleClose={handleCloseEditMode}
-      /> */}
     </div>
   )
 }
