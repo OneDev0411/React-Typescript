@@ -97,22 +97,23 @@ export const BoardColumn = memo(function BoardColumn({
   const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
   const [list, updateList] = useColumnList(tag)
   const [loadingOffset, setLoadingOffset] = useState(0)
-  const [loading, setLoading] = useState<Nullable<'initial' | 'more'>>(null)
+  const [loadingState, setLoadingState] =
+    useState<Nullable<'initial' | 'more'>>(null)
   const [isReachedEnd, setIsReachedEnd] = useState(false)
   const user = useSelector(selectUser)
   const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
     ({ contacts }) => contacts.attributeDefs.byName.tag
   )
 
-  const isInitialLoading = list.length === 0 && loading === 'initial'
-  const isLoading = loading !== null
+  const isInitialLoading = list.length === 0 && loadingState === 'initial'
+  const isLoading = loadingState !== null
 
   const getLoadingPosition = () => {
-    if (loading === 'initial') {
+    if (loadingState === 'initial') {
       return LoadingPosition.Middle
     }
 
-    if (loading === 'more') {
+    if (loadingState === 'more') {
       return LoadingPosition.Bottom
     }
 
@@ -120,11 +121,11 @@ export const BoardColumn = memo(function BoardColumn({
   }
 
   useAsync(async () => {
-    if (loading || (searchTerm === currentSearchTerm && isReachedEnd)) {
+    if (loadingState || (searchTerm === currentSearchTerm && isReachedEnd)) {
       return
     }
 
-    setLoading(loadingOffset === 0 ? 'initial' : 'more')
+    setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
 
     let filters: IContactFilter[] | undefined
 
@@ -154,7 +155,7 @@ export const BoardColumn = memo(function BoardColumn({
       viewAs(user)
     )
 
-    setLoading(null)
+    setLoadingState(null)
     setIsReachedEnd(data.length + list.length === info?.total)
 
     updateList(
@@ -250,7 +251,7 @@ export const BoardColumn = memo(function BoardColumn({
                     itemSize={() => 112}
                     overscanCount={10}
                     onReachEnd={handleReachEnd}
-                    isLoading={loading !== null}
+                    isLoading={loadingState !== null}
                     loadingPosition={getLoadingPosition()}
                   >
                     {DraggableCardItem}
