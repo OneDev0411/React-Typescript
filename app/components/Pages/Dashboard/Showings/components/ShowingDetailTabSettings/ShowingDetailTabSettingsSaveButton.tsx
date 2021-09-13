@@ -1,4 +1,16 @@
-import { Box, Button, ButtonProps, CircularProgress } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  ButtonProps,
+  CircularProgress,
+  makeStyles
+} from '@material-ui/core'
+import classNames from 'classnames'
+
+const useStyles = makeStyles(
+  { root: { minWidth: 100 } },
+  { name: 'ShowingDetailTabSettingsSaveButton' }
+)
 
 export interface ShowingDetailTabSettingsSaveButtonProps
   extends Omit<
@@ -10,17 +22,21 @@ export interface ShowingDetailTabSettingsSaveButtonProps
 }
 
 function ShowingDetailTabSettingsSaveButton({
+  className,
   alignRight = false,
   isSaving = false,
   disabled,
   ...otherProps
 }: ShowingDetailTabSettingsSaveButtonProps) {
+  const classes = useStyles()
+
   const button = (
     <Button
       {...otherProps}
+      className={classNames(classes.root, className)}
       color="primary"
-      size="small"
-      variant="outlined"
+      size="medium"
+      variant="contained"
       startIcon={
         isSaving ? <CircularProgress size="1em" color="inherit" /> : undefined
       }
