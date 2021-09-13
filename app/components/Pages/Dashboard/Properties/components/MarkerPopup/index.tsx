@@ -5,6 +5,7 @@ import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import { useSelector } from 'react-redux'
 
+import { noop } from '@app/utils/helpers'
 import {
   getListingFormatedPrice,
   addressTitle,
@@ -19,6 +20,7 @@ const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 const useStyles = makeStyles(
   theme => ({
     container: {
+      cursor: 'pointer',
       position: 'absolute',
       bottom: 30,
       left: '50%',
@@ -84,9 +86,10 @@ const useStyles = makeStyles(
 
 interface Props {
   listing: ICompactListing
+  onClick?: () => void
 }
 
-const MarkerPopup = ({ listing }: Props) => {
+const MarkerPopup = ({ listing, onClick = noop }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
 
@@ -104,7 +107,12 @@ const MarkerPopup = ({ listing }: Props) => {
   const status = listing.status
 
   return (
-    <div className={classes.container}>
+    <div
+      className={classes.container}
+      onClick={() => {
+        onClick()
+      }}
+    >
       <div
         className={classes.image}
         style={{ backgroundImage: `url(${coverImageURL})` }}

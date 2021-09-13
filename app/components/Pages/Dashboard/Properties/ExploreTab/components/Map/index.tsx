@@ -3,6 +3,8 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { useTheme } from '@material-ui/core'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
 
+import { ListingDetailsModal } from 'components/ListingDetailsModal'
+
 import Marker from '../../../components/Marker'
 import { bootstrapURLKeys } from '../../../constants/constants'
 import {
@@ -17,18 +19,28 @@ import {
 import useListingsContext from '../../hooks/useListingsContext'
 
 interface Props {
+  isWidget: boolean
   drawingMode?: boolean
   drawingModeCallBack: (points: ICoord[]) => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
 }
 
+interface ListingModalState {
+  id: UUID
+  isOpen: boolean
+}
+
 export const Map = ({
+  isWidget,
   drawingMode = true,
   drawingModeCallBack,
   onChange
 }: Props) => {
   const [state, dispatch] = useListingsContext()
   const [mapIsLoaded, setMapIsLoaded] = useState(false)
+  const [listingModalState, setListingModalState] = useState<ListingModalState>(
+    { id: '', isOpen: false }
+  )
   const theme = useTheme()
   // setting up refs
   // There is no way to get apropiate types for these
@@ -36,6 +48,22 @@ export const Map = ({
   const mapsRef = useRef<any>()
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
+
+  const closeListingModal = () => {
+    if (!isWidget) {
+      window.history.pushState({}, '', '/dashboard/properties')
+    }
+
+    setListingModalState({ id: '', isOpen: false })
+  }
+
+  const openListingModal = (id: UUID) => {
+    if (!isWidget) {
+      window.history.pushState({}, '', `/dashboard/properties/${id}`)
+    }
+
+    setListingModalState({ id, isOpen: true })
+  }
 
   const changeHoverState = (id: UUID, hover: boolean) => {
     dispatch(changeListingHoverState(hover ? id : null))
@@ -131,37 +159,48 @@ export const Map = ({
   }, [state.search])
 
   return (
-    <GoogleMap
-      center={state.map.center}
-      zoom={state.map.zoom}
-      bootstrapURLKeys={bootstrapURLKeys}
-      // we show/hide map controls based on drawing/normal mode
-      options={maps => createMapOptions(maps, drawingMode)}
-      onChildMouseEnter={(id: UUID) => {
-        changeHoverState(id, true)
-      }}
-      onChildMouseLeave={(id: UUID) => {
-        changeHoverState(id, false)
-      }}
-      onChildClick={toggleClickedState}
-      onClick={onMapClick}
-      onChange={handleChange}
-      onGoogleApiLoaded={onLoad}
-      yesIWantToUseGoogleMapApiInternals
-      style={{ height: '100%', width: '100%' }}
-    >
-      {!drawingMode &&
-        state.result.listings.map(listing => (
-          <Marker
-            hover={state.listingStates.hover === listing.id}
-            clicked={state.listingStates.click === listing.id}
-            key={listing.id}
-            lat={listing.location?.latitude}
-            lng={listing.location?.longitude}
-            listing={listing}
-            zoom={state.map.zoom}
-          />
-        ))}
-    </GoogleMap>
+    <>
+      <GoogleMap
+        center={state.map.center}
+        zoom={state.map.zoom}
+        bootstrapURLKeys={bootstrapURLKeys}
+        // we show/hide map controls based on drawing/normal mode
+        options={maps => createMapOptions(maps, drawingMode)}
+        onChildMouseEnter={(id: UUID) => {
+          changeHoverState(id, true)
+        }}
+        onChildMouseLeave={(id: UUID) => {
+          changeHoverState(id, false)
+        }}
+        onChildClick={toggleClickedState}
+        onClick={onMapClick}
+        onChange={handleChange}
+        onGoogleApiLoaded={onLoad}
+        yesIWantToUseGoogleMapApiInternals
+        style={{ height: '100%', width: '100%' }}
+      >
+        {!drawingMode &&
+          state.result.listings.map(listing => (
+            <Marker
+              hover={state.listingStates.hover === listing.id}
+              clicked={state.listingStates.click === listing.id}
+              onClick={() => {
+                openListingModal(listing.id)
+              }}
+              key={listing.id}
+              lat={listing.location?.latitude}
+              lng={listing.location?.longitude}
+              listing={listing}
+              zoom={state.map.zoom}
+            />
+          ))}
+      </GoogleMap>
+      <ListingDetailsModal
+        isOpen={listingModalState.isOpen}
+        isWidget={isWidget}
+        listingId={listingModalState.id}
+        closeHandler={closeListingModal}
+      />
+    </>
   )
 }

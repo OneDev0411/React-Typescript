@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
+import { noop } from '@app/utils/helpers'
 import { getListingFormatedPrice, getStatusColorClass } from 'utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../constants/constants'
@@ -77,6 +78,7 @@ interface Props {
   clicked?: boolean
   listing: ICompactListing
   zoom?: number
+  onClick?: () => void
 }
 
 const Marker = ({
@@ -85,6 +87,7 @@ const Marker = ({
   listing,
   hover,
   clicked,
+  onClick = noop,
   zoom = MINIMAL_MARKER_ZOOM_LEVEL,
   ...rest
 }: Props) => {
@@ -114,7 +117,7 @@ const Marker = ({
       >
         {isShowBubble && formatedPrice}
         {(hover || clicked) && isShowBubble && (
-          <MarkerPopup listing={listing} />
+          <MarkerPopup onClick={onClick} listing={listing} />
         )}
       </div>
     </>
