@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, ChangeEvent } from 'react'
 
 import {
   FormControlLabel,
@@ -7,6 +7,11 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
+
+import {
+  enableTrigger,
+  disableTrigger
+} from '@app/models/instant-marketing/global-triggers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -52,9 +57,11 @@ interface Props {
   trigger: IGlobalTrigger
 }
 
-export function Item({ trigger }: Props) {
+export function Item({ trigger: triggerProp }: Props) {
   const classes = useStyles()
-  const [checked, setChecked] = useState(false)
+  const [trigger, setTrigger] = useState<IGlobalTrigger>(triggerProp)
+  const [isEanable, setIsEanable] = useState<boolean>(!trigger.deleted_at)
+  const [loading, setIsLoading] = useState<boolean>(false)
 
   const templatePreview: Nullable<string> = useMemo(() => {
     if (trigger.template) {
@@ -68,8 +75,28 @@ export function Item({ trigger }: Props) {
     return null
   }, [trigger.template, trigger.template_instance])
 
-  const toggleChecked = () => {
-    setChecked(prev => !prev)
+  const toggleStatus = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (loading) {
+      return null
+    }
+
+    const { id, brand } = trigger
+    const isEnabling = event.target.checked
+
+    try {
+      setIsLoading(true)
+
+      const res = isEnabling
+        ? await enableTrigger(id, brand)
+        : await disableTrigger(id, brand)
+
+      setTrigger(res)
+      setIsEanable(!res.deleted_at)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -77,8 +104,8 @@ export function Item({ trigger }: Props) {
       <FormControlLabel
         control={
           <Switch
-            checked={checked}
-            onChange={toggleChecked}
+            checked={isEanable}
+            onChange={toggleStatus}
             size="small"
             color="primary"
             name="event_type"

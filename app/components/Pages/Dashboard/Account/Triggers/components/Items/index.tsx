@@ -27,8 +27,6 @@ interface Props {
 export function TriggerItems({ list }: Props) {
   const classes = useStyles()
 
-  console.log({ list })
-
   // const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
 
   // const handleShowEditMode = (event: React.MouseEvent<HTMLButtonElement>) => {
