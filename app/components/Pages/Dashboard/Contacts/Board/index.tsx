@@ -38,7 +38,7 @@ interface Props {
   searchTerm: string
 }
 
-function Board({ searchTerm }: Props) {
+export const Board = memo(({ searchTerm }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
   const dispatch = useDispatch()
@@ -115,6 +115,4 @@ function Board({ searchTerm }: Props) {
       </DragDropContext>
     </BoardContext.Provider>
   )
-}
-
-export default memo(Board)
+})

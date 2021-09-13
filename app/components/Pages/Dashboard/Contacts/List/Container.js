@@ -44,7 +44,7 @@ import {
 } from 'utils/oauth-provider'
 import { viewAs, getUserSettingsInActiveTeam } from 'utils/user-teams'
 
-import Board from '../Board'
+import { Board } from '../Board'
 import { CONTACTS_SEGMENT_NAME } from '../constants'
 
 import {

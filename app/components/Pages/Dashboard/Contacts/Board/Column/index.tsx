@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -87,7 +87,7 @@ interface Props {
   onReachEnd?: () => void
 }
 
-export const BoardColumn = React.memo(function BoardColumn({
+export const BoardColumn = memo(function BoardColumn({
   id,
   title,
   searchTerm,
