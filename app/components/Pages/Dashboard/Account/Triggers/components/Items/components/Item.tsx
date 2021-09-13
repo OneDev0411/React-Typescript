@@ -7,6 +7,7 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
+import cn from 'classnames'
 
 import {
   enableTrigger,
@@ -46,6 +47,9 @@ const useStyles = makeStyles(
     },
     subject: {
       display: 'block'
+    },
+    disabled: {
+      opacity: 0.5
     }
   }),
   {
@@ -61,7 +65,7 @@ export function Item({ trigger: triggerProp }: Props) {
   const classes = useStyles()
   const [trigger, setTrigger] = useState<IGlobalTrigger>(triggerProp)
   const [isEanable, setIsEanable] = useState<boolean>(!trigger.deleted_at)
-  const [loading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const templatePreview: Nullable<string> = useMemo(() => {
     if (trigger.template) {
@@ -76,7 +80,7 @@ export function Item({ trigger: triggerProp }: Props) {
   }, [trigger.template, trigger.template_instance])
 
   const toggleStatus = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (loading) {
+    if (isLoading) {
       return null
     }
 
@@ -114,25 +118,27 @@ export function Item({ trigger: triggerProp }: Props) {
         label={trigger.event_type}
         className={classes.switchState}
       />
-      <div className={classes.templatePreviewContainer}>
-        {templatePreview && (
-          <img
-            src={templatePreview}
-            alt="Selected Template"
-            className={classes.templatePreview}
-          />
-        )}
+      <div className={cn({ [classes.disabled]: !isEanable || isLoading })}>
+        <div className={classes.templatePreviewContainer}>
+          {templatePreview && (
+            <img
+              src={templatePreview}
+              alt="Selected Template"
+              className={classes.templatePreview}
+            />
+          )}
+        </div>
+        <Typography variant="caption" color="textSecondary">
+          Email Subject
+        </Typography>
+        <Typography
+          variant="body2"
+          color="textPrimary"
+          className={classes.subject}
+        >
+          {trigger.subject}
+        </Typography>
       </div>
-      <Typography variant="caption" color="textSecondary">
-        Email Subject
-      </Typography>
-      <Typography
-        variant="body2"
-        color="textPrimary"
-        className={classes.subject}
-      >
-        {trigger.subject}
-      </Typography>
     </div>
   )
 }
