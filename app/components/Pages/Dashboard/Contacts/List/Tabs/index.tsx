@@ -76,7 +76,6 @@ const getActiveTab = ({
 
 export const ContactsTabs = ({
   handleResetShortcutFilter,
-  handleChangeSavedSegment,
   handleFilterChange,
   savedListProps,
   onChangeView,
@@ -109,6 +108,13 @@ export const ContactsTabs = ({
     isTagListActive: tagListProps.isActive
   })
 
+  const actions = [
+    ...(viewMode === 'table'
+      ? [<Tab key={1} label={<SortFields {...sortProps} />} />]
+      : []),
+    <ViewSwitcher key={2} onChangeView={onChangeView} activeView={viewMode} />
+  ]
+
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
@@ -130,27 +136,24 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
-          <Tab
-            key="saved-list"
-            value="saved-list"
-            data-tour-id="saved-list"
-            label={<SavedSegments {...savedListProps} />}
-          />,
-          <Tab
-            key="tag-list"
-            value="tag-list"
-            data-tour-id="tags-list"
-            label={<TagsList onFilterChange={tagListProps.onClick} />}
-          />
+          ...(viewMode === 'table'
+            ? [
+                <Tab
+                  key="saved-list"
+                  value="saved-list"
+                  data-tour-id="saved-list"
+                  label={<SavedSegments {...savedListProps} />}
+                />,
+                <Tab
+                  key="tag-list"
+                  value="tag-list"
+                  data-tour-id="tags-list"
+                  label={<TagsList onFilterChange={tagListProps.onClick} />}
+                />
+              ]
+            : [])
         ]}
-        actions={[
-          <Tab key={1} label={<SortFields {...sortProps} />} />,
-          <ViewSwitcher
-            key={2}
-            onChangeView={onChangeView}
-            activeView={viewMode}
-          />
-        ]}
+        actions={actions}
       />
       {viewMode === 'table' && (
         <ContactFilters

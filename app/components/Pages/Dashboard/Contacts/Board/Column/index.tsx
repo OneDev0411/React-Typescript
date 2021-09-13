@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { memo, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -8,14 +8,25 @@ import {
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
+import { useAsync } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
+import { searchContacts } from '@app/models/contacts/search-contacts'
+import { IAppState } from '@app/reducers'
+import { selectUser } from '@app/selectors/user'
 import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { viewAs } from 'utils/user-teams'
+
+import { Tags } from '../constants'
+import { useColumnList } from '../hooks/use-column-list'
 
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
+
+const loadingLimit = 100
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -70,52 +81,92 @@ const useStyles = makeStyles(
 interface Props {
   id: string
   title: string
-  droppable?: boolean
-  listCount?: number
-  isFetchingContacts?: boolean
-  isFetchingNextContacts?: boolean
-  isFetchingPreviousContacts?: boolean
-  list: IContact[]
+  tag?: string
+  searchTerm: string
   onReachStart?: () => void
   onReachEnd?: () => void
 }
 
-export const BoardColumn = React.memo(function BoardColumn({
+export const BoardColumn = memo(function BoardColumn({
   id,
   title,
-  list,
-  listCount,
-  isFetchingContacts = false,
-  isFetchingNextContacts = false,
-  isFetchingPreviousContacts = false,
-  droppable = true,
-  onReachStart = () => {},
-  onReachEnd = () => {}
+  searchTerm,
+  tag
 }: Props) {
   const classes = useStyles()
+  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
+  const [list, updateList] = useColumnList(tag)
+  const [loadingOffset, setLoadingOffset] = useState(0)
+  const [loadingState, setLoadingState] =
+    useState<Nullable<'initial' | 'more'>>(null)
+  const [isReachedEnd, setIsReachedEnd] = useState(false)
+  const user = useSelector(selectUser)
+  const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
+    ({ contacts }) => contacts.attributeDefs.byName.tag
+  )
 
-  const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
-
-  const isInitialLoading = list.length === 0 && isFetchingContacts
-
-  const isLoading =
-    isFetchingContacts || isFetchingNextContacts || isFetchingPreviousContacts
+  const isInitialLoading = list.length === 0 && loadingState === 'initial'
+  const isLoading = loadingState !== null
 
   const getLoadingPosition = () => {
-    if (isInitialLoading) {
+    if (loadingState === 'initial') {
       return LoadingPosition.Middle
     }
 
-    if (isFetchingNextContacts) {
+    if (loadingState === 'more') {
       return LoadingPosition.Bottom
-    }
-
-    if (isFetchingPreviousContacts) {
-      return LoadingPosition.Top
     }
 
     return undefined
   }
+
+  useAsync(async () => {
+    if (loadingState || (searchTerm === currentSearchTerm && isReachedEnd)) {
+      return
+    }
+
+    setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
+
+    let filters: IContactFilter[] | undefined
+
+    if (tag) {
+      filters = [
+        {
+          attribute_def: tagAttributeDefinitionId,
+          invert: false,
+          value: tag
+        }
+      ]
+    } else {
+      filters = Tags.map(tag => ({
+        attribute_def: tagAttributeDefinitionId,
+        invert: true,
+        value: tag
+      }))
+    }
+
+    const { data, info } = await searchContacts(
+      searchTerm,
+      filters,
+      {
+        start: loadingOffset,
+        limit: loadingLimit
+      },
+      viewAs(user)
+    )
+
+    setLoadingState(null)
+    setIsReachedEnd(data.length + list.length === info?.total)
+
+    updateList(
+      searchTerm === currentSearchTerm ? [...list, ...data] : data,
+      tag
+    )
+
+    setCurrentSearchTerm(searchTerm)
+  }, [loadingOffset, searchTerm, tagAttributeDefinitionId])
+
+  const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
   return (
     <div className={classes.root}>
@@ -138,9 +189,7 @@ export const BoardColumn = React.memo(function BoardColumn({
               {isLoading ? (
                 <Skeleton animation="wave" width="16px" />
               ) : (
-                <Typography variant="subtitle1">
-                  {listCount || list.length}
-                </Typography>
+                <Typography variant="subtitle1">{list.length}</Typography>
               )}
             </Box>
           </Box>
@@ -149,7 +198,7 @@ export const BoardColumn = React.memo(function BoardColumn({
 
       {isInitialLoading && (
         <div className={classes.body}>
-          {new Array(randomNumber).fill(null).map((_, index) => (
+          {new Array(3).fill(null).map((_, index) => (
             <Skeleton
               key={index}
               animation="wave"
@@ -167,7 +216,6 @@ export const BoardColumn = React.memo(function BoardColumn({
               type="column"
               mode="virtual"
               direction="vertical"
-              isDropDisabled={!droppable}
               ignoreContainerClipping
               isCombineEnabled={false}
               renderClone={(provided, snapshot, rubric) => (
@@ -202,11 +250,8 @@ export const BoardColumn = React.memo(function BoardColumn({
                     threshold={5}
                     itemSize={() => 112}
                     overscanCount={10}
-                    onReachStart={onReachStart}
-                    onReachEnd={onReachEnd}
-                    isLoading={
-                      isFetchingNextContacts || isFetchingPreviousContacts
-                    }
+                    onReachEnd={handleReachEnd}
+                    isLoading={loadingState !== null}
                     loadingPosition={getLoadingPosition()}
                   >
                     {DraggableCardItem}
