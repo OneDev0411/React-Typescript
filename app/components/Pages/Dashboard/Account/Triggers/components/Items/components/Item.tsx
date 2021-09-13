@@ -98,6 +98,8 @@ export function Item({ trigger: triggerProp }: Props) {
     setAnchorEl(null)
   }
 
+  const handleEditCallback = trigger => setTrigger(trigger)
+
   const toggleStatus = async (event: ChangeEvent<HTMLInputElement>) => {
     if (isLoading) {
       return null
@@ -168,6 +170,7 @@ export function Item({ trigger: triggerProp }: Props) {
       <EditMode
         trigger={trigger}
         anchor={anchorEl}
+        callback={handleEditCallback}
         handleClose={handleCloseEdit}
       />
     </>

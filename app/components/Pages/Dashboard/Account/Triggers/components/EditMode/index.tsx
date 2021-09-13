@@ -17,11 +17,11 @@ import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
-import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { TemplateSelector } from './components/TemplateSelector'
+import { generateInitialValues } from './helper/index'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -65,7 +65,7 @@ interface Props {
   anchor: Nullable<HTMLElement>
   eventType?: TriggerContactEventTypes
   trigger?: IGlobalTrigger
-  callback?: () => void
+  callback?: (trigger: IGlobalTrigger) => void
   handleClose: () => void
 }
 
@@ -79,14 +79,16 @@ export function TriggerEditMode({
   const classes = useStyles()
   const brand = useSelector(selectActiveBrandId)
 
-  // console.log('TriggerEditMode', { trigger })
-
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<IGlobalTriggerFormData>()
 
+  const initialValue: IGlobalTriggerFormData = useMemo(
+    () => generateInitialValues(trigger),
+    [trigger]
+  )
   const currentEventType = useMemo(
     () => eventType ?? trigger?.event_type ?? null,
     [eventType, trigger?.event_type]
@@ -102,7 +104,11 @@ export function TriggerEditMode({
   }) => {
     console.log({ data })
 
-    const selectedTepmlate = template.isInstance
+    if (!template) {
+      return
+    }
+
+    const selectedTepmlate = template?.isInstance
       ? {
           template_instance: template.id
         }
@@ -111,17 +117,18 @@ export function TriggerEditMode({
         }
 
     try {
-      await createTrigger({
+      const res = await createTrigger({
         ...data,
         ...selectedTepmlate,
         brand,
         event_type: currentEventType
       })
-      handleClose()
 
       if (callback) {
-        callback()
+        callback(res.data)
       }
+
+      handleClose()
     } catch (err) {
       console.error(err)
     }
@@ -167,7 +174,7 @@ export function TriggerEditMode({
                   <Controller
                     name="subject"
                     control={control}
-                    defaultValue={trigger?.subject ?? 'Hi'}
+                    defaultValue={initialValue.subject}
                     rules={{
                       validate: (value: string) =>
                         !!value.trim() || 'This field is required.'
@@ -196,9 +203,7 @@ export function TriggerEditMode({
                     name="wait_for"
                     type="number"
                     control={control}
-                    defaultValue={
-                      trigger ? convertSecondsToDay(trigger.wait_for) : 0
-                    }
+                    defaultValue={initialValue.wait_for}
                     render={({ value, onChange }) => {
                       return (
                         <FormControl
@@ -243,6 +248,7 @@ export function TriggerEditMode({
               <Controller
                 name="template"
                 control={control}
+                defaultValue={initialValue.template}
                 render={({ value, onChange }) => {
                   // const error: string | undefined = errors.template
 

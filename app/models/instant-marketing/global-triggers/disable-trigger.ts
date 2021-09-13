@@ -1,19 +1,16 @@
 import Fetch from '../../../services/fetch'
 
+import { DEFAULT_QUERY } from './helpers/constant'
+
 export async function disableTrigger(
   triggerId: UUID,
-  brandId: UUID
+  brandId: UUID,
+  query: object = DEFAULT_QUERY
 ): Promise<IGlobalTrigger> {
   try {
     const response = await new Fetch()
       .patch(`/brands/${brandId}/triggers/${triggerId}/disable`)
-      .query({
-        associations: [
-          'brand_trigger.template',
-          'brand_trigger.template_instance',
-          'template_instance.template'
-        ]
-      })
+      .query(query)
 
     return response.body.data
   } catch (e) {

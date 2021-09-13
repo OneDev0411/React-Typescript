@@ -1,7 +1,10 @@
 import Fetch from '../../../services/fetch'
 
+import { DEFAULT_QUERY } from './helpers/constant'
+
 export async function createTrigger(
-  payload: IGlobalTriggerInput
+  payload: IGlobalTriggerInput,
+  query: object = DEFAULT_QUERY
 ): Promise<ApiResponseBody<IGlobalTrigger>> {
   try {
     if (!payload.brand) {
@@ -20,6 +23,7 @@ export async function createTrigger(
 
     const response = await new Fetch()
       .put(`/brands/${payload.brand}/triggers/${payload.event_type}`)
+      .query(query)
       .send(payload)
 
     return response.body

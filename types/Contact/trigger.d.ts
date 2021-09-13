@@ -36,12 +36,13 @@ declare type ITrigger = IModel<'trigger'> &
 
 declare type IGlobalTriggerRaw = Omit<
   ITriggerBase,
-  'user' | 'time' | 'recurring'
+  'user' | 'time' | 'recurring' | 'created_by'
 > &
   Pick<IContactTrigger, 'event_type'> & { subject: string }
 
-declare interface IGlobalTriggerFormData extends IGlobalTriggerRaw {
-  template: {
+declare interface IGlobalTriggerFormData
+  extends Omit<IGlobalTriggerRaw, 'brand' | 'event_type'> {
+  template?: {
     isInstance: boolean
     id: UUID
   }
