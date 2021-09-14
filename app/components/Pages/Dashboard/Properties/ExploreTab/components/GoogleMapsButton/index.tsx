@@ -20,6 +20,13 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     '&:hover': {
       color: theme.palette.grey[900],
       backgroundColor: theme.palette.grey[300]
+    },
+    '&.iconButton': {
+      minWidth: 'unset',
+      padding: '6px 0',
+      '& .MuiButton-startIcon': {
+        margin: 0
+      }
     }
   },
   label: {
@@ -32,12 +39,14 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
 }))(Button)
 
 interface Props {
-  children: React.ReactNode
+  children?: React.ReactNode
   top?: React.CSSProperties['top']
   left?: React.CSSProperties['left']
   bottom?: React.CSSProperties['bottom']
   right?: React.CSSProperties['right']
   startIcon?: React.ReactNode
+  iconButton?: boolean
+  size?: 'small' | 'medium' | 'large'
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   active?: boolean
 }
@@ -50,15 +59,17 @@ export const GoogleMapsButton = ({
   right = 'unset',
   startIcon,
   onClick,
-  active = false
+  size = 'small',
+  active = false,
+  iconButton = false
 }: Props) => {
   return (
     <CustomizedGoogleMapsButton
-      size="small"
+      size={size}
       style={{ top, left, right, bottom }}
       startIcon={startIcon}
       onClick={onClick}
-      className={cn({ active })}
+      className={cn({ active, iconButton })}
     >
       {children}
     </CustomizedGoogleMapsButton>
