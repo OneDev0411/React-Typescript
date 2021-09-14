@@ -65,6 +65,7 @@ export const GoogleMapsButton = ({
 }: Props) => {
   return (
     <CustomizedGoogleMapsButton
+      title="Get your exact location on the map"
       size={size}
       style={{ top, left, right, bottom }}
       startIcon={startIcon}
