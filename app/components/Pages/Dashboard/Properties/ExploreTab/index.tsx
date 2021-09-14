@@ -179,7 +179,11 @@ function ExploreTab({ isWidget, user, location }: Props) {
               onSelectPlace={onSelectPlace}
             />
           ) : (
-            <ExplorePage user={user} isWidget={isWidget} />
+            <ExplorePage
+              user={user}
+              isWidget={isWidget}
+              onClickLocate={onClickLocate}
+            />
           )}
         </ListingsContext.Provider>
       ) : (

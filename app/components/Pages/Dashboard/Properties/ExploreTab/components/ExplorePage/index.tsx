@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 
 import { Box, Button, Grid, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
+import MyLocationIcon from '@material-ui/icons/MyLocation'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
@@ -115,11 +116,12 @@ declare const window: Window &
 interface Props {
   user: IUser
   isWidget: boolean
+  onClickLocate: () => void
 }
 
 export type ViewType = 'cards' | 'table'
 
-export function ExplorePage({ user, isWidget }: Props) {
+export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useListingsContext()
   const classes = useStyles()
 
@@ -247,23 +249,31 @@ export function ExplorePage({ user, isWidget }: Props) {
               <Box className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
-                    <GoogleMapsButton top={9} left={5} onClick={toggleMap}>
+                    <GoogleMapsButton top={9} left={10} onClick={toggleMap}>
                       <MapToggler checked={mapIsShown} />
                     </GoogleMapsButton>
                     <GoogleMapsButton
                       top={9}
-                      right={9}
+                      right={10}
                       startIcon={<EditIcon />}
                       onClick={() => activateDrawingMode()}
                     >
                       Draw Area
                     </GoogleMapsButton>
+                    <GoogleMapsButton
+                      size="medium"
+                      bottom={100}
+                      left={10}
+                      iconButton
+                      startIcon={<MyLocationIcon />}
+                      onClick={() => onClickLocate()}
+                    />
                   </>
                 )}
                 {state.search.drawing.length > 0 && (
                   <GoogleMapsButton
                     top={9}
-                    right={9}
+                    right={10}
                     startIcon={<EditIcon />}
                     onClick={removeDrawing}
                     active
