@@ -1,17 +1,15 @@
 import React from 'react'
-import { makeStyles, Theme, Typography } from '@material-ui/core'
 
+import { makeStyles, Theme, Typography } from '@material-ui/core'
 import { mdiHomeOutline } from '@mdi/js'
 
 import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { getField, getEnderType } from 'models/Deal/helpers/context'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
-import { Side } from '../Side'
+import { getField, getEnderType } from 'models/Deal/helpers/context'
 
 import { Notification } from '../../Notification'
+import { Side } from '../Side'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

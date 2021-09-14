@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
+
 import isEqual from 'lodash/isEqual'
 import usePrevious from 'react-use/lib/usePrevious'
 
-import { getTasks } from 'models/tasks/get-tasks'
 import { CRM_TASKS_QUERY } from 'models/contacts/helpers/default-query'
+import { getTasks } from 'models/tasks/get-tasks'
 
 interface InitialState {
   isFetching: boolean

@@ -1,9 +1,10 @@
-import React from 'react'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Box, makeStyles, Theme } from '@material-ui/core'
+import { Fragment } from 'react'
 
-import { Step } from './Step'
+import { Box, makeStyles, Theme } from '@material-ui/core'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+
 import { NewStep } from './New'
+import { Step } from './Step'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -42,10 +43,8 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  disableEdit: boolean
   items: IBrandFlowStep[]
-  emailTemplates: IBrandEmailTemplate[]
-  defaultSelectedEmailTemplate?: UUID
+  disableEdit: boolean
   onNewStepSubmit: (data: IBrandFlowStepInput) => Promise<any>
   onStepDelete: (step: IBrandFlowStep) => Promise<any>
   onStepUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
@@ -54,19 +53,15 @@ interface Props {
     sourceIndex: number,
     destinationIndex: number
   ) => Promise<any>
-  onNewEmailTemplateClick: () => void
 }
 
 export default function Steps({
   disableEdit,
   items,
-  emailTemplates,
-  defaultSelectedEmailTemplate,
   onNewStepSubmit,
   onStepDelete,
   onStepUpdate,
-  onStepMove,
-  onNewEmailTemplateClick
+  onStepMove
 }: Props) {
   const classes = useStyles()
 
@@ -94,7 +89,7 @@ export default function Steps({
                   const isLastStep = stepIndex === items.length
 
                   return (
-                    <>
+                    <Fragment key={item.id}>
                       <Box
                         mb={
                           draggableSnapshot.isDraggingOver || disableEdit
@@ -112,11 +107,6 @@ export default function Steps({
                           onUpdate={onStepUpdate}
                           onDelete={onStepDelete}
                           onStepMove={onStepMove}
-                          emailTemplates={emailTemplates}
-                          defaultSelectedEmailTemplate={
-                            defaultSelectedEmailTemplate
-                          }
-                          onNewEmailTemplateClick={onNewEmailTemplateClick}
                         />
                       </Box>
                       {!isLastStep &&
@@ -126,16 +116,11 @@ export default function Steps({
                             <NewStep
                               miniMode
                               index={stepIndex + 1}
-                              emailTemplates={emailTemplates}
-                              defaultSelectedEmailTemplate={
-                                defaultSelectedEmailTemplate
-                              }
                               onSubmit={onNewStepSubmit}
-                              onNewEmailTemplateClick={onNewEmailTemplateClick}
                             />
                           </Box>
                         )}
-                    </>
+                    </Fragment>
                   )
                 })}
               </div>
@@ -148,10 +133,7 @@ export default function Steps({
           <NewStep
             index={items.length > 0 ? items[items.length - 1].order + 1 : 1}
             shouldShowDefaultForm={false}
-            emailTemplates={emailTemplates}
-            defaultSelectedEmailTemplate={defaultSelectedEmailTemplate}
             onSubmit={onNewStepSubmit}
-            onNewEmailTemplateClick={onNewEmailTemplateClick}
           />
         </Box>
       )}

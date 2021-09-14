@@ -1,10 +1,11 @@
 import React, { ReactNode, useState, useRef } from 'react'
+
 import ClickOutside from 'react-click-outside'
 
 import { noop } from 'utils/helpers'
 
-import { ViewMode } from './ViewMode'
 import { EditMode, Props as EditModeProps } from './EditMode'
+import { ViewMode } from './ViewMode'
 
 interface Props {
   error?: string
@@ -14,6 +15,7 @@ interface Props {
   showAdd?: boolean
   isEditing: boolean
   showEdit?: boolean
+  isPartner?: boolean
   showDelete?: boolean
   isDisabled?: boolean
   attributeName?: string
@@ -41,6 +43,7 @@ export const InlineEditableField = (props: Props) => {
     label = 'Label',
     showAdd = false,
     showEdit = true,
+    isPartner = false,
     showDelete = true,
     attributeName = '',
     isDisabled = false,
@@ -144,6 +147,7 @@ export const InlineEditableField = (props: Props) => {
       contact,
       showAdd,
       showEdit,
+      isPartner,
       showDelete,
       attributeName,
       handleDelete,

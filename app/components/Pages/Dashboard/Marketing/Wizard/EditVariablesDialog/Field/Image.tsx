@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+
 import {
   Grid,
   Box,
@@ -13,12 +14,12 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { useDropzone } from 'dropzone'
 import {
   mdiProgressUpload,
   mdiTrashCanOutline,
   mdiCameraOutline
 } from '@mdi/js'
+import { useDropzone } from 'dropzone'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 

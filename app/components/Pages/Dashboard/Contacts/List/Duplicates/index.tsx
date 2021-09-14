@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useDispatch } from 'react-redux'
 
 import {
   Button,
@@ -9,21 +8,20 @@ import {
   Theme
 } from '@material-ui/core'
 import pluralize from 'pluralize'
+import { useDispatch } from 'react-redux'
 
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
+import PageLayout from 'components/GlobalPageLayout'
+import LoadingContainer from 'components/LoadingContainer'
 import { addNotification } from 'components/notification'
-
+import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clusters'
+import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
+import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
 import { DuplicateContacts } from 'models/contacts/get-contact-duplicate-contacts/types'
 import { getDuplicateContacts } from 'models/contacts/get-duplicate-contacts'
 import { mergeContact } from 'models/contacts/merge-contact'
 import { mergeContactsAll } from 'models/contacts/merge-contacts-all'
-import { dismissAllMergeClusters } from 'models/contacts/dismiss-all-merge-clusters'
-import { dismissMergeCluster } from 'models/contacts/dismiss-merge-cluster'
-import { dismissMergeContact } from 'models/contacts/dismiss-merge-contact'
-
-import PageLayout from 'components/GlobalPageLayout'
-import LoadingContainer from 'components/LoadingContainer'
-import DuplicateContactsList from 'components/DuplicateContacts/DuplicateContactsList'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 import HeaderOptions from './HeaderOptions'
 import ZeroState from './ZeroState'
@@ -164,6 +162,7 @@ export default function Duplicates({
       clusterLengthWithoutMaster
     )
 
+    // eslint-disable-next-line max-len
     return `${masterTitle} and ${clusterLengthWithoutMaster} other ${possiblePluralizedContactWord}`
   }
 
@@ -182,6 +181,7 @@ export default function Duplicates({
       addNotification({
         status: 'error',
         message:
+          // eslint-disable-next-line max-len
           'Something went wrong while dismissing duplicate contacts. Please try again.'
       })
     )
@@ -311,6 +311,7 @@ export default function Duplicates({
             addNotification({
               status: 'success',
               message:
+                // eslint-disable-next-line max-len
                 'All duplicate contacts lists will be merged. It may take a few minutes.'
             })
           )
@@ -336,6 +337,7 @@ export default function Duplicates({
             addNotification({
               status: 'success',
               message:
+                // eslint-disable-next-line max-len
                 'All duplicate contacts lists will be dismissed. It may take a few minutes.'
             })
           )

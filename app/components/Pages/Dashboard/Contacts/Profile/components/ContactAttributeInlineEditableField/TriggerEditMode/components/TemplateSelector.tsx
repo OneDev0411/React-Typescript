@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
 import cn from 'classnames'
-
-import { selectUser } from 'selectors/user'
-
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
-import { IAppState } from 'reducers'
+import { useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
-
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
-
+import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
+import { IAppState } from 'reducers'
+import { selectUser } from 'selectors/user'
 import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
 
@@ -82,22 +79,18 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState<boolean>(
-    false
-  )
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
+    useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const currentTemplate = selectedTemplate || currentValue?.campaign?.template
 
-  const handleSelectTemplate = async (template: IBrandMarketingTemplate) => {
+  const createTemplateInstance = async (template: IBrandMarketingTemplate) => {
+    if (!brand) {
+      return
+    }
+
     try {
-      setIsTemplatePickerOpen(false)
-      setIsLoading(true)
-
-      if (!brand) {
-        return
-      }
-
       // render the nunjuks template
       const templateMarkup: string = await renderBrandedNunjucksTemplate(
         template,
@@ -105,10 +98,28 @@ export const TemplateSelector = ({
         { user }
       )
 
-      const templateInstance = await getTemplateInstance(
+      const instance = await getTemplateInstance(
         template.template.id,
         templateMarkup
       )
+
+      return instance
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleSelectTemplate = async (
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+  ) => {
+    try {
+      setIsTemplatePickerOpen(false)
+      setIsLoading(true)
+
+      const templateInstance =
+        template.type === 'template_instance'
+          ? template
+          : await createTemplateInstance(template)
 
       if (templateInstance) {
         onSelectTemplate(templateInstance)
@@ -269,7 +280,7 @@ export const TemplateSelector = ({
         </div>
       </div>
       {isTemplatePickerOpen && (
-        <MarketingTemplatePickerModal
+        <MarketingTemplateAndTemplateInstancePickerModal
           title="Select Template"
           user={user}
           mediums={['Email']}

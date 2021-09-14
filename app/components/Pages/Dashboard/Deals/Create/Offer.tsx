@@ -1,47 +1,40 @@
 import React, { useState, useEffect } from 'react'
-import { Box, CircularProgress, Typography } from '@material-ui/core'
 
-import { useSelector } from 'react-redux'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { useForm, Controller } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 import { withRouter, Route, InjectedRouter } from 'react-router'
 import { useTitle } from 'react-use'
 
-import { IAppState } from 'reducers'
-import { useReduxDispatch } from 'hooks/use-redux-dispatch'
-
-import { useLoadFullDeal } from 'hooks/use-load-deal'
-import { selectDealById } from 'reducers/deals/list'
 import { createOffer, createRoles, upsertContexts } from 'actions/deals'
-
-import { QuestionWizard } from 'components/QuestionWizard'
 import { normalizeForm as normalizeRole } from 'components/DealRole/helpers/normalize-form'
-import { goTo } from 'utils/go-to'
-
+import { QuestionWizard } from 'components/QuestionWizard'
 import { getLegalFullName } from 'deals/utils/roles'
-import { getDealChecklists } from 'reducers/deals/checklists'
 import { useDealStatuses } from 'hooks/use-deal-statuses'
-
+import { useLoadFullDeal } from 'hooks/use-load-deal'
+import { useReduxDispatch } from 'hooks/use-redux-dispatch'
+import { IAppState } from 'reducers'
 import {
   getBrandChecklistRequiredContexts,
   getBrandChecklistsById
 } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectDealById } from 'reducers/deals/list'
+import { goTo } from 'utils/go-to'
 
+import { Header } from './components/Header'
+import { Context } from './context'
+import { DealClient } from './form/DealClient'
+import { DealCoAgent } from './form/DealCoAgent'
+import { DealContext } from './form/DealContext'
+import { DealPrimaryAgent } from './form/DealPrimaryAgent'
+import { DealStatus } from './form/DealStatus'
+import { OfferEnderType } from './form/OfferEnderType'
 import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
-
-import { DealClient } from './form/DealClient'
-import { OfferEnderType } from './form/OfferEnderType'
-import { DealPrimaryAgent } from './form/DealPrimaryAgent'
-import { DealCoAgent } from './form/DealCoAgent'
-import { DealStatus } from './form/DealStatus'
-import { DealContext } from './form/DealContext'
-import { Header } from './components/Header'
-
+import { showStatusQuestion } from './helpers/show-status-question'
 import { useDealRoles } from './hooks/use-deal-roles'
 import { useStyles } from './hooks/use-styles'
-import { showStatusQuestion } from './helpers/show-status-question'
-
-import { Context } from './context'
 
 interface Props {
   router: InjectedRouter
@@ -59,6 +52,7 @@ function CreateOffer({ router, route, params }: Props) {
   const { isFetchingCompleted } = useLoadFullDeal(params.id)
 
   const [isCreatingOffer, setIsCreatingOffer] = useState(false)
+  const [isOfferCreated, setIsOfferCreated] = useState(false)
 
   const dispatch = useReduxDispatch()
   const user = useSelector<IAppState, IUser>(({ user }) => user!)
@@ -71,11 +65,11 @@ function CreateOffer({ router, route, params }: Props) {
 
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
-      if (!deal.has_active_offer) {
+      if (!isOfferCreated) {
         return 'By canceling you will lose your work. Continue?'
       }
     })
-  }, [deal?.has_active_offer, router, route])
+  }, [isOfferCreated, router, route])
 
   useEffect(() => {
     deal?.has_active_offer &&
@@ -148,6 +142,8 @@ function CreateOffer({ router, route, params }: Props) {
           is_deactivated: false
         })
       )
+
+      setIsOfferCreated(true)
 
       const roles = agents.concat(clients).map(role => ({
         ...role,

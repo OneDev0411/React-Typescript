@@ -1,14 +1,16 @@
-import React from 'react'
+import { ReactChild } from 'react'
+
 import {
   Typography,
   WithStyles,
   Theme,
   TypographyVariant,
-  withStyles
+  withStyles,
+  Tooltip
 } from '@material-ui/core'
 
 interface Props extends WithStyles<typeof styles> {
-  children: React.ReactNode
+  children: ReactChild
   variant?: TypographyVariant
 }
 
@@ -19,9 +21,11 @@ const styles = (theme: Theme) => ({
 })
 
 export const Caption = withStyles(styles)(
-  ({ children, variant, classes }: Props) => (
-    <Typography variant={variant || 'caption'} className={classes.root}>
-      {children}
-    </Typography>
+  ({ children, variant = 'caption', classes }: Props) => (
+    <Tooltip title={children}>
+      <Typography noWrap variant={variant} className={classes.root}>
+        {children}
+      </Typography>
+    </Tooltip>
   )
 )

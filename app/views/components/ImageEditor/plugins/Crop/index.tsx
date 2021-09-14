@@ -1,11 +1,11 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
 import { mdiCrop } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
-import { Button } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ImageEditor, ObjectActivatedData, Actions } from '../../types'
 

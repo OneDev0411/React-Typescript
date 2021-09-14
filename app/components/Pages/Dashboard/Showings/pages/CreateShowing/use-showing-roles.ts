@@ -1,19 +1,19 @@
 import { useRef, useState } from 'react'
+
 import { useSelector } from 'react-redux'
 
 import { ACL } from 'constants/acl'
-
 import { selectDealRoles } from 'selectors/deals'
 import { selectActiveTeamId } from 'selectors/team'
 import { getBrandUsers } from 'utils/user-teams'
 
-import useActiveTeamBrandWithShowingsPermission from '../../hooks/use-active-team-brand-with-permission'
-
+import useActiveTeamBrandWithPermission from '../../hooks/use-active-team-brand-with-permission'
 import {
   ShowingPropertyType,
   ShowingRoleInput,
   ShowingRoleInputPerson
 } from '../../types'
+
 import {
   getPersonFromDealRole,
   getPersonFromUser,
@@ -30,7 +30,7 @@ interface UseShowingRolesReturn {
 
 function useShowingRoles(): UseShowingRolesReturn {
   const dealRoles = useSelector(selectDealRoles)
-  const activeBrand = useActiveTeamBrandWithShowingsPermission(ACL.SHOWINGS)
+  const activeBrand = useActiveTeamBrandWithPermission(ACL.SHOWINGS)
   const teamMembers = activeBrand ? getBrandUsers(activeBrand) : []
   const teamId = useSelector(selectActiveTeamId)
   const nextRoleId = useRef<number>(1)
@@ -49,7 +49,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       confirm_notification_type: [],
       cancel_notification_type: [],
       deletable: false,
-      mode: 'form'
+      mode: 'form',
+      save_to_contact: true
     }
   ]
 
@@ -71,7 +72,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       deletable: role !== 'SellerAgent',
       can_approve: true,
       confirm_notification_type: [],
-      cancel_notification_type: []
+      cancel_notification_type: [],
+      save_to_contact: true
     }
 
     if (index === -1) {
@@ -145,7 +147,8 @@ function useShowingRoles(): UseShowingRolesReturn {
       confirm_notification_type: [],
       cancel_notification_type: [],
       deletable: true,
-      mode: 'form'
+      mode: 'form',
+      save_to_contact: true
     }
 
     newRoles.splice(index + 1, 0, newRole)

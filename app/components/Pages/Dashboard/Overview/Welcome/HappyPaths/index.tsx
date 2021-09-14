@@ -1,18 +1,16 @@
 import React from 'react'
-import { Box, Typography } from '@material-ui/core'
-import {
-  withStyles,
-  makeStyles,
-  createStyles,
-  Theme,
-  useTheme
-} from '@material-ui/core/styles'
 
+import { Box, Typography } from '@material-ui/core'
 import List from '@material-ui/core/List'
 import MuiListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-
+import {
+  withStyles,
+  makeStyles,
+  Theme,
+  useTheme
+} from '@material-ui/core/styles'
 import { mdiCheckboxMarkedCircle } from '@mdi/js'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { Button } from '@material-ui/core'
 
 import PageHeader from 'components/PageHeader'
 
-import Menu from './Menu'
 import { truncateString } from '../List/helpers'
+
+import Menu from './Menu'
 
 interface Props {
   title: string

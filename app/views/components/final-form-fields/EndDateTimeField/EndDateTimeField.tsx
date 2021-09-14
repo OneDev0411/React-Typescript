@@ -1,9 +1,6 @@
 // TODO: should be removed and use standard DateTimeField component
-import React, { useState, useRef } from 'react'
-import fecha from 'fecha'
-import { Field, FieldRenderProps } from 'react-final-form'
-import DayPicker, { Modifiers } from 'react-day-picker'
-import Flex from 'styled-flex-component'
+import React, { useState, useRef, useEffect } from 'react'
+
 import {
   Box,
   Button,
@@ -14,12 +11,17 @@ import {
 } from '@material-ui/core'
 import { PopperPlacementType } from '@material-ui/core/Popper'
 import { useTheme } from '@material-ui/core/styles'
+import fecha from 'fecha'
+import DayPicker, { Modifiers } from 'react-day-picker'
+import { Field, FieldRenderProps } from 'react-final-form'
+import Flex from 'styled-flex-component'
 
-import TimeInput from 'components/TimeInput'
-import { Divider } from 'components/Divider'
 import { PickerContainer } from 'components/DateTimePicker/styled'
+import { Divider } from 'components/Divider'
+import TimeInput from 'components/TimeInput'
 
 interface Props {
+  startDate?: Date
   selectedDate: Date
   showTimePicker?: boolean
   datePickerModifiers?: Partial<Modifiers>
@@ -27,6 +29,7 @@ interface Props {
 }
 
 export function EndDateTimeField({
+  startDate,
   selectedDate,
   showTimePicker = true,
   datePickerModifiers,
@@ -49,6 +52,10 @@ export function EndDateTimeField({
 
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    setEndDate(selectedDate)
+  }, [selectedDate])
 
   return (
     <Field
@@ -90,6 +97,9 @@ export function EndDateTimeField({
                       <DayPicker
                         initialMonth={endDate}
                         selectedDays={endDate}
+                        disabledDays={{
+                          before: startDate || endDate
+                        }}
                         onDayClick={date => {
                           date.setHours(
                             endDate.getHours(),

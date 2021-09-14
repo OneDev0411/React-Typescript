@@ -1,11 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { mdiEarth, mdiCellphone } from '@mdi/js'
-import { Box } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { Box } from '@material-ui/core'
+import { mdiEarth, mdiCellphone } from '@mdi/js'
+import { connect } from 'react-redux'
+
 import { RelativeTime } from 'components/RelativeTime'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 class LastSeen extends React.Component {
   constructor(props) {

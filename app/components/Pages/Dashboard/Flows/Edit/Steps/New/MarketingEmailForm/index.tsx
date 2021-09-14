@@ -1,16 +1,16 @@
 import React from 'react'
-import { Form } from 'react-final-form'
+
 import { Box } from '@material-ui/core'
 import { mdiNewspaperVariantOutline } from '@mdi/js'
+import { Form } from 'react-final-form'
 
-import { BaseFormProps, MarketingEmailFormData } from '../types'
-import { BaseFormLayout } from '../components/BaseFormLayout'
-
-import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { TemplateInctance } from '../components/BaseFields/TemplateInctance'
+import { Title } from '../components/BaseFields/Title'
+import { BaseFormLayout } from '../components/BaseFormLayout'
 import { getMarketingEmailInitialValues } from '../helpers/get-initial-values'
 import { marketingEmailFormPreSaveFormat } from '../helpers/pre-save-format'
+import { BaseFormProps, MarketingEmailFormData } from '../types'
 
 export default function MarketingEmailForm({
   index,
@@ -58,7 +58,10 @@ export default function MarketingEmailForm({
             onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
-              <Title textFieldProps={{ disabled: disableEdit }} />
+              <Title
+                label="Email Subject"
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <Description

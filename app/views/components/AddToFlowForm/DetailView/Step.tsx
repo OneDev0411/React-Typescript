@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Box, Typography, makeStyles } from '@material-ui/core'
 
 // TODO: merge all events icon into one specific file
@@ -7,6 +8,7 @@ import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 
 import { EVENT_ICONS } from '../../../../components/Pages/Dashboard/Flows/Edit/Steps/Step/Components/StepTypeIcon/icons'
 import { SvgIcon } from '../../SvgIcons/SvgIcon'
+
 import { StepContainer } from './styled'
 
 const useStyles = makeStyles({

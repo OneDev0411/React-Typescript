@@ -1,6 +1,6 @@
-import { applyMiddleware, createStore, compose } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { applyMiddleware, createStore /* compose */ } from 'redux'
 import { enableBatching } from 'redux-batched-actions'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 
 import reducers from '../reducers'

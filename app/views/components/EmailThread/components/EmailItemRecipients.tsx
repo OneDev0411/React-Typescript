@@ -1,14 +1,15 @@
 import React, { Fragment, useState, useRef, ReactNode } from 'react'
+
 import { Typography, Theme, Tooltip, Popover } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { mdiMenuDown } from '@mdi/js'
-import fecha from 'fecha'
 import classNames from 'classnames'
+import fecha from 'fecha'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { EmailThreadEmail } from '../types'
 import { EmailRecipient } from '../../EmailRecipient'
+import { EmailThreadEmail } from '../types'
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

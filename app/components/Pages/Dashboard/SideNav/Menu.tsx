@@ -1,56 +1,49 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
 import { GlobalActionsButton } from 'components/GlobalActionsButton'
-
-import { selectUserUnsafe } from 'selectors/user'
-
+import { InlineBadge } from 'components/InlineBadge'
 import { ACL } from 'constants/acl'
-import { selectNotificationNewCount } from 'reducers/notifications'
+import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
+import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
+import { IAppState } from 'reducers'
 import { selectUnreadEmailThreadsCount } from 'reducers/inbox'
 import { InboxAction } from 'reducers/inbox/types'
-
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
-
-import { useDealsNotificationsNumber } from 'hooks/use-deals-notifications-number'
-import { useChatRoomsNotificationsNumber } from 'hooks/use-chat-rooms-notifications-number'
-
-import Acl from 'views/components/Acl'
-
-import { ScrollableArea } from 'views/components/ScrollableArea'
-
-import { IAppState } from 'reducers'
-
+import { selectNotificationNewCount } from 'reducers/notifications'
 import { selectShowingsTotalNotificationCount } from 'selectors/showings'
-import { InlineBadge } from 'components/InlineBadge'
-
-import { getActiveTeamSettings } from 'utils/user-teams'
+import { selectUserUnsafe } from 'selectors/user'
+import { getBrandHelpCenterURL } from 'utils/brand'
+import Acl from 'views/components/Acl'
+import { ScrollableArea } from 'views/components/ScrollableArea'
 
 import useEmailThreadEvents from '../Inbox/helpers/use-email-thread-events'
 
 import Logo from './components/Logo'
-import { UserMenu } from './components/UserMenu'
-import SideNavLinkItem from './components/SideNavLinkItem'
 import MessagesDrawerTrigger from './components/MessagesDrawerTrigger'
-import SupportTrigger from './components/SupportTrigger'
 import PoweredBy from './components/PoweredBy'
-
-import { scrollableAreaShadowColor } from './variables'
-
+import SideNavLinkItem from './components/SideNavLinkItem'
+import SupportTrigger from './components/SupportTrigger'
+import { UserMenu } from './components/UserMenu'
 import {
   Sidenav,
   SidenavBlankLink,
   SideNavItem,
   SidenavListGroup
 } from './styled'
+import { scrollableAreaShadowColor } from './variables'
 
 const openHouseAccess = [ACL.CRM, ACL.MARKETING]
 const dealsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE] }
 const insightAccess = { oneOf: [ACL.MARKETING, ACL.CRM] }
 const dashboardAccess = { oneOf: [ACL.CRM, ACL.DEALS] }
+const listingsAccess = { oneOf: [ACL.DEALS, ACL.BACK_OFFICE, ACL.MARKETING] }
 
 export function Menu() {
   const user = useSelector(selectUserUnsafe)
+  const brand = useSelector<IAppState, IBrand>(
+    (state: IAppState) => state.brand
+  )
   const appNotifications = useSelector((state: IAppState) =>
     selectNotificationNewCount(state.globalNotifications)
   )
@@ -72,9 +65,7 @@ export function Menu() {
 
   // This is initially implemented for DE because they're using a
   // white-labeled version of help.rechat.com
-  const activeBrandSettings = getActiveTeamSettings(user, true)
-  const brandHelpCenterLink =
-    activeBrandSettings.help_center || 'https://help.rechat.com'
+  const brandHelpCenterURL = getBrandHelpCenterURL(brand)
 
   useEmailThreadEvents(handleEmailThreadEvent, handleEmailThreadEvent)
 
@@ -172,6 +163,12 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
+          <Acl access={listingsAccess}>
+            <SideNavLinkItem to="/dashboard/listings" tourId="nav-listings">
+              Listings
+            </SideNavLinkItem>
+          </Acl>
+
           <Acl access={ACL.WEBSITES}>
             <SideNavLinkItem to="/dashboard/websites" tourId="nav-websites">
               Websites
@@ -221,7 +218,7 @@ export function Menu() {
             <SidenavBlankLink
               target="_blank"
               rel="noopener noreferrer"
-              href={brandHelpCenterLink}
+              href={brandHelpCenterURL}
             >
               Help Center
             </SidenavBlankLink>

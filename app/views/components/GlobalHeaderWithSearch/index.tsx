@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
-import { debounce } from 'lodash'
+
 import { makeStyles, Theme } from '@material-ui/core'
+import { debounce } from 'lodash'
 
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles(
 
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   onSearch: (query: string) => void
+  searchDebounceTime?: number
   SearchInputProps?: SearchInputProps
 }
 
@@ -32,6 +34,7 @@ export * from './SearchInput'
 
 export default function GlobalHeaderWithSearch({
   onSearch,
+  searchDebounceTime = 500,
   SearchInputProps,
   children,
   ...globalHeaderProps
@@ -43,7 +46,7 @@ export default function GlobalHeaderWithSearch({
   )
 
   const throttledSearchHandler = useRef(
-    debounce((value: string) => onSearch(value), 500)
+    debounce((value: string) => onSearch(value), searchDebounceTime)
   )
 
   return (

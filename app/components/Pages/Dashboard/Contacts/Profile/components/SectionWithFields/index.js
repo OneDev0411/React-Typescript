@@ -1,22 +1,20 @@
 import React from 'react'
+
+import { mdiPlus, mdiChevronUp } from '@mdi/js'
 import cuid from 'cuid'
 import { connect } from 'react-redux'
 
-import { mdiPlus, mdiChevronUp } from '@mdi/js'
-
 import { addNotification as notify } from 'components/notification'
-
+import { addAttributes } from 'models/contacts/add-attributes'
+import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { getContact } from 'models/contacts/get-contact'
 import { updateContactQuery } from 'models/contacts/helpers/default-query'
-import { addAttributes } from 'models/contacts/add-attributes'
-import { updateAttribute } from 'models/contacts/update-attribute'
-import { deleteAttribute } from 'models/contacts/delete-attribute'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-
-import { BasicSection } from '../Section/Basic'
-import { SectionButton } from '../Section/Button'
+import { updateAttribute } from 'models/contacts/update-attribute'
 
 import MasterField from '../ContactAttributeInlineEditableField'
+import { BasicSection } from '../Section/Basic'
+import { SectionButton } from '../Section/Button'
 
 import {
   fieldsNeedUpdateContact,
@@ -135,6 +133,7 @@ class SectionWithFields extends React.Component {
           ...updateContactQuery.associations,
           'contact.triggers',
           'trigger.campaign',
+          'email_campaign.from',
           'email_campaign.template',
           'template_instance.template'
         ]
@@ -416,10 +415,8 @@ class SectionWithFields extends React.Component {
 
   renderToggleButton = () => {
     const { toggleEmptyAttributes } = this.state
-    const {
-      expandButtonLabel = 'More Fields',
-      expandButtonIcon = mdiPlus
-    } = this.props
+    const { expandButtonLabel = 'More Fields', expandButtonIcon = mdiPlus } =
+      this.props
 
     return (
       <SectionButton

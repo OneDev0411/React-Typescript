@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { mdiTagOutline } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import IconTextInput from 'components/Input/IconTextInput'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TextInputPrefix, TextInputSuffix } from './styled'
 
@@ -31,7 +32,6 @@ export class Input extends React.Component {
         onEnterKeyPress={props.onSubmit}
         placeholder="Add a tag..."
         prefixElementRenderer={this.renderPrefixElement}
-        style={{ margin: '1rem 1.5rem' }}
         suffixElementRenderer={this.renderSuffixElement}
         value={props.value}
       />

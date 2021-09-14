@@ -1,5 +1,4 @@
 import cuid from 'cuid'
-
 import { expandShowMoreLess } from 'helpers/page'
 
 import { createList } from './create'

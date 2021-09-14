@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import IconCircleCheck from 'components/SvgIcons/CircleCheckOutline/IconCircleCheckOutline'
-
 import { primary } from 'views/utils/colors'
 
 export const CSSLogo = styled.img`

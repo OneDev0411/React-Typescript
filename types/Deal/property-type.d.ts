@@ -12,4 +12,5 @@ declare interface IDealPropertyType extends IModel<'brand_property_type'> {
   checklists: Nullable<IBrandChecklist[]>
   is_lease: boolean
   label: IDealPropertyTypes
+  order: number
 }

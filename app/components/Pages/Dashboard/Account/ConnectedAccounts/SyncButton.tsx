@@ -1,6 +1,6 @@
-import { Link } from '@material-ui/core'
-
 import * as React from 'react'
+
+import { Link } from '@material-ui/core'
 
 import { OAuthProvider } from 'constants/contacts'
 
@@ -17,7 +17,7 @@ export function SyncButton({ account, onSync }: Props) {
   }
 
   if ((account.jobs || []).some(job => job.status !== 'success')) {
-    return <>Syncing ...</>
+    return <>Syncing... This may take a few minutes.</>
   }
 
   return (

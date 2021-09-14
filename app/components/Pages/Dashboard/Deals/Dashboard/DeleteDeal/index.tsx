@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, Theme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
-
-import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-import { deleteDeal } from 'actions/deals'
 import { confirmation } from 'actions/confirmation'
+import { deleteDeal } from 'actions/deals'
 import { createRequestTask } from 'actions/deals/helpers/create-request-task'
-
+import { addNotification as notify } from 'components/notification'
 import { getActiveChecklist } from 'models/Deal/helpers/get-active-checklist'
-import { selectUser } from 'selectors/user'
+import { IAppState } from 'reducers'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectUser } from 'selectors/user'
 
 interface Props {
   deal: IDeal

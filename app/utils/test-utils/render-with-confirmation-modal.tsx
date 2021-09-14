@@ -1,8 +1,9 @@
 import React from 'react'
+
 import { render } from '@testing-library/react'
 
-import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 import ConfirmationModal from 'components/ConfirmationModal'
+import ConfirmationModalProvider from 'components/ConfirmationModal/context/Provider'
 
 function renderWithConfirmationModal(component) {
   return render(

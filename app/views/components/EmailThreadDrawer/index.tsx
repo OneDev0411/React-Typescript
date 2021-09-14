@@ -1,12 +1,8 @@
 export { EmailThreadDrawer } from './components/EmailThreadDrawer'
-export {
-  EmailCampaignThreadDrawer
-} from './components/EmailCampaignThreadDrawer'
+export { EmailCampaignThreadDrawer } from './components/EmailCampaignThreadDrawer'
 
-export {
-  EmailCampaignThreadByCampaignId
-} from './components/EmailCampaignThreadDrawerByCampaignId'
+// eslint-disable-next-line max-len
+export { EmailCampaignThreadByCampaignId } from './components/EmailCampaignThreadDrawerByCampaignId'
 
-export {
-  EmailThreadDrawerByThreadKey
-} from './components/EmailThreadDrawerByThreadKey'
+// eslint-disable-next-line max-len
+export { EmailThreadDrawerByThreadKey } from './components/EmailThreadDrawerByThreadKey'

@@ -1,9 +1,9 @@
 import { batchActions } from 'redux-batched-actions'
 
+import { confirmation } from 'actions/confirmation'
+import { DEFAULT_ZOOM } from 'constants/listings/defaults'
 import * as types from 'constants/listings/map'
 import { getLocationErrorMessage } from 'utils/map'
-import { DEFAULT_ZOOM } from 'constants/listings/defaults'
-import { confirmation } from 'actions/confirmation'
 
 import { setMapProps } from '..'
 

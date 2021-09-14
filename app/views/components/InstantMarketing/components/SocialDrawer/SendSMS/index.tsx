@@ -1,16 +1,15 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { addNotification as notify } from 'components/notification'
+import { shareInstance } from 'models/instant-marketing/instance-share'
 import {
   selectUserDisplayName,
   selectUserFormattedPhoneNumber
 } from 'selectors/user'
-
 import { isValidPhoneNumber } from 'utils/helpers'
-
-import { addNotification as notify } from 'components/notification'
-import { shareInstance } from 'models/instant-marketing/instance-share'
 
 import { Section } from '../components/Section'
 
@@ -53,6 +52,7 @@ function SendSMS({ instance }: SendSMSProps) {
       await shareInstance(
         instance.id,
         [phone],
+        // eslint-disable-next-line max-len
         `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
       )
 

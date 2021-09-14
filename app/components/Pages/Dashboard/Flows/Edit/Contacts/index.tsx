@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+
 import {
   Grid,
   Paper,
@@ -85,7 +86,7 @@ export default function Contacts({ flowId, onStop, onContactClick }: Props) {
         container
         item
         direction="column"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         style={{ height: '50vh' }}
       >
@@ -100,7 +101,7 @@ export default function Contacts({ flowId, onStop, onContactClick }: Props) {
   }
 
   return (
-    <Grid container item justify="center" alignItems="center" xs={12}>
+    <Grid container item justifyContent="center" alignItems="center" xs={12}>
       <Paper className={classes.paper}>
         <Table>
           <TableHead>

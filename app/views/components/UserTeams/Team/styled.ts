@@ -1,5 +1,5 @@
-import styled, { ThemeProps } from 'styled-components'
 import { Theme } from '@material-ui/core/styles'
+import styled, { ThemeProps } from 'styled-components'
 
 import { borderColor } from 'views/utils/colors'
 

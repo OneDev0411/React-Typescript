@@ -1,4 +1,5 @@
 import Fetch from '../../../services/fetch'
+
 import { getTriggerCampaign } from './helpers/get-trigger-campaign'
 import { TriggerDataInput } from './types'
 
@@ -20,11 +21,12 @@ export async function createTrigger(
 
     // step1: create a email campaign
     const campaign = await getTriggerCampaign(contact, templateInstance.id, {
-      subject: triggerData.subject
+      subject: triggerData.subject,
+      sender: triggerData.sender
     })
 
     // step2: setup a trigger for a field
-    const response = await new Fetch().post('/triggers').send({
+    const payload = {
       user: contact.user.id,
       event_type: triggerData.event_type,
       action: triggerData.action || 'schedule_email',
@@ -33,7 +35,9 @@ export async function createTrigger(
       time: triggerData.time,
       campaign: campaign.id,
       contact: contact.id
-    })
+    }
+
+    const response = await new Fetch().post('/triggers').send(payload)
 
     return response.body
   } catch (e) {

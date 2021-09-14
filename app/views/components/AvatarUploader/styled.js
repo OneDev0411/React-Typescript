@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { setVisuallyHidden } from '../../utils/visually-hidden'
 import { borderColor, brandBackground } from '../../utils/colors'
+import { setVisuallyHidden } from '../../utils/visually-hidden'
 
 export const Container = styled.div`
   position: relative;

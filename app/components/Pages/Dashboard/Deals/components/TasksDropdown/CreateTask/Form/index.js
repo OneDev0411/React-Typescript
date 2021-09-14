@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { closeIcon } from 'components/SvgIcons/icons'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { closeIcon } from 'components/SvgIcons/icons'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { NotifyOffice } from '../../NotifyOffice'
@@ -26,7 +26,9 @@ export class CreateTaskForm extends React.Component {
   }
 
   toggleNotifyOffice = () =>
-    this.setState({ notifyOffice: !this.state.notifyOffice })
+    this.setState(prevState => ({
+      notifyOffice: !prevState.notifyOffice
+    }))
 
   onKeyPress = e => {
     const { value } = e.target

@@ -1,18 +1,20 @@
 import { Box, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
 
+import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import LoadingContainer from 'components/LoadingContainer'
-
 import { goTo } from 'utils/go-to'
 
-import ShowingColumnProperty from '../ShowingColumnProperty'
-import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
-import useGetShowingNotificationCount from './use-get-showing-notification-count'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
-import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
+import ShowingColumnProperty from '../ShowingColumnProperty'
 import ShowingEmptyState from '../ShowingEmptyState'
 import ShowingLabeledColumn from '../ShowingLabeledColumn'
+
+import ShowingPropertyListColumnActions from './ShowingPropertyListColumnActions'
+import useGetShowingNotificationCount from './use-get-showing-notification-count'
+import useSortPropertiesByNotificationCount from './use-sort-properties-by-notification-count'
 
 const useStyles = makeStyles(
   theme => ({
@@ -38,6 +40,7 @@ function ShowingPropertyList({
   showings: rows
 }: ShowingPropertyListProps) {
   const classes = useStyles()
+  const gridClasses = useGridStyles()
 
   const showingNotificationCount = useGetShowingNotificationCount(rows)
 
@@ -90,6 +93,7 @@ function ShowingPropertyList({
         <ShowingPropertyListColumnActions
           className={classes.actions}
           bookingUrl={getShowingBookingPageUrl(row)}
+          listingId={row.listing?.id || row.deal?.listing?.id}
         />
       )
     }
@@ -113,14 +117,14 @@ function ShowingPropertyList({
         EmptyStateComponent={() => (
           <ShowingEmptyState
             title="There are no Showings."
+            // eslint-disable-next-line max-len
             description="Create your first showing for your off-market or MLS listings under 2 minutes."
           />
         )}
         getTrProps={({ row }) => ({
           onClick: () => handleRowClick(row.id)
         })}
-        classes={{ row: classes.row }}
-        virtualize={false}
+        classes={{ row: classNames(classes.row, gridClasses.row) }}
       />
     </Box>
   )

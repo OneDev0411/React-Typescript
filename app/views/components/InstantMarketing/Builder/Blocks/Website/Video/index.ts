@@ -1,24 +1,24 @@
-import { Editor } from 'grapesjs'
+/* eslint-disable max-len */
 import { Model } from 'backbone'
-
-import { Video } from 'components/VideoDrawer/types'
+import { Editor } from 'grapesjs'
 
 import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
+import { Video } from 'components/VideoDrawer/types'
 
-import registerBlock from '../../registerBlock'
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
-
-import { baseView, isComponent } from '../utils'
+import registerBlock from '../../registerBlock'
+import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
+import { baseView, isComponent } from '../utils'
+
 import template from './template.njk'
 import {
   generateEmbedVideoUrl,
   getVimeoVideoId,
   getYouTubeVideoId
 } from './utils'
-import { TemplateBlockOptions } from '../../types'
-import { registerTemplateBlocks } from '../../templateBlocks'
 
 const typeEmbedVideo = 'embed-video'
 export const embedVideoBlockName = typeEmbedVideo

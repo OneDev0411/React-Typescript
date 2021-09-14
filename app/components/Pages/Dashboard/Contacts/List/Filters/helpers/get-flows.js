@@ -1,5 +1,5 @@
-import { getActiveTeamId } from 'utils/user-teams'
 import { getBrandFlows } from 'models/flows/get-brand-flows'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import getFlowFilter from './get-flow-filter'
 

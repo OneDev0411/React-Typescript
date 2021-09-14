@@ -1,7 +1,8 @@
 import config from '../../config/public'
 
 type MapType = 'roadmap' | 'satellite' | 'hybrid' | 'terrain'
-type Colors = 'black'
+type Colors =
+  | 'black'
   | 'brown'
   | 'green'
   | 'purple'
@@ -22,9 +23,9 @@ type Marker = {
 type GetGoogleMapStaticImageSrc = {
   location: ILocation
   zoom?: number
-  width?: number,
-  height?: number,
-  mapType?: MapType,
+  width?: number
+  height?: number
+  mapType?: MapType
   markers?: Marker[]
 }
 
@@ -40,15 +41,16 @@ export function getGoogleMapStaticImageSrc({
   const encodedMarkers = markers
     .map(marker =>
       encodeURI(
-        `markers=size:${marker.size ?? 'mid'}|color:${marker.color ?? 'red'}|label:${(marker.label ?? '')
-          .substring(0, 1)
-          .toUpperCase()}|${marker.location.latitude},${
-          marker.location.longitude
-        }`
+        `markers=size:${marker.size ?? 'mid'}|color:${
+          marker.color ?? 'red'
+        }|label:${(marker.label ?? '').substring(0, 1).toUpperCase()}|${
+          marker.location.latitude
+        },${marker.location.longitude}`
       )
     )
     .join('&')
 
+  // eslint-disable-next-line max-len
   const src = `https://maps.googleapis.com/maps/api/staticmap?center=${center}&zoom=${zoom}&size=${width}x${height}&maptype=${mapType}
     &${encodedMarkers}&key=${config.google.api_key}`
 

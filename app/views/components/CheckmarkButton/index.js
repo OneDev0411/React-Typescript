@@ -1,7 +1,7 @@
 import React from 'react'
-import cn from 'classnames'
 
 import { Tooltip } from '@material-ui/core'
+import cn from 'classnames'
 
 import Checkmark from '../../../components/Pages/Dashboard/Partials/Svgs/Checkmark'
 

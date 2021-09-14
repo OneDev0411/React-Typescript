@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react'
-import { useForm, Controller } from 'react-hook-form'
 
 import { Grid, TextField } from '@material-ui/core'
-
-import { normalizePostgressStdaddr } from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
+import { useForm, Controller } from 'react-hook-form'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+import { normalizePostgressStdaddr } from 'components/inline-editable-fields/InlineAddressField/InlineAddressForm/helpers/normalize-postgres-stdaddr'
 
 import type { ShowingPropertyPlace } from '../../types'
+
 import ShowingPropertyFormSection from './ShowingPropertyFormSection'
 
 type ShowingPropertyFormData = Omit<ShowingPropertyPlace, 'type'>

@@ -1,14 +1,15 @@
 import { combineReducers } from 'redux'
 
-import { attributeDefs, IAttributeDefsState } from './attributeDefs'
-import list from './list'
-import tags from './tags'
-import spinner from './spinner'
-import importOutlook from './importOutlook'
-import importCsv from './importCsv'
 import { contactsFilterSegments } from '../filter-segments'
+
+import { attributeDefs, IAttributeDefsState } from './attributeDefs'
+import importCsv from './importCsv'
+import importOutlook from './importOutlook'
+import list from './list'
 import { oAuthAccounts } from './oAuthAccounts'
 import { IOauthAccountsState } from './oAuthAccounts/types'
+import spinner from './spinner'
+import tags from './tags'
 
 export interface IContactReduxState {
   oAuthAccounts: IOauthAccountsState

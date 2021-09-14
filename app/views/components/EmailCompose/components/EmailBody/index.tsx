@@ -1,21 +1,21 @@
 import React, { ReactNode, RefObject, useCallback, useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import { EditorState } from 'draft-js'
 import { Options as ImportOptions } from 'draft-js-import-html'
+import { useSelector } from 'react-redux'
 
-import { TextEditor } from 'components/TextEditor'
 import Loading from 'components/LoadingContainer'
-
+import { TextEditor } from 'components/TextEditor'
 import {
   uploadEmailAttachment,
   UploadOrigin
 } from 'models/email/upload-email-attachment'
-
 import { selectUserEmailSignature } from 'selectors/user'
 
-import { useUploadAttachment } from '../../helpers/use-upload-attachment'
 import { EditEmailSignatureDrawer } from '../../../EditEmailSignatureDrawer'
 import { TextEditorProps, TextEditorRef } from '../../../TextEditor/types'
+import { useUploadAttachment } from '../../helpers/use-upload-attachment'
+
 import { EmailEditorFeatures } from './EmailEditorFeatures'
 
 interface Props {

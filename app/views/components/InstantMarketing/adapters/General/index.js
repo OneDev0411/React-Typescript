@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
+
 import { connect } from 'react-redux'
 
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-
+import ActionButton from 'components/Button/ActionButton'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
-import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import ActionButton from 'components/Button/ActionButton'
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
+import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
+import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 
 import SocialDrawer from '../../components/SocialDrawer'
 

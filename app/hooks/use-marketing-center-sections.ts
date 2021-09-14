@@ -1,16 +1,15 @@
 import { useSelector } from 'react-redux'
 
-import { hasUserAccess } from 'utils/user-teams'
-
 import {
   SectionsEnum,
   Section,
   SectionItem
 } from 'components/PageSideNav/types'
-import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
 import { selectUser } from 'selectors/user'
+import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+import { hasUserAccess } from 'utils/user-teams'
 
-interface ExtendedSection extends Section {
+export interface ExtendedSection extends Section {
   key: string
 }
 

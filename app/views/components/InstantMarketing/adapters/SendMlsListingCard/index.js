@@ -1,27 +1,27 @@
 import React, { Fragment } from 'react'
+
+import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Button } from '@material-ui/core'
 
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import { selectContact } from 'reducers/contacts/list'
-import SearchListingDrawer from 'components/SearchListingDrawer'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
+import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
+import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
+import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
 import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
+import SearchListingDrawer from 'components/SearchListingDrawer'
 import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
-
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
+import { selectContact } from 'reducers/contacts/list'
+import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
+import { getActiveTeamId } from 'utils/user-teams'
 
+import SocialDrawer from '../../components/SocialDrawer'
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
 import { getTemplateTypes } from '../../helpers/get-template-types'
-import SocialDrawer from '../../components/SocialDrawer'
 
 const propTypes = {
   isMultiListing: PropTypes.bool,
@@ -48,7 +48,6 @@ class SendMlsListingCard extends React.Component {
     listings: [],
     listingDrawerListings: [],
     isListingsModalOpen: false,
-    isEditingListings: false,
     isInstantMarketingBuilderOpen: false,
     isComposeEmailOpen: false,
     isSocialDrawerOpen: false,
@@ -211,10 +210,7 @@ class SendMlsListingCard extends React.Component {
   openListingModal = () => this.setState({ isListingsModalOpen: true })
 
   closeListingModal = () =>
-    this.setState(
-      { isListingsModalOpen: false, isEditingListings: false },
-      this.props.handleTrigger
-    )
+    this.setState({ isListingsModalOpen: false }, this.props.handleTrigger)
 
   toggleComposeEmail = () =>
     this.setState(state => ({
@@ -226,7 +222,6 @@ class SendMlsListingCard extends React.Component {
       {
         listings,
         isListingsModalOpen: false,
-        isEditingListings: false,
         isInstantMarketingBuilderOpen: true
       },
       this.props.handleTrigger
@@ -285,11 +280,6 @@ class SendMlsListingCard extends React.Component {
   closeSocialDrawer = () =>
     this.setState({
       isSocialDrawerOpen: false
-    })
-
-  handleEditListings = () =>
-    this.setState({
-      isEditingListings: true
     })
 
   get TemplateInstanceData() {
@@ -399,12 +389,15 @@ class SendMlsListingCard extends React.Component {
           })}
 
         <SearchListingDrawer
-          mockListings
-          allowSkip
-          isOpen={
-            (this.state.isListingsModalOpen || this.state.isEditingListings) &&
-            !this.props.isEdit
+          allowHipPocket
+          onHipPocketImageUpload={
+            this.props.selectedTemplate
+              ? getHipPocketTemplateImagesUploader(
+                  this.props.selectedTemplate.template.id
+                )
+              : undefined
           }
+          isOpen={this.state.isListingsModalOpen && !this.props.isEdit}
           withMlsDisclaimer
           title={this.IsMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
@@ -423,9 +416,7 @@ class SendMlsListingCard extends React.Component {
           multipleSelection={this.IsMultiListing}
           renderAction={props => (
             <Button {...props.buttonProps}>
-              {this.state.isEditingListings
-                ? 'Apply Changes'
-                : `Next (${props.selectedItemsCount} Listings Selected)`}
+              {`Next (${props.selectedItemsCount} Listings Selected)`}
             </Button>
           )}
         />
@@ -441,7 +432,6 @@ class SendMlsListingCard extends React.Component {
             assets={this.Assets}
             mediums={this.props.mediums}
             defaultTemplate={this.props.selectedTemplate}
-            onShowEditListings={this.handleEditListings}
             isEdit={this.props.isEdit}
             hideTemplatesColumn={this.props.hideTemplatesColumn}
             isTemplatesColumnHiddenDefault={

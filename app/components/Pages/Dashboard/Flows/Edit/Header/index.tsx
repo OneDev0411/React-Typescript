@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Button,
   IconButton,
@@ -7,15 +8,13 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-
 import { mdiClose } from '@mdi/js'
 
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { goTo } from 'utils/go-to'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { nameValidate, descriptionValidate } from './helpers'
 import Field from './Field'
+import { nameValidate, descriptionValidate } from './helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

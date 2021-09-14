@@ -1,22 +1,20 @@
 import { useContext, useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+
 import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
 
-import { addNotification as notify } from 'components/notification'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
+import { addNotification as notify } from 'components/notification'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
 
-import { TemplatesListContainer } from './styled'
 import MarketingTemplateCard from '../MarketingTemplateCard'
-import Fallback from './Fallback'
-import TemplateAction from './TemplateAction'
-import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
-import TemplateCardActions from './TemplateCardActions'
+import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
 
-const PAGE_SIZE = 12
+import Fallback from './Fallback'
+import { TemplatesListContainer } from './styled'
+import TemplateAction from './TemplateAction'
+import TemplateCardActions from './TemplateCardActions'
 
 function TemplatesList(props) {
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
@@ -25,18 +23,13 @@ function TemplatesList(props) {
   const [isEditActionTriggered, setEditActionTriggered] = useState(false)
   const modal = useContext(ConfirmationModalContext)
 
-  const currentPageItems = useInfinitePagination({
-    items: props.items,
-    pageSize: PAGE_SIZE
-  })
-
   useEffect(() => {
     if (!props.defaultSelected || !props.items || props.items.length === 0) {
       return
     }
 
     const defaultSelectedTemplate = props.items.find(
-      item => item.id === props.defaultSelected
+      item => item.template.id === props.defaultSelected
     )
 
     if (!defaultSelectedTemplate) {
@@ -115,7 +108,7 @@ function TemplatesList(props) {
             568: 1
           }}
         >
-          {currentPageItems.map(template => (
+          {props.items.map(template => (
             <MarketingTemplateCard
               key={template.id}
               template={template}

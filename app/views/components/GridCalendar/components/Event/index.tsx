@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
+
 import { EventContentArg } from '@fullcalendar/react'
 
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import {
   isDealEvent,
   isCelebrationEvent
 } from '../../helpers/normalize-events/helpers/event-checker'
+import { CRM_OBJECT_TYPES } from '../FilterEvents/helper'
 
-import { GeneralEvent } from './components/General'
+import { EventCard } from './components/Card'
 import { CelebrationEvent } from './components/Celebration'
 import { DealEvent } from './components/Deal'
-import { EventCard } from './components/Card'
-import { CRM_OBJECT_TYPES } from '../FilterEvents/helper'
+import { GeneralEvent } from './components/General'
 
 export interface BaseEventProps {
   event: EventContentArg

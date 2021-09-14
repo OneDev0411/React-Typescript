@@ -13,15 +13,14 @@ import { useForm, useWatch, Controller } from 'react-hook-form'
 import DateSlotPicker from 'components/DateSlotPicker'
 import TimeSlotPicker from 'components/TimeSlotPicker'
 import { TimeRange } from 'components/TimeSlotPicker/types'
-
 import { setTime } from 'utils/set-time'
 
-import { getFormattedAppointmentDateTime } from '../utils'
+import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
 import {
   getBookableDateRange,
   convertLocalTimeToShowingTime
 } from '../../Book/Sections/BookSection/utils'
-import { useBookTimeRange } from '../../Book/Sections/BookSection/hooks'
+import { getFormattedAppointmentDateTime } from '../utils'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -66,7 +65,7 @@ export default function ShowingAppointmentRescheduleForm({
     defaultValue: defaultSelectedDate
   })
 
-  const { startTime, endTime, defaultSelectedTimeRange, unavailableTimes } =
+  const { availableRanges, defaultSelectedTimeRange, unavailableTimes } =
     useBookTimeRange(appointment.showing, selectedDate)
   const selectedTimeRange = useWatch({
     name: 'timeRange',
@@ -151,8 +150,7 @@ export default function ShowingAppointmentRescheduleForm({
           render={({ onChange, value }) => {
             return (
               <TimeSlotPicker
-                start={startTime}
-                end={endTime}
+                availableRanges={availableRanges}
                 duration={appointment.showing.duration}
                 active={value}
                 unavailableTimes={unavailableTimes}
@@ -178,7 +176,6 @@ export default function ShowingAppointmentRescheduleForm({
                 multiline
                 fullWidth
                 rows={4}
-                placeholder="You can write some message or explanation here if you want to"
                 variant="outlined"
                 label="Message"
               />

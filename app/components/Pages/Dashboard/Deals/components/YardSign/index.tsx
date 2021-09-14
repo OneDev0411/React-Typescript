@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+
 import { Popover } from '@material-ui/core'
 import { PopoverActions } from '@material-ui/core/Popover'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { DropdownToggleButton } from 'components/DropdownToggleButton'
-
-import { getActiveTeamSettings } from 'utils/user-teams'
-import { IAppState } from 'reducers'
 import { setSelectedTask } from 'actions/deals'
+import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { getActiveTeamSettings } from 'utils/user-teams'
 
 import Form from './Create'
 import List from './List'

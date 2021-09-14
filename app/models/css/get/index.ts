@@ -1,9 +1,8 @@
 import { Response } from 'superagent'
 
 import Fetch from '../../../services/fetch'
-
-import { CSSData } from '../types'
 import { API_PATH } from '../constants'
+import { CSSData } from '../types'
 
 export default async function get(): Promise<CSSData> {
   try {

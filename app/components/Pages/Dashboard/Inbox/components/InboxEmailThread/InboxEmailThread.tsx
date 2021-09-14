@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+
 import {
   Box,
   IconButton,
@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
 import { makeStyles, useTheme } from '@material-ui/styles'
-import { addNotification } from 'components/notification'
 import {
   mdiEmailOpenOutline,
   mdiEmailOutline,
@@ -26,27 +25,26 @@ import {
   mdiArchiveOutline,
   mdiClose
 } from '@mdi/js'
+import { useDispatch } from 'react-redux'
 
+import { Avatar } from 'components/Avatar'
+import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
+import { EmailThreadEmails } from 'components/EmailThread'
+import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
+import { EmailResponseType } from 'components/EmailThread/types'
+import { addNotification } from 'components/notification'
 import { forwardOutlined } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useMenu } from 'hooks/use-menu'
 import { getEmailThread } from 'models/email/get-email-thread'
 import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
-
-import { normalizeThreadMessageToThreadEmail } from 'components/EmailThread/helpers/normalize-to-email-thread-email'
-import { EmailThreadEmails } from 'components/EmailThread'
-import { EmailResponseType } from 'components/EmailThread/types'
-import { EmailResponseComposeForm } from 'components/EmailCompose/EmailResponseComposeForm'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { Avatar } from 'components/Avatar'
-
-import { useMenu } from 'hooks/use-menu'
-
 import { getNameInitials } from 'utils/helpers'
 
+import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
+import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import useEmailThreadEvents from '../../helpers/use-email-thread-events'
 import useEmailThreadReadStatusSetter from '../../helpers/use-email-thread-read-status-setter'
-import useEmailThreadDeleter from '../../helpers/use-email-thread-deleter'
 import NoContentMessage from '../NoContentMessage'
-import useEmailThreadArchiver from '../../helpers/use-email-thread-archiver'
 
 const useStyles = makeStyles((theme: Theme) => ({
   moreMenu: {
@@ -123,21 +121,15 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
     fetchEmailThread()
   }, [fetchEmailThread])
 
-  const {
-    setEmailThreadReadStatus,
-    setEmailThreadReadStatusDisabled
-  } = useEmailThreadReadStatusSetter(
-    emailThreadId!,
-    (emailThread && emailThread.is_read)!
-  )
-  const {
-    deleteEmailThread,
-    deleteEmailThreadDisabled
-  } = useEmailThreadDeleter(emailThreadId!)
-  const {
-    archiveEmailThread,
-    archiveEmailThreadDisabled
-  } = useEmailThreadArchiver(emailThreadId!)
+  const { setEmailThreadReadStatus, setEmailThreadReadStatusDisabled } =
+    useEmailThreadReadStatusSetter(
+      emailThreadId!,
+      (emailThread && emailThread.is_read)!
+    )
+  const { deleteEmailThread, deleteEmailThreadDisabled } =
+    useEmailThreadDeleter(emailThreadId!)
+  const { archiveEmailThread, archiveEmailThreadDisabled } =
+    useEmailThreadArchiver(emailThreadId!)
 
   const handleUpdateEmailThreads = useCallback(
     (updatedEmailThreadIds: UUID[]) => {
@@ -180,6 +172,7 @@ export default function InboxEmailThread({ emailThreadId, onClose }: Props) {
             const name =
               (contact &&
                 (contact.display_name ||
+                  // eslint-disable-next-line max-len
                   `${contact.first_name} ${contact.middle_name} ${contact.last_name}`)) ||
               r.name ||
               ''

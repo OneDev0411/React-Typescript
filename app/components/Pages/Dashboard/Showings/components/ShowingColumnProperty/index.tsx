@@ -1,7 +1,6 @@
 import { Badge, Box, Typography, makeStyles } from '@material-ui/core'
 
 import { Avatar } from 'components/Avatar'
-
 // TODO: move this to the global scope
 import { Notification } from 'deals/List/components/Notification'
 
@@ -41,7 +40,7 @@ function ShowingColumnProperty({
           avatar
         )}
       </Box>
-      <Typography noWrap variant="body2">
+      <Typography className="underline-on-hover" noWrap variant="body2">
         {address}
       </Typography>
     </Box>

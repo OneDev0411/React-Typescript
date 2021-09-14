@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { withRouter, WithRouterProps } from 'react-router'
-import { useTitle } from 'react-use'
-import { isDesktop } from 'react-device-detect'
-import fileSaver from 'file-saver'
+
 import {
   makeStyles,
   useMediaQuery,
@@ -18,43 +14,42 @@ import {
   CircularProgress,
   IconButton
 } from '@material-ui/core'
-
 import { mdiPencilOutline } from '@mdi/js'
+import fileSaver from 'file-saver'
+import { isDesktop } from 'react-device-detect'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+import { useTitle } from 'react-use'
 
+import PageLayout from 'components/GlobalPageLayout'
+import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { addNotification } from 'components/notification'
-
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
+import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import {
   useListingById,
   LISTING_ID_QUERY_KEY
 } from 'hooks/use-query-param-entities'
-import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 import { useUniqueTemplateTypes } from 'hooks/use-unique-template-types'
-
-import uploadAsset from 'models/instant-marketing/upload-asset'
-
-import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
-import PageLayout from 'components/GlobalPageLayout'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
-import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
-import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
-import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
 import { useWebShareApi } from 'hooks/use-web-share-api'
-
+import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { selectUser } from 'selectors/user'
+import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
+import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { useTemplates } from '../hooks/use-templates'
 
-import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import CategoriesTabs from './CategoriesTabs'
-import EditVariablesDialog from './EditVariablesDialog'
-import PreviewAndDownloadModal from './PreviewAndDownloadModal'
-import PreviewDrawer from './PreviewDrawer'
+import { LISTING_TEMPLATE_TYPES, TEMPLATES_PAGE_SIZE } from './constants'
 import DownloadDrawer from './DownloadDrawer'
+import EditVariablesDialog from './EditVariablesDialog'
 import { getEditableVariables } from './helpers'
 import { useEntityWithSetter } from './hooks'
+import PreviewAndDownloadModal from './PreviewAndDownloadModal'
+import PreviewDrawer from './PreviewDrawer'
 import { TemplateVariable, TemplateVariableType } from './types'
 
 const useStyles = makeStyles(
@@ -96,7 +91,7 @@ function MarketingWizard(props: WithRouterProps) {
     const listingId = props.location.query[LISTING_ID_QUERY_KEY]
 
     if (isDesktop && listingId) {
-      props.router.replace(`/dashboard/mls/${listingId}/marketing`)
+      props.router.replace(`/dashboard/marketing/mls/${listingId}`)
     }
   }, [props.location.query, props.router])
 
@@ -222,7 +217,7 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handleUploadAsset = (file: File) => {
-    return uploadAsset(file, currentTabTemplates[0].template.id)
+    return uploadAsset(currentTabTemplates[0].template.id, file)
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {
@@ -266,7 +261,7 @@ function MarketingWizard(props: WithRouterProps) {
   if (isLoadingTemplates || isLoadingListing) {
     return (
       <Grid container alignItems="center" className={classes.loadingContainer}>
-        <Grid container item justify="center">
+        <Grid container item justifyContent="center">
           <CircularProgress />
         </Grid>
       </Grid>
@@ -350,7 +345,7 @@ function MarketingWizard(props: WithRouterProps) {
                 key={template.id}
                 container
                 item
-                justify="center"
+                justifyContent="center"
                 xs={6}
                 lg={3}
               >

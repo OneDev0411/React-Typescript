@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { primary } from 'views/utils/colors'
 
@@ -18,11 +18,6 @@ export const Container = styled.div`
     margin: 0 auto;
     width: 85%;
     border: solid 1px #e6e6e6;
-    ${props =>
-      props.isLoading &&
-      css`
-        filter: blur(2px);
-      `};
   }
 
   svg {

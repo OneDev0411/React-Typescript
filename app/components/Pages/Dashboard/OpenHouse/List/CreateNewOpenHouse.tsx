@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+
 import { Button } from '@material-ui/core'
+import { connect } from 'react-redux'
 
 import SearchListingDrawer from 'components/SearchListingDrawer'
 
@@ -26,7 +27,6 @@ function CreateNewOpenHouse(props: Props) {
       </Button>
 
       <SearchListingDrawer
-        mockListings
         isOpen={isSearchDrawerOpen}
         defaultLists={[
           {

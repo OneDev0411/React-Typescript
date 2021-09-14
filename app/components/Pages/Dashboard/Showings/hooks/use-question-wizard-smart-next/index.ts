@@ -13,7 +13,7 @@ function useQuestionWizardSmartNext(): UseQuestionWizardSmartNextReturn {
       if (step === wizard.currentStep) {
         wizard.next(delay)
       } else if (step === wizard.lastVisitedStep) {
-        wizard.goto(step + 1)
+        wizard.setStep(step + 1)
       }
     },
     [step, wizard]

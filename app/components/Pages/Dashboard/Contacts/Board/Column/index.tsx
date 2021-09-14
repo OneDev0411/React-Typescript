@@ -1,18 +1,32 @@
-import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
-import { mdiCardsOutline } from '@mdi/js'
-import Skeleton from '@material-ui/lab/Skeleton'
+import React, { memo, useState } from 'react'
 
+import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
+import Skeleton from '@material-ui/lab/Skeleton'
+import { mdiCardsOutline } from '@mdi/js'
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
+import { useSelector } from 'react-redux'
+import { useAsync } from 'react-use'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { areEqual } from 'react-window'
 
-import { useMemo } from 'react'
-
+import { searchContacts } from '@app/models/contacts/search-contacts'
+import { IAppState } from '@app/reducers'
+import { selectUser } from '@app/selectors/user'
+import VirtualList, { LoadingPosition } from '@app/views/components/VirtualList'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { viewAs } from 'utils/user-teams'
 
-import { ColumnCard } from './Card'
+import { Tags } from '../constants'
+import { useColumnList } from '../hooks/use-column-list'
+
+import { CardItem } from './Card/CardItem'
+import { DraggableCardItem } from './Card/DraggableCardItem'
+
+const loadingLimit = 100
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -37,12 +51,8 @@ const useStyles = makeStyles(
       zIndex: 1
     },
     body: {
-      // https://github.com/atlassian/react-beautiful-dnd/issues/1640
+      // calc(height of the entire column - heading height)
       height: `calc(100% - ${theme.spacing(6)}px)`
-    },
-    innerBody: {
-      height: '100%',
-      overflowY: 'auto'
     },
     placeholder: {
       margin: theme.spacing(0.5),
@@ -71,21 +81,92 @@ const useStyles = makeStyles(
 interface Props {
   id: string
   title: string
-  droppable?: boolean
-  isLoading: boolean
-  list: IContact[]
+  tag?: string
+  searchTerm: string
+  onReachStart?: () => void
+  onReachEnd?: () => void
 }
 
-export function BoardColumn({
+export const BoardColumn = memo(function BoardColumn({
   id,
   title,
-  list,
-  isLoading,
-  droppable = true
+  searchTerm,
+  tag
 }: Props) {
   const classes = useStyles()
+  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
+  const [list, updateList] = useColumnList(tag)
+  const [loadingOffset, setLoadingOffset] = useState(0)
+  const [loadingState, setLoadingState] =
+    useState<Nullable<'initial' | 'more'>>(null)
+  const [isReachedEnd, setIsReachedEnd] = useState(false)
+  const user = useSelector(selectUser)
+  const tagAttributeDefinitionId = useSelector<IAppState, UUID>(
+    ({ contacts }) => contacts.attributeDefs.byName.tag
+  )
 
-  const randomNumber = useMemo(() => Math.floor(Math.random() * 6) + 1, [])
+  const isInitialLoading = list.length === 0 && loadingState === 'initial'
+  const isLoading = loadingState !== null
+
+  const getLoadingPosition = () => {
+    if (loadingState === 'initial') {
+      return LoadingPosition.Middle
+    }
+
+    if (loadingState === 'more') {
+      return LoadingPosition.Bottom
+    }
+
+    return undefined
+  }
+
+  useAsync(async () => {
+    if (loadingState || (searchTerm === currentSearchTerm && isReachedEnd)) {
+      return
+    }
+
+    setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
+
+    let filters: IContactFilter[] | undefined
+
+    if (tag) {
+      filters = [
+        {
+          attribute_def: tagAttributeDefinitionId,
+          invert: false,
+          value: tag
+        }
+      ]
+    } else {
+      filters = Tags.map(tag => ({
+        attribute_def: tagAttributeDefinitionId,
+        invert: true,
+        value: tag
+      }))
+    }
+
+    const { data, info } = await searchContacts(
+      searchTerm,
+      filters,
+      {
+        start: loadingOffset,
+        limit: loadingLimit
+      },
+      viewAs(user)
+    )
+
+    setLoadingState(null)
+    setIsReachedEnd(data.length + list.length === info?.total)
+
+    updateList(
+      searchTerm === currentSearchTerm ? [...list, ...data] : data,
+      tag
+    )
+
+    setCurrentSearchTerm(searchTerm)
+  }, [loadingOffset, searchTerm, tagAttributeDefinitionId])
+
+  const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
   return (
     <div className={classes.root}>
@@ -115,49 +196,73 @@ export function BoardColumn({
         </Box>
       </div>
 
-      <Droppable
-        droppableId={id}
-        type="column"
-        direction="vertical"
-        isDropDisabled={!droppable}
-        ignoreContainerClipping
-        isCombineEnabled={false}
-      >
-        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-          <div
-            className={classes.body}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            <div className={classes.innerBody}>
-              {snapshot.isDraggingOver && (
-                <div className={classes.placeholder} />
+      {isInitialLoading && (
+        <div className={classes.body}>
+          {new Array(3).fill(null).map((_, index) => (
+            <Skeleton
+              key={index}
+              animation="wave"
+              className={classes.skeleton}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className={classes.body}>
+        <AutoSizer>
+          {({ width, height }) => (
+            <Droppable
+              droppableId={id}
+              type="column"
+              mode="virtual"
+              direction="vertical"
+              ignoreContainerClipping
+              isCombineEnabled={false}
+              renderClone={(provided, snapshot, rubric) => (
+                <CardItem
+                  provided={provided}
+                  isDragging={snapshot.isDragging}
+                  contact={list[rubric.source.index]}
+                />
               )}
-
-              {isLoading
-                ? new Array(randomNumber)
-                    .fill(null)
-                    .map((_, index) => (
-                      <Skeleton
-                        key={index}
-                        animation="wave"
-                        className={classes.skeleton}
-                      />
-                    ))
-                : list.map((contact, index) => (
-                    <ColumnCard
-                      key={contact.id}
-                      columnId={id}
-                      rowId={index}
-                      contact={contact}
-                    />
-                  ))}
-            </div>
-
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+            >
+              {(
+                provided: DroppableProvided,
+                snapshot: DroppableStateSnapshot
+              ) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <VirtualList
+                    width={width}
+                    height={height}
+                    itemCount={
+                      snapshot.isUsingPlaceholder
+                        ? list.length + 1
+                        : list.length
+                    }
+                    itemData={
+                      {
+                        rows: list,
+                        columnId: id
+                      } as React.ComponentProps<
+                        typeof DraggableCardItem
+                      >['data']
+                    }
+                    threshold={5}
+                    itemSize={() => 112}
+                    overscanCount={10}
+                    onReachEnd={handleReachEnd}
+                    isLoading={loadingState !== null}
+                    loadingPosition={getLoadingPosition()}
+                  >
+                    {DraggableCardItem}
+                  </VirtualList>
+                </div>
+              )}
+            </Droppable>
+          )}
+        </AutoSizer>
+      </div>
     </div>
   )
-}
+},
+areEqual)

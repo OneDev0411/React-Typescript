@@ -1,27 +1,24 @@
 import React, { useState } from 'react'
+
+import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { browserHistory, withRouter, WithRouterProps } from 'react-router'
-import { Helmet } from 'react-helmet'
 
+import { markNotificationAsSeen } from 'actions/notifications'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
-
-import { selectNotificationNewCount } from 'reducers/notifications'
-
+import { IAppState } from 'reducers/index'
 import {
+  selectNotificationNewCount,
   selectNotifications,
   selectNotificationIsFetching
 } from 'reducers/notifications'
-import { IAppState } from 'reducers/index'
-import { markNotificationAsSeen } from 'actions/notifications'
-
 import { selectUser } from 'selectors/user'
 
-import List from './List'
-import EmptyState from './EmptyState'
-
-import Header from './Header'
 import { CrmEvents } from './CrmEvents'
+import EmptyState from './EmptyState'
+import Header from './Header'
+import List from './List'
 
 function Notifications({ params }: WithRouterProps) {
   const dispatch = useDispatch()
@@ -82,11 +79,7 @@ function Notifications({ params }: WithRouterProps) {
         openCRMTaskDrawer(notification.objects[0])
         break
       case 'ListingPriceDroppedUser':
-        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-        break
       case 'ListingStatusChangedUser':
-        browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
-        break
       case 'ListingBecameAvailableUser':
         browserHistory.push(`/dashboard/mls/${notification.subjects[0].id}`)
         break
@@ -112,9 +105,9 @@ function Notifications({ params }: WithRouterProps) {
 
     return (
       <List
-        handleNotifClick={handleNotifClick}
         isFetching={isFetching}
         notifications={notifications}
+        handleNotifClick={handleNotifClick}
       />
     )
   }

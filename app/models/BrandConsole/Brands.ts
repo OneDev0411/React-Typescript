@@ -5,6 +5,7 @@ const defaultAssociations = ['brand.roles', 'brand_role.users']
 export async function deprecatedGetBrands(brandId) {
   try {
     return await new Fetch().get(
+      // eslint-disable-next-line max-len
       `/brands/${brandId}?associations[]=brand.roles&associations[]=brand_role.members`
     )
   } catch (error) {
@@ -14,9 +15,10 @@ export async function deprecatedGetBrands(brandId) {
 
 export async function getBrands(
   brandId: string,
-  fetchChildren = true
+  fetchChildren: boolean = true,
+  customeAssociations: string[] = defaultAssociations
 ): Promise<ApiResponseBody<IBrand>> {
-  const associations = [...defaultAssociations]
+  const associations = [...customeAssociations]
 
   if (fetchChildren) {
     associations.push('brand.children')
@@ -32,6 +34,7 @@ export async function getBrands(
 export async function getChildrenBrands(brandId) {
   try {
     return await new Fetch().get(
+      // eslint-disable-next-line max-len
       `/brands/${brandId}/children?associations[]=brand.roles&associations[]=brand_role.users`
     )
   } catch (error) {

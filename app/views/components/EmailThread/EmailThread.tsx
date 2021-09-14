@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
-import { Box } from '@material-ui/core'
 
+import { Box } from '@material-ui/core'
 import { ModalProps } from '@material-ui/core/Modal'
 
 import { DialogTitle } from '../DialogTitle'
+
 import { EmailThreadEmails } from './EmailThreadEmails'
 import { normalizeThreadMessageToThreadEmail } from './helpers/normalize-to-email-thread-email'
 

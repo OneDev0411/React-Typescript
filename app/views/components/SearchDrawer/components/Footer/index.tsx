@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Drawer from 'components/OverlayDrawer'
 import ActionButton from 'components/Button/ActionButton'
+import Drawer from 'components/OverlayDrawer'
 
 interface ButtonPropsType {
   selectedItemsCount: number

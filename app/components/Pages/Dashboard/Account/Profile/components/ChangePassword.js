@@ -1,20 +1,20 @@
 import React from 'react'
+
+import { Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import { reduxForm } from 'redux-form'
-import { Button } from '@material-ui/core'
 
 import { updateUser } from 'actions/user'
-
 import FormCard from 'components/FormCard'
 
+import changePassword from '../../../../../../models/user/change-password'
 import getUser from '../../../../../../models/user/get-user/index'
 
 import Field from './Field'
 import SimpleField from './SimpleField'
-import changePassword from '../../../../../../models/user/change-password'
 
 const ChangePasswordForm = ({
   user,
@@ -158,33 +158,35 @@ export default compose(
   withState('isSubmitting', 'setIsSubmitting', false),
   withState('submitSuccessfully', 'setSubmitSuccessfully', false),
   withHandlers({
-    onSubmitHandler: ({
-      user,
-      reset,
-      updateUser,
-      setSubmitError,
-      setIsSubmitting,
-      setSubmitSuccessfully
-    }) => async formInputsValue => {
-      const { old_password, new_password } = formInputsValue
+    onSubmitHandler:
+      ({
+        user,
+        reset,
+        updateUser,
+        setSubmitError,
+        setIsSubmitting,
+        setSubmitSuccessfully
+      }) =>
+      async formInputsValue => {
+        const { old_password, new_password } = formInputsValue
 
-      setIsSubmitting(true)
-      setSubmitError(null)
+        setIsSubmitting(true)
+        setSubmitError(null)
 
-      try {
-        await changePassword({ old_password, new_password })
+        try {
+          await changePassword({ old_password, new_password })
 
-        const updatedUser = await getUser(user.id)
+          const updatedUser = await getUser(user.id)
 
-        updateUser(updatedUser)
-        reset()
-        setIsSubmitting(false)
-        setSubmitSuccessfully(true)
-        setTimeout(() => setSubmitSuccessfully(false), 2000)
-      } catch (errorCode) {
-        setIsSubmitting(false)
-        setSubmitError({ message: getErrorMessage(errorCode) })
+          updateUser(updatedUser)
+          reset()
+          setIsSubmitting(false)
+          setSubmitSuccessfully(true)
+          setTimeout(() => setSubmitSuccessfully(false), 2000)
+        } catch (errorCode) {
+          setIsSubmitting(false)
+          setSubmitError({ message: getErrorMessage(errorCode) })
+        }
       }
-    }
   })
 )(ChangePasswordForm)

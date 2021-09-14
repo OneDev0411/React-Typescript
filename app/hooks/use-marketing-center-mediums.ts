@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+
 import _groupBy from 'lodash/groupBy'
 
 import { onlyUnique, sortAlphabetically } from 'utils/helpers'
@@ -13,7 +14,7 @@ function getFormattedUniqueMediums(
     .reverse()
 }
 
-type TemplateTypeToMediumsMap = {
+export type TemplateTypeToMediumsMap = {
   [key: string]: IMarketingTemplateMedium[]
 }
 

@@ -1,8 +1,9 @@
 import React from 'react'
+
 import Box from '@material-ui/core/Box'
+import Chip from '@material-ui/core/Chip'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

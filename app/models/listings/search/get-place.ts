@@ -14,6 +14,7 @@ export function getPlace(
 
 export async function getPlace(address: string, compact: boolean = true) {
   try {
+    // eslint-disable-next-line max-len
     const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${config.google.api_key}&address=${address}`
     const response = await fetch(url)
 
@@ -34,8 +35,7 @@ export async function getPlace(address: string, compact: boolean = true) {
     if (compact) {
       return {
         zoom: 15,
-        center: (result.geometry
-          .location as unknown) as google.maps.LatLngLiteral
+        center: result.geometry.location as unknown as google.maps.LatLngLiteral
       }
     }
 

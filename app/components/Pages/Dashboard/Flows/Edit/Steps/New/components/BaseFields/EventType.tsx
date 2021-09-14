@@ -1,7 +1,5 @@
 import React, { useMemo, useCallback, ChangeEvent } from 'react'
-import { useSelector } from 'react-redux'
 
-import { Field } from 'react-final-form'
 import {
   FormControl,
   InputLabel,
@@ -9,16 +7,18 @@ import {
   MenuItem,
   FormHelperText
 } from '@material-ui/core'
-
-import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
+import { Field } from 'react-final-form'
+import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
+import { selectDefsBySection } from 'reducers/contacts/attributeDefs'
 
 interface Props {
+  index: number
   disabled?: boolean
 }
 
-export const EventType = ({ disabled = false }: Props) => {
+export const EventType = ({ index, disabled = false }: Props) => {
   const dateAttributes = useSelector(({ contacts }: IAppState) =>
     selectDefsBySection(contacts.attributeDefs, 'Dates')
   )
@@ -30,7 +30,7 @@ export const EventType = ({ disabled = false }: Props) => {
         value: 0
       },
       {
-        label: 'Previous Step',
+        label: index === 1 ? 'Contact added to flow' : 'Previous Step',
         value: 'last_step_date'
       },
       ...dateAttributes.map(attribute => ({
@@ -38,7 +38,7 @@ export const EventType = ({ disabled = false }: Props) => {
         value: attribute.name
       }))
     ]
-  }, [dateAttributes])
+  }, [dateAttributes, index])
 
   const getSelectedItem = useCallback(
     value => {
@@ -91,8 +91,8 @@ export const EventType = ({ disabled = false }: Props) => {
               }}
               label="Trigger"
             >
-              {triggerOptions.map(item => (
-                <MenuItem key={item.value} value={item.value}>
+              {triggerOptions.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
                   {item.label}
                 </MenuItem>
               ))}

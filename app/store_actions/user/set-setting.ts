@@ -1,6 +1,6 @@
 import { SET_USER_SETTING } from '../../constants/user'
-import { putUserSetting } from '../../models/user/put-user-setting'
 import { getTeams } from '../../models/user/get-teams'
+import { putUserSetting } from '../../models/user/put-user-setting'
 
 /**
  * Put a key value data as user settings data under
@@ -10,7 +10,7 @@ import { getTeams } from '../../models/user/get-teams'
  * @param {UUID} [brand] The active brand id
  */
 
-export function setUserSetting(key: string, value: any, brand: UUID) {
+export function setUserSetting(key: string, value: any, brand?: UUID) {
   return async (dispatch, getState) => {
     const user = getState().user
 

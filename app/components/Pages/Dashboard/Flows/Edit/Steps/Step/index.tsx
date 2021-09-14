@@ -1,8 +1,5 @@
-import React from 'react'
-
-import EventForm from '../New/EventForm'
-
 import BasicEmailForm from '../New/BasicEmailForm'
+import EventForm from '../New/EventForm'
 import MarketingEmailForm from '../New/MarketingEmailForm'
 
 interface Props {
@@ -11,8 +8,6 @@ interface Props {
   prevStep?: Nullable<IBrandFlowStep>
   disableEdit: boolean
   isLastStep: boolean
-  emailTemplates: IBrandEmailTemplate[]
-  defaultSelectedEmailTemplate?: UUID
   onDelete: (step: IBrandFlowStep) => Promise<any>
   onUpdate: (step: IBrandFlowStepInput, stepId: UUID) => Promise<any>
   onStepMove: (
@@ -20,7 +15,6 @@ interface Props {
     sourceIndex: number,
     destinationIndex: number
   ) => Promise<any>
-  onNewEmailTemplateClick: () => void
 }
 
 export function Step({
@@ -29,12 +23,9 @@ export function Step({
   prevStep,
   isLastStep,
   disableEdit,
-  emailTemplates,
-  defaultSelectedEmailTemplate,
   onDelete,
   onUpdate,
-  onStepMove,
-  onNewEmailTemplateClick
+  onStepMove
 }: Props) {
   const prevStepOrder = prevStep ? prevStep.order : null
 
@@ -66,52 +57,27 @@ export function Step({
       return null
     }
 
+    const commonProps = {
+      step,
+      index,
+      disableEdit,
+      prevStepOrder,
+      onMoveUpStep,
+      onMoveDownStep,
+      onSubmit: onUpdate,
+      onDelete: () => onDelete(step)
+    }
+
     if (step.event) {
-      return (
-        <EventForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
-        />
-      )
+      return <EventForm {...commonProps} />
     }
 
     if (step.email) {
-      return (
-        <BasicEmailForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
-          templates={emailTemplates}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
-          defaultSelectedTemplate={defaultSelectedEmailTemplate}
-          onNewTemplateClick={onNewEmailTemplateClick}
-        />
-      )
+      return <BasicEmailForm {...commonProps} />
     }
 
     if (step.template || step.template_instance) {
-      return (
-        <MarketingEmailForm
-          index={index}
-          step={step}
-          disableEdit={disableEdit}
-          prevStepOrder={prevStepOrder}
-          onSubmit={onUpdate}
-          onDelete={() => onDelete(step)}
-          onMoveUpStep={onMoveUpStep}
-          onMoveDownStep={onMoveDownStep}
-        />
-      )
+      return <MarketingEmailForm {...commonProps} />
     }
   }
 

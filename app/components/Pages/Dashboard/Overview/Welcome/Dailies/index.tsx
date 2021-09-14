@@ -1,6 +1,6 @@
 import { useCalendarEvents } from 'hooks/use-calendar-events'
 
-import { TodaysSchedule } from './TodaysSchedule'
+import { ThisWeeksSchedule } from './ThisWeeksSchedule'
 import { UpcomingCelebrations } from './UpcomingCelebrations'
 
 export function Dailies() {
@@ -17,7 +17,7 @@ export function Dailies() {
 
   return (
     <>
-      <TodaysSchedule isLoading={isLoading} events={events} />
+      <ThisWeeksSchedule isLoading={isLoading} events={events} />
       <UpcomingCelebrations isLoading={isLoading} events={events} />
     </>
   )

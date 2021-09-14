@@ -1,37 +1,36 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
-
-import useNotify from '@app/hooks/use-notify'
-import { useAcl } from '@app/views/components/Acl/use-acl'
-import getListing from '@app/models/listings/listing/get-listing'
-import { selectActiveTeamId } from '@app/selectors/team'
-import { useLoadingEntities } from '@app/hooks/use-loading'
-import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
-import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
-import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
-import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
-import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
-
-import Link from '@app/views/components/ALink'
-import LoadingContainer from '@app/views/components/LoadingContainer'
-import SendMlsListingCard from '@app/views/components/InstantMarketing/adapters/SendMlsListingCard'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { meetingRoomOutlined } from '@app/views/components/SvgIcons/icons'
+import { useSelector } from 'react-redux'
 
 import { useTemplates } from '@app/components/Pages/Dashboard/Marketing/hooks/use-templates'
-
 import {
   ALL_MEDIUMS,
   LISTING_TEMPLATE_TYPES
 } from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
+import { useLoadingEntities } from '@app/hooks/use-loading'
+import useNotify from '@app/hooks/use-notify'
+import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
+import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
+import getListing from '@app/models/listings/listing/get-listing'
+import { selectActiveTeamId } from '@app/selectors/team'
+import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
+import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+import Link from '@app/views/components/ALink'
+import SendMlsListingCard from '@app/views/components/InstantMarketing/adapters/SendMlsListingCard'
+import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
+import LoadingContainer from '@app/views/components/LoadingContainer'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { meetingRoomOutlined } from '@app/views/components/SvgIcons/icons'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import { OpenHouseDrawer } from '../open-house/OpenHouseDrawer'
 
 import MarketingButton from './MarketingButton'
-import TemplateTypesChips from './TemplateTypesChips'
 import TemplatesList from './TemplatesList'
-import { OpenHouseDrawer } from '../open-house/OpenHouseDrawer'
+import TemplateTypesChips from './TemplateTypesChips'
 
 type ListingRelatedProps = RequireOnlyOne<
   {
@@ -198,6 +197,7 @@ export default function ListingMarketing({
               <Grid item xs={12} sm={6} md={4}>
                 <Link
                   noStyle
+                  // eslint-disable-next-line max-len
                   to={`/dashboard/agent-network/agents?listing=${listing.id}&title=${listing.property.address.street_address}`}
                 >
                   <MarketingButton

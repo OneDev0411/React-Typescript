@@ -1,5 +1,5 @@
 import React, { forwardRef, Ref, ReactNode } from 'react'
-import classNames from 'classnames'
+
 import {
   Button,
   ButtonProps,
@@ -7,13 +7,12 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
-
+import { alpha } from '@material-ui/core/styles'
 import { mdiChevronDown } from '@mdi/js'
-
-import { SvgIcon } from '../SvgIcons/SvgIcon'
+import classNames from 'classnames'
 
 import { ClassesProps } from '../../../utils/ts-utils'
+import { SvgIcon } from '../SvgIcons/SvgIcon'
 
 interface Props extends ButtonProps {
   component?: string
@@ -29,7 +28,7 @@ const styles = (theme: Theme) => {
     },
     buttonActive: {
       '&, &:hover': {
-        background: fade(
+        background: alpha(
           theme.palette.secondary.main,
           theme.palette.action.hoverOpacity
         )

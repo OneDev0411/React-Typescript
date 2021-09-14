@@ -1,20 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Button } from '@material-ui/core'
+import { useSelector } from 'react-redux'
 
+import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
+import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
 
-import { setEmailThreadsReadStatus } from 'models/email/set-email-threads-read-status'
-
-import { hasOAuthAccess } from 'components/EmailThread/helpers/has-oauth-access'
-
-import { useEmailThreadLoader } from '../../../EmailThread/use-email-thread-loader'
-import { Drawer } from '../Drawer'
 import { AsyncValueContainer } from '../../../AsyncValueContainer'
 import { EmailThread } from '../../../EmailThread'
+import { useEmailThreadLoader } from '../../../EmailThread/use-email-thread-loader'
 import { DrawerProps } from '../../../OverlayDrawer'
+import { Drawer } from '../Drawer'
 
 interface Props extends DrawerProps {
   /**
@@ -30,9 +28,8 @@ export function EmailThreadDrawerByThreadKey({
   threadKey,
   ...drawerProps
 }: Props) {
-  const { fetchThread, thread, loading, error } = useEmailThreadLoader(
-    threadKey
-  )
+  const { fetchThread, thread, loading, error } =
+    useEmailThreadLoader(threadKey)
   const [markedAsReadThreadId, setMarkAsReadThreadId] = useState<
     UUID | undefined
   >(undefined)

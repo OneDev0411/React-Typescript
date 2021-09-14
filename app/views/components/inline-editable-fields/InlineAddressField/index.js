@@ -1,18 +1,18 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+
 import debounce from 'lodash/debounce'
+import PropTypes from 'prop-types'
 
 import {
   loadMapLibraries,
   isMapLibrariesLoaded
 } from '@app/utils/google-map-api'
 
-import { AddressPopover } from './AddressPopover'
-import { SuggestionsPopover } from './SuggestionsPopover'
-
+import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
 import { TEXAS_LOCATION } from '../../../../constants/listings/defaults'
 
-import { bootstrapURLKeys } from '../../../../components/Pages/Dashboard/Listings/mapOptions'
+import { AddressPopover } from './AddressPopover'
+import { SuggestionsPopover } from './SuggestionsPopover'
 
 const propTypes = {
   renderSearchField: PropTypes.func.isRequired,
@@ -56,6 +56,15 @@ export class InlineAddressField extends React.Component {
       return { address: props.address, isDirty: true }
     }
 
+    if (
+      !state.isDirty &&
+      state.address &&
+      props.address &&
+      props.address !== state.address
+    ) {
+      return { address: props.address }
+    }
+
     return null
   }
 
@@ -71,7 +80,7 @@ export class InlineAddressField extends React.Component {
       !isMapLibrariesLoaded(googleMapAPIParams.libraries)
     ) {
       window.isLoadingGoogleApi = true
-      loadMapLibraries(googleMapAPIParams, 'loadJS-inline-address-field')
+      loadMapLibraries(googleMapAPIParams)
     }
   }
 
@@ -222,6 +231,7 @@ export class InlineAddressField extends React.Component {
 
   handleClose = () => {
     this.setState({
+      isDirty: false,
       isAddressFormOpen: false,
       isSuggestionsOpen: false
     })

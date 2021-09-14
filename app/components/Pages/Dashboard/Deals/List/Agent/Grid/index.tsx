@@ -1,52 +1,48 @@
 import { useMemo } from 'react'
+
+import { TableCellProps } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { TableCellProps } from '@material-ui/core'
-
+import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { goTo } from '@app/utils/go-to'
 import Grid from 'components/Grid/Table'
-import { TrProps } from 'components/Grid/Table/types'
 import { useGridStyles } from 'components/Grid/Table/styles'
-import { SortableColumn, ColumnSortType } from 'components/Grid/Table/types'
-
-import { IAppState } from 'reducers'
-
+import {
+  TrProps,
+  SortableColumn,
+  ColumnSortType
+} from 'components/Grid/Table/types'
+import {
+  isActiveDeal,
+  isArchivedDeal,
+  isClosedDeal,
+  isPendingDeal
+} from 'deals/List/helpers/statuses'
+import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
   getField,
   getFormattedPrice
 } from 'models/Deal/helpers/context'
-import { getActiveTeamId } from 'utils/user-teams'
-import { sortDealsStatus } from 'utils/sort-deals-status'
-
-import { useBrandStatuses } from 'hooks/use-brand-statuses'
-
-import {
-  isActiveDeal,
-  isArchivedDeal,
-  isPendingDeal
-} from 'deals/List/helpers/statuses'
-
+import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
+import { sortDealsStatus } from 'utils/sort-deals-status'
+import { getActiveTeamId } from 'utils/user-teams'
 
-import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
-
-import { goTo } from '@app/utils/go-to'
-
-import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
-import { getGridSort } from '../../helpers/sorting'
-
-import EmptyState from './EmptyState'
+import onDealOpened from '../../../utils/on-deal-opened'
+import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
 import LoadingState from '../../components/LoadingState'
-
-import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import { Address } from '../../components/table-columns/Address'
+import AgentAvatars from '../../components/table-columns/AgentAvatars'
 import CriticalDate, {
   getCriticalDateNextValue
 } from '../../components/table-columns/CriticalDate'
+import { getGridSort } from '../../helpers/sorting'
+import useDealsListsLuckyMode from '../../hooks/use-deals-lists-lucky-mode'
+import { SORT_FIELD_SETTING_KEY } from '../helpers/agent-sorting'
 
-import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
-import onDealOpened from '../../../utils/on-deal-opened'
+import EmptyState from './EmptyState'
 
 interface Props {
   sortableColumns: SortableColumn[]
@@ -55,19 +51,19 @@ interface Props {
 
 const Filters = {
   all: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return !isArchivedDeal(deal, statuses)
+    return !isArchivedDeal(deal, statuses) && !isClosedDeal(deal, statuses)
   },
   drafts: (deal: IDeal) => {
     return deal.is_draft === true
   },
-  listings: (deal: IDeal, statuses: IDealStatus[] = []) => {
+  actives: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isActiveDeal(deal, statuses)
   },
   pendings: (deal: IDeal, statuses: IDealStatus[] = []) => {
     return isPendingDeal(deal, statuses)
   },
   archives: (deal: IDeal, statuses: IDealStatus[] = []) => {
-    return isArchivedDeal(deal, statuses)
+    return isArchivedDeal(deal, statuses) || isClosedDeal(deal, statuses)
   }
 }
 
@@ -82,7 +78,7 @@ function AgentGrid(props: Props & WithRouterProps) {
   const user = useSelector(selectUser)
   const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
 
-  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
 
   const columns = [
     {
@@ -139,7 +135,7 @@ function AgentGrid(props: Props & WithRouterProps) {
     }
   ]
 
-  const data = useMemo(() => {
+  const data = useMemo<IDeal[]>(() => {
     if (!deals) {
       return []
     }
@@ -153,6 +149,8 @@ function AgentGrid(props: Props & WithRouterProps) {
       filterFn(deal, statuses)
     ) as IDeal[]
   }, [deals, statuses, props.activeFilter])
+
+  useDealsListsLuckyMode(data, isFetchingDeals)
 
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {

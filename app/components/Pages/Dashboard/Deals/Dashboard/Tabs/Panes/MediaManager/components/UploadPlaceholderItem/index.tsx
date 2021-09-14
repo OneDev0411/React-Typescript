@@ -1,10 +1,10 @@
 import React from 'react'
-import { Box, Typography, Link } from '@material-ui/core'
-import { mdiProgressUpload } from '@mdi/js'
-import { useTheme } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Box, Typography, Link, useTheme } from '@material-ui/core'
+import { mdiProgressUpload } from '@mdi/js'
+
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../styles'
 

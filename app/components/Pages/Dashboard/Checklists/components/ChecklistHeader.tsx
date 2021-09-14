@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+
 import {
   Box,
   Checkbox,
@@ -9,16 +10,15 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import usePromise from 'react-use-promise'
 import Fuse from 'fuse.js'
+import usePromise from 'react-use-promise'
 
-import { ListItem as FormListItem } from 'deals/components/TaskCreate/styled'
-
-import SplitButton from 'components/SplitButton'
-import { useDictionary } from 'hooks/use-dictionary'
-import SearchDrawer from 'components/SearchDrawer'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
 import { InlineEditableString } from 'components/inline-editable-fields/InlineEditableString'
+import SearchDrawer from 'components/SearchDrawer'
+import SplitButton from 'components/SplitButton'
+import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
+import { ListItem as FormListItem } from 'deals/components/TaskCreate/styled'
+import { useDictionary } from 'hooks/use-dictionary'
 
 type Props = {
   checklist?: IBrandChecklist
@@ -163,6 +163,7 @@ export function ChecklistHeader({
       {formPickerOpen && (
         <SearchDrawer
           title="Select a form"
+          notFoundMessage="No form was found"
           searchFunction={q => formSearchFuse.search(q)}
           onSelectItems={async (items: Record<UUID, IDealForm>) => {
             setFormPickerOpen(false)

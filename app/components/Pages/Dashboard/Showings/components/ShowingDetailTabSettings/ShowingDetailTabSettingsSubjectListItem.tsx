@@ -1,8 +1,6 @@
-import classNames from 'classnames'
 import { makeStyles, Typography } from '@material-ui/core'
-
 import { mdiAlertCircleOutline } from '@mdi/js'
-
+import classNames from 'classnames'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -15,6 +13,8 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2),
       borderRadius: 0,
       justifyContent: 'flex-start',
+      borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+      borderBottomLeftRadius: `${theme.shape.borderRadius}px`,
       '&:focus, &:hover': {
         outline: 'none',
         color: theme.palette.common.black

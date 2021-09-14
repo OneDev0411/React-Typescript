@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+
 import { mdiEmailOpenOutline } from '@mdi/js'
+import PropTypes from 'prop-types'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import Container from './styled'
 import { EmailAssociationController } from './EmailAssociationController'
+import Container from './styled'
 
 CRMEmailAssociation.propTypes = {
   association: PropTypes.shape().isRequired,

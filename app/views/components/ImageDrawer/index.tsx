@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import Masonry from 'react-masonry-css'
+
 import { CircularProgress } from '@material-ui/core'
+import Masonry from 'react-masonry-css'
 
-import OverlayDrawer from 'components/OverlayDrawer'
 import Search from 'components/Grid/Search'
+import OverlayDrawer from 'components/OverlayDrawer'
 
-import { Image } from './types'
 import { searchImages, listImages } from './helpers'
-import Thumbnail from './Thumbnail'
 import NoResults from './NoResults'
+import Thumbnail from './Thumbnail'
+import { Image } from './types'
 
 interface Props {
   isOpen: boolean

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Drawer,
   Grid,
@@ -11,8 +12,8 @@ import {
   CircularProgress
 } from '@material-ui/core'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { closeIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -63,7 +64,7 @@ export default function DownloadDrawer({ file, onShare, onClose }: Props) {
             item
             spacing={3}
             alignItems="center"
-            justify="space-between"
+            justifyContent="space-between"
           >
             <Grid item>
               <Typography variant="h6">Share</Typography>
@@ -83,7 +84,7 @@ export default function DownloadDrawer({ file, onShare, onClose }: Props) {
               onLoad={handleLoadComplete}
             />
           </Grid>
-          <Grid container item justify="space-between">
+          <Grid container item justifyContent="space-between">
             <Grid item xs>
               <Box p={2} textAlign="center">
                 {isLoading && <CircularProgress />}

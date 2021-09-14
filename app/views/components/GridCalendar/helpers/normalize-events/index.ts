@@ -1,11 +1,6 @@
-import _uniqBy from 'lodash/uniqBy'
 import { EventInput } from '@fullcalendar/react'
+import _uniqBy from 'lodash/uniqBy'
 
-import { getTitle } from './helpers/get-title'
-import { getDates } from './helpers/get-dates'
-import { isEditable } from './helpers/is-editable'
-
-import { FilterShape } from '../../components/FilterEvents/type'
 import {
   CRM_OBJECT_TYPES,
   CELEBRATION_OBJECT_TYPE,
@@ -13,6 +8,11 @@ import {
   DEAL_OBJECT_TYPE,
   DEAL_EVENT_TYPES
 } from '../../components/FilterEvents/helper'
+import { FilterShape } from '../../components/FilterEvents/type'
+
+import { getDates } from './helpers/get-dates'
+import { getTitle } from './helpers/get-title'
+import { isEditable } from './helpers/is-editable'
 
 /**
  * return list of events for using in full calendar

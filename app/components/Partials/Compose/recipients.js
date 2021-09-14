@@ -1,7 +1,8 @@
 import React from 'react'
-import _ from 'underscore'
-import cn from 'classnames'
+
 import { mdiClose } from '@mdi/js'
+import cn from 'classnames'
+import _ from 'underscore'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'

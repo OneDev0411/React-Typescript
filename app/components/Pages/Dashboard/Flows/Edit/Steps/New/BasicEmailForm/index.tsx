@@ -1,41 +1,25 @@
-import React, { useMemo } from 'react'
-import { Form } from 'react-final-form'
 import { Box } from '@material-ui/core'
-
 import { mdiScriptTextOutline } from '@mdi/js'
+import { Form } from 'react-final-form'
 
-import { BaseFormProps, BasicEmailFormData } from '../types'
-import { BaseFormLayout } from '../components/BaseFormLayout'
-import { Title } from '../components/BaseFields/Title'
 import { Description } from '../components/BaseFields/Description'
 import { EmailTemplate } from '../components/BaseFields/EmailTemplate'
+import { Title } from '../components/BaseFields/Title'
+import { BaseFormLayout } from '../components/BaseFormLayout'
 import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
 import { basicEmailFormPreSaveFormat } from '../helpers/pre-save-format'
-
-interface Props extends BaseFormProps {
-  defaultSelectedTemplate?: UUID
-  templates: IBrandEmailTemplate[]
-  onNewTemplateClick: () => void
-}
+import { BaseFormProps, BasicEmailFormData } from '../types'
 
 export default function BasicEmailForm({
   index,
   step,
   disableEdit = false,
   prevStepOrder,
-  templates,
-  defaultSelectedTemplate,
   onSubmit,
   onDelete,
   onMoveUpStep,
-  onMoveDownStep,
-  onNewTemplateClick
-}: Props) {
-  const defaultTemplate = useMemo(
-    () => (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id,
-    [defaultSelectedTemplate, templates]
-  )
-
+  onMoveDownStep
+}: BaseFormProps) {
   return (
     <Form
       onSubmit={(data: BasicEmailFormData) => {
@@ -55,7 +39,7 @@ export default function BasicEmailForm({
         // Create step
         return onSubmit(newStep)
       }}
-      initialValues={getBasicEmailInitialValues(step, defaultTemplate)}
+      initialValues={getBasicEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
         return (
           <BaseFormLayout
@@ -72,7 +56,10 @@ export default function BasicEmailForm({
             onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
-              <Title textFieldProps={{ disabled: disableEdit }} />
+              <Title
+                label="Email Subject"
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <Description
@@ -82,10 +69,8 @@ export default function BasicEmailForm({
             </Box>
             <Box mb={2}>
               <EmailTemplate
-                templates={templates}
                 currentTemplateId={values.email_template}
                 disabled={submitting || disableEdit}
-                onNewTemplateClick={onNewTemplateClick}
               />
             </Box>
           </BaseFormLayout>

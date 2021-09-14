@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 export type ShowingDetailTabType = 'Bookings' | 'Visitors' | 'Settings'
 
 export type ShowingsTabType = 'Properties' | 'Bookings'
@@ -32,19 +30,22 @@ export type AppointmentFilter = 'All' | IShowingAppointmentStatus | 'Feedback'
 
 export interface AppointmentFilterInfo {
   label: string
-  icon?: ReactNode
+  icon?: string
   filter?: (
     appointments: IShowingAppointment<'showing'>[]
   ) => IShowingAppointment<'showing'>[]
 }
 
-export interface DismissActionParams {
+export interface ApprovalActionParams {
   appointmentId: UUID
   showingId: UUID
-  notificationCount: number
-}
-export interface ApprovalActionParams extends DismissActionParams {
   appointment: IShowingAppointment
+}
+
+export interface AckActionParams {
+  appointmentId: UUID
+  showingId: UUID
+  notificationIds: UUID[]
 }
 
 export type CreateShowingErrors = Record<string, string>
@@ -59,6 +60,8 @@ export interface ShowingRoleInput extends IShowingRoleInput {
   id: UUID
   mode: ShowingRoleInputMode
   deletable: boolean
+  contact?: IContact
+  save_to_contact: boolean
 }
 
 export type ShowingRoleInputPerson = Pick<

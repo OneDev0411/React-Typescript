@@ -2,7 +2,6 @@ import React from 'react'
 
 import Table from 'components/Grid/Table'
 import { RenderProps } from 'components/Grid/Table/types'
-
 import LoadingContainer from 'components/LoadingContainer'
 
 import Message from './columns/Message'
@@ -28,6 +27,7 @@ export default function List({
       render: ({ row }: RenderProps<INotification>) => (
         <Message
           onClick={() => handleNotifClick(row)}
+          title={row.title}
           message={row.message}
           isSeen={row.seen}
         />

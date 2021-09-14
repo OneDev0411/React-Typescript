@@ -1,18 +1,19 @@
 import React from 'react'
+
+import cn from 'classnames'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
 import _ from 'underscore'
 
-import cn from 'classnames'
-
-import Rooms from './Rooms'
-import Messages from './Messages'
 import ChatNotification from '../../../../services/notification/chat'
 import {
   changeActiveRoom,
   toggleInstantMode
 } from '../../../../store_actions/chatroom'
 import store from '../../../../stores'
+
+import Messages from './Messages'
+import Rooms from './Rooms'
 
 // set rooms container width
 const roomsWidth = '330px'

@@ -1,13 +1,12 @@
 import React from 'react'
 
-import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
-import { useGridContext } from '../../hooks/use-grid-context'
-
 import { SELECTION__TOGGLE_ROW } from '../../context/constants'
 import { getRowId } from '../../helpers/get-row-id'
-import { isRowSelected } from './helpers/is-row-selected'
+import { useGridContext } from '../../hooks/use-grid-context'
+import { TableColumn, RenderProps, GridSelectionOptions } from '../../types'
 
 import Checkbox from './Checkbox'
+import { isRowSelected } from './helpers/is-row-selected'
 
 export function useRowsSelection<Row>(
   columns: TableColumn<Row>[],

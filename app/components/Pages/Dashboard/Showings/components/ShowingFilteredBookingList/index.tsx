@@ -1,22 +1,22 @@
+import { Location } from 'history'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { Location } from 'history'
-
-import ShowingBookingList, {
-  ShowingBookingListProps
-} from '../ShowingBookingList'
-import useAppointmentListInfo from '../../hooks/use-appointment-list-info'
 import useAppointmentFilterInfo from '../../hooks/use-appointment-filter-info'
+import useAppointmentListInfo from '../../hooks/use-appointment-list-info'
 import useFilterAppointment from '../../hooks/use-filter-appointment'
 import { AppointmentFilter } from '../../types'
 import ShowingAppointmentFilters from '../ShowingAppointmentFilters'
+import ShowingBookingList, {
+  ShowingBookingListProps
+} from '../ShowingBookingList'
+
 import { getValidAppointmentFilter } from './helpers'
 
 export interface ShowingFilteredBookingListProps
   extends Pick<
       ShowingBookingListProps,
       | 'onApprovalAction'
-      | 'onDismissAction'
+      | 'onAckAction'
       | 'hasPropertyColumn'
       | 'stackDateAndTimeColumns'
       | 'emptyButtonLabel'
@@ -32,7 +32,7 @@ export interface ShowingFilteredBookingListProps
 function ShowingFilteredBookingList({
   appointments,
   onApprovalAction,
-  onDismissAction,
+  onAckAction,
   hasPropertyColumn,
   location,
   generateLink,
@@ -70,7 +70,7 @@ function ShowingFilteredBookingList({
         rows={filteredAppointments}
         emptyMessage={emptyMessage}
         onApprovalAction={onApprovalAction}
-        onDismissAction={onDismissAction}
+        onAckAction={onAckAction}
         hasPropertyColumn={hasPropertyColumn}
         hasPastBookingsFilter
         stackDateAndTimeColumns={stackDateAndTimeColumns}

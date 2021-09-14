@@ -1,5 +1,5 @@
 import React from 'react'
-import { browserHistory } from 'react-router'
+
 import {
   Divider,
   List,
@@ -12,9 +12,9 @@ import {
   useTheme
 } from '@material-ui/core'
 import { mdiCogOutline } from '@mdi/js'
+import { browserHistory } from 'react-router'
 
 import { hasUserAccessToBrandSettings } from '../../../../../../utils/user-teams'
-
 import Acl from '../../../../../../views/components/Acl'
 import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
 import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
@@ -83,6 +83,11 @@ export function UserMenuContent({
           <Acl.Admin>
             <ListItem button onClick={() => onClick('contexts')}>
               Contexts
+            </ListItem>
+          </Acl.Admin>
+          <Acl.Admin>
+            <ListItem button onClick={() => onClick('statuses')}>
+              Statuses
             </ListItem>
           </Acl.Admin>
           {showChecklists && (

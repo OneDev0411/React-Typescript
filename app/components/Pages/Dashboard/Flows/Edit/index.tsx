@@ -1,9 +1,5 @@
 import React, { useState, useContext, useCallback, useMemo } from 'react'
-import { useEffectOnce } from 'react-use'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { Helmet } from 'react-helmet'
-import { withRouter, WithRouterProps } from 'react-router'
 import {
   Grid,
   Box,
@@ -15,34 +11,32 @@ import {
   makeStyles
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
-
-import PageLayout from 'components/GlobalPageLayout'
-import { addNotification as notify } from 'components/notification'
-
-import { getEmailTemplates } from 'models/email-templates/get-email-templates'
-import { getBrandFlow } from 'models/flows/get-brand-flow'
-import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
-import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
-import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
-import { createStep } from 'models/flows/create-step'
-import { editBrandFlow } from 'models/flows/edit-brand-flow'
-import { stopFlow } from 'models/flows/stop-flow'
-
-import { getActiveTeamId } from 'utils/user-teams'
-import { goTo } from 'utils/go-to'
+import { Helmet } from 'react-helmet'
+import { useSelector, useDispatch } from 'react-redux'
+import { withRouter, WithRouterProps } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
-import EmailTemplateDrawer from 'components/AddOrEditEmailTemplateDrawer'
-
+import { addNotification as notify } from 'components/notification'
+import { createStep } from 'models/flows/create-step'
+import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
+import { editBrandFlow } from 'models/flows/edit-brand-flow'
+import { editBrandFlowStep } from 'models/flows/edit-brand-flow-step'
+import { editBrandFlowStepOrder } from 'models/flows/edit-brand-flow-step-order'
+import { getBrandFlow } from 'models/flows/get-brand-flow'
+import { stopFlow } from 'models/flows/stop-flow'
 import { selectUser } from 'selectors/user'
+import { goTo } from 'utils/go-to'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { getFlowEditUrl, createFlow } from '../helpers'
 import New from '../New'
 
+import Contacts from './Contacts'
 import Header from './Header'
 import Steps from './Steps'
-import Contacts from './Contacts'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -82,14 +76,8 @@ function Edit(props: WithRouterProps) {
 
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
-  const [emailTemplates, setEmailTemplates] =
-    useState<Nullable<IBrandEmailTemplate[]>>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
-  const [selectedEmailTemplate, setSelectedEmailTemplate] =
-    useState<IBrandEmailTemplate | null>(null)
-  const [isEmailTemplateDrawerOpen, setIsEmailTemplateDrawerOpen] =
-    useState(false)
   const [selectedTabIndex, setSelectedTabIndex] = useState(0)
   const [warning, setWarning] = useState<string | null>(null)
 
@@ -142,10 +130,6 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(true)
 
-      if (selectedEmailTemplate) {
-        setSelectedEmailTemplate(null)
-      }
-
       const flowData = await getFlow(brand, props.params.id, reload)
 
       setFlow(flowData)
@@ -156,6 +140,7 @@ function Edit(props: WithRouterProps) {
         )
       } else if (flowData.active_flows > 0) {
         setWarning(
+          // eslint-disable-next-line max-len
           'This Flow is in use! All of your changes will happen to the future steps and contacts.'
         )
       } else if (flowData.active_flows === 0) {
@@ -164,23 +149,11 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(false)
     },
-    [brand, getFlow, props.params.id, selectedEmailTemplate]
+    [brand, getFlow, props.params.id]
   )
-  const fetchEmailTemplates = useCallback(async () => {
-    if (!brand) {
-      return
-    }
-
-    const fetchedTemplates = await getEmailTemplates(brand, {
-      'omit[]': ['brand_email.body']
-    })
-
-    setEmailTemplates(fetchedTemplates)
-  }, [brand])
 
   useEffectOnce(() => {
     loadFlowData(true)
-    fetchEmailTemplates()
   })
 
   const newStepSubmitHandler = useCallback(
@@ -301,14 +274,6 @@ function Edit(props: WithRouterProps) {
     [brand, flow]
   )
 
-  const newEmailTemplateClickHandler = useCallback(() => {
-    if (!brand || !flow) {
-      return
-    }
-
-    setIsEmailTemplateDrawerOpen(true)
-  }, [brand, flow])
-
   if (error) {
     return (
       <Box className={classes.contentContainer}>
@@ -349,7 +314,7 @@ function Edit(props: WithRouterProps) {
                 disabled={isLoading}
                 className={classes.tab}
                 label={
-                  <Grid container alignItems="center" justify="center">
+                  <Grid container alignItems="center" justifyContent="center">
                     <span>Contacts</span>
                     <Chip
                       size="small"
@@ -374,19 +339,14 @@ function Edit(props: WithRouterProps) {
             </Alert>
           )}
           {isLoading && <LoadingContainer style={{ padding: '20% 0' }} />}
-          {!isLoading && emailTemplates && flow && selectedTabIndex === 0 && (
+          {!isLoading && flow && selectedTabIndex === 0 && (
             <Steps
+              items={flow.steps || []}
               disableEdit={!flow.is_editable}
               onNewStepSubmit={newStepSubmitHandler}
               onStepDelete={stepDeleteHandler}
               onStepUpdate={stepUpdateHandler}
               onStepMove={stepMoveHandler}
-              onNewEmailTemplateClick={newEmailTemplateClickHandler}
-              items={flow.steps || []}
-              emailTemplates={emailTemplates}
-              defaultSelectedEmailTemplate={
-                selectedEmailTemplate ? selectedEmailTemplate.id : undefined
-              }
             />
           )}
           {!isLoading && flow && selectedTabIndex === 1 && (
@@ -410,20 +370,6 @@ function Edit(props: WithRouterProps) {
           flow={flow}
         />
       )}
-      <EmailTemplateDrawer
-        isOpen={isEmailTemplateDrawerOpen}
-        onClose={() => {
-          setIsEmailTemplateDrawerOpen(false)
-        }}
-        submitCallback={emailTemplate => {
-          const newTemplates = Array.isArray(emailTemplates)
-            ? [...emailTemplates, emailTemplate]
-            : [emailTemplate]
-
-          setEmailTemplates(newTemplates)
-          setSelectedEmailTemplate(emailTemplate)
-        }}
-      />
     </>
   )
 }

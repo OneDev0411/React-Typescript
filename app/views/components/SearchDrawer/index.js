@@ -1,17 +1,19 @@
 import React, { createRef } from 'react'
-import PropTypes from 'prop-types'
-import Downshift from 'downshift'
-import _ from 'underscore'
+
 import { Box } from '@material-ui/core'
+import Downshift from 'downshift'
+import PropTypes from 'prop-types'
+import _ from 'underscore'
 
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
-import Drawer from '../OverlayDrawer'
 import Loading from '../../../components/Partials/Loading'
-import { SelectedItems } from './SelectedItems'
-import { SearchResultList } from './SearchResult'
-import { DefaultItems } from './DefaultItems'
+import Drawer from '../OverlayDrawer'
+
 import Footer from './components/Footer'
+import { DefaultItems } from './DefaultItems'
+import { SearchResultList } from './SearchResult'
+import { SelectedItems } from './SelectedItems'
 
 const initialState = {
   isSearching: false,
@@ -61,7 +63,7 @@ class SearchDrawer extends React.Component {
         searchResults,
         error: searchResults.length === 0 && {
           type: 'warning',
-          message: 'No MLS Listing Found'
+          message: this.props.notFoundMessage
         }
       })
     } catch (e) {
@@ -242,12 +244,14 @@ SearchDrawer.defaultProps = {
   searchInputOptions: {},
   defaultLists: [],
   multipleSelection: false,
-  forceRenderFooter: false
+  forceRenderFooter: false,
+  notFoundMessage: 'Nothing Found'
 }
 SearchDrawer.propTypes = {
   showLoadingIndicator: PropTypes.bool,
   multipleSelection: PropTypes.bool,
   searchInputOptions: PropTypes.object,
+  notFoundMessage: PropTypes.string,
   searchFunction: PropTypes.func.isRequired,
   ItemRow: PropTypes.oneOfType([PropTypes.element, PropTypes.func]).isRequired,
   defaultLists: PropTypes.arrayOf(

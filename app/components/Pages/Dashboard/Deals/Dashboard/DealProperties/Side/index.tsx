@@ -1,20 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useMemo } from 'react'
 
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
-
 import { mdiChevronDown } from '@mdi/js'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { upsertContexts } from 'actions/deals'
+import { BaseDropdown } from 'components/BaseDropdown'
+import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { getEnderType, getField } from 'models/Deal/helpers/context'
 import { IAppState } from 'reducers'
-import { getDealChecklists } from 'reducers/deals/checklists'
-
-import { BaseDropdown } from 'components/BaseDropdown'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
+import { getDealChecklists } from 'reducers/deals/checklists'
 
 import { ItemValue } from '../../Factsheet/styled'
 
@@ -48,20 +46,27 @@ export function DealSide(props: Props) {
     })
   )
 
-  const options = [
-    {
-      value: null,
-      label: props.deal.deal_type
-    },
-    {
-      value: 'AgentDoubleEnder',
-      label: `${props.deal.deal_type} (Agent Double Ender)`
-    },
-    {
-      value: 'OfficeDoubleEnder',
-      label: `${props.deal.deal_type} (Office Double Ender)`
-    }
-  ]
+  const dealType = props.deal.deal_type
+
+  const options = useMemo(() => {
+    return [
+      {
+        value: null,
+        label: dealType,
+        isAvailable: true
+      },
+      {
+        value: 'AgentDoubleEnder',
+        label: `${dealType} (Agent Double Ender)`,
+        isAvailable: dealType === 'Selling'
+      },
+      {
+        value: 'OfficeDoubleEnder',
+        label: `${dealType} (Office Double Ender)`,
+        isAvailable: true
+      }
+    ].filter(option => option.isAvailable)
+  }, [dealType])
 
   const enderType = getField(props.deal, 'ender_type')
   const sideName = getEnderType(props.deal)
@@ -91,7 +96,7 @@ export function DealSide(props: Props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={buttonProps => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <Button
           {...buttonProps}
           size="small"

@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { Box, Checkbox, makeStyles } from '@material-ui/core'
 
-import { useStyles } from '../../../styles'
-import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
-import type { IMediaItem } from '../../../types'
 import { toggleMediaSelection } from '../../../context/actions'
+import useMediaManagerContext from '../../../hooks/useMediaManagerContext'
+import { useStyles } from '../../../styles'
+import type { IMediaItem } from '../../../types'
 
 interface Props {
   media: IMediaItem

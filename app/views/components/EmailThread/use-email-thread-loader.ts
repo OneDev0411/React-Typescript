@@ -7,9 +7,8 @@ import { getEmailThread } from 'models/email/get-email-thread'
  * loads an email thread by threadKey
  */
 export function useEmailThreadLoader(threadKey) {
-  const [setThreadsPromise, thread, loading, error] = useAsyncValue<
-    IEmailThread<'messages'>
-  >()
+  const [setThreadsPromise, thread, loading, error] =
+    useAsyncValue<IEmailThread<'messages'>>()
 
   const fetchThread = useCallback(() => {
     if (threadKey) {

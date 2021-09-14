@@ -1,14 +1,14 @@
 import { useState, useRef } from 'react'
-import { useDeepCompareEffect } from 'react-use'
-import { Box, Theme, fade, makeStyles } from '@material-ui/core'
 
-import { loadTemplateHtml } from 'models/instant-marketing'
+import { Box, Theme, alpha, makeStyles } from '@material-ui/core'
+import { useDeepCompareEffect } from 'react-use'
 
 import CardSkeleton from 'components/CardSkeleton'
-import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
-import { renderMjml } from 'components/TemplatePreview/helpers'
 import { getTemplateRenderData } from 'components/InstantMarketing/Builder/utils/get-template-render-data'
 import { isTemplateInstance } from 'components/InstantMarketing/Builder/utils/helpers'
+import nunjucks from 'components/InstantMarketing/helpers/nunjucks'
+import { renderMjml } from 'components/TemplatePreview/helpers'
+import { loadTemplateHtml } from 'models/instant-marketing'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles(
       transition: theme.transitions.create('background-color'),
       cursor: 'pointer',
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.black, 0.1)
+        backgroundColor: alpha(theme.palette.common.black, 0.1)
       }
     }
   }),

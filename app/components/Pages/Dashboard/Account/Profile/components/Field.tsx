@@ -1,10 +1,11 @@
 import React from 'react'
+
+import { Typography } from '@material-ui/core'
 import {
   Field as ReduxFormField,
   GenericFieldHTMLAttributes,
   BaseFieldProps
 } from 'redux-form'
-import { Typography } from '@material-ui/core'
 
 type Props = (GenericFieldHTMLAttributes | BaseFieldProps) & {
   label: string

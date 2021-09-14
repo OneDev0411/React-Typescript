@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field } from 'react-final-form'
+
 import {
   FormControl,
   FormHelperText,
@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core'
+import { Field } from 'react-final-form'
 
 import { useCommonStyles } from '../common-styles'
 

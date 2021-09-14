@@ -1,12 +1,14 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 
-import RecommendationMessage from './recommendation'
+import Message from '../../Util/message'
+
+import ActivityMessage from './activity'
 import AlertMessage from './AlertMessage'
 import AttachementMessage from './attachment'
-import ActivityMessage from './activity'
+import RecommendationMessage from './recommendation'
 import UploadingFile from './uploading'
-import Message from '../../Util/message'
 
 const MessageTypes = ({
   author,

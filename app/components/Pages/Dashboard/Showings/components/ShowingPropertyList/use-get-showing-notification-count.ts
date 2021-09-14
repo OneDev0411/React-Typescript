@@ -12,7 +12,7 @@ function useGetShowingNotificationCount(
           ...acc,
           [showing.id]: (showing.appointments ?? []).reduce(
             (count, appointment) =>
-              (appointment.notifications?.length || 0) + count,
+              count + (appointment.notifications?.length ? 1 : 0),
             0
           )
         }

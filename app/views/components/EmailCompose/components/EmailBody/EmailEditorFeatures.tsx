@@ -1,11 +1,12 @@
 import React from 'react'
+
 import { Options as ImportOptions } from 'draft-js-import-html'
 
-import { RichTextFeature } from 'components/TextEditor/features/RichText'
-import { ImageFeature } from 'components/TextEditor/features/Image'
 import { EmojiFeature } from 'components/TextEditor/features/Emoji'
-import { TemplateExpressionsFeature } from 'components/TextEditor/features/TemplateExpressions'
+import { ImageFeature } from 'components/TextEditor/features/Image'
+import { RichTextFeature } from 'components/TextEditor/features/RichText'
 import { SignatureFeature } from 'components/TextEditor/features/Signature'
+import { TemplateExpressionsFeature } from 'components/TextEditor/features/TemplateExpressions'
 
 import { defaultTemplateVariableSuggestions } from '../../default-template-variable-suggestions'
 

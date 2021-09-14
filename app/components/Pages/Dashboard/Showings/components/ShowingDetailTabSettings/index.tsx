@@ -1,56 +1,82 @@
-import { useRef, useState, ChangeEvent } from 'react'
-import { Box, makeStyles } from '@material-ui/core'
+import { useRef, useState, ChangeEvent, useEffect } from 'react'
 
-import { withRouter, WithRouterProps } from 'react-router'
-
+import { makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
+import { Location } from 'history'
+import { InjectedRouter, PlainRoute } from 'react-router'
 import { useDebouncedCallback } from 'use-debounce'
 
 import TabContentSwitch from 'components/TabContentSwitch'
-
-import useNotify from 'hooks/use-notify'
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
 import updateShowing from 'models/showing/update-showing'
 
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import {
+  hasTimeConflicts,
+  hasInvalidTimeRange,
+  sortShowingAvailabilities
+} from '../../helpers'
+import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
+import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
 
 import { getValidShowingDetailSettingsTab } from './helpers'
+import ShowingDetailTabSettingsSaveButton, {
+  ShowingDetailTabSettingsSaveButtonProps
+} from './ShowingDetailTabSettingsSaveButton'
 import ShowingDetailTabSettingsSubjectList from './ShowingDetailTabSettingsSubjectList'
+import ShowingDetailTabSettingsTabAdvanceNotice from './ShowingDetailTabSettingsTabAdvanceNotice'
+import ShowingDetailTabSettingsTabAppraisalsAndInspections from './ShowingDetailTabSettingsTabAppraisalsAndInspections'
+import ShowingDetailTabSettingsTabApprovalTypeAndRoles from './ShowingDetailTabSettingsTabApprovalTypeAndRoles'
+import ShowingDetailTabSettingsTabAvailability from './ShowingDetailTabSettingsTabAvailability'
+import ShowingDetailTabSettingsTabFeedback from './ShowingDetailTabSettingsTabFeedback'
+import ShowingDetailTabSettingsTabInstructions from './ShowingDetailTabSettingsTabInstructions'
 import {
   ShowingDetailSettingsTabType,
   ShowingDetailTabSettingsErrors
 } from './types'
-import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
-import ShowingDetailTabSettingsSaveButton, {
-  ShowingDetailTabSettingsSaveButtonProps
-} from './ShowingDetailTabSettingsSaveButton'
-import ShowingDetailTabSettingsTabAvailability from './ShowingDetailTabSettingsTabAvailability'
-import ShowingDetailTabSettingsTabAdvanceNotice from './ShowingDetailTabSettingsTabAdvanceNotice'
-import ShowingDetailTabSettingsTabApprovalTypeAndRoles from './ShowingDetailTabSettingsTabApprovalTypeAndRoles'
-import ShowingDetailTabSettingsTabInstructions from './ShowingDetailTabSettingsTabInstructions'
-import ShowingDetailTabSettingsTabAppraisalsAndInspections from './ShowingDetailTabSettingsTabAppraisalsAndInspections'
-import ShowingDetailTabSettingsTabFeedback from './ShowingDetailTabSettingsTabFeedback'
 
 const useStyles = makeStyles(
-  {
-    content: { overflowX: 'hidden' }
-  },
+  theme => ({
+    root: {
+      display: 'flex',
+      minHeight: 'calc(100vh - 161px)' // 161px because tabs height is 51px and header height is 104px
+    },
+    padding: { padding: theme.spacing(3, 0) },
+    content: {
+      overflowX: 'hidden',
+      flexGrow: 1,
+      flexShrink: 1
+    },
+    sidebar: {
+      marginRight: theme.spacing(4),
+      flexBasis: theme.spacing(41),
+      flexGrow: 0,
+      flexShrink: 0,
+      backgroundColor: theme.palette.grey[50],
+      paddingLeft: theme.spacing(4)
+    }
+  }),
   { name: 'ShowingDetailTabSettings' }
 )
 
-interface ShowingDetailTabSettingsProps extends WithRouterProps {
+interface ShowingDetailTabSettingsProps {
   showing: IShowing<'showing'>
   setShowing: (showing: IShowing<'showing'>) => void
+  router: InjectedRouter
+  route: PlainRoute
+  location: Location
 }
 
 function ShowingDetailTabSettings({
-  location,
   showing,
-  setShowing
+  setShowing,
+  router,
+  route,
+  location
 }: ShowingDetailTabSettingsProps) {
   const classes = useStyles()
 
-  const tab = getValidShowingDetailSettingsTab(location.query.tab)
+  const tab = getValidShowingDetailSettingsTab(location.query.tab as string)
 
   const notify = useNotify()
   const showingRef = useRef(showing)
@@ -105,11 +131,11 @@ function ShowingDetailTabSettings({
     showing: IShowing<'showing'>,
     updateShowingRef: boolean = false
   ) => {
-    setShowing(showing)
-
     if (updateShowingRef) {
       showingRef.current = showing
     }
+
+    setShowing(showing)
 
     const errors: ShowingDetailTabSettingsErrors = {}
 
@@ -133,7 +159,7 @@ function ShowingDetailTabSettings({
   const handleAvailabilitiesChange = (availabilities: IShowingAvailability[]) =>
     handleShowingUpdate({
       ...showing,
-      availabilities
+      availabilities: sortShowingAvailabilities(availabilities)
     })
 
   const handleDurationChange = (duration: number) =>
@@ -196,16 +222,34 @@ function ShowingDetailTabSettings({
     onClick: handleSave
   }
 
+  useLoseYourWorkAlert(
+    router,
+    route,
+    !saveDisabled,
+    'You have not saved your changes. Continue?'
+  )
+
+  const isShowingDirty = showing !== showingRef.current
+
+  // Restore the showing state if it is dirty and the user leaves the settings
+  useEffect(() => {
+    return () => {
+      if (isShowingDirty) {
+        setShowing(showingRef.current)
+      }
+    }
+  }, [setShowing, isShowingDirty])
+
   return (
-    <Box display="flex">
-      <Box mr={4} flexBasis="296px" flexGrow="0" flexShrink="0">
+    <div className={classes.root}>
+      <div className={classNames(classes.padding, classes.sidebar)}>
         <ShowingDetailTabSettingsSubjectList
           tab={tab}
           errors={errors}
           hasListingInfo={!!showing.address}
         />
-      </Box>
-      <Box flexGrow="1" flexShrink="1" className={classes.content}>
+      </div>
+      <div className={classNames(classes.padding, classes.content)}>
         <TabContentSwitch.Container<ShowingDetailSettingsTabType> value={tab}>
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="Availability">
             <ShowingDetailTabSettingsTabAvailability
@@ -235,6 +279,8 @@ function ShowingDetailTabSettings({
               ListingInfo {/* TODO: Implement this step */}
             </TabContentSwitch.Item>
           )}
+
+          {/* eslint-disable-next-line max-len */}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="ApprovalTypeAndRoles">
             <ShowingDetailTabSettingsTabApprovalTypeAndRoles
               approvalType={showing.approval_type}
@@ -260,6 +306,7 @@ function ShowingDetailTabSettings({
               />
             </ShowingDetailTabSettingsTabInstructions>
           </TabContentSwitch.Item>
+          {/* eslint-disable-next-line max-len */}
           <TabContentSwitch.Item<ShowingDetailSettingsTabType> value="AppraisalsAndInspections">
             <ShowingDetailTabSettingsTabAppraisalsAndInspections
               allowAppraisalDefaultValue={
@@ -286,9 +333,9 @@ function ShowingDetailTabSettings({
             </ShowingDetailTabSettingsTabFeedback>
           </TabContentSwitch.Item>
         </TabContentSwitch.Container>
-      </Box>
-    </Box>
+      </div>
+    </div>
   )
 }
 
-export default withRouter(ShowingDetailTabSettings)
+export default ShowingDetailTabSettings

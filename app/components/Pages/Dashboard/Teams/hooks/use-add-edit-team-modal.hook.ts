@@ -1,9 +1,9 @@
 import { Dispatch, useCallback, useState } from 'react'
 
+import { IAddEditTeamFormData } from 'models/BrandConsole'
 import { addBrand, editBrand } from 'models/BrandConsole/Brands'
 
 import { getUpdatedRootTeam } from '../helpers/get-updated-root-team'
-import { IAddEditTeamFormData } from 'models/BrandConsole'
 
 export function useAddEditTeamModal(
   setRootTeam: Dispatch<(prevState: IBrand) => IBrand>

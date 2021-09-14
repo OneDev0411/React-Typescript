@@ -1,27 +1,24 @@
 import React, { useState, useCallback, useContext } from 'react'
+
 import { Grid, Button, Divider, Box } from '@material-ui/core'
+import isEqual from 'lodash/isEqual'
+import { Helmet } from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router'
-import { Helmet } from 'react-helmet'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import isEqual from 'lodash/isEqual'
-
-import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import { getUserTeams } from 'actions/user/teams'
 import Acl from 'components/Acl'
-import PageLayout from 'components/GlobalPageLayout'
-import TemplatePreview from 'components/TemplatePreview'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import { getActiveTeamPalette, getActiveTeamId } from 'utils/user-teams'
+import PageLayout from 'components/GlobalPageLayout'
+import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
+import TemplatePreview from 'components/TemplatePreview'
 import { ACL } from 'constants/acl'
-
 import { updatePalette } from 'models/brand/update-palette'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
 import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbnails'
-
-import { getUserTeams } from 'actions/user/teams'
 import { IAppState } from 'reducers'
+import { getActiveTeamPalette, getActiveTeamId } from 'utils/user-teams'
 
 import { TEMPLATE } from './constants'
 import {
@@ -37,9 +34,8 @@ export function BrandSettings() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [listing, setListing] = useState<Nullable<IListing>>(null)
   const activeBrand = getActiveTeamId(user) as UUID
-  const [defaultSettings, setDefaultSettings] = useState<
-    Nullable<BrandMarketingPalette>
-  >(null)
+  const [defaultSettings, setDefaultSettings] =
+    useState<Nullable<BrandMarketingPalette>>(null)
   const [settings, setSettings] = useState<BrandMarketingPalette>(
     getActiveTeamPalette(user)
   )
@@ -54,7 +50,7 @@ export function BrandSettings() {
 
       const mockedListing = await getMockListing()
 
-      setListing((mockedListing as any) as IListing)
+      setListing(mockedListing as any as IListing)
       setIsLoading(false)
     }
 
@@ -124,7 +120,7 @@ Are you sure?`,
 
       <PageLayout>
         <PageLayout.Header title="Brand Settings">
-          <Grid container justify="flex-end" spacing={2}>
+          <Grid container justifyContent="flex-end" spacing={2}>
             <Grid item>
               <Button
                 disabled={isLoading || !defaultSettings}
@@ -168,7 +164,7 @@ Are you sure?`,
               onUpdate={handleUpdateSettings}
               onImageUpload={handleImageUpload}
             >
-              <Grid container item justify="center">
+              <Grid container item justifyContent="center">
                 <Box my={2}>
                   {preferredSideBarView === 'simple' ? (
                     <Button

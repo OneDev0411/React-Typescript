@@ -1,14 +1,13 @@
-import { WithRouterProps, browserHistory } from 'react-router'
 import { Container, Grid, makeStyles } from '@material-ui/core'
-
-import { rescheduleAppointmentRequest } from 'models/showing/reschedule-appointment-request'
+import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
 import LoadingContainer from 'components/LoadingContainer'
+import { rescheduleAppointmentRequest } from 'models/showing/reschedule-appointment-request'
 
-import InfoSection from '../../Sections/InfoSection'
-import DetailsSection from '../../Sections/DetailsSection'
 import { usePublicShowingAppointment } from '../../hooks'
+import DetailsSection from '../../Sections/DetailsSection'
+import InfoSection from '../../Sections/InfoSection'
 
 import RescheduleForm from './Form'
 

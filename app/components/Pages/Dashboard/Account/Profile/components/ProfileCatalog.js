@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+
 import { Button, IconButton, Box, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
+import { connect } from 'react-redux'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import styled from 'styled-components'
 
+import { confirmation } from 'actions/confirmation'
 import editUser from 'actions/user/edit'
 import { uploadUserAvatarAction } from 'actions/user/upload-avatar'
-import { confirmation } from 'actions/confirmation'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { ImageUploader } from 'components/ImageUploader'
 import { Avatar } from 'components/Avatar'
-
+import { ImageUploader } from 'components/ImageUploader'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { readFileAsDataUrl } from 'utils/file-utils/read-file-as-data-url'
 
 const Container = styled.div`

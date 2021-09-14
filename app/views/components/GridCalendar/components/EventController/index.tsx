@@ -1,11 +1,10 @@
 import React from 'react'
 
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
-
 import { goTo } from 'utils/go-to'
-import { CrmEventType } from 'components/Calendar/types'
 
-import { CrmEvents } from '../../../Calendar/components/CrmEvents'
+import { CrmEvents } from '../../../ContactProfileTimeline/components/CrmEvents'
 import {
   isCRMEvent,
   isDealEvent,

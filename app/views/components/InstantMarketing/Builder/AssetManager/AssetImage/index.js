@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { EditorDialog } from 'components/ImageEditor'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 
 import { Container, CropButton, Image } from './styled'
 
@@ -74,7 +74,7 @@ export class AssetImage extends React.Component {
 
   onCropImg = async file => {
     const { templateId } = await this.props.getTemplateId()
-    const response = await uploadAsset(file, templateId)
+    const response = await uploadAsset(templateId, file)
 
     this.onImageSelect({ url: response.file.url })
     this.setState({

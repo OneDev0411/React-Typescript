@@ -1,12 +1,8 @@
 import React, { Fragment } from 'react'
+
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
 import Flex from 'styled-flex-component'
-
-import { addNotification as notify } from 'components/notification'
-
-import OverlayDrawer from 'components/OverlayDrawer'
 
 import {
   createFormTask,
@@ -14,14 +10,14 @@ import {
   setExpandChecklist,
   moveTaskFile
 } from 'actions/deals'
-
-import { getDealChecklists } from 'reducers/deals/checklists'
-import { selectTaskById } from 'reducers/deals/tasks'
-import { selectFormById } from 'reducers/deals/forms'
-
 import Search from 'components/Grid/Search'
+import { addNotification as notify } from 'components/notification'
+import OverlayDrawer from 'components/OverlayDrawer'
 import Spinner from 'components/Spinner'
 import { H4 } from 'components/Typography/headings'
+import { getDealChecklists } from 'reducers/deals/checklists'
+import { selectFormById } from 'reducers/deals/forms'
+import { selectTaskById } from 'reducers/deals/tasks'
 
 import Checklist from './Checklist'
 

@@ -24,7 +24,6 @@ export function validateDateField(
     return 'Month and Day fields are required.'
   }
 
-
   if (!isYearOptional && !year) {
     return 'Year is required!'
   }

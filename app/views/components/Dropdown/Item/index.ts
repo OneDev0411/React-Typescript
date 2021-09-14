@@ -1,5 +1,5 @@
-import styled, { css, ThemedStyledProps } from 'styled-components'
 import { Theme } from '@material-ui/core'
+import styled, { css, ThemedStyledProps } from 'styled-components'
 
 interface Props {
   isActive?: boolean

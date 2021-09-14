@@ -1,15 +1,16 @@
 import React from 'react'
+
+import { Tooltip } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
 import {
   mdiPlusCircleOutline,
   mdiProgressDownload,
-  mdiMinusCircleOutline
+  mdiMinusCircleOutline,
+  mdiDockWindow
 } from '@mdi/js'
-import { useTheme } from '@material-ui/core/styles'
 
-import { Tooltip } from '@material-ui/core'
-
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { rotateRightIcon, fitToPageIcon } from 'components/SvgIcons/icons'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { Container, MenuItem } from './styled'
 
@@ -50,6 +51,12 @@ export function Toolbar(props) {
       <MenuItem onClick={props.onRotate}>
         <Tooltip placement="bottom" title="Rotate Page">
           <SvgIcon path={rotateRightIcon} />
+        </Tooltip>
+      </MenuItem>
+
+      <MenuItem onClick={props.onNewWindow}>
+        <Tooltip placement="bottom" title="Open File In New Window">
+          <SvgIcon path={mdiDockWindow} />
         </Tooltip>
       </MenuItem>
     </Container>

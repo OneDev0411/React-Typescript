@@ -5,12 +5,11 @@ import { addNotification as notify } from 'components/notification'
 
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
-import { setTasks } from '../../task'
 import { setChecklists } from '../../checklist'
 import { setRoles } from '../../role'
-import { setDeals } from '../set-deals'
-
 import * as schema from '../../schema'
+import { setTasks } from '../../task'
+import { setDeals } from '../set-deals'
 
 export function searchDeals(user, value) {
   return async dispatch => {

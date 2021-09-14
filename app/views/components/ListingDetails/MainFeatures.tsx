@@ -1,9 +1,10 @@
 import React from 'react'
+
+import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Tooltip from '@material-ui/core/Tooltip'
-import { makeStyles, Theme } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 import {
   mdiBedKingOutline,
   mdiShower,
@@ -12,6 +13,7 @@ import {
   mdiRelativeScale,
   mdiCalendarMonthOutline
 } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import listingUtils from 'utils/listing'
@@ -198,8 +200,12 @@ export default MainFeatures
 function getBathroomsTooltip(listing: IListing): string {
   const fullCounts = listing.property.full_bathroom_count
   const halfCounts = listing.property.half_bathroom_count
-  const fullText = fullCounts != null ? `${fullCounts} Full Bath` : ''
-  const halfText = halfCounts != null ? `${halfCounts} Half Bath` : ''
+  const fullText = fullCounts
+    ? `${fullCounts} Full ${pluralize('Bath', fullCounts)}`
+    : ''
+  const halfText = halfCounts
+    ? `${halfCounts} Half ${pluralize('Bath', halfCounts)}`
+    : ''
 
   return [fullText, halfText].filter(Boolean).join(' + ')
 }

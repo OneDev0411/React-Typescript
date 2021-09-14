@@ -1,13 +1,14 @@
 import React from 'react'
-import { Form } from 'react-final-form'
+
 import { Box, Button, Divider } from '@material-ui/core'
+import { Form } from 'react-final-form'
 
 import { Modal, ModalHeader } from 'components/Modal'
 
-import useStyles from './styles'
+import { AvailabilityFields } from './Fields/Availability'
 import DetailsFiels from './Fields/Details'
 import OptionFields from './Fields/Options'
-import { AvailabilityFields } from './Fields/Availability'
+import useStyles from './styles'
 
 interface Props {
   isOpen: boolean

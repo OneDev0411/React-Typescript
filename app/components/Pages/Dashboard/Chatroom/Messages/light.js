@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
 import { getMessages } from '../../../../../store_actions/chatroom'
-import MessageItem from './message-item'
 import SocketStatus from '../SocketStatus'
+
+import MessageItem from './message-item'
 
 class Messages extends React.Component {
   constructor(props) {
@@ -57,12 +59,8 @@ class Messages extends React.Component {
   }
 
   render() {
-    const {
-      roomId,
-      user,
-      deliveryReportPlacement,
-      openFilesInNewTab
-    } = this.props
+    const { roomId, user, deliveryReportPlacement, openFilesInNewTab } =
+      this.props
 
     // get messages of current room
     const messages = roomId ? this.props.messages[roomId] : null

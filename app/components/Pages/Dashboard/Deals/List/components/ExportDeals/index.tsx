@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import moment from 'moment'
 
 import {
   makeStyles,
@@ -11,14 +10,14 @@ import {
   ListItemText,
   Tooltip
 } from '@material-ui/core'
-
-import { useSelector } from 'react-redux'
 import { mdiArrowDown } from '@mdi/js'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
 
-import { selectUser } from 'selectors/user'
+import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { IAppState } from 'reducers'
-import { BaseDropdown, RenderToggleButtonProps } from 'components/BaseDropdown'
+import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -129,7 +128,7 @@ export function ExportDeals(props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={(buttonProps: RenderToggleButtonProps) => (
+      renderDropdownButton={({ isActive, ...buttonProps }) => (
         <Tooltip placement="bottom" title="Export Deals">
           <Button
             className={classes.exportButton}

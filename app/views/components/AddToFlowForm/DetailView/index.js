@@ -1,16 +1,17 @@
 import React from 'react'
+
 import PropTypes from 'prop-types'
 
 import { Name } from '../styled'
 
-import StartAt from './StartAt'
-import Steps from './Steps'
-import Footer from './Footer'
-import MetaData from './MetaData'
 import ActiveMode from './ActiveMode'
 import DefaultView from './DefaultView'
-import WithoutStep from './WithoutStep'
+import Footer from './Footer'
+import MetaData from './MetaData'
+import StartAt from './StartAt'
+import Steps from './Steps'
 import { Container } from './styled'
+import WithoutStep from './WithoutStep'
 
 function getInitialState(flow) {
   return {

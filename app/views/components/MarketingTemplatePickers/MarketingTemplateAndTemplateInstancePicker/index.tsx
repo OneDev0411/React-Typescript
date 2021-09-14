@@ -1,20 +1,24 @@
-import React, { useState } from 'react'
 import { Grid, Tabs, Tab } from '@material-ui/core'
+import useControllableState from 'react-use-controllable-state'
 
-import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
-
-import TemplatesList from 'components/MarketingTemplatePickers/MarketingTemplatePicker/TemplatesList'
-import MarketingTemplateInstancePicker from 'components/MarketingTemplatePickers/MarketingTemplateInstancePicker'
-import { MarketingTemplateAndTemplateInstancePickerProps } from 'components/MarketingTemplatePickers/types'
-
-type MyDesignsOrTemplateType = 'MyDesigns' | IMarketingTemplateType
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+import MarketingTemplateInstancePicker from '@app/views/components/MarketingTemplatePickers/MarketingTemplateInstancePicker'
+import TemplatesList from '@app/views/components/MarketingTemplatePickers/MarketingTemplatePicker/TemplatesList'
+import {
+  MarketingTemplateAndTemplateInstancePickerProps,
+  MyDesignsOrTemplateType
+} from '@app/views/components/MarketingTemplatePickers/types'
 
 export default function MarketingTemplateAndTemplateInstancePicker({
   templateTypes,
+  selectedTab: passedSelectedTab,
+  onSelectTab,
   ...props
 }: MarketingTemplateAndTemplateInstancePickerProps) {
-  const [selectedTab, setSelectedTab] = useState<MyDesignsOrTemplateType>(
-    'MyDesigns'
+  const [selectedTab, setSelectedTab] = useControllableState(
+    passedSelectedTab,
+    onSelectTab,
+    templateTypes[0]
   )
 
   return (

@@ -190,6 +190,7 @@ declare type IListingAssociation = 'proposed_agent'
 declare type IListing<Associations extends IListingAssociation = ''> = {
   type: 'listing'
   id: UUID
+  url: string
   created_at: number
   updated_at: number
   deleted_at: number | null
@@ -247,6 +248,7 @@ declare type IListing<Associations extends IListingAssociation = ''> = {
   mls_area_major: string
   mls_area_minor: string
   mls_name: string
+  mls_display_name: string
   matrix_modified_dt: string
   showing_instructions_type: string
   tax_legal_description: string

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+
 import {
   Grid,
   Box,
@@ -38,7 +39,7 @@ export default function TeamTreeView({ onSelectTeam }: Props) {
 
   if (isLoading) {
     return (
-      <Grid container alignItems="center" justify="center">
+      <Grid container alignItems="center" justifyContent="center">
         <Box py={3}>
           <CircularProgress />
         </Box>

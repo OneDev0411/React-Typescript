@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   Grid,
   Box,
@@ -15,8 +16,8 @@ import {
   mdiArrowRight
 } from '@mdi/js'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -36,7 +37,7 @@ export default function Info() {
 
   return (
     <Box py={6} mb={3} textAlign="center" className={classes.container}>
-      <Grid container alignItems="center" justify="center">
+      <Grid container alignItems="center" justifyContent="center">
         <Grid item xs={12} md={3}>
           <div>
             <SvgIcon

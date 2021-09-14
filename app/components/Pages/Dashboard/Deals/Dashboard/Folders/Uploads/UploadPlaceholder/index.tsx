@@ -5,6 +5,7 @@ import { Tooltip } from '@material-ui/core'
 import copy from 'utils/copy-text-to-clipboard'
 
 import UploadManager from '../../../../UploadManager'
+
 import { Container, ItemLink } from './styled'
 
 interface Props {

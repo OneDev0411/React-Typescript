@@ -1,4 +1,5 @@
 import React from 'react'
+
 import Flex from 'styled-flex-component'
 
 import { H2 } from 'components/Typography/headings'

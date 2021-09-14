@@ -1,6 +1,7 @@
 import React from 'react'
-import Box from '@material-ui/core/Box'
+
 import { makeStyles, Theme } from '@material-ui/core'
+import Box from '@material-ui/core/Box'
 
 import { SingleMarkerMap } from 'components/maps/SingleMarkerMap'
 

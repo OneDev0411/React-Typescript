@@ -1,14 +1,47 @@
 import React, { useCallback, useEffect } from 'react'
+
+import { Typography, Theme, makeStyles } from '@material-ui/core'
+import { mdiBellOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import { mdiClockOutline } from '@mdi/js'
-
 import { addNotification, Notification } from 'components/notification'
-
-import useInput from 'hooks/use-input'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import useInput from 'hooks/use-input'
 
-import { Container, Label, Input } from './styled'
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      minHeight: '42px',
+      padding: theme.spacing(1),
+      borderRadius: `${theme.shape.borderRadius}px`,
+      border: `1px solid ${theme.palette.action.disabledBackground}`
+    },
+    icon: {
+      color: theme.palette.grey[500]
+    },
+    label: {
+      color: theme.palette.grey[600],
+      margin: 0
+    },
+    input: {
+      outline: 'none',
+      border: 'none',
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      textAlign: 'center',
+      color: theme.palette.primary.main,
+      width: '3rem',
+      margin: theme.spacing(0, 1),
+      ...theme.typography.body2
+    },
+    inputSuffix: {
+      margin: 0,
+      fontWeight: 'bold'
+    }
+  }),
+  { name: 'TouchReminder' }
+)
 
 interface TouchReminderProps {
   value?: number
@@ -21,6 +54,7 @@ function TouchReminder({
   onChange: passedOnChange,
   notify
 }: TouchReminderProps) {
+  const classes = useStyles()
   const { value, onChange, setValue } = useInput({
     pattern: /^[0-9]{0,5}$/
   })
@@ -57,20 +91,27 @@ function TouchReminder({
   }
 
   return (
-    <Container>
-      <SvgIcon path={mdiClockOutline} rightMargined />
-      <Label>Touch Reminder</Label>
-      <Input
+    <div className={classes.container}>
+      <SvgIcon path={mdiBellOutline} className={classes.icon} rightMargined />
+      <Typography variant="body2" className={classes.label}>
+        Remind to touch every
+      </Typography>
+      <input
+        className={classes.input}
         value={value.toString()}
         onChange={onChange}
         onFocus={handleFocus}
         onBlur={handleUpdate}
         data-test="touch-reminder-input"
       />
-      <Label data-test="touch-reminder-days" bold>
+      <Typography
+        variant="body2"
+        className={classes.inputSuffix}
+        data-test="touch-reminder-days"
+      >
         Days
-      </Label>
-    </Container>
+      </Typography>
+    </div>
   )
 }
 

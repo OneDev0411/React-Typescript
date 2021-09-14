@@ -1,11 +1,11 @@
 import { ROLE_NAMES } from 'deals/utils/roles'
 
+import { isValidAddress } from './is-valid-address'
 import { isValidCommission } from './is-valid-commission'
 import { isValidEmail } from './is-valid-email'
 import { isValidLegalPrefix } from './is-valid-legal-prefix'
 import { isValidPhoneNumber } from './is-valid-phone'
 import { isValidString } from './is-valid-string'
-import { isValidAddress } from './is-valid-address'
 
 /**
  * get form validators

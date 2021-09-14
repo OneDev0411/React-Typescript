@@ -1,5 +1,3 @@
-import _ from 'underscore'
-
 import { uploadCsvFile as upload } from '../../../../models/contacts/upload-csv'
 import { setCsvFileId } from '../set-csv-file'
 

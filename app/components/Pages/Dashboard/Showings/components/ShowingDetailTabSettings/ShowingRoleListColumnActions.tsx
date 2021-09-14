@@ -1,25 +1,22 @@
 import { useState } from 'react'
-import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
 
+import { Button, IconButton, makeStyles, Tooltip } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
+import deleteShowingRole from 'models/showing/delete-showing-role'
 import updateShowingRole from 'models/showing/update-showing-role'
 
-import deleteShowingRole from 'models/showing/delete-showing-role'
-
-import useNotify from 'hooks/use-notify'
-
+import { goAndShowNotificationTypes } from '../../constants'
+import { getShowingRoleLabel } from '../../helpers'
 import {
   ShowingRoleFormDialog,
   ShowingRoleFormDialogProps
 } from '../ShowingRoleForm'
-import { getShowingRoleLabel } from '../../helpers'
-import { goAndShowNotificationTypes } from '../../constants'
 import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import useShowingRoleFormSubmit from '../ShowingRoleForm/use-showing-role-form-submit'
 
 const useStyles = makeStyles(
   theme => ({
@@ -57,33 +54,35 @@ function ShowingRoleListColumnActions({
 
   const notify = useNotify()
 
-  const handleEdit = (updatedRole: ShowingRoleFormValues) => {
-    const roleInput: IShowingRoleInput = {
-      role: updatedRole.role,
-      first_name: updatedRole.first_name,
-      last_name: updatedRole.last_name,
-      email: updatedRole.email,
-      phone_number: updatedRole.phone_number,
-      can_approve: updatedRole.can_approve,
-      confirm_notification_type: updatedRole.confirm_notification_type,
-      cancel_notification_type: updatedRole.cancel_notification_type,
-      user: updatedRole.user,
-      brand: role.brand,
-      ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {})
-    }
+  const { handleSubmit: handleEdit, isSavingContact } =
+    useShowingRoleFormSubmit((updatedRole: ShowingRoleFormValues) => {
+      const roleInput: IShowingRoleInput = {
+        role: updatedRole.role,
+        first_name: updatedRole.first_name,
+        last_name: updatedRole.last_name,
+        email: updatedRole.email,
+        phone_number: updatedRole.phone_number,
+        can_approve: updatedRole.can_approve,
+        confirm_notification_type: updatedRole.confirm_notification_type,
+        cancel_notification_type: updatedRole.cancel_notification_type,
+        user: updatedRole.user,
+        brand: role.brand,
+        ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {})
+      }
 
-    run(async () => {
-      await updateShowingRole(showingId, role.id, roleInput)
-      onEdit({
-        ...role,
-        ...updatedRole
-      })
-      notify({
-        status: 'success',
-        message: 'The participant information was updated successfully.'
+      run(async () => {
+        await updateShowingRole(showingId, role.id, roleInput)
+        onEdit({
+          ...role,
+          ...updatedRole,
+          user: updatedRole.user ?? role.user
+        })
+        notify({
+          status: 'success',
+          message: 'The participant information was updated successfully.'
+        })
       })
     })
-  }
 
   const handleDelete = () => {
     run(async () => {
@@ -99,7 +98,7 @@ function ShowingRoleListColumnActions({
   const deleteButton = (
     <IconButton
       size="small"
-      disabled={!hasDelete || isLoading}
+      disabled={!hasDelete || isLoading || isSavingContact}
       onClick={handleDelete}
     >
       <SvgIcon path={mdiTrashCanOutline} />
@@ -114,7 +113,7 @@ function ShowingRoleListColumnActions({
         variant="outlined"
         color="default"
         onClick={openEditDialog}
-        disabled={isLoading}
+        disabled={isLoading || isSavingContact}
       >
         Edit
       </Button>
@@ -131,10 +130,12 @@ function ShowingRoleListColumnActions({
           can_approve: role.can_approve,
           confirm_notification_type: role.confirm_notification_type,
           cancel_notification_type: role.cancel_notification_type,
-          user: role.user
+          user: role.user,
+          save_to_contact: true
         }}
         onConfirm={handleEdit}
         hasNotificationTypeFields={hasNotificationTypeFields}
+        hideAddToContactCheckbox
       />
       {hasDelete ? (
         deleteButton

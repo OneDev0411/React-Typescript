@@ -1,29 +1,27 @@
 import { useState, ReactNode } from 'react'
-import { Box } from '@material-ui/core'
 
+import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
-
 import useAsync from 'hooks/use-async'
-
+import useNotify from 'hooks/use-notify'
 import addShowingRole from 'models/showing/add-showing-role'
-
 import { selectActiveTeamId } from 'selectors/team'
 
-import useNotify from 'hooks/use-notify'
-
 import { goAndShowNotificationTypes } from '../../constants'
-import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
+import { getShowingRoleLabel } from '../../helpers'
+import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
+import { ShowingRoleFormDialog } from '../ShowingRoleForm'
+import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import useShowingRoleFormSubmit from '../ShowingRoleForm/use-showing-role-form-submit'
+
 import ShowingRoleListColumnActions, {
   ShowingRoleListColumnActionsProps
 } from './ShowingRoleListColumnActions'
 import ShowingRoleListColumnMediums from './ShowingRoleListColumnMediums'
-import { ShowingRoleFormDialog } from '../ShowingRoleForm'
-import ShowingRoleAddNewButton from '../ShowingRoleAddNewButton'
-import { getShowingRoleLabel } from '../../helpers'
-import { ShowingRoleFormValues } from '../ShowingRoleForm/types'
+import ShowingRoleListColumnPerson from './ShowingRoleListColumnPerson'
 
 export interface ShowingRoleListProps
   extends Pick<
@@ -53,22 +51,24 @@ function ShowingRoleList({
 
   const notify = useNotify()
 
-  const handleAdd = (role: ShowingRoleFormValues) => {
-    run(async () => {
-      const newRole = await addShowingRole(showingId, {
-        ...role,
-        ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {}),
-        brand: activeTeamId
-      })
+  const { handleSubmit: handleAdd, isSavingContact } = useShowingRoleFormSubmit(
+    ({ save_to_contact, contact, ...role }: ShowingRoleFormValues) => {
+      run(async () => {
+        const newRole = await addShowingRole(showingId, {
+          ...role,
+          ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {}),
+          brand: activeTeamId
+        })
 
-      onChange([...roles, newRole])
+        onChange([...roles, newRole])
 
-      notify({
-        status: 'success',
-        message: 'A new participant was added successfully.'
+        notify({
+          status: 'success',
+          message: 'A new participant was added successfully.'
+        })
       })
-    })
-  }
+    }
+  )
 
   const handleEdit = (updatedRole: IShowingRole) => {
     const roleIndex = roles.findIndex(role => role.id === updatedRole.id)
@@ -163,7 +163,10 @@ function ShowingRoleList({
         virtualize={false}
       />
       <Box display="flex" justifyContent="space-between" mt={2}>
-        <ShowingRoleAddNewButton onClick={openAddDialog} disabled={isLoading} />
+        <ShowingRoleAddNewButton
+          onClick={openAddDialog}
+          disabled={isLoading || isSavingContact}
+        />
         {children}
       </Box>
       <ShowingRoleFormDialog
@@ -179,7 +182,8 @@ function ShowingRoleList({
           email: '',
           can_approve: true,
           confirm_notification_type: [],
-          cancel_notification_type: []
+          cancel_notification_type: [],
+          save_to_contact: true
         }}
         hasNotificationTypeFields={hasNotificationTypeFields}
       />

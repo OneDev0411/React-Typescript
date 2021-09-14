@@ -1,28 +1,22 @@
 import React from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import { upsertContexts, approveContext } from 'actions/deals'
-
+import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
+import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
 import { getContext } from 'models/Deal/helpers/context/get-context'
 import { getContextValue } from 'models/Deal/helpers/context/get-context-value'
-import { createContextObject } from 'models/Deal/helpers/brand-context/create-context-object'
 import { validateContext } from 'models/Deal/helpers/context/validate-context'
-
 import { IAppState } from 'reducers'
-
+import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
 
-import { isRequiredContext } from 'models/Deal/helpers/brand-context/is-required-context'
-
-import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
-
-import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
-
 import { DateField } from './DateField'
-import { TextField } from './TextField'
-
-import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
 import { isContextApproved } from './helpers/is-context-approved'
+import { useFactsheetContexts } from './hooks/use-factsheet-contexts'
+import { ItemsContainer, SectionTitle, TimelineSplitter } from './styled'
+import { TextField } from './TextField'
 
 interface Props {
   deal: IDeal
@@ -114,23 +108,33 @@ export default function Factsheet({
     try {
       const context = getContext(deal, field.key)
 
-      await dispatch(approveContext(deal.id, context.id))
+      if (context) {
+        await dispatch(approveContext(deal.id, context.id))
+      }
     } catch (e) {
       console.log(e)
     }
   }
 
-  const getTooltipTitle = (context: IDealBrandContext, isDisabledByMls) => {
+  const getTooltipTitle = (
+    brandContext: IDealBrandContext,
+    dealContext: Nullable<IDealContext>,
+    isDisabledByMls: boolean
+  ) => {
     if (isDisabledByMls) {
       return (
         <div>
-          <b>{context.label}</b> can only be changed on MLS. Once changed, the
-          update will be reflected here.
+          <b>{brandContext.label}</b> can only be changed on MLS. Once changed,
+          the update will be reflected here.
         </div>
       )
     }
 
-    if (!isContextApproved(deal, context) && !isBackOffice) {
+    if (
+      dealContext?.id &&
+      !isContextApproved(deal, brandContext) &&
+      !isBackOffice
+    ) {
       return 'Pending Office Approval'
     }
 
@@ -144,38 +148,44 @@ export default function Factsheet({
       <ItemsContainer>
         {section === 'Dates' && <TimelineSplitter />}
 
-        {table.map((context, index) => {
-          const value = getFieldValue(getContextValue(deal, context))
+        {table.map((brandContext, index) => {
+          const dealContext = getContext(deal, brandContext.key)
+          const value = getFieldValue(getContextValue(deal, brandContext))
           const hasMlsValue =
             value != null &&
             value !== '' &&
-            deal.context[context.key]?.source === 'MLS'
+            deal.context[brandContext.key]?.source === 'MLS'
 
           const isDisabledByMls = !!(
             deal.listing &&
-            context.preffered_source === 'MLS' &&
+            brandContext.preffered_source === 'MLS' &&
             hasMlsValue
           )
 
           const sharedProps = {
             index,
             total: table.length - 1,
-            field: context,
+            brandContext,
+            dealContext,
             value,
             deal,
             isBackOffice,
             isDisabled: disableEditing || isDisabledByMls,
-            tooltip: getTooltipTitle(context, isDisabledByMls),
+            tooltip: getTooltipTitle(
+              brandContext,
+              dealContext,
+              isDisabledByMls
+            ),
             onChange: handleChangeContext,
             onDelete: handleDeleteContext,
             onApprove: handleApproveField
           }
 
-          if (context.data_type === 'Date') {
-            return <DateField key={context.key} {...sharedProps} />
+          if (brandContext.data_type === 'Date') {
+            return <DateField key={brandContext.key} {...sharedProps} />
           }
 
-          return <TextField key={context.key} {...sharedProps} />
+          return <TextField key={brandContext.key} {...sharedProps} />
         })}
       </ItemsContainer>
     </>

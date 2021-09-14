@@ -8,27 +8,25 @@ import {
   Divider,
   Typography
 } from '@material-ui/core'
-import { spacing } from '@material-ui/system'
 import { styled } from '@material-ui/core/styles'
+import { spacing } from '@material-ui/system'
 
 import { roleName } from 'deals/utils/roles'
 
-import DeleteRole from '../components/DeleteRole'
-
 import Field from '../components/CustomField'
+import DeleteRole from '../components/DeleteRole'
+import { TYPE_PERSON } from '../constants/role-types'
+import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
 
-import { TitleInput } from './form-fields/TitleInput'
-import { TypeInput } from './form-fields/TypeInput'
-import { Roles } from './form-fields/Roles'
 import { Address } from './form-fields/Address'
 import { AutoCompleteInput } from './form-fields/AutoCompleteInput'
-import { NameInput } from './form-fields/NameInput'
-import { MlsInput } from './form-fields/MlsInput'
 import { CommissionInput } from './form-fields/CommissionInput'
+import { MlsInput } from './form-fields/MlsInput'
+import { NameInput } from './form-fields/NameInput'
+import { Roles } from './form-fields/Roles'
 import { TextInput } from './form-fields/TextInput'
-
-import { getAutocompleteOptions } from '../helpers/get-autocomplete-options'
-import { TYPE_PERSON } from '../constants/role-types'
+import { TitleInput } from './form-fields/TitleInput'
+import { TypeInput } from './form-fields/TypeInput'
 
 const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
@@ -132,6 +130,7 @@ export function RoleForm(props) {
               isVisible={isVisible('legal_first_name')}
               isRequired={isRequired('legal_first_name')}
               crmSearch={!isVisible('mls_id')}
+              autoTrim={false}
               mutators={props.form.mutators}
               component={NameInput}
             />
@@ -157,6 +156,7 @@ export function RoleForm(props) {
               isVisible={isVisible('legal_last_name')}
               isRequired={isRequired('legal_last_name')}
               crmSearch={!isVisible('mls_id')}
+              autoTrim={false}
               component={NameInput}
               mutators={props.form.mutators}
             />
@@ -200,6 +200,7 @@ export function RoleForm(props) {
               isVisible={isVisible('company_title')}
               isRequired={isRequired('company_title')}
               component={NameInput}
+              autoTrim={false}
               crmSearch // always search company in crm contacts
               mutators={props.form.mutators}
             />

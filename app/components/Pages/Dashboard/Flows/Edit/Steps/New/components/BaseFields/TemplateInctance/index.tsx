@@ -1,6 +1,7 @@
 import React from 'react'
+
+import { Box, Typography } from '@material-ui/core'
 import { Field } from 'react-final-form'
-import { Typography } from '@material-ui/core'
 
 import { TemplateSelector } from './Selector'
 
@@ -35,14 +36,17 @@ export const TemplateInctance = ({
           <>
             <TemplateSelector
               disabled={disabled}
+              hasError={showError}
               currentBrandTemplate={currentBrandTemplate}
               currentTemplateInstance={currentTemplateInstance}
               onChange={onChange}
             />
             {showError && (
-              <Typography variant="body2" color="error">
-                {meta.error}
-              </Typography>
+              <Box mt={0.5}>
+                <Typography variant="body2" color="error">
+                  {meta.error}
+                </Typography>
+              </Box>
             )}
           </>
         )

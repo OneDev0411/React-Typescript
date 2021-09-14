@@ -1,8 +1,8 @@
 import React from 'react'
+
 import cn from 'classnames'
 
 import { NotifyOffice } from '../NotifyOffice'
-
 import {
   ChecklistItemContainer,
   ChecklistItemTitle,

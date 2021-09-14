@@ -1,28 +1,24 @@
 import React, { useState, useMemo, memo } from 'react'
-import cn from 'classnames'
+
 import { Popover, Button, IconButton } from '@material-ui/core'
+import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
+import cn from 'classnames'
 import fecha from 'fecha'
 
-import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
-
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
+import FollowUpModal from 'components/FollowUpModal'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { deleteTask } from 'models/tasks'
-import { CrmEventType } from 'components/Calendar/types'
-
 import { eventTypesIcons as eventIcons } from 'views/utils/event-types-icons'
 import { importantDatesIcons as contactIcons } from 'views/utils/important-dates-icons'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import FollowUpModal from 'components/FollowUpModal'
-
+import { BaseEventProps } from '../..'
 import {
   isCRMEvent,
   isDealEvent,
   isCelebrationEvent
 } from '../../../../helpers/normalize-events/helpers/event-checker'
-
 import { usePopoverStyles } from '../../use-style'
-import { BaseEventProps } from '../..'
 
 import { getFormatDate } from './helper/get-format-date'
 

@@ -1,4 +1,5 @@
 import { formValueSelector, change } from 'redux-form'
+
 import { ACTIVE_SOLD_STATUS } from '../../../../constants/listings/search/filters'
 
 const formName = 'filters'

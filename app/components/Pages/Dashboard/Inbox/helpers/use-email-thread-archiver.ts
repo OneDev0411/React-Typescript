@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { addNotification } from 'components/notification'
 
+import { useDispatch } from 'react-redux'
+
+import { addNotification } from 'components/notification'
 import { archiveEmailThreads } from 'models/email/archive-email-threads'
 
 export default function useEmailThreadArchiver(emailThreadId: UUID) {

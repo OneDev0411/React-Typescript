@@ -1,14 +1,14 @@
-import { WithRouterProps, browserHistory } from 'react-router'
 import { Container, Grid, Theme, makeStyles } from '@material-ui/core'
-
-import { createAppointmentRequest } from 'models/showing/create-appointment-request'
+import { WithRouterProps, browserHistory } from 'react-router'
 
 import useNotify from '@app/hooks/use-notify'
 import LoadingContainer from 'components/LoadingContainer'
+import { createAppointmentRequest } from 'models/showing/create-appointment-request'
 
-import InfoSection from '../Sections/InfoSection'
-import BookSection from './Sections/BookSection'
 import { usePublicShowing } from '../hooks'
+import InfoSection from '../Sections/InfoSection'
+
+import BookSection from './Sections/BookSection'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -63,8 +63,6 @@ export default function BookShowing({
       })
     }
   }
-
-  console.log({ showing })
 
   return (
     <Container className={classes.pageContainer}>

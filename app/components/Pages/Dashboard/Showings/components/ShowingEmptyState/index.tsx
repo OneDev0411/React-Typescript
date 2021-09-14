@@ -1,5 +1,6 @@
-import { Grid, Box, Typography, Theme, makeStyles } from '@material-ui/core'
 import { ReactNode } from 'react'
+
+import { Grid, Box, Typography, Theme, makeStyles } from '@material-ui/core'
 
 import LinkButton from '../LinkButton'
 
@@ -42,7 +43,7 @@ export default function ShowingEmptyState({
     <Grid
       container
       alignItems="center"
-      justify="space-around"
+      justifyContent="space-around"
       direction="row"
       spacing={4}
       className={classes.container}

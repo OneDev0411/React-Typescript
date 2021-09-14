@@ -1,18 +1,25 @@
 import { useEffect } from 'react'
-import { InjectedRouter, Route } from 'react-router'
+
+import { InjectedRouter, PlainRoute } from 'react-router'
 
 function useLoseYourWorkAlert(
   router: InjectedRouter,
-  route: Route,
-  needsAlert: boolean
+  route: PlainRoute,
+  needsAlert: boolean,
+  leaveMessage: string
 ) {
   useEffect(() => {
     router.setRouteLeaveHook(route, () => {
       if (needsAlert) {
-        return 'By canceling you will lose your work. Continue?'
+        return leaveMessage
       }
     })
-  }, [router, route, needsAlert])
+
+    return () => {
+      // Reset the leave hook if the user leaves the component
+      router.setRouteLeaveHook(route, () => {})
+    }
+  }, [router, route, needsAlert, leaveMessage])
 }
 
 export default useLoseYourWorkAlert

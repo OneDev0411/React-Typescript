@@ -8,11 +8,7 @@ export function setInlineDateField(
       .first()
       .click()
       .within(() => {
-        cy.get('div')
-          .first()
-          .children()
-          .eq(date.getMonth())
-          .click()
+        cy.get('div').first().children().eq(date.getMonth()).click()
       })
 
     cy.get('div')
@@ -27,9 +23,7 @@ export function setInlineDateField(
       })
 
     if (!ignoreYear) {
-      cy.get('input[type=text]')
-        .first()
-        .type(date.getFullYear().toString())
+      cy.get('input[type=text]').first().type(date.getFullYear().toString())
     }
   })
 
@@ -40,9 +34,7 @@ export function setInlineDateField(
       cy.get('div')
         .first()
         .within(() => {
-          cy.get('button')
-            .last()
-            .click()
+          cy.get('button').last().click()
         })
     })
 }
@@ -65,8 +57,6 @@ export function setDateFieldToFuture(isPickerAlreadyOpen = false) {
   }
 
   cy.get('.DayPicker-NavButton--next').click()
-  cy.get('.DayPicker-Day')
-    .last()
-    .click()
+  cy.get('.DayPicker-Day').last().click()
   cy.getByTestSelector('date-picker-done').click()
 }

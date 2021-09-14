@@ -3,6 +3,7 @@
 const fetch = require('isomorphic-fetch')
 
 const config = require('../../../../config').default
+
 const storage = require('./storage').default
 
 const API_URL = config.api_url
@@ -10,6 +11,7 @@ const API_URL = config.api_url
 export function onlineSubmitHandler(data) {
   const filterContactsApiUrl = `${API_URL}/contacts/filter?limit=1&filter_type=or`
   const attributeDefinitionsApiUrl = `${API_URL}/contacts/attribute_defs`
+  // eslint-disable-next-line max-len
   const createContactApiUrl = `${API_URL}/contacts?activity=true&relax=false&get=true`
   const associateContactApiUrl = `${API_URL}/crm/tasks/${data.id}/associations`
 

@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
-import { IconButton, Tooltip, makeStyles } from '@material-ui/core'
-import { fade } from '@material-ui/core/styles'
 
+import { IconButton, Tooltip, makeStyles } from '@material-ui/core'
+import { alpha } from '@material-ui/core/styles'
+import { mdiMonitor, mdiCellphone } from '@mdi/js'
 import { Editor } from 'grapesjs'
 
-import { mdiMonitor, mdiCellphone } from '@mdi/js'
-
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { useIconStyles } from 'views/../styles/use-icon-styles'
 
 const useStyles = makeStyles(theme => ({
   selected: {
-    backgroundColor: fade(theme.palette.primary.main, 0.14)
+    backgroundColor: alpha(theme.palette.primary.main, 0.14)
   }
 }))
 

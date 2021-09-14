@@ -1,30 +1,40 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { Box, Grid, Button, Container, RootRef } from '@material-ui/core'
-import { makeStyles, Theme, useTheme, useMediaQuery } from '@material-ui/core'
 
-import listingUtils from 'utils/listing'
+import {
+  Box,
+  Grid,
+  Button,
+  Container,
+  RootRef,
+  makeStyles,
+  Theme,
+  useTheme,
+  useMediaQuery
+} from '@material-ui/core'
+import { useSelector } from 'react-redux'
+
+import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
+import listingUtils from 'utils/listing'
 
-import ShareModal from '../../../components/Pages/Dashboard/Listings/components/modals/ShareListingModal.js'
-import { useGetListing, UseGetListing } from './use-get-listing'
-import Header from './Header'
-import Title from './Title'
-import Status from './Status'
-import Gallery from './Gallery'
-import MainFeatures from './MainFeatures'
-import FeaturedImages from './FeaturedImages'
+import ShareModal from '../../../components/Pages/Dashboard/MLS/components/modals/ShareListingModal.js'
+
 import AgentInfo from './AgentInfo'
+import ClaimAccountBanner from './ClaimAccountBanner'
 import Description from './Description'
+import FeaturedImages from './FeaturedImages'
 import FeatureList from './FeatureList'
+import Gallery from './Gallery'
+import { getAgentInfo } from './get-agent-info'
+import { getPrice } from './get-price'
+import Header from './Header'
+import MainFeatures from './MainFeatures'
 import Map from './Map'
 import MLSNote from './MLSNote'
-import ClaimAccountBanner from './ClaimAccountBanner'
-import { getPrice } from './get-price'
-import { getSubAddress } from './get-sub-address'
-import { getAgentInfo } from './get-agent-info'
+import Status from './Status'
+import Title from './Title'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -162,7 +172,10 @@ function ListingDetails({ id, isWidget = false, onClose }: Props) {
   const agent = getAgentInfo(listing)
   const title = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
-  const subtitle2 = `${getSubAddress(listing)} | MLS#: ${listing.mls_number}`
+  const subtitle2 = [
+    listingUtils.getListingAddressLine2(listing),
+    `MLS#: ${listing.mls_number}`
+  ].join(' | ')
   const images = listing.gallery_image_urls || []
 
   return (

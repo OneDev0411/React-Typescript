@@ -1,30 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { WithRouterProps } from 'react-router'
-import useDeepCompareEffect from 'react-use/lib/useDeepCompareEffect'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-
-import { IAppState } from 'reducers/index'
-
+import { selectUser } from '@app/selectors/user'
 import PageLayout from 'components/GlobalPageLayout'
-
-import { searchDeals, getDeals } from 'actions/deals'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
-
-import TabFilters from './Filters'
-
-import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import { SearchQuery } from './types'
-
-import { getStaticFilterQuery } from './utils/get-static-filter-query'
-
+import TabFilters from './Filters'
 import Grid from './Grid'
+import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
+import { useSearchQuery } from './hooks/use-search-query'
+import { SearchQuery } from './types'
 
 interface StateProps {
   user: IUser
@@ -51,14 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BackofficeTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
+  const user = useSelector(selectUser)
 
-  const dispatch = useDispatch()
-  const { user, deals } = useSelector(({ user, deals }: IAppState) => ({
-    user,
-    deals: deals.list
-  }))
-
-  const statuses = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const searchQuery: SearchQuery = {
@@ -67,27 +53,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
     term: searchCriteria || ''
   }
 
-  const handleQueryChange = (value: string): void => {
-    if (value.length === 0) {
-      dispatch(getDeals(user))
-    }
-
-    if (value.length > 3 && searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, value))
-    }
-
-    setSearchCriteria(value)
-  }
-
-  useDeepCompareEffect(() => {
-    if (searchQuery.type === 'query' && statuses.length > 0) {
-      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
-    }
-
-    if (searchQuery.type === 'inbox') {
-      dispatch(searchDeals(user, searchQuery.term))
-    }
-  }, [dispatch, searchQuery, statuses, user])
+  useSearchQuery(searchQuery, statuses)
 
   return (
     <PageLayout>
@@ -96,7 +62,7 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
             value={searchCriteria}
-            onChange={handleQueryChange}
+            onChange={setSearchCriteria}
           />
 
           <ExportDeals />
@@ -105,7 +71,6 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
       <PageLayout.Main>
         <div className={classes.filtersContainer}>
           <TabFilters
-            deals={deals}
             activeFilter={props.params.filter}
             searchQuery={searchQuery}
             sortableColumns={SORTABLE_COLUMNS}

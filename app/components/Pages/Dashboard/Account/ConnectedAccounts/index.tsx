@@ -1,24 +1,27 @@
 import React, { useContext } from 'react'
-import { AnyAction } from 'redux'
-import { connect } from 'react-redux'
-import { ThunkDispatch } from 'redux-thunk'
-import useEffectOnce from 'react-use/lib/useEffectOnce'
+
 import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
+import { connect, useSelector } from 'react-redux'
+import useEffectOnce from 'react-use/lib/useEffectOnce'
+import { AnyAction } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
+import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
+import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
+import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
+import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
+import { disconnectDocuSign } from 'actions/user/disconnect-docusign'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import LoadingContainer from 'components/LoadingContainer'
 import { IAppState } from 'reducers'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-import { syncOAuthAccount } from 'actions/contacts/sync-o-auth-account'
-import { fetchOAuthAccounts } from 'actions/contacts/fetch-o-auth-accounts'
-import { disconnectOAuthAccount } from 'actions/contacts/disconnect-o-auth-account'
-import { fetchUnreadEmailThreadsCount } from 'actions/inbox'
+import { selectUser } from 'selectors/user'
 
-import LoadingContainer from 'components/LoadingContainer'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import ConnectAccount from './ConnectAccount'
-import ConnectedAccount from './ConnectedAccount'
 import ConnectAccountButtons from './ConnectAccountButtons'
+import ConnectedAccount from './ConnectedAccount'
+import ConnectedDocusign from './ConnectedDocusign'
+import ZeroState from './ZeroState'
 
 interface Props {
   accounts: IOAuthAccount[]
@@ -26,6 +29,7 @@ interface Props {
   fetchOAuthAccounts: IAsyncActionProp<typeof fetchOAuthAccounts>
   syncOAuthAccount: IAsyncActionProp<typeof syncOAuthAccount>
   disconnectOAuthAccount: IAsyncActionProp<typeof disconnectOAuthAccount>
+  disconnectDocuSign: IAsyncActionProp<typeof disconnectDocuSign>
   fetchUnreadEmailThreadsCount: IAsyncActionProp<
     typeof fetchUnreadEmailThreadsCount
   >
@@ -37,6 +41,7 @@ function ConnectedAccounts({
   fetchOAuthAccounts,
   syncOAuthAccount,
   disconnectOAuthAccount,
+  disconnectDocuSign,
   fetchUnreadEmailThreadsCount
 }: Props) {
   useEffectOnce(() => {
@@ -44,6 +49,7 @@ function ConnectedAccounts({
   })
 
   const confirmation = useContext(ConfirmationModalContext)
+  const user = useSelector(selectUser)
 
   return (
     <>
@@ -56,7 +62,7 @@ function ConnectedAccounts({
           <LoadingContainer noPaddings />
         </Box>
       ) : accounts.length === 0 ? (
-        <ConnectAccount />
+        <ZeroState />
       ) : (
         <>
           <Box marginBottom={1.5}>
@@ -69,7 +75,7 @@ function ConnectedAccounts({
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <ConnectAccountButtons size="small" />
+                    <ConnectAccountButtons size="medium" />
                   </Grid>
                 </Grid>
               </Box>
@@ -94,6 +100,20 @@ function ConnectedAccounts({
                 }}
               />
             ))}
+            {user.docusign && (
+              <ConnectedDocusign
+                user={user}
+                onDisconnect={() => {
+                  confirmation.setConfirmationModal({
+                    message:
+                      'Your account will be permanently disconnected from DocuSign.',
+                    onConfirm: async () => {
+                      await disconnectDocuSign()
+                    }
+                  })
+                }}
+              />
+            )}
           </List>
         </>
       )}
@@ -114,6 +134,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
     disconnectOAuthAccount: (
       ...args: Parameters<typeof disconnectOAuthAccount>
     ) => dispatch(disconnectOAuthAccount(...args)),
+    disconnectDocuSign: (...args: Parameters<typeof disconnectDocuSign>) =>
+      dispatch(disconnectDocuSign(...args)),
     fetchUnreadEmailThreadsCount: (
       ...args: Parameters<typeof fetchUnreadEmailThreadsCount>
     ) => dispatch(fetchUnreadEmailThreadsCount(...args))

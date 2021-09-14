@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import EventForm from './EventForm'
 import BasicEmailForm from './BasicEmailForm'
-import MarketingEmailForm from './MarketingEmailForm'
 import { AddButtons } from './components/AddButtons'
+import EventForm from './EventForm'
+import MarketingEmailForm from './MarketingEmailForm'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -31,21 +32,15 @@ const useStyles = makeStyles(
 interface Props {
   index: number
   miniMode?: boolean
-  emailTemplates: IBrandEmailTemplate[]
-  defaultSelectedEmailTemplate?: UUID
   shouldShowDefaultForm?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
-  onNewEmailTemplateClick: () => void
 }
 
 export const NewStep = ({
   index,
-  emailTemplates,
   miniMode = false,
   shouldShowDefaultForm,
-  defaultSelectedEmailTemplate,
-  onSubmit,
-  onNewEmailTemplateClick
+  onSubmit
 }: Props) => {
   const classes = useStyles()
   const [isMiniMode, setIsMiniMode] = useState(miniMode)
@@ -63,13 +58,7 @@ export const NewStep = ({
   )
 
   const rebderBasicEmailForm = () => (
-    <BasicEmailForm
-      index={index}
-      templates={emailTemplates}
-      defaultSelectedTemplate={defaultSelectedEmailTemplate}
-      onSubmit={submitHandler}
-      onNewTemplateClick={onNewEmailTemplateClick}
-    />
+    <BasicEmailForm index={index} onSubmit={submitHandler} />
   )
   const rebderTemplateEmailForm = () => (
     <MarketingEmailForm index={index} onSubmit={submitHandler} />

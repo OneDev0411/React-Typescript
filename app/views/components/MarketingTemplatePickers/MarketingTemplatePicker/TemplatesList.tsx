@@ -1,13 +1,13 @@
 import React from 'react'
+
 import { Box, Grid, Typography, makeStyles } from '@material-ui/core'
 
-import { useInfinitePagination } from 'hooks/use-infinite-pagination'
-import { getActiveTeamId } from 'utils/user-teams'
-
 import LoadingContainer from 'components/LoadingContainer'
-import Masonry from 'components/Masonry'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
+import Masonry from 'components/Masonry'
+import { useInfinitePagination } from 'hooks/use-infinite-pagination'
+import { getActiveTeamId } from 'utils/user-teams'
 
 import { useTemplates } from '../../../../components/Pages/Dashboard/Marketing/hooks/use-templates'
 
@@ -47,7 +47,7 @@ export default function TemplatesList({
 
   if (isLoading) {
     return (
-      <Grid container justify="center">
+      <Grid container justifyContent="center">
         <LoadingContainer style={{ padding: '20%' }} noPaddings />
       </Grid>
     )
@@ -60,7 +60,7 @@ export default function TemplatesList({
         item
         direction="column"
         alignItems="center"
-        justify="center"
+        justifyContent="center"
       >
         <Box my={2} pt={10}>
           <img

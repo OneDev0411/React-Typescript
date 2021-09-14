@@ -1,10 +1,8 @@
 import { useSelector } from 'react-redux'
 
-import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
-
-import { selectContactAttributeDefs } from 'selectors/contacts'
-
 import useAsync from 'hooks/use-async'
+import { upsertContactAttributes } from 'models/contacts/helpers/upsert-contact-attributes'
+import { selectContactAttributeDefs } from 'selectors/contacts'
 
 import type { CreateContactInput } from './types'
 

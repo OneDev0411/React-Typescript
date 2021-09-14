@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
-import { withProps } from 'recompose'
+
 import { browserHistory } from 'react-router'
+import { withProps } from 'recompose'
 
 import { ACL } from '../../../constants/acl'
 

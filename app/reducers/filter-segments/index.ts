@@ -146,16 +146,19 @@ const filterSegments = <T>(state: IReduxFilterSegmentState<T>, action) => {
 }
 
 function createReducer<T>(id) {
-  const createList = reducer => (
-    state: IReduxFilterSegmentState<T> = initialState,
-    action
-  ) => {
-    if (action && action.namespace === 'filter-segments' && action.id === id) {
-      return reducer(state, action)
-    }
+  const createList =
+    reducer =>
+    (state: IReduxFilterSegmentState<T> = initialState, action) => {
+      if (
+        action &&
+        action.namespace === 'filter-segments' &&
+        action.id === id
+      ) {
+        return reducer(state, action)
+      }
 
-    return state
-  }
+      return state
+    }
 
   return createList(filterSegments)
 }

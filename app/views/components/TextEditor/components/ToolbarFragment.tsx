@@ -10,6 +10,7 @@ interface Props {
 
 export function ToolbarFragment({ children, group }: Props) {
   const { createToolbarFragment } = useContext(EditorToolbarContext)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const { update, remove } = useMemo(createToolbarFragment, [])
 
   useEffect(() => {

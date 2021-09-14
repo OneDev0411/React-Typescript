@@ -1,8 +1,9 @@
 import React, { memo } from 'react'
+
 import cn from 'classnames'
 
-import { useCommonStyles } from '../../use-style'
 import { BaseEventProps } from '../..'
+import { useCommonStyles } from '../../use-style'
 
 const CelebrationEventComponent = ({
   event,

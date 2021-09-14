@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect'
 
+import { getSettingsFromActiveTeam } from '@app/utils/user-teams'
 import { IAppState } from 'reducers'
 import { formatPhoneNumber } from 'utils/format'
+
+import { selectActiveTeamRolesUnsafe } from './team'
 
 /**
  * Returns the entire user info from the redux store.
@@ -15,20 +18,22 @@ export const selectUserUnsafe = (state: IAppState) => state.user
 
 /**
  * Returns the entire user info from the redux store.
- * It raises an error if the user did not sign in before.
  * @param state The app state
  * @returns The user state
  */
 export function selectUser(state: IAppState): IUser {
-  const user = selectUserUnsafe(state)!
+  return selectUserUnsafe(state)!
+}
 
-  // if (!user) {
-  //   throw new Error(
-  //     'This selector must be called when the user is signed in before'
-  //   )
-  // }
-
-  return user
+/**
+ * Returns the given user's settings
+ * @param state The app state
+ * @returns The user state
+ */
+export function selectUserSettingsInActiveTeam(
+  state: IAppState
+): StringMap<any> {
+  return getSettingsFromActiveTeam(team => team?.settings)(selectUser(state))
 }
 
 /**
@@ -50,9 +55,6 @@ export const selectUserFormattedPhoneNumber = createSelector(
     return phoneNumber ? formatPhoneNumber(phoneNumber) : phoneNumber
   }
 )
-
-export const selectUserDisplayName = (state: IAppState) =>
-  selectUser(state)?.display_name
 
 /**
  * Returns the email signature for the current user
@@ -77,9 +79,65 @@ export const selectUserIsSignedIn = (state: IAppState) =>
 export const selectUserId = (state: IAppState) => selectUser(state).id
 
 /**
+ * Returns the user first name
+ * @param state The app state
+ * @returns The current user first name
+ */
+export const selectUserFirstName = (state: IAppState): Nullable<string> =>
+  selectUser(state).first_name
+
+/**
+ * Returns the user display name
+ * @param state The app state
+ * @returns The current user display name
+ */
+export const selectUserDisplayName = (state: IAppState): Nullable<string> =>
+  selectUser(state).display_name
+
+/**
+ * Returns the user email
+ * @param state The app state
+ * @returns The current user email
+ */
+export const selectUserEmail = (state: IAppState): string =>
+  selectUser(state).email
+
+/**
+ * Returns the user type
+ * @param state The app state
+ * @returns The current user type
+ */
+export const selectUserType = (state: IAppState): TUserType =>
+  selectUser(state).user_type
+
+/**
+ * Returns the user created at
+ * @param state The app state
+ * @returns The current user created at
+ */
+export const selectUserCreatedAt = (state: IAppState): number =>
+  selectUser(state).created_at
+
+/**
  * Returns the user timezone
  * @param state The app state
  * @returns The current user timezone
  */
 export const selectUserTimezone = (state: IAppState) =>
   selectUser(state).timezone
+
+/**
+ * Returns the list of user's unique access list
+ * @param state The app state
+ * @returns current user access list
+ */
+export const selectUserAccessList = createSelector(
+  selectActiveTeamRolesUnsafe,
+  activeRoles => {
+    if (!activeRoles) {
+      return []
+    }
+
+    return [...new Set(activeRoles.flatMap(role => role.acl))]
+  }
+)

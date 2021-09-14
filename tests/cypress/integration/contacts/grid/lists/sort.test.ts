@@ -23,11 +23,7 @@ describe('Contacts list sort', () => {
 
     cy.navigate('/dashboard/contacts')
 
-    cy.getByTestSelector('grid-row')
-      .eq(0)
-      .should('contain', contactName)
-    cy.getByTestSelector('grid-row')
-      .eq(1)
-      .should('contain', secondContactName)
+    cy.getByTestSelector('grid-row').eq(0).should('contain', contactName)
+    cy.getByTestSelector('grid-row').eq(1).should('contain', secondContactName)
   })
 })

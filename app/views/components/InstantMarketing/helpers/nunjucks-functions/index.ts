@@ -1,13 +1,20 @@
 import _get from 'lodash/get'
 
-import flattenBrand from 'utils/flatten-brand'
 import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
+import flattenBrand from 'utils/flatten-brand'
 
 import config from '../../../../../../config/public'
 
-export function getListingUrl(activeBrand: IBrand, listing: IListing) {
+export function getListingUrl(
+  activeBrand: IBrand,
+  listing: IListing & { isMock?: true }
+) {
   if (!listing) {
     return ''
+  }
+
+  if (listing.isMock) {
+    return listing.url ?? ''
   }
 
   if (listing.url) {

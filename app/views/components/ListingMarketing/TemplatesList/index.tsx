@@ -1,11 +1,11 @@
 import { memo, ReactNode } from 'react'
-import { useSelector } from 'react-redux'
+
 import { Grid, Box, Button, makeStyles, Theme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 import pluralize from 'pluralize'
+import { useSelector } from 'react-redux'
 
 import { selectUser } from '@app/selectors/user'
-
 import { Thumbnail } from '@app/views/components/MarketingTemplateCard/Thumbnail'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -104,7 +104,7 @@ function TemplatesList({
             key={template.id}
             container
             item
-            justify="flex-start"
+            justifyContent="flex-start"
             xs={12}
             sm={6}
             md={3}

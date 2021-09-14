@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, waitForElement, fireEvent } from '@testing-library/react'
+import { render } from '@testing-library/react'
 
 // import mcEmailCampaign from 'fixtures/email-campaign/mc-email-campaign.json'
 

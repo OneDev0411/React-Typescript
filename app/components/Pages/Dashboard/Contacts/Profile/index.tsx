@@ -5,52 +5,47 @@ import React, {
   useRef,
   RefObject
 } from 'react'
-import { withRouter } from 'react-router'
-import { connect } from 'react-redux'
-import { useEffectOnce } from 'react-use'
+
 import { makeStyles, Theme } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
-
 import cn from 'classnames'
+import { Helmet } from 'react-helmet'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
+import { useEffectOnce } from 'react-use'
 
+import { getContactsTags } from 'actions/contacts/get-contacts-tags'
 import PageLayout from 'components/GlobalPageLayout'
-
-import { goTo } from 'utils/go-to'
-import { viewAs } from 'utils/user-teams'
-import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
-
-import { stopFlow } from 'models/flows/stop-flow'
-import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
-import { updateContactQuery } from 'models/contacts/helpers/default-query'
-import { getContact } from 'models/contacts/get-contact'
 import { deleteContacts } from 'models/contacts/delete-contact'
+import { getContact } from 'models/contacts/get-contact'
+import { updateContactQuery } from 'models/contacts/helpers/default-query'
+import { normalizeContact } from 'models/contacts/helpers/normalize-contact'
 import { updateContactSelf } from 'models/contacts/update-contact-self'
-
+import { stopFlow } from 'models/flows/stop-flow'
 import { isLoadedContactAttrDefs } from 'reducers/contacts/attributeDefs'
 import { selectContact } from 'reducers/contacts/list'
 import { selectAllConnectedAccounts } from 'reducers/contacts/oAuthAccounts'
-
-import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import { isFetchingTags, selectTags } from 'reducers/contacts/tags'
+import { goTo } from 'utils/go-to'
+import { viewAs } from 'utils/user-teams'
 
 import Loading from '../../../../Partials/Loading'
-
 import skipEmailThreadChangeEvent from '../../Inbox/helpers/skip-email-thread-change-event'
 import { Container } from '../components/Container'
-import Flows from './Flows'
+
+import AddressesSection from './Addresses'
+import { ContactInfo } from './ContactInfo'
 import { Dates } from './Dates'
 import Deals from './Deals'
-import { Details } from './Details'
-import { Partner } from './Partner'
-import { ContactInfo } from './ContactInfo'
-import { LastTouch } from './LastTouch'
-import AddressesSection from './Addresses'
-import { Owner } from './Owner'
 import Delete from './Delete'
-
+import { Details } from './Details'
+import Flows from './Flows'
 import { Header } from './Header'
+import { LastTouch } from './LastTouch'
+import MergeDuplicates from './MergeDuplicates'
+import { Owner } from './Owner'
+import { Partner } from './Partner'
 import { Filters, Tabs } from './Tabs'
 import Timeline, { TimelineRef } from './Timeline'
-import MergeDuplicates from './MergeDuplicates'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -127,6 +122,7 @@ const ContactProfile = props => {
             'contact.triggers',
             'trigger.campaign',
             'flow_step.crm_task',
+            'email_campaign.from',
             'email_campaign.template',
             'template_instance.template'
           ]
@@ -314,6 +310,12 @@ const ContactProfile = props => {
       fetchTimeline()
     }
   }
+  const onTouchChange = useCallback(({ contacts }) => {
+    if (Array.isArray(contacts) && contacts.includes(currentContactId)) {
+      updateContact()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffectOnce(() => {
     const socket: SocketIOClient.Socket = (window as any).socket
@@ -327,7 +329,7 @@ const ContactProfile = props => {
       return
     }
 
-    socket.on('contact:touch', updateContact)
+    socket.on('contact:touch', payload => onTouchChange(payload))
     socket.on('crm_task:create', () => fetchTimeline())
     socket.on('email_campaign:create', () => fetchTimeline())
     socket.on('email_campaign:send', () => fetchTimeline())
@@ -349,7 +351,7 @@ const ContactProfile = props => {
       }
 
       window.removeEventListener('resize', detectScreenSize)
-      socket.off('contact:touch', updateContact)
+      socket.off('contact:touch', onTouchChange)
       socket.off('crm_task:create', fetchTimeline)
       socket.off('email_campaign:create', fetchTimeline)
       socket.off('email_campaign:send', fetchTimeline)
@@ -358,6 +360,7 @@ const ContactProfile = props => {
     }
   }, [
     props.params,
+    onTouchChange,
     currentContactId,
     detectScreenSize,
     fetchTimeline,

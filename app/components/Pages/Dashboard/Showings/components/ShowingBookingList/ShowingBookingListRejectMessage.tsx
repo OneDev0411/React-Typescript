@@ -1,9 +1,18 @@
 import { useMemo, useState } from 'react'
-import { Button, Box } from '@material-ui/core'
 
-import Dialog from '../Dialog'
-import ShowingDialogCard from './ShowingDialogCard'
+import { Box, IconButton, Badge } from '@material-ui/core'
+import { mdiCommentTextMultiple, mdiCommentTextMultipleOutline } from '@mdi/js'
+
+import useAsync from '@app/hooks/use-async'
+import { ackNotifications } from '@app/models/notifications'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
 import { getShowingRoleLabel } from '../../helpers'
+import { AckActionParams } from '../../types'
+import Dialog from '../Dialog'
+
+import ShowingDialogQuote from './ShowingDialogQuote'
+import useAppointmentMessageReadStatus from './use-appointment-message-read-status'
 
 interface PersonMessage {
   role: string
@@ -16,13 +25,21 @@ export interface ShowingBookingListRejectMessageProps {
   buyerName: string
   buyerMessage: Nullable<string>
   appointmentTitle?: string
+  notifications: Nullable<INotification[]>
+  showingId: UUID
+  appointmentId: UUID
+  onAckAction?: (params: AckActionParams) => void
 }
 
 function ShowingBookingListRejectMessage({
   approvals,
   buyerName,
   buyerMessage,
-  appointmentTitle
+  appointmentTitle,
+  notifications,
+  onAckAction,
+  showingId,
+  appointmentId
 }: ShowingBookingListRejectMessageProps) {
   const [open, setOpen] = useState(false)
 
@@ -48,24 +65,55 @@ function ShowingBookingListRejectMessage({
     }
   }, [approvals, buyerMessage, buyerName])
 
-  if (!personMessage || !personMessage.message) {
-    return null
+  const hasMessage = !!personMessage?.message
+  const { isMessageRead, notificationIds } =
+    useAppointmentMessageReadStatus(notifications)
+
+  const { isLoading, run } = useAsync()
+
+  const ackAppointmentNotification = async () => {
+    if (!notificationIds.length) {
+      return
+    }
+
+    run(() => ackNotifications(notificationIds))
+
+    onAckAction?.({
+      showingId,
+      appointmentId,
+      notificationIds
+    })
   }
 
-  const openDialog = () => setOpen(true)
+  const openDialog = () => {
+    setOpen(true)
+    ackAppointmentNotification()
+  }
 
   const closeDialog = () => setOpen(false)
 
+  if (!personMessage) {
+    return null
+  }
+
   return (
     <>
-      <Button
-        size="small"
-        variant="text"
-        color="secondary"
-        onClick={openDialog}
-      >
-        View Message
-      </Button>
+      <IconButton size="medium" color="inherit" onClick={openDialog}>
+        <Badge
+          variant="dot"
+          badgeContent="1"
+          color="error"
+          invisible={isMessageRead || isLoading}
+        >
+          <SvgIcon
+            path={
+              hasMessage
+                ? mdiCommentTextMultiple
+                : mdiCommentTextMultipleOutline
+            }
+          />
+        </Badge>
+      </IconButton>
       <Dialog
         open={open}
         onClose={closeDialog}
@@ -77,13 +125,13 @@ function ShowingBookingListRejectMessage({
             </Box>
           </>
         }
+        hasDialogContent={false}
         subtitle={appointmentTitle}
       >
-        <Box my={2}>
-          <ShowingDialogCard
+        <Box m={2}>
+          <ShowingDialogQuote
             question="Comments"
-            answer={personMessage.message}
-            multiline
+            answer={personMessage.message ?? ''}
           />
         </Box>
       </Dialog>

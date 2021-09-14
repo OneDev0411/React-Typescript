@@ -1,12 +1,11 @@
-import cookie from 'js-cookie'
 import idx from 'idx'
-import { flatMap, identity, uniqBy, get as _get } from 'lodash'
+import { flatMap, identity, uniqBy } from 'lodash'
 
 import { ACL } from '../constants/acl'
 
-import { notDeleted } from './not-deleted'
 import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
+import { notDeleted } from './not-deleted'
 
 function getActiveTeamFromUser(user) {
   return user.active_brand || user.brand
@@ -95,10 +94,12 @@ export function hasUserAccess(
     ) {
       return true
     }
+
     // If policy is ActiveTeam, don't need to traverse the tree up
     if (accessControlPolicy === 'ActiveTeam') {
       break
     }
+
     brand = brand.parent
   }
 
@@ -172,9 +173,9 @@ export function isActiveTeamTraining(user: IUser | null): boolean {
 export function viewAs(
   user: IUser | null,
   shouldReturnAll: boolean = false,
-  team: IUserTeam | null = getActiveTeam(user),
+  team: IUserTeam | null = getActiveTeam(user)
 ): UUID[] {
-  if(!team) {
+  if (!team) {
     return []
   }
 
@@ -182,12 +183,17 @@ export function viewAs(
   const allTeamMemberIds = allTeamMember.map(t => t.id)
 
   if (!idx(team, t => t.acl.includes('BackOffice'))) {
-    const selectedViewAsUsers = (team.settings?.user_filter || []).filter(m => allTeamMemberIds.includes(m))
-    
-    if(!selectedViewAsUsers[0] || (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)) {
+    const selectedViewAsUsers = (team.settings?.user_filter || []).filter(m =>
+      allTeamMemberIds.includes(m)
+    )
+
+    if (
+      !selectedViewAsUsers[0] ||
+      (!shouldReturnAll && allTeamMember.length === selectedViewAsUsers.length)
+    ) {
       return allTeamMemberIds
     }
-      
+
     return selectedViewAsUsers
   }
 
@@ -199,18 +205,17 @@ type GetSettings = (
   includesParents?: boolean
 ) => StringMap<any>
 
-const getSettingsFromActiveTeam = (getSettings: GetSettings) => (
-  user: IUser | null,
-  includesParents?: boolean
-) => {
-  const team = getActiveTeam(user)
+export const getSettingsFromActiveTeam =
+  (getSettings: GetSettings) =>
+  (user: IUser | null, includesParents?: boolean) => {
+    const team = getActiveTeam(user)
 
-  if (!team) {
-    return {}
+    if (!team) {
+      return {}
+    }
+
+    return getSettings(team, includesParents)
   }
-
-  return getSettings(team, includesParents)
-}
 
 export const getActiveTeamSettings = getSettingsFromActiveTeam(
   (team, includesParents) => {
@@ -240,6 +245,7 @@ export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
   }
 
   const brand = flattenBrand(team.brand)
+
   if (!brand || !brand.settings || !brand.settings.marketing_palette) {
     return DEFAULT_BRAND_PALETTE
   }
@@ -252,7 +258,7 @@ export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
     return false
   }
 
-  const users = viewAs(user,true)
+  const users = viewAs(user, true)
 
   return (
     // It means all members of the team
@@ -331,5 +337,6 @@ export function getRootBrand(user: IUser | null): IBrand | null {
   while (brand && brand.parent) {
     brand = brand.parent
   }
+
   return brand
 }

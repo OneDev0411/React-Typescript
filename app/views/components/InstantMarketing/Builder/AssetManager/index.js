@@ -1,9 +1,10 @@
 import React from 'react'
+
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { Uploader } from 'components/Uploader'
-import uploadAsset from 'models/instant-marketing/upload-asset'
+import { uploadAsset } from 'models/instant-marketing/upload-asset'
 
 import { AppTheme } from '../../../../../AppTheme'
 import store from '../../../../../stores'
@@ -56,7 +57,7 @@ export const load = async () => {
                     const { templateId } = await getStorageData('templateId')
 
                     const uploadResponses = await Promise.all(
-                      files.map(file => uploadAsset(file, templateId))
+                      files.map(file => uploadAsset(templateId, file))
                     )
 
                     const uploadedAssets = uploadResponses.map(response => ({

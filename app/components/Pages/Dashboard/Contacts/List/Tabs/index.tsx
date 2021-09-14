@@ -1,25 +1,25 @@
 import { useMemo } from 'react'
+
 import { useSelector, useDispatch } from 'react-redux'
 
-import { PageTabs, Tab } from 'components/PageTabs'
-import SavedSegments from 'components/Grid/SavedSegments/List'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
+import SavedSegments from 'components/Grid/SavedSegments/List'
+import { PageTabs, Tab } from 'components/PageTabs'
 import { IAppState } from 'reducers'
 import { selectActiveFilters } from 'reducers/filter-segments'
 
-import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
 import { CONTACTS_SEGMENT_NAME } from '../../constants'
 import { PARKED_CONTACTS_LIST_ID } from '../constants'
-import { ViewSwitcher } from '../ViewSwitcher'
-
-import { SortFields } from '../SortFields'
 import ContactFilters from '../Filters'
+import { SortFields } from '../SortFields'
 import TagsList from '../TagsList'
+import { SyncedContacts as SyncedContactsTypes } from '../utils/get-synced-contacts'
+import { ViewSwitcher } from '../ViewSwitcher'
 
 export type ViewModeType = 'table' | 'board'
 
-interface Props {
+export interface Props {
   handleFilterChange: (newFilters: object, resetLoadedRanges: boolean) => void
   handleChangeSavedSegment: (savedSegment: object) => void
   handleResetShortcutFilter: () => void
@@ -39,6 +39,7 @@ interface Props {
   sortProps: {
     onChange: (item) => void
     currentOrder: string
+    searchValue: string
   }
   onChangeView: (viewMode: ViewModeType) => void
   viewMode: ViewModeType
@@ -75,14 +76,13 @@ const getActiveTab = ({
 
 export const ContactsTabs = ({
   handleResetShortcutFilter,
-  handleChangeSavedSegment,
   handleFilterChange,
   savedListProps,
+  onChangeView,
   activeSegment,
   contactCount,
   tagListProps,
   sortProps,
-  onChangeView,
   viewMode,
   filter,
   users
@@ -108,6 +108,13 @@ export const ContactsTabs = ({
     isTagListActive: tagListProps.isActive
   })
 
+  const actions = [
+    ...(viewMode === 'table'
+      ? [<Tab key={1} label={<SortFields {...sortProps} />} />]
+      : []),
+    <ViewSwitcher key={2} onChangeView={onChangeView} activeView={viewMode} />
+  ]
+
   const clickHandler = async (type: string) => {
     await dispatch(resetActiveFilters(CONTACTS_SEGMENT_NAME))
     await dispatch(changeActiveFilterSegment(CONTACTS_SEGMENT_NAME, type))
@@ -129,27 +136,24 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
-          <Tab
-            key="saved-list"
-            value="saved-list"
-            data-tour-id="saved-list"
-            label={<SavedSegments {...savedListProps} />}
-          />,
-          <Tab
-            key="tag-list"
-            value="tag-list"
-            data-tour-id="tags-list"
-            label={<TagsList onFilterChange={tagListProps.onClick} />}
-          />
+          ...(viewMode === 'table'
+            ? [
+                <Tab
+                  key="saved-list"
+                  value="saved-list"
+                  data-tour-id="saved-list"
+                  label={<SavedSegments {...savedListProps} />}
+                />,
+                <Tab
+                  key="tag-list"
+                  value="tag-list"
+                  data-tour-id="tags-list"
+                  label={<TagsList onFilterChange={tagListProps.onClick} />}
+                />
+              ]
+            : [])
         ]}
-        actions={[
-          <Tab key={1} label={<SortFields {...sortProps} />} />,
-          <ViewSwitcher
-            key={2}
-            onChangeView={onChangeView}
-            activeView={viewMode}
-          />
-        ]}
+        actions={actions}
       />
       {viewMode === 'table' && (
         <ContactFilters

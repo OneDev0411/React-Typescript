@@ -1,6 +1,6 @@
+import Fuse from 'fuse.js'
 import memoize from 'lodash/memoize'
 import uniqBy from 'lodash/uniqBy'
-import Fuse from 'fuse.js'
 
 import { getBrandUsers, isActiveTeamTraining } from 'utils/user-teams'
 

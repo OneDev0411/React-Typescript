@@ -1,14 +1,14 @@
 import { Editor } from 'grapesjs'
 
+import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
 import { BASICS_BLOCK_CATEGORY } from 'components/InstantMarketing/Builder/constants'
 
-import ShareIcon from 'assets/images/marketing/editor/blocks/share.png'
-
 import registerBlock from '../../registerBlock'
-import { baseView, isComponent } from '../utils'
-import SocialGroup from './social-group.njk'
-import { TemplateBlockOptions } from '../../types'
 import { registerTemplateBlocks } from '../../templateBlocks'
+import { TemplateBlockOptions } from '../../types'
+import { baseView, isComponent } from '../utils'
+
+import SocialGroup from './social-group.njk'
 
 const typeSocialGroup = 'social-group'
 const typeSocialLink = 'social-link'

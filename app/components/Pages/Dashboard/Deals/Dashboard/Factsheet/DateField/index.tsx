@@ -1,21 +1,18 @@
 import { useState } from 'react'
-import { Tooltip } from '@material-ui/core'
-import fecha from 'fecha'
-import { mdiCheck } from '@mdi/js'
 
-import { getField } from 'models/Deal/helpers/context/get-field'
+import { Tooltip } from '@material-ui/core'
+import { mdiCheck } from '@mdi/js'
+import fecha from 'fecha'
 
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
 import { getFormattedValue } from 'models/Deal/helpers/brand-context/get-formatted-value'
+import { getField } from 'models/Deal/helpers/context/get-field'
 
-import { EditButton } from '../ActionButtons/Edit'
-import { DeleteButton } from '../ActionButtons/Delete'
 import { ApproveButton } from '../ActionButtons/Approve'
-
+import { DeleteButton } from '../ActionButtons/Delete'
+import { EditButton } from '../ActionButtons/Edit'
 import { Loading } from '../components/Loading'
-
 import {
   Item,
   ItemLabel,
@@ -27,7 +24,8 @@ import {
 
 interface Props {
   deal: IDeal
-  field: IDealBrandContext
+  brandContext: IDealBrandContext
+  dealContext: Nullable<IDealContext>
   index: number
   total: number
   value: unknown
@@ -43,7 +41,8 @@ export function DateField({
   index,
   total,
   deal,
-  field,
+  brandContext,
+  dealContext,
   value,
   isBackOffice,
   isDisabled,
@@ -55,12 +54,12 @@ export function DateField({
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const isPastDate =
-    new Date().getTime() / 1000 > (getField(deal, field.key) ?? Infinity)
+    new Date().getTime() / 1000 > (getField(deal, brandContext.key) ?? Infinity)
 
   const handleSave = async (date: Date): Promise<void> => {
     setIsSaving(true)
 
-    await onChange(field, fecha.format(date, 'YYYY-MM-DD'))
+    await onChange(brandContext, fecha.format(date, 'YYYY-MM-DD'))
 
     setIsSaving(false)
   }
@@ -68,7 +67,7 @@ export function DateField({
   const handleDelete = async (): Promise<void> => {
     setIsSaving(true)
 
-    await onDelete(field)
+    await onDelete(brandContext)
 
     setIsSaving(false)
   }
@@ -85,14 +84,14 @@ export function DateField({
             <CircleStatus checked={isPastDate}>
               {isPastDate && <SvgIcon path={mdiCheck} color="#fff" />}
             </CircleStatus>{' '}
-            {field.label}
+            {brandContext.label}
           </ItemLabel>
-          <ItemValue>{getFormattedValue(field, value)}</ItemValue>
+          <ItemValue>{getFormattedValue(brandContext, value)}</ItemValue>
 
           {!isDisabled && (
             <ItemActions>
               <DateTimePicker
-                selectedDate={getInitialDate(deal, field)}
+                selectedDate={getInitialDate(deal, brandContext)}
                 showTimePicker={false}
                 onClose={handleSave}
                 saveCaption="Save Date"
@@ -102,16 +101,17 @@ export function DateField({
 
               <DeleteButton
                 deal={deal}
-                field={field}
+                brandContext={brandContext}
                 value={value}
                 onClick={handleDelete}
               />
 
               <ApproveButton
                 deal={deal}
-                context={field}
+                brandContext={brandContext}
+                dealContext={dealContext}
                 isBackOffice={isBackOffice}
-                onClick={() => onApprove(field)}
+                onClick={() => onApprove(brandContext)}
               />
             </ItemActions>
           )}
