@@ -61,7 +61,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     <PageTabs
       value={
         props.location.query.type === 'query' &&
-        ['listing', 'contact'].includes(props.params.filter)
+        ['listing', 'contract'].includes(props.params.filter)
           ? 'all-deals'
           : null
       }
