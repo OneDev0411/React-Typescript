@@ -1,14 +1,21 @@
-import { Grid, Typography, Theme, makeStyles } from '@material-ui/core'
+import { Typography, Theme, makeStyles } from '@material-ui/core'
 
 import { Item } from './components/Item'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      marginTop: theme.spacing(2)
+      marginTop: theme.spacing(3)
     },
     title: {
       marginBottom: theme.spacing(1.5)
+    },
+    itemContainer: {
+      display: 'flex',
+      alignItems: 'flex-start'
+    },
+    item: {
+      margin: theme.spacing(1, 3, 0, 0)
     }
   }),
   {
@@ -28,13 +35,13 @@ export function TriggerItems({ list }: Props) {
       <Typography variant="subtitle2" className={classes.title}>
         Default Templates
       </Typography>
-      <Grid container alignItems="flex-start" className={classes.container}>
+      <div className={classes.itemContainer}>
         {list?.map(trigger => (
-          <Grid key={trigger.event_type} item md={4}>
+          <div key={trigger.event_type} className={classes.item}>
             <Item trigger={trigger} />
-          </Grid>
+          </div>
         ))}
-      </Grid>
+      </div>
     </div>
   )
 }
