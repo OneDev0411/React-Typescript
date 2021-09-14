@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { Box } from '@material-ui/core'
 import { mdiCalendarMonthOutline } from '@mdi/js'
@@ -13,14 +13,16 @@ import { getEventInitialValues } from '../helpers/get-initial-values'
 import { eventFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, EventFormData } from '../types'
 
-export default function EventForm({
+function EventForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -44,6 +46,10 @@ export default function EventForm({
       }}
       initialValues={getEventInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}
@@ -76,3 +82,5 @@ export default function EventForm({
     />
   )
 }
+
+export default memo(EventForm)
