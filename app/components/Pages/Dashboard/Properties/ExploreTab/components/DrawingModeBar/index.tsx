@@ -1,7 +1,7 @@
 import { Box, Typography, Button, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(
-  () => ({
+  theme => ({
     drawingModeBar: {
       display: 'flex',
       justifyContent: 'space-around',
@@ -23,6 +23,9 @@ const useStyles = makeStyles(
         opacity: 0.5,
         zIndex: -1
       }
+    },
+    text: {
+      padding: theme.spacing(0, 2)
     }
   }),
   { name: 'DrawingModeBar' }
@@ -38,7 +41,7 @@ export const DrawingModeBar = ({ onCancel }: Props) => {
   return (
     <Box className={classes.drawingModeBar}>
       <Box className="alpha" />
-      <Typography variant="body2">
+      <Typography className={classes.text} variant="body2">
         You're now in drawing mode. Please click on the map to define an area
         for searching.
       </Typography>
