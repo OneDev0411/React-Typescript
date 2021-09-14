@@ -37,7 +37,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  listing: ICompactListing
+  listing: IListing
   isWidget?: boolean
   handleClose?: () => void
   handleShare: () => void
@@ -56,7 +56,7 @@ function Header({
   const [isFavorited, setIsFavorited] = useState(listing.favorited)
 
   const toggleFavorite = useCallback(
-    async (listing: ICompactListing) => {
+    async (listing: IListing) => {
       if (!user) {
         return
       }

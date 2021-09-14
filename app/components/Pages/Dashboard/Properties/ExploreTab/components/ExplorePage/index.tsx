@@ -285,6 +285,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   <DrawingModeBar onCancel={deactivateDrawingMode} />
                 )}
                 <Map
+                  isWidget={isWidget}
                   drawingMode={drawingMode}
                   drawingModeCallBack={onDoneDrawing}
                   onChange={updateUserLocation}
