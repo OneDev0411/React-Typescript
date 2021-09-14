@@ -8,13 +8,17 @@ import {
   makeStyles
 } from '@material-ui/core'
 import cn from 'classnames'
+import pluralize from 'pluralize'
 
+import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import {
   enableTrigger,
   disableTrigger
 } from '@app/models/instant-marketing/global-triggers'
 
 import { TriggerEditMode as EditMode } from '../../EditMode'
+
+import { getAttributeName } from './helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -37,7 +41,6 @@ const useStyles = makeStyles(
     templatePreviewContainer: {
       padding: theme.spacing(1),
       position: 'relative',
-      // height: '330px', // From figma
       maxWidth: '195px', // From figma
       background: theme.palette.common.white,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
@@ -85,6 +88,11 @@ export function Item({ trigger: triggerProp }: Props) {
 
     return null
   }, [trigger.template, trigger.template_instance])
+
+  const triggerWaitFor: number = useMemo(
+    () => convertSecondsToDay(trigger.wait_for),
+    [trigger.wait_for]
+  )
 
   const handleShowEdit = (event: MouseEvent<HTMLElement>) => {
     if (isLoading || !isEnable) {
@@ -137,7 +145,7 @@ export function Item({ trigger: triggerProp }: Props) {
               name="event_type"
             />
           }
-          label={trigger.event_type}
+          label={getAttributeName(trigger.event_type)}
           className={classes.switchState}
         />
         <div
@@ -159,11 +167,21 @@ export function Item({ trigger: triggerProp }: Props) {
             Email Subject
           </Typography>
           <Typography
-            variant="body2"
+            variant="body1"
             color="textPrimary"
             className={classes.subject}
           >
             {trigger.subject}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            className={classes.subject}
+          >
+            Send{' '}
+            {triggerWaitFor == 0
+              ? 'on the same day'
+              : `${pluralize('day', triggerWaitFor, true)} earlier`}
           </Typography>
         </div>
       </div>

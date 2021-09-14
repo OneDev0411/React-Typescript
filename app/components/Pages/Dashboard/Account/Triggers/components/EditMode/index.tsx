@@ -21,7 +21,7 @@ import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { TemplateSelector } from './components/TemplateSelector'
-import { generateInitialValues, generatePayload } from './helper/index'
+import { generateInitialValues, generatePayload } from './helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -82,7 +82,7 @@ export function TriggerEditMode({
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isDirty, isSubmitting }
   } = useForm<IGlobalTriggerFormData>()
 
   const initialValue: IGlobalTriggerFormData = useMemo(
@@ -227,11 +227,8 @@ export function TriggerEditMode({
                 control={control}
                 defaultValue={initialValue.template}
                 render={({ value, onChange }) => {
-                  // const error: string | undefined = errors.template
-
                   return (
                     <TemplateSelector
-                      // hasError={!!error}
                       disabled={isSubmitting}
                       templateType={['Birthday', 'WeddingAnniversary']}
                       currentBrandTemplate={trigger?.template}
@@ -245,7 +242,7 @@ export function TriggerEditMode({
           </div>
           <div className={classes.actions}>
             <Box mr={1}>
-              <Button size="small" disabled={isSubmitting}>
+              <Button size="small" disabled={isSubmitting || !isDirty}>
                 Cancel
               </Button>
             </Box>
@@ -254,7 +251,7 @@ export function TriggerEditMode({
               variant="contained"
               color="secondary"
               size="small"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isDirty}
             >
               {isSubmitting ? 'Saving...' : 'Save'}
             </Button>
