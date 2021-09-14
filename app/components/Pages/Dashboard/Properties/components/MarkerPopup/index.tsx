@@ -99,8 +99,8 @@ const MarkerPopup = ({ listing, onClick = noop }: Props) => {
     metersToFeet(listing.compact_property.square_meters)
   ).toLocaleString()
   const address = addressTitle(listing.address)
-  const bathCount = listing.compact_property.bedroom_count ?? 0
-  const bedroomCount = listing.compact_property.bathroom_count ?? 0
+  const bathCount = listing.compact_property.bathroom_count ?? 0
+  const bedroomCount = listing.compact_property.bedroom_count ?? 0
   const coverImageURL = listing.cover_image_url
     ? `${getResizeUrl(listing.cover_image_url)}?w=160`
     : PLACEHOLDER_IMAGE
