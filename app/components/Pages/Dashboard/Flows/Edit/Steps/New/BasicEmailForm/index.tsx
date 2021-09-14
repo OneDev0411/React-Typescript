@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { Box } from '@material-ui/core'
 import { mdiScriptTextOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
@@ -10,14 +12,16 @@ import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
 import { basicEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, BasicEmailFormData } from '../types'
 
-export default function BasicEmailForm({
+function BasicEmailForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -41,6 +45,10 @@ export default function BasicEmailForm({
       }}
       initialValues={getBasicEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}
@@ -79,3 +87,5 @@ export default function BasicEmailForm({
     />
   )
 }
+
+export default memo(BasicEmailForm)

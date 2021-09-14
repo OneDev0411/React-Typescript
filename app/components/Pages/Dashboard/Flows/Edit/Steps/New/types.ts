@@ -8,11 +8,13 @@ export interface BaseFormProps {
   index: number
   step?: Nullable<IBrandFlowStep>
   disableEdit?: boolean
+  isDirty?: boolean
   prevStepOrder?: Nullable<number>
   onSubmit: (data: IBrandFlowStepInput, stepId?: UUID) => Promise<any>
   onDelete?: (data: IBrandFlowStep) => Promise<any>
   onMoveUpStep?: () => void
   onMoveDownStep?: () => void
+  makeDirtyStep?: () => void
 }
 
 export interface BaseFormData
