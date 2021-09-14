@@ -1,11 +1,14 @@
 import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 
+import { getAttributeName } from '../../Items/components/helpers'
+
 /**
  * generate initial valued for global trigger form
  * @param {IGlobalTrigger} trigger - current trigger
  */
 export const generateInitialValues = (
-  trigger?: IGlobalTrigger
+  trigger: IGlobalTrigger | undefined,
+  eventType: TriggerContactEventTypes | undefined
 ): IGlobalTriggerFormData => {
   if (trigger) {
     const template: IGlobalTriggerFormData['template'] = trigger.template
@@ -26,7 +29,9 @@ export const generateInitialValues = (
   }
 
   return {
-    subject: 'Hi',
+    subject: eventType
+      ? `Happy ${getAttributeName(eventType)}`
+      : 'Celebration!',
     wait_for: 0
   }
 }

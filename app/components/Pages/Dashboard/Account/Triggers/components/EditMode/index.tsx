@@ -85,13 +85,13 @@ export function TriggerEditMode({
     formState: { errors, isDirty, isSubmitting }
   } = useForm<IGlobalTriggerFormData>()
 
-  const initialValue: IGlobalTriggerFormData = useMemo(
-    () => generateInitialValues(trigger),
-    [trigger]
-  )
   const currentEventType = useMemo(
-    () => eventType ?? trigger?.event_type ?? null,
+    () => eventType ?? trigger?.event_type,
     [eventType, trigger?.event_type]
+  )
+  const initialValue: IGlobalTriggerFormData = useMemo(
+    () => generateInitialValues(trigger, currentEventType),
+    [trigger, currentEventType]
   )
 
   if (!currentEventType) {
