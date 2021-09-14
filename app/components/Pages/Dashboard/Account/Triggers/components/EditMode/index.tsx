@@ -21,7 +21,7 @@ import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { TemplateSelector } from './components/TemplateSelector'
-import { generateInitialValues } from './helper/index'
+import { generateInitialValues, generatePayload } from './helper/index'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -98,31 +98,11 @@ export function TriggerEditMode({
     return null
   }
 
-  const handleOnSave: SubmitHandler<IGlobalTriggerFormData> = async ({
-    template,
-    ...data
-  }) => {
-    console.log({ data })
-
-    if (!template) {
-      return
-    }
-
-    const selectedTepmlate = template?.isInstance
-      ? {
-          template_instance: template.id
-        }
-      : {
-          template: template.id
-        }
+  const handleOnSave: SubmitHandler<IGlobalTriggerFormData> = async data => {
+    const payload = generatePayload(data, brand, currentEventType)
 
     try {
-      const res = await createTrigger({
-        ...data,
-        ...selectedTepmlate,
-        brand,
-        event_type: currentEventType
-      })
+      const res = await createTrigger(payload)
 
       if (callback) {
         callback(res.data)
@@ -221,10 +201,7 @@ export function TriggerEditMode({
                             disabled={isSubmitting}
                             value={value}
                             onChange={event => {
-                              const value = event.target.value
-
-                              // -86400 number of millisecond of a day
-                              const waitFor = Number(value) * -86400
+                              const waitFor = Number(event.target.value)
 
                               onChange(waitFor)
                             }}
