@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps, browserHistory } from 'react-router'
 import { notify } from 'reapop'
 
+import { noop } from '@app/utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
@@ -39,6 +40,7 @@ const useStyles = makeStyles(
 interface Props {
   listing: IListing
   isWidget?: boolean
+  onToggleFavorite?: () => void
   handleClose?: () => void
   handleShare: () => void
 }
@@ -48,6 +50,7 @@ function Header({
   isWidget = false,
   handleShare,
   location,
+  onToggleFavorite = noop,
   handleClose
 }: Props & WithRouterProps) {
   const classes = useStyles()
@@ -55,12 +58,13 @@ function Header({
 
   const [isFavorited, setIsFavorited] = useState(listing.favorited)
 
-  const toggleFavorite = useCallback(
+  const handleToggleFavorite = useCallback(
     async (listing: IListing) => {
       if (!user) {
         return
       }
 
+      onToggleFavorite()
       setIsFavorited(prev => !prev)
 
       try {
@@ -71,6 +75,7 @@ function Header({
           roomId: user.personal_room
         })
       } catch {
+        onToggleFavorite()
         setIsFavorited(prev => !prev)
         notify({
           status: 'error',
@@ -98,7 +103,7 @@ function Header({
     browserHistory.push(url)
   }
 
-  const handleFavorite = event => toggleFavorite(listing)
+  const handleFavorite = event => handleToggleFavorite(listing)
 
   return (
     <>

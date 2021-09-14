@@ -36,27 +36,29 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
   )
 
   const handleToggleLike = useCallback(
-    async (listing: ICompactListing) => {
+    async (listing: ICompactListing, sendApiRequest = true) => {
       if (!user) {
         return
       }
 
       dispatch(toggleListingFavoriteState(listing.id))
 
-      try {
-        await api.toggleFavorites({
-          recId: null,
-          mlsNumber: listing.mls_number,
-          isFavorite: listing.favorited,
-          roomId: user.personal_room
-        })
-      } catch {
-        dispatch(toggleListingFavoriteState(listing.id))
-        notify({
-          status: 'error',
-          message: 'Unable to perform this action.',
-          options: { id: 'toggle-listing-favorite-error' }
-        })
+      if (sendApiRequest) {
+        try {
+          await api.toggleFavorites({
+            recId: null,
+            mlsNumber: listing.mls_number,
+            isFavorite: listing.favorited,
+            roomId: user.personal_room
+          })
+        } catch {
+          dispatch(toggleListingFavoriteState(listing.id))
+          notify({
+            status: 'error',
+            message: 'Unable to perform this action.',
+            options: { id: 'toggle-listing-favorite-error' }
+          })
+        }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,9 +84,9 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
               clicked={state.listingStates.click === listing.id}
               onChangeHoverState={handleChangeHoverState}
               reduxToggleFavorite={false} // TODO: remove this after refactoring fav/saved tab
-              onToggleLike={() => {
-                handleToggleLike(listing)
-              }}
+              onToggleLike={sendApiRequest =>
+                handleToggleLike(listing, sendApiRequest)
+              }
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}

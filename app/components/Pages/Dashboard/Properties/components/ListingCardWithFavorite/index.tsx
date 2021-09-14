@@ -16,7 +16,7 @@ interface Props
   hover?: boolean
   isWidget?: boolean
   reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
-  onToggleLike?: () => void
+  onToggleLike?: (sendApiRequest?: boolean) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
@@ -105,6 +105,9 @@ const ListingCardWithFavorite = ({
         isWidget={isWidget}
         listingId={listing.id}
         closeHandler={closeListing}
+        onToggleFavorite={() => {
+          onToggleLike(false)
+        }}
       />
     </>
   )
