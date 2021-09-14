@@ -1272,6 +1272,7 @@ class Builder extends React.Component {
       <Portal root="marketing-center">
         <Container
           hideBlocks={!this.hasBlocks}
+          isTemplatesColumnVisible={!this.state.isTemplatesColumnHidden}
           className="template-builder"
           style={this.props.containerStyle}
         >

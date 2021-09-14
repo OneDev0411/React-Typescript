@@ -18,6 +18,9 @@ export const Container = styled.div`
       display: none
     }
   `}
+
+  ${props =>
+    props.isTemplatesColumnVisible && '#gjs-tools { left: 0 !important; }'}
 `
 
 export const TemplatesContainer = styled.div`
