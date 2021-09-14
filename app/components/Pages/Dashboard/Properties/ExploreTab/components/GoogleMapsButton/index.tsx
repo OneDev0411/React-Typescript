@@ -12,7 +12,7 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     height: 'auto',
     backgroundColor: '#fff',
     borderRadius: 2,
-    boxShadow: 'rgb(0 0 0 / 30%) 0px 1px 4px -1px',
+    boxShadow: 'rgb(0 0 0 / 30%) 0px 1px 4px -1px !important',
     '&.active': {
       backgroundColor: theme.palette.grey[300],
       color: theme.palette.grey[900]
@@ -30,7 +30,7 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     }
   },
   label: {
-    padding: '6px 15px',
+    padding: '6px 12px',
     fontSize: theme.typography.button.fontSize,
     textTransform: 'capitalize',
     color: theme.palette.grey[800],

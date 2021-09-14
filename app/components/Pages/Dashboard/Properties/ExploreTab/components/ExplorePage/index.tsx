@@ -261,8 +261,8 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                       Draw Area
                     </GoogleMapsButton>
                     <GoogleMapsButton
-                      size="medium"
-                      bottom={100}
+                      size="small"
+                      bottom={90}
                       left={10}
                       iconButton
                       startIcon={<MyLocationIcon />}
