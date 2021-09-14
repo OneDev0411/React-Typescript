@@ -1,21 +1,18 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState, useMemo } from 'react'
+
+import { Button, Box } from '@material-ui/core'
 import { mdiPlusCircleOutline } from '@mdi/js'
-import { Button } from '@material-ui/core'
-import Fuse from 'fuse.js'
-import { Box } from '@material-ui/core'
-import { useMemo } from 'react'
+import matchSorter from 'match-sorter'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { selectForms } from 'reducers/deals/forms'
+import { IAppState } from '@app/reducers'
 import { createFormTask } from 'actions/deals'
-
-import LoadingContainer from 'components/LoadingContainer'
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
+import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-
-import { IAppState } from '@app/reducers'
+import { selectForms } from 'reducers/deals/forms'
 
 import CreateCustomTask from './CustomTask'
 import { ListItem } from './styled'
@@ -72,10 +69,9 @@ export default function TaskCreate({
 
   const filteredForms = useMemo(() => {
     return searchFilter
-      ? new Fuse(Object.values(forms), {
-          keys: ['name'],
-          threshold: 0.7
-        }).search(searchFilter)
+      ? matchSorter(Object.values(forms), searchFilter, {
+          keys: ['name']
+        })
       : Object.values(forms)
   }, [forms, searchFilter])
 
