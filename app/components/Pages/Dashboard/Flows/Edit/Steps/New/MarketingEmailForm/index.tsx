@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { Box } from '@material-ui/core'
 import { mdiNewspaperVariantOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
@@ -10,7 +12,7 @@ import { getMarketingEmailInitialValues } from '../helpers/get-initial-values'
 import { marketingEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, MarketingEmailFormData } from '../types'
 
-export default function MarketingEmailForm({
+function MarketingEmailForm({
   index,
   step,
   isDirty = false,
@@ -86,3 +88,5 @@ export default function MarketingEmailForm({
     />
   )
 }
+
+export default memo(MarketingEmailForm)

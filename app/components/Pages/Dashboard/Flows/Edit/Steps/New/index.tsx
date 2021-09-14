@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useCallback } from 'react'
 
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
@@ -73,6 +73,9 @@ export const NewStep = ({
         cancelLabel: "Don't Cancel",
         onConfirm: () => {
           setOpenForm(type)
+        },
+        onCancel: () => {
+          return null
         }
       })
     }
@@ -81,6 +84,10 @@ export const NewStep = ({
   }
 
   const makeDirtyStep = () => {
+    if (hasDirtyStep) {
+      return
+    }
+
     setHasDirtyStep(true)
   }
 
@@ -109,8 +116,7 @@ export const NewStep = ({
       onSubmit={submitHandler}
     />
   )
-
-  const renderForm = () => {
+  const renderForm = useCallback(() => {
     switch (openForm) {
       case 'event':
         return renderEventForm()
@@ -119,7 +125,8 @@ export const NewStep = ({
       case 'marketing_email':
         return rebderTemplateEmailForm()
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openForm])
 
   const renderNewStep = () => {
     if (!openForm) {

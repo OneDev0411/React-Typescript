@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { Box } from '@material-ui/core'
 import { mdiCalendarMonthOutline } from '@mdi/js'
 import { Form } from 'react-final-form'
@@ -11,7 +13,7 @@ import { getEventInitialValues } from '../helpers/get-initial-values'
 import { eventFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, EventFormData } from '../types'
 
-export default function EventForm({
+function EventForm({
   index,
   step,
   isDirty = false,
@@ -80,3 +82,5 @@ export default function EventForm({
     />
   )
 }
+
+export default memo(EventForm)
