@@ -9,7 +9,8 @@ import Marker from '../../../components/Marker'
 import { bootstrapURLKeys } from '../../../constants/constants'
 import {
   pointsFromPolygon,
-  createMapOptions
+  createMapOptions,
+  createMapPolygonOptions
 } from '../../../helpers/map-helpers'
 import {
   changeListingHoverState,
@@ -37,17 +38,19 @@ export const Map = ({
   onChange
 }: Props) => {
   const [state, dispatch] = useListingsContext()
-  const [mapIsLoaded, setMapIsLoaded] = useState(false)
+  const mapIsLoaded = useRef<boolean>(false)
   const [listingModalState, setListingModalState] = useState<ListingModalState>(
     { id: '', isOpen: false }
   )
   const theme = useTheme()
+  const mapPolygonOptions = createMapPolygonOptions(theme)
   // setting up refs
   // There is no way to get apropiate types for these
   const mapRef = useRef<any>()
   const mapsRef = useRef<any>()
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
+  const oldRrawingRef = useRef<any>()
 
   const closeListingModal = () => {
     if (!isWidget) {
@@ -97,18 +100,21 @@ export const Map = ({
     drawingManagerRef.current = new mapsRef.current.drawing.DrawingManager({
       drawingControl: false,
       drawingMode: mapsRef.current.drawing.OverlayType.POLYGON,
-      polygonOptions: {
-        zIndex: 1,
-        strokeWeight: 3,
-        fillOpacity: 0.3,
-        fillColor: theme.palette.primary.main,
-        strokeColor: theme.palette.primary.main
-      }
+      polygonOptions: mapPolygonOptions
     })
+
+    // add old drawing if it exist before map is loaded
+    if (state.search.drawing.length) {
+      oldRrawingRef.current = new google.maps.Polygon({
+        ...mapPolygonOptions,
+        paths: state.search.drawing
+      })
+      oldRrawingRef.current.setMap(mapRef.current)
+    }
 
     // This is for internal uses of this component since some methods can only
     // execute when map is loaded
-    setMapIsLoaded(true)
+    mapIsLoaded.current = true
   }
 
   // TODO: implement freehand drawing:
@@ -142,19 +148,22 @@ export const Map = ({
   }
 
   useEffect(() => {
-    if (mapIsLoaded && !drawingMode) {
+    if (mapIsLoaded.current && !drawingMode) {
       deactivateDrawingMode()
     }
 
-    if (mapIsLoaded && drawingMode) {
+    if (mapIsLoaded.current && drawingMode) {
       activateDrawingMode(drawingModeCallBack)
     }
-  }, [mapIsLoaded, drawingMode, drawingModeCallBack, activateDrawingMode])
+  }, [drawingMode, drawingModeCallBack, activateDrawingMode])
 
   useEffect(() => {
     if (state.search.drawing.length === 0) {
       // Google API for removing already exisiting drawing
       drawingRef?.current?.setMap(null)
+
+      // Remove old drawing if it exists
+      oldRrawingRef?.current?.setMap(null)
     }
   }, [state.search])
 
