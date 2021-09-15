@@ -26,6 +26,9 @@ const useStyles = makeStyles(
     },
     text: {
       padding: theme.spacing(0, 2)
+    },
+    button: {
+      marginRight: theme.spacing(1)
     }
   }),
   { name: 'DrawingModeBar' }
@@ -45,7 +48,7 @@ export const DrawingModeBar = ({ onCancel }: Props) => {
         You're now in drawing mode. Please click on the map to define an area
         for searching.
       </Typography>
-      <Button variant="contained" onClick={onCancel}>
+      <Button className={classes.button} variant="contained" onClick={onCancel}>
         Cancel
       </Button>
     </Box>
