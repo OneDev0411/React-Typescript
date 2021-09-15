@@ -1,3 +1,4 @@
+import { Theme } from '@material-ui/core'
 import { Coords, Maps, MapOptions } from 'google-map-react'
 
 export const createMapOptions = (
@@ -29,6 +30,16 @@ export const createMapOptions = (
     streetViewControl: !drawingMode,
     fullscreenControl: false,
     scaleControl: true
+  }
+}
+
+export const createMapPolygonOptions = (theme: Theme) => {
+  return {
+    zIndex: 1,
+    strokeWeight: 3,
+    fillOpacity: 0.3,
+    fillColor: theme.palette.primary.main,
+    strokeColor: theme.palette.primary.main
   }
 }
 
