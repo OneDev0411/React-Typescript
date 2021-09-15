@@ -45,8 +45,10 @@ export const MlsAreaGroup = () => {
   }
 
   const onCountyInputChange = (event: any, newInputValue: string) => {
-    setLoadingCounties(true)
-    setCountyInputValue(newInputValue)
+    if (newInputValue) {
+      setLoadingCounties(true)
+      setCountyInputValue(newInputValue)
+    }
   }
 
   useDebounce(

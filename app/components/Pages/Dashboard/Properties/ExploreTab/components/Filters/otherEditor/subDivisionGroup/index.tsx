@@ -21,8 +21,10 @@ export const SubdivisionGroup = () => {
   const [loadingSubdivisions, setLoadingSubdivisions] = useState<boolean>(false)
 
   const onSubdivisionInputChange = (event: any, newInputValue: string) => {
-    setLoadingSubdivisions(true)
-    setSubdivisionInputValue(newInputValue)
+    if (newInputValue) {
+      setLoadingSubdivisions(true)
+      setSubdivisionInputValue(newInputValue)
+    }
   }
 
   useDebounce(
@@ -67,7 +69,7 @@ export const SubdivisionGroup = () => {
           <TextField
             {...params}
             variant="outlined"
-            label="Subdivisions"
+            label="Name"
             placeholder="Type in subdivision name..."
             InputProps={{
               ...params.InputProps,

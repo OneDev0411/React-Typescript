@@ -24,8 +24,10 @@ export const SchoolsDistrictsGroup = () => {
     useState<boolean>(false)
 
   const onSchoolsDistrictInputChange = (event: any, newInputValue: string) => {
-    setLoadingSchoolsDistricts(true)
-    setSchoolsDistrictInputValue(newInputValue)
+    if (newInputValue) {
+      setLoadingSchoolsDistricts(true)
+      setSchoolsDistrictInputValue(newInputValue)
+    }
   }
 
   useDebounce(
