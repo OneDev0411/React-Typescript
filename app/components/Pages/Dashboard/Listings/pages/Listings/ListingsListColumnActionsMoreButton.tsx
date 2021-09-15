@@ -1,5 +1,6 @@
 import { List, ListItem } from '@material-ui/core'
 
+import useNotify from '@app/hooks/use-notify'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import MoreActionsButton, {
   MoreActionsButtonProps
@@ -22,6 +23,8 @@ function ListingsListColumnActionsMoreButton({
   row,
   ...otherProps
 }: ListingsListColumnActionsMoreButtonProps) {
+  const notify = useNotify()
+
   const {
     isListingModalOpen,
     viewListingLabel,
@@ -38,6 +41,14 @@ function ListingsListColumnActionsMoreButton({
     closeOpenHouseDrawer,
     handleOpenHouseDelete
   } = useListingsListColumnActionsOpenHouseItem(row.id)
+
+  const handleOpenHouseSubmitCallback = () => {
+    handleOpenHouseDelete()
+    notify({
+      message: 'The open house was saved successfully.',
+      status: 'success'
+    })
+  }
 
   return (
     <>
@@ -75,7 +86,7 @@ function ListingsListColumnActionsMoreButton({
           isOpen
           onClose={closeOpenHouseDrawer}
           openHouse={openHouse}
-          submitCallback={handleOpenHouseDelete}
+          submitCallback={handleOpenHouseSubmitCallback}
           associations={{ listing: row }}
         />
       )}

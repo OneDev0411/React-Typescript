@@ -59,7 +59,8 @@ function TeamLibrary({
   query,
   setQuery,
   onSelect,
-  onEdit
+  onEdit,
+  containerRef
 }: SearchableImageTabProps) {
   const classes = useStyles()
   const dispatch = useDispatch()

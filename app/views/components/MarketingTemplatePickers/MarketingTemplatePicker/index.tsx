@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
-
 import { Grid, Tabs, Tab } from '@material-ui/core'
+import useControllableState from 'react-use-controllable-state'
 
-import { MarketingTemplatePickerProps } from 'components/MarketingTemplatePickers/types'
-import { getTemplateTypeLabel } from 'utils/marketing-center/get-template-type-label'
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+import { MarketingTemplatePickerProps } from '@app/views/components/MarketingTemplatePickers/types'
 
 import TemplatesList from './TemplatesList'
 
 export default function MarketingTemplatePicker({
   templateTypes,
+  selectedTab: passedSelectedTab,
+  onSelectTab,
   ...templatesListProps
 }: MarketingTemplatePickerProps) {
-  const [selectedTab, setSelectedTab] = useState<IMarketingTemplateType>(
+  const [selectedTab, setSelectedTab] = useControllableState(
+    passedSelectedTab,
+    onSelectTab,
     templateTypes[0]
   )
 

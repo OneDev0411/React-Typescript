@@ -1,13 +1,14 @@
-import React from 'react'
-
 import { Box, Typography, makeStyles, Theme } from '@material-ui/core'
 import {
   mdiCalendarMonthOutline,
   mdiNewspaperVariantOutline,
   mdiScriptTextOutline
 } from '@mdi/js'
+import cn from 'classnames'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+
+import type { Forms } from '../..'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -57,18 +58,23 @@ export const useStyles = makeStyles(
     buttonTitle: {
       display: 'block',
       marginTop: theme.spacing(0.5)
+    },
+    isActive: {
+      background: theme.palette.action.hover
     }
   }),
   { name: 'AddStepButtons' }
 )
 
 interface Props {
+  activeForm: Forms
   onNewEventClick: () => any
   onNewMarketingEmailClick: () => any
   onNewBasicEmailClick: () => any
 }
 
 export const AddButtons = ({
+  activeForm,
   onNewEventClick,
   onNewMarketingEmailClick,
   onNewBasicEmailClick
@@ -78,10 +84,15 @@ export const AddButtons = ({
   return (
     <Box className={classes.container} position="relative">
       <Typography variant="body1" className={classes.title}>
-        Add a New Step
+        Select a Step
       </Typography>
       <Box className={classes.buttonContainer}>
-        <Box className={classes.button} onClick={onNewEventClick}>
+        <Box
+          className={cn(classes.button, {
+            [classes.isActive]: activeForm === 'event'
+          })}
+          onClick={onNewEventClick}
+        >
           <SvgIcon
             path={mdiCalendarMonthOutline}
             className={classes.buttonIcon}
@@ -99,7 +110,9 @@ export const AddButtons = ({
         </Box>
         <Box
           mx={1}
-          className={classes.button}
+          className={cn(classes.button, {
+            [classes.isActive]: activeForm === 'marketing_email'
+          })}
           onClick={onNewMarketingEmailClick}
         >
           <SvgIcon
@@ -117,7 +130,12 @@ export const AddButtons = ({
             Using Marketing templates
           </Typography>
         </Box>
-        <Box className={classes.button} onClick={onNewBasicEmailClick}>
+        <Box
+          className={cn(classes.button, {
+            [classes.isActive]: activeForm === 'basic_email'
+          })}
+          onClick={onNewBasicEmailClick}
+        >
           <SvgIcon path={mdiScriptTextOutline} className={classes.buttonIcon} />
           <Typography
             variant="button"

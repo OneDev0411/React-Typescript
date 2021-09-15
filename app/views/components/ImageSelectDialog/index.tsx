@@ -36,14 +36,6 @@ function isSearchableTab(value: TabValue): boolean {
   return SEARCHABLE_IMAGE_TABS.includes(value)
 }
 
-function getDefaultActiveTab(disabledTabs: TabValue[]): TabValue {
-  return (
-    SEARCHABLE_IMAGE_TABS.find(tab => {
-      return !disabledTabs.includes(tab)
-    }) ?? 'team-library'
-  )
-}
-
 const useStyles = makeStyles(
   () => ({
     dialogPaper: {
@@ -62,16 +54,12 @@ export default function ImageSelectDialog({
   onSelect,
   onUpload,
   onClose,
-  acceptableMimeType = 'image/*',
-  disabledTabs = [],
   dialogProps
 }: ImageSelectDialogProps) {
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
   const [selectedTab, setSelectedTab] = useState<TabValue>(
-    onUpload && !disabledTabs.includes('upload-photo')
-      ? 'upload-photo'
-      : getDefaultActiveTab(disabledTabs)
+    onUpload ? 'upload-photo' : 'team-library'
   )
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 400)
@@ -109,10 +97,6 @@ export default function ImageSelectDialog({
     onSelect(fileUrl)
   }
 
-  const isTabDisabled = (tab: TabValue): boolean => {
-    return disabledTabs.includes(tab)
-  }
-
   if (imageFileToEdit) {
     return (
       <EditorDialog
@@ -148,18 +132,10 @@ export default function ImageSelectDialog({
                 setSelectedTab(newValue)
               }
             >
-              {onUpload && !isTabDisabled('upload-photo') && (
-                <Tab value="upload-photo" label="Upload" />
-              )}
-              {!isTabDisabled('team-library') && (
-                <Tab value="team-library" label="Your Gallery" />
-              )}
-              {!isTabDisabled('photo-library') && (
-                <Tab value="photo-library" label="Stock Photos" />
-              )}
-              {!isTabDisabled('gif-library') && (
-                <Tab value="gif-library" label="GIFs" />
-              )}
+              {onUpload && <Tab value="upload-photo" label="Upload" />}
+              <Tab value="team-library" label="Your Gallery" />
+              <Tab value="photo-library" label="Stock Photos" />
+              <Tab value="gif-library" label="GIFs" />
             </Tabs>
           </Grid>
           <Grid item>
@@ -184,10 +160,7 @@ export default function ImageSelectDialog({
       <DialogContent className={classes.dialogContent}>
         <Grid container>
           {selectedTab === 'upload-photo' && (
-            <Upload
-              onSelectFile={handleEdit}
-              acceptableMimeType={acceptableMimeType}
-            />
+            <Upload onSelectFile={handleEdit} />
           )}
           {selectedTab === 'team-library' && (
             <TeamLibrary
