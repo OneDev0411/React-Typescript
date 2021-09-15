@@ -102,7 +102,9 @@ export const MlsAreaGroup = () => {
         value={selectedMlsAreas}
         onChange={onMLSAreaChange}
         loading={loadingMlsAreas}
-        getOptionSelected={(option, value) => option.number === value.number}
+        getOptionSelected={(option, value) =>
+          option.number === value.number && option.title === value.title
+        }
         getOptionLabel={option => option.title}
         renderOption={option => option.title}
         renderInput={params => (
@@ -138,7 +140,9 @@ export const MlsAreaGroup = () => {
           value={selectedMlsSubAreas}
           onChange={onMLSAreaSubChange}
           loading={loadingMlsSubAreas}
-          getOptionSelected={(option, value) => option.number === value.number}
+          getOptionSelected={(option, value) =>
+            option.number === value.number && option.title === value.title
+          }
           getOptionLabel={option => option.title}
           renderOption={option => option.title}
           renderInput={params => (
@@ -175,9 +179,11 @@ export const MlsAreaGroup = () => {
         onInputChange={onCountyInputChange}
         onChange={onCountyChange}
         loading={loadingCounties}
-        getOptionSelected={(option, value) => option.value === value.value}
+        getOptionSelected={(option, value) =>
+          option.value === value.value && option.label === value.label
+        }
         getOptionLabel={option => option.label}
-        renderOption={option => option.value}
+        renderOption={option => option.label}
         renderInput={params => (
           <TextField
             {...params}
