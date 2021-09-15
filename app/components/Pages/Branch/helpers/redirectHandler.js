@@ -163,7 +163,7 @@ const redirectHandler = async (
           messageText: getConflictMessageText(loggedInUser.email, email),
           actionButtonProps: {
             onClick: loginHandler,
-            text: 'Sign in'
+            text: `Yes, sign in as ${decodeURIComponent(email)}`
           }
         }
       })
