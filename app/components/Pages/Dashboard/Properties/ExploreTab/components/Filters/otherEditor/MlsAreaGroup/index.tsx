@@ -2,13 +2,14 @@ import { useState } from 'react'
 
 import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useEffectOnce } from 'react-use'
+import { useDebounce, useEffectOnce } from 'react-use'
 
 import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
+const SEARCH_DEBONCE_MS = 500
 export const MlsAreaGroup = () => {
   const classes = useStyles()
 
@@ -19,6 +20,7 @@ export const MlsAreaGroup = () => {
   const [selectedMlsSubAreas, setSelectedMlsSubAreas] = useState<IMLSArea[]>([])
   const [loadingMlsSubAreas, setLoadingMlsSubAreas] = useState<boolean>(false)
   const [counties, setCounties] = useState<ICounty[]>([])
+  const [countyInputValue, setCountyInputValue] = useState<string>('')
   const [selectedCounties, setSelectedCounties] = useState<ICounty[]>([])
   const [loadingCounties, setLoadingCounties] = useState<boolean>(false)
 
@@ -44,13 +46,21 @@ export const MlsAreaGroup = () => {
 
   const onCountyInputChange = (event: any, newInputValue: string) => {
     setLoadingCounties(true)
-    api
-      .getCounties(newInputValue)
-      .then(counties => {
-        setCounties(counties.options)
-      })
-      .finally(() => setLoadingCounties(false))
+    setCountyInputValue(newInputValue)
   }
+
+  useDebounce(
+    () => {
+      api
+        .getCounties(countyInputValue)
+        .then(counties => {
+          setCounties(counties.options)
+        })
+        .finally(() => setLoadingCounties(false))
+    },
+    SEARCH_DEBONCE_MS,
+    [countyInputValue]
+  )
 
   const onMLSAreaChange = (event: any, values: IMLSArea[]) => {
     const selectedValues = values || []
