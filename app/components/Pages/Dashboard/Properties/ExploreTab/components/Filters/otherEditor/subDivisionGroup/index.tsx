@@ -10,7 +10,7 @@ import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
 const SEARCH_DEBONCE_MS = 500
-export const SubDivisionGroup = () => {
+export const SubdivisionGroup = () => {
   const classes = useStyles()
 
   const [subdivisions, setSubdivisions] = useState<ISubdivision[]>([])

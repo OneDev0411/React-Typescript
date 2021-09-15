@@ -12,7 +12,7 @@ import { ParkingGroup } from './parkingGroup'
 import { PoolGroup } from './poolGroup'
 import { SquareFootageGroup } from './squareFootageGroup'
 import { StatusGroup } from './statusGroup'
-import { SubDivisionGroup } from './subDivisionGroup'
+import { SubdivisionGroup } from './subdivisionGroup'
 import { YearBuiltGroup } from './yearBuiltGroup'
 
 export const OtherEditor = () => {
@@ -48,7 +48,7 @@ export const OtherEditor = () => {
               <OpenHouseGroup />
               <MlsAreaGroup />
               <ParkingGroup />
-              <SubDivisionGroup />
+              <SubdivisionGroup />
               <SquareFootageGroup />
               <LotSizeGroup />
               <YearBuiltGroup />
