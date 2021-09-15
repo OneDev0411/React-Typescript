@@ -1,8 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const getSubdivisions = async query => {
+export async function getSubdivisions(
+  query: string
+): Promise<{ options: ISubdivision[] }> {
   if (!query || query.length < 4) {
-    return Promise.resolve(() => ({ options: [] }))
+    return Promise.resolve({ options: [] as ISubdivision[] })
   }
 
   try {
@@ -15,7 +17,7 @@ const getSubdivisions = async query => {
 
     return { options }
   } catch (error) {
-    // console.log(error.message)
+    return Promise.resolve({ options: [] as ISubdivision[] })
   }
 }
 
