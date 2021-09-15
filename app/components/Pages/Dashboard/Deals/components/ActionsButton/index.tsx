@@ -449,6 +449,9 @@ class ActionsButton extends React.Component<
           title={`There are multiple copies of this form available. Please choose which copy you like to ${this.props.actionsState.mode?.type}`}
           placement="top"
           open
+          PopperProps={{
+            style: { zIndex: 1 }
+          }}
         >
           <Container>
             <PrimaryAction
