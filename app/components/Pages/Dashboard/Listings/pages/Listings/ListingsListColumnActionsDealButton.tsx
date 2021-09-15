@@ -19,7 +19,7 @@ function ListingsListColumnActionsDealButton({
       {...otherProps}
       to={
         dealId
-          ? `/dashboard/deals/${dealId}`
+          ? `/dashboard/deals/${dealId}?origin=dashboard/listings`
           : `/dashboard/deals/create?listingId=${listingId}`
       }
       disabled={disabled}

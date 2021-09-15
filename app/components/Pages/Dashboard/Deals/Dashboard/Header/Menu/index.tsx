@@ -46,6 +46,14 @@ export const Menu = withRouter(
     const userSettings = useSelector(selectUserSettingsInActiveTeam)
 
     const handleClose = () => {
+      const { origin } = location.query
+
+      if (origin) {
+        router.push(`/${origin}`)
+
+        return
+      }
+
       const query = userSettings[DEAL_GRID_FILTER_SETTING_KEY]
 
       router.push(`/dashboard/deals?q=${query?.term || ''}`)
