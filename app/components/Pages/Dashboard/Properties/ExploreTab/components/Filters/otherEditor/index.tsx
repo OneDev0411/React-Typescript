@@ -5,11 +5,13 @@ import TuneIcon from '@material-ui/icons/Tune'
 import { FilterEditor } from '../filterEditor'
 import { useStyles } from '../styles'
 
+import { HomeStyleGroup } from './homeStyleGroup'
 import { LotSizeGroup } from './lotSizeGroup'
 import { MlsAreaGroup } from './MlsAreaGroup'
 import { OpenHouseGroup } from './openHouseGroup'
 import { ParkingGroup } from './parkingGroup'
 import { PoolGroup } from './poolGroup'
+import { PropertySubtypesGroup } from './propertySubtypesGroup'
 import { SchoolsDistrictsGroup } from './schoolsDistrictsGroup'
 import { SquareFootageGroup } from './squareFootageGroup'
 import { StatusGroup } from './statusGroup'
@@ -47,6 +49,8 @@ export const OtherEditor = () => {
             <Grid container direction="column">
               <StatusGroup />
               <OpenHouseGroup />
+              <PropertySubtypesGroup />
+              <HomeStyleGroup />
               <MlsAreaGroup />
               <ParkingGroup />
               <SubdivisionGroup />

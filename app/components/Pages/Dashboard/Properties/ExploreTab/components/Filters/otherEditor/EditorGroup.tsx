@@ -1,14 +1,24 @@
 import { Button, Grid, Typography } from '@material-ui/core'
 
+import { noop } from '@app/utils/helpers'
+
 import { useStyles } from '../styles'
 
 interface Props {
   title?: string
   hasSelectAll?: boolean
+  isSelectAll?: boolean
+  onToggleSelectAll?: (allSelected: boolean) => void
   children: React.ReactNode
 }
 
-export const EditorGroup = ({ title, hasSelectAll, children }: Props) => {
+export const EditorGroup = ({
+  title,
+  hasSelectAll,
+  isSelectAll,
+  onToggleSelectAll = noop,
+  children
+}: Props) => {
   const classes = useStyles()
 
   return (
@@ -26,8 +36,14 @@ export const EditorGroup = ({ title, hasSelectAll, children }: Props) => {
             </Grid>
             {hasSelectAll && (
               <Grid item>
-                <Button variant="text" color="secondary">
-                  Select All
+                <Button
+                  onClick={() => {
+                    onToggleSelectAll(!isSelectAll)
+                  }}
+                  variant="text"
+                  color="secondary"
+                >
+                  {isSelectAll ? 'Deselect All' : 'Select All'}
                 </Button>
               </Grid>
             )}

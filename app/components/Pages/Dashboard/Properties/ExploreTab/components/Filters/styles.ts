@@ -14,7 +14,7 @@ export const useStyles = makeStyles(
       minWidth: 170
     },
     editorRoot: {
-      width: 350,
+      width: 420,
       padding: theme.spacing(2)
     },
     header: {
@@ -71,6 +71,9 @@ export const useStyles = makeStyles(
     select: {
       width: '100%',
       marginBottom: theme.spacing(2)
+    },
+    checkboxGroup: {
+      flexDirection: 'row'
     }
   }),
   { name: 'PropertiesFilters' }
