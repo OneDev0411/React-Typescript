@@ -41,7 +41,7 @@ export const useStyles = makeStyles(
     subheader: {
       fontSize: 14,
       marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(1)
     },
     subtitle: {
       fontSize: theme.typography.subtitle2.fontSize,
