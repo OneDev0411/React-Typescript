@@ -49,6 +49,7 @@ interface Props {
   size?: 'small' | 'medium' | 'large'
   onClick?: React.MouseEventHandler<HTMLButtonElement>
   active?: boolean
+  tooltip?: string
 }
 
 export const GoogleMapsButton = ({
@@ -61,11 +62,12 @@ export const GoogleMapsButton = ({
   onClick,
   size = 'small',
   active = false,
-  iconButton = false
+  iconButton = false,
+  tooltip
 }: Props) => {
   return (
     <CustomizedGoogleMapsButton
-      title="Get your exact location on the map"
+      title={tooltip}
       size={size}
       style={{ top, left, right, bottom }}
       startIcon={startIcon}

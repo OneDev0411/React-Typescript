@@ -249,13 +249,19 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               <Box className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
-                    <GoogleMapsButton top={9} left={10} onClick={toggleMap}>
+                    <GoogleMapsButton
+                      tooltip="Hide map"
+                      top={9}
+                      left={10}
+                      onClick={toggleMap}
+                    >
                       <MapToggler checked={mapIsShown} />
                     </GoogleMapsButton>
                     <GoogleMapsButton
                       top={9}
                       right={10}
                       startIcon={<EditIcon />}
+                      tooltip="Define an area for searching."
                       onClick={() => activateDrawingMode()}
                     >
                       Draw Area
@@ -265,6 +271,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                       bottom={90}
                       left={10}
                       iconButton
+                      tooltip="Get your exact location on the map"
                       startIcon={<MyLocationIcon />}
                       onClick={() => onClickLocate()}
                     />
