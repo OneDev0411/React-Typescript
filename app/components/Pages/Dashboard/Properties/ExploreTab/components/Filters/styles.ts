@@ -57,12 +57,19 @@ export const useStyles = makeStyles(
         color: theme.palette.primary.contrastText
       }
     },
-    FullToggleButton: {
+    fullToggleButton: {
       flex: 1,
       '&.Mui-selected': {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText
       }
+    },
+    filledAutoCompleteWrapper: {
+      flex: 1
+    },
+    to: {
+      textAlign: 'center',
+      padding: theme.spacing(2)
     },
     switchIcon: {
       fontSize: 14,

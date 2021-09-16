@@ -48,11 +48,7 @@ export const BedsEditor = () => {
                 />
               </Grid>
               <Grid item container justifyContent="center" xs={2}>
-                <Typography
-                  style={{ padding: 8 }}
-                  variant="body1"
-                  align="center"
-                >
+                <Typography className={classes.to} variant="body1">
                   To
                 </Typography>
               </Grid>

@@ -1,8 +1,11 @@
 import { Grid, Typography, TextField } from '@material-ui/core'
 
+import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
 export const SquareFootageGroup = () => {
+  const classes = useStyles()
+
   return (
     <EditorGroup title="Square Footage">
       <Grid container alignItems="center" wrap="nowrap">
@@ -16,7 +19,7 @@ export const SquareFootageGroup = () => {
           />
         </Grid>
         <Grid item>
-          <Typography style={{ padding: 8 }} variant="body1">
+          <Typography className={classes.to} variant="body1">
             To
           </Typography>
         </Grid>

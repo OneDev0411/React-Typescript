@@ -43,7 +43,7 @@ export const PriceEditor = () => {
                 />
               </Grid>
               <Grid item>
-                <Typography style={{ padding: 8 }} variant="body1">
+                <Typography className={classes.to} variant="body1">
                   To
                 </Typography>
               </Grid>

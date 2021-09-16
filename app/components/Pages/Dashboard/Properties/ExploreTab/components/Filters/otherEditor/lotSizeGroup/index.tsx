@@ -1,8 +1,11 @@
 import { Grid, Typography, TextField } from '@material-ui/core'
 
+import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
 export const LotSizeGroup = () => {
+  const classes = useStyles()
+
   return (
     <EditorGroup title="Lot Size Area (Acre)">
       <Grid container alignItems="center" wrap="nowrap">
@@ -16,7 +19,7 @@ export const LotSizeGroup = () => {
           />
         </Grid>
         <Grid item>
-          <Typography style={{ padding: 8 }} variant="body1">
+          <Typography className={classes.to} variant="body1">
             To
           </Typography>
         </Grid>
