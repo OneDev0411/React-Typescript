@@ -11,6 +11,7 @@ export const isDealEvent = (event: ICalendarEvent): boolean => {
       'contract_date',
       'inspection_date',
       'option_period',
+      'hoa_delivery',
       'financing_due',
       'title_due',
       't47_due',
