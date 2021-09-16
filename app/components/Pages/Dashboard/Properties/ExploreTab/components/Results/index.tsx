@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 
-import { Grid, Box, makeStyles, alpha } from '@material-ui/core'
+import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import memoize from 'lodash/memoize'
 import hash from 'object-hash'
@@ -11,7 +11,7 @@ import { CardsView } from '../../../components/CardsView'
 import { ResultsHeader } from '../../../components/ResultsHeader'
 import { TableView } from '../../../components/TableView'
 import ZeroState from '../../../components/ZeroState'
-import { PAGE_SIZE } from '../../../constants/constants'
+import { PAGE_SIZE, QUERY_LIMIT } from '../../../constants/constants'
 import { getListingsPage } from '../../../helpers/pagination-utils'
 import { sortByIndex, SortIndex, SortString } from '../../../helpers/sort-utils'
 import useListingsContext from '../../hooks/useListingsContext'
@@ -190,17 +190,27 @@ export const Results = ({
             </>
           )}
           {paginationShouldShown && (
-            <Box className={classes.paginationContainer}>
-              <Pagination
-                page={currentPage}
-                onChange={handlePageChange}
-                count={Math.ceil(state.result.listings.length / PAGE_SIZE)}
-                variant="outlined"
-                color="primary"
-                size="large"
-                shape="rounded"
-              />
-            </Box>
+            <>
+              <Box className={classes.paginationContainer}>
+                <Pagination
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  count={Math.ceil(state.result.listings.length / PAGE_SIZE)}
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  shape="rounded"
+                />
+              </Box>
+              {state.result.info && state.result.info.total > QUERY_LIMIT && (
+                <Grid container justifyContent="center">
+                  <Typography variant="caption" component="p">
+                    We only show {QUERY_LIMIT} results for general searches. To
+                    get more specific results please zoom in.
+                  </Typography>
+                </Grid>
+              )}
+            </>
           )}
         </Grid>
       </div>
