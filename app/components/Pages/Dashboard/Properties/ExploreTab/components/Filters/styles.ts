@@ -71,6 +71,9 @@ export const useStyles = makeStyles(
     select: {
       width: '100%',
       marginBottom: theme.spacing(2)
+    },
+    selectAllButton: {
+      color: theme.palette.grey[400]
     }
   }),
   { name: 'PropertiesFilters' }
