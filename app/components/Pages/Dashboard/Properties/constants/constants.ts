@@ -30,6 +30,28 @@ export const mapInitialState = {
 }
 
 // Filters constants
+export const STATUSES = {
+  sold: 'Sold',
+  active: 'Active',
+  pending: 'Pending',
+  other: 'Other Listing Statuses'
+}
+
+export const PENDING_STATUSES = {
+  pending: 'Pending',
+  active_kick_out: 'Active Kick Out',
+  active_contingent: 'Active Contingent',
+  active_option_contract: 'Active Option Contract'
+}
+
+export const OTHER_STATUSES = {
+  expired: 'Expired',
+  cancelled: 'Cancelled',
+  withdrawn: 'Withdrawn',
+  temp_off_market: 'Temp Off Market',
+  withdrawn_sublistin: 'Withdrawn Sublisting'
+}
+
 export const FILTER_PROPERTY_SUBTYPES = {
   condo: 'RES-Condo',
   farm: 'RES-Farm/Ranch',

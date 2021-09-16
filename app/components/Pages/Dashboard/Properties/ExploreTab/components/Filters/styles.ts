@@ -74,6 +74,9 @@ export const useStyles = makeStyles(
     },
     selectAllButton: {
       color: theme.palette.grey[400]
+    },
+    subStatusGroup: {
+      marginLeft: theme.spacing(3)
     }
   }),
   { name: 'PropertiesFilters' }
