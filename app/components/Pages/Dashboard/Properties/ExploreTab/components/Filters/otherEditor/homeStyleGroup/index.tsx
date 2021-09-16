@@ -4,12 +4,9 @@ import { Checkbox, FormControlLabel, FormGroup, Grid } from '@material-ui/core'
 import { mapValues } from 'lodash'
 
 import { ARCHITECTURAL_STYLES } from '../../../../../constants/constants'
-import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
 export const HomeStyleGroup = () => {
-  const classes = useStyles()
-
   const [values, setValues] = useState<
     Record<keyof typeof ARCHITECTURAL_STYLES, boolean>
   >(mapValues(ARCHITECTURAL_STYLES, () => false))
@@ -31,7 +28,7 @@ export const HomeStyleGroup = () => {
       isSelectAll={isSelectAll}
       onToggleSelectAll={onToggleSelectAll}
     >
-      <FormGroup className={classes.checkboxGroup}>
+      <FormGroup row>
         {Object.keys(ARCHITECTURAL_STYLES).map(key => (
           <Grid item key={key} xs={6}>
             <FormControlLabel

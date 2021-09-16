@@ -71,9 +71,6 @@ export const useStyles = makeStyles(
     select: {
       width: '100%',
       marginBottom: theme.spacing(2)
-    },
-    checkboxGroup: {
-      flexDirection: 'row'
     }
   }),
   { name: 'PropertiesFilters' }
