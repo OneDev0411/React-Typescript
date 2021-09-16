@@ -3,6 +3,8 @@ import ListRoundedIcon from '@material-ui/icons/ListRounded'
 import ViewModuleRoundedIcon from '@material-ui/icons/ViewModuleRounded'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
+
 import { ViewType } from '../../../ExploreTab/components/ExplorePage'
 
 const useStyles = makeStyles(
@@ -26,6 +28,7 @@ interface Props {
 
 const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
   const classes = useStyles()
+  const [, setViewQueryParam, deleteViewQueryParam] = useQueryParam('view')
 
   return (
     <>
@@ -37,6 +40,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
         selected={viewType === 'cards'}
         onChange={() => {
           onToggleView('cards')
+          deleteViewQueryParam()
         }}
       >
         <ViewModuleRoundedIcon />
@@ -49,6 +53,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
         selected={viewType === 'table'}
         onChange={() => {
           onToggleView('table')
+          setViewQueryParam('table')
         }}
       >
         <ListRoundedIcon />

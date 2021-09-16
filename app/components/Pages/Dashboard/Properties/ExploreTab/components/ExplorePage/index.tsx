@@ -6,6 +6,7 @@ import MyLocationIcon from '@material-ui/icons/MyLocation'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
@@ -124,6 +125,7 @@ export type ViewType = 'cards' | 'table'
 
 export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useListingsContext()
+  const [viewQueryParam] = useQueryParam('view')
   const classes = useStyles()
 
   const reduxDispatch = useDispatch()
@@ -131,7 +133,9 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [drawingMode, setDrawingMode] = useState(false)
   const [isShowAlertModal, setIsShowAlertModal] = useState(false)
-  const [viewType, setViewType] = useState<ViewType>('cards')
+  const [viewType, setViewType] = useState<ViewType>(
+    (viewQueryParam as ViewType) || 'cards'
+  )
   const [activeSort, setActiveSort] = useState(
     parseSortIndex(getDefaultSort(user))
   )
