@@ -2,6 +2,7 @@ import React, { ComponentProps, useCallback, useState, memo } from 'react'
 
 import { noop } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
 import ListingCard from 'components/ListingCards/ListingCard'
@@ -51,7 +52,7 @@ const ListingCardWithFavorite = ({
 
   const closeListing = () => {
     if (!isWidget) {
-      window.history.pushState({}, '', '/dashboard/properties')
+      browserHistory.push('/dashboard/properties')
     }
 
     setIsListingOpen(false)
@@ -65,7 +66,7 @@ const ListingCardWithFavorite = ({
     }
 
     if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/${listing.id}`)
+      browserHistory.push(`/dashboard/properties/${listing.id}`)
     }
 
     setIsListingOpen(true)
