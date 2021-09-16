@@ -6,13 +6,13 @@ import MyLocationIcon from '@material-ui/icons/MyLocation'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { setUserSetting } from '@app/store_actions/user/set-setting'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
   loadMapLibraries
 } from '@app/utils/google-map-api'
 import { confirmation } from 'actions/confirmation'
+import { setUserSetting } from 'actions/user/set-setting'
 
 import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
@@ -25,7 +25,8 @@ import {
   getDefaultSort,
   LAST_BROWSING_LOCATION,
   parseSortIndex,
-  SortString
+  SortString,
+  SORT_FIELD_SETTING_KEY
 } from '../../../helpers/sort-utils'
 import {
   setMapDrawing,
@@ -137,6 +138,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onChangeSort = (sort: SortString) => {
     setActiveSort(parseSortIndex(sort))
+    reduxDispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   const onToggleView = (to: ViewType) => {
