@@ -18,7 +18,7 @@ export const getTitle = (event: ICalendarEvent): string => {
   }
 
   if (event_type === 'home_anniversary') {
-    return `Anniversary: ${title}`
+    return `Home Anniversary: ${title}`
   }
 
   if (isDealEvent(event)) {
