@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react'
 import { Box, Button, Grid, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import MyLocationIcon from '@material-ui/icons/MyLocation'
+import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
@@ -69,6 +70,9 @@ const useStyles = makeStyles(
       minHeight: '100%',
       marginRight: theme.spacing(2),
       position: 'relative'
+    },
+    hidden: {
+      display: 'none'
     },
     mapCanvas: {
       position: 'absolute',
@@ -250,8 +254,14 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         </Box>
 
         <Grid container className={classes.main}>
-          {mapIsShown && mapIsInitialized && (
-            <Grid item className={classes.map}>
+          {mapIsInitialized && (
+            <Grid
+              item
+              className={cn({
+                [classes.map]: true,
+                [classes.hidden]: !mapIsShown
+              })}
+            >
               <Box className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
