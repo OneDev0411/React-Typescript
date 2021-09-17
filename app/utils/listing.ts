@@ -82,7 +82,8 @@ export const addressTitle = (address: Address | ICompactAddress): string => {
     address.street_number,
     address.street_dir_prefix,
     address.street_name,
-    address.street_suffix
+    address.street_suffix,
+    address.street_dir_suffix
   ]
     .filter(a => a)
     .join(' ')
@@ -122,9 +123,15 @@ export const getListingAddress = (
 ): string => {
   const address = getListingAddressObj(listing)
 
-  const { street_number, street_name, street_suffix, unit_number } = address
+  const {
+    street_number,
+    street_name,
+    street_suffix,
+    street_dir_suffix,
+    unit_number
+  } = address
 
-  let result = [street_number, street_name, street_suffix]
+  let result = [street_number, street_name, street_suffix, street_dir_suffix]
     .filter(s => s)
     .join(' ')
 

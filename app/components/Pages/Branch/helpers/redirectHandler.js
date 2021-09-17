@@ -83,7 +83,7 @@ const redirectHandler = async (
     // If the user is wrong, ask him to relogin with the right user
     if (hasConflict()) {
       params.redirectTo = marketingWizardRedirectUrl
-      params.messageText = getConflictMessageText(email)
+      params.messageText = getConflictMessageText(loggedInUser.email, email)
       setActiveModal({ name: 'CONFLICT', params })
 
       return
@@ -160,10 +160,10 @@ const redirectHandler = async (
         name: 'CONFLICT',
         params: {
           ...params,
-          messageText: getConflictMessageText(email),
+          messageText: getConflictMessageText(loggedInUser.email, email),
           actionButtonProps: {
             onClick: loginHandler,
-            text: 'Sign in'
+            text: `Yes, sign in as ${decodeURIComponent(email)}`
           }
         }
       })
@@ -181,7 +181,7 @@ const redirectHandler = async (
     if (hasConflict()) {
       console.log('you logged with deferent user')
       params.redirectTo = redirect
-      params.messageText = getConflictMessageText(email)
+      params.messageText = getConflictMessageText(loggedInUser.email, email)
       setActiveModal({ name: 'CONFLICT', params })
 
       return

@@ -316,6 +316,8 @@ type TContactAssociationMap<T extends string> = T extends 'contact.attributes'
   : never
 
 declare interface IFetchContactQuery {
+  start?: number
+  limit?: number
   associations?: string[] // TODO: use TContactAssociation[]
   order?: string
   filter_type?: TContactFilterType
@@ -327,4 +329,10 @@ declare interface TGetContactFunc<A extends string> {
     IContact,
     TContactAssociationMap<A>
   >
+}
+
+declare interface IContactFilter {
+  attribute_def: UUID
+  invert: boolean
+  value: unknown
 }
