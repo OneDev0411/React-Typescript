@@ -10,7 +10,7 @@ const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'LinkedInCover',
   'FacebookCover',
   'InstagramStory',
-  'RealtorComCover',
+  'RealtorCover',
   'TwitterCover',
   'YouTubeCover'
 ]

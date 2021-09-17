@@ -12,7 +12,7 @@ const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
   'LinkedInCover',
   'FacebookCover',
   'InstagramStory',
-  'RealtorComCover',
+  'RealtorCover',
   'TwitterCover',
   'YouTubeCover'
 ]

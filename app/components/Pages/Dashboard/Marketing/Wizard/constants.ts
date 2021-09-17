@@ -17,7 +17,7 @@ export const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
   'LinkedInCover',
   'FacebookCover',
   'Letter',
-  'RealtorComCover',
+  'RealtorCover',
   'TwitterCover',
   'YouTubeCover'
 ]
