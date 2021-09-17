@@ -130,21 +130,28 @@ export const Map = ({
       drawingManagerRef.current,
       'polygoncomplete',
       drawing => {
+        // User changed his mind and cancelled drawing
         drawingRef.current = drawing
 
-        const drawingPoints = pointsFromPolygon(drawing)
+        if (!drawingMode) {
+          return
+        }
 
         if (typeof callback === 'function') {
+          const drawingPoints = pointsFromPolygon(drawing)
+
           callback(drawingPoints)
         }
       }
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const deactivateDrawingMode = () => {
     if (drawingManagerRef.current) {
       // https://developers.google.com/maps/documentation/javascript/reference/drawing
       drawingManagerRef.current.setDrawingMode(null)
+      drawingRef?.current?.setMap(null)
     }
   }
 
