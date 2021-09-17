@@ -1,11 +1,11 @@
+import { FILTERS_INITIAL_VALUES } from '../../../constants/constants'
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
   bounds: Nullable<IBounds>
   office?: Nullable<string>
   drawing: ICoord[]
-  // TODO: change filters model
-  filters: Nullable<any>
+  filters: Partial<AlertFilters>
 }
 export interface ListingsState {
   search: ListingSearchOptions
@@ -19,7 +19,7 @@ export interface ListingsState {
 }
 
 export const initialState: ListingsState = {
-  search: { bounds: null, drawing: [], filters: null },
+  search: { bounds: null, drawing: [], filters: FILTERS_INITIAL_VALUES },
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
   listingStates: { hover: null, click: null },
@@ -94,6 +94,18 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
         ...state,
         search: { ...state.search, bounds },
         map: { center, zoom }
+      }
+    }
+
+    case 'UPDATE_FILTERS': {
+      const { filters } = action.payload
+
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          filters: { ...state.search.filters, ...filters }
+        }
       }
     }
 

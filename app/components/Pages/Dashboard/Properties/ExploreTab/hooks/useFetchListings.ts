@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import useThunkReducer, { Thunk } from 'react-hook-thunk-reducer'
 import { useSelector } from 'react-redux'
+import { useDebounce } from 'use-debounce'
 
 import api from '@app/models/listings/search'
 import { normalizeListingLocation } from '@app/utils/map'
@@ -10,7 +11,8 @@ import { selectUser } from 'selectors/user'
 
 import {
   PROPOSED_AGENT_ZOOM_LEVEL,
-  QUERY_LIMIT
+  QUERY_LIMIT,
+  SEARCH_DEBOUNCE_MS
 } from '../../constants/constants'
 import { formatListing } from '../../helpers/format-listing'
 import {
@@ -39,6 +41,8 @@ export default function useFetchListings(
   // TO fix calling GoogleMap onChange at initialization
   // https://github.com/google-map-react/google-map-react/blob/master/DOC.md
   const isInitCall = useRef(true)
+
+  const [debouncedSearch] = useDebounce(state.search, SEARCH_DEBOUNCE_MS)
 
   // Upon each change in search we fetch new results
   useEffect(() => {
@@ -94,7 +98,7 @@ export default function useFetchListings(
     // Because we already has state.search.bounds on the deps list,
     // We don't need to call fetchResults() on every state.map.zoom change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.search, dispatch, brand])
+  }, [debouncedSearch, dispatch, brand])
 
   return [state, dispatch]
 }

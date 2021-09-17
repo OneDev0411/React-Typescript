@@ -37,6 +37,11 @@ export const setMapDrawing = (points: ICoord[]) => ({
   }
 })
 
+export const updateFilters = (filters: Partial<AlertFilters>) => ({
+  type: 'UPDATE_FILTERS' as 'UPDATE_FILTERS',
+  payload: { filters }
+})
+
 export const setMapBounds = (
   center: ICoord,
   zoom: number,
@@ -77,6 +82,7 @@ export type Actions = ReturnType<
   | typeof toggleListingFavoriteState
   | typeof setMapDrawing
   | typeof setMapBounds
+  | typeof updateFilters
   | typeof setMapLocation
   | typeof setIsLoading
   | typeof removeMapDrawing
