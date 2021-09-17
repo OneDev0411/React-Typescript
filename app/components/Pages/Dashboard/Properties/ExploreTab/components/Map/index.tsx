@@ -2,7 +2,6 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 
 import { useTheme } from '@material-ui/core'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
-import { browserHistory } from 'react-router'
 
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
@@ -55,7 +54,7 @@ export const Map = ({
 
   const closeListingModal = () => {
     if (!isWidget) {
-      browserHistory.push('/dashboard/properties')
+      window.history.pushState({}, '', '/dashboard/properties')
     }
 
     setListingModalState({ id: '', isOpen: false })
@@ -63,7 +62,7 @@ export const Map = ({
 
   const openListingModal = (id: UUID) => {
     if (!isWidget) {
-      browserHistory.push(`/dashboard/properties/${id}`)
+      window.history.pushState({}, '', `/dashboard/properties/${id}`)
     }
 
     setListingModalState({ id, isOpen: true })
