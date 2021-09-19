@@ -17,6 +17,7 @@ import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
+import { getTemplateType } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
@@ -85,13 +86,17 @@ export function TriggerEditMode({
     formState: { errors, isDirty, isSubmitting }
   } = useForm<IGlobalTriggerFormData>()
 
-  const currentEventType = useMemo(
+  const currentEventType: TriggerContactEventTypes | undefined = useMemo(
     () => eventType ?? trigger?.event_type,
     [eventType, trigger?.event_type]
   )
   const initialValue: IGlobalTriggerFormData = useMemo(
     () => generateInitialValues(trigger, currentEventType),
     [trigger, currentEventType]
+  )
+  const templatesType: IMarketingTemplateType = useMemo(
+    () => getTemplateType(currentEventType!),
+    [currentEventType]
   )
 
   if (!currentEventType) {
@@ -230,7 +235,7 @@ export function TriggerEditMode({
                   return (
                     <TemplateSelector
                       disabled={isSubmitting}
-                      templateType={['Birthday', 'WeddingAnniversary']}
+                      templateType={[templatesType]}
                       currentBrandTemplate={trigger?.template}
                       currentTemplateInstance={trigger?.template_instance}
                       onChange={onChange}

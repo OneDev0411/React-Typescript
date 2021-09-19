@@ -30,6 +30,10 @@ interface Props {
 export function TriggerItems({ list }: Props) {
   const classes = useStyles()
 
+  if (list?.length === 0) {
+    return null
+  }
+
   return (
     <div className={classes.container}>
       <Typography variant="subtitle2" className={classes.title}>
