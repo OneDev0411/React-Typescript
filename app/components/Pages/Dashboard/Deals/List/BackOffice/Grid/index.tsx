@@ -143,7 +143,11 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
       onClick: () => {
-        goTo(`/dashboard/deals/${deal.id}`)
+        goTo(
+          `/dashboard/deals/${deal.id}?origin=${props.location.pathname.slice(
+            1
+          )}`
+        )
         onDealOpened()
       }
     }
