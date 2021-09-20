@@ -8,10 +8,10 @@ const parseAppearanceString = appearance => {
   )}, ${Math.round(appearance?.fontColor[2] || 0)})`
 
   return {
+    color,
     font: appearance.fontName,
     size: appearance.fontSize,
-    color,
-    bold: false
+    bold: appearance.fontName.toLowerCase().includes('bold')
   }
 }
 
