@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useOriginQueryString } from '../../../../hooks/use-origin-query-string'
+
 interface Props {
   deal: IDeal
 }
@@ -24,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RemoveDraft(props: Props & WithRouterProps) {
   const classes = useStyles()
+  const originQueryString = useOriginQueryString()
 
   return (
     <div className={classes.root}>
@@ -32,7 +35,9 @@ function RemoveDraft(props: Props & WithRouterProps) {
           size="small"
           variant="outlined"
           onClick={() =>
-            props.router.push(`/dashboard/deals/${props.deal.id}/publish`)
+            props.router.push(
+              `/dashboard/deals/${props.deal.id}/publish${originQueryString}`
+            )
           }
         >
           Make visible to admin
