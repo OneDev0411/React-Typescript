@@ -81,7 +81,7 @@ export default function CalendarEventListItem({ event }: Props) {
     : timeago().format(eventTime)
 
   // Build avatars
-  if (contact) {
+  if (contact && contact.profile_image_url) {
     avatarIcon = (
       <Link to={`/dashboard/contacts/${contact.id}`}>
         <Avatar disableLazyLoad size="medium" contact={contact} />
