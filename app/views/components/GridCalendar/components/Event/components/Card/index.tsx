@@ -5,7 +5,7 @@ import { mdiClose, mdiTrashCanOutline, mdiPencilOutline } from '@mdi/js'
 import cn from 'classnames'
 import fecha from 'fecha'
 
-import { CrmEventType } from 'components/Calendar/types'
+import { CrmEventType } from 'components/ContactProfileTimeline/types'
 import FollowUpModal from 'components/FollowUpModal'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { deleteTask } from 'models/tasks'

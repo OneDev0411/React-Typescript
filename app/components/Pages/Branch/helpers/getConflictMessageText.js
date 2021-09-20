@@ -1,6 +1,6 @@
-const getConfilictMessageText = email =>
-  `You are currently logged in a different user.  Please sign out and sign in ${
-    email ? `using ${decodeURIComponent(email)}` : 'again'
-  }.`
+const getConflictMessageText = (fromEmail, toEmail) =>
+  `You are currently logged in as "${decodeURIComponent(
+    fromEmail
+  )}". Do you want to sign out and sign in as "${decodeURIComponent(toEmail)}"?`
 
-export default getConfilictMessageText
+export default getConflictMessageText

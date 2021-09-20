@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { memo } from 'react'
 
 import { Box } from '@material-ui/core'
 import { mdiScriptTextOutline } from '@mdi/js'
@@ -12,30 +12,18 @@ import { getBasicEmailInitialValues } from '../helpers/get-initial-values'
 import { basicEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, BasicEmailFormData } from '../types'
 
-interface Props extends BaseFormProps {
-  defaultSelectedTemplate?: UUID
-  templates: IBrandEmailTemplate[]
-  onNewTemplateClick: () => void
-}
-
-export default function BasicEmailForm({
+function BasicEmailForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
-  templates,
-  defaultSelectedTemplate,
   onSubmit,
   onDelete,
   onMoveUpStep,
-  onMoveDownStep,
-  onNewTemplateClick
-}: Props) {
-  const defaultTemplate = useMemo(
-    () => (templates.find(({ id }) => id === defaultSelectedTemplate) || {}).id,
-    [defaultSelectedTemplate, templates]
-  )
-
+  makeDirtyStep,
+  onMoveDownStep
+}: BaseFormProps) {
   return (
     <Form
       onSubmit={(data: BasicEmailFormData) => {
@@ -55,8 +43,12 @@ export default function BasicEmailForm({
         // Create step
         return onSubmit(newStep)
       }}
-      initialValues={getBasicEmailInitialValues(step, defaultTemplate)}
+      initialValues={getBasicEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}
@@ -72,7 +64,10 @@ export default function BasicEmailForm({
             onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
-              <Title textFieldProps={{ disabled: disableEdit }} />
+              <Title
+                label="Email Subject"
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <Description
@@ -82,10 +77,8 @@ export default function BasicEmailForm({
             </Box>
             <Box mb={2}>
               <EmailTemplate
-                templates={templates}
                 currentTemplateId={values.email_template}
                 disabled={submitting || disableEdit}
-                onNewTemplateClick={onNewTemplateClick}
               />
             </Box>
           </BaseFormLayout>
@@ -94,3 +87,5 @@ export default function BasicEmailForm({
     />
   )
 }
+
+export default memo(BasicEmailForm)

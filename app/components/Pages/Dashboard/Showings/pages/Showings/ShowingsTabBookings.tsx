@@ -6,7 +6,6 @@ import ShowingFilteredBookingList, {
 import { generateAppointmentFilterLink } from '../../helpers'
 
 import useShowingsAckAppointmentNotifications from './use-showings-ack-appointment-notifications'
-import useShowingsDismissAppointmentNotifications from './use-showings-dismiss-appointment-notifications'
 import useShowingsUpdateAppointmentStatus from './use-showings-update-appointment-status'
 
 interface ShowingsTabBookingsProps
@@ -21,9 +20,6 @@ function ShowingsTabBookings({
   const updateShowingsAppointmentStatus =
     useShowingsUpdateAppointmentStatus(setShowings)
 
-  const dismissShowingsAppointmentNotifications =
-    useShowingsDismissAppointmentNotifications(setShowings)
-
   const ackShowingsAppointmentNotifications =
     useShowingsAckAppointmentNotifications(setShowings)
 
@@ -33,7 +29,6 @@ function ShowingsTabBookings({
       hasPropertyColumn
       generateLink={generateAppointmentFilterLink}
       onApprovalAction={updateShowingsAppointmentStatus}
-      onDismissAction={dismissShowingsAppointmentNotifications}
       onAckAction={ackShowingsAppointmentNotifications}
       stackDateAndTimeColumns
       // eslint-disable-next-line max-len

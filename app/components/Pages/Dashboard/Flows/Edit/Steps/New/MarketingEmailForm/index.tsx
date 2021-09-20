@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 
 import { Box } from '@material-ui/core'
 import { mdiNewspaperVariantOutline } from '@mdi/js'
@@ -12,14 +12,16 @@ import { getMarketingEmailInitialValues } from '../helpers/get-initial-values'
 import { marketingEmailFormPreSaveFormat } from '../helpers/pre-save-format'
 import { BaseFormProps, MarketingEmailFormData } from '../types'
 
-export default function MarketingEmailForm({
+function MarketingEmailForm({
   index,
   step,
+  isDirty = false,
   disableEdit = false,
   prevStepOrder,
   onSubmit,
   onDelete,
   onMoveUpStep,
+  makeDirtyStep,
   onMoveDownStep
 }: BaseFormProps) {
   return (
@@ -43,6 +45,10 @@ export default function MarketingEmailForm({
       }}
       initialValues={getMarketingEmailInitialValues(step)}
       render={({ handleSubmit, submitting, pristine, values }) => {
+        if (!pristine && makeDirtyStep && !isDirty) {
+          makeDirtyStep()
+        }
+
         return (
           <BaseFormLayout
             index={index}
@@ -58,7 +64,10 @@ export default function MarketingEmailForm({
             onMoveDownStep={onMoveDownStep}
           >
             <Box mb={2}>
-              <Title textFieldProps={{ disabled: disableEdit }} />
+              <Title
+                label="Email Subject"
+                textFieldProps={{ disabled: disableEdit }}
+              />
             </Box>
             <Box mb={2}>
               <Description
@@ -79,3 +88,5 @@ export default function MarketingEmailForm({
     />
   )
 }
+
+export default memo(MarketingEmailForm)

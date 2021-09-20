@@ -6,7 +6,8 @@ import { isContextApproved } from '../../helpers/is-context-approved'
 
 interface Props {
   deal: IDeal
-  context: IDealBrandContext
+  brandContext: IDealBrandContext
+  dealContext: Nullable<IDealContext>
   isBackOffice: boolean
   onClick(): void
 }
@@ -20,11 +21,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function ApproveButton({ deal, context, isBackOffice, onClick }: Props) {
+export function ApproveButton({
+  deal,
+  brandContext,
+  dealContext,
+  isBackOffice,
+  onClick
+}: Props) {
   const classes = useStyles()
   const [isSaving, setIsSaving] = useState<boolean>(false)
 
-  if (!isBackOffice || isContextApproved(deal, context)) {
+  if (
+    !dealContext?.id ||
+    !isBackOffice ||
+    isContextApproved(deal, brandContext)
+  ) {
     return null
   }
 

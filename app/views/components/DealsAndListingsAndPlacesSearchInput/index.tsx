@@ -10,7 +10,8 @@ import {
   TextFieldProps,
   InputAdornment,
   makeStyles,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core'
 import Autocomplete, {
   AutocompleteRenderInputParams
@@ -37,7 +38,16 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
     popper: ({ inputValue }) => ({
       display: inputValue.length < 3 ? 'none' : 'block'
     }),
-    label: { marginLeft: theme.spacing(1) }
+    mlsDetailsContainer: {
+      display: 'flex',
+      paddingLeft: theme.spacing(1),
+      flexDirection: 'column',
+      alignItems: 'flex-end'
+    },
+    listingStatus: {
+      width: 'fit-content',
+      marginBottom: theme.spacing(1)
+    }
   }),
   {
     name: 'DealsAndListingsAndPlacesSearchInput'
@@ -180,6 +190,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
       const listing = option.listing
 
       const address = [
+        listing.address.neighborhood,
         listing.address.city,
         listing.address.state,
         listing.address.postal_code,
@@ -200,7 +211,15 @@ export default function DealsAndListingsAndPlacesSearchInput({
             secondary={address}
           />
           <ListItemAvatar>
-            <ListingStatus listing={listing} className={classes.label} />
+            <div className={classes.mlsDetailsContainer}>
+              <ListingStatus
+                listing={listing}
+                className={classes.listingStatus}
+              />
+              <Typography component="p" variant="caption" color="textSecondary">
+                Listed by: {listing.mls_display_name}
+              </Typography>
+            </div>
           </ListItemAvatar>
         </ListItem>
       )

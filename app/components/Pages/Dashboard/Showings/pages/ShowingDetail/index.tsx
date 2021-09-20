@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import { Box } from '@material-ui/core'
-import { WithRouterProps } from 'react-router'
+import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
@@ -14,18 +14,27 @@ import ShowingDetailTabVisitors from '../../components/ShowingDetailTabVisitors'
 import { showingDetailTabs } from '../../constants'
 import { getShowingBookingPageUrl, getShowingImage } from '../../helpers'
 
+import ShowingDetailLayout from './ShowingDetailLayout'
 import ShowingDetailTabBookings from './ShowingDetailTabBookings'
 import ShowingDetailTabs, { ShowingDetailTabsProps } from './ShowingDetailTabs'
 import useGetShowing from './use-get-showing'
 
-type ShowingDetailProps = WithRouterProps<{
-  tab?: ShowingDetailTabsProps['value']
-  id: UUID
-}>
+type ShowingDetailProps = RouteComponentProps<
+  {
+    tab?: ShowingDetailTabsProps['value']
+    id: UUID
+  },
+  {} // Used this empty type because if you pass `any` it ruins the params type
+>
 
 const defaultAppointments: IShowingAppointment<'showing'>[] = []
 
-function ShowingDetail({ params }: ShowingDetailProps) {
+function ShowingDetail({
+  params,
+  route,
+  router,
+  location
+}: ShowingDetailProps) {
   useTitle('Showing Detail | Rechat')
 
   const showingId = params.id
@@ -47,8 +56,8 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         listing={showing?.listing || showing?.deal?.listing}
         bookingUrl={showingBookingUrl}
       />
-      <PageLayout.Main gutter={4} mt={0} pt={0}>
-        <Box mb={3}>
+      <PageLayout.Main gutter={0} mt={0} mr={4}>
+        <Box ml={4}>
           <ShowingDetailTabs value={tab} id={showingId} />
         </Box>
         {isLoading || !showing ? (
@@ -66,23 +75,30 @@ function ShowingDetail({ params }: ShowingDetailProps) {
         ) : (
           <TabContentSwitch.Container value={tab}>
             <TabContentSwitch.Item value={showingDetailTabs.Bookings}>
-              <ShowingDetailTabBookings
-                appointments={showing.appointments ?? defaultAppointments}
-                setShowing={setShowing}
-                showingBookingUrl={showingBookingUrl}
-              />
+              <ShowingDetailLayout>
+                <ShowingDetailTabBookings
+                  appointments={showing.appointments ?? defaultAppointments}
+                  setShowing={setShowing}
+                  showingBookingUrl={showingBookingUrl}
+                />
+              </ShowingDetailLayout>
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Visitors}>
-              <ShowingDetailTabVisitors
-                showing={showing}
-                appointments={showing.appointments ?? defaultAppointments}
-                showingBookingUrl={showingBookingUrl}
-              />
+              <ShowingDetailLayout>
+                <ShowingDetailTabVisitors
+                  showing={showing}
+                  appointments={showing.appointments ?? defaultAppointments}
+                  showingBookingUrl={showingBookingUrl}
+                />
+              </ShowingDetailLayout>
             </TabContentSwitch.Item>
             <TabContentSwitch.Item value={showingDetailTabs.Settings}>
               <ShowingDetailTabSettings
                 showing={showing}
                 setShowing={setShowing}
+                route={route}
+                router={router}
+                location={location}
               />
             </TabContentSwitch.Item>
           </TabContentSwitch.Container>

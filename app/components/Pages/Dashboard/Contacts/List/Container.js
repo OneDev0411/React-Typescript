@@ -96,11 +96,17 @@ class ContactsList extends React.Component {
 
     const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+    const relevanceSortKey = '-last_touch_rank'
 
     this.order = searchInputValue
-      ? '-last_touch_rank'
-      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
-        '-last_touch'
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
 
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
@@ -434,12 +440,12 @@ class ContactsList extends React.Component {
     this.setState({ searchInputValue: value, firstLetter: null }, () => {
       this.setQueryParam('letter', '')
 
-      const relevanceValue = '-last_touch_rank'
+      const relevanceSortKey = '-last_touch_rank'
 
       if (value) {
-        this.order = relevanceValue
-      } else if (this.order === relevanceValue) {
-        this.order = '-updated_at'
+        this.order = relevanceSortKey
+      } else if (this.order === relevanceSortKey) {
+        this.order = '-last_touch'
       }
 
       this.handleFilterChange({ parked: undefined }, true, this.order)
@@ -818,6 +824,8 @@ class ContactsList extends React.Component {
     const syncing = Object.values(this.props.oAuthAccounts)
       .flat()
       .some(account => account.sync_status !== 'success')
+    const isTableMode = this.state.viewMode === 'table'
+    const isBoardMode = this.state.viewMode === 'board'
 
     const isZeroState =
       !isParkedTabActive &&
@@ -840,7 +848,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
-        {...(this.state.viewMode === 'board' && {
+        {...(isBoardMode && {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
@@ -879,12 +887,10 @@ class ContactsList extends React.Component {
               )}
             </Box>
           )}
-          <Box ml={1.5}>
-            <ViewAs />
-          </Box>
+          <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
-          {...(this.state.viewMode === 'board' && {
+          {...(isBoardMode && {
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 auto',
@@ -930,26 +936,16 @@ class ContactsList extends React.Component {
 
               <Box
                 mt={2}
-                {...(this.state.viewMode === 'board' && {
+                {...(isBoardMode && {
                   flexGrow: 1,
                   overflow: 'hidden'
                 })}
               >
-                <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board
-                    contacts={contacts}
-                    totalContacts={props.listInfo.total || 0}
-                    isFetchingContacts={isFetchingContacts}
-                    isFetchingNextContacts={state.isFetchingMoreContacts}
-                    isFetchingPreviousContacts={
-                      state.isFetchingMoreContactsBefore
-                    }
-                    onColumnReachStart={this.handleLoadMoreBefore}
-                    onColumnReachEnd={this.handleLoadMore}
-                  />
+                <ViewMode enabled={isBoardMode}>
+                  <Board searchTerm={this.state.searchInputValue || ''} />
                 </ViewMode>
 
-                <ViewMode enabled={this.state.viewMode === 'table'}>
+                <ViewMode enabled={isTableMode}>
                   <Table
                     data={contacts}
                     order={this.order}

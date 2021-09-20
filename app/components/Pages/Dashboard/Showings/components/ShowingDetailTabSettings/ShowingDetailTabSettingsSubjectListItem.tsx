@@ -13,6 +13,8 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2),
       borderRadius: 0,
       justifyContent: 'flex-start',
+      borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+      borderBottomLeftRadius: `${theme.shape.borderRadius}px`,
       '&:focus, &:hover': {
         outline: 'none',
         color: theme.palette.common.black

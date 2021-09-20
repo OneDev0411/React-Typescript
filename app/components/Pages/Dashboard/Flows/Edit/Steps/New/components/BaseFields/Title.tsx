@@ -9,10 +9,11 @@ import { MAX_STEP_TITLE_LENGTH } from '../../../../../constants'
 import { validateStringInput } from '../../../../../helpers'
 
 interface Props {
+  label?: string
   textFieldProps?: TextFieldProps
 }
 
-export const Title = ({ textFieldProps = {} }: Props) => {
+export const Title = ({ label = 'Title', textFieldProps = {} }: Props) => {
   return (
     <Field
       required
@@ -20,7 +21,7 @@ export const Title = ({ textFieldProps = {} }: Props) => {
       fullWidth
       size="small"
       name="title"
-      label="Title"
+      label={label}
       margin="none"
       variant="outlined"
       autoComplete="off"
@@ -30,11 +31,7 @@ export const Title = ({ textFieldProps = {} }: Props) => {
       }}
       {...textFieldProps}
       validate={value =>
-        validateStringInput(
-          value as string,
-          'event title',
-          MAX_STEP_TITLE_LENGTH
-        )
+        validateStringInput(value as string, label, MAX_STEP_TITLE_LENGTH)
       }
     />
   )
