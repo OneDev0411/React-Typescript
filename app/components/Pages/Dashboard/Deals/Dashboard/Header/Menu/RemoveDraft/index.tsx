@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { useOriginQueryString } from '../../../../hooks/use-origin-query-string'
+import { useGetOriginQueryParam } from '../../../../hooks/use-get-origin-query-param'
 
 interface Props {
   deal: IDeal
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function RemoveDraft(props: Props & WithRouterProps) {
   const classes = useStyles()
-  const originQueryString = useOriginQueryString()
+  const originQueryParam = useGetOriginQueryParam()
 
   return (
     <div className={classes.root}>
@@ -36,7 +36,7 @@ function RemoveDraft(props: Props & WithRouterProps) {
           variant="outlined"
           onClick={() =>
             props.router.push(
-              `/dashboard/deals/${props.deal.id}/publish${originQueryString}`
+              `/dashboard/deals/${props.deal.id}/publish?${originQueryParam}`
             )
           }
         >

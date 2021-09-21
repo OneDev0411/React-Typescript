@@ -28,7 +28,7 @@ import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 
-import { useOriginQueryString } from '../hooks/use-origin-query-string'
+import { useGetOriginQueryParam } from '../hooks/use-get-origin-query-param'
 
 import { Header } from './components/Header'
 import { Context } from './context'
@@ -86,13 +86,13 @@ export default function Publish({ params }: Props) {
   const isStatusVisible =
     deal && showStatusQuestion(deal, brandChecklists, statusContextKey)
 
-  const originQueryString = useOriginQueryString()
+  const originQueryParam = useGetOriginQueryParam()
 
   useEffect(() => {
     if (deal?.is_draft === false) {
-      goTo(`/dashboard/deals/${deal.id}${originQueryString}`)
+      goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
     }
-  }, [deal, originQueryString])
+  }, [deal, originQueryParam])
 
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
@@ -265,7 +265,7 @@ export default function Publish({ params }: Props) {
         })
       )
 
-      goTo(`/dashboard/deals/${deal.id}${originQueryString}`)
+      goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
     } catch (e) {
       console.log(e)
     } finally {
@@ -320,7 +320,7 @@ export default function Publish({ params }: Props) {
             </>
           }
           onClose={() =>
-            goTo(`/dashboard/deals/${deal.id}${originQueryString}`)
+            goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
           }
         />
 
