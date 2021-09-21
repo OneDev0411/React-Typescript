@@ -50,18 +50,20 @@ export const PropertySubtypesGroup = ({
     Object.values(allProperties).length === propertySubtypes.length
 
   const onToggleSelectAll = (allSelected: boolean) => {
-    if (allSelected) {
-      updateFilters({
-        property_subtypes: [...Object.values(allProperties)]
-      })
-    } else {
-      updateFilters({
-        property_subtypes: [
-          ...propertySubtypes.filter(
-            el => !Object.values(allProperties).includes(el)
-          )
-        ]
-      })
+    if (allProperties) {
+      if (allSelected) {
+        updateFilters({
+          property_subtypes: [...Object.values(allProperties)]
+        })
+      } else {
+        updateFilters({
+          property_subtypes: [
+            ...propertySubtypes.filter(
+              el => !Object.values(allProperties).includes(el)
+            )
+          ]
+        })
+      }
     }
   }
 
