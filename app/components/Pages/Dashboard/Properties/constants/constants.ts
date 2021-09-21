@@ -38,14 +38,14 @@ export const STATUSES = {
   other: 'Other Listing Statuses'
 }
 
-export const PENDING_STATUSES = {
+export const PENDING_STATUSES: Record<string, IListingStatus> = {
   pending: 'Pending',
   active_kick_out: 'Active Kick Out',
   active_contingent: 'Active Contingent',
   active_option_contract: 'Active Option Contract'
 }
 
-export const OTHER_STATUSES = {
+export const OTHER_STATUSES: Record<string, IListingStatus> = {
   expired: 'Expired',
   cancelled: 'Cancelled',
   withdrawn: 'Withdrawn',
@@ -53,7 +53,7 @@ export const OTHER_STATUSES = {
   withdrawn_sublistin: 'Withdrawn Sublisting'
 }
 
-export const FILTER_PROPERTY_SUBTYPES = {
+export const FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
   condo: 'RES-Condo',
   farm: 'RES-Farm/Ranch',
   duplex: 'RES-Half Duplex',
@@ -68,6 +68,19 @@ export const FILTERS_INITIAL_VALUES: AlertFilters = {
   property_subtypes: Object.values(
     FILTER_PROPERTY_SUBTYPES
   ) as IPropertySubtype[],
+  architectural_styles: null,
+  school_districts: null,
+  elementary_schools: null,
+  high_schools: null,
+  middle_schools: null,
+  junior_high_schools: null,
+  senior_high_schools: null,
+  primary_schools: null,
+  intermediate_schools: null,
+  minimum_parking_spaces: null,
+  mls_areas: null,
+  counties: null,
+  subdivisions: null,
   minimum_price: null,
   maximum_price: null,
   minimum_bedrooms: null,
@@ -91,13 +104,11 @@ export const FILTERS_INITIAL_VALUES: AlertFilters = {
   title: null,
   minimum_sold_date: null,
   excluded_listing_ids: null,
-  mls_areas: null,
   postal_codes: null,
   search: null
 }
 
-// TODO: Refactor this after refactoring Filters component
-export const ARCHITECTURAL_STYLES = {
+export const ARCHITECTURAL_STYLES: Record<string, IArchitecturalStyle> = {
   southwestern: 'Southwestern',
   ranch: 'Ranch',
   spanish: 'Spanish',
@@ -115,4 +126,14 @@ export const ARCHITECTURAL_STYLES = {
   loft: 'Loft',
   french: 'French',
   tudor: 'Tudor'
+}
+
+export const SCHOOL_TYPES: Record<SchoolType, string> = {
+  junior_high_school: 'junior high school',
+  elementary_school: 'elementary school',
+  high_school: 'high school',
+  middle_school: 'middle school',
+  intermediate_school: 'intermediate school',
+  senior_high_school: 'senior high school',
+  primary_school: 'primary school'
 }
