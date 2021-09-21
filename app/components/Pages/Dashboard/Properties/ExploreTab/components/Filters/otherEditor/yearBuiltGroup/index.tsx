@@ -1,12 +1,27 @@
 import { Grid, Typography, TextField } from '@material-ui/core'
 import { Autocomplete } from '@material-ui/lab'
 
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 import { createYearArray } from '../helpers'
 
-export const YearBuiltGroup = () => {
+export const YearBuiltGroup = ({
+  filters,
+  defaultFilters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
+
+  const handleChange = (
+    fieldName: keyof typeof defaultFilters,
+    newValue: Nullable<number>
+  ) => {
+    const fieldValue = Number(newValue || 0) || null
+
+    updateFilters({ [fieldName]: fieldValue })
+  }
 
   return (
     <EditorGroup title="Year Built">
@@ -14,8 +29,12 @@ export const YearBuiltGroup = () => {
         <Grid item className={classes.filledAutoCompleteWrapper}>
           <Autocomplete
             size="small"
-            value={null}
+            value={filters.minimum_year_built}
+            // TODO: should consider the selected maximum year
             options={createYearArray()}
+            onChange={(e: any, newValue: Nullable<number>) =>
+              handleChange('minimum_year_built', newValue)
+            }
             getOptionLabel={option => (option ? option.toString() : 'Any')}
             renderInput={params => (
               <TextField {...params} label="Min" variant="outlined" />
@@ -28,8 +47,12 @@ export const YearBuiltGroup = () => {
         <Grid item className={classes.filledAutoCompleteWrapper}>
           <Autocomplete
             size="small"
-            value={null}
+            value={filters.maximum_year_built}
+            // TODO: should consider the selected minumum year
             options={createYearArray()}
+            onChange={(e: any, newValue: Nullable<number>) =>
+              handleChange('maximum_year_built', newValue)
+            }
             getOptionLabel={option => (option ? option.toString() : 'Any')}
             renderInput={params => (
               <TextField {...params} label="Max" variant="outlined" />

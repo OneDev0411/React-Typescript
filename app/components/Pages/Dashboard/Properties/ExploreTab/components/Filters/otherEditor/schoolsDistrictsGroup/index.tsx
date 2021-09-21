@@ -4,75 +4,123 @@ import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useDebounce } from 'react-use'
 
+import { SCHOOL_TYPES } from '@app/components/Pages/Dashboard/Properties/constants/constants'
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
+import { SchoolSelector } from './schoolSelector'
+
 const SEARCH_DEBONCE_MS = 500
-export const SchoolsDistrictsGroup = () => {
+export const SchoolsDistrictsGroup = ({
+  filters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
 
   const [schoolsDistricts, setSchoolsDistricts] = useState<ISchoolsDistrict[]>(
     []
   )
-  const [countyInputValue, setSchoolsDistrictInputValue] = useState<string>('')
-  const [selectedSchoolsDistricts, setSelectedSchoolsDistricts] = useState<
-    ISchoolsDistrict[]
-  >([])
+  const [schools, setSchools] = useState<ISchool[]>([])
+
+  const [schoolsDistrictInputValue, setSchoolsDistrictInputValue] =
+    useState<string>('')
   const [loadingSchoolsDistricts, setLoadingSchoolsDistricts] =
     useState<boolean>(false)
+  const [loadingSchools, setLoadingSchools] = useState<boolean>(false)
 
-  const onSchoolsDistrictInputChange = (event: any, newInputValue: string) => {
-    if (newInputValue) {
-      setLoadingSchoolsDistricts(true)
+  const onSchoolsDistrictInputChange = (
+    event: React.ChangeEvent<{}>,
+    newInputValue: string
+  ) => {
+    if (event && event.isTrusted) {
+      if (newInputValue) {
+        setLoadingSchoolsDistricts(true)
+      }
+
       setSchoolsDistrictInputValue(newInputValue)
     }
   }
 
   useDebounce(
     () => {
-      api
-        .getSchoolsDistricts(countyInputValue)
-        .then(schoolsDistricts => {
-          setSchoolsDistricts(schoolsDistricts.options)
-        })
-        .finally(() => setLoadingSchoolsDistricts(false))
+      if (schoolsDistrictInputValue) {
+        api
+          .getSchoolsDistricts(schoolsDistrictInputValue)
+          .then(items => {
+            setSchoolsDistricts(items.options)
+          })
+          .finally(() => setLoadingSchoolsDistricts(false))
+      } else {
+        setLoadingSchoolsDistricts(false)
+        setSchoolsDistricts([])
+      }
     },
     SEARCH_DEBONCE_MS,
-    [countyInputValue]
+    [schoolsDistrictInputValue]
   )
 
-  const onSchoolsDistrictChange = (event: any, values: ISchoolsDistrict[]) => {
+  const onSchoolsChange = (newValue: string[], school_type: SchoolType) => {
+    const schoolsFilterKey = `${school_type}s` // e.g. 'elementary_school' => 'elementary_schools'
+
+    updateFilters({
+      [schoolsFilterKey]: newValue && newValue.length ? newValue : null
+    })
+  }
+
+  const onSchoolsDistrictChange = (event: any, values: string[]) => {
     const selectedValues = values || []
 
-    setSelectedSchoolsDistricts(selectedValues)
+    if (selectedValues.length === 0) {
+      updateFilters({
+        school_districts: null,
+        junior_high_schools: null,
+        elementary_schools: null,
+        high_schools: null,
+        middle_schools: null
+      })
+      setSchools([])
+    } else {
+      updateFilters({
+        school_districts: selectedValues
+      })
+      searchSchools(selectedValues)
+    }
+
+    setSchoolsDistrictInputValue('')
+  }
+
+  const searchSchools = (districts: string[]) => {
+    setLoadingSchools(true)
+    api
+      .getSchools(districts)
+      .then(items => {
+        setSchools(items)
+      })
+      .finally(() => setLoadingSchools(false))
   }
 
   return (
     <EditorGroup title="School District">
       <Autocomplete
         className={classes.select}
-        id="schoolsDistricts-select"
-        options={schoolsDistricts}
+        id="districts-select"
+        options={schoolsDistricts.map(item => item.label)}
         size="small"
         autoHighlight
         multiple
         limitTags={1}
-        value={selectedSchoolsDistricts}
-        onInputChange={onSchoolsDistrictInputChange}
+        value={filters.school_districts || []}
         onChange={onSchoolsDistrictChange}
+        onInputChange={onSchoolsDistrictInputChange}
+        inputValue={schoolsDistrictInputValue}
         loading={loadingSchoolsDistricts}
-        getOptionSelected={(option, value) =>
-          option.value === value.value && option.label === value.label
-        }
-        getOptionLabel={option => option.label}
-        renderOption={option => option.label}
         renderInput={params => (
           <TextField
             {...params}
             variant="outlined"
-            label="Name"
             placeholder="Type in school district name..."
             InputProps={{
               ...params.InputProps,
@@ -89,6 +137,25 @@ export const SchoolsDistrictsGroup = () => {
           />
         )}
       />
+
+      {Object.keys(SCHOOL_TYPES).map((schoolType: SchoolType) => {
+        const innerSchools = schools.filter(item => item.type === schoolType)
+
+        if (innerSchools.length > 0) {
+          return (
+            <SchoolSelector
+              key={schoolType}
+              value={filters[`${schoolType}s`]}
+              type={schoolType}
+              schools={innerSchools}
+              onChange={onSchoolsChange}
+              label={SCHOOL_TYPES[schoolType]}
+              placeholder={`Type in a ${SCHOOL_TYPES[schoolType]} name...`}
+              loading={loadingSchools}
+            />
+          )
+        }
+      })}
     </EditorGroup>
   )
 }

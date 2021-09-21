@@ -1,30 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useDebounce, useEffectOnce } from 'react-use'
+import { useEffectOnce } from 'react-use'
 
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
-const SEARCH_DEBONCE_MS = 500
-export const MlsAreaGroup = () => {
+import { CountiesSelector } from './countiesSelector'
+import { createPairedMlsAreas } from './helpers'
+
+export const MlsAreaGroup = ({
+  filters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
 
   const [mlsAreas, setMlsAreas] = useState<IMLSArea[]>([])
   const [selectedMlsAreas, setSelectedMlsAreas] = useState<IMLSArea[]>([])
   const [loadingMlsAreas, setLoadingMlsAreas] = useState<boolean>(false)
-  const [mlsSubAreas, setSubMlsAreas] = useState<IMLSArea[]>([])
+  const [mlsSubAreas, setMlsSubAreas] = useState<IMLSArea[]>([])
   const [selectedMlsSubAreas, setSelectedMlsSubAreas] = useState<IMLSArea[]>([])
   const [loadingMlsSubAreas, setLoadingMlsSubAreas] = useState<boolean>(false)
-  const [counties, setCounties] = useState<ICounty[]>([])
-  const [countyInputValue, setCountyInputValue] = useState<string>('')
-  const [selectedCounties, setSelectedCounties] = useState<ICounty[]>([])
-  const [loadingCounties, setLoadingCounties] = useState<boolean>(false)
 
-  const getMLSAreaList = () => {
+  const getMlsAreaList = () => {
     setLoadingMlsAreas(true)
     api
       .getMlsAreas()
@@ -34,65 +36,53 @@ export const MlsAreaGroup = () => {
       .finally(() => setLoadingMlsAreas(false))
   }
 
-  const getSubMLSAreaList = (areas: IMLSArea[]) => {
+  const getMlsSubAreaList = (areasNumber: number[]) => {
     setLoadingMlsSubAreas(true)
     api
-      .getMlsSubAreas(areas.map(({ number }) => number))
+      .getMlsSubAreas(areasNumber)
       .then(subareas => {
-        setSubMlsAreas(subareas)
+        setMlsSubAreas(subareas)
       })
       .finally(() => setLoadingMlsSubAreas(false))
   }
 
-  const onCountyInputChange = (event: any, newInputValue: string) => {
-    if (newInputValue) {
-      setLoadingCounties(true)
-      setCountyInputValue(newInputValue)
-    }
-  }
-
-  useDebounce(
-    () => {
-      api
-        .getCounties(countyInputValue)
-        .then(counties => {
-          setCounties(counties.options)
-        })
-        .finally(() => setLoadingCounties(false))
-    },
-    SEARCH_DEBONCE_MS,
-    [countyInputValue]
-  )
-
-  const onMLSAreaChange = (event: any, values: IMLSArea[]) => {
+  const onMlsAreaChange = (event: any, values: IMLSArea[]) => {
     const selectedValues = values || []
 
     setSelectedMlsAreas(selectedValues)
 
     if (values && values.length > 0) {
+      getMlsSubAreaList(selectedValues.map(({ number }) => number))
+    } else {
       setSelectedMlsSubAreas([])
-      getSubMLSAreaList(selectedValues)
     }
   }
 
-  const onMLSAreaSubChange = (event: any, values: IMLSArea[]) => {
+  const onMlsAreaSubChange = (event: any, values: IMLSArea[]) => {
     const selectedValues = values || []
 
     setSelectedMlsSubAreas(selectedValues)
   }
 
-  const onCountyChange = (event: any, values: ICounty[]) => {
-    const selectedValues = values || []
-
-    setSelectedCounties(selectedValues)
-  }
-
   useEffectOnce(() => {
-    getMLSAreaList()
+    getMlsAreaList()
+
+    if (filters.mls_areas) {
+      getMlsSubAreaList(
+        filters.mls_areas.map((item: [number, number]) => item[0])
+      )
+    }
   })
 
+  useEffect(() => {
+    updateFilters({
+      mls_areas: createPairedMlsAreas(selectedMlsAreas, selectedMlsSubAreas)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMlsAreas, selectedMlsSubAreas])
+
   return (
-    <EditorGroup title="MLS Areas">
+    <EditorGroup title="Mls Areas">
       <Autocomplete
         className={classes.select}
         id="area-select"
@@ -102,7 +92,7 @@ export const MlsAreaGroup = () => {
         multiple
         limitTags={1}
         value={selectedMlsAreas}
-        onChange={onMLSAreaChange}
+        onChange={onMlsAreaChange}
         loading={loadingMlsAreas}
         getOptionSelected={(option, value) =>
           option.number === value.number && option.title === value.title
@@ -114,7 +104,7 @@ export const MlsAreaGroup = () => {
             {...params}
             variant="outlined"
             label="Area"
-            placeholder="Type in your MLS area..."
+            placeholder="Type in your Mls area..."
             InputProps={{
               ...params.InputProps,
               autoComplete: 'new-password', // disable autocomplete and autofill
@@ -140,19 +130,19 @@ export const MlsAreaGroup = () => {
           multiple
           limitTags={1}
           value={selectedMlsSubAreas}
-          onChange={onMLSAreaSubChange}
+          onChange={onMlsAreaSubChange}
           loading={loadingMlsSubAreas}
           getOptionSelected={(option, value) =>
             option.number === value.number && option.title === value.title
           }
-          getOptionLabel={option => option.title}
-          renderOption={option => option.title}
+          getOptionLabel={option => `${option.title}#${option.number}`}
+          renderOption={option => `${option.title}: #${option.number}`}
           renderInput={params => (
             <TextField
               {...params}
               variant="outlined"
               label="Sub Area"
-              placeholder="Type in your MLS sub area..."
+              placeholder="Type in your Mls sub area..."
               InputProps={{
                 ...params.InputProps,
                 autoComplete: 'new-password', // disable autocomplete and autofill
@@ -169,43 +159,9 @@ export const MlsAreaGroup = () => {
           )}
         />
       )}
-      <Autocomplete
-        className={classes.select}
-        id="counties-select"
-        options={counties}
-        size="small"
-        autoHighlight
-        multiple
-        limitTags={1}
-        value={selectedCounties}
-        onInputChange={onCountyInputChange}
-        onChange={onCountyChange}
-        loading={loadingCounties}
-        getOptionSelected={(option, value) =>
-          option.value === value.value && option.label === value.label
-        }
-        getOptionLabel={option => option.label}
-        renderOption={option => option.label}
-        renderInput={params => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label="Counties"
-            placeholder="Type in county name..."
-            InputProps={{
-              ...params.InputProps,
-              autoComplete: 'new-password', // disable autocomplete and autofill
-              endAdornment: (
-                <>
-                  {loadingCounties ? (
-                    <CircularProgress color="inherit" size={20} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </>
-              )
-            }}
-          />
-        )}
+      <CountiesSelector
+        value={filters.counties}
+        updateFilters={updateFilters}
       />
     </EditorGroup>
   )

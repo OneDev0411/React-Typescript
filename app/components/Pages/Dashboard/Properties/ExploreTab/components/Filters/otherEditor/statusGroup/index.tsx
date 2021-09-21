@@ -9,7 +9,6 @@ import {
   FormGroup
 } from '@material-ui/core'
 import CircleIcon from '@material-ui/icons/FiberManualRecord'
-import { mapValues } from 'lodash'
 
 import {
   STATUSES,
@@ -17,48 +16,93 @@ import {
   OTHER_STATUSES
 } from '@app/components/Pages/Dashboard/Properties/constants/constants'
 import { getStatusColorClass } from '@app/utils/listing'
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
-export const StatusGroup = () => {
+export const StatusGroup = ({
+  filters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
+  const listingStatuses = filters.listing_statuses || []
 
-  const [values, setValues] = useState<Record<keyof typeof STATUSES, boolean>>(
-    mapValues(STATUSES, () => false)
+  const statusValue = (key: IListingStatus) => {
+    return !!filters.listing_statuses?.find(s => s === key)
+  }
+
+  const [isPendingExtended, setIsPendingExtended] = useState<boolean>(
+    statusValue(PENDING_STATUSES.pending) ||
+      statusValue(PENDING_STATUSES.active_contingent) ||
+      statusValue(PENDING_STATUSES.active_kick_out) ||
+      statusValue(PENDING_STATUSES.active_option_contract)
   )
 
+  const [isOtherExtended, setIsOtherExtended] = useState<boolean>(
+    statusValue(OTHER_STATUSES.expired) ||
+      statusValue(OTHER_STATUSES.cancelled) ||
+      statusValue(OTHER_STATUSES.withdrawn) ||
+      statusValue(OTHER_STATUSES.temp_off_market) ||
+      statusValue(OTHER_STATUSES.withdrawn_sublistin)
+  )
+
+  const handleChangePending = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsPendingExtended(event.target.checked)
+
+    if (event.target.checked === true) {
+      updateFilters({
+        listing_statuses: [
+          ...listingStatuses,
+          ...Object.values(PENDING_STATUSES)
+        ]
+      })
+    } else {
+      updateFilters({
+        listing_statuses: [
+          ...listingStatuses.filter(
+            el => !Object.values(PENDING_STATUSES).includes(el)
+          )
+        ]
+      })
+    }
+  }
+
+  const handleChangeOther = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsOtherExtended(event.target.checked)
+
+    if (event.target.checked === true) {
+      updateFilters({
+        listing_statuses: [...listingStatuses, ...Object.values(OTHER_STATUSES)]
+      })
+    } else {
+      updateFilters({
+        listing_statuses: [
+          ...listingStatuses.filter(
+            el => !Object.values(OTHER_STATUSES).includes(el)
+          )
+        ]
+      })
+    }
+  }
+
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues(prev => ({
-      ...prev,
-      [event.target.name]: event.target.checked
-    }))
-  }
-
-  const [pendingValues, setPendingValues] = useState<
-    Record<keyof typeof PENDING_STATUSES, boolean>
-  >(mapValues(PENDING_STATUSES, () => false))
-
-  const handlePendingValueChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPendingValues(prev => ({
-      ...prev,
-      [event.target.name]: event.target.checked
-    }))
-  }
-
-  const [otherValues, setOtherValues] = useState<
-    Record<keyof typeof OTHER_STATUSES, boolean>
-  >(mapValues(OTHER_STATUSES, () => false))
-
-  const handleOtherValueChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setOtherValues(prev => ({
-      ...prev,
-      [event.target.name]: event.target.checked
-    }))
+    if (event.target.checked) {
+      updateFilters({
+        listing_statuses: [
+          ...new Set([
+            ...listingStatuses,
+            event.target.name
+          ] as IListingStatus[])
+        ]
+      })
+    } else {
+      updateFilters({
+        listing_statuses: [
+          ...listingStatuses.filter(el => el !== event.target.name)
+        ]
+      })
+    }
   }
 
   return (
@@ -69,9 +113,10 @@ export const StatusGroup = () => {
         }}
         control={
           <Switch
+            checked={statusValue('Sold')}
             className={classes.switchControlButton}
             color="primary"
-            name="sold"
+            name="Sold"
             onChange={handleValueChange}
             inputProps={{ 'aria-label': 'sold checkbox' }}
           />
@@ -94,7 +139,8 @@ export const StatusGroup = () => {
           <Switch
             className={classes.switchControlButton}
             color="primary"
-            name="active"
+            checked={statusValue('Active')}
+            name="Active"
             onChange={handleValueChange}
             inputProps={{ 'aria-label': 'active checkbox' }}
           />
@@ -116,9 +162,10 @@ export const StatusGroup = () => {
         control={
           <Switch
             className={classes.switchControlButton}
+            checked={isPendingExtended}
             color="primary"
-            name="pending"
-            onChange={handleValueChange}
+            name="Pending"
+            onChange={handleChangePending}
             inputProps={{ 'aria-label': 'Pending checkbox' }}
           />
         }
@@ -132,20 +179,20 @@ export const StatusGroup = () => {
           </Grid>
         }
       />
-      {values.pending === true && (
+      {isPendingExtended && (
         <FormGroup className={classes.subStatusGroup} row>
-          {Object.keys(PENDING_STATUSES).map(key => (
+          {Object.values(PENDING_STATUSES).map(key => (
             <Grid item key={key} xs={12}>
               <FormControlLabel
                 control={
                   <Checkbox
                     color="primary"
-                    checked={pendingValues[key]}
-                    onChange={handlePendingValueChange}
+                    checked={statusValue(key)}
+                    onChange={handleValueChange}
                     name={key}
                   />
                 }
-                label={PENDING_STATUSES[key]}
+                label={key}
               />
             </Grid>
           ))}
@@ -160,7 +207,8 @@ export const StatusGroup = () => {
             className={classes.switchControlButton}
             color="primary"
             name="other"
-            onChange={handleValueChange}
+            checked={isOtherExtended}
+            onChange={handleChangeOther}
             inputProps={{ 'aria-label': 'Other checkbox' }}
           />
         }
@@ -174,20 +222,20 @@ export const StatusGroup = () => {
           </Grid>
         }
       />
-      {values.other === true && (
+      {isOtherExtended && (
         <FormGroup className={classes.subStatusGroup} row>
-          {Object.keys(OTHER_STATUSES).map(key => (
+          {Object.values(OTHER_STATUSES).map(key => (
             <Grid item key={key} xs={12}>
               <FormControlLabel
                 control={
                   <Checkbox
                     color="primary"
-                    checked={otherValues[key]}
-                    onChange={handleOtherValueChange}
+                    checked={statusValue(key)}
+                    onChange={handleValueChange}
                     name={key}
                   />
                 }
-                label={OTHER_STATUSES[key]}
+                label={key}
               />
             </Grid>
           ))}

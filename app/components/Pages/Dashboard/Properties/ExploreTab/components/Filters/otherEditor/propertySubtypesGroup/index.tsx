@@ -1,24 +1,56 @@
-import { useState } from 'react'
-
 import { Checkbox, FormControlLabel, FormGroup, Grid } from '@material-ui/core'
-import { mapValues } from 'lodash'
+
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import { FILTER_PROPERTY_SUBTYPES } from '../../../../../constants/constants'
 import { EditorGroup } from '../EditorGroup'
 
-export const PropertySubtypesGroup = () => {
-  const [values, setValues] = useState<
-    Record<keyof typeof FILTER_PROPERTY_SUBTYPES, boolean>
-  >(mapValues(FILTER_PROPERTY_SUBTYPES, () => false))
+export const PropertySubtypesGroup = ({
+  filters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
+  const propertySubtypes = filters.property_subtypes || []
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues(prev => ({ ...prev, [event.target.name]: event.target.checked }))
+  const subtypeValue = (key: IPropertySubtype) => {
+    return !!filters.property_subtypes?.find(s => s === key)
   }
 
-  const isSelectAll = Object.values(values).every(Boolean)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      updateFilters({
+        property_subtypes: [
+          ...new Set([
+            ...propertySubtypes,
+            event.target.name
+          ] as IPropertySubtype[])
+        ]
+      })
+    } else {
+      updateFilters({
+        property_subtypes: [
+          ...propertySubtypes.filter(el => el !== event.target.name)
+        ]
+      })
+    }
+  }
+
+  const isSelectAll =
+    Object.values(FILTER_PROPERTY_SUBTYPES).length === propertySubtypes.length
 
   const onToggleSelectAll = (allSelected: boolean) => {
-    setValues(prev => mapValues(FILTER_PROPERTY_SUBTYPES, () => allSelected))
+    if (allSelected) {
+      updateFilters({
+        property_subtypes: [...Object.values(FILTER_PROPERTY_SUBTYPES)]
+      })
+    } else {
+      updateFilters({
+        property_subtypes: [
+          ...propertySubtypes.filter(
+            el => !Object.values(FILTER_PROPERTY_SUBTYPES).includes(el)
+          )
+        ]
+      })
+    }
   }
 
   return (
@@ -29,18 +61,18 @@ export const PropertySubtypesGroup = () => {
       onToggleSelectAll={onToggleSelectAll}
     >
       <FormGroup row>
-        {Object.keys(FILTER_PROPERTY_SUBTYPES).map(key => (
+        {Object.values(FILTER_PROPERTY_SUBTYPES).map(key => (
           <Grid item key={key} xs={6}>
             <FormControlLabel
               control={
                 <Checkbox
                   color="primary"
-                  checked={values[key]}
+                  checked={subtypeValue(key)}
                   onChange={handleChange}
                   name={key}
                 />
               }
-              label={FILTER_PROPERTY_SUBTYPES[key]}
+              label={key}
             />
           </Grid>
         ))}

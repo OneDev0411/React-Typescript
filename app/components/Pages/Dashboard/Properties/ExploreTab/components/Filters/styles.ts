@@ -38,9 +38,12 @@ export const useStyles = makeStyles(
         color: theme.palette.primary.main
       }
     },
+    editorGroup: {
+      marginBottom: theme.spacing(2)
+    },
     subheader: {
       fontSize: 14,
-      marginTop: theme.spacing(3),
+      marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1)
     },
     subtitle: {
@@ -48,7 +51,10 @@ export const useStyles = makeStyles(
       fontWeight: theme.typography.fontWeightBold
     },
     footer: {
-      padding: theme.spacing(1, 2)
+      padding: theme.spacing(1, 0),
+      // TO Fix vertical alignment of the footer
+      marginLeft: theme.spacing(-1.5),
+      width: ` calc(100% + ${theme.spacing(1.5)}px)`
     },
     ToggleButtonGroup: { width: '100%' },
     ToggleButton: {

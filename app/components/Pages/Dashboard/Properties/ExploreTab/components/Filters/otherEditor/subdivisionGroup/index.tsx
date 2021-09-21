@@ -4,46 +4,61 @@ import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useDebounce } from 'react-use'
 
+import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
 
 const SEARCH_DEBONCE_MS = 500
-export const SubdivisionGroup = () => {
+export const SubdivisionGroup = ({
+  filters,
+  updateFilters
+}: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
 
   const [subdivisions, setSubdivisions] = useState<ISubdivision[]>([])
-  const [countyInputValue, setSubdivisionInputValue] = useState<string>('')
-  const [selectedSubdivisions, setSelectedSubdivisions] = useState<
-    ISubdivision[]
-  >([])
+  const [subdivisionInputValue, setSubdivisionInputValue] = useState<string>('')
   const [loadingSubdivisions, setLoadingSubdivisions] = useState<boolean>(false)
 
-  const onSubdivisionInputChange = (event: any, newInputValue: string) => {
-    if (newInputValue) {
-      setLoadingSubdivisions(true)
+  const onSubdivisionInputChange = (
+    event: React.ChangeEvent<{}>,
+    newInputValue: string
+  ) => {
+    if (event && event.isTrusted) {
+      if (newInputValue) {
+        setLoadingSubdivisions(true)
+      }
+
       setSubdivisionInputValue(newInputValue)
     }
   }
 
   useDebounce(
     () => {
-      api
-        .getSubdivisions(countyInputValue)
-        .then(subdivisions => {
-          setSubdivisions(subdivisions.options)
-        })
-        .finally(() => setLoadingSubdivisions(false))
+      if (subdivisionInputValue) {
+        api
+          .getSubdivisions(subdivisionInputValue)
+          .then(subdivisions => {
+            setSubdivisions(subdivisions.options)
+          })
+          .finally(() => setLoadingSubdivisions(false))
+      } else {
+        setLoadingSubdivisions(false)
+        setSubdivisions([])
+      }
     },
     SEARCH_DEBONCE_MS,
-    [countyInputValue]
+    [subdivisionInputValue]
   )
 
-  const onSubdivisionChange = (event: any, values: ISubdivision[]) => {
-    const selectedValues = values || []
+  const onSubdivisionChange = (event: any, values: string[]) => {
+    const selectedValues = values && values.length ? values : null
 
-    setSelectedSubdivisions(selectedValues)
+    updateFilters({
+      subdivisions: selectedValues
+    })
+    setSubdivisionInputValue('')
   }
 
   return (
@@ -51,26 +66,22 @@ export const SubdivisionGroup = () => {
       <Autocomplete
         className={classes.select}
         id="subdivisions-select"
-        options={subdivisions}
+        options={subdivisions.map(item => item.label)}
         size="small"
         autoHighlight
         multiple
         limitTags={1}
-        value={selectedSubdivisions}
+        value={filters.subdivisions || []}
+        inputValue={subdivisionInputValue}
         onInputChange={onSubdivisionInputChange}
         onChange={onSubdivisionChange}
         loading={loadingSubdivisions}
-        getOptionSelected={(option, value) =>
-          option.value === value.value && option.label === value.label
-        }
-        getOptionLabel={option => option.label}
-        renderOption={option => option.label}
         renderInput={params => (
           <TextField
             {...params}
             variant="outlined"
-            label="Name"
-            placeholder="Type in subdivision name..."
+            label=""
+            placeholder="Type in a subdivision name..."
             InputProps={{
               ...params.InputProps,
               autoComplete: 'new-password', // disable autocomplete and autofill

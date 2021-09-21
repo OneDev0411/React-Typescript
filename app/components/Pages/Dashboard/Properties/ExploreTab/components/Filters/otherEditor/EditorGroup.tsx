@@ -23,7 +23,7 @@ export const EditorGroup = ({
 
   return (
     <>
-      <Grid item container>
+      <Grid item container className={classes.editorGroup}>
         {title && (
           <Grid
             container
