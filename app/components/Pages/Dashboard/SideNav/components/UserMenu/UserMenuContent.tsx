@@ -1,5 +1,3 @@
-import React from 'react'
-
 import {
   ListSubheader,
   ListItemText,
@@ -13,10 +11,9 @@ import {
 import { mdiLogoutVariant, mdiCogOutline } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
-import { hasUserAccessToBrandSettings } from '../../../../../../utils/user-teams'
-import Acl from '../../../../../../views/components/Acl'
-import { ScrollableArea } from '../../../../../../views/components/ScrollableArea'
-import { SvgIcon } from '../../../../../../views/components/SvgIcons/SvgIcon'
+import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
+import Acl from '@app/views/components/Acl'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import TeamSwitcher from './TeamSwitcher'
 
@@ -28,6 +25,7 @@ const useStyles = makeStyles(
       overflow: 'auto',
       width: theme.spacing(32),
       height: 'min-content',
+      minWidth: '295px', // Figma
       // we set a max height to prevent menu from being clipped when it's longer
       // than viewport height.
       maxHeight: `calc(
@@ -70,11 +68,7 @@ export function UserMenuContent({
 
   return (
     <div className={classes.container}>
-      {/* <ScrollableArea hasThinnerScrollbar>
-        <List disablePadding>
-          <TeamSwitcher user={user} />
-        </List>
-      </ScrollableArea> */}
+      <TeamSwitcher user={user} />
 
       <List disablePadding>
         <Acl.Admin>

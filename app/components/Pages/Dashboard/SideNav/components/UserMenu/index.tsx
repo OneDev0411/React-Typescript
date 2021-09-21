@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState, useMemo } from 'react'
 
 import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
@@ -39,12 +39,13 @@ export function UserMenu({ user }: { user: IUserState }) {
    * the link which may be seen as a UX problem.
    */
   const classes = useStyles()
-  const teamId = user && getActiveTeamId(user)
+  const teamId = useMemo(() => getActiveTeamId(user), [user])
+
   const [checklists] = usePromise(() => {
     return (teamId && getBrandChecklists(teamId)) || Promise.reject()
   }, [teamId])
 
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget)
