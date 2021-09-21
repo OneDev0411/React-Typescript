@@ -99,8 +99,8 @@ export const Filters = () => {
               />
 
               {/* Beds Filter  */}
-              {/* Not showing on Lease/Commercial  */}
-              {!['Residential Lease', 'Commercial'].includes(
+              {/* Not showing on Lots & Acreage/Commercial  */}
+              {!['Lots & Acreage', 'Commercial'].includes(
                 currentFilters.property_types[0]
               ) && (
                 <FilterButton
@@ -123,8 +123,8 @@ export const Filters = () => {
               )}
 
               {/* Bath Filter  */}
-              {/* Not showing on Lease/Commercial  */}
-              {!['Residential Lease', 'Commercial'].includes(
+              {/* Not showing on Lots & Acreage/Commercial  */}
+              {!['Lots & Acreage', 'Commercial'].includes(
                 currentFilters.property_types[0]
               ) && (
                 <FilterButton

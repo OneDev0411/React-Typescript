@@ -200,9 +200,9 @@ export const PROPERTY_TYPES_DEFAULT_VALUES: Record<
 > = {
   Residential: RES_FILTERS_DEFAULT_VALUES,
   'Residential Lease': LSE_FILTERS_DEFAULT_VALUES,
-  Commercial: LND_FILTERS_DEFAULT_VALUES,
-  'Lots & Acreage': MUL_FILTERS_DEFAULT_VALUES,
-  'Multi-Family': COM_FILTERS_DEFAULT_VALUES
+  Commercial: COM_FILTERS_DEFAULT_VALUES,
+  'Lots & Acreage': LND_FILTERS_DEFAULT_VALUES,
+  'Multi-Family': MUL_FILTERS_DEFAULT_VALUES
 }
 
 export const ARCHITECTURAL_STYLES: Record<string, IArchitecturalStyle> = {
