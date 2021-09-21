@@ -1,6 +1,6 @@
 import { useLocation } from 'react-use'
 
-export function useMakeOriginFromLocation(): string {
+export function useMakeOriginQueryParamFromLocation(): string {
   const location = useLocation()
 
   if (!location.pathname) {
