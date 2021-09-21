@@ -46,9 +46,9 @@ export function getMapBoundsInCircle(
 
     return {
       bounds,
-      points: calculatePointsFromBounds(bounds)
+      points: calculatePointsFromBounds(bounds!)
     }
   }
 
-  return calculatePointsFromBounds(circle.getBounds())
+  return calculatePointsFromBounds(circle.getBounds()!)
 }
