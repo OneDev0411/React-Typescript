@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Popover } from '@material-ui/core'
+import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
 import { IUserState } from 'reducers/user'
@@ -10,6 +10,16 @@ import { getActiveTeamId } from '../../../../../../utils/user-teams'
 
 import ToggleButton from './ToggleButton'
 import { UserMenuContent } from './UserMenuContent'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    popover: {
+      marginLeft: theme.spacing(1.25),
+      boxShadow: theme.shadows[2]
+    }
+  }),
+  { name: 'UserMenu' }
+)
 
 export function UserMenu({ user }: { user: IUserState }) {
   /**
@@ -28,7 +38,7 @@ export function UserMenu({ user }: { user: IUserState }) {
    * UserMenuContent is rendered). But it introduces a delay in showing
    * the link which may be seen as a UX problem.
    */
-
+  const classes = useStyles()
   const teamId = user && getActiveTeamId(user)
   const [checklists] = usePromise(() => {
     return (teamId && getBrandChecklists(teamId)) || Promise.reject()
@@ -55,9 +65,12 @@ export function UserMenu({ user }: { user: IUserState }) {
         open={isOpen}
         anchorEl={anchorEl}
         onClose={handleClose}
+        classes={{
+          paper: classes.popover
+        }}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
+          vertical: 'bottom',
+          horizontal: 'right'
         }}
         transformOrigin={{
           vertical: 'bottom',
