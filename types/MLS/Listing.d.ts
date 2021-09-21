@@ -31,6 +31,25 @@ declare type IPropertySubtype =
   | 'COM-Sale or Lease (Either)'
   | 'COM-Sale/Leaseback (Both)'
 
+declare type IArchitecturalStyle =
+  | 'Southwestern'
+  | 'Ranch'
+  | 'Spanish'
+  | 'A-Frame'
+  | 'Mid-Centry Modern'
+  | 'Prairie'
+  | 'Studio Apartment'
+  | 'Contemporary/Modern'
+  | 'Split Level'
+  | 'Victorian'
+  | 'Traditional'
+  | 'Mediterranean'
+  | 'Colonial'
+  | 'Oriental'
+  | 'Loft'
+  | 'French'
+  | 'Tudor'
+
 declare interface IPoint {
   latitude: number
   longitude: number
