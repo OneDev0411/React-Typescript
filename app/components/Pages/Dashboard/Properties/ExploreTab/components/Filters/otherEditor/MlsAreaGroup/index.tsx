@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -53,8 +53,14 @@ export const MlsAreaGroup = ({
 
     if (values && values.length > 0) {
       getMlsSubAreaList(selectedValues.map(({ number }) => number))
+      updateFilters({
+        mls_areas: createPairedMlsAreas(selectedValues, selectedMlsSubAreas)
+      })
     } else {
       setSelectedMlsSubAreas([])
+      updateFilters({
+        mls_areas: createPairedMlsAreas(selectedValues, [])
+      })
     }
   }
 
@@ -62,6 +68,9 @@ export const MlsAreaGroup = ({
     const selectedValues = values || []
 
     setSelectedMlsSubAreas(selectedValues)
+    updateFilters({
+      mls_areas: createPairedMlsAreas(selectedMlsAreas, selectedValues)
+    })
   }
 
   useEffectOnce(() => {
@@ -73,13 +82,6 @@ export const MlsAreaGroup = ({
       )
     }
   })
-
-  useEffect(() => {
-    updateFilters({
-      mls_areas: createPairedMlsAreas(selectedMlsAreas, selectedMlsSubAreas)
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMlsAreas, selectedMlsSubAreas])
 
   return (
     <EditorGroup title="Mls Areas">
