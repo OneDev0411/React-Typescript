@@ -1,4 +1,4 @@
-import { useState, useMemo, ChangeEvent, MouseEvent } from 'react'
+import { useState, useMemo, useRef, ChangeEvent, MouseEvent } from 'react'
 
 import {
   FormControlLabel,
@@ -76,6 +76,7 @@ export function Item({ trigger: triggerProp }: Props) {
   const [isEnable, setIsEnable] = useState<boolean>(!trigger.deleted_at)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
+  const editModeContainerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   const templatePreview: Nullable<string> = useMemo(() => {
     if (trigger.template) {
@@ -134,7 +135,7 @@ export function Item({ trigger: triggerProp }: Props) {
 
   return (
     <>
-      <div className={classes.container}>
+      <div className={classes.container} ref={editModeContainerRef}>
         <FormControlLabel
           control={
             <Switch
@@ -188,6 +189,7 @@ export function Item({ trigger: triggerProp }: Props) {
       <EditMode
         trigger={trigger}
         anchor={anchorEl}
+        containerRef={editModeContainerRef.current}
         callback={handleEditCallback}
         handleClose={handleCloseEdit}
       />

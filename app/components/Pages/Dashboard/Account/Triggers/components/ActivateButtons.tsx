@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 
 import { Button, Theme, makeStyles } from '@material-ui/core'
 import { mdiRing, mdiHomeHeart, mdiCakeVariant } from '@mdi/js'
@@ -6,7 +6,7 @@ import { mdiRing, mdiHomeHeart, mdiCakeVariant } from '@mdi/js'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { TriggerEditMode } from './EditMode'
+import { TriggerEditMode as ActiveMode } from './EditMode'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -61,6 +61,7 @@ export function ActivateButtons({ activeTriggers, onActive }: Props) {
   const [selectedType, setSelectedType] =
     useState<Nullable<TriggerContactEventTypes>>(null)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
+  const activeModeContainerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   const handleShowEditMode = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -80,7 +81,7 @@ export function ActivateButtons({ activeTriggers, onActive }: Props) {
   )
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} ref={activeModeContainerRef}>
       {availableTriggers.map(({ type, icon, label }) => (
         <Button
           key={type}
@@ -94,9 +95,10 @@ export function ActivateButtons({ activeTriggers, onActive }: Props) {
         </Button>
       ))}
       {selectedType && anchorEl && (
-        <TriggerEditMode
+        <ActiveMode
           eventType={selectedType}
           anchor={anchorEl}
+          containerRef={activeModeContainerRef.current}
           callback={onActive}
           handleClose={handleCloseEditMode}
         />

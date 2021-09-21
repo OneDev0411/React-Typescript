@@ -64,6 +64,8 @@ const useStyles = makeStyles(
 
 interface Props {
   anchor: Nullable<HTMLElement>
+  containerRef?: Nullable<HTMLDivElement>
+
   eventType?: TriggerContactEventTypes
   trigger?: IGlobalTrigger
   callback?: (trigger: IGlobalTrigger) => void
@@ -71,6 +73,7 @@ interface Props {
 }
 
 export function TriggerEditMode({
+  containerRef = null,
   eventType,
   trigger,
   anchor,
@@ -127,6 +130,8 @@ export function TriggerEditMode({
       id={id}
       open={open}
       anchorEl={anchor}
+      disableEnforceFocus
+      container={containerRef}
       onClose={handleClose}
       anchorOrigin={{
         vertical: 'bottom',
@@ -247,7 +252,11 @@ export function TriggerEditMode({
           </div>
           <div className={classes.actions}>
             <Box mr={1}>
-              <Button size="small" disabled={isSubmitting || !isDirty}>
+              <Button
+                size="small"
+                onClick={handleClose}
+                disabled={isSubmitting || !isDirty}
+              >
                 Cancel
               </Button>
             </Box>
