@@ -712,6 +712,10 @@ class Builder extends React.Component {
         return
       }
 
+      if (getComputedStyle(richTextToolbar).display === 'none') {
+        return
+      }
+
       richTextToolbar.style.display = 'none'
 
       const toolbar = document.querySelector('.gjs-toolbar')
