@@ -1,17 +1,16 @@
 import React from 'react'
 
 import {
-  Divider,
-  List,
   ListSubheader,
-  ListItem,
   ListItemText,
   ListItemIcon,
   makeStyles,
-  Theme,
-  useTheme
+  ListItem,
+  Divider,
+  List,
+  Theme
 } from '@material-ui/core'
-import { mdiCogOutline } from '@mdi/js'
+import { mdiLogoutVariant, mdiCogOutline } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
 import { hasUserAccessToBrandSettings } from '../../../../../../utils/user-teams'
@@ -34,6 +33,17 @@ const useStyles = makeStyles(
       maxHeight: `calc(
         100vh - ${theme.spacing(9)}px
       )`
+    },
+    ListSubheader: {
+      ...theme.typography.overline
+    },
+    listItem: {
+      ...theme.typography.body2
+    },
+    listItemIcon: {
+      minWidth: 'unset',
+      marginRight: theme.spacing(2),
+      color: theme.palette.common.black
     }
   }),
   { name: 'UserMenuContent' }
@@ -50,7 +60,6 @@ export function UserMenuContent({
   showChecklists,
   onClose = () => {}
 }: Props) {
-  const theme = useTheme<Theme>()
   const classes = useStyles()
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
@@ -61,56 +70,87 @@ export function UserMenuContent({
 
   return (
     <div className={classes.container}>
-      <ScrollableArea hasThinnerScrollbar>
+      {/* <ScrollableArea hasThinnerScrollbar>
         <List disablePadding>
           <TeamSwitcher user={user} />
         </List>
-      </ScrollableArea>
+      </ScrollableArea> */}
 
       <List disablePadding>
         <Acl.Admin>
           {user.teams && user.teams.length > 1 && (
-            <ListSubheader>Team Settings</ListSubheader>
+            <ListSubheader className={classes.ListSubheader}>
+              Team Settings
+            </ListSubheader>
           )}
           {hasAccessToBrandSettings && (
-            <ListItem button onClick={() => onClick('brand-settings')}>
+            <ListItem
+              button
+              className={classes.listItem}
+              onClick={() => onClick('brand-settings')}
+            >
               Brand
             </ListItem>
           )}
-          <ListItem button onClick={() => onClick('teams')}>
+          <ListItem
+            button
+            className={classes.listItem}
+            onClick={() => onClick('teams')}
+          >
             Members
           </ListItem>
           <Acl.Admin>
-            <ListItem button onClick={() => onClick('contexts')}>
+            <ListItem
+              button
+              className={classes.listItem}
+              onClick={() => onClick('contexts')}
+            >
               Contexts
             </ListItem>
           </Acl.Admin>
           <Acl.Admin>
-            <ListItem button onClick={() => onClick('statuses')}>
+            <ListItem
+              button
+              className={classes.listItem}
+              onClick={() => onClick('statuses')}
+            >
               Statuses
             </ListItem>
           </Acl.Admin>
           {showChecklists && (
-            <ListItem button onClick={() => onClick('checklists')}>
+            <ListItem
+              button
+              className={classes.listItem}
+              onClick={() => onClick('checklists')}
+            >
               Checklists
             </ListItem>
           )}
           <Divider role="separator" />
         </Acl.Admin>
-        <ListItem divider button onClick={() => onClick('account')}>
-          <ListItemIcon>
-            <SvgIcon path={mdiCogOutline} color={theme.palette.common.black} />
+        <ListItem
+          divider
+          button
+          className={classes.listItem}
+          onClick={() => onClick('account')}
+        >
+          <ListItemIcon className={classes.listItemIcon}>
+            <SvgIcon path={mdiCogOutline} />
           </ListItemIcon>
-          <ListItemText>Account Settings</ListItemText>
+          <ListItemText disableTypography>Account Settings</ListItemText>
         </ListItem>
         <ListItem
           button
+          className={classes.listItem}
           onClick={() => {
             onClose()
             window.location.pathname = 'signout'
           }}
         >
-          <ListItemText>Sign out</ListItemText>
+          <ListItemIcon className={classes.listItemIcon}>
+            <SvgIcon path={mdiLogoutVariant} />
+          </ListItemIcon>
+          <ListItemText disableTypography>Sign out</ListItemText>
         </ListItem>
       </List>
     </div>
