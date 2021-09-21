@@ -53,7 +53,7 @@ export const OTHER_STATUSES: Record<string, IListingStatus> = {
   withdrawn_sublistin: 'Withdrawn Sublisting'
 }
 
-export const FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
+export const RES_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
   condo: 'RES-Condo',
   farm: 'RES-Farm/Ranch',
   duplex: 'RES-Half Duplex',
@@ -61,13 +61,63 @@ export const FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
   single_family: 'RES-Single Family'
 }
 
+export const LND_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
+  commercial: 'LND-Commercial',
+  farm: 'LND-Farm/Ranch',
+  residential: 'LND-Residential'
+}
+
+export const MUL_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
+  single: 'MUL-Multiple Single Units',
+  apartment: 'MUL-Apartment/5Plex+',
+  duplex: 'MUL-Full Duplex',
+  triplex: 'MUL-Triplex',
+  fourplex: 'MUL-Fourplex'
+}
+
+export const LSE_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
+  apartment: 'LSE-Apartment',
+  House: 'LSE-House',
+  townhome: 'LSE-Condo/Townhome',
+  duplex: 'LSE-Duplex',
+  Triplex: 'LSE-Triplex',
+  fourplex: 'LSE-Fourplex',
+  Mobile: 'LSE-Mobile'
+}
+
+export const COM_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
+  lease: 'COM-Lease',
+  sale: 'COM-Sale',
+  either: 'COM-Sale or Lease (Either)',
+  both: 'COM-Sale/Leaseback (Both)'
+}
+
+export const PROPERTY_TYPES: Record<IPropertyType, string> = {
+  Residential: 'Sale',
+  'Residential Lease': 'Lease',
+  Commercial: 'Commercial',
+  'Lots & Acreage': 'Lots & Acreage',
+  'Multi-Family': 'Multi Family'
+}
+
+export const PROPERTY_TYPES_PROPERTY_SUBTYPES: Record<
+  IPropertyType,
+  Record<string, IPropertySubtype>
+> = {
+  Residential: RES_FILTER_PROPERTY_SUBTYPES,
+  'Residential Lease': LSE_FILTER_PROPERTY_SUBTYPES,
+  Commercial: COM_FILTER_PROPERTY_SUBTYPES,
+  'Lots & Acreage': LND_FILTER_PROPERTY_SUBTYPES,
+  'Multi-Family': MUL_FILTER_PROPERTY_SUBTYPES
+}
+
 export const FILTERS_INITIAL_VALUES: AlertFilters = {
   open_house: false,
   property_types: ['Residential'],
-  listing_statuses: ['Active'] as IListingStatus[],
   property_subtypes: Object.values(
-    FILTER_PROPERTY_SUBTYPES
+    RES_FILTER_PROPERTY_SUBTYPES
   ) as IPropertySubtype[],
+  listing_statuses: ['Active'] as IListingStatus[],
   architectural_styles: null,
   school_districts: null,
   elementary_schools: null,
@@ -106,6 +156,53 @@ export const FILTERS_INITIAL_VALUES: AlertFilters = {
   excluded_listing_ids: null,
   postal_codes: null,
   search: null
+}
+
+export const RES_FILTERS_DEFAULT_VALUES: AlertFilters = {
+  ...FILTERS_INITIAL_VALUES
+}
+
+export const LSE_FILTERS_DEFAULT_VALUES: AlertFilters = {
+  ...FILTERS_INITIAL_VALUES,
+  property_types: ['Residential Lease'],
+  property_subtypes: Object.values(
+    LSE_FILTER_PROPERTY_SUBTYPES
+  ) as IPropertySubtype[]
+}
+
+export const LND_FILTERS_DEFAULT_VALUES: AlertFilters = {
+  ...FILTERS_INITIAL_VALUES,
+  property_types: ['Lots & Acreage'],
+  property_subtypes: Object.values(
+    LND_FILTER_PROPERTY_SUBTYPES
+  ) as IPropertySubtype[]
+}
+
+export const MUL_FILTERS_DEFAULT_VALUES: AlertFilters = {
+  ...FILTERS_INITIAL_VALUES,
+  property_types: ['Multi-Family'],
+  property_subtypes: Object.values(
+    MUL_FILTER_PROPERTY_SUBTYPES
+  ) as IPropertySubtype[]
+}
+
+export const COM_FILTERS_DEFAULT_VALUES: AlertFilters = {
+  ...FILTERS_INITIAL_VALUES,
+  property_types: ['Commercial'],
+  property_subtypes: Object.values(
+    COM_FILTER_PROPERTY_SUBTYPES
+  ) as IPropertySubtype[]
+}
+
+export const PROPERTY_TYPES_DEFAULT_VALUES: Record<
+  IPropertyType,
+  AlertFilters
+> = {
+  Residential: RES_FILTERS_DEFAULT_VALUES,
+  'Residential Lease': LSE_FILTERS_DEFAULT_VALUES,
+  Commercial: LND_FILTERS_DEFAULT_VALUES,
+  'Lots & Acreage': MUL_FILTERS_DEFAULT_VALUES,
+  'Multi-Family': COM_FILTERS_DEFAULT_VALUES
 }
 
 export const ARCHITECTURAL_STYLES: Record<string, IArchitecturalStyle> = {
