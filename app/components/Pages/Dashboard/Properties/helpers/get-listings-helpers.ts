@@ -1,3 +1,5 @@
+import { pickBy } from 'lodash'
+
 import { ListingSearchOptions } from '../ExploreTab/context/reducers'
 
 import { coordToPoint, pointFromBounds } from './map-helpers'
@@ -33,7 +35,7 @@ export function createValertOptions(
       : pointFromBounds(search.bounds)
 
   return {
-    ...search.filters,
+    ...pickBy(search.filters), // TO remove null values
     points,
     ...(search.office ? { offices: [search.office] } : {}),
     postal_codes: postalCodes,
