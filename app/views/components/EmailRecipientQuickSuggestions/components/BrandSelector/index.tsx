@@ -78,6 +78,16 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
     hanldeCloseDrawer()
   }
 
+  const renderNode = (brand: IBrand) => {
+    return (
+      <Brand
+        brand={brand}
+        currentRecipients={currentRecipients}
+        onClick={handleOnClickBrand}
+      />
+    )
+  }
+
   const renderTreeView = () => {
     if (loading) {
       return (
@@ -101,13 +111,7 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
         getChildNodes={getChildNodes}
         initialExpandedNodes={initialExpandedNodes}
         getNodeId={getNodeId}
-        renderNode={(brand: IBrand) => (
-          <Brand
-            brand={brand}
-            currentRecipients={currentRecipients}
-            onClick={handleOnClickBrand}
-          />
-        )}
+        renderNode={renderNode}
       />
     )
   }
