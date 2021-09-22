@@ -1,7 +1,7 @@
 import { useState, useMemo, Fragment } from 'react'
 
 import { Tooltip } from '@material-ui/core'
-import { mdiCloseCircleOutline, mdiPencilOutline } from '@mdi/js'
+import { mdiPencilOutline } from '@mdi/js'
 
 import DealRole from 'components/DealRole'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -94,15 +94,6 @@ export function RoleField(props) {
           onClick={() => setRole(null)}
           onUpsertRole={props.onUpsertRole}
         />
-
-        <Tooltip title="Unlink Role" placement="top">
-          <SvgIcon
-            path={mdiCloseCircleOutline}
-            onClick={props.onToggleUnlink}
-            size={props.style.height}
-            color={props.style.color}
-          />
-        </Tooltip>
       </div>
 
       {activeRole !== undefined && (
