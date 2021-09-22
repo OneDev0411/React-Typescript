@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-import { Box, Typography, Theme, makeStyles } from '@material-ui/core'
+import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
 
 import { isFetchingSelectedTeam } from '@app/reducers/user'
@@ -90,11 +90,9 @@ export function ActiveTeam({ user }: Props) {
 
   if (isFetchingSelectedTeam(user)) {
     return (
-      <>
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <Loading />
-        </Box>
-      </>
+      <div className={classes.container}>
+        <Loading />
+      </div>
     )
   }
 
