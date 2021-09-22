@@ -12,8 +12,8 @@ const useStyles = makeStyles(
       flexDirection: 'column'
     },
     image: {
-      maxWidth: '80%',
-      width: '325px',
+      maxWidth: '75%',
+      width: '320px',
       margin: theme.spacing(2, 0)
     },
     message: {
@@ -28,22 +28,24 @@ const useStyles = makeStyles(
   { name: 'PropertiesZeroState' }
 )
 
-export default function ZeroState() {
+interface Props {
+  image: string
+  title: string
+  subtitle: string
+}
+
+export default function ZeroState({ image, title, subtitle }: Props) {
   const classes = useStyles()
 
   return (
     <Box className={classes.main}>
-      <img
-        className={classes.image}
-        src="/static/images/zero-state/agents-network.png"
-        alt="zero results"
-      />
+      <img className={classes.image} src={image} alt="zero results" />
       <Box className={classes.message}>
         <Typography className={classes.title} variant="h6">
-          You don't have any listings.
+          {title}
         </Typography>
         <Typography className={classes.subtitle} variant="body1">
-          Try searching for an address or listing at the top.
+          {subtitle}
         </Typography>
       </Box>
     </Box>

@@ -158,7 +158,25 @@ const ListView = props => {
     }
 
     if (!props.sortedListings.length) {
-      return <ZeroState />
+      return (
+        <ZeroState
+          image={
+            props.tabName === 'favorites'
+              ? '/static/images/zero-state/mls-favorites.png'
+              : '/static/images/zero-state/agents-network.png'
+          }
+          title={
+            props.tabName === 'favorites'
+              ? 'You don’t have any Favorites.'
+              : 'You don’t have any Saved Search.'
+          }
+          subtitle={
+            props.tabName === 'favorites'
+              ? 'Try for add new Favorites.'
+              : 'Try for add new Saved Search.'
+          }
+        />
+      )
     }
 
     return (

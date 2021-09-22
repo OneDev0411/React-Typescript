@@ -170,7 +170,11 @@ export const Results = ({
           className={classes.scrollableContent}
         >
           {zeroStateShouldShown ? (
-            <ZeroState />
+            <ZeroState
+              image="/static/images/zero-state/mls-explore.png"
+              title="You don’t have any listings."
+              subtitle="Try searching for an address or listing at the top."
+            />
           ) : (
             <>
               {viewType === 'cards' && (
