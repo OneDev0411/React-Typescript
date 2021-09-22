@@ -141,7 +141,7 @@ export function getListingFeatures(listing: IListing): Feature[] {
           value: valueToString(property.architectural_style)
         },
         {
-          label: 'Subdivition',
+          label: 'Subdivision',
           value: valueToString(property.subdivision_name)
         },
         {
