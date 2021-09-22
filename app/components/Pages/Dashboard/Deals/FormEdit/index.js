@@ -28,6 +28,7 @@ import { Header } from './Header'
 import { Container, LoadingDealContainer, ErrorContainer } from './styled'
 import { getDefaultValues } from './utils/get-default-values'
 import { parseAnnotations } from './utils/parse-annotations'
+import { unlinkAnnotations } from './utils/unlink-annotations'
 
 class EditDigitalForm extends React.Component {
   state = {
@@ -36,6 +37,7 @@ class EditDigitalForm extends React.Component {
     pdfDocument: null,
     pdfUrl: '',
     values: {},
+    defaultValues: {},
     instructions: {},
     annotations: {},
     downloadPercents: 1,
@@ -146,6 +148,7 @@ class EditDigitalForm extends React.Component {
     })
 
     this.setState({
+      defaultValues,
       values: fields,
       annotations
     })
@@ -219,14 +222,32 @@ class EditDigitalForm extends React.Component {
     }
   }
 
-  handleUpdateInstruction = fields => {
-    console.log('Unlinking ', fields)
-    this.setState(state => ({
-      instructions: {
-        ...state.instructions,
-        ...fields
-      }
-    }))
+  handleUpdateInstruction = async fields => {
+    const {
+      pdfDocument,
+      defaultValues,
+      instructions: currentInstructions
+    } = this.state
+
+    const instructions = {
+      ...currentInstructions,
+      ...fields
+    }
+
+    const annotations = await unlinkAnnotations(pdfDocument, {
+      defaultValues,
+      deal: this.props.deal,
+      roles: this.props.roles,
+      brandChecklists: this.props.brandChecklists,
+      scale: this.scale,
+      displayWidth: this.displayWidth,
+      instructions
+    })
+
+    this.setState({
+      annotations,
+      instructions
+    })
   }
 
   handleReloadPage = () => window.location.reload()
