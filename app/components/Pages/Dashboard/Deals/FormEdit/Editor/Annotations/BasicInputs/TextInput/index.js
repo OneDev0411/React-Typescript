@@ -33,7 +33,10 @@ export default React.memo(props => {
     return `${fontSize}px`
   }
 
-  const appearance = parseAppearanceString(props.annotation.defaultAppearance)
+  const appearance = parseAppearanceString(
+    props.annotation.defaultAppearanceData
+  )
+
   const { rect } = props.annotation
 
   const bounds = {
