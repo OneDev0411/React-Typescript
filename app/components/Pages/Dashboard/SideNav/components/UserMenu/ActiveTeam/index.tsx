@@ -66,24 +66,27 @@ export function ActiveTeam({ user }: Props) {
 
   const activeTeam = useMemo(() => getActiveTeam(user), [user])
 
-  console.log({ activeTeam })
+  console.log({ activeTeam, user })
 
-  const handleOnClickBrand = async (teamId: string, onClose: () => void) => {
+  const handleOnClickBrand = async (brand: IBrand, onClose: () => void) => {
+    console.log({ brand })
+
     onClose()
     setSwitcherStatus({
       isSwitching: true,
-      switchedTeamId: teamId
+      switchedTeamId: brand.id
     })
 
-    await putUserSetting('user_filter', viewAs(user, true), teamId)
+    await putUserSetting('user_filter', viewAs(user, true), brand.id)
 
-    window.location.reload()
+    // window.location.reload()
   }
   const renderBrandNode = ({ brand, onClose }: NodeRenderer) => {
     return (
       <Brand
         brand={brand}
-        onClick={() => handleOnClickBrand(brand.id, onClose)}
+        isActive={brand.id === activeTeam?.brand.id}
+        onClick={() => handleOnClickBrand(brand, onClose)}
       />
     )
   }

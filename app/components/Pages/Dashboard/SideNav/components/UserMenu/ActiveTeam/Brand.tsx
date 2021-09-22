@@ -1,17 +1,22 @@
-import { useMemo, memo } from 'react'
+import { memo } from 'react'
 
-import { Typography, Theme, makeStyles } from '@material-ui/core'
+import { Typography, Chip, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     name: {
+      display: 'flex',
+      alignItems: 'center',
       padding: theme.spacing(1, 0),
       cursor: 'pointer'
     },
-    disabled: {
-      opacity: 0.6,
+    active: {
+      color: theme.palette.primary.main,
       cursor: 'not-allowed'
+    },
+    activeIndicator: {
+      marginLeft: theme.spacing(1)
     }
   }),
   { name: 'SwitchTeamNodeRenderer' }
@@ -19,18 +24,15 @@ const useStyles = makeStyles(
 
 interface Props {
   brand: IBrand
+  isActive: boolean
   onClick: (brand: IBrand) => void
 }
 
-function RawBrand({ brand, onClick }: Props) {
+function RawBrand({ brand, isActive, onClick }: Props) {
   const classes = useStyles()
 
-  const isSelected: boolean = useMemo(() => {
-    return false
-  }, [])
-
   const handleOnClick = () => {
-    if (isSelected) {
+    if (isActive) {
       return null
     }
 
@@ -39,10 +41,17 @@ function RawBrand({ brand, onClick }: Props) {
 
   return (
     <div
-      className={cn(classes.name, { [classes.disabled]: isSelected })}
+      className={cn(classes.name, { [classes.active]: isActive })}
       onClick={handleOnClick}
     >
       <Typography variant="body2">{brand.name}</Typography>
+      {isActive && (
+        <Chip
+          size="small"
+          label="You're here"
+          className={classes.activeIndicator}
+        />
+      )}
     </div>
   )
 }
