@@ -1,21 +1,20 @@
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
 import { Box, Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
 
 import { isFetchingSelectedTeam } from '@app/reducers/user'
-// import { viewAs, getActiveTeam, getActiveTeamId } from '@app/utils/user-teams'
-import { getActiveTeam } from '@app/utils/user-teams'
+import { viewAs, getActiveTeam } from '@app/utils/user-teams'
 import {
+  NodeRenderer,
   ButtonRenderer,
   BrandSelectorDrawer
 } from '@app/views/components/BrandSelectorDrawer'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { putUserSetting } from 'models/user/put-user-setting'
 
-// import { putUserSetting } from 'models/user/put-user-setting'
-
-// import { TeamItem } from './TeamItem'
+import { Brand } from './Brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -50,35 +49,44 @@ const useStyles = makeStyles(
   { name: 'ActiveTeam' }
 )
 
-// interface SwitcherStatus {
-//   isSwitching: boolean
-//   switchedTeamId: UUID
-// }
+interface SwitcherStatus {
+  isSwitching: boolean
+  switchedTeamId: UUID
+}
 interface Props {
   user: IUser
 }
 
 export function ActiveTeam({ user }: Props) {
   const classes = useStyles()
-  // const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
-  //   isSwitching: false,
-  //   switchedTeamId: ''
-  // })
+  const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
+    isSwitching: false,
+    switchedTeamId: ''
+  })
 
   const activeTeam = useMemo(() => getActiveTeam(user), [user])
 
   console.log({ activeTeam })
 
-  // const onClickTeam = async (teamId: string) => {
-  //   setSwitcherStatus({
-  //     isSwitching: true,
-  //     switchedTeamId: teamId
-  //   })
+  const handleOnClickBrand = async (teamId: string, onClose: () => void) => {
+    onClose()
+    setSwitcherStatus({
+      isSwitching: true,
+      switchedTeamId: teamId
+    })
 
-  //   await putUserSetting('user_filter', viewAs(user, true), teamId)
+    await putUserSetting('user_filter', viewAs(user, true), teamId)
 
-  //   window.location.reload()
-  // }
+    window.location.reload()
+  }
+  const renderBrandNode = ({ brand, onClose }: NodeRenderer) => {
+    return (
+      <Brand
+        brand={brand}
+        onClick={() => handleOnClickBrand(brand.id, onClose)}
+      />
+    )
+  }
 
   if (isFetchingSelectedTeam(user)) {
     return (
@@ -108,12 +116,12 @@ export function ActiveTeam({ user }: Props) {
             </Typography>
           </div>
           <BrandSelectorDrawer
+            nodeRenderer={renderBrandNode}
             buttonRenderer={({ onOpen }: ButtonRenderer) => (
               <div className={classes.switchTeam} onClick={onOpen}>
-                Change
+                {switcherStatus.isSwitching ? 'Switching...' : 'Change'}
               </div>
             )}
-            // nodeRenderer={renderBrandNode}
           />
         </div>
       </div>
