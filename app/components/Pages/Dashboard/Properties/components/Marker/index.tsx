@@ -47,6 +47,9 @@ const useStyles = makeStyles(
         transform: 'translate(-28px, -28px)', // Marker Anchor
         padding: 3,
         zIndex: 3
+      },
+      '&.clicked': {
+        zIndex: 5
       }
     },
     dot: {
@@ -65,6 +68,9 @@ const useStyles = makeStyles(
         width: 15,
         transform: 'translate(-8px, -8px)', // Marker Anchor
         zIndex: 3
+      },
+      '&.clicked': {
+        zIndex: 5
       }
     }
   }),
