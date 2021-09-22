@@ -57,9 +57,11 @@ export default function Editor(props) {
             <Annotations
               deal={props.deal}
               values={props.values}
+              instructions={props.instructions}
               pageIndex={index}
               annotations={props.annotations}
               onValueUpdate={props.onValueUpdate}
+              onInstructionUpdate={props.onInstructionUpdate}
             />
           </div>
         ))}

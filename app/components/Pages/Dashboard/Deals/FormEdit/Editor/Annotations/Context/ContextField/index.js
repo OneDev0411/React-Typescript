@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import { useSingleAndDoubleClick } from '@app/hooks/use-single-and-double-click'
 import DatePicker from 'components/DatePicker'
 import { ContextInlineEdit } from 'deals/FormEdit/Editor/ContextInlineEdit'
 import { searchContext } from 'models/Deal/helpers/brand-context/search-context'
@@ -55,6 +56,10 @@ export function ContextField(props) {
     return props.value
   }
 
+  const onClick = useSingleAndDoubleClick(() => {
+    setEditorStatus(true)
+  }, props.onToggleUnlink)
+
   return (
     <>
       <div
@@ -63,7 +68,7 @@ export function ContextField(props) {
           backgroundColor: props.value ? 'transparent' : '#d2e5f2'
         }}
         title={props.annotation.context}
-        onClick={() => setEditorStatus(true)}
+        onClick={onClick}
       >
         {formatValue()}
       </div>

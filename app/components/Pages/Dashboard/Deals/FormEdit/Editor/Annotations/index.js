@@ -13,7 +13,8 @@ export default function Annotations(props) {
     pageIndex: props.pageIndex,
     deal: props.deal,
     values: props.values,
-    onValueUpdate: props.onValueUpdate
+    onValueUpdate: props.onValueUpdate,
+    onInstructionUpdate: props.onInstructionUpdate
   }
 
   return (

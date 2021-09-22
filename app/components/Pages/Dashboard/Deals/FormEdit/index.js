@@ -36,6 +36,7 @@ class EditDigitalForm extends React.Component {
     pdfDocument: null,
     pdfUrl: '',
     values: {},
+    instructions: {},
     annotations: {},
     downloadPercents: 1,
     promptOnQuit: false,
@@ -217,6 +218,15 @@ class EditDigitalForm extends React.Component {
     }
   }
 
+  handleUpdateInstruction = fields => {
+    this.setState(state => ({
+      instructions: {
+        ...state.instructions,
+        ...fields
+      }
+    }))
+  }
+
   handleReloadPage = () => window.location.reload()
 
   render() {
@@ -286,7 +296,9 @@ class EditDigitalForm extends React.Component {
                 displayWidth={this.displayWidth}
                 annotations={state.annotations}
                 values={state.values}
+                instructions={state.instructions}
                 onValueUpdate={this.handleUpdateValue}
+                onInstructionUpdate={this.handleUpdateInstruction}
               />
             </Container>
           )
