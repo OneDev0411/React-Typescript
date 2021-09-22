@@ -19,7 +19,7 @@ export function useSingleAndDoubleClick(
     // the duration between this click and the previous one
     // is less than the value of delay = double-click
     if (click === 2) {
-      actionDoubleClick()
+      setTimeout(actionDoubleClick, Math.max(delay, 500))
     }
 
     return () => clearTimeout(timer)

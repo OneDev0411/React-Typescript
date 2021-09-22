@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { AddressEdit } from './AddressEdit'
 import { AddressWithSuggestion } from './AddressWithSuggestion'
@@ -15,6 +15,7 @@ export function AddressField({
   deal,
   upsertContexts,
   onAddressUpdate,
+  onToggleUnlink,
   annotations,
   formValues,
   ...inputProps
@@ -43,6 +44,7 @@ export function AddressField({
         annotations={annotations}
         formValues={formValues}
         onSave={onAddressUpdate}
+        onToggleUnlink={onToggleUnlink}
       />
     )
   }

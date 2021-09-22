@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { useSingleAndDoubleClick } from '@app/hooks/use-single-and-double-click'
 import { AddressPopover } from 'components/inline-editable-fields/InlineAddressField/AddressPopover'
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
 
@@ -10,7 +11,8 @@ export function AddressEdit({
   style,
   annotations,
   formValues,
-  onSave
+  onSave,
+  onToggleUnlink
 }) {
   const [address, setAddress] = useState(null)
 
@@ -43,6 +45,8 @@ export function AddressEdit({
     setAddress(addressFields.full_address || addressFields)
   }
 
+  const onClick = useSingleAndDoubleClick(handleEdit, onToggleUnlink)
+
   return (
     <div
       style={{
@@ -53,7 +57,7 @@ export function AddressEdit({
         left: style.left,
         width: rect.width
       }}
-      onClick={handleEdit}
+      onClick={onClick}
     >
       <span>{inputValue}</span>
 

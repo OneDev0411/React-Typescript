@@ -162,7 +162,8 @@ class EditDigitalForm extends React.Component {
         task.id,
         this.state.pdfUrl,
         task.form,
-        this.state.values
+        this.state.values,
+        this.state.instructions
       )
 
       await this.saveContexts()
@@ -219,6 +220,7 @@ class EditDigitalForm extends React.Component {
   }
 
   handleUpdateInstruction = fields => {
+    console.log('Unlinking ', fields)
     this.setState(state => ({
       instructions: {
         ...state.instructions,
