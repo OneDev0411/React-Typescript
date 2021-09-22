@@ -26,9 +26,7 @@ const getType = annotation => {
   }
 
   if (annotation.fieldType === 'Ch' && annotation.combo) {
-    if (annotation.fieldFlags & 131072) {
-      return COMBOBOX_ANNOTATION
-    }
+    return COMBOBOX_ANNOTATION
   }
 
   return UNKNOWN_ANNOTATION
