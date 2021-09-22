@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-import { Box, Button, Grid, makeStyles } from '@material-ui/core'
+import { Box, Grid, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import MyLocationIcon from '@material-ui/icons/MyLocation'
 import cn from 'classnames'
@@ -44,6 +44,7 @@ import { GoogleMapsButton } from '../GoogleMapsButton'
 import { Map } from '../Map'
 import { MapToggler } from '../MapToggler'
 import { Results } from '../Results'
+import { SaveSearchButton } from '../SaveSearchButton'
 
 const useStyles = makeStyles(
   theme => ({
@@ -91,9 +92,6 @@ const useStyles = makeStyles(
       padding: theme.spacing(1, 2),
       borderRadius: theme.shape.borderRadius,
       zIndex: 3
-    },
-    saveButton: {
-      padding: theme.spacing(1, 2)
     },
     results: {
       flex: 1,
@@ -240,16 +238,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
           <Autocomplete isMapView={mapIsShown} onSelectPlace={onSelectPlace} />
           <Box>
             <Filters />
-            <Button
-              className={classes.saveButton}
-              size="medium"
-              variant="contained"
-              color="primary"
-              disabled={state.isLoading}
+            <SaveSearchButton
+              isLoading={state.isLoading}
               onClick={handleSaveSearch}
-            >
-              Save Search
-            </Button>
+            />
           </Box>
         </Box>
 

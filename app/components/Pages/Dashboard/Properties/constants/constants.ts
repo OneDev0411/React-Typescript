@@ -1,5 +1,8 @@
 import config from 'config'
 
+export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
+  'mls-saved-search-hint-dismissed'
+
 // Autocomplete search component constanst
 export const AUTOCOMPLETE_RADIUS_M = 100000
 export const AUTOCOMPLETE_MINIMUM_LENGTH_FOR_SEARCH = 3
