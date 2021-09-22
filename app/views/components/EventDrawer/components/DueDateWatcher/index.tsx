@@ -31,8 +31,6 @@ export const DueDateWatcher = ({
       setter={onChange => {
         const isDueDateAfterEndDate = dueDate.getTime() >= endDate.getTime()
 
-        console.log({ isEndTimeTouchedManually, isEndDateTouchedManually })
-
         if (isEndTimeTouchedManually || isEndDateTouchedManually) {
           if (isDueDateAfterEndDate) {
             // 1 hour after
