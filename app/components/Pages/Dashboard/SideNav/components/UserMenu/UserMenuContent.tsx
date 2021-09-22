@@ -15,7 +15,7 @@ import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import TeamSwitcher from './TeamSwitcher'
+import { ActiveTeam } from './ActiveTeam'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -68,7 +68,7 @@ export function UserMenuContent({
 
   return (
     <div className={classes.container}>
-      <TeamSwitcher user={user} />
+      <ActiveTeam user={user} />
 
       <List disablePadding>
         <Acl.Admin>

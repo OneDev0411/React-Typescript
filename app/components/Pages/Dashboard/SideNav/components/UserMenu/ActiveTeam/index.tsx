@@ -53,7 +53,7 @@ interface Props {
   user: IUser
 }
 
-export function TeamsList({ user }: Props) {
+export function ActiveTeam({ user }: Props) {
   const classes = useStyles()
   // const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
   //   isSwitching: false,
