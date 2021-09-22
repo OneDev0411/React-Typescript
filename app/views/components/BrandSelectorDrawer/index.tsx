@@ -40,18 +40,21 @@ const useStyles = makeStyles(
   { name: 'BrandSelectorDrawer' }
 )
 
+export type NodeRenderer = { brand: IBrand; onClose: () => void }
+export type ButtonRenderer = { onOpen: () => void }
+
 interface Props {
-  nodeRenderer?: (brand: IBrand, onClose: () => void) => ReactNode
+  nodeRenderer?: (props: NodeRenderer) => ReactNode
   defaultButtonProps?: Omit<ButtonProps, 'onClick'>
   drawerProps?: Omit<OverlayDrawerProps, 'open' | 'onClose'>
-  buttonRenderer?: (onClick: (brand: IBrand) => void) => ReactNode
+  buttonRenderer?: (props: ButtonRenderer) => ReactNode
 }
 
 export function BrandSelectorDrawer({
-  nodeRenderer,
   defaultButtonProps = {},
   drawerProps = {},
-  buttonRenderer
+  buttonRenderer,
+  nodeRenderer
 }: Props) {
   const user = useSelector(selectUser)
   const classes = useStyles()
@@ -75,6 +78,18 @@ export function BrandSelectorDrawer({
 
   const debouncedSetQuery = debounce(setQuery, 400)
 
+  const renderButton = () => {
+    if (buttonRenderer) {
+      return buttonRenderer({ onOpen: hanldeOpenDrawer })
+    }
+
+    return (
+      <Button {...defaultButtonProps} onClick={hanldeOpenDrawer}>
+        Our Agents
+      </Button>
+    )
+  }
+
   const renderNode = (brand: IBrand) => {
     if (!nodeRenderer) {
       return (
@@ -84,7 +99,7 @@ export function BrandSelectorDrawer({
       )
     }
 
-    return nodeRenderer(brand, hanldeCloseDrawer)
+    return nodeRenderer({ brand, onClose: hanldeCloseDrawer })
   }
 
   const renderTreeView = () => {
@@ -117,9 +132,7 @@ export function BrandSelectorDrawer({
 
   return (
     <>
-      <Button {...defaultButtonProps} onClick={hanldeOpenDrawer}>
-        Our Agents
-      </Button>
+      {renderButton()}
       <Drawer {...drawerProps} open={isOpen} onClose={hanldeCloseDrawer}>
         <Drawer.Header title="Select Agents" />
         <Drawer.Body>

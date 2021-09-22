@@ -6,8 +6,13 @@ import { mdiAccountGroupOutline } from '@mdi/js'
 import { isFetchingSelectedTeam } from '@app/reducers/user'
 // import { viewAs, getActiveTeam, getActiveTeamId } from '@app/utils/user-teams'
 import { getActiveTeam } from '@app/utils/user-teams'
+import {
+  ButtonRenderer,
+  BrandSelectorDrawer
+} from '@app/views/components/BrandSelectorDrawer'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
 // import { putUserSetting } from 'models/user/put-user-setting'
 
 // import { TeamItem } from './TeamItem'
@@ -102,7 +107,14 @@ export function ActiveTeam({ user }: Props) {
               {activeTeam?.brand.name}
             </Typography>
           </div>
-          <div className={classes.switchTeam}>Change</div>
+          <BrandSelectorDrawer
+            buttonRenderer={({ onOpen }: ButtonRenderer) => (
+              <div className={classes.switchTeam} onClick={onOpen}>
+                Change
+              </div>
+            )}
+            // nodeRenderer={renderBrandNode}
+          />
         </div>
       </div>
     )
