@@ -6,6 +6,7 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -21,7 +22,6 @@ import { Portal } from 'components/Portal'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
-import VideoDrawer from 'components/VideoDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
@@ -1367,7 +1367,20 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <VideoDrawer
+          {/* TODO: Rather VideoDrawer use SearchVideoDrawer for testing purposes */}
+          <SearchVideoDrawer
+            isOpen={!!this.state.videoToEdit}
+            model={this.state.videoToEdit}
+            onClose={() => {
+              this.blocks.video.selectHandler()
+              this.setState({ videoToEdit: null })
+            }}
+            onSelect={video => {
+              this.blocks.video.selectHandler(video)
+              this.setState({ videoToEdit: null })
+            }}
+          />
+          {/* <VideoDrawer
             isOpen={!!this.state.videoToEdit}
             video={this.state.videoToEdit}
             onClose={() => {
@@ -1378,7 +1391,7 @@ class Builder extends React.Component {
               this.blocks.video.selectHandler(video)
               this.setState({ videoToEdit: null })
             }}
-          />
+          /> */}
           <ArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
