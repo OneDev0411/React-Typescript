@@ -1,3 +1,5 @@
+import { Sort } from '../../../helpers/sort-utils'
+
 export const setListings = (
   listings: ICompactListing[],
   info: ICompactListingInfo
@@ -42,6 +44,11 @@ export const updateFilters = (filters: Partial<AlertFilters>) => ({
   payload: { filters }
 })
 
+export const changeSort = (sort: Sort) => ({
+  type: 'CHANGE_SORT' as 'CHANGE_SORT',
+  payload: { sort }
+})
+
 export const setMapBounds = (
   center: ICoord,
   zoom: number,
@@ -83,6 +90,7 @@ export type Actions = ReturnType<
   | typeof setMapDrawing
   | typeof setMapBounds
   | typeof updateFilters
+  | typeof changeSort
   | typeof setMapLocation
   | typeof setIsLoading
   | typeof removeMapDrawing

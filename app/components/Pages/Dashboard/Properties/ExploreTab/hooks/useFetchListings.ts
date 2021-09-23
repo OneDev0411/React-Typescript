@@ -66,7 +66,8 @@ export default function useFetchListings(
       const valertQueryString = createValertQueryString(
         state.map.zoom,
         PROPOSED_AGENT_ZOOM_LEVEL,
-        brand
+        brand,
+        state.search.sort
       )
       const valertOptions = createValertOptions(state.search, null, QUERY_LIMIT)
 

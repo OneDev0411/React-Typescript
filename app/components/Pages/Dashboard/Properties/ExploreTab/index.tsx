@@ -12,7 +12,11 @@ import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
 import { FILTERS_INITIAL_VALUES } from '../constants/constants'
-import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
+import {
+  getDefaultSort,
+  getUserLastBrowsingLocation,
+  parseSortIndex
+} from '../helpers/sort-utils'
 
 import { ExplorePage } from './components/ExplorePage'
 import { LandingPage } from './components/LandingPage'
@@ -48,13 +52,15 @@ function ExploreTab({ isWidget, user, location }: Props) {
   const hasUrlQuery = !!(brokerageQuery || searchQuery)
 
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
+  const userActiveSort = parseSortIndex(getDefaultSort(user))
 
   const initialState = {
     search: {
       bounds: null,
       ...(brokerageQuery ? { office: brokerageQuery } : {}),
       drawing: [],
-      filters: FILTERS_INITIAL_VALUES
+      filters: FILTERS_INITIAL_VALUES,
+      sort: userActiveSort
     },
     map: userLastBrowsingLocation
   }

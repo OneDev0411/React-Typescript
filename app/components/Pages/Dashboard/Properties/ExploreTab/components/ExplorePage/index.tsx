@@ -24,7 +24,6 @@ import { QUERY_LIMIT, bootstrapURLKeys } from '../../../constants/constants'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
 import { coordToPoint } from '../../../helpers/map-helpers'
 import {
-  getDefaultSort,
   LAST_BROWSING_LOCATION,
   parseSortIndex,
   SortString,
@@ -34,7 +33,8 @@ import {
   setMapDrawing,
   removeMapDrawing,
   setMapBounds,
-  setMapLocation
+  setMapLocation,
+  changeSort
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -138,12 +138,9 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [viewType, setViewType] = useState<ViewType>(
     (viewQueryParam as ViewType) || 'cards'
   )
-  const [activeSort, setActiveSort] = useState(
-    parseSortIndex(getDefaultSort(user))
-  )
 
   const onChangeSort = (sort: SortString) => {
-    setActiveSort(parseSortIndex(sort))
+    dispatch(changeSort(parseSortIndex(sort)))
     reduxDispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
@@ -314,7 +311,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               onMapToggle={toggleMap}
               viewType={viewType}
               onChangeSort={onChangeSort}
-              activeSort={activeSort}
+              activeSort={state.search.sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
             />

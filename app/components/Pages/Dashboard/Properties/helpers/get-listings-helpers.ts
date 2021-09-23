@@ -3,11 +3,13 @@ import { pickBy } from 'lodash'
 import { ListingSearchOptions } from '../ExploreTab/context/reducers'
 
 import { coordToPoint, pointFromBounds } from './map-helpers'
+import { Sort, parseToValertSort } from './sort-utils'
 
 export function createValertQueryString(
   zoom: Optional<number>,
   proposedAgentZoomLevel: number,
-  brand: Nullable<IBrand>
+  brand: Nullable<IBrand>,
+  sort: Sort
 ): string {
   let query = ''
 
@@ -19,6 +21,13 @@ export function createValertQueryString(
     if (office) {
       query += `&order_by[]=office&order_by[]=status&office=${office}`
     }
+  }
+
+  if (sort) {
+    const orderByQuery = parseToValertSort(sort.index)
+    const sortDirQuery = sort.ascending ? 'ASC' : 'DESC'
+
+    query += `&order_by[]=${orderByQuery}&sort_dir=${sortDirQuery}`
   }
 
   return query

@@ -1,4 +1,9 @@
 import { FILTERS_INITIAL_VALUES } from '../../../constants/constants'
+import {
+  parseSortIndex,
+  Sort,
+  SORT_FIELD_DEFAULT
+} from '../../../helpers/sort-utils'
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
@@ -6,6 +11,7 @@ export interface ListingSearchOptions {
   office?: Nullable<string>
   drawing: ICoord[]
   filters: Partial<AlertFilters>
+  sort: Sort
 }
 export interface ListingsState {
   search: ListingSearchOptions
@@ -19,7 +25,12 @@ export interface ListingsState {
 }
 
 export const initialState: ListingsState = {
-  search: { bounds: null, drawing: [], filters: FILTERS_INITIAL_VALUES },
+  search: {
+    bounds: null,
+    drawing: [],
+    filters: FILTERS_INITIAL_VALUES,
+    sort: parseSortIndex(SORT_FIELD_DEFAULT)
+  },
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
   listingStates: { hover: null, click: null },
@@ -105,6 +116,26 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
         search: {
           ...state.search,
           filters: { ...state.search.filters, ...filters }
+        }
+      }
+    }
+
+    case 'CHANGE_SORT': {
+      const { sort } = action.payload
+
+      console.log('CHANGE_SORT', {
+        ...state,
+        search: {
+          ...state.search,
+          sort
+        }
+      })
+
+      return {
+        ...state,
+        search: {
+          ...state.search,
+          sort
         }
       }
     }
