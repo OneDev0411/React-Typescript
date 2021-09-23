@@ -824,6 +824,8 @@ class ContactsList extends React.Component {
     const syncing = Object.values(this.props.oAuthAccounts)
       .flat()
       .some(account => account.sync_status !== 'success')
+    const isTableMode = this.state.viewMode === 'table'
+    const isBoardMode = this.state.viewMode === 'board'
 
     const isZeroState =
       !isParkedTabActive &&
@@ -846,7 +848,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
-        {...(this.state.viewMode === 'board' && {
+        {...(isBoardMode && {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
@@ -888,7 +890,7 @@ class ContactsList extends React.Component {
           <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
-          {...(this.state.viewMode === 'board' && {
+          {...(isBoardMode && {
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 auto',
@@ -934,26 +936,16 @@ class ContactsList extends React.Component {
 
               <Box
                 mt={2}
-                {...(this.state.viewMode === 'board' && {
+                {...(isBoardMode && {
                   flexGrow: 1,
                   overflow: 'hidden'
                 })}
               >
-                <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board
-                    contacts={contacts}
-                    totalContacts={props.listInfo.total || 0}
-                    isFetchingContacts={isFetchingContacts}
-                    isFetchingNextContacts={state.isFetchingMoreContacts}
-                    isFetchingPreviousContacts={
-                      state.isFetchingMoreContactsBefore
-                    }
-                    onColumnReachStart={this.handleLoadMoreBefore}
-                    onColumnReachEnd={this.handleLoadMore}
-                  />
+                <ViewMode enabled={isBoardMode}>
+                  <Board searchTerm={this.state.searchInputValue || ''} />
                 </ViewMode>
 
-                <ViewMode enabled={this.state.viewMode === 'table'}>
+                <ViewMode enabled={isTableMode}>
                   <Table
                     data={contacts}
                     order={this.order}

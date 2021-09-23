@@ -54,16 +54,19 @@ interface ILabelValue {
   value: Nullable<string>
 }
 
-declare interface ApiResponseBody<T> {
-  data: T
-  references: T
-  code: string
-  info?:
+declare interface ApiResponseBody<
+  T,
+  U =
     | boolean
     | {
         count: number
         total: number
       }
+> {
+  data: T
+  references: T
+  code: string
+  info?: U
 }
 
 declare interface ApiResponse<T> {

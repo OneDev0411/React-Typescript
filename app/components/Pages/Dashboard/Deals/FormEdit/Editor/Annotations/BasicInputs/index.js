@@ -5,6 +5,7 @@ import debounce from 'debounce'
 import { getType, Types } from 'deals/FormEdit/utils/types'
 
 import CheckboxAnnotation from './Checkbox'
+import ComboboxAnnotation from './Combobox'
 import RadioAnnotation from './Radio'
 import TextInputAnnotation from './TextInput'
 
@@ -38,6 +39,16 @@ export const FormInputs = React.memo(
         if (type === Types.RADIO_ANNOTATION) {
           return (
             <RadioAnnotation
+              key={index}
+              {...sharedProps}
+              values={props.values}
+            />
+          )
+        }
+
+        if (type === Types.COMBOBOX_ANNOTATION) {
+          return (
+            <ComboboxAnnotation
               key={index}
               {...sharedProps}
               values={props.values}

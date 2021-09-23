@@ -14,7 +14,12 @@ import {
   mdiAccountMultipleOutline,
   mdiCardAccountMailOutline,
   mdiAccountArrowLeftOutline,
-  mdiDotsHorizontalCircleOutline
+  mdiDotsHorizontalCircleOutline,
+  mdiHomeOutline,
+  mdiRing,
+  mdiCakeVariant,
+  mdiBriefcaseOutline,
+  mdiHomeHeart
 } from '@mdi/js'
 
 import {
@@ -137,6 +142,108 @@ export const eventTypesIcons = [
       <SvgIcon {...props} path={mdiDotsHorizontalCircleOutline} />
     ),
     color: '#9013fe'
+  },
+  {
+    name: 'list_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'expiration_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'contract_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'inspection_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'option_period',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'hoa_delivery',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'financing_due',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'title_due',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 't47_due',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'closing_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'possession_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'lease_executed',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'lease_application_date',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'lease_begin',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'lease_end',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeOutline} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'birthday',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiCakeVariant} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'wedding_anniversary',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiRing} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'work_anniversary',
+    icon: (props: SvgIconProps) => (
+      <SvgIcon {...props} path={mdiBriefcaseOutline} />
+    ),
+    color: '#7ed321'
+  },
+  {
+    name: 'home_anniversary',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiHomeHeart} />,
+    color: '#7ed321'
+  },
+  {
+    name: 'child_birthday',
+    icon: (props: SvgIconProps) => <SvgIcon {...props} path={mdiCakeVariant} />,
+    color: '#7ed321'
   }
 ].reduce((acc, icon) => {
   return {
