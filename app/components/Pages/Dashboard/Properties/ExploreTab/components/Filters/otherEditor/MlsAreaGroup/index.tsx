@@ -84,7 +84,7 @@ export const MlsAreaGroup = ({
   })
 
   return (
-    <EditorGroup title="Mls Areas">
+    <EditorGroup title="MLS Areas">
       <Autocomplete
         className={classes.select}
         id="area-select"
@@ -106,7 +106,7 @@ export const MlsAreaGroup = ({
             {...params}
             variant="outlined"
             label="Area"
-            placeholder="Type in your Mls area..."
+            placeholder="Type in your MLS area..."
             InputProps={{
               ...params.InputProps,
               autoComplete: 'new-password', // disable autocomplete and autofill
@@ -144,7 +144,7 @@ export const MlsAreaGroup = ({
               {...params}
               variant="outlined"
               label="Sub Area"
-              placeholder="Type in your Mls sub area..."
+              placeholder="Type in your MLS sub area..."
               InputProps={{
                 ...params.InputProps,
                 autoComplete: 'new-password', // disable autocomplete and autofill
