@@ -12,7 +12,6 @@ import { useStyles } from '../styles'
 export const TypeEditor = ({
   filters,
   updateFilters,
-  defaultFilters,
   resultsCount
 }: FilterButtonDropDownProp<AlertFilters>) => {
   const classes = useStyles()
@@ -68,9 +67,10 @@ export const TypeEditor = ({
 
       <FilterEditorFooter
         resultCount={resultsCount}
+        disabledReset={filters.property_types[0] === 'Residential'}
         onClickReset={() => {
           updateFilters({
-            property_types: defaultFilters.property_types
+            ...PROPERTY_TYPES_DEFAULT_VALUES.Residential
           })
         }}
       />

@@ -78,10 +78,14 @@ export const BedsEditor = ({
       </Grid>
       <FilterEditorFooter
         resultCount={resultsCount}
+        disabledReset={
+          filters.minimum_bedrooms === defaultFilters.minimum_bedrooms &&
+          filters.maximum_bedrooms === defaultFilters.maximum_bedrooms
+        }
         onClickReset={() => {
           updateFilters({
             minimum_bedrooms: defaultFilters.minimum_bedrooms,
-            maximum_bathrooms: defaultFilters.maximum_bathrooms
+            maximum_bedrooms: defaultFilters.maximum_bedrooms
           })
         }}
       />

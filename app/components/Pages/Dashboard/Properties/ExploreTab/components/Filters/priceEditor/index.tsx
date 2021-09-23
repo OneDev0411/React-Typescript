@@ -83,6 +83,10 @@ export const PriceEditor = ({
       </Grid>
       <FilterEditorFooter
         resultCount={resultsCount}
+        disabledReset={
+          filters.minimum_price === defaultFilters.minimum_price &&
+          filters.maximum_price === defaultFilters.maximum_price
+        }
         onClickReset={() => {
           updateFilters({
             minimum_price: defaultFilters.minimum_price,

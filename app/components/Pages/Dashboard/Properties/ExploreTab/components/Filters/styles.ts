@@ -85,9 +85,6 @@ export const useStyles = makeStyles(
       width: '100%',
       marginBottom: theme.spacing(2)
     },
-    selectAllButton: {
-      color: theme.palette.grey[400]
-    },
     subStatusGroup: {
       marginLeft: theme.spacing(3)
     }

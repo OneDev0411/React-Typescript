@@ -25,6 +25,7 @@ export const OtherEditor = ({
 }: FilterButtonDropDownProp<AlertFilters>) => {
   const classes = useStyles()
   const defaultFilters = otherEditorProps.defaultFilters
+  const filters = otherEditorProps.filters
 
   const handleReset = () => {
     otherEditorProps.updateFilters({
@@ -54,6 +55,33 @@ export const OtherEditor = ({
     })
   }
 
+  const disabledReset =
+    filters.minimum_square_meters === defaultFilters.minimum_square_meters &&
+    filters.maximum_square_meters === defaultFilters.maximum_square_meters &&
+    filters.minimum_lot_square_meters ===
+      defaultFilters.minimum_lot_square_meters &&
+    filters.maximum_lot_square_meters ===
+      defaultFilters.maximum_lot_square_meters &&
+    filters.minimum_year_built === defaultFilters.minimum_year_built &&
+    filters.maximum_year_built === defaultFilters.maximum_year_built &&
+    filters.pool === defaultFilters.pool &&
+    filters.property_subtypes === defaultFilters.property_subtypes &&
+    filters.listing_statuses === defaultFilters.listing_statuses &&
+    filters.open_house === defaultFilters.open_house &&
+    filters.architectural_styles === defaultFilters.architectural_styles &&
+    filters.school_districts === defaultFilters.school_districts &&
+    filters.junior_high_schools === defaultFilters.junior_high_schools &&
+    filters.elementary_schools === defaultFilters.elementary_schools &&
+    filters.high_schools === defaultFilters.high_schools &&
+    filters.middle_schools === defaultFilters.middle_schools &&
+    filters.senior_high_schools === defaultFilters.senior_high_schools &&
+    filters.primary_schools === defaultFilters.primary_schools &&
+    filters.intermediate_schools === defaultFilters.intermediate_schools &&
+    filters.minimum_parking_spaces === defaultFilters.minimum_parking_spaces &&
+    filters.mls_areas === defaultFilters.mls_areas &&
+    filters.counties === defaultFilters.counties &&
+    filters.subdivisions === defaultFilters.subdivisions
+
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
@@ -78,6 +106,7 @@ export const OtherEditor = ({
       </Grid>
       <FilterEditorFooter
         resultCount={resultsCount}
+        disabledReset={disabledReset}
         onClickReset={handleReset}
       />
     </Grid>

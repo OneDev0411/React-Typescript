@@ -37,13 +37,12 @@ export const EditorGroup = ({
             {hasSelectAll && (
               <Grid item>
                 <Button
-                  className={classes.selectAllButton}
                   onClick={() => {
                     onToggleSelectAll(!isSelectAll)
                   }}
                   size="small"
                   variant="text"
-                  color="inherit"
+                  color="primary"
                 >
                   {isSelectAll ? 'Deselect All' : 'Select All'}
                 </Button>

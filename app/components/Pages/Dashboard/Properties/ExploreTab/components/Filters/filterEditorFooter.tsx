@@ -12,11 +12,13 @@ export interface RenderButton {
 
 interface Props {
   resultCount: number
+  disabledReset?: boolean
   onClickReset?: () => void
 }
 
 export function FilterEditorFooter({
   resultCount,
+  disabledReset = false,
   onClickReset = noop
 }: Props) {
   const classes = useStyles()
@@ -24,7 +26,12 @@ export function FilterEditorFooter({
   return (
     <Grid item container className={classes.footer} alignItems="center">
       <Grid item xs={5}>
-        <Button onClick={onClickReset} variant="text" color="primary">
+        <Button
+          disabled={disabledReset}
+          onClick={onClickReset}
+          variant="text"
+          color="primary"
+        >
           Reset
         </Button>
       </Grid>

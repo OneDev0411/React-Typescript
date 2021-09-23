@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import {
   FormControlLabel,
@@ -23,14 +23,18 @@ import { EditorGroup } from '../EditorGroup'
 
 export const StatusGroup = ({
   filters,
+  defaultFilters,
   updateFilters
 }: Omit<FilterButtonDropDownProp<AlertFilters>, 'resultsCount'>) => {
   const classes = useStyles()
   const listingStatuses = filters.listing_statuses || []
 
-  const statusValue = (key: IListingStatus) => {
-    return !!filters.listing_statuses?.find(s => s === key)
-  }
+  const statusValue = useCallback(
+    (key: IListingStatus) => {
+      return !!filters.listing_statuses?.find(s => s === key)
+    },
+    [filters.listing_statuses]
+  )
 
   const [isPendingExtended, setIsPendingExtended] = useState<boolean>(
     statusValue(PENDING_STATUSES.pending) ||
@@ -58,12 +62,14 @@ export const StatusGroup = ({
         ]
       })
     } else {
+      const newStatuses = listingStatuses.filter(
+        el => !Object.values(PENDING_STATUSES).includes(el)
+      )
+
       updateFilters({
-        listing_statuses: [
-          ...listingStatuses.filter(
-            el => !Object.values(PENDING_STATUSES).includes(el)
-          )
-        ]
+        listing_statuses: newStatuses.length
+          ? [...newStatuses]
+          : defaultFilters.listing_statuses
       })
     }
   }
@@ -76,12 +82,14 @@ export const StatusGroup = ({
         listing_statuses: [...listingStatuses, ...Object.values(OTHER_STATUSES)]
       })
     } else {
+      const newStatuses = listingStatuses.filter(
+        el => !Object.values(OTHER_STATUSES).includes(el)
+      )
+
       updateFilters({
-        listing_statuses: [
-          ...listingStatuses.filter(
-            el => !Object.values(OTHER_STATUSES).includes(el)
-          )
-        ]
+        listing_statuses: newStatuses.length
+          ? [...newStatuses]
+          : defaultFilters.listing_statuses
       })
     }
   }
@@ -97,13 +105,32 @@ export const StatusGroup = ({
         ]
       })
     } else {
+      const newStatuses = listingStatuses.filter(el => el !== event.target.name)
+
       updateFilters({
-        listing_statuses: [
-          ...listingStatuses.filter(el => el !== event.target.name)
-        ]
+        listing_statuses: newStatuses.length
+          ? [...newStatuses]
+          : defaultFilters.listing_statuses
       })
     }
   }
+
+  useEffect(() => {
+    setIsPendingExtended(
+      statusValue(PENDING_STATUSES.pending) ||
+        statusValue(PENDING_STATUSES.active_contingent) ||
+        statusValue(PENDING_STATUSES.active_kick_out) ||
+        statusValue(PENDING_STATUSES.active_option_contract)
+    )
+
+    setIsOtherExtended(
+      statusValue(OTHER_STATUSES.expired) ||
+        statusValue(OTHER_STATUSES.cancelled) ||
+        statusValue(OTHER_STATUSES.withdrawn) ||
+        statusValue(OTHER_STATUSES.temp_off_market) ||
+        statusValue(OTHER_STATUSES.withdrawn_sublistin)
+    )
+  }, [statusValue])
 
   return (
     <EditorGroup>

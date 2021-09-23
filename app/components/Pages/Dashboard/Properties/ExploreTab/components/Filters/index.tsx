@@ -6,7 +6,10 @@ import { isEqual } from 'lodash'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import FilterButton from '@app/views/components/Filters/FilterButton'
 
-import { PROPERTY_TYPES_DEFAULT_VALUES } from '../../../constants/constants'
+import {
+  PROPERTY_TYPES_DEFAULT_VALUES,
+  RES_FILTERS_DEFAULT_VALUES
+} from '../../../constants/constants'
 import { updateFilters } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 
@@ -169,7 +172,9 @@ export const Filters = () => {
               <Button
                 className={classes.resetButton}
                 variant="outlined"
-                onClick={resetFilters}
+                onClick={() => {
+                  updateFilters({ ...RES_FILTERS_DEFAULT_VALUES })
+                }}
                 disabled={isEqual(currentFilters, systemDefaultFilters)}
                 size="medium"
               >

@@ -61,6 +61,9 @@ export const BathsEditor = ({
       </ToggleButtonGroup>
       <FilterEditorFooter
         resultCount={resultsCount}
+        disabledReset={
+          filters.minimum_bathrooms === defaultFilters.minimum_bathrooms
+        }
         onClickReset={() => {
           updateFilters({
             minimum_bathrooms: defaultFilters.minimum_bathrooms
