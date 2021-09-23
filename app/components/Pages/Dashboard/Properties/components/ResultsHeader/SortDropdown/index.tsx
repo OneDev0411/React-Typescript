@@ -114,6 +114,9 @@ export function SortDropdown({ onChangeSort, activeSort }: Props) {
           flip: {
             enabled: false
           },
+          hide: {
+            enabled: false
+          },
           preventOverflow: {
             enabled: false
           }
