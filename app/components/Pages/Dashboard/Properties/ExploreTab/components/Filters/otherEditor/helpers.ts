@@ -1,8 +1,33 @@
-export function createYearArray(start = new Date().getFullYear(), end = 1990) {
-  return [
+export function createYearArray({
+  start = new Date().getFullYear(),
+  end = 1990,
+  min,
+  max
+}: {
+  start?: number
+  end?: number
+  length?: number
+  min?: Nullable<number>
+  max?: Nullable<number>
+}) {
+  if (min && max) {
+    throw new Error('You cant have both min and max')
+  }
+
+  const rawArray = [
     null,
     ...Array.from({ length: (end - start) / -1 + 1 }, (_, i) => start + i * -1)
   ]
+
+  if (min) {
+    return rawArray.filter(item => item === null || item > min)
+  }
+
+  if (max) {
+    return rawArray.filter(item => item === null || item < max)
+  }
+
+  return rawArray
 }
 
 export function filterGroupChangesCount<T>(

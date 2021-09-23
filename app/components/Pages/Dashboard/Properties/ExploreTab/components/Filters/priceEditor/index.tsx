@@ -40,8 +40,7 @@ export const PriceEditor = ({
           <Autocomplete
             size="small"
             value={filters.minimum_price}
-            // TODO: should consider the selected maximum price
-            options={createPriceArray()}
+            options={createPriceArray({ max: filters.maximum_price })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('minimum_price', newValue)
             }
@@ -62,8 +61,7 @@ export const PriceEditor = ({
           <Autocomplete
             size="small"
             value={filters.maximum_price}
-            // TODO: should consider the selected minimum price
-            options={createPriceArray()}
+            options={createPriceArray({ min: filters.minimum_price })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('maximum_price', newValue)
             }

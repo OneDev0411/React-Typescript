@@ -30,8 +30,7 @@ export const YearBuiltGroup = ({
           <Autocomplete
             size="small"
             value={filters.minimum_year_built}
-            // TODO: should consider the selected maximum year
-            options={createYearArray()}
+            options={createYearArray({ max: filters.maximum_year_built })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('minimum_year_built', newValue)
             }
@@ -48,8 +47,7 @@ export const YearBuiltGroup = ({
           <Autocomplete
             size="small"
             value={filters.maximum_year_built}
-            // TODO: should consider the selected minumum year
-            options={createYearArray()}
+            options={createYearArray({ min: filters.minimum_year_built })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('maximum_year_built', newValue)
             }

@@ -39,8 +39,7 @@ export const BedsEditor = ({
           <Autocomplete
             size="small"
             value={filters.minimum_bedrooms}
-            // TODO: should consider the selected maximum
-            options={createBedArray()}
+            options={createBedArray({ max: filters.maximum_bedrooms })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('minimum_bedrooms', newValue)
             }
@@ -59,8 +58,7 @@ export const BedsEditor = ({
           <Autocomplete
             size="small"
             value={filters.maximum_bedrooms}
-            // TODO: should consider the selected minimum
-            options={createBedArray()}
+            options={createBedArray({ min: filters.minimum_bedrooms })}
             onChange={(e: any, newValue: Nullable<number>) =>
               handleChange('maximum_bedrooms', newValue)
             }
