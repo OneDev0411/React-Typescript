@@ -40,7 +40,10 @@ export function getUTCStartOfCurrentDayTimestamp(): number {
 }
 
 export function fromNowWithTimezone(date: Date, isAllDay: boolean): string {
-  const event = moment.tz(date, 'US/Central')
+  const event = moment.tz(
+    date,
+    Intl.DateTimeFormat().resolvedOptions().timeZone
+  )
 
   if (isAllDay) {
     // Rechat's "All day" events are set to occure at 00:00:00.
