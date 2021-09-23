@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Dialog,
@@ -11,6 +11,8 @@ import {
   Typography,
   Radio,
   RadioGroup,
+  Select,
+  MenuItem,
   FormControlLabel,
   Button,
   Divider,
@@ -252,6 +254,23 @@ export function DefaultValues({ formId }: Props) {
                     multiline={annotation.multiLine}
                     onChange={e => setInputValue(e.target.value)}
                   />
+                )}
+
+                {Types.COMBOBOX_ANNOTATION === annotationType && (
+                  <Select
+                    fullWidth
+                    label="Default Value"
+                    value={inputValue}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setInputValue(e.target.value)
+                    }
+                  >
+                    {annotation.options?.map((option, index) => (
+                      <MenuItem key={index} value={option.exportValue}>
+                        {option.displayValue}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 )}
 
                 {[Types.CHECKBOX_ANNOTATION, Types.RADIO_ANNOTATION].includes(

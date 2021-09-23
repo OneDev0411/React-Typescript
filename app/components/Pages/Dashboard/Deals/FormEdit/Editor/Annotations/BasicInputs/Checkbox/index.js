@@ -15,7 +15,7 @@ export default React.memo(props => {
   const { annotation } = props
   const { rect } = annotation
 
-  const appearance = parseAppearanceString(annotation.defaultAppearance)
+  const appearance = parseAppearanceString(annotation.defaultAppearanceData)
 
   const box = {
     left: rect[0],

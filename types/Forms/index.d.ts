@@ -35,6 +35,10 @@ declare interface IFormAnnotation {
   textAlignment: Nullable<string>
   subtype: string
   attributes: string[]
+  options: {
+    exportValue: string
+    displayValue: string
+  }[]
 }
 
 declare interface IFormTemplateValue extends IModel<'form_template'> {

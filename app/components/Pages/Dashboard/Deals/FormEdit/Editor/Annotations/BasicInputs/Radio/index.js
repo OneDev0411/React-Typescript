@@ -6,7 +6,7 @@ import { RadioInput } from './styled'
 
 export default React.memo(props => {
   const { annotation } = props
-  const appearance = parseAppearanceString(annotation.defaultAppearance)
+  const appearance = parseAppearanceString(annotation.defaultAppearanceData)
   const rect = annotation.rect
   const [fieldName, fieldId] = annotation.fieldName.split('.')
   const defaultChecked = annotation.fieldValue === annotation.buttonValue

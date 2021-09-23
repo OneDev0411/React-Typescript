@@ -454,6 +454,8 @@ class Builder extends React.Component {
     this.lockIn()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
+    this.setupRTEMerge()
+    this.setupFixToolbarPosition()
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
@@ -700,6 +702,75 @@ class Builder extends React.Component {
     this.editor.on('component:selected', selected => {
       this.setTraits(selected)
     })
+  }
+
+  mergeRTEToolbarWithActionsToolbar = () => {
+    setTimeout(() => {
+      const richTextToolbar = this.editor.RichTextEditor.getToolbarEl()
+
+      if (!richTextToolbar) {
+        return
+      }
+
+      if (getComputedStyle(richTextToolbar).display === 'none') {
+        return
+      }
+
+      richTextToolbar.style.display = 'none'
+
+      const toolbar = document.querySelector('.gjs-toolbar')
+
+      if (toolbar) {
+        toolbar.appendChild(richTextToolbar)
+      }
+
+      richTextToolbar.style.display = 'flex'
+
+      setTimeout(this.resetToolbarPosition, 200)
+    }, 100)
+  }
+
+  setupRTEMerge = () => {
+    this.editor.on('rte:enable', () => {
+      this.mergeRTEToolbarWithActionsToolbar()
+    })
+
+    this.editor.on('component:drag:end', this.resetToolbarPosition)
+  }
+
+  resetToolbarPosition = () => {
+    const selected = this.editor.getSelected()
+
+    if (!selected) {
+      return
+    }
+
+    this.editor.selectRemove(selected)
+    this.editor.select(selected)
+  }
+
+  setupFixToolbarPosition = () => {
+    const iframe = this.editor.Canvas.getFrameEl()
+
+    if (!iframe || !iframe.contentDocument) {
+      return
+    }
+
+    let timeoutHandler
+
+    iframe.contentDocument.addEventListener(
+      'scroll',
+      () => {
+        if (timeoutHandler) {
+          clearTimeout(timeoutHandler)
+        }
+
+        timeoutHandler = setTimeout(this.resetToolbarPosition, 100)
+      },
+      {
+        passive: true
+      }
+    )
   }
 
   scrollSidebarToTopOnComponentSelect = () => {

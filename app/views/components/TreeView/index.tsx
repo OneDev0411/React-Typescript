@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { ReactNode, useCallback } from 'react'
+import { ReactNode, useCallback, useEffect, memo } from 'react'
 
 import { Typography } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
@@ -38,7 +37,7 @@ interface Props<NodeType> {
  * @param props
  * @constructor
  */
-export default React.memo(function TreeView<NodeType = any>({
+export default memo(function TreeView<NodeType = any>({
   getNodeId = (node => node.id) as any,
   getChildNodes = (node => node.children) as any,
   ...props
@@ -48,6 +47,14 @@ export default React.memo(function TreeView<NodeType = any>({
     props.onExpandedNodesChanged,
     props.initialExpandedNodes || []
   )
+
+  useEffect(() => {
+    if (props.initialExpandedNodes) {
+      setExpandedNodes(expandedNodes => {
+        return [...expandedNodes, ...(props.initialExpandedNodes || [])]
+      })
+    }
+  }, [props.initialExpandedNodes, setExpandedNodes])
 
   const toggleNode = useCallback(
     node => {
