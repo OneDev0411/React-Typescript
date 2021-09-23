@@ -31,7 +31,7 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(0.5)
     },
     menu: {
-      zIndex: theme.zIndex.modal
+      zIndex: theme.zIndex.modal - 1
     },
     buttonGroup: {
       margin: theme.spacing(2)
@@ -109,8 +109,15 @@ export function SortDropdown({ onChangeSort, activeSort }: Props) {
         open={open}
         anchorEl={anchorRef.current}
         transition
-        disablePortal
         placement="bottom-end"
+        modifiers={{
+          flip: {
+            enabled: false
+          },
+          preventOverflow: {
+            enabled: false
+          }
+        }}
       >
         <Paper>
           <ClickAwayListener onClickAway={handleClose}>

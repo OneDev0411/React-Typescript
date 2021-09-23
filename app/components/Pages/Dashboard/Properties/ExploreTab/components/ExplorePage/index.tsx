@@ -103,6 +103,7 @@ const useStyles = makeStyles(
       position: 'absolute',
       bottom: 20,
       right: 0,
+      zIndex: theme.zIndex.modal - 3,
       // The width of app sidebar is 192px
       // TODO: probably need to be changed if sidebar is changed
       width: 'calc(100% - 192px)'
