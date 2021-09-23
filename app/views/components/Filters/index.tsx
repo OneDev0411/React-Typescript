@@ -29,8 +29,6 @@ export function Filters<T>({
   resultsCount,
   onChange
 }: Props<T>) {
-  console.log('[ R ] <Filters>')
-
   const [state, dispatch] = useReducer(reducer, {
     ...systemDefaultFilters,
     ...userFilters

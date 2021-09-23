@@ -52,3 +52,18 @@ export function filterGroupChangesCount<T>(
 
   return count
 }
+
+export const preventNonNumbricOnKeyDown = (
+  e: React.KeyboardEvent<HTMLInputElement>
+) => {
+  const key = e.key
+
+  if (
+    !(e.metaKey || e.ctrlKey) &&
+    key.length === 1 &&
+    Number.isNaN(parseInt(key, 10)) &&
+    e.key !== 'Backspace'
+  ) {
+    e.preventDefault()
+  }
+}
