@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import useSafeDispatch from '@app/hooks/use-safe-dispatch'
 import {
@@ -41,24 +41,29 @@ export function useSearchYouTube(): UseSearchYouTube {
     }
   }, [safeSetIsReady, isReady])
 
-  const searchYouTube = (value: string) => {
-    return new Promise<GoogleApiYouTubeSearchResource[]>((resolve, reject) => {
-      if (!isReady) {
-        resolve([])
+  const searchYouTube = useCallback(
+    (value: string) => {
+      return new Promise<GoogleApiYouTubeSearchResource[]>(
+        (resolve, reject) => {
+          if (!isReady) {
+            resolve([])
 
-        return
-      }
+            return
+          }
 
-      gapi.client.youtube.search
-        .list({
-          part: ['snippet'],
-          type: ['video'],
-          maxResults: 15,
-          q: value
-        })
-        .then(response => resolve(response.result.items ?? []), reject)
-    })
-  }
+          gapi.client.youtube.search
+            .list({
+              part: ['snippet'],
+              type: ['video'],
+              maxResults: 15,
+              q: value
+            })
+            .then(response => resolve(response.result.items ?? []), reject)
+        }
+      )
+    },
+    [isReady]
+  )
 
   return { isYouTubeReady: isReady, searchYouTube }
 }

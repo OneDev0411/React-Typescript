@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 
 import { Button, Box, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
@@ -37,6 +37,9 @@ interface SearchVideoDrawerProps {
   onSelect: (video: VideoInfo) => void
 }
 
+const INITIAL_SEARCH_TERM = 'architectural digest'
+const SEARCH_TERM_STORAGE_KEY = 'searchVideoDrawer_initialSearchTerm'
+
 function SearchVideoDrawer({
   isOpen,
   model,
@@ -47,36 +50,46 @@ function SearchVideoDrawer({
   const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const {
     data: result,
-    setData: setResult,
     isLoading,
     run
   } = useAsync<SearchVideoResult[]>({ data: [] })
   const { isYouTubeReady, searchYouTube } = useSearchYouTube()
 
-  const handleClose = () => {
-    setVideo(null)
-    onClose()
-  }
+  const searchVideos = useCallback(
+    (value: string) => {
+      const searchTerm = value.trim()
 
-  const searchVideos = (value: string) => {
-    if (!value.trim()) {
-      return
+      if (!searchTerm) {
+        return
+      }
+
+      localStorage.setItem(SEARCH_TERM_STORAGE_KEY, searchTerm)
+
+      run(async () => {
+        const videos = await searchYouTube(searchTerm)
+
+        return videos.map<SearchVideoResult>(video => ({
+          type: 'youtube',
+          thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
+          title: video.snippet?.title ?? '',
+          url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
+          channelURL: `https://www.youtube.com/channel/${video.id?.channelId}`,
+          channelTitle: video.snippet?.channelTitle ?? '',
+          publishedAt: video.snippet?.publishedAt ?? ''
+        }))
+      })
+    },
+    [run, searchYouTube]
+  )
+
+  // Load initial videos using the initial term
+  useEffect(() => {
+    if (isYouTubeReady) {
+      searchVideos(
+        localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || INITIAL_SEARCH_TERM
+      )
     }
-
-    run(async () => {
-      const videos = await searchYouTube(value)
-
-      return videos.map<SearchVideoResult>(video => ({
-        type: 'youtube',
-        thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
-        title: video.snippet?.title ?? '',
-        url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
-        channelURL: `https://www.youtube.com/channel/${video.id?.channelId}`,
-        channelTitle: video.snippet?.channelTitle ?? '',
-        publishedAt: video.snippet?.publishedAt ?? ''
-      }))
-    })
-  }
+  }, [isYouTubeReady, searchVideos])
 
   const [debouncedSearchVideos] = useDebouncedCallback(searchVideos, 500)
 
@@ -97,7 +110,11 @@ function SearchVideoDrawer({
     onSelect(videoInfo)
     model?.trigger('change:video:info', videoInfo)
     setVideo(null)
-    setResult([])
+  }
+
+  const handleClose = () => {
+    setVideo(null)
+    onClose()
   }
 
   return (
