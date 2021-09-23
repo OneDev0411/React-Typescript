@@ -13,8 +13,7 @@ export const BathsButton = ({
   const classes = useStyles()
 
   const isActive =
-    filters.minimum_bathrooms !== defaultFilters.minimum_bathrooms ||
-    filters.maximum_bathrooms !== defaultFilters.maximum_bathrooms
+    filters.minimum_bathrooms !== defaultFilters.minimum_bathrooms
 
   return (
     <Button
@@ -25,11 +24,7 @@ export const BathsButton = ({
       size="medium"
       startIcon={<BathtubOutlinedIcon fontSize="small" />}
     >
-      {isActive ? (
-        <>{filters.maximum_bathrooms || filters.minimum_bathrooms}</>
-      ) : (
-        <>Baths</>
-      )}
+      {isActive ? <>{filters.minimum_bathrooms}+</> : <>Baths</>}
     </Button>
   )
 }
