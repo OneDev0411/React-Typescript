@@ -11,9 +11,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { isToday, isTomorrow } from 'date-fns'
 import { useSelector } from 'react-redux'
-import timeago from 'timeago.js'
 
 import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
 import { getTitle } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/get-title'
@@ -22,6 +20,7 @@ import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import { selectUser } from 'selectors/user'
+import { fromNowWithTimezone } from 'utils/date-utils'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
@@ -72,13 +71,11 @@ export default function CalendarEventListItem({ event }: Props) {
     event.people[0].type === 'contact'
       ? event.people[0]
       : null
+
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
   const eventTime = new Date(event.next_occurence)
-  const humanizedEventTime = isToday(eventTime)
-    ? 'Today'
-    : isTomorrow(eventTime)
-    ? 'Tomorrow'
-    : timeago().format(eventTime)
+
+  const humanizedEventTime = fromNowWithTimezone(eventTime, event.all_day)
 
   // Build avatars
   if (contact && contact.profile_image_url) {

@@ -1,4 +1,5 @@
 import { differenceInSeconds, startOfDay } from 'date-fns'
+import moment from 'moment-timezone'
 
 export function getWeekdayName(date: Date = new Date()): Weekday {
   return date.toLocaleDateString('en-US', {
@@ -36,4 +37,33 @@ export function getUTCStartOfCurrentDayTimestamp(): number {
     0,
     0
   )
+}
+
+export function fromNowWithTimezone(date: Date, isAllDay: boolean): string {
+  let event
+
+  event = moment.tz(date, 'US/Central')
+
+  if (isAllDay) {
+    // Rechat's "All day" events are set to occure at 00:00:00.
+    // This makes date comparison libraries to go nuts when calculating
+    // today, tomorrow. By setting the event at 8am same day everything
+    // works perfectly fine.
+    event.add(8, 'hours')
+  }
+
+  const fromNow = moment(event).fromNow()
+
+  return moment(event).calendar(null, {
+    // when the date is closer, specify custom values
+    lastWeek: '[Last] dddd',
+    lastDay: '[Yesterday]',
+    sameDay: '[Today]',
+    nextDay: '[Tomorrow]',
+    nextWeek: `[${fromNow}]`,
+    // when the date is further away, use from-now functionality
+    sameElse() {
+      return `[${fromNow}]`
+    }
+  })
 }
