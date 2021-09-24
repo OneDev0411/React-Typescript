@@ -1,6 +1,6 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
-import { Button, Box, makeStyles } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
 import useDebouncedCallback from 'use-debounce/lib/callback'
 
@@ -15,18 +15,18 @@ import { SearchVideoResult, VideoInfo } from './types'
 import { useSearchYouTube } from './useSearchYouTube'
 
 const useStyles = makeStyles(
-  {
+  theme => ({
     body: {
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
-      padding: 0
+      padding: theme.spacing(0, 0, 2, 0)
     },
     result: {
       overflowX: 'hidden',
       overflowY: 'auto'
     }
-  },
+  }),
   { name: 'SearchVideoDrawer' }
 )
 
@@ -47,7 +47,6 @@ function SearchVideoDrawer({
   onSelect
 }: SearchVideoDrawerProps) {
   const classes = useStyles()
-  const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const {
     data: result,
     isLoading,
@@ -97,11 +96,7 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => debouncedSearchVideos(target.value)
 
-  const handleClick = () => {
-    if (!video) {
-      return
-    }
-
+  const handleSelect = (video: SearchVideoResult) => {
     const videoInfo: VideoInfo = {
       url: video.url,
       thumbnail: video.thumbnail
@@ -109,16 +104,10 @@ function SearchVideoDrawer({
 
     onSelect(videoInfo)
     model?.trigger('change:video:info', videoInfo)
-    setVideo(null)
-  }
-
-  const handleClose = () => {
-    setVideo(null)
-    onClose()
   }
 
   return (
-    <OverlayDrawer open={isOpen} onClose={handleClose}>
+    <OverlayDrawer open={isOpen} onClose={onClose}>
       <OverlayDrawer.Header title="Search for Youtube videos" />
       <OverlayDrawer.Body className={classes.body}>
         {isYouTubeReady && (
@@ -136,24 +125,10 @@ function SearchVideoDrawer({
           {isLoading || !isYouTubeReady ? (
             <LoadingContainer />
           ) : (
-            <SearchVideoResults
-              videos={result}
-              selected={video}
-              onSelect={setVideo}
-            />
+            <SearchVideoResults videos={result} onSelect={handleSelect} />
           )}
         </Box>
       </OverlayDrawer.Body>
-      <OverlayDrawer.Footer rowReverse>
-        <Button
-          disabled={isLoading || !video}
-          color="primary"
-          variant="contained"
-          onClick={handleClick}
-        >
-          Insert Video
-        </Button>
-      </OverlayDrawer.Footer>
     </OverlayDrawer>
   )
 }

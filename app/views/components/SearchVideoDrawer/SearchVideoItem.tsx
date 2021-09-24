@@ -15,11 +15,6 @@ const useStyles = makeStyles(
     root: {
       display: 'block',
       width: '100%',
-      border: `4px solid ${theme.palette.background.paper}`,
-      transition: theme.transitions.create([
-        'border-color',
-        'background-color'
-      ]),
       borderRadius: theme.spacing(0.5),
       '&:hover': { backgroundColor: theme.palette.grey[200] }
     },
@@ -33,12 +28,7 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: 0,
       left: 0,
-      objectFit: 'cover',
-      border: `1px solid ${theme.palette.grey[300]}`
-    },
-    selected: {
-      borderColor: theme.palette.primary.main,
-      backgroundColor: theme.palette.grey[100]
+      objectFit: 'cover'
     },
     detail: {
       margin: theme.spacing(1),
@@ -53,26 +43,17 @@ const useStyles = makeStyles(
 
 interface SearchVideoItemProps extends ButtonBaseProps {
   video: SearchVideoResult
-  selected: boolean
 }
 
 function SearchVideoItem({
   video,
-  selected,
   className,
   ...otherProps
 }: SearchVideoItemProps) {
   const classes = useStyles()
 
   return (
-    <ButtonBase
-      {...otherProps}
-      className={classNames(
-        classes.root,
-        selected && classes.selected,
-        className
-      )}
-    >
+    <ButtonBase {...otherProps} className={classNames(classes.root, className)}>
       <div className={classes.holder}>
         <img
           className={classes.thumbnail}
