@@ -1,9 +1,10 @@
+// TODO: refactor this function to make it more generic
 export function createPriceArray({
-  length = 15,
+  propertyType,
   min,
   max
 }: {
-  length?: number
+  propertyType?: IPropertyType
   min?: Nullable<number>
   max?: Nullable<number>
 }) {
@@ -11,9 +12,13 @@ export function createPriceArray({
     throw new Error('You cant have both min and max')
   }
 
-  const rawArray = [
+  const ARR_FREQ_LENGTH_OTHER = 14
+  const ARR_FREQ_LENGTH_LEASE = 17
+
+  let rawArray = [
     null,
-    ...Array.from({ length }, (_, i) => 25000 * (i + 1)),
+    ...Array.from({ length: ARR_FREQ_LENGTH_OTHER }, (_, i) => 25000 * (i + 1)),
+    500000,
     800000,
     1000000,
     1500000,
@@ -22,6 +27,24 @@ export function createPriceArray({
     3000000,
     5000000
   ]
+
+  if (propertyType === 'Residential Lease') {
+    rawArray = [
+      null,
+      ...Array.from(
+        { length: ARR_FREQ_LENGTH_LEASE },
+        (_, i) => 150 + 50 * (i + 1)
+      ),
+      1250,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      5000
+    ]
+  }
 
   if (min) {
     return rawArray.filter(item => item === null || item > min)
