@@ -235,10 +235,12 @@ export const getListingFormatedPrice = (
   const price = getListingPrice(listing, user)
 
   if (isShortFormat) {
-    return numeral(price).format('0.[00]a')
+    const roundedPrice = Math.round(price / 1000) * 1000
+
+    return numeral(roundedPrice).format('0.[00]a')
   }
 
-  return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  return price.toLocaleString('en-US', { maximumFractionDigits: 1 })
 }
 
 export const getListingPricePerSquareFoot = (
