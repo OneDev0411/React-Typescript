@@ -10,8 +10,10 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
 
+import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, VideoInfo } from './types'
+import { useSearchVimeo } from './useSearchVimeo'
 import { useSearchYouTube } from './useSearchYouTube'
 
 const useStyles = makeStyles(
@@ -52,7 +54,8 @@ function SearchVideoDrawer({
     isLoading,
     run
   } = useAsync<SearchVideoResult[]>({ data: [] })
-  const { isYouTubeReady, searchYouTube } = useSearchYouTube()
+  const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
+  const { safeSearchVimeo } = useSearchVimeo()
 
   const searchVideos = useCallback(
     (value: string) => {
@@ -62,33 +65,49 @@ function SearchVideoDrawer({
         return
       }
 
-      localStorage.setItem(SEARCH_TERM_STORAGE_KEY, searchTerm)
-
       run(async () => {
-        const videos = await searchYouTube(searchTerm)
+        // Send both request at the same time and wait for the results
+        const [youtubeVideos, vimeoVideos] = await Promise.all([
+          safeSearchYouTube(searchTerm),
+          safeSearchVimeo(searchTerm)
+        ])
 
-        return videos.map<SearchVideoResult>(video => ({
-          type: 'youtube',
-          thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
-          title: video.snippet?.title ?? '',
-          url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
-          channelURL: `https://www.youtube.com/channel/${video.id?.channelId}`,
-          channelTitle: video.snippet?.channelTitle ?? '',
-          publishedAt: video.snippet?.publishedAt ?? ''
-        }))
+        const results = [
+          ...youtubeVideos.map<SearchVideoResult>(video => ({
+            thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
+            title: video.snippet?.title ?? '',
+            url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
+            publisher: video.snippet?.channelTitle ?? '',
+            publishedAt: video.snippet?.publishedAt ?? ''
+          })),
+          ...vimeoVideos.map<SearchVideoResult>(video => ({
+            thumbnail: video.thumbnail_url,
+            title: video.title,
+            url: `https://vimeo.com${video.uri}`,
+            publisher: video.author_name,
+            publishedAt: video.upload_date
+          }))
+        ]
+
+        // Update the search term if there is any result
+        if (results.length > 0) {
+          localStorage.setItem(SEARCH_TERM_STORAGE_KEY, searchTerm)
+        }
+
+        return results
       })
     },
-    [run, searchYouTube]
+    [run, safeSearchYouTube, safeSearchVimeo]
   )
 
   // Load initial videos using the initial term
   useEffect(() => {
-    if (isYouTubeReady) {
+    if (isYouTubeReady && isOpen) {
       searchVideos(
         localStorage.getItem(SEARCH_TERM_STORAGE_KEY) || INITIAL_SEARCH_TERM
       )
     }
-  }, [isYouTubeReady, searchVideos])
+  }, [isYouTubeReady, searchVideos, isOpen])
 
   const [debouncedSearchVideos] = useDebouncedCallback(searchVideos, 500)
 
@@ -106,6 +125,9 @@ function SearchVideoDrawer({
     model?.trigger('change:video:info', videoInfo)
   }
 
+  const isLoadingState = isLoading || !isYouTubeReady
+  const isEmptyState = !isLoadingState && result.length === 0
+
   return (
     <OverlayDrawer open={isOpen} onClose={onClose}>
       <OverlayDrawer.Header title="Search for Youtube videos" />
@@ -122,8 +144,10 @@ function SearchVideoDrawer({
           </Box>
         )}
         <Box flex={1} className={classes.result} px={3}>
-          {isLoading || !isYouTubeReady ? (
+          {isLoadingState ? (
             <LoadingContainer />
+          ) : isEmptyState ? (
+            <SearchVideoEmptyState />
           ) : (
             <SearchVideoResults videos={result} onSelect={handleSelect} />
           )}

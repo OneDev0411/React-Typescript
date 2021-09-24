@@ -35,7 +35,7 @@ const useStyles = makeStyles(
       textAlign: 'left'
     },
     title: {},
-    channelTitle: { color: theme.palette.grey[600] },
+    publisher: { color: theme.palette.grey[600] },
     date: { color: theme.palette.grey[500] }
   }),
   { name: 'SearchVideoItem' }
@@ -65,26 +65,22 @@ function SearchVideoItem({
         <Typography className={classes.title} variant="body2" noWrap>
           {video.title}
         </Typography>
-        {video.type === 'youtube' && (
-          <>
-            <Typography
-              className={classes.channelTitle}
-              variant="caption"
-              noWrap
-              component="div"
-            >
-              {video.channelTitle}
-            </Typography>
-            <Typography
-              className={classes.date}
-              variant="caption"
-              noWrap
-              component="div"
-            >
-              <RelativeTime time={video.publishedAt} />
-            </Typography>
-          </>
-        )}
+        <Typography
+          className={classes.publisher}
+          variant="caption"
+          noWrap
+          component="div"
+        >
+          {video.publisher}
+        </Typography>
+        <Typography
+          className={classes.date}
+          variant="caption"
+          noWrap
+          component="div"
+        >
+          <RelativeTime time={video.publishedAt} />
+        </Typography>
       </div>
     </ButtonBase>
   )
