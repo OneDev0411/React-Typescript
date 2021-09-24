@@ -31,8 +31,12 @@ const useStyles = makeStyles(
       marginLeft: theme.spacing(0.5)
     },
     menu: {
-      zIndex: theme.zIndex.modal - 1
+      zIndex: theme.zIndex.modal - 1,
+      '& ul:focus': {
+        outline: 'none'
+      }
     },
+
     buttonGroup: {
       margin: theme.spacing(2)
     },
