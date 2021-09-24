@@ -32,11 +32,11 @@ export const PriceButton = ({
           {`${
             filters.minimum_price
               ? ConvertPriceShortFormat(filters.minimum_price)
-              : 'any'
+              : 'Any'
           } - ${
             filters.maximum_price
               ? ConvertPriceShortFormat(filters.maximum_price)
-              : 'any'
+              : 'Any'
           }`}
         </>
       ) : (

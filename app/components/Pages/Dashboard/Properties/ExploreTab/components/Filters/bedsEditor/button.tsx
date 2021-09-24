@@ -27,8 +27,8 @@ export const BedsButton = ({
     >
       {isActive ? (
         <>
-          {`${filters.minimum_bedrooms || 'any'} - ${
-            filters.maximum_bedrooms || 'any'
+          {`${filters.minimum_bedrooms || 'Any'} - ${
+            filters.maximum_bedrooms || 'Any'
           }`}
         </>
       ) : (
