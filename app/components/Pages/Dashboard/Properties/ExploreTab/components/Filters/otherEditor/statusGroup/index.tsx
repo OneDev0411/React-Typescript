@@ -134,30 +134,57 @@ export const StatusGroup = ({
 
   return (
     <EditorGroup>
-      <FormControlLabel
-        classes={{
-          root: classes.switchControlLabel
-        }}
-        control={
-          <Switch
-            checked={statusValue('Sold')}
-            className={classes.switchControlButton}
-            color="primary"
-            name="Sold"
-            onChange={handleValueChange}
-            inputProps={{ 'aria-label': 'sold checkbox' }}
-          />
-        }
-        label={
-          <Grid container alignItems="center">
-            <CircleIcon
-              className={classes.switchIcon}
-              style={{ color: getStatusColorClass('Sold') }}
+      {filters.property_types[0] === 'Residential Lease' ? (
+        <FormControlLabel
+          classes={{
+            root: classes.switchControlLabel
+          }}
+          control={
+            <Switch
+              checked={statusValue('Leased')}
+              className={classes.switchControlButton}
+              color="primary"
+              name="Leased"
+              onChange={handleValueChange}
+              inputProps={{ 'aria-label': 'Leased checkbox' }}
             />
-            <Typography variant="body1">{STATUSES.sold}</Typography>
-          </Grid>
-        }
-      />
+          }
+          label={
+            <Grid container alignItems="center">
+              <CircleIcon
+                className={classes.switchIcon}
+                style={{ color: getStatusColorClass('Leased') }}
+              />
+              <Typography variant="body1">{STATUSES.leased}</Typography>
+            </Grid>
+          }
+        />
+      ) : (
+        <FormControlLabel
+          classes={{
+            root: classes.switchControlLabel
+          }}
+          control={
+            <Switch
+              checked={statusValue('Sold')}
+              className={classes.switchControlButton}
+              color="primary"
+              name="Sold"
+              onChange={handleValueChange}
+              inputProps={{ 'aria-label': 'sold checkbox' }}
+            />
+          }
+          label={
+            <Grid container alignItems="center">
+              <CircleIcon
+                className={classes.switchIcon}
+                style={{ color: getStatusColorClass('Sold') }}
+              />
+              <Typography variant="body1">{STATUSES.sold}</Typography>
+            </Grid>
+          }
+        />
+      )}
       <FormControlLabel
         classes={{
           root: classes.switchControlLabel

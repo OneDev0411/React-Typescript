@@ -35,6 +35,7 @@ export const mapInitialState = {
 
 // Filters constants
 export const STATUSES = {
+  leased: 'Leased Listings',
   sold: 'Sold',
   active: 'Active',
   pending: 'Pending',
