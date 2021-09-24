@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useDebounce } from 'react-use'
+import { useDebounce, useEffectOnce } from 'react-use'
 
 import { SCHOOL_TYPES } from '@app/components/Pages/Dashboard/Properties/constants/constants'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
@@ -101,6 +101,12 @@ export const SchoolsDistrictsGroup = ({
       })
       .finally(() => setLoadingSchools(false))
   }
+
+  useEffectOnce(() => {
+    if (filters.school_districts) {
+      searchSchools(filters.school_districts)
+    }
+  })
 
   return (
     <EditorGroup title="School District">
