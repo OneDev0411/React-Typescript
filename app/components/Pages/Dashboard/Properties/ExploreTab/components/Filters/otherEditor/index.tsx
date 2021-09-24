@@ -100,7 +100,9 @@ export const OtherEditor = ({
         <SubdivisionGroup {...otherEditorProps} />
         <SchoolsDistrictsGroup {...otherEditorProps} />
         <SquareFootageGroup {...otherEditorProps} />
-        <LotSizeGroup {...otherEditorProps} />
+        {filters.property_types[0] !== 'Residential Lease' && (
+          <LotSizeGroup {...otherEditorProps} />
+        )}
         <YearBuiltGroup {...otherEditorProps} />
         <PoolGroup {...otherEditorProps} />
       </Grid>
