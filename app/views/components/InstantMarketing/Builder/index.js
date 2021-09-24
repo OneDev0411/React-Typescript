@@ -497,7 +497,7 @@ class Builder extends React.Component {
         }
       },
       video: {
-        onDrop: this.openVideoDrawer
+        onDrop: this.openSearchVideoDrawer
       },
       article: {
         onDrop: () => {
@@ -599,8 +599,8 @@ class Builder extends React.Component {
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
       onCarouselDoubleClick: this.openCarouselDrawer,
-      onVideoDoubleClick: this.openVideoDrawer,
-      onEmptyVideoClick: this.openVideoDrawer
+      onVideoDoubleClick: this.openSearchVideoDrawer,
+      onEmptyVideoClick: this.openSearchVideoDrawer
     }
 
     const templateBlockOptions = await getTemplateBlockOptions(
@@ -658,7 +658,7 @@ class Builder extends React.Component {
     this.setState({ mapToEdit: model })
   }
 
-  openVideoDrawer = model => {
+  openSearchVideoDrawer = model => {
     this.setState({ videoToEdit: model })
   }
 
@@ -1367,7 +1367,6 @@ class Builder extends React.Component {
               }}
             />
           )}
-          {/* TODO: Rather VideoDrawer use SearchVideoDrawer for testing purposes */}
           <SearchVideoDrawer
             isOpen={!!this.state.videoToEdit}
             model={this.state.videoToEdit}
@@ -1380,18 +1379,6 @@ class Builder extends React.Component {
               this.setState({ videoToEdit: null })
             }}
           />
-          {/* <VideoDrawer
-            isOpen={!!this.state.videoToEdit}
-            video={this.state.videoToEdit}
-            onClose={() => {
-              this.blocks.video.selectHandler()
-              this.setState({ videoToEdit: null })
-            }}
-            onSelect={video => {
-              this.blocks.video.selectHandler(video)
-              this.setState({ videoToEdit: null })
-            }}
-          /> */}
           <ArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {

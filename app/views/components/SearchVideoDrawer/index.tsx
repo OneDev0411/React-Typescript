@@ -12,7 +12,7 @@ import LoadingContainer from '../LoadingContainer'
 
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
-import { SearchVideoResult, VideoInfo } from './types'
+import { SearchVideoResult, Video } from './types'
 import { useSearchVimeo } from './useSearchVimeo'
 import { useSearchYouTube } from './useSearchYouTube'
 
@@ -36,7 +36,7 @@ interface SearchVideoDrawerProps {
   isOpen: boolean
   model: Nullable<Model>
   onClose: () => void
-  onSelect: (video: VideoInfo) => void
+  onSelect: (video: Video) => void
 }
 
 const INITIAL_SEARCH_TERM = 'architectural digest'
@@ -116,7 +116,7 @@ function SearchVideoDrawer({
   }: React.ChangeEvent<HTMLInputElement>) => debouncedSearchVideos(target.value)
 
   const handleSelect = (video: SearchVideoResult) => {
-    const videoInfo: VideoInfo = {
+    const videoInfo: Video = {
       url: video.url,
       thumbnail: video.thumbnail
     }

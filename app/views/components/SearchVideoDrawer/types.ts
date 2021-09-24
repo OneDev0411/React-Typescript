@@ -1,5 +1,3 @@
-import { Video } from '../VideoDrawer/types'
-
 export interface SearchVideoResult {
   url: string
   title: string
@@ -11,7 +9,10 @@ export interface SearchVideoResult {
 export type YouTubeVideoResource = gapi.client.youtube.SearchResult
 
 // TODO: move this type to a global scope and sue it on both this component and VideoDrawer
-export type VideoInfo = Video
+export interface Video {
+  url: string
+  thumbnail?: string
+}
 
 // https://developer.vimeo.com/api/oembed/videos#embedding-a-video-with-oembed
 export interface VimeoVideoResource {
