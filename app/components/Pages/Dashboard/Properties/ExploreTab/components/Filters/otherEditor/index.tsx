@@ -94,17 +94,29 @@ export const OtherEditor = ({
         <StatusGroup {...otherEditorProps} />
         <OpenHouseGroup {...otherEditorProps} />
         <PropertySubtypesGroup {...otherEditorProps} />
-        <HomeStyleGroup {...otherEditorProps} />
+        {filters.property_types[0] !== 'Lots & Acreage' && (
+          <HomeStyleGroup {...otherEditorProps} />
+        )}
         <MlsAreaGroup {...otherEditorProps} />
         <ParkingGroup {...otherEditorProps} />
         <SubdivisionGroup {...otherEditorProps} />
         <SchoolsDistrictsGroup {...otherEditorProps} />
-        <SquareFootageGroup {...otherEditorProps} />
-        {filters.property_types[0] !== 'Residential Lease' && (
-          <LotSizeGroup {...otherEditorProps} />
+
+        {!['Multi-Family', 'Lots & Acreage'].includes(
+          filters.property_types[0]
+        ) && <SquareFootageGroup {...otherEditorProps} />}
+
+        {!['Multi-Family', 'Residential Lease'].includes(
+          filters.property_types[0]
+        ) && <LotSizeGroup {...otherEditorProps} />}
+
+        {filters.property_types[0] !== 'Lots & Acreage' && (
+          <YearBuiltGroup {...otherEditorProps} />
         )}
-        <YearBuiltGroup {...otherEditorProps} />
-        <PoolGroup {...otherEditorProps} />
+
+        {filters.property_types[0] !== 'Lots & Acreage' && (
+          <PoolGroup {...otherEditorProps} />
+        )}
       </Grid>
       <FilterEditorFooter
         resultCount={resultsCount}
