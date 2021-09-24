@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 
-import { Box, Grid, makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import MyLocationIcon from '@material-ui/icons/MyLocation'
 import cn from 'classnames'
@@ -55,11 +55,21 @@ const useStyles = makeStyles(
       overflow: 'hidden'
     },
     searchBar: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(4),
+      paddingBottom: theme.spacing(3),
       display: 'flex',
       alignItems: 'center',
+      flexWrap: 'wrap',
       justifyContent: 'space-between'
+    },
+    searchBarSearchItem: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1)
+    },
+    searchBarFilterItem: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: 'auto',
+      alignItems: 'stretch'
     },
     main: {
       flexGrow: 1,
@@ -229,19 +239,24 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   return (
     <>
-      <Box className={classes.container}>
+      <Grid className={classes.container}>
         <Header title="Properties" />
         <Tabs user={user} isWidget={isWidget} />
-        <Box className={classes.searchBar}>
-          <Autocomplete isMapView={mapIsShown} onSelectPlace={onSelectPlace} />
-          <Box>
+        <Grid className={classes.searchBar}>
+          <Grid className={classes.searchBarSearchItem}>
+            <Autocomplete
+              isMapView={mapIsShown}
+              onSelectPlace={onSelectPlace}
+            />
+          </Grid>
+          <Grid className={classes.searchBarFilterItem}>
             <Filters />
             <SaveSearchButton
               isLoading={state.isLoading}
               onClick={handleSaveSearch}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
         <Grid container className={classes.main}>
           {mapIsInitialized && (
@@ -252,7 +267,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                 [classes.hidden]: !mapIsShown
               })}
             >
-              <Box className={classes.mapCanvas}>
+              <Grid className={classes.mapCanvas}>
                 {!drawingMode && (
                   <>
                     <GoogleMapsButton
@@ -303,7 +318,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   drawingModeCallBack={onDoneDrawing}
                   onChange={updateUserLocation}
                 />
-              </Box>
+              </Grid>
             </Grid>
           )}
           <Grid item className={classes.results}>
@@ -318,10 +333,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
             />
           </Grid>
         </Grid>
-      </Box>
-      <Box className={classes.selectionActionBar}>
+      </Grid>
+      <Grid className={classes.selectionActionBar}>
         <ShareListings />
-      </Box>
+      </Grid>
       <CreateAlertModal
         user={user}
         onHide={onCloseAlertModal}
