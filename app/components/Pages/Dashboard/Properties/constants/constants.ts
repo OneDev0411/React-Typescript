@@ -214,7 +214,7 @@ export const ARCHITECTURAL_STYLES: Record<string, IArchitecturalStyle> = {
   ranch: 'Ranch',
   spanish: 'Spanish',
   aFrame: 'A-Frame',
-  midCentry_modern: 'Mid-Centry Modern',
+  midCentury_modern: 'Mid-Century Modern',
   prairie: 'Prairie',
   studio_apartment: 'Studio Apartment',
   contemporary: 'Contemporary/Modern',

@@ -36,7 +36,7 @@ declare type IArchitecturalStyle =
   | 'Ranch'
   | 'Spanish'
   | 'A-Frame'
-  | 'Mid-Centry Modern'
+  | 'Mid-Century Modern'
   | 'Prairie'
   | 'Studio Apartment'
   | 'Contemporary/Modern'
