@@ -10,6 +10,7 @@ interface Props {
   renderButton: ({ onClick }: RenderButton) => React.ReactNode
   renderDropdown: () => React.ReactNode
   popoverProps?: Omit<PopoverProps, 'open' | 'id' | 'anchorEl' | 'onClose'>
+  className?: string
 }
 
 export type FilterButtonDropDownProp<T> = {
@@ -25,7 +26,12 @@ export type FilterButtonToggler<T> = {
   defaultFilters: T
 }
 
-function FilterButton({ renderButton, renderDropdown, popoverProps }: Props) {
+function FilterButton({
+  renderButton,
+  renderDropdown,
+  popoverProps,
+  className
+}: Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,6 +51,7 @@ function FilterButton({ renderButton, renderDropdown, popoverProps }: Props) {
       <Popover
         id={id}
         open={open}
+        className={className}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{

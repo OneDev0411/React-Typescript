@@ -151,6 +151,7 @@ export const Filters = () => {
 
               {/* Other Filter  */}
               <FilterButton
+                className="u-scrollbar--thinner"
                 renderButton={({ onClick }) => (
                   <OtherButton
                     filters={currentFilters}
