@@ -56,7 +56,7 @@ export const MlsAreaGroup = ({
 
         if (filters.mls_areas && filters.mls_areas.length > 0) {
           const prevSelectedMlsSubAreasNumber = filters.mls_areas.map(
-            (item: [number, number]) => item[0]
+            (item: [number, number]) => item[1]
           )
           const prevSelectedMlsSubAreas = subareas.filter(item =>
             prevSelectedMlsSubAreasNumber.includes(item.number)
