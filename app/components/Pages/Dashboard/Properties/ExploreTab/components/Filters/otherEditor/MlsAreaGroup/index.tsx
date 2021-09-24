@@ -32,6 +32,17 @@ export const MlsAreaGroup = ({
       .getMlsAreas()
       .then(areas => {
         setMlsAreas(areas)
+
+        if (filters.mls_areas && filters.mls_areas.length > 0) {
+          const prevSelectedMLSAreasNumber = filters.mls_areas.map(
+            (item: [number, number]) => item[0]
+          )
+          const prevSelectedMLSAreas = areas.filter(item =>
+            prevSelectedMLSAreasNumber.includes(item.number)
+          )
+
+          setSelectedMlsAreas(prevSelectedMLSAreas)
+        }
       })
       .finally(() => setLoadingMlsAreas(false))
   }
@@ -42,6 +53,17 @@ export const MlsAreaGroup = ({
       .getMlsSubAreas(areasNumber)
       .then(subareas => {
         setMlsSubAreas(subareas)
+
+        if (filters.mls_areas && filters.mls_areas.length > 0) {
+          const prevSelectedMlsSubAreasNumber = filters.mls_areas.map(
+            (item: [number, number]) => item[0]
+          )
+          const prevSelectedMlsSubAreas = subareas.filter(item =>
+            prevSelectedMlsSubAreasNumber.includes(item.number)
+          )
+
+          setSelectedMlsSubAreas(prevSelectedMlsSubAreas)
+        }
       })
       .finally(() => setLoadingMlsSubAreas(false))
   }
@@ -76,7 +98,7 @@ export const MlsAreaGroup = ({
   useEffectOnce(() => {
     getMlsAreaList()
 
-    if (filters.mls_areas) {
+    if (filters.mls_areas && filters.mls_areas.length > 0) {
       getMlsSubAreaList(
         filters.mls_areas.map((item: [number, number]) => item[0])
       )
