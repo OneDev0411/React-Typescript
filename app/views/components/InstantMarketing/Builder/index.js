@@ -735,9 +735,7 @@ class Builder extends React.Component {
       this.mergeRTEToolbarWithActionsToolbar()
     })
 
-    this.editor.on('component:drag:end', () => {
-      this.mergeRTEToolbarWithActionsToolbar()
-    })
+    this.editor.on('component:drag:end', this.resetToolbarPosition)
   }
 
   resetToolbarPosition = () => {
@@ -752,13 +750,6 @@ class Builder extends React.Component {
   }
 
   setupFixToolbarPosition = () => {
-    this.editor.on('component:drag:end', () => {
-      setTimeout(this.resetToolbarPosition, 200)
-    })
-
-    this.editor.on('undo', this.resetToolbarPosition)
-    this.editor.on('redo', this.resetToolbarPosition)
-
     const iframe = this.editor.Canvas.getFrameEl()
 
     if (!iframe || !iframe.contentDocument) {
