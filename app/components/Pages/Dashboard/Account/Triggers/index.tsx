@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react'
+import { useCallback } from 'react'
 
 import {
   CircularProgress,
@@ -13,7 +13,6 @@ import useAsync from '@app/hooks/use-async'
 import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
-import { ActivateButtons } from './components/ActivateButtons'
 import { TriggerItems } from './components/Items'
 
 const useStyles = makeStyles(
@@ -40,16 +39,11 @@ export default function Triggers() {
     [brandId, run]
   )
 
-  const activeTriggers = useMemo(
-    () => (triggers || []).map(trigger => trigger.event_type),
-    [triggers]
-  )
-
   useEffectOnce(() => {
     loadTriggers()
   })
 
-  const renderContent = () => {
+  const renderTriggers = () => {
     if (isLoading) {
       return (
         <div className={classes.loading}>
@@ -58,15 +52,7 @@ export default function Triggers() {
       )
     }
 
-    return (
-      <>
-        <ActivateButtons
-          activeTriggers={activeTriggers}
-          onActive={loadTriggers}
-        />
-        <TriggerItems list={triggers} />
-      </>
-    )
+    return <TriggerItems list={triggers} onSetupCallback={loadTriggers} />
   }
 
   return (
@@ -79,7 +65,7 @@ export default function Triggers() {
         anniversaries. It is possible to opt out contacts or change the template
         in their profile.
       </Typography>
-      {renderContent()}
+      {renderTriggers()}
     </>
   )
 }

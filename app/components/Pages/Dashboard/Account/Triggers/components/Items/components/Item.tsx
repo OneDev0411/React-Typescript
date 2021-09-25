@@ -41,7 +41,7 @@ const useStyles = makeStyles(
     templatePreviewContainer: {
       padding: theme.spacing(1),
       position: 'relative',
-      maxWidth: '195px', // From figma
+      maxWidth: '200px', // From figma
       background: theme.palette.common.white,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderRadius: theme.shape.borderRadius,
