@@ -32,8 +32,10 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(1.5)
     },
     switchState: {
-      margin: theme.spacing(0),
-      paddingBottom: theme.spacing(0.5)
+      marginLeft: theme.spacing(-0.5)
+    },
+    waitFor: {
+      margin: theme.spacing(0.5, 0, 1)
     },
     cover: {
       cursor: 'pointer'
@@ -52,9 +54,6 @@ const useStyles = makeStyles(
       maxWidth: '100%',
       border: `1px solid ${theme.palette.action.disabledBackground}`,
       borderRadius: theme.shape.borderRadius
-    },
-    subject: {
-      display: 'block'
     },
     disabled: {
       opacity: 0.5,
@@ -146,9 +145,23 @@ export function Item({ trigger: triggerProp }: Props) {
               name="event_type"
             />
           }
-          label={getAttributeName(trigger.event_type)}
+          label={
+            <Typography variant="body2">
+              {getAttributeName(trigger.event_type)}
+            </Typography>
+          }
           className={classes.switchState}
         />
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className={classes.waitFor}
+        >
+          Send{' '}
+          {triggerWaitFor == 0
+            ? 'on the same day'
+            : `${pluralize('day', triggerWaitFor, true)} earlier`}
+        </Typography>
         <div
           className={cn(classes.cover, {
             [classes.disabled]: !isEnable || isLoading
@@ -164,26 +177,6 @@ export function Item({ trigger: triggerProp }: Props) {
               />
             )}
           </div>
-          <Typography variant="caption" color="textSecondary">
-            Email Subject
-          </Typography>
-          <Typography
-            variant="body1"
-            color="textPrimary"
-            className={classes.subject}
-          >
-            {trigger.subject}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            className={classes.subject}
-          >
-            Send{' '}
-            {triggerWaitFor == 0
-              ? 'on the same day'
-              : `${pluralize('day', triggerWaitFor, true)} earlier`}
-          </Typography>
         </div>
       </div>
       <EditMode
