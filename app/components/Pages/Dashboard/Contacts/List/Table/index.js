@@ -194,6 +194,7 @@ const ContactsList = props => {
     <>
       <Table
         rows={props.data}
+        virtualize={false}
         totalRows={props.totalRows}
         loading={getLoading()}
         columns={columns}

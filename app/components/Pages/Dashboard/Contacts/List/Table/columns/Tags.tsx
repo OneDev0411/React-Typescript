@@ -1,13 +1,13 @@
-import React, { useState, memo } from 'react'
+import { useState, useMemo, memo } from 'react'
 
-import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
+import { Box, Tooltip, Chip, makeStyles } from '@material-ui/core'
 
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
 import { getContact } from 'models/contacts/get-contact'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
+const useStyles = makeStyles(
+  theme => ({
     container: {
       maxWidth: '100%',
       display: 'inline-flex',
@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme =>
       maxWidth: '100%',
       marginRight: theme.spacing(0.25)
     }
-  })
+  }),
+  { name: 'ContactListTagsString' }
 )
 
 interface Props {
@@ -43,7 +44,12 @@ const TagsString = ({
 }: Props) => {
   const classes = useStyles()
   const [contact, setContact] = useState<IContact>(contactProp)
-  const tags = contact?.tags || []
+
+  const memoizedContact = useMemo(() => contact || [], [contact])
+  const tags = useMemo(
+    () => memoizedContact?.tags || [],
+    [memoizedContact?.tags]
+  )
 
   const tagsCount = tags.length
   const showingTags: string[] = []
@@ -66,7 +72,7 @@ const TagsString = ({
         return reloadContacts()
       }
 
-      const response = await getContact(contact.id, {
+      const response = await getContact(memoizedContact.id, {
         associations: []
       })
 
@@ -79,7 +85,7 @@ const TagsString = ({
   return (
     <PopoverContactTagSelector
       showManageTags
-      label={`${contact.display_name}'s Tag`}
+      label={`${memoizedContact.display_name}'s Tag`}
       anchorRenderer={onClick => (
         <Tooltip title="Click to edit">
           <Box
@@ -117,7 +123,7 @@ const TagsString = ({
       )}
       value={currentTags}
       filter={{
-        selectedIds: [contact.id]
+        selectedIds: [memoizedContact.id]
       }}
       callback={handleChangeTag}
     />
