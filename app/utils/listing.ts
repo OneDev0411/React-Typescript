@@ -215,24 +215,26 @@ export const getListingFeatures = (
 }
 
 export const getListingPrice = (
-  listing: ICompactListing | IListing,
+  listingPrice: number,
+  listingClosePrice: Nullable<number>,
   user: Nullable<IUser>
 ): number => {
-  let price = listing.price
+  let price = listingPrice
 
-  if (user && listing.close_price && user.user_type === 'Agent') {
-    price = listing.close_price
+  if (user && listingClosePrice && user.user_type === 'Agent') {
+    price = listingClosePrice
   }
 
   return price || 0
 }
 
 export const getListingFormatedPrice = (
-  listing: ICompactListing | IListing,
+  listingPrice: number,
+  listingClosePrice: Nullable<number>,
   user: Nullable<IUser>,
   isShortFormat: boolean = true
 ): string => {
-  const price = getListingPrice(listing, user)
+  const price = getListingPrice(listingPrice, listingClosePrice, user)
 
   if (isShortFormat) {
     const roundedPrice = Math.round(price / 1000) * 1000
@@ -248,7 +250,7 @@ export const getListingPricePerSquareFoot = (
   user: Nullable<IUser>,
   fallback: Nullable<string> = null
 ): Nullable<string> => {
-  const price = getListingPrice(listing, user)
+  const price = getListingPrice(listing.price, listing.close_price, user)
   const squareMeters =
     listing.type === 'compact_listing'
       ? listing.compact_property.square_meters

@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 import { Chip, Grid, makeStyles, Typography } from '@material-ui/core'
 import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
 import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined'
@@ -79,26 +81,40 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  listing: ICompactListing
+  price: number
+  closePrice: Nullable<number>
+  squareMeters: number
+  status: IListingStatus
+  address: ICompactAddress
+  bathroomCount: Nullable<number>
+  bedroomCount: Nullable<number>
+  coverImageUrl: string
   onClick?: () => void
 }
 
-const MarkerPopup = ({ listing, onClick = noop }: Props) => {
+const MarkerPopup = ({
+  status,
+  price,
+  closePrice,
+  address,
+  squareMeters,
+  bathroomCount,
+  bedroomCount,
+  coverImageUrl,
+  onClick = noop
+}: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
 
-  const statusColor = getStatusColorClass(listing.status)
-  const price = getListingFormatedPrice(listing, user, false)
-  const squareFeet = Math.floor(
-    metersToFeet(listing.compact_property.square_meters)
-  ).toLocaleString()
-  const address = addressTitle(listing.address)
-  const bathCount = listing.compact_property.bathroom_count ?? 0
-  const bedroomCount = listing.compact_property.bedroom_count ?? 0
-  const coverImageURL = listing.cover_image_url
-    ? `${getResizeUrl(listing.cover_image_url)}?w=160`
+  const statusColor = getStatusColorClass(status)
+  const listingPrice = getListingFormatedPrice(price, closePrice, user, false)
+  const squareFeet = Math.floor(metersToFeet(squareMeters)).toLocaleString()
+  const fullAddress = addressTitle(address)
+  const baths = bathroomCount ?? 0
+  const bedrooms = bedroomCount ?? 0
+  const coverImageURL = coverImageUrl
+    ? `${getResizeUrl(coverImageUrl)}?w=160`
     : PLACEHOLDER_IMAGE
-  const status = listing.status
 
   return (
     <div
@@ -114,7 +130,7 @@ const MarkerPopup = ({ listing, onClick = noop }: Props) => {
       <div className={classes.info}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="subtitle1" className={classes.price}>
-            ${price}
+            ${listingPrice}
           </Typography>
           <Chip
             size="small"
@@ -126,10 +142,10 @@ const MarkerPopup = ({ listing, onClick = noop }: Props) => {
 
         <Grid className={classes.details} container>
           <Grid className={classes.detailItem} item>
-            <KingBedOutlinedIcon className={classes.icon} /> {bedroomCount}
+            <KingBedOutlinedIcon className={classes.icon} /> {bedrooms}
           </Grid>
           <Grid className={classes.detailItem} item>
-            <BathtubOutlinedIcon className={classes.icon} /> {bathCount}
+            <BathtubOutlinedIcon className={classes.icon} /> {baths}
           </Grid>
           <Grid className={classes.detailItem} item>
             <FullscreenOutlinedIcon className={classes.icon} /> {squareFeet} ft
@@ -138,11 +154,11 @@ const MarkerPopup = ({ listing, onClick = noop }: Props) => {
         </Grid>
 
         <Typography variant="body2" className={classes.address}>
-          <RoomOutlinedIcon className={classes.addressIcon} /> {address}
+          <RoomOutlinedIcon className={classes.addressIcon} /> {fullAddress}
         </Typography>
       </div>
     </div>
   )
 }
 
-export default MarkerPopup
+export default memo(MarkerPopup)

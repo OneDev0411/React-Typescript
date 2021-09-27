@@ -86,20 +86,35 @@ interface Props {
   lng?: number
   hover?: boolean
   clicked?: boolean
-  listing: ICompactListing
+  id: UUID
+  price: number
+  closePrice: Nullable<number>
+  squareMeters: number
+  status: IListingStatus
+  address: ICompactAddress
+  bathroomCount: Nullable<number>
+  bedroomCount: Nullable<number>
+  coverImageUrl: string
   zoom?: number
-  onClick?: () => void
+  onClick?: (id: UUID) => void
 }
 
 const Marker = ({
   lat,
   lng,
-  listing,
+  id,
+  status,
+  price,
+  closePrice,
+  address,
+  squareMeters,
+  bathroomCount,
+  bedroomCount,
+  coverImageUrl,
   hover,
   clicked,
   onClick = noop,
-  zoom = MINIMAL_MARKER_ZOOM_LEVEL,
-  ...rest
+  zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -109,8 +124,8 @@ const Marker = ({
     return null
   }
 
-  const formatedPrice = getListingFormatedPrice(listing, user, true)
-  const statusColor = getStatusColorClass(listing.status)
+  const formatedPrice = getListingFormatedPrice(price, closePrice, user, true)
+  const statusColor = getStatusColorClass(status)
 
   const isShowBubble = zoom >= MINIMAL_MARKER_ZOOM_LEVEL
 
@@ -119,7 +134,7 @@ const Marker = ({
     <>
       <div
         ref={markerRef}
-        aria-describedby={listing.id}
+        aria-describedby={id}
         className={cn({
           [classes.bubble]: isShowBubble,
           [classes.dot]: !isShowBubble,
@@ -132,12 +147,22 @@ const Marker = ({
       </div>
       {(hover || clicked) && isShowBubble && (
         <Popper
-          id={listing.id}
+          id={id}
           open
           anchorEl={markerRef.current}
           className={classes.popover}
         >
-          <MarkerPopup onClick={onClick} listing={listing} />
+          <MarkerPopup
+            onClick={() => onClick(id)}
+            status={status}
+            price={price}
+            closePrice={closePrice}
+            address={address}
+            squareMeters={squareMeters}
+            bathroomCount={bathroomCount}
+            bedroomCount={bedroomCount}
+            coverImageUrl={coverImageUrl}
+          />
         </Popper>
       )}
     </>
