@@ -39,12 +39,12 @@ export const LotSizeGroup = ({
 
   const maxError =
     filters.maximum_lot_square_meters && filters.minimum_lot_square_meters
-      ? filters.maximum_lot_square_meters < filters.minimum_lot_square_meters
+      ? filters.maximum_lot_square_meters <= filters.minimum_lot_square_meters
       : false
 
   const minError =
     filters.maximum_lot_square_meters && filters.minimum_lot_square_meters
-      ? filters.minimum_lot_square_meters > filters.maximum_lot_square_meters
+      ? filters.minimum_lot_square_meters >= filters.maximum_lot_square_meters
       : false
 
   useDebounce(

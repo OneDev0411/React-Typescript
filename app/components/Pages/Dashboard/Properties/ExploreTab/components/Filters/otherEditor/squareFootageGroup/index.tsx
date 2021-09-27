@@ -39,12 +39,12 @@ export const SquareFootageGroup = ({
 
   const maxError =
     filters.maximum_square_meters && filters.minimum_square_meters
-      ? filters.maximum_square_meters < filters.minimum_square_meters
+      ? filters.maximum_square_meters <= filters.minimum_square_meters
       : false
 
   const minError =
     filters.maximum_square_meters && filters.minimum_square_meters
-      ? filters.minimum_square_meters > filters.maximum_square_meters
+      ? filters.minimum_square_meters >= filters.maximum_square_meters
       : false
 
   useDebounce(
