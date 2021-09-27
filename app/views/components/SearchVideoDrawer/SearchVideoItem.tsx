@@ -1,11 +1,13 @@
-import {
-  ButtonBase,
-  ButtonBaseProps,
-  Typography,
-  makeStyles
-} from '@material-ui/core'
+import { MouseEvent } from 'react'
+
+import { Typography, makeStyles } from '@material-ui/core'
+import { mdiOpenInNew } from '@mdi/js'
 import classNames from 'classnames'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import LinkIconButton from '../LinkIconButton'
 import { RelativeTime } from '../RelativeTime'
 
 import { SearchVideoResult } from './types'
@@ -16,6 +18,7 @@ const useStyles = makeStyles(
       display: 'block',
       width: '100%',
       borderRadius: theme.spacing(0.5),
+      cursor: 'pointer',
       '&:hover': { backgroundColor: theme.palette.grey[200] }
     },
     holder: {
@@ -31,29 +34,39 @@ const useStyles = makeStyles(
       objectFit: 'cover'
     },
     detail: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1, 1, 0, 1),
       textAlign: 'left'
     },
     title: {},
     publisher: { color: theme.palette.grey[600] },
-    date: { color: theme.palette.grey[500] }
+    date: { color: theme.palette.grey[500] },
+    view: {
+      color: theme.palette.grey[500],
+      '&:hover, &:focus': { color: theme.palette.primary.main }
+    },
+    actions: {
+      padding: theme.spacing(0, 1, 1, 1),
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
   }),
   { name: 'SearchVideoItem' }
 )
 
-interface SearchVideoItemProps extends ButtonBaseProps {
+interface SearchVideoItemProps {
+  className?: string
   video: SearchVideoResult
+  onClick: () => void
 }
 
-function SearchVideoItem({
-  video,
-  className,
-  ...otherProps
-}: SearchVideoItemProps) {
+function SearchVideoItem({ video, className, onClick }: SearchVideoItemProps) {
   const classes = useStyles()
 
+  const handleViewClick = (event: MouseEvent) => event.stopPropagation()
+
   return (
-    <ButtonBase {...otherProps} className={classNames(classes.root, className)}>
+    <div className={classNames(classes.root, className)} onClick={onClick}>
       <div className={classes.holder}>
         <img
           className={classes.thumbnail}
@@ -73,6 +86,8 @@ function SearchVideoItem({
         >
           {video.publisher}
         </Typography>
+      </div>
+      <div className={classes.actions}>
         <Typography
           className={classes.date}
           variant="caption"
@@ -81,8 +96,18 @@ function SearchVideoItem({
         >
           <RelativeTime time={video.publishedAt} />
         </Typography>
+        <LinkIconButton
+          size="small"
+          color="inherit"
+          className={classes.view}
+          to={video.url}
+          target="_blank"
+          onClick={handleViewClick}
+        >
+          <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
+        </LinkIconButton>
       </div>
-    </ButtonBase>
+    </div>
   )
 }
 
