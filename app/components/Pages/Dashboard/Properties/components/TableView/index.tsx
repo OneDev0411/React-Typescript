@@ -71,7 +71,12 @@ const primaryColumns: TableColumnItem[] = [
     header: 'Price',
     id: 'price',
     render: (listing, user) =>
-      `$${getListingFormatedPrice(listing, user, false)}`
+      `$${getListingFormatedPrice(
+        listing.price,
+        listing.close_price,
+        user,
+        false
+      )}`
   },
   {
     header: 'Beds',
