@@ -28,7 +28,9 @@ const CreateAlertModal = ({
   hideShareAlertModal,
   successModalIsActive,
   activeShareAlertModal,
-  shareAlertModalIsActive
+  shareAlertModalIsActive,
+  searchOptions,
+  drawingPoints
 }) => (
   <div>
     <Modal
@@ -87,6 +89,8 @@ const CreateAlertModal = ({
       isActive={successModalIsActive}
     />
     <ShareAlertModal
+      searchOptions={searchOptions}
+      drawingPoints={drawingPoints}
       alertTitle={alertTitle}
       onHide={hideShareAlertModal}
       isActive={shareAlertModalIsActive}

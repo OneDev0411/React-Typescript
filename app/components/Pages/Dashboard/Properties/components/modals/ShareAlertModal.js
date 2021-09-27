@@ -65,10 +65,8 @@ const ShareAlertModal = ({
 
 export default compose(
   connect(
-    ({ user, search }) => ({
-      user,
-      searchOptions: search.options,
-      drawingPoints: search.map.drawing.points
+    ({ user }) => ({
+      user
     }),
     { createRoom, createAlert }
   ),
@@ -91,7 +89,6 @@ export default compose(
       }) =>
       () => {
         setIsSharing(true)
-
         createRoom(recipients).then(room => {
           const alertOptions = normalizeAlertOptions(
             searchOptions,
