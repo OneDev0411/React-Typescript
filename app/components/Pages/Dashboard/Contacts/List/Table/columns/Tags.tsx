@@ -1,7 +1,9 @@
-import { useState, useMemo, memo } from 'react'
+import { useMemo, memo } from 'react'
 
 import { Box, Tooltip, Chip, makeStyles } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
 import { getContact } from 'models/contacts/get-contact'
@@ -37,19 +39,15 @@ interface Props {
 }
 
 const TagsString = ({
-  contact: contactProp,
+  contact,
   hasAttributeFilters,
   isParkTabActive,
   reloadContacts
 }: Props) => {
   const classes = useStyles()
-  const [contact, setContact] = useState<IContact>(contactProp)
+  const dispatch = useDispatch()
 
-  const memoizedContact = useMemo(() => contact || [], [contact])
-  const tags = useMemo(
-    () => memoizedContact?.tags || [],
-    [memoizedContact?.tags]
-  )
+  const tags = useMemo(() => contact?.tags || [], [contact?.tags])
 
   const tagsCount = tags.length
   const showingTags: string[] = []
@@ -72,11 +70,12 @@ const TagsString = ({
         return reloadContacts()
       }
 
-      const response = await getContact(memoizedContact.id, {
+      const response = await getContact(contact.id, {
         associations: []
       })
+      const newTags = response.data?.tags ?? []
 
-      setContact(response.data)
+      dispatch(updateContactTags(contact.id, newTags))
     } catch (error) {
       console.error(error)
     }
@@ -85,7 +84,7 @@ const TagsString = ({
   return (
     <PopoverContactTagSelector
       showManageTags
-      label={`${memoizedContact.display_name}'s Tag`}
+      label={`${contact.display_name}'s Tag`}
       anchorRenderer={onClick => (
         <Tooltip title="Click to edit">
           <Box
@@ -123,7 +122,7 @@ const TagsString = ({
       )}
       value={currentTags}
       filter={{
-        selectedIds: [memoizedContact.id]
+        selectedIds: [contact.id]
       }}
       callback={handleChangeTag}
     />
