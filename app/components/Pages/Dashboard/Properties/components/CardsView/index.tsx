@@ -19,9 +19,15 @@ interface Props {
   listings: ICompactListing[]
   mapIsShown: boolean
   isWidget: boolean
+  isScroling?: boolean
 }
 
-export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
+export const CardsView = ({
+  listings,
+  mapIsShown,
+  isWidget,
+  isScroling = false
+}: Props) => {
   const { selections, toggleItem } = useListSelection()
   const [state, dispatch] = useListingsContext()
   const user = useSelector(selectUserUnsafe)
@@ -29,10 +35,14 @@ export const CardsView = ({ listings, mapIsShown, isWidget }: Props) => {
 
   const handleChangeHoverState = useCallback(
     (listingId: UUID, hover: boolean) => {
-      dispatch(changeListingHoverState(hover ? listingId : null))
+      // Turn off hover state immediately if hover is false
+      // Turn on hover state if is not scroling
+      if (!hover || !isScroling) {
+        dispatch(changeListingHoverState(hover ? listingId : null))
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [isScroling]
   )
 
   const handleToggleLike = useCallback(

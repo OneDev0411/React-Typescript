@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useMemo } from 'react'
 
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
+import { useScrolling } from 'react-use'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
@@ -89,6 +90,7 @@ export const Results = ({
   const [state] = useListingsContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
+  const isScroling = useScrolling(cardsContainerRef)
 
   const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
@@ -158,6 +160,7 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
+                  isScroling={isScroling}
                 />
               )}
               {viewType === 'table' && (

@@ -44,6 +44,7 @@ interface Props {
   listings: ICompactListing[]
   mapIsShown: boolean
   isWidget: boolean
+  isScroling?: boolean
 }
 
 const CELL_FALLBACK = '--'
@@ -124,7 +125,12 @@ const secondaryColumns: TableColumnItem[] = [
   }
 ]
 
-export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
+export const TableView = ({
+  listings,
+  mapIsShown,
+  isWidget,
+  isScroling = false
+}: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const { selections, toggleItem } = useListSelection()
@@ -156,7 +162,11 @@ export const TableView = ({ listings, mapIsShown, isWidget }: Props) => {
   )
 
   const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(hover ? listingId : null))
+    // Turn off hover state immediately if hover is false
+    // Turn on hover state if is not scroling
+    if (!hover || !isScroling) {
+      dispatch(changeListingHoverState(hover ? listingId : null))
+    }
   }
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
