@@ -130,7 +130,7 @@ function SearchVideoDrawer({
 
   return (
     <OverlayDrawer open={isOpen} onClose={onClose}>
-      <OverlayDrawer.Header title="Search for Youtube videos" />
+      <OverlayDrawer.Header title="Insert a Youtube/Vimeo video" />
       <OverlayDrawer.Body className={classes.body}>
         {isYouTubeReady && (
           <Box flex={0} px={3} py={2}>
