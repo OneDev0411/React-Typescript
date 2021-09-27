@@ -103,7 +103,7 @@ const Marker = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
-  const markerRef = useRef(null)
+  const markerRef = useRef<Nullable<HTMLDivElement>>(null)
 
   if (!lat || !lng) {
     return null
