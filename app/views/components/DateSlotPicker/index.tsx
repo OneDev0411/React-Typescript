@@ -9,8 +9,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import DayCard from './components/DayCard'
 
-SwiperCore.use([Navigation, A11y, Mousewheel])
-
 const useStyles = makeStyles(
   theme => ({
     slide: {
@@ -86,6 +84,7 @@ export default function DateSlotPicker({
   return (
     <div className={classes.container}>
       <Swiper
+        modules={[Navigation, A11y, Mousewheel]}
         freeMode
         mousewheel
         navigation={{
