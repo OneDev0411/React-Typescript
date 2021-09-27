@@ -317,6 +317,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   drawingMode={drawingMode}
                   drawingModeCallBack={onDoneDrawing}
                   onChange={updateUserLocation}
+                  mapIsShown={mapIsShown}
                 />
               </Grid>
             </Grid>

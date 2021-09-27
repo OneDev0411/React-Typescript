@@ -21,6 +21,7 @@ import useListingsContext from '../../hooks/useListingsContext'
 
 interface Props {
   isWidget: boolean
+  mapIsShown?: boolean
   drawingMode?: boolean
   drawingModeCallBack: (points: ICoord[]) => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
@@ -35,7 +36,8 @@ export const Map = ({
   isWidget,
   drawingMode = true,
   drawingModeCallBack,
-  onChange
+  onChange,
+  mapIsShown = true
 }: Props) => {
   const [state, dispatch] = useListingsContext()
   const mapIsLoaded = useRef<boolean>(false)
@@ -196,6 +198,7 @@ export const Map = ({
         style={{ height: '100%', width: '100%' }}
       >
         {!drawingMode &&
+          mapIsShown &&
           state.result.listings.map(listing => (
             <Marker
               hover={state.listingStates.hover === listing.id}
