@@ -40,6 +40,7 @@ export const PriceEditor = ({
           <Autocomplete
             size="small"
             value={filters.minimum_price}
+            classes={{ popper: 'u-scrollbar--thinner' }}
             options={createPriceArray({
               propertyType: filters.property_types[0],
               max: filters.maximum_price
@@ -64,6 +65,7 @@ export const PriceEditor = ({
           <Autocomplete
             size="small"
             value={filters.maximum_price}
+            classes={{ popper: 'u-scrollbar--thinner' }}
             options={createPriceArray({
               propertyType: filters.property_types[0],
               min: filters.minimum_price

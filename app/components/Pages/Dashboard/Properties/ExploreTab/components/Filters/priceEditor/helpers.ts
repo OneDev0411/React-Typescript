@@ -15,8 +15,7 @@ export function createPriceArray({
   const ARR_FREQ_LENGTH_OTHER = 14
   const ARR_FREQ_LENGTH_LEASE = 17
 
-  let rawArray = [
-    null,
+  let rawArray: (number | null)[] = [
     ...Array.from({ length: ARR_FREQ_LENGTH_OTHER }, (_, i) => 25000 * (i + 1)),
     500000,
     800000,
@@ -30,12 +29,10 @@ export function createPriceArray({
 
   if (propertyType === 'Residential Lease') {
     rawArray = [
-      null,
       ...Array.from(
         { length: ARR_FREQ_LENGTH_LEASE },
         (_, i) => 150 + 50 * (i + 1)
       ),
-      1250,
       1500,
       2000,
       2500,
@@ -46,12 +43,20 @@ export function createPriceArray({
     ]
   }
 
-  if (min) {
-    return rawArray.filter(item => item === null || item > min)
+  if (typeof min !== 'undefined') {
+    rawArray = [...rawArray, null]
+
+    if (min) {
+      return [...rawArray.filter(item => item === null || item > min)]
+    }
   }
 
-  if (max) {
-    return rawArray.filter(item => item === null || item < max)
+  if (typeof max !== 'undefined') {
+    rawArray = [null, ...rawArray]
+
+    if (max) {
+      return [...rawArray.filter(item => item === null || item < max)]
+    }
   }
 
   return rawArray
