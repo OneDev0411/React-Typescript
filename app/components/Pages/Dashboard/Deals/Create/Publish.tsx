@@ -28,6 +28,8 @@ import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 
+import { useGetOriginQueryParam } from '../hooks/use-get-origin-query-param'
+
 import { Header } from './components/Header'
 import { Context } from './context'
 import { DealAddress, PropertyAddress } from './form/DealAddress'
@@ -84,11 +86,13 @@ export default function Publish({ params }: Props) {
   const isStatusVisible =
     deal && showStatusQuestion(deal, brandChecklists, statusContextKey)
 
+  const originQueryParam = useGetOriginQueryParam()
+
   useEffect(() => {
     if (deal?.is_draft === false) {
-      goTo(`/dashboard/deals/${deal.id}`)
+      goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
     }
-  }, [deal])
+  }, [deal, originQueryParam])
 
   const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
@@ -261,7 +265,7 @@ export default function Publish({ params }: Props) {
         })
       )
 
-      goTo(`/dashboard/deals/${deal.id}`)
+      goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
     } catch (e) {
       console.log(e)
     } finally {
@@ -315,7 +319,9 @@ export default function Publish({ params }: Props) {
               </Button>
             </>
           }
-          onClose={() => goTo(`/dashboard/deals/${deal.id}`)}
+          onClose={() =>
+            goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
+          }
         />
 
         <Box className={classes.root}>
