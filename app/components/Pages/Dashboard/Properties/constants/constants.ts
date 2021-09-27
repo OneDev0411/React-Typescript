@@ -12,7 +12,7 @@ export const AUTOCOMPLETE_LISTINGS_ITEM_LIMIT = 4
 // Valert constanst
 export const SEARCH_DEBOUNCE_MS = 300
 export const PROPOSED_AGENT_ZOOM_LEVEL = 16
-export const PAGE_SIZE = 30
+export const PAGE_SIZE = 20
 
 // Map constants
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8

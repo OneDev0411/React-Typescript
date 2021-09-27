@@ -62,13 +62,16 @@ export const Map = ({
     setListingModalState({ id: '', isOpen: false })
   }
 
-  const openListingModal = (id: UUID) => {
-    if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/${id}`)
-    }
+  const openListingModal = useCallback(
+    (id: UUID) => {
+      if (!isWidget) {
+        window.history.pushState({}, '', `/dashboard/properties/${id}`)
+      }
 
-    setListingModalState({ id, isOpen: true })
-  }
+      setListingModalState({ id, isOpen: true })
+    },
+    [isWidget]
+  )
 
   const changeHoverState = (id: UUID, hover: boolean) => {
     dispatch(changeListingHoverState(hover ? id : null))
@@ -203,13 +206,19 @@ export const Map = ({
             <Marker
               hover={state.listingStates.hover === listing.id}
               clicked={state.listingStates.click === listing.id}
-              onClick={() => {
-                openListingModal(listing.id)
-              }}
+              onClick={openListingModal}
               key={listing.id}
               lat={listing.location?.latitude}
               lng={listing.location?.longitude}
-              listing={listing}
+              id={listing.id}
+              status={listing.status}
+              price={listing.price}
+              closePrice={listing.close_price}
+              address={listing.address}
+              squareMeters={listing.compact_property.square_meters}
+              bathroomCount={listing.compact_property.bathroom_count}
+              bedroomCount={listing.compact_property.bedroom_count}
+              coverImageUrl={listing.cover_image_url}
               zoom={state.map.zoom}
             />
           ))}

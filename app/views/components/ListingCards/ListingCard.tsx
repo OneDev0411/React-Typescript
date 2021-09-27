@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import {
   Card,
@@ -229,11 +229,14 @@ export default function ListingCard({
     !hideFeatures &&
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
-  const handleChangeHoverState = (id: UUID, hover: boolean) => {
-    if (typeof onChangeHoverState === 'function') {
-      onChangeHoverState(id, hover)
-    }
-  }
+  const handleChangeHoverState = useCallback(
+    (id: UUID, hover: boolean) => {
+      if (typeof onChangeHoverState === 'function') {
+        onChangeHoverState(id, hover)
+      }
+    },
+    [onChangeHoverState]
+  )
 
   const shouldHighlightCard = hover || clicked
 
@@ -251,7 +254,7 @@ export default function ListingCard({
       onClick={onClick}
     >
       <CardActionArea component="div">
-        <ListingCardMedia listing={listing}>
+        <ListingCardMedia imagesURL={listing.gallery_image_urls}>
           <Grid container justifyContent="space-between">
             <Grid item>
               <Grid container item>
