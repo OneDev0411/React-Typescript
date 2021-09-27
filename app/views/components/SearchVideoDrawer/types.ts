@@ -19,6 +19,6 @@ export interface VimeoVideoResource {
   author_name: string
   thumbnail_url: string
   title: string
-  uri: string
   upload_date: string
+  video_id: number
 }

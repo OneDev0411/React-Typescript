@@ -83,7 +83,7 @@ function SearchVideoDrawer({
           ...vimeoVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.thumbnail_url,
             title: video.title,
-            url: `https://vimeo.com${video.uri}`,
+            url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
             publishedAt: video.upload_date
           }))
