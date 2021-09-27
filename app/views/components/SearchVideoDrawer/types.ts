@@ -17,7 +17,7 @@ export interface Video {
 // https://developer.vimeo.com/api/oembed/videos#embedding-a-video-with-oembed
 export interface VimeoVideoResource {
   author_name: string
-  thumbnail_url: 'https://i.vimeocdn.com/video/506427660-2e93a42675715090a52de8e6645d592c5f58c1a7e388231d801072c9b2d9843d-d_295x166'
+  thumbnail_url: string
   title: string
   uri: string
   upload_date: string
