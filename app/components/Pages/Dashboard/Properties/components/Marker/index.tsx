@@ -1,6 +1,6 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Popper } from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
@@ -73,6 +73,9 @@ const useStyles = makeStyles(
       '&.clicked': {
         zIndex: 5
       }
+    },
+    popover: {
+      zIndex: theme.zIndex.modal
     }
   }),
   { name: 'Maker' }
@@ -100,6 +103,7 @@ const Marker = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
+  const markerRef = useRef(null)
 
   if (!lat || !lng) {
     return null
@@ -114,6 +118,8 @@ const Marker = ({
   return (
     <>
       <div
+        ref={markerRef}
+        aria-describedby={listing.id}
         className={cn({
           [classes.bubble]: isShowBubble,
           [classes.dot]: !isShowBubble,
@@ -123,10 +129,17 @@ const Marker = ({
         style={{ backgroundColor: statusColor }}
       >
         {isShowBubble && formatedPrice}
-        {(hover || clicked) && isShowBubble && (
-          <MarkerPopup onClick={onClick} listing={listing} />
-        )}
       </div>
+      {(hover || clicked) && isShowBubble && (
+        <Popper
+          id={listing.id}
+          open
+          anchorEl={markerRef.current}
+          className={classes.popover}
+        >
+          <MarkerPopup onClick={onClick} listing={listing} />
+        </Popper>
+      )}
     </>
   )
 }

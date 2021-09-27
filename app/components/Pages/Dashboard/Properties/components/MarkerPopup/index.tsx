@@ -21,16 +21,10 @@ const useStyles = makeStyles(
   theme => ({
     container: {
       cursor: 'pointer',
-      position: 'absolute',
-      bottom: 30,
-      left: '50%',
-      transform: 'translateX(-50%)',
       width: 230,
       backgroundColor: 'white',
       boxShadow: '0 2px 7px 1px rgba(0, 0, 0, 0.3)',
-      zIndex: theme.zIndex.modal,
-      borderRadius: 5,
-      overflow: 'hidden'
+      borderRadius: 5
     },
     image: {
       backgroundRepeat: 'none',
