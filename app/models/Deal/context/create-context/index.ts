@@ -5,7 +5,7 @@ import Fetch from '../../../../services/fetch'
  */
 
 export default async function createContext(
-  brand: UUID,
+  brand: Nullable<UUID>,
   data: Partial<IDealBrandContext> & {
     checklists: {
       checklist: UUID
@@ -13,6 +13,10 @@ export default async function createContext(
     }[]
   }
 ): Promise<IDealBrandContext> {
+  if (!brand) {
+    throw new Error('Can not edit context. brand is not provided')
+  }
+
   const newContext = {
     ...data,
     preffered_source: data.preffered_source ? 'MLS' : 'Provided',
