@@ -14,6 +14,7 @@ import {
 import cn from 'classnames'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
+import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
   metersToFeet,
@@ -25,6 +26,7 @@ import { useListSelection } from '@app/views/components/ListSelection/use-list-s
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { selectUserUnsafe } from 'selectors/user'
 
+import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants/constants'
 import { changeListingHoverState } from '../../ExploreTab/context/actions'
 import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
 
@@ -166,13 +168,22 @@ export const TableView = ({
     [isWidget]
   )
 
-  const handleChangeHoverState = (listingId: UUID, hover: boolean) => {
-    // Turn off hover state immediately if hover is false
-    // Turn on hover state if is not scroling
-    if (!hover || !isScroling) {
-      dispatch(changeListingHoverState(hover ? listingId : null))
-    }
-  }
+  const handleChangeHoverState = useCallback(
+    (listingId: UUID, hover: boolean) => {
+      // Turn off hover state immediately if hover is false
+      // Turn on hover state if is not scroling
+      if (!hover || !isScroling) {
+        dispatch(changeListingHoverState(hover ? listingId : null))
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isScroling]
+  )
+
+  const [changeHoverStateDebounced] = useDebouncedCallback(
+    handleChangeHoverState,
+    LISTING_HOVER_DEBOUNCE_TIME_MS
+  )
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
 
@@ -199,8 +210,10 @@ export const TableView = ({
               <TableRow
                 key={listing.id}
                 id={listing.id}
-                onMouseEnter={() => handleChangeHoverState(listing.id, true)}
-                onMouseLeave={() => handleChangeHoverState(listing.id, false)}
+                onMouseEnter={() => changeHoverStateDebounced(listing.id, true)}
+                onMouseLeave={() =>
+                  changeHoverStateDebounced(listing.id, false)
+                }
                 className={cn(classes.row, {
                   hover: state.listingStates.hover === listing.id,
                   selected: state.listingStates.click === listing.id

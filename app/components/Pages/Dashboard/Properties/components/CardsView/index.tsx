@@ -2,12 +2,14 @@ import { useCallback } from 'react'
 
 import { Grid, Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
+import { useDebouncedCallback } from 'use-debounce/lib'
 
 import useNotify from '@app/hooks/use-notify'
 import { useListSelection } from 'components/ListSelection/use-list-selection'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
+import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants/constants'
 import {
   changeListingHoverState,
   toggleListingFavoriteState
@@ -43,6 +45,11 @@ export const CardsView = ({
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [isScroling]
+  )
+
+  const [changeHoverStateDebounced] = useDebouncedCallback(
+    handleChangeHoverState,
+    LISTING_HOVER_DEBOUNCE_TIME_MS
   )
 
   const handleToggleLike = useCallback(
@@ -92,7 +99,7 @@ export const CardsView = ({
               listing={listing}
               hover={state.listingStates.hover === listing.id}
               clicked={state.listingStates.click === listing.id}
-              onChangeHoverState={handleChangeHoverState}
+              onChangeHoverState={changeHoverStateDebounced}
               reduxToggleFavorite={false} // TODO: remove this after refactoring fav/saved tab
               onToggleLike={sendApiRequest =>
                 handleToggleLike(listing, sendApiRequest)
