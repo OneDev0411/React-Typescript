@@ -1,6 +1,13 @@
 import { useState, useMemo } from 'react'
 
-import { Box, makeStyles, Theme, Button, Grid } from '@material-ui/core'
+import {
+  Box,
+  Typography,
+  makeStyles,
+  Theme,
+  Button,
+  Grid
+} from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
@@ -15,6 +22,7 @@ import { getActiveBrand } from 'utils/user-teams'
 interface Props {
   disabled?: boolean
   hasError?: boolean
+  error?: Nullable<string>
   templateType: IMarketingTemplateType[]
   currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
   currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
@@ -82,6 +90,7 @@ const useStyles = makeStyles(
 export const TemplateSelector = ({
   disabled = false,
   hasError = false,
+  error = null,
   templateType,
   currentBrandTemplate = null,
   currentTemplateInstance = null,
@@ -104,6 +113,8 @@ export const TemplateSelector = ({
     () => selectedBrandTemplate || selectedTemplateInstance,
     [selectedBrandTemplate, selectedTemplateInstance]
   )
+
+  console.log({ error })
 
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
@@ -279,6 +290,13 @@ export const TemplateSelector = ({
           {renderPreview()}
         </Box>
       </Box>
+      {error && (
+        <Box mt={0.5}>
+          <Typography variant="body2" color="error">
+            {error}
+          </Typography>
+        </Box>
+      )}
       {isTemplatePickerOpen && (
         <MarketingTemplateAndTemplateInstancePickerModal
           title="Select Template"

@@ -236,10 +236,22 @@ export function TriggerEditMode({
                 name="template"
                 control={control}
                 defaultValue={initialValue.template}
+                rules={{
+                  validate: (template: IGlobalTriggerFormData['template']) => {
+                    if (!template || !template.id) {
+                      return 'This field is required.'
+                    }
+                  }
+                }}
                 render={({ value, onChange }) => {
+                  // @ts-ignore
+                  const error: string | undefined = errors.template?.message
+
                   return (
                     <TemplateSelector
                       disabled={isSubmitting}
+                      hasError={!!error}
+                      error={error}
                       templateType={[templatesType]}
                       currentBrandTemplate={trigger?.template}
                       currentTemplateInstance={trigger?.template_instance}
