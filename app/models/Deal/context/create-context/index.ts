@@ -14,7 +14,7 @@ export default async function createContext(
   }
 ): Promise<IDealBrandContext> {
   if (!brand) {
-    throw new Error('Can not edit context. brand is not provided')
+    throw new Error('Can not create context. brand is not provided')
   }
 
   const newContext = {

@@ -10,7 +10,7 @@ export default async function deleteContext(
 ): Promise<boolean> {
   try {
     if (!brand) {
-      throw new Error('Can not edit context. brand is not provided')
+      throw new Error('Can not delete context. brand is not provided')
     }
 
     const response = await new Fetch().delete(
