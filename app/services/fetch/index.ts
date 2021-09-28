@@ -62,7 +62,7 @@ export default class Fetch {
     if (useProxy) {
       agent = endpoint.startsWith('/api/')
         ? SuperAgent[method](endpoint)
-        : SuperAgent.post('/api/proxifier')
+        : SuperAgent.post(`/api/proxy${endpoint}`)
             .set('X-Method', method)
             .set('X-Endpoint', endpoint)
     } else {

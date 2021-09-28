@@ -4,6 +4,10 @@ export default {
     background-color: rgb(243, 243, 243);
   }
 
+  body {
+    height: auto;
+  }
+
   .gjs-selected {
     outline-offset: 4px;
   }
