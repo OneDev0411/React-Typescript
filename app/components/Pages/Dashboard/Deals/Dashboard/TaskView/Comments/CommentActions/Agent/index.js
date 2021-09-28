@@ -38,7 +38,7 @@ class Agent extends React.Component {
       this.props.hasComment === false
 
     return (
-      <>
+      <div>
         <Tooltip title={this.props.hasComment ? '' : 'Notify office to Review'}>
           <Button
             color="secondary"
@@ -64,7 +64,7 @@ class Agent extends React.Component {
             {this.props.isSaving ? 'Processing...' : 'Cancel Notify'}
           </Button>
         )}
-      </>
+      </div>
     )
   }
 }
