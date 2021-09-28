@@ -20,7 +20,7 @@ import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import { selectUser } from 'selectors/user'
-import { fromNowWithTimezone } from 'utils/date-utils'
+import { fromNow, convertToCurrentYear } from 'utils/date-utils'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
@@ -50,6 +50,7 @@ export default function CalendarEventListItem({ event }: Props) {
   let Icon
   let eventSubTitle
   let eventTitleLink
+  let humanizedEventTime
   const eventTitle = getTitle(event)
 
   const classes = useStyles()
@@ -73,9 +74,15 @@ export default function CalendarEventListItem({ event }: Props) {
       : null
 
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
-  const eventTime = new Date(event.next_occurence)
+  const eventTime = new Date(event.timestamp * 1000)
 
-  const humanizedEventTime = fromNowWithTimezone(eventTime, event.all_day)
+  if (event.recurring && event.all_day) {
+    // More info on why we do this read:
+    // https://gitlab.com/rechat/web/-/issues/5581#note_689114258
+    humanizedEventTime = fromNow(convertToCurrentYear(eventTime), true)
+  } else {
+    humanizedEventTime = fromNow(eventTime, false)
+  }
 
   // Build avatars
   if (contact && contact.profile_image_url) {

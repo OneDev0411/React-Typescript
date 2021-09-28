@@ -39,7 +39,7 @@ export function getUTCStartOfCurrentDayTimestamp(): number {
   )
 }
 
-export function fromNowWithTimezone(date: Date, isAllDay: boolean): string {
+export function fromNow(date: Date, isAllDay: boolean): string {
   const event = moment.tz(
     date,
     Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -67,4 +67,18 @@ export function fromNowWithTimezone(date: Date, isAllDay: boolean): string {
       return `[${fromNow}]`
     }
   })
+}
+
+export function isToday(date: Date): boolean {
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const event = moment.tz(date, userTimeZone)
+  const today = moment()
+
+  return event.date() === today.date() && event.month() === today.month()
+}
+
+export function convertToCurrentYear(date: Date): Date {
+  const newDate: moment.Moment = moment(date)
+
+  return newDate.set('year', moment().year()).toDate()
 }
