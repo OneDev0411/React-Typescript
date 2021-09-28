@@ -27,10 +27,11 @@ import NewCategoryModal from '../components/NewCategory'
 interface Props {
   brandId: Nullable<UUID>
   isFetching: boolean
-  list: { [key: string]: Array<IDealBrandContext> }
+  isEmpty: boolean
+  list: Record<string, IDealBrandContext[]>
 }
 
-function DealContext({ brandId, isFetching, list }: Props) {
+function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -142,7 +143,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
-    if (list.isEmpty) {
+    if (isEmpty) {
       return <EmptyState onOpenNewContext={() => setIsModalOpen(true)} />
     }
 
@@ -201,9 +202,8 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
   return {
     brandId,
     isFetching: isEmpty(deals.contexts),
-    list: !isEmpty(exactContexts)
-      ? groupBy(exactContexts, 'section')
-      : { isEmpty: true }
+    isEmpty: isEmpty(exactContexts),
+    list: groupBy(exactContexts, 'section')
   }
 }
 
