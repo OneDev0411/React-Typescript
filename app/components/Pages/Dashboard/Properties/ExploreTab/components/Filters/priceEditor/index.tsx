@@ -1,13 +1,20 @@
-import { Grid, TextField, Typography } from '@material-ui/core'
+import { useRef } from 'react'
+
+import { FormHelperText, Grid, TextField, Typography } from '@material-ui/core'
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
-import { Autocomplete } from '@material-ui/lab'
+import { Autocomplete, createFilterOptions } from '@material-ui/lab'
+import { useDebounce } from 'react-use'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import { FilterEditorFooter } from '../filterEditorFooter'
+import { preventNonNumbricOnKeyDown } from '../otherEditor/helpers'
 import { useStyles } from '../styles'
 
 import { createPriceArray, ConvertPriceShortFormat } from './helpers'
+
+const filter = createFilterOptions<number | null>()
+const CHECK_ERROR_DEBOUNCE_TIME = 500
 
 export const PriceEditor = ({
   filters,
@@ -17,10 +24,36 @@ export const PriceEditor = ({
 }: FilterButtonDropDownProp<AlertFilters>) => {
   const classes = useStyles()
 
+  const validationError = useRef(false)
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    validationError.current = false
+  }
+
+  const maxError =
+    filters.maximum_price && filters.minimum_price
+      ? filters.maximum_price <= filters.minimum_price
+      : false
+
+  const minError =
+    filters.maximum_price && filters.minimum_price
+      ? filters.minimum_price >= filters.maximum_price
+      : false
+
+  useDebounce(
+    () => {
+      validationError.current = minError && maxError
+    },
+    CHECK_ERROR_DEBOUNCE_TIME,
+    [minError, maxError, filters.maximum_price, filters.minimum_price]
+  )
+
   const handleChange = (
     fieldName: keyof typeof defaultFilters,
     newValue: Nullable<number>
   ) => {
+    validationError.current = false
+
     const fieldValue = Number(newValue || 0) || null
 
     updateFilters({ [fieldName]: fieldValue })
@@ -45,15 +78,36 @@ export const PriceEditor = ({
               propertyType: filters.property_types[0],
               max: filters.maximum_price
             })}
-            onChange={(e: any, newValue: Nullable<number>) =>
-              handleChange('minimum_price', newValue)
-            }
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params)
+              const input = params.inputValue ? Number(params.inputValue) : null
+
+              if (input) {
+                return [input, ...filtered]
+              }
+
+              return filtered
+            }}
+            onChange={(e: any, newValue: Nullable<number | string>) => {
+              handleChange('minimum_price', Number(newValue))
+            }}
             getOptionLabel={option =>
               option ? ConvertPriceShortFormat(option) : 'No Min'
             }
             renderInput={params => (
-              <TextField {...params} label="Min" variant="outlined" />
+              <TextField
+                {...params}
+                onChange={handleChangeInput}
+                onKeyDown={preventNonNumbricOnKeyDown}
+                label="Min"
+                variant="outlined"
+                error={validationError.current}
+              />
             )}
+            freeSolo
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
           />
         </Grid>
         <Grid item container justifyContent="center" xs={2}>
@@ -66,6 +120,16 @@ export const PriceEditor = ({
             size="small"
             value={filters.maximum_price}
             classes={{ popper: 'u-scrollbar--thinner' }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params)
+              const input = params.inputValue ? Number(params.inputValue) : null
+
+              if (input) {
+                return [input, ...filtered]
+              }
+
+              return filtered
+            }}
             options={createPriceArray({
               propertyType: filters.property_types[0],
               min: filters.minimum_price
@@ -79,14 +143,26 @@ export const PriceEditor = ({
             renderInput={params => (
               <TextField
                 {...params}
+                onChange={handleChangeInput}
+                onKeyDown={preventNonNumbricOnKeyDown}
                 placeholder="No Max"
                 label="Max"
                 variant="outlined"
+                error={validationError.current}
               />
             )}
+            freeSolo
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
           />
         </Grid>
       </Grid>
+      {validationError.current && (
+        <FormHelperText error>
+          Please enter valid min and max values!
+        </FormHelperText>
+      )}
       <FilterEditorFooter
         resultCount={resultsCount}
         disabledReset={

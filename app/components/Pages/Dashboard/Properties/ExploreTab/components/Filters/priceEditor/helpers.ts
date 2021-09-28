@@ -67,8 +67,10 @@ export function ConvertPriceShortFormat(price: number) {
 
   if (price > 999 && price < 1000000) {
     priceString = `${price / 1000}K`
-  } else if (price >= 1000000) {
+  } else if (price >= 1000000 && price < 1000000000) {
     priceString = `${(price / 1000000).toFixed(1)}M`
+  } else if (price >= 1000000000) {
+    priceString = `${(price / 1000000000).toFixed(1)}B`
   } else if (price <= 999) {
     priceString = price.toString()
   }
