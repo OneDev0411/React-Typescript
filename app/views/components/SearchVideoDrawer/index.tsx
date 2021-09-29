@@ -12,8 +12,8 @@ import LoadingContainer from '../LoadingContainer'
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
 import { SearchVideoResult, Video } from './types'
-import { useSearchVimeo } from './useSearchVimeo'
-import { useSearchYouTube } from './useSearchYouTube'
+import { useSearchVimeo } from './use-search-vimeo'
+import { useSearchYouTube } from './use-search-youtube'
 
 const useStyles = makeStyles(
   theme => ({
