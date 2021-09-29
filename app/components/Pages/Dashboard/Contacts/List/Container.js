@@ -1007,8 +1007,6 @@ class ContactsList extends React.Component {
  * @param {IContactReduxState} contacts
  */
 function mapStateToProps({ user, contacts, ...restOfState }) {
-  console.log('mapStateToProps', { user })
-
   const listInfo = selectContactsInfo(contacts.list)
   const tags = contacts.tags
   const fetchTags = !isFetchingTags(tags) && selectTags(tags).length === 0
