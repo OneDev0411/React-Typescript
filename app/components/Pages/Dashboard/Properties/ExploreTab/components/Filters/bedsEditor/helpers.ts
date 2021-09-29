@@ -11,14 +11,22 @@ export function createBedArray({
     throw new Error('You cant have both min and max')
   }
 
-  const rawArray = [null, ...Array.from({ length }, (_, i) => i + 1)]
+  let rawArray: (number | null)[] = Array.from({ length }, (_, i) => i + 1)
 
-  if (min) {
-    return rawArray.filter(item => item === null || item > min)
+  if (typeof min !== 'undefined') {
+    rawArray = [...rawArray, null]
+
+    if (min) {
+      return [...rawArray.filter(item => item === null || item > min)]
+    }
   }
 
-  if (max) {
-    return rawArray.filter(item => item === null || item < max)
+  if (typeof max !== 'undefined') {
+    rawArray = [null, ...rawArray]
+
+    if (max) {
+      return [...rawArray.filter(item => item === null || item < max)]
+    }
   }
 
   return rawArray
