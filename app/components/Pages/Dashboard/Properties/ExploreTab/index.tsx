@@ -48,10 +48,9 @@ interface Props extends WithRouterProps {
 function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
 
-  const [filtersStorageValue] = useLocalStorage<Nullable<string>>(
-    PROPERTIES_FILTERS_STORAGE_KEY,
-    null
-  )
+  const [filtersStorageValue, setFiltersStorageValue] = useLocalStorage<
+    Nullable<string>
+  >(PROPERTIES_FILTERS_STORAGE_KEY, null)
   const reduxDispatch = useDispatch()
   const [searchQuery, setSearchQuery] = useState<string>(location.query.q || '')
   const brokerageQuery = location.query.brokerage || ''
@@ -61,9 +60,15 @@ function ExploreTab({ isWidget, user, location }: Props) {
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
   const userActiveSort = parseSortIndex(getDefaultSort(user))
 
-  const filtersPersistedValue: Partial<AlertFilters> = filtersStorageValue
-    ? JSON.parse(filtersStorageValue)
-    : {}
+  let filtersPersistedValue: Partial<AlertFilters> = {}
+
+  try {
+    filtersPersistedValue = filtersStorageValue
+      ? JSON.parse(filtersStorageValue)
+      : {}
+  } catch {
+    setFiltersStorageValue(null)
+  }
 
   const initialState = {
     search: {
