@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { WithRouterProps, withRouter } from 'react-router'
 
 import { useBrandChecklists } from '@app/hooks/use-brand-checklists'
+import { useMakeOriginQueryParamFromLocation } from '@app/hooks/use-make-origin-query-param-from-location'
 import { goTo } from '@app/utils/go-to'
 import { getActiveTeamId } from '@app/utils/user-teams'
 import { TrProps } from '@app/views/components/Grid/Table/types'
@@ -140,10 +141,12 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
     }
   ]
 
+  const originQueryParam = useMakeOriginQueryParamFromLocation()
+
   const getRowProps = ({ row: deal }: TrProps<IDeal>) => {
     return {
       onClick: () => {
-        goTo(`/dashboard/deals/${deal.id}`)
+        goTo(`/dashboard/deals/${deal.id}?${originQueryParam}`)
         onDealOpened()
       }
     }

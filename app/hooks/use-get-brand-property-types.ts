@@ -3,7 +3,11 @@ import { useState, useEffect, useCallback } from 'react'
 import { reorderBrandPropertyTypes } from '@app/models/brand/reorder-property-types'
 import { getBrandPropertyTypes } from 'models/brand/get-property-types'
 
-export function useBrandPropertyTypes(brandId: UUID) {
+export function useBrandPropertyTypes(brandId: Nullable<UUID>) {
+  if (!brandId) {
+    throw new Error('Brand is not provided')
+  }
+
   const [propertyTypes, setPropertyTypes] = useState<IDealPropertyType[]>([])
 
   const load = useCallback(async () => {
