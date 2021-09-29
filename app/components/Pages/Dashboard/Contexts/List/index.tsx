@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { Theme } from '@material-ui/core/styles'
 import { useTheme } from '@material-ui/styles'
@@ -6,6 +6,7 @@ import groupBy from 'lodash/groupBy'
 import isEmpty from 'lodash/isEmpty'
 import { Helmet } from 'react-helmet'
 import { connect, useDispatch } from 'react-redux'
+import { useEffectOnce } from 'react-use'
 
 import { getContextsByBrand } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
@@ -24,12 +25,13 @@ import EmptyState from '../components/EmptyState'
 import NewCategoryModal from '../components/NewCategory'
 
 interface Props {
-  brandId: UUID
+  brandId: Nullable<UUID>
   isFetching: boolean
-  list: { [key: string]: Array<IDealBrandContext> }
+  isEmpty: boolean
+  list: Record<string, IDealBrandContext[]>
 }
 
-function DealContext({ brandId, isFetching, list }: Props) {
+function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -37,9 +39,9 @@ function DealContext({ brandId, isFetching, list }: Props) {
   const [selectedContext, setSelectedContext] =
     useState<IDealBrandContext | null>(null)
 
-  useEffect(() => {
+  useEffectOnce(() => {
     dispatch(getContextsByBrand(brandId))
-  }, [brandId, dispatch])
+  })
 
   const {
     propertyTypes: brandPropertyTypes,
@@ -141,7 +143,7 @@ function DealContext({ brandId, isFetching, list }: Props) {
       return <LoadingContainer style={{ padding: '30vh 0 0' }} />
     }
 
-    if (list.isEmpty) {
+    if (isEmpty) {
       return <EmptyState onOpenNewContext={() => setIsModalOpen(true)} />
     }
 
@@ -173,19 +175,21 @@ function DealContext({ brandId, isFetching, list }: Props) {
           <PageHeader.Heading>Deal Context</PageHeader.Heading>
         </PageHeader.Title>
       </PageHeader>
-      <NewCategoryModal
-        isOpen={isModalOpen}
-        section={selectedSection}
-        context={selectedContext}
-        brandId={brandId}
-        brandPropertyTypes={brandPropertyTypes}
-        onClose={() => {
-          setIsModalOpen(false)
-          setSelectedContext(null)
-          setSelectedSection(null)
-        }}
-        onSubmit={contextFormHandler}
-      />
+      {brandId && isModalOpen && (
+        <NewCategoryModal
+          isOpen={isModalOpen}
+          section={selectedSection}
+          context={selectedContext}
+          brandId={brandId}
+          brandPropertyTypes={brandPropertyTypes}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedContext(null)
+            setSelectedSection(null)
+          }}
+          onSubmit={contextFormHandler}
+        />
+      )}
       <div style={{ padding: theme.spacing(0, 3, 9) }}>{renderContent()}</div>
     </>
   )
@@ -198,9 +202,8 @@ const mapStateToProps = ({ deals, user }: IAppState) => {
   return {
     brandId,
     isFetching: isEmpty(deals.contexts),
-    list: !isEmpty(exactContexts)
-      ? groupBy(exactContexts, 'section')
-      : { isEmpty: true }
+    isEmpty: isEmpty(exactContexts),
+    list: groupBy(exactContexts, 'section')
   }
 }
 
