@@ -2,7 +2,6 @@ import { useCallback, useEffect } from 'react'
 
 import { Box, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
-import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import useAsync from '@app/hooks/use-async'
 import OverlayDrawer from 'components/OverlayDrawer'
@@ -109,11 +108,9 @@ function SearchVideoDrawer({
     }
   }, [isYouTubeReady, searchVideos, isOpen])
 
-  const [debouncedSearchVideos] = useDebouncedCallback(searchVideos, 500)
-
   const handleSearchChange = ({
     target
-  }: React.ChangeEvent<HTMLInputElement>) => debouncedSearchVideos(target.value)
+  }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
   const handleSelect = (video: SearchVideoResult) => {
     const videoInfo: Video = {
@@ -140,6 +137,7 @@ function SearchVideoDrawer({
               autoFocus
               isLoading={isLoading}
               placeholder="Search"
+              debounceTime={500}
             />
           </Box>
         )}
