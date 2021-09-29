@@ -185,7 +185,10 @@ export const Filters = () => {
                 onClick={() => {
                   updateFilters({ ...RES_FILTERS_DEFAULT_VALUES })
                 }}
-                disabled={isEqual(currentFilters, systemDefaultFilters)}
+                disabled={
+                  isEqual(currentFilters, systemDefaultFilters) &&
+                  currentFilters.property_types[0] === 'Residential'
+                }
                 size="medium"
               >
                 Reset Search
