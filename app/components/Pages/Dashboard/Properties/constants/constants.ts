@@ -1,5 +1,6 @@
 import config from 'config'
 
+export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
   'mls-saved-search-hint-dismissed'
 

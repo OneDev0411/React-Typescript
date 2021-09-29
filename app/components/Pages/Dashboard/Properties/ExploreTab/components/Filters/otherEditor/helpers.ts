@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash'
+
 export function createYearArray({
   start = new Date().getFullYear(),
   end = 1990,
@@ -41,7 +43,7 @@ export function filterGroupChangesCount<T>(
   Object.keys(object).forEach(key => {
     if (
       typeof base[key as keyof T] !== 'undefined' &&
-      object[key as keyof T] !== base[key as keyof T] &&
+      !isEqual(object[key as keyof T], base[key as keyof T]) &&
       groups[key as keyof T] &&
       !activeGroups[groups[key]]
     ) {

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useLocalStorage } from 'react-use'
 
 import { getPlace } from '@app/models/listings/search/get-place'
 import { confirmation } from 'actions/confirmation'
@@ -11,7 +11,10 @@ import { AnimatedLoader } from 'components/AnimatedLoader'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
-import { FILTERS_INITIAL_VALUES } from '../constants/constants'
+import {
+  FILTERS_INITIAL_VALUES,
+  PROPERTIES_FILTERS_STORAGE_KEY
+} from '../constants/constants'
 import {
   getDefaultSort,
   getUserLastBrowsingLocation,
@@ -45,6 +48,10 @@ interface Props extends WithRouterProps {
 function ExploreTab({ isWidget, user, location }: Props) {
   const classes = useStyles()
 
+  const [filtersStorageValue] = useLocalStorage<Nullable<string>>(
+    PROPERTIES_FILTERS_STORAGE_KEY,
+    null
+  )
   const reduxDispatch = useDispatch()
   const [searchQuery, setSearchQuery] = useState<string>(location.query.q || '')
   const brokerageQuery = location.query.brokerage || ''
@@ -54,12 +61,16 @@ function ExploreTab({ isWidget, user, location }: Props) {
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
   const userActiveSort = parseSortIndex(getDefaultSort(user))
 
+  const filtersPersistedValue: Partial<AlertFilters> = filtersStorageValue
+    ? JSON.parse(filtersStorageValue)
+    : {}
+
   const initialState = {
     search: {
       bounds: null,
       ...(brokerageQuery ? { office: brokerageQuery } : {}),
       drawing: [],
-      filters: FILTERS_INITIAL_VALUES,
+      filters: { ...FILTERS_INITIAL_VALUES, ...filtersPersistedValue },
       sort: userActiveSort
     },
     map: userLastBrowsingLocation

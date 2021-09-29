@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 
 import { Button } from '@material-ui/core'
 import { isEqual } from 'lodash'
+import { useLocalStorage } from 'react-use'
 
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import FilterButton from '@app/views/components/Filters/FilterButton'
 
 import {
+  PROPERTIES_FILTERS_STORAGE_KEY,
   PROPERTY_TYPES_DEFAULT_VALUES,
   RES_FILTERS_DEFAULT_VALUES
 } from '../../../constants/constants'
@@ -28,6 +30,10 @@ import { TypeButton } from './typeEditor/button'
 export const Filters = () => {
   const classes = useStyles()
   const [state, dispatch] = useListingsContext()
+  const [, setStorageValue] = useLocalStorage<Nullable<string>>(
+    PROPERTIES_FILTERS_STORAGE_KEY,
+    null
+  )
 
   const [initialFilters, setInitialFilters] =
     useState<Nullable<AlertFilters>>(null)
@@ -40,6 +46,9 @@ export const Filters = () => {
 
   const onFiltersChange = (filters: Partial<AlertFilters>) => {
     dispatch(updateFilters(filters))
+
+    // Save user filters to local storage
+    setStorageValue(JSON.stringify(filters))
   }
 
   useEffect(() => {
