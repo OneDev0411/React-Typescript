@@ -38,6 +38,7 @@ export const BedsEditor = ({
         <Grid item xs={5}>
           <Autocomplete
             size="small"
+            classes={{ popper: 'u-scrollbar--thinner' }}
             value={filters.minimum_bedrooms}
             options={createBedArray({ max: filters.maximum_bedrooms })}
             onChange={(e: any, newValue: Nullable<number>) =>
@@ -57,6 +58,7 @@ export const BedsEditor = ({
         <Grid item xs={5}>
           <Autocomplete
             size="small"
+            classes={{ popper: 'u-scrollbar--thinner' }}
             value={filters.maximum_bedrooms}
             options={createBedArray({ min: filters.minimum_bedrooms })}
             onChange={(e: any, newValue: Nullable<number>) =>

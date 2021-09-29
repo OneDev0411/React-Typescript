@@ -27,6 +27,7 @@ export const SchoolSelector = ({
   return (
     <Autocomplete
       className={classes.select}
+      classes={{ popper: 'u-scrollbar--thinner' }}
       id={`${type}-school-selector`}
       options={schools.map(school => school.name)}
       size="small"

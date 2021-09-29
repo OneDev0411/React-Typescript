@@ -65,6 +65,7 @@ export const SubdivisionGroup = ({
     <EditorGroup title="Subdivisions">
       <Autocomplete
         className={classes.select}
+        classes={{ popper: 'u-scrollbar--thinner' }}
         id="subdivisions-select"
         options={subdivisions.map(item => item.label)}
         size="small"

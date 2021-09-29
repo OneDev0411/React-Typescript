@@ -65,6 +65,7 @@ export const CountiesSelector = ({ value, updateFilters }: Props) => {
   return (
     <Autocomplete
       className={classes.select}
+      classes={{ popper: 'u-scrollbar--thinner' }}
       id="counties-select"
       options={counties.map(item => item.label)}
       size="small"

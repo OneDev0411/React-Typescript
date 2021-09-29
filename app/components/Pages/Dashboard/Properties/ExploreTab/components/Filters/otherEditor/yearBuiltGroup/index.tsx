@@ -29,6 +29,7 @@ export const YearBuiltGroup = ({
         <Grid item className={classes.filledAutoCompleteWrapper}>
           <Autocomplete
             size="small"
+            classes={{ popper: 'u-scrollbar--thinner' }}
             value={filters.minimum_year_built}
             options={createYearArray({ max: filters.maximum_year_built })}
             onChange={(e: any, newValue: Nullable<number>) =>
@@ -46,6 +47,7 @@ export const YearBuiltGroup = ({
         <Grid item className={classes.filledAutoCompleteWrapper}>
           <Autocomplete
             size="small"
+            classes={{ popper: 'u-scrollbar--thinner' }}
             value={filters.maximum_year_built}
             options={createYearArray({ min: filters.minimum_year_built })}
             onChange={(e: any, newValue: Nullable<number>) =>

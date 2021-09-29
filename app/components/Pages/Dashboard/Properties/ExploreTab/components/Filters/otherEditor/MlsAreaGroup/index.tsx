@@ -109,6 +109,7 @@ export const MlsAreaGroup = ({
     <EditorGroup title="MLS Areas">
       <Autocomplete
         className={classes.select}
+        classes={{ popper: 'u-scrollbar--thinner' }}
         id="area-select"
         options={mlsAreas}
         size="small"
@@ -147,6 +148,7 @@ export const MlsAreaGroup = ({
       {selectedMlsAreas.length > 0 && (
         <Autocomplete
           className={classes.select}
+          classes={{ popper: 'u-scrollbar--thinner' }}
           id="sub-area-select"
           options={mlsSubAreas}
           size="small"

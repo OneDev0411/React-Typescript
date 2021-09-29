@@ -112,6 +112,7 @@ export const SchoolsDistrictsGroup = ({
     <EditorGroup title="School District">
       <Autocomplete
         className={classes.select}
+        classes={{ popper: 'u-scrollbar--thinner' }}
         id="districts-select"
         options={schoolsDistricts.map(item => item.label)}
         size="small"
