@@ -33,7 +33,7 @@ const requestLimit = bodyParser.json({
 /**
  * deals routes.
  */
-router.post('/api/proxy/*', requestLimit, proxifierRoute)
+router.post('/api/proxifier', requestLimit, proxifierRoute)
 
 /**
  * user routes.
