@@ -446,7 +446,9 @@ class ContactsList extends React.Component {
     if (value) {
       order = relevanceSortKey
     } else if (order === relevanceSortKey) {
-      order = '-last_touch'
+      order =
+        getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ??
+        '-last_touch'
     }
 
     this.setState(
