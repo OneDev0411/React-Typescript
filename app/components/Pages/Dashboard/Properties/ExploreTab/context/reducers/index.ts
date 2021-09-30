@@ -123,14 +123,6 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
     case 'CHANGE_SORT': {
       const { sort } = action.payload
 
-      console.log('CHANGE_SORT', {
-        ...state,
-        search: {
-          ...state.search,
-          sort
-        }
-      })
-
       return {
         ...state,
         search: {

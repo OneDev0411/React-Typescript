@@ -48,12 +48,6 @@ export default function useFetchListings(
   // Upon each change in search we fetch new results
   useEffect(() => {
     async function fetchResults() {
-      // TODO: remove this log
-      console.log(
-        "Some params in search changed. Let's fetch new results!",
-        state.search
-      )
-
       /* if state.search.drawing is present
        *  it means user has drawn a polygon, so we search in that area only
        *  having a drawing always takes precedence over `bounds` if they're both set.
