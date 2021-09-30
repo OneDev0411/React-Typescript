@@ -6,7 +6,7 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { EditorDialog } from 'components/ImageEditor'
@@ -1379,7 +1379,7 @@ class Builder extends React.Component {
               this.setState({ videoToEdit: null })
             }}
           />
-          <ArticleDrawer
+          <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
               this.blocks.article.selectHandler()
