@@ -2,6 +2,11 @@ import { useState } from 'react'
 
 import { Grid, Box, Typography } from '@material-ui/core'
 import cn from 'classnames'
+import {
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot
+} from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -22,7 +27,7 @@ import { TaskItems } from '../TaskItems'
 import { Activity } from './Activity'
 import { getTaskActions } from './get-task-actions'
 import { useStyles } from './styles'
-import { TaskIcon } from './TaskIcon'
+import { TaskSplitter } from './TaskSplitter'
 
 interface Props {
   index: number
@@ -32,9 +37,7 @@ interface Props {
 }
 
 export function TaskRow({ index, deal, task, isBackOffice }: Props) {
-  const classes = useStyles({
-    index
-  })
+  const classes = useStyles()
 
   const dispatch = useDispatch()
   const [checklistBulkActionsContext] = useChecklistActionsContext()
@@ -82,69 +85,95 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
   }
 
   return (
-    <Grid container className={classes.container}>
-      <Grid container className={classes.row}>
-        <Box display="flex" alignItems="center">
-          <TaskIcon
-            deal={deal}
-            task={task}
-            isTaskExpanded={isTaskExpanded}
-            isBackOffice={isBackOffice}
-            onClick={toggleTaskOpen}
-          />
+    <Draggable key={task.id} draggableId={task.id} index={index}>
+      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.dragHandleProps}
+          {...provided.draggableProps}
+          style={{
+            userSelect: 'none',
+            ...provided.draggableProps.style
+          }}
+        >
+          {task.task_type === 'Splitter' ? (
+            <TaskSplitter task={task} />
+          ) : (
+            <Grid container className={classes.container}>
+              <Grid container className={classes.row}>
+                <Box display="flex" alignItems="center">
+                  {/* <TaskIcon
+                    deal={deal}
+                    task={task}
+                    isTaskExpanded={isTaskExpanded}
+                    isBackOffice={isBackOffice}
+                    onClick={toggleTaskOpen}
+                  /> */}
 
-          <div>
-            <Box display="flex" alignItems="center">
-              <span
-                className={cn(classes.title, classes.link)}
-                onClick={toggleTaskOpen}
-              >
-                {task.title}
-              </span>
-            </Box>
+                  <div>
+                    <Box display="flex" alignItems="center">
+                      <span
+                        className={cn(classes.title, classes.link)}
+                        onClick={toggleTaskOpen}
+                      >
+                        {task.title}
+                      </span>
+                    </Box>
 
-            <Typography variant="caption" className={classes.caption}>
-              <EnvelopeStatus envelope={envelope} deal={deal} task={task} />
-            </Typography>
-          </div>
-        </Box>
+                    <Typography variant="caption" className={classes.caption}>
+                      <EnvelopeStatus
+                        envelope={envelope}
+                        deal={deal}
+                        task={task}
+                      />
+                    </Typography>
+                  </div>
+                </Box>
 
-        <Box display="flex" alignItems="center" className={classes.actions}>
-          <Box display="flex" alignItems="center">
-            {!isBulkMode && (
-              <div className="visible-on-hover">
-                <Activity task={task} onClick={handleSelectTask} />
-              </div>
-            )}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.actions}
+                >
+                  <Box display="flex" alignItems="center">
+                    {!isBulkMode && (
+                      <div className="visible-on-hover">
+                        <Activity task={task} onClick={handleSelectTask} />
+                      </div>
+                    )}
 
-            <ActionsButton
-              deal={deal}
-              task={task}
-              envelope={envelope}
-              file={file}
-              actions={actions}
-              className={cn({
-                'visible-on-hover': !isTaskExpanded && !isBulkMode
-              })}
-            />
-          </Box>
+                    <ActionsButton
+                      deal={deal}
+                      task={task}
+                      envelope={envelope}
+                      file={file}
+                      actions={actions}
+                      className={cn({
+                        'visible-on-hover': !isTaskExpanded && !isBulkMode
+                      })}
+                    />
+                  </Box>
 
-          <Box className="hide-on-hover">
-            <TaskNotifications task={task} />
-          </Box>
-        </Box>
-      </Grid>
+                  <Box className="hide-on-hover">
+                    <TaskNotifications task={task} />
+                  </Box>
+                </Box>
+              </Grid>
 
-      <Grid container>
-        <TaskItems
-          isOpen={isTaskExpanded}
-          task={task}
-          deal={deal}
-          isBackOffice={isBackOffice}
-        />
-      </Grid>
+              <Grid container>
+                <TaskItems
+                  isOpen={isTaskExpanded}
+                  task={task}
+                  deal={deal}
+                  isBackOffice={isBackOffice}
+                />
+              </Grid>
 
-      {isTaskExpanded && <div className={classes.verticalGuideLine} />}
-    </Grid>
+              {isTaskExpanded && <div className={classes.verticalGuideLine} />}
+            </Grid>
+          )}
+        </div>
+      )}
+    </Draggable>
   )
 }

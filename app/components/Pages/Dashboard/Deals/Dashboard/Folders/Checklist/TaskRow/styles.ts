@@ -1,17 +1,13 @@
 import { makeStyles, Theme } from '@material-ui/core'
 
-interface StyleProps {
-  index: number
-}
-
 export const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: ({ index }: StyleProps) => ({
-      position: 'relative',
-      backgroundColor: index % 2 === 0 ? theme.palette.grey['50'] : '#fff'
-    }),
+    container: {
+      position: 'relative'
+    },
     row: {
       position: 'relative',
+      paddingLeft: theme.spacing(2),
       minHeight: theme.spacing(8),
       '& .visible-on-hover': {
         visibility: 'hidden'
