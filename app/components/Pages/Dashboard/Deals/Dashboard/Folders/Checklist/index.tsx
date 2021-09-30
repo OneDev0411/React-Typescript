@@ -1,7 +1,16 @@
 import { Grid, Box, Typography } from '@material-ui/core'
+import {
+  DragDropContext,
+  Droppable,
+  DroppableProvided,
+  DroppableStateSnapshot,
+  DropResult
+} from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { setExpandChecklist } from 'actions/deals'
+import { updateTasks } from '@app/models/Deal/task'
+import { reorder } from '@app/utils/dnd-reorder'
+import { setExpandChecklist, updateTasksOrders } from 'actions/deals'
 import { IAppState } from 'reducers'
 import { isChecklistExpanded } from 'reducers/deals/checklists'
 
@@ -49,6 +58,24 @@ export function ChecklistFolder({
     onToggleExpand?.()
   }
 
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return false
+    }
+
+    const reorderedTasks = reorder(
+      tasks,
+      result.source.index,
+      result.destination.index
+    ).map((task, index) => ({
+      id: task.id,
+      order: index + 1
+    }))
+
+    dispatch(updateTasksOrders(reorderedTasks))
+    updateTasks(deal.id, reorderedTasks)
+  }
+
   return (
     <Grid container className={classes.container}>
       <Grid container className={classes.header}>
@@ -79,21 +106,37 @@ export function ChecklistFolder({
         </Grid>
       </Grid>
 
-      {isExpanded && (
-        <Grid container>
-          {tasks.map((task, index) => (
-            <TaskRow
-              index={index}
-              key={task.id}
-              task={task}
-              deal={deal}
-              isBackOffice={isBackOffice}
-            />
-          ))}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        {isExpanded && (
+          <Box width="100%">
+            <Droppable
+              droppableId={checklist ? checklist.id : 'disabled'}
+              isDropDisabled={!checklist}
+            >
+              {(
+                provided: DroppableProvided,
+                snapshot: DroppableStateSnapshot
+              ) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {tasks.map((task, index) => (
+                    <TaskRow
+                      index={index}
+                      key={task.id}
+                      task={task}
+                      deal={deal}
+                      isBackOffice={isBackOffice}
+                    />
+                  ))}
 
-          {createNewTask && <NewTaskRow deal={deal} checklist={checklist} />}
-        </Grid>
-      )}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+
+            {createNewTask && <NewTaskRow deal={deal} checklist={checklist} />}
+          </Box>
+        )}
+      </DragDropContext>
     </Grid>
   )
 }
