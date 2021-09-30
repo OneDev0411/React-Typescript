@@ -25,6 +25,7 @@ type Props = {
   setTerminable: (terminable: boolean) => void
   setDeactivatable: (terminable: boolean) => void
   addGenericTask: (checklist: IBrandChecklist) => void
+  addSplitterTask: (checklist: IBrandChecklist) => void
   addGeneralCommentTask: (checklist: IBrandChecklist) => void
   addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
   renameChecklist: (name: string) => void
@@ -57,6 +58,7 @@ export function ChecklistHeader({
   addGeneralCommentTask,
   addGenericTask,
   addFormTask,
+  addSplitterTask,
   renameChecklist,
   checklist,
   forms,
@@ -139,6 +141,16 @@ export function ChecklistHeader({
               }}
             >
               Add Generic Task
+            </ListItem>
+            <ListItem
+              className={classes.splitMenuItem}
+              button
+              onClick={event => {
+                addSplitterTask(checklist)
+                closeMenu(event)
+              }}
+            >
+              Add Splitter
             </ListItem>
             {Array.isArray(checklist.tasks) &&
               checklist.tasks.every(
