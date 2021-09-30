@@ -65,10 +65,7 @@ export type SearchInputExposedMethods = {
   getInputEl: () => HTMLInputElement | null
 }
 
-export const SearchInput = forwardRef<
-  SearchInputExposedMethods,
-  SearchInputProps
->(
+export const SearchInput = forwardRef(
   (
     {
       isLoading,

@@ -99,7 +99,7 @@ interface Props<T> {
   debug?: boolean
   minChars?: number
   debounce?: number
-  disableClearButton: boolean
+  disableClearButton?: boolean
 }
 
 export default function AutoComplete<T>({
@@ -141,7 +141,19 @@ export default function AutoComplete<T>({
     onOpen: () => {
       setOpen(true)
     },
-    onClose: () => {
+    onClose: (e, reason) => {
+      // @ts-ignore
+      const targetEl = e.relatedTarget
+
+      if (targetEl) {
+        if (
+          targetEl.className.includes('listBoxFooter') &&
+          typeof onFooterClick === 'function'
+        ) {
+          onFooterClick(inputValue)
+        }
+      }
+
       setOpen(false)
     },
     onInputChange: (e, value, reason) => {
@@ -208,9 +220,6 @@ export default function AutoComplete<T>({
             <Button
               className={classes.listBoxFooter}
               classes={{ label: classes.listBoxFooterLabel }}
-              onClick={e => {
-                onFooterClick(inputValue)
-              }}
             >
               {renderFooter(inputValue)}
             </Button>

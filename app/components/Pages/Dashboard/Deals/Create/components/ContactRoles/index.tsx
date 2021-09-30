@@ -79,10 +79,8 @@ export function ContactRoles({
         <AutoComplete<IAgent>
           placeholder={placeholder}
           onFooterClick={createNewContact}
-          debug
           model={searchAgentsModel}
           minChars={3}
-          disableClearButton
           getOptionLabel={(option: IAgent) => option.full_name}
           renderFooter={inputValue => (
             <>
@@ -143,8 +141,6 @@ export function ContactRoles({
         <AutoComplete<IContact>
           placeholder={placeholder}
           onFooterClick={createNewContact}
-          debug={false}
-          disableClearButton
           model={searchContactsModel}
           getOptionLabel={(option: IContact) => option.display_name}
           renderFooter={inputValue => (
