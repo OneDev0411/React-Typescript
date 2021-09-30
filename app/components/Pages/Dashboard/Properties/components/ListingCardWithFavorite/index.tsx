@@ -100,15 +100,17 @@ const ListingCardWithFavorite = ({
         onToggleSelection={handleToggleSelection}
       />
 
-      <ListingDetailsModal
-        isOpen={isListingOpen}
-        isWidget={isWidget}
-        listingId={listing.id}
-        closeHandler={closeListing}
-        onToggleFavorite={() => {
-          onToggleLike(false)
-        }}
-      />
+      {isListingOpen && (
+        <ListingDetailsModal
+          isOpen
+          isWidget={isWidget}
+          listingId={listing.id}
+          closeHandler={closeListing}
+          onToggleFavorite={() => {
+            onToggleLike(false)
+          }}
+        />
+      )}
     </>
   )
 }
