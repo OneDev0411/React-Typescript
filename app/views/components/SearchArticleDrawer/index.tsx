@@ -82,15 +82,19 @@ function SearchArticleDrawer({
           return searchArticles(searchTerm)
         }
 
-        const articleMetadata = await getUrlMetadata(searchTerm)
+        try {
+          const articleMetadata = await getUrlMetadata(searchTerm)
 
-        return [
-          {
-            image: articleMetadata?.image,
-            title: articleMetadata?.title ?? '',
-            url: articleMetadata?.url ?? ''
-          }
-        ]
+          return [
+            {
+              image: articleMetadata?.image,
+              title: articleMetadata?.title ?? '',
+              url: articleMetadata?.url ?? ''
+            }
+          ]
+        } catch (_) {
+          return []
+        }
       })
     },
     [allArticles, run, searchArticles]
