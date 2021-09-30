@@ -19,11 +19,6 @@ export interface RSSFeedItem extends Parser.Item {
   sourceIndex: number
 }
 
-export interface ArticleMetadataResponse {
-  response?: ArticleMetadata
-  error?: string
-}
-
 export interface SearchArticleImageCacheActions {
   setItem: (articleUrl: string, imageUrl: string) => void
   getItem: (articleUrl: string) => Optional<string>
