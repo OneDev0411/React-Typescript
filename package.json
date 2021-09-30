@@ -222,6 +222,7 @@
     "react-use-intercom": "^1.1.9",
     "react-use-promise": "^0.3.0",
     "react-virtualized-auto-sizer": "^1.0.5",
+    "react-visibility-sensor": "^5.1.1",
     "react-window": "^1.8.5",
     "reapop": "^3.0.4",
     "recompose": "^0.30.0",
