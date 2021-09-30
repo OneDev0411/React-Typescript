@@ -52,7 +52,8 @@ export function useCalendarEvents(
 
           return {
             ...event,
-            timestamp: newTimestamp.getTime() / 1000
+            timestamp: newTimestamp.getTime() / 1000,
+            next_occurence: newTimestamp
           }
         })
         .sort((a, b) =>
