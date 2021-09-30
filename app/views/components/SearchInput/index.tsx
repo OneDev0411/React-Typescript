@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
+import React, { useRef, forwardRef, useImperativeHandle } from 'react'
 
 import {
   TextField,
@@ -56,14 +56,19 @@ export type SearchInputProps = TextFieldProps & {
   InputProps?: InputProps
   inputProps?: InputBaseProps
   disableClearButton?: boolean
+  value?: string
 }
-export type Ref = {
+export type SearchInputExposedMethods = {
   focus: () => void
   blur: () => void
   clear: () => void
+  getInputEl: () => HTMLInputElement | null
 }
 
-export const SearchInput = forwardRef(
+export const SearchInput = forwardRef<
+  SearchInputExposedMethods,
+  SearchInputProps
+>(
   (
     {
       isLoading,
@@ -76,13 +81,13 @@ export const SearchInput = forwardRef(
       inputProps,
       disableClearButton = false,
       minChars = 0,
+      value,
       ...textFieldProps
     }: SearchInputProps,
     ref
   ) => {
     const classes = useStyles()
-    const [nonEmpty, setNonEmpty] = useState(Boolean(defaultValue))
-    const inputEl = useRef<HTMLInputElement | null>(null)
+    const inputEl = useRef<HTMLInputElement>(null)
     const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
 
     const [debouncedOnChange] = useDebouncedCallback(
@@ -104,15 +109,15 @@ export const SearchInput = forwardRef(
       clear: () => {
         if (inputEl && inputEl.current) {
           inputEl.current.value = ''
-          setNonEmpty(false)
         }
+      },
+      getInputEl: () => {
+        return inputEl.current
       }
     }))
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
       const value = e.target.value
-
-      setNonEmpty(!!value)
 
       if (value.length >= minChars) {
         if (debounceTime > 0) {
@@ -131,9 +136,8 @@ export const SearchInput = forwardRef(
         inputEl.current.value = ''
 
         if (typeof onClearHandler === 'function') {
-          // A custom `onClear` routine may also be provided as a prop
+          // A custom `onClearHandler` routine may also be provided as a prop
           onClearHandler()
-          setNonEmpty(false)
         } else {
           // Since components using this TextField may rely on an standard `onChange`
           // event listener for getting the latest input value, we should respect
@@ -154,9 +158,8 @@ export const SearchInput = forwardRef(
 
     return (
       <TextField
-        defaultValue={defaultValue}
         color="secondary"
-        inputProps={inputProps}
+        inputProps={{ ...inputProps, value }}
         // eslint-disable-next-line react/jsx-no-duplicate-props
         InputProps={{
           ...InputProps,
@@ -164,7 +167,7 @@ export const SearchInput = forwardRef(
           endAdornment: (
             <>
               {isLoading && <CircularProgress size={20} thickness={6} />}
-              {nonEmpty && !disableClearButton && (
+              {inputEl.current?.value && !disableClearButton && (
                 <IconButton
                   size="small"
                   aria-label="clear"

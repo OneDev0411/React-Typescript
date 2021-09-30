@@ -68,9 +68,6 @@ export default function MarketingSearchInput({
         <SearchInput
           {...params}
           fullWidth
-          color="primary"
-          variant="outlined"
-          size="small"
           placeholder="Search by category or topic"
         />
       )}

@@ -173,9 +173,10 @@ export default function AutoComplete<T>({
           inputProps={{ ...getInputProps() }}
           isLoading={isLoading}
           disableClearButton={disableClearButton}
+          onClearHandler={() => {
+            setOpen(false)
+          }}
           onChangeHandler={(e, value = '') => {
-            // since our input is "controlled" we want to set the input value
-            // on onChange event
             setIsLoading(true)
 
             if (value && value.length >= minChars) {
