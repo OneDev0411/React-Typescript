@@ -30,7 +30,10 @@ const useStyles = makeStyles(
       '& $title': { color: theme.palette.common.black }
     },
     imageHolder: {
-      position: 'relative'
+      position: 'relative',
+      backgroundColor: theme.palette.grey[200],
+      borderRadius: theme.spacing(0.5),
+      overflow: 'hidden'
     },
     image: {
       position: 'absolute',
@@ -39,7 +42,7 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       objectFit: 'cover',
-      borderRadius: theme.spacing(0.5)
+      fontSize: 0
     },
     overlineIcon: {
       width: 12,
@@ -133,7 +136,9 @@ function DrawerResultCard({
       >
         <div className={classes.imageHolder}>
           <div style={{ paddingTop: `${imageAspect * 100}%` }} />
-          <img className={classes.image} src={imageUrl} alt={title} />
+          {imageUrl && (
+            <img className={classes.image} src={imageUrl} alt={title} />
+          )}
         </div>
         {hasOverlineDetail && (
           <div className={classes.overlineDetail}>
