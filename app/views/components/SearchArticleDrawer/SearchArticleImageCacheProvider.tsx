@@ -1,31 +1,19 @@
-import { ReactNode, useMemo, useRef } from 'react'
+import { ReactNode } from 'react'
 
 import { SearchArticleImageCacheContext } from './context'
-import { SearchArticleImageCacheActions } from './types'
+import { SearchArticleImageCache } from './types'
 
 interface SearchArticleImageCacheProviderProps {
   children: ReactNode
+  imageCache: SearchArticleImageCache
 }
 
 function SearchArticleImageCacheProvider({
+  imageCache,
   children
 }: SearchArticleImageCacheProviderProps) {
-  const cacheRef = useRef<Record<string, string>>({})
-
-  const contextValue = useMemo<SearchArticleImageCacheActions>(
-    () => ({
-      setItem: (articleUrl: string, imageUrl: string) => {
-        cacheRef.current[articleUrl] = imageUrl
-      },
-      getItem: (articleUrl: string) => {
-        return cacheRef.current[articleUrl]
-      }
-    }),
-    []
-  )
-
   return (
-    <SearchArticleImageCacheContext.Provider value={contextValue}>
+    <SearchArticleImageCacheContext.Provider value={imageCache}>
       {children}
     </SearchArticleImageCacheContext.Provider>
   )

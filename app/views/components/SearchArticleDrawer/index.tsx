@@ -15,6 +15,7 @@ import SearchArticleEmptyState from './SearchArticleEmptyState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
 import SearchArticleResults from './SearchArticleResults'
 import { RSSArticleMetadata } from './types'
+import { useCreateImageCache } from './use-create-image-cache'
 import { useSearchArticles } from './use-search-articles'
 
 const useStyles = makeStyles(
@@ -66,6 +67,8 @@ function SearchArticleDrawer({
   } = useAsync<RSSArticleMetadata[]>({ data: [] })
   const [selected, setSelected] = useState<RSSArticleMetadata[]>([])
 
+  const imageCache = useCreateImageCache()
+
   const { searchArticles, isArticlesLoading, allArticles } =
     useSearchArticles(RSS_SOURCES)
 
@@ -89,7 +92,8 @@ function SearchArticleDrawer({
             {
               image: articleMetadata?.image,
               title: articleMetadata?.title ?? '',
-              url: articleMetadata?.url ?? ''
+              url: articleMetadata?.url ?? '',
+              description: articleMetadata?.description
             }
           ]
         } catch (_) {
@@ -103,10 +107,21 @@ function SearchArticleDrawer({
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
     handleSearch(event.target.value)
 
-  const handleInsert = () => {
+  const getArticleWithImage = (
+    article: RSSArticleMetadata
+  ): RSSArticleMetadata => ({
+    ...article,
+    image: imageCache.getItem(article.url)
+  })
+
+  const handleConfirm = () => {
     // TODO: Fix the below error
-    // @ts-ignore
-    onSelect(multipleSelection ? selected : selected[0])
+    onSelect(
+      // @ts-ignore
+      multipleSelection
+        ? selected.map(getArticleWithImage)
+        : getArticleWithImage(selected[0])
+    )
 
     setSelected([])
   }
@@ -164,7 +179,7 @@ function SearchArticleDrawer({
           />
         </Box>
         <Box flex={1} className={classes.results} px={3}>
-          <SearchArticleImageCacheProvider>
+          <SearchArticleImageCacheProvider imageCache={imageCache}>
             {isLoadingState ? (
               <LoadingContainer />
             ) : isEmptyState ? (
@@ -184,7 +199,7 @@ function SearchArticleDrawer({
           disabled={isLoadingState || selected.length === 0}
           color="primary"
           variant="contained"
-          onClick={handleInsert}
+          onClick={handleConfirm}
         >
           Done
         </Button>

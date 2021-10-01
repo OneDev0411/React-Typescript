@@ -19,7 +19,7 @@ export interface RSSFeedItem extends Parser.Item {
   sourceIndex: number
 }
 
-export interface SearchArticleImageCacheActions {
+export interface SearchArticleImageCache {
   setItem: (articleUrl: string, imageUrl: string) => void
   getItem: (articleUrl: string) => Optional<string>
 }

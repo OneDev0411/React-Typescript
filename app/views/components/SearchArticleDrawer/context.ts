@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { SearchArticleImageCacheActions } from './types'
+import { SearchArticleImageCache } from './types'
 
 export const SearchArticleImageCacheContext =
-  createContext<Optional<SearchArticleImageCacheActions>>(undefined)
+  createContext<Optional<SearchArticleImageCache>>(undefined)
