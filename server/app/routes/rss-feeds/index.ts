@@ -17,6 +17,7 @@ export default async (req: Request, res: Response) => {
               ...result,
               items: result.items.map(item => ({
                 ...item,
+                content: removeHTMLTags(item.content ?? ''),
                 sourceIndex
               }))
             }),
@@ -30,4 +31,8 @@ export default async (req: Request, res: Response) => {
   const rssLoadedFeeds = rssResults.filter(rssResult => !!rssResult)
 
   res.json(rssLoadedFeeds)
+}
+
+function removeHTMLTags(input: string): string {
+  return input.replace(/(<([^>]+)>)/gi, '')
 }
