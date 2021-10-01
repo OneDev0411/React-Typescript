@@ -26,7 +26,7 @@ export interface Options {
 }
 
 interface ArticleBlock {
-  selectHandler: (selectedArticle?: ArticleMetadata) => void
+  selectHandler: (articles?: ArticleMetadata[]) => void
 }
 
 export default function registerArticleBlock(
@@ -92,12 +92,9 @@ export default function registerArticleBlock(
   return handleBlockDragStopEvent(
     editor,
     allBlocks,
-    (selectedArticle: ArticleMetadata) => ({
+    (articles: ArticleMetadata[]) => ({
       ...renderData,
-      description: selectedArticle?.description,
-      image: selectedArticle?.image,
-      title: selectedArticle?.title,
-      url: selectedArticle?.url
+      articles
     }),
     onDrop
   )

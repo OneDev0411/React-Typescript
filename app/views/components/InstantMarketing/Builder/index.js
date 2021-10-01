@@ -1389,6 +1389,7 @@ class Builder extends React.Component {
               this.blocks.article.selectHandler(article)
               this.setState({ isArticleDrawerOpen: false })
             }}
+            multipleSelection
           />
           {this.blocks && this.blocks.neighborhoods && (
             <NeighborhoodsReportDrawer

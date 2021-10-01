@@ -1,12 +1,14 @@
-<div data-type="article" data-article="top" rechat-editable="tree">
-  <img data-type="image" class="pure-img" rechat-assets="static" src="{{image}}"/>
-  <h3 data-type="headline">
-    {{title}}
-  </h3>
-  <div data-type="text">
-    {{description}}
+{% for article in articles %}
+  <div data-type="article" data-article="top" rechat-editable="tree">
+    <img data-type="image" class="pure-img" rechat-assets="static" src="{{ article.image }}"/>
+    <h3 data-type="headline">
+      {{ article.title }}
+    </h3>
+    <div data-type="text">
+      {{ article.description }}
+    </div>
+    <a data-type="button" class="pure-button" href="{{ article.url }}" target="_blank">
+      Read More
+    </a>
   </div>
-  <a data-type="button" class="pure-button" href="{{url}}" target="_blank">
-    Read More
-  </a>
-</div>
+{% endfor %}}
