@@ -7,7 +7,7 @@ import {
 } from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { updateTasks } from '@app/models/Deal/task'
+import { updateChecklistTasksOrders } from '@app/models/Deal/task'
 import { reorder } from '@app/utils/dnd-reorder'
 import { setExpandChecklist, updateTasksOrders } from 'actions/deals'
 import { IAppState } from 'reducers'
@@ -72,7 +72,7 @@ export function ChecklistFolder({
     }))
 
     dispatch(updateTasksOrders(reorderedTasks))
-    updateTasks(deal.id, reorderedTasks)
+    updateChecklistTasksOrders(deal.id, checklist!.id, reorderedTasks)
   }
 
   return (
@@ -120,6 +120,7 @@ export function ChecklistFolder({
                       key={task.id}
                       task={task}
                       deal={deal}
+                      isDragDisabled={!checklist}
                       isBackOffice={isBackOffice}
                     />
                   ))}

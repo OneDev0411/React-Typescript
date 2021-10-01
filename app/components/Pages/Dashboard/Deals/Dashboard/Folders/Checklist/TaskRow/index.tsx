@@ -34,9 +34,16 @@ interface Props {
   deal: IDeal
   task: IDealTask & { is_expanded?: boolean }
   isBackOffice: boolean
+  isDragDisabled: boolean
 }
 
-export function TaskRow({ index, deal, task, isBackOffice }: Props) {
+export function TaskRow({
+  index,
+  deal,
+  task,
+  isDragDisabled,
+  isBackOffice
+}: Props) {
   const classes = useStyles()
 
   const dispatch = useDispatch()
@@ -102,7 +109,12 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
   }
 
   return (
-    <Draggable key={task.id} draggableId={task.id} index={index}>
+    <Draggable
+      key={task.id}
+      draggableId={task.id}
+      index={index}
+      isDragDisabled={isDragDisabled}
+    >
       {(provided: DraggableProvided) => (
         <div
           ref={provided.innerRef}
