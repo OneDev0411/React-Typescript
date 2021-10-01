@@ -8,7 +8,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
 
-import { RSS_SOURCES, INITIAL_SEARCH_TERM } from './constants'
+import { RSS_SOURCES } from './constants'
 import { isValidUrl } from './helpers'
 import { getUrlMetadata } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
@@ -157,7 +157,8 @@ function SearchArticleDrawer({
   // Load initial videos using the initial term
   useEffect(() => {
     if (!isArticlesLoading && isOpen) {
-      handleSearch(INITIAL_SEARCH_TERM)
+      // TODO: user the initial term here
+      handleSearch('') // handleSearch(INITIAL_SEARCH_TERM)
     }
   }, [isArticlesLoading, handleSearch, isOpen])
 
