@@ -66,6 +66,7 @@
     },
     "title": "Information About Brokerage Services (TAR 2501)\t\t\t\t\t",
     "task_type": "Form",
+    "order": 0,
     "submission": {
       "id": "e3df4e18-caa2-11e9-ae2e-027d31a1f7a0",
       "last_revision": "ebfdb4e0-caa2-11e9-a7ee-027d31a1f7a0",
@@ -172,6 +173,7 @@
     },
     "title": "Information About Brokerage Services (TAR 2501)\t\t\t\t\t",
     "task_type": "Form",
+    "order": 0,
     "submission": {
       "id": "65c733ba-67fb-11e9-8a17-0a95998482ac",
       "last_revision": "65c87004-67fb-11e9-8a18-0a95998482ac",
@@ -278,6 +280,7 @@
     },
     "title": "Commercial Real Estate Listing Agreement - Exclusive Right to Sell (TAR 1301)\t\t\t\t\t",
     "task_type": "Form",
+    "order": 0,
     "submission": {
       "id": "b4dea870-67fb-11e9-94da-0a95998482ac",
       "last_revision": "b4e0a9f4-67fb-11e9-94db-0a95998482ac",
@@ -386,6 +389,7 @@
     },
     "title": "kk",
     "task_type": "Form",
+    "order": 0,
     "submission": {
       "id": "09afca56-e532-11e9-ac10-027d31a1f7a0",
       "last_revision": "09b06efc-e532-11e9-ac11-027d31a1f7a0",

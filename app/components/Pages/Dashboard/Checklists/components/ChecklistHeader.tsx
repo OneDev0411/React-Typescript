@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Box,
@@ -17,7 +17,6 @@ import { InlineEditableString } from 'components/inline-editable-fields/InlineEd
 import SearchDrawer from 'components/SearchDrawer'
 import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { ListItem as FormListItem } from 'deals/components/TaskCreate/styled'
 import { useDictionary } from 'hooks/use-dictionary'
 
 type Props = {
@@ -48,9 +47,9 @@ const useChecklistHeaderStyles = makeStyles(
 
 const ItemRow = props => {
   return (
-    <FormListItem onClick={props.onClick}>
+    <ListItem button onClick={props.onClick}>
       <TextMiddleTruncate text={props.item.name} maxLength={70} />
-    </FormListItem>
+    </ListItem>
   )
 }
 
