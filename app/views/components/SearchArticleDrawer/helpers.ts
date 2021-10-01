@@ -11,7 +11,8 @@ export function convertFeedItemToArticleMetadata(
     url: rssFeedItem.link ?? '',
     publishDate: rssFeedItem.pubDate ?? '',
     publisher: source.title,
-    publisherIcon: source.icon
+    publisherIcon: source.icon,
+    description: rssFeedItem.content
   }
 }
 
