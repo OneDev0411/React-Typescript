@@ -1,8 +1,17 @@
 import { useState } from 'react'
 
-import { Button, makeStyles, createStyles, Theme } from '@material-ui/core'
-import { mdiFolderPlusOutline } from '@mdi/js'
+import {
+  MenuList,
+  Button,
+  makeStyles,
+  MenuItem,
+  Theme,
+  Divider,
+  Typography
+} from '@material-ui/core'
+import { mdiPlus } from '@mdi/js'
 
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import TaskCreate from '../../../../components/TaskCreate'
@@ -12,51 +21,93 @@ interface Props {
   checklist: IDealChecklist | null
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      flexGrow: 1,
-      backgroundColor: '#fff',
-      height: theme.spacing(8),
-      borderBottomLeftRadius: theme.shape.borderRadius,
-      borderBottomRightRadius: theme.shape.borderRadius
-    },
-    button: {
-      justifyContent: 'flex-start',
-      height: '100%',
-      borderRadius: 0
-    },
-    buttonIcon: {
-      margin: theme.spacing(0, 1.5, 0, 0.5)
-    }
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexGrow: 1,
+    height: theme.spacing(6),
+    borderBottomLeftRadius: theme.shape.borderRadius,
+    borderBottomRightRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.grey['50']
+  },
+  button: {
+    justifyContent: 'flex-start',
+    height: '100%',
+    borderRadius: 0
+  },
+  buttonIcon: {
+    margin: theme.spacing(0, 1.5, 0, 0.5)
+  },
+  menuList: {
+    minWidth: '300px'
+  },
+  divider: {
+    margin: theme.spacing(1, 0)
+  }
+}))
 
 export default function NewTaskRow(props: Props) {
-  const [showCreateTaskDrawer, setShowCreateTaskDrawer] = useState(false)
+  const [newTaskType, setNewTaskType] = useState<Nullable<IDealTaskType>>(null)
+
   const classes = useStyles()
-  const toggleCreateTaskDrawer = () =>
-    setShowCreateTaskDrawer(!showCreateTaskDrawer)
+  const toggleCreateTaskDrawer = () => setNewTaskType(null)
 
   return (
     <div className={classes.root}>
-      <Button
-        fullWidth
-        color="secondary"
-        className={classes.button}
-        onClick={toggleCreateTaskDrawer}
-      >
-        <SvgIcon path={mdiFolderPlusOutline} className={classes.buttonIcon} />
-        Add new folder
-      </Button>
+      <BaseDropdown
+        renderDropdownButton={buttonProps => (
+          <>
+            <Button
+              fullWidth
+              color="primary"
+              className={classes.button}
+              {...buttonProps}
+            >
+              <SvgIcon path={mdiPlus} className={classes.buttonIcon} />
+              Add
+            </Button>
+          </>
+        )}
+        renderMenu={({ close }) => (
+          <MenuList className={classes.menuList}>
+            <MenuItem
+              onClick={() => {
+                setNewTaskType('Form')
+                close()
+              }}
+            >
+              Form{' '}
+              <Typography color="textSecondary">
+                &nbsp;(from library)
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setNewTaskType('Generic')
+                close()
+              }}
+            >
+              New Folder
+            </MenuItem>
+            <Divider className={classes.divider} />
+            <MenuItem
+              onClick={() => {
+                setNewTaskType('Splitter')
+                close()
+              }}
+            >
+              New Section
+            </MenuItem>
+          </MenuList>
+        )}
+      />
 
       <TaskCreate
         deal={props.deal}
         checklist={props.checklist}
-        isOpen={showCreateTaskDrawer}
+        taskType={newTaskType}
         onClose={toggleCreateTaskDrawer}
       />
     </div>
