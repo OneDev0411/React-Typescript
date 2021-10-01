@@ -1,7 +1,13 @@
 import { Request, Response } from 'express'
 import Parser from 'rss-parser'
 
-const parser: Parser = new Parser()
+const parser: Parser = new Parser({
+  headers: {
+    Accept:
+      'text/html,application/xhtml+xml,application/xml;q=0.9,application/rss+xml'
+  },
+  timeout: 25000
+})
 
 export default async (req: Request, res: Response) => {
   const rssSources: string[] = Array.isArray(req.body.sources)
@@ -11,8 +17,11 @@ export default async (req: Request, res: Response) => {
   const rssPromises = rssSources.map(
     (rssSource, sourceIndex) =>
       new Promise<Parser.Output<{ sourceIndex: number }> | null>(resolve => {
-        parser.parseURL(rssSource).then(
-          result =>
+        console.time(rssSource)
+
+        parser
+          .parseURL(rssSource)
+          .then(result => {
             resolve({
               ...result,
               items: result.items.map(item => ({
@@ -20,9 +29,13 @@ export default async (req: Request, res: Response) => {
                 content: removeHTMLTags(item.content ?? ''),
                 sourceIndex
               }))
-            }),
-          () => resolve(null)
-        )
+            })
+            console.timeEnd(rssSource)
+          })
+          .catch(error => {
+            console.log('############## Error', `!!${rssSource}!!`, error)
+            resolve(null)
+          })
       })
   )
 
