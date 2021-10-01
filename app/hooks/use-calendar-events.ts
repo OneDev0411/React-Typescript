@@ -43,17 +43,16 @@ export function useCalendarEvents(
       // More info: https://gitlab.com/rechat/web/-/issues/5058#note_561554003
       const sortedEvents = calendarEvents
         .map(event => {
-          let newTimestamp
-          const timestamp = new Date(event.timestamp * 1000)
+          let newTimestamp = new Date(event.timestamp * 1000)
 
           if (event.all_day && event.recurring) {
-            newTimestamp = convertToCurrentYear(timestamp)
+            newTimestamp = convertToCurrentYear(newTimestamp)
           }
 
           return {
             ...event,
             timestamp: newTimestamp.getTime() / 1000,
-            next_occurence: newTimestamp
+            next_occurence: newTimestamp.toISOString()
           }
         })
         .sort((a, b) =>
