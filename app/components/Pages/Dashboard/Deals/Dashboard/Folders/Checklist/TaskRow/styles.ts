@@ -10,17 +10,22 @@ export const useStyles = makeStyles(
       paddingLeft: theme.spacing(2),
       minHeight: theme.spacing(8),
       '& .visible-on-hover': {
-        visibility: 'hidden'
+        display: 'none'
       },
       '&:hover .visible-on-hover': {
-        visibility: 'visible'
+        display: 'inherit'
       },
       '&:hover .hide-on-hover': {
-        visibility: 'hidden'
+        display: 'none'
       },
       '&:hover': {
         backgroundColor: theme.palette.info.ultralight
       }
+    },
+    divider: {
+      width: '100%',
+      margin: theme.spacing(0, 2),
+      borderBottom: `1px solid ${theme.palette.grey[100]}`
     },
     iconContainer: {
       margin: theme.spacing(0, 1.5)

@@ -3,7 +3,6 @@ import {
   DragDropContext,
   Droppable,
   DroppableProvided,
-  DroppableStateSnapshot,
   DropResult
 } from 'react-beautiful-dnd'
 import { useSelector, useDispatch } from 'react-redux'
@@ -113,10 +112,7 @@ export function ChecklistFolder({
               droppableId={checklist ? checklist.id : 'disabled'}
               isDropDisabled={!checklist}
             >
-              {(
-                provided: DroppableProvided,
-                snapshot: DroppableStateSnapshot
-              ) => (
+              {(provided: DroppableProvided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {tasks.map((task, index) => (
                     <TaskRow

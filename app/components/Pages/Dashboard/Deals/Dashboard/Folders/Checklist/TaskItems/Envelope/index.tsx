@@ -37,7 +37,7 @@ export function Envelope({ deal, task, envelope }: Props) {
                   to={`/dashboard/deals/${deal.id}/view/${task.id}/envelope/${envelope.id}`}
                 >
                   {envelope.title}
-                  {' - '}
+                  {'  '}
                   <EnvelopeStatus deal={deal} task={task} envelope={envelope} />
                 </Link>
               </Box>

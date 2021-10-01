@@ -1,14 +1,13 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import { Grid, Box, Typography } from '@material-ui/core'
+import { Grid, Box } from '@material-ui/core'
+import { mdiChevronDown, mdiChevronRight } from '@mdi/js'
 import cn from 'classnames'
-import {
-  Draggable,
-  DraggableProvided,
-  DraggableStateSnapshot
-} from 'react-beautiful-dnd'
+import { Draggable, DraggableProvided } from 'react-beautiful-dnd'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import {
   setSelectedTask,
   setExpandTask,
@@ -27,6 +26,7 @@ import { TaskItems } from '../TaskItems'
 import { Activity } from './Activity'
 import { getTaskActions } from './get-task-actions'
 import { useStyles } from './styles'
+import { TaskBadge } from './TaskBadge'
 import { TaskSplitter } from './TaskSplitter'
 
 interface Props {
@@ -66,7 +66,24 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
     isBackOffice
   })
 
+  const isTaskExpandable = useMemo(() => {
+    let count = 0
+
+    if (task.form) {
+      count += 1
+    }
+
+    count += taskEnvelopes.length
+    count += attachments?.length ?? 0
+
+    return count > 0
+  }, [task, taskEnvelopes.length, attachments?.length])
+
   const toggleTaskOpen = () => {
+    if (!isTaskExpandable) {
+      return
+    }
+
     setIsTaskExpanded(state => !state)
 
     setTimeout(() => {
@@ -86,7 +103,7 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
 
   return (
     <Draggable key={task.id} draggableId={task.id} index={index}>
-      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+      {(provided: DraggableProvided) => (
         <div
           ref={provided.innerRef}
           {...provided.dragHandleProps}
@@ -101,33 +118,29 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
           ) : (
             <Grid container className={classes.container}>
               <Grid container className={classes.row}>
-                <Box display="flex" alignItems="center">
-                  {/* <TaskIcon
-                    deal={deal}
-                    task={task}
-                    isTaskExpanded={isTaskExpanded}
-                    isBackOffice={isBackOffice}
-                    onClick={toggleTaskOpen}
-                  /> */}
-
-                  <div>
-                    <Box display="flex" alignItems="center">
-                      <span
-                        className={cn(classes.title, classes.link)}
-                        onClick={toggleTaskOpen}
-                      >
-                        {task.title}
-                      </span>
-                    </Box>
-
-                    <Typography variant="caption" className={classes.caption}>
-                      <EnvelopeStatus
-                        envelope={envelope}
-                        deal={deal}
-                        task={task}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  onClick={toggleTaskOpen}
+                >
+                  {isTaskExpandable && (
+                    <Box mr={1.5}>
+                      <SvgIcon
+                        path={isTaskExpanded ? mdiChevronDown : mdiChevronRight}
+                        size={muiIconSizes.medium}
+                        style={{
+                          margin: '6px 0 0 -6px' // icon is not standard
+                        }}
                       />
-                    </Typography>
-                  </div>
+                    </Box>
+                  )}
+                  <span
+                    className={cn(classes.title, {
+                      [classes.link]: isTaskExpandable
+                    })}
+                  >
+                    {task.title}
+                  </span>
                 </Box>
 
                 <Box
@@ -154,9 +167,25 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
                     />
                   </Box>
 
-                  <Box className="hide-on-hover">
-                    <TaskNotifications task={task} />
-                  </Box>
+                  {!isTaskExpanded && (
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      className="hide-on-hover"
+                    >
+                      <EnvelopeStatus
+                        envelope={envelope}
+                        deal={deal}
+                        task={task}
+                      />
+                      <TaskBadge
+                        deal={deal}
+                        task={task}
+                        isBackOffice={isBackOffice}
+                      />
+                      <TaskNotifications task={task} />
+                    </Box>
+                  )}
                 </Box>
               </Grid>
 
@@ -170,6 +199,8 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
               </Grid>
 
               {isTaskExpanded && <div className={classes.verticalGuideLine} />}
+
+              <div className={classes.divider} />
             </Grid>
           )}
         </div>
