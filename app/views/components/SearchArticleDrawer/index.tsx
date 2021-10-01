@@ -66,7 +66,6 @@ function SearchArticleDrawer({
     isLoading
   } = useAsync<RSSArticleMetadata[]>({ data: [] })
   const [selected, setSelected] = useState<RSSArticleMetadata[]>([])
-
   const imageCache = useCreateImageCache()
 
   const { searchArticles, isArticlesLoading, allArticles } =
