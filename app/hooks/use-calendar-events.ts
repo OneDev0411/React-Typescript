@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { isToday, setYear, compareAsc } from 'date-fns'
+import { compareAsc } from 'date-fns'
 import { useSelector } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
@@ -11,6 +11,7 @@ import {
 import { useLoadingEntities } from 'hooks/use-loading'
 import { getCalendar, CalendarObjectType } from 'models/calendar/get-calendar'
 import { selectUser } from 'selectors/user'
+import { convertToCurrentYear } from 'utils/date-utils'
 
 interface UseCalendarEvents {
   isLoading: boolean
@@ -42,22 +43,20 @@ export function useCalendarEvents(
       // More info: https://gitlab.com/rechat/web/-/issues/5058#note_561554003
       const sortedEvents = calendarEvents
         .map(event => {
-          const eventNextOccurence = new Date(event.next_occurence)
+          let newTimestamp = new Date(event.timestamp * 1000)
 
-          const currentYear = new Date().getFullYear()
-          const nextOccurence = isToday(
-            setYear(eventNextOccurence, currentYear)
-          )
-            ? setYear(eventNextOccurence, currentYear)
-            : eventNextOccurence
+          if (event.all_day && event.recurring) {
+            newTimestamp = convertToCurrentYear(newTimestamp)
+          }
 
           return {
             ...event,
-            next_occurence: nextOccurence.toISOString()
+            timestamp: newTimestamp.getTime() / 1000,
+            next_occurence: newTimestamp.toISOString()
           }
         })
         .sort((a, b) =>
-          compareAsc(new Date(a.next_occurence), new Date(b.next_occurence))
+          compareAsc(new Date(a.timestamp), new Date(b.timestamp))
         )
 
       setEvents(sortedEvents)
