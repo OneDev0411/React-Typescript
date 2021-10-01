@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 0
   },
   buttonIcon: {
-    margin: theme.spacing(0, 1.5, 0, 0.5)
+    margin: theme.spacing(0, 0.5, 0, 0.5)
   },
   menuList: {
     minWidth: '300px'

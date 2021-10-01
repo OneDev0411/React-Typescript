@@ -123,17 +123,21 @@ export function TaskRow({ index, deal, task, isBackOffice }: Props) {
                   alignItems="center"
                   onClick={toggleTaskOpen}
                 >
-                  {isTaskExpandable && (
-                    <Box mr={1.5}>
-                      <SvgIcon
-                        path={isTaskExpanded ? mdiChevronDown : mdiChevronRight}
-                        size={muiIconSizes.medium}
-                        style={{
-                          margin: '6px 0 0 -6px' // icon is not standard
-                        }}
-                      />
-                    </Box>
-                  )}
+                  <Box
+                    mr={0.5}
+                    style={{
+                      visibility: isTaskExpandable ? 'visible' : 'hidden'
+                    }}
+                  >
+                    <SvgIcon
+                      path={isTaskExpanded ? mdiChevronDown : mdiChevronRight}
+                      size={muiIconSizes.medium}
+                      style={{
+                        margin: '6px 0 0 -6px' // icon is not standard
+                      }}
+                    />
+                  </Box>
+
                   <span
                     className={cn(classes.title, {
                       [classes.link]: isTaskExpandable
