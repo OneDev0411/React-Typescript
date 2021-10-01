@@ -6,8 +6,8 @@ import matchSorter from 'match-sorter'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { IAppState } from '@app/reducers'
+import { SearchInput } from '@app/views/components/SearchInput'
 import { createFormTask } from 'actions/deals'
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
 import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -32,7 +32,7 @@ export default function TaskCreate({
 }: Props) {
   const dispatch = useDispatch()
 
-  const [searchFilter, setSearchFilter] = useState('')
+  const [searchFilter, setSearchFilter] = useState<string>('')
   const [isSaving, setIsSaving] = useState(false)
   const [showCustomTaskDrawer, setShowCustomTaskDrawer] = useState(false)
 
@@ -107,10 +107,9 @@ export default function TaskCreate({
                 <SearchInput
                   fullWidth
                   placeholder="Type in to search..."
-                  value={searchFilter}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearchFilter(e.target.value)
-                  }
+                  onChangeHandler={(e, value: string) => {
+                    setSearchFilter(value)
+                  }}
                 />
               </Box>
 
