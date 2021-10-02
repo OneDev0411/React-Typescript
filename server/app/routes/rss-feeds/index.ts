@@ -6,7 +6,10 @@ const parser: Parser = new Parser({
     Accept:
       'text/html,application/xhtml+xml,application/xml;q=0.9,application/rss+xml'
   },
-  timeout: 25000
+  timeout: 25000,
+  customFields: {
+    item: ['createdDate']
+  }
 })
 
 export default async (req: Request, res: Response) => {

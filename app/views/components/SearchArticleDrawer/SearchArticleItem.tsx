@@ -26,7 +26,7 @@ function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
         imageAspect={0.58}
         overline={article.publisher}
         overlineIcon={article.publisherIcon}
-        overlineDate={article.publishDate}
+        overlineDate={article.publishDate ?? article.createdDate}
         title={article.title}
         link={article.url}
       />

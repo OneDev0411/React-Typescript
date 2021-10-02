@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 
 import useAsync from '@app/hooks/use-async'
 
+import { sortRSSFeedItems } from './helpers'
 import { getRSSFeeds } from './models'
 import { RSSFeedItem, RSSSource } from './types'
 
@@ -21,10 +22,12 @@ export function useRSSFeedItems(rssSources: RSSSource[]): UseRSSFeedItems {
     run(async () => {
       const rssFeeds = await getRSSFeeds(rssSources)
 
-      return rssFeeds.reduce(
+      const rssFeedItems = rssFeeds.reduce<RSSFeedItem[]>(
         (feedItems, feedItem) => [...feedItems, ...feedItem.items],
         []
       )
+
+      return sortRSSFeedItems(rssFeedItems)
     })
   }, [run, rssSources])
 
