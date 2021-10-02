@@ -103,5 +103,9 @@
     "app/**/*.ts",
     "app/**/*.tsx",
     "types/**/*.ts"
+  ],
+  "exclude": [
+    "builds/**/*",
+    "node_modules"
   ]
 }

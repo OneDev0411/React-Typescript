@@ -11,9 +11,7 @@ import {
   makeStyles,
   Theme
 } from '@material-ui/core'
-import { isToday, isTomorrow } from 'date-fns'
 import { useSelector } from 'react-redux'
-import timeago from 'timeago.js'
 
 import { isDealEvent } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/event-checker'
 import { getTitle } from '@app/views/components/GridCalendar/helpers/normalize-events/helpers/get-title'
@@ -22,6 +20,7 @@ import { Avatar } from 'components/Avatar'
 import SendContactCard from 'components/InstantMarketing/adapters/SendContactCard'
 import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 import { selectUser } from 'selectors/user'
+import { fromNow, convertToCurrentYear } from 'utils/date-utils'
 import { eventTypesIcons } from 'views/utils/event-types-icons'
 
 import { getEventMarketingTemplateTypes } from './helpers'
@@ -51,6 +50,7 @@ export default function CalendarEventListItem({ event }: Props) {
   let Icon
   let eventSubTitle
   let eventTitleLink
+  let humanizedEventTime
   const eventTitle = getTitle(event)
 
   const classes = useStyles()
@@ -72,16 +72,20 @@ export default function CalendarEventListItem({ event }: Props) {
     event.people[0].type === 'contact'
       ? event.people[0]
       : null
+
   const cardTemplateTypes = getEventMarketingTemplateTypes(event)
-  const eventTime = new Date(event.next_occurence)
-  const humanizedEventTime = isToday(eventTime)
-    ? 'Today'
-    : isTomorrow(eventTime)
-    ? 'Tomorrow'
-    : timeago().format(eventTime)
+  const eventTime = new Date(event.timestamp * 1000)
+
+  if (event.recurring && event.all_day) {
+    // More info on why we do this read:
+    // https://gitlab.com/rechat/web/-/issues/5581#note_689114258
+    humanizedEventTime = fromNow(convertToCurrentYear(eventTime), true)
+  } else {
+    humanizedEventTime = fromNow(eventTime, false)
+  }
 
   // Build avatars
-  if (contact) {
+  if (contact && contact.profile_image_url) {
     avatarIcon = (
       <Link to={`/dashboard/contacts/${contact.id}`}>
         <Avatar disableLazyLoad size="medium" contact={contact} />

@@ -45,7 +45,7 @@ const ConflictModal = ({ params, brandInfo }) => {
               to="/dashboard/mls"
               style={{ marginRight: '1rem' }}
             >
-              Cancel
+              Never mind
             </LinkButton>
           </Grid>
           <Grid item xs={6}>

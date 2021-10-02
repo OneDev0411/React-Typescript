@@ -50,7 +50,7 @@ export function useSearchLocation(criteria: string): {
           if (status != google.maps.places.PlacesServiceStatus.OK) {
             resolve([])
           } else {
-            resolve(results)
+            resolve(results!)
           }
         })
       })
@@ -109,7 +109,7 @@ export function useSearchLocation(criteria: string): {
         async (place, status) => {
           if (status === window.google.maps.places.PlacesServiceStatus.OK) {
             const parsedAddress = await addressParser.parseLocation(
-              place.formatted_address
+              place?.formatted_address
             )
 
             resolve(parsedAddress)
