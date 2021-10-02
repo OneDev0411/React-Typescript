@@ -100,7 +100,7 @@ const useStyles = makeStyles(
 )
 
 export interface DrawerResultCardProps {
-  imageUrl: string
+  imageUrl: Optional<string>
   imageAspect: number
   isSelected: boolean
   overline?: string

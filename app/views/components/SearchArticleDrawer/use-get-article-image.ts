@@ -4,10 +4,10 @@ import { getUrlMetadata } from './models'
 import { RSSArticleMetadata } from './types'
 import { useSearchArticleImageCache } from './use-search-article-image-cache'
 
-const DEFAULT_IMAGE_URL = '' // TODO: insert the url here
+const DEFAULT_IMAGE_URL = '/' // TODO: insert the url here
 
 interface UseGetArticleImage {
-  image: string
+  image: Optional<string>
   loadImage: () => void
 }
 
@@ -27,14 +27,20 @@ export function useGetArticleImage(
     reset()
 
     run(async () => {
-      const metadata = await getUrlMetadata(article.url)
-      const image = metadata?.image ?? DEFAULT_IMAGE_URL
+      try {
+        const metadata = await getUrlMetadata(article.url)
+        const image = metadata?.image ?? DEFAULT_IMAGE_URL
 
-      setItem(article.url, image)
+        setItem(article.url, image)
 
-      return image
+        return image
+      } catch (_) {
+        setItem(article.url, DEFAULT_IMAGE_URL)
+
+        return DEFAULT_IMAGE_URL
+      }
     })
   }
 
-  return { image: imageUrl ?? DEFAULT_IMAGE_URL, loadImage }
+  return { image: imageUrl, loadImage }
 }
