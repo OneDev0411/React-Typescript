@@ -178,7 +178,7 @@ function SearchArticleDrawer({
             fullWidth
           />
         </Box>
-        <Box flex={1} className={classes.results} px={3}>
+        <Box flex={1} className={classes.results} pl={3}>
           <SearchArticleImageCacheProvider imageCache={imageCache}>
             {isLoadingState ? (
               <LoadingContainer />
