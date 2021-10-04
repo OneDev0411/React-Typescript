@@ -192,7 +192,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     <GlobalPageLayout className={classes.exploreContainer}>
       {!isLoadingPlace ? (
         <ListingsContext.Provider value={[state, dispatch]}>
-          {!userLocationState.firstRun && !hasUrlQuery && !isWidget ? (
+          {userLocationState.firstRun && !hasUrlQuery && !isWidget ? (
             <LandingPage
               isGettingCurrentPosition={
                 userLocationState.isGettingCurrentPosition
