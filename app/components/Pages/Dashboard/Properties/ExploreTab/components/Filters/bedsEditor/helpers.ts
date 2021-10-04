@@ -1,5 +1,5 @@
 export function createBedArray({
-  length = 10,
+  length = 6,
   min,
   max
 }: {
