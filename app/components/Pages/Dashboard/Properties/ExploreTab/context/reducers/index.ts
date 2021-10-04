@@ -1,9 +1,6 @@
 import { FILTERS_INITIAL_VALUES } from '../../../constants'
-import {
-  parseSortIndex,
-  Sort,
-  SORT_FIELD_DEFAULT
-} from '../../../helpers/sort-utils'
+import { parseSortIndex, SORT_FIELD_DEFAULT } from '../../../helpers/sort-utils'
+import { IListingUIStates, IMapPosition, Sort } from '../../../types'
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
@@ -14,18 +11,14 @@ export interface ListingSearchOptions {
   sort: Sort
 }
 
-export interface MapPosition {
-  center: Optional<ICoord>
-  zoom: Optional<number>
-}
 export interface ListingsState {
   search: ListingSearchOptions
-  map: MapPosition
+  map: IMapPosition
   result: {
     listings: ICompactListing[]
     info: Nullable<ICompactListingInfo>
   }
-  listingStates: { hover: Nullable<UUID>; click: Nullable<UUID> }
+  listingStates: IListingUIStates
   isLoading: boolean
 }
 

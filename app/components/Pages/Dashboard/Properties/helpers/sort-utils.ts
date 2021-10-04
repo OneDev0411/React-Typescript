@@ -4,6 +4,8 @@ export const SORT_FIELD_DEFAULT = '-price'
 
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
+import { IMapPosition, Sort, SortIndex, SortPrefix, SortString } from '../types'
+
 export const sortOptions = {
   created_at: 'Listed Date',
   price: 'Price',
@@ -13,15 +15,6 @@ export const sortOptions = {
   lotSizeArea: 'Lot Size',
   builtYear: 'Year Built'
 }
-
-export interface LastBrowsingLocation {
-  center: { lat: number; lng: number }
-  zoom: number
-}
-export type SortIndex = keyof typeof sortOptions
-export type SortPrefix = '' | '-'
-export type SortString = `${SortPrefix}${SortIndex}`
-export type Sort = { index: SortIndex; ascending: boolean }
 
 export const createSortString = (
   index: SortIndex,
@@ -61,7 +54,7 @@ export const getUserLastBrowsingLocation = (user: IUser) => {
   return getUserSettingsInActiveTeam(
     user,
     LAST_BROWSING_LOCATION
-  ) as Optional<LastBrowsingLocation>
+  ) as Optional<IMapPosition>
 }
 
 export function parseToValertSort(sort: SortIndex): string {

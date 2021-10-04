@@ -2,14 +2,10 @@ import { useMemo } from 'react'
 
 import { makeStyles, Box, Grid } from '@material-ui/core'
 
-import {
-  SortIndex,
-  SortString
-} from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
-
 import { PAGE_SIZE } from '../../constants'
 import { ViewType } from '../../ExploreTab/components/ExplorePage'
 import { getResultsCountText } from '../../helpers/pagination-utils'
+import { SortIndex, SortString } from '../../types'
 import { MapToggler } from '../MapToggler'
 
 import { SortDropdown } from './SortDropdown'
