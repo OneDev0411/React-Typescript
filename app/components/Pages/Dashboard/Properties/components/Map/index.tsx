@@ -8,7 +8,7 @@ import GoogleMap, { ChangeEventValue } from 'google-map-react'
 import { noop } from '@app/utils/helpers'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
-import { bootstrapURLKeys } from '../../constants/constants'
+import { bootstrapURLKeys } from '../../constants'
 import { MapPosition } from '../../ExploreTab/context/reducers'
 import {
   pointsFromPolygon,

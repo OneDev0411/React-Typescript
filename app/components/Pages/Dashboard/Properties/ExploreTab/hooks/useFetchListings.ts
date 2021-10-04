@@ -14,7 +14,7 @@ import {
   PROPOSED_AGENT_ZOOM_LEVEL,
   QUERY_LIMIT,
   SEARCH_DEBOUNCE_MS
-} from '../../constants/constants'
+} from '../../constants'
 import { formatListing } from '../../helpers/format-listing'
 import {
   createValertOptions,

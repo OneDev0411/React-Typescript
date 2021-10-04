@@ -4,7 +4,7 @@ import { Checkbox, FormControlLabel, FormGroup, Grid } from '@material-ui/core'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
-import { PROPERTY_TYPES_PROPERTY_SUBTYPES } from '../../../../../constants/constants'
+import { PROPERTY_TYPES_PROPERTY_SUBTYPES } from '../../../../../constants'
 import { EditorGroup } from '../EditorGroup'
 
 export const PropertySubtypesGroup = ({

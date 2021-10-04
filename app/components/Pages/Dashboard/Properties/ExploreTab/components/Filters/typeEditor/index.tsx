@@ -5,7 +5,7 @@ import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterBu
 import {
   PROPERTY_TYPES,
   PROPERTY_TYPES_DEFAULT_VALUES
-} from '../../../../constants/constants'
+} from '../../../../constants'
 import { FilterEditorFooter } from '../filterEditorFooter'
 import { useStyles } from '../styles'
 

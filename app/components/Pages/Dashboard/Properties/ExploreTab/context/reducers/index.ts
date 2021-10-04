@@ -1,4 +1,4 @@
-import { FILTERS_INITIAL_VALUES } from '../../../constants/constants'
+import { FILTERS_INITIAL_VALUES } from '../../../constants'
 import {
   parseSortIndex,
   Sort,

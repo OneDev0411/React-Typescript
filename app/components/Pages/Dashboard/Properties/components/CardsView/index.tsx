@@ -9,7 +9,7 @@ import { useListSelection } from 'components/ListSelection/use-list-selection'
 import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
-import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants/constants'
+import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants'
 import {
   changeListingHoverState,
   toggleListingFavoriteState

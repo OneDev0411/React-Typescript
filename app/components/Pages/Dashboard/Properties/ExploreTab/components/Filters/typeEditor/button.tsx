@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
 
-import { PROPERTY_TYPES } from '../../../../constants/constants'
+import { PROPERTY_TYPES } from '../../../../constants'
 import { useStyles } from '../styles'
 
 export const TypeButton = ({

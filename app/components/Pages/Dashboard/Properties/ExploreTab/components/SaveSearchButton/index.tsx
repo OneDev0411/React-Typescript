@@ -16,7 +16,7 @@ import { putUserSetting } from '@app/models/user/put-user-setting'
 import { selectUserUnsafe } from '@app/selectors/user'
 import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
 
-import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants/constants'
+import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
 
 const useStyles = makeStyles(
   theme => ({

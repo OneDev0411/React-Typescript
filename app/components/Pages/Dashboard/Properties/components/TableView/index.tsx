@@ -26,7 +26,7 @@ import { useListSelection } from '@app/views/components/ListSelection/use-list-s
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { selectUserUnsafe } from 'selectors/user'
 
-import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants/constants'
+import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants'
 import { changeListingHoverState } from '../../ExploreTab/context/actions'
 import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
 

@@ -11,7 +11,7 @@ import {
   PROPERTIES_FILTERS_STORAGE_KEY,
   PROPERTY_TYPES_DEFAULT_VALUES,
   RES_FILTERS_DEFAULT_VALUES
-} from '../../../constants/constants'
+} from '../../../constants'
 import { updateFilters } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 

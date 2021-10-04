@@ -2,7 +2,7 @@ import { Checkbox, FormControlLabel, FormGroup, Grid } from '@material-ui/core'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
-import { ARCHITECTURAL_STYLES } from '../../../../../constants/constants'
+import { ARCHITECTURAL_STYLES } from '../../../../../constants'
 import { EditorGroup } from '../EditorGroup'
 
 export const HomeStyleGroup = ({

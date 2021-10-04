@@ -19,7 +19,7 @@ import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { QUERY_LIMIT, bootstrapURLKeys } from '../../../constants/constants'
+import { QUERY_LIMIT, bootstrapURLKeys } from '../../../constants'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
 import { coordToPoint } from '../../../helpers/map-helpers'
 import {

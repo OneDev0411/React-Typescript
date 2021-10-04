@@ -14,7 +14,7 @@ import {
   STATUSES,
   PENDING_STATUSES,
   OTHER_STATUSES
-} from '@app/components/Pages/Dashboard/Properties/constants/constants'
+} from '@app/components/Pages/Dashboard/Properties/constants'
 import { getStatusColorClass } from '@app/utils/listing'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 

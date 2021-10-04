@@ -14,7 +14,7 @@ import { getLocationErrorMessage } from 'utils/map'
 import {
   FILTERS_INITIAL_VALUES,
   PROPERTIES_FILTERS_STORAGE_KEY
-} from '../constants/constants'
+} from '../constants'
 import {
   getDefaultSort,
   getUserLastBrowsingLocation,
