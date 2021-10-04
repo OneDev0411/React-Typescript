@@ -153,7 +153,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const onSelectPlace = (center: ICoord, zoom: number) => {
     dispatch(setMapLocation(center, zoom))
-    setSearchQuery(window.location.search.substring(3))
+    setSearchQuery(location.query.q)
     setUserLocationState(prev => ({ ...prev, firstRun: false }))
   }
 
@@ -192,7 +192,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     <GlobalPageLayout className={classes.exploreContainer}>
       {!isLoadingPlace ? (
         <ListingsContext.Provider value={[state, dispatch]}>
-          {userLocationState.firstRun && !hasUrlQuery && !isWidget ? (
+          {!userLocationState.firstRun && !hasUrlQuery && !isWidget ? (
             <LandingPage
               isGettingCurrentPosition={
                 userLocationState.isGettingCurrentPosition
