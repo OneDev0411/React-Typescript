@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react'
 
 import { Grid, makeStyles } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import MyLocationIcon from '@material-ui/icons/MyLocation'
 import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
@@ -16,6 +14,7 @@ import {
 import { confirmation } from 'actions/confirmation'
 import { setUserSetting } from 'actions/user/set-setting'
 
+import { Map } from '../../../components/Map'
 import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
@@ -34,15 +33,13 @@ import {
   removeMapDrawing,
   setMapBounds,
   setMapLocation,
-  changeSort
+  changeSort,
+  changeListingHoverState,
+  changeListingClickedState
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
-import { DrawingModeBar } from '../DrawingModeBar'
 import { Filters } from '../Filters'
-import { GoogleMapsButton } from '../GoogleMapsButton'
-import { Map } from '../Map'
-import { MapToggler } from '../MapToggler'
 import { Results } from '../Results'
 import { SaveSearchButton } from '../SaveSearchButton'
 
@@ -144,7 +141,6 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const reduxDispatch = useDispatch()
   const [mapIsShown, setMapIsShown] = useState(true)
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
-  const [drawingMode, setDrawingMode] = useState(false)
   const [isShowAlertModal, setIsShowAlertModal] = useState(false)
   const [viewType, setViewType] = useState<ViewType>(
     (viewQueryParam as ViewType) || 'cards'
@@ -158,25 +154,17 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onToggleView = (to: ViewType) => {
     setViewType(to)
   }
-  const activateDrawingMode = () => {
-    setDrawingMode(true)
-  }
 
-  const deactivateDrawingMode = () => {
-    setDrawingMode(false)
-  }
-
-  const removeDrawing = () => {
+  const onRemoveDrawing = () => {
     dispatch(removeMapDrawing())
   }
 
   const onDoneDrawing = useCallback((points: ICoord[]) => {
-    setDrawingMode(false)
     dispatch(setMapDrawing(points))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const toggleMap = () => setMapIsShown(mapIsShown => !mapIsShown)
+  const toggleMapShown = () => setMapIsShown(mapIsShown => !mapIsShown)
 
   const onSelectPlace = (center: ICoord, zoom: number, bounds: IBounds) => {
     if (viewType === 'cards') {
@@ -206,15 +194,17 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     setMapIsInitialized(true)
   }
 
-  const updateUserLocation = useCallback(
-    (center: ICoord, zoom: number) => {
+  const onMapChange = useCallback(
+    (center: ICoord, zoom: number, bounds: IBounds) => {
+      dispatch(setMapBounds(center, zoom, bounds))
+
       // Anonymous user's can also see /mls and explore the map
       // So updatingLastBrowsing location should not be run for them
       if (user) {
         reduxDispatch(setUserSetting(LAST_BROWSING_LOCATION, { center, zoom }))
       }
     },
-    [user, reduxDispatch]
+    [dispatch, user, reduxDispatch]
   )
 
   const handleSaveSearch = () => {
@@ -236,6 +226,35 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onCloseAlertModal = () => {
     setIsShowAlertModal(false)
   }
+
+  const changeHoverState = (id: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(hover ? id : null))
+  }
+
+  const onOpenListingModal = (id: UUID) => {
+    if (!isWidget) {
+      window.history.pushState({}, '', `/dashboard/properties/${id}`)
+    }
+  }
+
+  const onCloseListingModal = () => {
+    if (!isWidget) {
+      window.history.pushState({}, '', '/dashboard/properties')
+    }
+  }
+
+  const onMarkerClick = (key: UUID) => {
+    const resultElement = document.getElementById(key)
+
+    if (resultElement) {
+      // Smooth scrolling doesn't work on Chrome for some reason
+      resultElement.scrollIntoView({ behavior: 'smooth' })
+    }
+
+    dispatch(changeListingClickedState(key))
+  }
+
+  const onMapClick = () => dispatch(changeListingClickedState(null))
 
   return (
     <>
@@ -268,56 +287,25 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               })}
             >
               <Grid className={classes.mapCanvas}>
-                {!drawingMode && (
-                  <>
-                    <GoogleMapsButton
-                      tooltip="Hide map"
-                      top={9}
-                      left={10}
-                      onClick={toggleMap}
-                    >
-                      <MapToggler checked={mapIsShown} />
-                    </GoogleMapsButton>
-                    <GoogleMapsButton
-                      top={9}
-                      right={10}
-                      startIcon={<EditIcon />}
-                      tooltip="Define an area for searching."
-                      onClick={() => activateDrawingMode()}
-                    >
-                      Draw Area
-                    </GoogleMapsButton>
-                    <GoogleMapsButton
-                      size="small"
-                      bottom={90}
-                      left={10}
-                      iconButton
-                      tooltip="Get your exact location on the map"
-                      startIcon={<MyLocationIcon />}
-                      onClick={() => onClickLocate()}
-                    />
-                  </>
-                )}
-                {state.search.drawing.length > 0 && (
-                  <GoogleMapsButton
-                    top={9}
-                    right={10}
-                    startIcon={<EditIcon />}
-                    onClick={removeDrawing}
-                    active
-                  >
-                    Remove Drawing
-                  </GoogleMapsButton>
-                )}
-                {drawingMode && (
-                  <DrawingModeBar onCancel={deactivateDrawingMode} />
-                )}
                 <Map
                   isWidget={isWidget}
-                  drawingMode={drawingMode}
-                  drawingModeCallBack={onDoneDrawing}
-                  onChange={updateUserLocation}
+                  hasDrawingMode
+                  drawing={state.search.drawing}
+                  onDraw={onDoneDrawing}
+                  onRemoveDrawing={onRemoveDrawing}
+                  onChange={onMapChange}
                   mapIsShown={mapIsShown}
+                  onClickLocate={onClickLocate}
+                  onClickToggleMap={toggleMapShown}
+                  onChangeHoverState={changeHoverState}
+                  onCloseListingModal={onCloseListingModal}
+                  onOpenListingModal={onOpenListingModal}
+                  onMarkerClick={onMarkerClick}
+                  onMapClick={onMapClick}
+                  mapPosition={state.map}
+                  listings={state.result.listings}
+                  hoverListing={state.listingStates.hover}
+                  clickedListing={state.listingStates.click}
                 />
               </Grid>
             </Grid>
@@ -325,7 +313,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
           <Grid item className={classes.results}>
             <Results
               mapIsShown={mapIsShown}
-              onMapToggle={toggleMap}
+              onMapToggle={toggleMapShown}
               viewType={viewType}
               onChangeSort={onChangeSort}
               activeSort={state.search.sort}

@@ -13,9 +13,14 @@ export interface ListingSearchOptions {
   filters: Partial<AlertFilters>
   sort: Sort
 }
+
+export interface MapPosition {
+  center: Optional<ICoord>
+  zoom: Optional<number>
+}
 export interface ListingsState {
   search: ListingSearchOptions
-  map: { center: Optional<ICoord>; zoom: Optional<number> }
+  map: MapPosition
   result: {
     listings: ICompactListing[]
     info: Nullable<ICompactListingInfo>

@@ -9,8 +9,8 @@ import {
 
 import { PAGE_SIZE } from '../../constants/constants'
 import { ViewType } from '../../ExploreTab/components/ExplorePage'
-import { MapToggler } from '../../ExploreTab/components/MapToggler'
 import { getResultsCountText } from '../../helpers/pagination-utils'
+import { MapToggler } from '../MapToggler'
 
 import { SortDropdown } from './SortDropdown'
 import ViewSwitcher from './ViewSwitcher'
