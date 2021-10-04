@@ -190,7 +190,7 @@ export const Map = ({
               top={9}
               right={10}
               startIcon={<EditIcon />}
-              tooltip="Define an area for searching."
+              tooltip="Define an area for searching"
               onClick={() => setDrawingMode(true)}
             >
               Draw Area
