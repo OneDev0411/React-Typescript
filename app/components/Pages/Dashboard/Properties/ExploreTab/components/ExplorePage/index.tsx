@@ -25,9 +25,9 @@ import { coordToPoint } from '../../../helpers/map-helpers'
 import {
   LAST_BROWSING_LOCATION,
   parseSortIndex,
-  SortString,
   SORT_FIELD_SETTING_KEY
 } from '../../../helpers/sort-utils'
+import { SortString } from '../../../types'
 import {
   setMapDrawing,
   removeMapDrawing,

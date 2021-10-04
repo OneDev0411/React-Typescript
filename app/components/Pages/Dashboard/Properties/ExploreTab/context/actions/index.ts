@@ -1,4 +1,4 @@
-import { Sort } from '../../../helpers/sort-utils'
+import { Sort } from '../../../types'
 
 export const setListings = (
   listings: ICompactListing[],

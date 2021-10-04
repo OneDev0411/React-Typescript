@@ -18,10 +18,10 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import {
   createSortString,
   sortOptions,
-  SortIndex,
-  SortString,
   SORT_FIELD_DEFAULT
 } from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
+
+import { SortIndex, SortString } from '../../../types'
 
 const useStyles = makeStyles(
   theme => ({

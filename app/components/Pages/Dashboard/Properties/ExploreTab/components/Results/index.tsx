@@ -4,6 +4,10 @@ import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import { useScrolling } from 'react-use'
 
+import {
+  SortString,
+  SortIndex
+} from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { AnimatedLoader } from 'components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
@@ -12,7 +16,6 @@ import { TableView } from '../../../components/TableView'
 import ZeroState from '../../../components/ZeroState'
 import { PAGE_SIZE, QUERY_LIMIT } from '../../../constants'
 import { getListingsPage } from '../../../helpers/pagination-utils'
-import { SortIndex, SortString } from '../../../helpers/sort-utils'
 import useListingsContext from '../../hooks/useListingsContext'
 import { ViewType } from '../ExplorePage'
 

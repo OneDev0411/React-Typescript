@@ -1,9 +1,10 @@
 import { pickBy } from 'lodash'
 
 import { ListingSearchOptions } from '../ExploreTab/context/reducers'
+import { Sort } from '../types'
 
 import { coordToPoint, pointFromBounds } from './map-helpers'
-import { Sort, parseToValertSort } from './sort-utils'
+import { parseToValertSort } from './sort-utils'
 
 export function createValertQueryString(
   zoom: Optional<number>,

@@ -9,12 +9,12 @@ import { noop } from '@app/utils/helpers'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 
 import { bootstrapURLKeys } from '../../constants'
-import { MapPosition } from '../../ExploreTab/context/reducers'
 import {
   pointsFromPolygon,
   createMapOptions,
   createMapPolygonOptions
 } from '../../helpers/map-helpers'
+import { IMapPosition } from '../../types'
 import { DrawingModeBar } from '../DrawingModeBar'
 import { GoogleMapsButton } from '../GoogleMapsButton'
 import { MapToggler } from '../MapToggler'
@@ -23,7 +23,7 @@ import Marker from '../Marker'
 interface Props {
   isWidget: boolean
   mapIsShown?: boolean
-  mapPosition: MapPosition
+  mapPosition: IMapPosition
   listings: ICompactListing[]
   hoverListing: Nullable<UUID>
   clickedListing: Nullable<UUID>
