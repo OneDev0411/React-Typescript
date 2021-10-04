@@ -159,7 +159,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(removeMapDrawing())
   }
 
-  const onDoneDrawing = useCallback((points: ICoord[]) => {
+  const onDrawingComplete = useCallback((points: ICoord[]) => {
     dispatch(setMapDrawing(points))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -291,7 +291,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   isWidget={isWidget}
                   hasDrawingMode
                   drawing={state.search.drawing}
-                  onDraw={onDoneDrawing}
+                  onDrawingComplete={onDrawingComplete}
                   onRemoveDrawing={onRemoveDrawing}
                   onChange={onMapChange}
                   mapIsShown={mapIsShown}

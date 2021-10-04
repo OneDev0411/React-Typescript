@@ -29,7 +29,7 @@ interface Props {
   clickedListing: Nullable<UUID>
   hasDrawingMode?: boolean
   drawing?: ICoord[]
-  onDraw?: (points: ICoord[]) => void
+  onDrawingComplete?: (points: ICoord[]) => void
   onRemoveDrawing?: () => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
@@ -56,7 +56,7 @@ export const Map = ({
   hasDrawingMode = false,
   drawing = [],
   onRemoveDrawing = noop,
-  onDraw,
+  onDrawingComplete,
   onChange,
   onOpenListingModal = noop,
   onCloseListingModal = noop,
@@ -155,9 +155,9 @@ export const Map = ({
 
   useEffect(() => {
     if (mapIsLoaded.current && drawingMode) {
-      activateDrawingMode(onDraw)
+      activateDrawingMode(onDrawingComplete)
     }
-  }, [drawingMode, onDraw, activateDrawingMode])
+  }, [drawingMode, onDrawingComplete, activateDrawingMode])
 
   return (
     <>
