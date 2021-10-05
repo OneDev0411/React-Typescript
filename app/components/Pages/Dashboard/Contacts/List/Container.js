@@ -84,10 +84,10 @@ class ContactsList extends React.Component {
       loadedRanges: [],
       duplicateClusterCount: 0,
       parkedContactCount: 0,
-      viewMode: 'table'
+      viewMode: 'table',
+      sortOrder: '-last_touch'
     }
 
-    this.order = null
     this.tableContainerId = 'contacts--page-container'
   }
 
@@ -102,7 +102,7 @@ class ContactsList extends React.Component {
     )
     const relevanceSortKey = '-last_touch_rank'
 
-    this.order = searchInputValue
+    const order = searchInputValue
       ? relevanceSortKey
       : sortFieldSetting && sortFieldSetting !== relevanceSortKey
       ? sortFieldSetting
@@ -114,7 +114,8 @@ class ContactsList extends React.Component {
     this.setState({
       viewMode:
         getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
-        'table'
+        'table',
+      sortOrder: order
     })
 
     if (globalButtonDispatch) {
@@ -322,7 +323,7 @@ class ContactsList extends React.Component {
   }
 
   hasSearchState = () =>
-    this.props.filters || this.state.searchInputValue || this.order
+    this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
   fetchList = async (
     start = 0,
@@ -364,7 +365,7 @@ class ContactsList extends React.Component {
   handleFilterChange = async (
     newFilters,
     resetLoadedRanges = false,
-    newOrder = this.order
+    newOrder
   ) => {
     if (this.state.isShowingDuplicatesList) {
       return
@@ -372,12 +373,13 @@ class ContactsList extends React.Component {
 
     const isParkedTabActive =
       this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
+    const sortOrder = newOrder ?? this.state.sortOrder
 
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = newOrder,
+      order = sortOrder,
       viewAsUsers = this.props.viewAsUsers,
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
@@ -437,19 +439,26 @@ class ContactsList extends React.Component {
   }
 
   handleSearch = value => {
-    this.setState({ searchInputValue: value, firstLetter: null }, () => {
-      this.setQueryParam('letter', '')
+    const { sortOrder } = this.state
+    const relevanceSortKey = '-last_touch_rank'
+    let order = sortOrder
 
-      const relevanceSortKey = '-last_touch_rank'
+    if (value) {
+      order = relevanceSortKey
+    } else if (order === relevanceSortKey) {
+      order =
+        getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ??
+        '-last_touch'
+    }
 
-      if (value) {
-        this.order = relevanceSortKey
-      } else if (this.order === relevanceSortKey) {
-        this.order = '-last_touch'
+    this.setState(
+      { searchInputValue: value, sortOrder: order, firstLetter: null },
+      () => {
+        this.setQueryParam('letter', '')
+
+        this.handleFilterChange({ parked: undefined }, true, order)
       }
-
-      this.handleFilterChange({ parked: undefined }, true, this.order)
-    })
+    )
   }
 
   handleFirstLetterChange = value => {
@@ -459,10 +468,17 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleChangeOrder = ({ value: order }) => {
-    const { user, getUserTeams } = this.props
+  changeSortOrder = ({ value: order }) => {
+    if (order === this.state.sortOrder) {
+      return
+    }
 
-    this.order = order
+    const { user, getUserTeams, setUserSetting } = this.props
+
+    this.setState({
+      sortOrder: order
+    })
+    setUserSetting(SORT_FIELD_SETTING_KEY, order)
     this.handleFilterChange({}, true)
     getUserTeams(user)
   }
@@ -611,7 +627,7 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
-    const { parkedContactCount } = this.state
+    const { parkedContactCount, sortOrder } = this.state
     const { activeSegment, searchContacts } = this.props
     const isParkedTabActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
@@ -625,7 +641,7 @@ class ContactsList extends React.Component {
       undefined,
       isParkedTabActive,
       this.state.searchInputValue,
-      this.order,
+      sortOrder,
       this.props.viewAsUsers,
       this.props.conditionOperator,
       false,
@@ -772,7 +788,8 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { selectedShortcutFilter, searchInputValue } = this.state
+    const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
+      this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -801,15 +818,15 @@ class ContactsList extends React.Component {
           }
         }}
         sortProps={{
-          onChange: this.handleChangeOrder,
-          currentOrder: this.order,
+          onChange: this.changeSortOrder,
+          currentOrder: sortOrder,
           searchValue: searchInputValue
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
         onChangeView={this.changeViewMode}
-        viewMode={this.state.viewMode}
+        viewMode={viewMode}
         {...props}
       />
     )
@@ -948,7 +965,7 @@ class ContactsList extends React.Component {
                 <ViewMode enabled={isTableMode}>
                   <Table
                     data={contacts}
-                    order={this.order}
+                    order={state.sortOrder}
                     totalRows={props.listInfo.total || 0}
                     listInfo={props.listInfo}
                     activeSegment={activeSegment}

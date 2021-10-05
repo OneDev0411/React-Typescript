@@ -1,13 +1,15 @@
-import React, { useState, memo } from 'react'
+import { useMemo, memo } from 'react'
 
-import { Box, Tooltip, Chip, makeStyles, createStyles } from '@material-ui/core'
+import { Box, Tooltip, Chip, makeStyles } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
 
+import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { PopoverContactTagSelector } from 'components/TagSelector'
 import { SelectorOption } from 'components/TagSelector/type'
 import { getContact } from 'models/contacts/get-contact'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
+const useStyles = makeStyles(
+  theme => ({
     container: {
       maxWidth: '100%',
       display: 'inline-flex',
@@ -25,7 +27,8 @@ const useStyles = makeStyles(theme =>
       maxWidth: '100%',
       marginRight: theme.spacing(0.25)
     }
-  })
+  }),
+  { name: 'ContactListTagsString' }
 )
 
 interface Props {
@@ -36,14 +39,15 @@ interface Props {
 }
 
 const TagsString = ({
-  contact: contactProp,
+  contact,
   hasAttributeFilters,
   isParkTabActive,
   reloadContacts
 }: Props) => {
   const classes = useStyles()
-  const [contact, setContact] = useState<IContact>(contactProp)
-  const tags = contact?.tags || []
+  const dispatch = useDispatch()
+
+  const tags = useMemo(() => contact?.tags || [], [contact?.tags])
 
   const tagsCount = tags.length
   const showingTags: string[] = []
@@ -69,8 +73,9 @@ const TagsString = ({
       const response = await getContact(contact.id, {
         associations: []
       })
+      const newTags = response.data?.tags ?? []
 
-      setContact(response.data)
+      dispatch(updateContactTags(contact.id, newTags))
     } catch (error) {
       console.error(error)
     }

@@ -7,8 +7,13 @@ export type IUserState = Nullable<IUser>
 const userReducer = (state: IUserState = null, action) => {
   switch (action.type) {
     case SIGNIN_SUCCESS:
-    case actionTypes.SET_USER_SETTING:
       return action.user
+
+    case actionTypes.SET_USER_SETTING:
+      return {
+        ...state,
+        teams: action.user.teams
+      }
 
     case actionTypes.FETCH_USER_TEAMS_SUCCESS:
       return {
