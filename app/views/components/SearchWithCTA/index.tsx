@@ -48,6 +48,11 @@ const useStyles = makeStyles(
       textTransform: 'none',
       textAlign: 'left'
     },
+    listBoxFooterButton: {
+      '&:hover': {
+        backgroundColor: theme.palette.grey[100]
+      }
+    },
     listBoxFooterLabel: {
       justifyContent: 'start',
       color: theme.palette.primary.main
@@ -219,7 +224,10 @@ export default function AutoComplete<T>({
           {inputValue.length > 0 && (
             <Button
               className={classes.listBoxFooter}
-              classes={{ label: classes.listBoxFooterLabel }}
+              classes={{
+                root: classes.listBoxFooterButton,
+                label: classes.listBoxFooterLabel
+              }}
             >
               {renderFooter(inputValue)}
             </Button>
