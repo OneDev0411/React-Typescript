@@ -23,7 +23,9 @@ const SOCIAL_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'Social',
   'FacebookCover',
   'LinkedInCover',
-  'InstagramStory'
+  'InstagramStory',
+  'TwitterCover',
+  'YouTubeCover'
 ]
 
 const useStyles = makeStyles(
