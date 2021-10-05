@@ -10,11 +10,11 @@ interface SearchArticleItemProps
 }
 
 function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
-  const { image, loadImage } = useGetArticleImage(article)
+  const { image, getImage } = useGetArticleImage(article)
 
   const handleVisibilityChange = (isVisible: boolean) => {
     if (isVisible) {
-      loadImage()
+      getImage()
     }
   }
 

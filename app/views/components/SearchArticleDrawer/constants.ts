@@ -140,4 +140,4 @@ export const RSS_SOURCES: RSSSource[] = [
   }
 ]
 
-export const INITIAL_SEARCH_TERM = 'architectural digest'
+export const NO_IMAGE_URL = ''

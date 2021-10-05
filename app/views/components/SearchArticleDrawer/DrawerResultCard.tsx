@@ -1,4 +1,9 @@
-import { makeStyles, Typography, Button } from '@material-ui/core'
+import {
+  makeStyles,
+  Typography,
+  Button,
+  CircularProgress
+} from '@material-ui/core'
 import { mdiOpenInNew, mdiCheck } from '@mdi/js'
 import classNames from 'classnames'
 import timeago from 'timeago.js'
@@ -9,7 +14,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import LinkButton from '../LinkButton'
 import { RelativeTime } from '../RelativeTime'
 
-import { localeENExtraShort } from './helpers'
+import { hasImageUrl, localeENExtraShort } from './helpers'
 
 timeago.register('en_extra_short', localeENExtraShort)
 
@@ -69,6 +74,14 @@ const useStyles = makeStyles(
         justifyContent: 'center',
         alignItems: 'flex-start'
       }
+    },
+    loading: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      fontSize: 0,
+      color: theme.palette.grey[400]
     },
     overlineIcon: {
       width: 12,
@@ -162,8 +175,12 @@ function DrawerResultCard({
       >
         <div className={classes.imageHolder}>
           <div style={{ paddingTop: `${imageAspect * 100}%` }} />
-          {imageUrl && (
+          {hasImageUrl(imageUrl) ? (
             <img className={classes.image} src={imageUrl} alt={overline} />
+          ) : (
+            <div className={classes.loading}>
+              <CircularProgress size={24} color="inherit" />
+            </div>
           )}
         </div>
         {hasOverlineDetail && (

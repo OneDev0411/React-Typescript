@@ -49,6 +49,10 @@ export function sortRSSFeedItems(feedItems: RSSFeedItem[]): RSSFeedItem[] {
   })
 }
 
+export function hasImageUrl(image: Optional<string>): boolean {
+  return image !== undefined
+}
+
 // Borrow and customize the below code from https://github.com/hustcc/timeago.js/blob/master/src/lang/en_short.ts
 const EN_US = ['s', 'm', 'h', 'd', 'w', 'm', 'y']
 

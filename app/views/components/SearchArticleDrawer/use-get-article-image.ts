@@ -1,14 +1,14 @@
 import useAsync from '@app/hooks/use-async'
 
+import { NO_IMAGE_URL } from './constants'
+import { hasImageUrl } from './helpers'
 import { getUrlMetadata } from './models'
 import { RSSArticleMetadata } from './types'
 import { useSearchArticleImageCache } from './use-search-article-image-cache'
 
-const DEFAULT_IMAGE_URL = '/' // TODO: insert the url here
-
 interface UseGetArticleImage {
   image: Optional<string>
-  loadImage: () => void
+  getImage: () => void
 }
 
 export function useGetArticleImage(
@@ -19,8 +19,8 @@ export function useGetArticleImage(
 
   const imageUrl = article.image ?? getItem(article.url)
 
-  const loadImage = () => {
-    if (imageUrl) {
+  const getImage = () => {
+    if (hasImageUrl(imageUrl)) {
       return
     }
 
@@ -29,18 +29,18 @@ export function useGetArticleImage(
     run(async () => {
       try {
         const metadata = await getUrlMetadata(article.url)
-        const image = metadata?.image ?? DEFAULT_IMAGE_URL
+        const image = metadata?.image ?? NO_IMAGE_URL
 
         setItem(article.url, image)
 
         return image
       } catch (_) {
-        setItem(article.url, DEFAULT_IMAGE_URL)
+        setItem(article.url, NO_IMAGE_URL)
 
-        return DEFAULT_IMAGE_URL
+        return NO_IMAGE_URL
       }
     })
   }
 
-  return { image: imageUrl, loadImage }
+  return { image: imageUrl, getImage }
 }
