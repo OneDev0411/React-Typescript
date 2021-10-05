@@ -154,7 +154,8 @@ class MasterField extends React.Component {
       (!props.isActive &&
         props.attribute?.updated_at &&
         props.attribute?.updated_at > state.updated_at) ||
-      props.contact?.email !== state.contact?.email
+      props.contact?.email !== state.contact?.email ||
+      (!props.trigger && state.currentTrigger)
     ) {
       return getInitialState(props)
     }
@@ -490,6 +491,8 @@ class MasterField extends React.Component {
     const { currentTrigger } = this.state
     const { trigger: triggerFromParent } = this.props
     const trigger = triggerFromParent || currentTrigger
+
+    console.log({ triggerFromParent, currentTrigger })
 
     return (
       <ViewMode
