@@ -2,7 +2,8 @@ import {
   makeStyles,
   Typography,
   Button,
-  CircularProgress
+  CircularProgress,
+  alpha
 } from '@material-ui/core'
 import { mdiOpenInNew, mdiCheck } from '@mdi/js'
 import classNames from 'classnames'
@@ -18,21 +19,28 @@ import { hasImageUrl, localeENExtraShort } from './helpers'
 
 timeago.register('en_extra_short', localeENExtraShort)
 
+const CARD_MARGIN = 1
+const CARD_INNER_HEIGHT = 235
+export const CARD_HEIGHT = CARD_INNER_HEIGHT + CARD_MARGIN * 2
+
 const useStyles = makeStyles(
   theme => ({
-    root: { border: `1px solid ${theme.palette.common.white}` },
-    inner: {
+    root: {
+      margin: CARD_MARGIN,
       padding: theme.spacing(1),
-      border: `2px solid ${theme.palette.common.white}`,
       borderRadius: theme.spacing(0.5),
+      height: CARD_INNER_HEIGHT,
       '&:hover': { backgroundColor: theme.palette.grey[100] },
       '&:hover $title': { color: theme.palette.common.black },
       '&:hover $footerInner': { opacity: 1 }
     },
-    innerSelected: {
-      borderColor: theme.palette.info.main,
+    rootSelected: {
+      boxShadow: `inset 0 0 0 2px ${
+        theme.palette.info.main
+      }, 0px 2px 2px ${alpha(theme.palette.common.black, 0.1)}`,
       backgroundColor: theme.palette.info.ultralight,
-      '& $title': { color: theme.palette.common.black }
+      '& $title': { color: theme.palette.common.black },
+      '& $footerInner': { opacity: 1 }
     },
     imageHolder: {
       position: 'relative',
@@ -83,6 +91,7 @@ const useStyles = makeStyles(
       fontSize: 0,
       color: theme.palette.grey[400]
     },
+    detail: { padding: theme.spacing(0, 0.5) },
     overlineIcon: {
       width: 12,
       height: 12
@@ -112,18 +121,18 @@ const useStyles = makeStyles(
       '-webkit-line-clamp': 2,
       display: '-webkit-box',
       '-webkit-box-orient': 'vertical',
-      whiteSpace: 'normal'
+      whiteSpace: 'normal',
+      minHeight: 38 // Reserve the space for two lines
     },
     titleMargin: { marginTop: theme.spacing(1) },
     footer: { position: 'relative' },
     footerInner: {
-      paddingTop: theme.spacing(0.5),
+      paddingTop: theme.spacing(1),
       display: 'flex',
       justifyContent: 'space-between',
       opacity: 0,
       transition: theme.transitions.create('opacity')
     },
-    footerInnerSelected: { opacity: 1 },
     viewIcon: {
       height: 30,
       display: 'flex',
@@ -166,23 +175,20 @@ function DrawerResultCard({
   const hasOverlineDetail = !!(overlineIcon || overline)
 
   return (
-    <div className={classes.root}>
-      <div
-        className={classNames(
-          classes.inner,
-          isSelected && classes.innerSelected
+    <div
+      className={classNames(classes.root, isSelected && classes.rootSelected)}
+    >
+      <div className={classes.imageHolder}>
+        <div style={{ paddingTop: `${imageAspect * 100}%` }} />
+        {hasImageUrl(imageUrl) ? (
+          <img className={classes.image} src={imageUrl} alt={overline} />
+        ) : (
+          <div className={classes.loading}>
+            <CircularProgress size={24} color="inherit" />
+          </div>
         )}
-      >
-        <div className={classes.imageHolder}>
-          <div style={{ paddingTop: `${imageAspect * 100}%` }} />
-          {hasImageUrl(imageUrl) ? (
-            <img className={classes.image} src={imageUrl} alt={overline} />
-          ) : (
-            <div className={classes.loading}>
-              <CircularProgress size={24} color="inherit" />
-            </div>
-          )}
-        </div>
+      </div>
+      <div className={classes.detail}>
         {hasOverlineDetail && (
           <div className={classes.overlineDetail}>
             <img
@@ -215,12 +221,7 @@ function DrawerResultCard({
           <div className={classes.viewIcon}>
             <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
           </div>
-          <div
-            className={classNames(
-              classes.footerInner,
-              isSelected && classes.footerInnerSelected
-            )}
-          >
+          <div className={classes.footerInner}>
             <LinkButton
               startIcon={
                 <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />

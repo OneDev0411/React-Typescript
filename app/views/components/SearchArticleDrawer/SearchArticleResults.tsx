@@ -2,6 +2,7 @@ import { Grid, makeStyles } from '@material-ui/core'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
 
+import { CARD_HEIGHT } from './DrawerResultCard'
 import SearchArticleItem from './SearchArticleItem'
 import { RSSArticleMetadata } from './types'
 
@@ -44,7 +45,7 @@ function SearchArticleResults({
             height={height}
             itemCount={rowCount}
             overscanCount={ITEMS_PER_ROW}
-            itemSize={235} // This is the height of a SearchArticleItem element
+            itemSize={CARD_HEIGHT}
           >
             {({ index, style }) => {
               const fromIndex = index * ITEMS_PER_ROW
