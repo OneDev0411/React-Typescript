@@ -143,6 +143,7 @@ export function ContactRoles({
           placeholder={placeholder}
           onFooterClick={createNewContact}
           model={searchContactsModel}
+          debug
           clearOnBlur
           getOptionLabel={(option: IContact) => option.display_name}
           renderFooter={inputValue => (

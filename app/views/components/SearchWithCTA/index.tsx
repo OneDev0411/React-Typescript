@@ -106,6 +106,7 @@ interface Props<T> {
   debounce?: number
   disableClearButton?: boolean
   clearOnBlur?: boolean
+  autoHighlight?: boolean
 }
 
 export default function AutoComplete<T>({
@@ -120,7 +121,8 @@ export default function AutoComplete<T>({
   minChars = 2,
   debounce = 200,
   disableClearButton,
-  clearOnBlur = false
+  clearOnBlur = false,
+  autoHighlight = true
 }: Props<T>) {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
@@ -140,7 +142,7 @@ export default function AutoComplete<T>({
   } = useAutocomplete<T>({
     id: 'auto-complete',
     autoComplete: true,
-    autoHighlight: true,
+    autoHighlight,
     options,
     inputValue: controlledInputValue,
     getOptionLabel,
