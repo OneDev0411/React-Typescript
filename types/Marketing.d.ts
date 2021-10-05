@@ -47,6 +47,9 @@ declare type IMarketingTemplateMedium =
   | 'LinkedInCover'
   | 'FacebookCover'
   | 'InstagramStory'
+  | 'TwitterCover'
+  | 'RealtorCover'
+  | 'YouTubeCover'
   | IWebsiteTemplateMedium
 
 declare type IMarketingTemplateType =

@@ -113,14 +113,17 @@ export function CalendarList({
 
       <Box>
         {rows.map((section, index) => (
-          <Box className={classes.section} key={index}>
+          <Box
+            className={classes.section}
+            key={`${section.header.date}-${index}`}
+          >
             <Box className={classes.header}>
               <EventHeader item={section.header} />
             </Box>
 
             <Box flexGrow={1} className={classes.events}>
-              {section.events.map((event, eventIndex) => (
-                <div key={eventIndex} className={classes.event}>
+              {section.events.map(event => (
+                <div key={event.id} className={classes.event}>
                   <Event event={event} onEventChange={handleEventChange} />
                 </div>
               ))}

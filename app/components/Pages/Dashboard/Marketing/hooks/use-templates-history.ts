@@ -9,7 +9,10 @@ const DEFAULT_TEMPLATE_MEDIUMS: IMarketingTemplateMedium[] = [
   'Letter',
   'LinkedInCover',
   'FacebookCover',
-  'InstagramStory'
+  'InstagramStory',
+  'RealtorCover',
+  'TwitterCover',
+  'YouTubeCover'
 ]
 
 interface TemplatesHistory {

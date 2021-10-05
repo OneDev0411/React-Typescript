@@ -65,6 +65,7 @@ export function File({ index, style, data: { files, deal } }: Props) {
         <div className="visible-on-hover">
           <Flex alignCenter>
             <ActionsButton
+              type="file"
               deal={deal}
               task={null}
               file={file}
