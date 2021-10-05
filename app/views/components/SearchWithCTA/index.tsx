@@ -157,10 +157,10 @@ export default function AutoComplete<T>({
       const targetEl = e.relatedTarget
 
       if (targetEl) {
-        if (
-          targetEl.className.includes('listBoxFooter') &&
-          typeof onFooterClick === 'function'
-        ) {
+        // user has clicked on the foorter button. This triggers a blur event which
+        // results in dropdown being closed executing the footer click function.
+        // So we check if that's the case, we call `onFooterClick` before closing it
+        if (targetEl.type === 'button' && typeof onFooterClick === 'function') {
           onFooterClick(inputValue)
         }
       }
