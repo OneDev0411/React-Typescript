@@ -1,6 +1,6 @@
 import { useEffect, ChangeEvent, useState, useCallback } from 'react'
 
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 
 import useAsync from '@app/hooks/use-async'
 import OverlayDrawer from 'components/OverlayDrawer'
@@ -29,6 +29,10 @@ const useStyles = makeStyles(
     results: {
       overflowX: 'hidden',
       overflowY: 'auto'
+    },
+    selected: {
+      color: theme.palette.grey[800],
+      paddingLeft: theme.spacing(0.5)
     }
   }),
   { name: 'SearchArticleDrawer' }
@@ -62,6 +66,7 @@ function SearchArticleDrawer({
   const classes = useStyles()
   const {
     data: results,
+    setData: setResults,
     run,
     isLoading
   } = useAsync<RSSArticleMetadata[]>({ data: [] })
@@ -138,18 +143,21 @@ function SearchArticleDrawer({
       return
     }
 
+    const articleIndex = selected.findIndex(
+      selected => selected.url === article.url
+    )
+
     // Add the item into the selection list if not exists
-    if (!selected.includes(article)) {
+    if (articleIndex == -1) {
       setSelected(selected => [...selected, article])
 
       return
     }
 
     // Remove the item from the selection list if exists
-    const index = selected.indexOf(article)
     const newSelected = [...selected]
 
-    newSelected.splice(index, 1)
+    newSelected.splice(articleIndex, 1)
 
     setSelected(newSelected)
   }
@@ -157,10 +165,9 @@ function SearchArticleDrawer({
   // Load initial videos using the initial term
   useEffect(() => {
     if (!isArticlesLoading && isOpen) {
-      // TODO: user the initial term here
-      handleSearch('') // handleSearch(INITIAL_SEARCH_TERM)
+      setResults(allArticles) // Display all articles when the drawer comes up
     }
-  }, [isArticlesLoading, handleSearch, isOpen])
+  }, [isArticlesLoading, handleSearch, isOpen, setResults, allArticles])
 
   const isLoadingState = isLoading || isArticlesLoading
   const isEmptyState = !isLoadingState && results.length === 0
@@ -194,7 +201,14 @@ function SearchArticleDrawer({
           </SearchArticleImageCacheProvider>
         </Box>
       </OverlayDrawer.Body>
-      <OverlayDrawer.Footer rowReverse>
+      <OverlayDrawer.Footer>
+        {selected.length ? (
+          <Typography className={classes.selected} variant="body2">
+            {selected.length} Selected
+          </Typography>
+        ) : (
+          <span />
+        )}
         <Button
           disabled={isLoadingState || selected.length === 0}
           color="primary"
