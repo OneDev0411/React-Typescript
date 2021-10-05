@@ -42,7 +42,33 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       objectFit: 'cover',
-      fontSize: 0
+      color: theme.palette.grey[400],
+      ...theme.typography.caption,
+      '&::before': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '50%',
+        backgroundColor: theme.palette.grey[200],
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        textTransform: 'uppercase',
+        content: 'attr(alt)'
+      },
+      '&::after': {
+        content: '"(no image)"',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        height: '50%',
+        backgroundColor: theme.palette.grey[200],
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start'
+      }
     },
     overlineIcon: {
       width: 12,
@@ -137,7 +163,7 @@ function DrawerResultCard({
         <div className={classes.imageHolder}>
           <div style={{ paddingTop: `${imageAspect * 100}%` }} />
           {imageUrl && (
-            <img className={classes.image} src={imageUrl} alt={title} />
+            <img className={classes.image} src={imageUrl} alt={overline} />
           )}
         </div>
         {hasOverlineDetail && (
