@@ -9,6 +9,7 @@ import { useSearchArticleImageCache } from './use-search-article-image-cache'
 interface UseGetArticleImage {
   image: Optional<string>
   getImage: () => void
+  handleBrokenImage: () => void
 }
 
 export function useGetArticleImage(
@@ -18,6 +19,8 @@ export function useGetArticleImage(
   const { run, reset } = useAsync<Nullable<string>>()
 
   const imageUrl = article.image ?? getItem(article.url)
+
+  const handleBrokenImage = () => setItem(article.url, NO_IMAGE_URL)
 
   const getImage = () => {
     if (hasImageUrl(imageUrl)) {
@@ -35,12 +38,12 @@ export function useGetArticleImage(
 
         return image
       } catch (_) {
-        setItem(article.url, NO_IMAGE_URL)
+        handleBrokenImage()
 
         return NO_IMAGE_URL
       }
     })
   }
 
-  return { image: imageUrl, getImage }
+  return { image: imageUrl, getImage, handleBrokenImage }
 }

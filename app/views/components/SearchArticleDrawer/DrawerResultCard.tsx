@@ -157,6 +157,7 @@ export interface DrawerResultCardProps {
   title: string
   link: string
   onSelect: () => void
+  onImageError?: () => void
 }
 
 function DrawerResultCard({
@@ -168,7 +169,8 @@ function DrawerResultCard({
   overlineDate,
   link,
   isSelected,
-  onSelect
+  onSelect,
+  onImageError
 }: DrawerResultCardProps) {
   const classes = useStyles()
 
@@ -181,7 +183,12 @@ function DrawerResultCard({
       <div className={classes.imageHolder}>
         <div style={{ paddingTop: `${imageAspect * 100}%` }} />
         {hasImageUrl(imageUrl) ? (
-          <img className={classes.image} src={imageUrl} alt={overline} />
+          <img
+            className={classes.image}
+            src={imageUrl}
+            alt={overline}
+            onError={onImageError}
+          />
         ) : (
           <div className={classes.loading}>
             <CircularProgress size={24} color="inherit" />

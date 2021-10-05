@@ -10,7 +10,7 @@ interface SearchArticleItemProps
 }
 
 function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
-  const { image, getImage } = useGetArticleImage(article)
+  const { image, getImage, handleBrokenImage } = useGetArticleImage(article)
 
   const handleVisibilityChange = (isVisible: boolean) => {
     if (isVisible) {
@@ -29,6 +29,7 @@ function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
         overlineDate={article.publishDate ?? article.createdDate}
         title={article.title}
         link={article.url}
+        onImageError={handleBrokenImage}
       />
     </VisibilitySensor>
   )
