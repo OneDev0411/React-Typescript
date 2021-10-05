@@ -32,7 +32,10 @@ const useStyles = makeStyles(
       height: CARD_INNER_HEIGHT,
       '&:hover': { backgroundColor: theme.palette.grey[100] },
       '&:hover $title': { color: theme.palette.common.black },
-      '&:hover $footerInner': { opacity: 1 }
+      '&:hover $footerInner': {
+        opacity: 1,
+        backgroundColor: theme.palette.grey[100]
+      }
     },
     rootSelected: {
       boxShadow: `inset 0 0 0 2px ${
@@ -40,7 +43,10 @@ const useStyles = makeStyles(
       }, 0px 2px 2px ${alpha(theme.palette.common.black, 0.1)}`,
       backgroundColor: theme.palette.info.ultralight,
       '& $title': { color: theme.palette.common.black },
-      '& $footerInner': { opacity: 1 }
+      '& $footerInner': {
+        opacity: 1,
+        backgroundColor: theme.palette.info.ultralight
+      }
     },
     imageHolder: {
       position: 'relative',
@@ -131,7 +137,8 @@ const useStyles = makeStyles(
       display: 'flex',
       justifyContent: 'space-between',
       opacity: 0,
-      transition: theme.transitions.create('opacity')
+      transition: theme.transitions.create('opacity'),
+      position: 'relative'
     },
     viewIcon: {
       height: 30,
@@ -142,7 +149,8 @@ const useStyles = makeStyles(
       bottom: 0,
       color: theme.palette.grey[400]
     },
-    selectButton: { minWidth: theme.spacing(9) }
+    selectButton: { minWidth: theme.spacing(9) },
+    viewButton: { '&:hover, &:focus': { color: theme.palette.primary.main } }
   }),
   { name: 'DrawerResultCard' }
 )
@@ -230,10 +238,11 @@ function DrawerResultCard({
           </div>
           <div className={classes.footerInner}>
             <LinkButton
+              className={classes.viewButton}
               startIcon={
                 <SvgIcon path={mdiOpenInNew} size={muiIconSizes.small} />
               }
-              variant="contained"
+              variant="outlined"
               color="primary"
               size="small"
               to={link}
@@ -247,8 +256,8 @@ function DrawerResultCard({
                   <SvgIcon path={mdiCheck} size={muiIconSizes.small} />
                 )
               }
-              variant={isSelected ? 'text' : 'outlined'}
-              color="secondary"
+              variant={isSelected ? 'text' : 'contained'}
+              color="primary"
               size="small"
               onClick={onSelect}
               className={classes.selectButton}
