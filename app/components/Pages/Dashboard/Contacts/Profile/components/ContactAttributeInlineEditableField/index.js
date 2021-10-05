@@ -492,8 +492,6 @@ class MasterField extends React.Component {
     const { trigger: triggerFromParent } = this.props
     const trigger = triggerFromParent || currentTrigger
 
-    console.log({ triggerFromParent, currentTrigger })
-
     return (
       <ViewMode
         is_primary={this.state.is_primary}
