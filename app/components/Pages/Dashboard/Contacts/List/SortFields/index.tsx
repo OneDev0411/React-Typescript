@@ -1,12 +1,8 @@
-import React from 'react'
-
 import { MenuItem } from '@material-ui/core'
 import _findIndex from 'lodash/findIndex'
 
 import { DropdownTab } from 'components/PageTabs'
-import { putUserSetting } from 'models/user/put-user-setting'
 
-import { SORT_FIELD_SETTING_KEY } from '../constants'
 import { Props } from '../Tabs'
 
 interface SortableColumnsType {
@@ -56,7 +52,6 @@ export const SortFields = ({
                 value={index}
                 onClick={async () => {
                   onChange(item)
-                  await putUserSetting(SORT_FIELD_SETTING_KEY, item.value)
                   toggleMenu()
                 }}
               >
