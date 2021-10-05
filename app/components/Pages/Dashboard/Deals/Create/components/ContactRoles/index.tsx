@@ -81,6 +81,7 @@ export function ContactRoles({
           onFooterClick={createNewContact}
           model={searchAgentsModel}
           minChars={3}
+          clearOnBlur
           getOptionLabel={(option: IAgent) => option.full_name}
           renderFooter={inputValue => (
             <>
@@ -142,6 +143,7 @@ export function ContactRoles({
           placeholder={placeholder}
           onFooterClick={createNewContact}
           model={searchContactsModel}
+          clearOnBlur
           getOptionLabel={(option: IContact) => option.display_name}
           renderFooter={inputValue => (
             <>

@@ -105,6 +105,7 @@ interface Props<T> {
   minChars?: number
   debounce?: number
   disableClearButton?: boolean
+  clearOnBlur?: boolean
 }
 
 export default function AutoComplete<T>({
@@ -118,14 +119,16 @@ export default function AutoComplete<T>({
   model,
   minChars = 2,
   debounce = 200,
-  disableClearButton
+  disableClearButton,
+  clearOnBlur = false
 }: Props<T>) {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<T[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [controlledInputValue, setControlledInputValue] = React.useState('')
 
-  const widthStyle = { width: fullWidth ? '100%' : '500px' } // default width
+  const widthStyle = { width: fullWidth ? '100%' : '360px' } // default width
 
   const {
     getRootProps,
@@ -139,8 +142,9 @@ export default function AutoComplete<T>({
     autoComplete: true,
     autoHighlight: true,
     options,
+    inputValue: controlledInputValue,
     getOptionLabel,
-    clearOnBlur: false,
+    clearOnBlur,
     open,
     debug,
     onOpen: () => {
@@ -162,8 +166,12 @@ export default function AutoComplete<T>({
       setOpen(false)
     },
     onInputChange: (e, value, reason) => {
-      // console.log(e, value, reason);
+      // console.log('onInputChange', e, value, reason);
+      setControlledInputValue(value)
     }
+    // onChange: (event, value, reason, details) => {
+    //   console.log('onChange', event, value, reason, details)
+    // }
   })
 
   const [fetchResults] = useDebouncedCallback(async (value: string) => {
@@ -186,12 +194,13 @@ export default function AutoComplete<T>({
     <div>
       <div {...getRootProps()}>
         <SearchInput
+          value={inputValue}
           placeholder={placeholder}
           inputProps={{ ...getInputProps() }}
           isLoading={isLoading}
           disableClearButton={disableClearButton}
           onClearHandler={() => {
-            setOpen(false)
+            setControlledInputValue('')
           }}
           onChangeHandler={(e, value = '') => {
             setIsLoading(true)
