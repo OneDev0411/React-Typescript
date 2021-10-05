@@ -3,6 +3,7 @@ import { useEffect, ChangeEvent, useState, useCallback } from 'react'
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 
 import useAsync from '@app/hooks/use-async'
+import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import { SearchInput } from '../GlobalHeaderWithSearch'
@@ -115,7 +116,7 @@ function SearchArticleDrawer({
     article: RSSArticleMetadata
   ): RSSArticleMetadata => ({
     ...article,
-    image: imageCache.getItem(article.url)
+    image: imageCache.getItem(article.url) || PLACEHOLDER_IMAGE_URL
   })
 
   const handleConfirm = () => {
