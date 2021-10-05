@@ -40,7 +40,12 @@ export function DigitalForm({ deal, task }: Props) {
             </div>
           </Box>
 
-          <ActionsButton deal={deal} task={task} actions={actions} />
+          <ActionsButton
+            type="submission"
+            deal={deal}
+            task={task}
+            actions={actions}
+          />
         </Box>
       </div>
     </div>
