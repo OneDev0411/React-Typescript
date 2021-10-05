@@ -6,6 +6,9 @@ import { stateToHTML } from 'draft-js-export-html'
  * @returns {object} a formated object
  */
 export async function preSaveFormat(values, originalValues = null) {
+  const PENDING_STATUS = 'PENDING'
+  const DONE_STATUS = 'DONE'
+
   const {
     title,
     dueDate,
@@ -41,7 +44,14 @@ export async function preSaveFormat(values, originalValues = null) {
   const end_date =
     endDateTimestamp > dueDateTimestamp ? endDateTimestamp / 1000 : null
 
-  const defaultStatus = values.status || 'PENDING'
+  let defaultStatus = values.status ?? PENDING_STATUS
+
+  if (
+    defaultStatus === DONE_STATUS &&
+    dueDateTimestamp >= new Date().getTime()
+  ) {
+    defaultStatus = PENDING_STATUS
+  }
 
   const task = {
     title: title.trim(),
@@ -50,7 +60,8 @@ export async function preSaveFormat(values, originalValues = null) {
     task_type: task_type.value,
     all_day: isAllDay,
     assignees: assignees.map(a => a.id),
-    status: dueDateTimestamp <= new Date().getTime() ? 'DONE' : defaultStatus
+    status:
+      dueDateTimestamp <= new Date().getTime() ? DONE_STATUS : defaultStatus
   }
 
   if (originalValues?.id || description) {
@@ -65,7 +76,7 @@ export async function preSaveFormat(values, originalValues = null) {
         : ''
   }
 
-  if (task.status === 'DONE') {
+  if (task.status === DONE_STATUS) {
     task.reminders = []
   } else if (reminder.value >= 0) {
     task.reminders = [
