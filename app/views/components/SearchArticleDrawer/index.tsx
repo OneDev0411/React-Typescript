@@ -9,7 +9,7 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
 
-import { RSS_SOURCES } from './constants'
+import { NO_IMAGE_URL, RSS_SOURCES } from './constants'
 import { isValidUrl } from './helpers'
 import { getUrlMetadata } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
@@ -93,6 +93,8 @@ function SearchArticleDrawer({
         try {
           const articleMetadata = await getUrlMetadata(searchTerm)
 
+          imageCache.setItem(searchTerm, articleMetadata?.image ?? NO_IMAGE_URL)
+
           return [
             {
               image: articleMetadata?.image,
@@ -106,7 +108,7 @@ function SearchArticleDrawer({
         }
       })
     },
-    [allArticles, run, searchArticles]
+    [allArticles, imageCache, run, searchArticles]
   )
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) =>
@@ -137,6 +139,11 @@ function SearchArticleDrawer({
   }
 
   const handleSelect = (article: RSSArticleMetadata) => {
+    console.log(
+      'imageCache.getItem(article.url)',
+      imageCache.getItem(article.url)
+    )
+
     // Handle the single selection mode
     if (!multipleSelection) {
       setSelected([article])
