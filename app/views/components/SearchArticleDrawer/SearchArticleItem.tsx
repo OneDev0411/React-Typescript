@@ -23,7 +23,8 @@ function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
       <DrawerResultCard
         {...otherProps}
         imageUrl={image}
-        imageAspect={0.58}
+        imageAspect={0.58} // 9/16 aspect ration
+        imageAlt={article.publisher}
         overline={article.publisher}
         overlineIcon={article.publisherIcon}
         overlineDate={article.publishDate ?? article.createdDate}

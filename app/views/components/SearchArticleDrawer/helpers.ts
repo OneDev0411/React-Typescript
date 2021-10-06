@@ -1,4 +1,4 @@
-import { RSS_SOURCES } from './constants'
+import { NO_IMAGE_URL, RSS_SOURCES } from './constants'
 import { RSSArticleMetadata, RSSFeedItem } from './types'
 
 export function convertFeedItemToArticleMetadata(
@@ -51,6 +51,10 @@ export function sortRSSFeedItems(feedItems: RSSFeedItem[]): RSSFeedItem[] {
 
 export function hasImageUrl(image: Optional<string>): boolean {
   return image !== undefined
+}
+
+export function isNoImageState(image: Optional<string>): boolean {
+  return image === NO_IMAGE_URL
 }
 
 // Borrow and customize the below code from https://github.com/hustcc/timeago.js/blob/master/src/lang/en_short.ts

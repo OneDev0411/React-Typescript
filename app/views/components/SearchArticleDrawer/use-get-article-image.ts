@@ -16,11 +16,14 @@ export function useGetArticleImage(
   article: RSSArticleMetadata
 ): UseGetArticleImage {
   const { setItem, getItem } = useSearchArticleImageCache()
-  const { run, reset } = useAsync<Nullable<string>>()
+  const { run, reset, setData } = useAsync<Nullable<string>>()
 
   const imageUrl = article.image ?? getItem(article.url)
 
-  const handleBrokenImage = () => setItem(article.url, NO_IMAGE_URL)
+  const handleBrokenImage = () => {
+    setItem(article.url, NO_IMAGE_URL)
+    setData(NO_IMAGE_URL)
+  }
 
   const getImage = () => {
     if (hasImageUrl(imageUrl)) {

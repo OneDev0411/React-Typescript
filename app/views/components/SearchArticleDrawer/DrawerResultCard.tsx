@@ -1,10 +1,4 @@
-import {
-  makeStyles,
-  Typography,
-  Button,
-  CircularProgress,
-  alpha
-} from '@material-ui/core'
+import { makeStyles, Typography, Button, alpha } from '@material-ui/core'
 import { mdiOpenInNew, mdiCheck } from '@mdi/js'
 import classNames from 'classnames'
 import timeago from 'timeago.js'
@@ -15,7 +9,10 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import LinkButton from '../LinkButton'
 import { RelativeTime } from '../RelativeTime'
 
-import { hasImageUrl, localeENExtraShort } from './helpers'
+import DrawerResultCardImage, {
+  DrawerResultCardImageProps
+} from './DrawerResultCardImage'
+import { localeENExtraShort } from './helpers'
 
 timeago.register('en_extra_short', localeENExtraShort)
 
@@ -48,55 +45,7 @@ const useStyles = makeStyles(
         backgroundColor: theme.palette.info.ultralight
       }
     },
-    imageHolder: {
-      position: 'relative',
-      backgroundColor: theme.palette.grey[200],
-      borderRadius: theme.spacing(0.5),
-      overflow: 'hidden'
-    },
-    image: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
-      objectFit: 'cover',
-      color: theme.palette.grey[400],
-      ...theme.typography.caption,
-      '&::before': {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '50%',
-        backgroundColor: theme.palette.grey[200],
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        textTransform: 'uppercase',
-        content: 'attr(alt)'
-      },
-      '&::after': {
-        content: '"(no image)"',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: '50%',
-        backgroundColor: theme.palette.grey[200],
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start'
-      }
-    },
-    loading: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      fontSize: 0,
-      color: theme.palette.grey[400]
-    },
+
     detail: { padding: theme.spacing(0, 0.5) },
     overlineIcon: {
       width: 12,
@@ -155,9 +104,7 @@ const useStyles = makeStyles(
   { name: 'DrawerResultCard' }
 )
 
-export interface DrawerResultCardProps {
-  imageUrl: Optional<string>
-  imageAspect: number
+export interface DrawerResultCardProps extends DrawerResultCardImageProps {
   isSelected: boolean
   overline?: string
   overlineIcon?: string
@@ -165,12 +112,9 @@ export interface DrawerResultCardProps {
   title: string
   link: string
   onSelect: () => void
-  onImageError?: () => void
 }
 
 function DrawerResultCard({
-  imageUrl,
-  imageAspect,
   overlineIcon,
   overline,
   title,
@@ -178,7 +122,7 @@ function DrawerResultCard({
   link,
   isSelected,
   onSelect,
-  onImageError
+  ...otherProps
 }: DrawerResultCardProps) {
   const classes = useStyles()
 
@@ -188,21 +132,7 @@ function DrawerResultCard({
     <div
       className={classNames(classes.root, isSelected && classes.rootSelected)}
     >
-      <div className={classes.imageHolder}>
-        <div style={{ paddingTop: `${imageAspect * 100}%` }} />
-        {hasImageUrl(imageUrl) ? (
-          <img
-            className={classes.image}
-            src={imageUrl}
-            alt={overline}
-            onError={onImageError}
-          />
-        ) : (
-          <div className={classes.loading}>
-            <CircularProgress size={24} color="inherit" />
-          </div>
-        )}
-      </div>
+      <DrawerResultCardImage {...otherProps} />
       <div className={classes.detail}>
         {hasOverlineDetail && (
           <div className={classes.overlineDetail}>
