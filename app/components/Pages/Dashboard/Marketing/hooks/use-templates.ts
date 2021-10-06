@@ -11,7 +11,10 @@ const ALL_MEDIUMS: IMarketingTemplateMedium[] = [
   'Letter',
   'LinkedInCover',
   'FacebookCover',
-  'InstagramStory'
+  'InstagramStory',
+  'RealtorCover',
+  'TwitterCover',
+  'YouTubeCover'
 ]
 
 interface TemplatesData {

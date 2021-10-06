@@ -2,6 +2,7 @@ import { Box, makeStyles } from '@material-ui/core'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
+import { useGetOriginQueryParam } from '../../hooks/use-get-origin-query-param'
 import Notifications from '../Notifications'
 
 import FoldersPane from './Panes/Folders'
@@ -50,6 +51,7 @@ const tabs = [
 export default function Tabs(props: Props) {
   const classes = useStyles()
   const tab = tabs.find(tab => tab.id === props.activeTab)
+  const originQueryParam = useGetOriginQueryParam()
 
   return (
     <Box>
@@ -64,7 +66,7 @@ export default function Tabs(props: Props) {
             <TabLink
               key={id}
               label={label}
-              to={`/dashboard/deals/${props.deal.id}/${id}`}
+              to={`/dashboard/deals/${props.deal.id}/${id}?${originQueryParam}`}
               value={id}
             />
           ))}
