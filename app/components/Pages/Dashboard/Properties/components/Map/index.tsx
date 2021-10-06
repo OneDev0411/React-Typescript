@@ -159,6 +159,14 @@ export const Map = ({
     }
   }, [drawingMode, onDrawingComplete, activateDrawingMode])
 
+  const checkIsInBound = (lat?: number, lng?: number): boolean => {
+    if (!lat || !lng) {
+      return false
+    }
+
+    return mapRef.current.getBounds().contains(new google.maps.LatLng(lat, lng))
+  }
+
   return (
     <>
       {!drawingMode && (
@@ -230,40 +238,32 @@ export const Map = ({
       >
         {!drawingMode &&
           mapIsShown &&
-          listings.map(listing => (
-            <Marker
-              hover={hoverListing === listing.id}
-              clicked={clickedListing === listing.id}
-              onClick={openListingModal}
-              key={listing.id}
-              // TODO: Fix location on favorite (listing format)
-              lat={listing.location?.latitude}
-              lng={listing.location?.longitude}
-              id={listing.id}
-              status={listing.status}
-              price={listing.price}
-              closePrice={listing.close_price}
-              // TODO: Fix address on favorite (listing format)
-              address={listing.address}
-              squareMeters={
-                listing.type === 'compact_listing'
-                  ? listing.compact_property.square_meters
-                  : (listing as any).property.square_meters
-              }
-              bathroomCount={
-                listing.type === 'compact_listing'
-                  ? listing.compact_property.bathroom_count
-                  : (listing as any).property.bathroom_count
-              }
-              bedroomCount={
-                listing.type === 'compact_listing'
-                  ? listing.compact_property.bedroom_count
-                  : (listing as any).property.bedroom_count
-              }
-              coverImageUrl={listing.cover_image_url}
-              zoom={mapPosition.zoom}
-            />
-          ))}
+          listings.map(
+            listing =>
+              checkIsInBound(
+                listing.location?.latitude,
+                listing.location?.longitude
+              ) && (
+                <Marker
+                  hover={hoverListing === listing.id}
+                  clicked={clickedListing === listing.id}
+                  onClick={openListingModal}
+                  key={listing.id}
+                  lat={listing.location?.latitude}
+                  lng={listing.location?.longitude}
+                  id={listing.id}
+                  status={listing.status}
+                  price={listing.price}
+                  closePrice={listing.close_price}
+                  address={listing.address}
+                  squareMeters={listing.compact_property.square_meters}
+                  bathroomCount={listing.compact_property.bathroom_count}
+                  bedroomCount={listing.compact_property.bedroom_count}
+                  coverImageUrl={listing.cover_image_url}
+                  zoom={mapPosition.zoom}
+                />
+              )
+          )}
       </GoogleMap>
       <ListingDetailsModal
         isOpen={listingModalState.isOpen}

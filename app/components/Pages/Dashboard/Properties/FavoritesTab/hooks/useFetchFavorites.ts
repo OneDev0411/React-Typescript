@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
 import useNotify from '@app/hooks/use-notify'
-import { getFavorites } from '@app/models/listings/favorites/getFavorites'
-import { normalizeListingLocation } from '@app/utils/map'
+import { getFavoritesCompactListings } from '@app/models/listings/favorites/getFavoritesCompactListings'
 import { selectUser } from 'selectors/user'
 
 import { formatListing } from '../../helpers/format-listing'
@@ -33,14 +32,11 @@ export default function useFetchFavorites(
       dispatch(setIsLoading(true))
 
       try {
-        const response = await getFavorites(user)
+        const response = await getFavoritesCompactListings(user)
 
-        const listings = response.entities.listings
+        const listings: ICompactListing[] = response.entities.listings
           ? Object.values(response.entities.listings).map(listing =>
-              formatListing(
-                normalizeListingLocation(listing) as ICompactListing,
-                user
-              )
+              formatListing(listing, user)
             )
           : []
 
