@@ -1,7 +1,7 @@
 import useAsync from '@app/hooks/use-async'
 
-import { NO_IMAGE_URL } from './constants'
-import { hasImageUrl } from './helpers'
+import { hasImageUrl, NO_IMAGE_URL } from '../SearchResultCard'
+
 import { getUrlMetadata } from './models'
 import { RSSArticleMetadata } from './types'
 import { useSearchArticleImageCache } from './use-search-article-image-cache'

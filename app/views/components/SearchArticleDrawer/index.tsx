@@ -8,8 +8,9 @@ import OverlayDrawer from 'components/OverlayDrawer'
 
 import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
+import { NO_IMAGE_URL } from '../SearchResultCard'
 
-import { NO_IMAGE_URL, RSS_SOURCES } from './constants'
+import { RSS_SOURCES } from './constants'
 import { isValidUrl } from './helpers'
 import { getUrlMetadata } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'

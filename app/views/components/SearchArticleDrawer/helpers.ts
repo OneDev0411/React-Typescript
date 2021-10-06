@@ -1,4 +1,4 @@
-import { NO_IMAGE_URL, RSS_SOURCES } from './constants'
+import { RSS_SOURCES } from './constants'
 import { RSSArticleMetadata, RSSFeedItem } from './types'
 
 export function convertFeedItemToArticleMetadata(
@@ -47,28 +47,4 @@ export function sortRSSFeedItems(feedItems: RSSFeedItem[]): RSSFeedItem[] {
 
     return 0
   })
-}
-
-export function hasImageUrl(image: Optional<string>): boolean {
-  return image !== undefined
-}
-
-export function isNoImageState(image: Optional<string>): boolean {
-  return image === NO_IMAGE_URL
-}
-
-// Borrow and customize the below code from https://github.com/hustcc/timeago.js/blob/master/src/lang/en_short.ts
-const EN_US = ['s', 'm', 'h', 'd', 'w', 'm', 'y']
-
-export function localeENExtraShort(
-  diff: number,
-  idx: number
-): [string, string] {
-  if (idx === 0) {
-    return ['now', 'now']
-  }
-
-  const unit = EN_US[Math.floor(idx / 2)]
-
-  return [`${diff}${unit}`, `${diff}${unit}`]
 }

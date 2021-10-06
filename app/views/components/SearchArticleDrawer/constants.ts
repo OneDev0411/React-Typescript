@@ -139,5 +139,3 @@ export const RSS_SOURCES: RSSSource[] = [
     url: 'https://www.latimes.com/lifestyle/rss2.0.xml#nt=0000016c-0bf3-d57d-afed-2fff84fd0000-1col-7030col1'
   }
 ]
-
-export const NO_IMAGE_URL = ''
