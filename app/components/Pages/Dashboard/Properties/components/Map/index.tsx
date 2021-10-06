@@ -29,6 +29,7 @@ interface Props {
   clickedListing: Nullable<UUID>
   hasDrawingMode?: boolean
   drawing?: ICoord[]
+  onMapLoad?: (map: google.maps.Map) => void
   onDrawingComplete?: (points: ICoord[]) => void
   onRemoveDrawing?: () => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
@@ -55,6 +56,7 @@ export const Map = ({
   clickedListing,
   hasDrawingMode = false,
   drawing = [],
+  onMapLoad = noop,
   onRemoveDrawing = noop,
   onDrawingComplete,
   onChange,
@@ -75,7 +77,7 @@ export const Map = ({
   const mapPolygonOptions = createMapPolygonOptions(theme)
   // setting up refs
   // There is no way to get apropiate types for these
-  const mapRef = useRef<any>()
+  const mapRef = useRef<google.maps.Map>()
   const mapsRef = useRef<any>()
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
@@ -97,7 +99,7 @@ export const Map = ({
   // map: The map object on the page
   // maps: eq. google.maps
   // There is no way to get apropiate types for these
-  const onLoad = ({ map, maps }: { map: any; maps: any }) => {
+  const onLoad = ({ map, maps }: { map: google.maps.Map; maps: any }) => {
     mapRef.current = map
     mapsRef.current = maps
 
@@ -110,6 +112,7 @@ export const Map = ({
     // This is for internal uses of this component since some methods can only
     // execute when map is loaded
     mapIsLoaded.current = true
+    onMapLoad(mapRef.current)
   }
 
   // TODO: implement freehand drawing:
@@ -160,11 +163,14 @@ export const Map = ({
   }, [drawingMode, onDrawingComplete, activateDrawingMode])
 
   const checkIsInBound = (lat?: number, lng?: number): boolean => {
-    if (!lat || !lng) {
+    if (!lat || !lng || !mapRef.current) {
       return false
     }
 
-    return mapRef.current.getBounds().contains(new google.maps.LatLng(lat, lng))
+    return (
+      mapRef.current.getBounds()?.contains(new google.maps.LatLng(lat, lng)) ||
+      false
+    )
   }
 
   return (

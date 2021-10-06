@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 import { Grid, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
@@ -105,6 +105,9 @@ interface Props {
 
 export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useFavoritesContext()
+  const mapRef = useRef<google.maps.Map>()
+  const isMapFitRef = useRef<boolean>(false)
+
   const [viewQueryParam] = useQueryParam('view')
   const classes = useStyles()
 
@@ -183,6 +186,30 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapClick = () => dispatch(changeListingClickedState(null))
 
+  const onMapLoad = (map: google.maps.Map) => {
+    mapRef.current = map
+  }
+
+  useEffect(() => {
+    if (!isMapFitRef.current && mapRef.current) {
+      const bounds = new window.google.maps.LatLngBounds()
+
+      state.result.listings.forEach(item => {
+        if (item.location) {
+          bounds.extend(
+            new google.maps.LatLng(
+              item.location.latitude,
+              item.location.longitude
+            )
+          )
+        }
+      })
+
+      mapRef.current.fitBounds(bounds)
+      isMapFitRef.current = true
+    }
+  }, [state.result.listings])
+
   return (
     <>
       <Grid className={classes.container}>
@@ -214,6 +241,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   listings={state.result.listings}
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
+                  onMapLoad={onMapLoad}
                 />
               </Grid>
             </Grid>
