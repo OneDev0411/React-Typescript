@@ -236,16 +236,30 @@ export const Map = ({
               clicked={clickedListing === listing.id}
               onClick={openListingModal}
               key={listing.id}
+              // TODO: Fix location on favorite (listing format)
               lat={listing.location?.latitude}
               lng={listing.location?.longitude}
               id={listing.id}
               status={listing.status}
               price={listing.price}
               closePrice={listing.close_price}
+              // TODO: Fix address on favorite (listing format)
               address={listing.address}
-              squareMeters={listing.compact_property.square_meters}
-              bathroomCount={listing.compact_property.bathroom_count}
-              bedroomCount={listing.compact_property.bedroom_count}
+              squareMeters={
+                listing.type === 'compact_listing'
+                  ? listing.compact_property.square_meters
+                  : (listing as any).property.square_meters
+              }
+              bathroomCount={
+                listing.type === 'compact_listing'
+                  ? listing.compact_property.bathroom_count
+                  : (listing as any).property.bathroom_count
+              }
+              bedroomCount={
+                listing.type === 'compact_listing'
+                  ? listing.compact_property.bedroom_count
+                  : (listing as any).property.bedroom_count
+              }
               coverImageUrl={listing.cover_image_url}
               zoom={mapPosition.zoom}
             />

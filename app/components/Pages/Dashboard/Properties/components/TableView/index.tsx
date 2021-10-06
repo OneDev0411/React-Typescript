@@ -14,8 +14,8 @@ import {
 import cn from 'classnames'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
-import { useDebouncedCallback } from 'use-debounce/lib'
 
+import { noop } from '@app/utils/helpers'
 import {
   metersToFeet,
   addressTitle,
@@ -26,9 +26,7 @@ import { useListSelection } from '@app/views/components/ListSelection/use-list-s
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { selectUserUnsafe } from 'selectors/user'
 
-import { LISTING_HOVER_DEBOUNCE_TIME_MS } from '../../constants'
-import { changeListingHoverState } from '../../ExploreTab/context/actions'
-import useListingsContext from '../../ExploreTab/hooks/useListingsContext'
+import { IListingUIStates } from '../../types'
 
 const useStyles = makeStyles(
   () => ({
@@ -37,6 +35,9 @@ const useStyles = makeStyles(
         backgroundColor: '#eee',
         cursor: 'pointer'
       }
+    },
+    isScroling: {
+      pointerEvents: 'none'
     }
   }),
   { name: 'ListingsTable' }
@@ -46,7 +47,9 @@ interface Props {
   listings: ICompactListing[]
   mapIsShown: boolean
   isWidget: boolean
+  listingStates: IListingUIStates
   isScroling?: boolean
+  onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
 const CELL_FALLBACK = '--'
@@ -136,12 +139,13 @@ export const TableView = ({
   listings,
   mapIsShown,
   isWidget,
-  isScroling = false
+  listingStates,
+  isScroling = false,
+  onChangeHoverState = noop
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const { selections, toggleItem } = useListSelection()
-  const [state, dispatch] = useListingsContext()
   const [selectedListingId, setSelectedListingId] =
     useState<Nullable<UUID>>(null)
   const [isListingDetailsModalOpen, setIsListingDetailsModalOpen] =
@@ -166,23 +170,6 @@ export const TableView = ({
       setSelectedListingId(id)
     },
     [isWidget]
-  )
-
-  const handleChangeHoverState = useCallback(
-    (listingId: UUID, hover: boolean) => {
-      // Turn off hover state immediately if hover is false
-      // Turn on hover state if is not scroling
-      if (!hover || !isScroling) {
-        dispatch(changeListingHoverState(hover ? listingId : null))
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isScroling]
-  )
-
-  const [changeHoverStateDebounced] = useDebouncedCallback(
-    handleChangeHoverState,
-    LISTING_HOVER_DEBOUNCE_TIME_MS
   )
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
@@ -210,13 +197,12 @@ export const TableView = ({
               <TableRow
                 key={listing.id}
                 id={listing.id}
-                onMouseEnter={() => changeHoverStateDebounced(listing.id, true)}
-                onMouseLeave={() =>
-                  changeHoverStateDebounced(listing.id, false)
-                }
+                onMouseEnter={() => onChangeHoverState(listing.id, true)}
+                onMouseLeave={() => onChangeHoverState(listing.id, false)}
                 className={cn(classes.row, {
-                  hover: state.listingStates.hover === listing.id,
-                  selected: state.listingStates.click === listing.id
+                  hover: listingStates.hover === listing.id,
+                  selected: listingStates.click === listing.id,
+                  [classes.isScroling]: isScroling
                 })}
               >
                 <TableCell padding="checkbox">

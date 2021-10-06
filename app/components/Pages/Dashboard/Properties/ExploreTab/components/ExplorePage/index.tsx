@@ -27,7 +27,7 @@ import {
   parseSortIndex,
   SORT_FIELD_SETTING_KEY
 } from '../../../helpers/sort-utils'
-import { SortString } from '../../../types'
+import { SortString, ViewType } from '../../../types'
 import {
   setMapDrawing,
   removeMapDrawing,
@@ -130,8 +130,6 @@ interface Props {
   isWidget: boolean
   onClickLocate: () => void
 }
-
-export type ViewType = 'cards' | 'table'
 
 export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useListingsContext()

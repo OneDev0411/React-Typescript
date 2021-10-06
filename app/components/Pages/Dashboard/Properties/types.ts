@@ -14,3 +14,5 @@ export type SortIndex = keyof typeof sortOptions
 export type SortPrefix = '' | '-'
 export type SortString = `${SortPrefix}${SortIndex}`
 export type Sort = { index: SortIndex; ascending: boolean }
+
+export type ViewType = 'cards' | 'table'

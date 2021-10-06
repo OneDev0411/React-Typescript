@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
@@ -16,8 +16,12 @@ import { TableView } from '../../../components/TableView'
 import ZeroState from '../../../components/ZeroState'
 import { PAGE_SIZE, QUERY_LIMIT } from '../../../constants'
 import { getListingsPage } from '../../../helpers/pagination-utils'
+import { ViewType } from '../../../types'
+import {
+  changeListingHoverState,
+  toggleListingFavoriteState
+} from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
-import { ViewType } from '../ExplorePage'
 
 const useStyles = makeStyles(
   theme => ({
@@ -90,7 +94,7 @@ export const Results = ({
   isWidget
 }: Props) => {
   const classes = useStyles()
-  const [state] = useListingsContext()
+  const [state, dispatch] = useListingsContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
   const isScroling = useScrolling(cardsContainerRef)
@@ -106,6 +110,8 @@ export const Results = ({
   }, [state.result.listings.length, state.isLoading])
 
   const listingsPage = useMemo(() => {
+    console.log(state.result.listings)
+
     return getListingsPage(state.result.listings, currentPage, PAGE_SIZE)
   }, [state.result.listings, currentPage])
 
@@ -124,6 +130,19 @@ export const Results = ({
     setCurrentPage(1)
     scrollToTop()
   }, [state.result.listings])
+
+  const handleChangeHoverState = useCallback(
+    (listingId: UUID, hover: boolean) => {
+      dispatch(changeListingHoverState(hover ? listingId : null))
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+
+  const handleToggleLike = useCallback((listingId: UUID) => {
+    dispatch(toggleListingFavoriteState(listingId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Grid container className={classes.root}>
@@ -164,6 +183,9 @@ export const Results = ({
                   listings={listingsPage}
                   isWidget={isWidget}
                   isScroling={isScroling}
+                  listingStates={state.listingStates}
+                  onChangeHoverState={handleChangeHoverState}
+                  onToggleLike={handleToggleLike}
                 />
               )}
               {viewType === 'table' && (
@@ -171,6 +193,8 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
+                  listingStates={state.listingStates}
+                  onChangeHoverState={handleChangeHoverState}
                 />
               )}
             </>
