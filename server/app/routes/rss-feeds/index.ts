@@ -19,9 +19,7 @@ export default async (req: Request, res: Response) => {
 
   const rssPromises = rssSources.map(
     (rssSource, sourceIndex) =>
-      new Promise<Parser.Output<{ sourceIndex: number }> | null>(resolve => {
-        console.time(rssSource)
-
+      new Promise<Parser.Output<{ sourceIndex: number }> | null>(resolve =>
         parser
           .parseURL(rssSource)
           .then(result => {
@@ -33,13 +31,11 @@ export default async (req: Request, res: Response) => {
                 sourceIndex
               }))
             })
-            console.timeEnd(rssSource)
           })
           .catch(error => {
-            console.log('############## Error', `!!${rssSource}!!`, error)
             resolve(null)
           })
-      })
+      )
   )
 
   const rssResults = await Promise.all(rssPromises)
