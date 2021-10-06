@@ -4,11 +4,11 @@ export interface SearchVideoResult {
   thumbnail: string
   publisher: string
   publishedAt: string
+  sourceIcon: string
 }
 
 export type YouTubeVideoResource = gapi.client.youtube.SearchResult
 
-// TODO: move this type to a global scope and sue it on both this component and VideoDrawer
 export interface Video {
   url: string
   thumbnail?: string

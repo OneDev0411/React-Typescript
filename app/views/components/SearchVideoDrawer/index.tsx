@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { Box, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 import type { Model } from 'backbone'
 import unescape from 'lodash/unescape'
 
@@ -27,6 +27,11 @@ const useStyles = makeStyles(
     result: {
       overflowX: 'hidden',
       overflowY: 'auto'
+    },
+    helpText: {
+      display: 'block',
+      textAlign: 'right',
+      color: theme.palette.grey[400]
     }
   }),
   { name: 'SearchVideoDrawer' }
@@ -54,6 +59,7 @@ function SearchVideoDrawer({
     isLoading,
     run
   } = useAsync<SearchVideoResult[]>({ data: [] })
+  const [video, setVideo] = useState<Nullable<SearchVideoResult>>(null)
   const { isYouTubeReady, safeSearchYouTube } = useSearchYouTube()
   const { safeSearchVimeo } = useSearchVimeo()
 
@@ -78,14 +84,17 @@ function SearchVideoDrawer({
             title: unescape(video.snippet?.title ?? ''),
             url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
             publisher: video.snippet?.channelTitle ?? '',
-            publishedAt: video.snippet?.publishedAt ?? ''
+            publishedAt: video.snippet?.publishedAt ?? '',
+            sourceIcon:
+              'https://www.youtube.com/s/desktop/8cdd1596/img/favicon_32x32.png'
           })),
           ...vimeoVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.thumbnail_url,
             title: unescape(video.title),
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
-            publishedAt: video.upload_date
+            publishedAt: video.upload_date,
+            sourceIcon: 'https://f.vimeocdn.com/images_v6/favicon.ico'
           }))
         ]
 
@@ -113,7 +122,11 @@ function SearchVideoDrawer({
     target
   }: React.ChangeEvent<HTMLInputElement>) => searchVideos(target.value)
 
-  const handleSelect = (video: SearchVideoResult) => {
+  const handleConfirm = () => {
+    if (!video) {
+      return
+    }
+
     const videoInfo: Video = {
       url: video.url,
       thumbnail: video.thumbnail
@@ -127,7 +140,7 @@ function SearchVideoDrawer({
   const isEmptyState = !isLoadingState && result.length === 0
 
   return (
-    <OverlayDrawer open={isOpen} onClose={onClose}>
+    <OverlayDrawer open={isOpen} onClose={onClose} width="690px">
       <OverlayDrawer.Header title="Insert a Youtube/Vimeo video" />
       <OverlayDrawer.Body className={classes.body}>
         {isYouTubeReady && (
@@ -140,6 +153,9 @@ function SearchVideoDrawer({
               placeholder="Search"
               debounceTime={500}
             />
+            <Typography className={classes.helpText} variant="caption">
+              Youtube and Vimeo links supported
+            </Typography>
           </Box>
         )}
         <Box flex={1} className={classes.result} px={3}>
@@ -148,10 +164,24 @@ function SearchVideoDrawer({
           ) : isEmptyState ? (
             <SearchVideoEmptyState />
           ) : (
-            <SearchVideoResults videos={result} onSelect={handleSelect} />
+            <SearchVideoResults
+              videos={result}
+              selected={video}
+              onSelect={setVideo}
+            />
           )}
         </Box>
       </OverlayDrawer.Body>
+      <OverlayDrawer.Footer rowReverse>
+        <Button
+          disabled={!video}
+          color="primary"
+          variant="contained"
+          onClick={handleConfirm}
+        >
+          Done
+        </Button>
+      </OverlayDrawer.Footer>
     </OverlayDrawer>
   )
 }
