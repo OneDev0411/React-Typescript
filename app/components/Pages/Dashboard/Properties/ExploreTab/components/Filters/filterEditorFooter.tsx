@@ -27,6 +27,7 @@ export function FilterEditorFooter({
     <Grid item container className={classes.footer} alignItems="center">
       <Grid item xs={5}>
         <Button
+          className={classes.footerResetButton}
           disabled={disabledReset}
           onClick={onClickReset}
           variant="text"

@@ -51,10 +51,16 @@ export const useStyles = makeStyles(
       fontWeight: theme.typography.fontWeightBold
     },
     footer: {
-      padding: theme.spacing(1, 0),
-      // TO Fix vertical alignment of the footer
-      marginLeft: theme.spacing(-1.5),
-      width: ` calc(100% + ${theme.spacing(1.5)}px)`
+      paddingTop: theme.spacing(1)
+    },
+    footerResetButton: {
+      textAlign: 'left',
+      justifyContent: 'flex-start',
+      padding: 0,
+      margin: 0,
+      '&:hover, &:focus': {
+        backgroundColor: 'transparent'
+      }
     },
     ToggleButtonGroup: { width: '100%' },
     ToggleButton: {
