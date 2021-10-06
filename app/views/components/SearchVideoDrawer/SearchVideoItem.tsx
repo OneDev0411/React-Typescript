@@ -23,7 +23,7 @@ const useStyles = makeStyles(
     },
     holder: {
       position: 'relative',
-      paddingBottom: `${Math.floor((9 / 16) * 100)}%`
+      paddingBottom: '56%' // 9/16 aspect ratio
     },
     thumbnail: {
       width: '100%',
@@ -37,7 +37,6 @@ const useStyles = makeStyles(
       margin: theme.spacing(1, 1, 0, 1),
       textAlign: 'left'
     },
-    title: {},
     publisher: { color: theme.palette.grey[600] },
     date: { color: theme.palette.grey[500] },
     view: {
@@ -75,7 +74,7 @@ function SearchVideoItem({ video, className, onClick }: SearchVideoItemProps) {
         />
       </div>
       <div className={classes.detail}>
-        <Typography className={classes.title} variant="body2" noWrap>
+        <Typography variant="body2" noWrap>
           {video.title}
         </Typography>
         <Typography
