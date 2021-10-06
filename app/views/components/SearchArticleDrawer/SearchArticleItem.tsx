@@ -1,4 +1,4 @@
-import VisibilitySensor from 'react-visibility-sensor'
+import { InView } from 'react-intersection-observer'
 
 import DrawerResultCard, { DrawerResultCardProps } from './DrawerResultCard'
 import { RSSArticleMetadata } from './types'
@@ -19,7 +19,7 @@ function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
   }
 
   return (
-    <VisibilitySensor onChange={handleVisibilityChange}>
+    <InView as="div" onChange={handleVisibilityChange}>
       <DrawerResultCard
         {...otherProps}
         imageUrl={image}
@@ -31,7 +31,7 @@ function SearchArticleItem({ article, ...otherProps }: SearchArticleItemProps) {
         link={article.url}
         onImageError={handleBrokenImage}
       />
-    </VisibilitySensor>
+    </InView>
   )
 }
 
