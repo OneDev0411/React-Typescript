@@ -34,7 +34,7 @@ export default function useFetchFavorites(
       try {
         const response = await getFavoritesCompactListings(user)
 
-        const listings: ICompactListing[] = response.entities.listings
+        const listings = response.entities.listings
           ? Object.values(response.entities.listings).map(listing =>
               formatListing(listing, user)
             )

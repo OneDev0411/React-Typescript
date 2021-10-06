@@ -6,7 +6,6 @@ import { useDebounce } from 'use-debounce'
 
 import useNotify from '@app/hooks/use-notify'
 import api from '@app/models/listings/search'
-import { normalizeListingLocation } from '@app/utils/map'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 
@@ -73,11 +72,8 @@ export default function useFetchListings(
         )
 
         const listings = response.entities.listings
-          ? Object.values(response.entities.listings).map(listing =>
-              formatListing(
-                normalizeListingLocation(listing) as ICompactListing,
-                user
-              )
+          ? Object.values(response.entities.listings).map(
+              (listing: ICompactListing) => formatListing(listing, user)
             )
           : []
 

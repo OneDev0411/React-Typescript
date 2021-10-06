@@ -1,6 +1,11 @@
 import { FILTERS_INITIAL_VALUES } from '../../../constants'
 import { parseSortIndex, SORT_FIELD_DEFAULT } from '../../../helpers/sort-utils'
-import { IListingUIStates, IMapPosition, Sort } from '../../../types'
+import {
+  IListingUIStates,
+  IMapPosition,
+  Sort,
+  IFormattedCompactListing
+} from '../../../types'
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
@@ -15,7 +20,7 @@ export interface ListingsState {
   search: ListingSearchOptions
   map: IMapPosition
   result: {
-    listings: ICompactListing[]
+    listings: IFormattedCompactListing[]
     info: Nullable<ICompactListingInfo>
   }
   listingStates: IListingUIStates

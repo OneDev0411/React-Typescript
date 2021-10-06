@@ -1,5 +1,7 @@
+import { IFormattedCompactListing } from '../../../types'
+
 export const setListings = (
-  listings: ICompactListing[],
+  listings: IFormattedCompactListing[],
   info: ICompactListingInfo
 ) => ({
   type: 'SET_LISTINGS' as 'SET_LISTINGS',

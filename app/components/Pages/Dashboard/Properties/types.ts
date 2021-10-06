@@ -1,4 +1,15 @@
+import { formatListing } from './helpers/format-listing'
 import { sortOptions } from './helpers/sort-utils'
+
+export type IFormattedListing = GenericReturnType<
+  IListing,
+  typeof formatListing
+>
+
+export type IFormattedCompactListing = GenericReturnType<
+  ICompactListing,
+  typeof formatListing
+>
 
 export interface IMapPosition {
   center: Optional<ICoord>

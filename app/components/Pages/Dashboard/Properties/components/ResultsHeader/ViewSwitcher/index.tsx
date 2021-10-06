@@ -5,7 +5,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
 
-import { ViewType } from '../../../ExploreTab/components/ExplorePage'
+import { ViewType } from '../../../types'
 
 const useStyles = makeStyles(
   theme => ({

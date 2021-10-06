@@ -1,7 +1,5 @@
 import { normalize } from 'normalizr'
 
-import { normalizeListingLocation } from '@app/utils/map'
-
 import Fetch from '../../../services/fetch'
 import * as schema from '../schema'
 
@@ -16,10 +14,9 @@ export const getFavorateCompactListingsData = (
 ) =>
   favorites.map(favorite => {
     const { compact_listing: listing, id: recId, room: recRoom } = favorite
-    const normalizedListing = normalizeListingLocation(listing)
 
     return {
-      ...normalizedListing,
+      ...listing,
       recId,
       recRoom
     }

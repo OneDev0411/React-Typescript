@@ -4,17 +4,21 @@ import {
   metersToFeet
 } from 'utils/listing'
 
-export function formatListing(listing, user) {
+export function formatListing<T extends ICompactListing | IListing>(
+  listing: T,
+  user?: Nullable<IUser>
+) {
   const statusColor = getStatusColor(listing.status)
 
+  // TODO: remove these (as ICompactListing) & (listing as IListing) after update typescript
   const property =
     listing.type === 'compact_listing'
-      ? listing.compact_property
-      : listing.property
+      ? (listing as ICompactListing).compact_property
+      : (listing as IListing).property
   const address =
     listing.type === 'compact_listing'
-      ? listing.address
-      : listing.property.address
+      ? (listing as ICompactListing).address
+      : (listing as IListing).property.address
 
   const addressTitle = getAddressTitle(address)
   const baths = property.bathroom_count || 0
