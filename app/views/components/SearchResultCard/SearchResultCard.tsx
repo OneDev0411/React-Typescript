@@ -5,6 +5,7 @@ import timeago from 'timeago.js'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { ClassesProps } from 'utils/ts-utils'
 
 import LinkButton from '../LinkButton'
 import { RelativeTime } from '../RelativeTime'
@@ -35,11 +36,11 @@ const useStyles = makeStyles(
       boxShadow: `inset 0 0 0 2px ${
         theme.palette.info.main
       }, 0px 2px 2px ${alpha(theme.palette.common.black, 0.1)}`,
-      backgroundColor: theme.palette.info.ultralight,
+      backgroundColor: theme.palette.grey[50],
       '& $title': { color: theme.palette.common.black },
       '& $footerInner': {
         opacity: 1,
-        backgroundColor: theme.palette.info.ultralight
+        backgroundColor: theme.palette.grey[50]
       }
     },
 
@@ -69,7 +70,7 @@ const useStyles = makeStyles(
       }
     },
     title: {
-      color: theme.palette.grey[700],
+      color: theme.palette.grey[800],
       '-webkit-line-clamp': 2,
       display: '-webkit-box',
       '-webkit-box-orient': 'vertical',
@@ -101,7 +102,9 @@ const useStyles = makeStyles(
   { name: 'SearchResultCard' }
 )
 
-export interface SearchResultCardProps extends SearchResultCardImageProps {
+export interface SearchResultCardProps
+  extends SearchResultCardImageProps,
+    ClassesProps<typeof useStyles> {
   isSelected: boolean
   overline?: string
   overlineIcon?: string
@@ -119,9 +122,10 @@ function SearchResultCard({
   link,
   isSelected,
   onSelect,
+  classes: classesProp,
   ...otherProps
 }: SearchResultCardProps) {
-  const classes = useStyles()
+  const classes = useStyles({ classes: classesProp })
 
   const hasOverlineDetail = !!(overlineIcon || overline)
 
