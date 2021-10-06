@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react'
 
 import { Box, makeStyles } from '@material-ui/core'
 import type { Model } from 'backbone'
+import unescape from 'lodash/unescape'
 
 import useAsync from '@app/hooks/use-async'
 import OverlayDrawer from 'components/OverlayDrawer'
@@ -74,14 +75,14 @@ function SearchVideoDrawer({
         const results = [
           ...youtubeVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.snippet?.thumbnails?.high?.url ?? '',
-            title: video.snippet?.title ?? '',
+            title: unescape(video.snippet?.title ?? ''),
             url: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
             publisher: video.snippet?.channelTitle ?? '',
             publishedAt: video.snippet?.publishedAt ?? ''
           })),
           ...vimeoVideos.map<SearchVideoResult>(video => ({
             thumbnail: video.thumbnail_url,
-            title: video.title,
+            title: unescape(video.title),
             url: `https://vimeo.com/${video.video_id}`,
             publisher: video.author_name,
             publishedAt: video.upload_date
