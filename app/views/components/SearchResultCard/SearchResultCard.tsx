@@ -36,11 +36,11 @@ const useStyles = makeStyles(
       boxShadow: `inset 0 0 0 2px ${
         theme.palette.info.main
       }, 0px 2px 2px ${alpha(theme.palette.common.black, 0.1)}`,
-      backgroundColor: theme.palette.info.ultralight,
+      backgroundColor: theme.palette.grey[50],
       '& $title': { color: theme.palette.common.black },
       '& $footerInner': {
         opacity: 1,
-        backgroundColor: theme.palette.info.ultralight
+        backgroundColor: theme.palette.grey[50]
       }
     },
 
@@ -70,7 +70,7 @@ const useStyles = makeStyles(
       }
     },
     title: {
-      color: theme.palette.grey[700],
+      color: theme.palette.grey[800],
       '-webkit-line-clamp': 2,
       display: '-webkit-box',
       '-webkit-box-orient': 'vertical',

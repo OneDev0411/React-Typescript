@@ -7,7 +7,7 @@ const useStyles = makeStyles(
   theme => ({
     root: {
       position: 'relative',
-      backgroundColor: theme.palette.grey[200],
+      backgroundColor: theme.palette.grey[100],
       borderRadius: theme.spacing(0.5),
       overflow: 'hidden'
     },
