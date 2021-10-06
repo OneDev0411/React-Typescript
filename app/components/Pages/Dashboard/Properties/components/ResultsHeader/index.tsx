@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import { makeStyles, Box, Grid } from '@material-ui/core'
 
 import { PAGE_SIZE } from '../../constants'
-import { getResultsCountText } from '../../helpers/pagination-utils'
 import { SortIndex, SortString, ViewType } from '../../types'
 import { MapToggler } from '../MapToggler'
 
+import { ResultCount } from './ResultCount'
 import { SortDropdown } from './SortDropdown'
 import ViewSwitcher from './ViewSwitcher'
 
@@ -67,9 +67,12 @@ export function ResultsHeader({
             <MapToggler checked={mapIsShown} onChange={onMapToggle} />
           )}
           {resultsCountShouldShown && (
-            <>
-              {getResultsCountText(resultsCount, currentPage, pageSize, total)}
-            </>
+            <ResultCount
+              resultsCount={resultsCount}
+              currentPage={currentPage}
+              pageSize={currentPage}
+              total={total}
+            />
           )}
         </Box>
       </Grid>
