@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme =>
 
 interface Props {
   title: string
-  subtitle: string
+  subtitle?: string
 }
 
 export function Header({ subtitle, title }: Props) {
