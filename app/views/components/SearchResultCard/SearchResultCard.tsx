@@ -9,16 +9,13 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import LinkButton from '../LinkButton'
 import { RelativeTime } from '../RelativeTime'
 
-import DrawerResultCardImage, {
-  DrawerResultCardImageProps
-} from './DrawerResultCardImage'
+import { CARD_INNER_HEIGHT, CARD_MARGIN } from './constants'
 import { localeENExtraShort } from './helpers'
+import SearchResultCardImage, {
+  SearchResultCardImageProps
+} from './SearchResultCardImage'
 
 timeago.register('en_extra_short', localeENExtraShort)
-
-const CARD_MARGIN = 1
-const CARD_INNER_HEIGHT = 235
-export const CARD_HEIGHT = CARD_INNER_HEIGHT + CARD_MARGIN * 2
 
 const useStyles = makeStyles(
   theme => ({
@@ -101,10 +98,10 @@ const useStyles = makeStyles(
     selectButton: { minWidth: theme.spacing(9) },
     viewButton: { '&:hover, &:focus': { color: theme.palette.primary.main } }
   }),
-  { name: 'DrawerResultCard' }
+  { name: 'SearchResultCard' }
 )
 
-export interface DrawerResultCardProps extends DrawerResultCardImageProps {
+export interface SearchResultCardProps extends SearchResultCardImageProps {
   isSelected: boolean
   overline?: string
   overlineIcon?: string
@@ -114,7 +111,7 @@ export interface DrawerResultCardProps extends DrawerResultCardImageProps {
   onSelect: () => void
 }
 
-function DrawerResultCard({
+function SearchResultCard({
   overlineIcon,
   overline,
   title,
@@ -123,7 +120,7 @@ function DrawerResultCard({
   isSelected,
   onSelect,
   ...otherProps
-}: DrawerResultCardProps) {
+}: SearchResultCardProps) {
   const classes = useStyles()
 
   const hasOverlineDetail = !!(overlineIcon || overline)
@@ -132,7 +129,7 @@ function DrawerResultCard({
     <div
       className={classNames(classes.root, isSelected && classes.rootSelected)}
     >
-      <DrawerResultCardImage {...otherProps} />
+      <SearchResultCardImage {...otherProps} />
       <div className={classes.detail}>
         {hasOverlineDetail && (
           <div className={classes.overlineDetail}>
@@ -201,4 +198,4 @@ function DrawerResultCard({
   )
 }
 
-export default DrawerResultCard
+export default SearchResultCard

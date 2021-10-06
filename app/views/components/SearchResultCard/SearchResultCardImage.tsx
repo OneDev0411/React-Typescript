@@ -36,22 +36,22 @@ const useStyles = makeStyles(
       color: theme.palette.grey[400]
     }
   }),
-  { name: 'DrawerResultCardImage' }
+  { name: 'SearchResultCardImage' }
 )
 
-export interface DrawerResultCardImageProps {
+export interface SearchResultCardImageProps {
   imageUrl: Optional<string>
   imageAspect: number
   imageAlt?: string
   onImageError?: () => void
 }
 
-function DrawerResultCardImage({
+function SearchResultCardImage({
   imageUrl,
   imageAlt,
   imageAspect,
   onImageError
-}: DrawerResultCardImageProps) {
+}: SearchResultCardImageProps) {
   const classes = useStyles()
 
   return (
@@ -86,4 +86,4 @@ function DrawerResultCardImage({
   )
 }
 
-export default DrawerResultCardImage
+export default SearchResultCardImage
