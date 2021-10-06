@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, KeyboardEvent } from 'react'
 
 import {
   Box,
@@ -65,13 +65,13 @@ export function TaskSplitter({ task }: Props) {
     )
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === 'Enter') {
       handleSaveTitle()
     }
   }
 
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value)
 
   return (

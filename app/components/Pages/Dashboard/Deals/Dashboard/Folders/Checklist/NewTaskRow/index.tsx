@@ -21,32 +21,37 @@ interface Props {
   checklist: IDealChecklist | null
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-    height: theme.spacing(6),
-    borderBottomLeftRadius: theme.shape.borderRadius,
-    borderBottomRightRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey['50']
-  },
-  button: {
-    justifyContent: 'flex-start',
-    height: '100%',
-    borderRadius: 0
-  },
-  buttonIcon: {
-    margin: theme.spacing(0, 0.5, 0, 0.5)
-  },
-  menuList: {
-    minWidth: '300px'
-  },
-  divider: {
-    margin: theme.spacing(1, 0)
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexGrow: 1,
+      height: theme.spacing(6),
+      borderBottomLeftRadius: theme.shape.borderRadius,
+      borderBottomRightRadius: theme.shape.borderRadius,
+      backgroundColor: theme.palette.grey['50']
+    },
+    button: {
+      justifyContent: 'flex-start',
+      height: '100%',
+      borderRadius: 0
+    },
+    buttonIcon: {
+      margin: theme.spacing(0, 0.5, 0, 0.5)
+    },
+    menuList: {
+      minWidth: '300px'
+    },
+    divider: {
+      margin: theme.spacing(1, 0)
+    }
+  }),
+  {
+    name: 'Checklist-NewTaskRow'
   }
-}))
+)
 
 export default function NewTaskRow(props: Props) {
   const [newTaskType, setNewTaskType] = useState<Nullable<IDealTaskType>>(null)
@@ -58,17 +63,15 @@ export default function NewTaskRow(props: Props) {
     <div className={classes.root}>
       <BaseDropdown
         renderDropdownButton={buttonProps => (
-          <>
-            <Button
-              fullWidth
-              color="primary"
-              className={classes.button}
-              {...buttonProps}
-            >
-              <SvgIcon path={mdiPlus} className={classes.buttonIcon} />
-              Add
-            </Button>
-          </>
+          <Button
+            fullWidth
+            color="primary"
+            className={classes.button}
+            {...buttonProps}
+          >
+            <SvgIcon path={mdiPlus} className={classes.buttonIcon} />
+            Add
+          </Button>
         )}
         renderMenu={({ close }) => (
           <MenuList className={classes.menuList}>

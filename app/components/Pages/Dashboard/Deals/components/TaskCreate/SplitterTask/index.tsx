@@ -12,7 +12,7 @@ export function SplitterTask({ onCreateTask }: Props) {
   const handleCreateTask = () => {
     onCreateTask({
       taskType: 'Splitter',
-      title: taskTitle
+      title: taskTitle.trim()
     })
   }
 
@@ -29,7 +29,7 @@ export function SplitterTask({ onCreateTask }: Props) {
         <Button
           color="secondary"
           variant="contained"
-          disabled={taskTitle.length === 0}
+          disabled={taskTitle.trim().length === 0}
           onClick={handleCreateTask}
         >
           Create Section
