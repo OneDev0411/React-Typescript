@@ -183,7 +183,7 @@ export function TaskRow({
                     />
                   </Box>
 
-                  {!isTaskExpanded && (
+                  {!isTaskExpanded && !isBulkMode && (
                     <Box
                       display="flex"
                       alignItems="center"
