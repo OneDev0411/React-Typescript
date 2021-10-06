@@ -86,7 +86,7 @@ export default function AgentTable(props: WithRouterProps) {
         searchInputProps={{
           placeholder: 'Search deals by address, MLS# or agent name...',
           debounceTime: 500,
-          value: searchCriteria
+          defaultValue: searchCriteria
         }}
       >
         <ExportDeals />

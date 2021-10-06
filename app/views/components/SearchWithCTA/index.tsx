@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Button, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useAutocomplete from '@material-ui/lab/useAutocomplete'
 import { useDebouncedCallback } from 'use-debounce'
@@ -46,16 +46,18 @@ const useStyles = makeStyles(
       backgroundColor: '#F9FAFC',
       padding: theme.spacing(1),
       textTransform: 'none',
-      textAlign: 'left'
-    },
-    listBoxFooterButton: {
-      '&:hover': {
-        backgroundColor: theme.palette.grey[100]
-      }
-    },
-    listBoxFooterLabel: {
+      textAlign: 'left',
       justifyContent: 'start',
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
+      textDecoration: 'none',
+      display: 'block',
+      '&:hover': {
+        backgroundColor: theme.palette.grey[100],
+        textDecoration: 'none'
+      },
+      '& > svg': {
+        verticalAlign: 'text-bottom'
+      }
     },
     noResults: {
       padding: theme.spacing(2),
@@ -153,16 +155,16 @@ export default function AutoComplete<T>({
       setOpen(true)
     },
     onClose: (e, reason) => {
+      e.preventDefault()
+
       // @ts-ignore
       const targetEl = e.relatedTarget
 
-      if (targetEl) {
-        // user has clicked on the foorter button. This triggers a blur event which
+      if (targetEl && typeof onFooterClick === 'function') {
+        // user has clicked on the foorter link. This triggers a blur event which
         // results in dropdown being closed executing the footer click function.
         // So we check if that's the case, we call `onFooterClick` before closing it
-        if (targetEl.type === 'button' && typeof onFooterClick === 'function') {
-          onFooterClick(inputValue)
-        }
+        onFooterClick(inputValue)
       }
 
       setOpen(false)
@@ -233,15 +235,10 @@ export default function AutoComplete<T>({
               <div className={classes.noResults}>No results found.</div>
             )}
           {inputValue.length > 0 && (
-            <Button
-              className={classes.listBoxFooter}
-              classes={{
-                root: classes.listBoxFooterButton,
-                label: classes.listBoxFooterLabel
-              }}
-            >
+            // tab index is for a nasty safari bug which returns null for e.relatedTarget
+            <a role="button" tabIndex={0} className={classes.listBoxFooter}>
               {renderFooter(inputValue)}
-            </Button>
+            </a>
           )}
         </div>
       )}

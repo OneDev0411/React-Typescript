@@ -57,6 +57,7 @@ export type SearchInputProps = TextFieldProps & {
   inputProps?: InputBaseProps
   disableClearButton?: boolean
   value?: string
+  defaultValue?: string
 }
 export type SearchInputExposedMethods = {
   focus: () => void
@@ -156,6 +157,7 @@ export const SearchInput = forwardRef(
     return (
       <TextField
         color="secondary"
+        defaultValue={defaultValue}
         inputProps={{ ...inputProps, value }}
         // eslint-disable-next-line react/jsx-no-duplicate-props
         InputProps={{
