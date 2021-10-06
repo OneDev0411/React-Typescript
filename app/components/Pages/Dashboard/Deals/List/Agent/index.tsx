@@ -85,7 +85,8 @@ export default function AgentTable(props: WithRouterProps) {
         onSearch={handleQueryChange}
         searchInputProps={{
           placeholder: 'Search deals by address, MLS# or agent name...',
-          debounceTime: 500
+          debounceTime: 500,
+          value: searchCriteria
         }}
       >
         <ExportDeals />
