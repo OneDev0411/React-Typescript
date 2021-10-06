@@ -238,6 +238,7 @@ export const Map = ({
       >
         {!drawingMode &&
           mapIsShown &&
+          mapRef.current &&
           listings.map(
             listing =>
               checkIsInBound(
