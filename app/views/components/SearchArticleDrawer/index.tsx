@@ -94,14 +94,18 @@ function SearchArticleDrawer({
         try {
           const articleMetadata = await getUrlMetadata(searchTerm)
 
-          imageCache.setItem(searchTerm, articleMetadata?.image ?? NO_IMAGE_URL)
+          if (!articleMetadata) {
+            return []
+          }
+
+          imageCache.setItem(searchTerm, articleMetadata.image ?? NO_IMAGE_URL)
 
           return [
             {
-              image: articleMetadata?.image,
-              title: articleMetadata?.title ?? '',
-              url: articleMetadata?.url ?? '',
-              description: articleMetadata?.description
+              image: articleMetadata.image,
+              title: articleMetadata.title ?? '',
+              url: articleMetadata.url ?? '',
+              description: articleMetadata.description
             }
           ]
         } catch (_) {
