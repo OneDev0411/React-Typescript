@@ -110,8 +110,6 @@ export const Results = ({
   }, [state.result.listings.length, state.isLoading])
 
   const listingsPage = useMemo(() => {
-    console.log(state.result.listings)
-
     return getListingsPage(state.result.listings, currentPage, PAGE_SIZE)
   }, [state.result.listings, currentPage])
 
