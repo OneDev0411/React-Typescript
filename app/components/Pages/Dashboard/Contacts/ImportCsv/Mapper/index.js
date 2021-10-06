@@ -60,7 +60,7 @@ class Mapper extends React.Component {
         ? errors[0].message
         : 'This file does not contain any contacts to upload'
 
-    if (errors[0].code === 'InvalidQuotes') {
+    if (errors[0]?.code === 'InvalidQuotes') {
       errorMessage = (
         <span>
           Your file is not a CSV file, please try again with the correct file
