@@ -11,6 +11,7 @@ import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
+import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
 import { AddRole } from '../AddRole'
 
 import { RoleItem } from './styled'
@@ -42,13 +43,13 @@ export function RoleField(props) {
   return (
     <>
       <div
+        className="field-unlinkable"
         style={{
           ...props.style,
           cursor: annotationRoles.length > 0 ? props.style.cursor : 'normal',
           backgroundColor:
             annotationRoles.length > 0 ? '#d2e5f2' : 'transparent'
         }}
-        onDoubleClick={props.onToggleUnlink}
       >
         <Tooltip title={tooltip}>
           <div
@@ -95,6 +96,15 @@ export function RoleField(props) {
           onUpsertRole={props.onUpsertRole}
         />
       </div>
+
+      <UnlinkFieldButton
+        style={{
+          left: `${props.rect.left + props.rect.width - 16}px`,
+          top: `${props.rect.top + props.rect.height / 10}px`,
+          height: `${props.rect.height}px`
+        }}
+        onClick={props.onToggleUnlink}
+      />
 
       {activeRole !== undefined && (
         <DealRole

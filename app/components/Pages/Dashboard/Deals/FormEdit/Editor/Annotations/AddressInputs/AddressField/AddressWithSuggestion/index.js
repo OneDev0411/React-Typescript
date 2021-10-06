@@ -1,6 +1,8 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
 import { InlineAddressField } from 'components/inline-editable-fields/InlineAddressField'
+
+import { UnlinkFieldButton } from '../../../../../components/UnlinkFieldButton'
 
 const popoverStyles = {
   marginTop: '1rem'
@@ -13,7 +15,8 @@ export function AddressWithSuggestion({
   rectIndex,
   style,
   onChange,
-  onSave
+  onSave,
+  onToggleUnlink
 }) {
   const formRef = useRef(null)
 
@@ -36,19 +39,31 @@ export function AddressWithSuggestion({
         width: Math.max(rect.width, 300)
       }}
       renderSearchField={addressProps => (
-        <input
-          key={rectIndex}
-          {...addressProps}
-          value={inputValue}
-          onChange={e => {
-            addressProps.onChange(e)
-            onChange(e.target.value)
-          }}
-          style={{
-            ...style,
-            ...inputStyles
-          }}
-        />
+        <>
+          <input
+            key={rectIndex}
+            {...addressProps}
+            value={inputValue}
+            className="field-unlinkable"
+            onChange={e => {
+              addressProps.onChange(e)
+              onChange(e.target.value)
+            }}
+            style={{
+              ...style,
+              ...inputStyles
+            }}
+          />
+
+          <UnlinkFieldButton
+            style={{
+              left: `${rect.width - 16}px`,
+              top: `${rect.height / 10}px`,
+              height: `${rect.height}px`
+            }}
+            onClick={onToggleUnlink}
+          />
+        </>
       )}
     />
   )

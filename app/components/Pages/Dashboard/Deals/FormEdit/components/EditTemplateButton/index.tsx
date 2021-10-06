@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { ButtonBase } from '@material-ui/core'
-import { mdiFileEdit } from '@mdi/js'
+import { ButtonBase, Tooltip } from '@material-ui/core'
+import { mdiDotsHorizontal } from '@mdi/js'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import Acl from 'components/Acl'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useDefaultValueContext } from 'deals/FormEdit/Editor/DefaultValues/use-default-value-content'
@@ -18,17 +19,23 @@ export function EditTemplateButton({ style, annotation, type }: Props) {
 
   return (
     <Acl.BackOffice accessControlPolicy="ActiveTeamAndParents">
-      <ButtonBase
-        className="button-default-value"
-        style={{
-          position: 'absolute',
-          cursor: 'pointer',
-          ...style
-        }}
-        onClick={() => defaultValueContext.setAnnotation(annotation, type)}
-      >
-        <SvgIcon size={0.6} path={mdiFileEdit} />
-      </ButtonBase>
+      <Tooltip title="Set Default Value">
+        <ButtonBase
+          className="button-visible-on-hover"
+          style={{
+            position: 'absolute',
+            cursor: 'pointer',
+            width: '16px',
+            color: '#fff',
+            backgroundColor: 'rgb(33, 118, 203)',
+            borderRadius: '0 4px 4px 0',
+            ...style
+          }}
+          onClick={() => defaultValueContext.setAnnotation(annotation, type)}
+        >
+          <SvgIcon path={mdiDotsHorizontal} size={muiIconSizes.xsmall} />
+        </ButtonBase>
+      </Tooltip>
     </Acl.BackOffice>
   )
 }

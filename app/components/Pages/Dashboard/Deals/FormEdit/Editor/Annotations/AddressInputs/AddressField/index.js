@@ -58,6 +58,7 @@ export function AddressField({
       inputStyles={inputStyles}
       onChange={setInputValue}
       onSave={onAddressUpdate}
+      onToggleUnlink={onToggleUnlink}
     />
   )
 }

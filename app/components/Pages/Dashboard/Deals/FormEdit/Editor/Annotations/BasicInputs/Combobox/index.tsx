@@ -64,7 +64,8 @@ export default React.memo(
         <EditTemplateButton
           style={{
             left: `${box.left}px`,
-            top: `${box.top + box.height / 10}px`
+            top: `${box.top + box.height / 10}px`,
+            height: `${box.height}px`
           }}
           annotation={annotation}
           type={Types.COMBOBOX_ANNOTATION}

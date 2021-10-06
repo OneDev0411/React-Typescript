@@ -19,13 +19,16 @@ const useStyles = makeStyles(
       /*
        * only show default value icon when hover overing on the related input
        */
-      '& .button-default-value': {
+      '& .button-visible-on-hover': {
         visibility: 'hidden'
       },
-      '& .button-default-value:hover': {
+      '& .button-visible-on-hover:hover': {
         visibility: 'visible'
       },
-      '& .input-with-template:hover + .button-default-value': {
+      '& .input-with-template:hover + .button-visible-on-hover': {
+        visibility: 'visible'
+      },
+      '& .field-unlinkable:hover + .button-visible-on-hover': {
         visibility: 'visible'
       }
     }

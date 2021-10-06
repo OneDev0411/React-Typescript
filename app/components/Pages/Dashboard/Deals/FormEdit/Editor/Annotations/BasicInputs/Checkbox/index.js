@@ -45,8 +45,9 @@ export default React.memo(
 
         <EditTemplateButton
           style={{
-            left: box.left - box.width - theme.spacing(1.5),
-            top: box.top - theme.spacing(0.5)
+            left: `${box.left - box.width - theme.spacing(1.5)}px`,
+            top: `${box.top - theme.spacing(0.5)}px`,
+            height: `${box.height}px`
           }}
           annotation={props.annotation}
           type={Types.CHECKBOX_ANNOTATION}
