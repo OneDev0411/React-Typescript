@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 
@@ -25,9 +23,13 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export function Header(props) {
-  const classes = useStyles(props)
-  const { subtitle, title } = props
+interface Props {
+  title: string
+  subtitle: string
+}
+
+export function Header({ subtitle, title }: Props) {
+  const classes = useStyles()
 
   return (
     <Box className={classes.container}>
