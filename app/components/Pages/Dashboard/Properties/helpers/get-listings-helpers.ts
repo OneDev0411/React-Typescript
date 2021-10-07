@@ -26,9 +26,9 @@ export function createValertQueryString(
 
   if (sort) {
     const orderByQuery = parseToValertSort(sort.index)
-    const sortDirQuery = sort.ascending ? 'ASC' : 'DESC'
+    const sortDirQuery = sort.ascending ? '+' : '-'
 
-    query += `&order_by[]=${orderByQuery}&sort_dir=${sortDirQuery}`
+    query += `&order_by[]=${encodeURIComponent(sortDirQuery + orderByQuery)}`
   }
 
   return query
