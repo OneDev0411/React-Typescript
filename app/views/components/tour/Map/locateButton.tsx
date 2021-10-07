@@ -2,9 +2,9 @@ import { Button, withStyles } from '@material-ui/core'
 import { mdiCrosshairsGps } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
+import { confirmation } from '@app/store_actions/confirmation'
 import { getLocationErrorMessage } from '@app/utils/map'
-import { confirmation } from 'actions/confirmation'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 // This Customized button should looks like other google map buttons
 // This is why it is not following the app style guide
