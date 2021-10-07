@@ -15,6 +15,7 @@ import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/p
 import openHouseRoute from './app/routes/openhouse/registration'
 import proxifierRoute from './app/routes/proxifier'
 import renderMjmlRoute from './app/routes/render-mjml'
+import rssFeedsRoute from './app/routes/rss-feeds'
 import unsupportedRoute from './app/routes/unsupported'
 import urlMetadataRoute from './app/routes/url-metadata'
 import usersOAuthTokenRoute from './app/routes/user/oauth-token'
@@ -91,5 +92,6 @@ router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
+router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 
 export default router
