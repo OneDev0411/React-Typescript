@@ -1,8 +1,8 @@
 import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
+import { Video } from '@app/views/components/SearchVideoDrawer/types'
 import VideoIcon from 'assets/images/marketing/editor/blocks/video.png'
-import { Video } from 'components/VideoDrawer/types'
 
 import { BASICS_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'

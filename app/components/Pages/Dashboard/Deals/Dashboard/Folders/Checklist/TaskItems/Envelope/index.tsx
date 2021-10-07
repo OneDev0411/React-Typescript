@@ -53,6 +53,7 @@ export function Envelope({ deal, task, envelope }: Props) {
           </Box>
 
           <ActionsButton
+            type="envelope"
             deal={deal}
             task={task}
             envelope={envelope}

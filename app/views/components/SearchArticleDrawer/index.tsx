@@ -6,8 +6,8 @@ import useAsync from '@app/hooks/use-async'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
+import { SearchInput } from '../SearchInput'
 import { NO_IMAGE_URL } from '../SearchResultCard'
 
 import { RSS_SOURCES } from './constants'

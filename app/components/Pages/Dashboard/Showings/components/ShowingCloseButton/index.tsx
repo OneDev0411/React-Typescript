@@ -1,9 +1,8 @@
 import { makeStyles } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
+import LinkIconButton from '@app/views/components/LinkIconButton'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
-import LinkIconButton from '../LinkIconButton'
 
 const useStyles = makeStyles(
   theme => ({

@@ -12,6 +12,10 @@ export interface StateContext {
   attachments: IDealFile[]
   form?: EmailFormValues | FormValues
   isDrawerOpen: boolean
+  mode: {
+    type: Nullable<'View/Print' | 'Docusign'>
+    taskId: Nullable<UUID>
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare

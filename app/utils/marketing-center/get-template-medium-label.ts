@@ -7,6 +7,9 @@ const MEDIUM_LABEL_MAP: {
   FacebookCover: 'Facebook Covers',
   InstagramStory: 'Instagram Stories',
   LinkedInCover: 'LinkedIn Covers',
+  TwitterCover: 'Twitter Covers',
+  RealtorCover: 'Realtor.com Covers',
+  YouTubeCover: 'YouTube Covers',
   Website: 'Website'
 }
 

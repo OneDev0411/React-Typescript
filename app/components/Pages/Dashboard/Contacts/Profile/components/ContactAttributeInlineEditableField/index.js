@@ -154,7 +154,8 @@ class MasterField extends React.Component {
       (!props.isActive &&
         props.attribute?.updated_at &&
         props.attribute?.updated_at > state.updated_at) ||
-      props.contact?.email !== state.contact?.email
+      props.contact?.email !== state.contact?.email ||
+      (!props.trigger && state.currentTrigger)
     ) {
       return getInitialState(props)
     }
