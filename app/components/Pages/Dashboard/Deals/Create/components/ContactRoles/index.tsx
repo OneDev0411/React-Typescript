@@ -1,45 +1,20 @@
-import React, { useState } from 'react'
+import { ComponentProps } from 'react'
 
-import {
-  Box,
-  makeStyles,
-  TextField,
-  Theme,
-  Paper,
-  CircularProgress
-} from '@material-ui/core'
+import { List, makeStyles } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
 import { parseFullName } from 'parse-full-name'
-import { useAsync, useDebounce } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { isValidNameTitle } from '@app/views/components/DealRole/validators/is-valid-legal-prefix'
+import AutoComplete from 'components/SearchWithCTA'
 import VirtualList from 'components/VirtualList'
 import searchAgents from 'models/agent/search'
 import { searchContacts } from 'models/contacts/search-contacts'
 
 import { IDealFormRole } from '../../types'
 
-import { Row, RowItem, RowType } from './Row'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    root: {
-      '&.has-border': {
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: theme.shape.borderRadius
-      }
-    },
-    listContainer: {
-      padding: theme.spacing(1)
-    },
-    searchInput: {
-      padding: theme.spacing(1, 0)
-    }
-  }),
-  {
-    name: 'CreateDeal-PrimaryAgent'
-  }
-)
+import { AgentRow } from './AgentRow'
+import { ContactRow } from './ContactRow'
 
 interface Props {
   source?: 'MLS' | 'CRM'
@@ -47,92 +22,39 @@ interface Props {
   onSelectRole: (role: Partial<IDealFormRole>) => void
 }
 
+const useStyles = makeStyles(
+  theme => ({
+    listbox: {
+      padding: 0,
+      margin: 0,
+      listStyle: 'none',
+      backgroundColor: theme.palette.background.paper
+    }
+  }),
+  { name: 'ContactRolesAutoComplete' }
+)
+const autocompleteRowHeight = 60
+
 export function ContactRoles({
   placeholder,
   source = 'CRM',
   onSelectRole
 }: Props) {
   const classes = useStyles()
+  const searchContactsModel = (value: string) =>
+    new Promise(resolve => {
+      resolve(resolve(searchContacts(value)))
+    }).then((response: ApiResponseBody<IContact[]>) => response.data)
 
-  const [searchCriteria, setSearchCriteria] = useState<string>('')
-  const [debouncedSearchCriteria, setDebouncedSearchCriteria] =
-    useState<string>('')
-
-  const [isSearching, setIsSearching] = useState(false)
-  const [rows, setRows] = useState<RowItem[]>([])
-
-  /**
-   * debounce search criteria to don't search contacts on input change
-   */
-  useDebounce(
-    () => {
-      setDebouncedSearchCriteria(searchCriteria)
-    },
-    700,
-    [searchCriteria]
-  )
-
-  /**
-   * Search for contacts when the search criteria changes
-   */
-  useAsync(async () => {
-    if (searchCriteria.length === 0) {
-      setRows([])
-
-      return
-    }
-
-    if (searchCriteria.length < 3) {
-      return
-    }
-
-    setIsSearching(true)
-
-    if (source === 'MLS') {
-      const agents: IAgent[] = await searchAgents(searchCriteria, 'q')
-
-      setRows([
-        {
-          type: RowType.New,
-          name: searchCriteria
-        },
-        ...agents.map(
-          agent =>
-            ({
-              type: RowType.Agent,
-              agent
-            } as RowItem)
-        )
-      ])
-    }
-
-    if (source === 'CRM') {
-      const { data: contacts } = await searchContacts(searchCriteria)
-
-      setRows([
-        {
-          type: RowType.New,
-          name: searchCriteria
-        },
-        ...contacts.map(
-          contact =>
-            ({
-              type: RowType.Contact,
-              contact
-            } as RowItem)
-        )
-      ])
-    }
-
-    setIsSearching(false)
-  }, [debouncedSearchCriteria])
+  const searchAgentsModel = (value: string) =>
+    new Promise<IAgent[]>(resolve => resolve(searchAgents(value, 'q')))
 
   /**
    * Starts creating a new contact based on the given name
    */
-  const createNewContact = () => {
+  const createNewContact = (inputValue: string) => {
     const { first, last, middle, title } = parseFullName(
-      debouncedSearchCriteria,
+      inputValue,
       'all',
       1,
       0,
@@ -148,58 +70,135 @@ export function ContactRoles({
   }
 
   const handleSelectRole = (role: Partial<IDealFormRole>) => {
-    setSearchCriteria('')
-    setRows([])
-
     onSelectRole(role)
   }
 
   return (
-    <Box className={classes.root}>
-      <TextField
-        fullWidth
-        autoComplete="no-autocomplete"
-        variant="outlined"
-        size="small"
-        value={searchCriteria}
-        onChange={e => setSearchCriteria(e.target.value)}
-        placeholder={placeholder}
-        className={classes.searchInput}
-      />
-
-      {isSearching && <CircularProgress />}
-
-      {rows.length > 0 && !isSearching && (
-        <Paper
-          className={classes.listContainer}
-          style={{
-            height: rows.length < 5 ? `${rows.length * 60 + 16}px` : '250px'
-          }}
-        >
-          <AutoSizer>
-            {({ width, height }) => (
-              <VirtualList
-                width={width}
-                height={height}
-                itemCount={rows.length}
-                itemData={
-                  {
-                    rows,
-                    searchCriteria,
-                    onSelectRole: handleSelectRole,
-                    onCreateNewContact: createNewContact
-                  } as React.ComponentProps<typeof Row>['data']
-                }
-                threshold={2}
-                itemSize={() => 60}
-                overscanCount={3}
+    <>
+      {source === 'MLS' && (
+        <AutoComplete<IAgent>
+          placeholder={placeholder}
+          onFooterClick={createNewContact}
+          model={searchAgentsModel}
+          minChars={3}
+          clearOnBlur
+          getOptionLabel={(option: IAgent) => option.full_name}
+          renderFooter={inputValue => (
+            <>
+              <AddIcon fontSize="small" />
+              Create a new contact: '{inputValue}'
+            </>
+          )}
+          renderOption={(
+            options,
+            getOptionProps,
+            getHighlightedText,
+            { inputValue }
+          ) => {
+            return (
+              <List
+                className={classes.listbox}
+                style={{
+                  height:
+                    options.length < 5
+                      ? `${options.length * autocompleteRowHeight}px`
+                      : '270px'
+                }}
               >
-                {Row}
-              </VirtualList>
-            )}
-          </AutoSizer>
-        </Paper>
+                <AutoSizer>
+                  {({ width, height }) => {
+                    return (
+                      <VirtualList
+                        key={inputValue}
+                        width={width}
+                        height={height}
+                        itemCount={options.length}
+                        itemData={
+                          {
+                            options,
+                            getHighlightedText,
+                            inputValue,
+                            getOptionProps,
+                            onSelectRole: handleSelectRole
+                          } as ComponentProps<typeof AgentRow>['data']
+                        }
+                        threshold={2}
+                        isLoading={false}
+                        itemSize={index => autocompleteRowHeight}
+                        overscanCount={3}
+                      >
+                        {AgentRow}
+                      </VirtualList>
+                    )
+                  }}
+                </AutoSizer>
+              </List>
+            )
+          }}
+        />
       )}
-    </Box>
+
+      {source === 'CRM' && (
+        <AutoComplete<IContact>
+          placeholder={placeholder}
+          onFooterClick={createNewContact}
+          model={searchContactsModel}
+          clearOnBlur
+          getOptionLabel={(option: IContact) => option.display_name}
+          renderFooter={inputValue => (
+            <>
+              <AddIcon fontSize="small" />
+              Create a new contact: '{inputValue}'
+            </>
+          )}
+          renderOption={(
+            options,
+            getOptionProps,
+            getHighlightedText,
+            { inputValue }
+          ) => {
+            return (
+              <List
+                className={classes.listbox}
+                style={{
+                  height:
+                    options.length < 5
+                      ? `${options.length * autocompleteRowHeight}px`
+                      : '270px'
+                }}
+              >
+                <AutoSizer>
+                  {({ width, height }) => {
+                    return (
+                      <VirtualList
+                        key={inputValue}
+                        width={width}
+                        height={height}
+                        itemCount={options.length}
+                        itemData={
+                          {
+                            options,
+                            getHighlightedText,
+                            inputValue,
+                            getOptionProps,
+                            onSelectRole: handleSelectRole
+                          } as ComponentProps<typeof ContactRow>['data']
+                        }
+                        threshold={2}
+                        isLoading={false}
+                        itemSize={index => autocompleteRowHeight}
+                        overscanCount={3}
+                      >
+                        {ContactRow}
+                      </VirtualList>
+                    )
+                  }}
+                </AutoSizer>
+              </List>
+            )
+          }}
+        />
+      )}
+    </>
   )
 }
