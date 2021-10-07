@@ -9,7 +9,7 @@ import {
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
-  bounds: Nullable<IBounds>
+  bounds: Nullable<ICompactBounds>
   office?: Nullable<string>
   drawing: ICoord[]
   filters: Partial<AlertFilters>

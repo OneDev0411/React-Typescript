@@ -52,7 +52,7 @@ export const changeSort = (sort: Sort) => ({
 export const setMapBounds = (
   center: ICoord,
   zoom: number,
-  bounds: IBounds
+  bounds: ICompactBounds
 ) => ({
   type: 'SET_MAP_BOUNDS' as 'SET_MAP_BOUNDS',
   payload: {

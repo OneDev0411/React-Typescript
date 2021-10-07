@@ -60,6 +60,10 @@ declare interface ICoord {
   lng: number
 }
 
+declare interface ICompactBounds {
+  ne: ICoord
+  sw: ICoord
+}
 declare interface IBounds {
   ne: ICoord
   nw: ICoord
