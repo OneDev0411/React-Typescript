@@ -62,12 +62,13 @@ export function reducer(
         ...state,
         result: {
           ...state.result,
-          listings: state.result.listings.map(listing => {
-            if (listing.id === id) {
-              return { ...listing, favorited: !listing.favorited }
+          listings: state.result.listings.filter(listing => {
+            // Remove the listing if it is the one that was toggled
+            if (listing.id === id && listing.favorited) {
+              return false
             }
 
-            return listing
+            return true
           })
         }
       }
