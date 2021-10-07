@@ -27,7 +27,8 @@ export const FormInputs = props => (
         annotation,
         type: info.type,
         format: info.format,
-        defaultValue: annotation.fieldValue,
+        defaultValue:
+          props.values[annotation.fieldName] ?? annotation.fieldValue,
         onChange: debounce(props.onValueUpdate, 1000)
       }
 
@@ -49,11 +50,7 @@ export const FormInputs = props => (
 
       if (type === Types.COMBOBOX_ANNOTATION) {
         return (
-          <ComboboxAnnotation
-            key={annotation.fieldName}
-            {...sharedProps}
-            values={props.values}
-          />
+          <ComboboxAnnotation key={annotation.fieldName} {...sharedProps} />
         )
       }
 
