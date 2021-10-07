@@ -11,7 +11,7 @@ import LoadingContainer from '../LoadingContainer'
 import { NO_IMAGE_URL } from '../SearchResultCard'
 
 import { RSS_SOURCES } from './constants'
-import { isValidUrl } from './helpers'
+import { prependHTTPSIfNeeded, isValidUrl } from './helpers'
 import { getUrlMetadata } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
@@ -87,24 +87,31 @@ function SearchArticleDrawer({
           return allArticles
         }
 
-        if (!isValidUrl(searchTerm)) {
+        const searchTermWithHTTPSPrefix = prependHTTPSIfNeeded(searchTerm)
+
+        if (!isValidUrl(searchTermWithHTTPSPrefix)) {
           return searchArticles(searchTerm)
         }
 
         try {
-          const articleMetadata = await getUrlMetadata(searchTerm)
+          const articleMetadata = await getUrlMetadata(
+            searchTermWithHTTPSPrefix
+          )
 
           if (!articleMetadata) {
             return []
           }
 
-          imageCache.setItem(searchTerm, articleMetadata.image ?? NO_IMAGE_URL)
+          imageCache.setItem(
+            searchTermWithHTTPSPrefix,
+            articleMetadata.image ?? NO_IMAGE_URL
+          )
 
           return [
             {
               image: articleMetadata.image,
               title: articleMetadata.title ?? '',
-              url: articleMetadata.url ?? '',
+              url: articleMetadata.url ?? searchTermWithHTTPSPrefix,
               description: articleMetadata.description
             }
           ]
