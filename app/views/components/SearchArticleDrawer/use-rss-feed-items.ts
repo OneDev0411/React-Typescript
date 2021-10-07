@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+import uniqBy from 'lodash/uniqBy'
+
 import useAsync from '@app/hooks/use-async'
 
 import { sortRSSFeedItems } from './helpers'
@@ -27,7 +29,14 @@ export function useRSSFeedItems(rssSources: RSSSource[]): UseRSSFeedItems {
         []
       )
 
-      return sortRSSFeedItems(rssFeedItems)
+      // The feed items come from different sources and it is possible to have duplicated articles
+      // on the list. So to avoid that we need to make them unique.
+      const uniqueRSSFeedItems = uniqBy(
+        rssFeedItems,
+        rssFeedItem => rssFeedItem.link
+      )
+
+      return sortRSSFeedItems(uniqueRSSFeedItems)
     })
   }, [run, rssSources])
 

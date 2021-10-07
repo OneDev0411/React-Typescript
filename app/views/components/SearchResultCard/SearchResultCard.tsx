@@ -147,7 +147,12 @@ function SearchResultCard({
             </Typography>
             {overlineDate && (
               <Typography className={classes.overlineDate} variant="caption">
-                <RelativeTime time={overlineDate} locale="en_extra_short" />
+                <RelativeTime
+                  // The timeago().format() method does not return a valid date for some timezones,
+                  // so it needs an ISO date to works fine.
+                  time={new Date(overlineDate).toISOString()}
+                  locale="en_extra_short"
+                />
               </Typography>
             )}
           </div>
