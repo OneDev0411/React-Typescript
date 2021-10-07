@@ -101,8 +101,6 @@ const sortListings = memoize(
       formatListing(normalizeListingLocation(listing), user)
     )
 
-    console.log(formattedListings)
-
     return formattedListings.sort((a, b) => sortByIndex(a, b, index, ascending))
   },
   // Since listings are equal during renders and are read from this.state
@@ -235,6 +233,7 @@ export const Results = ({
                   isWidget={isWidget}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
+                  onToggleLike={handleToggleLike}
                 />
               )}
             </>

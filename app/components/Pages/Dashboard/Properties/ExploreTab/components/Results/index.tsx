@@ -193,6 +193,7 @@ export const Results = ({
                   isWidget={isWidget}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
+                  onToggleLike={handleToggleLike}
                 />
               )}
             </>

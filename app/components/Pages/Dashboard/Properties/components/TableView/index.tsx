@@ -50,6 +50,7 @@ interface Props {
   listingStates: IListingUIStates
   isScroling?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
+  onToggleLike?: (id: UUID) => void
 }
 
 const CELL_FALLBACK = '--'
@@ -141,7 +142,8 @@ export const TableView = ({
   isWidget,
   listingStates,
   isScroling = false,
-  onChangeHoverState = noop
+  onChangeHoverState = noop,
+  onToggleLike = noop
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -171,6 +173,12 @@ export const TableView = ({
     },
     [isWidget]
   )
+
+  const onToggleFavorite = useCallback(() => {
+    if (selectedListingId) {
+      onToggleLike(selectedListingId)
+    }
+  }, [onToggleLike, selectedListingId])
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
 
@@ -230,6 +238,7 @@ export const TableView = ({
       <ListingDetailsModal
         isOpen={isListingDetailsModalOpen}
         listingId={selectedListingId}
+        onToggleFavorite={onToggleFavorite}
         closeHandler={closeListingDetailsModal}
       />
     </>
