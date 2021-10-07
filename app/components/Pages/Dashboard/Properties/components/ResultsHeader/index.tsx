@@ -70,7 +70,7 @@ export function ResultsHeader({
             <ResultCount
               resultsCount={resultsCount}
               currentPage={currentPage}
-              pageSize={currentPage}
+              pageSize={pageSize}
               total={total}
             />
           )}
