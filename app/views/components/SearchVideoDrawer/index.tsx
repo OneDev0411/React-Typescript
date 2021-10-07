@@ -7,8 +7,8 @@ import unescape from 'lodash/unescape'
 import useAsync from '@app/hooks/use-async'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { SearchInput } from '../GlobalHeaderWithSearch'
 import LoadingContainer from '../LoadingContainer'
+import { SearchInput } from '../SearchInput'
 
 import SearchVideoEmptyState from './SearchVideoEmptyState'
 import SearchVideoResults from './SearchVideoResults'
