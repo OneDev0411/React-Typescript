@@ -42,7 +42,8 @@ export const ResultCount = ({
   return (
     <>
       <span>Showing </span>
-      <b className={classes.bold}>{start}</b> -{' '}
+      <b className={classes.bold}>{start}</b>
+      {' - '}
       <b className={classes.bold}>{Math.min(end, resultsCount)}</b>
       <span> of </span>
       <b className={classes.bold}>{total || resultsCount}</b>
