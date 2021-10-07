@@ -125,9 +125,11 @@ export const Results = ({
   }
 
   useEffect(() => {
-    setCurrentPage(1)
-    scrollToTop()
-  }, [state.result.listings])
+    if (state.isLoading) {
+      setCurrentPage(1)
+      scrollToTop()
+    }
+  }, [state.isLoading])
 
   const handleChangeHoverState = useCallback(
     (listingId: UUID, hover: boolean) => {
