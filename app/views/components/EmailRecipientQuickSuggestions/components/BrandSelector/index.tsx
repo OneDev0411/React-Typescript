@@ -1,4 +1,7 @@
-import { BrandSelectorDrawer } from '@app/views/components/BrandSelectorDrawer'
+import {
+  NodeRenderer,
+  BrandSelectorDrawer
+} from '@app/views/components/BrandSelectorDrawer'
 
 import { Brand } from './components/Brand'
 
@@ -21,7 +24,7 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
     onClose()
   }
 
-  const renderBrandNode = (brand, onClose) => {
+  const renderBrandNode = ({ brand, onClose }: NodeRenderer) => {
     return (
       <Brand
         brand={brand}
