@@ -44,14 +44,18 @@ export type NodeRenderer = { brand: IBrand; onClose: () => void }
 export type ButtonRenderer = { onOpen: () => void }
 
 interface Props {
-  nodeRenderer?: (props: NodeRenderer) => ReactNode
+  defaultButtonLabel?: string
   defaultButtonProps?: Omit<ButtonProps, 'onClick'>
+  drawerTitle?: string
   drawerProps?: Omit<OverlayDrawerProps, 'open' | 'onClose'>
+  nodeRenderer?: (props: NodeRenderer) => ReactNode
   buttonRenderer?: (props: ButtonRenderer) => ReactNode
 }
 
 export function BrandSelectorDrawer({
+  defaultButtonLabel = 'Our Agents',
   defaultButtonProps = {},
+  drawerTitle = 'Select Agents',
   drawerProps = {},
   buttonRenderer,
   nodeRenderer
@@ -85,7 +89,7 @@ export function BrandSelectorDrawer({
 
     return (
       <Button {...defaultButtonProps} onClick={hanldeOpenDrawer}>
-        Our Agents
+        {defaultButtonLabel}
       </Button>
     )
   }
@@ -134,7 +138,7 @@ export function BrandSelectorDrawer({
     <>
       {renderButton()}
       <Drawer {...drawerProps} open={isOpen} onClose={hanldeCloseDrawer}>
-        <Drawer.Header title="Select Agents" />
+        <Drawer.Header title={drawerTitle} />
         <Drawer.Body>
           <div className={classes.searchContainer}>
             <Search
