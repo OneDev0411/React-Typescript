@@ -58,10 +58,18 @@ export function reducer(
     case 'TOGGLE_LISTING_FAVORITE_STATE': {
       const { id } = action.payload
 
+      const info = state.result.info
+
       return {
         ...state,
         result: {
-          ...state.result,
+          // reduce the number of listings by 1
+          info: {
+            ...state.result.info,
+            proposed_title: info ? info.proposed_title : '',
+            count: info ? info.count - 1 : 0,
+            total: info ? info.total - 1 : 0
+          },
           listings: state.result.listings.filter(listing => {
             // Remove the listing if it is the one that was toggled
             if (listing.id === id && listing.favorited) {
