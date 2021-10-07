@@ -128,6 +128,7 @@ const Marker = ({
   const statusColor = getStatusColorClass(status)
 
   const isShowBubble = zoom >= MINIMAL_MARKER_ZOOM_LEVEL
+  const isShowPopper = (hover && isShowBubble) || clicked
 
   // We render markers differently based on the current zoom level...
   return (
@@ -145,7 +146,7 @@ const Marker = ({
       >
         {isShowBubble && formatedPrice}
       </div>
-      {(hover || clicked) && isShowBubble && (
+      {isShowPopper && (
         <Popper
           id={id}
           open
