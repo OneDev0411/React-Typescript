@@ -9,7 +9,7 @@ export function isNoImageState(image: Optional<string>): boolean {
 }
 
 // Borrow and customize the below code from https://github.com/hustcc/timeago.js/blob/master/src/lang/en_short.ts
-const EN_US = ['s', 'm', 'h', 'd', 'w', 'm', 'y']
+const EN_US = ['s', 'm', 'h', 'd', 'w', 'mo', 'yr']
 
 export function localeENExtraShort(
   diff: number,
