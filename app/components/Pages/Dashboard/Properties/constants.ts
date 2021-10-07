@@ -18,6 +18,8 @@ export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const PAGE_SIZE = 20
 
 // Map constants
+export const GOOGLE_MAP_GLOBE_WIDTH = 256
+export const USER_LOCATION_ZOOM_LEVEL = 15
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8
 export const QUERY_LIMIT = 200
 export const bootstrapURLKeys = {

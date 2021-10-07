@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import {
   GoogleMapLibrary,
@@ -83,9 +84,7 @@ const useStyles = makeStyles(
       bottom: 20,
       right: 0,
       zIndex: theme.zIndex.modal - 3,
-      // The width of app sidebar is 192px
-      // TODO: probably need to be changed if sidebar is changed
-      width: 'calc(100% - 192px)'
+      width: `calc(100% - ${appSidenavWidth}px)`
     }
   }),
   { name: 'PropertiesFavoritesPage' }

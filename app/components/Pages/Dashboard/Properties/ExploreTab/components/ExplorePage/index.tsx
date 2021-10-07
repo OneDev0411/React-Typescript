@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 
 import { Grid, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import {
   GoogleMapLibrary,
@@ -111,9 +112,7 @@ const useStyles = makeStyles(
       bottom: 20,
       right: 0,
       zIndex: theme.zIndex.modal - 3,
-      // The width of app sidebar is 192px
-      // TODO: probably need to be changed if sidebar is changed
-      width: 'calc(100% - 192px)'
+      width: `calc(100% - ${appSidenavWidth}px)`
     }
   }),
   { name: 'PropertiesExplorePage' }
@@ -137,6 +136,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const classes = useStyles()
 
   const reduxDispatch = useDispatch()
+  const mapRef = useRef<google.maps.Map>()
   const [mapIsShown, setMapIsShown] = useState(true)
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [isShowAlertModal, setIsShowAlertModal] = useState(false)
@@ -164,11 +164,24 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const toggleMapShown = () => setMapIsShown(mapIsShown => !mapIsShown)
 
-  const onSelectPlace = (center: ICoord, zoom: number, bounds: IBounds) => {
+  const onSelectPlace = (
+    center: ICoord,
+    zoom: number,
+    bounds: ICompactBounds
+  ) => {
     if (viewType === 'cards') {
       dispatch(setMapLocation(center, zoom))
     } else {
       dispatch(setMapBounds(center, zoom, bounds))
+    }
+
+    if (mapRef.current) {
+      const cornerBounds = new window.google.maps.LatLngBounds()
+
+      cornerBounds.extend(new google.maps.LatLng(bounds.ne.lat, bounds.ne.lng))
+      cornerBounds.extend(new google.maps.LatLng(bounds.sw.lat, bounds.sw.lng))
+
+      mapRef.current.fitBounds(cornerBounds)
     }
   }
 
@@ -254,6 +267,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapClick = () => dispatch(changeListingClickedState(null))
 
+  const onMapLoad = (map: google.maps.Map) => {
+    mapRef.current = map
+  }
+
   return (
     <>
       <Grid className={classes.container}>
@@ -304,6 +321,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   listings={state.result.listings}
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
+                  onMapLoad={onMapLoad}
                 />
               </Grid>
             </Grid>

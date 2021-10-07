@@ -6,6 +6,7 @@ import { confirmation } from 'actions/confirmation'
 import GlobalPageLayout from 'components/GlobalPageLayout'
 import { getLocationErrorMessage } from 'utils/map'
 
+import { USER_LOCATION_ZOOM_LEVEL } from '../constants'
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
 import { FavoritesPage } from './components/FavoritesPage'
@@ -78,9 +79,7 @@ function FavoritesTab({ isWidget, user }: Props) {
 
   // Initialize user location on click Locate
   const initUserLocation = (lat: number, lng: number) => {
-    // TODO: Calculate zoom from bound and center and map width
-    // https://stackoverflow.com/a/6055653/10326226
-    const zoom = 15
+    const zoom = USER_LOCATION_ZOOM_LEVEL
     const center = { lat, lng }
 
     dispatch(setMapLocation(center, zoom))

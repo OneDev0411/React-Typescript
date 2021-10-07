@@ -1,6 +1,9 @@
 import { Theme } from '@material-ui/core'
 import { Coords, Maps, MapOptions } from 'google-map-react'
 
+import { appSidenavWidth } from '../../SideNav/variables'
+import { GOOGLE_MAP_GLOBE_WIDTH } from '../constants'
+
 export const createMapOptions = (
   maps: Maps,
   drawingMode: boolean
@@ -64,7 +67,7 @@ export const coordToPoint = (coord: Coords): IPoint => {
 }
 
 export const pointFromBounds = (
-  bounds?: Nullable<IBounds>
+  bounds?: Nullable<ICompactBounds>
 ): Nullable<IPoint[]> => {
   if (!bounds) {
     return null
@@ -72,9 +75,32 @@ export const pointFromBounds = (
 
   return [
     { latitude: bounds.ne.lat, longitude: bounds.ne.lng },
-    { latitude: bounds.se.lat, longitude: bounds.se.lng },
+    { latitude: bounds.sw.lat, longitude: bounds.ne.lng },
     { latitude: bounds.sw.lat, longitude: bounds.sw.lng },
-    { latitude: bounds.nw.lat, longitude: bounds.nw.lng },
+    { latitude: bounds.ne.lat, longitude: bounds.sw.lng },
     { latitude: bounds.ne.lat, longitude: bounds.ne.lng }
   ]
+}
+
+export const estimateMapZoom = (
+  bounds: ICompactBounds,
+  mapWidth?: number
+): number => {
+  const gapWidth = 80
+  const estimatedMapWidth = (window.innerWidth - appSidenavWidth - gapWidth) / 2
+  const west = bounds.sw.lng
+  const east = bounds.ne.lng
+  let angle = east - west
+
+  if (angle < 0) {
+    angle += 360
+  }
+
+  const zoom = Math.round(
+    Math.log(
+      (mapWidth ?? estimatedMapWidth * 360) / angle / GOOGLE_MAP_GLOBE_WIDTH
+    ) / Math.LN2
+  )
+
+  return zoom
 }

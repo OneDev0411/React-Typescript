@@ -17,6 +17,7 @@ import {
   AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS,
   AUTOCOMPLETE_LISTINGS_ITEM_LIMIT
 } from '../../../constants'
+import { estimateMapZoom } from '../../../helpers/map-helpers'
 
 import {
   SearchContainer,
@@ -125,9 +126,7 @@ class MlsAutocompleteSearch extends Component {
         sw: placeResponse.geometry.viewport.southwest
       }
 
-      // TODO: Calculate zoom from bound and center and map width
-      // https://stackoverflow.com/a/6055653/10326226
-      const zoom = 16
+      const zoom = estimateMapZoom(bounds)
 
       this.props.onSelectPlace(center, zoom, bounds)
     } finally {

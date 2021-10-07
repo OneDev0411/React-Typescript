@@ -13,8 +13,10 @@ import { getLocationErrorMessage } from 'utils/map'
 
 import {
   FILTERS_INITIAL_VALUES,
-  PROPERTIES_FILTERS_STORAGE_KEY
+  PROPERTIES_FILTERS_STORAGE_KEY,
+  USER_LOCATION_ZOOM_LEVEL
 } from '../constants'
+import { estimateMapZoom } from '../helpers/map-helpers'
 import {
   getDefaultSort,
   getUserLastBrowsingLocation,
@@ -134,9 +136,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   // Initialize user location on click Locate
   const initUserLocation = (lat: number, lng: number) => {
-    // TODO: Calculate zoom from bound and center and map width
-    // https://stackoverflow.com/a/6055653/10326226
-    const zoom = 15
+    const zoom = USER_LOCATION_ZOOM_LEVEL
     const center = { lat, lng }
 
     dispatch(setMapLocation(center, zoom))
@@ -169,11 +169,15 @@ function ExploreTab({ isWidget, user, location }: Props) {
           // @types/googlemaps describe the Javascript API not the JSON object on the response
           // there a sublte difference like lat/lng beeing number not functions,
           // So making this `as any as ICoord` cast necessary
-          let center = placeResponse.geometry.location as any as ICoord
+          const geometry: any = placeResponse.geometry
+          let center = geometry.location as ICoord
 
-          // TODO: Calculate zoom from bound and center and map width
-          // https://stackoverflow.com/a/6055653/10326226
-          const zoom = 16
+          const bounds = {
+            ne: geometry.viewport.northeast,
+            sw: geometry.viewport.southwest
+          }
+
+          const zoom = estimateMapZoom(bounds)
 
           dispatch(setMapLocation(center, zoom))
         }
