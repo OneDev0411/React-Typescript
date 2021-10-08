@@ -4,8 +4,8 @@ import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { browserHistory } from 'react-router'
 
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { SearchInput } from 'components/SearchInput'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { getPlace } from 'models/listings/search/get-place'
 import { searchListings } from 'models/listings/search/search-listings'
@@ -232,7 +232,6 @@ class MlsAutocompleteSearch extends Component {
                     onChange={this.handleChangeInput}
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
-                    // eslint-disable-next-line max-len
                     placeholder="Search by MLS, City ..."
                     onClear={this.onClear}
                     isLoading={this.state.isLoading}
