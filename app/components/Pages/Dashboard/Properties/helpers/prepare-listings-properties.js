@@ -1,5 +1,5 @@
-import { numberWithCommas } from 'utils/helpers'
-import listingUtils from 'utils/listing'
+import { numberWithCommas } from '@app/utils/helpers'
+import listingUtils from '@app/utils/listing'
 
 export const prepareListingsProperties = (user, listing) => {
   const statusColor = listingUtils.getStatusColor(listing.status)

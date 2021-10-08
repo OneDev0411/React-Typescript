@@ -2,7 +2,7 @@ export const SORT_FIELD_SETTING_KEY = 'mls_sort_field'
 export const LAST_BROWSING_LOCATION = 'mls_last_browsing_location'
 export const SORT_FIELD_DEFAULT = '-price'
 
-import { getUserSettingsInActiveTeam } from 'utils/user-teams'
+import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
 
 import { IMapPosition, Sort, SortIndex, SortPrefix, SortString } from '../types'
 

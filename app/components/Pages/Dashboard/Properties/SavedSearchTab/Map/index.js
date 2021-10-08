@@ -9,17 +9,17 @@ import withPropsOnChange from 'recompose/withPropsOnChange'
 import withState from 'recompose/withState'
 import _ from 'underscore'
 
-import { primary } from 'views/utils/colors'
-
-import Brand from '../../../../../../controllers/Brand'
-import logUserActivity from '../../../../../../models/user/post-new-activity'
-import { setActivityLog } from '../../../../../../store_actions/listings/alerts/set-alert-activity-log'
-import * as actions from '../../../../../../store_actions/listings/map'
-import { getBounds } from '../../../../../../utils/extendedBounds'
+import Brand from '@app/controllers/Brand'
+import logUserActivity from '@app/models/user/post-new-activity'
+import { setActivityLog } from '@app/store_actions/listings/alerts/set-alert-activity-log'
+import * as actions from '@app/store_actions/listings/map'
+import { getBounds } from '@app/utils/extendedBounds'
 import {
   setCssPositionToListingsWithSameBuilding,
   generatePointsFromBounds
-} from '../../../../../../utils/map'
+} from '@app/utils/map'
+import { primary } from '@app/views/utils/colors'
+
 import Marker from '../../components/Markers/SimpleMarker'
 import { bootstrapURLKeys, mapInitialState } from '../../constants'
 import { createMapOptions } from '../../helpers/map-helpers'

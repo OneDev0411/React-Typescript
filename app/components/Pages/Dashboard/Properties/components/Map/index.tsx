@@ -6,7 +6,7 @@ import MyLocationIcon from '@material-ui/icons/MyLocation'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
 
 import { noop } from '@app/utils/helpers'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 
 import { bootstrapURLKeys } from '../../constants'
 import {

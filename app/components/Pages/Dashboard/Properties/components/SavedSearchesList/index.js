@@ -16,10 +16,10 @@ import { confirmation } from '@app/store_actions/confirmation'
 import deleteAlert from '@app/store_actions/listings/alerts/delete-alert'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
 import { uppercaseFirstLetter } from '@app/utils/helpers'
+import { BaseDropdownWithMore } from '@app/views/components/BaseDropdownWithMore'
 import Loading from '@app/views/components/Spinner'
-import { BaseDropdownWithMore } from 'components/BaseDropdownWithMore'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const styles = theme => ({
   savedSearchItem: {

@@ -4,6 +4,9 @@ import { Button } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import cn from 'classnames'
 
+// This Customized button should looks like other google map buttons
+// This is why it is not following the app style guide
+// All spacing and padding are constant and should not be related to theme object
 const CustomizedGoogleMapsButton = withStyles(theme => ({
   root: {
     position: 'absolute',
@@ -23,11 +26,11 @@ const CustomizedGoogleMapsButton = withStyles(theme => ({
     },
     '&.iconButton': {
       minWidth: 'unset',
-      padding: '6px 0',
-      '& .MuiButton-startIcon': {
-        margin: 0
-      }
+      padding: '6px 0'
     }
+  },
+  startIcon: {
+    margin: 0
   },
   label: {
     padding: '6px 12px',

@@ -4,7 +4,7 @@ import { useEffectOnce } from 'react-use'
 
 import useNotify from '@app/hooks/use-notify'
 import { getFavoritesCompactListings } from '@app/models/listings/favorites/getFavoritesCompactListings'
-import { selectUser } from 'selectors/user'
+import { selectUser } from '@app/selectors/user'
 
 import { formatListing } from '../../helpers/format-listing'
 import { Actions, setListings, setIsLoading } from '../context/actions'

@@ -15,6 +15,7 @@ import cn from 'classnames'
 import pluralize from 'pluralize'
 import { useSelector } from 'react-redux'
 
+import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
 import {
   metersToFeet,
@@ -22,9 +23,8 @@ import {
   getListingFormatedPrice,
   getListingPricePerSquareFoot
 } from '@app/utils/listing'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
-import { selectUserUnsafe } from 'selectors/user'
 
 import { IListingUIStates } from '../../types'
 

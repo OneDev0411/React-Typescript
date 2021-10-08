@@ -4,8 +4,8 @@ import { Grid, Box, makeStyles } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import cn from 'classnames'
 
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import LoadingComponent from 'components/Spinner'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
+import LoadingComponent from '@app/views/components/Spinner'
 
 import { getListingsPage } from '../../helpers/pagination-utils'
 import ListingCard from '../ListingCardWithFavorite'

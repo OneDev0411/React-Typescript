@@ -2,10 +2,13 @@ import React from 'react'
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core'
 
-import { StateContext, DispatchContext } from 'components/Grid/Table/context'
-import { resetRows } from 'components/Grid/Table/context/actions/selection/reset-rows'
-import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import Acl from 'views/components/Acl'
+import Acl from '@app/views/components/Acl'
+import {
+  StateContext,
+  DispatchContext
+} from '@app/views/components/Grid/Table/context'
+import { resetRows } from '@app/views/components/Grid/Table/context/actions/selection/reset-rows'
+import { useGridContext } from '@app/views/components/Grid/Table/hooks/use-grid-context'
 
 import CreateTourAction from '../CreateTourAction'
 

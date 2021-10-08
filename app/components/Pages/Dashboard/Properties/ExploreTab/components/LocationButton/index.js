@@ -4,10 +4,9 @@ import { Tooltip } from '@material-ui/core'
 import { mdiCrosshairsGps } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { getUserLocationIsFetching } from '../../../../../../../reducers/listings/map/user-location'
-import { getLocation } from '../../../../../../../store_actions/listings/map/user-location'
+import { getUserLocationIsFetching } from '@app/reducers/listings/map/user-location'
+import { getLocation } from '@app/store_actions/listings/map/user-location'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { Button } from './styled'
 

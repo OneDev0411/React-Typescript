@@ -5,10 +5,10 @@ import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
 import useNotify from '@app/hooks/use-notify'
+import api from '@app/models/listings/favorites'
+import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import api from 'models/listings/favorites'
-import { selectUserUnsafe } from 'selectors/user'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 
 import { IListingUIStates } from '../../types'
 import ListingCard from '../ListingCardWithFavorite'

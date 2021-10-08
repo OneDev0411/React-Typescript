@@ -8,7 +8,7 @@ import {
   SortString,
   SortIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
-import { AnimatedLoader } from 'components/AnimatedLoader'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
 import { ResultsHeader } from '../../../components/ResultsHeader'

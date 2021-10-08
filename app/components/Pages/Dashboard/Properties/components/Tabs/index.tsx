@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 import { Box } from '@material-ui/core'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { PageTabs, Tab, TabLink } from 'components/PageTabs'
+import { PageTabs, Tab, TabLink } from '@app/views/components/PageTabs'
 
 import SavedSearchesList from '../SavedSearchesList'
 

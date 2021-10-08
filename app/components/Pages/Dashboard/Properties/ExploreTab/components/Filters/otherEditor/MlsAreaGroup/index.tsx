@@ -4,8 +4,8 @@ import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useEffectOnce } from 'react-use'
 
+import api from '@app/models/listings/search'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
-import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'

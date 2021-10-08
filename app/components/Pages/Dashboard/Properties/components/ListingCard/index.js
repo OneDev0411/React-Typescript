@@ -6,7 +6,7 @@ import LazyLoad from 'react-lazy-load'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
-import { isLeaseProperty } from 'utils/listing'
+import { isLeaseProperty } from '@app/utils/listing'
 
 import Listing from '../../ListingPage'
 import FavoriteHeart from '../FavoriteHeart'

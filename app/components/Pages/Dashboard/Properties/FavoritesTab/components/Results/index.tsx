@@ -13,7 +13,7 @@ import {
   sortByIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
 import { normalizeListingLocation } from '@app/utils/map'
-import { AnimatedLoader } from 'components/AnimatedLoader'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
 import { ResultsHeader } from '../../../components/ResultsHeader'

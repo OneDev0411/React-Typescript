@@ -4,12 +4,12 @@ import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { browserHistory } from 'react-router'
 
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
-import { SearchInput } from 'components/SearchInput'
-import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
-import { getPlace } from 'models/listings/search/get-place'
-import { searchListings } from 'models/listings/search/search-listings'
-import { getListingAddress } from 'utils/listing'
+import { getPlace } from '@app/models/listings/search/get-place'
+import { searchListings } from '@app/models/listings/search/search-listings'
+import { getListingAddress } from '@app/utils/listing'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
+import { SearchInput } from '@app/views/components/SearchInput'
+import { MlsItem } from '@app/views/components/SearchListingDrawer/ListingItem/MlsItem'
 
 import {
   AUTOCOMPLETE_RADIUS_M,

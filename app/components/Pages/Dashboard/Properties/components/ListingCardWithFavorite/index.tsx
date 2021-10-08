@@ -3,12 +3,12 @@ import React, { ComponentProps, useCallback, useState, memo } from 'react'
 import { noop } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 
-import toggleFavorite from 'actions/listings/favorites/toggle-favorite'
-import ListingCard from 'components/ListingCards/ListingCard'
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { selectListingIsFavorited } from '@app/selectors/listings'
+import { selectUserUnsafe } from '@app/selectors/user'
+import toggleFavorite from '@app/store_actions/listings/favorites/toggle-favorite'
+import ListingCard from '@app/views/components/ListingCards/ListingCard'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { IAppState } from 'reducers'
-import { selectListingIsFavorited } from 'selectors/listings'
-import { selectUserUnsafe } from 'selectors/user'
 
 interface Props
   extends Omit<ComponentProps<typeof ListingCard>, 'liked' | 'onLikeClick'> {

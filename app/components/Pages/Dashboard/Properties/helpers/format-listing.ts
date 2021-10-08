@@ -2,7 +2,7 @@ import {
   getStatusColor,
   addressTitle as getAddressTitle,
   metersToFeet
-} from 'utils/listing'
+} from '@app/utils/listing'
 
 export function formatListing<T extends ICompactListing | IListing>(
   listing: T,

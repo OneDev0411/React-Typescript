@@ -7,6 +7,7 @@ import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import { useSelector } from 'react-redux'
 
+import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
 import {
   getListingFormatedPrice,
@@ -15,7 +16,6 @@ import {
   getResizeUrl,
   getStatusColorClass
 } from '@app/utils/listing'
-import { selectUserUnsafe } from 'selectors/user'
 
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 

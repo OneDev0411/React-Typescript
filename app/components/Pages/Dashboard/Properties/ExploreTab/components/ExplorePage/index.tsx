@@ -7,13 +7,13 @@ import { useEffectOnce } from 'react-use'
 
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { confirmation } from '@app/store_actions/confirmation'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
   loadMapLibraries
 } from '@app/utils/google-map-api'
-import { confirmation } from 'actions/confirmation'
-import { setUserSetting } from 'actions/user/set-setting'
 
 import { Map } from '../../../components/Map'
 import CreateAlertModal from '../../../components/modals/CreateAlertModal'

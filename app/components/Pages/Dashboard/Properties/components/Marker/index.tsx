@@ -6,7 +6,10 @@ import { useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
 import { noop } from '@app/utils/helpers'
-import { getListingFormatedPrice, getStatusColorClass } from 'utils/listing'
+import {
+  getListingFormatedPrice,
+  getStatusColorClass
+} from '@app/utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../constants'
 import MarkerPopup from '../MarkerPopup'

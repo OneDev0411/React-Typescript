@@ -4,7 +4,7 @@ import { CircularProgress, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useDebounce } from 'react-use'
 
-import api from 'models/listings/search'
+import api from '@app/models/listings/search'
 
 import { useStyles } from '../../styles'
 

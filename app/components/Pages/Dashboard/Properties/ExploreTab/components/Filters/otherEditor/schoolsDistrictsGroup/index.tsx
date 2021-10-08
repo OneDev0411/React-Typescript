@@ -5,8 +5,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useDebounce, useEffectOnce } from 'react-use'
 
 import { SCHOOL_TYPES } from '@app/components/Pages/Dashboard/Properties/constants'
+import api from '@app/models/listings/search'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
-import api from 'models/listings/search'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'

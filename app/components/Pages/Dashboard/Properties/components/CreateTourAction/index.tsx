@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react'
 
 import { Button } from '@material-ui/core'
 
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
+import CreateTourDrawer from '@app/views/components/tour/CreateTourDrawer/CreateTourDrawer'
 
 interface Props {
   disabled: boolean

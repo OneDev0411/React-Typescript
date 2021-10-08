@@ -6,10 +6,10 @@ import { WithRouterProps } from 'react-router'
 import { useEffectOnce, useLocalStorage } from 'react-use'
 
 import { getPlace } from '@app/models/listings/search/get-place'
-import { confirmation } from 'actions/confirmation'
-import { AnimatedLoader } from 'components/AnimatedLoader'
-import GlobalPageLayout from 'components/GlobalPageLayout'
-import { getLocationErrorMessage } from 'utils/map'
+import { confirmation } from '@app/store_actions/confirmation'
+import { getLocationErrorMessage } from '@app/utils/map'
+import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
+import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
 
 import {
   FILTERS_INITIAL_VALUES,

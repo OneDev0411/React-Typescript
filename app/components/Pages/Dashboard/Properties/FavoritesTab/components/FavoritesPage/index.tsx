@@ -7,12 +7,12 @@ import { useEffectOnce } from 'react-use'
 
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
   loadMapLibraries
 } from '@app/utils/google-map-api'
-import { setUserSetting } from 'actions/user/set-setting'
 
 import { Map } from '../../../components/Map'
 import { Header } from '../../../components/PageHeader'

@@ -6,8 +6,8 @@ import { useDebounce } from 'use-debounce'
 
 import useNotify from '@app/hooks/use-notify'
 import api from '@app/models/listings/search'
+import { selectUser } from '@app/selectors/user'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 
 import {
   PROPOSED_AGENT_ZOOM_LEVEL,
