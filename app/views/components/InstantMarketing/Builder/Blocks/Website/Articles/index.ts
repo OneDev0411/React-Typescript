@@ -1,10 +1,10 @@
 import { Model } from 'backbone'
 import { Editor } from 'grapesjs'
 
+import { ArticleMetadata } from '@app/views/components/SearchArticleDrawer/types'
 import ArticleLeftIcon from 'assets/images/marketing/editor/blocks/article-image-left.png'
 import ArticleRightIcon from 'assets/images/marketing/editor/blocks/article-image-right.png'
 import ArticleTopIcon from 'assets/images/marketing/editor/blocks/article-image-top.png'
-import { Metadata } from 'components/ArticleDrawer/types'
 
 import { ARTICLES_BLOCK_CATEGORY } from '../../../constants'
 import { TemplateRenderData } from '../../../utils/get-template-render-data'
@@ -30,7 +30,7 @@ export interface ArticleBlocksOptions {
 }
 
 interface ArticleBlocks {
-  selectHandler: (selectedArticle?: Metadata) => void
+  selectHandler: (articles?: ArticleMetadata[]) => void
 }
 
 export default function registerArticleBlocks(
@@ -101,12 +101,9 @@ export default function registerArticleBlocks(
   return handleBlockDragStopEvent(
     editor,
     allBlocks,
-    (selectedArticle: Metadata) => ({
+    (articles: ArticleMetadata[]) => ({
       ...renderData,
-      description: selectedArticle.description,
-      image: selectedArticle.image,
-      title: selectedArticle.title,
-      url: selectedArticle.url
+      articles
     }),
     onArticleDrop
   )
