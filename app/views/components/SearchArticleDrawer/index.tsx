@@ -1,6 +1,7 @@
-import { useEffect, ChangeEvent, useState, useCallback } from 'react'
+import { useEffect, ChangeEvent, useState, useCallback, useRef } from 'react'
 
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { SuperAgentRequest } from 'superagent'
 
 import useAsync from '@app/hooks/use-async'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
@@ -12,11 +13,11 @@ import { NO_IMAGE_URL } from '../SearchResultCard'
 
 import { RSS_SOURCES } from './constants'
 import { prependHTTPSIfNeeded, isValidUrl } from './helpers'
-import { getUrlMetadata } from './models'
+import { getUrlMetadataRequest } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
 import SearchArticleResults from './SearchArticleResults'
-import { RSSArticleMetadata } from './types'
+import { ArticleMetadata, RSSArticleMetadata } from './types'
 import { useCreateImageCache } from './use-create-image-cache'
 import { useSearchArticles } from './use-search-articles'
 
@@ -74,6 +75,7 @@ function SearchArticleDrawer({
   } = useAsync<RSSArticleMetadata[]>({ data: [] })
   const [selected, setSelected] = useState<RSSArticleMetadata[]>([])
   const imageCache = useCreateImageCache()
+  const getUrlMetadataRequestRef = useRef<Optional<SuperAgentRequest>>()
 
   const { searchArticles, isArticlesLoading, allArticles } =
     useSearchArticles(RSS_SOURCES)
@@ -94,19 +96,36 @@ function SearchArticleDrawer({
         }
 
         try {
-          const articleMetadata = await getUrlMetadata(
+          // Abort the previous request to avoid delay problems
+          if (getUrlMetadataRequestRef.current) {
+            getUrlMetadataRequestRef.current.abort()
+            getUrlMetadataRequestRef.current = undefined
+          }
+
+          // Create a new request
+          getUrlMetadataRequestRef.current = getUrlMetadataRequest(
             searchTermWithHTTPSPrefix
           )
 
+          // Waiting for the response and extract it
+          const articleMetadata: Nullable<ArticleMetadata> =
+            (await getUrlMetadataRequestRef.current).body.response ?? null
+
+          // Delete the request object because the response is ready
+          getUrlMetadataRequestRef.current = undefined
+
+          // Handle the invalid link state
           if (!articleMetadata) {
             return []
           }
 
+          // Update the image cache with the url and image
           imageCache.setItem(
             searchTermWithHTTPSPrefix,
             articleMetadata.image ?? NO_IMAGE_URL
           )
 
+          // Put the article on the results list
           return [
             {
               image: articleMetadata.image,
@@ -151,11 +170,6 @@ function SearchArticleDrawer({
   }
 
   const handleSelect = (article: RSSArticleMetadata) => {
-    console.log(
-      'imageCache.getItem(article.url)',
-      imageCache.getItem(article.url)
-    )
-
     // Handle the single selection mode
     if (!multipleSelection) {
       setSelected([article])
@@ -198,7 +212,7 @@ function SearchArticleDrawer({
       <OverlayDrawer.Body className={classes.body}>
         <Box flex={0} px={3} py={2}>
           <SearchInput
-            debounceTime={500}
+            debounceTime={250}
             isLoading={isLoadingState}
             onChange={handleSearchChange}
             placeholder="Search for a subject or paste a link"
