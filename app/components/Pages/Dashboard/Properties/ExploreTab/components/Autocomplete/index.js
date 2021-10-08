@@ -4,7 +4,7 @@ import Downshift from 'downshift'
 import debounce from 'lodash/debounce'
 import { browserHistory } from 'react-router'
 
-import { SearchInput } from 'components/GlobalHeaderWithSearch/SearchInput'
+import { SearchInput } from 'components/GlobalHeaderWithSearch'
 import { ListingDetailsModal } from 'components/ListingDetailsModal'
 import { MlsItem } from 'components/SearchListingDrawer/ListingItem/MlsItem'
 import { getPlace } from 'models/listings/search/get-place'
