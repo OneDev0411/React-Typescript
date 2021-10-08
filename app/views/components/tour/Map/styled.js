@@ -4,6 +4,11 @@ export const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+`
+export const MapContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
 
   &:after {
     content: 'Calculating Direction ...';

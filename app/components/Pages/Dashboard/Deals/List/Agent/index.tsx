@@ -14,7 +14,6 @@ import { selectUser } from 'selectors/user'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'
 import { ExportDeals } from '../components/ExportDeals'
-import { DebouncedSearchInput } from '../components/SearchInput'
 
 import TabFilters from './Filters'
 import Grid from './Grid'
@@ -81,17 +80,17 @@ export default function AgentTable(props: WithRouterProps) {
 
   return (
     <PageLayout>
-      <PageLayout.Header title="My deals">
-        <div className={classes.headerContainer}>
-          <DebouncedSearchInput
-            placeholder="Search deals by address, MLS# or agent name..."
-            value={searchCriteria}
-            onChange={handleQueryChange}
-          />
-
-          <ExportDeals />
-        </div>
-      </PageLayout.Header>
+      <PageLayout.HeaderWithSearch
+        title="My deals"
+        onSearch={handleQueryChange}
+        searchInputProps={{
+          placeholder: 'Search deals by address, MLS# or agent name...',
+          debounceTime: 500,
+          defaultValue: searchCriteria
+        }}
+      >
+        <ExportDeals />
+      </PageLayout.HeaderWithSearch>
       <PageLayout.Main>
         <div className={classes.filtersContainer}>
           <TabFilters

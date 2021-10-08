@@ -6,7 +6,8 @@ import PropTypes from 'prop-types'
 import config from '../../../../../config/public'
 import { loadJS } from '../../../../utils/load-js'
 
-import { Container } from './styled'
+import { LocateButton } from './locateButton'
+import { Container, MapContainer } from './styled'
 
 const DEFAULT_OPTIONS = {
   zoom: 15,
@@ -182,9 +183,19 @@ export class Map extends React.Component {
     this.setState({ hasMarker: true })
   }
 
+  onGetPosition = (lat, lng) => {
+    this.map.setCenter(new window.google.maps.LatLng(lat, lng))
+  }
+
   render() {
     return (
-      <Container id={this.props.id} isCalculating={this.state.isCalculating} />
+      <Container>
+        <LocateButton onGetPosition={this.onGetPosition} />
+        <MapContainer
+          id={this.props.id}
+          isCalculating={this.state.isCalculating}
+        />
+      </Container>
     )
   }
 }

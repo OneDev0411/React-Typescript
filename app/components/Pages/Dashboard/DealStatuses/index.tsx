@@ -17,10 +17,10 @@ import useNotify from '@app/hooks/use-notify'
 import { selectActiveTeamId } from '@app/selectors/team'
 import { confirmation } from '@app/store_actions/confirmation'
 import { getDealStatusColor } from '@app/utils/get-deal-status-color'
-import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import Grid from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
+import { SearchInput } from '@app/views/components/SearchInput'
 
 import { StatusForm } from './StatusForm'
 
@@ -156,9 +156,7 @@ export default function DealStatusesAdmin({ params }: Props) {
           <Box mr={1}>
             <SearchInput
               placeholder="Search status"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setCriteria(e.target.value)
-              }
+              onChangeHandler={(e, value = '') => setCriteria(value)}
             />
           </Box>
 
