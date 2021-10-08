@@ -233,7 +233,7 @@ class MlsAutocompleteSearch extends Component {
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
                     placeholder="Search by MLS, City ..."
-                    onClear={this.onClear}
+                    onClearHandler={this.onClear}
                     isLoading={this.state.isLoading}
                     fullWidth={this.props.fullWidth}
                   />
