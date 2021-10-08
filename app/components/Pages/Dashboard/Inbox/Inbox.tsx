@@ -106,7 +106,7 @@ export default function Inbox({ params }: WithRouterProps) {
               // Keep it undefined until there are actually some query.
               setSearchQuery(searchQuery => query || (searchQuery && query))
             }
-            searchInputProps={{
+            SearchInputProps={{
               placeholder: 'Search emails',
               isLoading: searchStatus
             }}

@@ -6,7 +6,7 @@ import Fuse from 'fuse.js'
 import { useTemplateTypeSections } from '@app/hooks/use-template-type-sections'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
-import { SearchInput } from '@app/views/components/SearchInput'
+import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 
 import { MarketingSearchInputProps, TemplateTypeWithMedium } from './types'
 
@@ -68,7 +68,10 @@ export default function MarketingSearchInput({
         <SearchInput
           {...params}
           fullWidth
-          placeholder="Search by category or topic"
+          color="primary"
+          variant="outlined"
+          size="small"
+          label="Search by category or topic"
         />
       )}
     />

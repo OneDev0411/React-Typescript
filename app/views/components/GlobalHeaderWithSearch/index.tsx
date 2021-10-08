@@ -1,10 +1,11 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import React, { useState, useRef } from 'react'
 
-import {
-  SearchInput,
-  SearchInputProps
-} from '@app/views/components/SearchInput'
+import { makeStyles, Theme } from '@material-ui/core'
+import { debounce } from 'lodash'
+
 import GlobalHeader, { GlobalHeaderProps } from 'components/GlobalHeader'
+
+import { SearchInput, SearchInputProps } from './SearchInput'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -26,17 +27,27 @@ const useStyles = makeStyles(
 export interface GlobalHeaderWithSearchProps extends GlobalHeaderProps {
   onSearch: (query: string) => void
   searchDebounceTime?: number
-  searchInputProps?: SearchInputProps
+  SearchInputProps?: SearchInputProps
 }
+
+export * from './SearchInput'
 
 export default function GlobalHeaderWithSearch({
   onSearch,
-  searchDebounceTime = 300,
-  searchInputProps,
+  searchDebounceTime = 500,
+  SearchInputProps,
   children,
   ...globalHeaderProps
 }: GlobalHeaderWithSearchProps) {
   const classes = useStyles()
+
+  const [searchQueryValue, setSearchQueryValue] = useState(
+    SearchInputProps?.defaultValue || ''
+  )
+
+  const throttledSearchHandler = useRef(
+    debounce((value: string) => onSearch(value), searchDebounceTime)
+  )
 
   return (
     <GlobalHeader {...globalHeaderProps}>
@@ -44,11 +55,12 @@ export default function GlobalHeaderWithSearch({
         {children}
         <div className={classes.searchContainer}>
           <SearchInput
-            debounceTime={searchDebounceTime}
-            onChangeHandler={(e, value) =>
-              value ? onSearch(value) : onSearch('')
-            }
-            {...searchInputProps}
+            value={searchQueryValue}
+            onChange={({ target: { value } }) => {
+              setSearchQueryValue(value)
+              throttledSearchHandler.current(value)
+            }}
+            {...SearchInputProps}
           />
         </div>
       </div>
