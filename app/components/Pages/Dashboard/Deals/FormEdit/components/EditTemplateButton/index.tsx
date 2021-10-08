@@ -1,8 +1,10 @@
 import React from 'react'
 
-import { ButtonBase } from '@material-ui/core'
-import { mdiFileEdit } from '@mdi/js'
+import { ButtonBase, MenuItem, MenuList } from '@material-ui/core'
+import { mdiCogOutline, mdiDotsHorizontal } from '@mdi/js'
 
+import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import Acl from 'components/Acl'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useDefaultValueContext } from 'deals/FormEdit/Editor/DefaultValues/use-default-value-content'
@@ -18,17 +20,44 @@ export function EditTemplateButton({ style, annotation, type }: Props) {
 
   return (
     <Acl.BackOffice accessControlPolicy="ActiveTeamAndParents">
-      <ButtonBase
-        className="button-default-value"
-        style={{
-          position: 'absolute',
-          cursor: 'pointer',
-          ...style
-        }}
-        onClick={() => defaultValueContext.setAnnotation(annotation, type)}
-      >
-        <SvgIcon size={0.6} path={mdiFileEdit} />
-      </ButtonBase>
+      <BaseDropdown
+        placement="bottom-end"
+        renderDropdownButton={renderProps => (
+          <ButtonBase
+            className="button-visible-on-hover"
+            style={{
+              position: 'absolute',
+              cursor: 'pointer',
+              width: '16px',
+              color: '#fff',
+              backgroundColor: 'rgb(33, 118, 203)',
+              borderRadius: '0 4px 4px 0',
+              ...style
+            }}
+            {...renderProps}
+          >
+            <SvgIcon path={mdiDotsHorizontal} size={muiIconSizes.xsmall} />
+          </ButtonBase>
+        )}
+        renderMenu={({ close }) => (
+          <MenuList>
+            <MenuItem
+              onClick={() => {
+                defaultValueContext.setAnnotation(annotation, type)
+                close()
+              }}
+            >
+              <SvgIcon
+                path={mdiCogOutline}
+                color="rgb(161,161,161)"
+                size={muiIconSizes.medium}
+                rightMargined
+              />
+              Set Default Value
+            </MenuItem>
+          </MenuList>
+        )}
+      />
     </Acl.BackOffice>
   )
 }
