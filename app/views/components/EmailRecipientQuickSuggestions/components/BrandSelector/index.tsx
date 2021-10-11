@@ -1,7 +1,11 @@
+import { useState } from 'react'
+
+import { Button } from '@material-ui/core'
+
 import {
   NodeRenderer,
   BrandSelectorDrawer
-} from '@app/views/components/BrandSelectorDrawer'
+} from '@app/views/components/BrandSelector'
 
 import { Brand } from './components/Brand'
 
@@ -14,35 +18,48 @@ interface Props {
 }
 
 export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
-  const handleOnClickBrand = (brand: IBrand, onClose: () => void) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const hanldeOpenDrawer = () => setIsOpen(true)
+  const hanldeCloseDrawer = () => setIsOpen(false)
+
+  const handleOnClickBrand = (brand: IBrand) => {
     const recipient: IDenormalizedEmailRecipientBrandInput = {
       recipient_type: 'Brand',
       brand
     }
 
     onSelect(recipient, 'BCC')
-    onClose()
+    hanldeCloseDrawer()
   }
 
-  const renderBrandNode = ({ brand, onClose }: NodeRenderer) => {
+  const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
       <Brand
         brand={brand}
         currentRecipients={currentRecipients}
-        onClick={() => handleOnClickBrand(brand, onClose)}
+        onClick={() => handleOnClickBrand(brand)}
       />
     )
   }
 
   return (
-    <BrandSelectorDrawer
-      defaultButtonProps={{ size: 'small' }}
-      /*
+    <>
+      <Button size="small" onClick={hanldeOpenDrawer}>
+        Our Agents
+      </Button>
+      <BrandSelectorDrawer
+        open={isOpen}
+        /*
         we set the drawer width to the 43rem manually bacause in our email drawer we set this
         value and base on shayan request we want the brand selector drawer cover the email drawer
-      */
-      drawerProps={{ width: '43rem' }}
-      nodeRenderer={renderBrandNode}
-    />
+        */
+        width="43rem"
+        onClose={hanldeCloseDrawer}
+        brandSelectorProps={{
+          nodeRenderer: renderBrandNode
+        }}
+      />
+    </>
   )
 }

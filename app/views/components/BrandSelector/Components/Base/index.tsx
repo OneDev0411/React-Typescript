@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import Search from '@app/views/components/Grid/Search'
 import TreeView from '@app/views/components/TreeView'
 import { selectUser } from 'selectors/user'
+import { noop } from 'utils/helpers'
 
 import { useTeam } from '../../hooks/use-team'
 
@@ -21,18 +22,15 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {},
     searchContainer: {
-      margin: theme.spacing(2, 0)
-    },
-    team: {
-      padding: theme.spacing(1, 0),
-      cursor: 'pointer'
+      marginBottom: theme.spacing(2)
     },
     loading: {
       textAlign: 'center',
       marginTop: theme.spacing(3)
     },
     nodeName: {
-      padding: theme.spacing(1, 0)
+      padding: theme.spacing(1, 0),
+      cursor: 'pointer'
     }
   }),
   { name: 'BaseBrandSelector' }
@@ -40,14 +38,18 @@ const useStyles = makeStyles(
 
 export type NodeRenderer = {
   brand: IBrand
-  // onClickCallBack?: (brand?: IBrand) => void
+  onNodeClick?: (brand?: IBrand) => void
 }
 
-interface Props {
+export interface BaseBrandSelectorProps {
   nodeRenderer?: (props: NodeRenderer) => ReactNode
+  onNodeClick?: (brand?: IBrand) => void
 }
 
-export function BrandSelectorDrawer({ nodeRenderer }: Props) {
+export function BaseBrandSelector({
+  onNodeClick = noop,
+  nodeRenderer
+}: BaseBrandSelectorProps) {
   const user = useSelector(selectUser)
   const classes = useStyles()
   const [query, setQuery] = useState<string>('')
@@ -62,13 +64,13 @@ export function BrandSelectorDrawer({ nodeRenderer }: Props) {
   const renderNode = (brand: IBrand) => {
     if (!nodeRenderer) {
       return (
-        <div className={classes.nodeName}>
+        <div className={classes.nodeName} onClick={() => onNodeClick(brand)}>
           <Typography variant="body2">{brand.name}</Typography>
         </div>
       )
     }
 
-    return nodeRenderer({ brand })
+    return nodeRenderer({ brand, onNodeClick })
   }
 
   const renderTreeView = () => {
