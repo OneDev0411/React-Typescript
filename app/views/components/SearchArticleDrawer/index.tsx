@@ -4,6 +4,7 @@ import { Box, Button, makeStyles, Typography } from '@material-ui/core'
 import { SuperAgentRequest } from 'superagent'
 
 import useAsync from '@app/hooks/use-async'
+import { prependHTTPSIfNeeded, isValidUrl } from '@app/utils/url'
 import { PLACEHOLDER_IMAGE_URL } from '@app/views/components/InstantMarketing/constants'
 import OverlayDrawer from 'components/OverlayDrawer'
 
@@ -12,7 +13,6 @@ import LoadingContainer from '../LoadingContainer'
 import { NO_IMAGE_URL } from '../SearchResultCard'
 
 import { RSS_SOURCES } from './constants'
-import { prependHTTPSIfNeeded, isValidUrl } from './helpers'
 import { getUrlMetadataRequest } from './models'
 import SearchArticleEmptyState from './SearchArticleEmptyState'
 import SearchArticleImageCacheProvider from './SearchArticleImageCacheProvider'
