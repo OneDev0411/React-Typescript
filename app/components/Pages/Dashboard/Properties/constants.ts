@@ -101,12 +101,16 @@ export const COM_FILTER_PROPERTY_SUBTYPES: Record<string, IPropertySubtype> = {
   both: 'COM-Sale/Leaseback (Both)'
 }
 
-export const PROPERTY_TYPES: Record<IPropertyType, string> = {
+// Update filters to unifying them across all MLSs
+// https://gitlab.com/rechat/web/-/issues/5673
+export const PROPERTY_TYPES: Record<
+  Exclude<IPropertyType, 'Multi-Family'>,
+  string
+> = {
   Residential: 'Sale',
   'Residential Lease': 'Lease',
   Commercial: 'Commercial',
-  'Lots & Acreage': 'Lots & Acreage',
-  'Multi-Family': 'Multi Family'
+  'Lots & Acreage': 'Lots & Acreage'
 }
 
 export const PROPERTY_TYPES_PROPERTY_SUBTYPES: Record<
@@ -173,34 +177,50 @@ export const RES_FILTERS_DEFAULT_VALUES: AlertFilters = {
 
 export const LSE_FILTERS_DEFAULT_VALUES: AlertFilters = {
   ...FILTERS_INITIAL_VALUES,
-  property_types: ['Residential Lease'],
-  property_subtypes: Object.values(
-    LSE_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[]
+  property_types: ['Residential Lease']
+
+  // Update filters to unifying them across all MLSs
+  // https://gitlab.com/rechat/web/-/issues/5673
+
+  // property_subtypes: Object.values(
+  //   LSE_FILTER_PROPERTY_SUBTYPES
+  // ) as IPropertySubtype[]
 }
 
 export const LND_FILTERS_DEFAULT_VALUES: AlertFilters = {
   ...FILTERS_INITIAL_VALUES,
-  property_types: ['Lots & Acreage'],
-  property_subtypes: Object.values(
-    LND_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[]
+  property_types: ['Lots & Acreage']
+
+  // Update filters to unifying them across all MLSs
+  // https://gitlab.com/rechat/web/-/issues/5673
+
+  // property_subtypes: Object.values(
+  //   LND_FILTER_PROPERTY_SUBTYPES
+  // ) as IPropertySubtype[]
 }
 
 export const MUL_FILTERS_DEFAULT_VALUES: AlertFilters = {
   ...FILTERS_INITIAL_VALUES,
-  property_types: ['Multi-Family'],
-  property_subtypes: Object.values(
-    MUL_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[]
+  property_types: ['Multi-Family']
+
+  // Update filters to unifying them across all MLSs
+  // https://gitlab.com/rechat/web/-/issues/5673
+
+  // property_subtypes: Object.values(
+  //    MUL_FILTER_PROPERTY_SUBTYPES
+  //  ) as IPropertySubtype[]
 }
 
 export const COM_FILTERS_DEFAULT_VALUES: AlertFilters = {
   ...FILTERS_INITIAL_VALUES,
-  property_types: ['Commercial'],
-  property_subtypes: Object.values(
-    COM_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[]
+  property_types: ['Commercial']
+
+  // Update filters to unifying them across all MLSs
+  // https://gitlab.com/rechat/web/-/issues/5673
+
+  // property_subtypes: Object.values(
+  //   COM_FILTER_PROPERTY_SUBTYPES
+  // ) as IPropertySubtype[]
 }
 
 export const PROPERTY_TYPES_DEFAULT_VALUES: Record<

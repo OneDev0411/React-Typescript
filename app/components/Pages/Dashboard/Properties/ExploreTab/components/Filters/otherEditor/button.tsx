@@ -16,22 +16,26 @@ const otherFiltersGroups: Partial<Record<keyof AlertFilters, string>> = {
   minimum_year_built: 'year_built',
   maximum_year_built: 'year_built',
   pool: 'pool',
-  property_subtypes: 'property_subtypes',
   listing_statuses: 'status',
   open_house: 'open_house',
-  architectural_styles: 'architectural_styles',
-  school_districts: 'school_district',
-  junior_high_schools: 'school_district',
-  elementary_schools: 'school_district',
-  high_schools: 'school_district',
-  middle_schools: 'school_district',
-  senior_high_schools: 'school_district',
-  primary_schools: 'school_district',
-  intermediate_schools: 'school_district',
-  minimum_parking_spaces: 'parking_spaces',
-  mls_areas: 'mls_areas',
-  counties: 'mls_areas',
-  subdivisions: 'subdivisions'
+  minimum_parking_spaces: 'parking_spaces'
+
+  // Update filters to unifying them across all MLSs
+  // https://gitlab.com/rechat/web/-/issues/5673
+
+  // property_subtypes: 'property_subtypes',
+  // architectural_styles: 'architectural_styles',
+  // school_districts: 'school_district',
+  // junior_high_schools: 'school_district',
+  // elementary_schools: 'school_district',
+  // high_schools: 'school_district',
+  // middle_schools: 'school_district',
+  // senior_high_schools: 'school_district',
+  // primary_schools: 'school_district',
+  // intermediate_schools: 'school_district',
+  // mls_areas: 'mls_areas',
+  // counties: 'mls_areas',
+  // subdivisions: 'subdivisions'
 }
 
 export const OtherButton = ({
