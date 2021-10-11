@@ -149,7 +149,7 @@ export async function attachCKEditor(
             ]
           }
         ],
-        format: " {{ %placeholder% or '%fallback%' }} "
+        format: ' {{%placeholder% or "%fallback%"}} '
       }
     }
   }
