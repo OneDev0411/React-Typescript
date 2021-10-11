@@ -33,7 +33,7 @@ export function TaskNotifications({ task }: Props) {
   const room = rooms && rooms[task.room.id] ? rooms[task.room.id] : task.room
   const { new_notifications } = room
 
-  if (new_notifications === 0) {
+  if (!new_notifications) {
     return null
   }
 
