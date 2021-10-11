@@ -28,6 +28,7 @@ import { Header } from './Header'
 import { Container, LoadingDealContainer, ErrorContainer } from './styled'
 import { getDefaultValues } from './utils/get-default-values'
 import { parseAnnotations } from './utils/parse-annotations'
+import { unlinkAnnotations } from './utils/unlink-annotations'
 
 class EditDigitalForm extends React.Component {
   state = {
@@ -36,6 +37,8 @@ class EditDigitalForm extends React.Component {
     pdfDocument: null,
     pdfUrl: '',
     values: {},
+    defaultValues: {},
+    instructions: {},
     annotations: {},
     downloadPercents: 1,
     promptOnQuit: false,
@@ -145,6 +148,7 @@ class EditDigitalForm extends React.Component {
     })
 
     this.setState({
+      defaultValues,
       values: fields,
       annotations
     })
@@ -161,7 +165,8 @@ class EditDigitalForm extends React.Component {
         task.id,
         this.state.pdfUrl,
         task.form,
-        this.state.values
+        this.state.values,
+        this.state.instructions
       )
 
       await this.saveContexts()
@@ -215,6 +220,34 @@ class EditDigitalForm extends React.Component {
       ...this.pendingContexts,
       ...contexts
     }
+  }
+
+  handleUpdateInstruction = async fields => {
+    const {
+      pdfDocument,
+      defaultValues,
+      instructions: currentInstructions
+    } = this.state
+
+    const instructions = {
+      ...currentInstructions,
+      ...fields
+    }
+
+    const annotations = await unlinkAnnotations(pdfDocument, {
+      defaultValues,
+      deal: this.props.deal,
+      roles: this.props.roles,
+      brandChecklists: this.props.brandChecklists,
+      scale: this.scale,
+      displayWidth: this.displayWidth,
+      instructions
+    })
+
+    this.setState({
+      annotations,
+      instructions
+    })
   }
 
   handleReloadPage = () => window.location.reload()
@@ -286,7 +319,9 @@ class EditDigitalForm extends React.Component {
                 displayWidth={this.displayWidth}
                 annotations={state.annotations}
                 values={state.values}
+                instructions={state.instructions}
                 onValueUpdate={this.handleUpdateValue}
+                onInstructionUpdate={this.handleUpdateInstruction}
               />
             </Container>
           )
