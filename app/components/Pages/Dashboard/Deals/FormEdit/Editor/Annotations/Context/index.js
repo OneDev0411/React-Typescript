@@ -9,6 +9,12 @@ import { AnnotationWrapper } from '../components/AnnotationWrapper'
 import { ContextField } from './ContextField'
 
 function Contexts(props) {
+  const handleToggleUnlink = inputProps => {
+    props.onInstructionUpdate({
+      [inputProps.group[0].annotation.fieldName]: ''
+    })
+  }
+
   const handleSaveValue = (
     inputProps,
     context,
@@ -45,6 +51,7 @@ function Contexts(props) {
           key={inputProps.key}
           deal={props.deal}
           onSaveValue={handleSaveValue.bind(null, inputProps)}
+          onToggleUnlink={() => handleToggleUnlink(inputProps)}
           {...inputProps}
         />
       )}

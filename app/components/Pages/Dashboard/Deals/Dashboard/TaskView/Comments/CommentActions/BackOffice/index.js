@@ -19,7 +19,7 @@ export default function BackOffice(props) {
   const isNotReviewed = !isDeclined && !isApproved && !attention_requested
 
   return (
-    <Flex alignCenter justifyBetween style={{ width: '100%' }}>
+    <Flex alignCenter>
       <div>
         <RequiredAction task={task} />
       </div>

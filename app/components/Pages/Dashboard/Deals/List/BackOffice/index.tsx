@@ -9,6 +9,7 @@ import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
 
 import { ExportDeals } from '../components/ExportDeals'
+import { DebouncedSearchInput } from '../components/SearchInput'
 
 import TabFilters from './Filters'
 import Grid from './Grid'
@@ -56,17 +57,17 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
 
   return (
     <PageLayout>
-      <PageLayout.HeaderWithSearch
-        title="My deals"
-        onSearch={setSearchCriteria}
-        searchInputProps={{
-          placeholder: 'Search deals by address, MLS# or agent name...',
-          debounceTime: 500
-        }}
-      >
-        <ExportDeals />
-      </PageLayout.HeaderWithSearch>
+      <PageLayout.Header title="Deals Admin">
+        <div className={classes.headerContainer}>
+          <DebouncedSearchInput
+            placeholder="Search deals by address, MLS# or agent name..."
+            value={searchCriteria}
+            onChange={setSearchCriteria}
+          />
 
+          <ExportDeals />
+        </div>
+      </PageLayout.Header>
       <PageLayout.Main>
         <div className={classes.filtersContainer}>
           <TabFilters
