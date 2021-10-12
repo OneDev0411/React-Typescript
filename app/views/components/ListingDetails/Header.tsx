@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback, useState } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
@@ -7,9 +7,11 @@ import Grid from '@material-ui/core/Grid'
 import { mdiClose, mdiExportVariant, mdiHeart, mdiHeartOutline } from '@mdi/js'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps, browserHistory } from 'react-router'
+import { notify } from 'reapop'
 
+import { noop } from '@app/utils/helpers'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useFavorite } from 'hooks/use-favorite'
+import api from 'models/listings/favorites'
 import { selectUserUnsafe } from 'selectors/user'
 
 const useStyles = makeStyles(
@@ -38,6 +40,7 @@ const useStyles = makeStyles(
 interface Props {
   listing: IListing
   isWidget?: boolean
+  onToggleFavorite?: () => void
   handleClose?: () => void
   handleShare: () => void
 }
@@ -47,12 +50,43 @@ function Header({
   isWidget = false,
   handleShare,
   location,
+  onToggleFavorite = noop,
   handleClose
 }: Props & WithRouterProps) {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
 
-  const { isFavorited, toggleFavorite } = useFavorite(listing)
+  const [isFavorited, setIsFavorited] = useState(listing.favorited)
+
+  const handleToggleFavorite = useCallback(
+    async (listing: IListing) => {
+      if (!user) {
+        return
+      }
+
+      onToggleFavorite()
+      setIsFavorited(prev => !prev)
+
+      try {
+        await api.toggleFavorites({
+          recId: null,
+          mlsNumber: listing.mls_number,
+          isFavorite: listing.favorited,
+          roomId: user.personal_room
+        })
+      } catch {
+        onToggleFavorite()
+        setIsFavorited(prev => !prev)
+        notify({
+          status: 'error',
+          message: 'Unable to perform this action.',
+          options: { id: 'toggle-listing-favorite-error' }
+        })
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [user]
+  )
 
   const handleLogin = () => {
     const { query } = location
@@ -69,7 +103,7 @@ function Header({
     browserHistory.push(url)
   }
 
-  const handleFavorite = event => toggleFavorite()
+  const handleFavorite = event => handleToggleFavorite(listing)
 
   return (
     <>

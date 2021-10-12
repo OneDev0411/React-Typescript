@@ -1,8 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const getCounties = async query => {
+export async function getCounties(
+  query: string
+): Promise<{ options: ICounty[] }> {
   if (!query || query.length < 4) {
-    return Promise.resolve(() => ({ options: [] }))
+    return Promise.resolve({ options: [] as ICounty[] })
   }
 
   try {
@@ -15,7 +17,7 @@ const getCounties = async query => {
 
     return { options }
   } catch (error) {
-    // console.log(error.message)
+    return Promise.resolve({ options: [] as ICounty[] })
   }
 }
 

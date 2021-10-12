@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import {
   Card,
@@ -9,12 +9,12 @@ import {
   Button,
   Grid,
   Chip,
-  Box,
   alpha,
   Theme,
   makeStyles
 } from '@material-ui/core'
 import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import cn from 'classnames'
 import { noop } from 'lodash'
 import pluralize from 'pluralize'
 
@@ -75,6 +75,22 @@ const useStyles = makeStyles(
     cardContent: {
       padding: theme.spacing(1)
     },
+    cardHighlightRoot: {
+      opacity: 0,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      overflow: 'hidden',
+      position: 'absolute',
+      transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+      borderRadius: 'inherit',
+      pointerEvents: 'none',
+      backgroundColor: 'currentcolor'
+    },
+    cardHighlightActive: {
+      opacity: 0.1
+    },
     listingFeature: {
       ...theme.typography.subtitle3,
       marginRight: theme.spacing(0.5)
@@ -87,6 +103,23 @@ const useStyles = makeStyles(
     },
     address: {
       ...theme.typography.body3
+    },
+    selectionContainer: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(1)
+    },
+    chipsContainer: {
+      margin: theme.spacing(1)
+    },
+    statusContainer: {
+      margin: theme.spacing(1),
+      textAlign: 'center'
+    },
+    listingFeatureContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      marginRight: theme.spacing(2)
     }
   }),
   {
@@ -148,14 +181,32 @@ export interface ListingCardProps {
    * The click handler of listing card
    */
   onClick?: () => void
+
+  /**
+   * The card hover state
+   */
+  hover?: boolean
+
+  /**
+   * The card clicked state
+   */
+  clicked?: boolean
+
+  /**
+   * The onMouseEnter / onMouseLeave handler of listing card
+   */
+  onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
 export default function ListingCard({
   listing,
   tags,
+  clicked = false,
+  hover = false,
   hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
+  onChangeHoverState,
   liked = undefined,
   onLikeClick = noop,
   onClick
@@ -194,20 +245,37 @@ export default function ListingCard({
     !hideFeatures &&
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
+  const handleChangeHoverState = useCallback(
+    (id: UUID, hover: boolean) => {
+      if (typeof onChangeHoverState === 'function') {
+        onChangeHoverState(id, hover)
+      }
+    },
+    [onChangeHoverState]
+  )
+
+  const shouldHighlightCard = hover || clicked
+
   return (
     <Card
       data-test="card"
       variant="outlined"
       className={classes.card}
+      onMouseEnter={() => {
+        handleChangeHoverState(listing.id, true)
+      }}
+      onMouseLeave={() => {
+        handleChangeHoverState(listing.id, false)
+      }}
       onClick={onClick}
     >
       <CardActionArea component="div">
-        <ListingCardMedia listing={listing}>
+        <ListingCardMedia imagesURL={listing.gallery_image_urls}>
           <Grid container justifyContent="space-between">
             <Grid item>
               <Grid container item>
                 {selected !== undefined && (
-                  <Box my={1} ml={1}>
+                  <Grid className={classes.selectionContainer}>
                     <div className={classes.cardMediaActionContainer}>
                       <Checkbox
                         size="small"
@@ -217,10 +285,10 @@ export default function ListingCard({
                         onClick={stopPropagation}
                       />
                     </div>
-                  </Box>
+                  </Grid>
                 )}
                 {liked !== undefined && (
-                  <Box my={1} ml={1}>
+                  <Grid className={classes.selectionContainer}>
                     <div className={classes.cardMediaActionContainer}>
                       <Button
                         variant="text"
@@ -234,13 +302,13 @@ export default function ListingCard({
                         />
                       </Button>
                     </div>
-                  </Box>
+                  </Grid>
                 )}
               </Grid>
             </Grid>
             {tags && (
               <Grid item>
-                <Box m={1}>
+                <Grid className={classes.chipsContainer}>
                   {tags.map(tag => (
                     <Chip
                       key={tag}
@@ -253,7 +321,7 @@ export default function ListingCard({
                       }}
                     />
                   ))}
-                </Box>
+                </Grid>
               </Grid>
             )}
           </Grid>
@@ -273,7 +341,7 @@ export default function ListingCard({
                 </Typography>
               </Grid>
               <Grid item>
-                <Box m={1} textAlign="center">
+                <Grid className={classes.statusContainer}>
                   <Chip
                     label={listing.status}
                     size="small"
@@ -281,52 +349,52 @@ export default function ListingCard({
                     classes={{
                       iconSmall: classes.iconSmall
                     }}
-                    icon={<Box className={classes.statusDot} />}
+                    icon={<Grid className={classes.statusDot} />}
                   />
-                </Box>
+                </Grid>
               </Grid>
             </Grid>
             {shouldRenderListingFeaturesRow && (
               <Grid container item alignItems="flex-end">
                 {listingFeatures.bedroomCount ? (
                   <Grid item>
-                    <Box display="flex" alignItems="center" mr={2}>
+                    <Grid className={classes.listingFeatureContainer}>
                       <Typography className={classes.listingFeature}>
                         {listingFeatures.bedroomCount}{' '}
                       </Typography>
                       <Typography className={classes.listingFeatureValue}>
                         {pluralize('bed', listingFeatures.bedroomCount)}
                       </Typography>
-                    </Box>
+                    </Grid>
                   </Grid>
                 ) : null}
                 {listingFeatures.bathroomCount ? (
                   <Grid item>
-                    <Box display="flex" alignItems="center" mr={2}>
+                    <Grid className={classes.listingFeatureContainer}>
                       <Typography className={classes.listingFeature}>
                         {listingFeatures.bathroomCount}{' '}
                       </Typography>
                       <Typography className={classes.listingFeatureValue}>
                         {pluralize('bath', listingFeatures.bathroomCount)}
                       </Typography>
-                    </Box>
+                    </Grid>
                   </Grid>
                 ) : null}
                 {listingFeatures.areaSqft && !shouldShowAcres ? (
                   <Grid item>
-                    <Box display="flex" alignItems="center" mr={2}>
+                    <Grid className={classes.listingFeatureContainer}>
                       <Typography className={classes.listingFeature}>
                         {listingFeatures.areaSqft.toLocaleString()}{' '}
                       </Typography>
                       <Typography className={classes.listingFeatureValue}>
                         ft<sup>2</sup>
                       </Typography>
-                    </Box>
+                    </Grid>
                   </Grid>
                 ) : null}
                 {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
                   <Grid item>
-                    <Box display="flex" alignItems="center" mr={2}>
+                    <Grid className={classes.listingFeatureContainer}>
                       <Typography
                         variant="subtitle2"
                         className={classes.listingFeature}
@@ -336,7 +404,7 @@ export default function ListingCard({
                       <Typography className={classes.listingFeatureValue}>
                         acres
                       </Typography>
-                    </Box>
+                    </Grid>
                   </Grid>
                 ) : null}
               </Grid>
@@ -356,6 +424,12 @@ export default function ListingCard({
             )}
           </Grid>
         </CardContent>
+        <span
+          className={cn({
+            [classes.cardHighlightRoot]: true,
+            [classes.cardHighlightActive]: shouldHighlightCard
+          })}
+        />
       </CardActionArea>
     </Card>
   )

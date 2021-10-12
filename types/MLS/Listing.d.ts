@@ -31,9 +31,44 @@ declare type IPropertySubtype =
   | 'COM-Sale or Lease (Either)'
   | 'COM-Sale/Leaseback (Both)'
 
-interface IPoint {
+declare type IArchitecturalStyle =
+  | 'Southwestern'
+  | 'Ranch'
+  | 'Spanish'
+  | 'A-Frame'
+  | 'Mid-Century Modern'
+  | 'Prairie'
+  | 'Studio Apartment'
+  | 'Contemporary/Modern'
+  | 'Split Level'
+  | 'Victorian'
+  | 'Traditional'
+  | 'Mediterranean'
+  | 'Colonial'
+  | 'Oriental'
+  | 'Loft'
+  | 'French'
+  | 'Tudor'
+
+declare interface IPoint {
   latitude: number
   longitude: number
+}
+
+declare interface ICoord {
+  lat: number
+  lng: number
+}
+
+declare interface ICompactBounds {
+  ne: ICoord
+  sw: ICoord
+}
+declare interface IBounds {
+  ne: ICoord
+  nw: ICoord
+  se: ICoord
+  sw: ICoord
 }
 
 interface ListingAgent extends IModel<'agent'> {

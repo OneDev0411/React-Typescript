@@ -42,6 +42,8 @@ declare interface IUser extends IUserBase {
 
   agent: IAgent | null // association?
 
+  personal_room: Nullable<UUID>
+
   user_type: TUserType
 }
 

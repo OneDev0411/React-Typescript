@@ -16,7 +16,7 @@ export const architectural_styles = {
   ranch: 'Ranch',
   spanish: 'Spanish',
   aFrame: 'A-Frame',
-  midCentry_modern: 'Mid-Centry Modern',
+  midCentry_modern: 'Mid-Century Modern',
   prairie: 'Prairie',
   studio_apartment: 'Studio Apartment',
   contemporary: 'Contemporary/Modern',
