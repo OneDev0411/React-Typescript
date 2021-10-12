@@ -1279,7 +1279,7 @@ class Builder extends React.Component {
       <Portal root="marketing-center">
         <Container
           hideBlocks={!this.hasBlocks}
-          className="template-builder"
+          className="template-builder mui-fixed"
           style={this.props.containerStyle}
         >
           {this.state.isListingDrawerOpen && (
