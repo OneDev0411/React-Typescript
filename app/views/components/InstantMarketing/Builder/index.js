@@ -37,8 +37,9 @@ import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
 import Templates from '../Templates'
 
-import AddToMarketingCenter from './AddToMarketingCenter'
+import { AddToMarketingCenter } from './AddToMarketingCenter'
 import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
+import AdminContinueButton from './AdminContinueButton'
 import { registerEmailBlocks } from './Blocks/Email'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
@@ -1200,7 +1201,7 @@ class Builder extends React.Component {
     }))
   }
 
-  shouldShowSaveAsTemplateButton = () => {
+  get shouldShowSaveAsTemplateButton() {
     if (this.isBareMode) {
       return false
     }
@@ -1209,6 +1210,17 @@ class Builder extends React.Component {
     const isAdminUser = isAdmin(this.props.user)
 
     return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+  }
+
+  get shouldShowAdminContinueButton() {
+    if (this.isBareMode) {
+      return false
+    }
+
+    // Only admin users should see this for now
+    const isAdminUser = isAdmin(this.props.user)
+
+    return isAdminUser && this.state.selectedTemplate && this.isEmailMedium
   }
 
   isTemplatesListEnabled = () => {
@@ -1498,7 +1510,7 @@ class Builder extends React.Component {
             <Actions>
               {this.props.customActions}
 
-              {this.shouldShowSaveAsTemplateButton() && (
+              {this.shouldShowSaveAsTemplateButton && (
                 <AddToMarketingCenter
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
@@ -1508,24 +1520,35 @@ class Builder extends React.Component {
                 />
               )}
 
-              {(this.shouldShowPrintableActions ||
-                this.shouldShowSocialShareActions) && (
-                <Button
-                  style={{
-                    marginLeft: '0.5rem'
-                  }}
-                  variant="contained"
-                  color="primary"
-                  onClick={this.handleSocialSharing}
+              {this.shouldShowAdminContinueButton && (
+                <AdminContinueButton
+                  onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
-                >
-                  Continue
-                </Button>
+                  hasAddToMarketingCenter={this.shouldShowSaveAsTemplateButton}
+                  templateId={this.selectedTemplate.id}
+                />
               )}
 
-              {(this.isOpenHouseMedium ||
-                this.shouldShowEmailActions ||
-                this.isBareMode) &&
+              {!this.shouldShowAdminContinueButton &&
+                (this.shouldShowPrintableActions ||
+                  this.shouldShowSocialShareActions) && (
+                  <Button
+                    style={{
+                      marginLeft: '0.5rem'
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={this.handleSocialSharing}
+                    disabled={this.props.actionButtonsDisabled}
+                  >
+                    Continue
+                  </Button>
+                )}
+
+              {!this.shouldShowAdminContinueButton &&
+                (this.isOpenHouseMedium ||
+                  this.shouldShowEmailActions ||
+                  this.isBareMode) &&
                 this.getSaveButton()}
 
               <IconButton
