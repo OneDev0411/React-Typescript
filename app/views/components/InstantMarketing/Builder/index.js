@@ -1524,7 +1524,8 @@ class Builder extends React.Component {
                 <AdminContinueButton
                   onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
-                  hasAddToMarketingCenter={this.shouldShowSaveAsTemplateButton}
+                  // hasAddToMarketingCenter={this.shouldShowSaveAsTemplateButton}
+                  hasAddToMarketingCenter={false} // TODO: Ask Ali about having the `Add to marketing` issue
                   templateId={this.selectedTemplate.id}
                 />
               )}
