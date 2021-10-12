@@ -107,9 +107,7 @@ export const OtherEditor = ({
           filters.property_types[0]
         ) && <SquareFootageGroup {...otherEditorProps} />}
 
-        {!['Multi-Family', 'Residential Lease'].includes(
-          filters.property_types[0]
-        ) && <LotSizeGroup {...otherEditorProps} />}
+        <LotSizeGroup {...otherEditorProps} />
 
         {filters.property_types[0] !== 'Lots & Acreage' && (
           <YearBuiltGroup {...otherEditorProps} />
