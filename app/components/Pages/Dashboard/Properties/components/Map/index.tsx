@@ -270,6 +270,7 @@ export const Map = ({
                   bathroomCount={listing.compact_property.bathroom_count}
                   bedroomCount={listing.compact_property.bedroom_count}
                   coverImageUrl={listing.cover_image_url}
+                  propertyType={listing.compact_property.property_type}
                   zoom={mapPosition.zoom}
                 />
               )

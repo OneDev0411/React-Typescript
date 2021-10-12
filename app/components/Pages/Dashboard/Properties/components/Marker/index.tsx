@@ -98,6 +98,7 @@ interface Props {
   bathroomCount: Nullable<number>
   bedroomCount: Nullable<number>
   coverImageUrl: string
+  propertyType: string
   zoom?: number
   onClick?: (id: UUID) => void
 }
@@ -114,6 +115,7 @@ const Marker = ({
   bathroomCount,
   bedroomCount,
   coverImageUrl,
+  propertyType,
   hover,
   clicked,
   onClick = noop,
@@ -166,6 +168,7 @@ const Marker = ({
             bathroomCount={bathroomCount}
             bedroomCount={bedroomCount}
             coverImageUrl={coverImageUrl}
+            propertyType={propertyType}
           />
         </Popper>
       )}

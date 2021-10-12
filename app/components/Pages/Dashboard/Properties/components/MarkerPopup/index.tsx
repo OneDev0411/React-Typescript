@@ -92,6 +92,7 @@ interface Props {
   bathroomCount: Nullable<number>
   bedroomCount: Nullable<number>
   coverImageUrl: string
+  propertyType: string
   onClick?: () => void
 }
 
@@ -104,6 +105,7 @@ const MarkerPopup = ({
   bathroomCount,
   bedroomCount,
   coverImageUrl,
+  propertyType,
   onClick = noop
 }: Props) => {
   const classes = useStyles()
@@ -143,21 +145,23 @@ const MarkerPopup = ({
           />
         </Grid>
 
-        <Grid className={classes.details} container>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
-            {bedrooms}
+        {!['Commercial', 'Lots & Acreage'].includes(propertyType) && (
+          <Grid className={classes.details} container>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
+              {bedrooms}
+            </Grid>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiShower} className={classes.icon} />
+              {baths}
+            </Grid>
+            <Grid className={classes.detailItem} item>
+              <SvgIcon path={mdiFullscreen} className={classes.icon} />
+              {squareFeet} ft
+              <sup>2</sup>
+            </Grid>
           </Grid>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiShower} className={classes.icon} />
-            {baths}
-          </Grid>
-          <Grid className={classes.detailItem} item>
-            <SvgIcon path={mdiFullscreen} className={classes.icon} />
-            {squareFeet} ft
-            <sup>2</sup>
-          </Grid>
-        </Grid>
+        )}
 
         <Typography variant="body2" className={classes.address}>
           <SvgIcon path={mdiMapMarkerOutline} className={classes.addressIcon} />
