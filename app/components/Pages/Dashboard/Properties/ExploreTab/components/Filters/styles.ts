@@ -64,17 +64,18 @@ export const useStyles = makeStyles(
     },
     ToggleButtonGroup: { width: '100%' },
     ToggleButton: {
-      '&.Mui-selected': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText
+      color: theme.palette.text.secondary
+    },
+    ToggleButtonSelected: {
+      // !important is needed to fix MUI priority issue of CSS selector
+      backgroundColor: `${theme.palette.primary.main} !important`,
+      color: `${theme.palette.primary.contrastText} !important`,
+      '&:hover': {
+        backgroundColor: `${theme.palette.primary.dark} !important`
       }
     },
     fullToggleButton: {
-      flex: 1,
-      '&.Mui-selected': {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText
-      }
+      flex: 1
     },
     filledAutoCompleteWrapper: {
       flex: 1

@@ -44,7 +44,10 @@ export const BathsEditor = ({
         onChange={handleChange}
       >
         <ToggleButton
-          className={classes.fullToggleButton}
+          classes={{
+            root: classes.fullToggleButton,
+            selected: classes.ToggleButtonSelected
+          }}
           value={0}
           aria-label="any bathrooms"
         >
@@ -52,7 +55,10 @@ export const BathsEditor = ({
         </ToggleButton>
         {numbersArray.map(i => (
           <ToggleButton
-            className={classes.fullToggleButton}
+            classes={{
+              root: classes.fullToggleButton,
+              selected: classes.ToggleButtonSelected
+            }}
             key={i + 1}
             value={i + 1}
             aria-label={`${i + 1} bathroom(s)`}

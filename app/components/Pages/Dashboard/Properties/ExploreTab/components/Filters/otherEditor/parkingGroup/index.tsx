@@ -33,7 +33,10 @@ export const ParkingGroup = ({
         aria-label="parking"
       >
         <ToggleButton
-          className={classes.ToggleButton}
+          classes={{
+            root: classes.ToggleButton,
+            selected: classes.ToggleButtonSelected
+          }}
           value={0}
           aria-label="any parking"
         >
@@ -41,7 +44,10 @@ export const ParkingGroup = ({
         </ToggleButton>
         {numbersArray.map(i => (
           <ToggleButton
-            className={classes.ToggleButton}
+            classes={{
+              root: classes.ToggleButton,
+              selected: classes.ToggleButtonSelected
+            }}
             key={i + 1}
             value={i + 1}
             aria-label={`${i + 1} parking(s)`}

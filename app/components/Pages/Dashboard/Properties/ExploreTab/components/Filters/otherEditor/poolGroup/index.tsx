@@ -30,7 +30,10 @@ export const PoolGroup = ({
         aria-label="pool"
       >
         <ToggleButton
-          className={classes.ToggleButton}
+          classes={{
+            root: classes.ToggleButton,
+            selected: classes.ToggleButtonSelected
+          }}
           // eslint-disable-next-line react/jsx-boolean-value
           value={true}
           aria-label="has pool"
@@ -38,14 +41,20 @@ export const PoolGroup = ({
           Yes
         </ToggleButton>
         <ToggleButton
-          className={classes.ToggleButton}
+          classes={{
+            root: classes.ToggleButton,
+            selected: classes.ToggleButtonSelected
+          }}
           value={false}
           aria-label="no pool"
         >
           No
         </ToggleButton>
         <ToggleButton
-          className={classes.ToggleButton}
+          classes={{
+            root: classes.ToggleButton,
+            selected: classes.ToggleButtonSelected
+          }}
           value={0}
           aria-label="either"
         >
