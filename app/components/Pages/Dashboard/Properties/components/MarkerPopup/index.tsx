@@ -1,10 +1,12 @@
 import { memo } from 'react'
 
 import { Chip, Grid, makeStyles, Typography } from '@material-ui/core'
-import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
-import FullscreenOutlinedIcon from '@material-ui/icons/FullscreenOutlined'
-import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
-import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
+import {
+  mdiShower,
+  mdiBedKingOutline,
+  mdiFullscreen,
+  mdiMapMarkerOutline
+} from '@mdi/js'
 import { useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
@@ -16,6 +18,7 @@ import {
   getResizeUrl,
   getStatusColorClass
 } from '@app/utils/listing'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
 
@@ -142,19 +145,23 @@ const MarkerPopup = ({
 
         <Grid className={classes.details} container>
           <Grid className={classes.detailItem} item>
-            <KingBedOutlinedIcon className={classes.icon} /> {bedrooms}
+            <SvgIcon path={mdiBedKingOutline} className={classes.icon} />
+            {bedrooms}
           </Grid>
           <Grid className={classes.detailItem} item>
-            <BathtubOutlinedIcon className={classes.icon} /> {baths}
+            <SvgIcon path={mdiShower} className={classes.icon} />
+            {baths}
           </Grid>
           <Grid className={classes.detailItem} item>
-            <FullscreenOutlinedIcon className={classes.icon} /> {squareFeet} ft
+            <SvgIcon path={mdiFullscreen} className={classes.icon} />
+            {squareFeet} ft
             <sup>2</sup>
           </Grid>
         </Grid>
 
         <Typography variant="body2" className={classes.address}>
-          <RoomOutlinedIcon className={classes.addressIcon} /> {fullAddress}
+          <SvgIcon path={mdiMapMarkerOutline} className={classes.addressIcon} />
+          {fullAddress}
         </Typography>
       </div>
     </div>

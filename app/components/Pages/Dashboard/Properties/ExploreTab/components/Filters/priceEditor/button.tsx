@@ -1,7 +1,9 @@
 import { Button } from '@material-ui/core'
-import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
+import { mdiCurrencyUsd } from '@mdi/js'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../styles'
 
@@ -25,7 +27,7 @@ export const PriceButton = ({
       color={isActive ? 'primary' : undefined}
       variant="outlined"
       size="medium"
-      startIcon={<AttachMoneyOutlinedIcon fontSize="small" />}
+      startIcon={<SvgIcon path={mdiCurrencyUsd} size={muiIconSizes.small} />}
     >
       {isActive ? (
         <>

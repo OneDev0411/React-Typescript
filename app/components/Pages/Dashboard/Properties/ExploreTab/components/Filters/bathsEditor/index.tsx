@@ -1,8 +1,10 @@
 import { Grid, Typography } from '@material-ui/core'
-import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
+import { mdiShower } from '@mdi/js'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { FilterEditorFooter } from '../filterEditorFooter'
 import { useStyles } from '../styles'
@@ -29,7 +31,7 @@ export const BathsEditor = ({
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
-        <BathtubOutlinedIcon />
+        <SvgIcon size={muiIconSizes.medium} path={mdiShower} />
         <Typography variant="subtitle1" className={classes.title}>
           Baths
         </Typography>

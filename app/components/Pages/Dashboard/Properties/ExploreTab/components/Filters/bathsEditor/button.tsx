@@ -1,7 +1,9 @@
 import { Button } from '@material-ui/core'
-import BathtubOutlinedIcon from '@material-ui/icons/BathtubOutlined'
+import { mdiShower } from '@mdi/js'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../styles'
 
@@ -22,7 +24,7 @@ export const BathsButton = ({
       color={isActive ? 'primary' : undefined}
       variant="outlined"
       size="medium"
-      startIcon={<BathtubOutlinedIcon fontSize="small" />}
+      startIcon={<SvgIcon size={muiIconSizes.small} path={mdiShower} />}
     >
       {isActive ? <>{filters.minimum_bathrooms}+</> : <>Baths</>}
     </Button>

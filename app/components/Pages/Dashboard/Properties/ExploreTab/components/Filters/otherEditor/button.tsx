@@ -1,8 +1,10 @@
 import { Button } from '@material-ui/core'
-import TuneIcon from '@material-ui/icons/Tune'
+import { mdiTune } from '@mdi/js'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
 import FilterButtonBadge from '@app/views/components/Filters/FilterButtonBadge'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../styles'
 
@@ -61,7 +63,7 @@ export const OtherButton = ({
       color={isActive ? 'primary' : undefined}
       variant="outlined"
       size="medium"
-      startIcon={<TuneIcon fontSize="small" />}
+      startIcon={<SvgIcon path={mdiTune} size={muiIconSizes.small} />}
     >
       More Filters{' '}
       {isActive && <FilterButtonBadge value={changedFiltersCount} />}

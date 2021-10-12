@@ -1,12 +1,13 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
 import { useTheme } from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import MyLocationIcon from '@material-ui/icons/MyLocation'
+import { mdiPencil, mdiCrosshairsGps } from '@mdi/js'
 import GoogleMap, { ChangeEventValue } from 'google-map-react'
 
 import { noop } from '@app/utils/helpers'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { bootstrapURLKeys } from '../../constants'
 import {
@@ -191,7 +192,9 @@ export const Map = ({
             left={10}
             iconButton
             tooltip="Get your exact location on the map"
-            startIcon={<MyLocationIcon />}
+            startIcon={
+              <SvgIcon size={muiIconSizes.small} path={mdiCrosshairsGps} />
+            }
             onClick={() => onClickLocate()}
           />
         </>
@@ -203,7 +206,7 @@ export const Map = ({
             <GoogleMapsButton
               top={9}
               right={10}
-              startIcon={<EditIcon />}
+              startIcon={<SvgIcon size={muiIconSizes.small} path={mdiPencil} />}
               tooltip="Define an area for searching"
               onClick={() => setDrawingMode(true)}
             >
@@ -214,7 +217,7 @@ export const Map = ({
             <GoogleMapsButton
               top={9}
               right={10}
-              startIcon={<EditIcon />}
+              startIcon={<SvgIcon size={muiIconSizes.small} path={mdiPencil} />}
               onClick={handleRemoveDrawing}
               active
             >

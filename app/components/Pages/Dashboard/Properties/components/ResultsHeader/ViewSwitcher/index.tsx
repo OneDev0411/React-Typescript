@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core'
-import ListRoundedIcon from '@material-ui/icons/ListRounded'
-import ViewModuleRoundedIcon from '@material-ui/icons/ViewModuleRounded'
 import ToggleButton from '@material-ui/lab/ToggleButton'
+import { mdiFormatListCheckbox, mdiViewModule } from '@mdi/js'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { ViewType } from '../../../types'
 
@@ -33,6 +34,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
   return (
     <>
       <ToggleButton
+        title="Card view"
         className={classes.toggleViewButton}
         value="check"
         size="small"
@@ -43,9 +45,10 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
           deleteViewQueryParam()
         }}
       >
-        <ViewModuleRoundedIcon />
+        <SvgIcon size={muiIconSizes.medium} path={mdiViewModule} />
       </ToggleButton>
       <ToggleButton
+        title="Table view"
         className={classes.toggleViewButton}
         value="check"
         color="primary"
@@ -56,7 +59,7 @@ const ViewSwitcher = ({ onToggleView, viewType }: Props) => {
           setViewQueryParam('table')
         }}
       >
-        <ListRoundedIcon />
+        <SvgIcon size={muiIconSizes.medium} path={mdiFormatListCheckbox} />
       </ToggleButton>
     </>
   )

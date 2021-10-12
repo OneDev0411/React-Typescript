@@ -1,8 +1,10 @@
 import { Button } from '@material-ui/core'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import { mdiCheckboxBlankCircle } from '@mdi/js'
 import cn from 'classnames'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { PROPERTY_TYPES } from '../../../../constants'
 import { useStyles } from '../styles'
@@ -27,7 +29,13 @@ export const TypeButton = ({
         [classes.button]: true,
         active: true
       })}
-      startIcon={<FiberManualRecordIcon fontSize="small" color="primary" />}
+      startIcon={
+        <SvgIcon
+          path={mdiCheckboxBlankCircle}
+          size={muiIconSizes.small}
+          className={classes.typeIcon}
+        />
+      }
     >
       {PROPERTY_TYPES[filters.property_types[0]]}
     </Button>

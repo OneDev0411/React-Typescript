@@ -6,10 +6,12 @@ import {
   Tooltip,
   Typography
 } from '@material-ui/core'
-import { MyLocation } from '@material-ui/icons'
+import { mdiCrosshairsGps } from '@mdi/js'
 import { useEffectOnce } from 'react-use'
 
 import { GoogleMapLibrary, loadMapLibraries } from '@app/utils/google-map-api'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { bootstrapURLKeys } from '../../../constants'
 import Autocomplete from '../Autocomplete'
@@ -75,7 +77,7 @@ export function LandingPage({
           ) : (
             <Tooltip title="Get your exact location on the map">
               <IconButton aria-label="locate me" onClick={onClickLocate}>
-                <MyLocation />
+                <SvgIcon size={muiIconSizes.small} path={mdiCrosshairsGps} />
               </IconButton>
             </Tooltip>
           )}

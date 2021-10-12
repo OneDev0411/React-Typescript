@@ -1,8 +1,10 @@
 import { Grid, TextField, Typography } from '@material-ui/core'
-import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
 import { Autocomplete } from '@material-ui/lab'
+import { mdiBedKingOutline } from '@mdi/js'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { FilterEditorFooter } from '../filterEditorFooter'
 import { useStyles } from '../styles'
@@ -29,7 +31,7 @@ export const BedsEditor = ({
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
-        <KingBedOutlinedIcon />
+        <SvgIcon path={mdiBedKingOutline} size={muiIconSizes.medium} />
         <Typography variant="subtitle1" className={classes.title}>
           Beds
         </Typography>

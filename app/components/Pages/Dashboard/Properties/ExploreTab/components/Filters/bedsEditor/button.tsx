@@ -1,7 +1,9 @@
 import { Button } from '@material-ui/core'
-import KingBedOutlinedIcon from '@material-ui/icons/KingBedOutlined'
+import { mdiBedKingOutline } from '@mdi/js'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../styles'
 
@@ -23,7 +25,7 @@ export const BedsButton = ({
       color={isActive ? 'primary' : undefined}
       variant="outlined"
       size="medium"
-      startIcon={<KingBedOutlinedIcon fontSize="small" />}
+      startIcon={<SvgIcon path={mdiBedKingOutline} size={muiIconSizes.small} />}
     >
       {isActive ? (
         <>

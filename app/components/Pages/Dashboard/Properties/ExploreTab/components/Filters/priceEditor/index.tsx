@@ -1,11 +1,13 @@
 import { useRef } from 'react'
 
 import { FormHelperText, Grid, TextField, Typography } from '@material-ui/core'
-import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined'
 import { Autocomplete, createFilterOptions } from '@material-ui/lab'
+import { mdiCurrencyUsd } from '@mdi/js'
 import { useDebounce } from 'react-use'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { FilterEditorFooter } from '../filterEditorFooter'
 import { preventNonNumbricOnKeyDown } from '../otherEditor/helpers'
@@ -62,7 +64,7 @@ export const PriceEditor = ({
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
-        <AttachMoneyOutlinedIcon />
+        <SvgIcon path={mdiCurrencyUsd} size={muiIconSizes.medium} />
         <Typography variant="subtitle1" className={classes.title}>
           Price
         </Typography>

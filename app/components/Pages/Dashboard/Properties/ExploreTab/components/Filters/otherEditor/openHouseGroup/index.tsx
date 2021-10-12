@@ -1,7 +1,8 @@
 import { FormControlLabel, Switch, Grid, Typography } from '@material-ui/core'
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom'
+import { mdiDoorOpen } from '@mdi/js'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
@@ -36,7 +37,7 @@ export const OpenHouseGroup = ({
         }
         label={
           <Grid container alignItems="center">
-            <MeetingRoomIcon className={classes.switchIcon} />
+            <SvgIcon path={mdiDoorOpen} className={classes.switchIcon} />
             <Typography variant="body1">Open House Only</Typography>
           </Grid>
         }

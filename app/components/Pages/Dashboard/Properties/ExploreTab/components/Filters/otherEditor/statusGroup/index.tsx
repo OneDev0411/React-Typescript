@@ -8,7 +8,7 @@ import {
   Checkbox,
   FormGroup
 } from '@material-ui/core'
-import CircleIcon from '@material-ui/icons/FiberManualRecord'
+import { mdiCircleMedium } from '@mdi/js'
 
 import {
   STATUSES,
@@ -17,6 +17,7 @@ import {
 } from '@app/components/Pages/Dashboard/Properties/constants'
 import { getStatusColorClass } from '@app/utils/listing'
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useStyles } from '../../styles'
 import { EditorGroup } from '../EditorGroup'
@@ -151,7 +152,8 @@ export const StatusGroup = ({
           }
           label={
             <Grid container alignItems="center">
-              <CircleIcon
+              <SvgIcon
+                path={mdiCircleMedium}
                 className={classes.switchIcon}
                 style={{ color: getStatusColorClass('Leased') }}
               />
@@ -176,7 +178,8 @@ export const StatusGroup = ({
           }
           label={
             <Grid container alignItems="center">
-              <CircleIcon
+              <SvgIcon
+                path={mdiCircleMedium}
                 className={classes.switchIcon}
                 style={{ color: getStatusColorClass('Sold') }}
               />
@@ -201,7 +204,8 @@ export const StatusGroup = ({
         }
         label={
           <Grid container alignItems="center">
-            <CircleIcon
+            <SvgIcon
+              path={mdiCircleMedium}
               className={classes.switchIcon}
               style={{ color: getStatusColorClass('Active') }}
             />
@@ -225,7 +229,8 @@ export const StatusGroup = ({
         }
         label={
           <Grid container alignItems="center">
-            <CircleIcon
+            <SvgIcon
+              path={mdiCircleMedium}
               className={classes.switchIcon}
               style={{ color: getStatusColorClass('Pending') }}
             />
@@ -268,7 +273,8 @@ export const StatusGroup = ({
         }
         label={
           <Grid container alignItems="center">
-            <CircleIcon
+            <SvgIcon
+              path={mdiCircleMedium}
               className={classes.switchIcon}
               style={{ color: getStatusColorClass('Withdrawn') }}
             />

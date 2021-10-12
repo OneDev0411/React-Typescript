@@ -93,6 +93,9 @@ export const useStyles = makeStyles(
     },
     subStatusGroup: {
       marginLeft: theme.spacing(3)
+    },
+    typeIcon: {
+      color: theme.palette.primary.main
     }
   }),
   { name: 'PropertiesFilters' }

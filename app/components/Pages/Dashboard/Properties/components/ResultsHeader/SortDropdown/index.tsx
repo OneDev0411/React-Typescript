@@ -11,8 +11,7 @@ import {
   MenuItem,
   MenuList
 } from '@material-ui/core'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import { mdiArrowDown, mdiArrowUp } from '@mdi/js'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import {
@@ -20,6 +19,8 @@ import {
   sortOptions,
   SORT_FIELD_DEFAULT
 } from '@app/components/Pages/Dashboard/Properties/helpers/sort-utils'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { SortIndex, SortString } from '../../../types'
 
@@ -103,7 +104,11 @@ export function SortDropdown({ onChangeSort, activeSort }: Props) {
         aria-haspopup="true"
         onClick={handleToggle}
         endIcon={
-          activeSort.ascending ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />
+          activeSort.ascending ? (
+            <SvgIcon size={muiIconSizes.small} path={mdiArrowUp} />
+          ) : (
+            <SvgIcon size={muiIconSizes.small} path={mdiArrowDown} />
+          )
         }
       >
         {sortOptions[activeSort.index]}
