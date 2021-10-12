@@ -7,8 +7,8 @@ import { browserHistory } from 'react-router'
 import { getPlace } from '@app/models/listings/search/get-place'
 import { searchListings } from '@app/models/listings/search/search-listings'
 import { getListingAddress } from '@app/utils/listing'
+import { SearchInput } from '@app/views/components/GlobalHeaderWithSearch/SearchInput'
 import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
-import { SearchInput } from '@app/views/components/SearchInput'
 import { MlsItem } from '@app/views/components/SearchListingDrawer/ListingItem/MlsItem'
 
 import {
