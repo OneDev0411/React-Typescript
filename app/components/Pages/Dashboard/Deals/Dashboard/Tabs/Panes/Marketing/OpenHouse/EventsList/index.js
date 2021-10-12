@@ -10,7 +10,6 @@ import LinkButton from 'components/Button/LinkButton'
 import { addNotification as notify } from 'components/notification'
 import Spinner from 'components/Spinner'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import config from 'config'
 import copy from 'utils/copy-text-to-clipboard'
 import { getActiveTeamId } from 'utils/user-teams'
 
@@ -41,7 +40,7 @@ class EventsList extends React.Component {
   activeBrand = getActiveTeamId(this.props.user)
 
   getRegisterLink = event =>
-    `${config.app.url}/openhouse/${event.id}/${this.activeBrand}/register`
+    `/openhouse/${event.id}/${this.activeBrand}/register`
 
   onEditEvent = event => this.props.onEditEvent(event)
 
