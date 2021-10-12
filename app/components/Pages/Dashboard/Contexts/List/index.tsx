@@ -196,7 +196,7 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
 }
 
 const mapStateToProps = ({ deals, user }: IAppState) => {
-  const brandId = getActiveTeamId(user)
+  const brandId = getActiveTeamId(user)!
   const exactContexts = selectBrandContexts(deals.contexts, brandId)
 
   return {

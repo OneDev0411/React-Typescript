@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import { Button, Tooltip } from '@material-ui/core'
 import { connect } from 'react-redux'
@@ -38,7 +38,7 @@ class Agent extends React.Component {
       this.props.hasComment === false
 
     return (
-      <Fragment>
+      <div>
         <Tooltip title={this.props.hasComment ? '' : 'Notify office to Review'}>
           <Button
             color="secondary"
@@ -64,7 +64,7 @@ class Agent extends React.Component {
             {this.props.isSaving ? 'Processing...' : 'Cancel Notify'}
           </Button>
         )}
-      </Fragment>
+      </div>
     )
   }
 }
