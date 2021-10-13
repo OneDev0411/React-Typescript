@@ -5,5 +5,10 @@ declare interface ISuperCampaign extends IModel<'super_campaign'> {
   recipients: null
   subject: string
   template_instance: null
+  subject: string
+  description: string
+  due_at: number
+  eligible_brands: null
+  tags: null
   // TODO: complete this type
 }
