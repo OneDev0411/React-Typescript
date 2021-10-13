@@ -37,12 +37,12 @@ function AdminContinueButton({
     const superCampaign = await createSuperCampaign({
       subject: '',
       description: '',
-      due_at: new Date(),
+      due_at: new Date().getTime(),
       recipients: [],
       template: templateId
     })
 
-    goTo(`/dashboard/super-campaign/${superCampaign.id}`)
+    goTo(`/dashboard/super-campaigns/${superCampaign.id}/detail`)
   }
 
   const addToMarketingCenter = () => console.log('addToMarketingCenter') // TODO: implement this
