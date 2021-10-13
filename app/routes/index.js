@@ -12,6 +12,7 @@ import {
   showingDetailTabs,
   showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
+import { superCampaignDetailTabs } from '../components/Pages/Dashboard/SuperCampaigns/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
@@ -791,6 +792,19 @@ const AsyncCreateShowing = withAcl.showings(
 )
 
 /* ==================================== */
+//  Super Campaigns
+/* ==================================== */
+
+const AsyncSuperCampaignDetail = withAcl.admin(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/SuperCampaigns/pages/SuperCampaignDetail' /* webpackChunkName: "super_campaign_detail" */
+      )
+  })
+)
+
+/* ==================================== */
 //  Other Pages
 /* ==================================== */
 
@@ -1132,6 +1146,16 @@ export default (
             path={`:tab(${Object.keys(showingsTabs).join('|')})`}
             component={AsyncShowings}
           />
+        </Route>
+
+        <Route path="super-campaigns">
+          <Route
+            path={`:id/detail/:tab(${Object.keys(superCampaignDetailTabs).join(
+              '|'
+            )})`}
+            component={AsyncSuperCampaignDetail}
+          />
+          <Route path=":id/detail" component={AsyncSuperCampaignDetail} />
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />
