@@ -39,6 +39,7 @@ interface Props {
   onCloseListingModal?: () => void
   onMapClick?: () => void
   onClickToggleMap?: () => void
+  onToggleFavorite?: (id: UUID) => void
   onMarkerClick?: (key: UUID) => void
   onClickLocate: () => void
 }
@@ -67,6 +68,7 @@ export const Map = ({
   onMarkerClick = noop,
   onMapClick = noop,
   onClickToggleMap = noop,
+  onToggleFavorite = noop,
   onClickLocate
 }: Props) => {
   const mapIsLoaded = useRef<boolean>(false)
@@ -149,6 +151,10 @@ export const Map = ({
     onRemoveDrawing()
     drawingRef?.current?.setMap(null)
   }
+
+  const handleToggleFavorite = useCallback(() => {
+    onToggleFavorite(listingModalState.id)
+  }, [listingModalState.id, onToggleFavorite])
 
   const cancelDrawingMode = () => {
     setDrawingMode(false)
@@ -281,6 +287,7 @@ export const Map = ({
         isWidget={isWidget}
         listingId={listingModalState.id}
         closeHandler={closeListingModal}
+        onToggleFavorite={handleToggleFavorite}
       />
     </>
   )
