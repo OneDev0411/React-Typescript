@@ -29,6 +29,7 @@ interface Props {
   hoverListing: Nullable<UUID>
   clickedListing: Nullable<UUID>
   hasDrawingMode?: boolean
+  closeModalAfterToggleFavorite?: boolean
   drawing?: ICoord[]
   onMapLoad?: (map: google.maps.Map) => void
   onDrawingComplete?: (points: ICoord[]) => void
@@ -39,6 +40,7 @@ interface Props {
   onCloseListingModal?: () => void
   onMapClick?: () => void
   onClickToggleMap?: () => void
+  onToggleFavorite?: (id: UUID) => void
   onMarkerClick?: (key: UUID) => void
   onClickLocate: () => void
 }
@@ -57,6 +59,7 @@ export const Map = ({
   clickedListing,
   hasDrawingMode = false,
   drawing = [],
+  closeModalAfterToggleFavorite = false,
   onMapLoad = noop,
   onRemoveDrawing = noop,
   onDrawingComplete,
@@ -67,6 +70,7 @@ export const Map = ({
   onMarkerClick = noop,
   onMapClick = noop,
   onClickToggleMap = noop,
+  onToggleFavorite = noop,
   onClickLocate
 }: Props) => {
   const mapIsLoaded = useRef<boolean>(false)
@@ -83,10 +87,10 @@ export const Map = ({
   const drawingManagerRef = useRef<any>()
   const drawingRef = useRef<any>()
 
-  const closeListingModal = () => {
+  const closeListingModal = useCallback(() => {
     setListingModalState({ id: '', isOpen: false })
     onCloseListingModal()
-  }
+  }, [onCloseListingModal])
 
   const openListingModal = (id: UUID) => {
     setListingModalState({ id, isOpen: true })
@@ -149,6 +153,19 @@ export const Map = ({
     onRemoveDrawing()
     drawingRef?.current?.setMap(null)
   }
+
+  const handleToggleFavorite = useCallback(() => {
+    onToggleFavorite(listingModalState.id)
+
+    if (closeModalAfterToggleFavorite) {
+      closeListingModal()
+    }
+  }, [
+    closeListingModal,
+    closeModalAfterToggleFavorite,
+    listingModalState.id,
+    onToggleFavorite
+  ])
 
   const cancelDrawingMode = () => {
     setDrawingMode(false)
@@ -281,6 +298,7 @@ export const Map = ({
         isWidget={isWidget}
         listingId={listingModalState.id}
         closeHandler={closeListingModal}
+        onToggleFavorite={handleToggleFavorite}
       />
     </>
   )
