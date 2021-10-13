@@ -242,6 +242,11 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(changeListingHoverState(hover ? id : null))
   }
 
+  const onStartDrawingMode = (id: UUID, hover: boolean) => {
+    dispatch(changeListingHoverState(null))
+    dispatch(changeListingClickedState(null))
+  }
+
   const onOpenListingModal = (id: UUID) => {
     if (!isWidget) {
       window.history.pushState({}, '', `/dashboard/properties/${id}`)
@@ -306,6 +311,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   isWidget={isWidget}
                   hasDrawingMode
                   drawing={state.search.drawing}
+                  onStartDrawingMode={onStartDrawingMode}
                   onDrawingComplete={onDrawingComplete}
                   onRemoveDrawing={onRemoveDrawing}
                   onChange={onMapChange}

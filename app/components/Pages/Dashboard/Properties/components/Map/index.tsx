@@ -33,6 +33,7 @@ interface Props {
   drawing?: ICoord[]
   onMapLoad?: (map: google.maps.Map) => void
   onDrawingComplete?: (points: ICoord[]) => void
+  onStartDrawingMode?: () => void
   onRemoveDrawing?: () => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
@@ -61,6 +62,7 @@ export const Map = ({
   drawing = [],
   closeModalAfterToggleFavorite = false,
   onMapLoad = noop,
+  onStartDrawingMode = noop,
   onRemoveDrawing = noop,
   onDrawingComplete,
   onChange,
@@ -167,6 +169,11 @@ export const Map = ({
     onToggleFavorite
   ])
 
+  const handleStartDrawingMode = () => {
+    onStartDrawingMode()
+    setDrawingMode(true)
+  }
+
   const cancelDrawingMode = () => {
     setDrawingMode(false)
 
@@ -225,7 +232,7 @@ export const Map = ({
               right={10}
               startIcon={<SvgIcon size={muiIconSizes.small} path={mdiPencil} />}
               tooltip="Define an area for searching"
-              onClick={() => setDrawingMode(true)}
+              onClick={handleStartDrawingMode}
             >
               Draw Area
             </GoogleMapsButton>
