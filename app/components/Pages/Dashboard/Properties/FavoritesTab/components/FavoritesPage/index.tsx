@@ -246,6 +246,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
                   onToggleFavorite={onToggleFavorite}
+                  closeModalAfterToggleFavorite
                   onMapLoad={onMapLoad}
                 />
               </Grid>
