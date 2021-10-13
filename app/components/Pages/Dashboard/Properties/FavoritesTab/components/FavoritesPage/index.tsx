@@ -28,7 +28,8 @@ import { SortString, ViewType } from '../../../types'
 import {
   setMapLocation,
   changeListingHoverState,
-  changeListingClickedState
+  changeListingClickedState,
+  toggleListingFavoriteState
 } from '../../context/actions'
 import useFavoritesContext from '../../hooks/useFavoritesContext'
 import { Results } from '../Results'
@@ -160,6 +161,10 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     dispatch(changeListingHoverState(hover ? id : null))
   }
 
+  const onToggleFavorite = (id: UUID) => {
+    dispatch(toggleListingFavoriteState(id))
+  }
+
   const onOpenListingModal = (id: UUID) => {
     if (!isWidget) {
       window.history.pushState({}, '', `/dashboard/properties/favorites/${id}`)
@@ -240,6 +245,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   listings={state.result.listings}
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
+                  onToggleFavorite={onToggleFavorite}
                   onMapLoad={onMapLoad}
                 />
               </Grid>
