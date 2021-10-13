@@ -242,7 +242,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(changeListingHoverState(hover ? id : null))
   }
 
-  const onStartDrawingMode = (id: UUID, hover: boolean) => {
+  const onStartDrawingMode = () => {
     dispatch(changeListingHoverState(null))
     dispatch(changeListingClickedState(null))
   }
