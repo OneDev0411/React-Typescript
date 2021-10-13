@@ -1,10 +1,11 @@
-import React from 'react'
-
-import { makeStyles, Theme } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
-import Grid from '@material-ui/core/Grid'
-import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
+import {
+  makeStyles,
+  Theme,
+  Box,
+  Grid,
+  Tooltip,
+  Typography
+} from '@material-ui/core'
 import {
   mdiBedKingOutline,
   mdiShower,
@@ -38,6 +39,9 @@ interface Props {
 function MainFeatures({ listing }: Props) {
   const classes = useStyles()
   const property = listing.property
+
+  const isLand = property.property_type === 'Lots & Acreage'
+
   const bedroom = property.bedroom_count
   const bathrooms = property.bathroom_count
   const squareFeet = Math.floor(
@@ -45,6 +49,21 @@ function MainFeatures({ listing }: Props) {
   )
   const priceSqft = squareFeet > 0 ? Math.round(listing.price / squareFeet) : 0
   const lotSize = property.lot_size_area
+
+  // We don't have bath or bed counts for land, so we'll just show the property type
+  if (isLand) {
+    return (
+      <Grid container>
+        <Grid item xs={12}>
+          <Box mb={3}>
+            <Typography className={classes.label} variant="h5">
+              Land
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
+    )
+  }
 
   return (
     <Grid container>
