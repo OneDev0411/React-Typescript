@@ -78,7 +78,7 @@ const useStyles = makeStyles(
       }
     },
     popover: {
-      zIndex: theme.zIndex.modal
+      zIndex: theme.zIndex.modal - 2
     }
   }),
   { name: 'Maker' }
