@@ -1,7 +1,7 @@
 declare interface ISuperCampaignInput {
   subject: string
   description: string
-  template: UUID
+  template_instance: UUID
   due_at: number
   recipients: ISuperCampaignRecipientInput[]
 }

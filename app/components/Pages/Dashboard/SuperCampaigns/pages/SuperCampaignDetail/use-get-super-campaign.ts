@@ -5,8 +5,10 @@ import getSuperCampaign from '@app/models/super-campaign/get-super-campaign'
 
 interface UseGetSuperCampaign {
   isLoading: boolean
-  superCampaign: Nullable<ISuperCampaign>
-  setSuperCampaign: Dispatch<SetStateAction<Nullable<ISuperCampaign>>>
+  superCampaign: Nullable<ISuperCampaign<'template_instance'>>
+  setSuperCampaign: Dispatch<
+    SetStateAction<Nullable<ISuperCampaign<'template_instance'>>>
+  >
 }
 
 export function useGetSuperCampaign(
@@ -17,7 +19,7 @@ export function useGetSuperCampaign(
     data: superCampaign,
     setData: setSuperCampaign,
     isLoading
-  } = useAsync<Nullable<ISuperCampaign>>({
+  } = useAsync<Nullable<ISuperCampaign<'template_instance'>>>({
     data: null,
     status: 'pending'
   })
