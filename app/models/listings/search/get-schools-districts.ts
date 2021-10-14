@@ -1,8 +1,10 @@
 import Fetch from '../../../services/fetch'
 
-const getSchoolsDistricts = async query => {
+export async function getSchoolsDistricts(
+  query: string
+): Promise<{ options: ISchoolsDistrict[] }> {
   if (!query || query.length < 4) {
-    return Promise.resolve(() => ({ options: [] }))
+    return Promise.resolve({ options: [] as ISchoolsDistrict[] })
   }
 
   try {
@@ -17,7 +19,7 @@ const getSchoolsDistricts = async query => {
 
     return { options }
   } catch (error) {
-    // console.log(error.message)
+    return Promise.resolve({ options: [] as ISchoolsDistrict[] })
   }
 }
 

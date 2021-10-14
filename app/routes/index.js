@@ -256,6 +256,60 @@ const AsyncMLSSinglePage = Load({
 })
 
 /* ==================================== */
+//  Properties
+/* ==================================== */
+
+const AsyncPropertiesLayout = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties' /* webpackChunkName: "properties" */
+      )
+  }),
+  [ACL.BETA]
+)
+
+const AsyncPropertiesSearch = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/ExploreTab' /* webpackChunkName: "properties_search" */
+      )
+  }),
+  [ACL.BETA]
+)
+
+const AsyncPropertiesSavedSearch = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/SavedSearchTab' /* webpackChunkName: "properties_alerts" */
+      )
+  }),
+  [ACL.BETA]
+)
+
+const AsyncPropertiesFavorites = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/FavoritesTab' /* webpackChunkName: "properties_fav" */
+      )
+  }),
+  [ACL.BETA]
+)
+
+const AsyncPropertiesSinglePage = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Properties/ListingPage' /* webpackChunkName: "properties_list_single" */
+      )
+  }),
+  [ACL.BETA]
+)
+
+/* ==================================== */
 //  Agent Network
 /* ==================================== */
 
@@ -1004,6 +1058,20 @@ export default (
         </Route>
 
         <Route path="/dashboard/mls/:id" component={AsyncMLSSinglePage} />
+
+        <Route path="/dashboard/properties" component={AsyncPropertiesLayout}>
+          <IndexRoute component={AsyncPropertiesSearch} />
+          <Route path="favorites" component={AsyncPropertiesFavorites} />
+          <Route
+            path="saved-searches/:id"
+            component={AsyncPropertiesSavedSearch}
+          />
+        </Route>
+
+        <Route
+          path="/dashboard/properties/:id"
+          component={AsyncPropertiesSinglePage}
+        />
 
         <Route path="recents(/:roomId)">
           <IndexRoute component={AsyncRecents} />

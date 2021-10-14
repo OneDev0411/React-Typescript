@@ -31,6 +31,20 @@ declare interface AlertFilters {
   postal_codes?: Nullable<unknown[]>
   search?: Nullable<string>
   limit?: Nullable<number>
+
+  architectural_styles?: Nullable<IArchitecturalStyle[]>
+  school_districts?: Nullable<string[]>
+  elementary_schools?: Nullable<string[]>
+  high_schools?: Nullable<string[]>
+  middle_schools?: Nullable<string[]>
+  junior_high_schools?: Nullable<string[]>
+  senior_high_schools?: Nullable<string[]>
+  primary_schools?: Nullable<string[]>
+  intermediate_schools?: Nullable<string[]>
+  minimum_parking_spaces?: Nullable<number>
+  mls_areas?: Nullable<Array<Array[number]>>
+  counties?: Nullable<string[]>
+  subdivisions?: Nullable<string[]>
 }
 
 declare interface AlertFiltersWithRadiusAndCenter extends AlertFilters {

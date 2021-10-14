@@ -14,6 +14,7 @@ import {
 import { useSelector } from 'react-redux'
 
 import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
+import { noop } from '@app/utils/helpers.js'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
@@ -140,9 +141,15 @@ interface Props {
   id: UUID
   isWidget?: boolean
   onClose?: () => void
+  onToggleFavorite?: () => void
 }
 
-function ListingDetails({ id, isWidget = false, onClose }: Props) {
+function ListingDetails({
+  id,
+  isWidget = false,
+  onClose,
+  onToggleFavorite = noop
+}: Props) {
   const classes = useStyles()
   const theme = useTheme()
   const user = useSelector(selectUserUnsafe)
@@ -186,6 +193,7 @@ function ListingDetails({ id, isWidget = false, onClose }: Props) {
           listing={listing}
           handleShare={openShareModal}
           handleClose={onClose}
+          onToggleFavorite={onToggleFavorite}
         />
       </div>
       <Box className={classes.heroWrapper}>

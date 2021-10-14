@@ -6,8 +6,10 @@ import {
   loadGoogleAPIScript,
   unloadGoogleAPIScript
 } from '@app/utils/google-api'
+import { prependHTTPSIfNeeded } from '@app/utils/url'
 import config from 'config'
 
+import { getYouTubeVideoId, youtubeSearch, youtubeVideos } from './helpers'
 import { YouTubeVideoResource } from './types'
 
 interface UseSearchYouTube {
@@ -42,24 +44,24 @@ export function useSearchYouTube(): UseSearchYouTube {
     }
   }, [safeSetIsReady, isReady])
 
-  const searchYouTube = useCallback(
-    (term: string) =>
-      new Promise<YouTubeVideoResource[]>((resolve, reject) => {
-        if (!isReady) {
-          resolve([])
+  const searchYouTube = useCallback<
+    (term: string) => Promise<YouTubeVideoResource[]>
+  >(
+    (term: string) => {
+      if (!isReady) {
+        return Promise.resolve([])
+      }
 
-          return
-        }
+      const termWithHTTPSPrefix = prependHTTPSIfNeeded(term)
 
-        gapi.client.youtube.search
-          .list({
-            part: ['snippet'],
-            type: ['video'],
-            maxResults: 30,
-            q: term
-          })
-          .then(response => resolve(response.result.items ?? []), reject)
-      }),
+      const videoId = getYouTubeVideoId(termWithHTTPSPrefix)
+
+      if (videoId) {
+        return youtubeVideos(videoId)
+      }
+
+      return youtubeSearch(term)
+    },
     [isReady]
   )
 
