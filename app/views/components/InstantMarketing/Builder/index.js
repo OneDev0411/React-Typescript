@@ -1270,6 +1270,20 @@ class Builder extends React.Component {
       : saveButton
   }
 
+  get templateInstanceData() {
+    // TODO: ask Emil about saving the listing separately
+    // Do we need something like this?
+    const listingsFromListing = this.props.templateData.listing
+      ? [this.props.templateData.listing.id]
+      : undefined
+
+    return {
+      contacts: this.props.templateData.contacts,
+      listings: this.props.templateData.listings ?? listingsFromListing,
+      deals: this.props.templateData.deals
+    }
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1524,9 +1538,11 @@ class Builder extends React.Component {
                 <AdminContinueButton
                   onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
+                  template={this.selectedTemplate}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  templateInstanceData={this.templateInstanceData}
                   // hasAddToMarketingCenter={this.shouldShowSaveAsTemplateButton}
                   hasAddToMarketingCenter={false} // TODO: Ask Ali about having the `Add to marketing` issue
-                  templateId={this.selectedTemplate.id}
                 />
               )}
 
