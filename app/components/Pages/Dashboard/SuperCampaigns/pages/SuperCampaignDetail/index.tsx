@@ -7,6 +7,8 @@ import { useTitle } from 'react-use'
 import TabContentSwitch from '@app/views/components/TabContentSwitch'
 import PageLayout from 'components/GlobalPageLayout'
 
+import { SuperCampaignDetailProvider } from '../../components/SuperCampaignDetailProvider'
+import SuperCampaignOverview from '../../components/SuperCampaignOverview'
 import { superCampaignDetailTabs } from '../../constants'
 
 import SuperCampaignDetailLoading from './SuperCampaignDetailLoading'
@@ -30,7 +32,8 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
 
   const tab = params.tab || superCampaignDetailTabs.Overview
 
-  const { isLoading, superCampaign } = useGetSuperCampaign(superCampaignId)
+  const { isLoading, superCampaign, setSuperCampaign } =
+    useGetSuperCampaign(superCampaignId)
 
   return (
     <PageLayout>
@@ -46,14 +49,19 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
         {isLoading || !superCampaign ? (
           <SuperCampaignDetailLoading />
         ) : (
-          <TabContentSwitch.Container value={tab}>
-            <TabContentSwitch.Item value={superCampaignDetailTabs.Overview}>
-              Overview
-            </TabContentSwitch.Item>
-            <TabContentSwitch.Item value={superCampaignDetailTabs.Results}>
-              Results
-            </TabContentSwitch.Item>
-          </TabContentSwitch.Container>
+          <SuperCampaignDetailProvider
+            superCampaign={superCampaign}
+            setSuperCampaign={setSuperCampaign}
+          >
+            <TabContentSwitch.Container value={tab}>
+              <TabContentSwitch.Item value={superCampaignDetailTabs.Overview}>
+                <SuperCampaignOverview />
+              </TabContentSwitch.Item>
+              <TabContentSwitch.Item value={superCampaignDetailTabs.Results}>
+                Results
+              </TabContentSwitch.Item>
+            </TabContentSwitch.Container>
+          </SuperCampaignDetailProvider>
         )}
       </PageLayout.Main>
     </PageLayout>
