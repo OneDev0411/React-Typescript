@@ -7,13 +7,15 @@ type BrandedUser = IUser & {
 export function convertUserAgentToRole(
   user: BrandedUser
 ): Partial<IDealFormRole> {
+  const agents = user.agents || []
+
   return {
-    agent: user.agent,
+    agents,
     brand: user.brand_id,
     legal_first_name: user.first_name || '',
     legal_last_name: user.last_name || '',
-    phone_number: user.phone_number || user.agent?.work_phone,
-    company_title: user.agent?.office ? user.agent?.office.name : '',
+    phone_number: user.phone_number || agents[0]?.work_phone,
+    company_title: agents[0]?.office ? agents[0]?.office.name : '',
     email: user.email
   }
 }

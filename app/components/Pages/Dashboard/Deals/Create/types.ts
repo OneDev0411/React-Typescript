@@ -13,7 +13,7 @@ export type Address = {
 export type IDealFormRole = IDealRole & {
   id: number | string
   brand?: UUID | null
-  agent: Nullable<IAgent>
+  agents: Nullable<IAgent[]>
   contact?: IContact
   current_address: Address | string | null
 }

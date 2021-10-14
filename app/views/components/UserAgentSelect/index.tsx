@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 
+import { TextMiddleTruncate } from '../TextMiddleTruncate'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -82,7 +84,10 @@ export function UserAgentSelect({ agents, defaultAgent, onChange }: Props) {
               <Typography variant="body2">{agent.mls}</Typography>
 
               <Typography variant="body2" color="textSecondary">
-                {agent.mlsid} . {agent.office?.name}
+                {agent.mlsid} {' . '}
+                {agent.office?.name && (
+                  <TextMiddleTruncate text={agent.office.name} maxLength={20} />
+                )}
               </Typography>
             </Box>
           </Box>
