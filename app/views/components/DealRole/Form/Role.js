@@ -223,7 +223,7 @@ export function RoleForm(props) {
         </Grid>
       )}
 
-      {agents?.length > 0 && (
+      {agents?.length > 1 && (
         <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
