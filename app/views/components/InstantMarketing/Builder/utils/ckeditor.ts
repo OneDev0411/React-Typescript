@@ -89,24 +89,24 @@ export async function attachCKEditor(
       placeholder: {
         items: [
           {
-            value: 'user.first_name',
-            label: "User's First Name"
+            value: 'sender.first_name',
+            label: "Sender's First Name"
           },
           {
-            value: 'user.last_name',
-            label: "User's Last Name"
+            value: 'sender.last_name',
+            label: "Sender's Last Name"
           },
           {
-            value: 'user.display_name',
-            label: "User's Display Name"
+            value: 'sender.display_name',
+            label: "Sender's Display Name"
           },
           {
-            value: 'user.email',
-            label: "User's Email"
+            value: 'sender.email',
+            label: "Sender's Email"
           },
           {
-            value: 'user.phone_number',
-            label: "User's Phone Number"
+            value: 'sender.phone_number',
+            label: "Sender's Phone Number"
           },
           {
             value: 'recipient.first_name',
