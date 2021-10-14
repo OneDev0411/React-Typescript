@@ -44,7 +44,7 @@ export async function attachCKEditor(
 
     // CKEditor Options
     options: {
-      extraPlugins: 'placeholder_select',
+      extraPlugins: 'placeholder',
       colorButton_colors: colors.map(color => color.replace('#', '')).join(','),
       line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
       contentsCss: getFontFamiliesCSSFiles(fontFamilies),
@@ -84,72 +84,51 @@ export async function attachCKEditor(
           'EmojiPanel'
         ],
         '/',
-        ['placeholder_select']
+        ['CreatePlaceholder']
       ],
-      placeholder_select: {
-        placeholders: [
+      placeholder: {
+        items: [
           {
-            title: 'User',
-            items: [
-              {
-                value: 'user.first_name',
-                label: 'First Name',
-                fallback: "User's First Name"
-              },
-              {
-                value: 'user.last_name',
-                label: 'Last Name',
-                fallback: "User's Last Name"
-              },
-              {
-                value: 'user.display_name',
-                label: 'Display Name',
-                fallback: "User's Display Name"
-              },
-              {
-                value: 'user.email',
-                label: 'Email',
-                fallback: "User's Email"
-              },
-              {
-                value: 'user.phone_number',
-                label: 'Phone Number',
-                fallback: "User's Phone Number"
-              }
-            ]
+            value: 'user.first_name',
+            label: "User's First Name"
           },
           {
-            title: 'Recipient',
-            items: [
-              {
-                value: 'recipient.first_name',
-                label: 'First Name',
-                fallback: "Recipient's First Name"
-              },
-              {
-                value: 'recipient.last_name',
-                label: 'Last Name',
-                fallback: "Recipient's Last Name"
-              },
-              {
-                value: 'recipient.display_name',
-                label: 'Display Name',
-                fallback: "Recipient's Display Name"
-              },
-              {
-                value: 'recipient.email',
-                label: 'Email',
-                fallback: "Recipient's Email"
-              },
-              {
-                value: 'recipient.phone_number',
-                label: 'Phone Number',
-                fallback: "Recipient's Phone Number"
-              }
-            ]
+            value: 'user.last_name',
+            label: "User's Last Name"
+          },
+          {
+            value: 'user.display_name',
+            label: "User's Display Name"
+          },
+          {
+            value: 'user.email',
+            label: "User's Email"
+          },
+          {
+            value: 'user.phone_number',
+            label: "User's Phone Number"
+          },
+          {
+            value: 'recipient.first_name',
+            label: "Recipient's First Name"
+          },
+          {
+            value: 'recipient.last_name',
+            label: "Recipient's Last Name"
+          },
+          {
+            value: 'recipient.display_name',
+            label: "Recipient's Display Name"
+          },
+          {
+            value: 'recipient.email',
+            label: "Recipient's Email"
+          },
+          {
+            value: 'recipient.phone_number',
+            label: "Recipient's Phone Number"
           }
-        ],
-        format: ' {{%placeholder% or "%fallback%"}} '
+        ]
       }
     }
   }

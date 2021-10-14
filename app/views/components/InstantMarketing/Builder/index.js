@@ -305,13 +305,7 @@ class Builder extends React.Component {
       return []
     }
 
-    return [
-      'quicktable',
-      'tableresize',
-      'tabletools',
-      'table',
-      'placeholder_select'
-    ]
+    return ['quicktable', 'tableresize', 'tabletools', 'table', 'placeholder']
   }
 
   loadCKEditorRTE = async () => {
