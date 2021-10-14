@@ -12,11 +12,19 @@ import cn from 'classnames'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
+    root: {
+      '& $row:not(:last-child)': {
+        marginBottom: theme.spacing(1)
+      }
+    },
     row: {
       borderRadius: theme.shape.borderRadius,
       border: `1px solid ${theme.palette.action.disabledBackground}`,
-      marginBottom: theme.spacing(1),
-      padding: theme.spacing(1.5)
+      padding: theme.spacing(0.5, 1.5),
+      cursor: 'pointer',
+      '&.selected': {
+        backgroundColor: theme.palette.grey['100']
+      }
     },
     status: {
       display: 'inline-block',
@@ -55,21 +63,20 @@ export function UserAgentSelect({ agents, defaultAgent, onChange }: Props) {
   }
 
   return (
-    <Box>
+    <Box className={classes.root} width="100%">
       {agents.map(agent => (
         <Box
+          key={agent.id}
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          className={classes.row}
-          key={agent.id}
+          className={cn(classes.row, {
+            selected: selectedAgent === agent.id
+          })}
+          onClick={() => handleSelectAgent(agent)}
         >
           <Box display="flex" alignItems="center">
-            <Radio
-              color="primary"
-              checked={selectedAgent === agent.id}
-              onClick={() => handleSelectAgent(agent)}
-            />
+            <Radio color="primary" checked={selectedAgent === agent.id} />
 
             <Box ml={2}>
               <Typography variant="body2">{agent.mls}</Typography>

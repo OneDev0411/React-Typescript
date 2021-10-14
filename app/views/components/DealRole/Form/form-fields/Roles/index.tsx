@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'

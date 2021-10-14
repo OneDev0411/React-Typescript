@@ -88,14 +88,15 @@ export class RoleAgentIntegration extends React.Component {
     )
   }
 
-  onSelectAgent = agents => {
-    const { agent: user, contacts: relatedContacts = [] } = agents[0]
+  onSelectAgent = data => {
+    const user = data[0].agent
+    const relatedContacts = data[0].contacts
     const shouldSetBrand = this.getShouldSelectRoleFromAgentsList()
 
     let newState
 
-    const { agent, first_name, last_name, email, phone_number } = user
-    const { office, work_phone } = agent || {}
+    const { agents, first_name, last_name, email, phone_number } = user
+    const { office, work_phone } = agents[0] || {}
 
     /**
      * if there is no related contact for this agent:
@@ -104,7 +105,7 @@ export class RoleAgentIntegration extends React.Component {
     if (relatedContacts.length === 0) {
       newState = {
         role: {
-          agent,
+          agents,
           email,
           brand: shouldSetBrand ? user.brand_id : null,
           legal_last_name: last_name,
@@ -129,7 +130,7 @@ export class RoleAgentIntegration extends React.Component {
       if (user.id === this.props.user.id) {
         role = {
           ...role,
-          agent: user.agent,
+          agents: user.agents,
           legal_first_name: user.first_name || role.legal_first_name,
           legal_last_name: user.last_name || role.legal_last_name
         }
