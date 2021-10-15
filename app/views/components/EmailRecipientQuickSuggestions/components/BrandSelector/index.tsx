@@ -4,7 +4,8 @@ import { Button } from '@material-ui/core'
 
 import {
   NodeRenderer,
-  BrandSelectorDrawer
+  // BrandSelectorDrawer,
+  MultiSelectionBrandSelectorDrawer
 } from '@app/views/components/BrandSelector'
 
 import { Brand } from './components/Brand'
@@ -48,7 +49,7 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
       <Button size="small" onClick={hanldeOpenDrawer}>
         Our Agents
       </Button>
-      <BrandSelectorDrawer
+      <MultiSelectionBrandSelectorDrawer
         open={isOpen}
         /*
         we set the drawer width to the 43rem manually bacause in our email drawer we set this
@@ -56,9 +57,11 @@ export function BrandSelector({ onSelect, currentRecipients = [] }: Props) {
         */
         width="43rem"
         onClose={hanldeCloseDrawer}
-        brandSelectorProps={{
-          nodeRenderer: renderBrandNode
-        }}
+        brandSelectorProps={
+          {
+            // nodeRenderer: renderBrandNode
+          }
+        }
       />
     </>
   )
