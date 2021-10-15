@@ -29,7 +29,7 @@ declare interface IMarketingTemplateInstance
   template: IMarketingTemplate
   contacts: Nullable<IContact[]>
   deals: Nullable<IDeal[]>
-  listings: Nullable<IListings[]>
+  listings: Nullable<IListing[]>
 }
 
 declare interface ITemplateAsset extends IModel<'template_asset'> {

@@ -1,7 +1,8 @@
 declare interface ISuperCampaignInput {
-  subject: string
-  description: string
-  template_instance: UUID
-  due_at: number
-  recipients: ISuperCampaignRecipientInput[]
+  due_at?: number
+  subject?: string
+  description?: string
+  template_instance?: UUID
+  tags?: string[]
+  eligible_brands?: UUID[]
 }
