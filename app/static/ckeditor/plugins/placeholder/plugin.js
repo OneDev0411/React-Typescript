@@ -40,12 +40,20 @@
 
         downcast() {
           // eslint-disable-next-line no-undef
-          return new CKEDITOR.htmlParser.text(`[[${this.data.name}]]`)
+          return new CKEDITOR.htmlParser.text(
+            `[[${this.data.name} or "${this.data.fallback}"]]`
+          )
         },
 
         init() {
           // Note that placeholder markup characters are stripped for the name.
-          this.setData('name', this.element.getText().slice(2, -2))
+          const [name, fallback = ''] = this.element
+            .getText()
+            .slice(2, -2)
+            .split(' or ')
+
+          this.setData('name', name)
+          this.setData('fallback', fallback.split('"').join(''))
         },
 
         data() {
