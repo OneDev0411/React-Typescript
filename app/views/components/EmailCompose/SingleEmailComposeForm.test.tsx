@@ -13,7 +13,7 @@ import { TestBed } from '../../../../tests/unit/TestBed'
 
 import { SingleEmailComposeForm } from './SingleEmailComposeForm'
 
-const role = roleObj as IDealRole
+const role = roleObj as any
 // IDeal type is not in compliance with what is actually stored in redux.
 // TODO: fix `as unknown` when deal types are improved
 const deal = (dealObj as unknown) as IDeal
