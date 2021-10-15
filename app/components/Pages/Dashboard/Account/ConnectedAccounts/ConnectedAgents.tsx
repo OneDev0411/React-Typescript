@@ -1,8 +1,9 @@
+import { useState } from 'react'
+
 import {
   Box,
   Grid,
   ListItem,
-  ListItemSecondaryAction,
   Theme,
   makeStyles,
   Typography,
@@ -11,7 +12,7 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 
-import { DangerButton } from 'components/Button/DangerButton'
+import { AddMlsAgent } from 'components/AddMlsAgent'
 
 interface Props {
   user: IUser
@@ -40,6 +41,7 @@ const useStyles = makeStyles(
 
 export default function ConnectedAgents({ user, onDelete }: Props) {
   const classes = useStyles()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   return (
     <>
@@ -52,15 +54,24 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
       </Box>
 
       <Box my={2}>
-        <Button href="" variant="outlined" size="small" onClick={() => {}}>
+        <Button
+          href=""
+          variant="outlined"
+          size="small"
+          onClick={() => setIsDialogOpen(true)}
+        >
           Add MLS Account
         </Button>
       </Box>
 
-      {user.agents?.map(agent => (
-        <ListItem key={agent.id} className={classes.bordered} button>
+      {user.agents?.map((agent, key) => (
+        <ListItem
+          key={`${agent.id}-${key}`}
+          className={classes.bordered}
+          button
+        >
           <Grid container>
-            <Grid item xs={4}>
+            <Grid item xs={5}>
               <Box
                 display="flex"
                 alignItems="center"
@@ -73,7 +84,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
                   </Typography>
                 </div>
 
-                <Box mr={2}>
+                <Box mr={3}>
                   <Chip
                     variant="outlined"
                     size="small"
@@ -88,7 +99,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
               </Box>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <Box display="flex" alignItems="center" height="100%">
                 <Typography variant="body2" color="textSecondary">
                   Email:&nbsp;
@@ -108,15 +119,14 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
                 </Typography>
               </Box>
             </Grid>
-
-            <ListItemSecondaryAction>
-              <DangerButton variant="outlined" size="small" onClick={onDelete}>
-                Delete
-              </DangerButton>
-            </ListItemSecondaryAction>
           </Grid>
         </ListItem>
       ))}
+
+      <AddMlsAgent
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </>
   )
 }
