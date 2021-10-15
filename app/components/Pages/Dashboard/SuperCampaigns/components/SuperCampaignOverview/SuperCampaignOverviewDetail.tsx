@@ -1,12 +1,16 @@
+import { useState } from 'react'
+
 import { Card, makeStyles } from '@material-ui/core'
 import format from 'date-fns/format'
 
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
+import SuperCampaignDrawer from '../SuperCampaignDrawer'
+import { SuperCampaignFormValues } from '../SuperCampaignDrawer/types'
+import SuperCampaignSectionHeader from '../SuperCampaignSectionHeader'
+import SuperCampaignTemplate from '../SuperCampaignTemplate/SuperCampaignTemplate'
 
 import SuperCampaignOverviewDetailLabelValue from './SuperCampaignOverviewDetailLabelValue'
-import SuperCampaignOverviewDetailTemplate from './SuperCampaignOverviewDetailTemplate'
-import SuperCampaignOverviewDetailTitle from './SuperCampaignOverviewDetailTitle'
 
 const useStyles = makeStyles(
   theme => ({
@@ -27,24 +31,34 @@ const useStyles = makeStyles(
 function SuperCampaignOverviewDetail() {
   const classes = useStyles()
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
-  const { saveSuperCampaign } = useSaveSuperCampaign(
+  const { isSaving, saveSuperCampaign } = useSaveSuperCampaign(
     superCampaign,
     setSuperCampaign
   )
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const handleEdit = () => console.log('handleEdit')
+  const openDrawer = () => setIsDrawerOpen(true)
+
+  const closeDrawer = () => setIsDrawerOpen(false)
 
   const handleTemplateChange = (template: IMarketingTemplateInstance) =>
     saveSuperCampaign({ template_instance: template })
 
+  const handleSuperCampaignConfirm = async (
+    formValues: SuperCampaignFormValues
+  ) => {
+    await saveSuperCampaign(formValues)
+    closeDrawer()
+  }
+
   return (
     <Card className={classes.root} variant="outlined">
       <div className={classes.section}>
-        <SuperCampaignOverviewDetailTitle
+        <SuperCampaignSectionHeader
           className={classes.title}
           title="Details"
           actionLabel="Edit"
-          onActionClick={handleEdit}
+          onActionClick={openDrawer}
         />
         <SuperCampaignOverviewDetailLabelValue
           className={classes.labelValue}
@@ -70,10 +84,18 @@ function SuperCampaignOverviewDetail() {
           }
         />
       </div>
-      <SuperCampaignOverviewDetailTemplate
+      <SuperCampaignTemplate
         titleClassName={classes.title}
+        titleVariant="body1"
         template={superCampaign.template_instance}
         onTemplateChange={handleTemplateChange}
+      />
+      <SuperCampaignDrawer
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        formInitialValues={superCampaign}
+        onConfirm={handleSuperCampaignConfirm}
+        actionButtonsDisabled={isSaving}
       />
     </Card>
   )

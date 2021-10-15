@@ -5,15 +5,15 @@ import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
-interface SuperCampaignOverviewDetailTemplatePreviewProps {
+interface SuperCampaignTemplatePreviewProps {
   template: IMarketingTemplateInstance
   onClick: () => void
 }
 
-function SuperCampaignOverviewDetailTemplatePreview({
+function SuperCampaignTemplatePreview({
   template,
   onClick
-}: SuperCampaignOverviewDetailTemplatePreviewProps) {
+}: SuperCampaignTemplatePreviewProps) {
   const user = useSelector(selectUser)
   const brand = useSelector(selectActiveBrand)
 
@@ -33,4 +33,4 @@ function SuperCampaignOverviewDetailTemplatePreview({
   )
 }
 
-export default SuperCampaignOverviewDetailTemplatePreview
+export default SuperCampaignTemplatePreview

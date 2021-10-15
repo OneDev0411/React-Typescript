@@ -1,4 +1,10 @@
-import { Box, Typography, Button, makeStyles } from '@material-ui/core'
+import {
+  Box,
+  Typography,
+  Button,
+  makeStyles,
+  TypographyProps
+} from '@material-ui/core'
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,27 +17,29 @@ const useStyles = makeStyles(
       minWidth: 'unset'
     }
   }),
-  { name: 'SuperCampaignOverviewDetailTitle' }
+  { name: 'SuperCampaignSectionHeader' }
 )
 
-interface SuperCampaignOverviewDetailTitleProps {
-  className: string
+export interface SuperCampaignSectionHeaderProps {
+  className?: string
   title: string
+  titleVariant?: TypographyProps['variant']
   actionLabel: string
   onActionClick: () => void
 }
 
-function SuperCampaignOverviewDetailTitle({
+function SuperCampaignSectionHeader({
   className,
   title,
+  titleVariant,
   actionLabel,
   onActionClick
-}: SuperCampaignOverviewDetailTitleProps) {
+}: SuperCampaignSectionHeaderProps) {
   const classes = useStyles()
 
   return (
     <Box className={className} display="flex" alignItems="center">
-      <Typography className={classes.title} variant="body1">
+      <Typography className={classes.title} variant={titleVariant}>
         {title}
       </Typography>
       <Button
@@ -47,4 +55,4 @@ function SuperCampaignOverviewDetailTitle({
   )
 }
 
-export default SuperCampaignOverviewDetailTitle
+export default SuperCampaignSectionHeader
