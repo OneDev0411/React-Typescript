@@ -35,7 +35,7 @@ export default function ConnectedAccount({ user, onDisconnect }: Props) {
   const classes = useStyles()
 
   return (
-    <>
+    <Box mb={4}>
       <Box mb={1} mt={6}>
         <Typography variant="subtitle1">Docusign</Typography>
       </Box>
@@ -69,6 +69,6 @@ export default function ConnectedAccount({ user, onDisconnect }: Props) {
           </ListItemSecondaryAction>
         </Grid>
       </ListItem>
-    </>
+    </Box>
   )
 }

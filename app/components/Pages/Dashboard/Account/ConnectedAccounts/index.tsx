@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { List, Box, Paper, Grid, Typography } from '@material-ui/core'
+import { List, Box, Typography } from '@material-ui/core'
 import { connect, useSelector } from 'react-redux'
 import { useTitle } from 'react-use'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
@@ -60,25 +60,19 @@ function ConnectedAccounts({
     )
   }
 
-  console.log('>>>>', user, (user.agents || []).length > 0)
-
   return (
     <>
-      <Box marginBottom={1.5}>
-        <Paper variant="outlined">
-          <Box paddingX={3} paddingY={2}>
-            <Grid container alignItems="center">
-              <Grid item xs>
-                <Typography variant="subtitle2">
-                  Connect other accounts
-                </Typography>
-              </Grid>
-              <Grid item>
-                <ConnectAccountButtons size="medium" />
-              </Grid>
-            </Grid>
-          </Box>
-        </Paper>
+      <Box>
+        <Box mb={4}>
+          <Typography variant="subtitle1">Accounts</Typography>
+
+          <Typography variant="body2" color="textSecondary">
+            Connect your Google or Outlook account and see your emails, contacts
+            and calendar events right from inside Rechat.
+          </Typography>
+        </Box>
+
+        <ConnectAccountButtons size="medium" />
       </Box>
 
       <List disablePadding>
@@ -101,6 +95,10 @@ function ConnectedAccounts({
         ))}
       </List>
 
+      {(user.agents || []).length > 0 && (
+        <ConnectedAgents user={user} onDelete={() => {}} />
+      )}
+
       {user.docusign && (
         <ConnectedDocusign
           user={user}
@@ -114,10 +112,6 @@ function ConnectedAccounts({
             })
           }}
         />
-      )}
-
-      {(user.agents || []).length > 0 && (
-        <ConnectedAgents user={user} onDelete={() => {}} />
       )}
     </>
   )
