@@ -72,9 +72,7 @@ export function AddMlsAgent({ isOpen, onClose }: Props) {
         </Box>
       </DialogTitle>
 
-      <Box mb={1}>
-        <Divider />
-      </Box>
+      <Divider />
 
       <DialogContent>
         <Box display="flex" flexDirection="column" my={2}>

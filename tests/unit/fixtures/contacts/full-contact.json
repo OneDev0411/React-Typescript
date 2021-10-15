@@ -25,39 +25,41 @@
     "phone_confirmed": true,
     "access_token": "",
     "refresh_token": "",
-    "agent": {
-      "id": "a42184f2-43e4-11e9-b00c-0a95998482ac",
-      "email": "esparipour+agent@gmail.com",
-      "mlsid": "RECHATMOJTABA",
-      "fax": null,
-      "full_name": "",
-      "first_name": "Mojtaba",
-      "last_name": "Esparipour",
-      "middle_name": "",
-      "phone_number": "(999) 999-9999",
-      "phone_numbers": [
-        "(999) 999-9999"
-      ],
-      "nar_number": "",
-      "office_mui": 9999999,
-      "status": "Active",
-      "office_mlsid": "RCHT01",
-      "work_phone": "(999) 999-9999",
-      "generational_name": null,
-      "matrix_unique_id": 111222,
-      "updated_at": 1552298489.67755,
-      "deleted_at": null,
-      "created_at": 1552298489.67755,
-      "type": "agent",
-      "user_id": "7b5d2618-43e2-11e9-ad8c-0a95998482ac",
-      "office_id": "b8b6d6cc-6166-11e7-bbc4-0242ac110003",
-      "profile_image_url": null,
-      "cover_image_url": null,
-      "secret_questions": [
-        "(999) XXX-XX99",
-        "esparixxxxxxxxxxxxxxil.com"
-      ]
-    },
+    "agent": [
+      {
+        "id": "a42184f2-43e4-11e9-b00c-0a95998482ac",
+        "email": "esparipour+agent@gmail.com",
+        "mlsid": "RECHATMOJTABA",
+        "fax": null,
+        "full_name": "",
+        "first_name": "Mojtaba",
+        "last_name": "Esparipour",
+        "middle_name": "",
+        "phone_number": "(999) 999-9999",
+        "phone_numbers": [
+          "(999) 999-9999"
+        ],
+        "nar_number": "",
+        "office_mui": 9999999,
+        "status": "Active",
+        "office_mlsid": "RCHT01",
+        "work_phone": "(999) 999-9999",
+        "generational_name": null,
+        "matrix_unique_id": 111222,
+        "updated_at": 1552298489.67755,
+        "deleted_at": null,
+        "created_at": 1552298489.67755,
+        "type": "agent",
+        "user_id": "7b5d2618-43e2-11e9-ad8c-0a95998482ac",
+        "office_id": "b8b6d6cc-6166-11e7-bbc4-0242ac110003",
+        "profile_image_url": null,
+        "cover_image_url": null,
+        "secret_questions": [
+          "(999) XXX-XX99",
+          "esparixxxxxxxxxxxxxxil.com"
+        ]
+      }
+    ],
     "is_shadow": false,
     "personal_room": "7b5e13fc-43e2-11e9-ad8d-0a95998482ac",
     "brand": null,
