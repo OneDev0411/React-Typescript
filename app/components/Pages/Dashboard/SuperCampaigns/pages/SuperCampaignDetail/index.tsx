@@ -37,7 +37,9 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
 
   return (
     <PageLayout>
-      <PageLayout.Header title={superCampaign?.subject || 'Page Title'} />
+      <PageLayout.Header
+        title={superCampaign?.subject || 'Untitled Campaign'}
+      />
       {/* TODO: use a better title for default case */}
       <PageLayout.Main>
         <Box mb={4}>
