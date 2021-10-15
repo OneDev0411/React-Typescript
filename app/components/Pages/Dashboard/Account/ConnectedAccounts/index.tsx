@@ -95,9 +95,7 @@ function ConnectedAccounts({
         ))}
       </List>
 
-      {(user.agents || []).length > 0 && (
-        <ConnectedAgents user={user} onDelete={() => {}} />
-      )}
+      <ConnectedAgents user={user} onDelete={() => {}} />
 
       {user.docusign && (
         <ConnectedDocusign
