@@ -1271,8 +1271,6 @@ class Builder extends React.Component {
   }
 
   get templateInstanceData() {
-    // TODO: ask Emil about saving the listing separately
-    // Do we need something like this?
     const listingsFromListing = this.props.templateData.listing
       ? [this.props.templateData.listing.id]
       : undefined

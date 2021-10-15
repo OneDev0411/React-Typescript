@@ -63,7 +63,6 @@ function AdminContinueButton({
         subject: '',
         description: '',
         due_at: new Date().getTime(),
-        recipients: [],
         template_instance: templateInstance.id
       })
 
