@@ -25,7 +25,7 @@
     "phone_confirmed": true,
     "access_token": "",
     "refresh_token": "",
-    "agent": [
+    "agents": [
       {
         "id": "a42184f2-43e4-11e9-b00c-0a95998482ac",
         "email": "esparipour+agent@gmail.com",
@@ -2163,7 +2163,7 @@
       "user_type": "Client",
       "deleted_at": null,
       "phone_confirmed": false,
-      "agent": null,
+      "agents": null,
       "is_shadow": false,
       "personal_room": "aa216626-4338-11e9-9bd9-0a95998482ac",
       "brand": null,
