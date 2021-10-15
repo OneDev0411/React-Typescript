@@ -6,12 +6,12 @@ import { selectUser } from '@app/selectors/user'
 import TemplateThumbnail from 'components/TemplateThumbnail'
 
 interface SuperCampaignOverviewDetailTemplatePreviewProps {
-  templateInstance: IMarketingTemplateInstance
+  template: IMarketingTemplateInstance
   onClick: () => void
 }
 
 function SuperCampaignOverviewDetailTemplatePreview({
-  templateInstance,
+  template,
   onClick
 }: SuperCampaignOverviewDetailTemplatePreviewProps) {
   const user = useSelector(selectUser)
@@ -20,13 +20,12 @@ function SuperCampaignOverviewDetailTemplatePreview({
   return (
     <Card variant="outlined">
       <TemplateThumbnail
-        template={templateInstance}
+        template={template}
         brand={brand}
         data={{
           user,
-          listing: templateInstance.listings?.[0],
-          contact: templateInstance.contacts?.[0]
-          // TODO: ask Emil about the listings, deals, and contacts
+          listing: template.listings?.[0],
+          contact: template.contacts?.[0]
         }}
         onClick={onClick}
       />

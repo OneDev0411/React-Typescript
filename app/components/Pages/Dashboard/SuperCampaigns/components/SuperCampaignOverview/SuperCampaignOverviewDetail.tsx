@@ -1,10 +1,11 @@
 import { Card, makeStyles } from '@material-ui/core'
 import format from 'date-fns/format'
 
+import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import SuperCampaignOverviewDetailLabelValue from './SuperCampaignOverviewDetailLabelValue'
-import SuperCampaignOverviewDetailTemplatePreview from './SuperCampaignOverviewDetailTemplatePreview'
+import SuperCampaignOverviewDetailTemplate from './SuperCampaignOverviewDetailTemplate'
 import SuperCampaignOverviewDetailTitle from './SuperCampaignOverviewDetailTitle'
 
 const useStyles = makeStyles(
@@ -25,13 +26,16 @@ const useStyles = makeStyles(
 
 function SuperCampaignOverviewDetail() {
   const classes = useStyles()
-  const { superCampaign } = useSuperCampaignDetail()
-
-  console.log('superCampaign', superCampaign)
+  const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
+  const { saveSuperCampaign } = useSaveSuperCampaign(
+    superCampaign,
+    setSuperCampaign
+  )
 
   const handleEdit = () => console.log('handleEdit')
 
-  const handleChangeTemplate = () => console.log('handleChangeTemplate')
+  const handleTemplateChange = (template: IMarketingTemplateInstance) =>
+    saveSuperCampaign({ template_instance: template })
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -52,25 +56,24 @@ function SuperCampaignOverviewDetail() {
           label="Description"
           value={superCampaign.description || '-'}
         />
+        {}
         <SuperCampaignOverviewDetailLabelValue
           className={classes.labelValue}
           label="Scheduled for"
-          value={format(
-            superCampaign.due_at,
-            "EEEE, LLLL dd, yyyy 'at' HH:mmaaa"
-          )}
+          value={
+            superCampaign.due_at
+              ? format(
+                  superCampaign.due_at,
+                  "EEEE, LLLL dd, yyyy 'at' HH:mmaaa"
+                )
+              : '-'
+          }
         />
       </div>
-
-      <SuperCampaignOverviewDetailTitle
-        className={classes.title}
-        title="Template"
-        actionLabel="Change"
-        onActionClick={handleChangeTemplate}
-      />
-      <SuperCampaignOverviewDetailTemplatePreview
-        templateInstance={superCampaign.template_instance}
-        onClick={handleChangeTemplate}
+      <SuperCampaignOverviewDetailTemplate
+        titleClassName={classes.title}
+        template={superCampaign.template_instance}
+        onTemplateChange={handleTemplateChange}
       />
     </Card>
   )
