@@ -70,6 +70,13 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
       }
     }
 
+    case 'CLEAR_LISTING_UI_STATES': {
+      return {
+        ...state,
+        listingStates: { click: null, hover: null }
+      }
+    }
+
     case 'TOGGLE_LISTING_FAVORITE_STATE': {
       const { id } = action.payload
 
