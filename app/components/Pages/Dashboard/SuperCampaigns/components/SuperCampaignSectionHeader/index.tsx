@@ -14,7 +14,8 @@ const useStyles = makeStyles(
     },
     action: {
       flex: '0 0',
-      minWidth: 'unset'
+      minWidth: 'unset',
+      whiteSpace: 'nowrap'
     }
   }),
   { name: 'SuperCampaignSectionHeader' }

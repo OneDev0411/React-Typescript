@@ -49,7 +49,7 @@ function SuperCampaignTemplate({
         className={titleClassName}
         title="Template"
         titleVariant={titleVariant}
-        actionLabel="Edit"
+        actionLabel="Edit Template"
         onActionClick={openEditor}
       />
       <SuperCampaignTemplatePreview template={template} onClick={openEditor} />

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 
 import { FormTextField } from '@app/views/components/final-form-fields'
@@ -9,6 +9,13 @@ import OverlayDrawer from 'components/OverlayDrawer'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
 import { SuperCampaignFormValues } from './types'
+
+const useStyles = makeStyles(
+  theme => ({
+    templateTitle: { marginBottom: theme.spacing(0.5) }
+  }),
+  { name: 'SuperCampaignDrawer' }
+)
 
 interface SuperCampaignDrawerProps {
   isOpen: boolean
@@ -25,6 +32,7 @@ function SuperCampaignDrawer({
   onConfirm,
   actionButtonsDisabled
 }: SuperCampaignDrawerProps) {
+  const classes = useStyles()
   const formRef = useRef<HTMLFormElement>(null)
 
   // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#via-documentgetelementbyid
@@ -83,6 +91,7 @@ function SuperCampaignDrawer({
                       name="template_instance"
                       render={({ input }) => (
                         <SuperCampaignTemplate
+                          titleClassName={classes.templateTitle}
                           titleVariant="caption"
                           template={input.value}
                           onTemplateChange={template =>
