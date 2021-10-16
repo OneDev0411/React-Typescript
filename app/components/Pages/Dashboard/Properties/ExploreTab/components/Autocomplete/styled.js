@@ -1,3 +1,4 @@
+import zIndex from '@material-ui/core/styles/zIndex'
 import styled from 'styled-components'
 
 import Card from '../../../../../../../views/components/Card'
@@ -6,12 +7,14 @@ import { grey, borderColor } from '../../../../../../../views/utils/colors'
 export const SearchContainer = styled.div`
   position: relative;
 `
+
+// TODO: refactor this styled-component and use MUI theme
 export const ListContainer = styled(Card)`
   width: 100%;
   position: absolute;
   top: calc(100% + 0.5rem);
   left: 0;
-  z-index: 4;
+  z-index: ${zIndex.modal - 1};
 `
 
 export const ListTitle = styled.div`
