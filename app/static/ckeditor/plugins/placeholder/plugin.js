@@ -36,6 +36,7 @@
         pathName: lang.pathName,
         // We need to have wrapping element, otherwise there are issues in
         // add dialog.
+        draggable: false,
         template: '<span class="cke_placeholder">[[]]</span>',
 
         downcast() {
