@@ -59,3 +59,16 @@ start_review:
   except:
     - master
   needs: []
+
+stop_review:
+  stage: review
+  script:
+    - chmod u+x ./dokku-stop.sh
+    - ./dokku-stop.sh
+  environment:
+    name: review/$CI_BUILD_REF_NAME
+  only:
+    - merge_requests
+  except:
+    - master
+  needs: []
