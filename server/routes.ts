@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 
+import branchLinkRoute from './app/routes/branch-link'
 import contactsExportOutlookRoute from './app/routes/contacts/export-outlook'
 import corsRoute from './app/routes/cors'
 import dealDocusignLoginRoute from './app/routes/deal/docusign-login'
@@ -83,6 +84,17 @@ router.post(
  * open house routes.
  */
 router.get('/openhouse/:id/:brand/register', openHouseRoute)
+
+/**
+ * branch-link route.
+ */
+router.post(
+  '/api/branch/link/*',
+  bodyParser.urlencoded({
+    limit: '10mb'
+  }),
+  branchLinkRoute
+)
 
 /**
  * utility routes
