@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Box } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import { RouteComponentProps } from 'react-router'
 import { useTitle } from 'react-use'
 
@@ -17,6 +17,16 @@ import SuperCampaignDetailTabs, {
 } from './SuperCampaignDetailTabs'
 import { useGetSuperCampaign } from './use-get-super-campaign'
 
+const useStyles = makeStyles(
+  theme => ({
+    body: {
+      backgroundColor: theme.palette.grey[50],
+      minHeight: 'calc(100vh - 144px)' // The header height is 144px
+    }
+  }),
+  { name: 'SuperCampaignDetail' }
+)
+
 type SuperCampaignDetailProps = RouteComponentProps<
   {
     tab?: SuperCampaignDetailTabsProps['value']
@@ -28,6 +38,8 @@ type SuperCampaignDetailProps = RouteComponentProps<
 function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
   useTitle('Super Campaign Detail | Rechat')
 
+  const classes = useStyles()
+
   const superCampaignId = params.id
 
   const tab = params.tab || superCampaignDetailTabs.Overview
@@ -36,35 +48,38 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
     useGetSuperCampaign(superCampaignId)
 
   return (
-    <PageLayout>
-      <PageLayout.Header
-        title={superCampaign?.subject || 'Untitled Campaign'}
-      />
-      {/* TODO: use a better title for default case */}
-      <PageLayout.Main>
-        <Box mb={4}>
+    <PageLayout gutter={0}>
+      <Box px={4} pt={4}>
+        <PageLayout.Header
+          title={isLoading ? '' : superCampaign?.subject || 'Untitled Campaign'}
+        />
+        <Box mt={2}>
           <SuperCampaignDetailTabs
             value={tab}
             superCampaignId={superCampaignId}
           />
         </Box>
-        {isLoading || !superCampaign ? (
-          <SuperCampaignDetailLoading />
-        ) : (
-          <SuperCampaignDetailProvider
-            superCampaign={superCampaign}
-            setSuperCampaign={setSuperCampaign}
-          >
-            <TabContentSwitch.Container value={tab}>
-              <TabContentSwitch.Item value={superCampaignDetailTabs.Overview}>
-                <SuperCampaignOverview />
-              </TabContentSwitch.Item>
-              <TabContentSwitch.Item value={superCampaignDetailTabs.Results}>
-                Results
-              </TabContentSwitch.Item>
-            </TabContentSwitch.Container>
-          </SuperCampaignDetailProvider>
-        )}
+      </Box>
+      <PageLayout.Main mt={0} pt={2} pb={4} className={classes.body}>
+        <Box px={4}>
+          {isLoading || !superCampaign ? (
+            <SuperCampaignDetailLoading />
+          ) : (
+            <SuperCampaignDetailProvider
+              superCampaign={superCampaign}
+              setSuperCampaign={setSuperCampaign}
+            >
+              <TabContentSwitch.Container value={tab}>
+                <TabContentSwitch.Item value={superCampaignDetailTabs.Overview}>
+                  <SuperCampaignOverview />
+                </TabContentSwitch.Item>
+                <TabContentSwitch.Item value={superCampaignDetailTabs.Results}>
+                  Results
+                </TabContentSwitch.Item>
+              </TabContentSwitch.Container>
+            </SuperCampaignDetailProvider>
+          )}
+        </Box>
       </PageLayout.Main>
     </PageLayout>
   )
