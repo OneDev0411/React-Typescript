@@ -3,7 +3,11 @@ import { Typography, makeStyles } from '@material-ui/core'
 const useStyles = makeStyles(
   theme => ({
     label: { color: theme.palette.grey[500] },
-    value: { color: theme.palette.grey[900] }
+    value: {
+      color: theme.palette.grey[900],
+      whiteSpace: 'pre-line',
+      wordBreak: 'break-word'
+    }
   }),
   { name: 'SuperCampaignOverviewDetailLabelValue' }
 )
