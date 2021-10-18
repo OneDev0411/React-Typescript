@@ -9,6 +9,7 @@ import SuperCampaignTemplatePreview from './SuperCampaignTemplatePreview'
 
 interface SuperCampaignTemplateProps
   extends Pick<SuperCampaignSectionHeaderProps, 'titleVariant'> {
+  className?: string
   titleClassName?: string
   template: IMarketingTemplateInstance
   onTemplateChange: (
@@ -19,6 +20,7 @@ interface SuperCampaignTemplateProps
 }
 
 function SuperCampaignTemplate({
+  className,
   titleClassName,
   titleVariant,
   template,
@@ -44,7 +46,7 @@ function SuperCampaignTemplate({
   }
 
   return (
-    <>
+    <div className={className}>
       <SuperCampaignSectionHeader
         className={titleClassName}
         title="Template"
@@ -60,7 +62,7 @@ function SuperCampaignTemplate({
           onTemplateSave={handleEditorSave}
         />
       )}
-    </>
+    </div>
   )
 }
 

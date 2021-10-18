@@ -4,6 +4,7 @@ import { Box, Button, makeStyles } from '@material-ui/core'
 import { Form, Field } from 'react-final-form'
 
 import { FormTextField } from '@app/views/components/final-form-fields'
+import FormDateTimeField from '@app/views/components/final-form-fields/FormDateTimeField'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
@@ -12,7 +13,9 @@ import { SuperCampaignFormValues } from './types'
 
 const useStyles = makeStyles(
   theme => ({
-    templateTitle: { marginBottom: theme.spacing(0.5) }
+    templateTitle: { marginBottom: theme.spacing(0.5) },
+    description: { minHeight: theme.spacing(11) },
+    template: { marginTop: theme.spacing(3) }
   }),
   { name: 'SuperCampaignDrawer' }
 )
@@ -80,17 +83,18 @@ function SuperCampaignDrawer({
                       label="Description"
                       multiline
                       helperText="Only agents who are eligible to participate in this campaign will see this."
-                      // TODO: fix helper issue
+                      minRows={3}
                     />
-                    <FormTextField
+                    <FormDateTimeField
                       name="due_at"
-                      label="Schedule a day and time"
-                      type="date"
+                      label="Schedule"
+                      mode="timestamp"
                     />
                     <Field
                       name="template_instance"
                       render={({ input }) => (
                         <SuperCampaignTemplate
+                          className={classes.template}
                           titleClassName={classes.templateTitle}
                           titleVariant="caption"
                           template={input.value}
