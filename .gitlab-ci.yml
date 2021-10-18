@@ -74,3 +74,4 @@ stop_review:
   except:
     - master
   needs: []
+  action: stop
