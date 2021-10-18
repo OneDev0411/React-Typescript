@@ -36,7 +36,8 @@ import {
   setMapLocation,
   changeSort,
   changeListingHoverState,
-  changeListingClickedState
+  changeListingClickedState,
+  clearListingUiStates
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -162,7 +163,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const toggleMapShown = () => setMapIsShown(mapIsShown => !mapIsShown)
+  const toggleMapShown = () => {
+    dispatch(clearListingUiStates())
+    setMapIsShown(mapIsShown => !mapIsShown)
+  }
 
   const onSelectPlace = (
     center: ICoord,
@@ -243,8 +247,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   }
 
   const onStartDrawingMode = () => {
-    dispatch(changeListingHoverState(null))
-    dispatch(changeListingClickedState(null))
+    dispatch(clearListingUiStates())
   }
 
   const onOpenListingModal = (id: UUID) => {
