@@ -10,8 +10,6 @@ import TimeCard from './components/TimeCard'
 import { TimeRange } from './types'
 import { getTimeSlotsInRange } from './utils'
 
-SwiperCore.use([Navigation, A11y, Mousewheel])
-
 const useStyles = makeStyles(
   theme => ({
     slide: {
@@ -98,6 +96,7 @@ export default function TimeSlotPicker({
   return (
     <div className={classes.container}>
       <Swiper
+        modules={[Navigation, A11y, Mousewheel]}
         freeMode
         mousewheel
         navigation={{
