@@ -68,10 +68,10 @@ stop_review:
     - ./dokku-stop.sh
   environment:
     name: review/$CI_BUILD_REF_NAME
+    action: stop
   when: manual
   only:
     - merge_requests
   except:
     - master
   needs: []
-  action: stop
