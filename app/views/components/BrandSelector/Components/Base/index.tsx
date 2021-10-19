@@ -38,7 +38,6 @@ const useStyles = makeStyles(
 
 export type NodeRenderer = {
   brand: IBrand
-  onNodeClick?: (brand?: IBrand) => void
 }
 
 export interface BaseBrandSelectorProps {
@@ -70,7 +69,7 @@ export function BaseBrandSelector({
       )
     }
 
-    return nodeRenderer({ brand, onNodeClick })
+    return nodeRenderer({ brand })
   }
 
   const renderTreeView = () => {
