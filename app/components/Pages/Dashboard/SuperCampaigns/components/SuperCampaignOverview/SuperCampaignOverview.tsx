@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core'
 
+import SuperCampaignEligibleParticipants from './SuperCampaignEligibleParticipants'
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
 function SuperCampaignOverview() {
@@ -9,7 +10,7 @@ function SuperCampaignOverview() {
         <SuperCampaignOverviewDetail />
       </Box>
       <Box flex="1" ml={2}>
-        right box
+        <SuperCampaignEligibleParticipants />
       </Box>
     </Box>
   )

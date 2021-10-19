@@ -11,6 +11,6 @@ declare interface ISuperCampaign<A extends ISuperCampaignAssociations = ''>
   template_instance: A extends 'template_instance'
     ? IMarketingTemplateInstance
     : UUID
-  tags?: string[]
-  eligible_brands: UUID[]
+  tags: Nullable<string[]>
+  eligible_brands: Nullable<UUID[]>
 }
