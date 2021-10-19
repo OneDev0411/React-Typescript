@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-import SuperCampaignSectionHeader, {
-  SuperCampaignSectionHeaderProps
-} from '../SuperCampaignSectionHeader'
+import SuperCampaignCardHeader, {
+  SuperCampaignCardHeaderProps
+} from '../SuperCampaignCardHeader'
 
 import SuperCampaignTemplateEditor from './SuperCampaignTemplateEditor'
 import SuperCampaignTemplatePreview from './SuperCampaignTemplatePreview'
 
 interface SuperCampaignTemplateProps
-  extends Pick<SuperCampaignSectionHeaderProps, 'titleVariant'> {
+  extends Pick<SuperCampaignCardHeaderProps, 'titleVariant'> {
   className?: string
   titleClassName?: string
   template: IMarketingTemplateInstance
@@ -47,7 +47,7 @@ function SuperCampaignTemplate({
 
   return (
     <div className={className}>
-      <SuperCampaignSectionHeader
+      <SuperCampaignCardHeader
         className={titleClassName}
         title="Template"
         titleVariant={titleVariant}

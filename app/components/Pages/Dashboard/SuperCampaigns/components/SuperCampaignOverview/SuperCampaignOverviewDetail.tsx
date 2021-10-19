@@ -1,20 +1,20 @@
 import { useState } from 'react'
 
-import { Card, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import format from 'date-fns/format'
 
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
+import SuperCampaignCard from '../SuperCampaignCard'
+import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 import SuperCampaignDrawer from '../SuperCampaignDrawer'
 import { SuperCampaignFormValues } from '../SuperCampaignDrawer/types'
-import SuperCampaignSectionHeader from '../SuperCampaignSectionHeader'
 import SuperCampaignTemplate from '../SuperCampaignTemplate/SuperCampaignTemplate'
 
 import SuperCampaignOverviewDetailLabelValue from './SuperCampaignOverviewDetailLabelValue'
 
 const useStyles = makeStyles(
   theme => ({
-    root: { padding: theme.spacing(2) },
     title: {
       marginRight: -5,
       marginBottom: theme.spacing(2)
@@ -52,9 +52,9 @@ function SuperCampaignOverviewDetail() {
   }
 
   return (
-    <Card className={classes.root} variant="outlined">
+    <SuperCampaignCard>
       <div className={classes.section}>
-        <SuperCampaignSectionHeader
+        <SuperCampaignCardHeader
           className={classes.title}
           title="Details"
           actionLabel="Edit"
@@ -97,7 +97,7 @@ function SuperCampaignOverviewDetail() {
         onConfirm={handleSuperCampaignConfirm}
         actionButtonsDisabled={isSaving}
       />
-    </Card>
+    </SuperCampaignCard>
   )
 }
 
