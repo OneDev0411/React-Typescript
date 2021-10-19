@@ -94,6 +94,11 @@ export function useChecklistsPage(rootBrandId: string | null) {
       task_type: 'GeneralComments'
     })
   }
+  const addSplitterTask = (checklist: IBrandChecklist) => {
+    return addTask(checklist, {
+      task_type: 'Splitter'
+    })
+  }
   const addFormTask = (checklist: IBrandChecklist, form: IDealForm) => {
     return addTask(checklist, {
       task_type: 'Form',
@@ -156,6 +161,7 @@ export function useChecklistsPage(rootBrandId: string | null) {
     addChecklists,
     addGenericTask,
     addGeneralCommentTask,
+    addSplitterTask,
     addFormTask,
     forms,
     formsError,

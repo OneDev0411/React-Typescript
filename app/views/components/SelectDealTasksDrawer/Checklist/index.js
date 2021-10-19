@@ -44,7 +44,11 @@ class Checklist extends React.Component {
         )}
 
         {this.props.tasks
-          .filter(task => this.getSearchFilter(task.title) === true)
+          .filter(
+            task =>
+              this.getSearchFilter(task.title) === true &&
+              ['Media', 'Splitter'].includes(task.task_type) === false
+          )
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
           .map((task, index) => (
             <Item

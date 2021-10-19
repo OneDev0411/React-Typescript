@@ -18,7 +18,7 @@ const role = roleObj as IDealRole
 // TODO: fix `as unknown` when deal types are improved
 const deal = (dealObj as unknown) as IDeal
 const checklists = keyBy(checklistsArray as IDealChecklist[], 'id')
-const tasks = keyBy<IDealTask>(tasksArray as IDealTask[], 'id')
+const tasks = keyBy<IDealTask>(tasksArray as any, 'id')
 
 jest.mock('models/email/create-email-campaign')
 jest.mock('models/contacts/search-contacts')
