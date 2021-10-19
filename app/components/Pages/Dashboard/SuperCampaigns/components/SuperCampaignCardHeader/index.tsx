@@ -18,24 +18,24 @@ const useStyles = makeStyles(
       whiteSpace: 'nowrap'
     }
   }),
-  { name: 'SuperCampaignSectionHeader' }
+  { name: 'SuperCampaignCardHeader' }
 )
 
-export interface SuperCampaignSectionHeaderProps {
+export interface SuperCampaignCardHeaderProps {
   className?: string
   title: string
   titleVariant?: TypographyProps['variant']
-  actionLabel: string
-  onActionClick: () => void
+  actionLabel?: string
+  onActionClick?: () => void
 }
 
-function SuperCampaignSectionHeader({
+function SuperCampaignCardHeader({
   className,
   title,
   titleVariant,
   actionLabel,
   onActionClick
-}: SuperCampaignSectionHeaderProps) {
+}: SuperCampaignCardHeaderProps) {
   const classes = useStyles()
 
   return (
@@ -43,17 +43,19 @@ function SuperCampaignSectionHeader({
       <Typography className={classes.title} variant={titleVariant}>
         {title}
       </Typography>
-      <Button
-        className={classes.action}
-        color="primary"
-        variant="text"
-        size="small"
-        onClick={onActionClick}
-      >
-        {actionLabel}
-      </Button>
+      {actionLabel && (
+        <Button
+          className={classes.action}
+          color="primary"
+          variant="text"
+          size="small"
+          onClick={onActionClick}
+        >
+          {actionLabel}
+        </Button>
+      )}
     </Box>
   )
 }
 
-export default SuperCampaignSectionHeader
+export default SuperCampaignCardHeader
