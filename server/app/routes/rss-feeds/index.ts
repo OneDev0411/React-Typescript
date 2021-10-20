@@ -5,7 +5,8 @@ import Parser from 'rss-parser'
 interface ContentMedia {
   $: {
     url: string
-    medium: string
+    medium?: string
+    type?: string
   }
 }
 
@@ -76,7 +77,9 @@ function getImageUrlFromContentMedia(
     return
   }
 
-  if (contentMedia.$?.medium?.indexOf('image') !== 0) {
+  const type = contentMedia.$?.type || contentMedia.$?.medium
+
+  if (type?.indexOf('image') !== 0) {
     return
   }
 
