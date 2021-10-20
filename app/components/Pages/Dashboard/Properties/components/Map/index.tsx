@@ -29,6 +29,11 @@ interface Props {
   hoverListing: Nullable<UUID>
   clickedListing: Nullable<UUID>
   hasDrawingMode?: boolean
+  /*
+   * on Favorite Tab: We should close modals after Toggle Favorite on it
+   * to avoid fix bug on multiple toggle
+   * https://gitlab.com/rechat/web/-/issues/5658#note_702445108
+   */
   closeModalAfterToggleFavorite?: boolean
   drawing?: ICoord[]
   onMapLoad?: (map: google.maps.Map) => void

@@ -236,6 +236,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  closeModalAfterToggleFavorite
                 />
               )}
             </>
