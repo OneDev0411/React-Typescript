@@ -49,6 +49,12 @@ interface Props {
   isWidget: boolean
   listingStates: IListingUIStates
   isScroling?: boolean
+  /*
+   * on Favorite Tab: We should close modals after Toggle Favorite on it
+   * to avoid fix bug on multiple toggle
+   * https://gitlab.com/rechat/web/-/issues/5708
+   */
+  closeModalAfterToggleFavorite?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleLike?: (id: UUID) => void
 }
@@ -142,6 +148,7 @@ export const TableView = ({
   isWidget,
   listingStates,
   isScroling = false,
+  closeModalAfterToggleFavorite = false,
   onChangeHoverState = noop,
   onToggleLike = noop
 }: Props) => {
@@ -178,7 +185,16 @@ export const TableView = ({
     if (selectedListingId) {
       onToggleLike(selectedListingId)
     }
-  }, [onToggleLike, selectedListingId])
+
+    if (closeModalAfterToggleFavorite) {
+      closeListingDetailsModal()
+    }
+  }, [
+    selectedListingId,
+    closeModalAfterToggleFavorite,
+    onToggleLike,
+    closeListingDetailsModal
+  ])
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
 

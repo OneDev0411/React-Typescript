@@ -246,8 +246,6 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
                   onToggleFavorite={onToggleFavorite}
-                  // close detail modal after toggle favorite
-                  // to avoid fix bug on multiple toggle
                   closeModalAfterToggleFavorite
                   onMapLoad={onMapLoad}
                 />
