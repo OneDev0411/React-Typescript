@@ -1,6 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
-import { Box, Divider } from '@material-ui/core'
+import { Box, Divider, TextField, Theme, useTheme } from '@material-ui/core'
+
+import { useMatchSorter } from '@app/hooks/use-match-sorter'
 
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 import { isFetchingSelectedTeam } from '../../../../../../../reducers/user'
@@ -18,12 +20,17 @@ interface Props {
 }
 
 export function TeamsList({ user }: Props) {
+  const theme = useTheme<Theme>()
+  const [searchValue, setSearchValue] = useState('')
   const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
     isSwitching: false,
     switchedTeamId: ''
   })
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
+
+  const userTeams = user?.teams || []
+  const teams = useMatchSorter(userTeams, searchValue, ['brand.name'])
 
   const onClickTeam = async (teamId: string) => {
     setSwitcherStatus({
@@ -33,7 +40,7 @@ export function TeamsList({ user }: Props) {
 
     await putUserSetting('user_filter', viewAs(user, true), teamId)
 
-    window.location.reload(true)
+    window.location.reload()
   }
 
   if (isFetchingSelectedTeam(user)) {
@@ -47,10 +54,27 @@ export function TeamsList({ user }: Props) {
     )
   }
 
-  if (user && user.teams && user.teams.length > 0) {
+  if (userTeams.length > 0) {
     return (
       <>
-        {user.teams.map(team => {
+        {userTeams.length > 5 && (
+          <Box my={1}>
+            <TextField
+              fullWidth
+              size="small"
+              value={searchValue}
+              onChange={e => setSearchValue(e.target.value)}
+              placeholder="Search Team..."
+              InputProps={{
+                style: {
+                  padding: theme.spacing(0.5, 3)
+                }
+              }}
+            />
+          </Box>
+        )}
+
+        {teams.map(team => {
           const teamId = team.brand.id
 
           return (
