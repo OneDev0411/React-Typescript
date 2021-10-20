@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import omit from 'lodash/omit'
 import Parser from 'rss-parser'
 
 interface ContentMedia {
@@ -33,7 +34,12 @@ export default async (req: Request, res: Response) => {
             resolve({
               ...result,
               items: result.items.map(item => ({
-                ...item,
+                ...omit(item, [
+                  'media:content',
+                  'content:encoded',
+                  'content:encodedSnippet',
+                  'contentSnippet'
+                ]),
                 content: removeHTMLTags(item.content ?? ''),
                 sourceIndex,
                 image:
