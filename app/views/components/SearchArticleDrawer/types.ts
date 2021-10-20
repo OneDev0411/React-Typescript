@@ -14,13 +14,13 @@ export interface RSSArticleMetadata extends ArticleMetadata {
   createdDate?: string
 }
 
-export type RSSFeed = Parser.Output<{ sourceIndex: number }>
-
 export interface RSSFeedItem extends Parser.Item {
   sourceIndex: number
   createdDate?: string
   image: Optional<string>
 }
+
+export type RSSFeed = Parser.Output<RSSFeedItem>
 
 export interface SearchArticleImageCache {
   setItem: (articleUrl: string, imageUrl: string) => void
