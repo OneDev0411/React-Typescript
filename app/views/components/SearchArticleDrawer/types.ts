@@ -19,6 +19,7 @@ export type RSSFeed = Parser.Output<{ sourceIndex: number }>
 export interface RSSFeedItem extends Parser.Item {
   sourceIndex: number
   createdDate?: string
+  image: Optional<string>
 }
 
 export interface SearchArticleImageCache {
@@ -30,4 +31,6 @@ export interface RSSSource {
   title: string
   icon: string
   url: string
+  useImage?: boolean
+  imageSanitizer?: (image: string) => string
 }
