@@ -1,12 +1,15 @@
 import { RSS_SOURCES } from './constants'
 import { RSSArticleMetadata, RSSFeedItem, RSSSource } from './types'
 
-function getRSSFeedItemImage(rssFeedItem: RSSFeedItem, source: RSSSource) {
-  if (!source.useImage) {
+function getRSSFeedItemImage(
+  rssFeedItem: RSSFeedItem,
+  source: RSSSource
+): Optional<string> {
+  if (!rssFeedItem.image) {
     return
   }
 
-  if (source.imageSanitizer && rssFeedItem.image) {
+  if (source.imageSanitizer) {
     return source.imageSanitizer(rssFeedItem.image)
   }
 
