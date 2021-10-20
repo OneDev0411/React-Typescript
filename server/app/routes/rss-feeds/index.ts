@@ -76,9 +76,9 @@ function getImageUrlFromContentMedia(
     return
   }
 
-  if (contentMedia.$.medium.indexOf('image') !== 0) {
+  if (contentMedia.$?.medium?.indexOf('image') !== 0) {
     return
   }
 
-  return contentMedia.$.url
+  return contentMedia.$?.url
 }
