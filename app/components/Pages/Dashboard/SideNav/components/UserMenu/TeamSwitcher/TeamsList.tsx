@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 
 import { Box, Divider, TextField, Theme, useTheme } from '@material-ui/core'
+import sort from 'lodash/sortBy'
 
 import { useMatchSorter } from '@app/hooks/use-match-sorter'
 
@@ -29,8 +30,19 @@ export function TeamsList({ user }: Props) {
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
 
-  const userTeams = user?.teams || []
-  const teams = useMatchSorter(userTeams, searchValue, ['brand.name'])
+  const userTeams = useMemo(() => user?.teams || [], [user?.teams])
+  const results = useMatchSorter(userTeams, searchValue, ['brand.name'])
+
+  /**
+   * sorting the teams based on the given search results.
+   */
+  const teams = useMemo(() => {
+    return sort(userTeams, team => {
+      const resultIndex = results.findIndex(({ id }) => id === team.id)
+
+      return resultIndex > -1 ? resultIndex : Infinity
+    })
+  }, [results, userTeams])
 
   const onClickTeam = async (teamId: string) => {
     setSwitcherStatus({
@@ -64,7 +76,7 @@ export function TeamsList({ user }: Props) {
               size="small"
               value={searchValue}
               onChange={e => setSearchValue(e.target.value)}
-              placeholder="Search Team..."
+              placeholder="Search by team name"
               InputProps={{
                 style: {
                   padding: theme.spacing(0.5, 3)
@@ -85,6 +97,13 @@ export function TeamsList({ user }: Props) {
               onClick={() => onClickTeam(teamId)}
               selected={teamId === activeTeamId}
               team={team}
+              style={{
+                opacity: searchValue
+                  ? results.some(({ id }) => id === team.id)
+                    ? 1
+                    : 0.5
+                  : 1
+              }}
             />
           )
         })}
