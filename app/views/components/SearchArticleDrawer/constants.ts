@@ -142,5 +142,10 @@ export const RSS_SOURCES: RSSSource[] = [
     icon: 'https://www.latimes.com/favicon-16x16.png',
     title: 'Los Angeles Times',
     url: 'https://www.latimes.com/lifestyle/rss2.0.xml#nt=0000016c-0bf3-d57d-afed-2fff84fd0000-1col-7030col1'
+  },
+  {
+    icon: 'https://www.briggsfreeman.com/blog/wp-content/uploads/2020/09/B_blog_logo_circle-200x200-1.jpg',
+    title: 'Briggs Freeman',
+    url: 'https://www.briggsfreeman.com/blog/feed/'
   }
 ]
