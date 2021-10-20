@@ -88,8 +88,8 @@ function ShowingStepRolePerson({
   const showingRoleAOrAn = getShowingRoleAOrAn(role.role).toLowerCase()
   const showingRole = getShowingRoleLabel(role.role).toLowerCase()
 
-  const handleSelectAgent = (agent: IUser) => {
-    onRoleEdit({ ...role, ...getPersonFromUser(agent) })
+  const handleSelectAgent = (userAgent: IUser, selectedAgent?: IAgent) => {
+    onRoleEdit({ ...role, ...getPersonFromUser(userAgent, selectedAgent) })
   }
 
   const handleNext = () => {

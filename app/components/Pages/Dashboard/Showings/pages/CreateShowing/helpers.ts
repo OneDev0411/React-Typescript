@@ -11,15 +11,27 @@ export function getPersonFromDealRole(role: IDealRole): ShowingRoleInputPerson {
   }
 }
 
-export function getPersonFromUser(user: IUser): ShowingRoleInputPerson {
-  return {
-    first_name: user.first_name ?? '',
-    last_name: user.last_name ?? '',
-    email: user.email,
-    phone_number: user.phone_number ?? '',
-    user: user.id,
-    brand: user.brand ?? ''
-  }
+export function getPersonFromUser(
+  user: IUser,
+  selectedAgent?: IAgent
+): ShowingRoleInputPerson {
+  return selectedAgent
+    ? {
+        first_name: selectedAgent.first_name ?? '',
+        last_name: selectedAgent.last_name ?? '',
+        email: selectedAgent.email,
+        phone_number: selectedAgent.phone_number ?? '',
+        user: user.id,
+        brand: user.brand ?? ''
+      }
+    : {
+        first_name: user.first_name ?? '',
+        last_name: user.last_name ?? '',
+        email: user.email,
+        phone_number: user.phone_number ?? '',
+        user: user.id,
+        brand: user.brand ?? ''
+      }
 }
 
 const validRoles: IShowingRoleType[] = [
