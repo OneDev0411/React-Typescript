@@ -1,6 +1,13 @@
 import { Request, Response } from 'express'
 import Parser from 'rss-parser'
 
+interface ContentMedia {
+  $: {
+    url: string
+    medium: string
+  }
+}
+
 const parser: Parser = new Parser({
   headers: {
     Accept:
@@ -8,7 +15,7 @@ const parser: Parser = new Parser({
   },
   timeout: 25000,
   customFields: {
-    item: ['createdDate']
+    item: ['createdDate', 'media:content']
   }
 })
 
@@ -29,13 +36,13 @@ export default async (req: Request, res: Response) => {
                 ...item,
                 content: removeHTMLTags(item.content ?? ''),
                 sourceIndex,
-                image: extractImageUrlFromContent(item.content ?? '')
+                image:
+                  getImageUrlFromContentMedia(item['media:content']) ||
+                  extractImageUrlFromContent(item.content ?? '')
               }))
             })
           })
-          .catch(error => {
-            resolve(null)
-          })
+          .catch(() => resolve(null))
       )
   )
 
@@ -52,6 +59,20 @@ function removeHTMLTags(input: string): string {
 
 const imageSrcRegex = /<img[^>]+src="([^"]+)"/
 
-function extractImageUrlFromContent(content: string) {
+function extractImageUrlFromContent(content: string): string | undefined {
   return content.match(imageSrcRegex)?.[1]
+}
+
+function getImageUrlFromContentMedia(
+  contentMedia: ContentMedia | undefined
+): string | undefined {
+  if (!contentMedia) {
+    return
+  }
+
+  if (contentMedia.$.medium.indexOf('image') !== 0) {
+    return
+  }
+
+  return contentMedia.$.url
 }

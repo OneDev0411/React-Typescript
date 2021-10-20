@@ -31,6 +31,5 @@ export interface RSSSource {
   title: string
   icon: string
   url: string
-  useImage?: boolean
   imageSanitizer?: (image: string) => string
 }
