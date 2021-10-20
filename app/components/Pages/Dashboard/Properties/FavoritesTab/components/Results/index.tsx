@@ -12,6 +12,7 @@ import {
   SortIndex,
   sortByIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+import { noop } from '@app/utils/helpers'
 import { normalizeListingLocation } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
@@ -88,6 +89,8 @@ interface Props {
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
   user: IUser
+  onOpenListingModal?: (id: UUID) => void
+  onCloseListingModal?: () => void
 }
 
 const sortListings = memoize(
@@ -119,7 +122,9 @@ export const Results = ({
   activeSort,
   onChangeSort,
   isWidget,
-  user
+  user,
+  onOpenListingModal = noop,
+  onCloseListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useFavoritesContext()
@@ -226,6 +231,8 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onOpenListingModal={onOpenListingModal}
+                  onCloseListingModal={onCloseListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -236,6 +243,8 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onOpenListingModal={onOpenListingModal}
+                  onCloseListingModal={onCloseListingModal}
                   closeModalAfterToggleFavorite
                 />
               )}

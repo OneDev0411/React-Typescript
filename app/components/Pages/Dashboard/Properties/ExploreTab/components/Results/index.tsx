@@ -8,6 +8,7 @@ import {
   SortString,
   SortIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+import { noop } from '@app/utils/helpers'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
@@ -82,6 +83,8 @@ interface Props {
   isWidget: boolean
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
+  onOpenListingModal?: (id: UUID) => void
+  onCloseListingModal?: () => void
 }
 
 export const Results = ({
@@ -91,7 +94,9 @@ export const Results = ({
   onToggleView,
   activeSort,
   onChangeSort,
-  isWidget
+  isWidget,
+  onOpenListingModal = noop,
+  onCloseListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useListingsContext()
@@ -186,6 +191,8 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onOpenListingModal={onOpenListingModal}
+                  onCloseListingModal={onCloseListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -196,6 +203,8 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onOpenListingModal={onOpenListingModal}
+                  onCloseListingModal={onCloseListingModal}
                 />
               )}
             </>

@@ -18,7 +18,7 @@ import { Map } from '../../../components/Map'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { bootstrapURLKeys } from '../../../constants'
+import { bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import {
   parseSortIndex,
   SORT_FIELD_DEFAULT,
@@ -116,7 +116,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const [mapIsShown, setMapIsShown] = useState(true)
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [viewType, setViewType] = useState<ViewType>(
-    (viewQueryParam as ViewType) || 'cards'
+    (viewQueryParam as ViewType) || DEFAULT_VIEW
   )
 
   const onChangeSort = (sort: SortString) => {
@@ -167,13 +167,21 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
 
   const onOpenListingModal = (id: UUID) => {
     if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/favorites/${id}`)
+      window.history.pushState({}, '', `/dashboard/properties/${id}`)
     }
   }
 
   const onCloseListingModal = () => {
     if (!isWidget) {
-      window.history.pushState({}, '', '/dashboard/properties/favorites')
+      // Inject view param to url
+      const viewStringParam =
+        viewType !== DEFAULT_VIEW ? `?view=${viewType}` : ''
+
+      window.history.pushState(
+        {},
+        '',
+        `/dashboard/properties/favorites${viewStringParam}`
+      )
     }
   }
 
@@ -261,6 +269,8 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
               activeSort={sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
+              onCloseListingModal={onCloseListingModal}
+              onOpenListingModal={onOpenListingModal}
               user={user}
             />
           </Grid>
