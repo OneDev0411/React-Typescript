@@ -1,6 +1,7 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+
 import * as Sentry from '@sentry/react'
+import ReactDOM from 'react-dom'
 
 import Provider from './provider'
 
