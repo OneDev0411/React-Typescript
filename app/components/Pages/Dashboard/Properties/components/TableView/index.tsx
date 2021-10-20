@@ -57,10 +57,11 @@ interface Props {
   closeModalAfterToggleFavorite?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleLike?: (id: UUID) => void
+  onOpenListingModal?: (id: UUID) => void
+  onCloseListingModal?: () => void
 }
 
 const CELL_FALLBACK = '--'
-const MLS_BASE_URL = '/dashboard/properties'
 
 interface TableColumnItem {
   header: string
@@ -143,14 +144,16 @@ const secondaryColumns: TableColumnItem[] = [
 ]
 
 export const TableView = ({
+  isWidget,
   listings,
   mapIsShown,
-  isWidget,
   listingStates,
   isScroling = false,
   closeModalAfterToggleFavorite = false,
   onChangeHoverState = noop,
-  onToggleLike = noop
+  onToggleLike = noop,
+  onOpenListingModal = noop,
+  onCloseListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -161,24 +164,18 @@ export const TableView = ({
     useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
-    if (!isWidget) {
-      window.history.replaceState({}, '', MLS_BASE_URL)
-    }
-
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
-  }, [isWidget])
+    onCloseListingModal()
+  }, [onCloseListingModal])
 
   const openListingDetailsModal = useCallback(
     (id: UUID) => {
-      if (!isWidget) {
-        window.history.replaceState({}, '', `${MLS_BASE_URL}/${id}`)
-      }
-
       setIsListingDetailsModalOpen(true)
       setSelectedListingId(id)
+      onOpenListingModal(id)
     },
-    [isWidget]
+    [onOpenListingModal]
   )
 
   const onToggleFavorite = useCallback(() => {
@@ -254,6 +251,7 @@ export const TableView = ({
       <ListingDetailsModal
         isOpen={isListingDetailsModalOpen}
         listingId={selectedListingId}
+        isWidget={isWidget}
         onToggleFavorite={onToggleFavorite}
         closeHandler={closeListingDetailsModal}
       />
