@@ -470,7 +470,7 @@ class ActionsButton extends React.Component<
         className={this.props.className}
         style={{
           ...(this.state.isMenuOpen && {
-            visibility: 'visible'
+            display: 'block'
           })
         }}
       >
@@ -482,11 +482,11 @@ class ActionsButton extends React.Component<
               width: '10.8rem' // TODO: needs refactor all styled components
             }
           }}
-          onIsOpenChange={isMenuOpen =>
+          onIsOpenChange={isMenuOpen => {
             this.setState({
               isMenuOpen
             })
-          }
+          }}
           renderDropdownButton={({ isActive, ...props }) => (
             <Container>
               <PrimaryAction
