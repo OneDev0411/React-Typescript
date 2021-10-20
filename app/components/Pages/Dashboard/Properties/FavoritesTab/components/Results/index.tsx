@@ -185,6 +185,9 @@ export const Results = ({
   )
 
   const handleToggleLike = useCallback((listingId: UUID) => {
+    // Close listing modal after toggle like to prevent multiple toggling issue
+    // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
+    onCloseListingModal()
     dispatch(toggleListingFavoriteState(listingId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
