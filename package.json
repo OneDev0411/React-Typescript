@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.3.5",
+  "version": "86.3.7",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -80,7 +80,7 @@
     "balloon-css": "^0.5.0",
     "body-parser": "^1.19.0",
     "bowser": "^2.0.0-alpha.4",
-    "branch-sdk": "^2.58.0",
+    "branch-sdk-rechat": "^2.59.1",
     "buffer": "^6.0.3",
     "calendar-link": "^2.1.1",
     "chromath": "^0.0.7",
@@ -165,7 +165,6 @@
     "nunjucks": "^3.2.3",
     "object-hash": "^2.0.3",
     "offline-js": "^0.7.19",
-    "optimize-css-assets-webpack-plugin": "^5.0.4",
     "papaparse": "^4.6.2",
     "parse-address": "^1.1.0",
     "parse-full-name": "^1.2.5",
@@ -255,7 +254,7 @@
     "throng": "^5.0.0",
     "timeago.js": "^3.0.2",
     "ts-node": "^9.1.1",
-    "tui-image-editor": "^3.15.0",
+    "tui-image-editor": "3.15.0",
     "underscore": "^1.12.1",
     "underscore.get": "^0.2.9",
     "unfurl.js": "^5.2.5",

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   Box,
@@ -17,7 +17,6 @@ import { InlineEditableString } from 'components/inline-editable-fields/InlineEd
 import SearchDrawer from 'components/SearchDrawer'
 import SplitButton from 'components/SplitButton'
 import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { ListItem as FormListItem } from 'deals/components/TaskCreate/styled'
 import { useDictionary } from 'hooks/use-dictionary'
 
 type Props = {
@@ -25,6 +24,7 @@ type Props = {
   setTerminable: (terminable: boolean) => void
   setDeactivatable: (terminable: boolean) => void
   addGenericTask: (checklist: IBrandChecklist) => void
+  addSplitterTask: (checklist: IBrandChecklist) => void
   addGeneralCommentTask: (checklist: IBrandChecklist) => void
   addFormTask: (checklist: IBrandChecklist, form: IDealForm) => void
   renameChecklist: (name: string) => void
@@ -47,9 +47,9 @@ const useChecklistHeaderStyles = makeStyles(
 
 const ItemRow = props => {
   return (
-    <FormListItem onClick={props.onClick}>
+    <ListItem button onClick={props.onClick}>
       <TextMiddleTruncate text={props.item.name} maxLength={70} />
-    </FormListItem>
+    </ListItem>
   )
 }
 
@@ -57,6 +57,7 @@ export function ChecklistHeader({
   addGeneralCommentTask,
   addGenericTask,
   addFormTask,
+  addSplitterTask,
   renameChecklist,
   checklist,
   forms,
@@ -139,6 +140,16 @@ export function ChecklistHeader({
               }}
             >
               Add Generic Task
+            </ListItem>
+            <ListItem
+              className={classes.splitMenuItem}
+              button
+              onClick={event => {
+                addSplitterTask(checklist)
+                closeMenu(event)
+              }}
+            >
+              Add Splitter
             </ListItem>
             {Array.isArray(checklist.tasks) &&
               checklist.tasks.every(

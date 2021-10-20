@@ -14,8 +14,10 @@ export const Tasks = ({
 }) => (
   <div>
     {tasks
-      .filter(task =>
-        task.title.toLowerCase().includes((filterValue || '').toLowerCase())
+      .filter(
+        task =>
+          ['Media', 'Splitter'].includes(task.task_type) === false &&
+          task.title.toLowerCase().includes((filterValue || '').toLowerCase())
       )
       .map((task, index) => (
         <ChecklistItem

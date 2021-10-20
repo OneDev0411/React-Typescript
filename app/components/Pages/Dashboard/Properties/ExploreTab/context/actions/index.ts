@@ -82,6 +82,11 @@ export const removeMapDrawing = () => ({
   payload: {}
 })
 
+export const clearListingUiStates = () => ({
+  type: 'CLEAR_LISTING_UI_STATES' as 'CLEAR_LISTING_UI_STATES',
+  payload: {}
+})
+
 export type Actions = ReturnType<
   | typeof setListings
   | typeof changeListingHoverState
@@ -94,4 +99,5 @@ export type Actions = ReturnType<
   | typeof setMapLocation
   | typeof setIsLoading
   | typeof removeMapDrawing
+  | typeof clearListingUiStates
 >

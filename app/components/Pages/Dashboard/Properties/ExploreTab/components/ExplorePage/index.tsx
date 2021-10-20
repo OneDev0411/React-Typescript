@@ -36,7 +36,8 @@ import {
   setMapLocation,
   changeSort,
   changeListingHoverState,
-  changeListingClickedState
+  changeListingClickedState,
+  clearListingUiStates
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -162,7 +163,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const toggleMapShown = () => setMapIsShown(mapIsShown => !mapIsShown)
+  const toggleMapShown = () => {
+    dispatch(clearListingUiStates())
+    setMapIsShown(mapIsShown => !mapIsShown)
+  }
 
   const onSelectPlace = (
     center: ICoord,
@@ -242,6 +246,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(changeListingHoverState(hover ? id : null))
   }
 
+  const onStartDrawingMode = () => {
+    dispatch(clearListingUiStates())
+  }
+
   const onOpenListingModal = (id: UUID) => {
     if (!isWidget) {
       window.history.pushState({}, '', `/dashboard/properties/${id}`)
@@ -306,6 +314,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   isWidget={isWidget}
                   hasDrawingMode
                   drawing={state.search.drawing}
+                  onStartDrawingMode={onStartDrawingMode}
                   onDrawingComplete={onDrawingComplete}
                   onRemoveDrawing={onRemoveDrawing}
                   onChange={onMapChange}

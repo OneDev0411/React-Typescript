@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -38,8 +38,8 @@ export function TaskNotifications({ task }: Props) {
   }
 
   return (
-    <div>
+    <Box ml={1}>
       <span className={classes.badge}>{new_notifications}</span>
-    </div>
+    </Box>
   )
 }
