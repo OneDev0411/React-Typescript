@@ -1,5 +1,8 @@
 import { RSSSource } from './types'
 
+const businessJournalsImageSanitizer = (image: string) =>
+  image.replace(/\*[^\.]+\./, '.')
+
 export const RSS_SOURCES: RSSSource[] = [
   // TODO: Bot protection
   // {
@@ -45,12 +48,16 @@ export const RSS_SOURCES: RSSSource[] = [
   {
     icon: 'https://assets.bizjournals.com/lib/img/favicon.ico',
     title: 'The Business Journals',
-    url: 'http://feeds.bizjournals.com/industry_20'
+    url: 'http://feeds.bizjournals.com/industry_20',
+    useImage: true,
+    imageSanitizer: businessJournalsImageSanitizer
   },
   {
     icon: 'https://assets.bizjournals.com/lib/img/favicon.ico',
     title: 'The Business Journals',
-    url: 'http://feeds.bizjournals.com/industry_21'
+    url: 'http://feeds.bizjournals.com/industry_21',
+    useImage: true,
+    imageSanitizer: businessJournalsImageSanitizer
   },
   // TODO: timeout issue
   // {

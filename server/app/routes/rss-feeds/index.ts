@@ -28,7 +28,8 @@ export default async (req: Request, res: Response) => {
               items: result.items.map(item => ({
                 ...item,
                 content: removeHTMLTags(item.content ?? ''),
-                sourceIndex
+                sourceIndex,
+                image: extractImageUrlFromContent(item.content ?? '')
               }))
             })
           })
@@ -47,4 +48,10 @@ export default async (req: Request, res: Response) => {
 
 function removeHTMLTags(input: string): string {
   return input.replace(/(<([^>]+)>)/gi, '')
+}
+
+const imageSrcRegex = /<img[^>]+src="([^"]+)"/
+
+function extractImageUrlFromContent(content: string) {
+  return content.match(imageSrcRegex)?.[1]
 }
