@@ -165,13 +165,16 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     dispatch(toggleListingFavoriteState(id))
   }
 
-  const onOpenListingModal = (id: UUID) => {
-    if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/${id}`)
-    }
-  }
+  const onOpenListingModal = useCallback(
+    (id: UUID) => {
+      if (!isWidget) {
+        window.history.pushState({}, '', `/dashboard/properties/${id}`)
+      }
+    },
+    [isWidget]
+  )
 
-  const onCloseListingModal = () => {
+  const onCloseListingModal = useCallback(() => {
     if (!isWidget) {
       // Inject view param to url
       const viewStringParam =
@@ -183,7 +186,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
         `/dashboard/properties/favorites${viewStringParam}`
       )
     }
-  }
+  }, [isWidget, viewType])
 
   const onMarkerClick = (key: UUID) => {
     const resultElement = document.getElementById(key)
