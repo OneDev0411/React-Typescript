@@ -29,6 +29,7 @@ interface Props {
   listingStates: IListingUIStates
   onToggleLike?: (id: UUID) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 export const CardsView = ({
@@ -37,7 +38,8 @@ export const CardsView = ({
   isWidget,
   listingStates,
   onToggleLike = noop,
-  onChangeHoverState = noop
+  onChangeHoverState = noop,
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
 
@@ -98,6 +100,7 @@ export const CardsView = ({
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}
+              onToggleListingModal={onToggleListingModal}
               onToggleSelection={handleToggleSelection}
             />
           </Grid>
