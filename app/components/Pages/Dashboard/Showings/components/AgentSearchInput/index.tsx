@@ -2,15 +2,14 @@ import { useState } from 'react'
 
 import {
   Box,
-  Button,
   TextField,
   Typography,
   CircularProgress,
   makeStyles
 } from '@material-ui/core'
+import useControllableState from 'react-use-controllable-state'
 
 import useTeamAgentsSearch from '@app/views/components/TeamAgents/use-team-agents-search'
-import { UserAgentSelect } from '@app/views/components/UserAgentSelect'
 
 import AgentSearchInputResultItem from './AgentSearchInputResultItem'
 
@@ -36,7 +35,7 @@ export interface AgentSearchInputProps {
   autoFocus?: boolean
   defaultValue?: IUser
   value?: IUser
-  onChange: (user: IUser, selectedAgent?: IAgent) => void
+  onChange: (agent: IUser) => void
   options: IBrand[]
   flattenTeams?: boolean
   isLoading?: boolean
@@ -54,67 +53,16 @@ function AgentSearchInput({
 }: AgentSearchInputProps) {
   const classes = useStyles()
   const [searchCriteria, setSearchCriteria] = useState('')
-  const [selectedUser, setSelectedUser] = useState<Optional<IUser>>(
-    value ?? defaultValue
+
+  const [agentValue, setAgentValue] = useControllableState(
+    value,
+    onChange,
+    defaultValue
   )
-  const [isAgentMlsSelectOpen, setIsAgentMlsSelectOpen] =
-    useState<boolean>(false)
-
   const teams = useTeamAgentsSearch(options, searchCriteria, flattenTeams)
-
-  const handleSelectUser = (user: IUser) => {
-    setSelectedUser(user)
-
-    const hasMultipleAgents = user.agents?.length && user.agents.length > 1
-
-    if (hasMultipleAgents) {
-      setIsAgentMlsSelectOpen(true)
-
-      return
-    }
-
-    const selectedAgent = user.agents?.[0] ?? undefined
-
-    onChange(user, selectedAgent)
-  }
-
-  const handleSelectAgent = (selectedAgent: IAgent) => {
-    if (!selectedUser) {
-      return
-    }
-
-    onChange(selectedUser, selectedAgent)
-  }
-
-  const handleClickOnBackToAgentsList = () => {
-    setIsAgentMlsSelectOpen(false)
-  }
 
   if (isLoading) {
     return <CircularProgress disableShrink />
-  }
-
-  if (isAgentMlsSelectOpen && !!selectedUser) {
-    return (
-      <div className={classes.root}>
-        <Box mb={1}>
-          <Typography variant="body1">Select MLS</Typography>
-        </Box>
-        <UserAgentSelect
-          agents={selectedUser.agents}
-          onChange={handleSelectAgent}
-        />
-        <Box mt={2} display="flex" flexDirection="row-reverse">
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={handleClickOnBackToAgentsList}
-          >
-            Back To Agents List
-          </Button>
-        </Box>
-      </div>
-    )
   }
 
   return (
@@ -123,7 +71,6 @@ function AgentSearchInput({
         <TextField
           fullWidth
           variant="outlined"
-          value={searchCriteria}
           onChange={e => setSearchCriteria(e.target.value)}
           placeholder={placeholder}
           size="small"
@@ -138,14 +85,14 @@ function AgentSearchInput({
               <Typography variant="caption">{team.subtitle}</Typography>
             </Box>
           )}
-          {team.users.map(user => (
+          {team.users.map(agent => (
             <AgentSearchInputResultItem
-              key={user.id}
-              name={user.display_name}
-              email={user.email}
-              avatarUrl={user.profile_image_url!}
-              onClick={() => handleSelectUser(user)}
-              selected={selectedUser?.id === user.id}
+              key={agent.id}
+              name={agent.display_name}
+              email={agent.email}
+              avatarUrl={agent.profile_image_url!}
+              onClick={() => setAgentValue(agent)}
+              selected={agentValue?.id === agent.id}
             />
           ))}
         </div>

@@ -101,10 +101,8 @@ function useShowingRoles(): UseShowingRolesReturn {
         }
       })
     } else if (property?.type === 'listing') {
-      const user = teamMembers.find(user =>
-        user.agents?.some(
-          agent => agent.email === property.listing.list_agent_email
-        )
+      const user = teamMembers.find(
+        user => user.agent?.email === property.listing.list_agent_email
       )
 
       if (user) {
