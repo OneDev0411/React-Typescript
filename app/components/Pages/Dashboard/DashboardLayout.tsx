@@ -2,8 +2,6 @@ import React, { createContext, useState } from 'react'
 
 import { Box, Theme, makeStyles } from '@material-ui/core'
 
-import { CurrentTeamBanner } from '@app/views/components/CurrentTeamBanner'
-
 import SideNav from './SideNav'
 
 interface Props {
@@ -45,10 +43,7 @@ export function DashboardLayout({ children }: Props) {
     >
       <Box display="flex">
         <SideNav isMenuOpen={isMenuOpen} onDrawerToggle={handleToggle} />
-        <main className={classes.main}>
-          <CurrentTeamBanner />
-          {children}
-        </main>
+        <main className={classes.main}>{children}</main>
       </Box>
     </SideNavContext.Provider>
   )
