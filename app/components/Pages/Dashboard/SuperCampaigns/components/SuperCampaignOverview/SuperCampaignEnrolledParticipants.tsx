@@ -1,16 +1,30 @@
+import { Box } from '@material-ui/core'
+
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
-function SuperCampaignEnrolledParticipants() {
-  const { superCampaign } = useSuperCampaignDetail()
+import SuperCampaignEnrolledParticipantsTags from './SuperCampaignEnrolledParticipantsTags'
+import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
 
-  console.log('superCampaign', superCampaign)
+function SuperCampaignEnrolledParticipants() {
+  const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
+  const { isSaving, updateSuperCampaignTags } = useUpdateSuperCampaignTags(
+    superCampaign,
+    setSuperCampaign
+  )
 
   return (
     <SuperCampaignCard>
       <SuperCampaignCardHeader title="Enrolled Participants By Their Contacts Tags" />
-      {/* TODO: use the autocomplete field here */}
+      <Box pt={1}>
+        <SuperCampaignEnrolledParticipantsTags
+          defaultValue={superCampaign.tags}
+          // options={['Famous 1', 'Famous 2']} // TODO: Ask Abbas about most popular tags
+          onChange={updateSuperCampaignTags}
+          disabled={isSaving}
+        />
+      </Box>
     </SuperCampaignCard>
   )
 }
