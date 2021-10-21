@@ -4,7 +4,7 @@ import { Typography, Button, makeStyles } from '@material-ui/core'
 
 import TeamTreeViewDrawer from '@app/views/components/TeamTreeView/Drawer'
 
-import SuperCampaignCard from '../SuperCampaignCard'
+import SuperCampaignCard, { SuperCampaignCardProps } from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
@@ -18,7 +18,11 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignEligibleParticipants' }
 )
 
-function SuperCampaignEligibleParticipants() {
+type SuperCampaignEligibleParticipantsProps = SuperCampaignCardProps
+
+function SuperCampaignEligibleParticipants(
+  props: SuperCampaignEligibleParticipantsProps
+) {
   const classes = useStyles()
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState(false)
 
@@ -41,7 +45,7 @@ function SuperCampaignEligibleParticipants() {
   const eligibleBrands: UUID[] = superCampaign.eligible_brands ?? []
 
   return (
-    <SuperCampaignCard>
+    <SuperCampaignCard {...props}>
       <SuperCampaignCardHeader title="Eligible Participants" />
       <Typography className={classes.subtitle} variant="body2">
         Add offices and teams which are eligible to participate to this
