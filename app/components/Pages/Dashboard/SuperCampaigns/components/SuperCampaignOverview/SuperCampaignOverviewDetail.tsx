@@ -1,7 +1,7 @@
-import { useState } from 'react'
-
 import { makeStyles } from '@material-ui/core'
 import format from 'date-fns/format'
+
+import useSafeState from '@app/hooks/use-safe-state'
 
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
@@ -35,7 +35,7 @@ function SuperCampaignOverviewDetail() {
     superCampaign,
     setSuperCampaign
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useSafeState(false)
 
   const openDrawer = () => setIsDrawerOpen(true)
 

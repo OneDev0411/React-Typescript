@@ -1,7 +1,6 @@
-import { useState } from 'react'
-
 import { Typography, Button, makeStyles } from '@material-ui/core'
 
+import useSafeState from '@app/hooks/use-safe-state'
 import TeamTreeViewDrawer from '@app/views/components/TeamTreeView/Drawer'
 
 import SuperCampaignCard, { SuperCampaignCardProps } from '../SuperCampaignCard'
@@ -24,7 +23,7 @@ function SuperCampaignEligibleParticipants(
   props: SuperCampaignEligibleParticipantsProps
 ) {
   const classes = useStyles()
-  const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState(false)
+  const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
 
