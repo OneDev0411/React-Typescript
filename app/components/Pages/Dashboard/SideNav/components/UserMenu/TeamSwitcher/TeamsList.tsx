@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 
-import { Box, Divider, TextField, Theme, useTheme } from '@material-ui/core'
+import { Box, Divider, TextField, Theme, makeStyles } from '@material-ui/core'
 import sort from 'lodash/sortBy'
 
 import { useMatchSorter } from '@app/hooks/use-match-sorter'
@@ -20,8 +20,17 @@ interface Props {
   user: IUser
 }
 
+const DEFAULT_USER_TEAMS: IUserTeam[] = []
+
+const useStyles = makeStyles((theme: Theme) => ({
+  searchInput: {
+    padding: theme.spacing(0.5, 3)
+  }
+}))
+
 export function TeamsList({ user }: Props) {
-  const theme = useTheme<Theme>()
+  const classes = useStyles()
+
   const [searchValue, setSearchValue] = useState('')
   const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
     isSwitching: false,
@@ -30,7 +39,10 @@ export function TeamsList({ user }: Props) {
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
 
-  const userTeams = useMemo(() => user?.teams || [], [user?.teams])
+  const userTeams = useMemo(
+    () => user?.teams || DEFAULT_USER_TEAMS,
+    [user?.teams]
+  )
   const results = useMatchSorter(userTeams, searchValue, ['brand.name'])
 
   /**
@@ -78,9 +90,7 @@ export function TeamsList({ user }: Props) {
               onChange={e => setSearchValue(e.target.value)}
               placeholder="Search by team name"
               InputProps={{
-                style: {
-                  padding: theme.spacing(0.5, 3)
-                }
+                className: classes.searchInput
               }}
             />
           </Box>
