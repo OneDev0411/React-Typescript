@@ -8,6 +8,7 @@ import { useEffectOnce } from 'react-use'
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
@@ -168,7 +169,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const onOpenListingModal = useCallback(
     (id: UUID) => {
       if (!isWidget) {
-        window.history.pushState({}, '', `/dashboard/properties/${id}`)
+        changeUrl(`/dashboard/properties/${id}`)
       }
     },
     [isWidget]
@@ -177,14 +178,9 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const onCloseListingModal = useCallback(() => {
     if (!isWidget) {
       // Inject view param to url
-      const viewStringParam =
-        viewType !== DEFAULT_VIEW ? `?view=${viewType}` : ''
+      const viewQueryParam = viewType !== DEFAULT_VIEW ? { view: viewType } : {}
 
-      window.history.pushState(
-        {},
-        '',
-        `/dashboard/properties/favorites${viewStringParam}`
-      )
+      changeUrl('/dashboard/properties/favorites', viewQueryParam)
     }
   }, [isWidget, viewType])
 

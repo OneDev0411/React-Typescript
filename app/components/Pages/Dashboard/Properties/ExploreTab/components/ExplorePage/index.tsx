@@ -9,6 +9,7 @@ import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variabl
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { confirmation } from '@app/store_actions/confirmation'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
@@ -253,7 +254,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onOpenListingModal = useCallback(
     (id: UUID) => {
       if (!isWidget) {
-        window.history.pushState({}, '', `/dashboard/properties/${id}`)
+        changeUrl(`/dashboard/properties/${id}`)
       }
     },
     [isWidget]
@@ -262,14 +263,9 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const onCloseListingModal = useCallback(() => {
     if (!isWidget) {
       // Inject view param to url
-      const viewStringParam =
-        viewType !== DEFAULT_VIEW ? `?view=${viewType}` : ''
+      const viewQueryParam = viewType !== DEFAULT_VIEW ? { view: viewType } : {}
 
-      window.history.pushState(
-        {},
-        '',
-        `/dashboard/properties${viewStringParam}`
-      )
+      changeUrl('/dashboard/properties', viewQueryParam)
     }
   }, [viewType, isWidget])
 
