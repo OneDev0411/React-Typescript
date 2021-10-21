@@ -2,7 +2,6 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
-import { useScrolling } from 'react-use'
 
 import {
   SortString,
@@ -97,7 +96,6 @@ export const Results = ({
   const [state, dispatch] = useListingsContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
-  const isScroling = useScrolling(cardsContainerRef)
 
   const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
@@ -182,7 +180,6 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  isScroling={isScroling}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
