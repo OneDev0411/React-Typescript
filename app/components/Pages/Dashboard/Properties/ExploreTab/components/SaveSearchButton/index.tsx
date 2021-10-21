@@ -10,10 +10,10 @@ import {
   Popper,
   Typography
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { putUserSetting } from '@app/models/user/put-user-setting'
 import { selectUserUnsafe } from '@app/selectors/user'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
 
 import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
@@ -55,6 +55,7 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
   const classes = useStyles()
   const buttonRef = useRef<Nullable<HTMLButtonElement>>(null)
   const user = useSelector(selectUserUnsafe)
+  const dispatch = useDispatch()
 
   const [dontShow, setDontShow] = useState(false)
   const [isOpenHint, setIsOpenHint] = useState(
@@ -68,7 +69,7 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
 
   const onClickGotIt = () => {
     if (dontShow) {
-      putUserSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1')
+      dispatch(setUserSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1'))
     }
 
     setIsOpenHint(false)
