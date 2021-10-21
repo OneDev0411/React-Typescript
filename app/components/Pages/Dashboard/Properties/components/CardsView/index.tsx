@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import { Grid, makeStyles } from '@material-ui/core'
-import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
 import useNotify from '@app/hooks/use-notify'
@@ -15,12 +14,6 @@ import ListingCard from '../ListingCardWithFavorite'
 
 const useStyles = makeStyles(
   theme => ({
-    root: {
-      pointerEvents: 'unset'
-    },
-    isScroling: {
-      pointerEvents: 'none'
-    },
     listingContainer: {
       paddingBottom: theme.spacing(1),
       paddingRight: theme.spacing(1)
@@ -34,7 +27,6 @@ interface Props {
   mapIsShown: boolean
   isWidget: boolean
   listingStates: IListingUIStates
-  isScroling?: boolean
   onToggleLike?: (id: UUID) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onOpenListingModal?: (id: UUID) => void
@@ -46,7 +38,6 @@ export const CardsView = ({
   mapIsShown,
   isWidget,
   listingStates,
-  isScroling = false,
   onToggleLike = noop,
   onChangeHoverState = noop,
   onOpenListingModal = noop,
@@ -91,10 +82,7 @@ export const CardsView = ({
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
 
   return (
-    <Grid
-      container
-      className={cn({ [classes.root]: true, [classes.isScroling]: isScroling })}
-    >
+    <Grid container>
       {listings.map(listing => (
         <Grid
           item
@@ -110,15 +98,13 @@ export const CardsView = ({
               clicked={listingStates.click === listing.id}
               onChangeHoverState={onChangeHoverState}
               reduxToggleFavorite={false} // TODO: remove this after refactoring fav/saved tab
-              onToggleLike={sendApiRequest =>
-                handleToggleLike(listing, sendApiRequest)
-              }
+              onToggleLike={handleToggleLike}
               selected={selections.some(
                 (item: ICompactListing) => item.id === listing.id
               )}
-              onToggleSelection={() => handleToggleSelection(listing)}
               onOpenListingModal={onOpenListingModal}
               onCloseListingModal={onCloseListingModal}
+              onToggleSelection={handleToggleSelection}
             />
           </Grid>
         </Grid>

@@ -3,7 +3,6 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import hash from 'object-hash'
-import { useScrolling } from 'react-use'
 import { memoize } from 'underscore'
 
 import { formatListing } from '@app/components/Pages/Dashboard/MLS/helpers/format-listing'
@@ -130,7 +129,6 @@ export const Results = ({
   const [state, dispatch] = useFavoritesContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
-  const isScroling = useScrolling(cardsContainerRef)
   const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
     return state.result.listings.length > 0 && !state.isLoading
@@ -230,7 +228,6 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  isScroling={isScroling}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}

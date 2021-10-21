@@ -16,10 +16,13 @@ interface Props
   hover?: boolean
   isWidget?: boolean
   reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
-  onToggleLike?: (sendApiRequest?: boolean) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onOpenListingModal?: (id: UUID) => void
   onCloseListingModal?: () => void
+  onToggleLike?: (
+    listing: IListing | ICompactListing,
+    sendApiRequest?: boolean
+  ) => void
 }
 
 const ListingCardWithFavorite = ({
@@ -53,10 +56,10 @@ const ListingCardWithFavorite = ({
       : listing.favorited
     : undefined
 
-  const closeListing = () => {
+  const closeListing = useCallback(() => {
     setIsListingOpen(false)
     onCloseListingModal()
-  }
+  }, [onCloseListingModal])
 
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -69,13 +72,13 @@ const ListingCardWithFavorite = ({
     onOpenListingModal(listing.id)
   }, [onClick, onOpenListingModal, listing.id])
 
-  const handleToggleSelection = useCallback(onToggleSelection, [
-    onToggleSelection
-  ])
+  const handleToggleSelection = useCallback(() => {
+    onToggleSelection(listing)
+  }, [onToggleSelection, listing])
 
   const handleLikeClick = useCallback(() => {
     if (selected) {
-      onToggleSelection()
+      onToggleSelection(listing)
     }
 
     dispatch(toggleFavorite(listing))
@@ -105,7 +108,7 @@ const ListingCardWithFavorite = ({
           listingId={listing.id}
           closeHandler={closeListing}
           onToggleFavorite={() => {
-            onToggleLike(false)
+            onToggleLike(listing, false)
           }}
         />
       )}
