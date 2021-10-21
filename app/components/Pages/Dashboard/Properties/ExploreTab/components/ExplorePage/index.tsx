@@ -251,23 +251,22 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(clearListingUiStates())
   }
 
-  const onOpenListingModal = useCallback(
-    (id: UUID) => {
+  const onToggleListingModal = useCallback(
+    (id: UUID, isOpen: boolean) => {
       if (!isWidget) {
-        changeUrl(`/dashboard/properties/${id}`)
+        if (isOpen) {
+          changeUrl(`/dashboard/properties/${id}`)
+        } else {
+          // Inject view param to url
+          const viewQueryParam =
+            viewType !== DEFAULT_VIEW ? { view: viewType } : {}
+
+          changeUrl('/dashboard/properties', viewQueryParam)
+        }
       }
     },
-    [isWidget]
+    [isWidget, viewType]
   )
-
-  const onCloseListingModal = useCallback(() => {
-    if (!isWidget) {
-      // Inject view param to url
-      const viewQueryParam = viewType !== DEFAULT_VIEW ? { view: viewType } : {}
-
-      changeUrl('/dashboard/properties', viewQueryParam)
-    }
-  }, [viewType, isWidget])
 
   const onMarkerClick = (key: UUID) => {
     const resultElement = document.getElementById(key)
@@ -329,8 +328,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   onClickLocate={onClickLocate}
                   onClickToggleMap={toggleMapShown}
                   onChangeHoverState={changeHoverState}
-                  onCloseListingModal={onCloseListingModal}
-                  onOpenListingModal={onOpenListingModal}
+                  onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={onMapClick}
                   mapPosition={state.map}
@@ -351,8 +349,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               activeSort={state.search.sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
-              onOpenListingModal={onOpenListingModal}
-              onCloseListingModal={onCloseListingModal}
+              onToggleListingModal={onToggleListingModal}
             />
           </Grid>
         </Grid>

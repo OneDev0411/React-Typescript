@@ -88,8 +88,7 @@ interface Props {
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
   user: IUser
-  onOpenListingModal?: (id: UUID) => void
-  onCloseListingModal?: () => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 const sortListings = memoize(
@@ -122,8 +121,7 @@ export const Results = ({
   onChangeSort,
   isWidget,
   user,
-  onOpenListingModal = noop,
-  onCloseListingModal = noop
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useFavoritesContext()
@@ -185,7 +183,7 @@ export const Results = ({
   const handleToggleLike = useCallback((listingId: UUID) => {
     // Close listing modal after toggle like to prevent multiple toggling issue
     // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
-    onCloseListingModal()
+    onToggleListingModal('', false)
     dispatch(toggleListingFavoriteState(listingId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -231,8 +229,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
-                  onOpenListingModal={onOpenListingModal}
-                  onCloseListingModal={onCloseListingModal}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -243,8 +240,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
-                  onOpenListingModal={onOpenListingModal}
-                  onCloseListingModal={onCloseListingModal}
+                  onToggleListingModal={onToggleListingModal}
                   closeModalAfterToggleFavorite
                 />
               )}

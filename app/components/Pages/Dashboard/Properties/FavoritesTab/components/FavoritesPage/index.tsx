@@ -166,23 +166,22 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     dispatch(toggleListingFavoriteState(id))
   }
 
-  const onOpenListingModal = useCallback(
-    (id: UUID) => {
+  const onToggleListingModal = useCallback(
+    (id: UUID, isOpen: boolean) => {
       if (!isWidget) {
-        changeUrl(`/dashboard/properties/${id}`)
+        if (isOpen) {
+          changeUrl(`/dashboard/properties/${id}`)
+        } else {
+          // Inject view param to url
+          const viewQueryParam =
+            viewType !== DEFAULT_VIEW ? { view: viewType } : {}
+
+          changeUrl('/dashboard/properties/favorites', viewQueryParam)
+        }
       }
     },
-    [isWidget]
+    [isWidget, viewType]
   )
-
-  const onCloseListingModal = useCallback(() => {
-    if (!isWidget) {
-      // Inject view param to url
-      const viewQueryParam = viewType !== DEFAULT_VIEW ? { view: viewType } : {}
-
-      changeUrl('/dashboard/properties/favorites', viewQueryParam)
-    }
-  }, [isWidget, viewType])
 
   const onMarkerClick = (key: UUID) => {
     const resultElement = document.getElementById(key)
@@ -244,8 +243,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   onClickLocate={onClickLocate}
                   onClickToggleMap={toggleMapShown}
                   onChangeHoverState={changeHoverState}
-                  onCloseListingModal={onCloseListingModal}
-                  onOpenListingModal={onOpenListingModal}
+                  onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={onMapClick}
                   mapPosition={state.map}
@@ -268,8 +266,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
               activeSort={sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
-              onCloseListingModal={onCloseListingModal}
-              onOpenListingModal={onOpenListingModal}
+              onToggleListingModal={onToggleListingModal}
               user={user}
             />
           </Grid>

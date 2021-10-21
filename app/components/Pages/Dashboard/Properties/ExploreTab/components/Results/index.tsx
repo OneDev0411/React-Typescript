@@ -82,8 +82,7 @@ interface Props {
   isWidget: boolean
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
-  onOpenListingModal?: (id: UUID) => void
-  onCloseListingModal?: () => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 export const Results = ({
@@ -94,8 +93,7 @@ export const Results = ({
   activeSort,
   onChangeSort,
   isWidget,
-  onOpenListingModal = noop,
-  onCloseListingModal = noop
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useListingsContext()
@@ -188,8 +186,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
-                  onOpenListingModal={onOpenListingModal}
-                  onCloseListingModal={onCloseListingModal}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -200,8 +197,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
-                  onOpenListingModal={onOpenListingModal}
-                  onCloseListingModal={onCloseListingModal}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
             </>

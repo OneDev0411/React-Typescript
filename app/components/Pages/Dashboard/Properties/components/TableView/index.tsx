@@ -57,8 +57,7 @@ interface Props {
   closeModalAfterToggleFavorite?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleLike?: (id: UUID) => void
-  onOpenListingModal?: (id: UUID) => void
-  onCloseListingModal?: () => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 const CELL_FALLBACK = '--'
@@ -152,8 +151,7 @@ export const TableView = ({
   closeModalAfterToggleFavorite = false,
   onChangeHoverState = noop,
   onToggleLike = noop,
-  onOpenListingModal = noop,
-  onCloseListingModal = noop
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -166,16 +164,16 @@ export const TableView = ({
   const closeListingDetailsModal = useCallback(() => {
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
-    onCloseListingModal()
-  }, [onCloseListingModal])
+    onToggleListingModal('', false)
+  }, [onToggleListingModal])
 
   const openListingDetailsModal = useCallback(
     (id: UUID) => {
       setIsListingDetailsModalOpen(true)
       setSelectedListingId(id)
-      onOpenListingModal(id)
+      onToggleListingModal(id, true)
     },
-    [onOpenListingModal]
+    [onToggleListingModal]
   )
 
   const onToggleFavorite = useCallback(() => {
