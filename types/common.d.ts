@@ -54,16 +54,19 @@ interface ILabelValue {
   value: Nullable<string>
 }
 
-declare interface ApiResponseBody<T> {
-  data: T
-  references: T
-  code: string
-  info?:
+declare interface ApiResponseBody<
+  T,
+  U =
     | boolean
     | {
         count: number
         total: number
       }
+> {
+  data: T
+  references: T
+  code: string
+  info?: U
 }
 
 declare interface ApiResponse<T> {
@@ -114,3 +117,9 @@ declare type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
     [K in Keys]-?: Required<Pick<T, K>> &
       Partial<Record<Exclude<Keys, K>, undefined>>
   }[Keys]
+
+declare interface Callable<R> {
+  (...args: any[]): R
+}
+
+declare type GenericReturnType<R, X> = X extends Callable<R> ? R : never

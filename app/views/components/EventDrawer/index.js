@@ -37,14 +37,13 @@ import {
   CheckboxField,
   AssigneesField,
   AssociationsList,
-  EndDateTimeField,
   FieldError
 } from '../final-form-fields'
 import Drawer from '../OverlayDrawer'
 import { ItemChangelog } from '../TeamContact/ItemChangelog'
 
 import { Description } from './components/Description/RichText'
-import { DueDateWatcher } from './components/DueDateWatcher'
+import { EndDateTimeField } from './components/EndDateTimeField'
 import { EventField } from './components/EventField'
 import { EventType } from './components/EventType'
 import {
@@ -335,14 +334,10 @@ class EventDrawerContainer extends Component {
                             />
 
                             <EndDateTimeField
-                              startDate={values.dueDate}
-                              selectedDate={values.endDate || values.dueDate}
-                              showTimePicker={!values.allDay}
-                            />
-
-                            <DueDateWatcher
                               dueDate={values.dueDate}
                               endDate={values.endDate}
+                              selectedDate={values.endDate || values.dueDate}
+                              showTimePicker={!values.allDay}
                             />
                           </FieldContainer>
 

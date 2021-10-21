@@ -1,8 +1,9 @@
-import { useRef, useState, ChangeEvent } from 'react'
+import { useRef, useState, ChangeEvent, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
-import { withRouter, WithRouterProps } from 'react-router'
+import { Location } from 'history'
+import { InjectedRouter, PlainRoute } from 'react-router'
 import { useDebouncedCallback } from 'use-debounce'
 
 import TabContentSwitch from 'components/TabContentSwitch'
@@ -10,7 +11,12 @@ import useAsync from 'hooks/use-async'
 import useNotify from 'hooks/use-notify'
 import updateShowing from 'models/showing/update-showing'
 
-import { hasTimeConflicts, hasInvalidTimeRange } from '../../helpers'
+import {
+  hasTimeConflicts,
+  hasInvalidTimeRange,
+  sortShowingAvailabilities
+} from '../../helpers'
+import useLoseYourWorkAlert from '../../hooks/use-lose-your-work-alert'
 import { YesNoAnswer } from '../ShowingYesNoRadioGroup'
 
 import { getValidShowingDetailSettingsTab } from './helpers'
@@ -53,19 +59,24 @@ const useStyles = makeStyles(
   { name: 'ShowingDetailTabSettings' }
 )
 
-interface ShowingDetailTabSettingsProps extends WithRouterProps {
+interface ShowingDetailTabSettingsProps {
   showing: IShowing<'showing'>
   setShowing: (showing: IShowing<'showing'>) => void
+  router: InjectedRouter
+  route: PlainRoute
+  location: Location
 }
 
 function ShowingDetailTabSettings({
-  location,
   showing,
-  setShowing
+  setShowing,
+  router,
+  route,
+  location
 }: ShowingDetailTabSettingsProps) {
   const classes = useStyles()
 
-  const tab = getValidShowingDetailSettingsTab(location.query.tab)
+  const tab = getValidShowingDetailSettingsTab(location.query.tab as string)
 
   const notify = useNotify()
   const showingRef = useRef(showing)
@@ -120,11 +131,11 @@ function ShowingDetailTabSettings({
     showing: IShowing<'showing'>,
     updateShowingRef: boolean = false
   ) => {
-    setShowing(showing)
-
     if (updateShowingRef) {
       showingRef.current = showing
     }
+
+    setShowing(showing)
 
     const errors: ShowingDetailTabSettingsErrors = {}
 
@@ -148,7 +159,7 @@ function ShowingDetailTabSettings({
   const handleAvailabilitiesChange = (availabilities: IShowingAvailability[]) =>
     handleShowingUpdate({
       ...showing,
-      availabilities
+      availabilities: sortShowingAvailabilities(availabilities)
     })
 
   const handleDurationChange = (duration: number) =>
@@ -210,6 +221,24 @@ function ShowingDetailTabSettings({
     disabled: saveDisabled,
     onClick: handleSave
   }
+
+  useLoseYourWorkAlert(
+    router,
+    route,
+    !saveDisabled,
+    'You have not saved your changes. Continue?'
+  )
+
+  const isShowingDirty = showing !== showingRef.current
+
+  // Restore the showing state if it is dirty and the user leaves the settings
+  useEffect(() => {
+    return () => {
+      if (isShowingDirty) {
+        setShowing(showingRef.current)
+      }
+    }
+  }, [setShowing, isShowingDirty])
 
   return (
     <div className={classes.root}>
@@ -309,4 +338,4 @@ function ShowingDetailTabSettings({
   )
 }
 
-export default withRouter(ShowingDetailTabSettings)
+export default ShowingDetailTabSettings

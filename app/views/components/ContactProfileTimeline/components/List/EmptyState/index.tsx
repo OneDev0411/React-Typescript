@@ -10,6 +10,7 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      margin: theme.spacing(15, 0),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -34,10 +35,6 @@ interface Props {
 
 export function EmptyState({ rowsCount, isLoading }: Props) {
   const classes = useStyles()
-
-  if (rowsCount > 0) {
-    return null
-  }
 
   return (
     <div className={classes.container}>

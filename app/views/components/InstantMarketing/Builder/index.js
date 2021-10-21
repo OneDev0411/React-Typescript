@@ -6,7 +6,8 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import ArticleDrawer from 'components/ArticleDrawer/ArticleDrawer'
+import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
+import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { EditorDialog } from 'components/ImageEditor'
@@ -21,7 +22,6 @@ import { Portal } from 'components/Portal'
 import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
-import VideoDrawer from 'components/VideoDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
@@ -305,7 +305,7 @@ class Builder extends React.Component {
       return []
     }
 
-    return ['quicktable', 'tableresize', 'tabletools', 'table']
+    return ['quicktable', 'tableresize', 'tabletools', 'table', 'placeholder']
   }
 
   loadCKEditorRTE = async () => {
@@ -454,6 +454,8 @@ class Builder extends React.Component {
     this.lockIn()
     this.singleClickTextEditing()
     this.loadTraitsOnSelect()
+    this.setupRTEMerge()
+    this.setupFixToolbarPosition()
     this.disableAssetManager()
     this.makeTemplateCentered()
     this.removeTextStylesOnPaste()
@@ -495,7 +497,7 @@ class Builder extends React.Component {
         }
       },
       video: {
-        onDrop: this.openVideoDrawer
+        onDrop: this.openSearchVideoDrawer
       },
       article: {
         onDrop: () => {
@@ -597,8 +599,8 @@ class Builder extends React.Component {
       onMapDoubleClick: this.openMapDrawer,
       onCarouselDrop: this.openCarouselDrawer,
       onCarouselDoubleClick: this.openCarouselDrawer,
-      onVideoDoubleClick: this.openVideoDrawer,
-      onEmptyVideoClick: this.openVideoDrawer
+      onVideoDoubleClick: this.openSearchVideoDrawer,
+      onEmptyVideoClick: this.openSearchVideoDrawer
     }
 
     const templateBlockOptions = await getTemplateBlockOptions(
@@ -656,7 +658,7 @@ class Builder extends React.Component {
     this.setState({ mapToEdit: model })
   }
 
-  openVideoDrawer = model => {
+  openSearchVideoDrawer = model => {
     this.setState({ videoToEdit: model })
   }
 
@@ -700,6 +702,75 @@ class Builder extends React.Component {
     this.editor.on('component:selected', selected => {
       this.setTraits(selected)
     })
+  }
+
+  mergeRTEToolbarWithActionsToolbar = () => {
+    setTimeout(() => {
+      const richTextToolbar = this.editor.RichTextEditor.getToolbarEl()
+
+      if (!richTextToolbar) {
+        return
+      }
+
+      if (getComputedStyle(richTextToolbar).display === 'none') {
+        return
+      }
+
+      richTextToolbar.style.display = 'none'
+
+      const toolbar = document.querySelector('.gjs-toolbar')
+
+      if (toolbar) {
+        toolbar.appendChild(richTextToolbar)
+      }
+
+      richTextToolbar.style.display = 'flex'
+
+      setTimeout(this.resetToolbarPosition, 200)
+    }, 100)
+  }
+
+  setupRTEMerge = () => {
+    this.editor.on('rte:enable', () => {
+      this.mergeRTEToolbarWithActionsToolbar()
+    })
+
+    this.editor.on('component:drag:end', this.resetToolbarPosition)
+  }
+
+  resetToolbarPosition = () => {
+    const selected = this.editor.getSelected()
+
+    if (!selected) {
+      return
+    }
+
+    this.editor.selectRemove(selected)
+    this.editor.select(selected)
+  }
+
+  setupFixToolbarPosition = () => {
+    const iframe = this.editor.Canvas.getFrameEl()
+
+    if (!iframe || !iframe.contentDocument) {
+      return
+    }
+
+    let timeoutHandler
+
+    iframe.contentDocument.addEventListener(
+      'scroll',
+      () => {
+        if (timeoutHandler) {
+          clearTimeout(timeoutHandler)
+        }
+
+        timeoutHandler = setTimeout(this.resetToolbarPosition, 100)
+      },
+      {
+        passive: true
+      }
+    )
   }
 
   scrollSidebarToTopOnComponentSelect = () => {
@@ -1296,9 +1367,9 @@ class Builder extends React.Component {
               }}
             />
           )}
-          <VideoDrawer
+          <SearchVideoDrawer
             isOpen={!!this.state.videoToEdit}
-            video={this.state.videoToEdit}
+            model={this.state.videoToEdit}
             onClose={() => {
               this.blocks.video.selectHandler()
               this.setState({ videoToEdit: null })
@@ -1308,7 +1379,7 @@ class Builder extends React.Component {
               this.setState({ videoToEdit: null })
             }}
           />
-          <ArticleDrawer
+          <SearchArticleDrawer
             isOpen={this.state.isArticleDrawerOpen}
             onClose={() => {
               this.blocks.article.selectHandler()
@@ -1318,6 +1389,7 @@ class Builder extends React.Component {
               this.blocks.article.selectHandler(article)
               this.setState({ isArticleDrawerOpen: false })
             }}
+            multipleSelection
           />
           {this.blocks && this.blocks.neighborhoods && (
             <NeighborhoodsReportDrawer

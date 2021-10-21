@@ -18,6 +18,7 @@ import YardSign from 'deals/components/YardSign'
 
 import DealStatus from '../../../components/DealStatus'
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
+import { useGetOriginQueryParam } from '../../../hooks/use-get-origin-query-param'
 
 import { Email } from './Email'
 
@@ -45,8 +46,17 @@ export const Menu = withRouter(
   ({ deal, isBackOffice, router, location }: Props & WithRouterProps) => {
     const classes = useStyles()
     const userSettings = useSelector(selectUserSettingsInActiveTeam)
+    const originQueryParam = useGetOriginQueryParam()
 
     const handleClose = () => {
+      const { origin } = location.query
+
+      if (origin) {
+        router.push(`/${origin}`)
+
+        return
+      }
+
       const query = userSettings[DEAL_GRID_FILTER_SETTING_KEY]
 
       router.push(`/dashboard/deals?q=${query?.term || ''}`)
@@ -77,7 +87,11 @@ export const Menu = withRouter(
           <Button
             size="small"
             variant="outlined"
-            onClick={() => router.push(`/dashboard/deals/${deal.id}/offer`)}
+            onClick={() =>
+              router.push(
+                `/dashboard/deals/${deal.id}/offer?${originQueryParam}`
+              )
+            }
           >
             Add Offer
           </Button>

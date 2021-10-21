@@ -22,5 +22,6 @@ export const dealTaskTypeToString: { [key in IDealTaskType]: string } = {
   Generic: 'Generic',
   YardSign: 'Yard Sign',
   OpenHouse: 'Open House',
-  Media: 'Media'
+  Media: 'Media',
+  Splitter: 'Splitter'
 }

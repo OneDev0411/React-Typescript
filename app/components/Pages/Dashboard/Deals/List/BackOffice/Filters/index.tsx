@@ -20,7 +20,6 @@ import { useInboxTabs } from '../hooks/use-inbox-tabs'
 import { SearchQuery } from '../types'
 
 interface Props {
-  deals: IDeal[]
   activeFilter: string
   searchQuery: SearchQuery
   sortableColumns: SortableColumn[]
@@ -31,7 +30,8 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const user = useSelector(selectUser)
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
-  const inboxTabs = useInboxTabs(props.deals)
+  const inboxTabs = useInboxTabs()
+
   const defaultTab = Array.isArray(inboxTabs) ? inboxTabs[0] : null
 
   useDefaultTab(props.params || {}, defaultTab)
@@ -61,7 +61,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     <PageTabs
       value={
         props.location.query.type === 'query' &&
-        ['listing', 'contact'].includes(props.params.filter)
+        ['listing', 'contract'].includes(props.params.filter)
           ? 'all-deals'
           : null
       }

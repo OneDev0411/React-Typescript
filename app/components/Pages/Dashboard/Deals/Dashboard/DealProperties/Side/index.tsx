@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { Button, MenuItem, makeStyles, Theme } from '@material-ui/core'
 import { mdiChevronDown } from '@mdi/js'
 import { useDispatch, useSelector } from 'react-redux'
@@ -44,20 +46,27 @@ export function DealSide(props: Props) {
     })
   )
 
-  const options = [
-    {
-      value: null,
-      label: props.deal.deal_type
-    },
-    {
-      value: 'AgentDoubleEnder',
-      label: `${props.deal.deal_type} (Agent Double Ender)`
-    },
-    {
-      value: 'OfficeDoubleEnder',
-      label: `${props.deal.deal_type} (Office Double Ender)`
-    }
-  ]
+  const dealType = props.deal.deal_type
+
+  const options = useMemo(() => {
+    return [
+      {
+        value: null,
+        label: dealType,
+        isAvailable: true
+      },
+      {
+        value: 'AgentDoubleEnder',
+        label: `${dealType} (Agent Double Ender)`,
+        isAvailable: dealType === 'Selling'
+      },
+      {
+        value: 'OfficeDoubleEnder',
+        label: `${dealType} (Office Double Ender)`,
+        isAvailable: true
+      }
+    ].filter(option => option.isAvailable)
+  }, [dealType])
 
   const enderType = getField(props.deal, 'ender_type')
   const sideName = getEnderType(props.deal)

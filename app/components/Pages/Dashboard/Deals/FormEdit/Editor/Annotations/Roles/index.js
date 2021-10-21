@@ -17,6 +17,12 @@ export function Roles(props) {
     return selectDealRoles(deals.roles, props.deal)
   })
 
+  const handleToggleUnlink = inputProps => {
+    props.onInstructionUpdate({
+      [inputProps.group[0].annotation.fieldName]: ''
+    })
+  }
+
   const handleChangeRoles = form => {
     let fields = {}
 
@@ -56,6 +62,7 @@ export function Roles(props) {
           roles={roles}
           onUpsertRole={handleChangeRoles}
           onDeleteRole={handleChangeRoles}
+          onToggleUnlink={() => handleToggleUnlink(inputProps)}
           {...inputProps}
         />
       )}

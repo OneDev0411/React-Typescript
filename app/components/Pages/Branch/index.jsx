@@ -1,23 +1,23 @@
 // Branch.js
 import React, { useState } from 'react'
-import { useDeepCompareEffect } from 'react-use'
-import * as BranchSDK from 'branch-sdk'
-import { browserHistory, withRouter } from 'react-router'
-import idx from 'idx'
 
+import * as BranchSDK from 'branch-sdk-rechat'
+import idx from 'idx'
 import { useDispatch, useSelector } from 'react-redux'
+import { browserHistory, withRouter } from 'react-router'
+import { useDeepCompareEffect } from 'react-use'
 
 import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
 import publicConfig from '../../../../config/public'
+import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
 import Loading from '../../Partials/Loading'
 import { getBrandInfo } from '../Auth/SignIn/get-brand-info'
-import { lookUpUserByEmail } from '../../../models/user/lookup-user-by-email'
+
 import ConflictModal from './components/ConflictModal'
 import NeedsToLoginModal from './components/NeedsToLoginModal'
 import VerifyRedirectModal from './components/VerifyRedirectModal'
-
 import redirectHandler from './helpers/redirectHandler'
 
 const branchKey = publicConfig.branch.key

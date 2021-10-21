@@ -6,9 +6,10 @@ import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import { selectActiveTeamId } from '@app/selectors/team'
 import MarketingSearchInput, {
-  MarketingSearchInputOption
+  TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
@@ -41,7 +42,7 @@ interface Props {
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
-    defaultSelectedTemplate: UUID
+    defaultSelectedTemplate: Optional<UUID>
     onSelectTemplate: (template: IBrandMarketingTemplate) => void
     onDeleteTemplate: (template: IBrandMarketingTemplate) => void
   }) => JSX.Element
@@ -51,7 +52,10 @@ export function MarketingLayout({
   render,
   ...props
 }: Props &
-  WithRouterProps<{ types: string; medium: IMarketingTemplateMedium }>) {
+  WithRouterProps<
+    { types: string; medium: IMarketingTemplateMedium },
+    { templateId?: UUID }
+  >) {
   const classes = useStyles()
   const activeBrand = useSelector(selectActiveTeamId)
   const user = useSelector(selectUser)
@@ -63,6 +67,9 @@ export function MarketingLayout({
 
   const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
+
+  const templateTypesWithMediums =
+    useMarketingTemplateTypesWithMediums(templates)
 
   const currentMedium = params.medium
   const currentPageItems = useMemo(() => {
@@ -103,13 +110,17 @@ export function MarketingLayout({
       ...location,
       query: {
         ...newQuery,
-        templateId: template.id
+        templateId: template.template.id
       }
     })
   }
 
-  const handleSelectSearchResult = (result: MarketingSearchInputOption) => {
-    goTo(result.url)
+  const handleSelectSearchResult = (result: TemplateTypeWithMedium) => {
+    goTo(
+      `/dashboard/marketing/${result.type}${
+        result.medium ? `/${result.medium}` : ''
+      }`
+    )
   }
 
   return (
@@ -123,8 +134,7 @@ export function MarketingLayout({
           <div className={classes.headerActionsContainer}>
             <div className={classes.searchContainer}>
               <MarketingSearchInput
-                sections={sections}
-                templateTypeMediums={mediums}
+                types={templateTypesWithMediums}
                 onSelect={handleSelectSearchResult}
               />
             </div>

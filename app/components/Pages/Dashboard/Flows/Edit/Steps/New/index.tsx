@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import { useState, useContext, useCallback } from 'react'
 
 import { Box, Theme, makeStyles } from '@material-ui/core'
+
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 
 import BasicEmailForm from './BasicEmailForm'
 import { AddButtons } from './components/AddButtons'
@@ -32,51 +34,89 @@ const useStyles = makeStyles(
 interface Props {
   index: number
   miniMode?: boolean
-  emailTemplates: IBrandEmailTemplate[]
-  defaultSelectedEmailTemplate?: UUID
   shouldShowDefaultForm?: boolean
   onSubmit: (data: IBrandFlowStepInput) => Promise<any>
-  onNewEmailTemplateClick: () => void
 }
+
+export type Forms = Nullable<'event' | 'basic_email' | 'marketing_email'>
 
 export const NewStep = ({
   index,
-  emailTemplates,
   miniMode = false,
   shouldShowDefaultForm,
-  defaultSelectedEmailTemplate,
-  onSubmit,
-  onNewEmailTemplateClick
+  onSubmit
 }: Props) => {
   const classes = useStyles()
+  const modal = useContext(ConfirmationModalContext)
   const [isMiniMode, setIsMiniMode] = useState(miniMode)
-  const [openForm, setOpenForm] = useState<
-    Nullable<'event' | 'basic_email' | 'marketing_email'>
-  >(shouldShowDefaultForm ? 'event' : null)
+  const [hasDirtyStep, setHasDirtyStep] = useState(false)
+  const [openForm, setOpenForm] = useState<Forms>(
+    shouldShowDefaultForm ? 'event' : null
+  )
 
-  async function submitHandler(data: IBrandFlowStepInput) {
+  const submitHandler = async (data: IBrandFlowStepInput) => {
     await onSubmit(data)
     setOpenForm(null)
   }
 
+  const creatNewStep = (type: Forms) => {
+    if (type === openForm) {
+      return
+    }
+
+    if (hasDirtyStep) {
+      return modal.setConfirmationModal({
+        message: 'Warning!',
+        description:
+          'You have not saved your work yet, are you sure you want to cancel it?',
+        confirmLabel: 'Cancel',
+        cancelLabel: "Don't Cancel",
+        onConfirm: () => {
+          setOpenForm(type)
+        },
+        onCancel: () => {
+          return null
+        }
+      })
+    }
+
+    setOpenForm(type)
+  }
+
+  const makeDirtyStep = () => {
+    if (hasDirtyStep) {
+      return
+    }
+
+    setHasDirtyStep(true)
+  }
+
   const renderEventForm = () => (
-    <EventForm index={index} onSubmit={submitHandler} />
+    <EventForm
+      index={index}
+      isDirty={openForm === 'event' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
+      onSubmit={submitHandler}
+    />
   )
 
   const rebderBasicEmailForm = () => (
     <BasicEmailForm
       index={index}
-      templates={emailTemplates}
-      defaultSelectedTemplate={defaultSelectedEmailTemplate}
+      isDirty={openForm === 'basic_email' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
       onSubmit={submitHandler}
-      onNewTemplateClick={onNewEmailTemplateClick}
     />
   )
   const rebderTemplateEmailForm = () => (
-    <MarketingEmailForm index={index} onSubmit={submitHandler} />
+    <MarketingEmailForm
+      index={index}
+      isDirty={openForm === 'marketing_email' && hasDirtyStep}
+      makeDirtyStep={makeDirtyStep}
+      onSubmit={submitHandler}
+    />
   )
-
-  const renderForm = () => {
+  const renderForm = useCallback(() => {
     switch (openForm) {
       case 'event':
         return renderEventForm()
@@ -85,7 +125,8 @@ export const NewStep = ({
       case 'marketing_email':
         return rebderTemplateEmailForm()
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openForm])
 
   const renderNewStep = () => {
     if (!openForm) {
@@ -107,9 +148,10 @@ export const NewStep = ({
     return (
       <Box className={classes.container} mt={openForm ? 2 : 0}>
         <AddButtons
-          onNewEventClick={() => setOpenForm('event')}
-          onNewMarketingEmailClick={() => setOpenForm('marketing_email')}
-          onNewBasicEmailClick={() => setOpenForm('basic_email')}
+          activeForm={openForm}
+          onNewEventClick={() => creatNewStep('event')}
+          onNewMarketingEmailClick={() => creatNewStep('marketing_email')}
+          onNewBasicEmailClick={() => creatNewStep('basic_email')}
         />
       </Box>
     )

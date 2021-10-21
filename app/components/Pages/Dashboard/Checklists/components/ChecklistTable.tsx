@@ -109,6 +109,10 @@ export function CheckListTable({
                     snapshot: DraggableStateSnapshot
                   ) => (
                     <TableRow
+                      className={classNames({
+                        [tableClasses.splitterRow]:
+                          task.task_type === 'Splitter'
+                      })}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -156,7 +160,17 @@ export function CheckListTable({
                             })
                           }
                         >
-                          {task.title || (
+                          {task.title ? (
+                            <Typography
+                              variant={
+                                task.task_type === 'Splitter'
+                                  ? 'subtitle1'
+                                  : 'body1'
+                              }
+                            >
+                              {task.title}
+                            </Typography>
+                          ) : (
                             <Typography color="textSecondary">
                               Unnamed Task
                             </Typography>
@@ -175,19 +189,21 @@ export function CheckListTable({
                           width: '10%'
                         }}
                       >
-                        <Checkbox
-                          disabled={isRequiredChanging(task.id)}
-                          color="primary"
-                          checked={task.required}
-                          onChange={async event => {
-                            setRequiredChanging(task.id, true)
-                            await updateTask({
-                              ...task,
-                              required: event.target.checked
-                            })
-                            setRequiredChanging(task.id, false)
-                          }}
-                        />
+                        {task.task_type !== 'Splitter' && (
+                          <Checkbox
+                            disabled={isRequiredChanging(task.id)}
+                            color="primary"
+                            checked={task.required}
+                            onChange={async event => {
+                              setRequiredChanging(task.id, true)
+                              await updateTask({
+                                ...task,
+                                required: event.target.checked
+                              })
+                              setRequiredChanging(task.id, false)
+                            }}
+                          />
+                        )}
                       </TableCell>
                       <TableCell
                         style={{

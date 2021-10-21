@@ -5,7 +5,7 @@ import Fetch from '../../../../services/fetch'
  */
 
 export default async function editContext(
-  brand: UUID,
+  brand: Nullable<UUID>,
   contextId: UUID | undefined,
   data: Partial<IDealBrandContext> & {
     checklists: {
@@ -14,6 +14,10 @@ export default async function editContext(
     }[]
   }
 ): Promise<IDealBrandContext> {
+  if (!brand) {
+    throw new Error('Can not edit context. brand is not provided')
+  }
+
   if (!contextId) {
     throw new Error('invalid context id')
   }

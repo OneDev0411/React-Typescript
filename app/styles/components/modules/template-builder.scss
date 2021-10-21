@@ -327,6 +327,7 @@
 
   .gjs-toolbar {
     display: flex;
+    flex-direction: column;
     background-color: #e7e9ec;
     border: 2px solid rgba(0, 0, 0, 0.08);
     color: #000;
@@ -348,6 +349,7 @@
         justify-content: center;
         flex-direction: column;
         margin: 0.1rem;
+        padding: 0.5rem;
         height: 100%;
         border-radius: 4px;
 
@@ -427,6 +429,26 @@
 
   .gjs-highlighter {
     outline: none;
+  }
+
+  .gjs-rte-toolbar {
+    position: static;
+    border: none;
+  }
+
+  .cke {
+    border: none;
+  }
+
+  .cke_top {
+    background-color: #e7e9ec;
+    border: none;
+    padding: 0;
+  }
+
+  .cke_dialog_ui_input_select {
+    display: block;
+    width: 100%;
   }
 
   .gjs-block {

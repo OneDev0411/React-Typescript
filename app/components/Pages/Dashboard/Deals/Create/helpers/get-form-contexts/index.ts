@@ -1,5 +1,3 @@
-import { getContext } from 'models/Deal/helpers/context'
-
 export function getFormContexts(
   values: Record<string, unknown>,
   deal: IDeal,
@@ -13,7 +11,6 @@ export function getFormContexts(
     }
 
     const [, name] = key.split(':')
-    const context = getContext(deal, name)
 
     const brandChecklist = brandChecklists?.filter(
       checklist =>
@@ -48,7 +45,7 @@ export function getFormContexts(
         value,
         definition: definition.id,
         checklist: checklist?.id,
-        approved: context ? context.needs_approval : false
+        approved: definition ? definition.needs_approval : false
       }
     ]
   }, [])

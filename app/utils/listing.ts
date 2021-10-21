@@ -1,3 +1,5 @@
+import numeral from 'numeral'
+
 import { LEASE_PROPERTY_SUBTYPES } from '../constants/listings/property-subtypes'
 import { LEASE_PROPERTY_TYPES } from '../constants/listings/property-types'
 
@@ -82,7 +84,8 @@ export const addressTitle = (address: Address | ICompactAddress): string => {
     address.street_number,
     address.street_dir_prefix,
     address.street_name,
-    address.street_suffix
+    address.street_suffix,
+    address.street_dir_suffix
   ]
     .filter(a => a)
     .join(' ')
@@ -122,9 +125,15 @@ export const getListingAddress = (
 ): string => {
   const address = getListingAddressObj(listing)
 
-  const { street_number, street_name, street_suffix, unit_number } = address
+  const {
+    street_number,
+    street_name,
+    street_suffix,
+    street_dir_suffix,
+    unit_number
+  } = address
 
-  let result = [street_number, street_name, street_suffix]
+  let result = [street_number, street_name, street_suffix, street_dir_suffix]
     .filter(s => s)
     .join(' ')
 
@@ -205,6 +214,59 @@ export const getListingFeatures = (
   }
 }
 
+export const getListingPrice = (
+  listingPrice: number,
+  listingClosePrice: Nullable<number>,
+  user: Nullable<IUser>
+): number => {
+  let price = listingPrice
+
+  if (user && listingClosePrice && user.user_type === 'Agent') {
+    price = listingClosePrice
+  }
+
+  return price || 0
+}
+
+export const getListingFormatedPrice = (
+  listingPrice: number,
+  listingClosePrice: Nullable<number>,
+  user: Nullable<IUser>,
+  isShortFormat: boolean = true
+): string => {
+  const price = getListingPrice(listingPrice, listingClosePrice, user)
+
+  if (isShortFormat) {
+    const roundedPrice = Math.round(price / 1000) * 1000
+
+    return numeral(roundedPrice).format('0.[00]a')
+  }
+
+  return price.toLocaleString('en-US', { maximumFractionDigits: 1 })
+}
+
+export const getListingPricePerSquareFoot = (
+  listing: ICompactListing | IListing,
+  user: Nullable<IUser>,
+  fallback: Nullable<string> = null
+): Nullable<string> => {
+  const price = getListingPrice(listing.price, listing.close_price, user)
+  const squareMeters =
+    listing.type === 'compact_listing'
+      ? listing.compact_property.square_meters
+      : listing.property.square_meters
+
+  const squareFeet = metersToFeet(squareMeters)
+
+  if (squareFeet === 0) {
+    return fallback
+  }
+
+  return (price / squareFeet).toLocaleString('en-US', {
+    maximumFractionDigits: 2
+  })
+}
+
 export default {
   getStatusColor,
   getStatusColorClass,
@@ -218,5 +280,6 @@ export default {
   getCurrentDaysOnMarket,
   getResizeUrl,
   squareMetersToAcres,
-  isLeaseProperty
+  isLeaseProperty,
+  getListingPrice: getListingFormatedPrice
 }

@@ -48,6 +48,7 @@ export default function ChecklistsPage({ location }: Props) {
     updateChecklist,
     addChecklists,
     addGeneralCommentTask,
+    addSplitterTask,
     addFormTask,
     deleteTask,
     reorderTasks
@@ -142,6 +143,10 @@ export default function ChecklistsPage({ location }: Props) {
                   }}
                   addGeneralCommentTask={async (...args) => {
                     await addGeneralCommentTask(...args)
+                    lastTaskNameEditorRef.current!.edit()
+                  }}
+                  addSplitterTask={async (...args) => {
+                    await addSplitterTask(...args)
                     lastTaskNameEditorRef.current!.edit()
                   }}
                   addFormTask={addFormTask}

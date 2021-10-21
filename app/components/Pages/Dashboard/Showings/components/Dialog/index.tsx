@@ -25,7 +25,8 @@ const useStyles = makeStyles(
       minHeight: theme.spacing(8),
       borderBottom: `1px solid ${theme.palette.grey[200]}`,
       paddingRight: theme.spacing(1)
-    }
+    },
+    title: { flex: 1 }
   }),
   { name: 'Dialog' }
 )
@@ -62,7 +63,7 @@ function Dialog({
       }}
     >
       <Box className={classes.header}>
-        <DialogTitle disableTypography>
+        <DialogTitle className={classes.title} disableTypography>
           <Typography variant="subtitle1">{title}</Typography>
           {subtitle && <Typography variant="body2">{subtitle}</Typography>}
         </DialogTitle>

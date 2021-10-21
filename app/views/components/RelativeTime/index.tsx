@@ -10,6 +10,7 @@ type DateType = number | string | Date
 interface Props {
   time: DateType
   refreshIntervalInSeconds?: number
+  locale?: string
 }
 
 /**
@@ -22,10 +23,14 @@ interface Props {
  * @param refreshIntervalInSeconds: interval for updating relative time
  * @constructor
  */
-export function RelativeTime({ time, refreshIntervalInSeconds = 60 }: Props) {
+export function RelativeTime({
+  time,
+  refreshIntervalInSeconds = 60,
+  locale
+}: Props) {
   const rerender = useForceRender()
 
   useInterval(rerender, refreshIntervalInSeconds * 1000)
 
-  return <>{timeago().format(time)}</>
+  return <>{timeago().format(time, locale)}</>
 }

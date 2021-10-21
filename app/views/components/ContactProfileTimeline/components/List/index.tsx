@@ -99,30 +99,31 @@ export function CalendarList({
         setSelectedEvent
       }}
     >
-      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
+      <Box my={1} textAlign="center">
+        <Button
+          size="small"
+          disabled={isLoading}
+          onClick={onLoadPreviousEvents}
+        >
+          Load Next Year Events
+        </Button>
+      </Box>
 
-      {!isReachedStart && rows.length > 0 && (
-        <Box my={1} textAlign="center">
-          <Button
-            size="small"
-            disabled={isLoading}
-            onClick={onLoadPreviousEvents}
-          >
-            {isLoading ? 'Loading...' : 'More Upcoming Events'}
-          </Button>
-        </Box>
-      )}
+      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
 
       <Box>
         {rows.map((section, index) => (
-          <Box className={classes.section} key={index}>
+          <Box
+            className={classes.section}
+            key={`${section.header.date}-${index}`}
+          >
             <Box className={classes.header}>
               <EventHeader item={section.header} />
             </Box>
 
             <Box flexGrow={1} className={classes.events}>
-              {section.events.map((event, eventIndex) => (
-                <div key={eventIndex} className={classes.event}>
+              {section.events.map(event => (
+                <div key={event.id} className={classes.event}>
                   <Event event={event} onEventChange={handleEventChange} />
                 </div>
               ))}
@@ -131,13 +132,11 @@ export function CalendarList({
         ))}
       </Box>
 
-      {!isReachedEnd && rows.length > 0 && (
-        <Box my={1} textAlign="center">
-          <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
-            {isLoading ? 'Loading...' : 'More Past Events'}
-          </Button>
-        </Box>
-      )}
+      <Box my={1} textAlign="center">
+        <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
+          Load Previous Year Events
+        </Button>
+      </Box>
 
       <EventController
         user={user}

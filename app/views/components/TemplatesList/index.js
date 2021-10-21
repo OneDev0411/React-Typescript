@@ -29,7 +29,7 @@ function TemplatesList(props) {
     }
 
     const defaultSelectedTemplate = props.items.find(
-      item => item.id === props.defaultSelected
+      item => item.template.id === props.defaultSelected
     )
 
     if (!defaultSelectedTemplate) {

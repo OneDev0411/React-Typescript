@@ -2,6 +2,8 @@ import React from 'react'
 
 import { Dialog, useTheme, Theme } from '@material-ui/core'
 
+import { noop } from '@app/utils/helpers'
+
 import { ListingDetails } from '../ListingDetails'
 
 interface Props {
@@ -9,13 +11,15 @@ interface Props {
   isOpen: boolean
   isWidget?: boolean
   closeHandler: () => void
+  onToggleFavorite?: () => void
 }
 
 function ListingDetailsModal({
   listingId,
   isOpen,
   closeHandler,
-  isWidget = false
+  isWidget = false,
+  onToggleFavorite = noop
 }: Props) {
   const theme: Theme = useTheme()
 
@@ -35,6 +39,7 @@ function ListingDetailsModal({
             isWidget={isWidget}
             id={listingId}
             onClose={closeHandler}
+            onToggleFavorite={onToggleFavorite}
           />
         </>
       )}

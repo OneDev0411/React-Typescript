@@ -84,10 +84,10 @@ class ContactsList extends React.Component {
       loadedRanges: [],
       duplicateClusterCount: 0,
       parkedContactCount: 0,
-      viewMode: 'table'
+      viewMode: 'table',
+      sortOrder: '-last_touch'
     }
 
-    this.order = null
     this.tableContainerId = 'contacts--page-container'
   }
 
@@ -96,11 +96,17 @@ class ContactsList extends React.Component {
 
     const { parkedContactsCount, searchInputValue } = this.state
     const { user, fetchTags, getContactsTags } = this.props
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+    const relevanceSortKey = '-last_touch_rank'
 
-    this.order = searchInputValue
-      ? '-last_touch_rank'
-      : getUserSettingsInActiveTeam(user, SORT_FIELD_SETTING_KEY) ||
-        '-last_touch'
+    const order = searchInputValue
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
 
     this.fetchContactsAndJumpToSelected()
     this.getDuplicateClusterCount()
@@ -108,7 +114,8 @@ class ContactsList extends React.Component {
     this.setState({
       viewMode:
         getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) ||
-        'table'
+        'table',
+      sortOrder: order
     })
 
     if (globalButtonDispatch) {
@@ -316,7 +323,7 @@ class ContactsList extends React.Component {
   }
 
   hasSearchState = () =>
-    this.props.filters || this.state.searchInputValue || this.order
+    this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
   fetchList = async (
     start = 0,
@@ -358,7 +365,7 @@ class ContactsList extends React.Component {
   handleFilterChange = async (
     newFilters,
     resetLoadedRanges = false,
-    newOrder = this.order
+    newOrder
   ) => {
     if (this.state.isShowingDuplicatesList) {
       return
@@ -366,12 +373,13 @@ class ContactsList extends React.Component {
 
     const isParkedTabActive =
       this.props.activeSegment.id === PARKED_CONTACTS_LIST_ID
+    const sortOrder = newOrder ?? this.state.sortOrder
 
     const {
       filters = this.props.filters,
       searchInputValue = this.state.searchInputValue,
       start = 0,
-      order = newOrder,
+      order = sortOrder,
       viewAsUsers = this.props.viewAsUsers,
       flows = this.props.flows,
       crmTasks = this.props.crmTasks,
@@ -431,19 +439,26 @@ class ContactsList extends React.Component {
   }
 
   handleSearch = value => {
-    this.setState({ searchInputValue: value, firstLetter: null }, () => {
-      this.setQueryParam('letter', '')
+    const { sortOrder } = this.state
+    const relevanceSortKey = '-last_touch_rank'
+    let order = sortOrder
 
-      const relevanceValue = '-last_touch_rank'
+    if (value) {
+      order = relevanceSortKey
+    } else if (order === relevanceSortKey) {
+      order =
+        getUserSettingsInActiveTeam(this.props.user, SORT_FIELD_SETTING_KEY) ??
+        '-last_touch'
+    }
 
-      if (value) {
-        this.order = relevanceValue
-      } else if (this.order === relevanceValue) {
-        this.order = '-updated_at'
+    this.setState(
+      { searchInputValue: value, sortOrder: order, firstLetter: null },
+      () => {
+        this.setQueryParam('letter', '')
+
+        this.handleFilterChange({ parked: undefined }, true, order)
       }
-
-      this.handleFilterChange({ parked: undefined }, true, this.order)
-    })
+    )
   }
 
   handleFirstLetterChange = value => {
@@ -453,10 +468,17 @@ class ContactsList extends React.Component {
     })
   }
 
-  handleChangeOrder = ({ value: order }) => {
-    const { user, getUserTeams } = this.props
+  changeSortOrder = ({ value: order }) => {
+    if (order === this.state.sortOrder) {
+      return
+    }
 
-    this.order = order
+    const { user, getUserTeams, setUserSetting } = this.props
+
+    this.setState({
+      sortOrder: order
+    })
+    setUserSetting(SORT_FIELD_SETTING_KEY, order)
     this.handleFilterChange({}, true)
     getUserTeams(user)
   }
@@ -605,7 +627,7 @@ class ContactsList extends React.Component {
   }
 
   reloadContacts = async (start = 0) => {
-    const { parkedContactCount } = this.state
+    const { parkedContactCount, sortOrder } = this.state
     const { activeSegment, searchContacts } = this.props
     const isParkedTabActive = activeSegment.id === PARKED_CONTACTS_LIST_ID
 
@@ -619,7 +641,7 @@ class ContactsList extends React.Component {
       undefined,
       isParkedTabActive,
       this.state.searchInputValue,
-      this.order,
+      sortOrder,
       this.props.viewAsUsers,
       this.props.conditionOperator,
       false,
@@ -766,7 +788,8 @@ class ContactsList extends React.Component {
   }
 
   renderTabs = (props = {}) => {
-    const { selectedShortcutFilter, searchInputValue } = this.state
+    const { selectedShortcutFilter, searchInputValue, sortOrder, viewMode } =
+      this.state
     const { viewAsUsers, listInfo, activeSegment } = this.props
 
     return (
@@ -795,15 +818,15 @@ class ContactsList extends React.Component {
           }
         }}
         sortProps={{
-          onChange: this.handleChangeOrder,
-          currentOrder: this.order,
+          onChange: this.changeSortOrder,
+          currentOrder: sortOrder,
           searchValue: searchInputValue
         }}
         contactCount={listInfo.total || 0}
         users={viewAsUsers}
         activeSegment={activeSegment}
         onChangeView={this.changeViewMode}
-        viewMode={this.state.viewMode}
+        viewMode={viewMode}
         {...props}
       />
     )
@@ -818,6 +841,8 @@ class ContactsList extends React.Component {
     const syncing = Object.values(this.props.oAuthAccounts)
       .flat()
       .some(account => account.sync_status !== 'success')
+    const isTableMode = this.state.viewMode === 'table'
+    const isBoardMode = this.state.viewMode === 'board'
 
     const isZeroState =
       !isParkedTabActive &&
@@ -840,7 +865,7 @@ class ContactsList extends React.Component {
 
     return (
       <PageLayout
-        {...(this.state.viewMode === 'board' && {
+        {...(isBoardMode && {
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
@@ -882,7 +907,7 @@ class ContactsList extends React.Component {
           <ViewAs containerStyle={{ marginLeft: '0.5rem' }} />
         </PageLayout.HeaderWithSearch>
         <PageLayout.Main
-          {...(this.state.viewMode === 'board' && {
+          {...(isBoardMode && {
             display: 'flex',
             flexDirection: 'column',
             flex: '1 1 auto',
@@ -928,29 +953,19 @@ class ContactsList extends React.Component {
 
               <Box
                 mt={2}
-                {...(this.state.viewMode === 'board' && {
+                {...(isBoardMode && {
                   flexGrow: 1,
                   overflow: 'hidden'
                 })}
               >
-                <ViewMode enabled={this.state.viewMode === 'board'}>
-                  <Board
-                    contacts={contacts}
-                    totalContacts={props.listInfo.total || 0}
-                    isFetchingContacts={isFetchingContacts}
-                    isFetchingNextContacts={state.isFetchingMoreContacts}
-                    isFetchingPreviousContacts={
-                      state.isFetchingMoreContactsBefore
-                    }
-                    onColumnReachStart={this.handleLoadMoreBefore}
-                    onColumnReachEnd={this.handleLoadMore}
-                  />
+                <ViewMode enabled={isBoardMode}>
+                  <Board searchTerm={this.state.searchInputValue || ''} />
                 </ViewMode>
 
-                <ViewMode enabled={this.state.viewMode === 'table'}>
+                <ViewMode enabled={isTableMode}>
                   <Table
                     data={contacts}
-                    order={this.order}
+                    order={state.sortOrder}
                     totalRows={props.listInfo.total || 0}
                     listInfo={props.listInfo}
                     activeSegment={activeSegment}

@@ -55,13 +55,27 @@ class Mapper extends React.Component {
       .slice(1)
       .filter(columns => columns.join('').length > 0)
 
+    let errorMessage =
+      errors.length > 0
+        ? errors[0].message
+        : 'This file does not contain any contacts to upload'
+
+    if (errors[0]?.code === 'InvalidQuotes') {
+      errorMessage = (
+        <span>
+          Your file is not a CSV file, please try again with the correct file
+          format.{' '}
+          <a target="_blank" href="https://bit.ly/3zbPcDx">
+            Learn More
+          </a>
+        </span>
+      )
+    }
+
     if (contacts.length === 0 || errors.length > 0) {
       return showMessageModal({
         message: errors.length > 0 ? 'Something Wrong' : 'No Contact',
-        description:
-          errors.length > 0
-            ? errors[0].message
-            : 'This file does not contain any contacts to upload',
+        description: errorMessage,
         hideCancelButton: true,
         confirmLabel: 'Okay',
         onConfirm: () =>

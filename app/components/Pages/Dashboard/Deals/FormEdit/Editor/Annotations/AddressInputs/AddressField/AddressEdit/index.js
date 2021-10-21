@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { AddressPopover } from 'components/inline-editable-fields/InlineAddressField/AddressPopover'
 import { getAnnotationsByType } from 'deals/FormEdit/utils/get-annotations-by-type'
+
+import { UnlinkFieldButton } from '../../../../../components/UnlinkFieldButton'
 
 export function AddressEdit({
   rect,
@@ -10,7 +12,8 @@ export function AddressEdit({
   style,
   annotations,
   formValues,
-  onSave
+  onSave,
+  onToggleUnlink
 }) {
   const [address, setAddress] = useState(null)
 
@@ -44,25 +47,36 @@ export function AddressEdit({
   }
 
   return (
-    <div
-      style={{
-        ...style,
-        ...inputStyles,
-        position: 'absolute',
-        top: style.top,
-        left: style.left,
-        width: rect.width
-      }}
-      onClick={handleEdit}
-    >
-      <span>{inputValue}</span>
+    <div>
+      <div
+        style={{
+          ...style,
+          ...inputStyles,
+          position: 'absolute',
+          top: style.top,
+          left: style.left,
+          width: rect.width
+        }}
+        className="field-unlinkable"
+        onClick={handleEdit}
+      >
+        <span>{inputValue}</span>
 
-      <AddressPopover
-        isOpen={address !== null}
-        address={address}
-        showDeleteButton={false}
-        onSubmit={handleSave}
-        onClose={handleClose}
+        <AddressPopover
+          isOpen={address !== null}
+          address={address}
+          showDeleteButton={false}
+          onSubmit={handleSave}
+          onClose={handleClose}
+        />
+      </div>
+      <UnlinkFieldButton
+        style={{
+          left: `${rect.left + rect.width - 16}px`,
+          top: `${rect.top + rect.height / 10}px`,
+          height: `${rect.height}px`
+        }}
+        onClick={onToggleUnlink}
       />
     </div>
   )

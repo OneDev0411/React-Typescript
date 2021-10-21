@@ -12,7 +12,7 @@ export const calculateWordWrap = memoize(
     }
   ) => {
     const first = annotations[0]
-    const appearance = parseAppearanceString(first.defaultAppearance)
+    const appearance = parseAppearanceString(first.defaultAppearanceData)
 
     const rects = annotations.map(annotation => {
       const rect = annotation.rect

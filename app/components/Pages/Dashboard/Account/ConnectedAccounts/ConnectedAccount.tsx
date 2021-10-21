@@ -84,7 +84,7 @@ export default function ConnectedAccount({ account, onSync, onDelete }: Props) {
           />
         </Grid>
 
-        <Grid item xs={4} direction="row" alignItems="center">
+        <Grid item xs={6} direction="row" alignItems="center">
           <Box display="flex" alignItems="center">
             <ConnectedAccountSyncStatus account={account} />
             <SyncButton account={account} onSync={onSync} />

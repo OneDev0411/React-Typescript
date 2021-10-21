@@ -1,3 +1,4 @@
+// TODO: reimplement is required
 import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
@@ -17,7 +18,8 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  SET_DRAWER_STATUS
+  SET_DRAWER_STATUS,
+  SET_MODE
 } from 'deals/contexts/actions-context/constants'
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 import { IAppState } from 'reducers'
@@ -69,12 +71,14 @@ import {
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
+  type: 'task' | 'submission' | 'file' | 'envelope'
   deal: IDeal
   task: IDealTask | null
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
   className?: string
+  onTaskActionActivate?: () => void
 }
 
 interface ContextProps {
@@ -172,7 +176,45 @@ class ActionsButton extends React.Component<
       })
     }
 
+    if (
+      ['view-envelope', 'view-form', 'view-file'].includes(type) &&
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'View/Print',
+          taskId: this.props.task?.id
+        }
+      })
+
+      this.props.onTaskActionActivate?.()
+
+      return
+    }
+
+    if (
+      ['docusign-envelope', 'docusign-form', 'docusign-file'].includes(type) &&
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'Docusign',
+          taskId: this.props.task?.id
+        }
+      })
+
+      this.props.onTaskActionActivate?.()
+
+      return
+    }
+
     this.actions[type] && this.actions[type](this.props)
+
+    this.resetTaskActionMode()
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -381,10 +423,49 @@ class ActionsButton extends React.Component<
     return button.label
   }
 
+  resetTaskActionMode = () => {
+    this.props.actionsDispatch({
+      type: SET_MODE,
+      mode: {
+        type: null,
+        taskId: null
+      }
+    })
+  }
+
+  getViewableFilesCount = () => {
+    let count = this.props.task?.room.attachments?.length ?? 0
+
+    if (this.props.envelope) {
+      count += 1
+    }
+
+    if (this.props.task?.form) {
+      count += 1
+    }
+
+    return count
+  }
+
   render() {
+    const isTaskViewActionActive =
+      this.props.actionsState.mode.type === 'View/Print' &&
+      this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskDocusignActionActive =
+      this.props.actionsState.mode.type === 'Docusign' &&
+      this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskActionActive =
+      isTaskViewActionActive || isTaskDocusignActionActive
+
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actionsState.actions,
-      this.props.actions
+      this.props.actions,
+      {
+        isTaskViewActionActive,
+        isTaskDocusignActionActive
+      }
     )
 
     if (secondaryActions.length === 0) {
@@ -393,12 +474,34 @@ class ActionsButton extends React.Component<
 
     const primaryAction: ActionButton = secondaryActions.shift()!
 
+    if (isTaskActionActive && this.props.type === 'task') {
+      return (
+        <Tooltip
+          title={`There are multiple copies of this form available. Please choose which copy you like to ${this.props.actionsState.mode?.type}`}
+          placement="top"
+          open
+          PopperProps={{
+            style: { zIndex: 1 }
+          }}
+        >
+          <Container>
+            <PrimaryAction
+              hasSecondaryActions={false}
+              onClick={this.resetTaskActionMode}
+            >
+              Cancel
+            </PrimaryAction>
+          </Container>
+        </Tooltip>
+      )
+    }
+
     return (
       <div
         className={this.props.className}
         style={{
           ...(this.state.isMenuOpen && {
-            visibility: 'visible'
+            display: 'block'
           })
         }}
       >
@@ -410,13 +513,13 @@ class ActionsButton extends React.Component<
               width: '10.8rem' // TODO: needs refactor all styled components
             }
           }}
-          onIsOpenChange={isMenuOpen =>
+          onIsOpenChange={isMenuOpen => {
             this.setState({
               isMenuOpen
             })
-          }
+          }}
           renderDropdownButton={({ isActive, ...props }) => (
-            <Container hasSecondaryActions={secondaryActions.length > 0}>
+            <Container>
               <PrimaryAction
                 hasSecondaryActions={secondaryActions.length > 0}
                 className={this.getButtonLabel(primaryAction)}
