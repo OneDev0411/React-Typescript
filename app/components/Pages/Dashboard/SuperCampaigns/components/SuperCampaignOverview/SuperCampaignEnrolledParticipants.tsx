@@ -4,7 +4,7 @@ import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
-import SuperCampaignEnrolledParticipantsTags from './SuperCampaignEnrolledParticipantsTags'
+import SuperCampaignTags from './SuperCampaignTags'
 import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
 
 function SuperCampaignEnrolledParticipants() {
@@ -18,9 +18,8 @@ function SuperCampaignEnrolledParticipants() {
     <SuperCampaignCard>
       <SuperCampaignCardHeader title="Enrolled Participants By Their Contacts Tags" />
       <Box pt={1}>
-        <SuperCampaignEnrolledParticipantsTags
-          defaultValue={superCampaign.tags}
-          // options={['Famous 1', 'Famous 2']} // TODO: Ask Abbas about most popular tags
+        <SuperCampaignTags
+          value={superCampaign.tags}
           onChange={updateSuperCampaignTags}
           disabled={isSaving}
         />
