@@ -172,7 +172,7 @@ export const PopoverContactTagSelector = ({
               variant: 'outlined',
               size: 'small'
             }}
-            textFiledProps={{
+            textFieldProps={{
               autoFocus: true,
               variant: 'outlined',
               className: classes.textField
