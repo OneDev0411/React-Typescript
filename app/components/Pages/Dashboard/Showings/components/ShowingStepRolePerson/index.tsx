@@ -65,8 +65,8 @@ function ShowingStepRolePerson({
   const isLastStep = step === wizard.lastVisitedStep
 
   const { handleSubmit, isSavingContact } = useShowingRoleFormSubmit(
-    ({ user, ...values }: ShowingRoleFormValues) => {
-      onRoleEdit({ ...role, ...values, user: user.id, mode: 'card' })
+    (values: ShowingRoleFormValues) => {
+      onRoleEdit({ ...role, ...values, mode: 'card' })
       nextStep(400)
     }
   )
@@ -124,6 +124,7 @@ function ShowingStepRolePerson({
               confirm_notification_type: role.confirm_notification_type,
               cancel_notification_type: role.cancel_notification_type,
               user: role.user,
+              agent: role.agent,
               can_approve: role.can_approve,
               save_to_contact: role.save_to_contact,
               contact: role.contact

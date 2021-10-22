@@ -10,12 +10,11 @@ export type ShowingRoleFormValues = Pick<
   | 'phone_number'
   | 'confirm_notification_type'
   | 'cancel_notification_type'
+  | 'user'
   | 'can_approve'
   | 'contact'
   | 'save_to_contact'
-> & {
-  user: IUser
-}
+>
 
 export interface CreateContactInput {
   first_name: string

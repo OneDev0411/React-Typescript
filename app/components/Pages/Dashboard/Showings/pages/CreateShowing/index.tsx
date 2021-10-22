@@ -161,7 +161,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         aired_at: new Date().toISOString(), // TODO: use the real value later
         roles: roles.map<IShowingRoleInput>(role => ({
           role: role.role,
-          user: role.user ?? undefined,
+          user: role.user?.id ?? undefined,
           agent: role.agent ?? undefined,
           brand: role.brand || teamId,
           first_name: role.first_name,

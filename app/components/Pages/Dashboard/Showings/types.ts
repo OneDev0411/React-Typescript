@@ -56,17 +56,18 @@ export interface ShowingAvailabilityItem extends IShowingAvailabilityInput {
 
 export type ShowingRoleInputMode = 'form' | 'card'
 
-export interface ShowingRoleInput extends IShowingRoleInput {
+export interface ShowingRoleInput extends Omit<IShowingRoleInput, 'user'> {
   id: UUID
   mode: ShowingRoleInputMode
   deletable: boolean
   contact?: IContact
   save_to_contact: boolean
+  user: Optional<IUser>
 }
 
 export type ShowingRoleInputPerson = Pick<
   IShowingRoleInput,
   'brand' | 'first_name' | 'last_name' | 'email' | 'phone_number'
 > & {
-  user: IUser
+  user: Optional<IUser>
 }

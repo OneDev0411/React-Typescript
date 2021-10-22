@@ -68,7 +68,10 @@ function useShowingRoles(): UseShowingRolesReturn {
     const newRole: ShowingRoleInput = {
       id: `role-${nextRoleId.current++}`,
       ...person,
-      agent: undefined,
+      agent:
+        person.user?.agents?.length === 1
+          ? person.user.agents[0].id
+          : undefined,
       role,
       mode: 'form',
       deletable: role !== 'SellerAgent',
@@ -146,6 +149,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       id: `role-${nextRoleId.current++}`,
       role,
       user: undefined,
+      agent: undefined,
       brand: teamId,
       first_name: '',
       last_name: '',

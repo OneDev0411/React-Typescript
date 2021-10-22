@@ -11,6 +11,7 @@ async function getShowing(showingId: UUID): Promise<IShowing> {
         'showing_appointment.contact',
         'showing_appointment.approvals',
         'showing_approval.role',
+        // TODO: needs an association here for showing_approval_role.user
         'showing.roles',
         'showing_appointment.notifications',
         'showing.availabilities'
