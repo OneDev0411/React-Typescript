@@ -6,10 +6,12 @@ declare interface IShowingRole extends IModel<'showing_role'> {
   last_name: string
   email: string
   phone_number: string
-  user: UUID
+  user: UUID // Probably wrong, comes with association as an IUser
+  agent: UUID // Probably wrong, comes with association as an IAgent
   brand: UUID
   can_approve: boolean
   confirm_notification_type: INotificationDeliveryType[]
   cancel_notification_type: INotificationDeliveryType[]
-  user_id: string
+  user_id: UUID
+  agent_id: UUID
 }

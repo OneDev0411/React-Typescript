@@ -162,6 +162,7 @@ function CreateShowing({ router, route }: CreateShowingProps) {
         roles: roles.map<IShowingRoleInput>(role => ({
           role: role.role,
           user: role.user ?? undefined,
+          agent: role.agent ?? undefined,
           brand: role.brand || teamId,
           first_name: role.first_name,
           last_name: role.last_name,

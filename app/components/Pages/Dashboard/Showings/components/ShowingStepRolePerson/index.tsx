@@ -65,8 +65,8 @@ function ShowingStepRolePerson({
   const isLastStep = step === wizard.lastVisitedStep
 
   const { handleSubmit, isSavingContact } = useShowingRoleFormSubmit(
-    (values: ShowingRoleFormValues) => {
-      onRoleEdit({ ...role, ...values, mode: 'card' })
+    ({ user, ...values }: ShowingRoleFormValues) => {
+      onRoleEdit({ ...role, ...values, user: user.id, mode: 'card' })
       nextStep(400)
     }
   )

@@ -66,5 +66,7 @@ export interface ShowingRoleInput extends IShowingRoleInput {
 
 export type ShowingRoleInputPerson = Pick<
   IShowingRoleInput,
-  'user' | 'brand' | 'first_name' | 'last_name' | 'email' | 'phone_number'
->
+  'brand' | 'first_name' | 'last_name' | 'email' | 'phone_number'
+> & {
+  user: IUser
+}
