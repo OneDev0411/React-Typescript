@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import { Box, Button, TextField } from '@material-ui/core'
 
 import searchAgent from 'models/agent/search'
 
 interface Props {
+  user: IUser
   onComplete: (agents: IAgent[]) => void
 }
 
-export function SearchAgent({ onComplete }: Props) {
+export function SearchAgent({ user, onComplete }: Props) {
   const [agentNumber, setAgentNumber] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [error, setError] = useState('')
@@ -18,6 +19,14 @@ export function SearchAgent({ onComplete }: Props) {
     setIsSearching(true)
 
     try {
+      if (user.agents?.some(({ mlsid }) => mlsid === agentNumber)) {
+        setError(
+          `A MLS ID of "${agentNumber}" is currently associated with your account.`
+        )
+
+        return
+      }
+
       const agents = await searchAgent(agentNumber)
 
       setIsSearching(false)
@@ -37,6 +46,14 @@ export function SearchAgent({ onComplete }: Props) {
     }
   }
 
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAgentNumber(e.target.value)
+
+    if (error) {
+      setError('')
+    }
+  }
+
   return (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
@@ -48,7 +65,7 @@ export function SearchAgent({ onComplete }: Props) {
         size="small"
         error={!!error}
         helperText={error}
-        onChange={e => setAgentNumber(e.target.value)}
+        onChange={onChange}
       />
 
       <Box mt={2}>

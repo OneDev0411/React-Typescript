@@ -21,24 +21,34 @@ import { SelectAgent } from './SelectAgent'
 
 interface Props {
   isOpen: boolean
+  user: IUser
   onClose: () => void
 }
 
-export function AddMlsAgent({ isOpen, onClose }: Props) {
+export function AddMlsAgent({ user, isOpen, onClose }: Props) {
   const notify = useNotify()
   const [agent, setAgent] = useState<Nullable<IAgent>>(null)
   const [agents, setAgents] = useState<IAgent[]>([])
 
-  const getTitle = () => {
+  const getHeadings = () => {
     if (agents.length == 0) {
-      return 'Enter your agent license number.'
+      return {
+        title: 'Agent Verification',
+        subtitle: 'Enter your agent license # to unlock MLS features.'
+      }
     }
 
     if (agents.length > 0 && !agent) {
-      return 'Select MLS.'
+      return {
+        title: 'Choose MLS',
+        subtitle: 'Choose which MLS you are in.'
+      }
     }
 
-    return 'Agent Verification.'
+    return {
+      title: 'Agent Verification',
+      subtitle: 'Enter the complete mobile number or email address.'
+    }
   }
 
   const onSearchAgentComplete = (agents: IAgent[]) => {
@@ -61,11 +71,16 @@ export function AddMlsAgent({ isOpen, onClose }: Props) {
     onClose()
   }
 
+  const headings = getHeadings()
+
   return (
     <Dialog open={isOpen} fullWidth maxWidth="xs" onClose={onClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">{getTitle()}</Typography>
+          <div>
+            <Typography variant="h6">{headings.title}</Typography>
+            <Typography variant="subtitle2">{headings.subtitle}</Typography>
+          </div>
           <IconButton onClick={onClose}>
             <SvgIcon path={mdiClose} />
           </IconButton>
@@ -77,7 +92,7 @@ export function AddMlsAgent({ isOpen, onClose }: Props) {
       <DialogContent>
         <Box display="flex" flexDirection="column" my={2}>
           {agents.length === 0 && (
-            <SearchAgent onComplete={onSearchAgentComplete} />
+            <SearchAgent user={user} onComplete={onSearchAgentComplete} />
           )}
           {agents.length > 0 && !agent && (
             <SelectAgent
