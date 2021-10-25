@@ -1,7 +1,7 @@
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
 
-export function createFormTask(dealId, form, title, checklist) {
+export function createFormTask(dealId, form, title, checklist, order) {
   const task_type = 'Form'
   const status = 'Incomplete'
 
@@ -12,7 +12,8 @@ export function createFormTask(dealId, form, title, checklist) {
         status,
         task_type,
         checklist,
-        form
+        form,
+        order
       })
 
       dispatch({

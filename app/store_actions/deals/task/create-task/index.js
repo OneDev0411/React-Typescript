@@ -6,6 +6,8 @@ export function createTask({
   taskTitle,
   checklistId,
   taskType,
+  form,
+  order,
   taskStatus = 'Incomplete'
 }) {
   return async dispatch => {
@@ -14,7 +16,9 @@ export function createTask({
         title: taskTitle,
         status: taskStatus,
         checklist: checklistId,
-        task_type: taskType
+        task_type: taskType,
+        form,
+        order
       })
 
       dispatch({

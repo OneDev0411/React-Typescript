@@ -3,7 +3,6 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import hash from 'object-hash'
-import { useScrolling } from 'react-use'
 import { memoize } from 'underscore'
 
 import { formatListing } from '@app/components/Pages/Dashboard/MLS/helpers/format-listing'
@@ -12,6 +11,7 @@ import {
   SortIndex,
   sortByIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+import { noop } from '@app/utils/helpers'
 import { normalizeListingLocation } from '@app/utils/map'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
@@ -88,6 +88,7 @@ interface Props {
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
   user: IUser
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 const sortListings = memoize(
@@ -119,13 +120,13 @@ export const Results = ({
   activeSort,
   onChangeSort,
   isWidget,
-  user
+  user,
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useFavoritesContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
-  const isScroling = useScrolling(cardsContainerRef)
   const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
     return state.result.listings.length > 0 && !state.isLoading
@@ -180,6 +181,9 @@ export const Results = ({
   )
 
   const handleToggleLike = useCallback((listingId: UUID) => {
+    // Close listing modal after toggle like to prevent multiple toggling issue
+    // https://gitlab.com/rechat/web/-/issues/5708#note_709319289
+    onToggleListingModal('', false)
     dispatch(toggleListingFavoriteState(listingId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -222,10 +226,10 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  isScroling={isScroling}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -236,6 +240,8 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onToggleListingModal={onToggleListingModal}
+                  closeModalAfterToggleFavorite
                 />
               )}
             </>

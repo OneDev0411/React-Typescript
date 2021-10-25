@@ -21,6 +21,14 @@ export const useTableStyles = makeStyles(
         '& .MuiTableBody-root .MuiTableRow-root:nth-child(even)': {
           background: theme.palette.grey['50']
         }
+      },
+      splitterRow: {
+        '& td': {
+          paddingTop: theme.spacing(4)
+        },
+        '& td:not(:first-child)': {
+          borderBottom: '2px solid #000'
+        }
       }
     }),
   { name: 'Table' }

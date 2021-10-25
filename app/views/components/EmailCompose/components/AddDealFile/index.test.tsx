@@ -19,7 +19,7 @@ import { TestBed } from '../../../../../../tests/unit/TestBed'
 import AddDealFile, { AddDealFile as AddDealFileBase } from '.'
 
 const checklists = keyBy(checklistsArray as IDealChecklist[], 'id')
-const tasks = keyBy<IDealTask>(tasksArray as IDealTask[], 'id')
+const tasks = keyBy<IDealTask>(tasksArray as any, 'id')
 const deals = [deal1, deal2, dealWithDraft] as any[]
 
 const input: FieldRenderProps<any>['input'] = {

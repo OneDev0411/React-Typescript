@@ -217,11 +217,11 @@ const ContactProfile = props => {
    * refreshes timeline
    */
   const fetchTimeline = useCallback(() => {
-    if (!timelineRef) {
+    if (!timelineRef.current?.refresh) {
       return
     }
 
-    return setTimeout(timelineRef.current?.refresh, 500)
+    return setTimeout(timelineRef.current.refresh, 500)
   }, [timelineRef])
 
   const handleEmailThreadChangeEvent = useCallback(

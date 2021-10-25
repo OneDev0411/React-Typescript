@@ -29,6 +29,11 @@ interface Props {
   hoverListing: Nullable<UUID>
   clickedListing: Nullable<UUID>
   hasDrawingMode?: boolean
+  /*
+   * on Favorite Tab: We should close modals after Toggle Favorite on it
+   * to avoid fix bug on multiple toggle
+   * https://gitlab.com/rechat/web/-/issues/5658#note_702445108
+   */
   closeModalAfterToggleFavorite?: boolean
   drawing?: ICoord[]
   onMapLoad?: (map: google.maps.Map) => void
@@ -37,8 +42,7 @@ interface Props {
   onRemoveDrawing?: () => void
   onChange: (center: ICoord, zoom: number, bounds?: IBounds) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
-  onOpenListingModal?: (id: UUID) => void
-  onCloseListingModal?: () => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onMapClick?: () => void
   onClickToggleMap?: () => void
   onToggleFavorite?: (id: UUID) => void
@@ -66,8 +70,7 @@ export const Map = ({
   onRemoveDrawing = noop,
   onDrawingComplete,
   onChange,
-  onOpenListingModal = noop,
-  onCloseListingModal = noop,
+  onToggleListingModal = noop,
   onChangeHoverState = noop,
   onMarkerClick = noop,
   onMapClick = noop,
@@ -91,12 +94,12 @@ export const Map = ({
 
   const closeListingModal = useCallback(() => {
     setListingModalState({ id: '', isOpen: false })
-    onCloseListingModal()
-  }, [onCloseListingModal])
+    onToggleListingModal('', false)
+  }, [onToggleListingModal])
 
   const openListingModal = (id: UUID) => {
     setListingModalState({ id, isOpen: true })
-    onOpenListingModal(id)
+    onToggleListingModal(id, true)
   }
 
   const handleChange = ({ center, zoom, bounds }: ChangeEventValue) => {

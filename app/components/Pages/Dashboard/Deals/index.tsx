@@ -31,8 +31,6 @@ interface Props {
 }
 
 function Container(props: Props) {
-  console.log('[ x ] Rerender deals container')
-
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')
 

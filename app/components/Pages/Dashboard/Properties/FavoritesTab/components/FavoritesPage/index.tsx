@@ -8,6 +8,7 @@ import { useEffectOnce } from 'react-use'
 import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variables'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
@@ -18,7 +19,7 @@ import { Map } from '../../../components/Map'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { bootstrapURLKeys } from '../../../constants'
+import { bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import {
   parseSortIndex,
   SORT_FIELD_DEFAULT,
@@ -116,7 +117,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const [mapIsShown, setMapIsShown] = useState(true)
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [viewType, setViewType] = useState<ViewType>(
-    (viewQueryParam as ViewType) || 'cards'
+    (viewQueryParam as ViewType) || DEFAULT_VIEW
   )
 
   const onChangeSort = (sort: SortString) => {
@@ -165,17 +166,22 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     dispatch(toggleListingFavoriteState(id))
   }
 
-  const onOpenListingModal = (id: UUID) => {
-    if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/favorites/${id}`)
-    }
-  }
+  const onToggleListingModal = useCallback(
+    (id: UUID, isOpen: boolean) => {
+      if (!isWidget) {
+        if (isOpen) {
+          changeUrl(`/dashboard/properties/${id}`)
+        } else {
+          // Inject view param to url
+          const viewQueryParam =
+            viewType !== DEFAULT_VIEW ? { view: viewType } : {}
 
-  const onCloseListingModal = () => {
-    if (!isWidget) {
-      window.history.pushState({}, '', '/dashboard/properties/favorites')
-    }
-  }
+          changeUrl('/dashboard/properties/favorites', viewQueryParam)
+        }
+      }
+    },
+    [isWidget, viewType]
+  )
 
   const onMarkerClick = (key: UUID) => {
     const resultElement = document.getElementById(key)
@@ -237,8 +243,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   onClickLocate={onClickLocate}
                   onClickToggleMap={toggleMapShown}
                   onChangeHoverState={changeHoverState}
-                  onCloseListingModal={onCloseListingModal}
-                  onOpenListingModal={onOpenListingModal}
+                  onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={onMapClick}
                   mapPosition={state.map}
@@ -246,8 +251,6 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   hoverListing={state.listingStates.hover}
                   clickedListing={state.listingStates.click}
                   onToggleFavorite={onToggleFavorite}
-                  // close detail modal after toggle favorite
-                  // to avoid fix bug on multiple toggle
                   closeModalAfterToggleFavorite
                   onMapLoad={onMapLoad}
                 />
@@ -263,6 +266,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
               activeSort={sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
+              onToggleListingModal={onToggleListingModal}
               user={user}
             />
           </Grid>

@@ -35,6 +35,20 @@ export default (state = null, action) => {
         ...action.tasks
       }
 
+    case actionTypes.UPDATE_TASKS_ORDERS:
+      return Object.entries(state).reduce((list, [taskId, task]) => {
+        const order =
+          action.tasks.find(({ id }) => id === taskId)?.order ?? task.order ?? 0
+
+        return {
+          ...list,
+          [taskId]: {
+            ...task,
+            order
+          }
+        }
+      }, state)
+
     case actionTypes.SET_EXPAND_TASK:
       return {
         ...state,
@@ -140,7 +154,9 @@ export default (state = null, action) => {
 export const selectTaskById = (state, id) => (state && id ? state[id] : null)
 
 export const selectChecklistTasks = (checklist, state) =>
-  Array.isArray(checklist.tasks) ? checklist.tasks.map(id => state[id]) : []
+  Array.isArray(checklist.tasks)
+    ? checklist.tasks.map(id => state[id]).sort((a, b) => a.order - b.order)
+    : []
 
 export const selectDealTasks = (
   deal,

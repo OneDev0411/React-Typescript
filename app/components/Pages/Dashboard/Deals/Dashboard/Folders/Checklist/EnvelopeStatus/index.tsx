@@ -1,3 +1,5 @@
+import { Chip } from '@material-ui/core'
+
 interface Props {
   deal: IDeal
   task: IDealTask
@@ -26,12 +28,12 @@ export function EnvelopeStatus({ deal, task, envelope }: Props) {
 
     const extra = envelope.status === 'Created' ? ' (Draft)' : ''
 
-    return `${signedCount} of ${recipients.length} signed${extra}`
+    return `${signedCount}/${recipients.length} signed${extra}`
   }
 
   if (!envelope) {
     return null
   }
 
-  return <>{getTitle(envelope)}</>
+  return <Chip size="small" label={getTitle(envelope)} />
 }
