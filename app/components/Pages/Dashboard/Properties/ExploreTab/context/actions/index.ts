@@ -62,11 +62,16 @@ export const setMapBounds = (
   }
 })
 
-export const setMapLocation = (center: ICoord, zoom: number) => ({
+export const setMapLocation = (
+  center: ICoord,
+  zoom: number,
+  setPinMarker: boolean = false
+) => ({
   type: 'SET_MAP_LOCATION' as 'SET_MAP_LOCATION',
   payload: {
     center,
-    zoom
+    zoom,
+    setPinMarker
   }
 })
 

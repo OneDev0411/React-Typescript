@@ -175,7 +175,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     bounds: ICompactBounds
   ) => {
     if (viewType === DEFAULT_VIEW) {
-      dispatch(setMapLocation(center, zoom))
+      dispatch(setMapLocation(center, zoom, true))
     } else {
       dispatch(setMapBounds(center, zoom, bounds))
     }
@@ -319,6 +319,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                 <Map
                   isWidget={isWidget}
                   hasDrawingMode
+                  pin={state.pinMarker}
                   drawing={state.search.drawing}
                   onStartDrawingMode={onStartDrawingMode}
                   onDrawingComplete={onDrawingComplete}

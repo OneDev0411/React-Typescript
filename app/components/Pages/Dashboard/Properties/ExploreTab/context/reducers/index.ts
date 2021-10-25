@@ -19,6 +19,7 @@ export interface ListingSearchOptions {
 export interface ListingsState {
   search: ListingSearchOptions
   map: IMapPosition
+  pinMarker: Optional<ICoord>
   result: {
     listings: IFormattedCompactListing[]
     info: Nullable<ICompactListingInfo>
@@ -35,6 +36,7 @@ export const initialState: ListingsState = {
     sort: parseSortIndex(SORT_FIELD_DEFAULT)
   },
   map: { center: undefined, zoom: undefined },
+  pinMarker: undefined,
   result: { listings: [], info: null },
   listingStates: { hover: null, click: null },
   isLoading: true
@@ -143,9 +145,11 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
     }
 
     case 'SET_MAP_LOCATION': {
-      const { center, zoom } = action.payload
+      const { center, zoom, setPinMarker } = action.payload
 
-      return { ...state, map: { center, zoom } }
+      const pinMarker = setPinMarker ? { pinMarker: center } : {}
+
+      return { ...state, map: { center, zoom }, ...pinMarker }
     }
 
     case 'SET_IS_LOADING': {
