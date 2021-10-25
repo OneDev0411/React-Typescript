@@ -19,11 +19,18 @@ const useStyles = makeStyles(
   { name: 'Pin' }
 )
 
-const Pin = () => {
+interface Props {
+  lat: number
+  lng: number
+}
+
+const Pin = (props: Props) => {
   const classes = useStyles()
 
   return (
     <SvgIcon
+      data-lat={props.lat}
+      data-lng={props.lng}
       path={mdiMapMarker}
       className={classes.pin}
       size={muiIconSizes.xlarge}
