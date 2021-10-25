@@ -81,7 +81,8 @@ export class DealRole extends React.Component {
       ...getCommissionAttributes(form),
       role_type: this.getRoleType(),
       checklist: checklist ? checklist.id : undefined,
-      mls_id: form && form.agent ? form.agent.mlsid : ''
+      mls_id: form && form.agent ? form.agent.mlsid : '',
+      agents: this.isNewRecord ? form.agents : form.user.agents
     }
 
     return this.formObject
