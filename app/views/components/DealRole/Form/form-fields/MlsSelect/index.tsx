@@ -52,6 +52,7 @@ export function MlsSelect({
         <Box px={1} py={1} minWidth="400px">
           <UserAgentSelect
             agents={agents}
+            defaultAgent={selectedAgent?.id}
             onChange={agent => {
               handleChange(agent)
               close()
