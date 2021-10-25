@@ -336,7 +336,8 @@ export class DealRole extends React.Component {
 
     const shared = {
       role: values.role,
-      role_type: values.role_type
+      role_type: values.role_type,
+      agents: values.agents
     }
 
     const visibleFields = getVisibleFields({

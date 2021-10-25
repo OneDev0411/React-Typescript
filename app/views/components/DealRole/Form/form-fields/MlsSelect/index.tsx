@@ -1,5 +1,5 @@
 import { Box, TextField } from '@material-ui/core'
-import { FieldInputProps } from 'react-final-form'
+import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { UserAgentSelect } from '@app/views/components/UserAgentSelect'
@@ -7,12 +7,19 @@ import { UserAgentSelect } from '@app/views/components/UserAgentSelect'
 interface Props {
   input: FieldInputProps<any, HTMLElement>
   agents: IAgent[]
+  meta: FieldMetaState<any>
+  isRequired: boolean
   mutators: any // TODO: fix mutators types
 }
 
-export function MlsSelect({ input, mutators, agents }: Props) {
-  const selectedAgent =
-    agents.find(({ mlsid }) => input.value === mlsid) ?? agents[0]
+export function MlsSelect({
+  input,
+  meta,
+  mutators,
+  agents,
+  isRequired
+}: Props) {
+  const selectedAgent = agents.find(({ mlsid }) => input.value === mlsid)
 
   const handleChange = (agent: IAgent) => {
     mutators.populateRole(agent)
@@ -23,10 +30,15 @@ export function MlsSelect({ input, mutators, agents }: Props) {
       renderDropdownButton={buttonProps => (
         <TextField
           fullWidth
-          label="MLS"
+          label={selectedAgent ? '' : 'MLS'}
           variant="outlined"
+          error={meta.error || (isRequired && !selectedAgent)}
           size="small"
-          value={`${selectedAgent.mls} . ${selectedAgent.mlsid}`}
+          value={
+            selectedAgent
+              ? `${selectedAgent.mls} . ${selectedAgent.mlsid}`
+              : null
+          }
           InputProps={{
             readOnly: true
           }}
@@ -40,7 +52,6 @@ export function MlsSelect({ input, mutators, agents }: Props) {
         <Box px={1} py={1} minWidth="400px">
           <UserAgentSelect
             agents={agents}
-            defaultAgent={selectedAgent.id}
             onChange={agent => {
               handleChange(agent)
               close()
