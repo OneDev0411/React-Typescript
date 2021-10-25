@@ -5,6 +5,7 @@ declare type IDealTaskType =
   | 'YardSign'
   | 'OpenHouse'
   | 'Media'
+  | 'Splitter'
 
 declare interface IDealTaskRoom extends IModel<'room'> {
   attachments: IFile[] | null
@@ -43,6 +44,7 @@ declare interface IDealTask extends IModel<'task'> {
   title: string
   submission: IDealTaskSubmission | null
   room: IDealTaskRoom
+  order: number
   review: null | {
     id: UUID
     created_at: number

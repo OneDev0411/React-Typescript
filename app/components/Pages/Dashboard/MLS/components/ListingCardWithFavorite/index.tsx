@@ -52,13 +52,13 @@ const ListingCardWithFavorite = ({
     setIsListingOpen(true)
   }, [onClick, listing.id, isWidget])
 
-  const handleToggleSelection = useCallback(onToggleSelection, [
-    onToggleSelection
-  ])
+  const handleToggleSelection = useCallback(() => {
+    onToggleSelection(listing)
+  }, [onToggleSelection, listing])
 
   const handleLikeClick = useCallback(() => {
     if (selected) {
-      onToggleSelection()
+      onToggleSelection(listing)
     }
 
     dispatch(toggleFavorite(listing))

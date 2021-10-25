@@ -77,6 +77,7 @@ const useStyles = makeStyles(
     },
     cardHighlightRoot: {
       opacity: 0,
+      willChange: 'opacity',
       top: 0,
       left: 0,
       right: 0,
@@ -158,7 +159,7 @@ export interface ListingCardProps {
    * Note that you need to pass `true` or `false` value
    * to `selected` prop in order to use this handler
    */
-  onToggleSelection?: () => void
+  onToggleSelection?: (listing: IListing | ICompactListing) => void
 
   /**
    * The card heart like state
@@ -175,7 +176,7 @@ export interface ListingCardProps {
    * Note that you need to pass `true` or `false` value
    * to `liked` prop in order to use this handler
    */
-  onLikeClick?: () => void
+  onLikeClick?: (listing: IListing | ICompactListing) => void
 
   /**
    * The click handler of listing card
@@ -228,11 +229,11 @@ export default function ListingCard({
   const handleLikeClick = (event: React.MouseEvent) => {
     stopPropagation(event)
 
-    onLikeClick()
+    onLikeClick(listing)
   }
 
   const handleToggleSelection = () => {
-    onToggleSelection()
+    onToggleSelection(listing)
   }
 
   const propertyType =

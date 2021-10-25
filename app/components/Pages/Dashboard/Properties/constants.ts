@@ -1,10 +1,13 @@
 import config from 'config'
 
+import { ViewType } from './types'
+
 export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
   'mls-saved-search-hint-dismissed'
 
 export const LISTING_HOVER_DEBOUNCE_TIME_MS = 150
+export const DEFAULT_VIEW: ViewType = 'cards'
 
 // Autocomplete search component constanst
 export const AUTOCOMPLETE_RADIUS_M = 100000

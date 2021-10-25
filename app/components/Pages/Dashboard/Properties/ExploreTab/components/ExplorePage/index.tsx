@@ -9,6 +9,7 @@ import { appSidenavWidth } from '@app/components/Pages/Dashboard/SideNav/variabl
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { confirmation } from '@app/store_actions/confirmation'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { changeUrl } from '@app/utils/change-url'
 import {
   GoogleMapLibrary,
   isMapLibrariesLoaded,
@@ -20,7 +21,7 @@ import CreateAlertModal from '../../../components/modals/CreateAlertModal'
 import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
-import { QUERY_LIMIT, bootstrapURLKeys } from '../../../constants'
+import { QUERY_LIMIT, bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
 import { coordToPoint } from '../../../helpers/map-helpers'
 import {
@@ -142,7 +143,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [mapIsInitialized, setMapIsInitialized] = useState(false)
   const [isShowAlertModal, setIsShowAlertModal] = useState(false)
   const [viewType, setViewType] = useState<ViewType>(
-    (viewQueryParam as ViewType) || 'cards'
+    (viewQueryParam as ViewType) || DEFAULT_VIEW
   )
 
   const onChangeSort = (sort: SortString) => {
@@ -173,7 +174,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     zoom: number,
     bounds: ICompactBounds
   ) => {
-    if (viewType === 'cards') {
+    if (viewType === DEFAULT_VIEW) {
       dispatch(setMapLocation(center, zoom))
     } else {
       dispatch(setMapBounds(center, zoom, bounds))
@@ -250,17 +251,22 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     dispatch(clearListingUiStates())
   }
 
-  const onOpenListingModal = (id: UUID) => {
-    if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/${id}`)
-    }
-  }
+  const onToggleListingModal = useCallback(
+    (id: UUID, isOpen: boolean) => {
+      if (!isWidget) {
+        if (isOpen) {
+          changeUrl(`/dashboard/properties/${id}`)
+        } else {
+          // Inject view param to url
+          const viewQueryParam =
+            viewType !== DEFAULT_VIEW ? { view: viewType } : {}
 
-  const onCloseListingModal = () => {
-    if (!isWidget) {
-      window.history.pushState({}, '', '/dashboard/properties')
-    }
-  }
+          changeUrl('/dashboard/properties', viewQueryParam)
+        }
+      }
+    },
+    [isWidget, viewType]
+  )
 
   const onMarkerClick = (key: UUID) => {
     const resultElement = document.getElementById(key)
@@ -322,8 +328,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   onClickLocate={onClickLocate}
                   onClickToggleMap={toggleMapShown}
                   onChangeHoverState={changeHoverState}
-                  onCloseListingModal={onCloseListingModal}
-                  onOpenListingModal={onOpenListingModal}
+                  onToggleListingModal={onToggleListingModal}
                   onMarkerClick={onMarkerClick}
                   onMapClick={onMapClick}
                   mapPosition={state.map}
@@ -344,6 +349,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
               activeSort={state.search.sort}
               onToggleView={onToggleView}
               isWidget={isWidget}
+              onToggleListingModal={onToggleListingModal}
             />
           </Grid>
         </Grid>

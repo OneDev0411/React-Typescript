@@ -5,7 +5,8 @@ export const useStyles = makeStyles(
     container: {
       border: `1px solid ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius,
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
+      backgroundColor: '#fff'
     },
     header: {
       display: 'flex',

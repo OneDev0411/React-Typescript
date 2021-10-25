@@ -60,16 +60,6 @@ class CommentInput extends React.Component {
     try {
       if (attention_requested !== null) {
         await changeNeedsAttention(deal.id, task.id, attention_requested)
-
-        if (deal.is_draft) {
-          this.props.confirmation({
-            description:
-              // eslint-disable-next-line max-len
-              'We have captured your Notify Office request. As soon as this deal goes live, we will forward it on to your back office.',
-            confirmLabel: 'Got it. Thanks.',
-            hideCancelButton: true
-          })
-        }
       }
 
       if (task_status !== null) {
@@ -123,6 +113,7 @@ class CommentInput extends React.Component {
 
         <Actions>
           <CommentActions
+            deal={this.props.deal}
             hasComment={hasComment}
             isSaving={this.state.isSaving}
             task={this.props.task}
