@@ -152,6 +152,10 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
       return { ...state, map: { center, zoom }, ...pinMarker }
     }
 
+    case 'REMOVE_PIN_MARKER': {
+      return { ...state, pinMarker: undefined }
+    }
+
     case 'SET_IS_LOADING': {
       const { isLoading } = action.payload
 

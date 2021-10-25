@@ -38,7 +38,8 @@ import {
   changeSort,
   changeListingHoverState,
   changeListingClickedState,
-  clearListingUiStates
+  clearListingUiStates,
+  removePinMarker
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -281,6 +282,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapClick = () => dispatch(changeListingClickedState(null))
 
+  const onClearSearchbox = () => {
+    dispatch(removePinMarker())
+  }
+
   const onMapLoad = (map: google.maps.Map) => {
     mapRef.current = map
   }
@@ -295,6 +300,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
             <Autocomplete
               isMapView={mapIsShown}
               onSelectPlace={onSelectPlace}
+              onClear={onClearSearchbox}
             />
           </Grid>
           <Grid className={classes.searchBarFilterItem}>

@@ -75,6 +75,11 @@ export const setMapLocation = (
   }
 })
 
+export const removePinMarker = () => ({
+  type: 'REMOVE_PIN_MARKER' as 'REMOVE_PIN_MARKER',
+  payload: {}
+})
+
 export const setIsLoading = (isLoading: boolean) => ({
   type: 'SET_IS_LOADING' as 'SET_IS_LOADING',
   payload: {
@@ -102,6 +107,7 @@ export type Actions = ReturnType<
   | typeof updateFilters
   | typeof changeSort
   | typeof setMapLocation
+  | typeof removePinMarker
   | typeof setIsLoading
   | typeof removeMapDrawing
   | typeof clearListingUiStates
