@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Button, Tooltip } from '@material-ui/core'
+import { Box, Button, Tooltip } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
 import MakeVisibleToAdmin from '@app/components/Pages/Dashboard/Deals/Create/MakeVisibleToAdmin'
@@ -86,31 +86,33 @@ export default function Agent({
         />
       )}
 
-      <Tooltip title={hasComment ? '' : 'Notify office to Review'}>
-        <Button
-          color="secondary"
-          variant="contained"
-          disabled={isSaving || isSendDisabled}
-          onClick={sendComment}
-        >
-          {isSaving ? 'Saving...' : 'Notify Office'}
-        </Button>
-      </Tooltip>
+      <Box>
+        <Tooltip title={hasComment ? '' : 'Notify office to Review'}>
+          <Button
+            color="secondary"
+            variant="contained"
+            disabled={isSaving || isSendDisabled}
+            onClick={sendComment}
+          >
+            {isSaving ? 'Saving...' : 'Notify Office'}
+          </Button>
+        </Tooltip>
 
-      {task.attention_requested && (
-        <Button
-          color="secondary"
-          variant="outlined"
-          style={{
-            borderColor: '#f6a623',
-            color: '#f6a623'
-          }}
-          disabled={isSaving}
-          onClick={cancelNotify}
-        >
-          {isSaving ? 'Processing...' : 'Cancel Notify'}
-        </Button>
-      )}
+        {task.attention_requested && (
+          <Button
+            color="secondary"
+            variant="outlined"
+            style={{
+              borderColor: '#f6a623',
+              color: '#f6a623'
+            }}
+            disabled={isSaving}
+            onClick={cancelNotify}
+          >
+            {isSaving ? 'Processing...' : 'Cancel Notify'}
+          </Button>
+        )}
+      </Box>
     </>
   )
 }
