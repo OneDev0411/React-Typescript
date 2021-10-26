@@ -166,6 +166,7 @@ function Agents(props: WithRouterProps) {
         <Grid item>
           <AgentsGrid
             user={user}
+            filters={filters}
             listing={listing}
             agents={agents}
             isLoading={isLoadingAgents}

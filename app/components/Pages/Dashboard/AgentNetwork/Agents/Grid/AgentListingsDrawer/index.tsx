@@ -10,24 +10,32 @@ import { goTo } from 'utils/go-to'
 import { AgentSide } from '../../types'
 
 interface Props {
-  agent: IAgent
   title: string
+  filters: Nullable<AlertFilters>
   side: AgentSide
   onClose: () => void
 }
 
-export default function AgentListingsDrawer({ agent, title, onClose }: Props) {
+export default function AgentListingsDrawer({
+  title,
+  filters,
+  onClose
+}: Props) {
   const [listings, setListings] = useState<Nullable<ICompactListing[]>>(null)
 
   useEffect(() => {
     async function fetchAgentListings() {
-      const fetchedListings = await getAgentListings(agent.id)
+      if (!filters) {
+        return
+      }
+
+      const fetchedListings = await getAgentListings(filters)
 
       setListings(fetchedListings)
     }
 
     fetchAgentListings()
-  }, [agent.id])
+  }, [filters])
 
   const handleListingClick = (listing: ICompactListing) => {
     goTo(`/dashboard/mls/${listing.id}`)
@@ -56,7 +64,9 @@ export default function AgentListingsDrawer({ agent, title, onClose }: Props) {
                 justifyContent="center"
               >
                 <Grid item>
-                  <CircularProgress />
+                  <Box pt={2}>
+                    <CircularProgress />
+                  </Box>
                 </Grid>
               </Grid>
             )}

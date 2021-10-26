@@ -13,6 +13,7 @@ import { ListTable } from './Table'
 interface Props {
   user: IUser
   listing: Nullable<ListingWithProposedAgent>
+  filters: Nullable<AlertFilters>
   agents: Nullable<AgentWithStats[]>
   isLoading: boolean
 }
@@ -20,6 +21,7 @@ interface Props {
 export default function AgentsGrid({
   user,
   listing,
+  filters,
   agents,
   isLoading
 }: Props) {
@@ -74,7 +76,10 @@ export default function AgentsGrid({
         <AgentListingsDrawer
           title={`${selectedAgent.full_name}'s Listings`}
           onClose={onCloseDrawer}
-          agent={selectedAgent}
+          filters={{
+            ...filters,
+            agents: [selectedAgent.id]
+          }}
           side={selectedSide}
         />
       )}
