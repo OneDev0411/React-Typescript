@@ -66,7 +66,6 @@ export default function CtaAction({ contact }: Props) {
           {isDisabled ? (
             <Loading data-icon="loading" />
           ) : (
-            // @ts-ignore js component
             <Tooltip title="Chat with contact">
               <IconButton
                 size="small"
