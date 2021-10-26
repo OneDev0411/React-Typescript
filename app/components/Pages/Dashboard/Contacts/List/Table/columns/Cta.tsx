@@ -26,7 +26,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
-    justifyContent: 'end',
+    justifyContent: 'start',
     alignItems: 'center'
   },
   item: {
@@ -62,21 +62,23 @@ export default function CtaAction({ contact }: Props) {
     <ChatButton
       contact={contact}
       render={({ onClick, isDisabled }) => (
-        <Tooltip title="Chat with contact">
-          <IconButton
-            size="small"
-            className={classes.item}
-            disabled={isDisabled}
-            onClick={onClick}
-          >
-            {!isDisabled ? (
-              // @ts-ignore js component
-              <SvgIcon path={mdiChatProcessingOutline} />
-            ) : (
-              <Loading data-icon="loading" />
-            )}
-          </IconButton>
-        </Tooltip>
+        <>
+          {isDisabled ? (
+            <Loading data-icon="loading" />
+          ) : (
+            // @ts-ignore js component
+            <Tooltip title="Chat with contact">
+              <IconButton
+                size="small"
+                className={classes.item}
+                disabled={isDisabled}
+                onClick={onClick}
+              >
+                <SvgIcon path={mdiChatProcessingOutline} />
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
       )}
     />
   )
