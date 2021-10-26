@@ -31,7 +31,7 @@ declare interface IAgent extends IModel<'agent'> {
   office_mlsid: string
   work_phone: string
   generational_name: string | null
-  matrix_unique_id: number
+  matrix_unique_id: string
   updated_at: number
   deleted_at: number | null
   created_at: number

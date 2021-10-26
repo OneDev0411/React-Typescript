@@ -4,6 +4,7 @@ import { Button, Tooltip, Theme, useTheme } from '@material-ui/core'
 import { mdiEmailOutline } from '@mdi/js'
 import Flex from 'styled-flex-component'
 
+import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { Avatar } from 'components/Avatar'
 import { Table } from 'components/Grid/Table'
 import { SortableColumn, RenderProps } from 'components/Grid/Table/types'
@@ -13,11 +14,7 @@ import { putUserSetting } from 'models/user/put-user-setting'
 import { getNameInitials } from 'utils/helpers'
 import { parseSortSetting } from 'utils/sortings/parse-sort-setting'
 
-import {
-  AggregatedAgentInfo,
-  AgentSide,
-  ListingWithProposedAgent
-} from '../../types'
+import { AgentSide, ListingWithProposedAgent } from '../../types'
 import { TableActions } from '../Actions'
 import { Caption } from '../columns/Caption'
 import { SortableColumns } from '../helpers/sortable-columns'
@@ -28,9 +25,9 @@ const SORT_FIELD_SETTING_KEY = 'grid_deals_agent_network_sort_field'
 interface Props {
   user: IUser
   listing: Nullable<ListingWithProposedAgent>
-  agents: Nullable<AggregatedAgentInfo[]>
+  agents: Nullable<AgentWithStats[]>
   isLoading: boolean
-  onSelectAgentInfo: (info: AggregatedAgentInfo, side: AgentSide) => void
+  onSelectAgentInfo: (info: AgentWithStats, side: AgentSide) => void
 }
 
 export function ListTable({
@@ -47,23 +44,23 @@ export function ListTable({
       id: 'name',
       header: 'Name',
       width: '20%',
-      accessor: (agentData: AggregatedAgentInfo) => agentData.agent.full_name,
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      accessor: (agentData: AgentWithStats) => agentData.full_name,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <>
-          <div>{agentData.agent.full_name}</div>
-          <Caption variant="body2">{agentData.officeName ?? ''}</Caption>
+          <div>{agentData.full_name}</div>
+          {/* <Caption variant="body2">{agentData.officeName ?? ''}</Caption> */}
         </>
       )
     },
     {
       id: 'contact',
       width: '10%',
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <Tooltip
           title={
             <>
-              <div>{agentData.agent.email}</div>
-              <div>{agentData.agent.phone_number}</div>
+              <div>{agentData.email}</div>
+              <div>{agentData.phone_number}</div>
             </>
           }
         >
@@ -75,12 +72,11 @@ export function ListTable({
     },
     {
       id: 'listings',
-      accessor: (agentData: AggregatedAgentInfo) =>
-        agentData.listingsAsListAgent.length,
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      accessor: (agentData: AgentWithStats) => agentData.stats.listing,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <Flex alignCenter>
           <Caption># of Listings:&nbsp;</Caption>
-          {agentData.listingsAsListAgent.length > 0 ? (
+          {agentData.stats.listing > 0 ? (
             <Button
               size="small"
               style={{
@@ -88,7 +84,7 @@ export function ListTable({
               }}
               onClick={() => onSelectAgentInfo(agentData, 'list-agent')}
             >
-              {agentData.listingsAsListAgent.length}
+              {agentData.stats.listing}
             </Button>
           ) : (
             '0'
@@ -98,12 +94,11 @@ export function ListTable({
     },
     {
       id: 'buyers',
-      accessor: (agentData: AggregatedAgentInfo) =>
-        agentData.listingsAsSellingAgent.length,
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      accessor: (agentData: AgentWithStats) => agentData.stats.selling,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <Flex alignCenter>
           <Caption># of Buyers:&nbsp;</Caption>
-          {agentData.listingsAsSellingAgent.length > 0 ? (
+          {agentData.stats.selling > 0 ? (
             <Button
               size="small"
               style={{
@@ -111,7 +106,7 @@ export function ListTable({
               }}
               onClick={() => onSelectAgentInfo(agentData, 'selling-agent')}
             >
-              {agentData.listingsAsSellingAgent.length}
+              {agentData.stats.selling}
             </Button>
           ) : (
             '0'
@@ -121,25 +116,24 @@ export function ListTable({
     },
     {
       id: 'value_in',
-      accessor: (agentData: AggregatedAgentInfo) => agentData.stats.totalVolume,
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      accessor: (agentData: AgentWithStats) => agentData.stats.volume_in,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <Flex alignCenter>
           <Caption>Volume in $:&nbsp;</Caption>
-          {agentData.stats.totalVolume > 0
-            ? `$${agentData.stats.totalVolume.toLocaleString()}`
+          {agentData.stats.volume_in > 0
+            ? `$${agentData.stats.volume_in.toLocaleString()}`
             : 0}
         </Flex>
       )
     },
     {
       id: 'avg_price',
-      accessor: (agentData: AggregatedAgentInfo) =>
-        agentData.stats.averagePrice,
-      render: ({ row: agentData }: RenderProps<AggregatedAgentInfo>) => (
+      accessor: (agentData: AgentWithStats) => agentData.stats.avg_price,
+      render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <Flex alignCenter>
           <Caption>Avg Price:&nbsp;</Caption>
-          {agentData.stats.averagePrice > 0
-            ? `$${agentData.stats.averagePrice.toLocaleString()}`
+          {agentData.stats.avg_price > 0
+            ? `$${agentData.stats.avg_price.toLocaleString()}`
             : 0}
         </Flex>
       )
@@ -162,7 +156,7 @@ export function ListTable({
   }
 
   return (
-    <Table<AggregatedAgentInfo>
+    <Table<AgentWithStats>
       rows={agents ?? []}
       columns={columns}
       totalRows={(agents || []).length}
@@ -177,12 +171,10 @@ export function ListTable({
         columnProps: {
           width: `${theme.spacing(7.5)}px`
         },
-        defaultRender: ({
-          row: agentData
-        }: RenderProps<AggregatedAgentInfo>) => {
+        defaultRender: ({ row: agentData }: RenderProps<AgentWithStats>) => {
           return (
-            <Avatar alt={agentData.agent.full_name} url="">
-              {getNameInitials(agentData.agent.full_name, 1)}
+            <Avatar alt={agentData.full_name} url="">
+              {getNameInitials(agentData.full_name, 1)}
             </Avatar>
           )
         },

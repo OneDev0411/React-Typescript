@@ -1,4 +1,3 @@
-import { byValert } from 'models/listings/search/get-listings'
 import { getPlace } from 'models/listings/search/get-place'
 import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
@@ -8,8 +7,6 @@ import {
   ALL_PROPERTY_TYPES,
   ALL_PROPERTY_SUBTYPES
 } from '../constants'
-
-import { AggregatedAgentInfo, CompactListingWithBothSideAgents } from './types'
 
 function getSixMonthsAgoTimestamp() {
   return (new Date().getTime() - 180 * 24 * 3600000) / 1000
@@ -53,105 +50,4 @@ export function getLocationVAlertFilters(
     minimum_sold_date: sixMonthsAgoTimestamp,
     limit: DEFAULT_SEARCH_RESULT_LIMIT
   }
-}
-
-export async function getListingsWithBothSidesAgents(
-  filters: AlertFilters
-): Promise<CompactListingWithBothSideAgents[]> {
-  const response = await byValert(
-    filters,
-    {
-      'associations[]': [
-        'compact_listing.selling_agent',
-        'compact_listing.list_agent'
-      ]
-    },
-    false
-  )
-
-  return response.data
-}
-
-export function aggregateListingsAgents(
-  listings: CompactListingWithBothSideAgents[]
-): AggregatedAgentInfo[] {
-  const agentsMap: StringMap<AggregatedAgentInfo> = {}
-
-  listings.forEach(listing => {
-    if (listing.selling_agent) {
-      let agentInfo: Nullable<AggregatedAgentInfo> = null
-
-      if (agentsMap[listing.selling_agent.id]) {
-        agentInfo = agentsMap[listing.selling_agent.id]
-        agentInfo.listingsAsSellingAgent.push(listing)
-      } else {
-        agentInfo = {
-          id: listing.selling_agent.id,
-          agent: listing.selling_agent,
-          officeName: listing.selling_office_name ?? null,
-          listingsAsSellingAgent: [listing],
-          listingsAsListAgent: [],
-          stats: {
-            totalVolume: 0,
-            averagePrice: 0
-          }
-        }
-        agentsMap[agentInfo.agent.id] = agentInfo
-      }
-    }
-
-    if (listing.list_agent) {
-      let agentInfo: Nullable<AggregatedAgentInfo> = null
-
-      if (agentsMap[listing.list_agent.id]) {
-        agentInfo = agentsMap[listing.list_agent.id]
-        agentInfo.listingsAsListAgent.push(listing)
-      } else {
-        agentInfo = {
-          id: listing.list_agent.id,
-          agent: listing.list_agent,
-          officeName: listing.list_office_name ?? null,
-          listingsAsSellingAgent: [],
-          listingsAsListAgent: [listing],
-          stats: {
-            totalVolume: 0,
-            averagePrice: 0
-          }
-        }
-        agentsMap[agentInfo.agent.id] = agentInfo
-      }
-    }
-  })
-
-  const agentsDataWithStats: AggregatedAgentInfo[] = Object.keys(agentsMap).map(
-    id => {
-      const data = agentsMap[id]
-
-      const totalVolume =
-        data.listingsAsListAgent.reduce<number>(
-          (acc, listing) => acc + listing.price,
-          0
-        ) +
-        data.listingsAsSellingAgent.reduce<number>(
-          (acc, listing) => acc + listing.price,
-          0
-        )
-      const averagePrice =
-        totalVolume > 0
-          ? totalVolume /
-            (data.listingsAsListAgent.length +
-              data.listingsAsSellingAgent.length)
-          : 0
-
-      return {
-        ...data,
-        stats: {
-          totalVolume,
-          averagePrice
-        }
-      }
-    }
-  )
-
-  return agentsDataWithStats
 }

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Box, Divider, Grid, Typography } from '@material-ui/core'
 import { useLoadScript, LoadScriptProps } from '@react-google-maps/api'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import getAgents, { AgentWithStats } from '@app/models/agent-network/get-agents'
 import ListingAlertFilters from 'components/ListingAlertFilters'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import config from 'config'
@@ -16,13 +17,8 @@ import { openSearchResultPage } from '../helpers'
 import Layout from '../Layout'
 
 import AgentsGrid from './Grid'
-import {
-  aggregateListingsAgents,
-  getListingsWithBothSidesAgents,
-  getListingVAlertFilters,
-  getLocationVAlertFilters
-} from './helpers'
-import { ListingWithProposedAgent, AggregatedAgentInfo } from './types'
+import { getListingVAlertFilters, getLocationVAlertFilters } from './helpers'
+import { ListingWithProposedAgent } from './types'
 
 const GOOGLE_MAPS_LIBRARIES: LoadScriptProps['libraries'] = ['geometry']
 
@@ -35,7 +31,7 @@ function Agents(props: WithRouterProps) {
 
   const [listing, setListing] =
     useState<Nullable<ListingWithProposedAgent>>(null)
-  const [agents, setAgents] = useState<Nullable<AggregatedAgentInfo[]>>(null)
+  const [agents, setAgents] = useState<Nullable<AgentWithStats[]>>(null)
   const [isLoadingAgents, setIsLoadingAgents] = useLoadingEntities(agents)
 
   const [filters, setFilters] =
@@ -113,11 +109,7 @@ function Agents(props: WithRouterProps) {
       try {
         setAgents(null)
 
-        const listingsWithBothAgents = await getListingsWithBothSidesAgents(
-          filters
-        )
-
-        const fetchedAgents = aggregateListingsAgents(listingsWithBothAgents)
+        const fetchedAgents = await getAgents(filters)
 
         setAgents(fetchedAgents)
       } catch (error) {

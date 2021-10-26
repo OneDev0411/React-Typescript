@@ -31,6 +31,7 @@ declare interface AlertFilters {
   postal_codes?: Nullable<unknown[]>
   search?: Nullable<string>
   limit?: Nullable<number>
+  agents?: Nullable<UUID[]>
 
   architectural_styles?: Nullable<IArchitecturalStyle[]>
   school_districts?: Nullable<string[]>

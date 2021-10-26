@@ -1,22 +1,19 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Grid, Box, Typography } from '@material-ui/core'
 
+import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { GridProvider } from 'components/Grid/Table'
 
-import {
-  AggregatedAgentInfo,
-  AgentSide,
-  ListingWithProposedAgent
-} from '../types'
+import { AgentSide, ListingWithProposedAgent } from '../types'
 
-import { ListingsDrawer } from './ListingsDrawer'
+import AgentListingsDrawer from './AgentListingsDrawer'
 import { ListTable } from './Table'
 
 interface Props {
   user: IUser
   listing: Nullable<ListingWithProposedAgent>
-  agents: Nullable<AggregatedAgentInfo[]>
+  agents: Nullable<AgentWithStats[]>
   isLoading: boolean
 }
 
@@ -26,13 +23,18 @@ export default function AgentsGrid({
   agents,
   isLoading
 }: Props) {
-  const [selectedAgentInfo, setSelectedAgentInfo] =
-    useState<Nullable<{ info: AggregatedAgentInfo; side: AgentSide }>>(null)
+  const [selectedAgent, setSelectedAgent] = useState<Nullable<IAgent>>(null)
+  const [selectedSide, setSelectedSide] = useState<Nullable<AgentSide>>(null)
 
-  const onCloseDrawer = () => setSelectedAgentInfo(null)
+  const onCloseDrawer = () => {
+    setSelectedAgent(null)
+    setSelectedSide(null)
+  }
 
-  const onSelectAgentInfo = (info: AggregatedAgentInfo, side: AgentSide) =>
-    setSelectedAgentInfo({ info, side })
+  const onSelectAgentInfo = async (info: AgentWithStats, side: AgentSide) => {
+    setSelectedAgent(info)
+    setSelectedSide(side)
+  }
 
   if (agents?.length === 0) {
     return (
@@ -68,15 +70,12 @@ export default function AgentsGrid({
         onSelectAgentInfo={onSelectAgentInfo}
       />
 
-      {selectedAgentInfo && (
-        <ListingsDrawer
-          title={`${selectedAgentInfo.info.agent.full_name}'s Listings`}
+      {selectedAgent && selectedSide && (
+        <AgentListingsDrawer
+          title={`${selectedAgent.full_name}'s Listings`}
           onClose={onCloseDrawer}
-          listings={
-            selectedAgentInfo.side === 'list-agent'
-              ? selectedAgentInfo.info.listingsAsListAgent
-              : selectedAgentInfo.info.listingsAsSellingAgent
-          }
+          agent={selectedAgent}
+          side={selectedSide}
         />
       )}
     </GridProvider>
