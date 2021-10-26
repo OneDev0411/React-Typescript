@@ -65,7 +65,11 @@ export function MultiSelectionBrandSelectorDrawer({
             />
           </div>
         </Drawer.Body>
+<<<<<<< HEAD
         <Drawer.Footer rowReverse>
+=======
+        <Drawer.Footer className={classes.footer}>
+>>>>>>> 33ee21fa97 (feat(super campaign): use new brand selector (#5679))
           <Button
             variant="contained"
             color="primary"
