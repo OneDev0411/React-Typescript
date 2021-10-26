@@ -2,12 +2,12 @@ import { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 
 import { Grid, Box, makeStyles, alpha, Typography } from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
-import { useScrolling } from 'react-use'
 
 import {
   SortString,
   SortIndex
 } from '@app/components/Pages/Dashboard/MLS/helpers/sort-utils'
+import { noop } from '@app/utils/helpers'
 import { AnimatedLoader } from '@app/views/components/AnimatedLoader'
 
 import { CardsView } from '../../../components/CardsView'
@@ -82,6 +82,7 @@ interface Props {
   isWidget: boolean
   onChangeSort: (sort: SortString) => void
   activeSort: { index: SortIndex; ascending: boolean }
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 export const Results = ({
@@ -91,13 +92,13 @@ export const Results = ({
   onToggleView,
   activeSort,
   onChangeSort,
-  isWidget
+  isWidget,
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useListingsContext()
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
-  const isScroling = useScrolling(cardsContainerRef)
 
   const paginationShouldShown = useMemo(() => {
     // Hide pagination and results count if there is loading and listings are not loaded yet
@@ -182,10 +183,10 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  isScroling={isScroling}
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
               {viewType === 'table' && (
@@ -196,6 +197,7 @@ export const Results = ({
                   listingStates={state.listingStates}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
+                  onToggleListingModal={onToggleListingModal}
                 />
               )}
             </>
