@@ -2,7 +2,13 @@ import { Theme } from '@material-ui/core'
 import { Coords, Maps, MapOptions } from 'google-map-react'
 
 import { appSidenavWidth } from '../../SideNav/variables'
-import { GOOGLE_MAP_GLOBE_WIDTH } from '../constants'
+import {
+  GOOGLE_MAP_GLOBE_WIDTH,
+  GOOGLE_MAP_MAX_ZOOM_LEVEL,
+  MLS_MAP_Height_GAP,
+  MLS_MAP_WIDTH_GAP,
+  PLACE_ZOOM_OFFSETS
+} from '../constants'
 
 export const createMapOptions = (
   maps: Maps,
@@ -84,23 +90,59 @@ export const pointFromBounds = (
 
 export const estimateMapZoom = (
   bounds: ICompactBounds,
-  mapWidth?: number
+  offset: number = 0,
+  mapWidth?: number,
+  mapHeight?: number
 ): number => {
-  const gapWidth = 80
-  const estimatedMapWidth = (window.innerWidth - appSidenavWidth - gapWidth) / 2
-  const west = bounds.sw.lng
-  const east = bounds.ne.lng
-  let angle = east - west
+  const gapWidth = MLS_MAP_WIDTH_GAP
+  const gapHeight = MLS_MAP_Height_GAP
 
-  if (angle < 0) {
-    angle += 360
+  const estimatedMapWidth =
+    mapWidth ?? (window.innerWidth - appSidenavWidth - gapWidth) / 2
+  const estimatedMapHight = mapHeight ?? window.innerHeight - gapHeight
+
+  const WORLD_DIM = {
+    height: GOOGLE_MAP_GLOBE_WIDTH,
+    width: GOOGLE_MAP_GLOBE_WIDTH
   }
 
-  const zoom = Math.round(
-    Math.log(
-      (mapWidth ?? estimatedMapWidth * 360) / angle / GOOGLE_MAP_GLOBE_WIDTH
-    ) / Math.LN2
+  function getLatRad(lat: number) {
+    const sin = Math.sin((lat * Math.PI) / 180)
+    const radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+
+    return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
+  }
+
+  function getZoom(mapPx: number, worldPx: number, fraction: number) {
+    return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
+  }
+
+  const ne = bounds.ne
+  const sw = bounds.sw
+
+  const latFraction = (getLatRad(ne.lat) - getLatRad(sw.lat)) / Math.PI
+
+  const lngDiff = ne.lng - sw.lng
+  const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360
+
+  const latZoom = getZoom(estimatedMapHight, WORLD_DIM.height, latFraction)
+  const lngZoom = getZoom(estimatedMapWidth, WORLD_DIM.width, lngFraction)
+
+  const finalZoom = Math.min(
+    latZoom + offset,
+    lngZoom + offset,
+    GOOGLE_MAP_MAX_ZOOM_LEVEL
   )
 
-  return zoom
+  return finalZoom
+}
+
+export const getPlaceZoomOffset = (types: string[]): number => {
+  for (let i = 0; i < types.length; i++) {
+    if (typeof PLACE_ZOOM_OFFSETS[types[i]] !== 'undefined') {
+      return PLACE_ZOOM_OFFSETS[types[i]]
+    }
+  }
+
+  return 0
 }

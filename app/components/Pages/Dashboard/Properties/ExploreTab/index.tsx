@@ -16,7 +16,7 @@ import {
   PROPERTIES_FILTERS_STORAGE_KEY,
   USER_LOCATION_ZOOM_LEVEL
 } from '../constants'
-import { estimateMapZoom } from '../helpers/map-helpers'
+import { estimateMapZoom, getPlaceZoomOffset } from '../helpers/map-helpers'
 import {
   getDefaultSort,
   getUserLastBrowsingLocation,
@@ -151,7 +151,14 @@ function ExploreTab({ isWidget, user, location }: Props) {
     }))
   }
 
-  const onSelectPlace = (center: ICoord, zoom: number) => {
+  const onSelectPlace = (
+    center: ICoord,
+    bounds: ICompactBounds,
+    types: string[]
+  ) => {
+    const zoomOffset = getPlaceZoomOffset(types)
+    const zoom = estimateMapZoom(bounds, zoomOffset)
+
     dispatch(setMapLocation(center, zoom, true))
     setSearchQuery(location.query.q)
     setUserLocationState(prev => ({ ...prev, firstRun: false }))

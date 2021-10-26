@@ -23,7 +23,11 @@ import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { QUERY_LIMIT, bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
-import { coordToPoint } from '../../../helpers/map-helpers'
+import {
+  coordToPoint,
+  estimateMapZoom,
+  getPlaceZoomOffset
+} from '../../../helpers/map-helpers'
 import {
   LAST_BROWSING_LOCATION,
   parseSortIndex,
@@ -172,14 +176,28 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onSelectPlace = (
     center: ICoord,
-    zoom: number,
-    bounds: ICompactBounds
+    bounds: ICompactBounds,
+    types: string[]
   ) => {
+    const mapWidth = mapRef.current
+      ? mapRef.current.getDiv().clientWidth
+      : undefined
+    const mapHeight = mapRef.current
+      ? mapRef.current.getDiv().clientHeight
+      : undefined
+
+    const zoomOffset = getPlaceZoomOffset(types)
+    const zoom = estimateMapZoom(bounds, zoomOffset, mapWidth, mapHeight)
+
     if (viewType === DEFAULT_VIEW) {
       dispatch(setMapLocation(center, zoom, true))
     } else {
       dispatch(setMapBounds(center, zoom, bounds))
     }
+
+    /*
+    Remove fitBounds approach to manually set map zoom on specific place types
+    https://gitlab.com/rechat/web/-/issues/5723
 
     if (mapRef.current) {
       const cornerBounds = new window.google.maps.LatLngBounds()
@@ -189,6 +207,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
       mapRef.current.fitBounds(cornerBounds)
     }
+    */
   }
 
   useEffectOnce(() => {
