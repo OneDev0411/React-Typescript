@@ -71,17 +71,23 @@ export function AddMlsAgent({ user, isOpen, onClose }: Props) {
     onClose()
   }
 
+  const handleClose = () => {
+    setAgents([])
+    setAgent(null)
+    onClose()
+  }
+
   const headings = getHeadings()
 
   return (
-    <Dialog open={isOpen} fullWidth maxWidth="xs" onClose={onClose}>
+    <Dialog open={isOpen} fullWidth maxWidth="xs">
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <div>
             <Typography variant="h6">{headings.title}</Typography>
             <Typography variant="subtitle2">{headings.subtitle}</Typography>
           </div>
-          <IconButton onClick={onClose}>
+          <IconButton onClick={handleClose}>
             <SvgIcon path={mdiClose} />
           </IconButton>
         </Box>

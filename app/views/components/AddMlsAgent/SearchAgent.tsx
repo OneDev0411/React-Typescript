@@ -15,18 +15,18 @@ export function SearchAgent({ user, onComplete }: Props) {
   const [error, setError] = useState('')
 
   const handleSearch = async () => {
+    if (user.agents?.some(({ mlsid }) => mlsid === agentNumber)) {
+      setError(
+        `A MLS ID of "${agentNumber}" is currently associated with your account.`
+      )
+
+      return
+    }
+
     setError('')
     setIsSearching(true)
 
     try {
-      if (user.agents?.some(({ mlsid }) => mlsid === agentNumber)) {
-        setError(
-          `A MLS ID of "${agentNumber}" is currently associated with your account.`
-        )
-
-        return
-      }
-
       const agents = await searchAgent(agentNumber)
 
       setIsSearching(false)
