@@ -16,11 +16,12 @@ interface Props
   hover?: boolean
   isWidget?: boolean
   reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
+  onChangeHoverState?: (id: UUID, hover: boolean) => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onToggleLike?: (
     listing: IListing | ICompactListing,
     sendApiRequest?: boolean
   ) => void
-  onChangeHoverState: (id: UUID, hover: boolean) => void
 }
 
 const ListingCardWithFavorite = ({
@@ -34,7 +35,8 @@ const ListingCardWithFavorite = ({
   onChangeHoverState,
   reduxToggleFavorite = true,
   onToggleLike = noop,
-  onClick
+  onClick,
+  onToggleListingModal = noop
 }: Props) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUserUnsafe)
@@ -53,12 +55,9 @@ const ListingCardWithFavorite = ({
     : undefined
 
   const closeListing = useCallback(() => {
-    if (!isWidget) {
-      window.history.pushState({}, '', '/dashboard/properties')
-    }
-
     setIsListingOpen(false)
-  }, [isWidget])
+    onToggleListingModal('', false)
+  }, [onToggleListingModal])
 
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -67,12 +66,9 @@ const ListingCardWithFavorite = ({
       return
     }
 
-    if (!isWidget) {
-      window.history.pushState({}, '', `/dashboard/properties/${listing.id}`)
-    }
-
     setIsListingOpen(true)
-  }, [onClick, listing.id, isWidget])
+    onToggleListingModal(listing.id, true)
+  }, [onClick, onToggleListingModal, listing.id])
 
   const handleToggleSelection = useCallback(() => {
     onToggleSelection(listing)

@@ -49,12 +49,18 @@ interface Props {
   isWidget: boolean
   listingStates: IListingUIStates
   isScroling?: boolean
+  /*
+   * on Favorite Tab: We should close modals after Toggle Favorite on it
+   * to avoid fix bug on multiple toggle
+   * https://gitlab.com/rechat/web/-/issues/5708
+   */
+  closeModalAfterToggleFavorite?: boolean
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleLike?: (id: UUID) => void
+  onToggleListingModal?: (id: UUID, isOpen: boolean) => void
 }
 
 const CELL_FALLBACK = '--'
-const MLS_BASE_URL = '/dashboard/properties'
 
 interface TableColumnItem {
   header: string
@@ -137,13 +143,15 @@ const secondaryColumns: TableColumnItem[] = [
 ]
 
 export const TableView = ({
+  isWidget,
   listings,
   mapIsShown,
-  isWidget,
   listingStates,
   isScroling = false,
+  closeModalAfterToggleFavorite = false,
   onChangeHoverState = noop,
-  onToggleLike = noop
+  onToggleLike = noop,
+  onToggleListingModal = noop
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
@@ -154,31 +162,34 @@ export const TableView = ({
     useState(false)
 
   const closeListingDetailsModal = useCallback(() => {
-    if (!isWidget) {
-      window.history.replaceState({}, '', MLS_BASE_URL)
-    }
-
     setIsListingDetailsModalOpen(false)
     setSelectedListingId(null)
-  }, [isWidget])
+    onToggleListingModal('', false)
+  }, [onToggleListingModal])
 
   const openListingDetailsModal = useCallback(
     (id: UUID) => {
-      if (!isWidget) {
-        window.history.replaceState({}, '', `${MLS_BASE_URL}/${id}`)
-      }
-
       setIsListingDetailsModalOpen(true)
       setSelectedListingId(id)
+      onToggleListingModal(id, true)
     },
-    [isWidget]
+    [onToggleListingModal]
   )
 
   const onToggleFavorite = useCallback(() => {
     if (selectedListingId) {
       onToggleLike(selectedListingId)
     }
-  }, [onToggleLike, selectedListingId])
+
+    if (closeModalAfterToggleFavorite) {
+      closeListingDetailsModal()
+    }
+  }, [
+    selectedListingId,
+    closeModalAfterToggleFavorite,
+    onToggleLike,
+    closeListingDetailsModal
+  ])
 
   const handleToggleSelection = useCallback(toggleItem, [toggleItem])
 
@@ -238,6 +249,7 @@ export const TableView = ({
       <ListingDetailsModal
         isOpen={isListingDetailsModalOpen}
         listingId={selectedListingId}
+        isWidget={isWidget}
         onToggleFavorite={onToggleFavorite}
         closeHandler={closeListingDetailsModal}
       />

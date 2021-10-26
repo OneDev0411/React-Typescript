@@ -1,4 +1,4 @@
-import React, { useCallback, MouseEvent } from 'react'
+import { useCallback, MouseEvent } from 'react'
 
 import {
   Avatar,
@@ -17,6 +17,7 @@ interface Props {
   onClick: (event: MouseEvent<HTMLDivElement>) => void
   selected: boolean
   team: IUserTeam
+  style?: React.CSSProperties
 }
 
 export function TeamItem({
@@ -24,7 +25,8 @@ export function TeamItem({
   isSwitching,
   onClick,
   selected,
-  team
+  team,
+  style
 }: Props) {
   const getTeamNameInitial = useCallback(brand => {
     const flatted = flattenBrand(brand)
@@ -42,6 +44,7 @@ export function TeamItem({
         button
         disabled={disabled}
         selected={selected}
+        style={style}
         onClick={onClick}
       >
         <ListItemAvatar>

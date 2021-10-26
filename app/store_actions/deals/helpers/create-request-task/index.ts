@@ -1,3 +1,5 @@
+import { IAppState } from '@app/reducers'
+import { selectChecklistTasks } from '@app/reducers/deals/tasks'
 import { createTask, changeNeedsAttention } from 'actions/deals'
 import { addNotification as notify } from 'components/notification'
 import { createTaskComment } from 'deals/utils/create-task-comment'
@@ -22,8 +24,17 @@ export const createRequestTask =
     notifyMessage,
     taskType
   }: CreateRequestTask) =>
-  async dispatch => {
+  async (dispatch, getState) => {
     let task: IDealTask | null
+
+    const { deals } = getState() as IAppState
+
+    const tasks: IDealTask[] = selectChecklistTasks(checklist, deals.tasks)
+
+    const maxOrder = tasks.reduce(
+      (max, task) => (task.order > max ? task.order : max),
+      0
+    )
 
     try {
       task = await dispatch(
@@ -31,7 +42,9 @@ export const createRequestTask =
           dealId,
           taskTitle,
           checklistId: checklist.id,
-          taskType
+          taskType,
+          form: undefined,
+          order: maxOrder + 1
         })
       )
     } catch (e) {

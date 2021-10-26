@@ -1,13 +1,11 @@
+const SentryCliPlugin = require('@sentry/webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
+const moment = require('moment')
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin')
 const S3Plugin = require('webpack-s3-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const SentryCliPlugin = require('@sentry/webpack-plugin')
-
-const moment = require('moment')
 
 const common = require('./base')
 
@@ -43,7 +41,6 @@ const config = {
       filename: 'sourcemaps/[name][hash].js.map'
     }),
     new MomentLocalesPlugin(),
-    new OptimizeCSSAssetsPlugin(),
     new CompressionPlugin({
       test: /\.(css|js)$/,
       filename: '[path][base]',
