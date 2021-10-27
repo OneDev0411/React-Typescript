@@ -3,8 +3,7 @@ import Fetch from 'services/fetch'
 async function enrollUserInSuperCampaign(
   superCampaignId: UUID,
   data: ISuperCampaignEnrollmentInput
-  // TODO: Use a better type for the response
-): Promise<any> {
+): Promise<ISuperCampaignEnrollment> {
   return (
     await new Fetch()
       .post(`/email/super-campaigns/${superCampaignId}/enrollments`)

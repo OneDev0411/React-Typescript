@@ -38,8 +38,6 @@ export function useUpdateSuperCampaignEnrollmentTags(
         tags
       })
 
-      // TODO: Use the update response if needed
-
       const newSuperCampaignEnrollments = [...superCampaignEnrollments]
 
       newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {

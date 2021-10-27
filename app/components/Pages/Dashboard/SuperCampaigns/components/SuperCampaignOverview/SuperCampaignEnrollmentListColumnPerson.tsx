@@ -34,7 +34,7 @@ function SuperCampaignEnrollmentListColumnPerson({
       <Avatar size="small" user={user} />
       <Typography variant="body2" className={classes.name}>
         {user.display_name}{' '}
-        <span className={classes.brand}>({brand.name}`s Team)</span>
+        <span className={classes.brand}>({brand.name})</span>
       </Typography>
     </div>
   )
