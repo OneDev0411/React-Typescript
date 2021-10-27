@@ -3,11 +3,13 @@ import { makeStyles } from '@material-ui/core'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
+import SuperCampaignEnrollManuallyButton from '../SuperCampaignEnrollManuallyButton'
+
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
-import SuperCampaignEnrollManuallyButton from './SuperCampaignEnrollManuallyButton'
 import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentListColumnActions'
 import SuperCampaignEnrollmentListColumnPerson from './SuperCampaignEnrollmentListColumnPerson'
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
+import { useAddSuperCampaignEnrollment } from './use-add-super-campaign-enrollment'
 import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
 import { useGetSuperCampaignEnrollments } from './use-get-super-campaign-enrollments'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
@@ -46,6 +48,11 @@ function SuperCampaignEnrollmentList({
   const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
     superCampaignId,
     superCampaignEnrollments,
+    setSuperCampaignEnrollments
+  )
+
+  const addSuperCampaignEnrollment = useAddSuperCampaignEnrollment(
+    superCampaignId,
     setSuperCampaignEnrollments
   )
 
@@ -90,7 +97,10 @@ function SuperCampaignEnrollmentList({
 
   return (
     <>
-      <SuperCampaignEnrollManuallyButton />
+      <SuperCampaignEnrollManuallyButton
+        superCampaignId={superCampaignId}
+        onEnroll={addSuperCampaignEnrollment}
+      />
       <Table
         columns={columns}
         rows={superCampaignEnrollments}
