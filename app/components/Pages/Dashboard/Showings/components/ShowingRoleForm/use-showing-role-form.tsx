@@ -3,6 +3,7 @@ import { FormProps } from 'react-final-form'
 import {
   selectAgentMutator,
   selectContactMutator,
+  selectUserAgentMutator,
   selectUserMutator
 } from './helpers'
 import ShowingRoleFormFields, {
@@ -26,7 +27,8 @@ type UseShowingRoleFormReturn = Pick<
 const mutators: FormProps<ShowingRoleFormValues>['mutators'] = {
   selectUser: selectUserMutator,
   selectAgent: selectAgentMutator,
-  selectContact: selectContactMutator
+  selectContact: selectContactMutator,
+  selectUserAgent: selectUserAgentMutator
 }
 
 function useShowingRoleForm({
@@ -47,6 +49,7 @@ function useShowingRoleForm({
           values.role === 'Tenant' &&
           (!hideAddToContactCheckbox || !!values.contact)
         }
+        agents={values.user?.agents ?? undefined}
         saveToContactCheckboxLabel={
           values.contact ? 'Update the contact' : 'Add to my contact'
         }
