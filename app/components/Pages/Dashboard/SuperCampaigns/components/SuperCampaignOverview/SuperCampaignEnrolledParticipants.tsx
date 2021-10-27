@@ -25,6 +25,12 @@ function SuperCampaignEnrolledParticipants() {
           value={superCampaign.tags}
           onChange={updateSuperCampaignTags}
           disabled={isSaving}
+          readOnly={isResultMode}
+          helperText={
+            !isResultMode
+              ? 'XXX agents added by tags you’ve entered.'
+              : undefined
+          }
         />
       </Box>
       {isResultMode ? (

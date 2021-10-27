@@ -10,7 +10,7 @@ declare interface ISuperCampaignEnrollment<
     'id' | 'created_at' | 'updated_at'
   > {
   super_campaign: UUID
-  brand: A extends 'brand' | 'user_and_brand' ? IBrand : UUID
-  user: A extends 'user' | 'user_and_brand' ? IUser : UUID
+  brand: A extends 'brand' | 'user_and_brand' ? IBrand : never
+  user: A extends 'user' | 'user_and_brand' ? IUser : never
   tags: string[]
 }

@@ -3,6 +3,7 @@ import { Typography, Button, makeStyles } from '@material-ui/core'
 import useSafeState from '@app/hooks/use-safe-state'
 import TeamTreeViewDrawer from '@app/views/components/TeamTreeView/Drawer'
 
+import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import SuperCampaignCard, { SuperCampaignCardProps } from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -31,6 +32,8 @@ function SuperCampaignEligibleParticipants(
     superCampaign,
     setSuperCampaign
   )
+
+  const isReadOnly = useIsSuperCampaignResultMode(superCampaign)
 
   const openBrandSelector = () => setIsBrandSelectorOpen(true)
 
@@ -69,12 +72,12 @@ function SuperCampaignEligibleParticipants(
               been selected
             </Typography>
             <Button color="primary" size="small" onClick={openBrandSelector}>
-              Edit
+              {isReadOnly ? 'View' : 'Edit'}
             </Button>
           </>
         )}
       </div>
-      {/* TODO: use multi brand selector here */}
+      {/* TODO: use multi brand selector here. If isResultMode is true the selector must be opened in readonly mode */}
       {isBrandSelectorOpen && (
         <TeamTreeViewDrawer
           title="Select Offices or Teams"

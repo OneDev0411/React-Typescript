@@ -5,7 +5,9 @@ import { SelectorOption } from '@app/views/components/TagSelector/type'
 
 const useStyles = makeStyles(
   theme => ({
-    chip: { backgroundColor: theme.palette.common.white }
+    readOnly: { pointerEvents: 'none' },
+    chip: { backgroundColor: theme.palette.common.white },
+    chipDeleteIcon: { display: 'none' }
   }),
   { name: 'SuperCampaignEnrolledParticipantsTags' }
 )
@@ -14,12 +16,16 @@ interface SuperCampaignEnrolledParticipantsTagsProps {
   value: Nullable<string[]>
   onChange: (value: string[]) => void
   disabled: boolean
+  readOnly: boolean
+  helperText?: string
 }
 
 function SuperCampaignEnrolledParticipantsTags({
   value,
   onChange,
-  disabled
+  disabled,
+  readOnly,
+  helperText
 }: SuperCampaignEnrolledParticipantsTagsProps) {
   const classes = useStyles()
   const stringValue = value?.map(tag => ({ title: tag, value: tag })) ?? []
@@ -29,17 +35,19 @@ function SuperCampaignEnrolledParticipantsTags({
 
   return (
     <BaseTagSelector
+      className={readOnly ? classes.readOnly : undefined}
       value={stringValue}
       onChange={handleChange}
       chipProps={{
         size: 'small',
         variant: 'outlined',
-        className: classes.chip
+        className: classes.chip,
+        classes: { deleteIcon: readOnly ? classes.chipDeleteIcon : undefined }
       }}
       textFieldProps={{
-        placeholder: 'Search or create tags...',
+        placeholder: !readOnly ? 'Search or create tags...' : undefined,
         variant: 'filled',
-        helperText: 'XXX agents added by tags you’ve entered.',
+        helperText,
         label: 'Tags'
       }}
       disabled={disabled}

@@ -17,6 +17,7 @@ interface SuperCampaignTemplateProps
   ) => Promise<void> | void
   onEditorOpen?: () => void
   onEditorClose?: () => void
+  readOnly?: boolean
 }
 
 function SuperCampaignTemplate({
@@ -26,7 +27,8 @@ function SuperCampaignTemplate({
   template,
   onTemplateChange,
   onEditorOpen,
-  onEditorClose
+  onEditorClose,
+  readOnly = false
 }: SuperCampaignTemplateProps) {
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
@@ -51,11 +53,15 @@ function SuperCampaignTemplate({
         className={titleClassName}
         title="Template"
         titleVariant={titleVariant}
-        actionLabel="Edit Template"
+        actionLabel={!readOnly ? 'Edit Template' : undefined}
         onActionClick={openEditor}
       />
-      <SuperCampaignTemplatePreview template={template} onClick={openEditor} />
-      {isEditorOpen && (
+      <SuperCampaignTemplatePreview
+        template={template}
+        onClick={openEditor}
+        readOnly={readOnly}
+      />
+      {!readOnly && isEditorOpen && (
         <SuperCampaignTemplateEditor
           template={template}
           onClose={closeEditor}

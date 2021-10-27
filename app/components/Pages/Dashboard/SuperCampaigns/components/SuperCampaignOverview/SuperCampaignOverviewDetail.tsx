@@ -3,6 +3,7 @@ import format from 'date-fns/format'
 
 import useSafeState from '@app/hooks/use-safe-state'
 
+import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
@@ -37,6 +38,8 @@ function SuperCampaignOverviewDetail() {
   )
   const [isDrawerOpen, setIsDrawerOpen] = useSafeState(false)
 
+  const isResultMode = useIsSuperCampaignResultMode(superCampaign)
+
   const openDrawer = () => setIsDrawerOpen(true)
 
   const closeDrawer = () => setIsDrawerOpen(false)
@@ -57,7 +60,7 @@ function SuperCampaignOverviewDetail() {
         <SuperCampaignCardHeader
           className={classes.title}
           title="Details"
-          actionLabel="Edit"
+          actionLabel={!isResultMode ? 'Edit' : undefined}
           onActionClick={openDrawer}
         />
         <SuperCampaignOverviewDetailLabelValue
@@ -89,6 +92,7 @@ function SuperCampaignOverviewDetail() {
         titleVariant="body1"
         template={superCampaign.template_instance}
         onTemplateChange={handleTemplateChange}
+        readOnly={isResultMode}
       />
       <SuperCampaignDrawer
         isOpen={isDrawerOpen}
