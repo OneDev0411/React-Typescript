@@ -65,11 +65,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
       </Box>
 
       {user.agents?.map((agent, key) => (
-        <ListItem
-          key={`${agent.id}-${key}`}
-          className={classes.bordered}
-          button
-        >
+        <ListItem key={`${agent.id}-${key}`} className={classes.bordered}>
           <Grid container>
             <Grid item xs={5}>
               <Box
@@ -125,6 +121,7 @@ export default function ConnectedAgents({ user, onDelete }: Props) {
 
       <AddMlsAgent
         isOpen={isDialogOpen}
+        user={user}
         onClose={() => setIsDialogOpen(false)}
       />
     </>

@@ -96,7 +96,8 @@ export class RoleAgentIntegration extends React.Component {
     let newState
 
     const { agents, first_name, last_name, email, phone_number } = user
-    const { office, work_phone } = agents[0] || {}
+    const { office, work_phone } =
+      Array.isArray(agents) && agents.length > 0 ? agents[0] : {}
 
     /**
      * if there is no related contact for this agent:
