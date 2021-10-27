@@ -26,6 +26,7 @@ const filter = createFilterOptions<SelectorOption>({
 })
 
 export interface Props {
+  className?: string
   value?: SelectorOption[]
   chipProps?: ChipProps
   textFieldProps?: Omit<TextFieldProps, keyof AutocompleteRenderInputParams>
@@ -34,6 +35,7 @@ export interface Props {
 }
 
 export const BaseTagSelector = ({
+  className,
   value = [],
   onChange,
   chipProps = {},
@@ -77,6 +79,7 @@ export const BaseTagSelector = ({
 
   return (
     <Autocomplete
+      className={className}
       multiple
       freeSolo
       clearOnBlur
