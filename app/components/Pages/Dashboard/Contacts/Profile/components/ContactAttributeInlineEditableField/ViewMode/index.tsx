@@ -17,39 +17,38 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      display: 'grid',
       '&:hover $title': {
         color: theme.palette.text.primary
       }
     },
-    contentContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
+    titleContainer: {
+      gridColumn: `minmax(${theme.spacing(10.5)}, auto)`
+    },
+    title: {
+      color: theme.palette.grey[600]
+    },
+    value: {
+      display: 'inline-block',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      msTextOverflow: 'ellipsis',
+      color: theme.palette.grey[900]
     },
     triggerIndicator: {
       width: theme.spacing(2),
       height: theme.spacing(2)
     },
-    title: {
-      color: theme.palette.grey[600],
-      wordBreak: 'break-word'
-    },
     starIcon: {
-      color: theme.palette.warning.main
+      color: theme.palette.warning.main,
+      verticalAlign: 'middle'
     },
     triggerIcon: (props: Props) => ({
       color: props.isTriggerActive
         ? theme.palette.warning.main
-        : theme.palette.grey[500]
-    }),
-    value: {
-      minWidth: theme.spacing(10.5),
-      textAlign: 'right',
-      color: theme.palette.grey[900]
-    }
+        : theme.palette.grey[500],
+      verticalAlign: 'middle'
+    })
   }),
   { name: 'InlineEditFieldViewMode' }
 )
@@ -60,37 +59,35 @@ export function ViewMode(props: Props) {
 
   return (
     <Box className={classes.container}>
-      <Box className={classes.contentContainer}>
+      <Box className={classes.titleContainer}>
         <Typography
           variant="body2"
           className={classes.title}
           data-test={`contact-attribute${title ? `-${title}` : ''}`}
         >
-          {title}
-        </Typography>
-        {props.is_primary && (
-          <Tooltip title="Primary">
+          <span>{title}</span>
+          {props.is_primary && (
+            <Tooltip title="Primary">
+              <SvgIcon
+                path={mdiStarOutline}
+                leftMargined
+                className={classes.starIcon}
+                size={muiIconSizes.small}
+              />
+            </Tooltip>
+          )}
+          {props.isTriggerable && (
             <SvgIcon
-              path={mdiStarOutline}
+              path={mdiLightningBoltOutline}
               leftMargined
-              className={classes.starIcon}
+              className={classes.triggerIcon}
               size={muiIconSizes.small}
             />
-          </Tooltip>
-        )}
-        {props.isTriggerable && (
-          <SvgIcon
-            path={mdiLightningBoltOutline}
-            leftMargined
-            className={classes.triggerIcon}
-            size={muiIconSizes.small}
-          />
-        )}
+          )}
+        </Typography>
       </Box>
-      <Box className={classes.contentContainer}>
-        <Box className={classes.value}>
-          <Typography variant="body2">{props.value || '-'}</Typography>
-        </Box>
+      <Box className={classes.value}>
+        <Typography variant="body2">{props.value || '-'}</Typography>
       </Box>
     </Box>
   )
