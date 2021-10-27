@@ -1,6 +1,9 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
-import { Box, Divider } from '@material-ui/core'
+import { Box, Divider, TextField, Theme, makeStyles } from '@material-ui/core'
+import sort from 'lodash/sortBy'
+
+import { useMatchSorter } from '@app/hooks/use-match-sorter'
 
 import { putUserSetting } from '../../../../../../../models/user/put-user-setting'
 import { isFetchingSelectedTeam } from '../../../../../../../reducers/user'
@@ -17,13 +20,41 @@ interface Props {
   user: IUser
 }
 
+const DEFAULT_USER_TEAMS: IUserTeam[] = []
+
+const useStyles = makeStyles((theme: Theme) => ({
+  searchInput: {
+    padding: theme.spacing(0.5, 3)
+  }
+}))
+
 export function TeamsList({ user }: Props) {
+  const classes = useStyles()
+
+  const [searchValue, setSearchValue] = useState('')
   const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
     isSwitching: false,
     switchedTeamId: ''
   })
 
   const activeTeamId = useMemo(() => getActiveTeamId(user), [user])
+
+  const userTeams = useMemo(
+    () => user?.teams || DEFAULT_USER_TEAMS,
+    [user?.teams]
+  )
+  const results = useMatchSorter(userTeams, searchValue, ['brand.name'])
+
+  /**
+   * sorting the teams based on the given search results.
+   */
+  const teams = useMemo(() => {
+    return sort(userTeams, team => {
+      const resultIndex = results.findIndex(({ id }) => id === team.id)
+
+      return resultIndex > -1 ? resultIndex : Infinity
+    })
+  }, [results, userTeams])
 
   const onClickTeam = async (teamId: string) => {
     setSwitcherStatus({
@@ -33,7 +64,7 @@ export function TeamsList({ user }: Props) {
 
     await putUserSetting('user_filter', viewAs(user, true), teamId)
 
-    window.location.reload(true)
+    window.location.reload()
   }
 
   if (isFetchingSelectedTeam(user)) {
@@ -47,10 +78,25 @@ export function TeamsList({ user }: Props) {
     )
   }
 
-  if (user && user.teams && user.teams.length > 0) {
+  if (userTeams.length > 0) {
     return (
       <>
-        {user.teams.map(team => {
+        {userTeams.length > 5 && (
+          <Box my={1}>
+            <TextField
+              fullWidth
+              size="small"
+              value={searchValue}
+              onChange={e => setSearchValue(e.target.value)}
+              placeholder="Search by team name"
+              InputProps={{
+                className: classes.searchInput
+              }}
+            />
+          </Box>
+        )}
+
+        {teams.map(team => {
           const teamId = team.brand.id
 
           return (
@@ -61,6 +107,13 @@ export function TeamsList({ user }: Props) {
               onClick={() => onClickTeam(teamId)}
               selected={teamId === activeTeamId}
               team={team}
+              style={{
+                opacity: searchValue
+                  ? results.some(({ id }) => id === team.id)
+                    ? 1
+                    : 0.5
+                  : 1
+              }}
             />
           )
         })}

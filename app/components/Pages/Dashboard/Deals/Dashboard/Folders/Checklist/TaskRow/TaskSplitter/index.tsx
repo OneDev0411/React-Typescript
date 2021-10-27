@@ -63,6 +63,11 @@ export function TaskSplitter({ task }: Props) {
 
   const handleStartEditing = () => setIsEditing(true)
 
+  const handleCancel = () => {
+    setIsEditing(false)
+    setTitle(task.title)
+  }
+
   const handleSaveTitle = () => {
     setIsEditing(false)
 
@@ -119,7 +124,7 @@ export function TaskSplitter({ task }: Props) {
                     Save
                   </Button>
 
-                  <Button size="small" onClick={() => setIsEditing(false)}>
+                  <Button size="small" onClick={handleCancel}>
                     Cancel
                   </Button>
                 </Box>
