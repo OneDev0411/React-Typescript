@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react'
-
 import useNotify from '@app/hooks/use-notify'
 import deleteSuperCampaignEnrollmentModel from '@app/models/super-campaign/delete-super-campaign-enrollment'
 
@@ -8,9 +6,9 @@ type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
 export function useDeleteSuperCampaignEnrollment(
   superCampaignId: UUID,
   superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[],
-  setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
-  >
+  setSuperCampaignEnrollments: (
+    superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+  ) => void
 ): UseDeleteSuperCampaignEnrollment {
   const notify = useNotify()
 
