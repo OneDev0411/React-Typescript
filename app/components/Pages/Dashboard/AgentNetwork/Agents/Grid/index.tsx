@@ -76,10 +76,12 @@ export default function AgentsGrid({
         <AgentListingsDrawer
           title={`${selectedAgent.full_name}'s Listings`}
           onClose={onCloseDrawer}
-          filters={{
-            ...filters,
-            agents: [selectedAgent.id]
-          }}
+          filters={
+            {
+              ...filters,
+              agents: [selectedAgent.id]
+            } as AlertFilters
+          }
           side={selectedSide}
         />
       )}
