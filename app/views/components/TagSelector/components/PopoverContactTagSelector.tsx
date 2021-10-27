@@ -78,6 +78,7 @@ interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
+  disabled?: boolean
 }
 
 export const PopoverContactTagSelector = ({
