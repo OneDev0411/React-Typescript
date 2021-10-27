@@ -232,7 +232,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-form": "^8.3.5",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0",
+    "reselect": "~4.0.0",
     "rimraf": "^2.6.3",
     "rrule": "^2.6.8",
     "rss-parser": "^3.12.0",
