@@ -209,7 +209,7 @@ export function RoleForm(props) {
         </Grid>
       )}
 
-      {isVisible('mls_id') && !agents && (
+      {isVisible('mls_id') && agents?.length <= 1 && (
         <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field

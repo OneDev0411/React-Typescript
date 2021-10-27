@@ -81,8 +81,8 @@ export class DealRole extends React.Component {
       ...getCommissionAttributes(form),
       role_type: this.getRoleType(),
       checklist: checklist ? checklist.id : undefined,
-      mls_id: form && form.agent ? form.agent.mlsid : '',
-      agents: this.isNewRecord ? form.agents : form.user.agents
+      mls_id: this.getMlsId(),
+      agents: this.isNewRecord ? form?.agents : form?.user?.agents
     }
 
     return this.formObject
@@ -96,6 +96,18 @@ export class DealRole extends React.Component {
     }
 
     return TYPE_PERSON
+  }
+
+  getMlsId = () => {
+    const { form } = this.props
+
+    const agents = this.isNewRecord ? form?.agents : form?.user?.agents
+
+    if (Array.isArray(agents) && agents.length === 1) {
+      return agents[0].mlsid
+    }
+
+    return ''
   }
 
   isAllowedRole = (name, role) => {
