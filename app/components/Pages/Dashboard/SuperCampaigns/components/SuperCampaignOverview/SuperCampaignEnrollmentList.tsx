@@ -44,6 +44,8 @@ function SuperCampaignEnrollmentList({
     )
 
   const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
+    superCampaignId,
+    superCampaignEnrollments,
     setSuperCampaignEnrollments
   )
 

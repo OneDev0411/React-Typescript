@@ -1,10 +1,13 @@
 import { Dispatch, SetStateAction } from 'react'
 
 import useNotify from '@app/hooks/use-notify'
+import deleteSuperCampaignEnrollmentModel from '@app/models/super-campaign/delete-super-campaign-enrollment'
 
 type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
 
 export function useDeleteSuperCampaignEnrollment(
+  superCampaignId: UUID,
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[],
   setSuperCampaignEnrollments: Dispatch<
     SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
   >
@@ -13,24 +16,26 @@ export function useDeleteSuperCampaignEnrollment(
 
   const deleteSuperCampaignEnrollment = async (enrollmentId: UUID) => {
     try {
-      // TODO: call delete model for the enrollment
-      console.log('delete')
+      const enrollmentIndex = superCampaignEnrollments.findIndex(
+        enrollment => enrollment.id === enrollmentId
+      )
 
-      setSuperCampaignEnrollments(superCampaignEnrollments => {
-        const enrollmentIndex = superCampaignEnrollments.findIndex(
-          enrollment => enrollment.id === enrollmentId
-        )
+      if (enrollmentIndex === -1) {
+        return
+      }
 
-        if (enrollmentIndex === -1) {
-          return superCampaignEnrollments
-        }
+      const enrollment = superCampaignEnrollments[enrollmentIndex]
 
-        const newSuperCampaignEnrollments = [...superCampaignEnrollments]
-
-        newSuperCampaignEnrollments.splice(enrollmentIndex, 1)
-
-        return newSuperCampaignEnrollments
+      await deleteSuperCampaignEnrollmentModel(superCampaignId, enrollmentId, {
+        user: enrollment.user.id,
+        brand: enrollment.brand.id
       })
+
+      const newSuperCampaignEnrollments = [...superCampaignEnrollments]
+
+      newSuperCampaignEnrollments.splice(enrollmentIndex, 1)
+
+      setSuperCampaignEnrollments(newSuperCampaignEnrollments)
     } catch (_) {
       notify({
         status: 'error',
