@@ -34,8 +34,14 @@ function SuperCampaignEnrollmentList({
   const { superCampaignEnrollments, setSuperCampaignEnrollments } =
     useGetSuperCampaignEnrollments(superCampaignId)
 
+  console.log('superCampaignEnrollments', superCampaignEnrollments)
+
   const updateSuperCampaignEnrollmentTags =
-    useUpdateSuperCampaignEnrollmentTags(setSuperCampaignEnrollments)
+    useUpdateSuperCampaignEnrollmentTags(
+      superCampaignId,
+      superCampaignEnrollments,
+      setSuperCampaignEnrollments
+    )
 
   const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
     setSuperCampaignEnrollments
