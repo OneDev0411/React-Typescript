@@ -1,6 +1,4 @@
 /* eslint-disable max-len */
-import React from 'react'
-
 import { IndexRoute, Route } from 'react-router'
 
 import withAcl from 'components/Acl/with-acl'
@@ -588,7 +586,15 @@ const AsyncMarketingInsight = withAcl(
   }),
   { oneOf: [ACL.MARKETING, ACL.CRM] }
 )
-
+const AsyncSuperCampaign = withAcl(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/MarketingInsights/SuperCampaign' /* webpackChunkName: "email_insight_super_campaign" */
+      )
+  }),
+  { oneOf: [ACL.MARKETING, ACL.CRM] }
+)
 /* ==================================== */
 //  Chatroom
 /* ==================================== */
@@ -1016,6 +1022,7 @@ export default (
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route path="super-campaign" component={AsyncSuperCampaign} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
 
