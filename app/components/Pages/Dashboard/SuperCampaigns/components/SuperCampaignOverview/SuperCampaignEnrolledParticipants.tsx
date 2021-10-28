@@ -17,6 +17,8 @@ function SuperCampaignEnrolledParticipants() {
   )
   const isResultMode = useIsSuperCampaignResultMode(superCampaign)
 
+  // TODO: handle Loading and EmptyState for the lists
+
   return (
     <SuperCampaignCard>
       <SuperCampaignCardHeader title="Enrolled Participants By Their Contacts Tags" />
@@ -28,7 +30,7 @@ function SuperCampaignEnrolledParticipants() {
           readOnly={isResultMode}
           helperText={
             !isResultMode
-              ? 'XXX agents added by tags you’ve entered.'
+              ? 'XXX agents added by tags you’ve entered.' // TODO: Use the real agent count here
               : undefined
           }
         />

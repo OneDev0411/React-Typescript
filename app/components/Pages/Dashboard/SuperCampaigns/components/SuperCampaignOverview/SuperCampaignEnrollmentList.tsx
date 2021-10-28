@@ -36,8 +36,6 @@ function SuperCampaignEnrollmentList({
   const { superCampaignEnrollments, setSuperCampaignEnrollments } =
     useGetSuperCampaignEnrollments(superCampaignId)
 
-  console.log('superCampaignEnrollments', superCampaignEnrollments)
-
   const updateSuperCampaignEnrollmentTags =
     useUpdateSuperCampaignEnrollmentTags(
       superCampaignId,
