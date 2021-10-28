@@ -26,13 +26,11 @@ const useStyles = makeStyles(
     createStyles({
       container: {
         display: 'flex',
-        alignItems: 'center',
-        minWidth: '371px'
+        alignItems: 'center'
       },
       shortcutContainer: {
-        '& button:not(:last-child)': {
-          marginRight: theme.spacing(1)
-        }
+        display: 'flex',
+        columnGap: theme.spacing(1)
       },
       button: {
         background: theme.palette.background.paper,
@@ -44,8 +42,8 @@ const useStyles = makeStyles(
       actionContainer: {
         display: 'flex',
         alignItems: 'center',
-        marginLeft: theme.spacing(1),
-        '& button:not(:last-child)': { marginRight: theme.spacing(1) }
+        marginLeft: theme.spacing(1.5),
+        columnGap: theme.spacing(1)
       }
     }),
   { name: 'ContactProfileHeaderActions' }
@@ -74,7 +72,9 @@ export const Actions = ({
             </Tooltip>
           )}
         />
-        <Chat contact={contact} />
+
+        <Chat contact={contact} size={muiIconSizes.medium} />
+
         <SendContactCard
           contact={contact}
           mediums="Email"
