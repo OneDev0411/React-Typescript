@@ -80,8 +80,6 @@ const ListingCardWithFavorite = ({
     dispatch(toggleFavorite(listing))
   }, [dispatch, listing, selected, onToggleSelection])
 
-  console.log('ListingCardWithFavorite')
-
   return (
     <>
       <ListingCard
