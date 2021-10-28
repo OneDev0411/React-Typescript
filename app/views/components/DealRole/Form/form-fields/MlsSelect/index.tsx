@@ -1,4 +1,5 @@
 import { Box, TextField } from '@material-ui/core'
+import { omit } from 'lodash'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
@@ -9,17 +10,21 @@ interface Props {
   agents: IAgent[]
   meta: FieldMetaState<any>
   isRequired: boolean
+  fieldToSelect: keyof IAgent
   mutators: any // TODO: fix mutators types
 }
 
 export function MlsSelect({
   input,
   meta,
+  fieldToSelect = 'mlsid',
   mutators,
   agents,
   isRequired
 }: Props) {
-  const selectedAgent = agents.find(({ mlsid }) => input.value === mlsid)
+  const selectedAgent = agents.find(
+    agent => input.value === agent[fieldToSelect]
+  )
 
   const handleChange = (agent: IAgent) => {
     mutators.populateRole(agent)
@@ -45,7 +50,7 @@ export function MlsSelect({
           style={{
             background: '#fff'
           }}
-          {...buttonProps}
+          {...omit(buttonProps, 'component')}
         />
       )}
       renderMenu={({ close }) => (
