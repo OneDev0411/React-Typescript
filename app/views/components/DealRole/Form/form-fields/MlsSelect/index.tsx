@@ -1,4 +1,5 @@
 import { Box, TextField } from '@material-ui/core'
+import { omit } from 'lodash'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
@@ -49,7 +50,7 @@ export function MlsSelect({
           style={{
             background: '#fff'
           }}
-          {...buttonProps}
+          {...omit(buttonProps, 'component')}
         />
       )}
       renderMenu={({ close }) => (

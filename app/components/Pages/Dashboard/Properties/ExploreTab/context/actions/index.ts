@@ -62,12 +62,22 @@ export const setMapBounds = (
   }
 })
 
-export const setMapLocation = (center: ICoord, zoom: number) => ({
+export const setMapLocation = (
+  center: ICoord,
+  zoom: number,
+  setPinMarker: boolean = false
+) => ({
   type: 'SET_MAP_LOCATION' as 'SET_MAP_LOCATION',
   payload: {
     center,
-    zoom
+    zoom,
+    setPinMarker
   }
+})
+
+export const removePinMarker = () => ({
+  type: 'REMOVE_PIN_MARKER' as 'REMOVE_PIN_MARKER',
+  payload: {}
 })
 
 export const setIsLoading = (isLoading: boolean) => ({
@@ -97,6 +107,7 @@ export type Actions = ReturnType<
   | typeof updateFilters
   | typeof changeSort
   | typeof setMapLocation
+  | typeof removePinMarker
   | typeof setIsLoading
   | typeof removeMapDrawing
   | typeof clearListingUiStates
