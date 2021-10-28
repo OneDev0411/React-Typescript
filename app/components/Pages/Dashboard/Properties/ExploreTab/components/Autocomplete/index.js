@@ -17,7 +17,6 @@ import {
   AUTOCOMPLETE_SEARCH_DEBOUNCE_TIME_MS,
   AUTOCOMPLETE_LISTINGS_ITEM_LIMIT
 } from '../../../constants'
-import { estimateMapZoom } from '../../../helpers/map-helpers'
 
 import {
   SearchContainer,
@@ -123,6 +122,7 @@ class MlsAutocompleteSearch extends Component {
     try {
       const placeResponse = await getPlace(place.description, false)
 
+      const types = placeResponse.types
       const center = placeResponse.geometry.location
 
       const bounds = {
@@ -130,9 +130,7 @@ class MlsAutocompleteSearch extends Component {
         sw: placeResponse.geometry.viewport.southwest
       }
 
-      const zoom = estimateMapZoom(bounds)
-
-      this.props.onSelectPlace(center, zoom, bounds)
+      this.props.onSelectPlace(center, bounds, types)
     } finally {
       this.setState({
         isLoading: false

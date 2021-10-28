@@ -10,7 +10,7 @@ const useStyles = makeStyles(
   theme => ({
     pin: {
       color: theme.palette.secondary.main,
-      transform: 'translate(-50%,-50%)',
+      transform: 'translate(-50%,-90%)',
       zIndex: 2,
       position: 'absolute',
       pointerEvents: 'none'

@@ -21,7 +21,10 @@ export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const PAGE_SIZE = 20
 
 // Map constants
+export const GOOGLE_MAP_MAX_ZOOM_LEVEL = 21
 export const GOOGLE_MAP_GLOBE_WIDTH = 256
+export const MLS_MAP_WIDTH_GAP = 80
+export const MLS_MAP_Height_GAP = 250
 export const USER_LOCATION_ZOOM_LEVEL = 15
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8
 export const QUERY_LIMIT = 200
@@ -29,6 +32,15 @@ export const bootstrapURLKeys = {
   key: config.google.api_key,
   libraries: ['drawing', 'places', 'geometry'].join(',')
 }
+
+export const PLACE_ZOOM_OFFSETS = {
+  administrative_area_level_1: 0,
+  locality: 0.5,
+  sublocality: 0.75,
+  neighborhood: 1.25,
+  route: 2.65
+}
+
 // TODO: Remove this const after refactoring fav/saved tab
 export const mapInitialState = {
   zoom: 5,
