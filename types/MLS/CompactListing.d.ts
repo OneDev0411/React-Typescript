@@ -69,6 +69,7 @@ declare type ICompactListing<
   favorited: boolean
   location: ILocation | null
   cover_image_url: string
+  amenities?: Nullable<string[]>
   gallery_image_urls: null | string[]
   address: ICompactAddress
   open_houses: boolean | null
