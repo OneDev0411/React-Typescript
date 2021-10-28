@@ -12,7 +12,7 @@ export async function upgradeAgent(
   params: UpgradeAgentParams
 ): Promise<IUser | undefined> {
   try {
-    const response = await new Fetch().patch('/users/self/upgrade').send(params)
+    const response = await new Fetch().post('/users/self/agents').send(params)
 
     return response.body.data
   } catch (error) {

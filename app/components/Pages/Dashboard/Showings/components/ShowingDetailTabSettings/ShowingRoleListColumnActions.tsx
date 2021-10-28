@@ -65,7 +65,8 @@ function ShowingRoleListColumnActions({
         can_approve: updatedRole.can_approve,
         confirm_notification_type: updatedRole.confirm_notification_type,
         cancel_notification_type: updatedRole.cancel_notification_type,
-        user: updatedRole.user,
+        user: updatedRole.user?.id,
+        agent: updatedRole.agent,
         brand: role.brand,
         ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {})
       }
@@ -131,6 +132,7 @@ function ShowingRoleListColumnActions({
           confirm_notification_type: role.confirm_notification_type,
           cancel_notification_type: role.cancel_notification_type,
           user: role.user,
+          agent: role.agent,
           save_to_contact: true
         }}
         onConfirm={handleEdit}

@@ -22,6 +22,7 @@ import { Address } from './form-fields/Address'
 import { AutoCompleteInput } from './form-fields/AutoCompleteInput'
 import { CommissionInput } from './form-fields/CommissionInput'
 import { MlsInput } from './form-fields/MlsInput'
+import { MlsSelect } from './form-fields/MlsSelect'
 import { NameInput } from './form-fields/NameInput'
 import { Roles } from './form-fields/Roles'
 import { TextInput } from './form-fields/TextInput'
@@ -47,8 +48,8 @@ export function RoleForm(props) {
   const showUpdateContactButton =
     props.values.email !== props.userEmail && props.values.contact
 
-  const selectedRole = props.values.role
-  const roleType = props.values.role_type
+  const { role: selectedRole, role_type: roleType, agents } = props.values
+
   const compact = props.compact
 
   const getTooltip = () => {
@@ -208,7 +209,7 @@ export function RoleForm(props) {
         </Grid>
       )}
 
-      {isVisible('mls_id') && (
+      {isVisible('mls_id') && agents?.length <= 1 && (
         <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
           <Grid item md={compact ? 12 : true} xs={12}>
             <Field
@@ -217,6 +218,21 @@ export function RoleForm(props) {
               isVisible={isVisible('mls_id')}
               mutators={props.form.mutators}
               component={MlsInput}
+            />
+          </Grid>
+        </Grid>
+      )}
+
+      {isVisible('mls_id') && agents?.length > 1 && (
+        <Grid container xs={12} spacing={2} alignItems="center" mt={1}>
+          <Grid item md={compact ? 12 : true} xs={12}>
+            <Field
+              isRequired
+              name="mls_id"
+              label="MLS"
+              agents={agents}
+              mutators={props.form.mutators}
+              component={MlsSelect}
             />
           </Grid>
         </Grid>

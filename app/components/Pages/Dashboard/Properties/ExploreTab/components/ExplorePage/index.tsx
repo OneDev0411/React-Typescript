@@ -23,7 +23,11 @@ import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { QUERY_LIMIT, bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
-import { coordToPoint } from '../../../helpers/map-helpers'
+import {
+  coordToPoint,
+  estimateMapZoom,
+  getPlaceZoomOffset
+} from '../../../helpers/map-helpers'
 import {
   LAST_BROWSING_LOCATION,
   parseSortIndex,
@@ -38,7 +42,8 @@ import {
   changeSort,
   changeListingHoverState,
   changeListingClickedState,
-  clearListingUiStates
+  clearListingUiStates,
+  removePinMarker
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 import Autocomplete from '../Autocomplete'
@@ -171,14 +176,28 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onSelectPlace = (
     center: ICoord,
-    zoom: number,
-    bounds: ICompactBounds
+    bounds: ICompactBounds,
+    types: string[]
   ) => {
+    const mapWidth = mapRef.current
+      ? mapRef.current.getDiv().clientWidth
+      : undefined
+    const mapHeight = mapRef.current
+      ? mapRef.current.getDiv().clientHeight
+      : undefined
+
+    const zoomOffset = getPlaceZoomOffset(types)
+    const zoom = estimateMapZoom(bounds, zoomOffset, mapWidth, mapHeight)
+
     if (viewType === DEFAULT_VIEW) {
-      dispatch(setMapLocation(center, zoom))
+      dispatch(setMapLocation(center, zoom, true))
     } else {
       dispatch(setMapBounds(center, zoom, bounds))
     }
+
+    /*
+    Remove fitBounds approach to manually set map zoom on specific place types
+    https://gitlab.com/rechat/web/-/issues/5723
 
     if (mapRef.current) {
       const cornerBounds = new window.google.maps.LatLngBounds()
@@ -188,6 +207,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
       mapRef.current.fitBounds(cornerBounds)
     }
+    */
   }
 
   useEffectOnce(() => {
@@ -281,6 +301,10 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
 
   const onMapClick = () => dispatch(changeListingClickedState(null))
 
+  const onClearSearchbox = () => {
+    dispatch(removePinMarker())
+  }
+
   const onMapLoad = (map: google.maps.Map) => {
     mapRef.current = map
   }
@@ -295,6 +319,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
             <Autocomplete
               isMapView={mapIsShown}
               onSelectPlace={onSelectPlace}
+              onClear={onClearSearchbox}
             />
           </Grid>
           <Grid className={classes.searchBarFilterItem}>
@@ -319,6 +344,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                 <Map
                   isWidget={isWidget}
                   hasDrawingMode
+                  pin={state.pinMarker}
                   drawing={state.search.drawing}
                   onStartDrawingMode={onStartDrawingMode}
                   onDrawingComplete={onDrawingComplete}

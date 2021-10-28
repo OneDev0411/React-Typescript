@@ -173,7 +173,7 @@ export const Results = ({
           {zeroStateShouldShown ? (
             <ZeroState
               image="/static/images/zero-state/mls-explore.png"
-              title="You don’t have any listings."
+              title="Sorry, but no listings match your search right now"
               subtitle="Try searching for an address or listing at the top."
             />
           ) : (

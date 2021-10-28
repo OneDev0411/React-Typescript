@@ -2,7 +2,7 @@ import config from 'config'
 
 import { ViewType } from './types'
 
-export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-filters'
+export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-v.2.0-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
   'mls-saved-search-hint-dismissed'
 
@@ -21,7 +21,10 @@ export const PROPOSED_AGENT_ZOOM_LEVEL = 16
 export const PAGE_SIZE = 20
 
 // Map constants
+export const GOOGLE_MAP_MAX_ZOOM_LEVEL = 21
 export const GOOGLE_MAP_GLOBE_WIDTH = 256
+export const MLS_MAP_WIDTH_GAP = 80
+export const MLS_MAP_Height_GAP = 250
 export const USER_LOCATION_ZOOM_LEVEL = 15
 export const MINIMAL_MARKER_ZOOM_LEVEL = 8
 export const QUERY_LIMIT = 200
@@ -29,6 +32,15 @@ export const bootstrapURLKeys = {
   key: config.google.api_key,
   libraries: ['drawing', 'places', 'geometry'].join(',')
 }
+
+export const PLACE_ZOOM_OFFSETS = {
+  administrative_area_level_1: 0,
+  locality: 0.5,
+  sublocality: 0.75,
+  neighborhood: 1.25,
+  route: 2.65
+}
+
 // TODO: Remove this const after refactoring fav/saved tab
 export const mapInitialState = {
   zoom: 5,
@@ -130,9 +142,6 @@ export const PROPERTY_TYPES_PROPERTY_SUBTYPES: Record<
 export const FILTERS_INITIAL_VALUES: AlertFilters = {
   open_house: false,
   property_types: ['Residential'],
-  property_subtypes: Object.values(
-    RES_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[],
   listing_statuses: ['Active'] as IListingStatus[],
   architectural_styles: null,
   school_districts: null,

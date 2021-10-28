@@ -56,6 +56,7 @@ function ShowingRoleList({
       run(async () => {
         const newRole = await addShowingRole(showingId, {
           ...role,
+          user: role.user?.id,
           ...(!hasNotificationTypeFields ? goAndShowNotificationTypes : {}),
           brand: activeTeamId
         })
