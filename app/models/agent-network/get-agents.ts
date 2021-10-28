@@ -14,6 +14,7 @@ export default async function getAgents(
 ): Promise<AgentWithStats[]> {
   const response = await new Fetch()
     .post('/listings/filter/agents')
+    .query({ 'associations[]': 'agent.office' })
     .send(filters)
 
   return response.body.data

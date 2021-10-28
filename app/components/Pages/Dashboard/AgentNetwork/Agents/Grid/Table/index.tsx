@@ -48,7 +48,7 @@ export function ListTable({
       render: ({ row: agentData }: RenderProps<AgentWithStats>) => (
         <>
           <div>{agentData.full_name}</div>
-          {/* <Caption variant="body2">{agentData.officeName ?? ''}</Caption> */}
+          <Caption variant="body2">{agentData.office?.name ?? ''}</Caption>
         </>
       )
     },
