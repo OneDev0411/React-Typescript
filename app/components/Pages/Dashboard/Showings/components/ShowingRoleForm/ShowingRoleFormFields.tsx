@@ -76,15 +76,22 @@ function ShowingRoleFormFields({
       />
       {agents && agents.length > 1 && (
         <CustomField
+          isRequired
           name="agent"
           label="Agent"
+          fieldToSelect="id"
           agents={agents}
           component={MlsSelect}
           mutators={{ populateRole: form.mutators.selectUserAgent }}
         />
       )}
       {agents && agents.length === 1 && (
-        <Field type="hidden" name="agent" value={agents[0].id} />
+        <Field
+          type="hidden"
+          component="input"
+          name="agent"
+          value={agents[0].id}
+        />
       )}
       {hasNotificationTypeFields && (
         <>
