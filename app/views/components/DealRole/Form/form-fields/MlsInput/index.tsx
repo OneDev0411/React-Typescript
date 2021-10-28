@@ -9,7 +9,6 @@ import { AutoComplete, Option } from '../../components/AutoComplete'
 interface Props {
   label: string
   isVisible: boolean
-  isRequired: boolean
   input: FieldInputProps<any, HTMLElement>
   mutators: any // TODO: fix mutators types
 }

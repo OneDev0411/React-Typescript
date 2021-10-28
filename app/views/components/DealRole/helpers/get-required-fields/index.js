@@ -52,7 +52,7 @@ function getIsCompanyRequired(args) {
 }
 
 export default function getRequiredFields(args) {
-  const { role, role_type } = args
+  const { role, role_type, agents, visibleFields } = args
 
   if (args.isBrokerageForm) {
     return []
@@ -93,6 +93,10 @@ export default function getRequiredFields(args) {
       'email',
       'phone_number'
     )
+  }
+
+  if (visibleFields.includes('mls_id') && agents?.length > 1) {
+    list.push('mls_id')
   }
 
   // unique array

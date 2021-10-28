@@ -40,6 +40,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       id: 'role-0',
       role: 'SellerAgent',
       user: undefined,
+      agent: undefined,
       brand: teamId,
       first_name: '',
       last_name: '',
@@ -67,6 +68,10 @@ function useShowingRoles(): UseShowingRolesReturn {
     const newRole: ShowingRoleInput = {
       id: `role-${nextRoleId.current++}`,
       ...person,
+      agent:
+        person.user?.agents?.length === 1
+          ? person.user.agents[0].id
+          : undefined,
       role,
       mode: 'form',
       deletable: role !== 'SellerAgent',
@@ -101,9 +106,15 @@ function useShowingRoles(): UseShowingRolesReturn {
         }
       })
     } else if (property?.type === 'listing') {
-      const user = teamMembers.find(
-        user => user.agent?.email === property.listing.list_agent_email
-      )
+      const user = teamMembers.find(user => {
+        if (!user.agents) {
+          return false
+        }
+
+        return user.agents.some(
+          agent => agent.email === property.listing.list_agent_email
+        )
+      })
 
       if (user) {
         setRoleFromProperty('SellerAgent', getPersonFromUser(user))
@@ -138,6 +149,7 @@ function useShowingRoles(): UseShowingRolesReturn {
       id: `role-${nextRoleId.current++}`,
       role,
       user: undefined,
+      agent: undefined,
       brand: teamId,
       first_name: '',
       last_name: '',

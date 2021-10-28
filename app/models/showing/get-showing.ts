@@ -12,6 +12,7 @@ async function getShowing(showingId: UUID): Promise<IShowing> {
         'showing_appointment.approvals',
         'showing_approval.role',
         'showing.roles',
+        'showing_role.user',
         'showing_appointment.notifications',
         'showing.availabilities'
       ]
