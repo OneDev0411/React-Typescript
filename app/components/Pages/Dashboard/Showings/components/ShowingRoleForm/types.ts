@@ -3,6 +3,7 @@ import { ShowingRoleInput } from '../../types'
 export type ShowingRoleFormValues = Pick<
   ShowingRoleInput,
   | 'role'
+  | 'agent'
   | 'first_name'
   | 'last_name'
   | 'email'
