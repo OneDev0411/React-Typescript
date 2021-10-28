@@ -66,6 +66,7 @@ function ShowingStepRolePerson({
 
   const { handleSubmit, isSavingContact } = useShowingRoleFormSubmit(
     (values: ShowingRoleFormValues) => {
+      console.log('submitted', { values })
       onRoleEdit({ ...role, ...values, mode: 'card' })
       nextStep(400)
     }

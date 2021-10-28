@@ -23,7 +23,7 @@ export const selectUserAgentMutator: Mutator<ShowingRoleFormValues> = (
   changeValue(state, 'last_name', () => agent.last_name)
   changeValue(state, 'email', () => agent.email)
   changeValue(state, 'phone_number', () => agent.phone_number)
-  changeValue(state, 'agent', () => agent.id || undefined)
+  changeValue(state, 'agent', () => agent.id)
 }
 
 export const selectAgentMutator: Mutator<ShowingRoleFormValues> = (
