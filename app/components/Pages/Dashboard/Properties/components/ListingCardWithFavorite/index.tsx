@@ -16,7 +16,6 @@ interface Props
   hover?: boolean
   isWidget?: boolean
   reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
-  onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onToggleLike?: (
     listing: IListing | ICompactListing,
@@ -32,7 +31,6 @@ const ListingCardWithFavorite = ({
   tags,
   selected = undefined,
   onToggleSelection = noop,
-  onChangeHoverState,
   reduxToggleFavorite = true,
   onToggleLike = noop,
   onClick,
@@ -82,10 +80,11 @@ const ListingCardWithFavorite = ({
     dispatch(toggleFavorite(listing))
   }, [dispatch, listing, selected, onToggleSelection])
 
+  console.log('ListingCardWithFavorite')
+
   return (
     <>
       <ListingCard
-        onChangeHoverState={onChangeHoverState}
         listing={listing}
         clicked={clicked}
         hover={hover}
