@@ -2,7 +2,7 @@ import config from 'config'
 
 import { ViewType } from './types'
 
-export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-filters'
+export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-v.2.0-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
   'mls-saved-search-hint-dismissed'
 
@@ -130,9 +130,6 @@ export const PROPERTY_TYPES_PROPERTY_SUBTYPES: Record<
 export const FILTERS_INITIAL_VALUES: AlertFilters = {
   open_house: false,
   property_types: ['Residential'],
-  property_subtypes: Object.values(
-    RES_FILTER_PROPERTY_SUBTYPES
-  ) as IPropertySubtype[],
   listing_statuses: ['Active'] as IListingStatus[],
   architectural_styles: null,
   school_districts: null,

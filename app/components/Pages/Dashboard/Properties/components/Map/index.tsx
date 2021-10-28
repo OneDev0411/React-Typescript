@@ -20,11 +20,13 @@ import { DrawingModeBar } from '../DrawingModeBar'
 import { GoogleMapsButton } from '../GoogleMapsButton'
 import { MapToggler } from '../MapToggler'
 import Marker from '../Marker'
+import Pin from '../Pin'
 
 interface Props {
   isWidget: boolean
   mapIsShown?: boolean
   mapPosition: IMapPosition
+  pin?: ICoord
   listings: ICompactListing[]
   hoverListing: Nullable<UUID>
   clickedListing: Nullable<UUID>
@@ -59,6 +61,7 @@ export const Map = ({
   mapIsShown = true,
   isWidget,
   mapPosition,
+  pin = undefined,
   listings,
   hoverListing,
   clickedListing,
@@ -302,6 +305,10 @@ export const Map = ({
                 />
               )
           )}
+
+        {!drawingMode && mapIsShown && mapRef.current && pin && (
+          <Pin lat={pin.lat} lng={pin.lng} />
+        )}
       </GoogleMap>
       <ListingDetailsModal
         isOpen={listingModalState.isOpen}

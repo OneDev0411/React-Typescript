@@ -152,7 +152,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
   }
 
   const onSelectPlace = (center: ICoord, zoom: number) => {
-    dispatch(setMapLocation(center, zoom))
+    dispatch(setMapLocation(center, zoom, true))
     setSearchQuery(location.query.q)
     setUserLocationState(prev => ({ ...prev, firstRun: false }))
   }
@@ -179,7 +179,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
           const zoom = estimateMapZoom(bounds)
 
-          dispatch(setMapLocation(center, zoom))
+          dispatch(setMapLocation(center, zoom, true))
         }
       } finally {
         setIsLoadingPlace(false)

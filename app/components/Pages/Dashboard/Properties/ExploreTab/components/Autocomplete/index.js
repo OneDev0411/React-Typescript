@@ -48,6 +48,10 @@ class MlsAutocompleteSearch extends Component {
 
   onClear = () => {
     this.setState({ input: '', isOpen: false })
+
+    if (typeof this.props.onClear === 'function') {
+      this.props.onClear()
+    }
   }
 
   autocompleteAddress(input) {
@@ -233,7 +237,7 @@ class MlsAutocompleteSearch extends Component {
                     onFocus={this.handleInputFocus}
                     onBlur={this.handleInputBlur}
                     placeholder="Search by MLS, City ..."
-                    onClearHandler={this.onClear}
+                    onClear={this.onClear}
                     isLoading={this.state.isLoading}
                     fullWidth={this.props.fullWidth}
                   />
