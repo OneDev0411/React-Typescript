@@ -6,7 +6,7 @@ export function getPersonFromDealRole(role: IDealRole): ShowingRoleInputPerson {
     last_name: role.legal_last_name ?? '',
     email: role.email,
     phone_number: role.phone_number ?? '',
-    user: role.user?.id,
+    user: role.user,
     brand: role.user?.brand ?? ''
   }
 }
@@ -17,7 +17,7 @@ export function getPersonFromUser(user: IUser): ShowingRoleInputPerson {
     last_name: user.last_name ?? '',
     email: user.email,
     phone_number: user.phone_number ?? '',
-    user: user.id,
+    user,
     brand: user.brand ?? ''
   }
 }
