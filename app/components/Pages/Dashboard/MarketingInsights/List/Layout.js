@@ -10,6 +10,7 @@ import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { selectUser } from 'selectors/user'
+import { noop } from 'utils/helpers'
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
@@ -27,7 +28,7 @@ const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 function InsightsLayout({
   sentCount,
   scheduledCount,
-  onCreateEmail,
+  onCreateEmail = noop,
   renderContent
 }) {
   const classes = useStyles()

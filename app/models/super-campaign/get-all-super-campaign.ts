@@ -1,17 +1,13 @@
 import Fetch from 'services/fetch'
 
-async function getAllSuperCampaign(): Promise<any> {
-  return (
-    await new Fetch().post('/email/super-campaigns/filter').query({
-      associations: [
-        // 'super_campaign.template_instance',
-        // 'template_instance.template',
-        // 'template_instance.listings',
-        // 'template_instance.deals',
-        // 'template_instance.contacts'
-      ]
-    })
-  ).body.data
+async function getAllSuperCampaign(): Promise<
+  ISuperCampaign<'template_instance'>[]
+> {
+  const response = await new Fetch()
+    .post('/email/super-campaigns/filter')
+    .send()
+
+  return response.body.data
 }
 
 export default getAllSuperCampaign

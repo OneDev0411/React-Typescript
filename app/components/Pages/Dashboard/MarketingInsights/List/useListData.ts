@@ -56,6 +56,8 @@ export default function useListData(
           emailFields: []
         })
 
+        console.log({ emailCampaign })
+
         dispatch({
           type: InsightActionType.FetchItemSuccess,
           emailCampaign

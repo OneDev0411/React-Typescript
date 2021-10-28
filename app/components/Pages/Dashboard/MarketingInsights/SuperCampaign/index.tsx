@@ -24,7 +24,6 @@ function SuperCampaignList(props) {
     <Layout
       sentCount={0}
       scheduledCount={2}
-      onCreateEmail={() => null}
       renderContent={props => renderContent(props)}
     />
   )
