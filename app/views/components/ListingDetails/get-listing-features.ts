@@ -126,7 +126,7 @@ export function getListingFeatures(listing: IListing): Feature[] {
         {
           label: 'Others',
           value: valueToString([
-            ...property.utilities,
+            ...(property.utilities ? property.utilities : []),
             ...(property.amenities ? property.amenities : [])
           ])
         }
