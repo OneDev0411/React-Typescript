@@ -13,13 +13,11 @@ interface AdminContinueButtonProps
     'variant' | 'color' | 'onClick' | 'children' | 'startIcon'
   > {
   onClick: () => void
-  hasAddToMarketingCenter: boolean
   templateId: UUID
 }
 
 function AdminContinueButton({
   onClick,
-  hasAddToMarketingCenter,
   disabled,
   templateId,
   ...otherProps
@@ -45,8 +43,6 @@ function AdminContinueButton({
     goTo(`/dashboard/super-campaign/${superCampaign.id}`)
   }
 
-  const addToMarketingCenter = () => console.log('addToMarketingCenter') // TODO: implement this
-
   return (
     <>
       <Button
@@ -68,8 +64,6 @@ function AdminContinueButton({
         onClose={closeDrawer}
         onContinueClick={onClick}
         onSuperCampaignClick={createSuperCampaignAndRedirect}
-        onAddToMarketingCenterClick={addToMarketingCenter}
-        hasAddToMarketingCenter={hasAddToMarketingCenter}
       />
     </>
   )
