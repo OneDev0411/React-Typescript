@@ -9,7 +9,7 @@ declare interface ISuperCampaignEnrollment<
   A extends ISuperCampaignEnrollmentAssociations = ''
 > extends Pick<
     IModel<'super_campaign_enrollment'>,
-    'id' | 'created_at' | 'updated_at'
+    'id' | 'created_at' | 'updated_at' | 'deleted_at'
   > {
   super_campaign: UUID
   brand: A extends 'brand' | 'user_and_brand' | 'user_and_brand_and_campaign'
