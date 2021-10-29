@@ -6,8 +6,8 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
+import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import Search from '@app/views/components/Grid/Search'
 import TreeView from '@app/views/components/TreeView'
@@ -58,7 +58,7 @@ export function BaseBrandSelector({
     query
   )
 
-  const debouncedSetQuery = debounce(setQuery, 400)
+  const [debouncedSetQuery] = useDebouncedCallback(setQuery, 400)
 
   const renderNode = (brand: IBrand) => {
     if (!nodeRenderer) {

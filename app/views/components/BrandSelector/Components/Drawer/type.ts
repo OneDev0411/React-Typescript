@@ -6,7 +6,7 @@ interface BaseDrawerProps extends OverlayDrawerProps {
   drawerTitle?: string
 }
 
-export interface BaseSelectoeDrawer extends BaseDrawerProps {
+export interface BaseSelectorDrawer extends BaseDrawerProps {
   brandSelectorProps?: BaseBrandSelectorProps
 }
 export interface MultiSelectionBrandSelectoeDrawer extends BaseDrawerProps {

@@ -50,7 +50,10 @@ export function MultiSelectionBrandSelectorDrawer({
         <Drawer.Header title={drawerTitle} />
         <Drawer.Body>
           <div className={classes.container}>
-            <BaseBrandSelector nodeRenderer={nodeRenderer} />
+            <BaseBrandSelector
+              {...brandSelectorProps}
+              nodeRenderer={nodeRenderer}
+            />
           </div>
         </Drawer.Body>
         <Drawer.Footer>
