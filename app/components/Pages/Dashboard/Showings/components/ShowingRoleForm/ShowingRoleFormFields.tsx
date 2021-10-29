@@ -1,6 +1,8 @@
 import { Box } from '@material-ui/core'
-import { FormProps, FormRenderProps } from 'react-final-form'
+import { FormProps, FormRenderProps, Field } from 'react-final-form'
 
+import CustomField from '@app/views/components/DealRole/components/CustomField'
+import { MlsSelect } from '@app/views/components/DealRole/Form/form-fields/MlsSelect'
 import {
   FormPhoneField,
   FormTextField,
@@ -19,6 +21,7 @@ export interface ShowingRoleFormFieldsProps
   hasNotificationTypeFields: boolean
   hasSaveToContactCheckbox: boolean
   saveToContactCheckboxLabel: string
+  agents: Optional<IAgent[]>
 }
 
 function ShowingRoleFormFields({
@@ -26,7 +29,8 @@ function ShowingRoleFormFields({
   initialValues,
   hasNotificationTypeFields,
   hasSaveToContactCheckbox,
-  saveToContactCheckboxLabel
+  saveToContactCheckboxLabel,
+  agents
 }: ShowingRoleFormFieldsProps) {
   return (
     <>
@@ -70,6 +74,25 @@ function ShowingRoleFormFields({
         format={false}
         validate={requiredTextValidator}
       />
+      {agents && agents.length > 1 && (
+        <CustomField
+          isRequired
+          name="agent"
+          label="Agent"
+          fieldToSelect="id"
+          agents={agents}
+          component={MlsSelect}
+          mutators={{ populateRole: form.mutators.selectUserAgent }}
+        />
+      )}
+      {agents && agents.length === 1 && (
+        <Field
+          type="hidden"
+          component="input"
+          name="agent"
+          value={agents[0].id}
+        />
+      )}
       {hasNotificationTypeFields && (
         <>
           <ShowingRoleYesNoRadioGroupField

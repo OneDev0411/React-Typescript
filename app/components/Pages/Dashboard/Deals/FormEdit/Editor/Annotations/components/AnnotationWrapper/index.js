@@ -18,7 +18,9 @@ export function AnnotationWrapper(props) {
             getFormValue(props.values, annotations)
           )
 
-          return rects.map((rect, key) => {
+          return rects.map((rect, index) => {
+            const key = `${annotation.annotation.fieldName}-${index}`
+
             const style = {
               position: 'absolute',
               left: `${rect.left}px`,
@@ -47,7 +49,7 @@ export function AnnotationWrapper(props) {
                     whiteSpace: 'pre'
                   }}
                 >
-                  {values[key]}
+                  {values[index]}
                 </div>
               )
             }
@@ -63,8 +65,8 @@ export function AnnotationWrapper(props) {
                 fontSize
               },
               annotation,
-              rectIndex: key,
-              value: values[key] || ''
+              rectIndex: index,
+              value: values[index] || ''
             })
           })
         })

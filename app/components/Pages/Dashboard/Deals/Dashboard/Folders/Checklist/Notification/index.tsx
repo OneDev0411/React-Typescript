@@ -1,4 +1,4 @@
-import { makeStyles, Theme } from '@material-ui/core'
+import { Box, makeStyles, Theme } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
 import { IAppState } from 'reducers'
@@ -33,13 +33,13 @@ export function TaskNotifications({ task }: Props) {
   const room = rooms && rooms[task.room.id] ? rooms[task.room.id] : task.room
   const { new_notifications } = room
 
-  if (new_notifications === 0) {
+  if (!new_notifications) {
     return null
   }
 
   return (
-    <div>
+    <Box ml={1}>
       <span className={classes.badge}>{new_notifications}</span>
-    </div>
+    </Box>
   )
 }

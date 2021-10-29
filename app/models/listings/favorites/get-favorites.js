@@ -3,7 +3,7 @@ import { normalize } from 'normalizr'
 import Fetch from '../../../services/fetch'
 import * as schema from '../schema'
 
-const getFavorateListingsData = favorites =>
+export const getFavorateListingsData = favorites =>
   favorites.map(favorite => {
     const { listing, id: recId, room: recRoom } = favorite
     let lat

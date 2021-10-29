@@ -1,7 +1,9 @@
 export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
   const people = getPeople(event.associations)
-  const basicMetadata = { is_partner: false, status: '', send_updates: false }
 
+  const status = event.status ?? ''
+
+  const basicMetadata = { status, is_partner: false, send_updates: false }
   const metadata = event.metadata
     ? { ...basicMetadata, ...event.metadata }
     : basicMetadata
@@ -17,7 +19,7 @@ export function convertTaskToCalendarEvent(event: IEvent): ICalendarEvent {
     metadata,
     next_occurence: '',
     recurring: false,
-    status: '',
+    status,
     thread_key: null,
     timestamp_midday: '',
     timestamp_readable: '',

@@ -40,7 +40,9 @@ declare interface IUser extends IUserBase {
   active_brand: string | null
   teams?: IUserTeam[] // seems it comes with association
 
-  agent: IAgent | null // association?
+  agents: Nullable<IAgent[]>
+
+  personal_room: Nullable<UUID>
 
   user_type: TUserType
 }

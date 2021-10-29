@@ -1,7 +1,7 @@
 import Fetch from '../../../../services/fetch'
 
 /**
- * delete task
+ * update task
  */
 export async function updateTask(taskId, attributes) {
   try {

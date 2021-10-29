@@ -117,3 +117,9 @@ declare type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
     [K in Keys]-?: Required<Pick<T, K>> &
       Partial<Record<Exclude<Keys, K>, undefined>>
   }[Keys]
+
+declare interface Callable<R> {
+  (...args: any[]): R
+}
+
+declare type GenericReturnType<R, X> = X extends Callable<R> ? R : never
