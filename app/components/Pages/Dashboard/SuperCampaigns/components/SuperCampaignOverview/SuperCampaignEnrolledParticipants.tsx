@@ -22,10 +22,9 @@ function SuperCampaignEnrolledParticipants() {
   const {
     superCampaignEnrollments,
     setSuperCampaignEnrollments,
-    superCampaignEnrollmentCount
+    superCampaignEnrollmentCount,
+    isLoading
   } = useGetSuperCampaignEnrollments(superCampaign.id, isResultMode)
-
-  // TODO: handle Loading and EmptyState for the lists
 
   return (
     <SuperCampaignCard>
@@ -48,6 +47,7 @@ function SuperCampaignEnrolledParticipants() {
       <Box mt={3}>
         {isResultMode ? (
           <SuperCampaignResultList
+            isLoading={isLoading}
             superCampaignResults={
               superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
             }
@@ -55,6 +55,7 @@ function SuperCampaignEnrolledParticipants() {
         ) : (
           <SuperCampaignEnrollmentList
             superCampaignId={superCampaign.id}
+            isLoading={isLoading}
             superCampaignEnrollments={
               superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand'>[]
             }

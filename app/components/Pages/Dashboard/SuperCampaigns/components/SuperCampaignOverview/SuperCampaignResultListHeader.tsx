@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
 import { Box, BoxProps, makeStyles } from '@material-ui/core'
+import classNames from 'classnames'
+
+import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 
 const useStyles = makeStyles(
   theme => ({
@@ -27,9 +30,10 @@ function SuperCampaignResultListHeader({
   headers
 }: SuperCampaignResultListHeaderProps) {
   const classes = useStyles()
+  const listStyles = useSuperCampaignListStyles()
 
   return (
-    <div className={classes.root}>
+    <div className={classNames(classes.root, listStyles.row)}>
       {headers.map((header, idx) => (
         <Box key={idx} width={header.width} textAlign={header.align}>
           {header.header}

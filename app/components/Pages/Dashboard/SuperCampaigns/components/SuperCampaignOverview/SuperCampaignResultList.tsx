@@ -3,6 +3,8 @@ import { TableColumn } from 'components/Grid/Table/types'
 
 import { getSuperCampaignResultPercentage } from './helpers'
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
+import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
+import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
 import SuperCampaignResultListColumn from './SuperCampaignResultListColumn'
 import SuperCampaignResultListHeader, {
   ListHeader
@@ -12,10 +14,12 @@ import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useSuperCampaignResultStats } from './use-super-campaign-result-stats'
 
 interface SuperCampaignResultListProps {
+  isLoading: boolean
   superCampaignResults: ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
 }
 
 function SuperCampaignResultList({
+  isLoading,
   superCampaignResults
 }: SuperCampaignResultListProps) {
   const classes = useSuperCampaignListStyles()
@@ -152,6 +156,9 @@ function SuperCampaignResultList({
         totalRows={superCampaignResults.length}
         rowSize={5}
         getTrProps={() => ({ className: classes.row })}
+        loading={isLoading ? 'middle' : undefined}
+        LoadingStateComponent={SuperCampaignListLoadingState}
+        EmptyStateComponent={SuperCampaignListEmptyState}
       />
     </>
   )
