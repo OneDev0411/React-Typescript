@@ -1,7 +1,7 @@
 export function isSuperCampaignEnrollmentOptedOut(
   enrollment: ISuperCampaignEnrollment<'user_and_brand'>
 ): boolean {
-  // TODO: Implement the logic to detect opted-out options
+  // TODO: Implement the logic to detect opted-out options, asked Emil about this
   return false
 }
 
@@ -13,5 +13,7 @@ export function getSuperCampaignResultPercentage(
     return ''
   }
 
-  return `(${(value / total) * 100}%)`
+  const percentage = Math.round((value / total) * 100)
+
+  return `(${percentage}%)`
 }
