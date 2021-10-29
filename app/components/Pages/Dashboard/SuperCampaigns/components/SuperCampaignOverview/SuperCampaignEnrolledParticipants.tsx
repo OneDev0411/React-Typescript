@@ -7,6 +7,7 @@ import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import SuperCampaignEnrolledParticipantsTags from './SuperCampaignEnrolledParticipantsTags'
 import SuperCampaignEnrollmentList from './SuperCampaignEnrollmentList'
+import SuperCampaignResultList from './SuperCampaignResultList'
 import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
 
 function SuperCampaignEnrolledParticipants() {
@@ -35,13 +36,13 @@ function SuperCampaignEnrolledParticipants() {
           }
         />
       </Box>
-      {isResultMode ? (
-        <>results mode</>
-      ) : (
-        <Box mt={2}>
+      <Box mt={3}>
+        {isResultMode ? (
+          <SuperCampaignResultList superCampaignId={superCampaign.id} />
+        ) : (
           <SuperCampaignEnrollmentList superCampaignId={superCampaign.id} />
-        </Box>
-      )}
+        )}
+      </Box>
     </SuperCampaignCard>
   )
 }
