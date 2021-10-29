@@ -43,7 +43,7 @@ function SuperCampaignEnrollmentListColumnTags({
       }))}
       filter={
         {
-          // selectedIds: [contact.id] // TODO: Ask Hamed about this
+          // selectedIds: [contact.id] // TODO: Hamed jan, please do not forget to fix this
         }
       }
       callback={handleTagsChange}

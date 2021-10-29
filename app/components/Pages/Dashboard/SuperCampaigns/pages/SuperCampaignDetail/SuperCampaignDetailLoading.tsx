@@ -1,20 +1,27 @@
-import { Box } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 
 import LoadingContainer from '@app/views/components/LoadingContainer'
 
+const useStyles = makeStyles(
+  theme => ({
+    root: { height: theme.spacing(75) },
+    loading: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%'
+    }
+  }),
+  { name: 'SuperCampaignDetailLoading' }
+)
+
 function SuperCampaignDetailLoading() {
+  const classes = useStyles()
+
   return (
-    <Box height="600px">
-      <LoadingContainer
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-          padding: 0
-        }}
-      />
-    </Box>
+    <div className={classes.root}>
+      <LoadingContainer className={classes.loading} noPaddings />
+    </div>
   )
 }
 
