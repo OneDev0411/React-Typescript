@@ -1,7 +1,7 @@
 import { Typography, Button, makeStyles } from '@material-ui/core'
 
 import useSafeState from '@app/hooks/use-safe-state'
-import TeamTreeViewDrawer from '@app/views/components/TeamTreeView/Drawer'
+import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 
 import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import SuperCampaignCard, { SuperCampaignCardProps } from '../SuperCampaignCard'
@@ -39,8 +39,8 @@ function SuperCampaignEligibleParticipants(
 
   const closeBrandSelector = () => setIsBrandSelectorOpen(false)
 
-  const saveSelectedBrands = async (team: IBrand) => {
-    await updateSuperCampaignEligibility([team.id])
+  const saveSelectedBrands = async (teamIds: string[]) => {
+    await updateSuperCampaignEligibility(teamIds)
     closeBrandSelector()
   }
 
@@ -77,14 +77,14 @@ function SuperCampaignEligibleParticipants(
           </>
         )}
       </div>
-      {/* TODO: use multi brand selector here. If isResultMode is true the selector must be opened in readonly mode */}
-      {isBrandSelectorOpen && (
-        <TeamTreeViewDrawer
-          title="Select Offices or Teams"
-          onClose={closeBrandSelector}
-          onSelectTeam={saveSelectedBrands}
-        />
-      )}
+      <MultiSelectionBrandSelectorDrawer
+        open={isBrandSelectorOpen}
+        title="Select Offices or Teams"
+        onClose={closeBrandSelector}
+        onSave={saveSelectedBrands}
+        selectedBrands={eligibleBrands}
+        readOnly={isReadOnly}
+      />
     </SuperCampaignCard>
   )
 }
