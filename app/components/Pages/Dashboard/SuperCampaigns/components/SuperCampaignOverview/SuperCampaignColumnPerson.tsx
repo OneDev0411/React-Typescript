@@ -17,7 +17,7 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignEnrollmentListColumnPersonProps {
-  isOptedOut: boolean
+  isOptedOut?: boolean
   user: IUser
   brand: IBrand
 }
