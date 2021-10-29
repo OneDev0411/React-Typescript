@@ -1,9 +1,16 @@
-declare interface ISuperCampaign extends IModel<'super_campaign'> {
-  brand: UUID
+declare type ISuperCampaignAssociations = 'template_instance'
+
+declare interface ISuperCampaign<A extends ISuperCampaignAssociations = ''>
+  extends IModel<'super_campaign'> {
   created_by: UUID
-  executed_at: null
-  recipients: null
-  subject: string
-  template_instance: null
-  // TODO: complete this type
+  brand: UUID
+  due_at?: number
+  executed_at?: number
+  subject?: string
+  description?: string
+  template_instance: A extends 'template_instance'
+    ? IMarketingTemplateInstance
+    : UUID
+  tags: Nullable<string[]>
+  eligible_brands: Nullable<UUID[]>
 }

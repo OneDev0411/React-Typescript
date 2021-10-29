@@ -78,6 +78,7 @@ interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   showManageTags?: boolean
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
+  disabled?: boolean
 }
 
 export const PopoverContactTagSelector = ({
@@ -172,7 +173,7 @@ export const PopoverContactTagSelector = ({
               variant: 'outlined',
               size: 'small'
             }}
-            textFiledProps={{
+            textFieldProps={{
               autoFocus: true,
               variant: 'outlined',
               className: classes.textField

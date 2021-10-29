@@ -1270,6 +1270,18 @@ class Builder extends React.Component {
       : saveButton
   }
 
+  get templateInstanceData() {
+    const listingsFromListing = this.props.templateData.listing
+      ? [this.props.templateData.listing.id]
+      : undefined
+
+    return {
+      contacts: this.props.templateData.contacts,
+      listings: this.props.templateData.listings ?? listingsFromListing,
+      deals: this.props.templateData.deals
+    }
+  }
+
   render() {
     if (this.state.isLoading) {
       return null
@@ -1524,7 +1536,9 @@ class Builder extends React.Component {
                 <AdminContinueButton
                   onClick={this.handleSave}
                   disabled={this.props.actionButtonsDisabled}
-                  templateId={this.selectedTemplate.id}
+                  template={this.selectedTemplate}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  templateInstanceData={this.templateInstanceData}
                 />
               )}
 

@@ -57,6 +57,7 @@ export function GridTable<Row>({
   getTdProps,
   getTrProps,
   virtualize = true,
+  rowSize,
   summary = null,
   loading = null,
   selection = null,
@@ -122,6 +123,7 @@ export function GridTable<Row>({
             rows={newRows}
             classes={classes}
             virtualize={virtualize}
+            rowSize={rowSize}
             getTdProps={getTdProps}
             getTrProps={getTrProps}
             infiniteScrolling={infiniteScrolling}
