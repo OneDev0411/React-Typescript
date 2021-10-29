@@ -1,9 +1,5 @@
 import { Box, MenuList, Typography, makeStyles } from '@material-ui/core'
-import {
-  mdiEmailOutline,
-  mdiAccountGroupOutline,
-  mdiNewspaperPlus
-} from '@mdi/js'
+import { mdiEmailOutline, mdiAccountGroupOutline } from '@mdi/js'
 
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
@@ -21,15 +17,11 @@ interface AdminContinueDrawerProps
   extends Omit<OverlayDrawerProps, 'children'> {
   onContinueClick: () => void
   onSuperCampaignClick: () => void
-  onAddToMarketingCenterClick: () => void
-  hasAddToMarketingCenter: boolean
 }
 
 function AdminContinueDrawer({
   onContinueClick,
   onSuperCampaignClick,
-  onAddToMarketingCenterClick,
-  hasAddToMarketingCenter,
   onClose,
   ...otherProps
 }: AdminContinueDrawerProps) {
@@ -64,17 +56,6 @@ function AdminContinueDrawer({
                 Others
               </Typography>
             </AdminContinueItem>
-            {hasAddToMarketingCenter && (
-              <AdminContinueItem
-                onClick={onAddToMarketingCenterClick}
-                icon={mdiNewspaperPlus}
-              >
-                <Typography variant="body1">Add to Marketing Center</Typography>
-                <Typography variant="body2" className={classes.grey}>
-                  Add this template to any offices or team's library.
-                </Typography>
-              </AdminContinueItem>
-            )}
           </MenuList>
         </Box>
       </OverlayDrawer.Body>

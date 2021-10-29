@@ -1539,8 +1539,6 @@ class Builder extends React.Component {
                   template={this.selectedTemplate}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   templateInstanceData={this.templateInstanceData}
-                  // hasAddToMarketingCenter={this.shouldShowSaveAsTemplateButton}
-                  hasAddToMarketingCenter={false} // TODO: Ask Ali about having the `Add to marketing` issue
                 />
               )}
 

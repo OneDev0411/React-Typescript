@@ -1,4 +1,3 @@
-// import { NormalizedBrand } from 'components/TeamAgents/types'
 import { Box, Typography } from '@material-ui/core'
 
 import { convertUserAgentToRole } from '../../helpers/convert-user-to-role'

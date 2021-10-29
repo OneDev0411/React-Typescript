@@ -117,7 +117,7 @@ export function DealPrimaryAgent({
                 role={role}
                 readonly={!deal && !!role.deal}
                 onClickEdit={() => setSelectedRole(role)}
-                onClickRemove={() => handleDeleteRole(role)}
+                onClickRemove={() => handleDeleteRole(role as IDealFormRole)}
               />
             ))}
           </Box>

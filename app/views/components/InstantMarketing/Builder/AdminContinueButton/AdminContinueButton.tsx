@@ -18,7 +18,6 @@ interface AdminContinueButtonProps
     'variant' | 'color' | 'onClick' | 'children' | 'startIcon'
   > {
   onClick: () => void
-  hasAddToMarketingCenter: boolean
   template: Nullable<IMarketingTemplate>
   templateInstanceData: Omit<TemplateInstanceInputData, 'html'>
   getTemplateMarkup: () => string
@@ -26,7 +25,6 @@ interface AdminContinueButtonProps
 
 function AdminContinueButton({
   onClick,
-  hasAddToMarketingCenter,
   disabled,
   template,
   getTemplateMarkup,
@@ -78,8 +76,6 @@ function AdminContinueButton({
     setIsCreatingSuperCampaign(false)
   }
 
-  const addToMarketingCenter = () => console.log('addToMarketingCenter') // TODO: implement this
-
   return (
     <>
       <Button
@@ -101,8 +97,6 @@ function AdminContinueButton({
         onClose={closeDrawer}
         onContinueClick={onClick}
         onSuperCampaignClick={createSuperCampaignAndRedirect}
-        onAddToMarketingCenterClick={addToMarketingCenter}
-        hasAddToMarketingCenter={hasAddToMarketingCenter}
       />
     </>
   )
