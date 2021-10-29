@@ -1,9 +1,26 @@
 import Fetch from 'services/fetch'
 
-export async function getSuperCampaignEnrollmentsRequestBase<T>(
+async function getSuperCampaignEnrollments(
+  superCampaignId: UUID
+): Promise<ISuperCampaignEnrollment<'user_and_brand'>[]>
+async function getSuperCampaignEnrollments(
+  superCampaignId: UUID,
+  includeCampaign: true
+): Promise<ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]>
+async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: boolean
-): Promise<T> {
+): Promise<
+  | ISuperCampaignEnrollment<'user_and_brand'>[]
+  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+>
+async function getSuperCampaignEnrollments(
+  superCampaignId: UUID,
+  includeCampaign: boolean = false
+): Promise<
+  | ISuperCampaignEnrollment<'user_and_brand'>[]
+  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+> {
   const associations = [
     'super_campaign_enrollment.user',
     'super_campaign_enrollment.brand'
@@ -20,12 +37,6 @@ export async function getSuperCampaignEnrollmentsRequestBase<T>(
         associations
       })
   ).body.data
-}
-
-async function getSuperCampaignEnrollments(
-  superCampaignId: UUID
-): Promise<ISuperCampaignEnrollment<'user_and_brand'>[]> {
-  return getSuperCampaignEnrollmentsRequestBase(superCampaignId, false)
 }
 
 export default getSuperCampaignEnrollments
