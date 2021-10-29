@@ -1,28 +1,17 @@
-import { makeStyles } from '@material-ui/core'
-
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
 import SuperCampaignEnrollManuallyButton from '../SuperCampaignEnrollManuallyButton'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
+import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
 import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentListColumnActions'
-import SuperCampaignEnrollmentListColumnPerson from './SuperCampaignEnrollmentListColumnPerson'
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
 import { useAddSuperCampaignEnrollment } from './use-add-super-campaign-enrollment'
 import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
 import { useGetSuperCampaignEnrollments } from './use-get-super-campaign-enrollments'
+import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
-
-const useStyles = makeStyles(
-  theme => ({
-    row: {
-      borderTop: `1px solid ${theme.palette.grey[100]}`,
-      paddingRight: theme.spacing(0.5)
-    }
-  }),
-  { name: 'SuperCampaignEnrollmentList' }
-)
 
 interface SuperCampaignEnrollmentListProps {
   superCampaignId: UUID
@@ -31,7 +20,7 @@ interface SuperCampaignEnrollmentListProps {
 function SuperCampaignEnrollmentList({
   superCampaignId
 }: SuperCampaignEnrollmentListProps) {
-  const classes = useStyles()
+  const classes = useSuperCampaignListStyles()
 
   const { superCampaignEnrollments, setSuperCampaignEnrollments } =
     useGetSuperCampaignEnrollments(superCampaignId)
@@ -60,7 +49,7 @@ function SuperCampaignEnrollmentList({
       width: '35%',
       sortable: false,
       render: ({ row }) => (
-        <SuperCampaignEnrollmentListColumnPerson
+        <SuperCampaignColumnPerson
           isOptedOut={isSuperCampaignEnrollmentOptedOut(row)}
           user={row.user}
           brand={row.brand}
