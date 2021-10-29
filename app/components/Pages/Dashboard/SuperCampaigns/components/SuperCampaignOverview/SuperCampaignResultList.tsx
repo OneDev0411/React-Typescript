@@ -1,15 +1,12 @@
 import SuperCampaignResultListGrid from './SuperCampaignResultListGrid'
-import { useGetSuperCampaignResults } from './use-get-super-campaign-results'
 
 interface SuperCampaignResultListProps {
-  superCampaignId: UUID
+  superCampaignResults: ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
 }
 
 function SuperCampaignResultList({
-  superCampaignId
+  superCampaignResults
 }: SuperCampaignResultListProps) {
-  const { superCampaignResults } = useGetSuperCampaignResults(superCampaignId)
-
   console.log('superCampaignResults', superCampaignResults)
 
   return (

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react'
+
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
@@ -9,21 +11,23 @@ import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentL
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
 import { useAddSuperCampaignEnrollment } from './use-add-super-campaign-enrollment'
 import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
-import { useGetSuperCampaignEnrollments } from './use-get-super-campaign-enrollments'
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
 interface SuperCampaignEnrollmentListProps {
   superCampaignId: UUID
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+  setSuperCampaignEnrollments: Dispatch<
+    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
+  >
 }
 
 function SuperCampaignEnrollmentList({
-  superCampaignId
+  superCampaignId,
+  superCampaignEnrollments,
+  setSuperCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
   const classes = useSuperCampaignListStyles()
-
-  const { superCampaignEnrollments, setSuperCampaignEnrollments } =
-    useGetSuperCampaignEnrollments(superCampaignId)
 
   const updateSuperCampaignEnrollmentTags =
     useUpdateSuperCampaignEnrollmentTags(
