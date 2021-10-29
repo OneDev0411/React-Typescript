@@ -1,6 +1,17 @@
 import { ReactNode } from 'react'
 
-import { Box, BoxProps } from '@material-ui/core'
+import { Box, BoxProps, makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles(
+  theme => ({
+    root: {
+      display: 'flex',
+      alignItems: 'center',
+      height: theme.spacing(5)
+    }
+  }),
+  { name: 'SuperCampaignResultListHeader' }
+)
 
 export interface ListHeader {
   width?: string
@@ -15,14 +26,16 @@ interface SuperCampaignResultListHeaderProps {
 function SuperCampaignResultListHeader({
   headers
 }: SuperCampaignResultListHeaderProps) {
+  const classes = useStyles()
+
   return (
-    <Box display="flex" alignItems="center" height="40px">
+    <div className={classes.root}>
       {headers.map((header, idx) => (
         <Box key={idx} width={header.width} textAlign={header.align}>
           {header.header}
         </Box>
       ))}
-    </Box>
+    </div>
   )
 }
 
