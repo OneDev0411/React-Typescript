@@ -72,7 +72,7 @@ function SuperCampaignResultList({
         <SuperCampaignResultListColumn
           value={`${row.campaign.opened} ${getSuperCampaignResultPercentage(
             row.campaign.opened,
-            row.campaign.sent
+            row.campaign.delivered
           )}`}
         />
       )
@@ -86,7 +86,7 @@ function SuperCampaignResultList({
         <SuperCampaignResultListColumn
           value={`${row.campaign.clicked} ${getSuperCampaignResultPercentage(
             row.campaign.clicked,
-            row.campaign.sent
+            row.campaign.delivered
           )}`}
         />
       )
@@ -123,7 +123,7 @@ function SuperCampaignResultList({
           label="Opened"
           value={`${totalOpened} ${getSuperCampaignResultPercentage(
             totalOpened,
-            totalSent
+            totalDelivered
           )}`}
         />
       )
@@ -134,7 +134,7 @@ function SuperCampaignResultList({
           label="Clicked"
           value={`${totalClicked} ${getSuperCampaignResultPercentage(
             totalClicked,
-            totalSent
+            totalDelivered
           )}`}
         />
       )
