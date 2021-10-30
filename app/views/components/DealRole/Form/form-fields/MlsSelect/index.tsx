@@ -27,7 +27,7 @@ export function MlsSelect({
   )
 
   const handleChange = (agent: IAgent) => {
-    mutators.populateRole(agent)
+    mutators.populateRole(agent, 'MlsSelect')
   }
 
   return (
@@ -35,7 +35,7 @@ export function MlsSelect({
       renderDropdownButton={buttonProps => (
         <TextField
           fullWidth
-          label={selectedAgent ? '' : 'MLS'}
+          label={selectedAgent ? '' : `MLS ${isRequired ? '*' : ''}`}
           variant="outlined"
           error={meta.error || (isRequired && !selectedAgent)}
           size="small"

@@ -5,20 +5,13 @@ import { SearchQuery } from '../../types'
  * @param user
  * @param searchQuery
  */
-export function getStaticFilterQuery(
-  searchQuery: SearchQuery,
-  statuses: IDealStatus[] = []
-): object {
+export function getStaticFilterQuery(searchQuery: SearchQuery): object {
   if (searchQuery.filter === 'listing') {
     return {
       deal_type: ['Selling'],
       query: searchQuery.term,
-      contexts: {
-        listing_status: {
-          text: statuses
-            .filter(item => item.is_archived === false)
-            .map(item => item.label)
-        }
+      status: {
+        is_archived: false
       },
       $order: ['deals.created_at', 'DESC']
     }
@@ -28,12 +21,8 @@ export function getStaticFilterQuery(
     return {
       deal_type: ['Buying'],
       query: searchQuery.term,
-      contexts: {
-        contract_status: {
-          text: statuses
-            .filter(item => item.is_archived === false)
-            .map(item => item.label)
-        }
+      status: {
+        is_archived: false
       },
       $order: ['deals.created_at', 'DESC']
     }
