@@ -13,6 +13,26 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
 import { TextField } from './Input'
 
+/**
+```ts
+import Mutator from 'final-form-arrays'
+interface Label {
+  title: string,
+  value: string,
+  hint?: string
+}
+interface Props {
+  name: string
+  title: string,
+  value: string,
+  validate(value: string): boolean
+  defaultOptions: Array<Label>
+  defaultSelectedItem: Label
+  mutators: Array<Mutator>
+}
+```
+*/
+
 export function MultiField({
   defaultOptions,
   defaultSelectedItem,
