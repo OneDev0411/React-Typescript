@@ -1,5 +1,6 @@
 import { makeStyles, Typography } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
+import pluralize from 'pluralize'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -40,7 +41,7 @@ function SuperCampaignResultListHeaderParticipants({
       <Typography variant="subtitle2">
         {participantsCount}
         <span className={classes.label}>
-          Participant{participantsCount !== 1 ? 's' : ''}
+          {pluralize('Participant', participantsCount)}
         </span>
       </Typography>
     </div>

@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import SuperCampaignCard from '../SuperCampaignCard'
@@ -37,9 +38,10 @@ function SuperCampaignEnrolledParticipants() {
           readOnly={isResultMode}
           helperText={
             !isResultMode && superCampaignEnrollmentCount
-              ? `${superCampaignEnrollmentCount} agent${
-                  superCampaignEnrollmentCount > 1 ? 's' : ''
-                } added by tags you’ve entered.`
+              ? `${superCampaignEnrollmentCount} ${pluralize(
+                  'agent',
+                  superCampaignEnrollmentCount
+                )} added by tags you’ve entered.`
               : undefined
           }
         />
