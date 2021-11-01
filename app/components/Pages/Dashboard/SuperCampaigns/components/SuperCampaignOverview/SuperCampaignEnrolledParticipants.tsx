@@ -38,9 +38,10 @@ function SuperCampaignEnrolledParticipants() {
           readOnly={isResultMode}
           helperText={
             !isResultMode && superCampaignEnrollmentCount
-              ? `${superCampaignEnrollmentCount} ${pluralize(
+              ? `${pluralize(
                   'agent',
-                  superCampaignEnrollmentCount
+                  superCampaignEnrollmentCount,
+                  true
                 )} added by tags you’ve entered.`
               : undefined
           }
