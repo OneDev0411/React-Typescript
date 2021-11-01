@@ -10,5 +10,6 @@ export interface ClosingsFilterQuery {
   }
   status: {
     is_archived: boolean
+    is_null: boolean
   }
 }
