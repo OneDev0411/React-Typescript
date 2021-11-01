@@ -18,11 +18,20 @@ export function MultiSelectionBrandSelectorDrawer({
 }: Props) {
   const classes = useStyles()
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>(currentBrands)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
-  const handleClick = () => {
-    onSave(selectedBrands)
+  const handleClick = async () => {
+    setIsSaving(true)
+
+    try {
+      await onSave(selectedBrands)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsSaving(false)
+    }
   }
-  const handleOnClick = (brandId: UUID) => {
+  const handleOnNodeClick = (brandId: UUID) => {
     setSelectedBrands(state => {
       if (state.includes(brandId)) {
         return state.filter(id => id !== brandId)
@@ -38,7 +47,7 @@ export function MultiSelectionBrandSelectorDrawer({
       <FormControlLabel
         control={<Checkbox size="small" />}
         checked={isSelected}
-        onChange={() => handleOnClick(brand.id)}
+        onChange={() => handleOnNodeClick(brand.id)}
         label={brand.name}
       />
     )
@@ -57,8 +66,13 @@ export function MultiSelectionBrandSelectorDrawer({
           </div>
         </Drawer.Body>
         <Drawer.Footer rowReverse>
-          <Button variant="contained" color="primary" onClick={handleClick}>
-            Save
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={isSaving}
+            onClick={handleClick}
+          >
+            {isSaving ? 'Saving...' : 'Save'}
           </Button>
         </Drawer.Footer>
       </Drawer>
