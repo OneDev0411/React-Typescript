@@ -10,5 +10,5 @@ export const useSuperCampaignListStyles = makeStyles(
       '&:first-of-type': { borderTop: `1px solid ${theme.palette.grey[100]}` }
     }
   }),
-  { name: 'use-super-campaign-list-styles' }
+  { name: 'useSuperCampaignListStyles' }
 )
