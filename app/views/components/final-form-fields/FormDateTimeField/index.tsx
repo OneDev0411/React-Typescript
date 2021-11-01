@@ -11,7 +11,7 @@ function FormDateTimeField({
   ...otherProps
 }: FormDateTimeFieldProps) {
   const format = (value: string | number) => {
-    if (Number.isNaN(value)) {
+    if (!value || Number.isNaN(value)) {
       return ''
     }
 

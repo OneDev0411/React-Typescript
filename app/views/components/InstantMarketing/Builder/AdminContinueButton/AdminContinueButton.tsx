@@ -60,11 +60,12 @@ function AdminContinueButton({
       const superCampaign = await createSuperCampaign({
         subject: '',
         description: '',
-        due_at: new Date().getTime(),
         template_instance: templateInstance.id
       })
 
-      goTo(`/dashboard/super-campaigns/${superCampaign.id}/detail`)
+      goTo(
+        `/dashboard/super-campaigns/${superCampaign.id}/detail?edit-drawer=open`
+      )
     } catch (_) {
       notify({
         status: 'error',
