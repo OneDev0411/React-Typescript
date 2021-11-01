@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import format from 'date-fns/format'
 
-import useSafeState from '@app/hooks/use-safe-state'
+import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 
 import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
@@ -36,13 +36,14 @@ function SuperCampaignOverviewDetail() {
     superCampaign,
     setSuperCampaign
   )
-  const [isDrawerOpen, setIsDrawerOpen] = useSafeState(false)
+  const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
+    useReplaceQueryParam('edit-drawer')
 
   const isResultMode = useIsSuperCampaignResultMode(superCampaign)
 
-  const openDrawer = () => setIsDrawerOpen(true)
+  const openDrawer = () => setEditDrawerParam('open')
 
-  const closeDrawer = () => setIsDrawerOpen(false)
+  const closeDrawer = () => deleteEditDrawerParam()
 
   const handleTemplateChange = (template: IMarketingTemplateInstance) =>
     saveSuperCampaign({ template_instance: template })
@@ -95,7 +96,7 @@ function SuperCampaignOverviewDetail() {
         readOnly={isResultMode}
       />
       <SuperCampaignDrawer
-        isOpen={isDrawerOpen}
+        isOpen={!!editDrawerParam}
         onClose={closeDrawer}
         formInitialValues={superCampaign}
         onConfirm={handleSuperCampaignConfirm}
