@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Checkbox, FormControlLabel } from '@material-ui/core'
+import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
 
 import Drawer from '@app/views/components/OverlayDrawer'
 
@@ -56,12 +56,10 @@ export function MultiSelectionBrandSelectorDrawer({
             />
           </div>
         </Drawer.Body>
-        <Drawer.Footer>
-          <Box width="100%" display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="primary" onClick={handleClick}>
-              Save
-            </Button>
-          </Box>
+        <Drawer.Footer rowReverse>
+          <Button variant="contained" color="primary" onClick={handleClick}>
+            Save
+          </Button>
         </Drawer.Footer>
       </Drawer>
     </>
