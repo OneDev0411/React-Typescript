@@ -3,31 +3,38 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import useAsync from '@app/hooks/use-async'
 import getSuperCampaignEnrollments from '@app/models/super-campaign/get-super-campaign-enrollments'
 
+export type SuperCampaignEnrollmentItem =
+  | ISuperCampaignEnrollment<'user_and_brand'>
+  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>
+
 interface UseGetSuperCampaignEnrollments {
   isLoading: boolean
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+  superCampaignEnrollments: SuperCampaignEnrollmentItem[]
   setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
+    SetStateAction<SuperCampaignEnrollmentItem[]>
   >
   superCampaignEnrollmentCount: number
 }
 
 export function useGetSuperCampaignEnrollments(
-  superCampaignId: UUID
+  superCampaignId: UUID,
+  includeCampaign: boolean
 ): UseGetSuperCampaignEnrollments {
   const {
     run,
     data: superCampaignEnrollments,
     setData: setSuperCampaignEnrollments,
     isLoading
-  } = useAsync<ISuperCampaignEnrollment<'user_and_brand'>[]>({
+  } = useAsync<SuperCampaignEnrollmentItem[]>({
     data: [],
     status: 'pending'
   })
 
   useEffect(() => {
-    run(async () => getSuperCampaignEnrollments(superCampaignId))
-  }, [run, superCampaignId])
+    run(async () =>
+      getSuperCampaignEnrollments(superCampaignId, includeCampaign)
+    )
+  }, [run, superCampaignId, includeCampaign])
 
   return {
     isLoading,

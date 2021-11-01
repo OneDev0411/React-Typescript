@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core'
+import pluralize from 'pluralize'
 
 import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
 import SuperCampaignCard from '../SuperCampaignCard'
@@ -7,6 +8,8 @@ import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import SuperCampaignEnrolledParticipantsTags from './SuperCampaignEnrolledParticipantsTags'
 import SuperCampaignEnrollmentList from './SuperCampaignEnrollmentList'
+import SuperCampaignResultList from './SuperCampaignResultList'
+import { useGetSuperCampaignEnrollments } from './use-get-super-campaign-enrollments'
 import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
 
 function SuperCampaignEnrolledParticipants() {
@@ -17,7 +20,12 @@ function SuperCampaignEnrolledParticipants() {
   )
   const isResultMode = useIsSuperCampaignResultMode(superCampaign)
 
-  // TODO: handle Loading and EmptyState for the lists
+  const {
+    superCampaignEnrollments,
+    setSuperCampaignEnrollments,
+    superCampaignEnrollmentCount,
+    isLoading
+  } = useGetSuperCampaignEnrollments(superCampaign.id, isResultMode)
 
   return (
     <SuperCampaignCard>
@@ -29,19 +37,35 @@ function SuperCampaignEnrolledParticipants() {
           disabled={isSaving}
           readOnly={isResultMode}
           helperText={
-            !isResultMode
-              ? 'XXX agents added by tags you’ve entered.' // TODO: Use the real agent count here
+            !isResultMode && superCampaignEnrollmentCount
+              ? `${pluralize(
+                  'agent',
+                  superCampaignEnrollmentCount,
+                  true
+                )} added by tags you’ve entered.`
               : undefined
           }
         />
       </Box>
-      {isResultMode ? (
-        <>results mode</>
-      ) : (
-        <Box mt={2}>
-          <SuperCampaignEnrollmentList superCampaignId={superCampaign.id} />
-        </Box>
-      )}
+      <Box mt={3}>
+        {isResultMode ? (
+          <SuperCampaignResultList
+            isLoading={isLoading}
+            superCampaignResults={
+              superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+            }
+          />
+        ) : (
+          <SuperCampaignEnrollmentList
+            superCampaignId={superCampaign.id}
+            isLoading={isLoading}
+            superCampaignEnrollments={
+              superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand'>[]
+            }
+            setSuperCampaignEnrollments={setSuperCampaignEnrollments}
+          />
+        )}
+      </Box>
     </SuperCampaignCard>
   )
 }

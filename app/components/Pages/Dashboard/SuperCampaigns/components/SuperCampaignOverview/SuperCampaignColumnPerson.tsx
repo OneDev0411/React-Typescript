@@ -17,7 +17,7 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignEnrollmentListColumnPersonProps {
-  isOptedOut: boolean
+  isOptedOut?: boolean
   user: IUser
   brand: IBrand
 }
@@ -32,7 +32,7 @@ function SuperCampaignEnrollmentListColumnPerson({
   return (
     <div className={classNames(classes.root, isOptedOut && classes.optedOut)}>
       <Avatar size="small" user={user} />
-      <Typography variant="body2" className={classes.name}>
+      <Typography className={classes.name} variant="body2" noWrap>
         {user.display_name}{' '}
         <span className={classes.brand}>({brand.name})</span>
       </Typography>

@@ -12,7 +12,6 @@ import {
   showingDetailTabs,
   showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
-import { superCampaignDetailTabs } from '../components/Pages/Dashboard/SuperCampaigns/constants'
 import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
@@ -1149,12 +1148,6 @@ export default (
         </Route>
 
         <Route path="super-campaigns">
-          <Route
-            path={`:id/detail/:tab(${Object.keys(superCampaignDetailTabs).join(
-              '|'
-            )})`}
-            component={AsyncSuperCampaignDetail}
-          />
           <Route path=":id/detail" component={AsyncSuperCampaignDetail} />
         </Route>
 
