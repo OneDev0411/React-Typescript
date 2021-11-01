@@ -12,7 +12,7 @@ export interface AgentWithStats extends IAgent {
 export default async function getAgents(
   filters: AlertFiltersWithRadiusAndCenter
 ): Promise<AgentWithStats[]> {
-  const response = await new Fetch()
+  const response = await new Fetch({ proxy: false })
     .post('/listings/filter/agents')
     .query({ 'associations[]': 'agent.office' })
     .send(filters)
