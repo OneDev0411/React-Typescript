@@ -30,7 +30,7 @@ const BasicModal = ({
   ...rest
 }) => (
   <BareModal
-    autoHeight
+    autoHeight={true}
     isOpen={isOpen}
     shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
     contentLabel={title}
