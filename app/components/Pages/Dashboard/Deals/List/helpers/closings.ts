@@ -22,7 +22,8 @@ export function getClosingsFilterQuery(
       }
     },
     status: {
-      is_archived: false
+      is_archived: false,
+      is_null: true
     }
   }
 }

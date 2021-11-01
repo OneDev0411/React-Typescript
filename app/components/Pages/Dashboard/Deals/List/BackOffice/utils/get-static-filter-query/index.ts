@@ -11,7 +11,8 @@ export function getStaticFilterQuery(searchQuery: SearchQuery): object {
       deal_type: ['Selling'],
       query: searchQuery.term,
       status: {
-        is_archived: false
+        is_archived: false,
+        is_null: true
       },
       $order: ['deals.created_at', 'DESC']
     }
@@ -22,7 +23,8 @@ export function getStaticFilterQuery(searchQuery: SearchQuery): object {
       deal_type: ['Buying'],
       query: searchQuery.term,
       status: {
-        is_archived: false
+        is_archived: false,
+        is_null: true
       },
       $order: ['deals.created_at', 'DESC']
     }
