@@ -36,7 +36,7 @@ function SuperCampaignResultListHeaderParticipants({
   return (
     <div className={classes.root}>
       <div className={classes.icon}>
-        <SvgIcon path={mdiAccountGroupOutline} size={muiIconSizes.small} />{' '}
+        <SvgIcon path={mdiAccountGroupOutline} size={muiIconSizes.small} />
       </div>
       <Typography variant="subtitle2">
         {participantsCount}
