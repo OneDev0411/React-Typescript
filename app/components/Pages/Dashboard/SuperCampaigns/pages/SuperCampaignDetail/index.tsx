@@ -20,10 +20,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center'
     },
-    body: {
-      backgroundColor: theme.palette.grey[50],
-      minHeight: 'calc(100vh - 96px)' // The header height is 96px
-    }
+    body: { backgroundColor: theme.palette.grey[50] }
   }),
   { name: 'SuperCampaignDetail' }
 )
