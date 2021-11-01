@@ -14,7 +14,6 @@ export function MultiSelectionBrandSelectorDrawer({
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
   onSave,
-  readOnly,
   ...props
 }: Props) {
   const classes = useStyles()
@@ -41,7 +40,6 @@ export function MultiSelectionBrandSelectorDrawer({
         checked={isSelected}
         onChange={() => handleOnClick(brand.id)}
         label={brand.name}
-        disabled={readOnly}
       />
     )
   }
@@ -58,15 +56,13 @@ export function MultiSelectionBrandSelectorDrawer({
             />
           </div>
         </Drawer.Body>
-        {!readOnly && (
-          <Drawer.Footer>
-            <Box width="100%" display="flex" justifyContent="flex-end">
-              <Button variant="contained" color="primary" onClick={handleClick}>
-                Save
-              </Button>
-            </Box>
-          </Drawer.Footer>
-        )}
+        <Drawer.Footer>
+          <Box width="100%" display="flex" justifyContent="flex-end">
+            <Button variant="contained" color="primary" onClick={handleClick}>
+              Save
+            </Button>
+          </Box>
+        </Drawer.Footer>
       </Drawer>
     </>
   )
