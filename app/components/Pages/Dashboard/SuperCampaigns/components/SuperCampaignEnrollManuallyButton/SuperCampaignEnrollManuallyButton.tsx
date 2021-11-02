@@ -9,8 +9,6 @@ import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 import { SuperCampaignEnrollmentInput } from '../../types'
 
-import { SelectTagForSelectedAgentDrawer } from './components/SelectTagForSelectedAgentDrawer'
-
 interface SuperCampaignEnrollManuallyButtonProps {
   superCampaignId: UUID
   onEnroll: (data: SuperCampaignEnrollmentInput) => Promise<void>
@@ -20,30 +18,19 @@ function SuperCampaignEnrollManuallyButton({
   superCampaignId,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
-  const [selectedAgents, setSelectedAgents] = useSafeState<Agent[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSaving, setIsSaving] = useSafeState(false)
 
   const [isTeamAgentsDrawerOpen, setIsTeamAgentsDrawerOpen] =
     useSafeState(false)
-  const [isTagSelectorOpen, setIsTagSelectorOpen] = useSafeState(false)
 
   const handleOpenTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(true)
   const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
 
-  const handleOpenTagSelectorDrawer = () => setIsTagSelectorOpen(true)
-  const handleCloseTagSelectorDrawer = () => setIsTagSelectorOpen(false)
-
-  const handleSelectAgennt = (agent: Agent[]) => {
-    setSelectedAgents(agent)
-    handleOpenTagSelectorDrawer()
-  }
-
   // TODO: Implement the required logic and use this function
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleEnroll = async (/* data: SuperCampaignEnrollmentInput */) => {
-    console.log({ selectedAgents })
-    handleCloseTagSelectorDrawer()
-    handleCloseTeamAgentsDrawer()
+  const handleEnroll = async (agents: Agent[]) => {
+    console.log({ agents })
     // setIsSaving(true)
     // await onEnroll(data)
     // setIsSaving(false)
@@ -63,20 +50,13 @@ function SuperCampaignEnrollManuallyButton({
       {isTeamAgentsDrawerOpen && (
         <TeamAgentsDrawer
           isPrimaryAgent
-          multiSelection
+          // multiSelection
           title="Enroll Participants"
           withRelatedContacts={false}
-          onSelectAgents={handleSelectAgennt}
+          onSelectAgents={handleEnroll}
           onClose={handleCloseTeamAgentsDrawer}
         />
       )}
-      <SelectTagForSelectedAgentDrawer
-        open={isTagSelectorOpen && selectedAgents.length > 0}
-        onClose={handleCloseTagSelectorDrawer}
-        isAdding={isSaving}
-        onBack={handleCloseTagSelectorDrawer}
-        onAdd={handleEnroll}
-      />
     </>
   )
 }
