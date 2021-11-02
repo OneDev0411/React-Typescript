@@ -17,19 +17,22 @@ interface Props {
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      display: 'grid',
+      display: 'flex',
+      flexDirection: 'column',
       '&:hover $title': {
         color: theme.palette.text.primary
       }
     },
     titleContainer: {
-      gridColumn: `minmax(${theme.spacing(10.5)}, auto)`
+      width: '100%'
     },
     title: {
+      width: '100%',
       color: theme.palette.grey[600]
     },
     value: {
       display: 'inline-block',
+      width: '100%',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       msTextOverflow: 'ellipsis',
