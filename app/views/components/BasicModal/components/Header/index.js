@@ -14,7 +14,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 1;
-  padding: 1rem;
+  padding: ${props => props.theme.spacing(2, 2)};
   border: 1px solid rgba(0, 0, 0, 0.1);
 `
 

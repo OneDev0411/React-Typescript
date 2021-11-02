@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 1rem;
+  padding: ${props => props.theme.spacing(2, 2)};
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 `
 

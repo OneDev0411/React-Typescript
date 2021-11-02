@@ -3,19 +3,15 @@ import styled from 'styled-components'
 export const Container = styled.div`
   display: inline-flex;
   vertical-align: middle;
-  padding: 1rem 0;
+  padding: ${props => props.theme.spacing(2, 2)};
 `
 
 export const ItemRow = styled.div`
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: start;
+  gap: ${props => props.theme.spacing(2)};
   cursor: pointer;
-  padding: 1rem 0 2rem;
-
-  :not(:last-child) {
-    border-bottom: 1px solid ${props => props.theme.palette.grey['100']};
-  }
+  padding: ${props => props.theme.spacing(2, 1)};
 `
 
 export const ItemContainer = styled.div`
@@ -30,11 +26,11 @@ export const ItemTitle = styled.div`
 `
 
 export const TextInput = styled.input`
-  border-radius: 3px;
   background-color: #ffffff;
+  border-radius: ${props => props.theme.shape.borderRadius};
   border: solid 1px ${props => props.theme.palette.grey['300']};
-  padding: 0.5rem 1rem;
-  margin-top: 0.5rem;
+  padding: ${props => props.theme.spacing(1, 1.5)};
+  margin: ${props => props.theme.spacing(0.75, 0, 0)};
 
   :focus {
     outline: none;
