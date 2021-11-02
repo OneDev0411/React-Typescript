@@ -10,12 +10,12 @@ import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 import { SuperCampaignEnrollmentInput } from '../../types'
 
 interface SuperCampaignEnrollManuallyButtonProps {
-  superCampaignId: UUID
+  superCampaign: ISuperCampaign<'template_instance'>
   onEnroll: (data: SuperCampaignEnrollmentInput) => Promise<void>
 }
 
 function SuperCampaignEnrollManuallyButton({
-  superCampaignId,
+  superCampaign,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,7 +50,7 @@ function SuperCampaignEnrollManuallyButton({
       {isTeamAgentsDrawerOpen && (
         <TeamAgentsDrawer
           isPrimaryAgent
-          // multiSelection
+          multiSelection
           title="Enroll Participants"
           withRelatedContacts={false}
           onSelectAgents={handleEnroll}
