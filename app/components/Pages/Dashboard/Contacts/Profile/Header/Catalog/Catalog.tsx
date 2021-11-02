@@ -66,7 +66,7 @@ export default function Catalog({
       <div className={classes.profileContainer}>
         <div className={classes.displayNameContainer}>
           <Typography variant="h6" className={classes.displayName}>
-            {truncateTextFromMiddle(contact.display_name, 200)}
+            {truncateTextFromMiddle(contact.display_name, 150)}
           </Typography>
           <div className={classes.socialContainer}>
             <Social contact={contact} />
