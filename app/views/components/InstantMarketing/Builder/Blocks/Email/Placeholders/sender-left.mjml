@@ -1,19 +1,19 @@
 <mj-section mj-class="container" padding-top="20px" padding-bottom="20px" text-align="left" rechat-editable="tree">
-<mj-group>
-  <mj-column>
-    <mj-image src="{% raw %}{{ sender.profile_image_url }}{% endraw %}" width="250px" padding="4px 25px">
-    </mj-image>
-  </mj-column>
-  <mj-column vertical-align="bottom">
-    <mj-text mj-class="h3" text-transform="uppercase" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
-      {% raw %}{{sender.display_name}}{% endraw %}
-    </mj-text>
-    <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1">
-      {% raw %}{{sender.phone_number}}{% endraw %}
-    </mj-text>
-       <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1" href="mailto:{% raw %}{{sender.email}}{% endraw %}">
-        {% raw %}{{sender.email}}{% endraw %}
-    </mj-text>
-  </mj-column>
-</mj-group>
+  <mj-group>
+    <mj-column>
+      <mj-image src='[[sender.profile_image_url or "Profile Image Url"]]' width="250px" padding="4px 25px">
+      </mj-image>
+    </mj-column>
+    <mj-column vertical-align="bottom">
+      <mj-text mj-class="h3" text-transform="uppercase" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
+        [[sender.display_name or "Display Name"]]
+      </mj-text>
+      <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1">
+        [[sender.phone_number or "Phone Number"]]
+      </mj-text>
+      <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1" href='mailto:[[sender.email or "Email"]]'>
+        [[sender.email or "Email"]]
+      </mj-text>
+    </mj-column>
+  </mj-group>
 </mj-section>
