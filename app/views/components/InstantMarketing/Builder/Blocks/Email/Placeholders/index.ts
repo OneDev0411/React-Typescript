@@ -9,9 +9,11 @@ import { registerTemplateBlocks } from '../../templateBlocks'
 import { TemplateBlockOptions } from '../../types'
 import { handleBlockDragStopEvent } from '../../utils'
 
+import { isMJImagePlaceholderComponent } from './helpers'
 import SenderLeft from './sender-left.mjml'
 
 export const senderLeftBlockName = 'sender-left'
+export const typeImagePlaceholder = 'mj-image-placeholder'
 
 export interface PlaceholderOptions {
   hasSenderBlocks: boolean
@@ -27,6 +29,32 @@ export default function registerPlaceholderBlocks(
     [senderLeftBlockName]:
       templateBlockOptions.blocks[senderLeftBlockName]?.template || SenderLeft
   }
+
+  editor.DomComponents.addType(typeImagePlaceholder, {
+    isComponent: isMJImagePlaceholderComponent,
+    extend: 'mj-image',
+    extendFnView: ['render'],
+    view: {
+      render() {
+        // The grapesjs-mjml-improved package was missed `this.postRender` on its implementation and I'm not sure
+        // what happens if I add it. So according to the fact that only this component needs it, I added it here.
+        this.postRender()
+      },
+      onRender({ el, model }) {
+        const imgEl: Nullable<HTMLImageElement> = el.querySelector('img')
+
+        if (!imgEl) {
+          return
+        }
+
+        const placeholderSrc = model.getAttributes()['data-placeholder-src']
+
+        if (placeholderSrc) {
+          imgEl.src = placeholderSrc
+        }
+      }
+    }
+  })
 
   if (hasSenderBlocks) {
     registerBlock(
