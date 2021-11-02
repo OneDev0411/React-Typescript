@@ -104,7 +104,7 @@ export class DealRole extends React.Component {
   getMlsId = () => {
     const { form } = this.props
 
-    if (form.agent) {
+    if (form?.agent) {
       return form.agent.mlsid
     }
 
@@ -350,7 +350,7 @@ export class DealRole extends React.Component {
    * get form is new record or not
    */
   get isNewRecord() {
-    return !this.props.form.id
+    return !this.props?.form?.id
   }
 
   getFormProperties = values => {
