@@ -26,13 +26,14 @@ const useStyles = makeStyles(
     createStyles({
       container: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: theme.spacing(1.5)
       },
       shortcutContainer: {
         display: 'flex',
-        columnGap: theme.spacing(1)
+        gap: theme.spacing(1)
       },
-      button: {
+      shortcutIconButton: {
         background: theme.palette.background.paper,
         border: `1px solid ${theme.palette.action.disabledBackground}`,
         '&[disabled] svg': {
@@ -40,10 +41,10 @@ const useStyles = makeStyles(
         }
       },
       actionContainer: {
+        minWidth: '200px',
         display: 'flex',
         alignItems: 'center',
-        marginLeft: theme.spacing(1.5),
-        columnGap: theme.spacing(1)
+        gap: theme.spacing(1)
       }
     }),
   { name: 'ContactProfileHeaderActions' }
@@ -65,7 +66,7 @@ export const Actions = ({
               <IconButton
                 onClick={onClick}
                 data-test={testId}
-                className={classes.button}
+                className={classes.shortcutIconButton}
               >
                 <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
               </IconButton>
@@ -83,7 +84,7 @@ export const Actions = ({
               <IconButton
                 onClick={onClick}
                 disabled={disabled}
-                className={classes.button}
+                className={classes.shortcutIconButton}
               >
                 <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
               </IconButton>

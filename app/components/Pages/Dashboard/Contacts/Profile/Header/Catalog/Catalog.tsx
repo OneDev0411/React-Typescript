@@ -14,47 +14,40 @@ import { Social } from './Social'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     mainContainer: {
-      display: 'grid',
-      height: 'auto',
-      gridTemplateAreas: 'avatarContainer profileContainer',
-      gridTemplateColumns: '72px 2fr',
-      gridTemplateRows: 'auto',
-      gridColumnGap: theme.spacing(1),
+      display: 'flex',
+      gap: theme.spacing(1),
+      height: 'min-content',
+      width: '100%',
       justifyItems: 'start',
-      alignItems: 'center'
+      alignItems: 'start'
     },
     avatarContainer: {
-      gridArea: 'avatarContainer',
-      gridRow: '1 / span 2',
-      gridColumn: '1 / span 1',
-      height: 0,
+      height: '72px',
       width: '100%',
-      paddingBottom: '100%'
+      maxWidth: '72px'
     },
     profileContainer: {
-      gridArea: 'profileContainer',
-      gridColumn: '2 / span 2',
-      gridRow: '1 / span 1',
-      width: '100%',
-      height: 'auto'
+      display: 'flex',
+      flex: '1 1 auto',
+      flexDirection: 'column',
+      gap: theme.spacing(1)
     },
     displayNameContainer: {
-      marginBottom: '.5rem',
       display: 'flex',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+      height: 'max-content',
+      gap: theme.spacing(1)
     },
     displayName: {
       wordBreak: 'break-all',
-      marginRight: theme.spacing(1)
+      height: 'max-content'
     },
     socialContainer: {
-      display: 'flex',
-      gap: theme.spacing(1)
+      width: 'min-content',
+      height: 'max-content'
     },
-    tagsContainer: {
-      gridRow: '2 / span 1'
-    }
+    tagsContainer: {}
   }),
   { name: 'ContactProfileHeaderCatalog' }
 )

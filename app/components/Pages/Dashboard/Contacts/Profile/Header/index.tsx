@@ -8,24 +8,18 @@ import Catalog from './Catalog/Catalog'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
-      display: 'grid',
-      gridTemplateAreas: 'catalog actions',
-      gridTemplateColumns: '2fr 1fr',
-      padding: theme.spacing(3.5, 0, 1)
+      display: 'flex',
+      padding: theme.spacing(3.5, 0, 1),
+      gap: theme.spacing(1)
     },
     catalogContainer: {
-      gridArea: 'catalog',
-      gridColumn: '1 / span 2'
+      flex: '1 1 auto'
     },
     actionsContainer: {
-      gridArea: 'actions',
-      gridColumn: '3 / span 1',
-      gridRow: '1 / 1',
-
+      width: 'min-content',
       display: 'flex',
-      marginLeft: theme.spacing(1),
       height: 'auto',
-      alignItems: 'center'
+      alignItems: 'start'
     }
   }),
   { name: 'ContactProfileHeader' }
