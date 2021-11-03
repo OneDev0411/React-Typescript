@@ -72,7 +72,9 @@ export function RoleForm(props) {
     >
       <Grid item xs={12}>
         <Typography variant="h6">
-          Add {selectedRole ? roleName(selectedRole) : ' New Role'}
+          {props.title || (
+            <>Add {selectedRole ? roleName(selectedRole) : ' New Role'}</>
+          )}
         </Typography>
       </Grid>
 
