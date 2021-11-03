@@ -35,7 +35,7 @@ function SuperCampaignGridView(props) {
         verticalAlign: 'center',
         render: ({ row }) => (
           <Link
-            to={`dashboard/super-campaigns/${row.id}/detail`}
+            to={`/dashboard/super-campaigns/${row.id}/detail`}
             className={classes.title}
           >
             {row.subject || '(untitled)'}
@@ -45,8 +45,6 @@ function SuperCampaignGridView(props) {
     ],
     [classes.title]
   )
-
-  console.log({ isLoading, superCampaignList })
 
   if (isLoading) {
     return <LoadingComponent />
