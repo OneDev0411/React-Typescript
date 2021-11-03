@@ -8,8 +8,7 @@ import { SetupButton } from './components/SetupButton'
 const availableGlobalTriggerType: TriggerContactEventTypes[] = [
   'birthday',
   'wedding_anniversary',
-  'home_anniversary',
-  'child_birthday'
+  'home_anniversary'
 ]
 
 const useStyles = makeStyles(

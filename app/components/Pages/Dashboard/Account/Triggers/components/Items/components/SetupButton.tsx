@@ -42,8 +42,7 @@ const useStyles = makeStyles(
 const Icons: Record<TriggerContactEventTypes, string> = {
   birthday: mdiCakeVariant,
   wedding_anniversary: mdiRing,
-  home_anniversary: mdiHomeHeart,
-  child_birthday: mdiCakeVariant
+  home_anniversary: mdiHomeHeart
 }
 
 interface Props {

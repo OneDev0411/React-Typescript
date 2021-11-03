@@ -11,7 +11,6 @@ declare type TriggerContactEventTypes =
   | 'birthday'
   | 'wedding_anniversary'
   | 'home_anniversary'
-  | 'child_birthday'
 
 declare interface IContactTrigger {
   event_type: TriggerContactEventTypes
