@@ -16,16 +16,13 @@ export function useAddSuperCampaignEnrollment(
   const notify = useNotify()
 
   const addSuperCampaignEnrollment = async (
-    enrollments: ISuperCampaignEnrollmentInput[]
+    data: ISuperCampaignEnrollmentInput[]
   ) => {
     try {
-      const enrollment = await enrollUserInSuperCampaign(
-        superCampaignId,
-        enrollments
-      )
+      const enrollments = await enrollUserInSuperCampaign(superCampaignId, data)
 
       setSuperCampaignEnrollments(prevSuperCampaignEnrollments => [
-        ...enrollment,
+        ...enrollments,
         ...prevSuperCampaignEnrollments
       ])
 

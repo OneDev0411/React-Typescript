@@ -26,15 +26,17 @@ async function getSuperCampaignEnrollments(
   | ISuperCampaignEnrollment<'user_and_brand'>[]
   | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
 > {
+  const associations = [...defaultAssociations]
+
   if (includeCampaign) {
-    defaultAssociations.push('super_campaign_enrollment.campaign')
+    associations.push('super_campaign_enrollment.campaign')
   }
 
   return (
     await new Fetch({ proxy: false })
       .get(`/email/super-campaigns/${superCampaignId}/enrollments`)
       .query({
-        associations: defaultAssociations
+        associations
       })
   ).body.data
 }

@@ -96,7 +96,7 @@ function SuperCampaignEnrollmentList({
   return (
     <>
       <SuperCampaignEnrollManuallyButton
-        superCampaign={superCampaign}
+        superCampaignTags={superCampaign.tags}
         onEnroll={addSuperCampaignEnrollment}
       />
       <Table

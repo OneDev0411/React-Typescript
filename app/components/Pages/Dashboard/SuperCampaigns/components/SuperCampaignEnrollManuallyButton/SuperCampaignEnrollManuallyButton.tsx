@@ -8,12 +8,12 @@ import { Agent } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 interface SuperCampaignEnrollManuallyButtonProps {
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaignTags: ISuperCampaign<'template_instance'>['tags']
   onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
 }
 
 function SuperCampaignEnrollManuallyButton({
-  superCampaign,
+  superCampaignTags,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
   const [isSaving, setIsSaving] = useSafeState(false)
@@ -25,23 +25,18 @@ function SuperCampaignEnrollManuallyButton({
   const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
 
   const handleEnroll = async (agents: Agent[]) => {
-    try {
-      const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
-        ({ agent }: Agent) => ({
-          user: agent.id,
-          brand: agent.brand_id!,
-          tags: superCampaign.tags ?? []
-        })
-      )
+    const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
+      ({ agent }: Agent) => ({
+        user: agent.id,
+        brand: agent.brand_id!,
+        tags: superCampaignTags ?? []
+      })
+    )
 
-      setIsSaving(true)
-      await onEnroll(enrollments)
-      setIsSaving(false)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      handleCloseTeamAgentsDrawer()
-    }
+    setIsSaving(true)
+    await onEnroll(enrollments)
+    setIsSaving(false)
+    handleCloseTeamAgentsDrawer()
   }
 
   return (
