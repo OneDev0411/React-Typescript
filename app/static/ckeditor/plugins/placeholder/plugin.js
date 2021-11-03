@@ -37,12 +37,12 @@
         // We need to have wrapping element, otherwise there are issues in
         // add dialog.
         draggable: false,
-        template: '<span class="cke_placeholder">[[]]</span>',
+        template: '<span class="cke_placeholder">{{}}</span>',
 
         downcast() {
           // eslint-disable-next-line no-undef
           return new CKEDITOR.htmlParser.text(
-            `[[${this.data.name} or "${this.data.fallback}"]]`
+            `{{${this.data.name} or "${this.data.fallback}"}}`
           )
         },
 
@@ -81,7 +81,7 @@
     },
 
     afterInit(editor) {
-      let placeholderReplaceRegex = /\[\[([^\[\]])+\]\]/g
+      let placeholderReplaceRegex = /\{\{([^\{\}])+\}\}/g
 
       editor.dataProcessor.dataFilter.addRules({
         text(text, node) {
@@ -94,7 +94,7 @@
             return
           }
 
-          return text.replace(placeholderReplaceRegex, function (match) {
+          return text.replace(placeholderReplaceRegex, match => {
             // Creating widget code.
             let widgetWrapper = null
             // eslint-disable-next-line no-undef

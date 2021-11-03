@@ -6,13 +6,19 @@
     </mj-column>
     <mj-column vertical-align="bottom">
       <mj-text mj-class="h3" text-transform="uppercase" font-weight="600"  padding="5px 0"  rechat-editable="tree" line-height="1">
-        {% raw %}{{sender.display_name}}{% endraw %}
+        <span class="cke_placeholder">
+          {% raw %}{{sender.display_name}}{% endraw %}
+        </span>
       </mj-text>
       <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1">
-        {% raw %}{{sender.phone_number}}{% endraw %}
+        <span class="cke_placeholder">
+          {% raw %}{{sender.phone_number}}{% endraw %}
+        </span>
       </mj-text>
       <mj-text mj-class="container-text" padding="5px 0"  rechat-editable="tree" line-height="1" href='mailto:{% raw %}{{sender.email or "Email"}}{% endraw %}'>
-        {% raw %}{{sender.email}}{% endraw %}
+        <span class="cke_placeholder">
+          {% raw %}{{sender.email}}{% endraw %}
+        </span>
       </mj-text>
     </mj-column>
   </mj-group>
