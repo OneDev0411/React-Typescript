@@ -14,7 +14,7 @@ import { AgentsList } from './List'
 
 interface Props {
   title: string
-  multiSelection: boolean
+  multiSelection?: boolean
   withRelatedContacts?: boolean
   flattened?: boolean
   isPrimaryAgent?: boolean

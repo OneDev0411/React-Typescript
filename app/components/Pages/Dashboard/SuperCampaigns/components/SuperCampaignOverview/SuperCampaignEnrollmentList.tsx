@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
+import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 import SuperCampaignEnrollManuallyButton from '../SuperCampaignEnrollManuallyButton'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
@@ -19,7 +20,6 @@ import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
 interface SuperCampaignEnrollmentListProps {
-  superCampaignId: UUID
   isLoading: boolean
   superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
   setSuperCampaignEnrollments: Dispatch<
@@ -28,28 +28,29 @@ interface SuperCampaignEnrollmentListProps {
 }
 
 function SuperCampaignEnrollmentList({
-  superCampaignId,
   isLoading,
   superCampaignEnrollments,
   setSuperCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
+  const { superCampaign } = useSuperCampaignDetail()
+
   const classes = useSuperCampaignListStyles()
 
   const updateSuperCampaignEnrollmentTags =
     useUpdateSuperCampaignEnrollmentTags(
-      superCampaignId,
+      superCampaign.id,
       superCampaignEnrollments,
       setSuperCampaignEnrollments
     )
 
   const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
-    superCampaignId,
+    superCampaign.id,
     superCampaignEnrollments,
     setSuperCampaignEnrollments
   )
 
   const addSuperCampaignEnrollment = useAddSuperCampaignEnrollment(
-    superCampaignId,
+    superCampaign.id,
     setSuperCampaignEnrollments
   )
 
@@ -95,7 +96,7 @@ function SuperCampaignEnrollmentList({
   return (
     <>
       <SuperCampaignEnrollManuallyButton
-        superCampaignId={superCampaignId}
+        superCampaignTags={superCampaign.tags}
         onEnroll={addSuperCampaignEnrollment}
       />
       <Table

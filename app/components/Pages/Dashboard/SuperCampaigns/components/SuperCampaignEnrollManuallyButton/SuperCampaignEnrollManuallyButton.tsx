@@ -4,38 +4,63 @@ import { mdiPlus } from '@mdi/js'
 import useSafeState from '@app/hooks/use-safe-state'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
-import { SuperCampaignEnrollmentInput } from '../../types'
+import { Agent } from '@app/views/components/TeamAgents/types'
+import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 interface SuperCampaignEnrollManuallyButtonProps {
-  superCampaignId: UUID
-  onEnroll: (data: SuperCampaignEnrollmentInput) => Promise<void>
+  superCampaignTags: ISuperCampaign<'template_instance'>['tags']
+  onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
 }
 
 function SuperCampaignEnrollManuallyButton({
-  superCampaignId,
+  superCampaignTags,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
   const [isSaving, setIsSaving] = useSafeState(false)
 
-  // TODO: Implement the required logic and use this function
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleEnroll = async (data: SuperCampaignEnrollmentInput) => {
+  const [isTeamAgentsDrawerOpen, setIsTeamAgentsDrawerOpen] =
+    useSafeState(false)
+
+  const handleOpenTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(true)
+  const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
+
+  const handleEnroll = async (agents: Agent[]) => {
+    const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
+      ({ agent }: Agent) => ({
+        user: agent.id,
+        brand: agent.brand_id!,
+        tags: superCampaignTags ?? []
+      })
+    )
+
     setIsSaving(true)
-    await onEnroll(data)
+    await onEnroll(enrollments)
     setIsSaving(false)
+    handleCloseTeamAgentsDrawer()
   }
 
   return (
-    <Button
-      color="primary"
-      startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
-      size="small"
-      onClick={() => console.log('Not Implemented')}
-      disabled={isSaving}
-    >
-      Enroll Participants Manually
-    </Button>
+    <>
+      <Button
+        color="primary"
+        startIcon={<SvgIcon path={mdiPlus} size={muiIconSizes.small} />}
+        size="small"
+        onClick={handleOpenTeamAgentsDrawer}
+        disabled={isSaving}
+      >
+        Enroll Participants Manually
+      </Button>
+      {isTeamAgentsDrawerOpen && (
+        <TeamAgentsDrawer
+          isPrimaryAgent
+          multiSelection
+          title="Enroll Participants"
+          withRelatedContacts={false}
+          onSelectAgents={handleEnroll}
+          onClose={handleCloseTeamAgentsDrawer}
+        />
+      )}
+    </>
   )
 }
 

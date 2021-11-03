@@ -57,7 +57,6 @@ function SuperCampaignEnrolledParticipants() {
           />
         ) : (
           <SuperCampaignEnrollmentList
-            superCampaignId={superCampaign.id}
             isLoading={isLoading}
             superCampaignEnrollments={
               superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand'>[]
