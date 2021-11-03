@@ -31,7 +31,7 @@ async function getSuperCampaignEnrollments(
   }
 
   return (
-    await new Fetch({ proxy: false })
+    await new Fetch()
       .get(`/email/super-campaigns/${superCampaignId}/enrollments`)
       .query({
         associations
