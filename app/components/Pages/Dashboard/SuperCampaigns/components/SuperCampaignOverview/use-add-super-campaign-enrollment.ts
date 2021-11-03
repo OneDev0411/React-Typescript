@@ -3,10 +3,8 @@ import { Dispatch, SetStateAction } from 'react'
 import useNotify from '@app/hooks/use-notify'
 import enrollUserInSuperCampaign from '@app/models/super-campaign/enroll-user-in-super-campaign'
 
-import { SuperCampaignEnrollmentInput } from '../../types'
-
 type UseAddSuperCampaignEnrollment = (
-  data: SuperCampaignEnrollmentInput
+  data: ISuperCampaignEnrollmentInput[]
 ) => Promise<void>
 
 export function useAddSuperCampaignEnrollment(
@@ -18,19 +16,20 @@ export function useAddSuperCampaignEnrollment(
   const notify = useNotify()
 
   const addSuperCampaignEnrollment = async (
-    data: SuperCampaignEnrollmentInput
+    enrollments: ISuperCampaignEnrollmentInput[]
   ) => {
     try {
-      const enrollment = await enrollUserInSuperCampaign(superCampaignId, {
-        user: data.user.id,
-        brand: data.brand.id,
-        tags: data.tags
-      })
+      const enrollment = await enrollUserInSuperCampaign(
+        superCampaignId,
+        enrollments
+      )
 
-      setSuperCampaignEnrollments(superCampaignEnrollments => [
-        { ...enrollment, ...data },
-        ...superCampaignEnrollments
-      ])
+      console.log('useAddSuperCampaignEnrollment', { enrollment })
+
+      // setSuperCampaignEnrollments(superCampaignEnrollments => [
+      //   { ...enrollment, ...data },
+      //   ...superCampaignEnrollments
+      // ])
 
       notify({
         status: 'success',

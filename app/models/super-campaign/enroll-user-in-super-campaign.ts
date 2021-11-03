@@ -2,12 +2,12 @@ import Fetch from 'services/fetch'
 
 async function enrollUserInSuperCampaign(
   superCampaignId: UUID,
-  data: ISuperCampaignEnrollmentInput
+  enrollments: ISuperCampaignEnrollmentInput[]
 ): Promise<ISuperCampaignEnrollment> {
   return (
     await new Fetch()
       .post(`/email/super-campaigns/${superCampaignId}/enrollments`)
-      .send(data)
+      .send({ enrollments })
   ).body.data
 }
 

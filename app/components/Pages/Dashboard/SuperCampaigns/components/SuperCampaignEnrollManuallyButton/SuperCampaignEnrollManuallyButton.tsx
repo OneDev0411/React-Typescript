@@ -7,18 +7,15 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Agent } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
-import { SuperCampaignEnrollmentInput } from '../../types'
-
 interface SuperCampaignEnrollManuallyButtonProps {
   superCampaign: ISuperCampaign<'template_instance'>
-  onEnroll: (data: SuperCampaignEnrollmentInput) => Promise<void>
+  onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
 }
 
 function SuperCampaignEnrollManuallyButton({
   superCampaign,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSaving, setIsSaving] = useSafeState(false)
 
   const [isTeamAgentsDrawerOpen, setIsTeamAgentsDrawerOpen] =
@@ -27,13 +24,26 @@ function SuperCampaignEnrollManuallyButton({
   const handleOpenTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(true)
   const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
 
-  // TODO: Implement the required logic and use this function
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleEnroll = async (agents: Agent[]) => {
     console.log({ agents })
-    // setIsSaving(true)
-    // await onEnroll(data)
-    // setIsSaving(false)
+
+    try {
+      const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
+        ({ agent }: Agent) => ({
+          user: agent.id,
+          brand: agent.brand_id!,
+          tags: superCampaign.tags ?? []
+        })
+      )
+
+      setIsSaving(true)
+      await onEnroll(enrollments)
+      setIsSaving(false)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      handleCloseTeamAgentsDrawer()
+    }
   }
 
   return (
