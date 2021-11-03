@@ -30,11 +30,13 @@ export function useUpdateSuperCampaignEnrollmentTags(
 
       const superCampaignEnrollment = superCampaignEnrollments[enrollmentIndex]
 
-      await updateSuperCampaignEnrollment(superCampaignId, {
-        brand: superCampaignEnrollment.brand.id,
-        user: superCampaignEnrollment.user.id,
-        tags
-      })
+      await updateSuperCampaignEnrollment(superCampaignId, [
+        {
+          brand: superCampaignEnrollment.brand.id,
+          user: superCampaignEnrollment.user.id,
+          tags
+        }
+      ])
 
       const newSuperCampaignEnrollments = [...superCampaignEnrollments]
 

@@ -24,12 +24,10 @@ export function useAddSuperCampaignEnrollment(
         enrollments
       )
 
-      console.log('useAddSuperCampaignEnrollment', { enrollment })
-
-      // setSuperCampaignEnrollments(superCampaignEnrollments => [
-      //   { ...enrollment, ...data },
-      //   ...superCampaignEnrollments
-      // ])
+      setSuperCampaignEnrollments(prevSuperCampaignEnrollments => [
+        ...enrollment,
+        ...prevSuperCampaignEnrollments
+      ])
 
       notify({
         status: 'success',
@@ -38,7 +36,7 @@ export function useAddSuperCampaignEnrollment(
     } catch (_) {
       notify({
         status: 'error',
-        message: 'Something went wrong while deleting the enrollment'
+        message: 'Something went wrong while adding the enrollment'
       })
     }
   }

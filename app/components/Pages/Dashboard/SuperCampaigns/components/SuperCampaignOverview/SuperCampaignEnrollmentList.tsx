@@ -34,8 +34,6 @@ function SuperCampaignEnrollmentList({
 }: SuperCampaignEnrollmentListProps) {
   const { superCampaign } = useSuperCampaignDetail()
 
-  console.log('SuperCampaignEnrollmentList', { superCampaign })
-
   const classes = useSuperCampaignListStyles()
 
   const updateSuperCampaignEnrollmentTags =
