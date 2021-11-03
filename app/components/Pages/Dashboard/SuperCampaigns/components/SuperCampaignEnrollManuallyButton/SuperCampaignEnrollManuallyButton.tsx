@@ -25,8 +25,6 @@ function SuperCampaignEnrollManuallyButton({
   const handleCloseTeamAgentsDrawer = () => setIsTeamAgentsDrawerOpen(false)
 
   const handleEnroll = async (agents: Agent[]) => {
-    console.log({ agents })
-
     try {
       const enrollments: ISuperCampaignEnrollmentInput[] = agents.map(
         ({ agent }: Agent) => ({
