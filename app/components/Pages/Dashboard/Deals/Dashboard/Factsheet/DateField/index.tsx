@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Tooltip } from '@material-ui/core'
 import { mdiCheck } from '@mdi/js'
 import fecha from 'fecha'
+import moment from 'moment'
 
 import { DateTimePicker } from 'components/DateTimePicker'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -130,7 +131,6 @@ function getInitialDate(deal: IDeal, field: IDealBrandContext): Date {
     return new Date()
   }
 
-  const now = new Date()
-
-  return new Date(timestamp * 1000 + now.getTimezoneOffset() * 60000)
+  // fix timezone issue :cry:
+  return moment(moment.unix(timestamp).utc().format('MMM DD, YYYY')).toDate()
 }

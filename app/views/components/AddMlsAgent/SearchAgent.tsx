@@ -27,7 +27,7 @@ export function SearchAgent({ user, onComplete }: Props) {
     setIsSearching(true)
 
     try {
-      const agents = await searchAgent(agentNumber)
+      const agents = await searchAgent(agentNumber.trim())
 
       setIsSearching(false)
 

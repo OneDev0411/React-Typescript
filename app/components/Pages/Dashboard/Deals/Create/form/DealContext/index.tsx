@@ -9,6 +9,7 @@ import {
   Theme
 } from '@material-ui/core'
 import fecha from 'fecha'
+import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { upsertContexts } from 'actions/deals'
@@ -114,10 +115,10 @@ export function DealContext({
     }
 
     if (typeof inputValue === 'number') {
-      return new Date(inputValue * 1000)
+      return moment.unix(inputValue).utc().toDate()
     }
 
-    return new Date(inputValue)
+    return moment(inputValue).utc().toDate()
   }
 
   const handleSelectDate = (date: Date, type: 'day' | 'month' | 'year') => {

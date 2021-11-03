@@ -68,6 +68,7 @@ const defaultProps = {
 class Roles extends React.Component {
   state = {
     user: null,
+    form: null,
     isRoleFormOpen: false,
     isReplaceAgentDrawerOpen: false
   }
@@ -91,7 +92,12 @@ class Roles extends React.Component {
     this.setSelectedRole(role)
   }
 
-  closeRoleForm = () => this.setState({ isRoleFormOpen: false, user: null })
+  closeRoleForm = () =>
+    this.setState({
+      isRoleFormOpen: false,
+      isReplaceAgentDrawerOpen: false,
+      user: null
+    })
 
   setSelectedRole = user =>
     this.setState({
@@ -108,23 +114,38 @@ class Roles extends React.Component {
   handleReplaceAgent = async agents => {
     const { agent: user } = agents[0]
 
-    this.toggleReplaceAgentDrawer()
-
-    const { office, work_phone } = user.agent || {}
+    const { office, work_phone } = user.agents?.[0] || {}
     const currentRole = this.state.user
 
-    const role = {
+    let role = {
       user: user.id,
+      agents: user.agents,
       brand: user.brand_id,
       email: user.email,
+      role: currentRole.role,
       legal_last_name: user.last_name,
       legal_first_name: user.first_name,
       phone_number: user.phone_number || work_phone,
       company: office ? office.name : '',
-      role: currentRole.role,
       commission_dollar: currentRole.commission_dollar,
       commission_percentage: currentRole.commission_percentage
     }
+
+    if (Array.isArray(user.agents) && user.agents.length > 1) {
+      this.setState({
+        isRoleFormOpen: true,
+        form: role
+      })
+
+      return
+    }
+
+    role = {
+      ...role,
+      agent: user.agents?.[0].id
+    }
+
+    this.toggleReplaceAgentDrawer()
 
     try {
       await this.props.deleteRole(this.props.deal.id, this.state.user.id)
@@ -236,19 +257,21 @@ class Roles extends React.Component {
                 </RoleActions>
               )}
 
-              {this.state.isRoleFormOpen && role.id === this.state.user.id && (
-                <DealRole
-                  isOpen
-                  deal={this.props.deal}
-                  form={this.state.user}
-                  isRoleRemovable={isRowRemovable}
-                  isEmailRequired={this.props.isEmailRequired}
-                  showBrokerageFields={this.props.showBrokerageFields}
-                  allowedRoles={this.props.allowedRoles}
-                  onUpsertRole={this.props.onUpsertRole}
-                  onClose={this.closeRoleForm}
-                />
-              )}
+              {this.state.isRoleFormOpen &&
+                !this.state.isReplaceAgentDrawerOpen &&
+                role.id === this.state.user.id && (
+                  <DealRole
+                    isOpen
+                    deal={this.props.deal}
+                    form={this.state.user}
+                    isRoleRemovable={isRowRemovable}
+                    isEmailRequired={this.props.isEmailRequired}
+                    showBrokerageFields={this.props.showBrokerageFields}
+                    allowedRoles={this.props.allowedRoles}
+                    onUpsertRole={this.props.onUpsertRole}
+                    onClose={this.closeRoleForm}
+                  />
+                )}
             </RoleItem>
           )
         })}
@@ -265,7 +288,7 @@ class Roles extends React.Component {
           />
         )}
 
-        {this.state.isReplaceAgentDrawerOpen && (
+        {this.state.isReplaceAgentDrawerOpen && !this.state.isRoleFormOpen && (
           <TeamAgentsDrawer
             isPrimaryAgent
             withRelatedContacts={false}
@@ -273,6 +296,24 @@ class Roles extends React.Component {
             title="Select New Primary Agent"
             onSelectAgents={this.handleReplaceAgent}
             onClose={this.toggleReplaceAgentDrawer}
+          />
+        )}
+
+        {this.state.isRoleFormOpen && this.state.isReplaceAgentDrawerOpen && (
+          <DealRole
+            isOpen
+            title="Replace Agent"
+            deal={this.props.deal}
+            form={this.state.form}
+            isRoleRemovable={false}
+            isEmailRequired
+            showBrokerageFields={false}
+            allowedRoles={[]}
+            onBeforeUpsert={async () =>
+              this.props.deleteRole(this.props.deal.id, this.state.user.id)
+            }
+            onUpsertRole={this.props.onUpsertRole}
+            onClose={this.closeRoleForm}
           />
         )}
       </RolesContainer>
