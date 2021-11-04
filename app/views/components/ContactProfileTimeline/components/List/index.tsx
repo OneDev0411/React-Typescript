@@ -135,7 +135,7 @@ export function CalendarList({
 
   const CalendarLoader = () => (
     <Box className={classes.calendarContainer}>
-      <Box my={1} textAlign="center">
+      <Box my={2} textAlign="center">
         <Button
           size="small"
           disabled={isLoading}
@@ -164,7 +164,7 @@ export function CalendarList({
           </Box>
         ))}
       </Box>
-      <Box my={1} textAlign="center">
+      <Box my={2} textAlign="center">
         <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
           Load Previous Year Events
         </Button>
