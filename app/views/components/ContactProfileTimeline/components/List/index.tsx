@@ -180,12 +180,12 @@ export function CalendarList({
         setSelectedEvent
       }}
     >
-      {rows.length === 0 ? (
-        <EmptyState rowsCount={rows.length} />
+      {rows.length === 0 && !isLoading ? (
+        <EmptyState />
       ) : (
         <Box className={classes.mainContainer}>
           {isLoading ? <Loader /> : <></>}
-          <CalendarLoader />
+          {!(isLoading && rows.length === 0) ? <CalendarLoader /> : <></>}
         </Box>
       )}
 

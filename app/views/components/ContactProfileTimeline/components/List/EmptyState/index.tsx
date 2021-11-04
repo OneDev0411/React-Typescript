@@ -10,9 +10,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
+      position: 'relative',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
       height: '100%'
     },
     title: {
@@ -20,31 +19,31 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[500]
     },
     icon: {
-      marginBottom: theme.spacing(1),
-      color: theme.palette.grey['500']
+      color: theme.palette.grey['500'],
+      margin: `25% 25% ${theme.spacing(1)}px`
+    },
+    iconContainer: {
+      position: 'absolute',
+      top: '12.5%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
     }
   })
 )
 
-interface Props {
-  rowsCount: number
-}
-
-export function EmptyState({ rowsCount }: Props) {
+export function EmptyState() {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      {rowsCount === 0 && (
-        <>
-          <SvgIcon
-            path={importantDateIcon}
-            className={classes.icon}
-            size={muiIconSizes.xlarge}
-          />
-          <div className={classes.title}>No events</div>
-        </>
-      )}
+      <div className={classes.iconContainer}>
+        <SvgIcon
+          path={importantDateIcon}
+          className={classes.icon}
+          size={muiIconSizes.xlarge}
+        />
+        <div className={classes.title}>No events</div>
+      </div>
     </div>
   )
 }
