@@ -78,7 +78,15 @@ export function isToday(date: Date): boolean {
 }
 
 export function convertToCurrentYear(date: Date): Date {
-  const newDate: moment.Moment = moment(date)
+  const now = new Date()
+  const newDate = new Date(date)
 
-  return newDate.set('year', moment().year()).toDate()
+  newDate.setFullYear(
+    now.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate()
+  )
+  console.log({ date, newDate })
+
+  return newDate
 }
