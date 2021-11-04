@@ -38,7 +38,7 @@ function SuperCampaignGridView(props) {
           to={`/dashboard/super-campaigns/${row.id}/detail`}
           className={classes.title}
         >
-          {row.subject || '(untitled)'}
+          {row.subject || '(Untitled Campaign)'}
         </Link>
       )
     }
