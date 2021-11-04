@@ -1,6 +1,12 @@
 import { useState } from 'react'
 
-import { Box, Button, makeStyles, Theme } from '@material-ui/core'
+import {
+  Box,
+  Button,
+  makeStyles,
+  Theme,
+  CircularProgress
+} from '@material-ui/core'
 
 import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
@@ -12,24 +18,53 @@ import { EventHeader } from './EventHeader'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    header: {
+    eventHeaderContainer: {
       width: theme.spacing(12)
     },
-    section: {
+    eventsSectionContainer: {
       display: 'flex',
       borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
       paddingLeft: theme.spacing(2)
     },
-    events: {
+    eventsListContainer: {
       '& $event:nth-child(even)': {
         backgroundColor: theme.palette.grey['50']
       }
     },
-    event: {
+    eventContainer: {
+      flexGrow: 1,
       backgroundColor: '#fff',
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
       }
+    },
+    mainContainer: {
+      position: 'relative',
+      width: '100%',
+      height: '100%'
+    },
+    calendarContainer: {
+      position: 'absolute',
+      zIndex: 1,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      padding: theme.spacing(2, 1)
+    },
+    progressLoaderContainer: {
+      position: 'absolute',
+      zIndex: 10,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(255, 255, 255, 0.6)'
+    },
+    progressLoaderIcon: {
+      position: 'absolute',
+      top: '20%',
+      left: '50%'
     }
   }),
   {
@@ -91,14 +126,14 @@ export function CalendarList({
     setSelectedEvent(null)
   }
 
-  return (
-    <ListContext.Provider
-      value={{
-        selectedEvent,
-        contact,
-        setSelectedEvent
-      }}
-    >
+  const Loader = () => (
+    <Box className={classes.progressLoaderContainer}>
+      <CircularProgress className={classes.progressLoaderIcon} />
+    </Box>
+  )
+
+  const CalendarLoader = () => (
+    <Box className={classes.calendarContainer}>
       <Box my={1} textAlign="center">
         <Button
           size="small"
@@ -108,22 +143,19 @@ export function CalendarList({
           Load Next Year Events
         </Button>
       </Box>
-
-      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
-
       <Box>
         {rows.map((section, index) => (
           <Box
-            className={classes.section}
+            className={classes.eventsSectionContainer}
             key={`${section.header.date}-${index}`}
           >
-            <Box className={classes.header}>
+            <Box className={classes.eventHeaderContainer}>
               <EventHeader item={section.header} />
             </Box>
 
-            <Box flexGrow={1} className={classes.events}>
+            <Box className={classes.eventsListContainer}>
               {section.events.map(event => (
-                <div key={event.id} className={classes.event}>
+                <div key={event.id} className={classes.eventContainer}>
                   <Event event={event} onEventChange={handleEventChange} />
                 </div>
               ))}
@@ -131,12 +163,32 @@ export function CalendarList({
           </Box>
         ))}
       </Box>
-
       <Box my={1} textAlign="center">
         <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
           Load Previous Year Events
         </Button>
       </Box>
+    </Box>
+  )
+
+  isLoading = true
+
+  return (
+    <ListContext.Provider
+      value={{
+        selectedEvent,
+        contact,
+        setSelectedEvent
+      }}
+    >
+      {rows.length === 0 ? (
+        <EmptyState rowsCount={rows.length} />
+      ) : (
+        <Box className={classes.mainContainer}>
+          {isLoading ? <Loader /> : <></>}
+          <CalendarLoader />
+        </Box>
+      )}
 
       <EventController
         user={user}
