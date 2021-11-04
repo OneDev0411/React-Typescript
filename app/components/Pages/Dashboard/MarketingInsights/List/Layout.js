@@ -10,6 +10,7 @@ import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { selectUser } from 'selectors/user'
+import { noop } from 'utils/helpers'
 import { getUserSettingsInActiveTeam } from 'utils/user-teams'
 
 import SortField from './SortField'
@@ -25,9 +26,9 @@ const useStyles = makeStyles(theme => ({
 const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 
 function InsightsLayout({
-  sentCount,
-  scheduledCount,
-  onCreateEmail,
+  sentCount = 0,
+  scheduledCount = 0,
+  onCreateEmail = noop,
   renderContent
 }) {
   const classes = useStyles()
@@ -39,6 +40,7 @@ function InsightsLayout({
     ascending: false
   })
   const currentUrl = window.location.pathname
+
   const Items = [
     {
       label: 'Sent',
@@ -49,6 +51,10 @@ function InsightsLayout({
       label: 'Scheduled',
       count: scheduledCount,
       to: urlGenerator('/scheduled')
+    },
+    {
+      label: 'Super Campaign',
+      to: urlGenerator('/super-campaign')
     }
   ]
 
@@ -94,12 +100,14 @@ function InsightsLayout({
                 label={
                   <span>
                     {label}
-                    <Chip
-                      variant="outlined"
-                      size="small"
-                      label={count}
-                      className={classes.emailCount}
-                    />
+                    {Number(count) > 0 && (
+                      <Chip
+                        variant="outlined"
+                        size="small"
+                        label={count}
+                        className={classes.emailCount}
+                      />
+                    )}
                   </span>
                 }
                 to={to}

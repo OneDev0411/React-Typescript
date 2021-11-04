@@ -1,13 +1,18 @@
 import Fetch from 'services/fetch'
 
+import { defaultAssociations } from './get-super-campaign-enrollments'
+
 async function enrollUserInSuperCampaign(
   superCampaignId: UUID,
-  data: ISuperCampaignEnrollmentInput
-): Promise<ISuperCampaignEnrollment> {
+  enrollments: ISuperCampaignEnrollmentInput[]
+): Promise<ISuperCampaignEnrollment<'user_and_brand'>[]> {
   return (
     await new Fetch()
       .post(`/email/super-campaigns/${superCampaignId}/enrollments`)
-      .send(data)
+      .query({
+        associations: defaultAssociations
+      })
+      .send({ enrollments })
   ).body.data
 }
 
