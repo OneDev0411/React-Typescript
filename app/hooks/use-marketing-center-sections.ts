@@ -55,9 +55,9 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Newsletter')
       },
       {
-        title: getTemplateTypeLabel('Recruitment'),
-        value: 'Recruitment',
-        link: urlGenerator('/Recruitment')
+        title: getTemplateTypeLabel('MarketReport'),
+        value: 'MarketReport',
+        link: urlGenerator('/MarketReport')
       },
       {
         title: getTemplateTypeLabel('Event'),
@@ -65,9 +65,9 @@ const ALL_SECTIONS: SectionCollection = {
         link: urlGenerator('/Event')
       },
       {
-        title: getTemplateTypeLabel('MarketReport'),
-        value: 'MarketReport',
-        link: urlGenerator('/MarketReport')
+        title: getTemplateTypeLabel('Recruitment'),
+        value: 'Recruitment',
+        link: urlGenerator('/Recruitment')
       },
       {
         title: getTemplateTypeLabel('Blank'),
