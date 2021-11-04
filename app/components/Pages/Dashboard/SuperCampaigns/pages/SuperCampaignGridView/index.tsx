@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
 import Table from '@app/views/components/Grid/Table'
+import { noop } from 'utils/helpers'
 
 import { useGetAllSuperCampaign } from './use-get-all-super-campaign'
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles(
 
 function SuperCampaignGridView(props) {
   const classes = useStyles()
-  const { isLoading, superCampaignList } = useGetAllSuperCampaign()
+  const { isLoading, superCampaigns, loadMore } = useGetAllSuperCampaign()
 
   const columns = useMemo(
     () => [
@@ -46,15 +47,17 @@ function SuperCampaignGridView(props) {
     [classes.title]
   )
 
-  if (isLoading) {
-    return <LoadingComponent />
-  }
-
   return (
     <Table
-      rows={superCampaignList ?? []}
-      totalRows={superCampaignList?.length ?? 0}
+      rows={superCampaigns ?? []}
+      totalRows={superCampaigns?.length ?? 0}
       columns={columns}
+      loading={isLoading ? 'middle' : null}
+      LoadingStateComponent={LoadingComponent}
+      infiniteScrolling={{
+        onReachStart: noop,
+        onReachEnd: loadMore
+      }}
       EmptyStateComponent={() => (
         <EmailInsightsZeroState
           title="No super campaign to show, yet."
