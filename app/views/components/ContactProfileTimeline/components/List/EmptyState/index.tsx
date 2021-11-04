@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { CircularProgress } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -10,7 +9,6 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(15, 0),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -30,15 +28,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   rowsCount: number
-  isLoading: boolean
 }
 
-export function EmptyState({ rowsCount, isLoading }: Props) {
+export function EmptyState({ rowsCount }: Props) {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      {!isLoading && rowsCount === 0 && (
+      {rowsCount === 0 && (
         <>
           <SvgIcon
             path={importantDateIcon}
@@ -48,8 +45,6 @@ export function EmptyState({ rowsCount, isLoading }: Props) {
           <div className={classes.title}>No events</div>
         </>
       )}
-
-      {isLoading && <CircularProgress />}
     </div>
   )
 }
