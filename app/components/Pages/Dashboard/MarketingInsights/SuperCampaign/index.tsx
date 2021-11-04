@@ -11,13 +11,7 @@ function SuperCampaignList(props) {
 
   const renderContent = prosp => <SuperCampaignGridView {...props} />
 
-  return (
-    <Layout
-      sentCount={0}
-      scheduledCount={2}
-      renderContent={props => renderContent(props)}
-    />
-  )
+  return <Layout renderContent={props => renderContent(props)} />
 }
 
 export default memo(SuperCampaignList)

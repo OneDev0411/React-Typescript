@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
 const SORT_FIELD_INSIGHT_KEY = 'insight_layout_sort_field'
 
 function InsightsLayout({
-  sentCount,
-  scheduledCount,
+  sentCount = 0,
+  scheduledCount = 0,
   onCreateEmail = noop,
   renderContent
 }) {
@@ -40,6 +40,9 @@ function InsightsLayout({
     ascending: false
   })
   const currentUrl = window.location.pathname
+
+  // console.log({ props })
+
   const Items = [
     {
       label: 'Sent',
@@ -53,7 +56,6 @@ function InsightsLayout({
     },
     {
       label: 'Super Campaign',
-      count: scheduledCount,
       to: urlGenerator('/super-campaign')
     }
   ]
@@ -100,12 +102,14 @@ function InsightsLayout({
                 label={
                   <span>
                     {label}
-                    <Chip
-                      variant="outlined"
-                      size="small"
-                      label={count}
-                      className={classes.emailCount}
-                    />
+                    {Number(count) > 0 && (
+                      <Chip
+                        variant="outlined"
+                        size="small"
+                        label={count}
+                        className={classes.emailCount}
+                      />
+                    )}
                   </span>
                 }
                 to={to}

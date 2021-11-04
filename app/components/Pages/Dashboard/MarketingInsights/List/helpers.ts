@@ -89,8 +89,6 @@ export function filterInsightList(
 ): Pick<InsightState, 'list' | 'counts'> {
   const isSentStatus = type === InsightFilterType.SENT
 
-  console.log('filterInsightList', { list })
-
   const filteredList = list.filter(item => {
     const isScheduledItem = isEmailScheduled(item)
 
