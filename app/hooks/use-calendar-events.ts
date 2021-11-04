@@ -45,7 +45,7 @@ export function useCalendarEvents(
         .map(event => {
           let newTimestamp = new Date(event.timestamp * 1000)
 
-          if (event.all_day && event.recurring) {
+          if (event.all_day) {
             newTimestamp = convertToCurrentYear(newTimestamp)
           }
 
