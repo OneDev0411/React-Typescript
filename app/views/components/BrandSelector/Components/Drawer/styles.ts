@@ -12,9 +12,6 @@ export const useStyles = makeStyles(
     disabled: {
       opacity: 0.6,
       cursor: 'not-allowed'
-    },
-    footer: {
-      justifyContent: 'flex-end !important'
     }
   }),
   { name: 'BrandSelectorDrawer' }
