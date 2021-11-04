@@ -45,6 +45,7 @@ const useStyles = makeStyles(
     },
     calendarContainer: {
       position: 'absolute',
+      overflowY: 'auto',
       zIndex: 1,
       top: 0,
       left: 0,
@@ -170,8 +171,6 @@ export function CalendarList({
       </Box>
     </Box>
   )
-
-  isLoading = true
 
   return (
     <ListContext.Provider
