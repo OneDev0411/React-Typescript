@@ -41,8 +41,6 @@ function InsightsLayout({
   })
   const currentUrl = window.location.pathname
 
-  // console.log({ props })
-
   const Items = [
     {
       label: 'Sent',

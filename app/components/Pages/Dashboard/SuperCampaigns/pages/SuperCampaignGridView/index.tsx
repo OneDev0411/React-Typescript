@@ -1,4 +1,4 @@
-import { useMemo, memo } from 'react'
+import { memo } from 'react'
 
 import { Theme, makeStyles } from '@material-ui/core'
 import { Link } from 'react-router'
@@ -26,26 +26,23 @@ function SuperCampaignGridView(props) {
   const classes = useStyles()
   const { isLoading, superCampaigns, loadMore } = useGetAllSuperCampaign()
 
-  const columns = useMemo(
-    () => [
-      {
-        header: 'Subject',
-        id: 'subject',
-        primary: true,
-        width: '32%',
-        verticalAlign: 'center',
-        render: ({ row }) => (
-          <Link
-            to={`/dashboard/super-campaigns/${row.id}/detail`}
-            className={classes.title}
-          >
-            {row.subject || '(untitled)'}
-          </Link>
-        )
-      }
-    ],
-    [classes.title]
-  )
+  const columns = [
+    {
+      header: 'Subject',
+      id: 'subject',
+      primary: true,
+      width: '32%',
+      verticalAlign: 'center',
+      render: ({ row }) => (
+        <Link
+          to={`/dashboard/super-campaigns/${row.id}/detail`}
+          className={classes.title}
+        >
+          {row.subject || '(untitled)'}
+        </Link>
+      )
+    }
+  ]
 
   return (
     <Table
