@@ -45,7 +45,7 @@ const ALL_SECTIONS: SectionCollection = {
     ]
   },
   newsletters: {
-    type: SectionsEnum.Link,
+    type: SectionsEnum.List,
     key: 'newsletters',
     title: 'Newsletters',
     items: [
@@ -53,6 +53,31 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('Newsletter'),
         value: 'Newsletter',
         link: urlGenerator('/Newsletter')
+      },
+      {
+        title: getTemplateTypeLabel('MarketReport'),
+        value: 'MarketReport',
+        link: urlGenerator('/MarketReport')
+      },
+      {
+        title: getTemplateTypeLabel('Event'),
+        value: 'Event',
+        link: urlGenerator('/Event')
+      },
+      {
+        title: getTemplateTypeLabel('Recruitment'),
+        value: 'Recruitment',
+        link: urlGenerator('/Recruitment')
+      },
+      {
+        title: getTemplateTypeLabel('Blank'),
+        value: 'Blank',
+        link: urlGenerator('/Blank')
+      },
+      {
+        title: getTemplateTypeLabel('Blog'),
+        value: 'Blog',
+        link: urlGenerator('/Blog')
       }
     ]
   },
@@ -234,6 +259,11 @@ const ALL_SECTIONS: SectionCollection = {
         title: getTemplateTypeLabel('NewAgent'),
         value: 'NewAgent',
         link: urlGenerator('/NewAgent')
+      },
+      {
+        title: getTemplateTypeLabel('News'),
+        value: 'News',
+        link: urlGenerator('/News')
       }
     ]
   },
