@@ -3,6 +3,8 @@ import { ReactNode } from 'react'
 import { Card, CardMedia, makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 
+import SuperCampaignCardDays from './SuperCampaignCardDays'
+
 const useStyles = makeStyles(
   theme => ({
     actionArea: {
@@ -93,9 +95,12 @@ function SuperCampaignCard({
       </div>
       <div className={classes.details}>
         <div className={classes.padding}>
-          <Typography className={classes.margin} variant="caption">
-            1 day
-          </Typography>
+          {superCampaign.due_at && (
+            <SuperCampaignCardDays
+              className={classes.margin}
+              time={superCampaign.due_at}
+            />
+          )}
           <Typography className={classes.margin} variant="subtitle2" noWrap>
             {superCampaign.subject || 'Untitled Campaign'}
           </Typography>
