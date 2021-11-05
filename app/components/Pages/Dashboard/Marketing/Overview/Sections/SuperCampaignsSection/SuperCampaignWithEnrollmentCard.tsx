@@ -25,11 +25,9 @@ function SuperCampaignWithEnrollmentCard({
 }: SuperCampaignWithEnrollmentCardProps) {
   const classes = useStyles()
 
-  const hasEnrolled = !!enrollment
-
   return (
     <SuperCampaignCard className={classes.root} superCampaign={superCampaign}>
-      {hasEnrolled ? (
+      {enrollment ? (
         <SuperCampaignWithEnrollmentCardEnrolledFooter
           superCampaignId={superCampaign.id}
           superCampaignTags={enrollment.tags}
