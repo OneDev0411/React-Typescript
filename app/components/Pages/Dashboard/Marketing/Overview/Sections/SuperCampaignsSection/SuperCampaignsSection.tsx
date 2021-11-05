@@ -1,20 +1,30 @@
 import SectionLayout from '../SectionLayout'
 
 import SuperCampaignCards from './SuperCampaignCards'
+import SuperCampaignsSectionEmptyState from './SuperCampaignsSectionEmptyState'
+import SuperCampaignsSectionLoading from './SuperCampaignsSectionLoading'
 import { useGetSuperCampaignsWithEnrollment } from './use-get-super-campaigns-with-enrollment'
 
 function SuperCampaignsSection() {
-  const { superCampaignsWithEnrollment, setSuperCampaignsWithEnrollment } =
-    useGetSuperCampaignsWithEnrollment()
+  const {
+    superCampaignsWithEnrollment,
+    setSuperCampaignsWithEnrollment,
+    isLoading
+  } = useGetSuperCampaignsWithEnrollment()
 
-  // TODO: Handle loading and empty state
+  const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
   return (
     <SectionLayout title="Campaigns" gridProps={{ sm: 12 }}>
-      <SuperCampaignCards
-        superCampaignsWithEnrollment={superCampaignsWithEnrollment}
-        setSuperCampaignsWithEnrollment={setSuperCampaignsWithEnrollment}
-      />
+      {isEmpty && <SuperCampaignsSectionEmptyState />}
+      {isLoading ? (
+        <SuperCampaignsSectionLoading />
+      ) : (
+        <SuperCampaignCards
+          superCampaignsWithEnrollment={superCampaignsWithEnrollment}
+          setSuperCampaignsWithEnrollment={setSuperCampaignsWithEnrollment}
+        />
+      )}
     </SectionLayout>
   )
 }
