@@ -6,11 +6,8 @@ async function getMySuperCampaigns(): Promise<
   return (
     await new Fetch().get('/email/super-campaigns/self').query({
       associations: ['super_campaign.template_instance']
-      // limit: '2' // TODO: Ask the API guys about this
     })
-  ).body.data
-    .filter(item => !!item.template_instance)
-    .slice(0, 2) // TODO: Remove this when the API supports limit
+  ).body.data.slice(0, 4) // TODO: Use the limit param on the request if possible later
 }
 
 export default getMySuperCampaigns
