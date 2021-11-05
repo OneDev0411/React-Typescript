@@ -1,16 +1,12 @@
-import { ReactNode } from 'react'
+import { CardMedia, makeStyles, Typography } from '@material-ui/core'
 
-import { Card, CardMedia, makeStyles, Typography } from '@material-ui/core'
-import classNames from 'classnames'
-
+import SuperCampaignBaseCard, {
+  SuperCampaignBaseCardProps
+} from './SuperCampaignBaseCard'
 import SuperCampaignCardDays from './SuperCampaignCardDays'
 
 const useStyles = makeStyles(
   theme => ({
-    actionArea: {
-      display: 'flex',
-      alignItems: 'stretch'
-    },
     '@keyframes scrollPositionAnimation': {
       from: {
         objectPosition: '0 0%'
@@ -18,13 +14,6 @@ const useStyles = makeStyles(
       to: {
         objectPosition: '0 100%'
       }
-    },
-    imageHolder: {
-      position: 'relative',
-      overflow: 'hidden',
-      flexGrow: 0,
-      flexShrink: 0,
-      width: '46%'
     },
     media: {
       position: 'absolute',
@@ -38,14 +27,6 @@ const useStyles = makeStyles(
       '&:hover': {
         animation: '8s linear infinite alternate $scrollPositionAnimation'
       }
-    },
-    details: {
-      flexGrow: 1,
-      flexShrink: 1,
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between'
     },
     description: {
       color: theme.palette.grey[700],
@@ -65,25 +46,22 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignCard' }
 )
 
-export interface SuperCampaignCardProps {
-  className?: string
+export interface SuperCampaignCardProps
+  extends Omit<SuperCampaignBaseCardProps, 'image'> {
   superCampaign: ISuperCampaign<'template_instance'>
-  children?: ReactNode
 }
 
 function SuperCampaignCard({
-  className,
   superCampaign,
-  children
+  children,
+  ...otherProps
 }: SuperCampaignCardProps) {
   const classes = useStyles()
 
   return (
-    <Card
-      className={classNames(classes.actionArea, className)}
-      variant="outlined"
-    >
-      <div className={classes.imageHolder}>
+    <SuperCampaignBaseCard
+      {...otherProps}
+      image={
         <CardMedia
           component="img"
           className={classes.media}
@@ -92,25 +70,24 @@ function SuperCampaignCard({
             '/static/images/logo--gray.svg'
           }
         />
+      }
+    >
+      <div className={classes.padding}>
+        {superCampaign.due_at && (
+          <SuperCampaignCardDays
+            className={classes.margin}
+            time={superCampaign.due_at}
+          />
+        )}
+        <Typography className={classes.margin} variant="subtitle2" noWrap>
+          {superCampaign.subject || 'Untitled Campaign'}
+        </Typography>
+        <Typography variant="body2" className={classes.description}>
+          {superCampaign.description}
+        </Typography>
       </div>
-      <div className={classes.details}>
-        <div className={classes.padding}>
-          {superCampaign.due_at && (
-            <SuperCampaignCardDays
-              className={classes.margin}
-              time={superCampaign.due_at}
-            />
-          )}
-          <Typography className={classes.margin} variant="subtitle2" noWrap>
-            {superCampaign.subject || 'Untitled Campaign'}
-          </Typography>
-          <Typography variant="body2" className={classes.description}>
-            {superCampaign.description}
-          </Typography>
-        </div>
-        {children}
-      </div>
-    </Card>
+      {children}
+    </SuperCampaignBaseCard>
   )
 }
 
