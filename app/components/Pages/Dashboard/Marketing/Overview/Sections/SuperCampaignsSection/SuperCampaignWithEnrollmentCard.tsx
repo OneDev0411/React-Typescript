@@ -1,16 +1,8 @@
-import { makeStyles } from '@material-ui/core'
-
 import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
 import { SuperCampaignWithEnrollment } from './types'
-
-const useStyles = makeStyles(
-  theme => ({
-    root: { minHeight: theme.spacing(23) }
-  }),
-  { name: 'SuperCampaignWithEnrollmentCard' }
-)
+import useSuperCampaignWithEnrollmentCardStyles from './use-super-campaign-with-enrollment-card-styles'
 
 interface SuperCampaignWithEnrollmentCardProps {
   superCampaignWithEnrollment: SuperCampaignWithEnrollment
@@ -23,7 +15,7 @@ function SuperCampaignWithEnrollmentCard({
   onEnroll,
   onUnenroll
 }: SuperCampaignWithEnrollmentCardProps) {
-  const classes = useStyles()
+  const classes = useSuperCampaignWithEnrollmentCardStyles()
 
   return (
     <SuperCampaignCard className={classes.root} superCampaign={superCampaign}>
