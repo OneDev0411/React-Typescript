@@ -86,7 +86,6 @@ export function convertToCurrentYear(date: Date): Date {
     date.getUTCMonth(),
     date.getUTCDate()
   )
-  console.log({ date, newDate })
 
   return newDate
 }
