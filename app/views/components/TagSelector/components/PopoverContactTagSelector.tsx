@@ -71,7 +71,8 @@ const useStyles = makeStyles(
   { name: 'PopoverContactTagSelector' }
 )
 
-interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
+export interface PopoverContactTagSelectorProps
+  extends Omit<BaseTagSelectorProps, 'onChange'> {
   label?: string
   filter: ContactFilterGenerator
   popoverProps?: Omit<PopoverProps, 'open' | 'anchorEl' | 'onClose'>
@@ -79,6 +80,8 @@ interface Props extends Omit<BaseTagSelectorProps, 'onChange'> {
   anchorRenderer: (onClick: (e: MouseEvent<HTMLElement>) => void) => ReactNode
   callback?: (tags: SelectorOption[]) => void
   disabled?: boolean
+  defaultIsDirty?: boolean
+  minTagCount?: number
 }
 
 export const PopoverContactTagSelector = ({
@@ -89,12 +92,14 @@ export const PopoverContactTagSelector = ({
   value = [],
   filter,
   label,
+  defaultIsDirty = false,
+  minTagCount = 0,
   ...props
-}: Props) => {
+}: PopoverContactTagSelectorProps) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [hasNewTag, setHasNewTag] = useState<boolean>(false)
-  const [isDirty, setIsDirty] = useState<boolean>(false)
+  const [isDirty, setIsDirty] = useState<boolean>(defaultIsDirty)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const [selectedTags, setSelectedTags] = useState<SelectorOption[]>(value)
@@ -188,7 +193,9 @@ export const PopoverContactTagSelector = ({
                 variant="contained"
                 color="secondary"
                 size="small"
-                disabled={!isDirty || isSaving}
+                disabled={
+                  !isDirty || isSaving || minTagCount > selectedTags.length
+                }
                 onClick={handleSave}
               >
                 {isSaving ? 'Saving' : 'Done'}
