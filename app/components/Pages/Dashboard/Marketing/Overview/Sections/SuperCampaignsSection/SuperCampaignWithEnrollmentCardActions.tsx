@@ -3,6 +3,7 @@ import { MouseEvent, useState } from 'react'
 import { IconButton, Menu, MenuItem } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 interface SuperCampaignWithEnrollmentCardActionsProps {
@@ -32,7 +33,7 @@ function SuperCampaignWithEnrollmentCardActions({
         onClick={handleActionClick}
         size="small"
       >
-        <SvgIcon path={mdiDotsVertical} />
+        <SvgIcon path={mdiDotsVertical} size={muiIconSizes.small} />
       </IconButton>
       <Menu
         open={open}
