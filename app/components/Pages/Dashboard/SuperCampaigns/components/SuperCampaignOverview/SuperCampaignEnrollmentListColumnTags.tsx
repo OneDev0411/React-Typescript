@@ -1,8 +1,8 @@
 import { Chip, makeStyles, Tooltip } from '@material-ui/core'
 
-import useSafeState from '@app/hooks/use-safe-state'
-import { PopoverContactTagSelector } from '@app/views/components/TagSelector'
-import { SelectorOption } from '@app/views/components/TagSelector/type'
+import SuperCampaignTagsPopover, {
+  SuperCampaignTagsPopoverProps
+} from '@app/views/components/SuperCampaignTagsPopover'
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,48 +11,31 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignEnrollmentListColumnTags' }
 )
 
-interface SuperCampaignEnrollmentListColumnTagsProps {
+interface SuperCampaignEnrollmentListColumnTagsProps
+  extends Pick<SuperCampaignTagsPopoverProps, 'tags' | 'onTagsChange'> {
   isOptedOut: boolean
-  tags: string[]
-  onTagsChange: (tags: string[]) => Promise<void>
 }
 
 function SuperCampaignEnrollmentListColumnTags({
   isOptedOut,
   tags,
-  onTagsChange
+  ...otherProps
 }: SuperCampaignEnrollmentListColumnTagsProps) {
   const classes = useStyles()
-  const [isSaving, setIsSaving] = useSafeState(false)
-
-  const handleTagsChange = async (tags: SelectorOption[]) => {
-    setIsSaving(true)
-    await onTagsChange(tags.map(tag => tag.title))
-    setIsSaving(false)
-  }
 
   if (isOptedOut) {
     return null
   }
 
   return (
-    <PopoverContactTagSelector
-      value={tags.map(tag => ({
-        title: tag,
-        value: tag
-      }))}
-      filter={
-        {
-          // selectedIds: [contact.id] // TODO: Hamed jan, please do not forget to fix this
-        }
-      }
-      callback={handleTagsChange}
-      disabled={isSaving}
+    <SuperCampaignTagsPopover
+      {...otherProps}
+      tags={tags}
       anchorRenderer={onClick => (
         <Tooltip title="Click to edit">
           <span onClick={onClick}>
             {tags.length > 0 ? (
-              tags.map((tag, index) => (
+              tags.map(tag => (
                 <Chip
                   key={tag}
                   label={tag}
