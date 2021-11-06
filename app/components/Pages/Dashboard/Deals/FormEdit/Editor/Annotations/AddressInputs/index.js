@@ -29,6 +29,12 @@ export function AddressInputs(props) {
     props.onValueUpdate(fields, addressFields)
   }
 
+  const handleUnlink = inputProps => {
+    props.onInstructionUpdate({
+      [inputProps.group[0].annotation.fieldName]: ''
+    })
+  }
+
   return (
     <AnnotationWrapper
       items={props.annotations[props.pageIndex].addresses}
@@ -40,6 +46,7 @@ export function AddressInputs(props) {
           annotations={props.annotations}
           deal={props.deal}
           onAddressUpdate={handleAddressUpdate}
+          onToggleUnlink={() => handleUnlink(inputProps)}
         />
       )}
     />

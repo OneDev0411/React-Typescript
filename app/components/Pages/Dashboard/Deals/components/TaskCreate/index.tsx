@@ -1,138 +1,109 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 
-import { Button, Box } from '@material-ui/core'
-import { mdiPlusCircleOutline } from '@mdi/js'
-import matchSorter from 'match-sorter'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
+import { useReduxDispatch } from '@app/hooks/use-redux-dispatch'
 import { IAppState } from '@app/reducers'
-import { createFormTask } from 'actions/deals'
-import { SearchInput } from 'components/GlobalHeaderWithSearch'
+import { selectChecklistTasks } from '@app/reducers/deals/tasks'
+import { createTask } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
 import OverlayDrawer from 'components/OverlayDrawer'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { TextMiddleTruncate } from 'components/TextMiddleTruncate'
-import { selectForms } from 'reducers/deals/forms'
 
-import CreateCustomTask from './CustomTask'
-import { ListItem } from './styled'
+import { FormTask } from './FormTask'
+import { GenericTask } from './GenericTask'
+import { SplitterTask } from './SplitterTask'
 
 interface Props {
-  isOpen: boolean
   deal: IDeal
   checklist: Nullable<IDealChecklist>
+  taskType: Nullable<IDealTaskType>
   onClose: () => void
 }
 
 export default function TaskCreate({
-  isOpen,
   deal,
   checklist,
+  taskType,
   onClose
 }: Props) {
-  const dispatch = useDispatch()
+  const dispatch = useReduxDispatch()
 
-  const [searchFilter, setSearchFilter] = useState('')
-  const [isSaving, setIsSaving] = useState(false)
-  const [showCustomTaskDrawer, setShowCustomTaskDrawer] = useState(false)
-
-  const forms = useSelector<IAppState, Record<UUID, IDealForm>>(
-    ({ deals }) => selectForms(deals.forms, deal.id) || {}
+  const [isCreating, setIsCreating] = useState(false)
+  const tasks = useSelector<IAppState, IDealTask[]>(({ deals }) =>
+    selectChecklistTasks(checklist, deals.tasks)
   )
 
-  const handleClose = () => {
-    setSearchFilter('')
-    setIsSaving(false)
-    setShowCustomTaskDrawer(false)
-
-    onClose()
-  }
-
-  const toggleCustomTaskDrawer = () => setShowCustomTaskDrawer(state => !state)
-
-  const createTask = async (form: IDealForm) => {
-    setIsSaving(true)
-
+  const handleCreateTask = async ({
+    title,
+    form
+  }: {
+    form?: UUID
+    title: string
+    taskType: IDealTaskType
+  }): Promise<IDealTask | undefined> => {
     try {
-      const task = await dispatch(
-        createFormTask(deal.id, form.id, form.name, checklist?.id)
+      setIsCreating(true)
+
+      const maxOrder = tasks.reduce(
+        (max, task) => (task.order > max ? task.order : max),
+        0
       )
+
+      const task: Promise<IDealTask> = await dispatch(
+        createTask({
+          dealId: deal.id,
+          taskTitle: title,
+          checklistId: checklist!.id,
+          taskType,
+          form,
+          order: maxOrder + 1
+        })
+      )
+
+      setIsCreating(false)
 
       return task
     } catch (e) {
       console.log(e)
     } finally {
-      setIsSaving(false)
-      handleClose()
+      onClose()
     }
   }
 
-  const filteredForms = useMemo(() => {
-    return searchFilter
-      ? matchSorter(Object.values(forms), searchFilter, {
-          keys: ['name']
-        })
-      : Object.values(forms)
-  }, [forms, searchFilter])
-
   return (
-    <>
-      <OverlayDrawer
-        open={isOpen && showCustomTaskDrawer === false}
-        onClose={handleClose}
-      >
-        <OverlayDrawer.Header
-          title="Add new folder"
-          menu={
-            <Button
-              disabled={isSaving}
-              onClick={toggleCustomTaskDrawer}
-              variant="outlined"
-            >
-              <SvgIcon path={mdiPlusCircleOutline} rightMargined />
-              Create New Folder
-            </Button>
-          }
-        />
-        <OverlayDrawer.Body>
-          {isSaving ? (
-            <LoadingContainer
-              style={{
-                height: '90vh'
-              }}
-            />
-          ) : (
+    <OverlayDrawer open={!!taskType} onClose={onClose}>
+      {isCreating ? (
+        <LoadingContainer style={{ height: '90vh' }} />
+      ) : (
+        <>
+          {taskType === 'Form' && (
             <>
-              <Box my={1}>
-                <SearchInput
-                  fullWidth
-                  placeholder="Type in to search..."
-                  value={searchFilter}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearchFilter(e.target.value)
-                  }
-                />
-              </Box>
-
-              {filteredForms.map((form, index) => (
-                <ListItem
-                  key={`${form.id}_${index}`}
-                  onClick={() => createTask(form)}
-                  onDoubleClick={() => null}
-                >
-                  <TextMiddleTruncate text={form.name} maxLength={70} />
-                </ListItem>
-              ))}
+              <OverlayDrawer.Header title="Add new Form" />
+              <OverlayDrawer.Body>
+                <FormTask deal={deal} onSelectForm={handleCreateTask} />
+              </OverlayDrawer.Body>
             </>
           )}
-        </OverlayDrawer.Body>
-      </OverlayDrawer>
 
-      <CreateCustomTask
-        isOpen={showCustomTaskDrawer}
-        onClose={toggleCustomTaskDrawer}
-        handleCreateTask={createTask}
-      />
-    </>
+          {taskType === 'Generic' && (
+            <>
+              <OverlayDrawer.Header title="Add new Folder" />
+              <OverlayDrawer.Body>
+                <GenericTask onCreateTask={handleCreateTask} />
+              </OverlayDrawer.Body>
+            </>
+          )}
+
+          {taskType === 'Splitter' && (
+            <>
+              <OverlayDrawer.Header title="Add new Section" />
+              <OverlayDrawer.Body>
+                <SplitterTask onCreateTask={handleCreateTask} />
+              </OverlayDrawer.Body>
+            </>
+          )}
+        </>
+      )}
+    </OverlayDrawer>
   )
 }

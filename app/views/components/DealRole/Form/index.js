@@ -28,6 +28,7 @@ import { OfficeForm } from './Office'
 import { RoleForm } from './Role'
 
 const propTypes = {
+  title: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   deal: PropTypes.object,
@@ -39,6 +40,7 @@ const propTypes = {
   isCommissionRequired: PropTypes.bool,
   showBrokerageFields: PropTypes.bool,
   compact: PropTypes.bool,
+  onBeforeUpsert: PropTypes.func,
   onUpsertRole: PropTypes.func,
   onDeleteRole: PropTypes.func,
   showSaveContactButton: PropTypes.bool,
@@ -52,6 +54,7 @@ const defaultProps = {
   isCommissionRequired: true,
   showBrokerageFields: false,
   compact: false,
+  title: '',
   defaultRole: '',
   allowedRoles: [],
   onUpsertRole: () => null,
@@ -81,7 +84,8 @@ export class DealRole extends React.Component {
       ...getCommissionAttributes(form),
       role_type: this.getRoleType(),
       checklist: checklist ? checklist.id : undefined,
-      mls_id: form && form.agent ? form.agent.mlsid : ''
+      mls_id: this.getMlsId(),
+      agents: form?.user?.agents ?? form?.agents
     }
 
     return this.formObject
@@ -95,6 +99,20 @@ export class DealRole extends React.Component {
     }
 
     return TYPE_PERSON
+  }
+
+  getMlsId = () => {
+    const { form } = this.props
+
+    if (form?.agent) {
+      return form.agent.mlsid
+    }
+
+    if ((form?.agents || []).length === 1) {
+      return form?.agents[0].mlsid
+    }
+
+    return ''
   }
 
   isAllowedRole = (name, role) => {
@@ -155,6 +173,10 @@ export class DealRole extends React.Component {
       this.setState({
         isSaving: true
       })
+
+      if (typeof this.props.onBeforeUpsert === 'function') {
+        await this.props.onBeforeUpsert()
+      }
 
       if (this.isNewRecord) {
         await Promise.all([
@@ -328,7 +350,7 @@ export class DealRole extends React.Component {
    * get form is new record or not
    */
   get isNewRecord() {
-    return !this.props.form || !this.props.form.role
+    return !this.props?.form?.id
   }
 
   getFormProperties = values => {
@@ -336,7 +358,8 @@ export class DealRole extends React.Component {
 
     const shared = {
       role: values.role,
-      role_type: values.role_type
+      role_type: values.role_type,
+      agents: values.agents
     }
 
     const visibleFields = getVisibleFields({
@@ -358,7 +381,14 @@ export class DealRole extends React.Component {
     return { visibleFields, requiredFields }
   }
 
-  populateRole = ([user], state, { changeValue }) => {
+  populateRole = ([user, component], state, { changeValue }) => {
+    if (component === 'MlsSelect') {
+      changeValue(state, 'mls_id', () => user.mlsid || '')
+      changeValue(state, 'company_title', () => user?.office?.name || '')
+
+      return
+    }
+
     if (user.contact) {
       changeValue(state, 'contact', () => user.contact)
     }
@@ -367,7 +397,6 @@ export class DealRole extends React.Component {
     changeValue(state, 'legal_last_name', () => user.last_name || '')
     changeValue(state, 'legal_middle_name', () => user.middle_name || '')
     changeValue(state, 'email', () => user.email || '')
-    changeValue(state, 'company_title', () => user.company || '')
     changeValue(state, 'mls_id', () => user.mlsid || '')
     changeValue(state, 'agent', () => (user.mlsid ? user.id : null))
     changeValue(state, 'current_address', () => user.current_address || {})
@@ -378,6 +407,11 @@ export class DealRole extends React.Component {
       state,
       'phone_number',
       () => user.phone_number || user.work_phone || ''
+    )
+    changeValue(
+      state,
+      'company_title',
+      () => user.company || user?.office?.name || ''
     )
 
     // set plural autosuggestion values
@@ -420,6 +454,7 @@ export class DealRole extends React.Component {
 
           const sharedProps = {
             ...formProps,
+            title: this.props.title,
             initialValues: this.formObject,
             deal: this.props.deal,
             compact: this.props.compact,

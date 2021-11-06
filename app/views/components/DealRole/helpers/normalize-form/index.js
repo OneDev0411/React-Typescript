@@ -36,7 +36,11 @@ export function normalizeForm(values) {
     'checklist'
   ]
 
-  if (values.agent instanceof Object && values.agent.id) {
+  if (Array.isArray(values.agents) && values.mls_id) {
+    normalized.agent = values.agents.find(
+      ({ mlsid }) => mlsid === values.mls_id
+    )?.id
+  } else if (values.agent instanceof Object && values.agent.id) {
     normalized.agent = values.agent.id
   }
 

@@ -1,17 +1,48 @@
-<mj-section mj-class="container" padding-top="20px" padding-bottom="20px" rechat-editable="tree">
+{% for article in articles %}
+<mj-section
+  mj-class="container"
+  padding-top="20px"
+  padding-bottom="20px"
+  rechat-editable="tree"
+>
   <mj-column>
-    <mj-image padding="0" rechat-assets="static" src="{{image}}"></mj-image>
+    <mj-image
+      padding="0"
+      rechat-assets="static"
+      src="{{article.image}}"
+    ></mj-image>
 
-    <mj-text mj-class="h3" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
-      {{title}}
+    <mj-text
+      mj-class="h3"
+      padding="0"
+      align="left"
+      rechat-editable="tree"
+      line-height="1.5"
+    >
+      {{article.title}}
     </mj-text>
 
-    <mj-text mj-class="container-text" padding="0"  align="left" rechat-editable="tree" line-height="1.5">
-      {{description}}
+    <mj-text
+      mj-class="container-text"
+      padding="0"
+      align="left"
+      rechat-editable="tree"
+      line-height="1.5"
+    >
+      {{article.description}}
     </mj-text>
     <mj-spacer height="10px"></mj-spacer>
-    <mj-button href="{{url}}" rechat-editable="tree" padding="0" inner-padding="8px 20px" border-radius="4px"  line-height="1.5" align="left">
+    <mj-button
+      href="{{article.url}}"
+      rechat-editable="tree"
+      padding="0"
+      inner-padding="8px 20px"
+      border-radius="4px"
+      line-height="1.5"
+      align="left"
+    >
       Read More
     </mj-button>
   </mj-column>
 </mj-section>
+{% endfor %}

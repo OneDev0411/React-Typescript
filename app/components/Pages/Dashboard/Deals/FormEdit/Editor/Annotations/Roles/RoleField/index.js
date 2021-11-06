@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 
 import { Tooltip } from '@material-ui/core'
 import { mdiPencilOutline } from '@mdi/js'
@@ -11,6 +11,7 @@ import { isBrokerageField } from 'deals/FormEdit/utils/is-brokerage-field'
 import { normalizeRoleNames } from 'deals/FormEdit/utils/normalize-role-names'
 import { isPrimaryAgent } from 'deals/utils/roles'
 
+import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
 import { AddRole } from '../AddRole'
 
 import { RoleItem } from './styled'
@@ -40,8 +41,9 @@ export function RoleField(props) {
   )
 
   return (
-    <Fragment>
+    <>
       <div
+        className="field-unlinkable"
         style={{
           ...props.style,
           cursor: annotationRoles.length > 0 ? props.style.cursor : 'normal',
@@ -95,6 +97,15 @@ export function RoleField(props) {
         />
       </div>
 
+      <UnlinkFieldButton
+        style={{
+          left: `${props.rect.left + props.rect.width - 16}px`,
+          top: `${props.rect.top + props.rect.height / 10}px`,
+          height: `${props.rect.height}px`
+        }}
+        onClick={props.onToggleUnlink}
+      />
+
       {activeRole !== undefined && (
         <DealRole
           isOpen
@@ -110,6 +121,6 @@ export function RoleField(props) {
           onClose={() => setRole(undefined)}
         />
       )}
-    </Fragment>
+    </>
   )
 }

@@ -1,27 +1,8 @@
-import React, { CSSProperties, ReactNode } from 'react'
+import React, { memo, ReactNode } from 'react'
 
 import { makeStyles, Theme } from '@material-ui/core'
-import cn from 'classnames'
-import SwiperCore, { Lazy, Navigation } from 'swiper/core'
-import { Swiper, SwiperSlide } from 'swiper/react'
 
-SwiperCore.use([Lazy, Navigation])
-
-const PLACEHOLDER_IMAGE = '/static/images/logo--gray.svg'
-
-function getListingImages(listing: IListing | ICompactListing): string[] {
-  return listing.gallery_image_urls && listing.gallery_image_urls.length
-    ? listing.gallery_image_urls
-    : [PLACEHOLDER_IMAGE]
-}
-
-function getListingImageObjectFit(
-  listing: IListing | ICompactListing
-): CSSProperties['objectFit'] {
-  return listing.gallery_image_urls && listing.gallery_image_urls.length > 0
-    ? 'cover'
-    : 'none'
-}
+import ListingCardMediaSlider from './ListingCardMediaSlider'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -35,28 +16,6 @@ const useStyles = makeStyles(
       width: '100%',
       top: 0,
       left: 0
-    },
-    image: ({ listing }: Pick<Props, 'listing'>) => ({
-      height: 200,
-      width: '100%',
-      objectFit: getListingImageObjectFit(listing),
-      backgroundColor: theme.palette.grey[100]
-    }),
-    placeHolder: {
-      height: 200,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    swiper: {
-      height: 200,
-      '--swiper-navigation-color': '#fff',
-      // Had to add more clickable area
-      // For `.swiper-button-prev` and `.swiper-button-next`
-      '& > div[class^="swiper-button"]': {
-        top: `calc(50% - ${theme.spacing(2)}px)`,
-        padding: theme.spacing(4, 3)
-      }
     }
   }),
   {
@@ -65,14 +24,12 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  listing: IListing | ICompactListing
+  imagesURL: Nullable<string[]>
   children: ReactNode
 }
 
-export default function ListingCardMedia({ children, listing }: Props) {
-  const images = getListingImages(listing)
-
-  const classes = useStyles({ listing })
+function ListingCardMedia({ children, imagesURL }: Props) {
+  const classes = useStyles()
 
   return (
     <div
@@ -91,36 +48,9 @@ export default function ListingCardMedia({ children, listing }: Props) {
       }}
     >
       <div className={classes.childrenContainer}>{children}</div>
-      {images.length > 1 ? (
-        <Swiper
-          lazy
-          navigation
-          className={classes.swiper}
-          preloadImages={false}
-        >
-          {images.map((image, index) => (
-            // we have images with identical names so we can't use only image as key
-            <SwiperSlide key={`${index}-${image}`}>
-              <img
-                className={cn('swiper-lazy', classes.image)}
-                data-src={image}
-                alt=""
-              />
-              <div
-                className={cn(
-                  classes.placeHolder,
-                  'swiper-lazy-preloader',
-                  'swiper-lazy-preloader-white'
-                )}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      ) : (
-        <div>
-          <img className={classes.image} src={images[0]} alt="listing" />
-        </div>
-      )}
+      <ListingCardMediaSlider imagesURL={imagesURL} />
     </div>
   )
 }
+
+export default memo(ListingCardMedia)

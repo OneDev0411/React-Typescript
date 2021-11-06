@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 
+import branchLinkRoute from './app/routes/branch-link'
 import contactsExportOutlookRoute from './app/routes/contacts/export-outlook'
 import corsRoute from './app/routes/cors'
 import dealDocusignLoginRoute from './app/routes/deal/docusign-login'
@@ -15,6 +16,7 @@ import myMarketingMattersPunchoutRoute from './app/routes/my-marketing-matters/p
 import openHouseRoute from './app/routes/openhouse/registration'
 import proxifierRoute from './app/routes/proxifier'
 import renderMjmlRoute from './app/routes/render-mjml'
+import rssFeedsRoute from './app/routes/rss-feeds'
 import unsupportedRoute from './app/routes/unsupported'
 import urlMetadataRoute from './app/routes/url-metadata'
 import usersOAuthTokenRoute from './app/routes/user/oauth-token'
@@ -33,7 +35,7 @@ const requestLimit = bodyParser.json({
 /**
  * deals routes.
  */
-router.post('/api/proxy/*', requestLimit, proxifierRoute)
+router.post('/api/proxifier', requestLimit, proxifierRoute)
 
 /**
  * user routes.
@@ -84,6 +86,17 @@ router.post(
 router.get('/openhouse/:id/:brand/register', openHouseRoute)
 
 /**
+ * branch-link route.
+ */
+router.post(
+  '/api/branch/link/*',
+  bodyParser.urlencoded({
+    limit: '10mb'
+  }),
+  branchLinkRoute
+)
+
+/**
  * utility routes
  */
 router.get('/unsupported', unsupportedRoute)
@@ -91,5 +104,6 @@ router.get('/api/utils/cors/:url', corsRoute)
 router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
+router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
 
 export default router

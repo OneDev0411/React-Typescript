@@ -1,10 +1,12 @@
 import {
   Grid,
+  Box,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
   Theme,
+  Typography,
   makeStyles,
   createStyles
 } from '@material-ui/core'
@@ -33,30 +35,40 @@ export default function ConnectedAccount({ user, onDisconnect }: Props) {
   const classes = useStyles()
 
   return (
-    <ListItem className={classes.bordered} button>
-      <ListItemAvatar>
-        <Avatar user={user} style={{ marginRight: '1rem' }}>
-          {getContactNameInitials(user)}
-        </Avatar>
-      </ListItemAvatar>
-      <Grid container>
-        <Grid item xs={4}>
-          <ListItemText
-            primary={user.email}
-            secondary={
-              <Flex alignCenter>
-                <div style={{ marginRight: '0.5rem' }}>DocuSign</div>
-              </Flex>
-            }
-          />
-        </Grid>
+    <Box mb={4}>
+      <Box mb={1} mt={6}>
+        <Typography variant="subtitle1">Docusign</Typography>
+      </Box>
 
-        <ListItemSecondaryAction>
-          <DangerButton variant="outlined" size="small" onClick={onDisconnect}>
-            Disconnect Account
-          </DangerButton>
-        </ListItemSecondaryAction>
-      </Grid>
-    </ListItem>
+      <ListItem className={classes.bordered} button>
+        <ListItemAvatar>
+          <Avatar user={user} style={{ marginRight: '1rem' }}>
+            {getContactNameInitials(user)}
+          </Avatar>
+        </ListItemAvatar>
+        <Grid container>
+          <Grid item xs={4}>
+            <ListItemText
+              primary={user.email}
+              secondary={
+                <Flex alignCenter>
+                  <div style={{ marginRight: '0.5rem' }}>DocuSign</div>
+                </Flex>
+              }
+            />
+          </Grid>
+
+          <ListItemSecondaryAction>
+            <DangerButton
+              variant="outlined"
+              size="small"
+              onClick={onDisconnect}
+            >
+              Disconnect Account
+            </DangerButton>
+          </ListItemSecondaryAction>
+        </Grid>
+      </ListItem>
+    </Box>
   )
 }

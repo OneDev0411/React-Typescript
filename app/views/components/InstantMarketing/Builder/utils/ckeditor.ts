@@ -44,6 +44,7 @@ export async function attachCKEditor(
 
     // CKEditor Options
     options: {
+      extraPlugins: 'placeholder',
       colorButton_colors: colors.map(color => color.replace('#', '')).join(','),
       line_height: CK_EDITOR_LINE_HEIGHT_VALUES.join(';'),
       contentsCss: getFontFamiliesCSSFiles(fontFamilies),
@@ -74,8 +75,61 @@ export async function attachCKEditor(
           'Table'
         ],
         '/',
-        ['Font', 'FontSize', 'lineheight', 'TextColor', 'BGColor', 'EmojiPanel']
-      ]
+        [
+          'Font',
+          'FontSize',
+          'lineheight',
+          'TextColor',
+          'BGColor',
+          'EmojiPanel'
+        ],
+        '/',
+        ['CreatePlaceholder']
+      ],
+      placeholder: {
+        items: [
+          {
+            value: 'sender.first_name',
+            label: "Sender's First Name"
+          },
+          {
+            value: 'sender.last_name',
+            label: "Sender's Last Name"
+          },
+          {
+            value: 'sender.display_name',
+            label: "Sender's Display Name"
+          },
+          {
+            value: 'sender.email',
+            label: "Sender's Email"
+          },
+          {
+            value: 'sender.phone_number',
+            label: "Sender's Phone Number"
+          },
+          {
+            value: 'recipient.first_name',
+            label: "Recipient's First Name"
+          },
+          {
+            value: 'recipient.last_name',
+            label: "Recipient's Last Name"
+          },
+          {
+            value: 'recipient.display_name',
+            label: "Recipient's Display Name"
+          },
+          {
+            value: 'recipient.email',
+            label: "Recipient's Email"
+          },
+          {
+            value: 'recipient.phone_number',
+            label: "Recipient's Phone Number"
+          }
+        ]
+      }
     }
   }
 

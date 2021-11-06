@@ -69,6 +69,7 @@ declare type ICompactListing<
   favorited: boolean
   location: ILocation | null
   cover_image_url: string
+  amenities?: Nullable<string[]>
   gallery_image_urls: null | string[]
   address: ICompactAddress
   open_houses: boolean | null
@@ -77,3 +78,8 @@ declare type ICompactListing<
   dom: number | null
 } & Association<'list_agent', Nullable<IAgent>, Associations> &
   Association<'selling_agent', Nullable<IAgent>, Associations>
+declare interface ICompactListingInfo {
+  count: number
+  proposed_title: string
+  total: number
+}

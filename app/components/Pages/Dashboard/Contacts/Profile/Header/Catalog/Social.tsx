@@ -23,9 +23,7 @@ const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      '&:not(:last-child)': {
-        marginRight: theme.spacing(0.75)
-      },
+      gap: theme.spacing(0.9),
       '&:hover $icon': {
         color: theme.palette.secondary.main
       }

@@ -90,17 +90,14 @@ export const MenuButton = styled.div`
 
 export const Container = styled.div<{
   theme: Theme
-  hasSecondaryActions?: boolean
 }>`
-  ${({ theme, hasSecondaryActions }) => css`
+  ${({ theme }) => css`
     display: flex;
     height: ${theme.spacing(4)}px;
     border-radius: ${theme.shape.borderRadius}px;
     background-color: #fff;
     cursor: pointer;
-    border: ${hasSecondaryActions
-      ? `1px solid ${theme.palette.divider}`
-      : 'none'};
+    border: 1px solid ${theme.palette.divider};
 
     :hover {
       border-color: ${theme.palette.action.selected};

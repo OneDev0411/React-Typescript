@@ -1,3 +1,4 @@
+// TODO: reimplement is required
 import React from 'react'
 
 import { Tooltip } from '@material-ui/core'
@@ -5,6 +6,7 @@ import { mdiChevronDown } from '@mdi/js'
 import { connect } from 'react-redux'
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import { confirmation } from 'actions/confirmation'
 import { setSelectedTask } from 'actions/deals'
 import { Portal } from 'components/Portal'
 import TasksDrawer from 'components/SelectDealTasksDrawer'
@@ -16,7 +18,8 @@ import type {
 import {
   ADD_ATTACHMENTS,
   REMOVE_ATTACHMENT,
-  SET_DRAWER_STATUS
+  SET_DRAWER_STATUS,
+  SET_MODE
 } from 'deals/contexts/actions-context/constants'
 import { useChecklistActionsContext } from 'deals/contexts/actions-context/hooks'
 import { IAppState } from 'reducers'
@@ -34,6 +37,7 @@ import {
   getFileEsignAttachments
 } from 'views/utils/deal-files/get-esign-attachments'
 
+import MakeVisibleToAdmin from '../../Create/MakeVisibleToAdmin'
 import PdfSplitter from '../../PdfSplitter'
 import UploadManager from '../../UploadManager'
 
@@ -50,7 +54,6 @@ import { normalizeActions } from './data/normalize-actions'
 import {
   approveTask,
   requireTask,
-  createNeedsAttention,
   declineTask,
   deleteFile,
   deleteTask,
@@ -62,17 +65,20 @@ import {
   reviewEnvelope,
   voidEnvelope,
   viewForm,
-  viewFile
+  viewFile,
+  notifyOffice
 } from './helpers/actions'
 import { Container, MenuButton, MenuItem, PrimaryAction } from './styled'
 
 interface Props {
+  type: 'task' | 'submission' | 'file' | 'envelope'
   deal: IDeal
   task: IDealTask | null
   file?: IFile | undefined
   envelope?: IDealEnvelope
   actions: ActionButtonId[]
   className?: string
+  onTaskActionActivate?: () => void
 }
 
 interface ContextProps {
@@ -84,6 +90,7 @@ interface State {
   isMenuOpen: boolean
   isPdfSplitterOpen: boolean
   isTasksDrawerOpen: boolean
+  isMakeVisibleToAdminFormOpen: boolean
   multipleItemsSelection: {
     items: IDealFile[]
     title: string
@@ -96,6 +103,7 @@ interface StateProps {
   user: IUser
   envelopes: IDealEnvelope[]
   isBackOffice: boolean
+  confirmation: (data: object) => void
   setSelectedTask(task: any): {
     type: string
     task: any
@@ -113,6 +121,7 @@ class ActionsButton extends React.Component<
       isMenuOpen: false,
       isPdfSplitterOpen: false,
       isTasksDrawerOpen: false,
+      isMakeVisibleToAdminFormOpen: false,
       multipleItemsSelection: null
     }
 
@@ -125,7 +134,7 @@ class ActionsButton extends React.Component<
       'rename-file': renameFile,
       'edit-form': editForm,
       'delete-task': deleteTask,
-      'notify-task': createNeedsAttention,
+      'notify-task': this.createNeedsAttention,
       'approve-task': approveTask,
       'decline-task': declineTask,
       'require-task': requireTask,
@@ -167,7 +176,45 @@ class ActionsButton extends React.Component<
       })
     }
 
+    if (
+      ['view-envelope', 'view-form', 'view-file'].includes(type) &&
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'View/Print',
+          taskId: this.props.task?.id
+        }
+      })
+
+      this.props.onTaskActionActivate?.()
+
+      return
+    }
+
+    if (
+      ['docusign-envelope', 'docusign-form', 'docusign-file'].includes(type) &&
+      this.props.type === 'task' &&
+      this.getViewableFilesCount() > 1
+    ) {
+      this.props.actionsDispatch({
+        type: SET_MODE,
+        mode: {
+          type: 'Docusign',
+          taskId: this.props.task?.id
+        }
+      })
+
+      this.props.onTaskActionActivate?.()
+
+      return
+    }
+
     this.actions[type] && this.actions[type](this.props)
+
+    this.resetTaskActionMode()
   }
 
   handleCloseMenu = () => this.setState({ isMenuOpen: false })
@@ -215,6 +262,32 @@ class ActionsButton extends React.Component<
     )
 
     this.updateEmailList(attachments)
+  }
+
+  createNeedsAttention = () => {
+    if (this.props.deal.is_draft) {
+      this.setState({
+        isMakeVisibleToAdminFormOpen: true
+      })
+
+      return
+    }
+
+    this.props.confirmation({
+      message: 'Notify Office?',
+      confirmLabel: 'Notify Office',
+      needsUserEntry: true,
+      inputDefaultValue: '',
+      onConfirm: comment =>
+        notifyOffice(
+          {
+            deal: this.props.deal,
+            task: this.props.task,
+            user: this.props.user
+          },
+          comment
+        )
+    })
   }
 
   emailForm = () => {
@@ -350,10 +423,49 @@ class ActionsButton extends React.Component<
     return button.label
   }
 
+  resetTaskActionMode = () => {
+    this.props.actionsDispatch({
+      type: SET_MODE,
+      mode: {
+        type: null,
+        taskId: null
+      }
+    })
+  }
+
+  getViewableFilesCount = () => {
+    let count = this.props.task?.room.attachments?.length ?? 0
+
+    if (this.props.envelope) {
+      count += 1
+    }
+
+    if (this.props.task?.form) {
+      count += 1
+    }
+
+    return count
+  }
+
   render() {
+    const isTaskViewActionActive =
+      this.props.actionsState.mode.type === 'View/Print' &&
+      this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskDocusignActionActive =
+      this.props.actionsState.mode.type === 'Docusign' &&
+      this.props.actionsState.mode.taskId === this.props.task?.id
+
+    const isTaskActionActive =
+      isTaskViewActionActive || isTaskDocusignActionActive
+
     const secondaryActions: ActionButton[] = normalizeActions(
       this.props.actionsState.actions,
-      this.props.actions
+      this.props.actions,
+      {
+        isTaskViewActionActive,
+        isTaskDocusignActionActive
+      }
     )
 
     if (secondaryActions.length === 0) {
@@ -362,12 +474,34 @@ class ActionsButton extends React.Component<
 
     const primaryAction: ActionButton = secondaryActions.shift()!
 
+    if (isTaskActionActive && this.props.type === 'task') {
+      return (
+        <Tooltip
+          title={`There are multiple copies of this form available. Please choose which copy you like to ${this.props.actionsState.mode?.type}`}
+          placement="top"
+          open
+          PopperProps={{
+            style: { zIndex: 1 }
+          }}
+        >
+          <Container>
+            <PrimaryAction
+              hasSecondaryActions={false}
+              onClick={this.resetTaskActionMode}
+            >
+              Cancel
+            </PrimaryAction>
+          </Container>
+        </Tooltip>
+      )
+    }
+
     return (
       <div
         className={this.props.className}
         style={{
           ...(this.state.isMenuOpen && {
-            visibility: 'visible'
+            display: 'block'
           })
         }}
       >
@@ -379,13 +513,13 @@ class ActionsButton extends React.Component<
               width: '10.8rem' // TODO: needs refactor all styled components
             }
           }}
-          onIsOpenChange={isMenuOpen =>
+          onIsOpenChange={isMenuOpen => {
             this.setState({
               isMenuOpen
             })
-          }
+          }}
           renderDropdownButton={({ isActive, ...props }) => (
-            <Container hasSecondaryActions={secondaryActions.length > 0}>
+            <Container>
               <PrimaryAction
                 hasSecondaryActions={secondaryActions.length > 0}
                 className={this.getButtonLabel(primaryAction)}
@@ -469,6 +603,16 @@ class ActionsButton extends React.Component<
             onClose={this.handleCloseMultipleItemsSelectionDrawer}
           />
         )}
+
+        {this.state.isMakeVisibleToAdminFormOpen && (
+          <MakeVisibleToAdmin
+            dealId={this.props.deal.id}
+            onClose={() =>
+              this.setState({ isMakeVisibleToAdminFormOpen: false })
+            }
+            onComplete={this.createNeedsAttention}
+          />
+        )}
       </div>
     )
   }
@@ -492,5 +636,6 @@ const withContext =
   }
 
 export default connect(mapStateToProps, {
-  setSelectedTask
+  setSelectedTask,
+  confirmation
 })(withContext(ActionsButton))

@@ -1,14 +1,15 @@
 import * as actionTypes from '../../../../constants/deals'
 import Deal from '../../../../models/Deal'
 
-export function saveSubmission(taskId, pdfUrl, formId, values) {
+export function saveSubmission(taskId, pdfUrl, formId, values, instructions) {
   return async dispatch => {
     try {
       const submission = await Deal.saveSubmission(
         taskId,
         pdfUrl,
         formId,
-        values
+        values,
+        instructions
       )
 
       dispatch({

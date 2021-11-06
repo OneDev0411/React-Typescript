@@ -7,16 +7,23 @@ import { populateFormValues } from '../populate-form-values'
 
 let PDFJS
 
-export async function parseAnnotations(document, options) {
+export async function getAnnotations(document, options) {
   PDFJS = await importPdfJs()
 
   const pages = await Promise.all(
     new Array(document.numPages)
       .fill(null)
-      .map((v, index) => getPageAnnotations(document, index + 1, options))
+      .map((_, index) => getPageAnnotations(document, index + 1, options))
   )
 
-  const annotations = pages.map(page => page.annotations)
+  return {
+    pages,
+    annotations: pages.map(page => page.annotations)
+  }
+}
+
+export async function parseAnnotations(document, options) {
+  const { pages, annotations } = await getAnnotations(document, options)
 
   return {
     annotations,
@@ -49,7 +56,7 @@ async function getPageAnnotations(document, pageNumber, options) {
         )
       }
 
-      return getAnnotationInfo(item)
+      return getAnnotationInfo(item, options.instructions)
     })
 
   return {
@@ -129,7 +136,7 @@ function normalizeContexts(list, type) {
   }, {})
 }
 
-function getAnnotationInfo(annotation) {
+function getAnnotationInfo(annotation, instructions = {}) {
   const jsCode =
     annotation.additional && annotation.additional.calculate
       ? annotation.additional.calculate.JS
@@ -142,7 +149,7 @@ function getAnnotationInfo(annotation) {
     annotation
   }
 
-  if (!jsCode) {
+  if (!jsCode || instructions[annotation.fieldName] !== undefined) {
     return normalInput
   }
 

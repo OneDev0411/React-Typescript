@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 
 import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -10,12 +10,15 @@ import { getField } from 'models/Deal/helpers/context/get-field'
 import { getBrandChecklistsById } from 'reducers/deals/brand-checklists'
 import { isValidDate } from 'utils/date-times/is-valid-date'
 
+import { UnlinkFieldButton } from '../../../../components/UnlinkFieldButton'
 import { formatDate } from '../../../../utils/format-date'
 
 import { Body, Footer } from './styled'
 import { TextInput } from './TextInput'
 
 export function ContextField(props) {
+  const box = props.rect
+
   const brandChecklists = useSelector(({ deals }) =>
     getBrandChecklistsById(deals.brandChecklists, props.deal.brand.id)
   )
@@ -62,15 +65,25 @@ export function ContextField(props) {
           ...props.style,
           backgroundColor: props.value ? 'transparent' : '#d2e5f2'
         }}
+        className="field-unlinkable"
         title={props.annotation.context}
         onClick={() => setEditorStatus(true)}
       >
         {formatValue()}
       </div>
 
+      <UnlinkFieldButton
+        style={{
+          left: `${box.left + box.width - 16}px`,
+          top: `${box.top + box.height / 10}px`,
+          height: `${box.height}px`
+        }}
+        onClick={props.onToggleUnlink}
+      />
+
       <ContextInlineEdit
         isOpen={isEditorOpen}
-        bounds={props.rect}
+        bounds={box}
         width={300}
         onDismiss={() => setEditorStatus(false)}
       >

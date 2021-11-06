@@ -5,10 +5,14 @@ import Fetch from '../../../../services/fetch'
  */
 
 export default async function deleteContext(
-  brand: UUID,
+  brand: Nullable<UUID>,
   contextId: UUID
 ): Promise<boolean> {
   try {
+    if (!brand) {
+      throw new Error('Can not delete context. brand is not provided')
+    }
+
     const response = await new Fetch().delete(
       `/brands/${brand}/contexts/${contextId}`
     )
