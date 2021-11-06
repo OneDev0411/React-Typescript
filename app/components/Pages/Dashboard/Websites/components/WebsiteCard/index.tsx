@@ -12,10 +12,11 @@ import classNames from 'classnames'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router'
 
+import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
+import useListingsEditorTemplateData from '@app/hooks/use-listings-editor-template-data'
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import useAsync from 'hooks/use-async'
-import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 import usePublishWebsite from 'hooks/use-publish-website'
 import deleteWebsite from 'models/website/delete-website'
 import { selectUser } from 'selectors/user'
@@ -117,6 +118,11 @@ function WebsiteCard({
 
   const assets = useListingsEditorAssets(template_instance?.listings)
 
+  const templateData = useListingsEditorTemplateData(
+    template_instance?.listings,
+    template_instance?.template.template_type === 'Listings'
+  )
+
   if (isSuccess) {
     return null
   }
@@ -157,10 +163,8 @@ function WebsiteCard({
         <MarketingTemplateEditor
           template={template_instance}
           templateData={{
-            user,
-            listing: template_instance?.listings?.length
-              ? template_instance?.listings[0]
-              : undefined
+            ...templateData,
+            user
           }}
           assets={assets}
           onSave={handleSave}
