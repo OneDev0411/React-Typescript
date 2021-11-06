@@ -15,7 +15,6 @@ import {
   changeNeedsAttention,
   setExpandChecklist
 } from 'actions/deals'
-import Checkbox from 'components/CheckmarkButton'
 import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 import { addNotification as notify } from 'components/notification'
 import Deal from 'models/Deal'
@@ -210,6 +209,12 @@ class UploadModal extends React.Component {
     )
   }
 
+  get TaskIds() {
+    return Object.values(this.props.upload.files)
+      .map(file => file.properties.taskId)
+      .filter(taskId => !!taskId)
+  }
+
   get isSplitButtonActive() {
     const pdfFiles = _.filter(
       this.props.upload.files,
@@ -262,6 +267,8 @@ class UploadModal extends React.Component {
   }
 
   handleNext = () => {
+    this.closeModal()
+
     this.setState({
       isNotifyOfficeDialogOpen: true
     })
@@ -270,6 +277,7 @@ class UploadModal extends React.Component {
   render() {
     const { deal, upload } = this.props
 
+    const taskIds = this.TaskIds
     const filesCount = _.size(upload.files)
 
     let fileCounter = 0
@@ -293,7 +301,6 @@ class UploadModal extends React.Component {
             <div className="uploads-container">
               {_.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
-                const isBackupContract = this.isBackupContract(selectedTask)
                 const isUploading = file.properties.status === STATUS_UPLOADING
                 const isUploaded = file.properties.status === STATUS_UPLOADED
 
@@ -355,22 +362,6 @@ class UploadModal extends React.Component {
                         />
                       )}
                     </div>
-                    {/* <div className="notify-admin">
-                      {!isBackupContract && !isUploading && !isUploaded && (
-                        <Checkbox
-                          square
-                          selected={file.properties.notifyOffice || false}
-                          title="Notify Office"
-                          onClick={() => this.onClickNotifyAdmin(file)}
-                        />
-                      )}
-
-                      {isUploaded &&
-                        file.properties.notifyOffice &&
-                        !isBackupContract && (
-                          <span className="notified">Office Notified</span>
-                        )}
-                    </div> */}
                   </div>
                 )
               })}
@@ -410,20 +401,24 @@ class UploadModal extends React.Component {
               </Box>
 
               <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={this.isFinished === false}
-                  onClick={this.handleNext}
-                >
-                  Next
-                </Button>
+                {taskIds.length > 0 && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={this.isFinished === false}
+                    onClick={this.handleNext}
+                  >
+                    Next
+                  </Button>
+                )}
               </div>
             </Box>
           </ModalFooter>
         </Modal>
 
         <NotifyOfficeConfirmation
+          deal={this.props.deal}
+          tasks={this.TaskIds}
           isOpen={this.state.isNotifyOfficeDialogOpen}
           onClose={() =>
             this.setState({
