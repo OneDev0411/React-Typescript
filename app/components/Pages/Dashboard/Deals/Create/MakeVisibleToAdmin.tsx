@@ -76,6 +76,8 @@ export default function MakeVisibleToAdmin({
 
   const [isPublishing, setIsPublishing] = useState(false)
   const [isAutoPublishing, setIsAutoPublishing] = useState(false)
+  const [isAutoPublishingDisabled, setIsAutoPublishingDisabled] =
+    useState(false)
 
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
@@ -188,6 +190,8 @@ export default function MakeVisibleToAdmin({
   ])
 
   const saveForm = async (values = control.getValues() as FormValues) => {
+    setIsAutoPublishingDisabled(true)
+
     const roles = ([] as IDealRole[]).concat(
       values.selling_clients || [],
       values.buying_clients || []
@@ -270,7 +274,7 @@ export default function MakeVisibleToAdmin({
   const errors = formState.isSubmitted ? validate() : {}
 
   useEffect(() => {
-    if (isAutoPublishing || formState.isDirty) {
+    if (isAutoPublishingDisabled || isAutoPublishing || formState.isDirty) {
       return
     }
 
@@ -286,7 +290,8 @@ export default function MakeVisibleToAdmin({
     deal.id,
     deal.is_draft,
     formState.isDirty,
-    isAutoPublishing
+    isAutoPublishing,
+    isAutoPublishingDisabled
   ])
 
   useEffect(() => {
