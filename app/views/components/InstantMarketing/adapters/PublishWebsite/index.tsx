@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, CircularProgress, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
@@ -38,6 +38,17 @@ function PublishWebsite({
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
   const user = useSelector(selectUser)
 
+  /**
+   * TODO: We have to refactor this flow to support all template types in website builder.
+   *
+   * I know this is not ideal that this flow only supports having SearchListingDrawer
+   * and it can not provides the required data for all template types. We need to refactor
+   * the logic and remove this flow and move the publish logic to all other flows.
+   * This way, the website builder could work with all template types.
+   *
+   * I didn't refactor that because we are planning to refactor the builder to use
+   * `template.variables` instead of having these flows.
+   */
   const isListing = ['Listing', 'Listings'].includes(templateType)
   const isListingTriggered = !isEdit && isTriggered && isListing
 
