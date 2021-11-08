@@ -30,9 +30,10 @@ const useStyles = makeStyles(
 interface Props {
   contact: IContact
   render?: (props: { onClick: () => void; isDisabled: boolean }) => ReactNode
+  size?: string
 }
 
-function ChatButton({ contact, render }: Props) {
+function ChatButton({ contact, render, size = muiIconSizes.medium }: Props) {
   const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
   const user = useSelector(selectUser)
   const classes = useStyles()
@@ -84,7 +85,7 @@ function ChatButton({ contact, render }: Props) {
         disabled={!isChattable || isCreatingRoom}
         onClick={onClick}
       >
-        <SvgIcon path={mdiChatProcessingOutline} size={muiIconSizes.medium} />
+        <SvgIcon path={mdiChatProcessingOutline} size={size} />
       </IconButton>
     </Tooltip>
   )

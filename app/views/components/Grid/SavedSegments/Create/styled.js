@@ -2,31 +2,35 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   display: inline-flex;
-  margin-left: ${props => props.theme.spacing(1)}px;
   vertical-align: middle;
+  padding: ${props => props.theme.spacing(2, 2)};
 `
 
 export const ItemRow = styled.div`
   display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 1.5em;
+  align-items: start;
+  gap: ${props => props.theme.spacing(2)}px;
   cursor: pointer;
+  padding: ${props => props.theme.spacing(2, 1)};
 `
 
-export const ItemTitle = styled.span`
+export const ItemContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+`
+
+export const ItemTitle = styled.div`
   font-weight: 400;
   color: #000;
 `
 
 export const TextInput = styled.input`
-  width: 300px;
-  height: 2.5rem;
-  margin-left: 1em;
-  border-radius: 3px;
   background-color: #ffffff;
+  border-radius: ${props => props.theme.shape.borderRadius};
   border: solid 1px ${props => props.theme.palette.grey['300']};
-  padding: 0 1em;
+  padding: ${props => props.theme.spacing(1, 1.5)};
+  margin: ${props => props.theme.spacing(0.75, 0, 0)};
 
   :focus {
     outline: none;

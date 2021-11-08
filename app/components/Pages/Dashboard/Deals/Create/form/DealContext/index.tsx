@@ -9,9 +9,9 @@ import {
   Theme
 } from '@material-ui/core'
 import fecha from 'fecha'
-import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { convertUnixtimeToUtc } from '@app/utils/convert-unixitme-to-utc'
 import { upsertContexts } from 'actions/deals'
 import DatePicker from 'components/DatePicker'
 import { MaskedInput } from 'components/MaskedInput'
@@ -114,11 +114,7 @@ export function DealContext({
       return undefined
     }
 
-    if (typeof inputValue === 'number') {
-      return moment.unix(inputValue).utc().toDate()
-    }
-
-    return moment(inputValue).utc().toDate()
+    return convertUnixtimeToUtc(inputValue)
   }
 
   const handleSelectDate = (date: Date, type: 'day' | 'month' | 'year') => {

@@ -69,16 +69,30 @@ export function Select(props) {
               items={items}
               style={{ margin: 0 }}
               buttonStyle={{ padding: 0 }}
-              itemRenderer={(props, item) => (
-                <Tooltip title={item.hint} placement="left" key={item.value}>
+              itemRenderer={(props, item) => {
+                let selectItem = (
                   <Item
                     {...props}
                     data-test={`${input.name}-select-option-${item.value}`}
                   >
                     {item.title}
                   </Item>
-                </Tooltip>
-              )}
+                )
+
+                if (item.hint) {
+                  return (
+                    <Tooltip
+                      title={item.hint}
+                      placement="left"
+                      key={item.value}
+                    >
+                      {selectItem}
+                    </Tooltip>
+                  )
+                }
+
+                return selectItem
+              }}
             />
             {hasError && <ErrorMessage>{error}</ErrorMessage>}
           </Container>
