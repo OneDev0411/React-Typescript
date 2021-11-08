@@ -4,7 +4,7 @@ import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import { ListContext } from './context'
 import { EventController } from './EventController'
-import { EventLoader as renderContent } from './EventLoader'
+import { EventLoader } from './EventLoader'
 
 interface Props {
   user: IUser
@@ -66,13 +66,13 @@ export function CalendarList({
         setSelectedEvent
       }}
     >
-      {renderContent({
-        rows,
-        isLoading: false,
-        onLoadPreviousEvents,
-        onLoadNextEvents,
-        handleEventChange
-      })}
+      <EventLoader
+        rows={rows}
+        isLoading={isLoading}
+        onLoadPreviousEvents={onLoadPreviousEvents}
+        onLoadNextEvents={onLoadNextEvents}
+        handleEventChange={handleEventChange}
+      />
 
       <EventController
         user={user}
