@@ -298,10 +298,9 @@ export default function MakeVisibleToAdmin({
     if (deal.is_draft === false) {
       setIsPublishing(false)
       setIsAutoPublishing(false)
-      onClose()
       onComplete()
     }
-  }, [deal.is_draft, onClose, onComplete])
+  }, [deal.is_draft, onComplete])
 
   if (isAutoPublishing) {
     return null

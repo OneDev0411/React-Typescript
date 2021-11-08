@@ -417,6 +417,7 @@ class UploadModal extends React.Component {
         </Modal>
 
         <NotifyOfficeConfirmation
+          title="Should we ask office to review the uploaded files?"
           deal={this.props.deal}
           tasks={this.TaskIds}
           isOpen={this.state.isNotifyOfficeDialogOpen}

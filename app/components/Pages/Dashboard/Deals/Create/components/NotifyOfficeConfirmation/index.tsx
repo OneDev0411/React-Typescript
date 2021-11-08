@@ -17,13 +17,15 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import MakeVisibleToAdmin from '../../MakeVisibleToAdmin'
 
 interface Props {
+  title: string
   deal: IDeal
   isOpen: boolean
-  tasks: UUID[]
-  onClose: () => void
+  tasks?: UUID[]
+  onClose: (notifyOffice: boolean) => void
 }
 
 export function NotifyOfficeConfirmation({
+  title,
   deal,
   tasks,
   isOpen,
@@ -32,22 +34,30 @@ export function NotifyOfficeConfirmation({
   const dispatch = useDispatch()
   const [isMakeVisibleDialogOpen, setIsMakeVisibleDialogOpen] = useState(false)
 
-  const notifyOffice = () => {
+  const handleClose = () => {
+    onClose(false)
+    setIsMakeVisibleDialogOpen(false)
+  }
+
+  const handleNotifyOffice = () => {
     if (deal.is_draft) {
       setIsMakeVisibleDialogOpen(true)
 
       return
     }
 
-    requestNotifyOffice()
+    notifyOffice()
   }
 
-  const requestNotifyOffice = () => {
-    onClose()
+  const notifyOffice = () => {
+    if (tasks) {
+      tasks.forEach(taskId =>
+        dispatch(changeNeedsAttention(deal.id, taskId, true))
+      )
+    }
 
-    tasks.forEach(taskId =>
-      dispatch(changeNeedsAttention(deal.id, taskId, true))
-    )
+    setIsMakeVisibleDialogOpen(false)
+    onClose(true)
   }
 
   return (
@@ -58,9 +68,7 @@ export function NotifyOfficeConfirmation({
             <SvgIcon path={mdiBellOutline} size={muiIconSizes.xlarge} />
 
             <Box my={2}>
-              <Typography variant="subtitle1">
-                Should we ask office to review once it’s signed?
-              </Typography>
+              <Typography variant="subtitle1">{title}</Typography>
             </Box>
           </Box>
 
@@ -71,7 +79,7 @@ export function NotifyOfficeConfirmation({
             alignItems="center"
             justifyContent="center"
           >
-            <Button variant="outlined" onClick={onClose}>
+            <Button variant="outlined" onClick={handleClose}>
               Don’t Submit for Review
             </Button>
 
@@ -79,7 +87,7 @@ export function NotifyOfficeConfirmation({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={notifyOffice}
+                onClick={handleNotifyOffice}
               >
                 Submit for Review
               </Button>
@@ -91,8 +99,8 @@ export function NotifyOfficeConfirmation({
       {isMakeVisibleDialogOpen && (
         <MakeVisibleToAdmin
           dealId={deal.id}
-          onClose={() => setIsMakeVisibleDialogOpen(false)}
-          onComplete={requestNotifyOffice}
+          onClose={handleClose}
+          onComplete={notifyOffice}
         />
       )}
     </>
