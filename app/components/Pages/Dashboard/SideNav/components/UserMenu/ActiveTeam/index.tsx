@@ -7,9 +7,8 @@ import { isFetchingSelectedTeam } from '@app/reducers/user'
 import { viewAs, getActiveTeam } from '@app/utils/user-teams'
 import {
   NodeRenderer,
-  ButtonRenderer,
   BrandSelectorDrawer
-} from '@app/views/components/BrandSelectorDrawer'
+} from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { putUserSetting } from 'models/user/put-user-setting'
@@ -59,6 +58,7 @@ interface Props {
 
 export function ActiveTeam({ user }: Props) {
   const classes = useStyles()
+  const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
   const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
     isSwitching: false,
     switchedTeamId: ''
@@ -68,25 +68,27 @@ export function ActiveTeam({ user }: Props) {
 
   console.log({ activeTeam, user })
 
-  const handleOnClickBrand = async (brand: IBrand, onClose: () => void) => {
+  const hanldeOpenBrandSelectorDrawer = () => setIsBrandSelectorOpen(true)
+  const hanldeCloseBrandSelectorDrawer = () => setIsBrandSelectorOpen(false)
+
+  const handleOnClickBrand = async (brand: IBrand) => {
     console.log({ brand })
 
-    onClose()
     setSwitcherStatus({
       isSwitching: true,
       switchedTeamId: brand.id
     })
-
+    hanldeCloseBrandSelectorDrawer()
     await putUserSetting('user_filter', viewAs(user, true), brand.id)
 
     // window.location.reload()
   }
-  const renderBrandNode = ({ brand, onClose }: NodeRenderer) => {
+  const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
       <Brand
         brand={brand}
         isActive={brand.id === activeTeam?.brand.id}
-        onClick={() => handleOnClickBrand(brand, onClose)}
+        onClick={() => handleOnClickBrand(brand)}
       />
     )
   }
@@ -101,31 +103,39 @@ export function ActiveTeam({ user }: Props) {
 
   if (user && user.teams && user.teams.length > 0) {
     return (
-      <div className={classes.container}>
-        <Typography variant="overline" className={classes.header}>
-          You’re working on
-        </Typography>
-        <div className={classes.activeTeamContainer}>
-          <div className={classes.activeTeam}>
-            <SvgIcon
-              path={mdiAccountGroupOutline}
-              className={classes.activeTeamIcon}
-            />
+      <>
+        <div className={classes.container}>
+          <Typography variant="overline" className={classes.header}>
+            You’re working on
+          </Typography>
+          <div className={classes.activeTeamContainer}>
+            <div className={classes.activeTeam}>
+              <SvgIcon
+                path={mdiAccountGroupOutline}
+                className={classes.activeTeamIcon}
+              />
 
-            <Typography variant="subtitle2">
-              {activeTeam?.brand.name}
-            </Typography>
+              <Typography variant="subtitle2">
+                {activeTeam?.brand.name}
+              </Typography>
+            </div>
+            <div
+              className={classes.switchTeam}
+              onClick={hanldeOpenBrandSelectorDrawer}
+            >
+              {switcherStatus.isSwitching ? 'Switching...' : 'Change'}
+            </div>
           </div>
-          <BrandSelectorDrawer
-            nodeRenderer={renderBrandNode}
-            buttonRenderer={({ onOpen }: ButtonRenderer) => (
-              <div className={classes.switchTeam} onClick={onOpen}>
-                {switcherStatus.isSwitching ? 'Switching...' : 'Change'}
-              </div>
-            )}
-          />
         </div>
-      </div>
+        <BrandSelectorDrawer
+          open={isBrandSelectorOpen}
+          width="43rem"
+          onClose={hanldeCloseBrandSelectorDrawer}
+          brandSelectorProps={{
+            nodeRenderer: renderBrandNode
+          }}
+        />
+      </>
     )
     // return (
     //   <>
