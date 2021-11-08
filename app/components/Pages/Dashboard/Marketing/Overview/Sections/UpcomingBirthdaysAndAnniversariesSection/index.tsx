@@ -30,9 +30,13 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
       title="Upcoming Birthdays and Anniversaries"
       actionNode={
         celebrationEvents.length ? (
-          <LinkSectionAction title="View all" url="/dashboard/calendar" />
+          <LinkSectionAction
+            title="View all celebrations"
+            url="/dashboard/calendar"
+          />
         ) : null
       }
+      headerJustifyContent="space-between"
     >
       {isLoading && (
         <>
