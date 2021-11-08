@@ -2,7 +2,7 @@
 CKEDITOR.dialog.add('placeholder', editor => {
   let lang = editor.lang.placeholder
   let generalLabel = editor.lang.common.generalTab
-  let validFallbackRegex = /^[^\{\}<>]+$/
+  let validFallbackRegex = /^[^\[\]<>]+$/
 
   return {
     title: lang.title,
