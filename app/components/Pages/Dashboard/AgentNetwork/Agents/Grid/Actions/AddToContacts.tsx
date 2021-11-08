@@ -113,7 +113,7 @@ export default function AddToContacts({ user, agents }: Props) {
 
   return (
     <GridActionButton
-      label="Add To Contacts"
+      label={isLoading ? 'Adding Contacts' : 'Add To Contacts'}
       icon={mdiAccountPlusOutline}
       disabled={!attributeDefsMap || isLoading}
       onClick={handleClick}
