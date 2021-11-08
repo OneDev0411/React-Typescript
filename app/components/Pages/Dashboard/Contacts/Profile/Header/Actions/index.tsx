@@ -27,14 +27,13 @@ const useStyles = makeStyles(
       container: {
         display: 'flex',
         alignItems: 'center',
-        minWidth: '371px'
+        gap: theme.spacing(1.5)
       },
       shortcutContainer: {
-        '& button:not(:last-child)': {
-          marginRight: theme.spacing(1)
-        }
+        display: 'flex',
+        gap: theme.spacing(1)
       },
-      button: {
+      shortcutIconButton: {
         background: theme.palette.background.paper,
         border: `1px solid ${theme.palette.action.disabledBackground}`,
         '&[disabled] svg': {
@@ -42,10 +41,10 @@ const useStyles = makeStyles(
         }
       },
       actionContainer: {
+        minWidth: '200px',
         display: 'flex',
         alignItems: 'center',
-        marginLeft: theme.spacing(1),
-        '& button:not(:last-child)': { marginRight: theme.spacing(1) }
+        gap: theme.spacing(1)
       }
     }),
   { name: 'ContactProfileHeaderActions' }
@@ -67,14 +66,16 @@ export const Actions = ({
               <IconButton
                 onClick={onClick}
                 data-test={testId}
-                className={classes.button}
+                className={classes.shortcutIconButton}
               >
                 <SvgIcon path={mdiEmailOutline} size={muiIconSizes.medium} />
               </IconButton>
             </Tooltip>
           )}
         />
-        <Chat contact={contact} />
+
+        <Chat contact={contact} size={muiIconSizes.medium} />
+
         <SendContactCard
           contact={contact}
           mediums="Email"
@@ -83,7 +84,7 @@ export const Actions = ({
               <IconButton
                 onClick={onClick}
                 disabled={disabled}
-                className={classes.button}
+                className={classes.shortcutIconButton}
               >
                 <SvgIcon path={mdiGiftOutline} size={muiIconSizes.medium} />
               </IconButton>

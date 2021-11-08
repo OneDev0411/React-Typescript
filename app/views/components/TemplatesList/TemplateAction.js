@@ -47,10 +47,16 @@ const HOLIDAY_TYPES = [
 ]
 
 const GENERAL_FLOW_TYPES = [
+  'Blank',
+  'Blog',
   'Brand',
-  'NewAgent',
-  'Newsletter',
+  'Event',
   'Layout',
+  'MarketReport',
+  'NewAgent',
+  'News',
+  'Newsletter',
+  'Recruitment',
   HOLIDAY_TYPES.join(','),
   ...HOLIDAY_TYPES
 ]
