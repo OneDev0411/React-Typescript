@@ -25,7 +25,7 @@ export function NotifyOffice(props) {
         title={
           props.checklist.is_deactivated
             ? 'You can not Notify Office for Backup offers'
-            : null
+            : ''
         }
       >
         <CheckBoxButton
