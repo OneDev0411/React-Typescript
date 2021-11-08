@@ -9,7 +9,11 @@ export const Container = styled.div`
 export const ItemRow = styled.div`
   display: flex;
   align-items: start;
+<<<<<<< HEAD
   gap: ${props => props.theme.spacing(2)}px;
+=======
+  gap: ${props => props.theme.spacing(2)};
+>>>>>>> 9153197be4b73a0cfef4d15734a0b2c19391a639
   cursor: pointer;
   padding: ${props => props.theme.spacing(2, 1)};
 `

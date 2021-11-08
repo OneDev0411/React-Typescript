@@ -40,6 +40,8 @@ export function normalizeForm(values) {
     normalized.agent = values.agents.find(
       ({ mlsid }) => mlsid === values.mls_id
     )?.id
+  } else if (values.agent instanceof Object && values.agent.id) {
+    normalized.agent = values.agent.id
   }
 
   if (commission_type === 'commission_dollar') {
