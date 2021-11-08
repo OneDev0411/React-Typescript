@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box, Button, Tooltip } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 
 import MakeVisibleToAdmin from '@app/components/Pages/Dashboard/Deals/Create/MakeVisibleToAdmin'
