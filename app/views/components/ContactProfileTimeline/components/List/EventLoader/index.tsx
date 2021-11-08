@@ -62,6 +62,9 @@ const useStyles = makeStyles(
       position: 'absolute',
       top: '20%',
       left: '50%'
+    },
+    loadButton: {
+      minWidth: '5rem'
     }
   }),
   {
@@ -86,12 +89,15 @@ export function EventLoader({
 }: Props) {
   const classes = useStyles()
 
-  const renderLoader = () =>
-    isLoading ? (
-      <Box className={classes.progressLoaderContainer}>
-        <CircularProgress className={classes.progressLoaderIcon} />
-      </Box>
-    ) : null
+  const renderLoader = () => {
+    if (isLoading) {
+      return (
+        <Box className={classes.progressLoaderContainer}>
+          <CircularProgress className={classes.progressLoaderIcon} />
+        </Box>
+      )
+    }
+  }
 
   if (rows.length === 0) {
     if (isLoading) {
@@ -107,6 +113,7 @@ export function EventLoader({
       <Box className={classes.calendarContainer}>
         <Box my={2} textAlign="center">
           <Button
+            className={classes.loadButton}
             size="small"
             disabled={isLoading}
             onClick={onLoadPreviousEvents}
@@ -135,7 +142,12 @@ export function EventLoader({
           ))}
         </Box>
         <Box my={2} textAlign="center">
-          <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
+          <Button
+            className={classes.loadButton}
+            size="small"
+            disabled={isLoading}
+            onClick={onLoadNextEvents}
+          >
             Load Previous Year Events
           </Button>
         </Box>
