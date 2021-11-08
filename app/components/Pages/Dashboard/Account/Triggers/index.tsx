@@ -1,5 +1,3 @@
-import { useCallback } from 'react'
-
 import {
   CircularProgress,
   Typography,
@@ -7,13 +5,12 @@ import {
   Theme
 } from '@material-ui/core'
 import { useSelector } from 'react-redux'
-import { useTitle, useEffectOnce } from 'react-use'
+import { useTitle } from 'react-use'
 
-import useAsync from '@app/hooks/use-async'
-import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
 
 import { TriggerItems } from './components/Items'
+import { useGetGlobalTriggers } from './hooks/use-get-global-triggers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -33,16 +30,7 @@ export default function Triggers() {
 
   const classes = useStyles()
   const brandId = useSelector(selectActiveBrandId)
-  const { isLoading, data: triggers, run } = useAsync<IGlobalTrigger[]>()
-  const loadTriggers = useCallback(
-    () => run(() => getTriggers(brandId)),
-    [brandId, run]
-  )
-
-  useEffectOnce(() => {
-    loadTriggers()
-  })
-
+  const { isLoading, globalTriggers, reload } = useGetGlobalTriggers(brandId)
   const renderTriggers = () => {
     if (isLoading) {
       return (
@@ -52,7 +40,7 @@ export default function Triggers() {
       )
     }
 
-    return <TriggerItems list={triggers} onSetupCallback={loadTriggers} />
+    return <TriggerItems list={globalTriggers} onSetupCallback={reload} />
   }
 
   return (

@@ -114,8 +114,6 @@ export const TemplateSelector = ({
     [selectedBrandTemplate, selectedTemplateInstance]
   )
 
-  console.log({ error })
-
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => {
