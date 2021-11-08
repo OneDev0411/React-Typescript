@@ -65,7 +65,7 @@ export function NotifyOfficeConfirmation({
       <Dialog open={isOpen} fullWidth maxWidth="xs">
         <DialogContent>
           <Box textAlign="center">
-            <SvgIcon path={mdiBellOutline} size={muiIconSizes.xlarge} />
+            <img src="/static/images/bell/bell.gif" alt="" height="100" />
 
             <Box my={2}>
               <Typography variant="subtitle1">{title}</Typography>
