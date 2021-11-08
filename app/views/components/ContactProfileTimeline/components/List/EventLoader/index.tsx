@@ -89,27 +89,25 @@ export function EventLoader({
 }: Props) {
   const classes = useStyles()
 
-  const Loader = () => (
-    <Box className={classes.progressLoaderContainer}>
-      <CircularProgress className={classes.progressLoaderIcon} />
-    </Box>
-  )
+  const Loader = () =>
+    isLoading && (
+      <Box className={classes.progressLoaderContainer}>
+        <CircularProgress className={classes.progressLoaderIcon} />
+      </Box>
+    )
 
   if (rows.length === 0) {
-    if (isLoading) {
-      return <Loader />
-    }
-
     return (
       <Box className={classes.mainContainer}>
-        <EmptyState />
+        {Loader()}
+        {!isLoading && <EmptyState />}
       </Box>
     )
   }
 
   return (
     <Box className={classes.mainContainer}>
-      {isLoading ? <Loader /> : null}
+      {Loader()}
       <Box className={classes.calendarContainer}>
         <Box my={2} textAlign="center">
           <Button
