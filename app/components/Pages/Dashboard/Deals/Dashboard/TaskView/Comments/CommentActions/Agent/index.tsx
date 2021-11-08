@@ -87,16 +87,14 @@ export default function Agent({
       )}
 
       <Box>
-        <Tooltip title={hasComment ? '' : 'Notify office to Review'}>
-          <Button
-            color="secondary"
-            variant="contained"
-            disabled={isSaving || isSendDisabled}
-            onClick={sendComment}
-          >
-            {isSaving ? 'Saving...' : 'Notify Office'}
-          </Button>
-        </Tooltip>
+        <Button
+          color="secondary"
+          variant="contained"
+          disabled={isSaving || isSendDisabled}
+          onClick={sendComment}
+        >
+          {isSaving ? 'Saving...' : 'Notify Office to Review'}
+        </Button>
 
         {task.attention_requested && (
           <Button

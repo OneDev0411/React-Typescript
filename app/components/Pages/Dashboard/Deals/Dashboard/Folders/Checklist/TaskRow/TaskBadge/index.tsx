@@ -58,7 +58,7 @@ function getBadge(status: string, theme: Theme) {
       return (
         <Chip
           size="small"
-          label="Notified"
+          label="Office Notified"
           style={{
             backgroundColor: theme.palette.warning.ultralight,
             color: theme.palette.warning.main
@@ -82,7 +82,7 @@ function getBadge(status: string, theme: Theme) {
       return (
         <Chip
           size="small"
-          label="Declined"
+          label="Office Declined"
           style={{
             backgroundColor: theme.palette.error.ultralight,
             color: theme.palette.error.main
@@ -94,7 +94,7 @@ function getBadge(status: string, theme: Theme) {
       return (
         <Chip
           size="small"
-          label="Approved"
+          label="Office Approved"
           style={{
             backgroundColor: theme.palette.success.ultralight,
             color: theme.palette.success.main
