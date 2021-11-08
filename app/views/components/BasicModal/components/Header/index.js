@@ -10,13 +10,12 @@ import { H3 } from 'components/Typography/headings'
 
 const Container = styled.div`
   position: relative;
-  height: 48px;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 1em;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  padding: ${props => props.theme.spacing(2, 2)};
+  border: 1px solid rgba(0, 0, 0, 0.1);
 `
 
 const propTypes = {
