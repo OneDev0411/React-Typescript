@@ -43,8 +43,6 @@ export default function Signature({
   }
 
   const send = async (form: FormValues) => {
-    console.log({ form })
-
     const attachments = Object.values(form.attachments).map(attachment => {
       return attachment.source === 'submission'
         ? {
