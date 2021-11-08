@@ -50,14 +50,14 @@ export function NotifyOfficeConfirmation({
   }
 
   const notifyOffice = () => {
+    setIsMakeVisibleDialogOpen(false)
+    onClose(true)
+
     if (tasks) {
       tasks.forEach(taskId =>
         dispatch(changeNeedsAttention(deal.id, taskId, true))
       )
     }
-
-    setIsMakeVisibleDialogOpen(false)
-    onClose(true)
   }
 
   return (
@@ -99,7 +99,7 @@ export function NotifyOfficeConfirmation({
       {isMakeVisibleDialogOpen && (
         <MakeVisibleToAdmin
           dealId={deal.id}
-          onClose={handleClose}
+          onCancel={handleClose}
           onComplete={notifyOffice}
         />
       )}

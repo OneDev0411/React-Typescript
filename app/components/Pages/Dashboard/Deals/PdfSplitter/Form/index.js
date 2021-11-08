@@ -250,7 +250,7 @@ class Form extends React.Component {
         {this.state.isMakeVisibleDialogOpen && (
           <MakeVisibleToAdmin
             dealId={this.props.deal.id}
-            onClose={() =>
+            onCancel={() =>
               this.setState({
                 isMakeVisibleDialogOpen: false
               })

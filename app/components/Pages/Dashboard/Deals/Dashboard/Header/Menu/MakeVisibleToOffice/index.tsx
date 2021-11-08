@@ -14,7 +14,13 @@ export function MakeVisible({ deal }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const notify = useNotify()
 
+  const onCancel = () => {
+    setIsDialogOpen(false)
+  }
+
   const onComplete = () => {
+    setIsDialogOpen(false)
+
     notify({
       status: 'success',
       message:
@@ -35,7 +41,7 @@ export function MakeVisible({ deal }: Props) {
       {isDialogOpen && (
         <MakeVisibleToAdmin
           dealId={deal.id}
-          onClose={() => setIsDialogOpen(false)}
+          onCancel={onCancel}
           onComplete={onComplete}
         />
       )}

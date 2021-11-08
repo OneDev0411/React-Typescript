@@ -26,6 +26,10 @@ export class Item extends React.Component {
       return
     }
 
+    this.setState({
+      isMakeVisibleDialogOpen: false
+    })
+
     this.props.onSelectItem({
       type: this.props.type,
       id: this.props.id,
@@ -54,7 +58,7 @@ export class Item extends React.Component {
         {this.state.isMakeVisibleDialogOpen && (
           <MakeVisibleToAdmin
             dealId={this.props.deal.id}
-            onClose={() =>
+            onCancel={() =>
               this.setState({
                 isMakeVisibleDialogOpen: false
               })

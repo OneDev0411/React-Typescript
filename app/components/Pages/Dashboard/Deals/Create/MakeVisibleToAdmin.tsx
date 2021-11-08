@@ -59,13 +59,13 @@ type FormValues = {
 
 interface Props {
   dealId: UUID
-  onClose: () => void
+  onCancel: () => void
   onComplete: () => void
 }
 
 export default function MakeVisibleToAdmin({
   dealId,
-  onClose,
+  onCancel,
   onComplete
 }: Props) {
   useTitle('Publish Draft Deal | Deals | Rechat')
@@ -307,7 +307,7 @@ export default function MakeVisibleToAdmin({
   }
 
   return (
-    <Dialog open fullWidth maxWidth="md" onClose={onClose}>
+    <Dialog open fullWidth maxWidth="md" onClose={onCancel}>
       <Context.Provider
         value={{
           deal,
@@ -323,7 +323,7 @@ export default function MakeVisibleToAdmin({
             >
               <div>Notify Office</div>
 
-              <IconButton color="secondary" size="medium" onClick={onClose}>
+              <IconButton color="secondary" size="medium" onClick={onCancel}>
                 <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
               </IconButton>
             </Box>

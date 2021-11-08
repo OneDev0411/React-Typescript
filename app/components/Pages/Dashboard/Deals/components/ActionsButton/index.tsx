@@ -265,6 +265,8 @@ class ActionsButton extends React.Component<
   }
 
   createNeedsAttention = () => {
+    this.setState({ isMakeVisibleToAdminFormOpen: false })
+
     if (this.props.deal.is_draft) {
       this.setState({
         isMakeVisibleToAdminFormOpen: true
@@ -607,7 +609,7 @@ class ActionsButton extends React.Component<
         {this.state.isMakeVisibleToAdminFormOpen && (
           <MakeVisibleToAdmin
             dealId={this.props.deal.id}
-            onClose={() =>
+            onCancel={() =>
               this.setState({ isMakeVisibleToAdminFormOpen: false })
             }
             onComplete={this.createNeedsAttention}

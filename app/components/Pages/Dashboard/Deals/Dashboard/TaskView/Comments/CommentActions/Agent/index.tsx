@@ -81,7 +81,7 @@ export default function Agent({
       {isMakeVisibleToAdminFormOpen && (
         <MakeVisibleToAdmin
           dealId={deal.id}
-          onClose={() => setIsMakeVisibleToAdminFormOpen(false)}
+          onCancel={() => setIsMakeVisibleToAdminFormOpen(false)}
           onComplete={onDealVisible}
         />
       )}
