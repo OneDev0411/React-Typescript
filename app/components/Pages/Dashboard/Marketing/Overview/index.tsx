@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, Grid } from '@material-ui/core'
 import { useTitle } from 'react-use'
 

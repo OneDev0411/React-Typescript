@@ -7,11 +7,13 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import SuperCampaignOptedOutChip from './SuperCampaignOptedOutChip'
 
 interface SuperCampaignEnrollmentListColumnActionsProps {
+  className?: string
   isOptedOut: boolean
   onDelete: () => Promise<void>
 }
 
 function SuperCampaignEnrollmentListColumnActions({
+  className,
   isOptedOut,
   onDelete
 }: SuperCampaignEnrollmentListColumnActionsProps) {
@@ -28,7 +30,12 @@ function SuperCampaignEnrollmentListColumnActions({
   }
 
   return (
-    <IconButton size="small" onClick={handleDelete} disabled={isDeleting}>
+    <IconButton
+      className={className}
+      size="small"
+      onClick={handleDelete}
+      disabled={isDeleting}
+    >
       <SvgIcon path={mdiTrashCanOutline} />
     </IconButton>
   )

@@ -10,13 +10,11 @@ async function unenrollUserFromSuperCampaign(
   enrollmentId: UUID,
   data: UnenrollUserFromSuperCampaignInput
 ): Promise<void> {
-  return (
-    await new Fetch()
-      .delete(
-        `/email/super-campaigns/${superCampaignId}/enrollments/${enrollmentId}`
-      )
-      .send(data)
-  ).body.data
+  await new Fetch()
+    .delete(
+      `/email/super-campaigns/${superCampaignId}/enrollments/${enrollmentId}`
+    )
+    .send(data)
 }
 
 export default unenrollUserFromSuperCampaign
