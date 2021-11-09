@@ -467,7 +467,7 @@ export default function MakeVisibleToAdmin({
                 disabled={isPublishing}
                 onClick={handleSubmit(handlePublish)}
               >
-                {isPublishing ? 'Working...' : 'Notify Office'}
+                {isPublishing ? 'Working...' : 'Notify Office to Review'}
               </Button>
             </Box>
           </DialogActions>
