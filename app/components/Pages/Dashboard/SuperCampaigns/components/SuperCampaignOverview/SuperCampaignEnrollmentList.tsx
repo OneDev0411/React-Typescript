@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
+import { makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
 import { Table } from 'components/Grid/Table'
@@ -19,6 +20,17 @@ import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-en
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
 
+const useStyles = makeStyles(
+  theme => ({
+    row: { '&:hover $hide': { opacity: 1 } },
+    hide: {
+      opacity: 0,
+      transition: theme.transitions.create('opacity')
+    }
+  }),
+  { name: 'SuperCampaignEnrollmentList' }
+)
+
 interface SuperCampaignEnrollmentListProps {
   isLoading: boolean
   superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
@@ -34,7 +46,8 @@ function SuperCampaignEnrollmentList({
 }: SuperCampaignEnrollmentListProps) {
   const { superCampaign } = useSuperCampaignDetail()
 
-  const classes = useSuperCampaignListStyles()
+  const classes = useStyles()
+  const listClasses = useSuperCampaignListStyles()
 
   const updateSuperCampaignEnrollmentTags =
     useUpdateSuperCampaignEnrollmentTags(
@@ -84,12 +97,17 @@ function SuperCampaignEnrollmentList({
       width: '20%',
       align: 'right',
       sortable: false,
-      render: ({ row }) => (
-        <SuperCampaignEnrollmentListColumnActions
-          isOptedOut={isSuperCampaignEnrollmentOptedOut(row)}
-          onDelete={() => deleteSuperCampaignEnrollment(row.id)}
-        />
-      )
+      render: ({ row }) => {
+        const isOptedOut = isSuperCampaignEnrollmentOptedOut(row)
+
+        return (
+          <SuperCampaignEnrollmentListColumnActions
+            className={!isOptedOut ? classes.hide : undefined}
+            isOptedOut={isOptedOut}
+            onDelete={() => deleteSuperCampaignEnrollment(row.id)}
+          />
+        )
+      }
     }
   ]
 
@@ -105,7 +123,11 @@ function SuperCampaignEnrollmentList({
         totalRows={superCampaignEnrollments.length}
         rowSize={5}
         getTrProps={() => ({
-          className: classNames(classes.row, classes.rowBorderTop)
+          className: classNames(
+            classes.row,
+            listClasses.row,
+            listClasses.rowBorderTop
+          )
         })}
         loading={isLoading ? 'middle' : undefined}
         LoadingStateComponent={SuperCampaignListLoadingState}
