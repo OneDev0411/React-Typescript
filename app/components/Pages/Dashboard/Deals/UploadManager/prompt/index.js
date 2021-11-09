@@ -38,6 +38,10 @@ class UploadModal extends React.Component {
 
   closeModal() {
     this.props.resetUploadFiles()
+
+    this.setState({
+      isNotifyOfficeDialogOpen: false
+    })
   }
 
   getModalStyle(filesCount) {
@@ -208,6 +212,12 @@ class UploadModal extends React.Component {
     return pdfFiles.every(file => file.properties.status === STATUS_UPLOADED)
   }
 
+  get TaskIds() {
+    return Object.values(this.props.upload.files)
+      .map(file => file.properties.taskId)
+      .filter(taskId => !!taskId)
+  }
+
   getFileUniqueId(fileObject) {
     return (
       fileObject.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() +
@@ -247,21 +257,21 @@ class UploadModal extends React.Component {
   }
 
   handleNext = () => {
-    this.closeModal()
-
     this.setState({
       isNotifyOfficeDialogOpen: true
     })
   }
 
-  notifyOffice = () => {
-    const tasks = Object.values(this.props.upload.files)
-      .map(file => file.properties.taskId)
-      .filter(taskId => !!taskId)
+  skipNotifyOffice = () => {
+    this.closeModal()
+  }
 
-    tasks.forEach(taskId =>
+  notifyOffice = () => {
+    this.TaskIds.forEach(taskId =>
       this.props.changeNeedsAttention(this.props.deal.id, taskId, true)
     )
+
+    this.closeModal()
   }
 
   render() {
@@ -409,13 +419,8 @@ class UploadModal extends React.Component {
         <NotifyOfficeConfirmation
           title="Should we ask office to review the uploaded files?"
           deal={this.props.deal}
-          tasks={this.TaskIds}
           isOpen={this.state.isNotifyOfficeDialogOpen}
-          onCancel={() =>
-            this.setState({
-              isNotifyOfficeDialogOpen: false
-            })
-          }
+          onCancel={this.skipNotifyOffice}
           onConfirm={this.notifyOffice}
         />
 
