@@ -59,7 +59,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
   }
 
   return (
-    <div>
+    <>
       {activeFilter === Filters.Events && (
         <List
           contrariwise
@@ -74,7 +74,7 @@ function Timeline({ contact, activeFilter, timelineRef, onChangeNote }: Props) {
       {activeFilter === Filters.Notes && (
         <Notes contact={contact} onChange={onChangeNote} />
       )}
-    </div>
+    </>
   )
 }
 
