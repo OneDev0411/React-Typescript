@@ -31,6 +31,7 @@ export default function Triggers() {
   const classes = useStyles()
   const brandId = useSelector(selectActiveBrandId)
   const { isLoading, globalTriggers, reload } = useGetGlobalTriggers(brandId)
+
   const renderTriggers = () => {
     if (isLoading) {
       return (
