@@ -68,7 +68,7 @@ export default function Agent({
       confirmation({
         message: 'Cancel Notify Office?',
         description:
-          'Your pending Notify Office request will be canceled for this task',
+          'Your pending "Notify Office to Review" request will be canceled for this task',
         confirmLabel: 'Yes, cancel',
         cancelLabel: 'No',
         onConfirm: () => onSendComment(false, 'Incomplete')

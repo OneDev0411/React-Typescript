@@ -221,7 +221,7 @@ class Form extends React.Component {
                 title="Notify Office"
                 onClick={this.toggleNotifyOffice}
               />
-              &nbsp;Notify Office
+              &nbsp;Notify Office to Review
             </Flex>
 
             <Button

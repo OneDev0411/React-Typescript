@@ -321,7 +321,7 @@ export default function MakeVisibleToAdmin({
               alignItems="center"
               justifyContent="space-between"
             >
-              <div>Notify Office</div>
+              <div>Notify Office to Review</div>
 
               <IconButton color="secondary" size="medium" onClick={onCancel}>
                 <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
