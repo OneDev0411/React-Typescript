@@ -1,9 +1,9 @@
 import { makeStyles, Typography, Chip } from '@material-ui/core'
+import classNames from 'classnames'
 
 const useStyles = makeStyles(
   theme => ({
     root: {
-      maxWidth: `calc(100% - ${theme.spacing(6)}px)`,
       display: 'flex',
       whiteSpace: 'nowrap',
       alignItems: 'center'
@@ -29,17 +29,19 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignWithEnrollmentCardTagsProps {
+  className: string
   tags: string[]
 }
 
 function SuperCampaignWithEnrollmentCardTags({
+  className,
   tags
 }: SuperCampaignWithEnrollmentCardTagsProps) {
   const classes = useStyles()
   const moreCount = tags.length - 2
 
   return (
-    <div className={classes.root}>
+    <div className={classNames(classes.root, className)}>
       <div className={classes.tags}>
         {tags.slice(0, 2).map(tag => (
           <Chip
