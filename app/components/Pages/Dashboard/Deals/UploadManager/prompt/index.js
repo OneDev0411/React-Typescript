@@ -88,9 +88,6 @@ class UploadModal extends React.Component {
       return false
     }
 
-    // check task is inside a backup contract
-    const isBackupContract = this.isBackupContract(task)
-
     // get filename
     const filename = this.getFileName({ fileObject, properties })
 

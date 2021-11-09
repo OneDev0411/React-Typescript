@@ -7,12 +7,9 @@ import {
   Box,
   Button
 } from '@material-ui/core'
-import { mdiBellOutline } from '@mdi/js'
 import { useDispatch } from 'react-redux'
 
 import { changeNeedsAttention } from '@app/store_actions/deals'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
-import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import MakeVisibleToAdmin from '../../MakeVisibleToAdmin'
 
