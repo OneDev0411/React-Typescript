@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { mdiAccountPlusOutline } from '@mdi/js'
-import pluralize from 'pluralize'
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
 import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
 import { addNotification as notify } from 'components/notification'
-import { createContacts } from 'models/contacts/create-contacts'
 import { getAttributeDefs } from 'models/contacts/get-attribute-defs'
+import { importContacts } from 'models/contacts/import-contacts'
 
 const SOURCE_TYPE_ATTRIBUTE_DEF_NAME = 'source_type'
 const TAG_ATTRIBUTE_DEF_NAME = 'tag'
@@ -89,15 +88,14 @@ export default function AddToContacts({ user, agents }: Props) {
       setIsLoading(true)
 
       const contacts = getContactsFromAgents(agents)
-      const response = await createContacts(contacts)
+
+      await importContacts(contacts)
 
       dispatch(
         notify({
           status: 'success',
-          message: `${response.info.count} new ${pluralize(
-            'contacts',
-            response.info.count
-          )} added.`
+          message:
+            'The selected agents will be added to your contacts in the next few minutes.'
         })
       )
     } catch (error) {
@@ -115,7 +113,7 @@ export default function AddToContacts({ user, agents }: Props) {
 
   return (
     <GridActionButton
-      label="Add To Contacts"
+      label={isLoading ? 'Adding Contacts' : 'Add To Contacts'}
       icon={mdiAccountPlusOutline}
       disabled={!attributeDefsMap || isLoading}
       onClick={handleClick}
