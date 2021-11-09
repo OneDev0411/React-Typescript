@@ -8,7 +8,7 @@ import { SelectorOption } from '@app/views/components/TagSelector/type'
 export interface SuperCampaignTagsPopoverProps
   extends Pick<
     PopoverContactTagSelectorProps,
-    'anchorRenderer' | 'defaultIsDirty' | 'minTagCount'
+    'anchorRenderer' | 'defaultIsDirty' | 'minimumTag'
   > {
   tags: string[]
   onTagsChange: (tags: string[]) => Promise<void>
