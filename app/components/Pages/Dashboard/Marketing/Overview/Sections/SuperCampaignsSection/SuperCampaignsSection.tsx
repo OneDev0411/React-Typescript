@@ -1,8 +1,6 @@
 import SectionLayout from '../SectionLayout'
 
-import SuperCampaignCards from './SuperCampaignCards'
-import SuperCampaignsSectionEmptyState from './SuperCampaignsSectionEmptyState'
-import SuperCampaignsSectionLoading from './SuperCampaignsSectionLoading'
+import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
 import { useGetSuperCampaignsWithEnrollment } from './use-get-super-campaigns-with-enrollment'
 
 function SuperCampaignsSection() {
@@ -16,15 +14,12 @@ function SuperCampaignsSection() {
 
   return (
     <SectionLayout title="Campaigns" containerGridProps={{ sm: 12 }}>
-      {isEmpty && <SuperCampaignsSectionEmptyState />}
-      {isLoading ? (
-        <SuperCampaignsSectionLoading />
-      ) : (
-        <SuperCampaignCards
-          superCampaignsWithEnrollment={superCampaignsWithEnrollment}
-          setSuperCampaignsWithEnrollment={setSuperCampaignsWithEnrollment}
-        />
-      )}
+      <SuperCampaignsSectionContent
+        isEmpty={isEmpty}
+        isLoading={isLoading}
+        superCampaignsWithEnrollment={superCampaignsWithEnrollment}
+        setSuperCampaignsWithEnrollment={setSuperCampaignsWithEnrollment}
+      />
     </SectionLayout>
   )
 }

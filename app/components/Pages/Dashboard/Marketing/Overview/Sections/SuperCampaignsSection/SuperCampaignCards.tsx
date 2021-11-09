@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core'
 import SuperCampaignWithEnrollmentCard from './SuperCampaignWithEnrollmentCard'
 import { SuperCampaignWithEnrollment } from './types'
 
-interface SuperCampaignCardsProps {
+export interface SuperCampaignCardsProps {
   superCampaignsWithEnrollment: SuperCampaignWithEnrollment[]
   setSuperCampaignsWithEnrollment: Dispatch<
     SetStateAction<SuperCampaignWithEnrollment[]>
