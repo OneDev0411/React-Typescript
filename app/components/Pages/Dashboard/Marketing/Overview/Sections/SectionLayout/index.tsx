@@ -30,16 +30,22 @@ interface Props {
   title: string
   children: ReactNode
   actionNode?: ReactNode
-  gridProps?: GridProps
-  headerJustifyContent?: GridProps['justifyContent']
+  containerGridProps?: Omit<
+    GridProps,
+    'container' | 'item' | 'direction' | 'className'
+  >
+  headerGridProps?: Omit<
+    GridProps,
+    'container' | 'item' | 'alignItems' | 'direction' | 'className'
+  >
 }
 
 export default function SectionLayout({
   title,
   children,
   actionNode,
-  headerJustifyContent,
-  gridProps = {}
+  containerGridProps,
+  headerGridProps
 }: Props) {
   const classes = useStyles()
 
@@ -49,15 +55,15 @@ export default function SectionLayout({
       item
       direction="column"
       className={classes.container}
-      {...gridProps}
+      {...containerGridProps}
     >
       <Grid
         container
         item
         alignItems="center"
-        justifyContent={headerJustifyContent}
         direction="row"
         className={classes.headerContainer}
+        {...headerGridProps}
       >
         <Grid item className={classes.titleContainer}>
           <Box pr={1}>

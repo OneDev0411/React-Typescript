@@ -47,9 +47,7 @@ export default function MyDesignsSection() {
             />
           ) : null
         }
-        gridProps={{
-          sm: 6
-        }}
+        containerGridProps={{ sm: 6 }}
       >
         <>
           {isLoading && (

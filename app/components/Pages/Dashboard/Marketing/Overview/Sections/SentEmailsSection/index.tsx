@@ -25,7 +25,7 @@ export default function SentEmailsSection() {
           />
         ) : null
       }
-      gridProps={{
+      containerGridProps={{
         sm: 6
       }}
     >

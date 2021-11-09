@@ -15,7 +15,7 @@ function SuperCampaignsSection() {
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
   return (
-    <SectionLayout title="Campaigns" gridProps={{ sm: 12 }}>
+    <SectionLayout title="Campaigns" containerGridProps={{ sm: 12 }}>
       {isEmpty && <SuperCampaignsSectionEmptyState />}
       {isLoading ? (
         <SuperCampaignsSectionLoading />
