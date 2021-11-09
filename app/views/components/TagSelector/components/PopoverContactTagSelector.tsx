@@ -81,7 +81,7 @@ export interface PopoverContactTagSelectorProps
   callback?: (tags: SelectorOption[]) => void
   disabled?: boolean
   defaultIsDirty?: boolean
-  minTagCount?: number
+  minimumTag?: number
 }
 
 export const PopoverContactTagSelector = ({
@@ -93,7 +93,7 @@ export const PopoverContactTagSelector = ({
   filter,
   label,
   defaultIsDirty = false,
-  minTagCount = 0,
+  minimumTag = 0,
   ...props
 }: PopoverContactTagSelectorProps) => {
   const classes = useStyles()
@@ -194,7 +194,7 @@ export const PopoverContactTagSelector = ({
                 color="secondary"
                 size="small"
                 disabled={
-                  !isDirty || isSaving || minTagCount > selectedTags.length
+                  !isDirty || isSaving || minimumTag > selectedTags.length
                 }
                 onClick={handleSave}
               >
