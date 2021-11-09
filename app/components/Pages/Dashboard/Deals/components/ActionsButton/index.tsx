@@ -276,7 +276,7 @@ class ActionsButton extends React.Component<
     }
 
     this.props.confirmation({
-      message: 'Notify Office?',
+      message: 'Notify Office to Review?',
       confirmLabel: 'Notify Office',
       needsUserEntry: true,
       inputDefaultValue: '',
