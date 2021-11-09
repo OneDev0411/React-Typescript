@@ -7,9 +7,6 @@ import {
   Box,
   Button
 } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
-
-import { changeNeedsAttention } from '@app/store_actions/deals'
 
 import MakeVisibleToAdmin from '../../MakeVisibleToAdmin'
 
@@ -18,21 +15,21 @@ interface Props {
   deal: IDeal
   isOpen: boolean
   tasks?: UUID[]
-  onClose: (notifyOffice: boolean) => void
+  onCancel: () => void
+  onConfirm: () => void
 }
 
 export function NotifyOfficeConfirmation({
   title,
   deal,
-  tasks,
   isOpen,
-  onClose
+  onCancel,
+  onConfirm
 }: Props) {
-  const dispatch = useDispatch()
   const [isMakeVisibleDialogOpen, setIsMakeVisibleDialogOpen] = useState(false)
 
-  const handleClose = () => {
-    onClose(false)
+  const handleCancel = () => {
+    onCancel()
     setIsMakeVisibleDialogOpen(false)
   }
 
@@ -48,13 +45,7 @@ export function NotifyOfficeConfirmation({
 
   const notifyOffice = () => {
     setIsMakeVisibleDialogOpen(false)
-    onClose(true)
-
-    if (tasks) {
-      tasks.forEach(taskId =>
-        dispatch(changeNeedsAttention(deal.id, taskId, true))
-      )
-    }
+    onConfirm()
   }
 
   return (
@@ -76,7 +67,7 @@ export function NotifyOfficeConfirmation({
             alignItems="center"
             justifyContent="center"
           >
-            <Button variant="outlined" onClick={handleClose}>
+            <Button variant="outlined" onClick={handleCancel}>
               Don’t Submit for Review
             </Button>
 
@@ -96,7 +87,7 @@ export function NotifyOfficeConfirmation({
       {isMakeVisibleDialogOpen && (
         <MakeVisibleToAdmin
           dealId={deal.id}
-          onCancel={handleClose}
+          onCancel={handleCancel}
           onComplete={notifyOffice}
         />
       )}

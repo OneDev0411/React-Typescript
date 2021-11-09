@@ -12,7 +12,8 @@ import {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  setExpandChecklist
+  setExpandChecklist,
+  changeNeedsAttention
 } from 'actions/deals'
 import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 import { addNotification as notify } from 'components/notification'
@@ -194,12 +195,6 @@ class UploadModal extends React.Component {
     )
   }
 
-  get TaskIds() {
-    return Object.values(this.props.upload.files)
-      .map(file => file.properties.taskId)
-      .filter(taskId => !!taskId)
-  }
-
   get isSplitButtonActive() {
     const pdfFiles = _.filter(
       this.props.upload.files,
@@ -257,6 +252,16 @@ class UploadModal extends React.Component {
     this.setState({
       isNotifyOfficeDialogOpen: true
     })
+  }
+
+  notifyOffice = () => {
+    const tasks = Object.values(this.props.upload.files)
+      .map(file => file.properties.taskId)
+      .filter(taskId => !!taskId)
+
+    tasks.forEach(taskId =>
+      this.props.changeNeedsAttention(this.props.deal.id, taskId, true)
+    )
   }
 
   render() {
@@ -406,11 +411,12 @@ class UploadModal extends React.Component {
           deal={this.props.deal}
           tasks={this.TaskIds}
           isOpen={this.state.isNotifyOfficeDialogOpen}
-          onClose={() =>
+          onCancel={() =>
             this.setState({
               isNotifyOfficeDialogOpen: false
             })
           }
+          onConfirm={this.notifyOffice}
         />
 
         {this.state.splitFiles.length > 0 && (
@@ -441,5 +447,6 @@ export default connect(mapStateToProps, {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  setExpandChecklist
+  setExpandChecklist,
+  changeNeedsAttention
 })(UploadModal)

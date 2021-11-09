@@ -22,10 +22,18 @@ export function SubmitButton({ deal, isSubmitting, valid, onSubmit }: Props) {
     setIsNotifyOfficeDialogOpen(true)
   }
 
-  const onClose = (autoNotify: boolean) => {
-    field.input.onChange(autoNotify)
-    setIsNotifyOfficeDialogOpen(false)
+  const onConfirmNotifyOffice = () => {
+    field.input.onChange(true)
+    submit()
+  }
 
+  const onCancelNotifyOffice = () => {
+    field.input.onChange(false)
+    submit()
+  }
+
+  const submit = () => {
+    setIsNotifyOfficeDialogOpen(false)
     onSubmit()
   }
 
@@ -44,7 +52,8 @@ export function SubmitButton({ deal, isSubmitting, valid, onSubmit }: Props) {
         title="Should we ask office to review once it’s signed?"
         deal={deal}
         isOpen={isNotifyOfficeDialogOpen}
-        onClose={onClose}
+        onCancel={onCancelNotifyOffice}
+        onConfirm={onConfirmNotifyOffice}
       />
     </>
   )
