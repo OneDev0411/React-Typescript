@@ -100,7 +100,7 @@ function SuperCampaignWithEnrollmentCardEnrolledFooter({
               Edit
             </Button>
           )}
-          minTagCount={1}
+          minimumTag={1}
         />
       </div>
     </div>

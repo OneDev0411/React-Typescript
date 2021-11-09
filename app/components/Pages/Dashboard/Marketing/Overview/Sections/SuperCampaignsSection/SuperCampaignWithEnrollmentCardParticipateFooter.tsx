@@ -47,7 +47,7 @@ function SuperCampaignWithEnrollmentCardParticipateFooter({
           </Button>
         )}
         defaultIsDirty
-        minTagCount={1}
+        minimumTag={1}
       />
     </div>
   )
