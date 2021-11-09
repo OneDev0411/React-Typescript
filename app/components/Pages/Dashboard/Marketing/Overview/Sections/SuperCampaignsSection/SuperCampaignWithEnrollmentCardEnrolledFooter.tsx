@@ -28,6 +28,11 @@ const useStyles = makeStyles(
       alignItems: 'center',
       padding: theme.spacing(0.5, 0, 1, 0)
     },
+    tags: {
+      // We need to render the tags and the edit button on a line and avoid the overflow problem.
+      // The theme.spacing(6) is required space rendering the edit button
+      maxWidth: `calc(100% - ${theme.spacing(6)}px)`
+    },
     edit: { minWidth: 0 },
     action: {
       position: 'absolute',
@@ -76,7 +81,10 @@ function SuperCampaignWithEnrollmentCardEnrolledFooter({
         <Typography variant="caption">You joined with these tags</Typography>
       </div>
       <div className={classes.footer}>
-        <SuperCampaignWithEnrollmentCardTags tags={superCampaignTags} />
+        <SuperCampaignWithEnrollmentCardTags
+          className={classes.tags}
+          tags={superCampaignTags}
+        />
         .
         <SuperCampaignTagsPopover
           tags={superCampaignTags}
