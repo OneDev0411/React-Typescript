@@ -9,9 +9,17 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: theme.spacing(3.5, 0, 1)
+      padding: theme.spacing(3.5, 0, 1),
+      gap: theme.spacing(3)
+    },
+    catalogContainer: {
+      flex: '1 1 auto'
+    },
+    actionsContainer: {
+      width: 'min-content',
+      display: 'flex',
+      height: 'auto',
+      alignItems: 'start'
     }
   }),
   { name: 'ContactProfileHeader' }
@@ -28,8 +36,12 @@ export const Header = ({ contact, onTagChange, handleCreateNote }: Props) => {
 
   return (
     <div className={classes.container}>
-      <Catalog contact={contact} onTagChange={onTagChange} />
-      <Actions contact={contact} handleCreateNote={handleCreateNote} />
+      <div className={classes.catalogContainer}>
+        <Catalog contact={contact} onTagChange={onTagChange} />
+      </div>
+      <div className={classes.actionsContainer}>
+        <Actions contact={contact} handleCreateNote={handleCreateNote} />
+      </div>
     </div>
   )
 }
