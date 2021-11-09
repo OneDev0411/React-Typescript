@@ -20,17 +20,17 @@ function SuperCampaignCards({
     superCampaignId: UUID,
     enrollment: ISuperCampaignEnrollment
   ) =>
-    setSuperCampaignsWithEnrollment(oldSuperCampaignsWithEnrollment => {
+    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
       const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
         superCampaign => superCampaign.id === superCampaignId
       )
 
       if (superCampaignIndex === -1) {
-        return oldSuperCampaignsWithEnrollment
+        return prevSuperCampaignsWithEnrollment
       }
 
       const newSuperCampaignsWithEnrollment = [
-        ...oldSuperCampaignsWithEnrollment
+        ...prevSuperCampaignsWithEnrollment
       ]
 
       newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
@@ -42,17 +42,17 @@ function SuperCampaignCards({
     })
 
   const handleUnenroll = (superCampaignId: UUID) =>
-    setSuperCampaignsWithEnrollment(oldSuperCampaignsWithEnrollment => {
+    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
       const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
         superCampaign => superCampaign.id === superCampaignId
       )
 
       if (superCampaignIndex === -1) {
-        return oldSuperCampaignsWithEnrollment
+        return prevSuperCampaignsWithEnrollment
       }
 
       const newSuperCampaignsWithEnrollment = [
-        ...oldSuperCampaignsWithEnrollment
+        ...prevSuperCampaignsWithEnrollment
       ]
 
       newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
