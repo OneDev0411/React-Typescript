@@ -13,6 +13,7 @@ import { splitPDF, getSplitJobStatus } from 'models/Deal/splitter'
 import { createTaskMessage } from 'models/Deal/task'
 
 import TasksDropDown from '../../components/TasksDropdown'
+import MakeVisibleToAdmin from '../../Create/MakeVisibleToAdmin'
 
 import {
   Container,
@@ -27,7 +28,8 @@ class Form extends React.Component {
     isSaving: false,
     task: null,
     notifyOffice: true,
-    validationErrors: {}
+    validationErrors: {},
+    isMakeVisibleDialogOpen: false
   }
 
   exitOnFinish = false
@@ -55,11 +57,20 @@ class Form extends React.Component {
   sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   handleSave = async (exitOnFinish = false) => {
+    this.exitOnFinish = exitOnFinish
+
     if (!this.validateForm()) {
       return false
     }
 
-    this.exitOnFinish = exitOnFinish
+    if (this.state.notifyOffice && this.props.deal.is_draft) {
+      this.setState({
+        isMakeVisibleDialogOpen: true
+      })
+
+      return
+    }
+
     await this.splitPDF()
   }
 
@@ -159,11 +170,19 @@ class Form extends React.Component {
     this.props.onSave(this.exitOnFinish)
   }
 
+  onMakeVisibleComplete = () => {
+    this.setState({
+      isMakeVisibleDialogOpen: false
+    })
+
+    this.handleSave(this.exitOnFinish)
+  }
+
   render() {
     const isDisabled = _.size(this.props.selectedPages) === 0
 
     return (
-      <React.Fragment>
+      <>
         {this.state.isSaving && (
           <SaveModalContainer>
             <SaveModalBody>
@@ -202,7 +221,7 @@ class Form extends React.Component {
                 title="Notify Office"
                 onClick={this.toggleNotifyOffice}
               />
-              &nbsp;Notify Office
+              &nbsp;Notify Office to Review
             </Flex>
 
             <Button
@@ -227,7 +246,19 @@ class Form extends React.Component {
             </Button>
           </Flex>
         </Container>
-      </React.Fragment>
+
+        {this.state.isMakeVisibleDialogOpen && (
+          <MakeVisibleToAdmin
+            dealId={this.props.deal.id}
+            onCancel={() =>
+              this.setState({
+                isMakeVisibleDialogOpen: false
+              })
+            }
+            onComplete={this.onMakeVisibleComplete}
+          />
+        )}
+      </>
     )
   }
 }

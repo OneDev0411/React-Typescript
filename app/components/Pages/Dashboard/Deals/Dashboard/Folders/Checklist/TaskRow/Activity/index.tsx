@@ -44,7 +44,9 @@ export function Activity({ task, onClick }: Props) {
       startIcon={<SvgIcon path={mdiChatOutline} size={muiIconSizes.small} />}
       onClick={() => onClick(task)}
     >
-      {new_notifications > 0 ? `${new_notifications} New Activity` : 'Activity'}
+      {new_notifications > 0
+        ? `${new_notifications} New Activity`
+        : 'Message Office'}
     </Button>
   )
 }
