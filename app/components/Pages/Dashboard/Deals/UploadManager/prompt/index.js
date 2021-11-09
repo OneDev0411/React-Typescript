@@ -12,7 +12,6 @@ import {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  changeNeedsAttention,
   setExpandChecklist
 } from 'actions/deals'
 import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
@@ -51,12 +50,6 @@ class UploadModal extends React.Component {
     }
   }
 
-  onClickNotifyAdmin(file) {
-    this.props.setUploadAttributes(file.id, {
-      notifyOffice: !file.properties.notifyOffice
-    })
-  }
-
   onSelectTask(file, taskId) {
     this.props.setUploadAttributes(file.id, { taskId })
   }
@@ -88,7 +81,6 @@ class UploadModal extends React.Component {
       uploadTaskFile,
       uploadStashFile,
       setUploadAttributes,
-      changeNeedsAttention,
       notify
     } = this.props
 
@@ -144,10 +136,6 @@ class UploadModal extends React.Component {
       message: `"${filename}" uploaded.`,
       status: 'success'
     })
-
-    if (task && properties.notifyOffice === true && !isBackupContract) {
-      changeNeedsAttention(task.deal, task.id, true)
-    }
 
     // set status
     try {
@@ -456,6 +444,5 @@ export default connect(mapStateToProps, {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  setExpandChecklist,
-  changeNeedsAttention
+  setExpandChecklist
 })(UploadModal)
