@@ -24,7 +24,7 @@ export default function PromoteListingsSection() {
           url="/dashboard/listings"
         />
       }
-      headerJustifyContent="space-between"
+      headerGridProps={{ justifyContent: 'space-between' }}
     >
       {isLoading && (
         <>

@@ -79,7 +79,7 @@ export default function SomethingToShareSection() {
             url={`/dashboard/marketing/${BRANDING_TEMPLATE_TYPES.join(',')}`}
           />
         }
-        headerJustifyContent="space-between"
+        headerGridProps={{ justifyContent: 'space-between' }}
       >
         <>
           {isLoading && (

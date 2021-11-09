@@ -36,7 +36,7 @@ export default function UpcomingBirthdaysAndAnniversariesSection() {
           />
         ) : null
       }
-      headerJustifyContent="space-between"
+      headerGridProps={{ justifyContent: 'space-between' }}
     >
       {isLoading && (
         <>
