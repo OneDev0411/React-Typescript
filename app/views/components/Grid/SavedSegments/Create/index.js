@@ -15,7 +15,13 @@ import {
   changeActiveFilterSegment
 } from 'store_actions/filter-segments'
 
-import { Container, ItemRow, ItemTitle, TextInput } from './styled'
+import {
+  Container,
+  ItemRow,
+  ItemContainer,
+  ItemTitle,
+  TextInput
+} from './styled'
 
 const DEFAULT_QUERY = {
   associations: CRM_LIST_DEFAULT_ASSOCIATIONS
@@ -175,7 +181,7 @@ class SaveSegment extends React.Component {
             handleOnClose={this.toggleShowModal}
           >
             <Modal.Header title="Save list" />
-            <Modal.Body style={{ height: '115px' }}>
+            <Modal.Body>
               {this.isEditable(segment) && (
                 <ItemRow
                   onClick={() => this.changeSelectedOption(CURRENT_SEGMENT)}
@@ -189,16 +195,18 @@ class SaveSegment extends React.Component {
 
               <ItemRow onClick={() => this.changeSelectedOption(NEW_SEGMENT)}>
                 <RadioButton selected={selectedOption === NEW_SEGMENT} />
-                <ItemTitle data-test="create-new-list">
-                  Create new list
-                </ItemTitle>
-                <TextInput
-                  type="text"
-                  value={state.newFilterName}
-                  placeholder="Enter new list name"
-                  onChange={this.onNewFilterNameChange}
-                  data-test="new-list-name-input"
-                />
+                <ItemContainer>
+                  <ItemTitle data-test="create-new-list">
+                    Create new list
+                  </ItemTitle>
+                  <TextInput
+                    type="text"
+                    value={state.newFilterName}
+                    placeholder="Enter new list name"
+                    onChange={this.onNewFilterNameChange}
+                    data-test="new-list-name-input"
+                  />
+                </ItemContainer>
               </ItemRow>
             </Modal.Body>
 
