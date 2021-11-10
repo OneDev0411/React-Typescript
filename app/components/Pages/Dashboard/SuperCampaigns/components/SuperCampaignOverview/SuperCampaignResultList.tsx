@@ -156,7 +156,7 @@ function SuperCampaignResultList({
         totalRows={superCampaignResults.length}
         rowSize={5}
         getTrProps={() => ({ className: classes.row })}
-        loading={isLoading ? 'middle' : undefined}
+        loading={isLoading ? 'static' : undefined}
         LoadingStateComponent={SuperCampaignListLoadingState}
         EmptyStateComponent={SuperCampaignListEmptyState}
       />
