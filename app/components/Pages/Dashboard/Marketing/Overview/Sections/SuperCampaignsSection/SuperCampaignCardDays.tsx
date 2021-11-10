@@ -23,7 +23,8 @@ function SuperCampaignCardDays({
 }: SuperCampaignCardDaysProps) {
   const classes = useStyles()
 
-  const needsMoreAttention = differenceInDays(time, new Date().getTime()) <= 3
+  const needsMoreAttention =
+    differenceInDays(time * 1000, new Date().getTime()) <= 3
 
   return (
     <Typography
@@ -34,7 +35,7 @@ function SuperCampaignCardDays({
       )}
       variant="caption"
     >
-      <RelativeTime time={time} />
+      <RelativeTime time={time * 1000} />
     </Typography>
   )
 }
