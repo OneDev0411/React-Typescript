@@ -15,11 +15,12 @@ import {
 } from '@material-ui/core'
 import pluralize from 'pluralize'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { getTemplateType } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrandId } from '@app/selectors/brand'
+import { setGlobalTrigger } from '@app/store_actions/global-triggers'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { generateInitialValues, generatePayload } from './helpers'
@@ -81,6 +82,7 @@ export function TriggerEditMode({
   handleClose
 }: Props) {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const brand = useSelector(selectActiveBrandId)
 
   const {
@@ -110,10 +112,12 @@ export function TriggerEditMode({
     const payload = generatePayload(data, brand, currentEventType)
 
     try {
-      const res = await createTrigger(payload)
+      const trigger = (await createTrigger(payload)).data
+
+      dispatch(setGlobalTrigger(trigger))
 
       if (callback) {
-        callback(res.data)
+        callback(trigger)
       }
 
       handleClose()

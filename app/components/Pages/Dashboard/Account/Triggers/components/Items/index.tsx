@@ -37,8 +37,6 @@ export function TriggerItems() {
   const classes = useStyles()
   const { isEmpty, isLoading, attrs: globalTriggers } = useGetGlobalTriggers()
 
-  console.log({ isLoading, globalTriggers })
-
   const renderContent = () => {
     if (isLoading) {
       return (

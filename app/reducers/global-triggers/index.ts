@@ -1,6 +1,7 @@
 import type {
   RequestGlobalTriggersAction,
-  SetGlobalTriggersAction
+  SetGlobalTriggersAction,
+  SetGlobalTriggerAction
 } from 'actions/global-triggers'
 import * as actionType from 'constants/global-triggers'
 
@@ -16,7 +17,10 @@ const defaultGlobalTriggersState: IGlobalTriggerState = {
 
 function globalTriggersReducer(
   state: IGlobalTriggerState = defaultGlobalTriggersState,
-  action: SetGlobalTriggersAction | RequestGlobalTriggersAction
+  action:
+    | SetGlobalTriggerAction
+    | SetGlobalTriggersAction
+    | RequestGlobalTriggersAction
 ) {
   switch (action.type) {
     case actionType.REQUEST_GLOBAL_TRIGGERS:
@@ -24,12 +28,19 @@ function globalTriggersReducer(
         ...state,
         isLoading: true
       }
-    case actionType.SET_GLOBAL_TRIGGERS: {
+    case actionType.SET_GLOBAL_TRIGGERS:
       return {
         attrs: action.payload,
         isLoading: false
       }
-    }
+    case actionType.SET_GLOBAL_TRIGGER:
+      return {
+        ...state,
+        attrs: {
+          ...state.attrs,
+          [action.payload.event_type]: action.payload
+        }
+      }
     default:
       return state
   }

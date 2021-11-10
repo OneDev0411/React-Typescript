@@ -3,7 +3,8 @@ import { Dispatch } from 'redux'
 import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import {
   REQUEST_GLOBAL_TRIGGERS,
-  SET_GLOBAL_TRIGGERS
+  SET_GLOBAL_TRIGGERS,
+  SET_GLOBAL_TRIGGER
 } from 'constants/global-triggers'
 
 import { IGlobalTriggerState } from '../../reducers/global-triggers'
@@ -24,6 +25,14 @@ const setGlobalTriggers = (triggers: IGlobalTriggerState['attrs']) =>
   } as const)
 
 export type SetGlobalTriggersAction = ReturnType<typeof setGlobalTriggers>
+
+export const setGlobalTrigger = (trigger: IGlobalTrigger) =>
+  ({
+    type: SET_GLOBAL_TRIGGER,
+    payload: trigger
+  } as const)
+
+export type SetGlobalTriggerAction = ReturnType<typeof setGlobalTrigger>
 
 export const fetchGlobalTriggers =
   (brandId: UUID) => async (dispatch: Dispatch) => {

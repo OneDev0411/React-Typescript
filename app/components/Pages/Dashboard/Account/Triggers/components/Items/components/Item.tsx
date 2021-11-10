@@ -9,12 +9,14 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 import pluralize from 'pluralize'
+import { useDispatch } from 'react-redux'
 
 import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import {
   enableTrigger,
   disableTrigger
 } from '@app/models/instant-marketing/global-triggers'
+import { setGlobalTrigger as toggleGlobalTrigger } from '@app/store_actions/global-triggers'
 
 import { TriggerEditMode as EditMode } from '../../EditMode'
 
@@ -69,13 +71,17 @@ interface Props {
   trigger: IGlobalTrigger
 }
 
-export function Item({ trigger: triggerProp }: Props) {
+export function Item({ trigger }: Props) {
   const classes = useStyles()
-  const [trigger, setTrigger] = useState<IGlobalTrigger>(triggerProp)
-  const [isEnable, setIsEnable] = useState<boolean>(!trigger.deleted_at)
+  const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const editModeContainerRef = useRef<Nullable<HTMLDivElement>>(null)
+
+  const isEnable: boolean = useMemo(
+    () => !trigger.deleted_at,
+    [trigger.deleted_at]
+  )
 
   const templatePreview: Nullable<string> = useMemo(() => {
     if (trigger.template) {
@@ -106,8 +112,6 @@ export function Item({ trigger: triggerProp }: Props) {
     setAnchorEl(null)
   }
 
-  const handleEditCallback = trigger => setTrigger(trigger)
-
   const toggleStatus = async (event: ChangeEvent<HTMLInputElement>) => {
     if (isLoading) {
       return null
@@ -119,12 +123,11 @@ export function Item({ trigger: triggerProp }: Props) {
     try {
       setIsLoading(true)
 
-      const res = isEnabling
+      const trigger: IGlobalTrigger = isEnabling
         ? await enableTrigger(id, brand)
         : await disableTrigger(id, brand)
 
-      setTrigger(res)
-      setIsEnable(!res.deleted_at)
+      dispatch(toggleGlobalTrigger(trigger))
     } catch (error) {
       console.error(error)
     } finally {
@@ -183,7 +186,6 @@ export function Item({ trigger: triggerProp }: Props) {
         trigger={trigger}
         anchor={anchorEl}
         containerRef={editModeContainerRef.current}
-        callback={handleEditCallback}
         handleClose={handleCloseEdit}
       />
     </>
