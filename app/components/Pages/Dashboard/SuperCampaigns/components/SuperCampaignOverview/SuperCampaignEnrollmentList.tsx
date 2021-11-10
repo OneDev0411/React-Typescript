@@ -129,7 +129,7 @@ function SuperCampaignEnrollmentList({
             listClasses.rowBorderTop
           )
         })}
-        loading={isLoading ? 'middle' : undefined}
+        loading={isLoading ? 'static' : undefined}
         LoadingStateComponent={SuperCampaignListLoadingState}
         EmptyStateComponent={SuperCampaignListEmptyState}
       />

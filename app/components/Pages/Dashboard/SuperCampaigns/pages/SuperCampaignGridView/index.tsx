@@ -57,8 +57,8 @@ function SuperCampaignGridView(props) {
       }}
       EmptyStateComponent={() => (
         <EmailInsightsZeroState
-          title="No super campaign to show, yet."
-          subTitle="Try creating your first super campaign and help your agents"
+          title="No campaign to show, yet."
+          subTitle="Try creating your first campaign and help your agents"
         />
       )}
     />

@@ -62,7 +62,7 @@ function SuperCampaignDrawer({
         keepMounted
       >
         <OverlayDrawer.Header
-          title="Enter Super Campaign Details"
+          title="Enter Campaign Details"
           closeButtonDisabled={actionButtonsDisabled}
         />
         <OverlayDrawer.Body>
