@@ -21,29 +21,13 @@ import { useSelector } from 'react-redux'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
+import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
 import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { convertSecondsToDay } from './helpers'
-
-interface Props {
-  sender: IUser
-  disabled?: boolean
-  renderAttributeFields: () => ReactNode
-  attributeName: TriggerContactEventTypes
-  currentValue: Nullable<ITrigger>
-  isActive: boolean
-  isSaving?: boolean
-  subject: string
-  sendBefore: number
-  onChangeActive: (value: boolean) => void
-  onChangeSubject: (value: string) => void
-  onChangeSender: (value: IContact) => void
-  onChangeSendBefore: (value: number) => void
-  onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
-}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -101,6 +85,23 @@ const useStyles = makeStyles(
   { name: 'TriggerEditMode' }
 )
 
+interface Props {
+  sender: IUser
+  disabled?: boolean
+  renderAttributeFields: () => ReactNode
+  attributeName: TriggerContactEventTypes
+  currentValue: Nullable<ITrigger>
+  isActive: boolean
+  isSaving?: boolean
+  subject: string
+  sendBefore: number
+  onChangeActive: (value: boolean) => void
+  onChangeSubject: (value: string) => void
+  onChangeSender: (value: IContact) => void
+  onChangeSendBefore: (value: number) => void
+  onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
+}
+
 const TriggerEditModeComponent = ({
   disabled = false,
   isSaving = false,
@@ -119,14 +120,16 @@ const TriggerEditModeComponent = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUser)
+  const globalTriggers = useSelector(selectGlobalTriggersAttributes)
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
   const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
-    useState<boolean>(true)
+    useState<boolean>(!globalTriggers[attributeName])
   const [sendBefore, setSendBefore] = useState<number>(
     convertSecondsToDay(sendBeforeProp)
   )
+
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IMarketingTemplateInstance>>(null)
 

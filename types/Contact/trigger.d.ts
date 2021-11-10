@@ -23,7 +23,7 @@ interface IEventAction {
 }
 type IEmailAction = {
   action: 'schedule_email'
-  campaign?: IEmailCampaign
+  campaign?: IEmailCampaign<'from'>
 }
 
 declare type ITriggerRaw = ITriggerBase & IContactTrigger & IEmailAction

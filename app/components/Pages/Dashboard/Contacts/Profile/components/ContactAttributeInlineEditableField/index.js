@@ -1,4 +1,6 @@
-import React from 'react'
+import { Component } from 'react'
+
+import { connect } from 'react-redux'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
@@ -7,21 +9,23 @@ import {
   updateTrigger,
   removeTrigger
 } from 'models/instant-marketing/triggers'
+import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
 import { noop } from 'utils/helpers'
 
 import { TRIGGERABLE_ATTRIBUTES } from './constants'
 import { EditMode } from './EditMode'
 import {
-  formatValue,
   getTitle,
   getValue,
   parseValue,
-  getPlaceholder,
   validation,
-  validateTriggerFields
+  formatValue,
+  getPlaceholder,
+  getStateFromTrigger,
+  validateTriggerFields,
+  getInitialErrorMessage
 } from './helpers'
 import { TriggerEditMode } from './TriggerEditMode'
-import { getTriggerSubject } from './TriggerEditMode/helpers'
 import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
@@ -47,70 +51,13 @@ function getStateFromAttribute(attribute) {
     value: ''
   }
 }
-function getStateFromTrigger(trigger, contact, attribute) {
-  const attributeName = attribute?.attribute_def?.name || ''
 
-  if (trigger) {
-    return {
-      currentTrigger: trigger,
-      isTriggerActive: true,
-      triggerSender: trigger.campaign?.from ?? contact.user,
-      triggerSubject:
-        trigger.campaign?.subject || getTriggerSubject(attributeName),
-      triggerSendBefore: trigger.wait_for || 0,
-      triggerSelectedTemplate: null
-    }
-  }
-
-  // we're checking if date value is already exist
-  // disable the trigger unless enable it
-  let isActive
-
-  if (
-    attribute &&
-    TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def?.name)
-  ) {
-    const attributeValue = getValue(attribute)
-
-    if (
-      typeof attributeValue === 'object' &&
-      (!attributeValue.year ||
-        !attributeValue.month?.value ||
-        !attributeValue.day?.value)
-    ) {
-      isActive = true
-    } else {
-      isActive = false
-    }
-  }
-
-  return {
-    currentTrigger: null,
-    isTriggerActive: isActive,
-    triggerSender: contact.user,
-    triggerSubject: getTriggerSubject(attributeName),
-    triggerSendBefore: 0,
-    triggerSelectedTemplate: null
-  }
-}
-
-function getInitialErrorMessage(contact, isTriggerable) {
-  let error = ''
-
-  if (!contact.email && isTriggerable) {
-    error =
-      "You should provide contact's email to be able to use trigger feature."
-  }
-
-  if (!contact.user && isTriggerable) {
-    error =
-      "You should set an contact's owner to be able to use trigger feature."
-  }
-
-  return error
-}
-
-const getInitialState = ({ contact, attribute, trigger }) => {
+const getInitialState = ({
+  contact,
+  attribute,
+  trigger,
+  attributeGlobalTrigger
+}) => {
   const isTriggerable =
     TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def.name) &&
     !attribute?.is_partner
@@ -122,7 +69,7 @@ const getInitialState = ({ contact, attribute, trigger }) => {
     isTriggerFieldDirty: false,
     isTriggerSaving: false,
     disabled: false,
-    ...getStateFromTrigger(trigger, contact, attribute),
+    ...getStateFromTrigger(trigger, attributeGlobalTrigger, contact, attribute),
     ...getStateFromAttribute(attribute)
   }
 }
@@ -137,7 +84,7 @@ function diffAttributeStateWithProp(attribute, state) {
   )
 }
 
-class MasterField extends React.Component {
+class MasterField extends Component {
   constructor(props) {
     super(props)
 
@@ -540,4 +487,13 @@ class MasterField extends React.Component {
   }
 }
 
-export default MasterField
+const mapStateToProps = (state, props) => {
+  return {
+    attributeGlobalTrigger:
+      selectGlobalTriggersAttributes(state)[
+        props.attribute?.attribute_def?.name
+      ] ?? null
+  }
+}
+
+export default connect(mapStateToProps)(MasterField)
