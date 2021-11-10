@@ -33,7 +33,7 @@ type SuperCampaignDetailProps = RouteComponentProps<
 >
 
 function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
-  useTitle('Super Campaign Detail | Rechat')
+  useTitle('Campaign Detail | Rechat')
 
   const classes = useStyles()
 

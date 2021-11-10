@@ -45,13 +45,13 @@ export function useSaveSuperCampaign(
 
       notify({
         status: 'success',
-        message: 'The super campaign was updated'
+        message: 'The campaign was updated'
       })
     } catch (_) {
       notify({
         status: 'error',
         message:
-          'Something went wrong while saving the super campaign. Please try again.'
+          'Something went wrong while saving the campaign. Please try again.'
       })
     }
 
