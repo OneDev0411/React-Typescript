@@ -47,10 +47,9 @@ const Icons: Record<TriggerContactEventTypes, string> = {
 
 interface Props {
   setupType: TriggerContactEventTypes
-  onSetupCallback: () => void
 }
 
-export function SetupButton({ setupType, onSetupCallback }: Props) {
+export function SetupButton({ setupType }: Props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>(null)
   const setupModeContainerRef = useRef<Nullable<HTMLDivElement>>(null)
@@ -81,7 +80,6 @@ export function SetupButton({ setupType, onSetupCallback }: Props) {
           eventType={setupType}
           anchor={anchorEl}
           containerRef={setupModeContainerRef.current}
-          callback={onSetupCallback}
           handleClose={handleCloseSetupMode}
         />
       )}

@@ -1,37 +1,35 @@
-import { useCallback } from 'react'
-
+import isEmpty from 'lodash/isEmpty'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import useAsync from '@app/hooks/use-async'
-import { getTriggers } from '@app/models/instant-marketing/global-triggers'
+import { IGlobalTriggerState } from '@app/reducers/global-triggers'
+import { selectActiveBrandId } from '@app/selectors/brand'
+import { selectGlobalTriggers } from '@app/selectors/globalTriggers'
+import { fetchGlobalTriggers } from '@app/store_actions/global-triggers'
 
-export interface UseGetGlobalTriggers {
-  isLoading: boolean
-  globalTriggers: IGlobalTrigger[]
-  reload: () => void
+export interface UseGetGlobalTriggers extends IGlobalTriggerState {
+  isEmpty: boolean
 }
 
-export function useGetGlobalTriggers(brandId: UUID): UseGetGlobalTriggers {
-  const {
-    isLoading,
-    data: globalTriggers,
-    run
-  } = useAsync<IGlobalTrigger[]>({
-    data: [],
-    status: 'pending'
-  })
-  const loadTriggers = useCallback(
-    () => run(() => getTriggers(brandId)),
-    [brandId, run]
-  )
+export function useGetGlobalTriggers(): UseGetGlobalTriggers {
+  const dispatch = useDispatch()
+  const brandId = useSelector(selectActiveBrandId)
+  const { isLoading, attrs }: IGlobalTriggerState =
+    useSelector(selectGlobalTriggers)
+
+  // const loadTriggers = useCallback(
+  //   () => run(() => getTriggers(brandId)),
+  //   [brandId, run]
+  // )
 
   useEffectOnce(() => {
-    loadTriggers()
+    dispatch(fetchGlobalTriggers(brandId))
   })
 
   return {
+    isEmpty: isEmpty(attrs),
     isLoading,
-    globalTriggers,
-    reload: loadTriggers
+    attrs
+    // reload: loadTriggers
   }
 }

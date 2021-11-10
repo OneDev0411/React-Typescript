@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 
-// import { getTriggers } from '@app/models/instant-marketing/global-triggers'
+import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import {
   REQUEST_GLOBAL_TRIGGERS,
   SET_GLOBAL_TRIGGERS
@@ -29,7 +29,11 @@ export const fetchGlobalTriggers =
   (brandId: UUID) => async (dispatch: Dispatch) => {
     dispatch(requestGlobalTriggers())
 
-    // const triggers: IGlobalTrigger[] = await getTriggers(brandId)
+    const triggers: IGlobalTrigger[] = await getTriggers(brandId)
+    // @ts-ignore
+    const dd: IGlobalTriggerState['attrs'] = {}
 
-    // dispatch(setGlobalTriggers(triggers))
+    triggers.forEach(trigger => (dd[trigger.event_type] = trigger))
+
+    dispatch(setGlobalTriggers(dd))
   }

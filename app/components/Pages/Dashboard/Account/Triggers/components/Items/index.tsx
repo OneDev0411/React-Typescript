@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { CircularProgress, Theme, makeStyles } from '@material-ui/core'
 
-import { Theme, makeStyles } from '@material-ui/core'
+import { useGetGlobalTriggers } from '../../hooks/use-get-global-triggers'
 
 import { Item } from './components/Item'
 import { SetupButton } from './components/SetupButton'
@@ -20,6 +20,12 @@ const useStyles = makeStyles(
     },
     item: {
       margin: theme.spacing(1, 3, 0, 0)
+    },
+    loading: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: theme.spacing(4)
     }
   }),
   {
@@ -27,22 +33,24 @@ const useStyles = makeStyles(
   }
 )
 
-interface Props {
-  list: Nullable<IGlobalTrigger[]>
-  onSetupCallback: () => void
-}
-
-export function TriggerItems({ list, onSetupCallback }: Props) {
+export function TriggerItems() {
   const classes = useStyles()
+  const { isEmpty, isLoading, attrs: globalTriggers } = useGetGlobalTriggers()
 
-  const activeTriggers = useMemo(
-    () => (list || []).map(trigger => trigger.event_type),
-    [list]
-  )
-  const renderItem = () => {
+  console.log({ isLoading, globalTriggers })
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className={classes.loading}>
+          <CircularProgress />
+        </div>
+      )
+    }
+
     return availableGlobalTriggerType.map(type => {
-      if (list && list?.length > 0) {
-        const trigger = list[activeTriggers.indexOf(type)]
+      if (!isEmpty) {
+        const trigger = globalTriggers[type]
 
         if (trigger) {
           return (
@@ -55,11 +63,11 @@ export function TriggerItems({ list, onSetupCallback }: Props) {
 
       return (
         <div key={type} className={classes.item}>
-          <SetupButton setupType={type} onSetupCallback={onSetupCallback} />
+          <SetupButton setupType={type} />
         </div>
       )
     })
   }
 
-  return <div className={classes.container}>{renderItem()}</div>
+  return <div className={classes.container}>{renderContent()}</div>
 }
