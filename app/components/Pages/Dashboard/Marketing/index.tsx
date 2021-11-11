@@ -1,25 +1,27 @@
-import { useMemo, memo } from 'react'
+import { useState, useMemo, memo } from 'react'
 
-import { Tooltip, IconButton, makeStyles } from '@material-ui/core'
-import { mdiCogOutline } from '@mdi/js'
+import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
+import { mdiCogOutline, mdiPlus } from '@mdi/js'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
+import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
 import { selectActiveTeamId } from '@app/selectors/team'
+import { selectUser } from '@app/selectors/user'
+import { goTo } from '@app/utils/go-to'
+import { isTemplateInstance } from '@app/utils/marketing-center/helpers'
+import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
+import Acl from '@app/views/components/Acl'
+import PageLayout from '@app/views/components/GlobalPageLayout'
+import MarketingAssetUploadDrawer from '@app/views/components/MarketingAssetUploadDrawer'
 import MarketingSearchInput, {
   TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
-import Acl from 'components/Acl'
-import PageLayout from 'components/GlobalPageLayout'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
-import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
-import { selectUser } from 'selectors/user'
-import { goTo } from 'utils/go-to'
-import { isTemplateInstance } from 'utils/marketing-center/helpers'
-import { hasUserAccessToBrandSettings } from 'utils/user-teams'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
@@ -59,6 +61,10 @@ export function MarketingLayout({
   const classes = useStyles()
   const activeBrand = useSelector(selectActiveTeamId)
   const user = useSelector(selectUser)
+  const [
+    isMarketingAssetUploadDrawerOpen,
+    setIsMarketingAssetUploadDrawerOpen
+  ] = useState<boolean>(false)
 
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
@@ -123,6 +129,18 @@ export function MarketingLayout({
     )
   }
 
+  const openUploadMarketingAssetDrawer = () => {
+    setIsMarketingAssetUploadDrawerOpen(true)
+  }
+
+  const closeUploadMarketingAssetDrawer = () => {
+    setIsMarketingAssetUploadDrawerOpen(false)
+  }
+
+  const handleUploadAssetClick = () => {
+    openUploadMarketingAssetDrawer()
+  }
+
   return (
     <Acl.Marketing fallbackUrl="/dashboard/mls">
       <Helmet>
@@ -142,11 +160,23 @@ export function MarketingLayout({
               <div>
                 <Tooltip title="Brand Setup">
                   <IconButton onClick={() => goTo('/dashboard/brand-settings')}>
-                    <SvgIcon path={mdiCogOutline} />
+                    <SvgIcon path={mdiCogOutline} size={muiIconSizes.xsmall} />
                   </IconButton>
                 </Tooltip>
               </div>
             )}
+            <div>
+              <Tooltip title="Upload Asset">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleUploadAssetClick}
+                >
+                  <SvgIcon path={mdiPlus} />
+                  Add
+                </Button>
+              </Tooltip>
+            </div>
           </div>
         </PageLayout.Header>
         <PageLayout.Main minHeight="100vh">
@@ -169,6 +199,16 @@ export function MarketingLayout({
               defaultSelectedTemplate: location.query.templateId,
               onDeleteTemplate: deleteTemplate
             })}
+          {isMarketingAssetUploadDrawerOpen && (
+            <MarketingAssetUploadDrawer
+              defaultSelectedTemplateType={
+                templateTypes
+                  ? (templateTypes.split(',')[0] as IMarketingTemplateType)
+                  : undefined
+              }
+              onClose={closeUploadMarketingAssetDrawer}
+            />
+          )}
         </PageLayout.Main>
       </PageLayout>
     </Acl.Marketing>

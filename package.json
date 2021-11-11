@@ -195,7 +195,7 @@
     "react-final-form-listeners": "^1.0.2",
     "react-ga": "^2.5.3",
     "react-helmet": "^6.0.0-beta",
-    "react-hook-form": "^6.15.5",
+    "react-hook-form": "^6.15.8",
     "react-hook-thunk-reducer": "^0.2.1",
     "react-image-gallery": "^1.0.9",
     "react-images": "^0.5.11",
