@@ -31,7 +31,10 @@ export function useDeleteSuperCampaignEnrollment(
 
       const newSuperCampaignEnrollments = [...superCampaignEnrollments]
 
-      newSuperCampaignEnrollments.splice(enrollmentIndex, 1)
+      newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {
+        ...enrollment,
+        deleted_at: new Date().getTime() / 1000
+      })
 
       setSuperCampaignEnrollments(newSuperCampaignEnrollments)
     } catch (_) {
