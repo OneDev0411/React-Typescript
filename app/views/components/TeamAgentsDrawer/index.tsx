@@ -12,7 +12,7 @@ import { searchContacts } from 'models/contacts/search-contacts'
 
 import { AgentsList } from './List'
 
-interface Props extends Pick<TeamAgentsProps, 'getTeamAgentsModel'> {
+interface Props extends Pick<TeamAgentsProps, 'teamAgentsModelFn'> {
   title: string
   multiSelection?: boolean
   withRelatedContacts?: boolean
@@ -32,7 +32,7 @@ export function TeamAgentsDrawer({
   isDrawerOpen = true,
   onClose,
   onSelectAgents,
-  getTeamAgentsModel
+  teamAgentsModelFn
 }: Props) {
   const [selectedAgents, setSelectedAgents] = useState<BrandedUser[]>([])
   const [isSearchingContacts, setIsSearchingContacts] = useState<boolean>(false)
@@ -105,7 +105,7 @@ export function TeamAgentsDrawer({
           flattenTeams={flattened}
           isPrimaryAgent={isPrimaryAgent}
           criteria={searchCriteria}
-          getTeamAgentsModel={getTeamAgentsModel}
+          teamAgentsModelFn={teamAgentsModelFn}
         >
           {({ isLoading, isEmptyState, teams }) => (
             <>

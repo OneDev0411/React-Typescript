@@ -59,7 +59,7 @@ function SuperCampaignEnrollManuallyButton({
           withRelatedContacts={false}
           onSelectAgents={handleEnroll}
           onClose={handleCloseTeamAgentsDrawer}
-          getTeamAgentsModel={getSuperCampaignEligibleAgents}
+          teamAgentsModelFn={getSuperCampaignEligibleAgents}
         />
       )}
     </>
