@@ -34,6 +34,10 @@ import registerNeighborhoodsBlocks, {
   neighborhoodsBlockName,
   neighborhoodsGraphsBlockName
 } from './Neighborhoods'
+import registerPlaceholderBlocks, {
+  PlaceholderOptions,
+  senderLeftBlockName
+} from './Placeholders'
 import registerStaticBlocks, {
   headline1BlockName,
   dividerBlockName,
@@ -49,6 +53,7 @@ interface Options {
   video: VideoOptions
   article: ArticleOptions
   neighborhoods?: NeighborhoodsOptions
+  placeholder: PlaceholderOptions
 }
 
 const BLOCK_BUTTONS_ORDER = [
@@ -81,14 +86,16 @@ const BLOCK_BUTTONS_ORDER = [
   agentMultiBlockName,
 
   neighborhoodsBlockName,
-  neighborhoodsGraphsBlockName
+  neighborhoodsGraphsBlockName,
+
+  senderLeftBlockName
 ]
 
 export function registerEmailBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
-  { listing, agent, image, video, article, neighborhoods }: Options
+  { listing, agent, image, video, article, neighborhoods, placeholder }: Options
 ) {
   const draggable =
     '[data-gjs-type=mj-column],[data-gjs-type=mj-wrapper],[data-gjs-type=mj-body]'
@@ -138,6 +145,13 @@ export function registerEmailBlocks(
       neighborhoods
     )
   }
+
+  registerPlaceholderBlocks(
+    editor,
+    renderData,
+    templateBlockOptions,
+    placeholder
+  )
 
   reorderBlocks(editor, BLOCK_BUTTONS_ORDER)
   collapseBlockCategories(editor)
