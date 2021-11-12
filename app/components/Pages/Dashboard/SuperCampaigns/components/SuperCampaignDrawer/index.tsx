@@ -1,15 +1,23 @@
 import { useRef, useState } from 'react'
 
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles, TextField } from '@material-ui/core'
+import { mdiCalendarBlank } from '@mdi/js'
 import { Form, Field } from 'react-final-form'
 
-import { FormTextField } from '@app/views/components/final-form-fields'
-import FormDateTimeField from '@app/views/components/final-form-fields/FormDateTimeField'
+import {
+  DateTimeField,
+  FormTextField
+} from '@app/views/components/final-form-fields'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OverlayDrawer from 'components/OverlayDrawer'
 
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import { SuperCampaignFormValues } from './types'
+import { convertDateToTimestamp, convertTimestampToDate } from './helpers'
+import {
+  SuperCampaignFormInternalValues,
+  SuperCampaignFormValues
+} from './types'
 
 const useStyles = makeStyles(
   theme => ({
@@ -39,7 +47,7 @@ function SuperCampaignDrawer({
   const formRef = useRef<HTMLFormElement>(null)
 
   // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#via-documentgetelementbyid
-  const handleConfirm = () =>
+  const handleSaveClick = () =>
     formRef.current?.dispatchEvent(
       new Event('submit', { cancelable: true, bubbles: true })
     )
@@ -52,6 +60,15 @@ function SuperCampaignDrawer({
   const hideDrawer = () => setShouldHideDrawer(true)
 
   const showDrawer = () => setShouldHideDrawer(false)
+
+  const handleConfirm = ({
+    due_at,
+    ...otherValues
+  }: SuperCampaignFormInternalValues) =>
+    onConfirm({
+      ...otherValues,
+      due_at: due_at ? convertDateToTimestamp(due_at) : undefined
+    })
 
   return (
     <>
@@ -68,9 +85,14 @@ function SuperCampaignDrawer({
         <OverlayDrawer.Body>
           <Box my={3}>
             {isOpen && (
-              <Form<SuperCampaignFormValues>
-                onSubmit={onConfirm}
-                initialValues={formInitialValues}
+              <Form<SuperCampaignFormInternalValues>
+                onSubmit={handleConfirm}
+                initialValues={{
+                  ...formInitialValues,
+                  due_at: formInitialValues.due_at
+                    ? convertTimestampToDate(formInitialValues.due_at)
+                    : undefined
+                }}
               >
                 {({ handleSubmit }) => (
                   <form onSubmit={handleSubmit} ref={formRef}>
@@ -85,11 +107,23 @@ function SuperCampaignDrawer({
                       helperText="Only agents who are eligible to participate in this campaign will see this."
                       minRows={3}
                     />
-                    <FormDateTimeField
-                      name="due_at"
-                      label="Schedule"
-                      mode="timestamp"
-                    />
+                    <DateTimeField name="due_at">
+                      {({ formattedDate, handleOpen }) => (
+                        <TextField
+                          value={formattedDate}
+                          onClick={handleOpen}
+                          variant="outlined"
+                          label="Schedule"
+                          size="small"
+                          fullWidth
+                          InputProps={{
+                            endAdornment: <SvgIcon path={mdiCalendarBlank} />,
+                            inputProps: { readOnly: true }
+                          }}
+                          margin="normal"
+                        />
+                      )}
+                    </DateTimeField>
                     <Field
                       name="template_instance"
                       render={({ input }) => (
@@ -117,7 +151,7 @@ function SuperCampaignDrawer({
             disabled={actionButtonsDisabled}
             color="primary"
             variant="contained"
-            onClick={handleConfirm}
+            onClick={handleSaveClick}
           >
             Save
           </Button>
