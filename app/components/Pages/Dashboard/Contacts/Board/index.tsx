@@ -34,11 +34,14 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  isActive: boolean
-  searchTerm: string
+  criteria: {
+    searchTerm: string
+    filters: IContactFilter[]
+    conditionOperator: TContactFilterType
+  }
 }
 
-export const Board = memo(({ searchTerm }: Props) => {
+export const Board = memo(({ criteria }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
   const dispatch = useDispatch()
@@ -107,7 +110,7 @@ export const Board = memo(({ searchTerm }: Props) => {
                 id={tag || '-1'}
                 title={title}
                 tag={tag}
-                searchTerm={searchTerm}
+                criteria={criteria}
               />
             ))}
           </div>

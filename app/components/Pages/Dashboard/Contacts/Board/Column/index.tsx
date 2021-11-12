@@ -3,13 +3,14 @@ import React, { memo, useState } from 'react'
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 import { mdiCardsOutline } from '@mdi/js'
+import { dequal as equal } from 'dequal'
 import {
   Droppable,
   DroppableProvided,
   DroppableStateSnapshot
 } from 'react-beautiful-dnd'
 import { useSelector } from 'react-redux'
-import { useAsync } from 'react-use'
+import { useDeepCompareEffect } from 'react-use'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { areEqual } from 'react-window'
 
@@ -83,6 +84,11 @@ interface Props {
   title: string
   tag?: string
   searchTerm: string
+  criteria: {
+    searchTerm: string
+    filters: IContactFilter[]
+    conditionOperator: TContactFilterType
+  }
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -90,11 +96,11 @@ interface Props {
 export const BoardColumn = memo(function BoardColumn({
   id,
   title,
-  searchTerm,
+  criteria,
   tag
 }: Props) {
   const classes = useStyles()
-  const [currentSearchTerm, setCurrentSearchTerm] = useState(searchTerm)
+  const [currentCriteria, setCurrentCriteria] = useState(criteria)
   const [list, updateList] = useColumnList(tag)
   const [loadingOffset, setLoadingOffset] = useState(0)
   const [loadingState, setLoadingState] =
@@ -120,51 +126,59 @@ export const BoardColumn = memo(function BoardColumn({
     return undefined
   }
 
-  useAsync(async () => {
-    if (loadingState || (searchTerm === currentSearchTerm && isReachedEnd)) {
-      return
-    }
+  useDeepCompareEffect(() => {
+    const fetch = async () => {
+      const isCriteriaChanged =
+        equal(criteria.filters, currentCriteria.filters) === false ||
+        criteria.searchTerm !== currentCriteria.searchTerm ||
+        criteria.conditionOperator !== currentCriteria.conditionOperator
 
-    setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
+      if (isLoading || (!isCriteriaChanged && isReachedEnd)) {
+        return
+      }
 
-    let filters: IContactFilter[] | undefined
+      setLoadingState(loadingOffset === 0 ? 'initial' : 'more')
 
-    if (tag) {
-      filters = [
-        {
+      let columnFilters: IContactFilter[] | undefined
+
+      if (tag) {
+        columnFilters = [
+          {
+            attribute_def: tagAttributeDefinitionId,
+            invert: false,
+            value: tag
+          }
+        ]
+      } else {
+        columnFilters = Tags.map(tag => ({
           attribute_def: tagAttributeDefinitionId,
-          invert: false,
+          invert: true,
           value: tag
-        }
-      ]
-    } else {
-      filters = Tags.map(tag => ({
-        attribute_def: tagAttributeDefinitionId,
-        invert: true,
-        value: tag
-      }))
+        }))
+      }
+
+      const { data, info } = await searchContacts(
+        criteria.searchTerm,
+        [...columnFilters, ...criteria.filters],
+        {
+          start: loadingOffset,
+          limit: loadingLimit,
+          filter_type: criteria.conditionOperator
+        },
+        viewAs(user)
+      )
+
+      setLoadingState(null)
+      setIsReachedEnd(data.length + list.length >= info!.total)
+
+      console.log(title, { isCriteriaChanged })
+
+      updateList(isCriteriaChanged ? data : [...list, ...data], tag)
+      setCurrentCriteria(criteria)
     }
 
-    const { data, info } = await searchContacts(
-      searchTerm,
-      filters,
-      {
-        start: loadingOffset,
-        limit: loadingLimit
-      },
-      viewAs(user)
-    )
-
-    setLoadingState(null)
-    setIsReachedEnd(data.length + list.length === info?.total)
-
-    updateList(
-      searchTerm === currentSearchTerm ? [...list, ...data] : data,
-      tag
-    )
-
-    setCurrentSearchTerm(searchTerm)
-  }, [loadingOffset, searchTerm, tagAttributeDefinitionId])
+    fetch()
+  }, [loadingOffset, criteria, tagAttributeDefinitionId])
 
   const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
