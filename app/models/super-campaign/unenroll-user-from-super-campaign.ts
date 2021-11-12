@@ -7,13 +7,10 @@ interface UnenrollUserFromSuperCampaignInput {
 
 async function unenrollUserFromSuperCampaign(
   superCampaignId: UUID,
-  enrollmentId: UUID,
   data: UnenrollUserFromSuperCampaignInput
 ): Promise<void> {
   await new Fetch()
-    .delete(
-      `/email/super-campaigns/${superCampaignId}/enrollments/${enrollmentId}`
-    )
+    .delete(`/email/super-campaigns/${superCampaignId}/enrollments`)
     .send(data)
 }
 

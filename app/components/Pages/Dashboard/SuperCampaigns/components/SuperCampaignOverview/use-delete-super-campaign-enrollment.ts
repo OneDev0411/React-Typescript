@@ -24,7 +24,7 @@ export function useDeleteSuperCampaignEnrollment(
 
       const enrollment = superCampaignEnrollments[enrollmentIndex]
 
-      await deleteSuperCampaignEnrollmentModel(superCampaignId, enrollmentId, {
+      await deleteSuperCampaignEnrollmentModel(superCampaignId, {
         user: enrollment.user.id,
         brand: enrollment.brand.id
       })
