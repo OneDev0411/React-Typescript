@@ -11,7 +11,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { Asset, AssetsUploadFormData } from '../../types'
 import AssetItem from '../AssetItem'
-// import ZeroState from '../ZeroState'
+import ZeroState from '../ZeroState'
 
 const useStyles = makeStyles(
   theme => ({
@@ -120,6 +120,10 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
     noClick: true,
     accept: ['image/*', 'video/*', 'application/pdf']
   })
+
+  if (assets.length === 0) {
+    return <ZeroState onUpload={onDrop} />
+  }
 
   return (
     <div className={classes.wrapper} {...getRootProps()}>
