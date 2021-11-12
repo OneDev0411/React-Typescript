@@ -83,7 +83,6 @@ interface Props {
   id: string
   title: string
   tag?: string
-  searchTerm: string
   criteria: {
     searchTerm: string
     filters: IContactFilter[]
