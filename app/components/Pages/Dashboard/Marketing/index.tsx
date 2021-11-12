@@ -34,6 +34,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row-reverse',
     alignItems: 'center'
   },
+  uploadAssetButtonContainer: {
+    marginRight: theme.spacing(2),
+    '& svg': {
+      marginRight: theme.spacing(1)
+    }
+  },
   searchContainer: {
     width: 300,
     marginLeft: theme.spacing(2)
@@ -174,19 +180,19 @@ export function MarketingLayout({
               <div>
                 <Tooltip title="Brand Setup">
                   <IconButton onClick={() => goTo('/dashboard/brand-settings')}>
-                    <SvgIcon path={mdiCogOutline} size={muiIconSizes.xsmall} />
+                    <SvgIcon path={mdiCogOutline} />
                   </IconButton>
                 </Tooltip>
               </div>
             )}
-            <div>
+            <div className={classes.uploadAssetButtonContainer}>
               <Tooltip title="Upload Asset">
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleUploadAssetClick}
                 >
-                  <SvgIcon path={mdiPlus} />
+                  <SvgIcon path={mdiPlus} size={muiIconSizes.xsmall} />
                   Add
                 </Button>
               </Tooltip>
