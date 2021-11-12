@@ -24,14 +24,17 @@ export function useDeleteSuperCampaignEnrollment(
 
       const enrollment = superCampaignEnrollments[enrollmentIndex]
 
-      await deleteSuperCampaignEnrollmentModel(superCampaignId, enrollmentId, {
+      await deleteSuperCampaignEnrollmentModel(superCampaignId, {
         user: enrollment.user.id,
         brand: enrollment.brand.id
       })
 
       const newSuperCampaignEnrollments = [...superCampaignEnrollments]
 
-      newSuperCampaignEnrollments.splice(enrollmentIndex, 1)
+      newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {
+        ...enrollment,
+        deleted_at: new Date().getTime() / 1000
+      })
 
       setSuperCampaignEnrollments(newSuperCampaignEnrollments)
     } catch (_) {

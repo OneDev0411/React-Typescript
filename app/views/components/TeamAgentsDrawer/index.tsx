@@ -6,13 +6,13 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 
 import { normalizeContactAttribute } from 'actions/contacts/helpers/normalize-contacts'
 import Drawer from 'components/OverlayDrawer'
-import TeamAgents from 'components/TeamAgents'
+import TeamAgents, { TeamAgentsProps } from 'components/TeamAgents'
 import { Agent, BrandedUser } from 'components/TeamAgents/types'
 import { searchContacts } from 'models/contacts/search-contacts'
 
 import { AgentsList } from './List'
 
-interface Props {
+interface Props extends Pick<TeamAgentsProps, 'teamAgentsModelFn'> {
   title: string
   multiSelection?: boolean
   withRelatedContacts?: boolean
@@ -31,7 +31,8 @@ export function TeamAgentsDrawer({
   isPrimaryAgent = false,
   isDrawerOpen = true,
   onClose,
-  onSelectAgents
+  onSelectAgents,
+  teamAgentsModelFn
 }: Props) {
   const [selectedAgents, setSelectedAgents] = useState<BrandedUser[]>([])
   const [isSearchingContacts, setIsSearchingContacts] = useState<boolean>(false)
@@ -104,6 +105,7 @@ export function TeamAgentsDrawer({
           flattenTeams={flattened}
           isPrimaryAgent={isPrimaryAgent}
           criteria={searchCriteria}
+          teamAgentsModelFn={teamAgentsModelFn}
         >
           {({ isLoading, isEmptyState, teams }) => (
             <>

@@ -1,18 +1,23 @@
+import { useCallback } from 'react'
+
 import { Button } from '@material-ui/core'
 import { mdiPlus } from '@mdi/js'
 
 import useSafeState from '@app/hooks/use-safe-state'
+import getSuperCampaignEligibleAgents from '@app/models/super-campaign/get-super-campaign-eligible-agents'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { Agent } from '@app/views/components/TeamAgents/types'
 import { TeamAgentsDrawer } from '@app/views/components/TeamAgentsDrawer'
 
 interface SuperCampaignEnrollManuallyButtonProps {
+  superCampaignId: UUID
   superCampaignTags: ISuperCampaign<'template_instance'>['tags']
   onEnroll: (data: ISuperCampaignEnrollmentInput[]) => Promise<void>
 }
 
 function SuperCampaignEnrollManuallyButton({
+  superCampaignId,
   superCampaignTags,
   onEnroll
 }: SuperCampaignEnrollManuallyButtonProps) {
@@ -39,6 +44,11 @@ function SuperCampaignEnrollManuallyButton({
     handleCloseTeamAgentsDrawer()
   }
 
+  const teamAgentsModelFn = useCallback(
+    async () => getSuperCampaignEligibleAgents(superCampaignId),
+    [superCampaignId]
+  )
+
   return (
     <>
       <Button
@@ -58,6 +68,7 @@ function SuperCampaignEnrollManuallyButton({
           withRelatedContacts={false}
           onSelectAgents={handleEnroll}
           onClose={handleCloseTeamAgentsDrawer}
+          teamAgentsModelFn={teamAgentsModelFn}
         />
       )}
     </>
