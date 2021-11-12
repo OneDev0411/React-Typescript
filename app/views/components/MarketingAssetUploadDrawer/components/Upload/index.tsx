@@ -62,10 +62,6 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
         return
       }
 
-      const newFilesUrls = await Promise.all(
-        acceptedFiles.map(file => readFileAsDataUrl(file))
-      )
-
       const preSelectedTemplateType =
         assets.length > 0
           ? assets[assets.length - 1].templateType ??
@@ -77,13 +73,16 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
 
       const newAssets: Asset[] = [
         ...assets,
-        ...newFilesUrls.map<Asset>(url => ({
-          templateType: preSelectedTemplateType,
-          medium: preSelectedMedium,
-          file: {
-            url
-          }
-        }))
+        ...(await Promise.all(
+          acceptedFiles.map(async file => ({
+            templateType: preSelectedTemplateType,
+            medium: preSelectedMedium,
+            file: {
+              object: file,
+              url: await readFileAsDataUrl(file)
+            }
+          }))
+        ))
       ]
 
       setValue('assets', newAssets)

@@ -2,6 +2,7 @@ import { useState, useMemo, memo } from 'react'
 
 import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
+import pluralize from 'pluralize'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
@@ -9,6 +10,7 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
+import useNotify from '@app/hooks/use-notify'
 import { selectActiveTeamId } from '@app/selectors/team'
 import { selectUser } from '@app/selectors/user'
 import { goTo } from '@app/utils/go-to'
@@ -59,6 +61,7 @@ export function MarketingLayout({
     { templateId?: UUID }
   >) {
   const classes = useStyles()
+  const notify = useNotify()
   const activeBrand = useSelector(selectActiveTeamId)
   const user = useSelector(selectUser)
   const [
@@ -133,7 +136,18 @@ export function MarketingLayout({
     setIsMarketingAssetUploadDrawerOpen(true)
   }
 
-  const closeUploadMarketingAssetDrawer = () => {
+  const closeUploadMarketingAssetDrawer = (uploadedAssets?: IBrandAsset[]) => {
+    if (uploadedAssets) {
+      notify({
+        status: 'success',
+        message: `${pluralize(
+          'asset',
+          uploadedAssets.length,
+          true
+        )} uploaded successfully`
+      })
+    }
+
     setIsMarketingAssetUploadDrawerOpen(false)
   }
 

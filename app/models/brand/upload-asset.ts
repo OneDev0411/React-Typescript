@@ -1,17 +1,23 @@
 import Fetch from '../../services/fetch'
 
+interface OptionsWithLabel {
+  label?: string
+}
+
+interface OptionsWithTemplateTypeAndMedium extends OptionsWithLabel {
+  template_type: IMarketingTemplateType
+  medium: IMarketingTemplateMedium
+}
+
 export async function uploadBrandAsset(
   brand: UUID,
   file: File,
-  options: {
-    label?: string
-    templateType?: IMarketingTemplateType
-  } = {}
+  options: OptionsWithLabel | OptionsWithTemplateTypeAndMedium = {}
 ): Promise<IBrandAsset> {
   const request = new Fetch()
     .upload(`/brands/${brand}/assets`)
     .attach('file', file)
-    .field(options)
+    .field(options as any)
 
   const response = await request
 

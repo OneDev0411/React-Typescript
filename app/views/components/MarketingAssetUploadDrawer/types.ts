@@ -2,8 +2,9 @@ export type DrawerStep = 'upload' | 'teams'
 
 export interface Asset {
   file: {
+    object: File
     url: string
-    isUploading?: boolean
+    isUploaded?: boolean
     uploadProgress?: number
   }
   label?: string

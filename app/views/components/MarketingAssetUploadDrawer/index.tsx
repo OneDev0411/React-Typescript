@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { uploadBrandAsset } from '@app/models/brand/upload-asset'
+import LoadingContainer from '@app/views/components/LoadingContainer'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import TeamTreeView from '@app/views/components/TeamTreeView'
 
@@ -11,7 +13,7 @@ import { DrawerStep, AssetsUploadFormData } from './types'
 
 interface Props {
   defaultSelectedTemplateType?: IMarketingTemplateType
-  onClose: () => void
+  onClose: (uploadedAssets?: IBrandAsset[]) => void
 }
 
 export default function MarketingAssetUploadDrawer({
@@ -26,9 +28,20 @@ export default function MarketingAssetUploadDrawer({
     shouldUnregister: false
   })
   const assets = formMethods.watch('assets')
+  const brand = formMethods.watch('brand')
 
-  const onSubmit = (data: AssetsUploadFormData) => {
-    console.log(data)
+  const onSubmit = async (data: AssetsUploadFormData) => {
+    const uploadedAssets = await Promise.all(
+      data.assets.map(asset => {
+        return uploadBrandAsset(data.brand.id, asset.file.object, {
+          label: asset.label,
+          template_type: asset.templateType,
+          medium: asset.medium
+        })
+      })
+    )
+
+    onClose(uploadedAssets)
   }
 
   const goToSelectTeamsStep = () => {
@@ -40,6 +53,14 @@ export default function MarketingAssetUploadDrawer({
   }
 
   const renderActiveStep = () => {
+    if (formMethods.formState.isSubmitting) {
+      return (
+        <Box mt={4}>
+          <LoadingContainer noPaddings />
+        </Box>
+      )
+    }
+
     if (activeStep === 'upload') {
       return (
         <Upload defaultSelectedTemplateType={defaultSelectedTemplateType} />
@@ -83,6 +104,7 @@ export default function MarketingAssetUploadDrawer({
             variant="contained"
             color="primary"
             onClick={formMethods.handleSubmit(data => onSubmit(data))}
+            disabled={formMethods.formState.isSubmitting || !brand}
           >
             Done
           </Button>
@@ -94,7 +116,7 @@ export default function MarketingAssetUploadDrawer({
   }
 
   return (
-    <OverlayDrawer open onClose={onClose}>
+    <OverlayDrawer open onClose={() => onClose()}>
       <OverlayDrawer.Header title="Add to Marketing Center" />
       <OverlayDrawer.Body>
         <FormProvider {...formMethods}>
