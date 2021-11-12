@@ -1,5 +1,3 @@
-import React from 'react'
-
 import PropTypes from 'prop-types'
 import { Field } from 'react-final-form'
 
@@ -9,7 +7,8 @@ DateTimeField.propTypes = {
   name: PropTypes.string.isRequired,
   selectedDate: PropTypes.instanceOf(Date),
   datePickerModifiers: PropTypes.shape(),
-  showTimePicker: PropTypes.bool
+  showTimePicker: PropTypes.bool,
+  children: PropTypes.node
 }
 
 DateTimeField.defaultProps = {
@@ -22,7 +21,8 @@ export function DateTimeField({
   name,
   selectedDate,
   datePickerModifiers,
-  showTimePicker
+  showTimePicker,
+  children
 }) {
   return (
     <Field
@@ -30,11 +30,13 @@ export function DateTimeField({
       render={fieldProps => (
         <DateTimePicker
           onChange={fieldProps.input.onChange}
-          selectedDate={selectedDate}
+          selectedDate={fieldProps.input.value ?? selectedDate}
           showTimePicker={showTimePicker}
-          defaultlSelectedDate={selectedDate}
+          defaultlSelectedDate={fieldProps.input.value ?? selectedDate}
           datePickerModifiers={datePickerModifiers}
-        />
+        >
+          {children}
+        </DateTimePicker>
       )}
     />
   )
