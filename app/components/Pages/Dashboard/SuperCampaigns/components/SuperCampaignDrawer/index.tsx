@@ -110,7 +110,7 @@ function SuperCampaignDrawer({
                     <DateTimeField name="due_at">
                       {({ formattedDate, handleOpen }) => (
                         <TextField
-                          value={formattedDate}
+                          value={formattedDate ?? ''}
                           onClick={handleOpen}
                           variant="outlined"
                           label="Schedule"
@@ -120,6 +120,7 @@ function SuperCampaignDrawer({
                             endAdornment: <SvgIcon path={mdiCalendarBlank} />,
                             inputProps: { readOnly: true }
                           }}
+                          InputLabelProps={{ shrink: true }}
                           margin="normal"
                         />
                       )}
