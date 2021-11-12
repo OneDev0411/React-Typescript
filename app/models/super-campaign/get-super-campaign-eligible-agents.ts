@@ -1,11 +1,20 @@
-import { getAgents } from '@app/models/Deal/agent'
+import Fetch from '@app/services/fetch'
 
 async function getSuperCampaignEligibleAgents(
-  brandId: UUID
+  superCampaignId: UUID
 ): Promise<IBrand[]> {
-  // TODO: Use the real model here when it is deployed and ready to use
-  // GET /email/super-campaigns/:super_campaign_id/eligible/agents
-  return getAgents(brandId)
+  const response = await new Fetch()
+    .get(`/email/super-campaigns/${superCampaignId}/eligible/agents`)
+    .query({
+      associations: [
+        'brand.roles',
+        'brand_role.users',
+        'user.agent',
+        'agent.office'
+      ]
+    })
+
+  return response.body.data
 }
 
 export default getSuperCampaignEligibleAgents
