@@ -22,7 +22,7 @@ const useStyles = makeStyles(
   }
 )
 
-function SuperCampaignGridView(props) {
+function SuperCampaignGridView() {
   const classes = useStyles()
   const { isLoading, superCampaigns, loadMore } = useGetAllSuperCampaign()
 
@@ -35,7 +35,7 @@ function SuperCampaignGridView(props) {
       verticalAlign: 'center',
       render: ({ row }) => (
         <Link
-          to={`/dashboard/super-campaigns/${row.id}/detail`}
+          to={`/dashboard/insights/super-campaign/${row.id}/detail`}
           className={classes.title}
         >
           {row.subject || '(Untitled Campaign)'}

@@ -53,7 +53,7 @@ function InsightsLayout({
       to: urlGenerator('/scheduled')
     },
     {
-      label: 'Super Campaign',
+      label: 'Campaign',
       to: urlGenerator('/super-campaign')
     }
   ]
