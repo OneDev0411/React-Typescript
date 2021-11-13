@@ -3,7 +3,7 @@ import format from 'date-fns/format'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 
-import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
+import { useIsSuperCampaignExecuted } from '../../hooks/use-is-super-campaign-executed'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
@@ -39,7 +39,7 @@ function SuperCampaignOverviewDetail() {
   const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
     useReplaceQueryParam('edit-drawer')
 
-  const isResultMode = useIsSuperCampaignResultMode(superCampaign)
+  const isResultMode = useIsSuperCampaignExecuted(superCampaign)
 
   const openDrawer = () => setEditDrawerParam('open')
 
