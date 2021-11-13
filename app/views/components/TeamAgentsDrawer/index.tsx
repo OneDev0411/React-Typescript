@@ -50,11 +50,15 @@ export function TeamAgentsDrawer({
 
   const handleSelectAgent = async (user: BrandedUser) => {
     if (multiSelection) {
-      const isSelected = selectedAgents.some(agent => agent.id === user.id)
+      const isSelected = selectedAgents.some(
+        agent => agent.id === user.id && agent.brand_id === user.brand_id
+      )
 
       setSelectedAgents(
         isSelected
-          ? selectedAgents.filter(agent => agent.id !== user.id)
+          ? selectedAgents.filter(
+              agent => agent.id !== user.id || agent.brand_id !== user.brand_id
+            )
           : [...selectedAgents, user]
       )
 
