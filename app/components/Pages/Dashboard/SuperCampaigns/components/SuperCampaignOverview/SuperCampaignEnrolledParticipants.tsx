@@ -25,7 +25,11 @@ function SuperCampaignEnrolledParticipants() {
     setSuperCampaignEnrollments,
     superCampaignEnrollmentCount,
     isLoading
-  } = useGetSuperCampaignEnrollments(superCampaign.id, isResultMode)
+  } = useGetSuperCampaignEnrollments(
+    superCampaign.id,
+    superCampaign.tags,
+    isResultMode
+  )
 
   return (
     <SuperCampaignCard>
