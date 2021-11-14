@@ -67,15 +67,17 @@ const useStyles = makeStyles(
       borderRadius: `${theme.shape.borderRadius}px`
     },
     boxContainer: {
-      display: 'flex'
+      display: 'flex',
+      gap: theme.spacing(2)
     },
     sidenavContainer: {
-      width: '350px',
-      padding: theme.spacing(2),
-      marginRight: theme.spacing(2)
+      width: '30%',
+      minWidth: '350px',
+      maxWidth: '450px',
+      padding: theme.spacing(2)
     },
     timelineContainer: {
-      width: 'calc(100% - 350px)' // flex-grow jamming when there is long note
+      flex: '1 1 auto'
     },
     warnContainer: {
       marginBottom: theme.spacing(2),

@@ -1,41 +1,10 @@
 import { useState } from 'react'
 
-import { Box, Button, makeStyles, Theme } from '@material-ui/core'
-
 import { CrmEventType } from 'components/ContactProfileTimeline/types'
 
 import { ListContext } from './context'
-import { EmptyState } from './EmptyState'
-import { Event } from './Event'
 import { EventController } from './EventController'
-import { EventHeader } from './EventHeader'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    header: {
-      width: theme.spacing(12)
-    },
-    section: {
-      display: 'flex',
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
-      paddingLeft: theme.spacing(2)
-    },
-    events: {
-      '& $event:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
-      }
-    },
-    event: {
-      backgroundColor: '#fff',
-      '&:hover': {
-        backgroundColor: theme.palette.grey['100']
-      }
-    }
-  }),
-  {
-    name: 'CalendarList'
-  }
-)
+import { EventLoader } from './EventLoader'
 
 interface Props {
   user: IUser
@@ -65,8 +34,6 @@ export function CalendarList({
   onCrmEventChange,
   onScheduledEmailChange
 }: Props) {
-  const classes = useStyles()
-
   const [selectedEvent, setSelectedEvent] = useState<ICalendarEvent | null>(
     null
   )
@@ -99,44 +66,13 @@ export function CalendarList({
         setSelectedEvent
       }}
     >
-      <Box my={1} textAlign="center">
-        <Button
-          size="small"
-          disabled={isLoading}
-          onClick={onLoadPreviousEvents}
-        >
-          Load Next Year Events
-        </Button>
-      </Box>
-
-      <EmptyState rowsCount={rows.length} isLoading={isLoading} />
-
-      <Box>
-        {rows.map((section, index) => (
-          <Box
-            className={classes.section}
-            key={`${section.header.date}-${index}`}
-          >
-            <Box className={classes.header}>
-              <EventHeader item={section.header} />
-            </Box>
-
-            <Box flexGrow={1} className={classes.events}>
-              {section.events.map(event => (
-                <div key={event.id} className={classes.event}>
-                  <Event event={event} onEventChange={handleEventChange} />
-                </div>
-              ))}
-            </Box>
-          </Box>
-        ))}
-      </Box>
-
-      <Box my={1} textAlign="center">
-        <Button size="small" disabled={isLoading} onClick={onLoadNextEvents}>
-          Load Previous Year Events
-        </Button>
-      </Box>
+      <EventLoader
+        rows={rows}
+        isLoading={isLoading}
+        onLoadPreviousEvents={onLoadPreviousEvents}
+        onLoadNextEvents={onLoadNextEvents}
+        handleEventChange={handleEventChange}
+      />
 
       <EventController
         user={user}

@@ -1,7 +1,7 @@
-import { AggregatedAgentInfo } from '../../types'
+import { AgentWithStats } from '@app/models/agent-network/get-agents'
 
 export function getSelectedAgents(
-  agentsData: AggregatedAgentInfo[],
+  agentsData: AgentWithStats[],
   selectedRows: UUID[]
 ): IAgent[] {
   if (agentsData.length === 0 || selectedRows.length === 0) {
@@ -11,5 +11,5 @@ export function getSelectedAgents(
   // Sometimes an agent can have a null id!
   return agentsData
     .filter(item => item.id && selectedRows.includes(item.id))
-    .map(({ agent }) => agent)
+    .map(agent => agent)
 }
