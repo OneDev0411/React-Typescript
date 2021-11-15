@@ -18,14 +18,14 @@ export function NotifyOffice(props) {
 
   return (
     <Flex onClick={handleClick} alignCenter>
-      <Label>Notify Office</Label>
+      <Label>Notify Office to Review</Label>
 
       <Tooltip
         placement="left"
         title={
           props.checklist.is_deactivated
             ? 'You can not Notify Office for Backup offers'
-            : null
+            : ''
         }
       >
         <CheckBoxButton

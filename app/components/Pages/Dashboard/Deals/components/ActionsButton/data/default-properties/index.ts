@@ -45,7 +45,7 @@ export const actionsDefaultProperties = {
   },
   [SHOW_COMMENTS]: {
     label: ({ isBackOffice }) =>
-      isBackOffice ? 'Message Agent' : 'Message Admin',
+      isBackOffice ? 'Message Agent' : 'Message Office',
     type: 'comments'
   },
   [DOCUSIGN_FORM]: {
@@ -138,7 +138,9 @@ export const actionsDefaultProperties = {
         return 'Cancel Needs Attention'
       }
 
-      return task.attention_requested ? 'Cancel Notify' : 'Notify Office'
+      return task.attention_requested
+        ? 'Cancel Notify'
+        : 'Notify Office to Review'
     },
     type: ({ task }) =>
       task.attention_requested ? 'remove-task-notification' : 'notify-task'

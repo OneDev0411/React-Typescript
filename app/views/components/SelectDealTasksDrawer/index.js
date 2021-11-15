@@ -147,6 +147,7 @@ class TasksDrawer extends React.Component {
                 .map(checklist => (
                   <Checklist
                     key={checklist.id}
+                    deal={this.props.deal}
                     checklist={checklist}
                     filter={this.state.searchFilter}
                     onSelectItem={this.handleMoveFile}

@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { Grid, Box, Checkbox, Tooltip, Typography } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import {
   SELECTION__TOGGLE_ALL,
   SELECTION__RESET_ROWS
 } from 'components/Grid/Table/context/constants'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
-import { AggregatedAgentInfo } from '../../types'
-
 interface Props {
-  rows: AggregatedAgentInfo[]
+  rows: AgentWithStats[]
 }
 
 export function TableToolbar({ rows }: Props) {
