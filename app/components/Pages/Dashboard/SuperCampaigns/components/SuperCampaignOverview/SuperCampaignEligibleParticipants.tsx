@@ -81,6 +81,7 @@ function SuperCampaignEligibleParticipants(
           selectedBrands={eligibleBrands}
           onClose={closeBrandSelector}
           onSave={handleSelectedBrandSave}
+          drawerTitle="Select Offices or Teams"
         />
       )}
     </SuperCampaignCard>
