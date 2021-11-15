@@ -959,13 +959,15 @@ class ContactsList extends React.Component {
                 })}
               >
                 <ViewMode enabled={isBoardMode}>
-                  <Board
-                    criteria={{
-                      searchTerm: state.searchInputValue,
-                      filters: props.filters,
-                      conditionOperator: props.conditionOperator
-                    }}
-                  />
+                  {isBoardMode && (
+                    <Board
+                      criteria={{
+                        searchTerm: state.searchInputValue,
+                        filters: props.filters,
+                        conditionOperator: props.conditionOperator
+                      }}
+                    />
+                  )}
                 </ViewMode>
 
                 <ViewMode enabled={isTableMode}>
