@@ -11,6 +11,7 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
+import AllDealsPage from './AllDealsPage'
 import TabFilters from './Filters'
 import Grid from './Grid'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
@@ -77,7 +78,12 @@ export default function BackofficeTable(props: WithRouterProps & StateProps) {
           />
         </div>
 
-        <Grid searchQuery={searchQuery} statuses={statuses} />
+        {/* Added new filters for all deals tab */}
+        {props.params.filter === 'all' ? (
+          <AllDealsPage searchQuery={searchQuery} statuses={statuses} />
+        ) : (
+          <Grid searchQuery={searchQuery} statuses={statuses} />
+        )}
       </PageLayout.Main>
     </PageLayout>
   )

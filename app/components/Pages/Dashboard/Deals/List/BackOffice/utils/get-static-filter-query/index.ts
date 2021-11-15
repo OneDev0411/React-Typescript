@@ -1,32 +1,39 @@
-import { SearchQuery } from '../../types'
+import {
+  DEALS_LIST_DEFAULT_FILTERS,
+  DEALS_LIST_DEFUALT_ORDER
+} from '../../constants'
+import { DealsListPayload, SearchQuery } from '../../types'
 
 /**
  * returns query param of static filters
- * @param user
  * @param searchQuery
  */
-export function getStaticFilterQuery(searchQuery: SearchQuery): object {
+export function getStaticFilterQuery(
+  searchQuery: SearchQuery
+): DealsListPayload {
   if (searchQuery.filter === 'listing') {
     return {
-      deal_type: ['Selling'],
       query: searchQuery.term,
-      status: {
-        is_archived: false,
-        is_null: true
-      },
-      $order: ['deals.created_at', 'DESC']
+      ...DEALS_LIST_DEFAULT_FILTERS,
+      deal_type: ['Selling'],
+      $order: DEALS_LIST_DEFUALT_ORDER
     }
   }
 
   if (searchQuery.filter === 'contract') {
     return {
-      deal_type: ['Buying'],
       query: searchQuery.term,
-      status: {
-        is_archived: false,
-        is_null: true
-      },
-      $order: ['deals.created_at', 'DESC']
+      ...DEALS_LIST_DEFAULT_FILTERS,
+      deal_type: ['Buying'],
+      $order: DEALS_LIST_DEFUALT_ORDER
+    }
+  }
+
+  if (searchQuery.filter === 'all') {
+    return {
+      query: searchQuery.term,
+      ...DEALS_LIST_DEFAULT_FILTERS,
+      $order: DEALS_LIST_DEFUALT_ORDER
     }
   }
 

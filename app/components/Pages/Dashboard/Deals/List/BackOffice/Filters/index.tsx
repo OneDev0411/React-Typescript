@@ -11,6 +11,7 @@ import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
+import { QUERY_ARRAY_PARAM_SPLITTER_CHAR } from '../constants'
 import {
   SORTABLE_COLUMNS,
   SORT_FIELD_SETTING_KEY
@@ -51,9 +52,16 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   }
 
   // The closings filter uses query type but it is not included in the static filters.
+  // TODO: create utils for these codes
   const staticFiltersTitle =
-    props.location.query.type === 'query' && props.params.filter !== 'closings'
-      ? `All ${props.params.filter} deals`
+    props.location.query.type === 'query' &&
+    props.params.filter !== 'closings' &&
+    decodeURIComponent(props.location.query.dealType).split(
+      QUERY_ARRAY_PARAM_SPLITTER_CHAR
+    ).length < 2
+      ? `All ${
+          props.location.query.dealType === 'Buying' ? 'Contract' : 'Listings'
+        } deals`
       : 'All Deals'
 
   const activeBrand = getActiveBrand(user)
@@ -62,7 +70,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     <PageTabs
       value={
         props.location.query.type === 'query' &&
-        ['listing', 'contract'].includes(props.params.filter)
+        ['all'].includes(props.params.filter)
           ? 'all-deals'
           : null
       }
@@ -94,13 +102,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                   <MenuItem
                     key={0}
                     selected={
-                      props.params.filter === 'listing' &&
-                      props.location.query.type === 'query'
+                      props.params.filter === 'all' &&
+                      props.location.query.type === 'query' &&
+                      props.location.query.dealType === 'Selling'
                     }
                     onClick={() => {
                       toggleMenu()
                       props.router.push(
-                        '/dashboard/deals/filter/listing?type=query'
+                        '/dashboard/deals/filter/all?type=query&dealType=Selling'
                       )
                     }}
                   >
@@ -110,13 +119,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
                   <MenuItem
                     key={1}
                     selected={
-                      props.params.filter === 'contract' &&
-                      props.location.query.type === 'query'
+                      props.params.filter === 'all' &&
+                      props.location.query.type === 'query' &&
+                      props.location.query.dealType === 'Buying'
                     }
                     onClick={() => {
                       toggleMenu()
                       props.router.push(
-                        '/dashboard/deals/filter/contract?type=query'
+                        '/dashboard/deals/filter/all?type=query&dealType=Buying'
                       )
                     }}
                   >
