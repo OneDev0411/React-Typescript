@@ -95,7 +95,7 @@ interface Props {
   contact: IContact
   isDragging: boolean
   style?: React.CSSProperties
-  onChangeTags: (contact: IContact, tags: string[]) => void
+  onChangeTags?: (contact: IContact, tags: string[]) => void
 }
 
 export function CardItem({
@@ -113,7 +113,7 @@ export function CardItem({
     const newTags = tags.filter(tag => !!tag.value).map(tag => tag.value!)
 
     dispatch(updateContactTags(contact.id, newTags))
-    onChangeTags(contact, newTags)
+    onChangeTags?.(contact, newTags)
   }
 
   return (
