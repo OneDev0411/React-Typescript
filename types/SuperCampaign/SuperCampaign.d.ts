@@ -8,7 +8,7 @@ declare interface ISuperCampaign<A extends ISuperCampaignAssociations = ''>
   executed_at?: number
   subject?: string
   description?: string
-  template_instance: A extends 'template_instance'
+  template_instance?: A extends 'template_instance'
     ? IMarketingTemplateInstance
     : UUID
   tags: Nullable<string[]>

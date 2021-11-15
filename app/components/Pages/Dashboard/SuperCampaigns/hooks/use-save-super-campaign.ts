@@ -34,7 +34,7 @@ export function useSaveSuperCampaign(
         due_at: superCampaignData.due_at ?? superCampaign.due_at,
         template_instance:
           superCampaignData.template_instance?.id ??
-          superCampaign.template_instance.id
+          superCampaign.template_instance?.id
       })
 
       setSuperCampaign({

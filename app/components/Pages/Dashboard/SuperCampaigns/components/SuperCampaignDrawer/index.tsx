@@ -125,21 +125,23 @@ function SuperCampaignDrawer({
                         />
                       )}
                     </DateTimeField>
-                    <Field
+                    <Field<Optional<IMarketingTemplateInstance>>
                       name="template_instance"
-                      render={({ input }) => (
-                        <SuperCampaignTemplate
-                          className={classes.template}
-                          titleClassName={classes.templateTitle}
-                          titleVariant="caption"
-                          template={input.value}
-                          onTemplateChange={template =>
-                            input.onChange({ target: { value: template } })
-                          }
-                          onEditorOpen={hideDrawer}
-                          onEditorClose={showDrawer}
-                        />
-                      )}
+                      render={({ input }) =>
+                        input.value ? (
+                          <SuperCampaignTemplate
+                            className={classes.template}
+                            titleClassName={classes.templateTitle}
+                            titleVariant="caption"
+                            template={input.value}
+                            onTemplateChange={template =>
+                              input.onChange({ target: { value: template } })
+                            }
+                            onEditorOpen={hideDrawer}
+                            onEditorClose={showDrawer}
+                          />
+                        ) : null
+                      }
                     />
                   </form>
                 )}
