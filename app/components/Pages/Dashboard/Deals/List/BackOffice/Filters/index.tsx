@@ -50,8 +50,9 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     dispatch(getUserTeams(user))
   }
 
+  // The closings filter uses query type but it is not included in the static filters.
   const staticFiltersTitle =
-    props.location.query.type === 'query'
+    props.location.query.type === 'query' && props.params.filter !== 'closings'
       ? `All ${props.params.filter} deals`
       : 'All Deals'
 

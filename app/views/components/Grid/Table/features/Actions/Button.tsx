@@ -61,6 +61,7 @@ const useStyles = makeStyles(
 
 export const GridActionButton = ({
   label,
+  disabled,
   icon,
   attachedElementRef,
   textIcon,
@@ -69,6 +70,7 @@ export const GridActionButton = ({
 }: Props) => {
   const classes = useStyles({
     label,
+    disabled,
     icon,
     attachedElementRef,
     textIcon,
@@ -76,6 +78,10 @@ export const GridActionButton = ({
   })
 
   const handleOnClick = (e: MouseEvent<HTMLElement>) => {
+    if (disabled) {
+      return
+    }
+
     if (onClick) {
       onClick(e)
     }
