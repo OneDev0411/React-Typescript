@@ -16,14 +16,6 @@ import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
 
-interface Props {
-  disabled?: boolean
-  currentValue: Nullable<ITrigger>
-  attributeName: TriggerContactEventTypes
-  selectedTemplate: Nullable<IMarketingTemplateInstance>
-  onSelectTemplate: (template: IMarketingTemplateInstance) => void
-}
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {},
@@ -68,6 +60,14 @@ const useStyles = makeStyles(
   }),
   { name: 'TemplateSelector' }
 )
+
+interface Props {
+  disabled?: boolean
+  currentValue: Nullable<ITrigger>
+  attributeName: TriggerContactEventTypes
+  selectedTemplate: Nullable<IMarketingTemplateInstance>
+  onSelectTemplate: (template: IMarketingTemplateInstance) => void
+}
 
 export const TemplateSelector = ({
   currentValue,

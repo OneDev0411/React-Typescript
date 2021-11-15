@@ -10,21 +10,40 @@ import { getValue } from '.'
  * @param {IContact} contact - current contact
  * @param {IContactAttribute} attribute - editing attribute
  */
+interface TriggerState {
+  currentTrigger: Nullable<ITrigger>
+  isTriggerActive: boolean
+  triggerSender: IUser
+  triggerSubject: string
+  triggerSendBefore: number
+  triggerSelectedTemplate: null
+}
 
 export function getStateFromTrigger(
   trigger: ITrigger,
   globalTrigger: Nullable<IGlobalTrigger>,
   contact: IContact,
   attribute: IContactAttribute
-) {
+): TriggerState {
   const attributeName = (attribute.attribute_def.name ??
     '') as TriggerContactEventTypes
+
+  if (globalTrigger) {
+    return {
+      currentTrigger: null,
+      isTriggerActive: true,
+      triggerSender: contact.user as IUser,
+      triggerSubject: globalTrigger.subject,
+      triggerSendBefore: globalTrigger.wait_for ?? 0,
+      triggerSelectedTemplate: null
+    }
+  }
 
   if (trigger) {
     return {
       currentTrigger: trigger,
       isTriggerActive: true,
-      triggerSender: trigger.campaign?.from ?? contact.user,
+      triggerSender: (trigger.campaign?.from as IUser) ?? contact.user,
       triggerSubject:
         trigger.campaign?.subject || getTriggerSubject(attributeName),
       triggerSendBefore: trigger.wait_for || 0,
@@ -54,7 +73,7 @@ export function getStateFromTrigger(
   return {
     currentTrigger: null,
     isTriggerActive: isActive,
-    triggerSender: contact.user,
+    triggerSender: contact.user as IUser,
     triggerSubject: getTriggerSubject(attributeName),
     triggerSendBefore: 0,
     triggerSelectedTemplate: null

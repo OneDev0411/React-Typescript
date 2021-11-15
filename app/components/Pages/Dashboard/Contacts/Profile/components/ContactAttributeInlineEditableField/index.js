@@ -2,6 +2,8 @@ import { Component } from 'react'
 
 import { connect } from 'react-redux'
 
+import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import {
@@ -18,7 +20,7 @@ import {
   getTitle,
   getValue,
   parseValue,
-  validation,
+  validation as validationAttrFields,
   formatValue,
   getPlaceholder,
   getStateFromTrigger,
@@ -227,23 +229,30 @@ class MasterField extends Component {
     }
   }
 
-  save = async (callback = noop) => {
-    const { contact, attribute, trigger: triggerFromParent } = this.props
+  handleValidationBeforeSave = () => {
+    const { attribute, trigger: triggerFromParent } = this.props
+
+    if (!this.isDirty) {
+      const error = attribute.id ? 'Update value!' : 'Change something!'
+
+      return error
+    }
+
+    const error = validationAttrFields(this.attribute_def, this.state.value)
+
+    if (error) {
+      return error
+    }
+
+    // Validate Trigger Field
     const {
-      is_primary,
-      label,
-      value,
       currentTrigger,
       isTriggerFieldDirty,
-      isTriggerActive,
-      triggerSender,
       triggerSubject,
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
-
     const trigger = triggerFromParent || currentTrigger
-    const { id, cuid } = attribute
     const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
 
     if (shouldCheckTriggerField) {
@@ -258,64 +267,90 @@ class MasterField extends Component {
       )
 
       if (error) {
-        return this.setState({ error })
+        return error
       }
     }
 
-    if (!this.isDirty) {
-      const error = id ? 'Update value!' : 'Change something!'
+    return null
+  }
 
-      return this.setState({ error })
+  handleSaveTrigger = async () => {
+    const { contact, trigger: triggerFromParent } = this.props
+    const {
+      currentTrigger,
+      isTriggerFieldDirty,
+      isTriggerActive,
+      triggerSender,
+      triggerSubject,
+      triggerSendBefore,
+      triggerSelectedTemplate
+    } = this.state
+    const trigger = triggerFromParent || currentTrigger
+    const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
+
+    if (!shouldCheckTriggerField) {
+      return
     }
 
-    const error = await validation(this.attribute_def, value)
+    const commonParams = [
+      contact,
+      triggerSelectedTemplate,
+      {
+        recurring: true,
+        time: '08:00:00', // it's hard coded base api team comment
+        sender: triggerSender,
+        subject: triggerSubject,
+        wait_for: triggerSendBefore,
+        event_type: this.attribute_def.name
+      }
+    ]
+
+    this.setState({ isTriggerSaving: true })
+
+    if (trigger) {
+      if (!isTriggerActive) {
+        await removeTrigger(trigger.id)
+      } else {
+        await updateTrigger(trigger, ...commonParams)
+      }
+    } else if (isTriggerActive) {
+      await createTrigger(...commonParams)
+    }
+  }
+
+  handleSaveAttribute = () => {
+    const { attribute } = this.props
+    const { is_primary, label, value } = this.state
+    const { id, cuid } = attribute
+
+    const payload = {
+      cuid,
+      id,
+      label: label === '' ? null : label,
+      [this.type]: parseValue(value, this.attribute_def)
+    }
+
+    if (is_primary !== this.props.attribute.is_primary) {
+      payload.is_primary = is_primary
+    }
+
+    this.props.handleSave(attribute, payload)
+  }
+
+  save = async (callback = noop) => {
+    const error = this.handleValidationBeforeSave()
 
     if (error) {
+      console.log({ error })
+
       return this.setState({ error })
     }
+
+    return console.log('dddd')
 
     try {
       this.setState({ disabled: true, error: '' })
 
-      const data = {
-        cuid,
-        id,
-        label: label === '' ? null : label,
-        [this.type]: parseValue(value, this.attribute_def)
-      }
-
-      if (is_primary !== this.props.attribute.is_primary) {
-        data.is_primary = is_primary
-      }
-
-      if (shouldCheckTriggerField) {
-        this.setState({ isTriggerSaving: true })
-
-        const commonParams = [
-          contact,
-          triggerSelectedTemplate,
-          {
-            recurring: true,
-            time: '08:00:00', // it's hard coded base api team comment
-            sender: triggerSender,
-            subject: triggerSubject,
-            wait_for: triggerSendBefore,
-            event_type: this.attribute_def.name
-          }
-        ]
-
-        if (trigger) {
-          if (!isTriggerActive) {
-            await removeTrigger(trigger.id)
-          } else {
-            await updateTrigger(trigger, ...commonParams)
-          }
-        } else if (isTriggerActive) {
-          await createTrigger(...commonParams)
-        }
-      }
-
-      this.props.handleSave(attribute, data)
       this.setState(
         { disabled: false, isDirty: false, isTriggerSaving: false },
         this.toggleMode
@@ -492,7 +527,8 @@ const mapStateToProps = (state, props) => {
     attributeGlobalTrigger:
       selectGlobalTriggersAttributes(state)[
         props.attribute?.attribute_def?.name
-      ] ?? null
+      ] ?? null,
+    brandId: selectActiveBrandId(state)
   }
 }
 

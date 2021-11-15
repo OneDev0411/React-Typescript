@@ -97,7 +97,7 @@ interface Props {
   sendBefore: number
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
-  onChangeSender: (value: IContact) => void
+  onChangeSender: (value: IUser) => void
   onChangeSendBefore: (value: number) => void
   onChangeTemplate: (templateInstance: IMarketingTemplateInstance) => void
 }
@@ -129,6 +129,8 @@ const TriggerEditModeComponent = ({
   const [sendBefore, setSendBefore] = useState<number>(
     convertSecondsToDay(sendBeforeProp)
   )
+
+  console.log({ gg: globalTriggers[attributeName] })
 
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IMarketingTemplateInstance>>(null)
