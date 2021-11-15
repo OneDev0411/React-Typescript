@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -179,6 +179,19 @@ export const BoardColumn = memo(function BoardColumn({
 
   const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
+  const handleChangeTags = (contact: IContact, tags: string[]) => {
+    updateList(
+      list.map(row =>
+        row.id !== contact.id
+          ? row
+          : {
+              ...contact,
+              tags
+            }
+      )
+    )
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.head}>
@@ -253,7 +266,8 @@ export const BoardColumn = memo(function BoardColumn({
                     itemData={
                       {
                         rows: list,
-                        columnId: id
+                        columnId: id,
+                        onChangeTags: handleChangeTags
                       } as React.ComponentProps<
                         typeof DraggableCardItem
                       >['data']

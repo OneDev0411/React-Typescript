@@ -95,20 +95,25 @@ interface Props {
   contact: IContact
   isDragging: boolean
   style?: React.CSSProperties
+  onChangeTags: (contact: IContact, tags: string[]) => void
 }
 
-export function CardItem({ provided, contact, isDragging, style = {} }: Props) {
+export function CardItem({
+  provided,
+  contact,
+  isDragging,
+  style = {},
+  onChangeTags
+}: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
 
   const handleChangeTag = (tags: SelectorOption[]) => {
-    dispatch(
-      updateContactTags(
-        contact.id,
-        tags.filter(tag => !!tag.value).map(tag => tag.value!)
-      )
-    )
+    const newTags = tags.filter(tag => !!tag.value).map(tag => tag.value!)
+
+    dispatch(updateContactTags(contact.id, newTags))
+    onChangeTags(contact, newTags)
   }
 
   return (
