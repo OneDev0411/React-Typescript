@@ -1,7 +1,8 @@
 import { createContext } from 'react'
 
+import { IListingUIStates } from '../types'
+
 import { Actions } from './actions'
-import { IListingUIStates } from './reducers'
 
 export type Context = [IListingUIStates, React.Dispatch<Actions>]
 
