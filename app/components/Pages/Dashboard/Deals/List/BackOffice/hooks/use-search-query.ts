@@ -37,7 +37,7 @@ export function useSearchQuery(
     if (type === 'query' && filter === 'closings') {
       dispatch(searchDeals(user, getClosingsFilterQuery(searchQuery.term)))
     } else if (searchQuery.type === 'query' && statuses.length > 0) {
-      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery, statuses)))
+      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery)))
     } else if (type === 'inbox') {
       dispatch(term ? searchDeals(user, term) : getDeals(user))
     }

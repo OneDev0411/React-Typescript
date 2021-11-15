@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { CircularProgress } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
@@ -10,11 +9,9 @@ import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      margin: theme.spacing(15, 0),
       display: 'flex',
+      position: 'relative',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
       height: '100%'
     },
     title: {
@@ -22,34 +19,31 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[500]
     },
     icon: {
-      marginBottom: theme.spacing(1),
-      color: theme.palette.grey['500']
+      color: theme.palette.grey['500'],
+      margin: `25% 25% ${theme.spacing(1)}px`
+    },
+    iconContainer: {
+      position: 'absolute',
+      top: '12.5%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
     }
   })
 )
 
-interface Props {
-  rowsCount: number
-  isLoading: boolean
-}
-
-export function EmptyState({ rowsCount, isLoading }: Props) {
+export function EmptyState() {
   const classes = useStyles()
 
   return (
     <div className={classes.container}>
-      {!isLoading && rowsCount === 0 && (
-        <>
-          <SvgIcon
-            path={importantDateIcon}
-            className={classes.icon}
-            size={muiIconSizes.xlarge}
-          />
-          <div className={classes.title}>No events</div>
-        </>
-      )}
-
-      {isLoading && <CircularProgress />}
+      <div className={classes.iconContainer}>
+        <SvgIcon
+          path={importantDateIcon}
+          className={classes.icon}
+          size={muiIconSizes.xlarge}
+        />
+        <div className={classes.title}>No events</div>
+      </div>
     </div>
   )
 }

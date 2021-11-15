@@ -125,7 +125,10 @@ export function getListingFeatures(listing: IListing): Feature[] {
         },
         {
           label: 'Others',
-          value: valueToString(property.utilities)
+          value: valueToString([
+            ...(property.utilities ?? []),
+            ...(property.amenities ?? [])
+          ])
         }
       ]
     },
@@ -166,7 +169,6 @@ export function getListingFeatures(listing: IListing): Feature[] {
         }
       ]
     },
-
     {
       title: 'Interior Features',
       items: [

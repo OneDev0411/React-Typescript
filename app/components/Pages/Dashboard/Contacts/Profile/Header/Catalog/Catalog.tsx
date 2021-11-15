@@ -3,6 +3,8 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 
+import { truncateTextFromMiddle } from '@app/utils/truncate-text-from-middle'
+
 import { Props } from '..'
 import Tags from '../../Tags/TagsSection'
 
@@ -11,27 +13,41 @@ import { Social } from './Social'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
+    mainContainer: {
+      display: 'flex',
+      gap: theme.spacing(1),
+      height: 'min-content',
+      width: '100%',
+      justifyItems: 'start',
+      alignItems: 'start'
+    },
+    avatarContainer: {
+      height: '72px',
+      width: '100%',
+      maxWidth: '72px'
+    },
+    profileContainer: {
+      display: 'flex',
+      flex: '1 1 auto',
+      flexDirection: 'column',
+      gap: theme.spacing(1)
+    },
+    displayNameContainer: {
       display: 'flex',
       alignItems: 'center',
-      flexGrow: 1
+      flexWrap: 'wrap',
+      height: 'max-content',
+      gap: theme.spacing(1)
     },
-    infoContainer: {
-      paddingLeft: theme.spacing(1)
+    displayName: {
+      wordBreak: 'break-all',
+      height: 'max-content'
     },
     socialContainer: {
-      marginLeft: theme.spacing(1)
+      width: 'min-content',
+      height: 'max-content'
     },
-    title: {
-      display: 'flex',
-      alignItems: 'center'
-    },
-    name: {
-      wordBreak: 'break-all'
-    },
-    tags: {
-      marginTop: theme.spacing(0.5)
-    }
+    tagsContainer: {}
   }),
   { name: 'ContactProfileHeaderCatalog' }
 )
@@ -43,19 +59,20 @@ export default function Catalog({
   const classes = useStyles()
 
   return (
-    <div className={classes.container}>
-      <Avatar contact={contact} />
-      <div className={classes.infoContainer}>
-        <div className={classes.title}>
-          <Typography variant="h6" className={classes.name}>
-            {contact.display_name}
+    <div className={classes.mainContainer}>
+      <div className={classes.avatarContainer}>
+        <Avatar contact={contact} />
+      </div>
+      <div className={classes.profileContainer}>
+        <div className={classes.displayNameContainer}>
+          <Typography variant="h6" className={classes.displayName}>
+            {truncateTextFromMiddle(contact.display_name, 150)}
           </Typography>
           <div className={classes.socialContainer}>
             <Social contact={contact} />
           </div>
         </div>
-
-        <div className={classes.tags}>
+        <div className={classes.tagsContainer}>
           <Tags contact={contact} onChange={onTagChange} />
         </div>
       </div>

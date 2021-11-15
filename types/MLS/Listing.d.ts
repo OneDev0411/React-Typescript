@@ -147,6 +147,7 @@ interface Property extends IModel<'property'> {
   property_subtype: IPropertySubtype
   lot_square_meters: number
   year_built: number
+  amenities?: Nullable<string[]>
   exterior_features: string[]
   interior_features: string[]
   fireplace_features: string[]
