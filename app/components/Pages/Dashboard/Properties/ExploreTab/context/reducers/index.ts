@@ -32,7 +32,6 @@ export const initialState: ListingsState = {
   map: { center: undefined, zoom: undefined },
   pinMarker: undefined,
   result: { listings: [], info: null },
-  listingStates: { hover: null, click: null },
   isLoading: true
 }
 
@@ -43,8 +42,7 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
 
       return {
         ...state,
-        result: { listings, info },
-        listingStates: { hover: null, click: null }
+        result: { listings, info }
       }
     }
 
