@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 
 import { Box, Chip, makeStyles, Theme, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
@@ -27,7 +27,7 @@ import { useColumnList } from '../hooks/use-column-list'
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
 
-const loadingLimit = 100
+const loadingLimit = 50
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -169,8 +169,6 @@ export const BoardColumn = memo(function BoardColumn({
 
       setLoadingState(null)
       setIsReachedEnd(data.length + list.length >= info!.total)
-
-      console.log(title, { isCriteriaChanged })
 
       updateList(isCriteriaChanged ? data : [...list, ...data], tag)
       setCurrentCriteria(criteria)

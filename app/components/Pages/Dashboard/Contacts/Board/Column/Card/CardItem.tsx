@@ -3,6 +3,7 @@ import {
   Typography,
   Avatar,
   Chip,
+  Tooltip,
   makeStyles,
   Theme,
   useTheme
@@ -56,7 +57,7 @@ const useStyles = makeStyles(
     tag: {
       backgroundColor: '#fff',
       border: `1px solid ${theme.palette.divider}`,
-      margin: theme.spacing(0, 1, 1, 0)
+      marginRight: theme.spacing(0.5)
     },
     noTags: {
       backgroundColor: '#fff'
@@ -178,16 +179,30 @@ export function CardItem({ provided, contact, isDragging, style = {} }: Props) {
           }}
           callback={handleChangeTag}
           anchorRenderer={onClick => (
-            <Box mt={2} onClick={onClick}>
+            <Box display="flex" alignItems="center" mt={2} onClick={onClick}>
               {(contact.tags || []).length > 0 ? (
-                contact.tags?.map((tag, index) => (
-                  <Chip
-                    key={tag}
-                    label={tag}
-                    size="small"
-                    className={classes.tag}
-                  />
-                ))
+                <>
+                  {contact.tags!.slice(0, 3).map((tag, index) => (
+                    <Chip
+                      key={tag}
+                      label={tag}
+                      size="small"
+                      className={classes.tag}
+                    />
+                  ))}
+
+                  {contact.tags!.length > 3 && (
+                    <Tooltip
+                      title={contact.tags!.slice(3).map(tag => (
+                        <div key={tag}>{tag}</div>
+                      ))}
+                    >
+                      <Typography variant="caption">
+                        and {contact.tags!.length - 3} more
+                      </Typography>
+                    </Tooltip>
+                  )}
+                </>
               ) : (
                 <Chip
                   className={cn(classes.noTags, classes.grey)}
