@@ -11,6 +11,11 @@ export type IFormattedCompactListing = GenericReturnType<
   typeof formatListing
 >
 
+export interface IListingUIStates {
+  hover: Nullable<UUID>
+  click: Nullable<UUID>
+}
+
 export interface IMapPosition {
   center: Optional<ICoord>
   zoom: Optional<number>

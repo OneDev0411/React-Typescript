@@ -1,9 +1,5 @@
+import { IListingUIStates } from '../../types'
 import { Actions } from '../actions'
-
-export interface IListingUIStates {
-  hover: Nullable<UUID>
-  click: Nullable<UUID>
-}
 
 export const initialState: IListingUIStates = {
   hover: null,
