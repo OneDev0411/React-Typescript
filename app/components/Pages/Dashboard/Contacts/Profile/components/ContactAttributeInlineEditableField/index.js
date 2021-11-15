@@ -275,7 +275,12 @@ class MasterField extends Component {
   }
 
   handleSaveTrigger = async () => {
-    const { contact, trigger: triggerFromParent } = this.props
+    const {
+      contact,
+      brandId,
+      attributeGlobalTrigger,
+      trigger: triggerFromParent
+    } = this.props
     const {
       currentTrigger,
       isTriggerFieldDirty,
@@ -292,7 +297,25 @@ class MasterField extends Component {
       return
     }
 
-    const commonParams = [
+    if (!isTriggerActive) {
+      if (attributeGlobalTrigger) {
+        await excludeContactFromGlobalTrigger(
+          contact.id,
+          this.attribute_def.name,
+          brandId
+        )
+
+        return
+      }
+
+      if (trigger) {
+        await removeTrigger(trigger.id)
+
+        return
+      }
+    }
+
+    const triggerCommonParams = [
       contact,
       triggerSelectedTemplate,
       {
@@ -308,14 +331,12 @@ class MasterField extends Component {
     this.setState({ isTriggerSaving: true })
 
     if (trigger) {
-      if (!isTriggerActive) {
-        await removeTrigger(trigger.id)
-      } else {
-        await updateTrigger(trigger, ...commonParams)
-      }
-    } else if (isTriggerActive) {
-      await createTrigger(...commonParams)
+      await updateTrigger(trigger, ...triggerCommonParams)
+
+      return
     }
+
+    await createTrigger(...triggerCommonParams)
   }
 
   handleSaveAttribute = () => {
@@ -341,12 +362,8 @@ class MasterField extends Component {
     const error = this.handleValidationBeforeSave()
 
     if (error) {
-      console.log({ error })
-
       return this.setState({ error })
     }
-
-    return console.log('dddd')
 
     try {
       this.setState({ disabled: true, error: '' })
@@ -355,6 +372,8 @@ class MasterField extends Component {
         { disabled: false, isDirty: false, isTriggerSaving: false },
         this.toggleMode
       )
+      await this.handleSaveTrigger()
+      this.handleSaveAttribute()
       callback()
     } catch (error) {
       console.error(error)

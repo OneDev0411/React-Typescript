@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, memo } from 'react'
+import React, { ReactNode, useState, useMemo, memo } from 'react'
 
 import {
   FormControl,
@@ -121,19 +121,25 @@ const TriggerEditModeComponent = ({
   const classes = useStyles()
   const user = useSelector(selectUser)
   const globalTriggers = useSelector(selectGlobalTriggersAttributes)
+
+  const attributeGlobalTrigger = useMemo(
+    () => globalTriggers[attributeName],
+    [attributeName, globalTriggers]
+  )
+
+  // Fields
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
-  const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
-    useState<boolean>(!globalTriggers[attributeName])
   const [sendBefore, setSendBefore] = useState<number>(
     convertSecondsToDay(sendBeforeProp)
   )
-
-  console.log({ gg: globalTriggers[attributeName] })
-
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IMarketingTemplateInstance>>(null)
+
+  // Show global trigger feature banner
+  const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
+    useState<boolean>(!attributeGlobalTrigger)
 
   const handleActiveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked
