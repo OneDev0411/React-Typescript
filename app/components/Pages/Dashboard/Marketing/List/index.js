@@ -38,7 +38,9 @@ export const MarketingList = () => {
         }) => {
           return (
             <>
-              {isGeneratingThumbnails(items) && (
+              {isGeneratingThumbnails(
+                items.filter(item => item.type !== 'brand_asset')
+              ) && (
                 <Box mt={1.5}>
                   <Alert severity="info">
                     <Box>

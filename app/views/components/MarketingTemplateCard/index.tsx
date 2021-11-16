@@ -12,7 +12,7 @@ import { marketingTemplateCardStyles } from './styles'
 import { Thumbnail } from './Thumbnail'
 
 interface Props {
-  template: IMarketingTemplateInstance | IBrandMarketingTemplate | IBrandAsset
+  template: IMarketingTemplateInstance | IBrandMarketingTemplate
   handlePreview?: () => void
   isLoading?: boolean
   suffix?: React.ReactNode // overrides default suffix
@@ -33,10 +33,6 @@ function MarketingTemplateCard(
   const isInstance = template.type === 'template_instance'
 
   const handlePreview = e => {
-    if (template.type === 'brand_asset') {
-      return
-    }
-
     if (
       !template.template.video &&
       props.handlePreview &&
@@ -44,24 +40,6 @@ function MarketingTemplateCard(
     ) {
       props.handlePreview()
     }
-  }
-
-  if (template.type === 'brand_asset') {
-    return (
-      <div key={template.id} title={template.label} className={classes.root}>
-        <div
-          className={classNames(classes.card, {
-            [classes.cardLoading]: props.isLoading
-          })}
-        >
-          <img
-            className={classes.assetThumbnail}
-            src={template.file.url}
-            alt={template.label}
-          />
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -77,9 +55,7 @@ function MarketingTemplateCard(
           [classes.cardHasPreview]:
             !template.template.video && !!props.handlePreview,
           [classes.cardLoading]: props.isLoading,
-          [classes.cardWebsite]:
-            props.template.type !== 'brand_asset' &&
-            props.template.template.medium === 'Website'
+          [classes.cardWebsite]: props.template.template.medium === 'Website'
         })}
         onClick={handlePreview}
         data-card="true"

@@ -47,7 +47,6 @@ export function getLocationVAlertFilters(
       longitude: location.lng
     },
     radius: DEFAULT_SEARCH_RADIUS,
-    minimum_sold_date: sixMonthsAgoTimestamp,
-    limit: DEFAULT_SEARCH_RESULT_LIMIT
+    minimum_sold_date: sixMonthsAgoTimestamp
   }
 }

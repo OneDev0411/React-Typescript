@@ -7,6 +7,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { addNotification as notify } from 'components/notification'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
 
+import BrandAssetCard from '../BrandAssetCard'
 import MarketingTemplateCard from '../MarketingTemplateCard'
 import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
 import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
@@ -108,44 +109,50 @@ function TemplatesList(props) {
             568: 1
           }}
         >
-          {props.items.map(template => (
-            <MarketingTemplateCard
-              key={template.id}
-              template={template}
-              handlePreview={() => {
-                setPreviewModalOpen(true)
-                setSelectedTemplate(template)
-                props.onSelect && props.onSelect(template)
-              }}
-              actions={
-                isTemplateInstance(template) ? (
-                  <TemplateCardActions
-                    editButtonText="Continue"
-                    handleDelete={() => handleDeleteInstance(template)}
-                    handleEdit={() => {
-                      setActionTriggered(true)
-                      setEditActionTriggered(true)
-                      setSelectedTemplate(template)
-                    }}
-                  />
-                ) : (
-                  <TemplateCardActions
-                    handleDelete={
-                      props.onDelete
-                        ? () => handleDeleteBrandTemplate(template)
-                        : undefined
-                    }
-                    handleEdit={() => {
-                      setActionTriggered(true)
-                      setEditActionTriggered(false)
-                      setSelectedTemplate(template)
-                      props.onSelect && props.onSelect(template)
-                    }}
-                  />
-                )
-              }
-            />
-          ))}
+          {props.items.map(item => {
+            if (item.type === 'brand_asset') {
+              return <BrandAssetCard key={item.id} asset={item} />
+            }
+
+            return (
+              <MarketingTemplateCard
+                key={item.id}
+                template={item}
+                handlePreview={() => {
+                  setPreviewModalOpen(true)
+                  setSelectedTemplate(item)
+                  props.onSelect && props.onSelect(item)
+                }}
+                actions={
+                  isTemplateInstance(item) ? (
+                    <TemplateCardActions
+                      editButtonText="Continue"
+                      handleDelete={() => handleDeleteInstance(item)}
+                      handleEdit={() => {
+                        setActionTriggered(true)
+                        setEditActionTriggered(true)
+                        setSelectedTemplate(item)
+                      }}
+                    />
+                  ) : (
+                    <TemplateCardActions
+                      handleDelete={
+                        props.onDelete
+                          ? () => handleDeleteBrandTemplate(item)
+                          : undefined
+                      }
+                      handleEdit={() => {
+                        setActionTriggered(true)
+                        setEditActionTriggered(false)
+                        setSelectedTemplate(item)
+                        props.onSelect && props.onSelect(item)
+                      }}
+                    />
+                  )
+                }
+              />
+            )
+          })}
         </MarketingTemplateMasonry>
       </TemplatesListContainer>
 

@@ -10,14 +10,14 @@ interface OptionsWithTemplateTypeAndMedium extends OptionsWithLabel {
 }
 
 export async function uploadBrandAsset(
-  brand: UUID,
+  brands: UUID[],
   file: File,
   options: OptionsWithLabel | OptionsWithTemplateTypeAndMedium = {}
 ): Promise<IBrandAsset> {
   const request = new Fetch()
-    .upload(`/brands/${brand}/assets`)
+    .upload('/brands/assets')
     .attach('file', file)
-    .field(options as any)
+    .field({ ...options, brands } as any)
 
   const response = await request
 

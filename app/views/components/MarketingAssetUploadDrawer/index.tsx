@@ -33,7 +33,7 @@ export default function MarketingAssetUploadDrawer({
   const onSubmit = async (data: AssetsUploadFormData) => {
     const uploadedAssets = await Promise.all(
       data.assets.map(asset => {
-        return uploadBrandAsset(data.brand.id, asset.file.object, {
+        return uploadBrandAsset([data.brand.id], asset.file.object, {
           label: asset.label,
           template_type: asset.templateType,
           medium: asset.medium
