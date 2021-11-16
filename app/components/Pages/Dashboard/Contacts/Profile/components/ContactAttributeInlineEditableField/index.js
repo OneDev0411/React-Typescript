@@ -3,7 +3,8 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
-import { selectActiveBrandId } from '@app/selectors/brand'
+import { selectActiveBrand } from '@app/selectors/brand'
+import { selectUser } from '@app/selectors/user'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import {
@@ -28,6 +29,7 @@ import {
   getInitialErrorMessage
 } from './helpers'
 import { TriggerEditMode } from './TriggerEditMode'
+import { createTemplateInstance } from './TriggerEditMode/helpers/create-template-instance'
 import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
@@ -276,8 +278,9 @@ class MasterField extends Component {
 
   handleSaveTrigger = async () => {
     const {
+      user,
+      brand,
       contact,
-      brandId,
       attributeGlobalTrigger,
       trigger: triggerFromParent
     } = this.props
@@ -298,26 +301,37 @@ class MasterField extends Component {
     }
 
     if (!isTriggerActive) {
-      if (attributeGlobalTrigger) {
-        await excludeContactFromGlobalTrigger(
-          contact.id,
-          this.attribute_def.name,
-          brandId
-        )
-
-        return
-      }
-
       if (trigger) {
         await removeTrigger(trigger.id)
 
         return
       }
+
+      if (attributeGlobalTrigger) {
+        await excludeContactFromGlobalTrigger(
+          contact.id,
+          this.attribute_def.name,
+          brand?.id
+        )
+
+        return
+      }
     }
+
+    /*
+    since we can create a trigger from global trigger data and
+    they also accept brand templates we should check the type of template
+    to make sure it's a template instance and if not create an instance from it
+    because we just need a template instance for contact trigger.
+    */
+    const template =
+      triggerSelectedTemplate.type === 'template_instance'
+        ? triggerSelectedTemplate
+        : await createTemplateInstance(triggerSelectedTemplate, brand, user)
 
     const triggerCommonParams = [
       contact,
-      triggerSelectedTemplate,
+      template,
       {
         recurring: true,
         time: '08:00:00', // it's hard coded base api team comment
@@ -543,11 +557,12 @@ class MasterField extends Component {
 
 const mapStateToProps = (state, props) => {
   return {
+    user: selectUser(state),
+    brand: selectActiveBrand(state),
     attributeGlobalTrigger:
       selectGlobalTriggersAttributes(state)[
         props.attribute?.attribute_def?.name
-      ] ?? null,
-    brandId: selectActiveBrandId(state)
+      ] ?? null
   }
 }
 

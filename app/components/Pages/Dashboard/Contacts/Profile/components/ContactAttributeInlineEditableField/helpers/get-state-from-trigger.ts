@@ -16,7 +16,9 @@ interface TriggerState {
   triggerSender: IUser
   triggerSubject: string
   triggerSendBefore: number
-  triggerSelectedTemplate: null
+  triggerSelectedTemplate: Nullable<
+    IMarketingTemplateInstance | IBrandMarketingTemplate
+  >
 }
 
 export function getStateFromTrigger(
@@ -28,45 +30,47 @@ export function getStateFromTrigger(
   const attributeName = (attribute.attribute_def.name ??
     '') as TriggerContactEventTypes
 
-  if (globalTrigger) {
-    return {
-      currentTrigger: null,
-      isTriggerActive: true,
-      triggerSender: contact.user as IUser,
-      triggerSubject: globalTrigger.subject,
-      triggerSendBefore: globalTrigger.wait_for ?? 0,
-      triggerSelectedTemplate: null
+  // we're checking if date value is already exist
+  // disable the trigger unless enable it
+  let isActive = true
+
+  if (
+    attribute &&
+    TRIGGERABLE_ATTRIBUTES.includes(attributeName) &&
+    !trigger &&
+    !globalTrigger
+  ) {
+    const attributeValue = getValue(attribute)
+
+    if (
+      typeof attributeValue === 'object' &&
+      (attributeValue.month?.value || attributeValue.day?.value)
+    ) {
+      isActive = false
     }
   }
 
   if (trigger) {
     return {
       currentTrigger: trigger,
-      isTriggerActive: true,
+      isTriggerActive: isActive,
       triggerSender: (trigger.campaign?.from as IUser) ?? contact.user,
       triggerSubject:
         trigger.campaign?.subject || getTriggerSubject(attributeName),
       triggerSendBefore: trigger.wait_for || 0,
-      triggerSelectedTemplate: null
+      triggerSelectedTemplate: trigger.campaign?.template ?? null
     }
   }
 
-  // we're checking if date value is already exist
-  // disable the trigger unless enable it
-  let isActive
-
-  if (attribute && TRIGGERABLE_ATTRIBUTES.includes(attributeName)) {
-    const attributeValue = getValue(attribute)
-
-    if (
-      typeof attributeValue === 'object' &&
-      (!attributeValue.year ||
-        !attributeValue.month?.value ||
-        !attributeValue.day?.value)
-    ) {
-      isActive = true
-    } else {
-      isActive = false
+  if (globalTrigger) {
+    return {
+      currentTrigger: null,
+      isTriggerActive: isActive,
+      triggerSender: contact.user as IUser,
+      triggerSubject: globalTrigger.subject,
+      triggerSendBefore: globalTrigger.wait_for ?? 0,
+      triggerSelectedTemplate:
+        globalTrigger.template_instance ?? globalTrigger.template ?? null
     }
   }
 

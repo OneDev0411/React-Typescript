@@ -90,11 +90,13 @@ interface Props {
   disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
-  currentValue: Nullable<ITrigger>
   isActive: boolean
   isSaving?: boolean
   subject: string
   sendBefore: number
+  selectedTemplate: Nullable<
+    IMarketingTemplateInstance | IBrandMarketingTemplate
+  >
   onChangeActive: (value: boolean) => void
   onChangeSubject: (value: string) => void
   onChangeSender: (value: IUser) => void
@@ -105,13 +107,13 @@ interface Props {
 const TriggerEditModeComponent = ({
   disabled = false,
   isSaving = false,
-  currentValue,
   attributeName,
   renderAttributeFields,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = 0,
   sender: senderProp,
   subject: subjectProp = '',
+  selectedTemplate: selectedTemplateProp = null,
   onChangeSender,
   onChangeActive,
   onChangeSubject,
@@ -121,12 +123,6 @@ const TriggerEditModeComponent = ({
   const classes = useStyles()
   const user = useSelector(selectUser)
   const globalTriggers = useSelector(selectGlobalTriggersAttributes)
-
-  const attributeGlobalTrigger = useMemo(
-    () => globalTriggers[attributeName],
-    [attributeName, globalTriggers]
-  )
-
   // Fields
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
@@ -135,7 +131,16 @@ const TriggerEditModeComponent = ({
     convertSecondsToDay(sendBeforeProp)
   )
   const [selectedTemplate, setSelectedTemplate] =
-    useState<Nullable<IMarketingTemplateInstance>>(null)
+    useState<Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>>(
+      selectedTemplateProp
+    )
+
+  const attributeGlobalTrigger = useMemo(
+    () => globalTriggers[attributeName],
+    [attributeName, globalTriggers]
+  )
+
+  console.log({ attributeGlobalTrigger })
 
   // Show global trigger feature banner
   const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
@@ -332,7 +337,6 @@ const TriggerEditModeComponent = ({
         <div className={classes.containerItem}>
           <TemplateSelector
             disabled={disabled || !isActive}
-            currentValue={currentValue}
             attributeName={attributeName}
             selectedTemplate={selectedTemplate}
             onSelectTemplate={handleSelectTemplate}
