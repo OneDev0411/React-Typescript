@@ -2,7 +2,7 @@ import { useState, useMemo, memo } from 'react'
 
 import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
-import { sortBy } from 'lodash'
+import { orderBy } from 'lodash'
 import pluralize from 'pluralize'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
@@ -122,9 +122,7 @@ export function MarketingLayout({
 
     const currentPageTemplatesAndAssets: Array<
       IBrandMarketingTemplate | IBrandAsset
-    > = sortBy([...currentPageTemplates, ...assets], item => {
-      return item.created_at
-    })
+    > = orderBy([...currentPageTemplates, ...assets], ['created_at'], 'desc')
 
     return currentPageTemplatesAndAssets
   }, [currentMedium, templateTypes, templates, assets])
