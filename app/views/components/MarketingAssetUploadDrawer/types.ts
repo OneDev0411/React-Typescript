@@ -7,7 +7,7 @@ export interface Asset {
     isUploaded?: boolean
     uploadProgress?: number
   }
-  label?: string
+  label: string
   medium: IMarketingTemplateMedium
   templateType?: IMarketingTemplateType
 }

@@ -99,5 +99,9 @@ export const marketingTemplateCardStyles = (theme: Theme) =>
       '& button:last-child': {
         marginRight: 0
       }
+    },
+    assetThumbnail: {
+      maxWidth: '100%',
+      objectFit: 'cover'
     }
   })

@@ -2,11 +2,13 @@ import { useState, useMemo, memo } from 'react'
 
 import { Button, Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline, mdiPlus } from '@mdi/js'
+import { sortBy } from 'lodash'
 import pluralize from 'pluralize'
 import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
+import { useBrandAssets } from '@app/hooks/use-brand-assets'
 import { useMarketingCenterMediums } from '@app/hooks/use-marketing-center-mediums'
 import { useMarketingCenterSections } from '@app/hooks/use-marketing-center-sections'
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
@@ -48,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   render: (props: {
-    items: IBrandMarketingTemplate[]
+    items: (IBrandMarketingTemplate | IBrandAsset)[]
     isLoading: boolean
     types: string
     medium: IMarketingTemplateMedium
@@ -80,17 +82,33 @@ export function MarketingLayout({
 
   const templateTypes = params.types
 
-  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
+  const {
+    templates,
+    isLoading: isLoadingTemplates,
+    deleteTemplate
+  } = useTemplates(activeBrand)
   const mediums = useMarketingCenterMediums(templates)
 
   const templateTypesWithMediums =
     useMarketingTemplateTypesWithMediums(templates)
 
   const currentMedium = params.medium
+  const { assets, isLoading: isLoadingBrandAssets } = useBrandAssets(
+    activeBrand,
+    {
+      templateTypes: templateTypes
+        ? (templateTypes.split(',') as IMarketingTemplateType[])
+        : [],
+      medium: currentMedium
+    }
+  )
+
+  const isLoading = isLoadingTemplates || isLoadingBrandAssets
+
   const currentPageItems = useMemo(() => {
     const splittedTemplateTypes = templateTypes ? templateTypes.split(',') : []
 
-    return templates.filter(item => {
+    const currentPageTemplates = templates.filter(item => {
       const mediumMatches = currentMedium
         ? item.template.medium === currentMedium
         : true
@@ -101,7 +119,15 @@ export function MarketingLayout({
 
       return mediumMatches && typeMatches
     })
-  }, [currentMedium, templateTypes, templates])
+
+    const currentPageTemplatesAndAssets: Array<
+      IBrandMarketingTemplate | IBrandAsset
+    > = sortBy([...currentPageTemplates, ...assets], item => {
+      return item.created_at
+    })
+
+    return currentPageTemplatesAndAssets
+  }, [currentMedium, templateTypes, templates, assets])
 
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 

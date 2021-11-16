@@ -75,6 +75,7 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
         ...assets,
         ...(await Promise.all(
           acceptedFiles.map(async file => ({
+            label: '',
             templateType: preSelectedTemplateType,
             medium: preSelectedMedium,
             file: {
@@ -156,9 +157,9 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
         <Controller
           control={control}
           name="assets"
-          render={({ value, onChange }) => (
+          render={({ value }) => (
             <>
-              {value.map(asset => (
+              {value.map((asset: Asset) => (
                 <AssetItem
                   key={asset.file.url}
                   asset={asset}
