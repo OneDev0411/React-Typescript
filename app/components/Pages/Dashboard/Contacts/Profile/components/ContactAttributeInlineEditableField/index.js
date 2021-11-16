@@ -324,6 +324,8 @@ class MasterField extends Component {
     to make sure it's a template instance and if not create an instance from it
     because we just need a template instance for contact trigger.
     */
+    this.setState({ isTriggerSaving: true })
+
     const template =
       triggerSelectedTemplate.type === 'template_instance'
         ? triggerSelectedTemplate
@@ -341,8 +343,6 @@ class MasterField extends Component {
         event_type: this.attribute_def.name
       }
     ]
-
-    this.setState({ isTriggerSaving: true })
 
     if (trigger) {
       await updateTrigger(trigger, ...triggerCommonParams)

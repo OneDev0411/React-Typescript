@@ -198,7 +198,7 @@ const TriggerEditModeComponent = ({
     return (
       <div className={classes.senderContainer}>
         <TeamContactSelect
-          disabled={disabled || !isActive}
+          disabled={disabled || !isActive || isSaving}
           owner={sender}
           user={sender}
           onSelect={handleSenderChange}
@@ -336,7 +336,7 @@ const TriggerEditModeComponent = ({
         </div>
         <div className={classes.containerItem}>
           <TemplateSelector
-            disabled={disabled || !isActive}
+            disabled={disabled || !isActive || isSaving}
             attributeName={attributeName}
             selectedTemplate={selectedTemplate}
             onSelectTemplate={handleSelectTemplate}

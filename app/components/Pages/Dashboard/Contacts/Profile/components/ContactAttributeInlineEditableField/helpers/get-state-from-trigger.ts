@@ -34,12 +34,7 @@ export function getStateFromTrigger(
   // disable the trigger unless enable it
   let isActive = true
 
-  if (
-    attribute &&
-    TRIGGERABLE_ATTRIBUTES.includes(attributeName) &&
-    !trigger &&
-    !globalTrigger
-  ) {
+  if (attribute && TRIGGERABLE_ATTRIBUTES.includes(attributeName) && !trigger) {
     const attributeValue = getValue(attribute)
 
     if (
