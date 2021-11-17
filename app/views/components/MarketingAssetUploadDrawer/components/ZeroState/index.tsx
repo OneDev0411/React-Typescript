@@ -60,7 +60,7 @@ export default function ZeroState({ onUpload }: Props) {
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,
-    multiple: false,
+    multiple: true,
     noClick: true,
     accept: ['image/*', 'video/*', 'application/pdf']
   })
