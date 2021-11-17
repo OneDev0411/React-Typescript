@@ -13,7 +13,11 @@ import OverlayDrawer from 'components/OverlayDrawer'
 
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import { convertDateToTimestamp, convertTimestampToDate } from './helpers'
+import {
+  convertDateToTimestamp,
+  convertTimestampToDate,
+  requiredTextValidator
+} from './helpers'
 import {
   SuperCampaignFormInternalValues,
   SuperCampaignFormValues
@@ -99,6 +103,7 @@ function SuperCampaignDrawer({
                     <FormTextField
                       name="subject"
                       label="Email Campaign Subject"
+                      validate={requiredTextValidator}
                     />
                     <FormTextField
                       name="description"
