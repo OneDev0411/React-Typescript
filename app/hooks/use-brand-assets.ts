@@ -11,6 +11,7 @@ interface Options {
 
 interface UseBrandAssets {
   search: (query: string) => void
+  refetch: () => void
   assets: IBrandAsset[]
   isLoading: boolean
 }
@@ -23,17 +24,17 @@ export function useBrandAssets(
   const [allAssets, setAllAssets] = useState<IBrandAsset[]>([])
   const [assets, setAssets] = useState<IBrandAsset[]>([])
 
+  const fetchAssets = async () => {
+    setIsLoading(true)
+
+    const fetchedAssets = await getBrandAssets(brandId, options)
+
+    setAllAssets(fetchedAssets)
+    setAssets(fetchedAssets)
+    setIsLoading(false)
+  }
+
   useDeepCompareEffect(() => {
-    async function fetchAssets() {
-      setIsLoading(true)
-
-      const fetchedAssets = await getBrandAssets(brandId, options)
-
-      setAllAssets(fetchedAssets)
-      setAssets(fetchedAssets)
-      setIsLoading(false)
-    }
-
     fetchAssets()
   }, [brandId, options])
 
@@ -50,6 +51,7 @@ export function useBrandAssets(
 
   return {
     search,
+    refetch: fetchAssets,
     assets,
     isLoading
   }

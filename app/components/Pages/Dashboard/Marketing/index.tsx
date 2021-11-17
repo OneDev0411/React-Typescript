@@ -93,15 +93,16 @@ export function MarketingLayout({
     useMarketingTemplateTypesWithMediums(templates)
 
   const currentMedium = params.medium
-  const { assets, isLoading: isLoadingBrandAssets } = useBrandAssets(
-    activeBrand,
-    {
-      templateTypes: templateTypes
-        ? (templateTypes.split(',') as IMarketingTemplateType[])
-        : [],
-      medium: currentMedium
-    }
-  )
+  const {
+    assets,
+    isLoading: isLoadingBrandAssets,
+    refetch: refetchBrandAssets
+  } = useBrandAssets(activeBrand, {
+    templateTypes: templateTypes
+      ? (templateTypes.split(',') as IMarketingTemplateType[])
+      : [],
+    medium: currentMedium
+  })
 
   const isLoading = isLoadingTemplates || isLoadingBrandAssets
 
@@ -166,7 +167,9 @@ export function MarketingLayout({
     setIsMarketingAssetUploadDrawerOpen(true)
   }
 
-  const closeUploadMarketingAssetDrawer = (uploadedAssets?: IBrandAsset[]) => {
+  const closeUploadMarketingAssetDrawer = async (
+    uploadedAssets?: IBrandAsset[]
+  ) => {
     if (uploadedAssets) {
       notify({
         status: 'success',
@@ -176,6 +179,7 @@ export function MarketingLayout({
           true
         )} uploaded successfully`
       })
+      refetchBrandAssets()
     }
 
     setIsMarketingAssetUploadDrawerOpen(false)
