@@ -2,7 +2,7 @@
 
 import React, { Fragment } from 'react'
 
-import { Button, Tooltip } from '@material-ui/core'
+import { Box, Button, Tooltip } from '@material-ui/core'
 import cn from 'classnames'
 import { connect } from 'react-redux'
 import _ from 'underscore'
@@ -12,15 +12,15 @@ import {
   uploadStashFile,
   resetUploadFiles,
   setUploadAttributes,
-  changeNeedsAttention,
-  setExpandChecklist
+  setExpandChecklist,
+  changeNeedsAttention
 } from 'actions/deals'
-import Checkbox from 'components/CheckmarkButton'
 import { Modal, ModalContent, ModalHeader, ModalFooter } from 'components/Modal'
 import { addNotification as notify } from 'components/notification'
 import Deal from 'models/Deal'
 
 import TasksDropDown from '../../components/TasksDropdown'
+import { NotifyOfficeConfirmation } from '../../Create/components/NotifyOfficeConfirmation'
 import PdfSplitter from '../../PdfSplitter'
 
 import FileName from './file-name'
@@ -32,11 +32,16 @@ const STATUS_UPLOADED = 'uploaded'
 class UploadModal extends React.Component {
   state = {
     uploadProgress: {},
-    splitFiles: []
+    splitFiles: [],
+    isNotifyOfficeDialogOpen: false
   }
 
   closeModal() {
     this.props.resetUploadFiles()
+
+    this.setState({
+      isNotifyOfficeDialogOpen: false
+    })
   }
 
   getModalStyle(filesCount) {
@@ -48,12 +53,6 @@ class UploadModal extends React.Component {
       maxHeight: '400px',
       overflow: 'auto'
     }
-  }
-
-  onClickNotifyAdmin(file) {
-    this.props.setUploadAttributes(file.id, {
-      notifyOffice: !file.properties.notifyOffice
-    })
   }
 
   onSelectTask(file, taskId) {
@@ -87,16 +86,12 @@ class UploadModal extends React.Component {
       uploadTaskFile,
       uploadStashFile,
       setUploadAttributes,
-      changeNeedsAttention,
       notify
     } = this.props
 
     if (properties.status === STATUS_UPLOADED) {
       return false
     }
-
-    // check task is inside a backup contract
-    const isBackupContract = this.isBackupContract(task)
 
     // get filename
     const filename = this.getFileName({ fileObject, properties })
@@ -144,10 +139,6 @@ class UploadModal extends React.Component {
       status: 'success'
     })
 
-    if (task && properties.notifyOffice === true && !isBackupContract) {
-      changeNeedsAttention(task.deal, task.id, true)
-    }
-
     // set status
     try {
       setUploadAttributes(id, { status: STATUS_UPLOADED, response: file })
@@ -179,7 +170,7 @@ class UploadModal extends React.Component {
     const { status } = file.properties
 
     if (status === STATUS_UPLOADING) {
-      return 'Uploading ...'
+      return 'Uploading...'
     }
 
     if (status === STATUS_UPLOADED) {
@@ -199,6 +190,15 @@ class UploadModal extends React.Component {
     return checklists[task.checklist].is_deactivated
   }
 
+  get isFinished() {
+    const files = Object.values(this.props.upload.files)
+
+    return (
+      files.length > 0 &&
+      files.every(file => file.properties.status === STATUS_UPLOADED)
+    )
+  }
+
   get isSplitButtonActive() {
     const pdfFiles = _.filter(
       this.props.upload.files,
@@ -210,6 +210,12 @@ class UploadModal extends React.Component {
     }
 
     return pdfFiles.every(file => file.properties.status === STATUS_UPLOADED)
+  }
+
+  get TaskIds() {
+    return Object.values(this.props.upload.files)
+      .map(file => file.properties.taskId)
+      .filter(taskId => !!taskId)
   }
 
   getFileUniqueId(fileObject) {
@@ -250,18 +256,37 @@ class UploadModal extends React.Component {
     })
   }
 
+  handleNext = () => {
+    this.setState({
+      isNotifyOfficeDialogOpen: true
+    })
+  }
+
+  skipNotifyOffice = () => {
+    this.closeModal()
+  }
+
+  notifyOffice = () => {
+    this.TaskIds.forEach(taskId =>
+      this.props.changeNeedsAttention(this.props.deal.id, taskId, true)
+    )
+
+    this.closeModal()
+  }
+
   render() {
     const { deal, upload } = this.props
 
+    const taskIds = this.TaskIds
     const filesCount = _.size(upload.files)
 
     let fileCounter = 0
 
     return (
-      <React.Fragment>
+      <>
         <Modal
           className="modal-deal-upload-files"
-          isOpen={filesCount > 0}
+          isOpen={filesCount > 0 && !this.state.isNotifyOfficeDialogOpen}
           autoHeight
           offOverflow
           onRequestClose={() => this.closeModal()}
@@ -276,7 +301,6 @@ class UploadModal extends React.Component {
             <div className="uploads-container">
               {_.map(upload.files, (file, id) => {
                 const selectedTask = this.getSelectedTask(file)
-                const isBackupContract = this.isBackupContract(selectedTask)
                 const isUploading = file.properties.status === STATUS_UPLOADING
                 const isUploaded = file.properties.status === STATUS_UPLOADED
 
@@ -338,22 +362,6 @@ class UploadModal extends React.Component {
                         />
                       )}
                     </div>
-                    <div className="notify-admin">
-                      {!isBackupContract && !isUploading && !isUploaded && (
-                        <Checkbox
-                          square
-                          selected={file.properties.notifyOffice || false}
-                          title="Notify Office"
-                          onClick={() => this.onClickNotifyAdmin(file)}
-                        />
-                      )}
-
-                      {isUploaded &&
-                        file.properties.notifyOffice &&
-                        !isBackupContract && (
-                          <span className="notified">Office Notified</span>
-                        )}
-                    </div>
                   </div>
                 )
               })}
@@ -361,29 +369,60 @@ class UploadModal extends React.Component {
           </ModalContent>
 
           <ModalFooter className="modal-footer">
-            <Tooltip
-              title={
-                this.isSplitButtonActive
-                  ? 'You can split files as soon as upload them'
-                  : ''
-              }
+            <Box
+              width="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              mx={1}
             >
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={!this.isSplitButtonActive}
-                style={{ marginRight: '1rem' }}
-                onClick={this.handleOpenSplitter}
-              >
-                Split PDF
-              </Button>
-            </Tooltip>
+              <Box display="flex" alignItems="center">
+                <Tooltip
+                  title={
+                    this.isSplitButtonActive
+                      ? 'You can split files as soon as upload them'
+                      : ''
+                  }
+                >
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    disabled={!this.isSplitButtonActive}
+                    style={{ marginRight: '1rem' }}
+                    onClick={this.handleOpenSplitter}
+                  >
+                    Split PDF
+                  </Button>
+                </Tooltip>
 
-            <Tooltip title="Create new documents and save them to tasks">
-              <div className="help">?</div>
-            </Tooltip>
+                <Tooltip title="Create new documents and save them to tasks">
+                  <div className="help">?</div>
+                </Tooltip>
+              </Box>
+
+              <div>
+                {taskIds.length > 0 && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={this.isFinished === false}
+                    onClick={this.handleNext}
+                  >
+                    Next
+                  </Button>
+                )}
+              </div>
+            </Box>
           </ModalFooter>
         </Modal>
+
+        <NotifyOfficeConfirmation
+          title="Should we ask office to review the uploaded files?"
+          deal={this.props.deal}
+          isOpen={this.state.isNotifyOfficeDialogOpen}
+          onCancel={this.skipNotifyOffice}
+          onConfirm={this.notifyOffice}
+        />
 
         {this.state.splitFiles.length > 0 && (
           <PdfSplitter
@@ -392,7 +431,7 @@ class UploadModal extends React.Component {
             onClose={this.handleCloseSplitter}
           />
         )}
-      </React.Fragment>
+      </>
     )
   }
 }

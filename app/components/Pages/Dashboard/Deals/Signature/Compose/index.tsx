@@ -1,6 +1,6 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
-import { Button, Box } from '@material-ui/core'
+import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import { Form, FormSpy } from 'react-final-form'
 
@@ -15,6 +15,7 @@ import { From } from './form/From'
 import { Message } from './form/Message'
 import { Recipients } from './form/Recipients'
 import { Subject } from './form/Subject'
+import { SubmitButton } from './form/SubmitButton'
 
 interface Props {
   user: IUser
@@ -128,7 +129,7 @@ export function SignatureComposeDrawer({
         initialValues={getInitialValues()}
         validate={validate}
         render={({ handleSubmit, valid }) => (
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <form className={classes.form}>
             <FormSpy
               subscription={{ values: true }}
               onChange={handleChangeForm}
@@ -148,14 +149,12 @@ export function SignatureComposeDrawer({
             <Drawer.Footer>
               <div className={classes.footer}>
                 <Box display="flex" flexDirection="row-reverse">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                    disabled={isSubmitting || !valid}
-                  >
-                    {isSubmitting ? 'Please Wait...' : 'Next: View in Docusign'}
-                  </Button>
+                  <SubmitButton
+                    deal={deal}
+                    isSubmitting={isSubmitting}
+                    valid={valid}
+                    onSubmit={handleSubmit}
+                  />
                 </Box>
               </div>
             </Drawer.Footer>

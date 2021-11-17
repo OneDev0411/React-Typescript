@@ -42,20 +42,7 @@ export default function Signature({
     onClose()
   }
 
-  const handleSubmit = async (form: FormValues) => {
-    dispatch(
-      confirmation({
-        message: '🔔',
-        description: 'Should we notify Back-office to review once it’s signed?',
-        confirmLabel: 'Submit for Review',
-        cancelLabel: 'Do Not Submit for Review',
-        onCancel: () => send(form, false),
-        onConfirm: () => send(form, true)
-      })
-    )
-  }
-
-  const send = async (form: FormValues, notifyOffice: boolean) => {
+  const send = async (form: FormValues) => {
     const attachments = Object.values(form.attachments).map(attachment => {
       return attachment.source === 'submission'
         ? {
@@ -84,7 +71,7 @@ export default function Signature({
         form.message,
         attachments,
         recipients,
-        notifyOffice
+        form.auto_notify
       )
 
       await dispatch(createEnvelope(envelope))
@@ -126,14 +113,14 @@ export default function Signature({
         isOpen={isOpen && !showDocusignBanner}
         isSubmitting={isSending}
         defaultAttachments={defaultAttachments}
-        onSubmit={handleSubmit}
+        onSubmit={send}
         onClickAddAttachments={onClickAddAttachments}
         onClose={onClose}
       />
 
       <DocusignAuthentication
         isOpen={isOpen && showDocusignBanner}
-        onAuthorize={() => handleSubmit(formData!)}
+        onAuthorize={() => send(formData!)}
       />
     </>
   )
