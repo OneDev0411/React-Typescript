@@ -70,7 +70,7 @@ export function MultiSelectionBrandSelectorDrawer({
           <Button
             variant="contained"
             color="primary"
-            disabled={isSaving}
+            disabled={isSaving || selectedBrands.length === 0}
             onClick={handleClick}
           >
             {isSaving ? 'Saving...' : saveButtonText}
