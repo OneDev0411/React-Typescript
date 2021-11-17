@@ -1,10 +1,9 @@
 import { useState } from 'react'
 
-import { Box, Button } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { uploadBrandAsset } from '@app/models/brand/upload-asset'
-import LoadingContainer from '@app/views/components/LoadingContainer'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 import TeamTreeView from '@app/views/components/TeamTreeView'
 
@@ -20,7 +19,8 @@ export default function MarketingAssetUploadDrawer({
   defaultSelectedTemplateType,
   onClose
 }: Props) {
-  const [activeStep, setActiveStep] = useState<DrawerStep>('upload')
+  const [activeStep, setActiveStep] = useState<DrawerStep>('teams')
+  const [uploadProgress, setUploadProgress] = useState<number[]>([])
   const formMethods = useForm<AssetsUploadFormData>({
     defaultValues: {
       assets: []
@@ -31,15 +31,39 @@ export default function MarketingAssetUploadDrawer({
   const brand = formMethods.watch('brand')
 
   const onSubmit = async (data: AssetsUploadFormData) => {
+    setUploadProgress(data.assets.map(() => 0))
+
     const uploadedAssets = await Promise.all(
-      data.assets.map(asset => {
-        return uploadBrandAsset([data.brand.id], asset.file.object, {
-          label: asset.label,
-          template_type: asset.templateType,
-          medium: asset.medium
-        })
+      data.assets.map((asset, index) => {
+        return uploadBrandAsset(
+          [data.brand.id],
+          asset.file.object,
+          {
+            label: asset.label,
+            template_type: asset.templateType,
+            medium: asset.medium
+          },
+          progressEvent => {
+            if (
+              progressEvent.direction !== 'upload' ||
+              !progressEvent.percent
+            ) {
+              return
+            }
+
+            setUploadProgress(uploadProgress => {
+              return [
+                ...uploadProgress.slice(0, index),
+                progressEvent.percent!,
+                ...uploadProgress.slice(index + 1)
+              ]
+            })
+          }
+        )
       })
     )
+
+    setUploadProgress([])
 
     onClose(uploadedAssets)
   }
@@ -52,21 +76,17 @@ export default function MarketingAssetUploadDrawer({
     setActiveStep('upload')
   }
 
+  const isUploadingFiles = uploadProgress.length > 0
+
+  const closeDrawer = () => {
+    if (isUploadingFiles) {
+      return
+    }
+
+    onClose()
+  }
+
   const renderActiveStep = () => {
-    if (formMethods.formState.isSubmitting) {
-      return (
-        <Box mt={4}>
-          <LoadingContainer noPaddings />
-        </Box>
-      )
-    }
-
-    if (activeStep === 'upload') {
-      return (
-        <Upload defaultSelectedTemplateType={defaultSelectedTemplateType} />
-      )
-    }
-
     if (activeStep === 'teams') {
       return (
         <TeamTreeView
@@ -75,38 +95,51 @@ export default function MarketingAssetUploadDrawer({
       )
     }
 
+    if (activeStep === 'upload') {
+      return (
+        <Upload
+          uploadProgress={uploadProgress}
+          defaultSelectedTemplateType={defaultSelectedTemplateType}
+        />
+      )
+    }
+
     return null
   }
 
   const renderActions = () => {
-    if (activeStep === 'upload') {
+    if (activeStep === 'teams') {
       return (
         <OverlayDrawer.Footer rowReverse>
           <Button
             variant="contained"
             color="primary"
-            disabled={assets.length === 0}
-            onClick={goToSelectTeamsStep}
+            disabled={!brand}
+            onClick={goToUploadStep}
           >
-            Next: Select Teams
+            Next: Select Files
           </Button>
         </OverlayDrawer.Footer>
       )
     }
 
-    if (activeStep === 'teams') {
+    if (activeStep === 'upload') {
       return (
         <OverlayDrawer.Footer>
-          <Button variant="outlined" onClick={goToUploadStep}>
+          <Button variant="outlined" onClick={goToSelectTeamsStep}>
             Back
           </Button>
           <Button
             variant="contained"
             color="primary"
             onClick={formMethods.handleSubmit(data => onSubmit(data))}
-            disabled={formMethods.formState.isSubmitting || !brand}
+            disabled={
+              formMethods.formState.isSubmitting ||
+              assets.length === 0 ||
+              isUploadingFiles
+            }
           >
-            Done
+            Upload Files
           </Button>
         </OverlayDrawer.Footer>
       )
@@ -115,12 +148,17 @@ export default function MarketingAssetUploadDrawer({
     return null
   }
 
+  const title = activeStep === 'teams' ? 'Select Teams' : 'Upload Files'
+
   return (
-    <OverlayDrawer open onClose={() => onClose()}>
-      <OverlayDrawer.Header title="Add to Marketing Center" />
+    <OverlayDrawer open onClose={closeDrawer}>
+      <OverlayDrawer.Header title={title} />
       <OverlayDrawer.Body>
         <FormProvider {...formMethods}>
-          <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+          <form
+            style={{ height: '100%', overflow: 'hidden' }}
+            onSubmit={formMethods.handleSubmit(onSubmit)}
+          >
             {renderActiveStep()}
           </form>
         </FormProvider>

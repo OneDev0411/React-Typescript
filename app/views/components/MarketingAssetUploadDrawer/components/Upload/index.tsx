@@ -48,9 +48,13 @@ const useStyles = makeStyles(
 
 interface Props {
   defaultSelectedTemplateType?: IMarketingTemplateType
+  uploadProgress: number[]
 }
 
-export default function Upload({ defaultSelectedTemplateType }: Props) {
+export default function Upload({
+  defaultSelectedTemplateType,
+  uploadProgress
+}: Props) {
   const classes = useStyles()
   const { setValue, watch, control } = useFormContext<AssetsUploadFormData>()
 
@@ -157,16 +161,23 @@ export default function Upload({ defaultSelectedTemplateType }: Props) {
         <Controller
           control={control}
           name="assets"
-          render={({ value }) => (
+          render={({ value }: { value: Asset[] }) => (
             <>
-              {value.map((asset: Asset) => (
-                <AssetItem
-                  key={asset.file.url}
-                  asset={asset}
-                  onDeleteAsset={handleDeleteAsset}
-                  onUpdateAsset={handleUpdateAsset}
-                />
-              ))}
+              {value.map((asset, index) => {
+                const currentItemUploadProgress = uploadProgress
+                  ? uploadProgress[index]
+                  : undefined
+
+                return (
+                  <AssetItem
+                    uploadProgress={currentItemUploadProgress}
+                    key={asset.file.url}
+                    asset={asset}
+                    onDeleteAsset={handleDeleteAsset}
+                    onUpdateAsset={handleUpdateAsset}
+                  />
+                )
+              })}
             </>
           )}
         />

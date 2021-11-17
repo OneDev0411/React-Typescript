@@ -7,7 +7,8 @@ import {
   MenuItem,
   FormControl,
   IconButton,
-  TextField
+  TextField,
+  LinearProgress
 } from '@material-ui/core'
 import { mdiDeleteOutline } from '@mdi/js'
 
@@ -33,9 +34,9 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius
     },
     image: {
-      width: theme.spacing(8),
-      height: theme.spacing(14),
+      width: '100%',
       objectFit: 'cover',
+      height: theme.spacing(14),
       borderRadius: theme.shape.borderRadius
     },
     clickToUpload: {
@@ -45,6 +46,9 @@ const useStyles = makeStyles(
     deleteContainer: {
       flexGrow: 1,
       textAlign: 'right'
+    },
+    progressBar: {
+      height: `${theme.spacing(3)}px !important`
     }
   }),
   {
@@ -54,23 +58,111 @@ const useStyles = makeStyles(
 
 interface Props {
   asset: Asset
+  uploadProgress?: number
   onUpdateAsset: (asset: Asset) => void
   onDeleteAsset: (asset: Asset) => void
 }
 
 export default memo(function AssetItem({
   asset,
+  uploadProgress,
   onUpdateAsset,
   onDeleteAsset
 }: Props) {
   const classes = useStyles()
 
+  const renderUploadProgress = () => {
+    return (
+      <Grid item xs={9}>
+        <LinearProgress
+          className={classes.progressBar}
+          value={uploadProgress}
+          variant="determinate"
+        />
+      </Grid>
+    )
+  }
+
+  const renderUploadForm = () => {
+    return (
+      <>
+        <Grid container item direction="column" xs={9} spacing={4}>
+          <Grid item xs>
+            <FormControl fullWidth>
+              <TextField
+                autoFocus
+                variant="outlined"
+                size="small"
+                placeholder="Label"
+                value={asset.label}
+                onChange={event => {
+                  onUpdateAsset({
+                    ...asset,
+                    label: event.target.value
+                  })
+                }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid container item direction="row" spacing={2}>
+            <Grid item xs={6}>
+              <FormControl fullWidth variant="outlined" size="small">
+                {/* <InputLabel>Add To</InputLabel> */}
+                <Select
+                  value={asset.templateType}
+                  onChange={event =>
+                    onUpdateAsset({
+                      ...asset,
+                      templateType: event.target.value as IMarketingTemplateType
+                    })
+                  }
+                >
+                  {TEMPLATE_TYPES.map(type => (
+                    <MenuItem key={type} value={type}>
+                      {getTemplateTypeLabel(type)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth variant="outlined" size="small">
+                {/* <InputLabel>Medium</InputLabel> */}
+                <Select
+                  value={asset.medium}
+                  onChange={event =>
+                    onUpdateAsset({
+                      ...asset,
+                      medium: event.target.value as IMarketingTemplateMedium
+                    })
+                  }
+                >
+                  {MEDIUMS.map(type => (
+                    <MenuItem key={type} value={type}>
+                      {getTemplateMediumLabel(type)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item className={classes.deleteContainer}>
+          <IconButton onClick={() => onDeleteAsset(asset)}>
+            <SvgIcon size={muiIconSizes.small} path={mdiDeleteOutline} />
+          </IconButton>
+        </Grid>
+      </>
+    )
+  }
+
   return (
     <Grid
       container
       item
-      alignItems="flex-start"
+      alignItems="center"
       direction="row"
+      spacing={2}
       key={asset.label}
     >
       <Grid item xs={2}>
@@ -80,72 +172,9 @@ export default memo(function AssetItem({
           className={classes.image}
         />
       </Grid>
-      <Grid container item direction="column" xs={9} spacing={4}>
-        <Grid item xs>
-          <FormControl fullWidth>
-            <TextField
-              autoFocus
-              variant="outlined"
-              size="small"
-              placeholder="Label"
-              value={asset.label}
-              onChange={event => {
-                onUpdateAsset({
-                  ...asset,
-                  label: event.target.value
-                })
-              }}
-            />
-          </FormControl>
-        </Grid>
-        <Grid container item direction="row" spacing={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined" size="small">
-              {/* <InputLabel>Add To</InputLabel> */}
-              <Select
-                value={asset.templateType}
-                onChange={event =>
-                  onUpdateAsset({
-                    ...asset,
-                    templateType: event.target.value as IMarketingTemplateType
-                  })
-                }
-              >
-                {TEMPLATE_TYPES.map(type => (
-                  <MenuItem key={type} value={type}>
-                    {getTemplateTypeLabel(type)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined" size="small">
-              {/* <InputLabel>Medium</InputLabel> */}
-              <Select
-                value={asset.medium}
-                onChange={event =>
-                  onUpdateAsset({
-                    ...asset,
-                    medium: event.target.value as IMarketingTemplateMedium
-                  })
-                }
-              >
-                {MEDIUMS.map(type => (
-                  <MenuItem key={type} value={type}>
-                    {getTemplateMediumLabel(type)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item className={classes.deleteContainer}>
-        <IconButton onClick={() => onDeleteAsset(asset)}>
-          <SvgIcon size={muiIconSizes.small} path={mdiDeleteOutline} />
-        </IconButton>
-      </Grid>
+      {uploadProgress === undefined
+        ? renderUploadForm()
+        : renderUploadProgress()}
     </Grid>
   )
 })

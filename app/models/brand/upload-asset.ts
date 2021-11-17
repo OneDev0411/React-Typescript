@@ -1,4 +1,5 @@
-import Fetch from '../../services/fetch'
+import Fetch from '@app/services/fetch'
+import { Progress } from '@app/services/fetch/types'
 
 interface OptionsWithLabel {
   label?: string
@@ -12,9 +13,10 @@ interface OptionsWithTemplateTypeAndMedium extends OptionsWithLabel {
 export async function uploadBrandAsset(
   brands: UUID[],
   file: File,
-  options: OptionsWithLabel | OptionsWithTemplateTypeAndMedium = {}
+  options: OptionsWithLabel | OptionsWithTemplateTypeAndMedium = {},
+  progressCallback?: Progress
 ): Promise<IBrandAsset> {
-  const request = new Fetch()
+  const request = new Fetch({ progress: progressCallback })
     .upload('/brands/assets')
     .attach('file', file)
     .field({ ...options, brands } as any)
