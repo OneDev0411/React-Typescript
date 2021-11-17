@@ -4,6 +4,7 @@ const useStyles = makeStyles(
   theme => ({
     card: {
       cursor: 'pointer',
+      marginBottom: theme.spacing(4),
       display: 'flex',
       alignItems: 'center',
       position: 'relative' as any,
