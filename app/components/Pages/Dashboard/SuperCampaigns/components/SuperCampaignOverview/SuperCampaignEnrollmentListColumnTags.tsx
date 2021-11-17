@@ -27,6 +27,9 @@ function SuperCampaignEnrollmentListColumnTags({
     return null
   }
 
+  const visibleTagsCount = 3
+  const moreCount = tags.length - visibleTagsCount
+
   return (
     <SuperCampaignTagsPopover
       {...otherProps}
@@ -35,15 +38,25 @@ function SuperCampaignEnrollmentListColumnTags({
         <Tooltip title="Click to edit">
           <span onClick={onClick}>
             {tags.length > 0 ? (
-              tags.map(tag => (
-                <Chip
-                  key={tag}
-                  label={tag}
-                  size="small"
-                  variant="outlined"
-                  className={classes.tag}
-                />
-              ))
+              <>
+                {tags.slice(0, visibleTagsCount).map(tag => (
+                  <Chip
+                    key={tag}
+                    label={tag}
+                    size="small"
+                    variant="outlined"
+                    className={classes.tag}
+                  />
+                ))}
+                {moreCount > 0 && (
+                  <Chip
+                    label={`+${moreCount}`}
+                    size="small"
+                    variant="outlined"
+                    className={classes.tag}
+                  />
+                )}
+              </>
             ) : (
               <Chip label="No Tags" size="small" />
             )}
