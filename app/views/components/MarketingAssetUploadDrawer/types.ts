@@ -12,5 +12,5 @@ export interface Asset {
 
 export interface AssetsUploadFormData {
   assets: Asset[]
-  brand: IBrand
+  brands: UUID[]
 }

@@ -4,8 +4,8 @@ import { Button } from '@material-ui/core'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { uploadBrandAsset } from '@app/models/brand/upload-asset'
+import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
-import TeamTreeView from '@app/views/components/TeamTreeView'
 
 import Upload from './components/Upload'
 import { DrawerStep, AssetsUploadFormData } from './types'
@@ -23,12 +23,13 @@ export default function MarketingAssetUploadDrawer({
   const [uploadProgress, setUploadProgress] = useState<number[]>([])
   const formMethods = useForm<AssetsUploadFormData>({
     defaultValues: {
-      assets: []
+      assets: [],
+      brands: []
     },
     shouldUnregister: false
   })
   const assets = formMethods.watch('assets')
-  const brand = formMethods.watch('brand')
+  const brands = formMethods.watch('brands')
 
   const onSubmit = async (data: AssetsUploadFormData) => {
     setUploadProgress(data.assets.map(() => 0))
@@ -36,7 +37,7 @@ export default function MarketingAssetUploadDrawer({
     const uploadedAssets = await Promise.all(
       data.assets.map((asset, index) => {
         return uploadBrandAsset(
-          [data.brand.id],
+          data.brands,
           asset.file.object,
           {
             label: asset.label,
@@ -89,8 +90,19 @@ export default function MarketingAssetUploadDrawer({
   const renderActiveStep = () => {
     if (activeStep === 'teams') {
       return (
-        <TeamTreeView
-          onSelectTeam={brand => formMethods.setValue('brand', brand)}
+        <MultiSelectionBrandSelectorDrawer
+          open
+          drawerTitle="Save to Marketing Center for:"
+          saveButtonText="Next: Select Files"
+          selectedBrands={brands}
+          onClose={closeDrawer}
+          onSave={brands => {
+            formMethods.setValue('brands', brands)
+
+            setActiveStep('upload')
+
+            return Promise.resolve()
+          }}
         />
       )
     }
@@ -107,6 +119,11 @@ export default function MarketingAssetUploadDrawer({
     return null
   }
 
+  const isWorking =
+    formMethods.formState.isSubmitting ||
+    assets.length === 0 ||
+    isUploadingFiles
+
   const renderActions = () => {
     if (activeStep === 'teams') {
       return (
@@ -114,7 +131,7 @@ export default function MarketingAssetUploadDrawer({
           <Button
             variant="contained"
             color="primary"
-            disabled={!brand}
+            disabled={brands.length === 0}
             onClick={goToUploadStep}
           >
             Next: Select Files
@@ -126,18 +143,18 @@ export default function MarketingAssetUploadDrawer({
     if (activeStep === 'upload') {
       return (
         <OverlayDrawer.Footer>
-          <Button variant="outlined" onClick={goToSelectTeamsStep}>
+          <Button
+            disabled={isWorking}
+            variant="outlined"
+            onClick={goToSelectTeamsStep}
+          >
             Back
           </Button>
           <Button
+            disabled={isWorking}
             variant="contained"
             color="primary"
             onClick={formMethods.handleSubmit(data => onSubmit(data))}
-            disabled={
-              formMethods.formState.isSubmitting ||
-              assets.length === 0 ||
-              isUploadingFiles
-            }
           >
             Upload Files
           </Button>
@@ -148,7 +165,7 @@ export default function MarketingAssetUploadDrawer({
     return null
   }
 
-  const title = activeStep === 'teams' ? 'Select Teams' : 'Upload Files'
+  const title = activeStep === 'teams' ? 'Select Agents' : 'Upload Files'
 
   return (
     <OverlayDrawer open onClose={closeDrawer}>
