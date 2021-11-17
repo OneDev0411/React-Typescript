@@ -2,6 +2,7 @@ import { Dispatch } from 'redux'
 
 import { getTriggers } from '@app/models/instant-marketing/global-triggers'
 import {
+  REQUEST_GLOBAL_TRIGGERS_FAILED,
   REQUEST_GLOBAL_TRIGGERS,
   SET_GLOBAL_TRIGGERS,
   SET_GLOBAL_TRIGGER
@@ -16,6 +17,15 @@ const requestGlobalTriggers = () =>
 
 export type RequestGlobalTriggersAction = ReturnType<
   typeof requestGlobalTriggers
+>
+
+const requestGlobalTriggersFailed = () =>
+  ({
+    type: REQUEST_GLOBAL_TRIGGERS_FAILED
+  } as const)
+
+export type RequestGlobalTriggersFailedAction = ReturnType<
+  typeof requestGlobalTriggersFailed
 >
 
 const setGlobalTriggers = (triggers: IGlobalTriggerState['attrs']) =>
@@ -39,10 +49,13 @@ export const fetchGlobalTriggers =
     dispatch(requestGlobalTriggers())
 
     const triggers: IGlobalTrigger[] = await getTriggers(brandId)
-    // @ts-ignore
-    const dd: IGlobalTriggerState['attrs'] = {}
 
-    triggers.forEach(trigger => (dd[trigger.event_type] = trigger))
+    if (triggers.length > 0) {
+      const attributes = {} as IGlobalTriggerState['attrs']
 
-    dispatch(setGlobalTriggers(dd))
+      triggers.forEach(trigger => (attributes[trigger.event_type] = trigger))
+      dispatch(setGlobalTriggers(attributes))
+    } else {
+      dispatch(requestGlobalTriggersFailed())
+    }
   }

@@ -1,4 +1,5 @@
 import type {
+  RequestGlobalTriggersFailedAction,
   RequestGlobalTriggersAction,
   SetGlobalTriggersAction,
   SetGlobalTriggerAction
@@ -21,6 +22,7 @@ function globalTriggersReducer(
     | SetGlobalTriggerAction
     | SetGlobalTriggersAction
     | RequestGlobalTriggersAction
+    | RequestGlobalTriggersFailedAction
 ) {
   switch (action.type) {
     case actionType.REQUEST_GLOBAL_TRIGGERS:
@@ -40,6 +42,11 @@ function globalTriggersReducer(
           ...state.attrs,
           [action.payload.event_type]: action.payload
         }
+      }
+    case actionType.REQUEST_GLOBAL_TRIGGERS_FAILED:
+      return {
+        ...state,
+        isLoading: false
       }
     default:
       return state

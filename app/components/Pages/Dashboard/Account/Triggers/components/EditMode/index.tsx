@@ -19,8 +19,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { getTemplateType } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
-import { selectActiveBrandId } from '@app/selectors/brand'
+import { selectActiveBrand } from '@app/selectors/brand'
+import { selectUser } from '@app/selectors/user'
 import { setGlobalTrigger } from '@app/store_actions/global-triggers'
+import { IAppState } from 'reducers'
 
 import { TemplateSelector } from './components/TemplateSelector'
 import { generateInitialValues, generatePayload } from './helpers'
@@ -83,7 +85,8 @@ export function TriggerEditMode({
 }: Props) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const brand = useSelector(selectActiveBrandId)
+  const user = useSelector<IAppState, IUser>(selectUser)
+  const brand = useSelector<IAppState, IBrand>(selectActiveBrand)
 
   const {
     control,
@@ -109,7 +112,7 @@ export function TriggerEditMode({
   }
 
   const handleOnSave: SubmitHandler<IGlobalTriggerFormData> = async data => {
-    const payload = generatePayload(data, brand, currentEventType)
+    const payload = await generatePayload(data, brand, user, currentEventType)
 
     try {
       const trigger = (await createTrigger(payload)).data
@@ -242,7 +245,7 @@ export function TriggerEditMode({
                 defaultValue={initialValue.template}
                 rules={{
                   validate: (template: IGlobalTriggerFormData['template']) => {
-                    if (!template || !template.id) {
+                    if (!template || !template.data) {
                       return 'This field is required.'
                     }
                   }

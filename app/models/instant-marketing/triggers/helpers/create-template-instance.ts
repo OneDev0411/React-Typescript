@@ -16,7 +16,7 @@ export const createTemplateInstance = async (
   template: IBrandMarketingTemplate,
   brand: Nullable<IBrand>,
   templateData: TemplateData = {}
-): Promise<IMarketingTemplateInstance | void> => {
+): Promise<IMarketingTemplateInstance> => {
   try {
     if (!brand) {
       throw new Error('brand is not available.')
@@ -29,13 +29,13 @@ export const createTemplateInstance = async (
       templateData
     )
 
-    const instance = await getTemplateInstance(
+    const instance: IMarketingTemplateInstance = await getTemplateInstance(
       template.template.id,
       templateMarkup
     )
 
     return instance
   } catch (error) {
-    console.error(error)
+    throw error
   }
 }

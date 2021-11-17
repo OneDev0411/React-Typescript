@@ -43,7 +43,7 @@ declare interface IGlobalTriggerFormData
   extends Omit<IGlobalTriggerRaw, 'brand' | 'event_type'> {
   template?: {
     isInstance: boolean
-    id: UUID
+    data: IBrandMarketingTemplate | IMarketingTemplateInstance
   }
 }
 

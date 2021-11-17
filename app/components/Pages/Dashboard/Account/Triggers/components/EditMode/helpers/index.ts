@@ -1,4 +1,5 @@
 import { convertSecondsToDay } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
+import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
 
 import { getAttributeName } from '../../Items/components/helpers'
 
@@ -14,11 +15,11 @@ export const generateInitialValues = (
     const template: IGlobalTriggerFormData['template'] = trigger.template
       ? {
           isInstance: false,
-          id: trigger.template.id
+          data: trigger.template as IBrandMarketingTemplate
         }
       : {
           isInstance: true,
-          id: trigger.template_instance!.id
+          data: trigger.template_instance as IMarketingTemplateInstance
         }
 
     return {
@@ -39,32 +40,39 @@ export const generateInitialValues = (
 /**
  * generate the payload we send to the server
  * @param {IGlobalTriggerFormData} data - form's data
- * @param {UUID} brand - active brand id
+ * @param {IBrand} brand - active brand
+ * @param {IUser} user - active user
  * @param {TriggerContactEventTypes} eventType - the type we want to create/edit trigger
  */
-export const generatePayload = (
+export const generatePayload = async (
   data: IGlobalTriggerFormData,
-  brand: UUID,
+  brand: IBrand,
+  user: IUser,
   eventType: TriggerContactEventTypes
-): IGlobalTriggerInput => {
+): Promise<IGlobalTriggerInput> => {
   const { template, wait_for, ...restData } = data
 
-  const selectedTepmlate = template?.isInstance
-    ? {
-        template_instance: template.id
-      }
-    : {
-        template: template!.id
-      }
+  /*
+    here we're changing the functionality of accepting brand templates
+    and creating an instance in selecting a brand template,
+    but due to some caution I don't change the base code of it.
+  */
+  const templateInstance = template?.isInstance
+    ? template.data
+    : await createTemplateInstance(
+        template?.data as IBrandMarketingTemplate,
+        brand,
+        { user }
+      )
 
   // -86400 number of millisecond of a day
   const waitFor = Math.abs(Number(wait_for)) * -86400
 
   return {
-    brand,
+    brand: brand.id,
     wait_for: waitFor,
     event_type: eventType,
-    ...selectedTepmlate,
+    template_instance: templateInstance.id,
     ...restData
   }
 }

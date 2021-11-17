@@ -19,16 +19,6 @@ import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
-interface Props {
-  disabled?: boolean
-  hasError?: boolean
-  error?: Nullable<string>
-  templateType: IMarketingTemplateType[]
-  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
-  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
-  onChange: (value: IGlobalTriggerFormData['template']) => void
-}
-
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -87,6 +77,16 @@ const useStyles = makeStyles(
   { name: 'FlowTemplateSelector' }
 )
 
+interface Props {
+  disabled?: boolean
+  hasError?: boolean
+  error?: Nullable<string>
+  templateType: IMarketingTemplateType[]
+  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
+  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
+  onChange: (value: IGlobalTriggerFormData['template']) => void
+}
+
 export const TemplateSelector = ({
   disabled = false,
   hasError = false,
@@ -99,7 +99,6 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const notify = useNotify()
   const user = useSelector<IAppState, IUser>(selectUser)
-  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
@@ -109,6 +108,7 @@ export const TemplateSelector = ({
   const [selectedTemplateInstance, setSelectedTemplateInstace] = useState<
     Nullable<IMarketingTemplateInstance>
   >(currentTemplateInstance)
+  const brand: Nullable<IBrand> = useMemo(() => getActiveBrand(user), [user])
   const currentTemplate = useMemo(
     () => selectedBrandTemplate || selectedTemplateInstance,
     [selectedBrandTemplate, selectedTemplateInstance]
@@ -146,7 +146,7 @@ export const TemplateSelector = ({
 
       onChange({
         isInstance: isTemplateInstance,
-        id: template.id
+        data: template
       })
     } catch (error) {
       console.error(error)
@@ -173,7 +173,7 @@ export const TemplateSelector = ({
       setSelectedTemplateInstace(templateInstance)
       onChange({
         isInstance: true,
-        id: templateInstance.id
+        data: templateInstance
       })
     } catch (error) {
       console.error(error)
