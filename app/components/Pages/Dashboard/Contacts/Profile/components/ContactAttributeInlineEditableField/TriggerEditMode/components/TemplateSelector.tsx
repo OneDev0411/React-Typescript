@@ -199,7 +199,7 @@ export const TemplateSelector = ({
       )
     }
 
-    if (!templatePreviewUrl) {
+    if (!selectedTemplate) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -216,7 +216,6 @@ export const TemplateSelector = ({
         />
       )
     }
-    // const preview = currentValue.campaign?.template?.file?.preview_url
 
     return (
       <span className={classes.templatePreviewPlaceholder}>
