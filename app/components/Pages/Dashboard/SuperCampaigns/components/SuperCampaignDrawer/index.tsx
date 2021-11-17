@@ -107,7 +107,14 @@ function SuperCampaignDrawer({
                       helperText="Only agents who are eligible to participate in this campaign will see this."
                       minRows={3}
                     />
-                    <DateTimeField name="due_at">
+                    <DateTimeField
+                      name="due_at"
+                      datePickerModifiers={{
+                        disabled: {
+                          before: new Date()
+                        }
+                      }}
+                    >
                       {({ formattedDate, handleOpen }) => (
                         <TextField
                           value={formattedDate ?? ''}
