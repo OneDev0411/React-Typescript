@@ -1284,9 +1284,11 @@ class Builder extends React.Component {
       : undefined
 
     return {
-      contacts: this.props.templateData.contacts,
-      listings: this.props.templateData.listings ?? listingsFromListing,
-      deals: this.props.templateData.deals
+      contacts: this.props.templateData.contacts?.map(contact => contact.id),
+      listings:
+        this.props.templateData.listings?.map(listing => listing.id) ??
+        listingsFromListing,
+      deals: this.props.templateData.deals?.map(deal => deal.id)
     }
   }
 
