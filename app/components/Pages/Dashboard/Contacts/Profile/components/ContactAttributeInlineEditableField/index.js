@@ -3,15 +3,16 @@ import { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
-import { selectActiveBrand } from '@app/selectors/brand'
-import { selectUser } from '@app/selectors/user'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import {
   createTrigger,
   updateTrigger,
   removeTrigger
-} from 'models/instant-marketing/triggers'
+} from '@app/models/instant-marketing/triggers'
+import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
+import { selectActiveBrand } from '@app/selectors/brand'
+import { selectUser } from '@app/selectors/user'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
 import { noop } from 'utils/helpers'
 
@@ -29,7 +30,6 @@ import {
   getInitialErrorMessage
 } from './helpers'
 import { TriggerEditMode } from './TriggerEditMode'
-import { createTemplateInstance } from './TriggerEditMode/helpers/create-template-instance'
 import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
@@ -329,7 +329,7 @@ class MasterField extends Component {
     const template =
       triggerSelectedTemplate.type === 'template_instance'
         ? triggerSelectedTemplate
-        : await createTemplateInstance(triggerSelectedTemplate, brand, user)
+        : await createTemplateInstance(triggerSelectedTemplate, brand, { user })
 
     const triggerCommonParams = [
       contact,

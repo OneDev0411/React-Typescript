@@ -1,17 +1,21 @@
-import { getTemplateInstance } from '@app/models/instant-marketing/triggers/helpers/get-template-instance'
-import { renderBrandedNunjucksTemplate } from '@app/utils/marketing-center/render-branded-nunjucks-template'
+import {
+  renderBrandedNunjucksTemplate,
+  TemplateData
+} from '@app/utils/marketing-center/render-branded-nunjucks-template'
+
+import { getTemplateInstance } from './get-template-instance'
 
 /**
  * create a template instance
  * @param {IBrandMarketingTemplate} template - brand template
  * @param {IBrand} brand - brand object
- * @param {IUser} user - user object
+ * @param {TemplateData} templateData - data for render a template
  */
 
 export const createTemplateInstance = async (
   template: IBrandMarketingTemplate,
   brand: Nullable<IBrand>,
-  user: IUser
+  templateData: TemplateData = {}
 ): Promise<IMarketingTemplateInstance | void> => {
   try {
     if (!brand) {
@@ -22,7 +26,7 @@ export const createTemplateInstance = async (
     const templateMarkup: string = await renderBrandedNunjucksTemplate(
       template,
       brand,
-      { user }
+      templateData
     )
 
     const instance = await getTemplateInstance(

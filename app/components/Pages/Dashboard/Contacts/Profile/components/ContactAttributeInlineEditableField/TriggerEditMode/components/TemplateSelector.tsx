@@ -8,12 +8,15 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplates } from 'models/instant-marketing/get-templates'
-import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
+import {
+  getTemplateInstance,
+  createTemplateInstance
+} from 'models/instant-marketing/triggers/helpers'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
-import { createTemplateInstance, getTemplateType } from '../helpers'
+import { getTemplateType } from '../helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -101,7 +104,7 @@ export const TemplateSelector = ({
 
   const handleCreateTemplateInstance = async (
     template: IBrandMarketingTemplate
-  ) => createTemplateInstance(template, brand, user)
+  ) => createTemplateInstance(template, brand, { user })
 
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
