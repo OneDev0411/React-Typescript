@@ -20,8 +20,12 @@ export async function getListingVAlertFilters(
   return {
     property_types: [listing.property.property_type],
     property_subtypes: [listing.property.property_subtype],
-    minimum_bedrooms: Math.max((listing.property.bedroom_count ?? 0) - 2, 0),
-    maximum_bedrooms: (listing.property.bedroom_count ?? 0) + 2,
+    minimum_bedrooms: listing.property.bedroom_count
+      ? Math.max(listing.property.bedroom_count - 2, 0)
+      : undefined,
+    maximum_bedrooms: listing.property.bedroom_count
+      ? listing.property.bedroom_count + 2
+      : undefined,
     minimum_sold_date: pastYearTimestamp,
     points: getMapBoundsInCircle(place.center, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
