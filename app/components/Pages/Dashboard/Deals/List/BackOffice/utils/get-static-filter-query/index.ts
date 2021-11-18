@@ -10,7 +10,7 @@ import { DealsListPayload, SearchQuery } from '../../types'
  */
 export function getStaticFilterQuery(
   searchQuery: SearchQuery
-): DealsListPayload {
+): DealsListPayload | {} {
   if (searchQuery.filter === 'listing') {
     return {
       query: searchQuery.term,
