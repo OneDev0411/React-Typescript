@@ -27,7 +27,7 @@ function SuperCampaignEligibleParticipants(
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
-  const issCampaignExecuted = useIsSuperCampaignExecuted(superCampaign)
+  const isCampaignExecuted = useIsSuperCampaignExecuted(superCampaign)
 
   const updateSuperCampaignEligibility = useUpdateSuperCampaignEligibility(
     superCampaign,
@@ -58,7 +58,7 @@ function SuperCampaignEligibleParticipants(
             color="primary"
             variant="contained"
             size="small"
-            disabled={issCampaignExecuted}
+            disabled={isCampaignExecuted}
             onClick={openBrandSelector}
           >
             Add Eligible Offices & Teams
@@ -72,7 +72,7 @@ function SuperCampaignEligibleParticipants(
               been selected
             </Typography>
             <Button color="primary" size="small" onClick={openBrandSelector}>
-              {issCampaignExecuted ? 'View Offices or Teams' : 'Edit'}
+              {isCampaignExecuted ? 'View Offices or Teams' : 'Edit'}
             </Button>
           </>
         )}
@@ -81,7 +81,7 @@ function SuperCampaignEligibleParticipants(
         <MultiSelectionBrandSelectorDrawer
           open
           width="43rem"
-          disabled={issCampaignExecuted}
+          disabled={isCampaignExecuted}
           selectedBrands={eligibleBrands}
           onClose={closeBrandSelector}
           onSave={handleSelectedBrandSave}
