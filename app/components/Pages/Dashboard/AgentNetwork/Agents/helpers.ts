@@ -3,40 +3,40 @@ import { getMapBoundsInCircle } from 'utils/get-coordinates-points'
 
 import {
   DEFAULT_SEARCH_RADIUS,
-  DEFAULT_SEARCH_RESULT_LIMIT,
   ALL_PROPERTY_TYPES,
   ALL_PROPERTY_SUBTYPES
 } from '../constants'
 
-function getSixMonthsAgoTimestamp() {
-  return (new Date().getTime() - 180 * 24 * 3600000) / 1000
+function getPastYearTimestamp() {
+  return (new Date().getTime() - 365 * 24 * 3600000) / 1000
 }
 
 export async function getListingVAlertFilters(
   listing: IListing
 ): Promise<AlertFiltersWithRadiusAndCenter> {
-  const sixMonthsAgoTimestamp = getSixMonthsAgoTimestamp()
+  const pastYearTimestamp = getPastYearTimestamp()
   const place = await getPlace(listing.property.address.full_address)
 
   return {
     property_types: [listing.property.property_type],
     property_subtypes: [listing.property.property_subtype],
-    minimum_bedrooms: listing.property.bedroom_count,
-    maximum_bedrooms: listing.property.bedroom_count,
-    minimum_bathrooms: listing.property.full_bathroom_count,
-    maximum_bathrooms: listing.property.full_bathroom_count,
-    minimum_sold_date: sixMonthsAgoTimestamp,
+    minimum_bedrooms: listing.property.bedroom_count
+      ? Math.max(listing.property.bedroom_count - 2, 0)
+      : undefined,
+    maximum_bedrooms: listing.property.bedroom_count
+      ? listing.property.bedroom_count + 2
+      : undefined,
+    minimum_sold_date: pastYearTimestamp,
     points: getMapBoundsInCircle(place.center, DEFAULT_SEARCH_RADIUS),
     radius: DEFAULT_SEARCH_RADIUS,
-    center: { latitude: place.center.lat, longitude: place.center.lng },
-    limit: DEFAULT_SEARCH_RESULT_LIMIT
+    center: { latitude: place.center.lat, longitude: place.center.lng }
   }
 }
 
 export function getLocationVAlertFilters(
   location: google.maps.LatLngLiteral
 ): AlertFiltersWithRadiusAndCenter {
-  const sixMonthsAgoTimestamp = getSixMonthsAgoTimestamp()
+  const pastYearTimestamp = getPastYearTimestamp()
 
   return {
     property_types: ALL_PROPERTY_TYPES,
@@ -47,6 +47,6 @@ export function getLocationVAlertFilters(
       longitude: location.lng
     },
     radius: DEFAULT_SEARCH_RADIUS,
-    minimum_sold_date: sixMonthsAgoTimestamp
+    minimum_sold_date: pastYearTimestamp
   }
 }
