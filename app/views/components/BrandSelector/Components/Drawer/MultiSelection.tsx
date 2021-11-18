@@ -10,6 +10,7 @@ import { useStyles } from './styles'
 import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
 
 export function MultiSelectionBrandSelectorDrawer({
+  disabled = false,
   drawerTitle = 'Select Brands',
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
@@ -45,6 +46,7 @@ export function MultiSelectionBrandSelectorDrawer({
 
     return (
       <FormControlLabel
+        disabled={disabled || isSaving}
         control={<Checkbox size="small" />}
         checked={isSelected}
         onChange={() => handleOnNodeClick(brand.id)}
@@ -69,7 +71,7 @@ export function MultiSelectionBrandSelectorDrawer({
           <Button
             variant="contained"
             color="primary"
-            disabled={isSaving}
+            disabled={disabled || isSaving}
             onClick={handleClick}
           >
             {isSaving ? 'Saving...' : 'Save'}
