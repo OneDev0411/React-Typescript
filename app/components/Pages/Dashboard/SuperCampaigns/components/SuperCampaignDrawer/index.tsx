@@ -135,7 +135,7 @@ function SuperCampaignDrawer({
                     <Field<Optional<IMarketingTemplateInstance>>
                       name="template_instance"
                       render={({ input }) =>
-                        input.value ? (
+                        input.value && (
                           <SuperCampaignTemplate
                             className={classes.template}
                             titleClassName={classes.templateTitle}
@@ -147,7 +147,7 @@ function SuperCampaignDrawer({
                             onEditorOpen={hideDrawer}
                             onEditorClose={showDrawer}
                           />
-                        ) : null
+                        )
                       }
                     />
                   </form>
