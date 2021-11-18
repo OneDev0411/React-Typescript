@@ -2,42 +2,39 @@ import React from 'react'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
 
-import { websiteTabs } from '../../constants'
-import { WebsiteTabType } from '../../types'
+import { myWebsitesTab } from '../../constants'
+import { WebsiteTabWithTemplatesCollection } from '../../types'
 
 export interface WebsiteTabsProps {
-  type: WebsiteTabType
-  hasAgentTab: boolean
-  hasPropertyTab: boolean
+  value: string
+  tabs: WebsiteTabWithTemplatesCollection
 }
 
-function WebsiteTabs({ type, hasAgentTab, hasPropertyTab }: WebsiteTabsProps) {
-  const tabs = [
-    <TabLink
-      key={1}
-      value={websiteTabs.MyWebsites}
-      to="/dashboard/websites"
-      label="My Websites"
-    />,
-    hasAgentTab && (
-      <TabLink
-        key={2}
-        value={websiteTabs.Agent}
-        to={`/dashboard/websites/templates/${websiteTabs.Agent}`}
-        label="Agent IDX Sites"
-      />
-    ),
-    hasPropertyTab && (
-      <TabLink
-        key={3}
-        value={websiteTabs.Listing}
-        to={`/dashboard/websites/templates/${websiteTabs.Listing}`}
-        label="Property Sites"
-      />
-    )
-  ]
-
-  return <PageTabs defaultValue={type} hasMegaMenu tabs={tabs} />
+function WebsiteTabs({ value, tabs }: WebsiteTabsProps) {
+  return (
+    <PageTabs
+      defaultValue={value}
+      hasMegaMenu
+      tabs={[
+        <TabLink
+          key={1}
+          value={myWebsitesTab}
+          to="/dashboard/websites"
+          label="My Websites"
+        />,
+        ...Object.values(tabs)
+          .filter(tab => tab.templates.length > 0)
+          .map(tab => (
+            <TabLink
+              key={tab.key}
+              value={tab.key}
+              to={`/dashboard/websites/templates/${tab.key}`}
+              label={`${tab.title} Sites`}
+            />
+          ))
+      ]}
+    />
+  )
 }
 
 export default WebsiteTabs
