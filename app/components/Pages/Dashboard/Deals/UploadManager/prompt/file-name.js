@@ -111,7 +111,7 @@ class FileName extends React.Component {
             })}
             onClick={() => this.setActiveState()}
           >
-            EDIT
+            Rename
           </Button>
         )}
       </Container>

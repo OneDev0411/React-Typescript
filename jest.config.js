@@ -6,6 +6,8 @@ module.exports = {
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
+  testEnvironment: 'jsdom',
+  transformIgnorePatterns: ['/node_modules/(?!(swiper|ssr-window|dom7)/)'],
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
     '\\.mjml$': 'jest-raw-loader',
@@ -15,6 +17,7 @@ module.exports = {
     '\\.svg$': 'jest-raw-loader'
   },
   moduleNameMapper: {
+    'swiper/react': '<rootDir>/node_modules/swiper/react/swiper-react.js',
     '^@app/(.*)': '<rootDir>/app/$1',
     '^actions/(.*)': '<rootDir>/app/store_actions/$1',
     '^assets/(.*)': '<rootDir>/app/static/$1',

@@ -37,6 +37,7 @@ class Checklist extends React.Component {
 
         {this.state.showCreateNewTask && (
           <CreateTask
+            deal={this.props.deal}
             checklist={this.props.checklist}
             onSave={this.props.handleCreateNewTask}
             onClose={this.toggleShowCreateTask}
@@ -49,10 +50,11 @@ class Checklist extends React.Component {
               this.getSearchFilter(task.title) === true &&
               ['Media', 'Splitter'].includes(task.task_type) === false
           )
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .sort((a, b) => a.order - b.order)
           .map((task, index) => (
             <Item
               key={`task${index}`}
+              deal={this.props.deal}
               type="task"
               id={task.id}
               title={task.title}
@@ -73,6 +75,7 @@ class Checklist extends React.Component {
           .map((form, index) => (
             <Item
               key={`form${index}`}
+              deal={this.props.deal}
               type="form"
               id={form.id}
               title={form.name}

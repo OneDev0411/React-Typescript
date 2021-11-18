@@ -9,7 +9,7 @@ export const Container = styled.div`
   right: 0;
   bottom: 0;
   background-color: #f2f2f2;
-  z-index: 1004;
+  z-index: 1001;
   overflow: auto;
   padding: 0 2rem;
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, 0.04), -1px 0 20px 0 rgba(0, 0, 0, 0.1);

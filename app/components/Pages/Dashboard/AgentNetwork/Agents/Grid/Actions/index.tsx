@@ -1,8 +1,9 @@
 import React from 'react'
 
+import { AgentWithStats } from '@app/models/agent-network/get-agents'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
 
-import { AggregatedAgentInfo, ListingWithProposedAgent } from '../../types'
+import { ListingWithProposedAgent } from '../../types'
 
 import AddToContacts from './AddToContacts'
 import { getSelectedAgents } from './get-selected-agents'
@@ -11,7 +12,7 @@ import PromoteListing from './PromoteListing'
 interface Props {
   user: IUser
   listing: Nullable<ListingWithProposedAgent>
-  agents: Nullable<AggregatedAgentInfo[]>
+  agents: Nullable<AgentWithStats[]>
 }
 
 export function TableActions({ user, listing, agents }: Props) {
