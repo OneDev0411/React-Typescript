@@ -9,7 +9,7 @@ import Layout from '../List/Layout'
 function SuperCampaignList(props) {
   useTitle('Super Campaign List | Rechat')
 
-  const renderContent = prosp => <SuperCampaignGridView {...props} />
+  const renderContent = props => <SuperCampaignGridView {...props} />
 
   return <Layout renderContent={props => renderContent(props)} />
 }

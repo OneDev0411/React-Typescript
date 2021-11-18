@@ -64,7 +64,7 @@ function AdminContinueButton({
       })
 
       goTo(
-        `/dashboard/super-campaigns/${superCampaign.id}/detail?edit-drawer=open`
+        `/dashboard/insights/super-campaign/${superCampaign.id}/detail?edit-drawer=open`
       )
     } catch (_) {
       notify({

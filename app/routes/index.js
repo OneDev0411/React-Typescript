@@ -1022,6 +1022,10 @@ export default (
         <Route path="insights">
           <IndexRoute component={AsyncMarketingInsightsList} />
           <Route path="scheduled" component={AsyncMarketingInsightsList} />
+          <Route
+            path="super-campaign/:id/detail"
+            component={AsyncSuperCampaignDetail}
+          />
           <Route path="super-campaign" component={AsyncSuperCampaign} />
           <Route path=":id" component={AsyncMarketingInsight} />
         </Route>
@@ -1152,10 +1156,6 @@ export default (
             path={`:tab(${Object.keys(showingsTabs).join('|')})`}
             component={AsyncShowings}
           />
-        </Route>
-
-        <Route path="super-campaigns">
-          <Route path=":id/detail" component={AsyncSuperCampaignDetail} />
         </Route>
 
         <Route path="website" component={AsyncOldWebsite} />
