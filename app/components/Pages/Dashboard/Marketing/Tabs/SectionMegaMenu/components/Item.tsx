@@ -1,11 +1,10 @@
+import React from 'react'
+
 import { Grid, makeStyles, createStyles, Theme } from '@material-ui/core'
 
-import { goTo } from '@app/utils/go-to'
-import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
-import { SectionItem } from '@app/views/components/PageSideNav/types'
-import { ShowMoreLess } from '@app/views/components/ShowMoreLess'
-
-import { ALL_MEDIUMS } from '../../../Wizard/constants'
+import { SectionItem } from 'components/PageSideNav/types'
+import { goTo } from 'utils/go-to'
+import { getTemplateMediumLabel } from 'utils/marketing-center/get-template-medium-label'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,11 +39,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   data: SectionItem
-  // mediums: IMarketingTemplateMedium[]
+  mediums: IMarketingTemplateMedium[]
   onClose: () => void
 }
 
-function Item({ data, onClose }: Props) {
+function Item({ data, mediums, onClose }: Props) {
   const classes = useStyles()
   const { title, link } = data
 
@@ -63,19 +62,22 @@ function Item({ data, onClose }: Props) {
   const renderMediumsList = () => {
     return (
       <ul className={classes.items}>
-        <ShowMoreLess count={2}>
-          {ALL_MEDIUMS.map(medium => {
-            const url = `${link}/${medium}`
+        {mediums.map(medium => {
+          const url = `${link}/${medium}`
 
-            return (
-              <li key={medium} onClick={e => navigateTo(e, url)}>
-                {getTemplateMediumLabel(medium)}
-              </li>
-            )
-          })}
-        </ShowMoreLess>
+          return (
+            <li key={medium} onClick={e => navigateTo(e, url)}>
+              {getTemplateMediumLabel(medium)}
+            </li>
+          )
+        })}
       </ul>
     )
+  }
+
+  // Do not render categories without any mediums/templates
+  if (mediums.length === 0) {
+    return null
   }
 
   return (
