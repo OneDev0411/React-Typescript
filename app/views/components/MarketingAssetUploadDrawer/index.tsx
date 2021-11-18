@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 import { Button } from '@material-ui/core'
+import pluralize from 'pluralize'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { uploadBrandAsset } from '@app/models/brand/upload-asset'
 import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 import OverlayDrawer from '@app/views/components/OverlayDrawer'
 
 import Upload from './components/Upload'
@@ -19,6 +21,7 @@ export default function MarketingAssetUploadDrawer({
   defaultSelectedTemplateType,
   onClose
 }: Props) {
+  const confirmation = useContext(ConfirmationModalContext)
   const [activeStep, setActiveStep] = useState<DrawerStep>('teams')
   const [uploadProgress, setUploadProgress] = useState<number[]>([])
   const formMethods = useForm<AssetsUploadFormData>({
@@ -31,7 +34,7 @@ export default function MarketingAssetUploadDrawer({
   const assets = formMethods.watch('assets')
   const brands = formMethods.watch('brands')
 
-  const onSubmit = async (data: AssetsUploadFormData) => {
+  const handleUploadAssets = async (data: AssetsUploadFormData) => {
     setUploadProgress(data.assets.map(() => 0))
 
     const uploadedAssets = await Promise.all(
@@ -67,6 +70,18 @@ export default function MarketingAssetUploadDrawer({
     setUploadProgress([])
 
     onClose(uploadedAssets)
+  }
+
+  const onSubmit = (data: AssetsUploadFormData) => {
+    confirmation.setConfirmationModal({
+      message: `You are going to add ${pluralize(
+        'asset',
+        data.assets.length,
+        true
+      )} to ${pluralize('team', data.brands.length, true)}. Are you sure?`,
+      confirmLabel: 'Yes, I am sure',
+      onConfirm: () => handleUploadAssets(data)
+    })
   }
 
   const goToSelectTeamsStep = () => {
