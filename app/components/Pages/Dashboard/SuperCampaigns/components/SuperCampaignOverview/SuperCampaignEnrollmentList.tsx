@@ -26,6 +26,11 @@ const useStyles = makeStyles(
     hide: {
       opacity: 0,
       transition: theme.transitions.create('opacity')
+    },
+    tags: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
     }
   }),
   { name: 'SuperCampaignEnrollmentList' }
@@ -84,6 +89,7 @@ function SuperCampaignEnrollmentList({
       id: 'tags',
       width: '45%',
       sortable: false,
+      class: classes.tags,
       render: ({ row }) => (
         <SuperCampaignEnrollmentListColumnTags
           isOptedOut={isSuperCampaignEnrollmentOptedOut(row)}
