@@ -18,6 +18,7 @@ interface UseGetSuperCampaignEnrollments {
 
 export function useGetSuperCampaignEnrollments(
   superCampaignId: UUID,
+  superCampaignTags: Nullable<string[]>,
   includeCampaign: boolean
 ): UseGetSuperCampaignEnrollments {
   const {
@@ -34,7 +35,7 @@ export function useGetSuperCampaignEnrollments(
     run(async () =>
       getSuperCampaignEnrollments(superCampaignId, includeCampaign)
     )
-  }, [run, superCampaignId, includeCampaign])
+  }, [run, superCampaignId, includeCampaign, superCampaignTags])
 
   return {
     isLoading,

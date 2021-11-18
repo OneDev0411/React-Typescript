@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { useIsSuperCampaignResultMode } from '../../hooks/use-is-super-campaign-result-mode'
+import { useIsSuperCampaignExecuted } from '../../hooks/use-is-super-campaign-executed'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -18,14 +18,18 @@ function SuperCampaignEnrolledParticipants() {
     superCampaign,
     setSuperCampaign
   )
-  const isResultMode = useIsSuperCampaignResultMode(superCampaign)
+  const isResultMode = useIsSuperCampaignExecuted(superCampaign)
 
   const {
     superCampaignEnrollments,
     setSuperCampaignEnrollments,
     superCampaignEnrollmentCount,
     isLoading
-  } = useGetSuperCampaignEnrollments(superCampaign.id, isResultMode)
+  } = useGetSuperCampaignEnrollments(
+    superCampaign.id,
+    superCampaign.tags,
+    isResultMode
+  )
 
   return (
     <SuperCampaignCard>

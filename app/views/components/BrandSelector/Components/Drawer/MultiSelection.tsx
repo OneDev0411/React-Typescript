@@ -10,7 +10,7 @@ import { useStyles } from './styles'
 import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
 
 export function MultiSelectionBrandSelectorDrawer({
-  drawerTitle = 'Select Agents',
+  drawerTitle = 'Select Brands',
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
   onSave,

@@ -31,7 +31,9 @@ export const ROLE_NAMES = [
   'Tenant',
   'LandlordPowerOfAttorney',
   'Landlord',
-  'TenantPowerOfAttorney'
+  'TenantPowerOfAttorney',
+  'BuyerBroker',
+  'SellerBroker'
 ]
 
 export const AGENT_ROLES = [

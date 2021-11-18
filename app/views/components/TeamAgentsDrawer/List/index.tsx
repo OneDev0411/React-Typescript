@@ -33,7 +33,10 @@ export function AgentsList({
       .flatMap(office => {
         const agents = office.users.map((user: IUser) => {
           const isSelected =
-            multiSelection && selectedAgents.some(agent => agent.id === user.id)
+            multiSelection &&
+            selectedAgents.some(
+              agent => agent.id === user.id && agent.brand_id === office.id
+            )
 
           return {
             type: RowType.Agent,

@@ -1,4 +1,8 @@
 import { CardMedia, makeStyles, Typography } from '@material-ui/core'
+import { Link } from 'react-router'
+
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import SuperCampaignBaseCard, {
   SuperCampaignBaseCardProps
@@ -58,6 +62,14 @@ function SuperCampaignCard({
 }: SuperCampaignCardProps) {
   const classes = useStyles()
 
+  const title = (
+    <Typography className={classes.margin} variant="subtitle2" noWrap>
+      {superCampaign.subject || 'Untitled Campaign'}
+    </Typography>
+  )
+
+  const isAdmin = useAcl(ACL.ADMIN)
+
   return (
     <SuperCampaignBaseCard
       {...otherProps}
@@ -79,9 +91,15 @@ function SuperCampaignCard({
             time={superCampaign.due_at}
           />
         )}
-        <Typography className={classes.margin} variant="subtitle2" noWrap>
-          {superCampaign.subject || 'Untitled Campaign'}
-        </Typography>
+        {isAdmin ? (
+          <Link
+            to={`/dashboard/insights/super-campaign/${superCampaign.id}/detail`}
+          >
+            {title}
+          </Link>
+        ) : (
+          title
+        )}
         <Typography variant="body2" className={classes.description}>
           {superCampaign.description}
         </Typography>
