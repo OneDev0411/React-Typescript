@@ -19,9 +19,12 @@ import {
 } from '../../constants'
 import { DealsListFilters, DealsListPayload, DealsOrder } from '../../types'
 
+import { StatusEditor } from './statusEditor'
+import { isStatusFilterChanged, StatusButton } from './statusEditor/button'
 import { useStyles } from './styles'
 import { TypeEditor } from './typeEditor'
 import { TypeButton } from './typeEditor/button'
+import { parseStatusFilterString, stringifyStatusFilter } from './utils'
 
 export const Filters = () => {
   const classes = useStyles()
@@ -33,6 +36,8 @@ export const Filters = () => {
   const [sortTypeParamValue] = useQueryParam('sortType')
   const [dealTypeParamValue, setDealTypeParamValue] =
     useReplaceQueryParam('dealType')
+  const [statusParamValue, setStatusParamValue, removeStatusParamValue] =
+    useReplaceQueryParam('status')
 
   const user = useSelector(selectUser)
 
@@ -45,7 +50,11 @@ export const Filters = () => {
             QUERY_ARRAY_PARAM_SPLITTER_CHAR
           ) as IDealType[]
         }
-      : {})
+      : {}),
+    status: {
+      ...DEALS_LIST_DEFAULT_FILTERS.status,
+      ...(statusParamValue ? parseStatusFilterString(statusParamValue) : {})
+    }
   })
 
   const onFiltersChange = (changedFilters: Partial<DealsListFilters>) => {
@@ -77,12 +86,20 @@ export const Filters = () => {
     ]
   )
 
+  // Set query params after each change
   useEffect(() => {
     if (userFilters.deal_type) {
       setDealTypeParamValue(
         userFilters.deal_type.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
       )
     }
+
+    if (isStatusFilterChanged(DEALS_LIST_DEFAULT_FILTERS, userFilters)) {
+      setStatusParamValue(stringifyStatusFilter(userFilters.status))
+    } else {
+      removeStatusParamValue()
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userFilters])
 
@@ -111,6 +128,23 @@ export const Filters = () => {
               )}
               renderDropdown={() => (
                 <TypeEditor
+                  filters={currentFilters}
+                  updateFilters={updateFilters}
+                  defaultFilters={systemDefaultFilters}
+                />
+              )}
+            />
+            {/* Deals Status Filter  */}
+            <FilterButton
+              renderButton={({ onClick }) => (
+                <StatusButton
+                  filters={currentFilters}
+                  defaultFilters={systemDefaultFilters}
+                  onClick={onClick}
+                />
+              )}
+              renderDropdown={() => (
+                <StatusEditor
                   filters={currentFilters}
                   updateFilters={updateFilters}
                   defaultFilters={systemDefaultFilters}
