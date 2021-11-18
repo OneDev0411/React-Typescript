@@ -1,23 +1,46 @@
 import { useContext, useState, useEffect } from 'react'
 
-import { Button } from '@material-ui/core'
+import { Tooltip, Button, makeStyles } from '@material-ui/core'
+import { mdiTrashCanOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { addNotification as notify } from 'components/notification'
-import { isTemplateInstance } from 'utils/marketing-center/helpers'
-
-import BrandAssetCard from '../BrandAssetCard'
-import MarketingTemplateCard from '../MarketingTemplateCard'
-import { MarketingTemplateMasonry } from '../MarketingTemplateMasonry'
-import MarketingTemplatePreviewModal from '../MarketingTemplatePreviewModal'
+import { isTemplateInstance } from '@app/utils/marketing-center/helpers'
+import BrandAssetCard from '@app/views/components/BrandAssetCard'
+import IconButton from '@app/views/components/Button/IconButton'
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
+import MarketingTemplateCard from '@app/views/components/MarketingTemplateCard'
+import { MarketingTemplateMasonry } from '@app/views/components/MarketingTemplateMasonry'
+import MarketingTemplatePreviewModal from '@app/views/components/MarketingTemplatePreviewModal'
+import { addNotification as notify } from '@app/views/components/notification'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import Fallback from './Fallback'
 import { TemplatesListContainer } from './styled'
 import TemplateAction from './TemplateAction'
 import TemplateCardActions from './TemplateCardActions'
 
+const useStyles = makeStyles(
+  theme => ({
+    iconButton: {
+      padding: `${theme.spacing(0, 1)} !important`,
+      backgroundColor: 'rgba(0, 0, 0, 0.55) !important',
+
+      '& svg': {
+        color: `${theme.palette.common.white} !important`
+      },
+
+      '&:hover': {
+        background: theme.palette.common.black
+      }
+    }
+  }),
+  {
+    name: 'MarketingTemplatesList'
+  }
+)
+
 function TemplatesList(props) {
+  const classes = useStyles()
   const [isPreviewModalOpen, setPreviewModalOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState(null)
   const [isActionTriggered, setActionTriggered] = useState(false)
@@ -43,7 +66,7 @@ function TemplatesList(props) {
 
   const notifyDeleteError = () => {
     props.notify({
-      title: 'Error deleting template. Please try again or contact support.',
+      title: 'Error deleting item. Please try again or contact support.',
       status: 'error'
     })
   }
@@ -85,6 +108,32 @@ function TemplatesList(props) {
     })
   }
 
+  const handleDeleteBrandAsset = asset => {
+    modal.setConfirmationModal({
+      message: 'Delete this asset?',
+      description:
+        'Once deleted you and your team members would not be able to recover it.',
+      confirmLabel: 'Delete',
+      appearance: 'danger',
+      onConfirm: async () => {
+        try {
+          props.onDeleteBrandAsset(asset)
+        } catch (e) {
+          console.error(e)
+          notifyDeleteError()
+        }
+      }
+    })
+  }
+
+  const handleBrandAssetClick = asset => {
+    console.log('Asset Clicked', { asset })
+  }
+
+  const handleShareBrandAssetClick = asset => {
+    console.log('Asset Share Clicked', { asset })
+  }
+
   const isEmpty = props.items.length === 0 && !props.isLoading
 
   if (props.isLoading || isEmpty) {
@@ -111,7 +160,45 @@ function TemplatesList(props) {
         >
           {props.items.map(item => {
             if (item.type === 'brand_asset') {
-              return <BrandAssetCard key={item.id} asset={item} />
+              return (
+                <BrandAssetCard
+                  key={item.id}
+                  asset={item}
+                  actions={
+                    <>
+                      <div>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={e => {
+                            e.stopPropagation()
+                            handleShareBrandAssetClick(item)
+                          }}
+                        >
+                          Share
+                        </Button>
+                      </div>
+                      {props.onDeleteBrandAsset && (
+                        <div>
+                          <Tooltip title="Delete">
+                            <IconButton
+                              iconSize="large"
+                              className={classes.iconButton}
+                              onClick={e => {
+                                e.stopPropagation()
+                                handleDeleteBrandAsset(item)
+                              }}
+                            >
+                              <SvgIcon path={mdiTrashCanOutline} />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      )}
+                    </>
+                  }
+                  onClick={handleBrandAssetClick}
+                />
+              )
             }
 
             return (

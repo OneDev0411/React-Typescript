@@ -34,7 +34,8 @@ export const MarketingList = () => {
           medium,
           onSelectTemplate,
           defaultSelectedTemplate,
-          onDeleteTemplate
+          onDeleteTemplate,
+          onDeleteBrandAsset
         }) => {
           return (
             <>
@@ -59,6 +60,7 @@ export const MarketingList = () => {
                 onSelect={onSelectTemplate}
                 defaultSelected={defaultSelectedTemplate}
                 onDelete={onDeleteTemplate}
+                onDeleteBrandAsset={onDeleteBrandAsset}
               />
             </>
           )

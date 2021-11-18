@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 
 import { useDeepCompareEffect } from 'react-use'
 
+import { deleteBrandAsset } from '@app/models/brand/delete-brand-asset'
 import { getBrandAssets } from '@app/models/brand/get-brand-assets'
 
 interface Options {
@@ -11,7 +12,9 @@ interface Options {
 
 interface UseBrandAssets {
   search: (query: string) => void
+  delete: (asset: IBrandAsset) => Promise<void>
   refetch: () => void
+  hasDeleteAccess: (asset: IBrandAsset) => boolean
   assets: IBrandAsset[]
   isLoading: boolean
 }
@@ -34,6 +37,30 @@ export function useBrandAssets(
     setIsLoading(false)
   }
 
+  const hasDeleteAccess = (asset: IBrandAsset) => {
+    if (!assets || !brandId) {
+      return false
+    }
+
+    const foundAsset = assets.find(item => item.id === asset.id)
+
+    if (!foundAsset) {
+      return false
+    }
+
+    return foundAsset.brand === brandId
+  }
+
+  const deleteAsset = async (asset: IBrandAsset) => {
+    if (!hasDeleteAccess(asset)) {
+      return
+    }
+
+    await deleteBrandAsset(asset.brand, asset.id)
+    setAllAssets(items => items.filter(item => item.id !== asset.id))
+    setAssets(items => items.filter(item => item.id !== asset.id))
+  }
+
   useDeepCompareEffect(() => {
     fetchAssets()
   }, [brandId, options])
@@ -51,7 +78,9 @@ export function useBrandAssets(
 
   return {
     search,
+    delete: deleteAsset,
     refetch: fetchAssets,
+    hasDeleteAccess,
     assets,
     isLoading
   }
