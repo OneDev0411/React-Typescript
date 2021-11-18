@@ -12,5 +12,6 @@ export interface BaseSelectorDrawer extends BaseDrawerProps {
 export interface MultiSelectionBrandSelectoeDrawer extends BaseDrawerProps {
   brandSelectorProps?: Omit<BaseBrandSelectorProps, 'nodeRenderer'>
   selectedBrands?: UUID[]
+  disabled?: boolean
   onSave: (brands: UUID[]) => Promise<void>
 }
