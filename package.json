@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.3.8",
+  "version": "86.3.9",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -416,6 +416,6 @@
   },
   "engines": {
     "node": "14.x",
-    "npm": "6.x"
+    "npm": "8.x"
   }
 }
