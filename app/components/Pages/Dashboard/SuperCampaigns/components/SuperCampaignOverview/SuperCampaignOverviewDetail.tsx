@@ -88,13 +88,15 @@ function SuperCampaignOverviewDetail() {
           }
         />
       </div>
-      <SuperCampaignTemplate
-        titleClassName={classes.title}
-        titleVariant="body1"
-        template={superCampaign.template_instance}
-        onTemplateChange={handleTemplateChange}
-        readOnly={isResultMode}
-      />
+      {superCampaign.template_instance && (
+        <SuperCampaignTemplate
+          titleClassName={classes.title}
+          titleVariant="body1"
+          template={superCampaign.template_instance}
+          onTemplateChange={handleTemplateChange}
+          readOnly={isResultMode}
+        />
+      )}
       <SuperCampaignDrawer
         isOpen={!!editDrawerParam}
         onClose={closeDrawer}

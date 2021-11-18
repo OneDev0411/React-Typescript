@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
 import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
@@ -41,7 +43,9 @@ function InsightsLayout({
   })
   const currentUrl = window.location.pathname
 
-  const Items = [
+  const hasSuperCampaignPermission = useAcl(ACL.ADMIN)
+
+  const items = [
     {
       label: 'Sent',
       count: sentCount,
@@ -57,6 +61,13 @@ function InsightsLayout({
       to: urlGenerator('/super-campaign')
     }
   ]
+
+  if (hasSuperCampaignPermission) {
+    items.push({
+      label: 'Super Campaign',
+      to: urlGenerator('/super-campaign')
+    })
+  }
 
   useEffectOnce(() => {
     const savedSortField = getUserSettingsInActiveTeam(
@@ -94,7 +105,7 @@ function InsightsLayout({
         <PageLayout.Main>
           <PageTabs
             defaultValue={currentUrl}
-            tabs={Items.map(({ label, count, to }, i) => (
+            tabs={items.map(({ label, count, to }, i) => (
               <TabLink
                 key={i}
                 label={
