@@ -55,16 +55,12 @@ function InsightsLayout({
       label: 'Scheduled',
       count: scheduledCount,
       to: urlGenerator('/scheduled')
-    },
-    {
-      label: 'Campaign',
-      to: urlGenerator('/super-campaign')
     }
   ]
 
   if (hasSuperCampaignPermission) {
     items.push({
-      label: 'Super Campaign',
+      label: 'Campaign',
       to: urlGenerator('/super-campaign')
     })
   }
