@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import {
   Card,
@@ -192,11 +192,6 @@ export interface ListingCardProps {
    * The card clicked state
    */
   clicked?: boolean
-
-  /**
-   * The onMouseEnter / onMouseLeave handler of listing card
-   */
-  onChangeHoverState?: (id: UUID, hover: boolean) => void
 }
 
 export default function ListingCard({
@@ -207,7 +202,6 @@ export default function ListingCard({
   hideFeatures = false,
   selected = undefined,
   onToggleSelection = noop,
-  onChangeHoverState,
   liked = undefined,
   onLikeClick = noop,
   onClick
@@ -246,15 +240,6 @@ export default function ListingCard({
     !hideFeatures &&
     Object.keys(listingFeatures).some(key => !!listingFeatures[key])
 
-  const handleChangeHoverState = useCallback(
-    (id: UUID, hover: boolean) => {
-      if (typeof onChangeHoverState === 'function') {
-        onChangeHoverState(id, hover)
-      }
-    },
-    [onChangeHoverState]
-  )
-
   const shouldHighlightCard = hover || clicked
 
   return (
@@ -262,12 +247,6 @@ export default function ListingCard({
       data-test="card"
       variant="outlined"
       className={classes.card}
-      onMouseEnter={() => {
-        handleChangeHoverState(listing.id, true)
-      }}
-      onMouseLeave={() => {
-        handleChangeHoverState(listing.id, false)
-      }}
       onClick={onClick}
     >
       <CardActionArea component="div">

@@ -12,6 +12,7 @@ import {
 } from '@app/utils/listing'
 
 import { MINIMAL_MARKER_ZOOM_LEVEL } from '../../constants'
+import useUiListingsContext from '../../context/useUiListingsContext'
 import MarkerPopup from '../MarkerPopup'
 
 const useStyles = makeStyles(
@@ -40,7 +41,7 @@ const useStyles = makeStyles(
         left: '50%',
         height: 7,
         width: 12,
-        transform: 'translate(-50%, 0)',
+        // transform: 'translate(-50%, 0)',
         background: 'inherit',
         clipPath: 'polygon(0 0, 100% 0, 50% 100%)'
       },
@@ -116,14 +117,16 @@ const Marker = ({
   bedroomCount,
   coverImageUrl,
   propertyType,
-  hover,
-  clicked,
   onClick = noop,
   zoom = MINIMAL_MARKER_ZOOM_LEVEL
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUserUnsafe)
   const markerRef = useRef<Nullable<HTMLDivElement>>(null)
+  const [uiState] = useUiListingsContext()
+
+  const hover = uiState.hover === id
+  const clicked = uiState.click === id
 
   if (!lat || !lng) {
     return null
