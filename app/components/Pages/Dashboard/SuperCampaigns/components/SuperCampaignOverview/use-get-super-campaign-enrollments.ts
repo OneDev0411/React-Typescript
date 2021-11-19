@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 
 import useAsync from '@app/hooks/use-async'
 import getSuperCampaignEnrollments from '@app/models/super-campaign/get-super-campaign-enrollments'
@@ -13,6 +13,7 @@ interface UseGetSuperCampaignEnrollments {
   setSuperCampaignEnrollments: Dispatch<
     SetStateAction<SuperCampaignEnrollmentItem[]>
   >
+  enrolledAgentCount: number
 }
 
 export function useGetSuperCampaignEnrollments(
@@ -36,9 +37,19 @@ export function useGetSuperCampaignEnrollments(
     )
   }, [run, superCampaignId, includeCampaign, superCampaignTags])
 
+  // Count the number of non-opted-out people
+  const enrolledAgentCount = useMemo(
+    () =>
+      superCampaignEnrollments.filter(
+        superCampaignEnrollment => !superCampaignEnrollment.deleted_at
+      ).length,
+    [superCampaignEnrollments]
+  )
+
   return {
     isLoading,
     superCampaignEnrollments,
-    setSuperCampaignEnrollments
+    setSuperCampaignEnrollments,
+    enrolledAgentCount
   }
 }

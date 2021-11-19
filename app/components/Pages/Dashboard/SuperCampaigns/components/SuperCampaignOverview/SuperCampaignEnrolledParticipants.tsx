@@ -20,17 +20,16 @@ function SuperCampaignEnrolledParticipants() {
   )
   const isResultMode = useIsSuperCampaignExecuted(superCampaign)
 
-  const { superCampaignEnrollments, setSuperCampaignEnrollments, isLoading } =
-    useGetSuperCampaignEnrollments(
-      superCampaign.id,
-      superCampaign.tags,
-      isResultMode
-    )
-
-  // Count the number of non-opted-out people
-  const enrolledAgentCount = superCampaignEnrollments.filter(
-    superCampaignEnrollment => !superCampaignEnrollment.deleted_at
-  ).length
+  const {
+    superCampaignEnrollments,
+    setSuperCampaignEnrollments,
+    isLoading,
+    enrolledAgentCount
+  } = useGetSuperCampaignEnrollments(
+    superCampaign.id,
+    superCampaign.tags,
+    isResultMode
+  )
 
   return (
     <SuperCampaignCard>
