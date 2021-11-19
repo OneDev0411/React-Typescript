@@ -1,4 +1,4 @@
-import { otherStatuses } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/statuses'
+import { OTHER_STATUSES } from '@app/components/Pages/Dashboard/MLS/constants'
 
 import toggleSubStatuses from './toggle-sub-statuses'
 
@@ -7,7 +7,7 @@ const activeOtherListings = event => dispatch => {
     type: 'ACTIVE_OTHER_STATUSES_LISTINGS'
   })
 
-  return toggleSubStatuses(otherStatuses, event.target.checked)(dispatch)
+  return toggleSubStatuses(OTHER_STATUSES, event.target.checked)(dispatch)
 }
 
 export default activeOtherListings
