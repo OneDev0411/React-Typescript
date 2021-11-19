@@ -286,3 +286,13 @@ export const queryOptions = {
   points: DALLAS_POINTS,
   property_subtypes: Object.values(RES_FILTER_PROPERTY_SUBTYPES)
 }
+
+export const SCHOOLS_TYPE = [
+  'high_schools',
+  'middle_schools',
+  'primary_schools',
+  'elementary_schools',
+  'senior_high_schools',
+  'junior_high_schools',
+  'intermediate_schools'
+]
