@@ -88,13 +88,21 @@ export const CardsView = ({
           md={mapIsShown ? 12 : 6}
           lg={mapIsShown ? 6 : 3}
         >
-          <Grid className={classes.listingContainer} id={listing.id}>
+          <Grid
+            className={classes.listingContainer}
+            id={listing.id}
+            onMouseEnter={() => {
+              onChangeHoverState(listing.id, true)
+            }}
+            onMouseLeave={() => {
+              onChangeHoverState(listing.id, false)
+            }}
+          >
             <ListingCard
               isWidget={isWidget}
               listing={listing}
               hover={listingStates.hover === listing.id}
               clicked={listingStates.click === listing.id}
-              onChangeHoverState={onChangeHoverState}
               reduxToggleFavorite={false} // TODO: remove this after refactoring fav/saved tab
               onToggleLike={handleToggleLike}
               selected={selections.some(

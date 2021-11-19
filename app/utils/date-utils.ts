@@ -39,19 +39,11 @@ export function getUTCStartOfCurrentDayTimestamp(): number {
   )
 }
 
-export function fromNow(date: Date, isAllDay: boolean): string {
+export function fromNow(date: Date): string {
   const event = moment.tz(
     date,
     Intl.DateTimeFormat().resolvedOptions().timeZone
   )
-
-  if (isAllDay) {
-    // Rechat's "All day" events are set to occure at 00:00:00.
-    // This makes date comparison libraries to go nuts when calculating
-    // today, tomorrow. By setting the event at 8am same day everything
-    // works perfectly fine.
-    event.add(8, 'hours')
-  }
 
   const fromNow = moment(event).fromNow()
 
@@ -83,9 +75,10 @@ export function convertToCurrentYear(date: Date): Date {
 
   newDate.setFullYear(
     now.getUTCFullYear(),
-    date.getUTCMonth(),
-    date.getUTCDate()
+    newDate.getUTCMonth(),
+    newDate.getUTCDate()
   )
+  newDate.setHours(0, 0, 0, 0)
 
   return newDate
 }

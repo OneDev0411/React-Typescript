@@ -21,6 +21,11 @@ import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
 import {
+  changeListingHoverState,
+  changeListingClickedState
+} from '../../../context/actions'
+import useUiListingsContext from '../../../context/useUiListingsContext'
+import {
   parseSortIndex,
   SORT_FIELD_DEFAULT,
   SORT_FIELD_SETTING_KEY
@@ -28,8 +33,6 @@ import {
 import { SortString, ViewType } from '../../../types'
 import {
   setMapLocation,
-  changeListingHoverState,
-  changeListingClickedState,
   toggleListingFavoriteState
 } from '../../context/actions'
 import useFavoritesContext from '../../hooks/useFavoritesContext'
@@ -106,6 +109,8 @@ interface Props {
 
 export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useFavoritesContext()
+  const [, uiDispatch] = useUiListingsContext()
+
   const mapRef = useRef<google.maps.Map>()
   const isMapFitRef = useRef<boolean>(false)
 
@@ -129,7 +134,9 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     setViewType(to)
   }
 
-  const toggleMapShown = () => setMapIsShown(mapIsShown => !mapIsShown)
+  const toggleMapShown = useCallback(() => {
+    setMapIsShown(mapIsShown => !mapIsShown)
+  }, [])
 
   useEffectOnce(() => {
     window.initialize = initialize
@@ -155,16 +162,19 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     (center: ICoord, zoom: number, bounds: IBounds) => {
       dispatch(setMapLocation(center, zoom))
     },
-    [dispatch]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   )
 
-  const changeHoverState = (id: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(hover ? id : null))
-  }
+  const changeHoverState = useCallback((id: UUID, hover: boolean) => {
+    uiDispatch(changeListingHoverState(hover ? id : null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const onToggleFavorite = (id: UUID) => {
+  const onToggleFavorite = useCallback((id: UUID) => {
     dispatch(toggleListingFavoriteState(id))
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const onToggleListingModal = useCallback(
     (id: UUID, isOpen: boolean) => {
@@ -183,7 +193,7 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
     [isWidget, viewType]
   )
 
-  const onMarkerClick = (key: UUID) => {
+  const onMarkerClick = useCallback((key: UUID) => {
     const resultElement = document.getElementById(key)
 
     if (resultElement) {
@@ -191,14 +201,18 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
       resultElement.scrollIntoView({ behavior: 'smooth' })
     }
 
-    dispatch(changeListingClickedState(key))
-  }
+    uiDispatch(changeListingClickedState(key))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const onMapClick = () => dispatch(changeListingClickedState(null))
+  const onMapClick = useCallback(() => {
+    uiDispatch(changeListingClickedState(null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const onMapLoad = (map: google.maps.Map) => {
+  const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
-  }
+  }, [])
 
   useEffect(() => {
     if (!isMapFitRef.current && mapRef.current) {
@@ -248,8 +262,6 @@ export function FavoritesPage({ user, isWidget, onClickLocate }: Props) {
                   onMapClick={onMapClick}
                   mapPosition={state.map}
                   listings={state.result.listings}
-                  hoverListing={state.listingStates.hover}
-                  clickedListing={state.listingStates.click}
                   onToggleFavorite={onToggleFavorite}
                   closeModalAfterToggleFavorite
                   onMapLoad={onMapLoad}
