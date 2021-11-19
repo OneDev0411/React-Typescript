@@ -23,8 +23,8 @@ function SuperCampaignEnrolledParticipants() {
   const {
     superCampaignEnrollments,
     setSuperCampaignEnrollments,
-    superCampaignEnrollmentCount,
-    isLoading
+    isLoading,
+    enrolledAgentCount
   } = useGetSuperCampaignEnrollments(
     superCampaign.id,
     superCampaign.tags,
@@ -41,10 +41,10 @@ function SuperCampaignEnrolledParticipants() {
           disabled={isSaving}
           readOnly={isResultMode}
           helperText={
-            !isResultMode && superCampaignEnrollmentCount
+            !isResultMode && enrolledAgentCount
               ? `${pluralize(
                   'agent',
-                  superCampaignEnrollmentCount,
+                  enrolledAgentCount,
                   true
                 )} added by tags you’ve entered.`
               : undefined
