@@ -1,29 +1,38 @@
-import React from 'react'
+import { useEffect } from 'react'
 
 import TemplatesList from 'components/TemplatesList'
+import { goTo } from 'utils/go-to'
 
 export interface WebsiteTemplatesProps {
-  type: IWebsiteTemplateType
+  types: IMarketingTemplateType[]
   items: IBrandMarketingTemplate[]
   isLoading: boolean
   onDelete: (template: IBrandMarketingTemplate) => void
 }
 
 function WebsiteTemplates({
-  type,
+  types,
   items,
   isLoading,
   onDelete
 }: WebsiteTemplatesProps) {
-  const selectedItems = items.filter(
-    item => item.template.template_type === type
-  )
+  const isEmpty = items.length === 0
+
+  useEffect(() => {
+    if (!isLoading && isEmpty) {
+      goTo('/dashboard/websites')
+    }
+  }, [isLoading, isEmpty])
+
+  if (isEmpty) {
+    return null
+  }
 
   return (
     <TemplatesList
-      items={selectedItems}
+      items={items}
       isLoading={isLoading}
-      type={type}
+      type={types.join(',')}
       medium="Website"
       onDelete={onDelete}
     />
