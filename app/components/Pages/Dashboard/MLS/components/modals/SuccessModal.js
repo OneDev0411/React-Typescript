@@ -3,8 +3,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { mdiCheck } from '@mdi/js'
 
-import { Modal } from 'components/Modal'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { Modal } from '@app/views/components/Modal'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 const useStyles = makeStyles(
   theme => ({
