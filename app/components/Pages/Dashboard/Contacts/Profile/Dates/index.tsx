@@ -89,6 +89,7 @@ export function Dates({ contact, submitCallback }: Props) {
                 key={field.id}
                 title={field.title}
                 value={field.timestamp}
+                isAllDay={field.all_day}
               />
             ))}
           </Box>

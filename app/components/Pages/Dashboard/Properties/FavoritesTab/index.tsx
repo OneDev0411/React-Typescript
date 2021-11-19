@@ -1,3 +1,5 @@
+import { useCallback, useReducer } from 'react'
+
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { WithRouterProps } from 'react-router'
@@ -7,6 +9,8 @@ import { getLocationErrorMessage } from '@app/utils/map'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
 
 import { USER_LOCATION_ZOOM_LEVEL } from '../constants'
+import { ListingsUiContext } from '../context'
+import { reducer as uiReducer } from '../context/reducers'
 import { getUserLastBrowsingLocation } from '../helpers/sort-utils'
 
 import { FavoritesPage } from './components/FavoritesPage'
@@ -43,8 +47,12 @@ function FavoritesTab({ isWidget, user }: Props) {
   }
 
   const [state, dispatch] = useFetchFavorites(initialState)
+  const [uiState, uiDispatch] = useReducer(uiReducer, {
+    hover: null,
+    click: null
+  })
 
-  const onClickLocate = () => {
+  const onClickLocate = useCallback(() => {
     if (!window.navigator.geolocation) {
       return reduxDispatch(
         confirmation({
@@ -75,7 +83,8 @@ function FavoritesTab({ isWidget, user }: Props) {
       },
       { timeout: 10000 }
     )
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Initialize user location on click Locate
   const initUserLocation = (lat: number, lng: number) => {
@@ -88,11 +97,13 @@ function FavoritesTab({ isWidget, user }: Props) {
   return (
     <GlobalPageLayout className={classes.exploreContainer}>
       <FavoritesContext.Provider value={[state, dispatch]}>
-        <FavoritesPage
-          user={user}
-          isWidget={isWidget}
-          onClickLocate={onClickLocate}
-        />
+        <ListingsUiContext.Provider value={[uiState, uiDispatch]}>
+          <FavoritesPage
+            user={user}
+            isWidget={isWidget}
+            onClickLocate={onClickLocate}
+          />
+        </ListingsUiContext.Provider>
       </FavoritesContext.Provider>
     </GlobalPageLayout>
   )

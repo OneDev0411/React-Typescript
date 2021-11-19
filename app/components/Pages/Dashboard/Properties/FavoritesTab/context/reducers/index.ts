@@ -1,8 +1,4 @@
-import {
-  IListingUIStates,
-  IMapPosition,
-  IFormattedCompactListing
-} from '../../../types'
+import { IMapPosition, IFormattedCompactListing } from '../../../types'
 import { Actions } from '../actions'
 
 export interface FavoritesState {
@@ -11,14 +7,12 @@ export interface FavoritesState {
     listings: IFormattedCompactListing[]
     info: Nullable<ICompactListingInfo>
   }
-  listingStates: IListingUIStates
   isLoading: boolean
 }
 
 export const initialState: FavoritesState = {
   map: { center: undefined, zoom: undefined },
   result: { listings: [], info: null },
-  listingStates: { hover: null, click: null },
   isLoading: true
 }
 
@@ -32,26 +26,7 @@ export function reducer(
 
       return {
         ...state,
-        result: { listings, info },
-        listingStates: { hover: null, click: null }
-      }
-    }
-
-    case 'CHANGE_LISTING_HOVER_STATE': {
-      const { id } = action.payload
-
-      return {
-        ...state,
-        listingStates: { ...state.listingStates, hover: id }
-      }
-    }
-
-    case 'CHANGE_LISTING_CLICKED_STATE': {
-      const { id } = action.payload
-
-      return {
-        ...state,
-        listingStates: { ...state.listingStates, click: id }
+        result: { listings, info }
       }
     }
 
