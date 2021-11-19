@@ -1,28 +1,28 @@
 <mj-section mj-class="container" padding-top="20px" padding-bottom="20px" text-align="left" rechat-editable="tree">
   <mj-group>
     <mj-column>
-      <mj-image data-component="placeholder" data-placeholder-src="/static/images/marketing/editor/sender.svg" src='{% raw %}{{sender.profile_image_url}}{% endraw %}' width="250px" padding="4px 25px">
+      <mj-image data-component="placeholder" data-placeholder-src="/static/images/marketing/editor/sender.svg" src='{% raw %}{{sender.profile_image_url or ""}}{% endraw %}' width="250px" padding="4px 25px">
       </mj-image>
     </mj-column>
     <mj-column vertical-align="bottom">
       <mj-text mj-class="h3" text-transform="uppercase" font-weight="600"  padding="5px 0" rechat-editable="false" line-height="1">
         <span contenteditable="false" data-cke-widget-wrapper="1" data-cke-filter="off" class="cke_widget_wrapper cke_widget_inline cke_widget_placeholder" data-cke-display-name="placeholder" data-cke-widget-id="0" role="region">
           <span class="cke_placeholder cke_widget_element" data-cke-widget-keep-attr="0" data-widget="placeholder" data-cke-widget-data="%7B%22name%22%3A%22sender.display_name%22%2C%22fallback%22%3A%22%22%2C%22classes%22%3Anull%7D">
-            {% raw %}{{sender.display_name}}{% endraw %}
+            {% raw %}{{sender.display_name or ""}}{% endraw %}
           </span>
         </span>
       </mj-text>
       <mj-text mj-class="container-text" padding="5px 0" rechat-editable="false" line-height="1">
         <span contenteditable="false" data-cke-widget-wrapper="1" data-cke-filter="off" class="cke_widget_wrapper cke_widget_inline cke_widget_placeholder" data-cke-display-name="placeholder" data-cke-widget-id="0" role="region">
           <span class="cke_placeholder cke_widget_element" data-cke-widget-keep-attr="0" data-widget="placeholder" data-cke-widget-data="%7B%22name%22%3A%22sender.phone_number%22%2C%22fallback%22%3A%22%22%2C%22classes%22%3Anull%7D">
-            {% raw %}{{sender.phone_number}}{% endraw %}
+            {% raw %}{{sender.phone_number or ""}}{% endraw %}
           </span>
         </span>
       </mj-text>
-      <mj-text mj-class="container-text" padding="5px 0" rechat-editable="false" line-height="1" href="mailto:{% raw %}{{sender.email}}{% endraw %}">
+      <mj-text mj-class="container-text" padding="5px 0" rechat-editable="false" line-height="1" href='mailto:{% raw %}{{sender.email or ""}}{% endraw %}'>
         <span contenteditable="false" data-cke-widget-wrapper="1" data-cke-filter="off" class="cke_widget_wrapper cke_widget_inline cke_widget_placeholder" data-cke-display-name="placeholder" data-cke-widget-id="0" role="region">
           <span class="cke_placeholder cke_widget_element" data-cke-widget-keep-attr="0" data-widget="placeholder" data-cke-widget-data="%7B%22name%22%3A%22sender.email%22%2C%22fallback%22%3A%22%22%2C%22classes%22%3Anull%7D">
-            {% raw %}{{sender.email}}{% endraw %}
+            {% raw %}{{sender.email or ""}}{% endraw %}
           </span>
         </span>
       </mj-text>
