@@ -146,19 +146,23 @@ export const BoardColumn = memo(function BoardColumn({
             attribute_def: tagAttributeDefinitionId,
             invert: false,
             value: tag
-          }
+          },
+          ...criteria.filters
         ]
       } else {
-        columnFilters = Tags.map(tag => ({
-          attribute_def: tagAttributeDefinitionId,
-          invert: true,
-          value: tag
-        }))
+        columnFilters =
+          criteria.filters?.length > 0
+            ? criteria.filters
+            : Tags.map(tag => ({
+                attribute_def: tagAttributeDefinitionId,
+                invert: true,
+                value: tag
+              }))
       }
 
       const { data, info } = await searchContacts(
         criteria.searchTerm,
-        [...columnFilters, ...criteria.filters],
+        columnFilters,
         {
           start: loadingOffset,
           limit: loadingLimit,
