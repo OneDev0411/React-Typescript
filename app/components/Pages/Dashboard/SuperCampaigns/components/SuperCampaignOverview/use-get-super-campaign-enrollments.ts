@@ -13,7 +13,6 @@ interface UseGetSuperCampaignEnrollments {
   setSuperCampaignEnrollments: Dispatch<
     SetStateAction<SuperCampaignEnrollmentItem[]>
   >
-  superCampaignEnrollmentCount: number
 }
 
 export function useGetSuperCampaignEnrollments(
@@ -40,7 +39,6 @@ export function useGetSuperCampaignEnrollments(
   return {
     isLoading,
     superCampaignEnrollments,
-    setSuperCampaignEnrollments,
-    superCampaignEnrollmentCount: superCampaignEnrollments.length
+    setSuperCampaignEnrollments
   }
 }
