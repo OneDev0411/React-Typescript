@@ -10,7 +10,8 @@ test_unit:
   only:
     - merge_requests
   script:
-    - npm i
+    - npm install -g npm@8
+    - npm ci
     - npm run lint:ci
     - npm run types:check
     - npm run test:ci -- --coverage

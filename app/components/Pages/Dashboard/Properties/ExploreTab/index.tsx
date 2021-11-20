@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useReducer, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
@@ -16,6 +16,8 @@ import {
   PROPERTIES_FILTERS_STORAGE_KEY,
   USER_LOCATION_ZOOM_LEVEL
 } from '../constants'
+import { ListingsUiContext } from '../context'
+import { reducer as uiReducer } from '../context/reducers'
 import { estimateMapZoom, getPlaceZoomOffset } from '../helpers/map-helpers'
 import {
   getDefaultSort,
@@ -85,6 +87,10 @@ function ExploreTab({ isWidget, user, location }: Props) {
 
   const [state, dispatch] = useFetchListings(initialState)
 
+  const [uiState, uiDispatch] = useReducer(uiReducer, {
+    hover: null,
+    click: null
+  })
   const [isLoadingPlace, setIsLoadingPlace] = useState(false)
 
   const [userLocationState, setUserLocationState] = useState({
@@ -95,7 +101,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
       Object.keys(userLastBrowsingLocation).length === 0
   })
 
-  const onClickLocate = () => {
+  const onClickLocate = useCallback(() => {
     if (!window.navigator.geolocation) {
       return reduxDispatch(
         confirmation({
@@ -132,7 +138,8 @@ function ExploreTab({ isWidget, user, location }: Props) {
       },
       { timeout: 10000 }
     )
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Initialize user location on click Locate
   const initUserLocation = (lat: number, lng: number) => {
@@ -212,11 +219,13 @@ function ExploreTab({ isWidget, user, location }: Props) {
               onSelectPlace={onSelectPlace}
             />
           ) : (
-            <ExplorePage
-              user={user}
-              isWidget={isWidget}
-              onClickLocate={onClickLocate}
-            />
+            <ListingsUiContext.Provider value={[uiState, uiDispatch]}>
+              <ExplorePage
+                user={user}
+                isWidget={isWidget}
+                onClickLocate={onClickLocate}
+              />
+            </ListingsUiContext.Provider>
           )}
         </ListingsContext.Provider>
       ) : (

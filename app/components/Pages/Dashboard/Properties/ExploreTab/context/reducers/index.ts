@@ -1,11 +1,6 @@
 import { FILTERS_INITIAL_VALUES } from '../../../constants'
 import { parseSortIndex, SORT_FIELD_DEFAULT } from '../../../helpers/sort-utils'
-import {
-  IListingUIStates,
-  IMapPosition,
-  Sort,
-  IFormattedCompactListing
-} from '../../../types'
+import { IMapPosition, Sort, IFormattedCompactListing } from '../../../types'
 import { Actions } from '../actions'
 
 export interface ListingSearchOptions {
@@ -24,7 +19,6 @@ export interface ListingsState {
     listings: IFormattedCompactListing[]
     info: Nullable<ICompactListingInfo>
   }
-  listingStates: IListingUIStates
   isLoading: boolean
 }
 
@@ -38,7 +32,6 @@ export const initialState: ListingsState = {
   map: { center: undefined, zoom: undefined },
   pinMarker: undefined,
   result: { listings: [], info: null },
-  listingStates: { hover: null, click: null },
   isLoading: true
 }
 
@@ -49,33 +42,7 @@ export function reducer(state: ListingsState, action: Actions): ListingsState {
 
       return {
         ...state,
-        result: { listings, info },
-        listingStates: { hover: null, click: null }
-      }
-    }
-
-    case 'CHANGE_LISTING_HOVER_STATE': {
-      const { id } = action.payload
-
-      return {
-        ...state,
-        listingStates: { ...state.listingStates, hover: id }
-      }
-    }
-
-    case 'CHANGE_LISTING_CLICKED_STATE': {
-      const { id } = action.payload
-
-      return {
-        ...state,
-        listingStates: { ...state.listingStates, click: id }
-      }
-    }
-
-    case 'CLEAR_LISTING_UI_STATES': {
-      return {
-        ...state,
-        listingStates: { click: null, hover: null }
+        result: { listings, info }
       }
     }
 
