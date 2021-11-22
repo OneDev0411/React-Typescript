@@ -17,11 +17,6 @@ export function useGetGlobalTriggers(): UseGetGlobalTriggers {
   const { isLoading, attrs }: IGlobalTriggerState =
     useSelector(selectGlobalTriggers)
 
-  // const loadTriggers = useCallback(
-  //   () => run(() => getTriggers(brandId)),
-  //   [brandId, run]
-  // )
-
   useEffectOnce(() => {
     dispatch(fetchGlobalTriggers(brandId))
   })
@@ -30,6 +25,5 @@ export function useGetGlobalTriggers(): UseGetGlobalTriggers {
     isEmpty: isEmpty(attrs),
     isLoading,
     attrs
-    // reload: loadTriggers
   }
 }
