@@ -22,6 +22,12 @@ import { Header } from '../../../components/PageHeader'
 import { ShareListings } from '../../../components/ShareListings'
 import Tabs from '../../../components/Tabs'
 import { QUERY_LIMIT, bootstrapURLKeys, DEFAULT_VIEW } from '../../../constants'
+import {
+  changeListingHoverState,
+  changeListingClickedState,
+  clearListingUiStates
+} from '../../../context/actions'
+import useUiListingsContext from '../../../context/useUiListingsContext'
 import { createValertOptions } from '../../../helpers/get-listings-helpers'
 import {
   coordToPoint,
@@ -40,9 +46,6 @@ import {
   setMapBounds,
   setMapLocation,
   changeSort,
-  changeListingHoverState,
-  changeListingClickedState,
-  clearListingUiStates,
   removePinMarker
 } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
@@ -139,6 +142,8 @@ interface Props {
 
 export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   const [state, dispatch] = useListingsContext()
+  const [, uiDispatch] = useUiListingsContext()
+
   const [viewQueryParam] = useQueryParam('view')
   const classes = useStyles()
 
@@ -160,19 +165,21 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     setViewType(to)
   }
 
-  const onRemoveDrawing = () => {
+  const onRemoveDrawing = useCallback(() => {
     dispatch(removeMapDrawing())
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const onDrawingComplete = useCallback((points: ICoord[]) => {
     dispatch(setMapDrawing(points))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const toggleMapShown = () => {
-    dispatch(clearListingUiStates())
+  const toggleMapShown = useCallback(() => {
+    uiDispatch(clearListingUiStates())
     setMapIsShown(mapIsShown => !mapIsShown)
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const onSelectPlace = (
     center: ICoord,
@@ -263,13 +270,15 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     setIsShowAlertModal(false)
   }
 
-  const changeHoverState = (id: UUID, hover: boolean) => {
-    dispatch(changeListingHoverState(hover ? id : null))
-  }
+  const changeHoverState = useCallback((id: UUID, hover: boolean) => {
+    uiDispatch(changeListingHoverState(hover ? id : null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const onStartDrawingMode = () => {
-    dispatch(clearListingUiStates())
-  }
+  const onStartDrawingMode = useCallback(() => {
+    uiDispatch(clearListingUiStates())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const onToggleListingModal = useCallback(
     (id: UUID, isOpen: boolean) => {
@@ -288,7 +297,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
     [isWidget, viewType]
   )
 
-  const onMarkerClick = (key: UUID) => {
+  const onMarkerClick = useCallback((key: UUID) => {
     const resultElement = document.getElementById(key)
 
     if (resultElement) {
@@ -296,18 +305,22 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
       resultElement.scrollIntoView({ behavior: 'smooth' })
     }
 
-    dispatch(changeListingClickedState(key))
-  }
+    uiDispatch(changeListingClickedState(key))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  const onMapClick = () => dispatch(changeListingClickedState(null))
+  const onMapClick = useCallback(() => {
+    uiDispatch(changeListingClickedState(null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const onClearSearchbox = () => {
     dispatch(removePinMarker())
   }
 
-  const onMapLoad = (map: google.maps.Map) => {
+  const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
-  }
+  }, [])
 
   return (
     <>
@@ -332,7 +345,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         </Grid>
 
         <Grid container className={classes.main}>
-          {mapIsInitialized && (
+          {mapIsInitialized && mapIsShown && (
             <Grid
               item
               className={cn({
@@ -359,8 +372,6 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
                   onMapClick={onMapClick}
                   mapPosition={state.map}
                   listings={state.result.listings}
-                  hoverListing={state.listingStates.hover}
-                  clickedListing={state.listingStates.click}
                   onMapLoad={onMapLoad}
                 />
               </Grid>

@@ -2,7 +2,7 @@ import config from 'config'
 
 import { ViewType } from './types'
 
-export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-v.2.0-filters'
+export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-v.2.1-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
   'mls-saved-search-hint-dismissed'
 

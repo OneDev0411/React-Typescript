@@ -654,6 +654,14 @@ const ManageTags = withAcl.crm(
       )
   })
 )
+const GlobalTriggers = withAcl.crm(
+  Load({
+    loader: () =>
+      import(
+        '../components/Pages/Dashboard/Account/Triggers' /* webpackChunkName: "global_trigger" */
+      )
+  })
+)
 
 const ReminderNotifications = withAcl(
   Load({
@@ -1100,6 +1108,7 @@ export default (
 
           <Route path="exportCalendar" component={ExportCalendar} />
           <Route path="manage-tags" component={ManageTags} />
+          <Route path="triggers" component={GlobalTriggers} />
           <Route
             path="reminder-notifications"
             component={ReminderNotifications}

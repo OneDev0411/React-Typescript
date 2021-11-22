@@ -11,20 +11,6 @@ export const setListings = (
   }
 })
 
-export const changeListingHoverState = (id: Nullable<UUID>) => ({
-  type: 'CHANGE_LISTING_HOVER_STATE' as 'CHANGE_LISTING_HOVER_STATE',
-  payload: {
-    id
-  }
-})
-
-export const changeListingClickedState = (id: Nullable<UUID>) => ({
-  type: 'CHANGE_LISTING_CLICKED_STATE' as 'CHANGE_LISTING_CLICKED_STATE',
-  payload: {
-    id
-  }
-})
-
 export const toggleListingFavoriteState = (id: UUID) => ({
   type: 'TOGGLE_LISTING_FAVORITE_STATE' as 'TOGGLE_LISTING_FAVORITE_STATE',
   payload: {
@@ -49,8 +35,6 @@ export const setIsLoading = (isLoading: boolean) => ({
 
 export type Actions = ReturnType<
   | typeof setListings
-  | typeof changeListingHoverState
-  | typeof changeListingClickedState
   | typeof toggleListingFavoriteState
   | typeof setMapLocation
   | typeof setIsLoading
