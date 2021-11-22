@@ -2,7 +2,7 @@ import React from 'react'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
 
-import { ListingDetailsModal } from 'components/ListingDetailsModal'
+import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 
 import ListingMarker from '../ListingMarker'
 
