@@ -16,6 +16,7 @@ import SuperCampaignTemplate from '../SuperCampaignTemplate'
 import {
   convertDateToTimestamp,
   convertTimestampToDate,
+  futureTimeValidator,
   requiredTextValidator
 } from './helpers'
 import {
@@ -134,8 +135,9 @@ function SuperCampaignDrawer({
                           before: new Date()
                         }
                       }}
+                      validate={futureTimeValidator}
                     >
-                      {({ formattedDate, handleOpen }) => (
+                      {({ formattedDate, handleOpen, errorText }) => (
                         <TextField
                           value={formattedDate ?? ''}
                           onClick={handleOpen}
@@ -149,6 +151,8 @@ function SuperCampaignDrawer({
                           }}
                           InputLabelProps={{ shrink: true }}
                           margin="normal"
+                          error={!!errorText}
+                          helperText={errorText}
                         />
                       )}
                     </DateTimeField>

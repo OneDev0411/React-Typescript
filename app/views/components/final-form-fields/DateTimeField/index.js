@@ -7,7 +7,8 @@ DateTimeField.propTypes = {
   name: PropTypes.string.isRequired,
   datePickerModifiers: PropTypes.shape(),
   showTimePicker: PropTypes.bool,
-  children: PropTypes.func
+  children: PropTypes.func,
+  validate: PropTypes.func
 }
 
 DateTimeField.defaultProps = {
@@ -19,16 +20,24 @@ export function DateTimeField({
   name,
   datePickerModifiers,
   showTimePicker,
-  children
+  children,
+  validate
 }) {
   return (
     <Field
       name={name}
-      render={fieldProps => {
+      validate={validate}
+      render={({ meta, ...fieldProps }) => {
         const hasFormValue = !!fieldProps.input.value
         // TODO: The DateTimePicker component does not support the initial state with no selected date.
         // I didn't have the time to fix that but we need to refactor the component to make it happen.
         const selectedDate = hasFormValue ? fieldProps.input.value : new Date()
+
+        const showError =
+          ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) &&
+          meta.touched
+
+        const errorText = showError ? meta.error || meta.submitError : undefined
 
         return (
           <DateTimePicker
@@ -43,7 +52,8 @@ export function DateTimeField({
                   children({
                     ...args,
                     rowDate: hasFormValue ? rowDate : null,
-                    formattedDate: hasFormValue ? formattedDate : null
+                    formattedDate: hasFormValue ? formattedDate : null,
+                    errorText
                   })
               : undefined}
           </DateTimePicker>
