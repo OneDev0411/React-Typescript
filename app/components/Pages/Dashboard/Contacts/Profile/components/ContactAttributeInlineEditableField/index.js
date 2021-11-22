@@ -1,35 +1,27 @@
-import { Component } from 'react'
+import React from 'react'
 
-import { connect } from 'react-redux'
-
-import { excludeContactFromGlobalTrigger } from '@app/models/instant-marketing/global-triggers'
+import ConfirmationModalContext from 'components/ConfirmationModal/context'
+import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
 import {
   createTrigger,
   updateTrigger,
   removeTrigger
-} from '@app/models/instant-marketing/triggers'
-import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
-import { selectActiveBrand } from '@app/selectors/brand'
-import { selectUser } from '@app/selectors/user'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { InlineEditableField } from 'components/inline-editable-fields/InlineEditableField'
-import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
+} from 'models/instant-marketing/triggers'
 import { noop } from 'utils/helpers'
 
 import { TRIGGERABLE_ATTRIBUTES } from './constants'
 import { EditMode } from './EditMode'
 import {
+  formatValue,
   getTitle,
   getValue,
   parseValue,
-  validation as validationAttrFields,
-  formatValue,
   getPlaceholder,
-  getStateFromTrigger,
-  validateTriggerFields,
-  getInitialErrorMessage
+  validation,
+  validateTriggerFields
 } from './helpers'
 import { TriggerEditMode } from './TriggerEditMode'
+import { getTriggerSubject } from './TriggerEditMode/helpers'
 import { ViewMode } from './ViewMode'
 
 function getCurrentTimestamp() {
@@ -55,13 +47,70 @@ function getStateFromAttribute(attribute) {
     value: ''
   }
 }
+function getStateFromTrigger(trigger, contact, attribute) {
+  const attributeName = attribute?.attribute_def?.name || ''
 
-const getInitialState = ({
-  contact,
-  attribute,
-  trigger,
-  attributeGlobalTrigger
-}) => {
+  if (trigger) {
+    return {
+      currentTrigger: trigger,
+      isTriggerActive: true,
+      triggerSender: trigger.campaign?.from ?? contact.user,
+      triggerSubject:
+        trigger.campaign?.subject || getTriggerSubject(attributeName),
+      triggerSendBefore: trigger.wait_for || 0,
+      triggerSelectedTemplate: null
+    }
+  }
+
+  // we're checking if date value is already exist
+  // disable the trigger unless enable it
+  let isActive
+
+  if (
+    attribute &&
+    TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def?.name)
+  ) {
+    const attributeValue = getValue(attribute)
+
+    if (
+      typeof attributeValue === 'object' &&
+      (!attributeValue.year ||
+        !attributeValue.month?.value ||
+        !attributeValue.day?.value)
+    ) {
+      isActive = true
+    } else {
+      isActive = false
+    }
+  }
+
+  return {
+    currentTrigger: null,
+    isTriggerActive: isActive,
+    triggerSender: contact.user,
+    triggerSubject: getTriggerSubject(attributeName),
+    triggerSendBefore: 0,
+    triggerSelectedTemplate: null
+  }
+}
+
+function getInitialErrorMessage(contact, isTriggerable) {
+  let error = ''
+
+  if (!contact.email && isTriggerable) {
+    error =
+      "You should provide contact's email to be able to use trigger feature."
+  }
+
+  if (!contact.user && isTriggerable) {
+    error =
+      "You should set an contact's owner to be able to use trigger feature."
+  }
+
+  return error
+}
+
+const getInitialState = ({ contact, attribute, trigger }) => {
   const isTriggerable =
     TRIGGERABLE_ATTRIBUTES.includes(attribute.attribute_def.name) &&
     !attribute?.is_partner
@@ -73,7 +122,7 @@ const getInitialState = ({
     isTriggerFieldDirty: false,
     isTriggerSaving: false,
     disabled: false,
-    ...getStateFromTrigger(trigger, attributeGlobalTrigger, contact, attribute),
+    ...getStateFromTrigger(trigger, contact, attribute),
     ...getStateFromAttribute(attribute)
   }
 }
@@ -88,7 +137,7 @@ function diffAttributeStateWithProp(attribute, state) {
   )
 }
 
-class MasterField extends Component {
+class MasterField extends React.Component {
   constructor(props) {
     super(props)
 
@@ -231,30 +280,23 @@ class MasterField extends Component {
     }
   }
 
-  handleValidationBeforeSave = () => {
-    const { attribute, trigger: triggerFromParent } = this.props
-
-    if (!this.isDirty) {
-      const error = attribute.id ? 'Update value!' : 'Change something!'
-
-      return error
-    }
-
-    const error = validationAttrFields(this.attribute_def, this.state.value)
-
-    if (error) {
-      return error
-    }
-
-    // Validate Trigger Field
+  save = async (callback = noop) => {
+    const { contact, attribute, trigger: triggerFromParent } = this.props
     const {
+      is_primary,
+      label,
+      value,
       currentTrigger,
       isTriggerFieldDirty,
+      isTriggerActive,
+      triggerSender,
       triggerSubject,
       triggerSendBefore,
       triggerSelectedTemplate
     } = this.state
+
     const trigger = triggerFromParent || currentTrigger
+    const { id, cuid } = attribute
     const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
 
     if (shouldCheckTriggerField) {
@@ -269,111 +311,17 @@ class MasterField extends Component {
       )
 
       if (error) {
-        return error
+        return this.setState({ error })
       }
     }
 
-    return null
-  }
+    if (!this.isDirty) {
+      const error = id ? 'Update value!' : 'Change something!'
 
-  handleSaveTrigger = async () => {
-    const {
-      user,
-      brand,
-      contact,
-      attributeGlobalTrigger,
-      trigger: triggerFromParent
-    } = this.props
-    const {
-      currentTrigger,
-      isTriggerFieldDirty,
-      isTriggerActive,
-      triggerSender,
-      triggerSubject,
-      triggerSendBefore,
-      triggerSelectedTemplate
-    } = this.state
-    const trigger = triggerFromParent || currentTrigger
-    const shouldCheckTriggerField = this.isTriggerable && isTriggerFieldDirty
-
-    if (!shouldCheckTriggerField) {
-      return
+      return this.setState({ error })
     }
 
-    if (!isTriggerActive) {
-      if (trigger) {
-        await removeTrigger(trigger.id)
-
-        return
-      }
-
-      if (attributeGlobalTrigger) {
-        await excludeContactFromGlobalTrigger(
-          contact.id,
-          this.attribute_def.name,
-          brand?.id
-        )
-
-        return
-      }
-    }
-
-    /*
-    since we can create a trigger from global trigger data and
-    they also accept brand templates we should check the type of template
-    to make sure it's a template instance and if not create an instance from it
-    because we just need a template instance for contact trigger.
-    */
-    this.setState({ isTriggerSaving: true })
-
-    const template =
-      triggerSelectedTemplate.type === 'template_instance'
-        ? triggerSelectedTemplate
-        : await createTemplateInstance(triggerSelectedTemplate, brand, { user })
-
-    const triggerCommonParams = [
-      contact,
-      template,
-      {
-        recurring: true,
-        time: '08:00:00', // it's hard coded base api team comment
-        sender: triggerSender,
-        subject: triggerSubject,
-        wait_for: triggerSendBefore,
-        event_type: this.attribute_def.name
-      }
-    ]
-
-    if (trigger) {
-      await updateTrigger(trigger, ...triggerCommonParams)
-
-      return
-    }
-
-    await createTrigger(...triggerCommonParams)
-  }
-
-  handleSaveAttribute = () => {
-    const { attribute } = this.props
-    const { is_primary, label, value } = this.state
-    const { id, cuid } = attribute
-
-    const payload = {
-      cuid,
-      id,
-      label: label === '' ? null : label,
-      [this.type]: parseValue(value, this.attribute_def)
-    }
-
-    if (is_primary !== this.props.attribute.is_primary) {
-      payload.is_primary = is_primary
-    }
-
-    this.props.handleSave(attribute, payload)
-  }
-
-  save = async (callback = noop) => {
-    const error = this.handleValidationBeforeSave()
+    const error = await validation(this.attribute_def, value)
 
     if (error) {
       return this.setState({ error })
@@ -382,12 +330,49 @@ class MasterField extends Component {
     try {
       this.setState({ disabled: true, error: '' })
 
+      const data = {
+        cuid,
+        id,
+        label: label === '' ? null : label,
+        [this.type]: parseValue(value, this.attribute_def)
+      }
+
+      if (is_primary !== this.props.attribute.is_primary) {
+        data.is_primary = is_primary
+      }
+
+      if (shouldCheckTriggerField) {
+        this.setState({ isTriggerSaving: true })
+
+        const commonParams = [
+          contact,
+          triggerSelectedTemplate,
+          {
+            recurring: true,
+            time: '08:00:00', // it's hard coded base api team comment
+            sender: triggerSender,
+            subject: triggerSubject,
+            wait_for: triggerSendBefore,
+            event_type: this.attribute_def.name
+          }
+        ]
+
+        if (trigger) {
+          if (!isTriggerActive) {
+            await removeTrigger(trigger.id)
+          } else {
+            await updateTrigger(trigger, ...commonParams)
+          }
+        } else if (isTriggerActive) {
+          await createTrigger(...commonParams)
+        }
+      }
+
+      this.props.handleSave(attribute, data)
       this.setState(
         { disabled: false, isDirty: false, isTriggerSaving: false },
         this.toggleMode
       )
-      await this.handleSaveTrigger()
-      this.handleSaveAttribute()
       callback()
     } catch (error) {
       console.error(error)
@@ -555,15 +540,4 @@ class MasterField extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
-    user: selectUser(state),
-    brand: selectActiveBrand(state),
-    attributeGlobalTrigger:
-      selectGlobalTriggersAttributes(state)[
-        props.attribute?.attribute_def?.name
-      ] ?? null
-  }
-}
-
-export default connect(mapStateToProps)(MasterField)
+export default MasterField

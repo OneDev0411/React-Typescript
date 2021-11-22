@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 
 import { makeStyles, Theme, Typography, Box } from '@material-ui/core'
 import cn from 'classnames'
@@ -8,15 +8,21 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplates } from 'models/instant-marketing/get-templates'
-import {
-  getTemplateInstance,
-  createTemplateInstance
-} from 'models/instant-marketing/triggers/helpers'
+import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
+import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
+import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
+
+interface Props {
+  disabled?: boolean
+  currentValue: Nullable<ITrigger>
+  attributeName: TriggerContactEventTypes
+  selectedTemplate: Nullable<IMarketingTemplateInstance>
+  onSelectTemplate: (template: IMarketingTemplateInstance) => void
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -63,16 +69,8 @@ const useStyles = makeStyles(
   { name: 'TemplateSelector' }
 )
 
-interface Props {
-  disabled?: boolean
-  attributeName: TriggerContactEventTypes
-  selectedTemplate: Nullable<
-    IMarketingTemplateInstance | IBrandMarketingTemplate
-  >
-  onSelectTemplate: (template: IMarketingTemplateInstance) => void
-}
-
 export const TemplateSelector = ({
+  currentValue,
   attributeName,
   disabled = false,
   selectedTemplate,
@@ -80,31 +78,36 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
+  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const brand: Nullable<IBrand> = useMemo(() => getActiveBrand(user), [user])
-  const templatePreviewUrl: Nullable<string> = useMemo(() => {
-    if (!selectedTemplate) {
-      return null
+  const currentTemplate = selectedTemplate || currentValue?.campaign?.template
+
+  const createTemplateInstance = async (template: IBrandMarketingTemplate) => {
+    if (!brand) {
+      return
     }
 
-    if (selectedTemplate.type === 'template_instance') {
-      return selectedTemplate.file.preview_url
+    try {
+      // render the nunjuks template
+      const templateMarkup: string = await renderBrandedNunjucksTemplate(
+        template,
+        brand,
+        { user }
+      )
+
+      const instance = await getTemplateInstance(
+        template.template.id,
+        templateMarkup
+      )
+
+      return instance
+    } catch (error) {
+      console.error(error)
     }
-
-    if (selectedTemplate.type === 'brand_template') {
-      return selectedTemplate.preview.preview_url
-    }
-
-    return null
-  }, [selectedTemplate])
-  // const currentTemplate = selectedTemplate || currentValue?.campaign?.template
-
-  const handleCreateTemplateInstance = async (
-    template: IBrandMarketingTemplate
-  ) => createTemplateInstance(template, brand, { user })
+  }
 
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
@@ -116,7 +119,7 @@ export const TemplateSelector = ({
       const templateInstance =
         template.type === 'template_instance'
           ? template
-          : await handleCreateTemplateInstance(template)
+          : await createTemplateInstance(template)
 
       if (templateInstance) {
         onSelectTemplate(templateInstance)
@@ -130,7 +133,9 @@ export const TemplateSelector = ({
 
   const handleEditTemplate = async (markup: string) => {
     try {
-      const templateId = selectedTemplate?.template.id
+      const templateId = selectedTemplate
+        ? selectedTemplate.template?.id
+        : currentValue?.campaign?.template?.template?.id
 
       if (!templateId) {
         return
@@ -168,30 +173,24 @@ export const TemplateSelector = ({
   }
 
   useEffectOnce(() => {
-    async function setInitialTemplate() {
-      try {
-        if (!brand?.id || disabled) {
-          return
-        }
+    const brandId = getActiveTeamId(user)
 
-        const templates = await getTemplates(
-          brand.id,
-          [getTemplateType(attributeName)],
-          ['Email']
-        )
-
-        if (templates.length) {
-          handleSelectTemplate(templates[0])
-        }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoading(false)
-      }
+    if (!brandId || disabled) {
+      return
     }
 
-    if (!selectedTemplate) {
-      setInitialTemplate()
+    if (!selectedTemplate && !currentValue) {
+      setIsLoading(true)
+      getTemplates(brandId, [getTemplateType(attributeName)], ['Email'])
+        .then(templates => {
+          if (templates.length) {
+            handleSelectTemplate(templates[0])
+          }
+        })
+        .catch(err => {
+          setIsLoading(false)
+          console.error(err)
+        })
     }
   })
 
@@ -202,7 +201,7 @@ export const TemplateSelector = ({
       )
     }
 
-    if (!selectedTemplate) {
+    if (disabled || (!selectedTemplate && !currentValue)) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -210,10 +209,30 @@ export const TemplateSelector = ({
       )
     }
 
-    if (templatePreviewUrl) {
+    if (selectedTemplate) {
       return (
         <img
-          src={templatePreviewUrl}
+          src={selectedTemplate.file.preview_url}
+          alt="Selected Template"
+          className={classes.templatePreviewImage}
+        />
+      )
+    }
+
+    if (currentValue) {
+      const preview = currentValue.campaign?.template?.file?.preview_url
+
+      if (!preview) {
+        return (
+          <span className={classes.templatePreviewPlaceholder}>
+            Preview is not available
+          </span>
+        )
+      }
+
+      return (
+        <img
+          src={preview}
           alt="Selected Template"
           className={classes.templatePreviewImage}
         />
@@ -233,7 +252,7 @@ export const TemplateSelector = ({
         <div className={classes.header}>
           <span className={classes.headerTitle}>Template</span>
           <Box display="inline-flex">
-            {selectedTemplate && (
+            {currentTemplate && (
               <Typography
                 variant="body2"
                 className={classes.templateHandler}
@@ -242,7 +261,7 @@ export const TemplateSelector = ({
                 Edit
               </Typography>
             )}
-            {selectedTemplate && (
+            {(selectedTemplate || currentValue) && (
               <Typography
                 variant="body2"
                 className={classes.templateHandler}
@@ -270,9 +289,9 @@ export const TemplateSelector = ({
           onClose={() => handleShowTemplatePicker(false)}
         />
       )}
-      {isBuilderOpen && selectedTemplate && (
+      {isBuilderOpen && currentTemplate && (
         <MarketingTemplateEditor
-          template={selectedTemplate}
+          template={currentTemplate}
           templateData={{ user }}
           onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}
