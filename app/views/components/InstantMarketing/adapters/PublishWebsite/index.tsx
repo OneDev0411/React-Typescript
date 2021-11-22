@@ -1,25 +1,28 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, CircularProgress, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
+import useListingsEditorAssets from '@app/hooks/use-listings-editor-assets'
+import useListingsEditorTemplateData from '@app/hooks/use-listings-editor-template-data'
 import DomainManagementDrawer from 'components/DomainManagementDrawer'
 import InstantMarketing, {
   IBrandMarketingTemplateWithResult
 } from 'components/InstantMarketing'
 import { getHipPocketTemplateImagesUploader } from 'components/InstantMarketing/helpers/get-hip-pocket-template-image-uploader'
 import SearchListingDrawer from 'components/SearchListingDrawer'
-import useListingsEditorAssets from 'hooks/use-listings-editor-assets'
 import usePublishWebsite from 'hooks/use-publish-website'
 import { selectUser } from 'selectors/user'
+
+import getTemplateObject from '../../helpers/get-template-object'
 
 import useLoadListingsData from './use-load-listings-data'
 
 interface PublishWebsiteProps {
   isEdit: boolean
   isTriggered: boolean
-  templateType: IWebsiteTemplateType
-  selectedTemplate: IBrandMarketingTemplate
+  templateType: IMarketingTemplateType
+  selectedTemplate: Nullable<IBrandMarketingTemplate>
   onFinish: () => {}
 }
 
@@ -30,19 +33,29 @@ function PublishWebsite({
   onFinish,
   selectedTemplate
 }: PublishWebsiteProps) {
-  const [isBuilderOpen, setIsBuilderOpen] = useState(false)
   const [isDomainManagementOpen, setIsDomainManagementOpen] = useState(false)
-  const [selectedListing, setSelectedListing] = useState<IListing[]>([])
+  const [selectedListings, setSelectedListings] = useState<IListing[]>([])
   const [websiteData, setWebsiteData] = useState<IWebsite | null>(null)
   const user = useSelector(selectUser)
 
-  const isAgentTriggered = isTriggered && templateType === 'Agent'
-  const isListingTriggered =
-    !isEdit && isTriggered && templateType === 'Listing'
+  /**
+   * TODO: We have to refactor this flow to support all template types in website builder.
+   *
+   * I know this is not ideal that this flow only supports having SearchListingDrawer
+   * and it can not provides the required data for all template types. We need to refactor
+   * the logic and remove this flow and move the publish logic to all other flows.
+   * This way, the website builder could work with all template types.
+   *
+   * I didn't refactor that because we are planning to refactor the builder to use
+   * `template.variables` instead of having these flows.
+   */
+  const isListing = ['Listing', 'Listings'].includes(templateType)
+  const isListingTriggered = !isEdit && isTriggered && isListing
 
-  const [brandListings, dealsList] = useLoadListingsData(
-    !isEdit && templateType === 'Listing'
-  )
+  const isBuilderOpen =
+    (isTriggered && !isListing) || (isListing && selectedListings.length > 0)
+
+  const [brandListings, dealsList] = useLoadListingsData(!isEdit)
 
   const openDomainManagement = () => setIsDomainManagementOpen(true)
 
@@ -55,7 +68,7 @@ function PublishWebsite({
     })
 
   const handleCloseBuilder = () => {
-    setIsBuilderOpen(false)
+    setSelectedListings([])
     onFinish()
   }
 
@@ -64,9 +77,7 @@ function PublishWebsite({
       websiteData?.id,
       template,
       {
-        ...(selectedListing?.length
-          ? { listings: selectedListing.map(listing => listing.id) }
-          : {}),
+        listings: selectedListings?.map(listing => listing.id),
         html: template.result
       },
       websiteData
@@ -117,18 +128,26 @@ function PublishWebsite({
   const handleListingDrawerClose = () => onFinish()
 
   const handleSelectListings = listings => {
-    setSelectedListing(listings)
-    setIsBuilderOpen(true)
+    setSelectedListings(listings)
   }
 
-  const assets = useListingsEditorAssets(selectedListing)
+  const isMultiListing =
+    !!selectedTemplate &&
+    getTemplateObject(selectedTemplate).template_type === 'Listings'
+
+  const assets = useListingsEditorAssets(selectedListings)
+
+  const templateData = useListingsEditorTemplateData(
+    selectedListings,
+    isMultiListing
+  )
 
   return (
     <>
-      {(isAgentTriggered || isBuilderOpen) && (
+      {isBuilderOpen && (
         <InstantMarketing
           defaultTemplate={selectedTemplate}
-          templateData={{ listing: selectedListing[0], user }}
+          templateData={{ ...templateData, user }}
           onClose={handleCloseBuilder}
           handleSave={handleSaveBuilder}
           bareMode
@@ -167,7 +186,7 @@ function PublishWebsite({
           )}
           withMlsDisclaimer
           isOpen
-          title="Select a Listing"
+          title={isMultiListing ? 'Select Listings' : 'Select a Listing'}
           searchPlaceholder="Enter MLS# or an address"
           defaultLists={[
             {
@@ -181,6 +200,7 @@ function PublishWebsite({
           ]}
           onClose={handleListingDrawerClose}
           onSelectListingsCallback={handleSelectListings}
+          multipleSelection={isMultiListing}
           renderAction={props => (
             <Button {...props.buttonProps}>
               {`Next (${props.selectedItemsCount} Listings Selected)`}

@@ -15,12 +15,11 @@ import { ResultsHeader } from '../../../components/ResultsHeader'
 import { TableView } from '../../../components/TableView'
 import ZeroState from '../../../components/ZeroState'
 import { PAGE_SIZE, QUERY_LIMIT } from '../../../constants'
+import { changeListingHoverState } from '../../../context/actions'
+import useUiListingsContext from '../../../context/useUiListingsContext'
 import { getListingsPage } from '../../../helpers/pagination-utils'
 import { ViewType } from '../../../types'
-import {
-  changeListingHoverState,
-  toggleListingFavoriteState
-} from '../../context/actions'
+import { toggleListingFavoriteState } from '../../context/actions'
 import useListingsContext from '../../hooks/useListingsContext'
 
 const useStyles = makeStyles(
@@ -97,6 +96,8 @@ export const Results = ({
 }: Props) => {
   const classes = useStyles()
   const [state, dispatch] = useListingsContext()
+  const [uiState, uiDispatch] = useUiListingsContext()
+
   const [currentPage, setCurrentPage] = useState(1)
   const cardsContainerRef = useRef<Nullable<HTMLDivElement>>(null)
 
@@ -134,7 +135,7 @@ export const Results = ({
 
   const handleChangeHoverState = useCallback(
     (listingId: UUID, hover: boolean) => {
-      dispatch(changeListingHoverState(hover ? listingId : null))
+      uiDispatch(changeListingHoverState(hover ? listingId : null))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -183,7 +184,7 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  listingStates={state.listingStates}
+                  listingStates={uiState}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
                   onToggleListingModal={onToggleListingModal}
@@ -194,7 +195,7 @@ export const Results = ({
                   mapIsShown={mapIsShown}
                   listings={listingsPage}
                   isWidget={isWidget}
-                  listingStates={state.listingStates}
+                  listingStates={uiState}
                   onChangeHoverState={handleChangeHoverState}
                   onToggleLike={handleToggleLike}
                   onToggleListingModal={onToggleListingModal}

@@ -12,7 +12,6 @@ import {
   showingDetailTabs,
   showingsTabs
 } from '../components/Pages/Dashboard/Showings/constants'
-import { websiteTabs } from '../components/Pages/Dashboard/Websites/constants'
 import Load from '../loader'
 import GoToDashboard from '../views/components/GoToDashboard'
 
@@ -1119,11 +1118,7 @@ export default (
           <IndexRoute component={AsyncBrandSettings} />
         </Route>
 
-        <Route
-          path={`websites(/templates/:type(${Object.keys(websiteTabs).join(
-            '|'
-          )}))`}
-        >
+        <Route path="websites(/templates/:type)">
           <IndexRoute component={AsyncWebsitesList} />
         </Route>
 
