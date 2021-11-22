@@ -42,14 +42,16 @@ export const PLACE_ZOOM_OFFSETS = {
   route: 2.65
 }
 
+export const US_CENTER_ZOOM = 5
+export const US_CENTER_LOCATION = {
+  lat: 37.2755783,
+  lng: -104.6571311
+}
+
 // TODO: Remove this const after refactoring fav/saved tab
 export const mapInitialState = {
-  zoom: 5,
-  center: {
-    // United States Center
-    lat: 37.2755783,
-    lng: -104.6571311
-  },
+  zoom: US_CENTER_ZOOM,
+  center: US_CENTER_LOCATION,
   size: null,
   bounds: null
 }

@@ -14,7 +14,9 @@ import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
 import {
   FILTERS_INITIAL_VALUES,
   PROPERTIES_FILTERS_STORAGE_KEY,
-  USER_LOCATION_ZOOM_LEVEL
+  USER_LOCATION_ZOOM_LEVEL,
+  US_CENTER_LOCATION,
+  US_CENTER_ZOOM
 } from '../constants'
 import { ListingsUiContext } from '../context'
 import { reducer as uiReducer } from '../context/reducers'
@@ -64,6 +66,14 @@ function ExploreTab({ isWidget, user, location }: Props) {
   const userLastBrowsingLocation = getUserLastBrowsingLocation(user)
   const userActiveSort = parseSortIndex(getDefaultSort(user))
 
+  const mapInitialLocation =
+    userLastBrowsingLocation?.center && userLastBrowsingLocation?.zoom
+      ? userLastBrowsingLocation
+      : {
+          zoom: US_CENTER_ZOOM,
+          center: US_CENTER_LOCATION
+        }
+
   let filtersPersistedValue: Partial<AlertFilters> = {}
 
   try {
@@ -82,7 +92,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
       filters: { ...FILTERS_INITIAL_VALUES, ...filtersPersistedValue },
       sort: userActiveSort
     },
-    map: userLastBrowsingLocation
+    map: mapInitialLocation
   }
 
   const [state, dispatch] = useFetchListings(initialState)
