@@ -328,7 +328,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         {!isWidget && (
           <>
             <Header title="Properties" />
-            <Tabs user={user} isWidget={isWidget} />{' '}
+            <Tabs user={user} isWidget={isWidget} />
           </>
         )}
         <Grid className={classes.searchBar}>
