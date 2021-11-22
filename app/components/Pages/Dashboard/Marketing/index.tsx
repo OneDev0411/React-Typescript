@@ -58,6 +58,7 @@ interface Props {
     onSelectTemplate: (template: IBrandMarketingTemplate) => void
     onDeleteTemplate: (template: IBrandMarketingTemplate) => void
     onDeleteBrandAsset: (asset: IBrandAsset) => void
+    hasDeleteAccessOnBrandAsset: (asset: IBrandAsset) => boolean
   }) => JSX.Element
 }
 
@@ -98,7 +99,8 @@ export function MarketingLayout({
     assets,
     isLoading: isLoadingBrandAssets,
     refetch: refetchBrandAssets,
-    delete: deleteBrandAsset
+    delete: deleteBrandAsset,
+    hasDeleteAccess: hasDeleteAccessOnBrandAsset
   } = useBrandAssets(activeBrand, {
     templateTypes: templateTypes
       ? (templateTypes.split(',') as IMarketingTemplateType[])
@@ -248,7 +250,8 @@ export function MarketingLayout({
               onSelectTemplate,
               defaultSelectedTemplate: location.query.templateId,
               onDeleteTemplate: deleteTemplate,
-              onDeleteBrandAsset: deleteBrandAsset
+              onDeleteBrandAsset: deleteBrandAsset,
+              hasDeleteAccessOnBrandAsset
             })}
           {isMarketingAssetUploadDrawerOpen && (
             <MarketingAssetUploadDrawer

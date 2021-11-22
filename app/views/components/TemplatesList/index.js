@@ -109,6 +109,10 @@ function TemplatesList(props) {
   }
 
   const handleDeleteBrandAsset = asset => {
+    if (!props.onDeleteBrandAsset) {
+      return
+    }
+
     modal.setConfirmationModal({
       message: 'Delete this asset?',
       description:
@@ -178,22 +182,23 @@ function TemplatesList(props) {
                           Share
                         </Button>
                       </div>
-                      {props.onDeleteBrandAsset && (
-                        <div>
-                          <Tooltip title="Delete">
-                            <IconButton
-                              iconSize="large"
-                              className={classes.iconButton}
-                              onClick={e => {
-                                e.stopPropagation()
-                                handleDeleteBrandAsset(item)
-                              }}
-                            >
-                              <SvgIcon path={mdiTrashCanOutline} />
-                            </IconButton>
-                          </Tooltip>
-                        </div>
-                      )}
+                      {props.hasDeleteAccessOnBrandAsset &&
+                        props.hasDeleteAccessOnBrandAsset(item) && (
+                          <div>
+                            <Tooltip title="Delete">
+                              <IconButton
+                                iconSize="large"
+                                className={classes.iconButton}
+                                onClick={e => {
+                                  e.stopPropagation()
+                                  handleDeleteBrandAsset(item)
+                                }}
+                              >
+                                <SvgIcon path={mdiTrashCanOutline} />
+                              </IconButton>
+                            </Tooltip>
+                          </div>
+                        )}
                     </>
                   }
                   onClick={handleBrandAssetClick}
