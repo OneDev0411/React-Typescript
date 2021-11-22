@@ -11,7 +11,6 @@ declare type TriggerContactEventTypes =
   | 'birthday'
   | 'wedding_anniversary'
   | 'home_anniversary'
-  | 'child_birthday'
 
 declare interface IContactTrigger {
   event_type: TriggerContactEventTypes
@@ -24,7 +23,7 @@ interface IEventAction {
 }
 type IEmailAction = {
   action: 'schedule_email'
-  campaign?: IEmailCampaign
+  campaign?: IEmailCampaign<'from'>
 }
 
 declare type ITriggerRaw = ITriggerBase & IContactTrigger & IEmailAction
@@ -33,3 +32,27 @@ declare type ITrigger = IModel<'trigger'> &
   ITriggerRaw & {
     executed_at: number
   }
+
+declare type IGlobalTriggerRaw = Omit<
+  ITriggerBase,
+  'user' | 'time' | 'recurring' | 'created_by'
+> &
+  Pick<IContactTrigger, 'event_type'> & { subject: string }
+
+declare interface IGlobalTriggerFormData
+  extends Omit<IGlobalTriggerRaw, 'brand' | 'event_type'> {
+  template?: {
+    isInstance: boolean
+    data: IBrandMarketingTemplate | IMarketingTemplateInstance
+  }
+}
+
+declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {
+  template?: UUID
+  template_instance?: UUID
+}
+
+declare interface IGlobalTrigger extends IModel<'trigger'>, IGlobalTriggerRaw {
+  template: Nullable<IBrandMarketingTemplate>
+  template_instance: Nullable<IMarketingTemplateInstance>
+}

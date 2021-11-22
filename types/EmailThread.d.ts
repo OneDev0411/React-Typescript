@@ -61,26 +61,25 @@ declare type IEmailThreadMessage =
 
 type IEmailThreadAssociations = 'messages' | 'contacts'
 
-declare type IEmailThread<
-  Associations extends IEmailThreadAssociations = ''
-> = {
-  id: UUID
-  subject: string
-  created_at: number
-  updated_at: number
-  first_message_date: number
-  last_message_date: number
-  recipients: string[]
-  recipients_raw: IRawEmailRecipient[]
-  senders_raw: IRawEmailRecipient[]
-  message_count: number
-  snippet?: string
-  has_attachments: boolean
-  is_read: boolean
-  brand: UUID
-  user: UUID
-  google_credential?: UUID
-  microsoft_credential?: UUID
-  type: 'email_thread'
-} & Association<'messages', IEmailThreadMessage[], Associations> &
-  Association<'contacts', (IContact & IContactSummary)[] | null, Associations>
+declare type IEmailThread<Associations extends IEmailThreadAssociations = ''> =
+  {
+    id: UUID
+    subject: string
+    created_at: number
+    updated_at: number
+    first_message_date: number
+    last_message_date: number
+    recipients: string[]
+    recipients_raw: IRawEmailRecipient[]
+    senders_raw: IRawEmailRecipient[]
+    message_count: number
+    snippet?: string
+    has_attachments: boolean
+    is_read: boolean
+    brand: UUID
+    user: UUID
+    google_credential?: UUID
+    microsoft_credential?: UUID
+    type: 'email_thread'
+  } & Association<'messages', IEmailThreadMessage[], Associations> &
+    Association<'contacts', (IContact & IContactSummary)[] | null, Associations>
