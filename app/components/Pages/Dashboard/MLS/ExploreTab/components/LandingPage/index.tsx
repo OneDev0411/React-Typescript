@@ -84,7 +84,7 @@ export function LandingPage({
         </Box>
         <Box mt={1} textAlign="center">
           <img
-            src="/static/images/mls/search-landing-bg.jpg"
+            src="/static/images/properties/search-landing-bg.jpg"
             width="450"
             alt="Search properties"
           />
