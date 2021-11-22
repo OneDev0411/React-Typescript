@@ -325,8 +325,12 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
   return (
     <>
       <Grid className={classes.container}>
-        <Header title="Properties" />
-        <Tabs user={user} isWidget={isWidget} />
+        {!isWidget && (
+          <>
+            <Header title="Properties" />
+            <Tabs user={user} isWidget={isWidget} />{' '}
+          </>
+        )}
         <Grid className={classes.searchBar}>
           <Grid className={classes.searchBarSearchItem}>
             <Autocomplete
