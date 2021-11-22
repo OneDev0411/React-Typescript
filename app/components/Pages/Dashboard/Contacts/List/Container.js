@@ -475,11 +475,10 @@ class ContactsList extends React.Component {
 
     const { user, getUserTeams, setUserSetting } = this.props
 
-    this.setState({
-      sortOrder: order
-    })
     setUserSetting(SORT_FIELD_SETTING_KEY, order)
-    this.handleFilterChange({}, true)
+    this.setState({ sortOrder: order })
+    this.handleFilterChange({}, true, order)
+
     getUserTeams(user)
   }
 
