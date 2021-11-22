@@ -19,6 +19,10 @@ const useStyles = makeStyles(
         objectPosition: '0 100%'
       }
     },
+    link: {
+      color: theme.palette.primary.main,
+      '&:hover, &:active': { color: theme.palette.primary.main }
+    },
     media: {
       position: 'absolute',
       top: 0,
@@ -93,6 +97,7 @@ function SuperCampaignCard({
         )}
         {isAdmin ? (
           <Link
+            className={classes.link}
             to={`/dashboard/insights/super-campaign/${superCampaign.id}/detail`}
           >
             {title}
