@@ -175,12 +175,6 @@ export function Menu() {
             </SideNavLinkItem>
           </Acl>
 
-          <Acl access={[ACL.STORE]}>
-            <SideNavLinkItem to="/dashboard/website" tourId="nav-store">
-              Store
-            </SideNavLinkItem>
-          </Acl>
-
           <Acl access={ACL.SHOWINGS}>
             <SideNavLinkItem to="/dashboard/showings">
               <InlineBadge
