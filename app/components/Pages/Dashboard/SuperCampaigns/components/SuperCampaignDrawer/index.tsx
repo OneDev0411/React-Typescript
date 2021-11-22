@@ -99,15 +99,21 @@ function SuperCampaignDrawer({
                 }}
               >
                 {({ handleSubmit }) => (
-                  <form onSubmit={handleSubmit} ref={formRef}>
+                  <form
+                    onSubmit={handleSubmit}
+                    ref={formRef}
+                    data-test="super-campaign-edit-form"
+                  >
                     <FormTextField
                       name="subject"
                       label="Email Campaign Subject"
+                      data-test="subject"
                       validate={requiredTextValidator}
                     />
                     <FormTextField
                       name="description"
                       label="Description"
+                      data-test="description"
                       multiline
                       helperText="Only agents who are eligible to participate in this campaign will see this."
                       minRows={3}

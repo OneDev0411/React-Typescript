@@ -48,7 +48,7 @@ function SuperCampaignTemplate({
   }
 
   return (
-    <div className={className}>
+    <div className={className} data-test="super-campaign-detail-template">
       <SuperCampaignCardHeader
         className={titleClassName}
         title="Template"

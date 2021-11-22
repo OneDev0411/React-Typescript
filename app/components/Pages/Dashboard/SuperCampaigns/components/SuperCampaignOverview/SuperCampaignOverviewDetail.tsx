@@ -57,7 +57,7 @@ function SuperCampaignOverviewDetail() {
 
   return (
     <SuperCampaignCard>
-      <div className={classes.section}>
+      <div className={classes.section} data-test="super-campaign-details">
         <SuperCampaignCardHeader
           className={classes.title}
           title="Details"
