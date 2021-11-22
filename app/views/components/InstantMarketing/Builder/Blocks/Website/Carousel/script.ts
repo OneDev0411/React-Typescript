@@ -153,12 +153,12 @@ function script({ heightRatio }) {
 
   if (typeof Splide === 'undefined') {
     loadScript(
-      'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js',
+      'https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js',
       initCarousel
     )
 
     loadCSS(
-      'https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide-core.min.css'
+      'https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide-core.min.css'
     )
   } else {
     initCarousel()

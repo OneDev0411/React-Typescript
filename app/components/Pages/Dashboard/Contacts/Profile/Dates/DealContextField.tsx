@@ -1,17 +1,10 @@
-import React from 'react'
+import { useMemo } from 'react'
 
-import { Link, Typography, Tooltip } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Link, Typography, Tooltip, Theme, makeStyles } from '@material-ui/core'
 import fecha from 'fecha'
 
-interface Props {
-  deal: UUID
-  title: string
-  value: number
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       width: '100%',
       padding: theme.spacing(0.5, 1),
@@ -30,11 +23,38 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.grey[900],
       textAlign: 'right'
     }
-  })
+  }),
+  { name: 'DealContextField' }
 )
 
-export default function DealContextField({ title, value, deal }: Props) {
+interface Props {
+  deal: UUID
+  title: string
+  value: number
+  isAllDay: boolean
+}
+
+export default function DealContextField({
+  title,
+  value,
+  deal,
+  isAllDay
+}: Props) {
   const classes = useStyles()
+
+  const dealDate = useMemo(() => {
+    const date = new Date(value * 1000)
+
+    if (isAllDay) {
+      date.setFullYear(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate()
+      )
+    }
+
+    return date
+  }, [isAllDay, value])
 
   return (
     <Tooltip title="Home Anniversary">
@@ -45,7 +65,7 @@ export default function DealContextField({ title, value, deal }: Props) {
       >
         <Typography variant="body2">{title}</Typography>
         <Typography variant="body2" className={classes.value}>
-          {fecha.format(new Date(value * 1000), 'MMM DD, YYYY')}
+          {fecha.format(dealDate, 'MMM DD, YYYY')}
         </Typography>
       </Link>
     </Tooltip>
