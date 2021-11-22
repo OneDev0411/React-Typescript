@@ -265,6 +265,8 @@ class ActionsButton extends React.Component<
   }
 
   createNeedsAttention = () => {
+    this.setState({ isMakeVisibleToAdminFormOpen: false })
+
     if (this.props.deal.is_draft) {
       this.setState({
         isMakeVisibleToAdminFormOpen: true
@@ -274,7 +276,7 @@ class ActionsButton extends React.Component<
     }
 
     this.props.confirmation({
-      message: 'Notify Office?',
+      message: 'Notify Office to Review?',
       confirmLabel: 'Notify Office',
       needsUserEntry: true,
       inputDefaultValue: '',
@@ -607,7 +609,7 @@ class ActionsButton extends React.Component<
         {this.state.isMakeVisibleToAdminFormOpen && (
           <MakeVisibleToAdmin
             dealId={this.props.deal.id}
-            onClose={() =>
+            onCancel={() =>
               this.setState({ isMakeVisibleToAdminFormOpen: false })
             }
             onComplete={this.createNeedsAttention}

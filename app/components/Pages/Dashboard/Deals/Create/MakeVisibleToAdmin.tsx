@@ -59,13 +59,13 @@ type FormValues = {
 
 interface Props {
   dealId: UUID
-  onClose: () => void
+  onCancel: () => void
   onComplete: () => void
 }
 
 export default function MakeVisibleToAdmin({
   dealId,
-  onClose,
+  onCancel,
   onComplete
 }: Props) {
   useTitle('Publish Draft Deal | Deals | Rechat')
@@ -76,6 +76,8 @@ export default function MakeVisibleToAdmin({
 
   const [isPublishing, setIsPublishing] = useState(false)
   const [isAutoPublishing, setIsAutoPublishing] = useState(false)
+  const [isAutoPublishingDisabled, setIsAutoPublishingDisabled] =
+    useState(false)
 
   const user = useSelector<IAppState, IUser>(state => selectUser(state))
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
@@ -188,6 +190,8 @@ export default function MakeVisibleToAdmin({
   ])
 
   const saveForm = async (values = control.getValues() as FormValues) => {
+    setIsAutoPublishingDisabled(true)
+
     const roles = ([] as IDealRole[]).concat(
       values.selling_clients || [],
       values.buying_clients || []
@@ -270,7 +274,7 @@ export default function MakeVisibleToAdmin({
   const errors = formState.isSubmitted ? validate() : {}
 
   useEffect(() => {
-    if (isAutoPublishing || formState.isDirty) {
+    if (isAutoPublishingDisabled || isAutoPublishing || formState.isDirty) {
       return
     }
 
@@ -286,24 +290,24 @@ export default function MakeVisibleToAdmin({
     deal.id,
     deal.is_draft,
     formState.isDirty,
-    isAutoPublishing
+    isAutoPublishing,
+    isAutoPublishingDisabled
   ])
 
   useEffect(() => {
     if (deal.is_draft === false) {
       setIsPublishing(false)
       setIsAutoPublishing(false)
-      onClose()
       onComplete()
     }
-  }, [deal.is_draft, onClose, onComplete])
+  }, [deal.is_draft, onComplete])
 
   if (isAutoPublishing) {
     return null
   }
 
   return (
-    <Dialog open fullWidth maxWidth="md" onClose={onClose}>
+    <Dialog open fullWidth maxWidth="md" onClose={onCancel}>
       <Context.Provider
         value={{
           deal,
@@ -317,9 +321,9 @@ export default function MakeVisibleToAdmin({
               alignItems="center"
               justifyContent="space-between"
             >
-              <div>Notify Office</div>
+              <div>Notify Office to Review</div>
 
-              <IconButton color="secondary" size="medium" onClick={onClose}>
+              <IconButton color="secondary" size="medium" onClick={onCancel}>
                 <SvgIcon path={mdiClose} size={muiIconSizes.xlarge} />
               </IconButton>
             </Box>
@@ -463,7 +467,7 @@ export default function MakeVisibleToAdmin({
                 disabled={isPublishing}
                 onClick={handleSubmit(handlePublish)}
               >
-                {isPublishing ? 'Working...' : 'Notify Office'}
+                {isPublishing ? 'Working...' : 'Notify Office to Review'}
               </Button>
             </Box>
           </DialogActions>

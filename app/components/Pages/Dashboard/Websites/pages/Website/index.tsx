@@ -1,69 +1,48 @@
-import React, { memo, useEffect } from 'react'
+import { memo } from 'react'
 
 import { WithRouterProps } from 'react-router'
 import { useTitle } from 'react-use'
 
 import PageLayout from 'components/GlobalPageLayout'
-import { goTo } from 'utils/go-to'
 
 import WebsiteList from '../../components/WebsiteList'
-import WebsiteTabs, { WebsiteTabsProps } from '../../components/WebsiteTabs'
+import WebsiteTabs from '../../components/WebsiteTabs'
 import WebsiteTemplates from '../../components/WebsiteTemplates'
-import { websiteTabs } from '../../constants'
+import { myWebsitesTab } from '../../constants'
+import useWebsiteTabsWithTemplates from '../../hooks/use-website-tabs-with-templates'
 import useWebsiteTemplates from '../../hooks/use-website-templates'
 
-type WebsiteProps = WithRouterProps<{ type?: WebsiteTabsProps['type'] }, {}>
+type WebsiteProps = WithRouterProps<{ type?: string }, {}>
 
 function Website({ params }: WebsiteProps) {
   useTitle('Websites | Rechat')
 
-  const type = params.type || websiteTabs.MyWebsites
+  const selectedTab = params.type || myWebsitesTab
+
+  const isMyWebsitesTab = selectedTab === myWebsitesTab
+
   const {
     templates,
     isLoading: isTemplatesLoading,
     deleteTemplate
   } = useWebsiteTemplates()
 
-  const hasAgentTab =
-    isTemplatesLoading ||
-    !!templates.find(
-      template => template.template.template_type === websiteTabs.Agent
-    )
-  const hasPropertyTab =
-    isTemplatesLoading ||
-    !!templates.find(
-      template => template.template.template_type === websiteTabs.Listing
-    )
+  const tabsWithTemplates = useWebsiteTabsWithTemplates(templates)
 
-  const isEmptyTab =
-    (type === websiteTabs.Agent && !hasAgentTab) ||
-    (type === websiteTabs.Listing && !hasPropertyTab)
-
-  useEffect(() => {
-    if (isEmptyTab) {
-      goTo('/dashboard/websites')
-    }
-  }, [isEmptyTab])
-
-  if (isEmptyTab) {
-    return null
-  }
+  const tabTemplates = tabsWithTemplates[selectedTab]?.templates ?? []
+  const tabTypes = tabsWithTemplates[selectedTab]?.types ?? []
 
   return (
     <PageLayout position="relative" overflow="hidden">
       <PageLayout.Header title="Websites" />
       <PageLayout.Main>
-        <WebsiteTabs
-          type={type}
-          hasAgentTab={hasAgentTab}
-          hasPropertyTab={hasPropertyTab}
-        />
-        {type === websiteTabs.MyWebsites ? (
+        <WebsiteTabs value={selectedTab} tabs={tabsWithTemplates} />
+        {isMyWebsitesTab ? (
           <WebsiteList />
         ) : (
           <WebsiteTemplates
-            type={type as IWebsiteTemplateType}
-            items={templates}
+            types={tabTypes}
+            items={tabTemplates}
             isLoading={isTemplatesLoading}
             onDelete={deleteTemplate}
           />
