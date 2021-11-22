@@ -10,7 +10,7 @@ export const DEALS_STATUSES = {
   is_closed: 'Closed',
   is_pending: 'Pending',
   is_archived: 'Archived',
-  is_null: 'Null Status'
+  is_null: 'No status'
 } as const
 
 export const DEALS_LIST_DEFAULT_FILTERS: DealsListFilters = {
