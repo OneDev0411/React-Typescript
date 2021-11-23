@@ -15,11 +15,14 @@ import { mdiDeleteOutline } from '@mdi/js'
 
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+import { PdfThumbnail } from '@app/views/components/PdfThumbnail'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { TEMPLATE_TYPES, MEDIUMS } from '../../constants'
 import { Asset } from '../../types'
+
+import { isImage, isPdf } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -181,11 +184,14 @@ export default memo(function AssetItem({
       key={asset.label}
     >
       <Grid item xs={2}>
-        <img
-          src={asset.file.url}
-          alt={asset.label ?? 'image'}
-          className={classes.image}
-        />
+        {isPdf(asset.file.object) && <PdfThumbnail url={asset.file.url} />}
+        {isImage(asset.file.object) && (
+          <img
+            src={asset.file.url}
+            alt={asset.label ?? 'image'}
+            className={classes.image}
+          />
+        )}
       </Grid>
       {uploadProgress === undefined
         ? renderUploadForm()
