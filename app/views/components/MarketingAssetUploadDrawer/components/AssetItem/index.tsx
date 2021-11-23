@@ -8,6 +8,7 @@ import {
   FormControl,
   IconButton,
   TextField,
+  InputLabel,
   LinearProgress
 } from '@material-ui/core'
 import { mdiDeleteOutline } from '@mdi/js'
@@ -93,7 +94,8 @@ export default memo(function AssetItem({
                 autoFocus
                 variant="outlined"
                 size="small"
-                placeholder="Label"
+                id="asset-label"
+                label="Label"
                 value={asset.label}
                 onChange={event => {
                   onUpdateAsset({
@@ -107,8 +109,16 @@ export default memo(function AssetItem({
           <Grid container item direction="row" spacing={2}>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined" size="small">
-                {/* <InputLabel>Add To</InputLabel> */}
+                <InputLabel
+                  id="asset-template-type-label"
+                  htmlFor="asset-template-type"
+                >
+                  Add To
+                </InputLabel>
                 <Select
+                  id="asset-template-type"
+                  labelId="asset-template-type-label"
+                  label="Add To"
                   value={asset.templateType}
                   onChange={event =>
                     onUpdateAsset({
@@ -127,8 +137,13 @@ export default memo(function AssetItem({
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined" size="small">
-                {/* <InputLabel>Medium</InputLabel> */}
+                <InputLabel id="asset-medium-label" htmlFor="asset-medium">
+                  Medium
+                </InputLabel>
                 <Select
+                  id="asset-medium"
+                  labelId="asset-medium-label"
+                  label="Medium"
                   value={asset.medium}
                   onChange={event =>
                     onUpdateAsset({
