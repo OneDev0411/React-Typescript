@@ -4,7 +4,7 @@ import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
 
 import Drawer from '@app/views/components/OverlayDrawer'
 
-import { BaseBrandSelector } from '../Base'
+import { BaseUserRootBrandSelector } from '../Base'
 
 import { useStyles } from './styles'
 import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
@@ -59,7 +59,7 @@ export function MultiSelectionBrandSelectorDrawer({
         <Drawer.Header title={drawerTitle} />
         <Drawer.Body>
           <div className={classes.container}>
-            <BaseBrandSelector
+            <BaseUserRootBrandSelector
               {...brandSelectorProps}
               nodeRenderer={nodeRenderer}
             />

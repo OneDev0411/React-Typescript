@@ -66,8 +66,6 @@ export function ActiveTeam({ user }: Props) {
 
   const activeTeam = useMemo(() => getActiveTeam(user), [user])
 
-  console.log({ activeTeam, user })
-
   const hanldeOpenBrandSelectorDrawer = () => setIsBrandSelectorOpen(true)
   const hanldeCloseBrandSelectorDrawer = () => setIsBrandSelectorOpen(false)
 

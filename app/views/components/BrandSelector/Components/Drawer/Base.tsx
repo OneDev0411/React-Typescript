@@ -1,6 +1,6 @@
 import Drawer from '@app/views/components/OverlayDrawer'
 
-import { BaseBrandSelector } from '../Base'
+import { BaseUserRootBrandSelector } from '../Base/BaseUserRootBrandSelector'
 
 import { useStyles } from './styles'
 import { BaseSelectorDrawer as Props } from './type'
@@ -18,7 +18,7 @@ export function BrandSelectorDrawer({
         <Drawer.Header title={drawerTitle} />
         <Drawer.Body>
           <div className={classes.container}>
-            <BaseBrandSelector {...brandSelectorProps} />
+            <BaseUserRootBrandSelector {...brandSelectorProps} />
           </div>
         </Drawer.Body>
       </Drawer>

@@ -3,13 +3,15 @@ import { ReactNode, useCallback, useEffect, memo } from 'react'
 import { Typography } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
 
+import { TreeFn } from 'utils/tree-utils/types'
+
 import { TreeViewNode } from './components/TreeViewNode'
 
-interface Props<NodeType> {
+export interface TreeViewProps<NodeType> {
   renderNode: (node: NodeType) => ReactNode
   getNodeId?: (node: NodeType) => string
   selectable: boolean
-  getChildNodes?: (node?: NodeType) => NodeType[]
+  getChildNodes?: TreeFn<NodeType>
   expandedNodes?: string[]
   onExpandedNodesChanged?: (nodes: string[]) => void
   initialExpandedNodes?: string[]
@@ -41,7 +43,7 @@ export default memo(function TreeView<NodeType = any>({
   getNodeId = (node => node.id) as any,
   getChildNodes = (node => node.children) as any,
   ...props
-}: Props<NodeType>) {
+}: TreeViewProps<NodeType>) {
   const [expandedNodes, setExpandedNodes] = useControllableState(
     props.expandedNodes,
     props.onExpandedNodesChanged,

@@ -2,13 +2,12 @@ import { useCallback, useMemo } from 'react'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
-import { useTeamsFilterHook } from '@app/components/Pages/Dashboard/Teams/hooks/use-teams-filter.hook'
 import useAsync from '@app/hooks/use-async'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { TreeFn } from 'utils/tree-utils/types'
 import { getRootBrand } from 'utils/user-teams'
 
-interface UseTeamReturnType {
+interface UseUserRootTeamsReturnType {
   isError: boolean
   isLoading: boolean
   rootTeam: Nullable<IBrand>
@@ -16,7 +15,7 @@ interface UseTeamReturnType {
   teamNodes: TreeFn<IBrand>
 }
 
-export function useTeam(user: IUser, searchTerm: string): UseTeamReturnType {
+export function useUserRootTeams(user: IUser): UseUserRootTeamsReturnType {
   const {
     data: rootTeam,
     isLoading,
@@ -45,19 +44,17 @@ export function useTeam(user: IUser, searchTerm: string): UseTeamReturnType {
 
   const initialExpandedNodes = useMemo(() => {
     if (rootTeam) {
-      return searchTerm
-        ? [rootTeam.id, ...(rootTeam.children || []).map(team => team.id)]
-        : [rootTeam.id]
+      return [rootTeam.id]
     }
 
     return []
-  }, [rootTeam, searchTerm])
+  }, [rootTeam])
 
   return {
     isError,
     rootTeam,
     isLoading,
     initialExpandedNodes,
-    teamNodes: useTeamsFilterHook(getChildNodes, searchTerm)
+    teamNodes: getChildNodes
   }
 }
