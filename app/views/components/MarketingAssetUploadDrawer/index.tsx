@@ -31,7 +31,6 @@ export default function MarketingAssetUploadDrawer({
     },
     shouldUnregister: false
   })
-  const assets = formMethods.watch('assets')
   const brands = formMethods.watch('brands')
 
   const handleUploadAssets = async (data: AssetsUploadFormData) => {
@@ -134,10 +133,7 @@ export default function MarketingAssetUploadDrawer({
     return null
   }
 
-  const isWorking =
-    formMethods.formState.isSubmitting ||
-    assets.length === 0 ||
-    isUploadingFiles
+  const isWorking = formMethods.formState.isSubmitting || isUploadingFiles
 
   const renderActions = () => {
     if (activeStep === 'teams') {
