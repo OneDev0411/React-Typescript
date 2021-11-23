@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
 import { makeStyles } from '@material-ui/core'
+import VideoImageThumbnail from 'react-video-thumbnail-image'
+
+import { PdfThumbnail } from '../PdfThumbnail'
 
 const useStyles = makeStyles(
   theme => ({
@@ -78,13 +81,27 @@ interface Props {
 export default function BrandAssetCard({ asset, actions, onClick }: Props) {
   const classes = useStyles()
 
-  return (
-    <div className={classes.card} onClick={onClick}>
+  const renderThumbnail = () => {
+    if (asset.file.url.endsWith('.pdf')) {
+      return <PdfThumbnail url={asset.file.url} />
+    }
+
+    if (asset.file.url.endsWith('.mp4')) {
+      return <VideoImageThumbnail videoUrl={asset.file.url} alt={asset.label} />
+    }
+
+    return (
       <img
-        alt={asset.label}
         src={asset.file.url}
+        alt={asset.label}
         className={classes.imageThumbnail}
       />
+    )
+  }
+
+  return (
+    <div className={classes.card} onClick={onClick}>
+      {renderThumbnail()}
       <div className={classes.actions}>{actions}</div>
     </div>
   )
