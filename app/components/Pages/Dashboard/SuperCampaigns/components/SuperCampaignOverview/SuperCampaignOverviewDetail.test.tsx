@@ -1,10 +1,20 @@
 import * as t from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TestBed } from 'tests/unit/TestBed';
+import { makeControlledAsync } from 'tests/unit/utils/controllable-promise';
 
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
 import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider';
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail';
+
+const mockUpdateCampaignModel = makeControlledAsync(jest.fn());
+jest.mock('@app/models/super-campaign/update-super-campaign', () => async (
+  superCampaignId: UUID,
+  data: ISuperCampaignInput
+) => {
+  await mockUpdateCampaignModel.fn(superCampaignId, data)
+  return data
+});
 
 const empty: ISuperCampaign<'template_instance'> = {
   id: '1',
@@ -30,15 +40,16 @@ const testData: Record<string, ISuperCampaign<'template_instance'>> = {
 }
 
 interface Props {
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaign: ISuperCampaign<'template_instance'>;
+  setSuperCampaign: (superCampaign: ISuperCampaign<'template_instance'>) => void;
 }
 
-function Test({ superCampaign }: Props) {
+function Test({ superCampaign, setSuperCampaign }: Props) {
   return (
     <TestBed>
       <SuperCampaignDetailProvider
         superCampaign={superCampaign}
-        setSuperCampaign={jest.fn()}
+        setSuperCampaign={setSuperCampaign}
       >
         <SuperCampaignOverviewDetail />
       </SuperCampaignDetailProvider>
@@ -47,13 +58,13 @@ function Test({ superCampaign }: Props) {
 }
 
 function testRenderEmpty() {
-  const $ = t.render(<Test superCampaign={testData.empty} />)
+  const $ = t.render(<Test superCampaign={testData.empty} setSuperCampaign={jest.fn()} />)
   expect($.getByTestId('super-campaign-details')).toMatchSnapshot('details box without template')
   expect($.getByText('Edit')).toBeInTheDocument()
 }
 
 function testRenderFilledWithTemplate() {
-  const $ = t.render(<Test superCampaign={testData.filled} />)
+  const $ = t.render(<Test superCampaign={testData.filled} setSuperCampaign={jest.fn()} />)
   expect($.getByTestId('super-campaign-details')).toMatchSnapshot('details box without template')
   expect($.getByTestId('super-campaign-detail-template').querySelector('iframe')).toMatchSnapshot('details box template preview')
 
@@ -62,11 +73,17 @@ function testRenderFilledWithTemplate() {
 }
 
 async function testEditFlow() {
-  const $ = t.render(<Test superCampaign={testData.empty} />)
+  const setSuperCampaign = jest.fn();
+  const $ = t.render(<Test superCampaign={testData.empty} setSuperCampaign={setSuperCampaign} />)
+
+  // Drawer is not yet open
   expect(t.screen.getByText('Enter Campaign Details')).not.toBeVisible()
+
+  // Clicking on Edit will open the drawer
   userEvent.click($.getByText('Edit'))
   expect(t.screen.getByText('Enter Campaign Details')).toBeVisible()
 
+  // Fill in the drawer form
   const form = $.getByTestId('super-campaign-edit-form')
   const find = (testId: string, selector: string) => {
     const res = t.within(form).getByTestId(testId).querySelector(selector)
@@ -76,20 +93,39 @@ async function testEditFlow() {
     return res
   }
   userEvent.type(find('subject', 'input'), `{selectall}${testData.filled.subject}`)
-  userEvent.type(find('description', 'textarea'), `{selectall}${testData.filled.subject}`)
+  userEvent.type(find('description', 'textarea'), `{selectall}${testData.filled.description}`)
 
-  userEvent.click($.getByText('Save'))
+  // Click on Save
+  const saveButton = $.getByText('Save')
+  t.fireEvent.click(saveButton)
+
+  // Expect `updateSuperCampaign` model to have been called correctly
+  mockUpdateCampaignModel.resolve()
+  await t.waitFor(() => expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledTimes(1))
+  const expected = expect.objectContaining({
+    subject: testData.filled.subject,
+    description: testData.filled.description,
+  })
+  expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledWith(testData.empty.id, expected)
+
+  // Expect `Provider.setSuperCampaign` to have been called correctly
+  expect(setSuperCampaign).toHaveBeenCalledWith(expected)
 }
 
 function testReadOnlyMode() {
-
+  const data = {
+    ...testData.filled,
+    executed_at: Date.now() / 1000
+  }
+  const $ = t.render(<Test superCampaign={data} setSuperCampaign={jest.fn()} />)
+  expect($.queryByText('Edit')).toBeNull()
 }
 
 describe('Super Campaign/Overview/Detail', () => {
   describe('When not executed', () => {
     it('renders empty when draft campaign is given', testRenderEmpty)
     it('renders template when there is one', testRenderFilledWithTemplate)
-    it('opens the edit drawer on click', testEditFlow)
+    it('completes the edit super campaign flow', testEditFlow)
   })
   describe('When executed', () => {
     it('renders in read-only mode', testReadOnlyMode)
