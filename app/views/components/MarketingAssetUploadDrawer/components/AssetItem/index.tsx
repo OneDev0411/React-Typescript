@@ -12,6 +12,7 @@ import {
   LinearProgress
 } from '@material-ui/core'
 import { mdiDeleteOutline } from '@mdi/js'
+import VideoImageThumbnail from 'react-video-thumbnail-image'
 
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
@@ -22,7 +23,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TEMPLATE_TYPES, MEDIUMS } from '../../constants'
 import { Asset } from '../../types'
 
-import { isImage, isPdf } from './helpers'
+import { isImage, isPdf, isVideo } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -37,11 +38,13 @@ const useStyles = makeStyles(
       border: `1px dashed ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     },
-    image: {
-      width: '100%',
-      objectFit: 'cover',
-      height: theme.spacing(14),
-      borderRadius: theme.shape.borderRadius
+    thumbnailContainer: {
+      '& img': {
+        width: '100%',
+        objectFit: 'cover',
+        height: theme.spacing(14),
+        borderRadius: theme.shape.borderRadius
+      }
     },
     clickToUpload: {
       color: theme.palette.primary.main,
@@ -183,14 +186,13 @@ export default memo(function AssetItem({
       spacing={2}
       key={asset.label}
     >
-      <Grid item xs={2}>
+      <Grid item xs={2} className={classes.thumbnailContainer}>
         {isPdf(asset.file.object) && <PdfThumbnail url={asset.file.url} />}
         {isImage(asset.file.object) && (
-          <img
-            src={asset.file.url}
-            alt={asset.label ?? 'image'}
-            className={classes.image}
-          />
+          <img src={asset.file.url} alt={asset.label} />
+        )}
+        {isVideo(asset.file.object) && (
+          <VideoImageThumbnail videoUrl={asset.file.url} alt={asset.label} />
         )}
       </Grid>
       {uploadProgress === undefined
