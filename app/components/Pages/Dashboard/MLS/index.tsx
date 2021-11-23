@@ -9,7 +9,7 @@ interface Props {
 }
 
 function Listings({ children, ...rest }: Props) {
-  useTitle('Properties v.2 | Rechat')
+  useTitle('Properties | Rechat')
 
   return (
     <ListSelection<ICompactListing>>
