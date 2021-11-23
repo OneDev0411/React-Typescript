@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 import { Box, Button, makeStyles, TextField } from '@material-ui/core'
 import { mdiCalendarBlank } from '@mdi/js'
@@ -16,6 +16,7 @@ import SuperCampaignTemplate from '../SuperCampaignTemplate'
 import {
   convertDateToTimestamp,
   convertTimestampToDate,
+  futureTimeValidator,
   requiredTextValidator
 } from './helpers'
 import {
@@ -66,13 +67,27 @@ function SuperCampaignDrawer({
   const showDrawer = () => setShouldHideDrawer(false)
 
   const handleConfirm = ({
+    subject,
+    description,
     due_at,
     ...otherValues
   }: SuperCampaignFormInternalValues) =>
     onConfirm({
       ...otherValues,
+      subject: subject?.trim() ?? '',
+      description: description?.trim() ?? '',
       due_at: due_at ? convertDateToTimestamp(due_at) : undefined
     })
+
+  const initialValues = useMemo<SuperCampaignFormInternalValues>(
+    () => ({
+      ...formInitialValues,
+      due_at: formInitialValues.due_at
+        ? convertTimestampToDate(formInitialValues.due_at)
+        : undefined
+    }),
+    [formInitialValues]
+  )
 
   return (
     <>
@@ -91,12 +106,7 @@ function SuperCampaignDrawer({
             {isOpen && (
               <Form<SuperCampaignFormInternalValues>
                 onSubmit={handleConfirm}
-                initialValues={{
-                  ...formInitialValues,
-                  due_at: formInitialValues.due_at
-                    ? convertTimestampToDate(formInitialValues.due_at)
-                    : undefined
-                }}
+                initialValues={initialValues}
               >
                 {({ handleSubmit }) => (
                   <form
@@ -125,8 +135,9 @@ function SuperCampaignDrawer({
                           before: new Date()
                         }
                       }}
+                      validate={futureTimeValidator}
                     >
-                      {({ formattedDate, handleOpen }) => (
+                      {({ formattedDate, handleOpen, errorText }) => (
                         <TextField
                           value={formattedDate ?? ''}
                           onClick={handleOpen}
@@ -140,6 +151,8 @@ function SuperCampaignDrawer({
                           }}
                           InputLabelProps={{ shrink: true }}
                           margin="normal"
+                          error={!!errorText}
+                          helperText={errorText}
                         />
                       )}
                     </DateTimeField>
