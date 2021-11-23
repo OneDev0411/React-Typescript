@@ -3,7 +3,6 @@ import {
   DragDropContext,
   Droppable,
   DroppableProvided,
-  DroppableStateSnapshot,
   DropResult,
   ResponderProvided
 } from 'react-beautiful-dnd'
@@ -33,10 +32,7 @@ export function ChecklistsSidenav({
         <SideNavSection>
           <DragDropContext onDragEnd={onReorder}>
             <Droppable droppableId="list" type="column" direction="vertical">
-              {(
-                provided: DroppableProvided,
-                snapshot: DroppableStateSnapshot
-              ) => (
+              {(provided: DroppableProvided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {propertyTypes.map((propertyType, index) => (
                     <ChecklistsSidenavItem

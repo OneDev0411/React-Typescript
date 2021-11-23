@@ -17,29 +17,49 @@ import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
+import { MultiSelectDropDown } from '@app/views/components/MultiSelectDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import {
   createPropertyType,
   PropertyTypeData
 } from 'models/property-types/create-property-type'
+import { updatePropertyType } from 'models/property-types/update-property-type'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
+import { roleName, ROLE_NAMES } from '../../Deals/utils/roles'
+
 interface Props {
+  propertyType?: IDealPropertyType
   isOpen: boolean
-  onCreate: (propertyType: IDealPropertyType) => void
+  onSave: (propertyType: IDealPropertyType) => void
   onClose: () => void
 }
 
-export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
+export function PropertyTypeForm({
+  isOpen,
+  propertyType,
+  onClose,
+  onSave
+}: Props) {
   const [isSaving, setIsSaving] = useState(false)
   const user = useSelector(selectUser)
+  const roles = ROLE_NAMES.map(role => ({
+    value: role,
+    label: roleName(role)
+  }))
 
   const {
     control,
     formState: { isValid }
   } = useForm({
-    mode: 'all'
+    mode: 'all',
+    defaultValues: {
+      label: propertyType?.label,
+      is_lease: propertyType?.is_lease,
+      required_roles: propertyType?.required_roles,
+      optional_roles: propertyType?.optional_roles
+    }
   })
 
   const handleClose = () => {
@@ -49,13 +69,17 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
   const handleSave = async () => {
     setIsSaving(true)
 
-    try {
-      const propertyType = await createPropertyType(
-        getActiveTeamId(user)!,
-        control.getValues() as PropertyTypeData
-      )
+    const values = control.getValues() as PropertyTypeData
+    const activeTeamId = getActiveTeamId(user)!
 
-      onCreate(propertyType)
+    console.log('$$$', propertyType)
+
+    try {
+      const data = await (propertyType
+        ? updatePropertyType(propertyType.id, activeTeamId, values)
+        : createPropertyType(activeTeamId, values))
+
+      onSave(data)
     } catch (e) {
       console.log(e)
     }
@@ -67,7 +91,9 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
     <Dialog open={isOpen} fullWidth maxWidth="sm" onClose={handleClose}>
       <DialogTitle>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          Add New Property Type
+          {propertyType
+            ? `Edit ${propertyType.label}`
+            : 'Add New Property Type'}
           <IconButton onClick={handleClose}>
             <SvgIcon path={mdiClose} />
           </IconButton>
@@ -91,7 +117,6 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
                 required: true,
                 validate: value => value.trim().length > 0
               }}
-              valida
               render={field => (
                 <TextField
                   fullWidth
@@ -117,6 +142,52 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
                   }
                   label="Lease Property"
                 />
+              )}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Controller
+              name="required_roles"
+              control={control}
+              render={({ onChange, value = false }) => (
+                <Box>
+                  <div>Required Roles</div>
+                  <MultiSelectDropDown
+                    list={roles}
+                    defaultValues={
+                      propertyType
+                        ? roles.filter(({ value }) =>
+                            propertyType.required_roles.includes(value)
+                          )
+                        : []
+                    }
+                    onChange={onChange}
+                  />
+                </Box>
+              )}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Controller
+              name="optional_roles"
+              control={control}
+              render={({ onChange, value = false }) => (
+                <Box>
+                  <div>Optional Roles</div>
+                  <MultiSelectDropDown
+                    list={roles}
+                    defaultValues={
+                      propertyType
+                        ? roles.filter(({ value }) =>
+                            propertyType.optional_roles.includes(value)
+                          )
+                        : []
+                    }
+                    onChange={onChange}
+                  />
+                </Box>
               )}
             />
           </Grid>

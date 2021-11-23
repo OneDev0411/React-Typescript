@@ -8,6 +8,7 @@ import {
   Typography
 } from '@material-ui/core'
 import { mdiDrag, mdiTrashCan } from '@mdi/js'
+import cn from 'classnames'
 import {
   Draggable,
   DraggableProvided,
@@ -26,6 +27,8 @@ import { getActiveTeamId } from 'utils/user-teams'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
 
+import { PropertyTypeEdit } from './PropertyTypeEdit'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles(
       '&:hover': {
         backgroundColor: theme.palette.action.hover
       },
-      '&:hover $deleteIcon': {
+      '&:hover .icon-button': {
         visibility: 'visible'
       },
       '& .active': {
@@ -160,16 +163,20 @@ export function ChecklistsSidenavItem({
               </Link>
             </Box>
 
-            <IconButton
-              size="small"
-              onClick={() => requestDelete(propertyType)}
-            >
-              <SvgIcon
-                path={mdiTrashCan}
-                className={classes.deleteIcon}
-                size={muiIconSizes.small}
-              />
-            </IconButton>
+            <div>
+              <PropertyTypeEdit propertyType={propertyType} />
+
+              <IconButton
+                size="small"
+                onClick={() => requestDelete(propertyType)}
+              >
+                <SvgIcon
+                  path={mdiTrashCan}
+                  className={cn(classes.deleteIcon, 'icon-button')}
+                  size={muiIconSizes.small}
+                />
+              </IconButton>
+            </div>
           </div>
         </div>
       )}
