@@ -1,0 +1,52 @@
+import { useState } from 'react'
+
+import { Theme, IconButton, makeStyles } from '@material-ui/core'
+import { mdiPencilOutline } from '@mdi/js'
+import cn from 'classnames'
+
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import { PropertyTypeForm } from './PropertyTypeForm'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    editIcon: {
+      color: theme.palette.error.main,
+      visibility: 'hidden'
+    }
+  }),
+  {
+    name: 'ChecklistSideNavItem'
+  }
+)
+
+interface Props {
+  propertyType: IDealPropertyType
+}
+
+export function PropertyTypeEdit({ propertyType }: Props) {
+  const classes = useStyles()
+  const [showEditForm, setShowEditForm] = useState(false)
+
+  const closeModal = () => setShowEditForm(false)
+
+  return (
+    <>
+      <IconButton
+        size="small"
+        className={cn(classes.editIcon, 'icon-button')}
+        onClick={() => setShowEditForm(true)}
+      >
+        <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
+      </IconButton>
+
+      <PropertyTypeForm
+        isOpen={showEditForm}
+        propertyType={propertyType}
+        onSave={closeModal}
+        onClose={closeModal}
+      />
+    </>
+  )
+}
