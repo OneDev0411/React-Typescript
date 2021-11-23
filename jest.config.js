@@ -6,6 +6,7 @@ module.exports = {
   testURL: 'http://localhost:8080',
   setupFilesAfterEnv: ['./setupTests.js'],
   verbose: true,
+  coverageReporters: ['cobertura', 'lcov', 'text-summary'],
   testEnvironment: 'jsdom',
   transformIgnorePatterns: ['/node_modules/(?!(swiper|ssr-window|dom7)/)'],
   transform: {
