@@ -63,7 +63,7 @@ const useStyles = makeStyles(
       }
     },
     imageThumbnail: {
-      maxWidth: '100%',
+      width: '100%',
       objectFit: 'cover'
     }
   }),
