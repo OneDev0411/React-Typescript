@@ -13,4 +13,6 @@ declare interface IDealPropertyType extends IModel<'brand_property_type'> {
   is_lease: boolean
   label: IDealPropertyTypes
   order: number
+  required_roles: string[]
+  optional_roles: string[]
 }
