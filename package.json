@@ -222,6 +222,7 @@
     "react-use-controllable-state": "0.0.7",
     "react-use-intercom": "^1.1.9",
     "react-use-promise": "^0.3.0",
+    "react-video-thumbnail-image": "^0.1.7",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.5",
     "reapop": "^3.0.4",
