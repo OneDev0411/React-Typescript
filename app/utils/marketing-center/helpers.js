@@ -6,7 +6,11 @@ export function getTemplateImage(
   template,
   fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
 ) {
-  if (template.type === 'template_instance' || template.type === 'template') {
+  if (
+    template.type === 'template_instance' ||
+    template.type === 'template' ||
+    template.type === 'brand_asset'
+  ) {
     return {
       original: template.file ? template.file.url : fallbackImage,
       thumbnail: template.file ? template.file.preview_url : fallbackImage
@@ -105,8 +109,16 @@ export function navigateBetweenTemplatesUsingKeyboard(
   }
 }
 
+export function isBrandTemplate(template) {
+  return template.type === 'brand_template'
+}
+
 export function isTemplateInstance(template) {
   return template.type === 'template_instance'
+}
+
+export function isBrandAsset(item) {
+  return item.type === 'brand_asset'
 }
 
 export function itemDateText(time) {

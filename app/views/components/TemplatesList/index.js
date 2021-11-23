@@ -4,7 +4,11 @@ import { Tooltip, Button, makeStyles } from '@material-ui/core'
 import { mdiTrashCanOutline } from '@mdi/js'
 import { connect } from 'react-redux'
 
-import { isTemplateInstance } from '@app/utils/marketing-center/helpers'
+import {
+  isBrandAsset,
+  isBrandTemplate,
+  isTemplateInstance
+} from '@app/utils/marketing-center/helpers'
 import BrandAssetCard from '@app/views/components/BrandAssetCard'
 import IconButton from '@app/views/components/Button/IconButton'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
@@ -52,9 +56,13 @@ function TemplatesList(props) {
       return
     }
 
-    const defaultSelectedTemplate = props.items.find(
-      item => item.template.id === props.defaultSelected
-    )
+    const defaultSelectedTemplate = props.items.find(item => {
+      if (isBrandAsset(item)) {
+        return item.id === props.defaultSelected
+      }
+
+      return item.template.id === props.defaultSelected
+    })
 
     if (!defaultSelectedTemplate) {
       return
@@ -131,11 +139,16 @@ function TemplatesList(props) {
   }
 
   const handleBrandAssetClick = asset => {
-    console.log('Asset Clicked', { asset })
+    setPreviewModalOpen(true)
+    setSelectedTemplate(asset)
+    setActionTriggered(false)
+    props.onSelect && props.onSelect(asset)
   }
 
   const handleShareBrandAssetClick = asset => {
-    console.log('Asset Share Clicked', { asset })
+    setPreviewModalOpen(false)
+    setSelectedTemplate(asset)
+    setActionTriggered(true)
   }
 
   const isEmpty = props.items.length === 0 && !props.isLoading
@@ -201,7 +214,7 @@ function TemplatesList(props) {
                         )}
                     </>
                   }
-                  onClick={handleBrandAssetClick}
+                  onClick={() => handleBrandAssetClick(item)}
                 />
               )
             }
@@ -267,9 +280,13 @@ function TemplatesList(props) {
               }
             }}
           >
-            {selectedTemplate && isTemplateInstance(selectedTemplate)
-              ? 'Continue'
-              : 'Customize'}
+            {selectedTemplate && isBrandAsset(selectedTemplate) && 'Share'}
+            {selectedTemplate &&
+              isTemplateInstance(selectedTemplate) &&
+              'Continue'}
+            {selectedTemplate &&
+              isBrandTemplate(selectedTemplate) &&
+              'Customize'}
           </Button>
         }
         onClose={() => {
@@ -289,6 +306,7 @@ function TemplatesList(props) {
         isTriggered={isActionTriggered}
         setTriggered={value => {
           setActionTriggered(value)
+          setSelectedTemplate(null)
 
           setPreviewModalOpen(false)
           props.onSelect && props.onSelect(null)

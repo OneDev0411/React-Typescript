@@ -12,13 +12,20 @@ import {
 
 interface Props {
   isOpen: boolean
-  selectedTemplate: IBrandMarketingTemplate | IMarketingTemplateInstance
+  selectedTemplate:
+    | IBrandMarketingTemplate
+    | IMarketingTemplateInstance
+    | IBrandAsset
   setSelectedTemplate: (
-    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset
   ) => void
   type: string // can be improved
   medium?: IMarketingTemplateMedium
-  templates?: (IBrandMarketingTemplate | IMarketingTemplateInstance)[]
+  templates?: (
+    | IBrandMarketingTemplate
+    | IMarketingTemplateInstance
+    | IBrandAsset
+  )[]
   actions?: React.ReactNode
   onClose?: () => void
 }
@@ -93,8 +100,10 @@ function PreviewModal(props: Props) {
   }
 
   if (
-    selectedTemplate.type === 'template_instance' &&
-    getFileType(selectedTemplate.file) === 'pdf'
+    (selectedTemplate.type === 'template_instance' &&
+      getFileType(selectedTemplate.file) === 'pdf') ||
+    (selectedTemplate.type === 'brand_asset' &&
+      getFileType(selectedTemplate.file) === 'pdf')
   ) {
     return (
       <PdfViewerModal

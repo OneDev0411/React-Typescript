@@ -16,7 +16,10 @@ import useNotify from '@app/hooks/use-notify'
 import { selectActiveTeamId } from '@app/selectors/team'
 import { selectUser } from '@app/selectors/user'
 import { goTo } from '@app/utils/go-to'
-import { isTemplateInstance } from '@app/utils/marketing-center/helpers'
+import {
+  isBrandAsset,
+  isTemplateInstance
+} from '@app/utils/marketing-center/helpers'
 import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
 import Acl from '@app/views/components/Acl'
 import PageLayout from '@app/views/components/GlobalPageLayout'
@@ -55,7 +58,12 @@ interface Props {
     types: string
     medium: IMarketingTemplateMedium
     defaultSelectedTemplate: Optional<UUID>
-    onSelectTemplate: (template: IBrandMarketingTemplate) => void
+    onSelectTemplate: (
+      template:
+        | IBrandMarketingTemplate
+        | IMarketingTemplateInstance
+        | IBrandAsset
+    ) => void
     onDeleteTemplate: (template: IBrandMarketingTemplate) => void
     onDeleteBrandAsset: (asset: IBrandAsset) => void
     hasDeleteAccessOnBrandAsset: (asset: IBrandAsset) => boolean
@@ -135,7 +143,7 @@ export function MarketingLayout({
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
 
   const onSelectTemplate = (
-    template: IBrandMarketingTemplate | IMarketingTemplateInstance
+    template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset
   ) => {
     const newQuery = { ...location.query }
 
@@ -150,11 +158,16 @@ export function MarketingLayout({
       return
     }
 
+    const templateId = isBrandAsset(template)
+      ? template.id
+      : (template as IBrandMarketingTemplate | IMarketingTemplateInstance)
+          .template.id
+
     router.replace({
       ...location,
       query: {
         ...newQuery,
-        templateId: template.template.id
+        templateId
       }
     })
   }

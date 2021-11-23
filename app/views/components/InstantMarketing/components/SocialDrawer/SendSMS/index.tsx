@@ -3,6 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { isBrandAsset } from '@app/utils/marketing-center/helpers'
 import { addNotification as notify } from 'components/notification'
 import { shareInstance } from 'models/instant-marketing/instance-share'
 import {
@@ -14,7 +15,7 @@ import { isValidPhoneNumber } from 'utils/helpers'
 import { Section } from '../components/Section'
 
 interface SendSMSProps {
-  instance: IMarketingTemplateInstance
+  instance: IMarketingTemplateInstance | IBrandAsset
 }
 
 function SendSMS({ instance }: SendSMSProps) {
@@ -53,12 +54,16 @@ function SendSMS({ instance }: SendSMSProps) {
         instance.id,
         [phone],
         // eslint-disable-next-line max-len
-        `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
+        `${displayName} sent you this ${isBrandAsset(
+          instance ? 'file' : 'image'
+        )}! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
       )
 
       dispatch(
         notify({
-          message: 'Image link sent to the phone number.',
+          message: `${
+            isBrandAsset(instance) ? 'Asset' : 'Image'
+          } link sent to the phone number.`,
           status: 'success'
         })
       )

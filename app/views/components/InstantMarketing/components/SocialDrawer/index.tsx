@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
@@ -20,6 +20,7 @@ import SendSMS from './SendSMS'
 interface Props {
   template: (IBrandMarketingTemplate | IMarketingTemplate) & { result: string }
   instance?: IMarketingTemplateInstance
+  brandAsset?: IBrandAsset
   templateInstanceData?: Omit<TemplateInstanceInputData, 'html'>
   onClose: () => void
 }
@@ -27,6 +28,7 @@ interface Props {
 export default function SocialDrawer({
   template,
   instance: passedInstance,
+  brandAsset,
   templateInstanceData = {},
   onClose
 }: Props) {
@@ -38,6 +40,10 @@ export default function SocialDrawer({
 
   useDeepCompareEffect(() => {
     async function makeTemplateInstance() {
+      if (brandAsset) {
+        return
+      }
+
       if (templateInstance) {
         return
       }
@@ -68,6 +74,10 @@ export default function SocialDrawer({
   }, [dispatch, template, templateInstance, templateInstanceData])
 
   const getActions = () => {
+    if (brandAsset) {
+      return [DownloadFile, CopyFileUrl]
+    }
+
     if (templateInstance && getFileType(templateInstance.file) === 'pdf') {
       return [DownloadFile, CopyFileUrl]
     }
@@ -79,12 +89,23 @@ export default function SocialDrawer({
     <Drawer open onClose={onClose}>
       <Drawer.Header title="How would you like to share?" />
       <Drawer.Body>
-        <PreviewFile instance={templateInstance} error={errorMessage} />
+        <PreviewFile
+          instance={templateInstance || brandAsset}
+          error={errorMessage}
+        />
 
         {templateInstance && (
           <>
             {getActions().map((Component, index) => (
               <Component key={index} instance={templateInstance} />
+            ))}
+          </>
+        )}
+
+        {brandAsset && (
+          <>
+            {getActions().map((Component, index) => (
+              <Component key={index} instance={brandAsset} />
             ))}
           </>
         )}
