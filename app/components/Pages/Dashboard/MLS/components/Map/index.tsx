@@ -78,8 +78,6 @@ export const Map = memo(
     onToggleFavorite = noop,
     onClickLocate
   }: Props) => {
-    console.log('map rerender')
-
     const mapIsLoaded = useRef<boolean>(false)
     const [drawingMode, setDrawingMode] = useState(false)
     const [listingModalState, setListingModalState] =
