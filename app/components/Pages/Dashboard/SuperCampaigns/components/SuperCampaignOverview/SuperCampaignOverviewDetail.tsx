@@ -82,7 +82,7 @@ function SuperCampaignOverviewDetail() {
             superCampaign.due_at
               ? format(
                   superCampaign.due_at * 1000,
-                  "EEEE, LLLL dd, yyyy 'at' HH:mmaaa"
+                  "EEEE, LLLL dd, yyyy 'at' hh:mmaaa"
                 )
               : '-'
           }
