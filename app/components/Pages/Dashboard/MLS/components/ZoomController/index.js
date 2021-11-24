@@ -4,9 +4,8 @@ import { mdiMinus, mdiPlus } from '@mdi/js'
 import { connect } from 'react-redux'
 import _ from 'underscore'
 
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-
-import { updateMapZoom } from '../../../../../../store_actions/listings/map'
+import { updateMapZoom } from '@app/store_actions/listings/map'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { Container, Button } from './styled'
 
