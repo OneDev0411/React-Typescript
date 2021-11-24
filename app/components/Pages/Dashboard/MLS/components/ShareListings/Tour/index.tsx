@@ -3,11 +3,11 @@ import React, { useContext, useState, ReactNode, MouseEvent } from 'react'
 import { Button, Tooltip } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import CreateTourDrawer from 'components/tour/CreateTourDrawer/CreateTourDrawer'
-import getListing from 'models/listings/listing/get-listing'
-import { selectUser } from 'selectors/user'
+import getListing from '@app/models/listings/listing/get-listing'
+import { selectUser } from '@app/selectors/user'
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
+import CreateTourDrawer from '@app/views/components/tour/CreateTourDrawer/CreateTourDrawer'
 
 interface Props {
   buttonRenderer?: (props: {
@@ -42,7 +42,7 @@ export function CreateTourAction({ buttonRenderer }: Props) {
 
     try {
       const listings = await Promise.all(
-        selections.map(async (selection: IListing) => {
+        selections.map(async (selection: ICompactListing) => {
           return getListing(selection.id)
         })
       )

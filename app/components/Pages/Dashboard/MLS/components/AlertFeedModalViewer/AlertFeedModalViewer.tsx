@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { getAlertFeed } from 'models/listings/alerts/get-alert-feed'
+import { getAlertFeed } from '@app/models/listings/alerts/get-alert-feed'
 
 import AlertViewerModal from './AlertViewerModal'
 

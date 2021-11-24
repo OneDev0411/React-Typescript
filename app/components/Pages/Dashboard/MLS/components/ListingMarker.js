@@ -5,7 +5,7 @@ import numeral from 'numeral'
 import PropTypes from 'prop-types'
 import S from 'shorti'
 
-import listing_util from 'utils/listing'
+import listing_util from '@app/utils/listing'
 
 import Brand from '../../../../../controllers/Brand'
 

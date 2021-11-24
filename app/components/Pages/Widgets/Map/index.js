@@ -1,4 +1,4 @@
-import SearchMap from '../../Dashboard/MLS/Search'
+import SearchMap from '../../Dashboard/MLS/ExploreTab'
 
 const MapWidget = props => (
   <div className="l-listings is-widget">
