@@ -16,6 +16,12 @@ test_unit:
     - npm run types:check
     - npm run test:ci -- --coverage
   needs: []
+  coverage: '/Lines\s+:\s([\d\.]+)/'
+  artifacts:
+    paths:
+      - coverage
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
 
 deploy_beta:
   stage: deploy
