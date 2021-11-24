@@ -4,7 +4,6 @@ export type AccessRecord = Record<
   | 'DEALS'
   | 'BACK_OFFICE'
   | 'MARKETING'
-  | 'STORE'
   | 'BETA'
   | 'AGENT_NETWORK'
   | 'WEBSITES'
@@ -17,7 +16,6 @@ export const ACL: AccessRecord = {
   DEALS: 'Deals',
   BACK_OFFICE: 'BackOffice',
   MARKETING: 'Marketing',
-  STORE: 'STORE',
   BETA: 'BetaFeatures',
   AGENT_NETWORK: 'AgentNetwork',
   WEBSITES: 'Websites',

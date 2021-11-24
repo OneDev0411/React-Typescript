@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { Slide, Box, Button, Theme, makeStyles, alpha } from '@material-ui/core'
 import { mdiClose, mdiShoePrint, mdiEmailOutline } from '@mdi/js'
 
-import { GridActionButton } from 'components/Grid/Table/features/Actions/Button'
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import SearchListingDrawer from 'components/SearchListingDrawer'
-import { TextTransition } from 'components/TextTransition'
+import { GridActionButton } from '@app/views/components/Grid/Table/features/Actions/Button'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
+import SearchListingDrawer from '@app/views/components/SearchListingDrawer'
+import { TextTransition } from '@app/views/components/TextTransition'
 
 import { EmailAction } from './Email'
 import { CreateTourAction } from './Tour'
@@ -56,7 +56,7 @@ export function ShareListings() {
 
   const getDefaultSelectedItems = () => {
     return selections.reduce(
-      (acc: Record<string, IListing>, listing: IListing) => ({
+      (acc: Record<string, ICompactListing>, listing: ICompactListing) => ({
         ...acc,
         [listing.id]: listing
       }),
@@ -64,7 +64,7 @@ export function ShareListings() {
     )
   }
 
-  const handleUpdateSelectedListings = (listings: IListing[]) => {
+  const handleUpdateSelectedListings = (listings: ICompactListing[]) => {
     setIsListingDrawerOpen(false)
     reinitialize(listings)
   }

@@ -1,5 +1,5 @@
-import { pendingStatuses } from '../../../../components/Pages/Dashboard/MLS/Search/components/Filters/statuses'
-import { ACTIVE_PENDING_STATUSES } from '../../../../constants/listings/search/filters'
+import { PENDING_STATUSES } from '@app/components/Pages/Dashboard/MLS/constants'
+import { ACTIVE_PENDING_STATUSES } from '@app/constants/listings/search/filters'
 
 import toggleSubStatuses from './toggle-sub-statuses'
 
@@ -8,7 +8,7 @@ const activePendingListings = event => dispatch => {
     type: ACTIVE_PENDING_STATUSES
   })
 
-  return toggleSubStatuses(pendingStatuses, event.target.checked)(dispatch)
+  return toggleSubStatuses(PENDING_STATUSES, event.target.checked)(dispatch)
 }
 
 export default activePendingListings
