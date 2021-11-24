@@ -108,6 +108,7 @@ function ExploreTab({ isWidget, user, location }: Props) {
     userLastBrowsingLocation,
     firstRun:
       typeof userLastBrowsingLocation === 'undefined' ||
+      userLastBrowsingLocation === null ||
       Object.keys(userLastBrowsingLocation).length === 0
   })
 
