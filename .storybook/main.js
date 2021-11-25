@@ -1,6 +1,9 @@
 const baseWebpackConfig = require('../webpack/base')
 
 module.exports = {
+  core: {
+    builder: 'webpack5',
+  },
   stories: [
     "../app/views/components/**/*.story.mdx",
     "../app/views/components/**/*.story.@(js|jsx|ts|tsx)"
