@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core'
-import { mdiCheckboxBlankCircle } from '@mdi/js'
+import { mdiListStatus } from '@mdi/js'
 import cn from 'classnames'
 
 import { FilterButtonToggler } from '@app/views/components/Filters/FilterButton'
@@ -40,13 +40,7 @@ export const StatusButton = ({
         [classes.button]: true,
         active: true
       })}
-      startIcon={
-        <SvgIcon
-          path={mdiCheckboxBlankCircle}
-          size={muiIconSizes.small}
-          className={classes.typeIcon}
-        />
-      }
+      startIcon={<SvgIcon path={mdiListStatus} size={muiIconSizes.small} />}
     >
       Deals Status
     </Button>

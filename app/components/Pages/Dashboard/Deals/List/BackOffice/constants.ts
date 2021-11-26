@@ -21,7 +21,8 @@ export const DEALS_LIST_DEFAULT_FILTERS: DealsListFilters = {
     is_pending: true,
     is_archived: false,
     is_null: true
-  }
+  },
+  contexts: {}
 }
 
 export const DEALS_LIST_DEFUALT_ORDER: DealsOrder = ['deals.created_at', 'DESC']

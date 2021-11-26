@@ -1,6 +1,9 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core'
+import { mdiListStatus } from '@mdi/js'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { DEALS_STATUSES } from '../../../constants'
 import {
@@ -31,6 +34,8 @@ export const StatusEditor = ({
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
+        <SvgIcon path={mdiListStatus} size={muiIconSizes.medium} />
+
         <Typography variant="subtitle1" className={classes.title}>
           Deals status
         </Typography>

@@ -45,7 +45,7 @@ export const TypeEditor = ({
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
         <Typography variant="subtitle1" className={classes.title}>
-          Deals type
+          Listings & Contracts
         </Typography>
       </Grid>
 
@@ -71,7 +71,7 @@ export const TypeEditor = ({
           }
           label={
             <Grid container alignItems="center">
-              <Typography variant="body1">{`All ${DEAL_TYPES_ITEMS[type]} Deals`}</Typography>
+              <Typography variant="body1">{`${DEAL_TYPES_ITEMS[type]}`}</Typography>
             </Grid>
           }
         />
