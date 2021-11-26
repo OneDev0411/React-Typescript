@@ -11,7 +11,7 @@ export const stringifyStatusFilter = (filters: TDealsStatusList): string => {
   const statusKeys = Object.keys(DEALS_STATUSES)
   const values = statusKeys.map(key => `${+!!filters[key]}${key}`)
 
-  return values.join(',')
+  return values.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
 }
 
 // Convert status filter query string to status object
