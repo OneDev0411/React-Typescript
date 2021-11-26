@@ -31,6 +31,27 @@ export async function getBrands(
   ).body
 }
 
+export async function getAvailableBrandsToSwitch(
+  fetchChildren: boolean = true,
+  customeAssociations: string[] = defaultAssociations
+): Promise<IBrand[]> {
+  const associations = [...customeAssociations]
+
+  if (fetchChildren) {
+    associations.push('brand.children')
+  }
+
+  try {
+    const response = await new Fetch().get('/users/self/brands').query({
+      associations
+    })
+
+    return response.body.data
+  } catch (e) {
+    throw e
+  }
+}
+
 export async function getChildrenBrands(brandId) {
   try {
     return await new Fetch().get(

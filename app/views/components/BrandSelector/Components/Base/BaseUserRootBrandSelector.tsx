@@ -4,19 +4,10 @@ import { selectUser } from 'selectors/user'
 
 import { useUserRootTeams } from '../../hooks/use-user-root-teams'
 
-import {
-  BaseTreeViewBrandSelector,
-  BaseTreeViewBrandSelectorProps
-} from './components/BaseTreeViewBrandSelector'
+import { BaseTreeViewBrandSelector } from './components/BaseTreeViewBrandSelector'
+import { BaseBrandSelectorProps } from './type'
 
-export type BaseUserRootBrandSelectorProps = Pick<
-  BaseTreeViewBrandSelectorProps,
-  'nodeRenderer' | 'onNodeClick'
->
-
-export function BaseUserRootBrandSelector(
-  props: BaseUserRootBrandSelectorProps
-) {
+export function BaseUserRootBrandSelector(props: BaseBrandSelectorProps) {
   const user = useSelector(selectUser)
 
   const { isError, isLoading, initialExpandedNodes, teamNodes } =
