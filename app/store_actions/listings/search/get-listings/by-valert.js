@@ -1,6 +1,6 @@
 import { batchActions } from 'redux-batched-actions'
 
-import { DECLUSTER_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/MLS/mapOptions'
+import { PROPOSED_AGENT_ZOOM_LEVEL } from '../../../../components/Pages/Dashboard/MLS/constants'
 import * as listingsTypes from '../../../../constants/listings'
 import api from '../../../../models/listings/search'
 import setSearchListingsOptions from '../set-options'
@@ -11,7 +11,7 @@ const getListingsByValert = options => (dispatch, getState) => {
 
   let query
 
-  if (brand != null && zoom >= DECLUSTER_ZOOM_LEVEL) {
+  if (brand != null && zoom >= PROPOSED_AGENT_ZOOM_LEVEL) {
     query = '?associations=compact_listing.proposed_agent'
 
     const office = brand.offices && brand.offices[0] ? brand.offices[0] : ''
