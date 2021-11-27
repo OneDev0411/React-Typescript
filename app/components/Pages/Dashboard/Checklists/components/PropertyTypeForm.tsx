@@ -56,9 +56,9 @@ export function PropertyTypeForm({
     mode: 'all',
     defaultValues: {
       label: propertyType?.label,
-      is_lease: propertyType?.is_lease,
-      required_roles: propertyType?.required_roles,
-      optional_roles: propertyType?.optional_roles
+      is_lease: propertyType?.is_lease ?? false,
+      required_roles: propertyType?.required_roles ?? [],
+      optional_roles: propertyType?.optional_roles ?? []
     }
   })
 
@@ -71,8 +71,6 @@ export function PropertyTypeForm({
 
     const values = control.getValues() as PropertyTypeData
     const activeTeamId = getActiveTeamId(user)!
-
-    console.log('$$$', propertyType)
 
     try {
       const data = await (propertyType
