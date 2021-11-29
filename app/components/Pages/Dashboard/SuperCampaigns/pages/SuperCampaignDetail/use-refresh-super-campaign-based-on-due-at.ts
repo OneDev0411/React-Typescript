@@ -12,7 +12,7 @@ export function useRefreshSuperCampaignBasedOnDueAt(
     const dueAt = superCampaign?.due_at
 
     // Return if there is no due at or the campaign was executed
-    if (!dueAt || !!superCampaign.executed_at) {
+    if (!dueAt || !!superCampaign?.executed_at) {
       return
     }
 
