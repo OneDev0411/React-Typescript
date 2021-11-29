@@ -35,7 +35,7 @@ const cleanURL = url => {
     return url
   }
 
-  return `http://${url}`
+  return `https://${url}`
 }
 
 let PersonalInfoForm = ({
