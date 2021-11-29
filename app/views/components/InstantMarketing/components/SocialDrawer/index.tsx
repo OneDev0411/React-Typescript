@@ -75,7 +75,7 @@ export default function SocialDrawer({
 
   const getActions = () => {
     if (brandAsset) {
-      return [DownloadFile, CopyFileUrl]
+      return [DownloadFile, SendSMS, CopyFileUrl]
     }
 
     if (templateInstance && getFileType(templateInstance.file) === 'pdf') {
