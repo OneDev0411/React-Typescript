@@ -31,7 +31,7 @@ const cleanURL = url => {
     return ''
   }
 
-  if (url.startsWith('https') || url.startsWith('https')) {
+  if (url.startsWith('http')) {
     return url
   }
 
