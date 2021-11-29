@@ -7,11 +7,11 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
-import createAlert from 'actions/listings/alerts/create-alert'
-import ActionButton from 'components/Button/ActionButton'
-import { Modal, ModalFooter } from 'components/Modal'
-import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import createAlert from '@app/store_actions/listings/alerts/create-alert'
+import ActionButton from '@app/views/components/Button/ActionButton'
+import { Modal, ModalFooter } from '@app/views/components/Modal'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { normalizeAlertOptions } from './normalize-alert-options'
 import ShareAlertModal from './ShareAlertModal'
@@ -28,7 +28,9 @@ const CreateAlertModal = ({
   hideShareAlertModal,
   successModalIsActive,
   activeShareAlertModal,
-  shareAlertModalIsActive
+  shareAlertModalIsActive,
+  searchOptions,
+  drawingPoints
 }) => (
   <div>
     <Modal
@@ -87,6 +89,8 @@ const CreateAlertModal = ({
       isActive={successModalIsActive}
     />
     <ShareAlertModal
+      searchOptions={searchOptions}
+      drawingPoints={drawingPoints}
       alertTitle={alertTitle}
       onHide={hideShareAlertModal}
       isActive={shareAlertModalIsActive}
@@ -96,10 +100,8 @@ const CreateAlertModal = ({
 
 export default compose(
   connect(
-    ({ data, search }) => ({
-      user: data.user,
-      searchOptions: search.options,
-      drawingPoints: search.map.drawing.points
+    ({ data }) => ({
+      user: data.user
     }),
     { createAlert }
   ),

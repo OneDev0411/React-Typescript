@@ -1,18 +1,17 @@
-import { numberWithCommas } from '../../../../../utils/helpers'
-import listingUtils from '../../../../../utils/listing'
+import { numberWithCommas } from '@app/utils/helpers'
+import listingUtils from '@app/utils/listing'
 
 export const prepareListingsProperties = (user, listing) => {
   const statusColor = listingUtils.getStatusColor(listing.status)
-  let property = listing.compact_property
-  let address = listing.address
 
-  if (!property) {
-    property = listing.property
-  }
-
-  if (!address) {
-    address = property.address
-  }
+  const property =
+    listing.type === 'compact_listing'
+      ? listing.compact_property
+      : listing.property
+  const address =
+    listing.type === 'compact_listing'
+      ? listing.address
+      : listing.property.address
 
   const sqft = numberWithCommas(
     Math.round(listingUtils.metersToFeet(property.square_meters))

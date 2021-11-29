@@ -8,13 +8,13 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import Flex from 'styled-flex-component'
 
-import { createRoom } from 'actions/chatroom/room'
-import createAlert from 'actions/listings/alerts/create-alert'
-import ActionButton from 'components/Button/ActionButton'
-import { Modal, ModalFooter } from 'components/Modal'
-import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { H2 } from 'components/Typography/headings'
-import { hasRecipients } from 'utils/helpers'
+import { createRoom } from '@app/store_actions/chatroom/room'
+import createAlert from '@app/store_actions/listings/alerts/create-alert'
+import { hasRecipients } from '@app/utils/helpers'
+import ActionButton from '@app/views/components/Button/ActionButton'
+import { Modal, ModalFooter } from '@app/views/components/Modal'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { H2 } from '@app/views/components/Typography/headings'
 
 import Recipients from '../../../../../Partials/ShareView'
 
@@ -65,10 +65,8 @@ const ShareAlertModal = ({
 
 export default compose(
   connect(
-    ({ user, search }) => ({
-      user,
-      searchOptions: search.options,
-      drawingPoints: search.map.drawing.points
+    ({ user }) => ({
+      user
     }),
     { createRoom, createAlert }
   ),
@@ -91,7 +89,6 @@ export default compose(
       }) =>
       () => {
         setIsSharing(true)
-
         createRoom(recipients).then(room => {
           const alertOptions = normalizeAlertOptions(
             searchOptions,
