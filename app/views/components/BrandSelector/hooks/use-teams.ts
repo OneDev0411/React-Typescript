@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
@@ -10,8 +10,7 @@ interface UseTeamsReturnType {
   isError: boolean
   isLoading: boolean
   teams: TreeFn<IBrand>
-  // initialExpandedNodes: UUID[]
-  // teamNodes: TreeFn<IBrand[]>
+  initialExpandedNodes: UUID[]
 }
 
 export function useTeams(): UseTeamsReturnType {
@@ -21,30 +20,30 @@ export function useTeams(): UseTeamsReturnType {
     run(async () => {
       const teams = await getAvailableBrandsToSwitch()
 
-      console.log({ teams })
-
       return teams
     })
   })
 
   const getChildNodes = useCallback(
-    () => teams,
+    parent => (parent ? parent.children || [] : teams || []),
     [teams]
   )
+  const initialExpandedNodes = useMemo(() => {
+    let expandedNodes: UUID[] = []
 
-  // const initialExpandedNodes = useMemo(() => {
-  //   if (brands) {
-  //     return [brands.id]
-  //   }
+    teams?.forEach(team => {
+      if (team.children) {
+        expandedNodes.push(team.id)
+      }
+    })
 
-  //   return []
-  // }, [brands])
+    return expandedNodes
+  }, [teams])
 
   return {
     isError,
     isLoading,
     teams: getChildNodes,
-    // initialExpandedNodes,
-    // teamNodes: getChildNodes
+    initialExpandedNodes
   }
 }

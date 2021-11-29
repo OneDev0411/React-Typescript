@@ -12,7 +12,7 @@ interface UseUserRootTeamsReturnType {
   isLoading: boolean
   rootTeam: Nullable<IBrand>
   initialExpandedNodes: UUID[]
-  teamNodes: TreeFn<IBrand>
+  teams: TreeFn<IBrand>
 }
 
 export function useUserRootTeams(user: IUser): UseUserRootTeamsReturnType {
@@ -55,6 +55,6 @@ export function useUserRootTeams(user: IUser): UseUserRootTeamsReturnType {
     rootTeam,
     isLoading,
     initialExpandedNodes,
-    teamNodes: getChildNodes
+    teams: getChildNodes
   }
 }

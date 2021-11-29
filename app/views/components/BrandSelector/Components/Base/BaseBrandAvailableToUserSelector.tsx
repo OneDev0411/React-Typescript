@@ -6,15 +6,14 @@ import { BaseBrandSelectorProps } from './type'
 export function BaseBrandAvailableToUserSelector(
   props: BaseBrandSelectorProps
 ) {
-  const { isError, isLoading, teams } = useTeams()
+  const { isError, isLoading, teams, initialExpandedNodes } = useTeams()
 
-  return <span>hamed</span>
-  // return (
-  //   <BaseTreeViewBrandSelector
-  //     isLoading={isLoading}
-  //     hasError={isError}
-  //     // initialExpandedNodes={initialExpandedNodes}
-  //     nodes={brands}
-  //   />
-  // )
+  return (
+    <BaseTreeViewBrandSelector
+      isLoading={isLoading}
+      hasError={isError}
+      initialExpandedNodes={initialExpandedNodes}
+      nodes={teams}
+    />
+  )
 }
