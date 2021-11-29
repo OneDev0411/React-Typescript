@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import { useIsSuperCampaignExecuted } from '../../hooks/use-is-super-campaign-executed'
+import { useIsSuperCampaignExecutedOrDueAtTimeout } from '../../hooks/use-is-super-campaign-executed-or-due-at-timeout'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -18,7 +19,9 @@ function SuperCampaignEnrolledParticipants() {
     superCampaign,
     setSuperCampaign
   )
-  const isResultMode = useIsSuperCampaignExecuted(superCampaign)
+  const isCampaignExecuted = useIsSuperCampaignExecuted(superCampaign)
+  const isCampaignExecutedOrDueAtTimeout =
+    useIsSuperCampaignExecutedOrDueAtTimeout(superCampaign)
 
   const {
     superCampaignEnrollments,
@@ -28,7 +31,7 @@ function SuperCampaignEnrolledParticipants() {
   } = useGetSuperCampaignEnrollments(
     superCampaign.id,
     superCampaign.tags,
-    isResultMode
+    isCampaignExecuted
   )
 
   return (
@@ -39,9 +42,9 @@ function SuperCampaignEnrolledParticipants() {
           value={superCampaign.tags}
           onChange={updateSuperCampaignTags}
           disabled={isSaving}
-          readOnly={isResultMode}
+          readOnly={isCampaignExecutedOrDueAtTimeout}
           helperText={
-            !isResultMode && enrolledAgentCount
+            !isCampaignExecutedOrDueAtTimeout && enrolledAgentCount
               ? `${pluralize(
                   'agent',
                   enrolledAgentCount,
@@ -52,7 +55,7 @@ function SuperCampaignEnrolledParticipants() {
         />
       </Box>
       <Box mt={3}>
-        {isResultMode ? (
+        {isCampaignExecuted ? (
           <SuperCampaignResultList
             isLoading={isLoading}
             superCampaignResults={
