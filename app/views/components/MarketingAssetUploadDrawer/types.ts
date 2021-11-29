@@ -6,7 +6,7 @@ export interface Asset {
     url: string
   }
   label: string
-  medium: IMarketingTemplateMedium
+  medium?: IMarketingTemplateMedium
   templateType?: IMarketingTemplateType
 }
 

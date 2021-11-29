@@ -30,9 +30,17 @@ export function createdAt(date) {
 }
 
 export function getSelectedMediumTemplates(brandTemplates, wantedMedium) {
-  return wantedMedium
-    ? brandTemplates.filter(t => t.template.medium === wantedMedium)
-    : brandTemplates
+  if (!wantedMedium) {
+    return brandTemplates
+  }
+
+  return brandTemplates.filter(templateOrAsset => {
+    if (isBrandAsset(templateOrAsset)) {
+      return templateOrAsset.medium === wantedMedium
+    }
+
+    return templateOrAsset.template.medium === wantedMedium
+  })
 }
 
 function getTemplateIndex(availableTemplates, selectedTemplate) {

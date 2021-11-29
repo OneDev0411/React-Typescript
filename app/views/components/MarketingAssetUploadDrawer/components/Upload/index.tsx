@@ -48,11 +48,13 @@ const useStyles = makeStyles(
 
 interface Props {
   defaultSelectedTemplateType?: IMarketingTemplateType
+  defaultSelectedMedium?: IMarketingTemplateMedium
   uploadProgress: number[]
 }
 
 export default function Upload({
   defaultSelectedTemplateType,
+  defaultSelectedMedium,
   uploadProgress
 }: Props) {
   const classes = useStyles()
@@ -72,8 +74,10 @@ export default function Upload({
             defaultSelectedTemplateType
           : defaultSelectedTemplateType
 
-      const preSelectedMedium: IMarketingTemplateMedium =
-        assets.length > 0 ? assets[assets.length - 1].medium : 'Email'
+      const preSelectedMedium =
+        assets.length > 0
+          ? assets[assets.length - 1].medium ?? defaultSelectedMedium
+          : defaultSelectedMedium
 
       const newAssets: Asset[] = [
         ...assets,
@@ -92,7 +96,7 @@ export default function Upload({
 
       setValue('assets', newAssets)
     },
-    [setValue, assets, defaultSelectedTemplateType]
+    [setValue, assets, defaultSelectedTemplateType, defaultSelectedMedium]
   )
 
   const handleUpdateAsset = (updatedAsset: Asset) => {

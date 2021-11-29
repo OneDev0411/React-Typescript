@@ -273,6 +273,7 @@ export function MarketingLayout({
                   ? (templateTypes.split(',')[0] as IMarketingTemplateType)
                   : undefined
               }
+              defaultSelectedMedium={currentMedium}
               onClose={closeUploadMarketingAssetDrawer}
             />
           )}

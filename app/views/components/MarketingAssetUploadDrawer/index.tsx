@@ -14,11 +14,13 @@ import { DrawerStep, AssetsUploadFormData } from './types'
 
 interface Props {
   defaultSelectedTemplateType?: IMarketingTemplateType
+  defaultSelectedMedium?: IMarketingTemplateMedium
   onClose: (uploadedAssets?: IBrandAsset[]) => void
 }
 
 export default function MarketingAssetUploadDrawer({
   defaultSelectedTemplateType,
+  defaultSelectedMedium,
   onClose
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
@@ -126,6 +128,7 @@ export default function MarketingAssetUploadDrawer({
         <Upload
           uploadProgress={uploadProgress}
           defaultSelectedTemplateType={defaultSelectedTemplateType}
+          defaultSelectedMedium={defaultSelectedMedium}
         />
       )
     }
