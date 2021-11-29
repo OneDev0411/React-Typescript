@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect } from 'react'
 
 import useAsync from '@app/hooks/use-async'
 import getSuperCampaign from '@app/models/super-campaign/get-super-campaign'
+
+import { useRefreshSuperCampaignBasedOnDueAt } from './use-refresh-super-campaign-based-on-due-at'
 
 interface UseGetSuperCampaign {
   isLoading: boolean
@@ -24,9 +26,16 @@ export function useGetSuperCampaign(
     status: 'pending'
   })
 
+  const loadSuperCampaign = useCallback(
+    () => run(async () => getSuperCampaign(superCampaignId)),
+    [run, superCampaignId]
+  )
+
   useEffect(() => {
-    run(async () => getSuperCampaign(superCampaignId))
-  }, [run, superCampaignId])
+    loadSuperCampaign()
+  }, [loadSuperCampaign])
+
+  useRefreshSuperCampaignBasedOnDueAt(superCampaign, loadSuperCampaign)
 
   return { isLoading, superCampaign, setSuperCampaign }
 }
