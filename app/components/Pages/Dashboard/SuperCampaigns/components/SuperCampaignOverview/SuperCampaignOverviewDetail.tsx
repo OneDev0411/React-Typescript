@@ -99,7 +99,7 @@ function SuperCampaignOverviewDetail() {
         />
       )}
       <SuperCampaignDrawer
-        isOpen={!!editDrawerParam}
+        isOpen={!!editDrawerParam && !isCampaignExecutedOrDueAtTimeout}
         onClose={closeDrawer}
         formInitialValues={superCampaign}
         onConfirm={handleSuperCampaignConfirm}
