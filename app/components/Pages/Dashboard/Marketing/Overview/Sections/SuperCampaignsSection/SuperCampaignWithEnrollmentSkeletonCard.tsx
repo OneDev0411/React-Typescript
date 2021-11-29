@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 
 import SuperCampaignBaseCard from './SuperCampaignBaseCard'
-import useSuperCampaignWithEnrollmentCardStyles from './use-super-campaign-with-enrollment-card-styles'
 
 const useStyles = makeStyles(
   theme => ({
@@ -15,11 +14,9 @@ const useStyles = makeStyles(
 
 function SuperCampaignWithEnrollmentSkeletonCard() {
   const classes = useStyles()
-  const cardClasses = useSuperCampaignWithEnrollmentCardStyles()
 
   return (
     <SuperCampaignBaseCard
-      className={cardClasses.root}
       image={<Skeleton animation="wave" variant="rect" height="100%" />}
     >
       <div className={classes.wrapper}>
@@ -32,6 +29,18 @@ function SuperCampaignWithEnrollmentSkeletonCard() {
         />
         <Skeleton variant="text" animation="wave" height="19px" width="50%" />
         <div className={classes.footer}>
+          <Skeleton
+            className={classes.text}
+            variant="text"
+            animation="wave"
+            height="10px"
+          />
+          <Skeleton
+            className={classes.text}
+            variant="text"
+            animation="wave"
+            height="10px"
+          />
           <Skeleton
             className={classes.text}
             variant="text"

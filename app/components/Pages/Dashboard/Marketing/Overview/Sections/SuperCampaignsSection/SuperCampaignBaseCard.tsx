@@ -3,32 +3,47 @@ import { ReactNode } from 'react'
 import { Card, makeStyles } from '@material-ui/core'
 import classNames from 'classnames'
 
+import LinkCardActionArea, {
+  LinkCardActionAreaProps
+} from '@app/views/components/LinkCardActionArea'
+
 const useStyles = makeStyles(
-  {
+  theme => ({
     actionArea: {
+      minHeight: theme.spacing(51),
       display: 'flex',
-      alignItems: 'stretch'
+      flexDirection: 'column',
+      // TODO: Remove the below block when bootstrap css got removed
+      '&:hover, &:focus': {
+        color: 'unset',
+        textDecoration: 'auto',
+        outline: 'unset',
+        outlineOffset: 'unset'
+      }
     },
     imageHolder: {
       position: 'relative',
       overflow: 'hidden',
-      flexGrow: 0,
+      height: theme.spacing(26),
       flexShrink: 0,
-      width: '46%'
+      flexGrow: 0,
+      width: '100%'
     },
     details: {
-      flexGrow: 1,
-      flexShrink: 1,
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      flexShrink: 1,
+      flexGrow: 1,
+      width: '100%'
     }
-  },
+  }),
   { name: 'SuperCampaignBaseCard' }
 )
 
-export interface SuperCampaignBaseCardProps {
+export interface SuperCampaignBaseCardProps
+  extends Pick<LinkCardActionAreaProps, 'onClick' | 'to'> {
   className?: string
   children?: ReactNode
   image: ReactNode
@@ -37,17 +52,20 @@ export interface SuperCampaignBaseCardProps {
 function SuperCampaignBaseCard({
   className,
   children,
-  image
+  image,
+  ...otherProps
 }: SuperCampaignBaseCardProps) {
   const classes = useStyles()
 
   return (
-    <Card
-      className={classNames(classes.actionArea, className)}
-      variant="outlined"
-    >
-      <div className={classes.imageHolder}>{image}</div>
-      <div className={classes.details}>{children}</div>
+    <Card variant="outlined">
+      <LinkCardActionArea
+        {...otherProps}
+        className={classNames(classes.actionArea, className)}
+      >
+        <div className={classes.imageHolder}>{image}</div>
+        <div className={classes.details}>{children}</div>
+      </LinkCardActionArea>
     </Card>
   )
 }

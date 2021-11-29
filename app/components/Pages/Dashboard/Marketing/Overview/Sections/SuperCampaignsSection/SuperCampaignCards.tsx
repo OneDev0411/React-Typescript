@@ -66,7 +66,7 @@ function SuperCampaignCards({
   return (
     <>
       {superCampaignsWithEnrollment.map(superCampaignWithEnrollment => (
-        <Grid key={superCampaignWithEnrollment.id} item sm={6}>
+        <Grid key={superCampaignWithEnrollment.id} item xs={6} sm={3}>
           <SuperCampaignWithEnrollmentCard
             superCampaignWithEnrollment={superCampaignWithEnrollment}
             onEnroll={enrollment =>

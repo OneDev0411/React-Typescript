@@ -1,6 +1,6 @@
-import { makeStyles, Typography } from '@material-ui/core'
+import { makeStyles, Tooltip, Typography } from '@material-ui/core'
 import classNames from 'classnames'
-import { differenceInDays } from 'date-fns'
+import { differenceInDays, format } from 'date-fns'
 
 import { RelativeTime } from '@app/views/components/RelativeTime'
 
@@ -28,6 +28,8 @@ function SuperCampaignCardDays({
 
   const timeInMilliseconds = time * 1000
 
+  const tooltipTitle = format(timeInMilliseconds, "LLLL dd, yyyy 'at' hh:mmaaa")
+
   return (
     <Typography
       className={classNames(
@@ -37,7 +39,11 @@ function SuperCampaignCardDays({
       )}
       variant="caption"
     >
-      <RelativeTime time={timeInMilliseconds} />
+      <Tooltip title={tooltipTitle}>
+        <span>
+          <RelativeTime time={timeInMilliseconds} />
+        </span>
+      </Tooltip>
     </Typography>
   )
 }

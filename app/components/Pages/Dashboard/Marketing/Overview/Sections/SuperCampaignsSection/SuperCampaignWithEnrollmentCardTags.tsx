@@ -1,4 +1,4 @@
-import { makeStyles, Typography, Chip } from '@material-ui/core'
+import { makeStyles, Typography, Chip, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
 
 const useStyles = makeStyles(
@@ -6,7 +6,8 @@ const useStyles = makeStyles(
     root: {
       display: 'flex',
       whiteSpace: 'nowrap',
-      alignItems: 'center'
+      alignItems: 'center',
+      overflow: 'hidden'
     },
     tags: {
       whiteSpace: 'nowrap',
@@ -29,7 +30,7 @@ const useStyles = makeStyles(
 )
 
 interface SuperCampaignWithEnrollmentCardTagsProps {
-  className: string
+  className?: string
   tags: string[]
 }
 
@@ -54,9 +55,11 @@ function SuperCampaignWithEnrollmentCardTags({
         ))}
       </div>
       {moreCount > 0 && (
-        <Typography className={classes.more} variant="caption">
-          +{moreCount}more
-        </Typography>
+        <Tooltip title="Click to view and edit the tags">
+          <Typography className={classes.more} variant="caption">
+            + {moreCount}more
+          </Typography>
+        </Tooltip>
       )}
     </div>
   )

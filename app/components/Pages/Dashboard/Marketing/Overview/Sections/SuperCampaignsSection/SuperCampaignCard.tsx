@@ -1,13 +1,15 @@
 import { CardMedia, makeStyles, Typography } from '@material-ui/core'
-import { Link } from 'react-router'
-
-import { ACL } from '@app/constants/acl'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import SuperCampaignBaseCard, {
   SuperCampaignBaseCardProps
 } from './SuperCampaignBaseCard'
 import SuperCampaignCardDays from './SuperCampaignCardDays'
+
+export interface SuperCampaignCardProps
+  extends Omit<SuperCampaignBaseCardProps, 'image'> {
+  superCampaign: ISuperCampaign<'template_instance'>
+  descriptionLineCount: number
+}
 
 const useStyles = makeStyles(
   theme => ({
@@ -18,10 +20,6 @@ const useStyles = makeStyles(
       to: {
         objectPosition: '0 100%'
       }
-    },
-    link: {
-      color: theme.palette.primary.main,
-      '&:hover, &:active': { color: theme.palette.primary.main }
     },
     media: {
       position: 'absolute',
@@ -36,43 +34,33 @@ const useStyles = makeStyles(
         animation: '8s linear infinite alternate $scrollPositionAnimation'
       }
     },
-    description: {
+    description: ({
+      descriptionLineCount
+    }: Pick<SuperCampaignCardProps, 'descriptionLineCount'>) => ({
       color: theme.palette.grey[700],
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       display: '-webkit-box',
-      '-webkit-line-clamp': 2 /* number of lines to show */,
-      'line-clamp': 2,
+      '-webkit-line-clamp': descriptionLineCount /* number of lines to show */,
+      'line-clamp': descriptionLineCount,
       '-webkit-box-orient': 'vertical'
-    },
+    }),
     margin: {
       display: 'block',
       marginBottom: theme.spacing(0.5)
     },
-    padding: { padding: theme.spacing(2) }
+    padding: { padding: theme.spacing(2, 2, 0, 2) }
   }),
   { name: 'SuperCampaignCard' }
 )
 
-export interface SuperCampaignCardProps
-  extends Omit<SuperCampaignBaseCardProps, 'image'> {
-  superCampaign: ISuperCampaign<'template_instance'>
-}
-
 function SuperCampaignCard({
   superCampaign,
   children,
+  descriptionLineCount,
   ...otherProps
 }: SuperCampaignCardProps) {
-  const classes = useStyles()
-
-  const title = (
-    <Typography className={classes.margin} variant="subtitle2" noWrap>
-      {superCampaign.subject || 'Untitled Campaign'}
-    </Typography>
-  )
-
-  const isAdmin = useAcl(ACL.ADMIN)
+  const classes = useStyles({ descriptionLineCount })
 
   return (
     <SuperCampaignBaseCard
@@ -95,16 +83,9 @@ function SuperCampaignCard({
             time={superCampaign.due_at}
           />
         )}
-        {isAdmin ? (
-          <Link
-            className={classes.link}
-            to={`/dashboard/insights/super-campaign/${superCampaign.id}/detail`}
-          >
-            {title}
-          </Link>
-        ) : (
-          title
-        )}
+        <Typography variant="subtitle2" noWrap gutterBottom>
+          {superCampaign.subject || 'Untitled Campaign'}
+        </Typography>
         <Typography variant="body2" className={classes.description}>
           {superCampaign.description}
         </Typography>
