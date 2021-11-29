@@ -95,7 +95,7 @@ let PersonalInfoForm = ({
           label="Website"
           component={SimpleField}
           required={false}
-          placeholder="http://www.example.com"
+          placeholder="https://www.example.com"
         />
         <Field
           name="instagram"
@@ -103,7 +103,7 @@ let PersonalInfoForm = ({
           label="Instagram"
           component={SimpleField}
           required={false}
-          placeholder="http://www.instagram.com/<username>"
+          placeholder="https://www.instagram.com/<username>"
         />
         <Field
           name="facebook"
@@ -111,7 +111,7 @@ let PersonalInfoForm = ({
           label="Facebook"
           component={SimpleField}
           required={false}
-          placeholder="http://www.fb.com/<username>"
+          placeholder="https://www.fb.com/<username>"
         />
         <Field
           name="linkedin"
@@ -119,7 +119,7 @@ let PersonalInfoForm = ({
           label="LinkedIn"
           component={SimpleField}
           required={false}
-          placeholder="http://www.linkedin.com/<username>"
+          placeholder="https://www.linkedin.com/<username>"
         />
         <Field
           name="youtube"
@@ -127,7 +127,7 @@ let PersonalInfoForm = ({
           label="Youtube"
           component={SimpleField}
           required={false}
-          placeholder="http://www.youtube.com/<username>"
+          placeholder="https://www.youtube.com/<username>"
         />
         <Field
           name="twitter"
@@ -135,7 +135,7 @@ let PersonalInfoForm = ({
           label="Twitter"
           component={SimpleField}
           required={false}
-          placeholder="http://www.twitter.com/<username>"
+          placeholder="https://www.twitter.com/<username>"
         />
 
         {submitError && (
