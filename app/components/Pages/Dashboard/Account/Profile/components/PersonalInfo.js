@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Button } from '@material-ui/core'
 import { connect } from 'react-redux'
 import compose from 'recompose/compose'
@@ -16,6 +14,29 @@ import PhoneNumberField from './PhoneNumberField'
 import Catalog from './ProfileCatalog'
 import SimpleField from './SimpleField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
+
+const isValidURL = url => {
+  const validUrlRegex =
+    /^(http[s]?:\/\/)?(www.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+
+  try {
+    return validUrlRegex.test(url)
+  } catch (_) {
+    return false
+  }
+}
+
+const cleanURL = url => {
+  if (!url) {
+    return ''
+  }
+
+  if (url.startsWith('https') || url.startsWith('https')) {
+    return url
+  }
+
+  return `http://${url}`
+}
 
 let PersonalInfoForm = ({
   user,
@@ -64,6 +85,59 @@ let PersonalInfoForm = ({
           format={value => value.replace(/\+1|[^+\d]*/g, '')}
         />
         <VerifyMobileNumber />
+
+        {/* socials */}
+        <hr />
+
+        <Field
+          name="website"
+          type="text"
+          label="Website"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.example.com"
+        />
+        <Field
+          name="instagram"
+          type="text"
+          label="Instagram"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.instagram.com/<username>"
+        />
+        <Field
+          name="facebook"
+          type="text"
+          label="Facebook"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.fb.com/<username>"
+        />
+        <Field
+          name="linkedin"
+          type="text"
+          label="LinkedIn"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.linkedin.com/<username>"
+        />
+        <Field
+          name="youtube"
+          type="text"
+          label="Youtube"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.youtube.com/<username>"
+        />
+        <Field
+          name="twitter"
+          type="text"
+          label="Twitter"
+          component={SimpleField}
+          required={false}
+          placeholder="http://www.twitter.com/<username>"
+        />
+
         {submitError && (
           <div className="c-auth__submit-error-alert">{submitError}</div>
         )}
@@ -92,7 +166,17 @@ let PersonalInfoForm = ({
 
 const validate = values => {
   const errors = {}
-  const { email, first_name, last_name } = values
+  const {
+    email,
+    first_name,
+    last_name,
+    website,
+    instagram,
+    facebook,
+    linkedin,
+    youtube,
+    twitter
+  } = values
 
   const NAME_CHARACTER_LIMIT = 1
 
@@ -130,13 +214,39 @@ const validate = values => {
     errors.email = 'Invalid email address.'
   }
 
+  const socials = {
+    website,
+    facebook,
+    twitter,
+    instagram,
+    linkedin,
+    youtube
+  }
+
+  Object.entries(socials).forEach(([name, value]) => {
+    if (value && !isValidURL(value)) {
+      errors[name] = `Invalid ${name} URL!`
+    }
+  })
+
   return errors
 }
 
 export default compose(
   connect(
     ({ brand, user }) => {
-      const { first_name, last_name, email, phone_number } = user
+      const {
+        first_name,
+        last_name,
+        email,
+        phone_number,
+        website,
+        instagram,
+        facebook,
+        linkedin,
+        youtube,
+        twitter
+      } = user
 
       return {
         brand,
@@ -145,7 +255,13 @@ export default compose(
           email,
           last_name,
           first_name,
-          phone_number: phone_number || ''
+          phone_number: phone_number || '',
+          website: cleanURL(website),
+          instagram: cleanURL(instagram),
+          facebook: cleanURL(facebook),
+          linkedin: cleanURL(linkedin),
+          youtube: cleanURL(youtube),
+          twitter: cleanURL(twitter)
         }
       }
     },
