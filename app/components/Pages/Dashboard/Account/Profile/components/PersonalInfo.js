@@ -15,29 +15,6 @@ import Catalog from './ProfileCatalog'
 import SimpleField from './SimpleField'
 import VerifyMobileNumber from './VerifyPhoneNumber'
 
-const isValidURL = url => {
-  const validUrlRegex =
-    /^(http[s]?:\/\/)?(www.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-
-  try {
-    return validUrlRegex.test(url)
-  } catch (_) {
-    return false
-  }
-}
-
-const cleanURL = url => {
-  if (!url) {
-    return ''
-  }
-
-  if (url.startsWith('http')) {
-    return url
-  }
-
-  return `https://${url}`
-}
-
 let PersonalInfoForm = ({
   user,
   invalid,
@@ -164,6 +141,17 @@ let PersonalInfoForm = ({
   )
 }
 
+const isValidURL = url => {
+  const validUrlRegex =
+    /^(http[s]?:\/\/)?(www.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+
+  try {
+    return validUrlRegex.test(url)
+  } catch (_) {
+    return false
+  }
+}
+
 const validate = values => {
   const errors = {}
   const {
@@ -247,6 +235,22 @@ export default compose(
         youtube,
         twitter
       } = user
+
+      const cleanURL = url => {
+        if (!url) {
+          return ''
+        }
+
+        if (url.startsWith('http')) {
+          if (url.startsWith('https://')) {
+            return url
+          }
+
+          return url.replace('http://', 'https://')
+        }
+
+        return `https://${url}`
+      }
 
       return {
         brand,
