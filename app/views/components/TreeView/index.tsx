@@ -83,7 +83,7 @@ export default memo(function TreeView<NodeType = any>({
 
   return (
     <>
-      {([] as NodeType[]).concat(root).map(node => (
+      {(root ?? []).map(node => (
         <TreeViewNode
           node={node}
           key={getNodeId(node)}

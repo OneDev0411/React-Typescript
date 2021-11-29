@@ -6,7 +6,7 @@ import { BaseBrandSelectorProps } from '../Base'
 
 interface BaseDrawerProps extends OverlayDrawerProps {
   drawerTitle?: string
-  children: ReactNode
+  children?: ReactNode
 }
 
 export interface BaseSingleSelectDrawer extends BaseDrawerProps {

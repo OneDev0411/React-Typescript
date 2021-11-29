@@ -7,7 +7,7 @@ import { isFetchingSelectedTeam } from '@app/reducers/user'
 import { viewAs, getActiveTeam } from '@app/utils/user-teams'
 import {
   NodeRenderer,
-  BrandSelectorDrawer
+  BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -125,7 +125,7 @@ export function ActiveTeam({ user }: Props) {
             </div>
           </div>
         </div>
-        <BrandSelectorDrawer
+        <BrandAvailableToUserSelectorDrawer
           open={isBrandSelectorOpen}
           width="43rem"
           onClose={hanldeCloseBrandSelectorDrawer}

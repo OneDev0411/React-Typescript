@@ -1,15 +1,14 @@
-import * as React from 'react'
-import { ReactNode, useCallback } from 'react'
+import { ReactNode, useCallback, memo } from 'react'
 
-import {
-  TreeViewExpandArrow,
-  TreeViewExpandButton,
-  TreeViewNodeChildrenContainer,
-  TreeViewNodeContainer,
-  TreeViewNodeContent
-} from './styled'
+import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
+import cn from 'classnames'
 
-interface Props<NodeType> {
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+
+import { useStyles } from './style'
+
+export interface Props<NodeType> {
   node: NodeType
 
   // adapter
@@ -24,9 +23,10 @@ interface Props<NodeType> {
   onToggleExpanded: (node: NodeType) => any
 }
 
-export const TreeViewNode = React.memo(function TreeViewNode<
+export const TreeViewNode = memo(function TreeViewNode<
   NodeType extends any = any
 >({ node, onToggleExpanded, ...props }: Props<NodeType>) {
+  const classes = useStyles()
   const childNodes = props.getChildNodes(node) || []
 
   const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
@@ -37,23 +37,27 @@ export const TreeViewNode = React.memo(function TreeViewNode<
   )
 
   const expandable = childNodes.length > 0
-  const arrow = expandable ? (
-    <TreeViewExpandButton onClick={toggle}>
-      <TreeViewExpandArrow expanded={expanded} />
-    </TreeViewExpandButton>
-  ) : null
+  const arrow = expandable && (
+    <button type="button" className={classes.expandButton} onClick={toggle}>
+      <SvgIcon
+        path={expanded ? mdiChevronDown : mdiChevronRight}
+        size={muiIconSizes.small}
+      />
+    </button>
+  )
 
   return (
-    <>
-      <TreeViewNodeContainer
-        selectable={props.selectable}
-        expandable={expandable}
+    <div className={classes.container}>
+      <div
+        className={cn(classes.contentContainer, {
+          [classes.expandableContentContainer]: expandable,
+          [classes.selectableContentContainer]: props.selectable
+        })}
       >
-        {arrow}{' '}
-        <TreeViewNodeContent>{props.renderNode(node)}</TreeViewNodeContent>
-      </TreeViewNodeContainer>
+        {arrow} <div className={classes.content}>{props.renderNode(node)}</div>
+      </div>
       {expanded && (
-        <TreeViewNodeChildrenContainer>
+        <div className={classes.childrenContainer}>
           {childNodes.map(node => (
             <TreeViewNode
               key={props.getId(node)}
@@ -62,8 +66,8 @@ export const TreeViewNode = React.memo(function TreeViewNode<
               {...props}
             />
           ))}
-        </TreeViewNodeChildrenContainer>
+        </div>
       )}
-    </>
+    </div>
   )
 })
