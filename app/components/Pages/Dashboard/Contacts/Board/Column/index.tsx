@@ -184,16 +184,16 @@ export const BoardColumn = memo(function BoardColumn({
   const handleReachEnd = () => setLoadingOffset(offset => offset + loadingLimit)
 
   const handleChangeTags = (contact: IContact, tags: string[]) => {
-    updateList(
-      list.map(row =>
-        row.id !== contact.id
-          ? row
-          : {
-              ...contact,
-              tags
-            }
-      )
+    const newList = list.map(item =>
+      item.id !== contact.id
+        ? item
+        : {
+            ...contact,
+            tags
+          }
     )
+
+    updateList(newList)
   }
 
   return (

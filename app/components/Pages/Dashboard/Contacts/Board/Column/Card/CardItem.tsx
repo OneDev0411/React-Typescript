@@ -190,7 +190,7 @@ export function CardItem({
                   {contact.tags!.slice(0, 3).map((tag, index) => (
                     <Chip
                       key={tag}
-                      label={tag}
+                      label={<TextMiddleTruncate text={tag} maxLength={10} />}
                       size="small"
                       className={classes.tag}
                     />

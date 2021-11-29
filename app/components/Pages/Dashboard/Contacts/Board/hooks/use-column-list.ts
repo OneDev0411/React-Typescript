@@ -7,5 +7,9 @@ export function useColumnList(
 ): [IContact[], Context['updateList']] {
   const context = useContext(BoardContext)
 
-  return [context.list[listName] ?? [], context.updateList]
+  const updateList = (contacts: IContact[]) => {
+    context.updateList(contacts, listName)
+  }
+
+  return [context.list[listName] ?? [], updateList]
 }
