@@ -2,7 +2,7 @@ import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
 import { SuperCampaignWithEnrollment } from './types'
-import useSuperCampaignWithEnrollmentCardStyles from './use-super-campaign-with-enrollment-card-styles'
+import { useHasSuperCampaignManageAccess } from './use-has-super-campaign-manage-access'
 
 interface SuperCampaignWithEnrollmentCardProps {
   superCampaignWithEnrollment: SuperCampaignWithEnrollment
@@ -15,22 +15,30 @@ function SuperCampaignWithEnrollmentCard({
   onEnroll,
   onUnenroll
 }: SuperCampaignWithEnrollmentCardProps) {
-  const classes = useSuperCampaignWithEnrollmentCardStyles()
+  const hasManageAccess = useHasSuperCampaignManageAccess(superCampaign)
+
+  // TODO: Complete the drawer logic here
+  const openSuperCampaignPreviewDrawer = () =>
+    console.log('openSuperCampaignPreviewDrawer')
 
   return (
-    <SuperCampaignCard className={classes.root} superCampaign={superCampaign}>
+    <SuperCampaignCard
+      superCampaign={superCampaign}
+      descriptionLineCount={enrollment ? 3 : 4}
+      to={
+        hasManageAccess
+          ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail`
+          : undefined
+      }
+      onClick={!hasManageAccess ? openSuperCampaignPreviewDrawer : undefined}
+    >
       {enrollment ? (
         <SuperCampaignWithEnrollmentCardEnrolledFooter
-          superCampaignId={superCampaign.id}
           superCampaignTags={enrollment.tags}
-          onUpdate={onEnroll}
-          onUnenroll={onUnenroll}
         />
       ) : (
         <SuperCampaignWithEnrollmentCardParticipateFooter
-          superCampaignId={superCampaign.id}
-          superCampaignTags={superCampaign.tags ?? []}
-          onEnroll={onEnroll}
+          isEnrolling={false} // TODO: pass a real value here
         />
       )}
     </SuperCampaignCard>
