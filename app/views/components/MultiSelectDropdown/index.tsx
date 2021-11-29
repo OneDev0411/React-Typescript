@@ -36,6 +36,7 @@ const useStyles = makeStyles(
 interface Item {
   label: string
   value: string
+  readonly?: boolean
 }
 
 interface Props<T> {
@@ -94,6 +95,7 @@ export function MultiSelectDropDown<T extends Item>({
         <MenuItem
           key={item.value}
           value={item.value}
+          disabled={item.readonly ?? false}
           onClick={() => handleChange(item)}
         >
           <Checkbox

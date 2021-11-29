@@ -180,11 +180,13 @@ export default function ChecklistsPage({ location }: Props) {
           </Box>
         </Content>
 
-        <PropertyTypeForm
-          isOpen={isFormOpen}
-          onSave={handleCreatePropertyType}
-          onClose={() => setIsFormOpen(false)}
-        />
+        {isFormOpen && (
+          <PropertyTypeForm
+            isOpen
+            onSave={handleCreatePropertyType}
+            onClose={() => setIsFormOpen(false)}
+          />
+        )}
       </Container>
     </Acl.Admin>
   )

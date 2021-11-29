@@ -41,12 +41,14 @@ export function PropertyTypeEdit({ propertyType }: Props) {
         <SvgIcon path={mdiPencilOutline} size={muiIconSizes.small} />
       </IconButton>
 
-      <PropertyTypeForm
-        isOpen={showEditForm}
-        propertyType={propertyType}
-        onSave={closeModal}
-        onClose={closeModal}
-      />
+      {showEditForm && (
+        <PropertyTypeForm
+          isOpen
+          propertyType={propertyType}
+          onSave={closeModal}
+          onClose={closeModal}
+        />
+      )}
     </>
   )
 }
