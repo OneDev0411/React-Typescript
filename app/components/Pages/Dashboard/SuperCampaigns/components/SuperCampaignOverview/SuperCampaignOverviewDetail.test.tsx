@@ -1,20 +1,22 @@
-import * as t from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { TestBed } from 'tests/unit/TestBed';
-import { makeControlledAsync } from 'tests/unit/utils/controllable-promise';
+import * as t from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { TestBed } from 'tests/unit/TestBed'
+import { makeControlledAsync } from 'tests/unit/utils/controllable-promise'
 
 import templateInstance from 'fixtures/marketing-center/template-instance.json'
-import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider';
-import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail';
+import { SuperCampaignDetailProvider } from '../SuperCampaignDetailProvider'
+import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
-const mockUpdateCampaignModel = makeControlledAsync(jest.fn());
-jest.mock('@app/models/super-campaign/update-super-campaign', () => async (
-  superCampaignId: UUID,
-  data: ISuperCampaignInput
-) => {
-  await mockUpdateCampaignModel.fn(superCampaignId, data)
-  return data
-});
+const mockUpdateCampaignModel = makeControlledAsync(jest.fn())
+jest.mock(
+  '@app/models/super-campaign/update-super-campaign',
+  () => async (superCampaignId: UUID, data: ISuperCampaignInput) => {
+    await mockUpdateCampaignModel.fn(superCampaignId, data)
+    return data
+  }
+)
+
+const mockDateInMilliSeconds = new Date('2021-11-17T21:30:00').getTime()
 
 const empty: ISuperCampaign<'template_instance'> = {
   id: '1',
@@ -34,14 +36,15 @@ const testData: Record<string, ISuperCampaign<'template_instance'>> = {
   filled: {
     ...empty,
     subject: 'Market Report Q3',
-    description: 'This is a monthly newsletter that is sent out to Newsletter tag',
-    due_at: new Date('2021-11-17T21:30:00').getTime() / 1000
+    description:
+      'This is a monthly newsletter that is sent out to Newsletter tag',
+    due_at: mockDateInMilliSeconds / 1000
   }
 }
 
 interface Props {
-  superCampaign: ISuperCampaign<'template_instance'>;
-  setSuperCampaign: (superCampaign: ISuperCampaign<'template_instance'>) => void;
+  superCampaign: ISuperCampaign<'template_instance'>
+  setSuperCampaign: (superCampaign: ISuperCampaign<'template_instance'>) => void
 }
 
 function Test({ superCampaign, setSuperCampaign }: Props) {
@@ -58,23 +61,37 @@ function Test({ superCampaign, setSuperCampaign }: Props) {
 }
 
 function testRenderEmpty() {
-  const $ = t.render(<Test superCampaign={testData.empty} setSuperCampaign={jest.fn()} />)
-  expect($.getByTestId('super-campaign-details')).toMatchSnapshot('details box without template')
+  const $ = t.render(
+    <Test superCampaign={testData.empty} setSuperCampaign={jest.fn()} />
+  )
+  expect($.getByTestId('super-campaign-details')).toMatchSnapshot(
+    'details box without template'
+  )
   expect($.getByText('Edit')).toBeInTheDocument()
 }
 
 function testRenderFilledWithTemplate() {
-  const $ = t.render(<Test superCampaign={testData.filled} setSuperCampaign={jest.fn()} />)
-  expect($.getByTestId('super-campaign-details')).toMatchSnapshot('details box without template')
-  expect($.getByTestId('super-campaign-detail-template').querySelector('iframe')).toMatchSnapshot('details box template preview')
+  const $ = t.render(
+    <Test superCampaign={testData.filled} setSuperCampaign={jest.fn()} />
+  )
+  expect($.getByTestId('super-campaign-details')).toMatchSnapshot(
+    'details box without template'
+  )
+  expect(
+    $.getByTestId('super-campaign-detail-template').querySelector('iframe')
+  ).toMatchSnapshot('details box template preview')
 
   // Just checking the button exists
-  t.within($.getByTestId('super-campaign-detail-template')).getByText('Edit Template');
+  t.within($.getByTestId('super-campaign-detail-template')).getByText(
+    'Edit Template'
+  )
 }
 
 async function testEditFlow() {
-  const setSuperCampaign = jest.fn();
-  const $ = t.render(<Test superCampaign={testData.empty} setSuperCampaign={setSuperCampaign} />)
+  const setSuperCampaign = jest.fn()
+  const $ = t.render(
+    <Test superCampaign={testData.empty} setSuperCampaign={setSuperCampaign} />
+  )
 
   // Drawer is not yet open
   expect(t.screen.getByText('Enter Campaign Details')).not.toBeVisible()
@@ -92,8 +109,14 @@ async function testEditFlow() {
     }
     return res
   }
-  userEvent.type(find('subject', 'input'), `{selectall}${testData.filled.subject}`)
-  userEvent.type(find('description', 'textarea'), `{selectall}${testData.filled.description}`)
+  userEvent.type(
+    find('subject', 'input'),
+    `{selectall}${testData.filled.subject}`
+  )
+  userEvent.type(
+    find('description', 'textarea'),
+    `{selectall}${testData.filled.description}`
+  )
 
   // Click on Save
   const saveButton = $.getByText('Save')
@@ -101,12 +124,17 @@ async function testEditFlow() {
 
   // Expect `updateSuperCampaign` model to have been called correctly
   mockUpdateCampaignModel.resolve()
-  await t.waitFor(() => expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledTimes(1))
+  await t.waitFor(() =>
+    expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledTimes(1)
+  )
   const expected = expect.objectContaining({
     subject: testData.filled.subject,
-    description: testData.filled.description,
+    description: testData.filled.description
   })
-  expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledWith(testData.empty.id, expected)
+  expect(mockUpdateCampaignModel.mockFn).toHaveBeenCalledWith(
+    testData.empty.id,
+    expected
+  )
 
   // Expect `Provider.setSuperCampaign` to have been called correctly
   expect(setSuperCampaign).toHaveBeenCalledWith(expected)
@@ -122,6 +150,16 @@ function testReadOnlyMode() {
 }
 
 describe('Super Campaign/Overview/Detail', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(Date.prototype, 'getTime')
+      .mockImplementation(() => mockDateInMilliSeconds)
+  })
+
+  afterAll(() => {
+    jest.restoreAllMocks()
+  })
+
   describe('When not executed', () => {
     it('renders empty when draft campaign is given', testRenderEmpty)
     it('renders template when there is one', testRenderFilledWithTemplate)
