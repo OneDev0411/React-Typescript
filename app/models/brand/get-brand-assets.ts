@@ -2,7 +2,7 @@ import Fetch from '../../services/fetch'
 
 interface Options {
   templateTypes?: IMarketingTemplateType[]
-  medium?: IMarketingTemplateMedium
+  mediums?: IMarketingTemplateMedium[]
 }
 
 export async function getBrandAssets(
@@ -11,15 +11,15 @@ export async function getBrandAssets(
 ): Promise<IBrandAsset[]> {
   const query: {
     'template_types[]'?: IMarketingTemplateType[]
-    medium?: IMarketingTemplateMedium
+    'mediums[]'?: IMarketingTemplateMedium[]
   } = {}
 
   if (options?.templateTypes) {
     query['template_types[]'] = options.templateTypes
   }
 
-  if (options?.medium) {
-    query.medium = options.medium
+  if (options?.mediums) {
+    query['mediums[]'] = options.mediums
   }
 
   const response = await new Fetch()

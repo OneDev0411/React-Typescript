@@ -7,7 +7,7 @@ import { getBrandAssets } from '@app/models/brand/get-brand-assets'
 
 interface Options {
   templateTypes?: IMarketingTemplateType[]
-  medium?: IMarketingTemplateMedium
+  mediums?: IMarketingTemplateMedium[]
 }
 
 interface UseBrandAssets {

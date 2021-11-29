@@ -113,7 +113,7 @@ export function MarketingLayout({
     templateTypes: templateTypes
       ? (templateTypes.split(',') as IMarketingTemplateType[])
       : [],
-    medium: currentMedium
+    mediums: [currentMedium]
   })
 
   const isLoading = isLoadingTemplates || isLoadingBrandAssets
