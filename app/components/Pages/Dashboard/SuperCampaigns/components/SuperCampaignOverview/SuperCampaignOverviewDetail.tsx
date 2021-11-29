@@ -3,7 +3,7 @@ import format from 'date-fns/format'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 
-import { useIsSuperCampaignExecutedOrDueAtTimeout } from '../../hooks/use-is-super-campaign-executed-or-due-at-timeout'
+import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
@@ -39,8 +39,7 @@ function SuperCampaignOverviewDetail() {
   const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
     useReplaceQueryParam('edit-drawer')
 
-  const isCampaignExecutedOrDueAtTimeout =
-    useIsSuperCampaignExecutedOrDueAtTimeout(superCampaign)
+  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
 
   const openDrawer = () => setEditDrawerParam('open')
 
@@ -62,7 +61,7 @@ function SuperCampaignOverviewDetail() {
         <SuperCampaignCardHeader
           className={classes.title}
           title="Details"
-          actionLabel={!isCampaignExecutedOrDueAtTimeout ? 'Edit' : undefined}
+          actionLabel={!isSuperCampaignReadOnly ? 'Edit' : undefined}
           onActionClick={openDrawer}
         />
         <SuperCampaignOverviewDetailLabelValue
@@ -95,11 +94,11 @@ function SuperCampaignOverviewDetail() {
           titleVariant="body1"
           template={superCampaign.template_instance}
           onTemplateChange={handleTemplateChange}
-          readOnly={isCampaignExecutedOrDueAtTimeout}
+          readOnly={isSuperCampaignReadOnly}
         />
       )}
       <SuperCampaignDrawer
-        isOpen={!!editDrawerParam && !isCampaignExecutedOrDueAtTimeout}
+        isOpen={!!editDrawerParam && !isSuperCampaignReadOnly}
         onClose={closeDrawer}
         formInitialValues={superCampaign}
         onConfirm={handleSuperCampaignConfirm}

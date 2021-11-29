@@ -3,7 +3,7 @@ import { Typography, Button, makeStyles } from '@material-ui/core'
 import useSafeState from '@app/hooks/use-safe-state'
 import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 
-import { useIsSuperCampaignExecutedOrDueAtTimeout } from '../../hooks/use-is-super-campaign-executed-or-due-at-timeout'
+import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
 import SuperCampaignCard, { SuperCampaignCardProps } from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -27,8 +27,7 @@ function SuperCampaignEligibleParticipants(
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
-  const isCampaignExecutedOrDueAtTimeout =
-    useIsSuperCampaignExecutedOrDueAtTimeout(superCampaign)
+  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
 
   const updateSuperCampaignEligibility = useUpdateSuperCampaignEligibility(
     superCampaign,
@@ -59,7 +58,7 @@ function SuperCampaignEligibleParticipants(
             color="primary"
             variant="contained"
             size="small"
-            disabled={isCampaignExecutedOrDueAtTimeout}
+            disabled={isSuperCampaignReadOnly}
             onClick={openBrandSelector}
           >
             Add Eligible Offices & Teams
@@ -73,9 +72,7 @@ function SuperCampaignEligibleParticipants(
               been selected
             </Typography>
             <Button color="primary" size="small" onClick={openBrandSelector}>
-              {isCampaignExecutedOrDueAtTimeout
-                ? 'View Offices or Teams'
-                : 'Edit'}
+              {isSuperCampaignReadOnly ? 'View Offices or Teams' : 'Edit'}
             </Button>
           </>
         )}
@@ -84,7 +81,7 @@ function SuperCampaignEligibleParticipants(
         <MultiSelectionBrandSelectorDrawer
           open
           width="43rem"
-          disabled={isCampaignExecutedOrDueAtTimeout}
+          disabled={isSuperCampaignReadOnly}
           selectedBrands={eligibleBrands}
           onClose={closeBrandSelector}
           onSave={handleSelectedBrandSave}
