@@ -1,8 +1,10 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core'
+import { isEqual } from 'underscore'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
 import { DealsListFilters } from '../../../types'
+import { FilterEditorFooter } from '../filterEditorFooter'
 import { useStyles } from '../styles'
 
 export const DEAL_TYPES_ITEMS: Record<IDealType, string> = {
@@ -12,6 +14,7 @@ export const DEAL_TYPES_ITEMS: Record<IDealType, string> = {
 
 export const TypeEditor = ({
   filters,
+  defaultFilters,
   updateFilters
 }: FilterButtonDropDownProp<DealsListFilters>) => {
   const classes = useStyles()
@@ -76,6 +79,12 @@ export const TypeEditor = ({
           }
         />
       ))}
+      <FilterEditorFooter
+        disabledReset={isEqual(filters.deal_type, defaultFilters.deal_type)}
+        onClickReset={() => {
+          updateFilters({ deal_type: defaultFilters.deal_type })
+        }}
+      />
     </Grid>
   )
 }

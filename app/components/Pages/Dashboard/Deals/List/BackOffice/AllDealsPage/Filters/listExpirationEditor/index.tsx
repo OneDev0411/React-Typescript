@@ -8,11 +8,13 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { DealsListFilters, TDateRange } from '../../../types'
+import { FilterEditorFooter } from '../filterEditorFooter'
 import { RangeDateSelector } from '../rangeDateSelector'
 import { useStyles } from '../styles'
 
 export const ListExpirationEditor = ({
   filters,
+  defaultFilters,
   updateFilters
 }: FilterButtonDropDownProp<DealsListFilters>) => {
   const classes = useStyles()
@@ -46,6 +48,17 @@ export const ListExpirationEditor = ({
       <RangeDateSelector
         onChange={onChange}
         value={filters.contexts.list_expiration?.date}
+      />
+      <FilterEditorFooter
+        disabledReset={
+          filters.contexts.list_expiration?.date.from ===
+            defaultFilters.contexts.list_expiration?.date.from &&
+          filters.contexts.list_expiration?.date.to ===
+            defaultFilters.contexts.list_expiration?.date.to
+        }
+        onClickReset={() => {
+          onChange({ from: undefined, to: undefined })
+        }}
       />
     </Grid>
   )

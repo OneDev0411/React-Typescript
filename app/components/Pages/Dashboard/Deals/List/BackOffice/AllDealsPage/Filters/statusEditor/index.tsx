@@ -11,10 +11,12 @@ import {
   TDealsStatus,
   TDealsStatusList
 } from '../../../types'
+import { FilterEditorFooter } from '../filterEditorFooter'
 import { useStyles } from '../styles'
 
 export const StatusEditor = ({
   filters,
+  defaultFilters,
   updateFilters
 }: FilterButtonDropDownProp<DealsListFilters>) => {
   const classes = useStyles()
@@ -68,6 +70,18 @@ export const StatusEditor = ({
           }
         />
       ))}
+      <FilterEditorFooter
+        disabledReset={
+          filters.status.is_active === defaultFilters.status.is_active &&
+          filters.status.is_archived === defaultFilters.status.is_archived &&
+          filters.status.is_closed === defaultFilters.status.is_closed &&
+          filters.status.is_null === defaultFilters.status.is_null &&
+          filters.status.is_pending === defaultFilters.status.is_pending
+        }
+        onClickReset={() => {
+          updateFilters({ status: defaultFilters.status })
+        }}
+      />
     </Grid>
   )
 }
