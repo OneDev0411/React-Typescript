@@ -4,18 +4,17 @@ import { Button, Checkbox, FormControlLabel } from '@material-ui/core'
 
 import Drawer from '@app/views/components/OverlayDrawer'
 
-import { BaseUserRootBrandSelector } from '../Base'
+import { BaseUserRootBrandSelector } from '../../Base'
+import { useStyles } from '../styles'
+import { BaseMultiSelectDrawer as BaseMultiSelectDrawerProps } from '../type'
 
-import { useStyles } from './styles'
-import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
-
-export function MultiSelectionBrandSelectorDrawer({
+export function BaseMultiSelectDrawer({
   drawerTitle = 'Select Agents',
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
   onSave,
   ...props
-}: Props) {
+}: BaseMultiSelectDrawerProps) {
   const classes = useStyles()
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>(currentBrands)
   const [isSaving, setIsSaving] = useState<boolean>(false)
