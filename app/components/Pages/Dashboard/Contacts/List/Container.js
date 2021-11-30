@@ -94,24 +94,10 @@ class ContactsList extends React.Component {
   componentDidMount() {
     const globalButtonDispatch = this.context
 
-    const { parkedContactsCount, searchInputValue } = this.state
+    const { parkedContactsCount } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    const sortFieldSetting = getUserSettingsInActiveTeam(
-      user,
-      SORT_FIELD_SETTING_KEY
-    )
-    const viewMode =
-      getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
-
-    const relevanceSortKey = '-last_touch_rank'
-    const sortOrder = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
-      ? sortFieldSetting
-      : '-last_touch'
-
-    this.getDuplicateClusterCount()
+    this.loadTableData()
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -121,19 +107,22 @@ class ContactsList extends React.Component {
       getContactsTags()
     }
 
-    this.setState({ viewMode, sortOrder })
-    this.fetchContactsAndJumpToSelected(sortOrder)
+    this.getDuplicateClusterCount()
+    this.setSelectedShortcutFilter()
+
+    const viewMode =
+      getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
+
+    this.setState({ viewMode })
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
         type: SET_CREATE_CALLBACK_HANDLER,
         handlers: {
-          onCreateAndAddNewContact: this.onCreateContact
+          onCreateAndAddNewContact: this.handleOnCreateContact
         }
       })
     }
-
-    this.setSelectedShortcutFilter()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -168,6 +157,27 @@ class ContactsList extends React.Component {
     }
 
     setContactsListTextFilter(this.state.searchInputValue)
+  }
+
+  loadTableData = () => {
+    const { searchInputValue } = this.state
+    const { user } = this.props
+
+    // load previous sorting settings from active team
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+
+    const relevanceSortKey = '-last_touch_rank'
+    const sortOrder = searchInputValue
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
+
+    this.fetchContactsAndJumpToSelected(sortOrder)
+    this.setState({ sortOrder })
   }
 
   setSelectedShortcutFilter = () => {
