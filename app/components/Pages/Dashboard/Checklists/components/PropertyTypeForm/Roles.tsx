@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core'
 import { Control, Controller, useFormContext } from 'react-hook-form'
 
+import { getDefaultRoles } from './helpers/get-default-roles'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
@@ -34,6 +36,7 @@ export function Roles({ list, control }: Props) {
   const { watch } = useFormContext()
 
   const roles = watch('roles')
+  const defaultRoles = getDefaultRoles(watch('is_lease'))
 
   const getNextState = (name: string) => {
     const role = roles?.[name]
@@ -87,7 +90,7 @@ export function Roles({ list, control }: Props) {
             <>
               {list.map(name => {
                 const { label, color } = getRoleProperties(name)
-                const disabled = ['BuyerAgent', 'SellerAgent'].includes(name)
+                const disabled = defaultRoles[name] === true
 
                 return (
                   <Grid
@@ -103,7 +106,7 @@ export function Roles({ list, control }: Props) {
                     <Grid xs={4}>
                       <Button
                         style={{
-                          color: disabled ? '#ccc' : color
+                          color: disabled ? 'gray' : color
                         }}
                         disabled={disabled}
                         size="small"

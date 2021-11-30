@@ -29,7 +29,13 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ROLE_NAMES } from '../../../Deals/utils/roles'
 
 import { getDefaultRoles } from './helpers/get-default-roles'
+import { pickRoles } from './helpers/pick-roles'
+import { rolesArrayToObject } from './helpers/roles-array-to-object'
 import { Roles } from './Roles'
+
+interface FormValues extends Pick<PropertyTypeData, 'label' | 'is_lease'> {
+  roles: Record<string, boolean | undefined>
+}
 
 interface Props {
   propertyType?: IDealPropertyType
@@ -52,7 +58,12 @@ export function PropertyTypeForm({
     defaultValues: {
       label: propertyType?.label as string,
       is_lease: propertyType?.is_lease ?? false,
-      roles: getDefaultRoles(false)
+      roles: propertyType
+        ? rolesArrayToObject(
+            propertyType.required_roles,
+            propertyType.optional_roles
+          )
+        : getDefaultRoles(false)
     }
   })
 
@@ -76,8 +87,15 @@ export function PropertyTypeForm({
   const handleSave = async () => {
     setIsSaving(true)
 
-    const values = control.getValues() as PropertyTypeData
+    const form = control.getValues() as FormValues
     const activeTeamId = getActiveTeamId(user)!
+
+    const values: PropertyTypeData = {
+      label: form.label,
+      is_lease: form.is_lease,
+      required_roles: pickRoles(form.roles, true),
+      optional_roles: pickRoles(form.roles, false)
+    }
 
     try {
       const data = await (propertyType
