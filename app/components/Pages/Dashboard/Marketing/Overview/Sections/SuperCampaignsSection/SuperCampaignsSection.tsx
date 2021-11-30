@@ -1,3 +1,4 @@
+import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
@@ -13,7 +14,19 @@ function SuperCampaignsSection() {
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
   return (
-    <SectionLayout title="Campaigns" containerGridProps={{ sm: 12 }}>
+    <SectionLayout
+      title="Campaigns"
+      actionNode={
+        superCampaignsWithEnrollment?.length ? (
+          <LinkSectionAction
+            title="All Campaigns"
+            url="/dashboard/insights/super-campaign"
+          />
+        ) : null
+      }
+      containerGridProps={{ sm: 12 }}
+      grayMode
+    >
       <SuperCampaignsSectionContent
         isEmpty={isEmpty}
         isLoading={isLoading}
