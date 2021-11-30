@@ -199,6 +199,7 @@ interface Property extends IModel<'property'> {
   furnished_yn: boolean
   fenced_yard_yn: boolean
   block: string
+  pets_policy: string
   mls: string
   address: Address
 }
