@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core'
 import pluralize from 'pluralize'
 
 import { useIsSuperCampaignExecuted } from '../../hooks/use-is-super-campaign-executed'
+import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -18,7 +19,8 @@ function SuperCampaignEnrolledParticipants() {
     superCampaign,
     setSuperCampaign
   )
-  const isResultMode = useIsSuperCampaignExecuted(superCampaign)
+  const isSuperCampaignExecuted = useIsSuperCampaignExecuted(superCampaign)
+  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
 
   const {
     superCampaignEnrollments,
@@ -28,7 +30,7 @@ function SuperCampaignEnrolledParticipants() {
   } = useGetSuperCampaignEnrollments(
     superCampaign.id,
     superCampaign.tags,
-    isResultMode
+    isSuperCampaignExecuted
   )
 
   return (
@@ -39,9 +41,9 @@ function SuperCampaignEnrolledParticipants() {
           value={superCampaign.tags}
           onChange={updateSuperCampaignTags}
           disabled={isSaving}
-          readOnly={isResultMode}
+          readOnly={isSuperCampaignReadOnly}
           helperText={
-            !isResultMode && enrolledAgentCount
+            !isSuperCampaignReadOnly && enrolledAgentCount
               ? `${pluralize(
                   'agent',
                   enrolledAgentCount,
@@ -52,7 +54,7 @@ function SuperCampaignEnrolledParticipants() {
         />
       </Box>
       <Box mt={3}>
-        {isResultMode ? (
+        {isSuperCampaignExecuted ? (
           <SuperCampaignResultList
             isLoading={isLoading}
             superCampaignResults={
