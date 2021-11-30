@@ -9,7 +9,7 @@ import { DealsListContext, TDealsStatusList } from '../../types'
 // Convert status filter to query string
 export const stringifyStatusFilter = (filters: TDealsStatusList): string => {
   const statusKeys = Object.keys(DEALS_STATUSES)
-  const values = statusKeys.map(key => `${+!!filters[key]}${key}`)
+  const values = statusKeys.filter(key => !!filters[key]).map(key => key)
 
   return values.join(QUERY_ARRAY_PARAM_SPLITTER_CHAR)
 }
@@ -23,12 +23,11 @@ export const parseStatusFilterString = (
 
   const statusList: TDealsStatusList = {}
 
-  statusQueries.forEach(statusQuery => {
-    const key = statusQuery.slice(1)
-    const value = !!statusQuery.slice(0, 1)
-
-    if (statusKeys.includes(key)) {
-      statusList[key] = value
+  statusKeys.forEach(key => {
+    if (statusQueries.includes(key)) {
+      statusList[key] = true
+    } else {
+      statusList[key] = false
     }
   })
 

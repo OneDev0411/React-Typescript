@@ -1,5 +1,5 @@
 import { Button, Grid } from '@material-ui/core'
-import { isEqual } from 'lodash'
+import { isEqual, pickBy } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useDebounce, useFirstMountState } from 'react-use'
 
@@ -53,8 +53,16 @@ export const Filters = () => {
         // TODO: we should replace the order
         const sortOption: DealsOrder = DEALS_LIST_DEFUALT_ORDER
 
-        const payload: DealsListPayload = {
+        // remove false statuses from the user filters
+        const cleanedUserFilters: DealsListFilters = {
           ...userFilters,
+          status: pickBy(userFilters.status, v => v === true)
+        }
+
+        console.log({ cleanedUserFilters, userFilters })
+
+        const payload: DealsListPayload = {
+          ...cleanedUserFilters,
           $order: sortOption,
           query: queryParamValue ?? ''
         }
