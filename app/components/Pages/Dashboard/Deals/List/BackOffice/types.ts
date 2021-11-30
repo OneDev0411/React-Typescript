@@ -26,3 +26,10 @@ export interface DealsListPayload extends DealsListFilters {
   query?: string
   $order?: DealsOrder
 }
+
+export interface StateProps {
+  user: IUser
+  isFetchingDeals: boolean
+  getDeals(user: IUser): void
+  searchDeals(user: IUser, value: object | string): void
+}
