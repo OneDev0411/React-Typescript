@@ -128,13 +128,16 @@ export function PropertyTypeForm({
           </Box>
         </DialogTitle>
 
-        <DialogContent>
+        <DialogContent
+          style={{
+            minHeight: '70vh'
+          }}
+        >
           <Grid
             container
             style={{
               flexGrow: 1
             }}
-            spacing={2}
           >
             <Grid container spacing={2}>
               <Grid item xs={8}>
@@ -162,7 +165,8 @@ export function PropertyTypeForm({
                 <Controller
                   name="is_lease"
                   control={control}
-                  render={({ onChange, value = false }) => (
+                  defaultValue={propertyType?.is_lease ?? false}
+                  render={({ onChange, value }) => (
                     <FormControlLabel
                       control={
                         <Checkbox

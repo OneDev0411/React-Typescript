@@ -1,14 +1,13 @@
-import {
-  Button,
-  Box,
-  Grid,
-  Theme,
-  makeStyles,
-  useTheme
-} from '@material-ui/core'
+import { useState } from 'react'
+
+import { Button, Grid, Theme, makeStyles, useTheme } from '@material-ui/core'
+import matchSorter from 'match-sorter'
 import { Control, Controller, useFormContext } from 'react-hook-form'
 
+import { roleName } from 'deals/utils/roles'
+
 import { getDefaultRoles } from './helpers/get-default-roles'
+import { RoleSearch } from './RoleSearch'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -34,9 +33,27 @@ export function Roles({ list, control }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const { watch } = useFormContext()
+  const [rolesList, setRolesList] = useState(list)
 
   const roles = watch('roles')
   const defaultRoles = getDefaultRoles(watch('is_lease'))
+
+  const handleSearch = (value: string) => {
+    const newList = value
+      ? matchSorter(
+          list.map(name => ({
+            value: name,
+            label: roleName(name)
+          })),
+          value,
+          {
+            keys: ['label', 'value']
+          }
+        ).map(item => item.value)
+      : list
+
+    setRolesList(newList)
+  }
 
   const getNextState = (name: string) => {
     const role = roles?.[name]
@@ -79,16 +96,14 @@ export function Roles({ list, control }: Props) {
 
   return (
     <>
-      <Box pl={0.5} my={3}>
-        Roles
-      </Box>
+      <RoleSearch onChange={handleSearch} />
       <Grid container className={classes.root}>
         <Controller
           name="roles"
           control={control}
           render={({ onChange }) => (
             <>
-              {list.map(name => {
+              {rolesList.map(name => {
                 const { label, color } = getRoleProperties(name)
                 const disabled = defaultRoles[name] === true
 
@@ -99,12 +114,13 @@ export function Roles({ list, control }: Props) {
                     spacing={2}
                     className={classes.row}
                   >
-                    <Grid xs={4}>
-                      <strong>{name}</strong>
+                    <Grid xs={5}>
+                      <strong>{roleName(name)}</strong>
                     </Grid>
 
-                    <Grid xs={4}>
+                    <Grid xs={2}>
                       <Button
+                        fullWidth
                         style={{
                           color: disabled ? 'gray' : color
                         }}

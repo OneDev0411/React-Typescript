@@ -23,9 +23,10 @@ const useStyles = makeStyles(
 
 interface Props {
   propertyType: IDealPropertyType
+  onUpdate: (propertyType: IDealPropertyType) => void
 }
 
-export function PropertyTypeEdit({ propertyType }: Props) {
+export function PropertyTypeEdit({ propertyType, onUpdate }: Props) {
   const classes = useStyles()
   const [showEditForm, setShowEditForm] = useState(false)
 
@@ -45,7 +46,10 @@ export function PropertyTypeEdit({ propertyType }: Props) {
         <PropertyTypeForm
           isOpen
           propertyType={propertyType}
-          onSave={closeModal}
+          onSave={propertyType => {
+            closeModal()
+            onUpdate(propertyType)
+          }}
           onClose={closeModal}
         />
       )}

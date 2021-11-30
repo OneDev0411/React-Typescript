@@ -54,8 +54,12 @@ export default function ChecklistsPage({ location }: Props) {
     reorderTasks
   } = useChecklistsPage(activeTeamId)
 
-  const { propertyTypes, addPropertyTypes, reorderPropertyTypes } =
-    useBrandPropertyTypes(activeTeamId!)
+  const {
+    propertyTypes,
+    addPropertyTypes,
+    updatePropertyType,
+    reorderPropertyTypes
+  } = useBrandPropertyTypes(activeTeamId!)
 
   const checklist = checklists?.find(
     checklist =>
@@ -103,6 +107,7 @@ export default function ChecklistsPage({ location }: Props) {
           checklistType={checklistType}
           onClickNewProperty={() => setIsFormOpen(true)}
           onReorder={onReorderPropertyTypes}
+          onUpdate={updatePropertyType}
         />
 
         <Content isSideMenuOpen>

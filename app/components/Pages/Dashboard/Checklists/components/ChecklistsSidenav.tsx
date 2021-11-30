@@ -16,6 +16,7 @@ interface Props {
   propertyTypes: IDealPropertyType[]
   checklistType: IDealChecklistType
   onClickNewProperty: () => void
+  onUpdate: (propertyType: IDealPropertyType) => void
   onReorder: (result: DropResult, provided: ResponderProvided) => void
 }
 
@@ -23,6 +24,7 @@ export function ChecklistsSidenav({
   propertyTypes,
   checklistType,
   onReorder,
+  onUpdate,
   onClickNewProperty
 }: Props) {
   return (
@@ -40,6 +42,7 @@ export function ChecklistsSidenav({
                       index={index}
                       checklistType={checklistType}
                       propertyType={propertyType}
+                      onUpdate={onUpdate}
                     />
                   ))}
 

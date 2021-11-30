@@ -74,12 +74,14 @@ interface Props {
   index: number
   checklistType: IDealChecklistType
   propertyType: IDealPropertyType
+  onUpdate: (propertyType: IDealPropertyType) => void
 }
 
 export function ChecklistsSidenavItem({
   index,
   checklistType,
-  propertyType
+  propertyType,
+  onUpdate
 }: Props) {
   const [isDeleted, setIsDeleted] = useState(false)
 
@@ -164,7 +166,10 @@ export function ChecklistsSidenavItem({
             </Box>
 
             <div>
-              <PropertyTypeEdit propertyType={propertyType} />
+              <PropertyTypeEdit
+                propertyType={propertyType}
+                onUpdate={onUpdate}
+              />
 
               <IconButton
                 size="small"
