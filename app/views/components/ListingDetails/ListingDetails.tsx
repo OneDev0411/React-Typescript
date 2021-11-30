@@ -255,6 +255,7 @@ function ListingDetails({
                 email={agent.email}
                 image={agent.image}
                 tel={agent.tel}
+                company={agent.brokrageName}
               />
             </Container>
           </Grid>
