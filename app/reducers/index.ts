@@ -3,6 +3,7 @@ import { reducer as notificationsReducer } from 'reapop'
 import { combineReducers } from 'redux'
 import { reducer as reduxFormReducer } from 'redux-form'
 
+import activeTeam, { IActiveTeamState } from './active-team'
 import auth from './auth'
 import brand from './brand'
 import chatroom from './chatroom'
@@ -53,6 +54,9 @@ const appReducer = combineReducers({
   /* showings reducers */
   showings,
 
+  /* active team reducers (aka active user's role) */
+  activeTeam,
+
   /* third party reducers */
   notifications: notificationsReducer(),
   form: reduxFormReducer,
@@ -74,6 +78,7 @@ export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
   showings: IShowingsState
+  activeTeam: IActiveTeamState
 }
 
 export default (state, action) => {

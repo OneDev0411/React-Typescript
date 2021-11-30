@@ -72,6 +72,8 @@ declare interface IUserTeam {
   acl: IPermission[]
   type: 'user_role'
   settings: StringMap<any>
+  // API: "we supposed to do some staff in feature on this field but for now it's always null"
+  subscription?: Nullable<unknown>
 }
 
 declare interface IUserDocusign extends IModel<'docusign_account'> {
