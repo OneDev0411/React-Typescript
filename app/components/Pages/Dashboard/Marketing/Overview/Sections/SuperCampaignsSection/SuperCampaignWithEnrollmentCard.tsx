@@ -1,5 +1,6 @@
 import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
+import SuperCampaignWithEnrollmentCardManagementFooter from './SuperCampaignWithEnrollmentCardManagementFooter'
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
 import { SuperCampaignWithEnrollment } from './types'
 import { useHasSuperCampaignManageAccess } from './use-has-super-campaign-manage-access'
@@ -24,7 +25,7 @@ function SuperCampaignWithEnrollmentCard({
   return (
     <SuperCampaignCard
       superCampaign={superCampaign}
-      descriptionLineCount={enrollment ? 3 : 4}
+      descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
       to={
         hasManageAccess
           ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail`
@@ -36,6 +37,8 @@ function SuperCampaignWithEnrollmentCard({
         <SuperCampaignWithEnrollmentCardEnrolledFooter
           superCampaignTags={enrollment.tags}
         />
+      ) : hasManageAccess ? (
+        <SuperCampaignWithEnrollmentCardManagementFooter />
       ) : (
         <SuperCampaignWithEnrollmentCardParticipateFooter
           isEnrolling={false} // TODO: pass a real value here
