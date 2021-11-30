@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { mdiClose } from '@mdi/js'
 
+import { useQueryParam } from '@app/hooks/use-query-param'
 import LinkIconButton from '@app/views/components/LinkIconButton'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
@@ -13,11 +14,12 @@ const useStyles = makeStyles(
 
 function SuperCampaignCloseButton() {
   const classes = useStyles()
+  const [backUrl] = useQueryParam('backUrl')
 
   return (
     <LinkIconButton
       className={classes.close}
-      to="/dashboard/insights/super-campaign"
+      to={backUrl || '/dashboard/insights/super-campaign'}
     >
       <SvgIcon path={mdiClose} />
     </LinkIconButton>

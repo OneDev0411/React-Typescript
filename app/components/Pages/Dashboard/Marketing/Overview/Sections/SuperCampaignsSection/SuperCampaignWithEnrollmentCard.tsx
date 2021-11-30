@@ -34,7 +34,7 @@ function SuperCampaignWithEnrollmentCard({
         descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
         to={
           hasManageAccess
-            ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail`
+            ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail?backUrl=/dashboard/marketing`
             : undefined
         }
         onClick={!hasManageAccess ? openPreviewDrawer : undefined}
