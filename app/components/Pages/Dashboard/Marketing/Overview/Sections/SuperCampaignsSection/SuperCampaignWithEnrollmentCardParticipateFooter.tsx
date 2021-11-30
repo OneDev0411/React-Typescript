@@ -7,13 +7,7 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignWithEnrollmentCardParticipateFooter' }
 )
 
-interface SuperCampaignWithEnrollmentCardParticipateFooterProps {
-  isEnrolling: boolean
-}
-
-function SuperCampaignWithEnrollmentCardParticipateFooter({
-  isEnrolling
-}: SuperCampaignWithEnrollmentCardParticipateFooterProps) {
+function SuperCampaignWithEnrollmentCardParticipateFooter() {
   const classes = useStyles()
 
   return (
@@ -23,7 +17,6 @@ function SuperCampaignWithEnrollmentCardParticipateFooter({
         color="primary"
         fullWidth
         size="small"
-        disabled={isEnrolling}
         component="div"
         tabIndex={-1}
       >

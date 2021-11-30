@@ -1,50 +1,62 @@
+import { useState } from 'react'
+
 import SuperCampaignCard from './SuperCampaignCard'
+import SuperCampaignPreviewDrawer, {
+  SuperCampaignPreviewDrawerProps
+} from './SuperCampaignPreviewDrawer'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
 import SuperCampaignWithEnrollmentCardManagementFooter from './SuperCampaignWithEnrollmentCardManagementFooter'
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
 import { SuperCampaignWithEnrollment } from './types'
 import { useHasSuperCampaignManageAccess } from './use-has-super-campaign-manage-access'
 
-interface SuperCampaignWithEnrollmentCardProps {
+interface SuperCampaignWithEnrollmentCardProps
+  extends Pick<SuperCampaignPreviewDrawerProps, 'onEnroll' | 'onUnenroll'> {
   superCampaignWithEnrollment: SuperCampaignWithEnrollment
-  onEnroll: (enrollment: ISuperCampaignEnrollment) => void
-  onUnenroll: () => void
 }
 
 function SuperCampaignWithEnrollmentCard({
   superCampaignWithEnrollment: { enrollment, ...superCampaign },
-  onEnroll,
-  onUnenroll
+  ...otherProps
 }: SuperCampaignWithEnrollmentCardProps) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+
   const hasManageAccess = useHasSuperCampaignManageAccess(superCampaign)
 
-  // TODO: Complete the drawer logic here
-  const openSuperCampaignPreviewDrawer = () =>
-    console.log('openSuperCampaignPreviewDrawer')
+  const openPreviewDrawer = () => setIsPreviewOpen(true)
+
+  const closePreviewDrawer = () => setIsPreviewOpen(false)
 
   return (
-    <SuperCampaignCard
-      superCampaign={superCampaign}
-      descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
-      to={
-        hasManageAccess
-          ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail`
-          : undefined
-      }
-      onClick={!hasManageAccess ? openSuperCampaignPreviewDrawer : undefined}
-    >
-      {enrollment ? (
-        <SuperCampaignWithEnrollmentCardEnrolledFooter
-          superCampaignTags={enrollment.tags}
-        />
-      ) : hasManageAccess ? (
-        <SuperCampaignWithEnrollmentCardManagementFooter />
-      ) : (
-        <SuperCampaignWithEnrollmentCardParticipateFooter
-          isEnrolling={false} // TODO: pass a real value here
-        />
-      )}
-    </SuperCampaignCard>
+    <>
+      <SuperCampaignCard
+        superCampaign={superCampaign}
+        descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
+        to={
+          hasManageAccess
+            ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail`
+            : undefined
+        }
+        onClick={!hasManageAccess ? openPreviewDrawer : undefined}
+      >
+        {enrollment ? (
+          <SuperCampaignWithEnrollmentCardEnrolledFooter
+            superCampaignTags={enrollment.tags}
+          />
+        ) : hasManageAccess ? (
+          <SuperCampaignWithEnrollmentCardManagementFooter />
+        ) : (
+          <SuperCampaignWithEnrollmentCardParticipateFooter />
+        )}
+      </SuperCampaignCard>
+      <SuperCampaignPreviewDrawer
+        open={isPreviewOpen}
+        onClose={closePreviewDrawer}
+        superCampaign={superCampaign}
+        hasUnenroll={!!enrollment}
+        {...otherProps}
+      />
+    </>
   )
 }
 
