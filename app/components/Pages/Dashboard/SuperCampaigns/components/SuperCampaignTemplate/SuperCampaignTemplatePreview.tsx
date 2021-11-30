@@ -14,7 +14,7 @@ const useStyles = makeStyles(
 
 interface SuperCampaignTemplatePreviewProps {
   template: IMarketingTemplateInstance
-  onClick: () => void
+  onClick?: () => void
   readOnly: boolean
 }
 
