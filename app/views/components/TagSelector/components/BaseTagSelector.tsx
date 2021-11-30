@@ -29,7 +29,10 @@ export interface Props {
   className?: string
   value?: SelectorOption[]
   chipProps?: ChipProps
-  textFieldProps?: Omit<TextFieldProps, keyof AutocompleteRenderInputParams>
+  textFieldProps?: Omit<
+    TextFieldProps,
+    Exclude<keyof AutocompleteRenderInputParams, 'InputLabelProps'>
+  >
   onChange: (tags: SelectorOption[], hasNewTag: boolean) => void
   disabled?: boolean
 }
@@ -100,6 +103,10 @@ export const BaseTagSelector = ({
           placeholder="Type a tag name"
           {...textFieldProps}
           {...params}
+          InputLabelProps={{
+            ...params.InputLabelProps,
+            ...textFieldProps.InputLabelProps
+          }}
         />
       )}
       onChange={(event, value: SelectorOption[]) => {
