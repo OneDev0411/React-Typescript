@@ -92,6 +92,19 @@ export function AgentsList({
       />
 
       <Box flexGrow={1}>
+        {rows.length === 0 && (
+          <Box
+            mx={1}
+            position="absolute"
+            display="flex"
+            width="100%"
+            height="100%"
+            justifyContent="center"
+            alignItems="center"
+          >
+            No Results.
+          </Box>
+        )}
         <AutoSizer>
           {({ width, height }) => (
             <VirtualList
