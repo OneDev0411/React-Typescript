@@ -107,27 +107,25 @@ export function AgentsList({
         )}
         <AutoSizer>
           {({ width, height }) => (
-            <>
-              <VirtualList
-                key={searchCriteria}
-                width={width}
-                height={height}
-                itemCount={rows.length}
-                itemData={
-                  {
-                    rows,
-                    searchCriteria,
-                    onSelectAgent
-                  } as ComponentProps<typeof ListRow>['data']
-                }
-                threshold={5}
-                isLoading={false}
-                itemSize={getRowLength}
-                overscanCount={15}
-              >
-                {ListRow}
-              </VirtualList>
-            </>
+            <VirtualList
+              key={searchCriteria}
+              width={width}
+              height={height}
+              itemCount={rows.length}
+              itemData={
+                {
+                  rows,
+                  searchCriteria,
+                  onSelectAgent
+                } as ComponentProps<typeof ListRow>['data']
+              }
+              threshold={5}
+              isLoading={false}
+              itemSize={getRowLength}
+              overscanCount={15}
+            >
+              {ListRow}
+            </VirtualList>
           )}
         </AutoSizer>
       </Box>
