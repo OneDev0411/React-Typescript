@@ -111,7 +111,8 @@ class SearchListingDrawer extends React.Component {
         id: item.id,
         price: item.price,
         status: item.status,
-        cover_image_url: item.cover_image_url
+        cover_image_url: item.cover_image_url,
+        mls_display_name: item.mls_display_name
       }))
 
       response = modifiedResponse
