@@ -1,4 +1,4 @@
-import { queryOptions } from '../../../components/Pages/Dashboard/MLS/mapOptions'
+import { queryOptions } from '../../../components/Pages/Dashboard/MLS/constants'
 import { SET_SEARCH_LISTINGS_OPTIONS } from '../../../constants/listings/search'
 
 const options = (state = queryOptions, action) => {

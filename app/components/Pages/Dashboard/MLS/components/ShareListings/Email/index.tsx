@@ -3,11 +3,11 @@ import React, { useState, ReactNode, MouseEvent } from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 
-import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
-import { useListSelection } from 'components/ListSelection/use-list-selection'
-import MarketingTemplatePickerModal from 'components/MarketingTemplatePickers/MarketingTemplatePickerModal'
-import getListing from 'models/listings/listing/get-listing'
-import { selectUser } from 'selectors/user'
+import getListing from '@app/models/listings/listing/get-listing'
+import { selectUser } from '@app/selectors/user'
+import ListingFlow from '@app/views/components/InstantMarketing/adapters/SendMlsListingCard'
+import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
+import MarketingTemplatePickerModal from '@app/views/components/MarketingTemplatePickers/MarketingTemplatePickerModal'
 
 interface Props {
   buttonRenderer?: (props: {
