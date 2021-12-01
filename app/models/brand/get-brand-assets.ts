@@ -28,5 +28,7 @@ export async function getBrandAssets(
 
   const allAssets: IBrandAsset[] = response.body.data
 
-  return allAssets.filter(asset => !!asset.label)
+  return allAssets.filter(
+    asset => asset.label || asset.medium || asset.template_type
+  )
 }
