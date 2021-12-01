@@ -20,7 +20,7 @@ const useStyles = makeStyles(
     containerGray: {
       '&&': { padding: theme.spacing(3) }, // TODO: Find a better way to override the padding value
       backgroundColor: theme.palette.grey[100],
-      borderRadius: theme.shape.borderRadius * 2
+      borderRadius: theme.shape.borderRadius
     },
     headerContainer: {
       paddingBottom: theme.spacing(2)

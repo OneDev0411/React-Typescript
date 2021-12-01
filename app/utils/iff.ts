@@ -1,5 +1,5 @@
 export default function iff<T>(
-  condition: unknown,
+  condition: boolean,
   trueResult: T,
   falseResult?: T
 ): Optional<T> {
