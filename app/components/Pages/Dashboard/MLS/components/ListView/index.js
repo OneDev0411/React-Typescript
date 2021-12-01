@@ -1,6 +1,12 @@
 import React, { useCallback, useState, memo, useEffect } from 'react'
 
-import { Grid, Checkbox, useTheme, makeStyles } from '@material-ui/core'
+import {
+  Grid,
+  Checkbox,
+  useTheme,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import Pagination from '@material-ui/lab/Pagination'
 import pluralize from 'pluralize'
 
@@ -10,6 +16,7 @@ import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 import LoadingComponent from '@app/views/components/Spinner'
 
+import { QUERY_LIMIT } from '../../constants'
 import { getListingsPage } from '../../helpers/pagination-utils'
 import { ResultsHeader } from '../ResultsHeader'
 import { ShareListings } from '../ShareListings'
@@ -210,6 +217,7 @@ const ListView = props => {
           isLoading={props.isFetching}
           mapIsShown
           currentPage={currentPage}
+          total={props.info?.total}
           resultsCount={props.sortedListings.length}
           viewType="table"
           onMapToggle={() => {}}
@@ -219,17 +227,26 @@ const ListView = props => {
         />
         {renderTable()}
         {isListingsDisplayed ? (
-          <Grid container className={classes.paginationContainer}>
-            <Pagination
-              page={currentPage}
-              onChange={handlePageChange}
-              count={Math.ceil(props.sortedListings.length / PAGE_SIZE)}
-              variant="outlined"
-              color="primary"
-              size="large"
-              shape="rounded"
-            />
-          </Grid>
+          <>
+            <Grid container className={classes.paginationContainer}>
+              <Pagination
+                page={currentPage}
+                onChange={handlePageChange}
+                count={Math.ceil(props.sortedListings.length / PAGE_SIZE)}
+                variant="outlined"
+                color="primary"
+                size="large"
+                shape="rounded"
+              />
+            </Grid>
+            {props.info && props.info.total > QUERY_LIMIT && (
+              <Grid container justifyContent="center">
+                <Typography variant="caption" component="p">
+                  We only show {QUERY_LIMIT} results for saved searches.
+                </Typography>
+              </Grid>
+            )}
+          </>
         ) : null}
         <ListingDetailsModal
           isOpen={isListingDetailsModalOpen}
