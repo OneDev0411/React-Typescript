@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useEffectOnce, useTitle } from 'react-use'
 
 import { AnimatedLoader } from 'components/AnimatedLoader'
-import { useLoadActiveTeam } from 'hooks/use-load-active-team'
+import { useLoadActiveTeam } from 'hooks/team/use-load-active-team'
 import { useLoadUser } from 'hooks/use-load-user'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import { IAppState } from 'reducers'
