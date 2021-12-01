@@ -14,6 +14,7 @@ export function BaseBrandAvailableToUserSelector(
       hasError={isError}
       initialExpandedNodes={initialExpandedNodes}
       nodes={teams}
+      {...props}
     />
   )
 }

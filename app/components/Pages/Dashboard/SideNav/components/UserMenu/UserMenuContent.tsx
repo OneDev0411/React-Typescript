@@ -68,7 +68,7 @@ export function UserMenuContent({
 
   return (
     <div className={classes.container}>
-      <ActiveTeam user={user} />
+      <ActiveTeam />
 
       <List disablePadding>
         <Acl.Admin>

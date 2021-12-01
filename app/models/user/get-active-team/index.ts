@@ -9,8 +9,6 @@ export async function getActiveTeam(): Promise<IUserTeam> {
   try {
     const response = await new Fetch().get('/users/self/active-role')
 
-    console.log({ accc: response.body.data })
-
     return response.body.data
   } catch (e) {
     throw e

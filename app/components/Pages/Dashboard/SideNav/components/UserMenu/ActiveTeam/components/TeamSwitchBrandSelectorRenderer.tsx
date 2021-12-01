@@ -28,7 +28,7 @@ interface Props {
   onClick: (brand: IBrand) => void
 }
 
-function RawBrand({ brand, isActive, onClick }: Props) {
+function Brand({ brand, isActive, onClick }: Props) {
   const classes = useStyles()
 
   const handleOnClick = () => {
@@ -56,4 +56,4 @@ function RawBrand({ brand, isActive, onClick }: Props) {
   )
 }
 
-export const Brand = memo(RawBrand)
+export const TeamSwitchBrandSelectorRenderer = memo(Brand)

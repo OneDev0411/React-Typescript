@@ -1,19 +1,19 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
-import { isFetchingSelectedTeam } from '@app/reducers/user'
-import { viewAs, getActiveTeam } from '@app/utils/user-teams'
+import { switchActiveTeam } from '@app/models/user/switch-active-team'
+import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import { putUserSetting } from 'models/user/put-user-setting'
 
-import { Brand } from './Brand'
+import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -48,38 +48,26 @@ const useStyles = makeStyles(
   { name: 'ActiveTeam' }
 )
 
-interface SwitcherStatus {
-  isSwitching: boolean
-  switchedTeamId: UUID
-}
-interface Props {
-  user: IUser
-}
-
-export function ActiveTeam({ user }: Props) {
+export function ActiveTeam() {
   const classes = useStyles()
+  const activeTeam = useSelector(selectActiveTeamUnsafe)
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
-  const [switcherStatus, setSwitcherStatus] = useState<SwitcherStatus>({
-    isSwitching: false,
-    switchedTeamId: ''
-  })
-
-  const activeTeam = useMemo(() => getActiveTeam(user), [user])
+  const [isSwitchingActiveTeam, setIsSwitchingActiveTeam] =
+    useState<boolean>(false)
 
   const hanldeOpenBrandSelectorDrawer = () => setIsBrandSelectorOpen(true)
   const hanldeCloseBrandSelectorDrawer = () => setIsBrandSelectorOpen(false)
 
   const handleOnClickBrand = async (brand: IBrand) => {
-    console.log({ brand })
+    try {
+      setIsSwitchingActiveTeam(true)
+      hanldeCloseBrandSelectorDrawer()
 
-    setSwitcherStatus({
-      isSwitching: true,
-      switchedTeamId: brand.id
-    })
-    hanldeCloseBrandSelectorDrawer()
-    await putUserSetting('user_filter', viewAs(user, true), brand.id)
-
-    // window.location.reload()
+      await switchActiveTeam(brand.id)
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+    }
   }
   const renderBrandNode = ({ brand }: NodeRenderer) => {
     return (
@@ -91,7 +79,7 @@ export function ActiveTeam({ user }: Props) {
     )
   }
 
-  if (isFetchingSelectedTeam(user)) {
+  if (!activeTeam) {
     return (
       <div className={classes.container}>
         <Loading />
@@ -99,61 +87,40 @@ export function ActiveTeam({ user }: Props) {
     )
   }
 
-  if (user && user.teams && user.teams.length > 0) {
-    return (
-      <>
-        <div className={classes.container}>
-          <Typography variant="overline" className={classes.header}>
-            You’re working on
-          </Typography>
-          <div className={classes.activeTeamContainer}>
-            <div className={classes.activeTeam}>
-              <SvgIcon
-                path={mdiAccountGroupOutline}
-                className={classes.activeTeamIcon}
-              />
+  return (
+    <>
+      <div className={classes.container}>
+        <Typography variant="overline" className={classes.header}>
+          You’re working on
+        </Typography>
+        <div className={classes.activeTeamContainer}>
+          <div className={classes.activeTeam}>
+            <SvgIcon
+              path={mdiAccountGroupOutline}
+              className={classes.activeTeamIcon}
+            />
 
-              <Typography variant="subtitle2">
-                {activeTeam?.brand.name}
-              </Typography>
-            </div>
-            <div
-              className={classes.switchTeam}
-              onClick={hanldeOpenBrandSelectorDrawer}
-            >
-              {switcherStatus.isSwitching ? 'Switching...' : 'Change'}
-            </div>
+            <Typography variant="subtitle2">
+              {activeTeam?.brand.name}
+            </Typography>
+          </div>
+          <div
+            className={classes.switchTeam}
+            onClick={hanldeOpenBrandSelectorDrawer}
+          >
+            {isSwitchingActiveTeam ? 'Switching...' : 'Change'}
           </div>
         </div>
-        <BrandAvailableToUserSelectorDrawer
-          open={isBrandSelectorOpen}
-          width="43rem"
-          onClose={hanldeCloseBrandSelectorDrawer}
-          brandSelectorProps={{
-            nodeRenderer: renderBrandNode
-          }}
-        />
-      </>
-    )
-    // return (
-    //   <>
-    //     {user.teams.map(team => {
-    //       const teamId = team.brand.id
-    //       return (
-    //         <TeamItem
-    //           key={team.id}
-    //           disabled={switcherStatus.isSwitching}
-    //           isSwitching={switcherStatus.switchedTeamId === teamId}
-    //           onClick={() => onClickTeam(teamId)}
-    //           selected={teamId === activeTeamId}
-    //           team={team}
-    //         />
-    //       )
-    //     })}
-    //     <Divider role="separator" />
-    //   </>
-    // )
-  }
-
-  return null
+      </div>
+      <BrandAvailableToUserSelectorDrawer
+        open={isBrandSelectorOpen}
+        drawerTitle="Switch Team"
+        width="43rem"
+        onClose={hanldeCloseBrandSelectorDrawer}
+        brandSelectorProps={{
+          nodeRenderer: renderBrandNode
+        }}
+      />
+    </>
+  )
 }

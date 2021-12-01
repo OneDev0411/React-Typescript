@@ -19,6 +19,7 @@ export function BaseUserRootBrandSelector(props: BaseBrandSelectorProps) {
       hasError={isError}
       initialExpandedNodes={initialExpandedNodes}
       nodes={teams}
+      {...props}
     />
   )
 }
