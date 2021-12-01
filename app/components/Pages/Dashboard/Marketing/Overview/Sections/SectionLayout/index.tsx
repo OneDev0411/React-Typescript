@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core'
 import classNames from 'classnames'
 
+import iff from '@app/utils/iff'
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
@@ -18,7 +20,7 @@ const useStyles = makeStyles(
     containerGray: {
       '&&': { padding: theme.spacing(3) }, // TODO: Find a better way to override the padding value
       backgroundColor: theme.palette.grey[100],
-      borderRadius: theme.spacing(1)
+      borderRadius: theme.shape.borderRadius * 2
     },
     headerContainer: {
       paddingBottom: theme.spacing(2)
@@ -64,7 +66,7 @@ export default function SectionLayout({
       direction="column"
       className={classNames(
         classes.container,
-        grayMode && classes.containerGray
+        iff(grayMode, classes.containerGray)
       )}
       {...containerGridProps}
     >
