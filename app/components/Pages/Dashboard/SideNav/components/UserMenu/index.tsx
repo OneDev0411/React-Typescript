@@ -58,7 +58,11 @@ export function UserMenu({ user }: { user: IUserState }) {
   const isOpen = Boolean(anchorEl)
   const id = isOpen ? 'user-menu-popover' : ''
 
-  return user ? (
+  if (!user) {
+    return null
+  }
+
+  return (
     <>
       <ToggleButton id={id} isOpen={isOpen} onClick={handleClick} user={user} />
       <Popover
@@ -85,5 +89,5 @@ export function UserMenu({ user }: { user: IUserState }) {
         />
       </Popover>
     </>
-  ) : null
+  )
 }

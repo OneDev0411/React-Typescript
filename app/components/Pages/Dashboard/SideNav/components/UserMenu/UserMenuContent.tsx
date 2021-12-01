@@ -14,6 +14,7 @@ import { browserHistory } from 'react-router'
 import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { noop } from 'utils/helpers'
 
 import { ActiveTeam } from './ActiveTeam'
 
@@ -56,7 +57,7 @@ interface Props {
 export function UserMenuContent({
   user,
   showChecklists,
-  onClose = () => {}
+  onClose = noop
 }: Props) {
   const classes = useStyles()
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)

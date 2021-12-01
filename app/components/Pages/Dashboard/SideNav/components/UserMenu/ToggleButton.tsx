@@ -1,9 +1,10 @@
 import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
+import { useSelector } from 'react-redux'
 
+import { selectActiveBrand } from '@app/selectors/brand'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -45,10 +46,12 @@ interface Props {
 
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
+  const activeBrand = useSelector(selectActiveBrand)
   const { display_name } = props.user
 
-  const brandName = getActiveBrand(props.user)?.name ?? ''
-  const tooltipTitle = `${display_name} ${brandName ? `(${brandName})` : ''}`
+  const tooltipTitle = `${display_name} ${
+    activeBrand.name ? `(${activeBrand.name})` : ''
+  }`
 
   return (
     <Tooltip placement="right" title={tooltipTitle}>
@@ -70,7 +73,7 @@ export default function ToggleButton(props: Props) {
               variant="body1"
               className={classes.userDisplayName}
             >
-              {brandName}
+              {activeBrand.name}
             </Typography>
           </div>
         </Box>
