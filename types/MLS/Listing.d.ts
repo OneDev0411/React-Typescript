@@ -81,6 +81,7 @@ interface ListingAgent extends IModel<'agent'> {
   middle_name: string
   phone_number: string
   nar_number: string
+  office?: IAgentOffice
   office_mui: number
   status: 'Active'
   office_mlsid: string
@@ -198,6 +199,7 @@ interface Property extends IModel<'property'> {
   furnished_yn: boolean
   fenced_yard_yn: boolean
   block: string
+  pets_policy: string
   mls: string
   address: Address
 }
@@ -219,9 +221,10 @@ interface ProposedAgent extends IModel<'user'> {
   user_type: 'Agent' | 'Client'
   phone_confirmed: boolean
   agent: ListingAgent
+  agents: Nullable<ListingAgent[]>
 }
 
-declare type IListingAssociation = 'proposed_agent'
+declare type IListingAssociation = 'agent' | 'proposed_agent'
 
 declare type IListing<Associations extends IListingAssociation = ''> = {
   type: 'listing'
