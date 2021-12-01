@@ -9,10 +9,6 @@ import LinkCardActionArea, {
 
 const useStyles = makeStyles(
   theme => ({
-    root: {
-      boxShadow:
-        '0px 0.1px 0.3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.2)'
-    },
     actionArea: {
       minHeight: theme.spacing(51),
       display: 'flex',
@@ -62,7 +58,8 @@ function SuperCampaignBaseCard({
   const classes = useStyles()
 
   return (
-    <Card className={classes.root} variant="outlined">
+    // TODO: Replace the shadow provided by design once they made a decision about it
+    <Card variant="elevation" elevation={2}>
       <LinkCardActionArea
         {...otherProps}
         className={classNames(classes.actionArea, className)}
