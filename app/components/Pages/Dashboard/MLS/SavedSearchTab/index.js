@@ -87,7 +87,7 @@ class SavedSearch extends React.Component {
     this.state = {
       listings: {
         data: [],
-        info: { total: 0 }
+        info: { count: 0, total: 0 }
       },
       activeSort: {
         index,
@@ -120,8 +120,6 @@ class SavedSearch extends React.Component {
         savedSearch.id,
         savedSearch.room
       )
-
-      console.log('response', response)
 
       this.setState({
         listings: {

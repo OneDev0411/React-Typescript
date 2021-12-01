@@ -7,14 +7,12 @@ import cn from 'classnames'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 import LoadingComponent from '@app/views/components/Spinner'
 
-import { QUERY_LIMIT } from '../../constants'
+import { QUERY_LIMIT, PAGE_SIZE } from '../../constants'
 import { getListingsPage } from '../../helpers/pagination-utils'
 import ListingCard from '../ListingCardWithFavorite'
 import { ResultsHeader } from '../ResultsHeader'
 import { ShareListings } from '../ShareListings'
 import ZeroState from '../ZeroState'
-
-const PAGE_SIZE = 30
 
 const useStyles = makeStyles(
   theme => ({

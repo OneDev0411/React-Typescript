@@ -16,7 +16,7 @@ import { ListingDetailsModal } from '@app/views/components/ListingDetailsModal'
 import { useListSelection } from '@app/views/components/ListSelection/use-list-selection'
 import LoadingComponent from '@app/views/components/Spinner'
 
-import { QUERY_LIMIT } from '../../constants'
+import { QUERY_LIMIT, PAGE_SIZE } from '../../constants'
 import { getListingsPage } from '../../helpers/pagination-utils'
 import { ResultsHeader } from '../ResultsHeader'
 import { ShareListings } from '../ShareListings'
@@ -25,7 +25,6 @@ import ZeroState from '../ZeroState'
 import { Address } from './columns/Address'
 
 const BASE_URL = '/dashboard/mls'
-const PAGE_SIZE = 30
 
 const useStyles = makeStyles(
   theme => ({
