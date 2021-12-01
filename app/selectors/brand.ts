@@ -1,15 +1,14 @@
 import { IAppState } from 'reducers'
-import { getActiveBrand } from 'utils/user-teams'
 
-import { selectUser } from './user'
+import { selectActiveTeamUnsafe } from './team'
 
 /**
  * Finds the active brand for current user if exists
  * @param state The app state
  * @returns The current user active brand if available or null
  */
-export function selectActiveBrandUnsafe(state: IAppState): IBrand | null {
-  return getActiveBrand(selectUser(state))
+export function selectActiveBrandUnsafe(state: IAppState): Nullable<IBrand> {
+  return selectActiveTeamUnsafe(state)?.brand || null
 }
 
 /**
