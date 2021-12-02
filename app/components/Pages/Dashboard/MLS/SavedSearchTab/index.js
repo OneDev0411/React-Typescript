@@ -87,7 +87,7 @@ class SavedSearch extends React.Component {
     this.state = {
       listings: {
         data: [],
-        info: { total: 0 }
+        info: { count: 0, total: 0 }
       },
       activeSort: {
         index,
@@ -124,7 +124,7 @@ class SavedSearch extends React.Component {
       this.setState({
         listings: {
           data: response.data.map(normalize),
-          info: { total: response.info.total }
+          info: response.info
         },
         isFetching: false
       })
@@ -190,6 +190,7 @@ class SavedSearch extends React.Component {
       case 'cards':
         return (
           <MapView
+            info={this.state.listings.info}
             isFetching={isFetching}
             sortedListings={sortedListings}
             onToggleView={this.onToggleView}
@@ -209,6 +210,7 @@ class SavedSearch extends React.Component {
         return (
           <ListView
             isFetching={isFetching}
+            info={this.state.listings.info}
             sortedListings={sortedListings}
             listings={listings}
             user={user}
