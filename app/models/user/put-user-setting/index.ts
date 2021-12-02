@@ -2,6 +2,19 @@ import _ from 'underscore'
 
 import Fetch from '../../../services/fetch'
 
+function sanitizeSettingValue(value: any): any {
+  // _.isEmpty always returns true for boolean type so we need to handle it
+  if (typeof value == 'boolean') {
+    return value
+  }
+
+  if (_.isEmpty(value)) {
+    return null
+  }
+
+  return value
+}
+
 /**
  * Put a key value data as user settings data under the specific brand
  * @param {String} key The setting key
@@ -15,9 +28,9 @@ export async function putUserSetting(key: string, value: any, brand?: UUID) {
   }
 
   try {
-    const request = new Fetch()
-      .put(`/users/self/settings/${key}`)
-      .send({ value: _.isEmpty(value) ? null : value })
+    const request = new Fetch().put(`/users/self/settings/${key}`).send({
+      value: sanitizeSettingValue(value)
+    })
 
     if (brand) {
       request.set({ 'X-RECHAT-BRAND': brand })
