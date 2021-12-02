@@ -56,6 +56,7 @@ export const TreeViewNode = memo(function TreeViewNode<
     <div className={classes.container}>
       <div
         className={cn(classes.contentContainer, {
+          [classes.expandableContentContainer]: expandable,
           [classes.selectableContentContainer]: props.selectable
         })}
       >

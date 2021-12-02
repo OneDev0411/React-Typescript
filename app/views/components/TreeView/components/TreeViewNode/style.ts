@@ -18,12 +18,16 @@ export const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       paddingLeft: theme.spacing(3),
+      marginLeft: theme.spacing(2),
       ...theme.typography.body2
     },
     selectableContentContainer: {
       '&:hover': {
         background: theme.palette.grey[200]
       }
+    },
+    expandableContentContainer: {
+      marginLeft: 0
     },
     expandButton: {
       background: 'none',
