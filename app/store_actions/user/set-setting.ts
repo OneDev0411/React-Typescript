@@ -1,3 +1,5 @@
+import { getActiveTeamId } from '@app/utils/user-teams'
+
 import { SET_USER_SETTING } from '../../constants/user'
 import { getTeams } from '../../models/user/get-teams'
 import { putUserSetting } from '../../models/user/put-user-setting'
@@ -16,44 +18,52 @@ export function setUserSetting(key: string, value: any, brand?: UUID) {
 
     try {
       const res = await putUserSetting(key, value, brand)
+      let currentTeamId: Nullable<string> = null
 
       if (Array.isArray(res.body) && res.body[0]) {
-        const currentTeamId: string = `${res.body[0].user}_${res.body[0].brand}`
-        let payload: IUser = user
+        currentTeamId = `${res.body[0].user}_${res.body[0].brand}`
+      } else {
+        currentTeamId = `${user.id}_${getActiveTeamId(user)}`
+      }
 
-        if (user.teams) {
-          payload = {
-            ...user,
-            teams: user.teams.map(team => {
-              if (currentTeamId === team.id) {
-                const currentSettings = team.settings || {}
+      if (!currentTeamId) {
+        return
+      }
 
-                return {
-                  ...team,
-                  settings: {
-                    ...currentSettings,
-                    [key]: value
-                  }
+      let payload: IUser = user
+
+      if (user.teams) {
+        payload = {
+          ...user,
+          teams: user.teams.map(team => {
+            if (currentTeamId === team.id) {
+              const currentSettings = team.settings || {}
+
+              return {
+                ...team,
+                settings: {
+                  ...currentSettings,
+                  [key]: value
                 }
               }
+            }
 
-              return team
-            })
-          }
-        } else {
-          const teams: IUserTeam[] = await getTeams(user)
-
-          payload = {
-            ...user,
-            teams
-          }
+            return team
+          })
         }
+      } else {
+        const teams: IUserTeam[] = await getTeams(user)
 
-        return dispatch({
-          type: SET_USER_SETTING,
-          user: payload
-        })
+        payload = {
+          ...user,
+          teams
+        }
       }
+
+      return dispatch({
+        type: SET_USER_SETTING,
+        user: payload
+      })
     } catch (error) {
       console.error(error)
     }
