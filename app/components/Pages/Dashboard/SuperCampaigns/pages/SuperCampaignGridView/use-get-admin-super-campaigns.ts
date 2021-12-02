@@ -9,13 +9,13 @@ import getAllSuperCampaign, {
 
 interface UseGetSuperCampaign {
   isLoading: boolean
-  superCampaigns: Nullable<ISuperCampaign<'template_instance'>[]>
+  superCampaigns: ISuperCampaign<'template_instance'>[]
   loadMore: () => void
 }
 
 const numberOfLoadSuperCampaignInRequest: number = 50
 
-export function useGetAllSuperCampaign(): UseGetSuperCampaign {
+export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
   const [range, setRange] = useState<FetchRange>({
     start: 0,
     limit: numberOfLoadSuperCampaignInRequest
@@ -24,8 +24,8 @@ export function useGetAllSuperCampaign(): UseGetSuperCampaign {
     run,
     data: superCampaigns,
     isLoading
-  } = useAsync<Nullable<ISuperCampaign<'template_instance'>[]>>({
-    data: null,
+  } = useAsync<ISuperCampaign<'template_instance'>[]>({
+    data: [],
     status: 'pending'
   })
 

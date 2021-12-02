@@ -8,7 +8,7 @@ import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/Marketin
 import Table from '@app/views/components/Grid/Table'
 import { noop } from 'utils/helpers'
 
-import { useGetAllSuperCampaign } from './use-get-all-super-campaign'
+import { useGetAdminSuperCampaigns } from './use-get-admin-super-campaigns'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -18,13 +18,13 @@ const useStyles = makeStyles(
     }
   }),
   {
-    name: 'SuperCampaignGridView'
+    name: 'SuperCampaignAdminList'
   }
 )
 
-function SuperCampaignGridView() {
+function SuperCampaignAdminList() {
   const classes = useStyles()
-  const { isLoading, superCampaigns, loadMore } = useGetAllSuperCampaign()
+  const { isLoading, superCampaigns, loadMore } = useGetAdminSuperCampaigns()
 
   const columns = [
     {
@@ -65,4 +65,4 @@ function SuperCampaignGridView() {
   )
 }
 
-export default memo(SuperCampaignGridView)
+export default memo(SuperCampaignAdminList)
