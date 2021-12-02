@@ -1,6 +1,4 @@
-import { ACL } from '@app/constants/acl'
 import { useGetMySuperCampaignsWithEnrollment } from '@app/hooks/use-get-my-super-campaigns-with-enrollment'
-import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
@@ -17,14 +15,11 @@ function SuperCampaignsSection() {
 
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
-  // TODO: Remove this when agents have their campaigns tab too
-  const hasAdminAccess = useAcl(ACL.ADMIN)
-
   return (
     <SectionLayout
       title="Campaigns"
       actionNode={
-        superCampaignsWithEnrollment?.length && hasAdminAccess ? (
+        superCampaignsWithEnrollment?.length ? (
           <LinkSectionAction
             title="All Campaigns"
             url="/dashboard/insights/super-campaign"
