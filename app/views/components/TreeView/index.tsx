@@ -1,11 +1,20 @@
 import { ReactNode, useCallback, useEffect, memo } from 'react'
 
-import { Typography } from '@material-ui/core'
+import { Typography, makeStyles, Theme } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
 
 import { TreeFn } from 'utils/tree-utils/types'
 
 import { TreeViewNode } from './components/TreeViewNode'
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    container: {
+      borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
+    }
+  }),
+  { name: 'TreeView' }
+)
 
 export interface TreeViewProps<NodeType> {
   renderNode: (node: NodeType) => ReactNode
@@ -44,6 +53,7 @@ export default memo(function TreeView<NodeType = any>({
   getChildNodes = (node => node.children) as any,
   ...props
 }: TreeViewProps<NodeType>) {
+  const classes = useStyles()
   const [expandedNodes, setExpandedNodes] = useControllableState(
     props.expandedNodes,
     props.onExpandedNodesChanged,
@@ -82,7 +92,7 @@ export default memo(function TreeView<NodeType = any>({
   }
 
   return (
-    <>
+    <div className={classes.container}>
       {(root ?? []).map(node => (
         <TreeViewNode
           node={node}
@@ -95,6 +105,6 @@ export default memo(function TreeView<NodeType = any>({
           renderNode={props.renderNode}
         />
       ))}
-    </>
+    </div>
   )
 })

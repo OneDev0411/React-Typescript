@@ -38,7 +38,13 @@ export const TreeViewNode = memo(function TreeViewNode<
 
   const expandable = childNodes.length > 0
   const arrow = expandable && (
-    <button type="button" className={classes.expandButton} onClick={toggle}>
+    <button
+      type="button"
+      className={cn(classes.expandButton, {
+        [classes.isExpanded]: expanded
+      })}
+      onClick={toggle}
+    >
       <SvgIcon
         path={expanded ? mdiChevronDown : mdiChevronRight}
         size={muiIconSizes.small}
@@ -50,7 +56,6 @@ export const TreeViewNode = memo(function TreeViewNode<
     <div className={classes.container}>
       <div
         className={cn(classes.contentContainer, {
-          [classes.expandableContentContainer]: expandable,
           [classes.selectableContentContainer]: props.selectable
         })}
       >

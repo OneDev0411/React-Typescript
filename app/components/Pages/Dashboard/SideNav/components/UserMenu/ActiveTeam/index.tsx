@@ -112,15 +112,17 @@ export function ActiveTeam() {
           </div>
         </div>
       </div>
-      <BrandAvailableToUserSelectorDrawer
-        open={isBrandSelectorOpen}
-        drawerTitle="Switch Team"
-        width="43rem"
-        onClose={hanldeCloseBrandSelectorDrawer}
-        brandSelectorProps={{
-          nodeRenderer: renderBrandNode
-        }}
-      />
+      {isBrandSelectorOpen && (
+        <BrandAvailableToUserSelectorDrawer
+          open
+          drawerTitle="Switch Team"
+          width="43rem"
+          onClose={hanldeCloseBrandSelectorDrawer}
+          brandSelectorProps={{
+            nodeRenderer: renderBrandNode
+          }}
+        />
+      )}
     </>
   )
 }

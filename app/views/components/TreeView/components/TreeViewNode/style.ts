@@ -2,16 +2,23 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {},
+    container: {
+      position: 'relative',
+      '&::before': {
+        position: 'absolute',
+        top: theme.spacing(2.25),
+        content: "''",
+        zIndex: 0,
+        width: '18px',
+        height: '1px',
+        borderBottom: `1px dashed ${theme.palette.action.disabledBackground}`
+      }
+    },
     contentContainer: {
       display: 'flex',
       alignItems: 'center',
-      lineHeight: 2.2,
-      paddingLeft: theme.spacing(2),
-      fontWeight: 500
-    },
-    expandableContentContainer: {
-      marginLeft: theme.spacing(2.5)
+      paddingLeft: theme.spacing(3),
+      ...theme.typography.body2
     },
     selectableContentContainer: {
       '&:hover': {
@@ -21,13 +28,12 @@ export const useStyles = makeStyles(
     expandButton: {
       background: 'none',
       width: '2rem',
-      height: '2.5rem',
+      height: '2rem',
       padding: 0,
       lineHeight: 0,
-      marginRight: '0.2rem',
       border: 'none',
-      marginLeft: '-1rem',
-
+      marginLeft: theme.spacing(-2),
+      borderRadius: '100%',
       outline: 'none',
       color: theme.palette.grey[600],
       '&:hover': {
@@ -38,6 +44,20 @@ export const useStyles = makeStyles(
         color: theme.palette.primary.main
       }
     },
+    isExpanded: {
+      position: 'relative',
+
+      '&::before': {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        content: "''",
+        zIndex: 0,
+        width: '1px',
+        height: '16px',
+        borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
+      }
+    },
     expandArrow: {
       fill: 'currentColor',
       paddingTop: '0.15rem',
@@ -46,7 +66,7 @@ export const useStyles = makeStyles(
     childrenContainer: {
       // background: 'red',
       borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`,
-      marginLeft: theme.spacing(2)
+      marginLeft: theme.spacing(3)
     },
     content: {
       order: 0,
