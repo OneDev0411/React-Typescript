@@ -3,12 +3,11 @@ import { Dispatch, SetStateAction } from 'react'
 import { Grid } from '@material-ui/core'
 
 import SuperCampaignWithEnrollmentCard from './SuperCampaignWithEnrollmentCard'
-import { SuperCampaignWithEnrollment } from './types'
 
 export interface SuperCampaignCardsProps {
-  superCampaignsWithEnrollment: SuperCampaignWithEnrollment[]
+  superCampaignsWithEnrollment: ISuperCampaignWithEnrollment[]
   setSuperCampaignsWithEnrollment: Dispatch<
-    SetStateAction<SuperCampaignWithEnrollment[]>
+    SetStateAction<ISuperCampaignWithEnrollment[]>
   >
 }
 

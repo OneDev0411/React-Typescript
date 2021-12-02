@@ -4,24 +4,24 @@ import useAsync from '@app/hooks/use-async'
 import getMySuperCampaignEnrollments from '@app/models/super-campaign/get-my-super-campaign-enrollments'
 import getMySuperCampaigns from '@app/models/super-campaign/get-my-super-campaigns'
 
-import { SuperCampaignWithEnrollment } from './types'
-
-interface UseGetSuperCampaignsWithEnrollment {
+interface UseGetMySuperCampaignsWithEnrollment {
   isLoading: boolean
-  superCampaignsWithEnrollment: SuperCampaignWithEnrollment[]
+  superCampaignsWithEnrollment: ISuperCampaignWithEnrollment[]
   setSuperCampaignsWithEnrollment: Dispatch<
-    SetStateAction<SuperCampaignWithEnrollment[]>
+    SetStateAction<ISuperCampaignWithEnrollment[]>
   >
 }
 
 // eslint-disable-next-line max-len
-export function useGetSuperCampaignsWithEnrollment(): UseGetSuperCampaignsWithEnrollment {
+export function useGetMySuperCampaignsWithEnrollment(
+  limit?: number
+): UseGetMySuperCampaignsWithEnrollment {
   const {
     isLoading,
     data: superCampaignsWithEnrollment,
     setData: setSuperCampaignsWithEnrollment,
     run
-  } = useAsync<SuperCampaignWithEnrollment[]>({
+  } = useAsync<ISuperCampaignWithEnrollment[]>({
     data: [],
     status: 'pending'
   })
@@ -29,7 +29,7 @@ export function useGetSuperCampaignsWithEnrollment(): UseGetSuperCampaignsWithEn
   useEffect(() => {
     run(async () => {
       const [mySuperCampaigns, mySuperCampaignEnrollments] = await Promise.all([
-        getMySuperCampaigns(),
+        getMySuperCampaigns(limit),
         getMySuperCampaignEnrollments()
       ])
 
@@ -43,14 +43,14 @@ export function useGetSuperCampaignsWithEnrollment(): UseGetSuperCampaignsWithEn
         {}
       )
 
-      return mySuperCampaigns.map<SuperCampaignWithEnrollment>(
+      return mySuperCampaigns.map<ISuperCampaignWithEnrollment>(
         mySuperCampaign => ({
           ...mySuperCampaign,
           enrollment: superCampaignEnrollmentMap[mySuperCampaign.id]
         })
       )
     })
-  }, [run])
+  }, [run, limit])
 
   return {
     isLoading,
