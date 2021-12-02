@@ -8,9 +8,10 @@ import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
 
 function SuperCampaignsSection() {
   const {
+    isLoading,
     superCampaignsWithEnrollment,
-    setSuperCampaignsWithEnrollment,
-    isLoading
+    enrollToSuperCampaign,
+    unenrollFromSuperCampaign
   } = useGetMySuperCampaignsWithEnrollment(SUPER_CAMPAIGN_CARDS_COUNT)
 
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
@@ -33,7 +34,8 @@ function SuperCampaignsSection() {
         isEmpty={isEmpty}
         isLoading={isLoading}
         superCampaignsWithEnrollment={superCampaignsWithEnrollment}
-        setSuperCampaignsWithEnrollment={setSuperCampaignsWithEnrollment}
+        onEnroll={enrollToSuperCampaign}
+        onUnenroll={unenrollFromSuperCampaign}
       />
     </SectionLayout>
   )

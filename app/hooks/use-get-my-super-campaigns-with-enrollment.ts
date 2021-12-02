@@ -10,6 +10,11 @@ interface UseGetMySuperCampaignsWithEnrollment {
   setSuperCampaignsWithEnrollment: Dispatch<
     SetStateAction<ISuperCampaignWithEnrollment[]>
   >
+  enrollToSuperCampaign: (
+    superCampaignId: UUID,
+    enrollment: ISuperCampaignEnrollment
+  ) => void
+  unenrollFromSuperCampaign: (superCampaignId: UUID) => void
 }
 
 // eslint-disable-next-line max-len
@@ -52,9 +57,58 @@ export function useGetMySuperCampaignsWithEnrollment(
     })
   }, [run, limit])
 
+  const enrollToSuperCampaign = (
+    superCampaignId: UUID,
+    enrollment: ISuperCampaignEnrollment
+  ) =>
+    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
+      const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
+        superCampaign => superCampaign.id === superCampaignId
+      )
+
+      if (superCampaignIndex === -1) {
+        return prevSuperCampaignsWithEnrollment
+      }
+
+      const newSuperCampaignsWithEnrollment = [
+        ...prevSuperCampaignsWithEnrollment
+      ]
+
+      newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
+        ...superCampaignsWithEnrollment[superCampaignIndex],
+        enrollment
+      })
+
+      return newSuperCampaignsWithEnrollment
+    })
+
+  const unenrollFromSuperCampaign = (superCampaignId: UUID) =>
+    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
+      const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
+        superCampaign => superCampaign.id === superCampaignId
+      )
+
+      if (superCampaignIndex === -1) {
+        return prevSuperCampaignsWithEnrollment
+      }
+
+      const newSuperCampaignsWithEnrollment = [
+        ...prevSuperCampaignsWithEnrollment
+      ]
+
+      newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
+        ...superCampaignsWithEnrollment[superCampaignIndex],
+        enrollment: undefined
+      })
+
+      return newSuperCampaignsWithEnrollment
+    })
+
   return {
     isLoading,
     superCampaignsWithEnrollment,
-    setSuperCampaignsWithEnrollment
+    setSuperCampaignsWithEnrollment,
+    enrollToSuperCampaign,
+    unenrollFromSuperCampaign
   }
 }
