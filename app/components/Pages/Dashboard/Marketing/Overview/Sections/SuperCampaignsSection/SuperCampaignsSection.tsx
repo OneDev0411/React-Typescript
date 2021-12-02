@@ -1,3 +1,7 @@
+import { ACL } from '@app/constants/acl'
+import { useAcl } from '@app/views/components/Acl/use-acl'
+
+import LinkSectionAction from '../LinkSectionAction'
 import SectionLayout from '../SectionLayout'
 
 import SuperCampaignsSectionContent from './SuperCampaignsSectionContent'
@@ -12,8 +16,23 @@ function SuperCampaignsSection() {
 
   const isEmpty = !isLoading && superCampaignsWithEnrollment.length === 0
 
+  // TODO: Remove this when agents have their campaigns tab too
+  const hasAdminAccess = useAcl(ACL.ADMIN)
+
   return (
-    <SectionLayout title="Campaigns" containerGridProps={{ sm: 12 }}>
+    <SectionLayout
+      title="Campaigns"
+      actionNode={
+        superCampaignsWithEnrollment?.length && hasAdminAccess ? (
+          <LinkSectionAction
+            title="All Campaigns"
+            url="/dashboard/insights/super-campaign"
+          />
+        ) : null
+      }
+      containerGridProps={{ sm: 12 }}
+      grayMode
+    >
       <SuperCampaignsSectionContent
         isEmpty={isEmpty}
         isLoading={isLoading}

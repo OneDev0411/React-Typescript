@@ -8,7 +8,7 @@ function SuperCampaignsSectionLoading() {
   return (
     <>
       {EMPTY_CARDS.map((_, index) => (
-        <Grid item sm={6} key={index}>
+        <Grid item xs={6} sm={3} key={index}>
           <SuperCampaignWithEnrollmentSkeletonCard />
         </Grid>
       ))}

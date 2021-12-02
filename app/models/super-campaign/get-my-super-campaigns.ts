@@ -5,7 +5,13 @@ async function getMySuperCampaigns(): Promise<
 > {
   return (
     await new Fetch().get('/email/super-campaigns/self').query({
-      associations: ['super_campaign.template_instance']
+      associations: [
+        'super_campaign.template_instance',
+        'template_instance.template',
+        'template_instance.listings',
+        'template_instance.deals',
+        'template_instance.contacts'
+      ]
     })
   ).body.data.slice(0, 4) // TODO: Use the limit param on the request if possible later
 }
