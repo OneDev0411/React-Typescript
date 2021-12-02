@@ -1,9 +1,9 @@
 import Fetch from 'services/fetch'
 
-async function getMySuperCampaigns(): Promise<
-  ISuperCampaign<'template_instance'>[]
-> {
-  return (
+async function getMySuperCampaigns(
+  limit?: number
+): Promise<ISuperCampaign<'template_instance'>[]> {
+  const superCampaigns = (
     await new Fetch().get('/email/super-campaigns/self').query({
       associations: [
         'super_campaign.template_instance',
@@ -13,7 +13,13 @@ async function getMySuperCampaigns(): Promise<
         'template_instance.contacts'
       ]
     })
-  ).body.data.slice(0, 4) // TODO: Use the limit param on the request if possible later
+  ).body.data
+
+  if (!limit) {
+    return superCampaigns
+  }
+
+  return superCampaigns.slice(0, limit) // TODO: Use the limit param on the request if possible later
 }
 
 export default getMySuperCampaigns
