@@ -1,7 +1,9 @@
+import { QUERY_LIMIT } from '@app/components/Pages/Dashboard/MLS/constants'
+
 import Fetch from '../../../services/fetch'
 
 const defaultQuery = {
-  limit: 50,
+  limit: QUERY_LIMIT,
   sorting_value: 'Update'
 }
 

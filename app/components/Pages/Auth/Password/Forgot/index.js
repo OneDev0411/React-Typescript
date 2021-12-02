@@ -148,7 +148,7 @@ export default compose(
             return
           }
 
-          let errorMessage = 'An unexpected error occurred. Please try again.'
+          let errorMessage = 'Password recovery email expired.'
 
           if (status === 404) {
             errorMessage = (
