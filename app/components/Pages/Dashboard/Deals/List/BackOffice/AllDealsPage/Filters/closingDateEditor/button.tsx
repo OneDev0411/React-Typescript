@@ -22,17 +22,6 @@ export const ClosingDateButton = ({
     defaultFilters.contexts.closing_date?.date.to !==
       filters.contexts.closing_date?.date.to
 
-  const getTitle = () => {
-    if (
-      !filters.contexts.closing_date?.date.from &&
-      !filters.contexts.closing_date?.date.to
-    ) {
-      return 'Select Closing Date'
-    }
-
-    return 'Closing Date'
-  }
-
   return (
     <Button
       onClick={onClick}
@@ -47,7 +36,7 @@ export const ClosingDateButton = ({
         <SvgIcon path={mdiCalendarCheckOutline} size={muiIconSizes.small} />
       }
     >
-      {getTitle()}
+      Closing Date
     </Button>
   )
 }

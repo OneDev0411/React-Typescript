@@ -22,17 +22,6 @@ export const ListExpirationButton = ({
     defaultFilters.contexts.list_expiration?.date.to !==
       filters.contexts.list_expiration?.date.to
 
-  const getTitle = () => {
-    if (
-      !filters.contexts.list_expiration?.date.from &&
-      !filters.contexts.list_expiration?.date.to
-    ) {
-      return 'Select List Expiration'
-    }
-
-    return 'List Expiration'
-  }
-
   return (
     <Button
       onClick={onClick}
@@ -45,7 +34,7 @@ export const ListExpirationButton = ({
       })}
       startIcon={<SvgIcon path={mdiCalendarRemove} size={muiIconSizes.small} />}
     >
-      {getTitle()}
+      List Expiration
     </Button>
   )
 }

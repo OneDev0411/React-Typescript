@@ -22,17 +22,6 @@ export const ListDateButton = ({
     defaultFilters.contexts.list_date?.date.to !==
       filters.contexts.list_date?.date.to
 
-  const getTitle = () => {
-    if (
-      !filters.contexts.list_date?.date.from &&
-      !filters.contexts.list_date?.date.to
-    ) {
-      return 'Select List Date'
-    }
-
-    return 'List Date'
-  }
-
   return (
     <Button
       onClick={onClick}
@@ -45,7 +34,7 @@ export const ListDateButton = ({
       })}
       startIcon={<SvgIcon path={mdiCalendarPlus} size={muiIconSizes.small} />}
     >
-      {getTitle()}
+      List Date
     </Button>
   )
 }
