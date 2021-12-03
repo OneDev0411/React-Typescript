@@ -2,18 +2,20 @@ import SuperCampaignDisplayTags from '@app/views/components/SuperCampaignDisplay
 
 import SuperCampaignListColumnBase from './SuperCampaignListColumnBase'
 
-interface SuperCampaignAgentListColumnTagsProps {
+interface SuperCampaignListColumnTagsProps {
+  label: string
   tags: string[]
 }
 
-function SuperCampaignAgentListColumnTags({
+function SuperCampaignListColumnTags({
+  label,
   tags
-}: SuperCampaignAgentListColumnTagsProps) {
+}: SuperCampaignListColumnTagsProps) {
   return (
-    <SuperCampaignListColumnBase label="Recipients Tags">
+    <SuperCampaignListColumnBase label={label}>
       <SuperCampaignDisplayTags tags={tags} visibleCount={3} />
     </SuperCampaignListColumnBase>
   )
 }
 
-export default SuperCampaignAgentListColumnTags
+export default SuperCampaignListColumnTags
