@@ -1,5 +1,5 @@
 export function useIsSuperCampaignExecuted(
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaign: Pick<ISuperCampaign, 'executed_at'>
 ): boolean {
   return !!superCampaign.executed_at
 }

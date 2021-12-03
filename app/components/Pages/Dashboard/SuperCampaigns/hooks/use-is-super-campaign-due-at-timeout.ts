@@ -1,7 +1,7 @@
 import { getSuperCampaignDueAtRemainingTimeInMilliSeconds } from '../helpers'
 
 export function useIsSuperCampaignDueAtTimeout(
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaign: Pick<ISuperCampaign, 'due_at'>
 ): boolean {
   return (
     !!superCampaign.due_at &&

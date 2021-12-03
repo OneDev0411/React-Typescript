@@ -2,7 +2,7 @@ import { useIsSuperCampaignDueAtTimeout } from './use-is-super-campaign-due-at-t
 import { useIsSuperCampaignExecuted } from './use-is-super-campaign-executed'
 
 export function useIsSuperCampaignReadOnly(
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaign: Pick<ISuperCampaign, 'executed_at' | 'due_at'>
 ): boolean {
   const isExecuted = useIsSuperCampaignExecuted(superCampaign)
   const isDueAtTimeout = useIsSuperCampaignDueAtTimeout(superCampaign)
