@@ -1,19 +1,21 @@
 export function rolesArrayToObject(
-  requiredRoles: string[] = [],
-  optionalRoles: string[] = []
+  requiredRoles: IDealRoleDefinition[] = [],
+  optionalRoles: IDealRoleDefinition[] = []
 ) {
+  console.log('!!!!', requiredRoles, optionalRoles)
+
   return {
     ...requiredRoles.reduce(
-      (acc, name) => ({
+      (acc, { role }) => ({
         ...acc,
-        [name]: true
+        [role]: true
       }),
       {}
     ),
     ...optionalRoles.reduce(
-      (acc, name) => ({
+      (acc, { role }) => ({
         ...acc,
-        [name]: false
+        [role]: false
       }),
       {}
     )
