@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { Box, Button, TextField } from '@material-ui/core'
 
 import SuperCampaignTemplatePreview from '@app/components/Pages/Dashboard/SuperCampaigns/components/SuperCampaignTemplate/SuperCampaignTemplatePreview'
+import { useUnenrollMeFromSuperCampaign } from '@app/hooks/use-unenroll-me-from-super-campaign'
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
 import SuperCampaignPreviewDrawerFrom from './SuperCampaignPreviewDrawerFrom'
 import SuperCampaignPreviewDrawerOptOutButton from './SuperCampaignPreviewDrawerOptOutButton'
 import SuperCampaignPreviewDrawerScheduledFor from './SuperCampaignPreviewDrawerScheduledFor'
 import SuperCampaignTagsField from './SuperCampaignTagsField'
-import { useUnenrollMeFromSuperCampaign } from './use-unenroll-me-from-super-campaign'
 import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
 
 export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
