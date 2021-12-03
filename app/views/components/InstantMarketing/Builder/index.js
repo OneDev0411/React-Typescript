@@ -176,11 +176,14 @@ class Builder extends React.Component {
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const brandColors = getBrandColors(brand)
+    const colors =
+      this.selectedTemplateColors.length > 0
+        ? this.selectedTemplateColors
+        : getBrandColors(brand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
-      loadStyleManagerPlugin(brandColors)
+      loadStyleManagerPlugin(colors)
     ])
 
     this.setState({
@@ -282,6 +285,18 @@ class Builder extends React.Component {
     return []
   }
 
+  get selectedTemplateColors() {
+    if (
+      this.selectedTemplateOptions &&
+      this.selectedTemplateOptions.textEditor &&
+      this.selectedTemplateOptions.textEditor.extraColors
+    ) {
+      return this.selectedTemplateOptions.textEditor.extraColors
+    }
+
+    return []
+  }
+
   loadCKEditor = () => {
     return new Promise(resolve => {
       loadJS('/static/ckeditor/ckeditor.js', 'ckeditor', resolve)
@@ -310,9 +325,12 @@ class Builder extends React.Component {
 
   loadCKEditorRTE = async () => {
     const brand = getBrandByType(this.props.user, 'Brokerage')
-    const brandColors = getBrandColors(brand)
+    const colors =
+      this.selectedTemplateColors.length > 0
+        ? this.selectedTemplateColors
+        : getBrandColors(brand)
 
-    return attachCKEditor(this.editor, [], brandColors, undefined, () => {
+    return attachCKEditor(this.editor, [], colors, undefined, () => {
       const templateFonts = this.selectedTemplateFonts
 
       const fonts =
@@ -1503,6 +1521,7 @@ class Builder extends React.Component {
                   medium={this.selectedTemplate.medium}
                   inputs={this.selectedTemplate.inputs}
                   mjml={this.selectedTemplate.mjml}
+                  originalTemplateId={this.selectedTemplate.id}
                   getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                   disabled={this.props.actionButtonsDisabled}
                 />

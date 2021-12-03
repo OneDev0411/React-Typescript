@@ -1,12 +1,13 @@
 import Fetch from '../../../services/fetch'
 
-interface SaveTemplateArguments {
+export interface CreateTemplateOptions {
   name: string
   variant: string
   templateType: IMarketingTemplateType
   medium: string
   html: string
   brands: UUID[]
+  originalTemplateId?: UUID
   mjml?: boolean
   inputs?: string[]
 }
@@ -18,9 +19,10 @@ export async function createTemplate({
   medium,
   html,
   brands,
+  originalTemplateId,
   mjml = false,
   inputs = []
-}: SaveTemplateArguments): Promise<ApiResponseBody<IMarketingTemplate>> {
+}: CreateTemplateOptions): Promise<ApiResponseBody<IMarketingTemplate>> {
   try {
     const response = await new Fetch().post('/templates').send({
       name,
@@ -29,6 +31,7 @@ export async function createTemplate({
       medium,
       html,
       brands,
+      origin: originalTemplateId,
       mjml,
       inputs
     })

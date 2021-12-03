@@ -476,6 +476,7 @@ class SectionWithFields extends React.Component {
     if (isAllFieldsEmpty && !toggleEmptyAttributes) {
       return (
         <BasicSection title={showTitleAnyway ? title : undefined}>
+          {this.props.children}
           {this.renderToggleButton()}
         </BasicSection>
       )
