@@ -42,7 +42,7 @@ export const ListDateEditor = ({
       <Grid container alignItems="center" className={classes.header}>
         <SvgIcon path={mdiCalendarPlus} size={muiIconSizes.medium} />
         <Typography variant="subtitle1" className={classes.title}>
-          List Date
+          Listing Date
         </Typography>
       </Grid>
       <RangeDateSelector

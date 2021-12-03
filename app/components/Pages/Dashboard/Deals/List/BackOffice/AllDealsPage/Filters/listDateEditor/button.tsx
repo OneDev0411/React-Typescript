@@ -34,7 +34,7 @@ export const ListDateButton = ({
       })}
       startIcon={<SvgIcon path={mdiCalendarPlus} size={muiIconSizes.small} />}
     >
-      List Date
+      Listing Date
     </Button>
   )
 }

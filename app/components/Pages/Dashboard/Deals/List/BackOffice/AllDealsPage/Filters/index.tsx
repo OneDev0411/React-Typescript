@@ -128,23 +128,6 @@ export const Filters = () => {
                 />
               )}
             />
-            {/* List date Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <ListDateButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <ListDateEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
 
             {/* Closing date Filter  */}
             <FilterButton
@@ -157,6 +140,24 @@ export const Filters = () => {
               )}
               renderDropdown={() => (
                 <ClosingDateEditor
+                  filters={currentFilters}
+                  updateFilters={updateFilters}
+                  defaultFilters={systemDefaultFilters}
+                />
+              )}
+            />
+
+            {/* List date Filter  */}
+            <FilterButton
+              renderButton={({ onClick }) => (
+                <ListDateButton
+                  filters={currentFilters}
+                  defaultFilters={systemDefaultFilters}
+                  onClick={onClick}
+                />
+              )}
+              renderDropdown={() => (
+                <ListDateEditor
                   filters={currentFilters}
                   updateFilters={updateFilters}
                   defaultFilters={systemDefaultFilters}

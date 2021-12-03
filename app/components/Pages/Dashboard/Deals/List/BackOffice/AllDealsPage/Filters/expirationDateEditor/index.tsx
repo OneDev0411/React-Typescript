@@ -42,7 +42,7 @@ export const ExpirationDateEditor = ({
       <Grid container alignItems="center" className={classes.header}>
         <SvgIcon path={mdiCalendarRemove} size={muiIconSizes.medium} />
         <Typography variant="subtitle1" className={classes.title}>
-          Expiration Date
+          Listing Expiration
         </Typography>
       </Grid>
       <RangeDateSelector

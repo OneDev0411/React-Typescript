@@ -34,7 +34,7 @@ export const ExpirationDateButton = ({
       })}
       startIcon={<SvgIcon path={mdiCalendarRemove} size={muiIconSizes.small} />}
     >
-      Expiration Date
+      Listing Expiration
     </Button>
   )
 }
