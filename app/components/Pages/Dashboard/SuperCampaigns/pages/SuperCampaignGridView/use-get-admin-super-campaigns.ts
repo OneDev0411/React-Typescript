@@ -9,7 +9,7 @@ import getAllSuperCampaign, {
 
 interface UseGetSuperCampaign {
   isLoading: boolean
-  superCampaigns: ISuperCampaign<'template_instance'>[]
+  superCampaigns: ISuperCampaign[]
   loadMore: () => void
 }
 
@@ -24,7 +24,7 @@ export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
     run,
     data: superCampaigns,
     isLoading
-  } = useAsync<ISuperCampaign<'template_instance'>[]>({
+  } = useAsync<ISuperCampaign[]>({
     data: [],
     status: 'pending'
   })

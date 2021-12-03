@@ -10,8 +10,8 @@ import SuperCampaignPreviewDrawer from '@app/views/components/SuperCampaignPrevi
 
 import SuperCampaignAgentListColumnActions from './SuperCampaignAgentListColumnActions'
 import SuperCampaignAgentListColumnCreatedBy from './SuperCampaignAgentListColumnCreatedBy'
-import SuperCampaignAgentListColumnTags from './SuperCampaignAgentListColumnTags'
 import SuperCampaignListColumnSubject from './SuperCampaignListColumnSubject'
+import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
 
 function SuperCampaignAgentList() {
   const gridClasses = useGridStyles()
@@ -70,7 +70,10 @@ function SuperCampaignAgentList() {
       width: '25%',
       render: ({ row }) =>
         row.enrollment && (
-          <SuperCampaignAgentListColumnTags tags={row.enrollment.tags} />
+          <SuperCampaignListColumnTags
+            label="Recipients Tags"
+            tags={row.enrollment.tags}
+          />
         )
     },
     {
