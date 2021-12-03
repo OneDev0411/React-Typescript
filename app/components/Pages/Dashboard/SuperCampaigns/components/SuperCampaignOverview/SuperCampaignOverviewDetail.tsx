@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core'
-import format from 'date-fns/format'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 
@@ -66,26 +65,8 @@ function SuperCampaignOverviewDetail() {
         />
         <SuperCampaignOverviewDetailLabelValue
           className={classes.labelValue}
-          label="Email Subject"
-          value={superCampaign.subject || '-'}
-        />
-        <SuperCampaignOverviewDetailLabelValue
-          className={classes.labelValue}
           label="Description"
           value={superCampaign.description || '-'}
-        />
-        {}
-        <SuperCampaignOverviewDetailLabelValue
-          className={classes.labelValue}
-          label="Scheduled for"
-          value={
-            superCampaign.due_at
-              ? format(
-                  superCampaign.due_at * 1000,
-                  "EEEE, LLLL dd, yyyy 'at' hh:mmaaa"
-                )
-              : '-'
-          }
         />
       </div>
       {superCampaign.template_instance && (
