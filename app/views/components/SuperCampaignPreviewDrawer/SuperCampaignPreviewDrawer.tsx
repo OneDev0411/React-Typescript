@@ -13,7 +13,7 @@ import { useUnenrollMeFromSuperCampaign } from './use-unenroll-me-from-super-cam
 import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
 
 export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
-  superCampaign: ISuperCampaign<'template_instance'>
+  superCampaign: ISuperCampaign<'template_instance_and_created_by'>
   onEnroll: (enrollment: ISuperCampaignEnrollment) => void
   onUnenroll: () => void
   hasUnenroll: boolean

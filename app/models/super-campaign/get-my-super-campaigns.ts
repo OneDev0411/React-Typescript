@@ -2,11 +2,12 @@ import Fetch from 'services/fetch'
 
 async function getMySuperCampaigns(
   limit?: number
-): Promise<ISuperCampaign<'template_instance'>[]> {
+): Promise<ISuperCampaign<'template_instance_and_created_by'>[]> {
   const superCampaigns = (
     await new Fetch().get('/email/super-campaigns/self').query({
       associations: [
         'super_campaign.template_instance',
+        'super_campaign.created_by',
         'template_instance.template',
         'template_instance.listings',
         'template_instance.deals',
