@@ -18,10 +18,10 @@ import { DealsListFilters, DealsListPayload, DealsOrder } from '../../types'
 
 import { ClosingDateEditor } from './closingDateEditor'
 import { ClosingDateButton } from './closingDateEditor/button'
+import { ExpirationDateEditor } from './expirationDateEditor'
+import { ExpirationDateButton } from './expirationDateEditor/button'
 import { ListDateEditor } from './listDateEditor'
 import { ListDateButton } from './listDateEditor/button'
-import { ListExpirationEditor } from './listExpirationEditor'
-import { ListExpirationButton } from './listExpirationEditor/button'
 import { StatusEditor } from './statusEditor'
 import { StatusButton } from './statusEditor/button'
 import { useStyles } from './styles'
@@ -167,14 +167,14 @@ export const Filters = () => {
             {/* List expiration Filter  */}
             <FilterButton
               renderButton={({ onClick }) => (
-                <ListExpirationButton
+                <ExpirationDateButton
                   filters={currentFilters}
                   defaultFilters={systemDefaultFilters}
                   onClick={onClick}
                 />
               )}
               renderDropdown={() => (
-                <ListExpirationEditor
+                <ExpirationDateEditor
                   filters={currentFilters}
                   updateFilters={updateFilters}
                   defaultFilters={systemDefaultFilters}

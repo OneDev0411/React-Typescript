@@ -12,7 +12,7 @@ import { FilterEditorFooter } from '../filterEditorFooter'
 import { RangeDateSelector } from '../rangeDateSelector'
 import { useStyles } from '../styles'
 
-export const ListExpirationEditor = ({
+export const ExpirationDateEditor = ({
   filters,
   defaultFilters,
   updateFilters
@@ -24,9 +24,9 @@ export const ListExpirationEditor = ({
       updateFilters({
         contexts: {
           ...(filters.contexts ?? {}),
-          list_expiration: {
+          expiration_date: {
             date: {
-              ...(filters?.contexts?.list_expiration?.date ?? {}),
+              ...(filters?.contexts?.expiration_date?.date ?? {}),
               ...newValues
             }
           }
@@ -42,19 +42,19 @@ export const ListExpirationEditor = ({
       <Grid container alignItems="center" className={classes.header}>
         <SvgIcon path={mdiCalendarRemove} size={muiIconSizes.medium} />
         <Typography variant="subtitle1" className={classes.title}>
-          List Expiration
+          Expiration Date
         </Typography>
       </Grid>
       <RangeDateSelector
         onChange={onChange}
-        value={filters.contexts.list_expiration?.date}
+        value={filters.contexts.expiration_date?.date}
       />
       <FilterEditorFooter
         disabledReset={
-          filters.contexts.list_expiration?.date.from ===
-            defaultFilters.contexts.list_expiration?.date.from &&
-          filters.contexts.list_expiration?.date.to ===
-            defaultFilters.contexts.list_expiration?.date.to
+          filters.contexts.expiration_date?.date.from ===
+            defaultFilters.contexts.expiration_date?.date.from &&
+          filters.contexts.expiration_date?.date.to ===
+            defaultFilters.contexts.expiration_date?.date.to
         }
         onClickReset={() => {
           onChange({ from: undefined, to: undefined })

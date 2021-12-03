@@ -9,7 +9,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { DealsListFilters } from '../../../types'
 import { useStyles } from '../styles'
 
-export const ListExpirationButton = ({
+export const ExpirationDateButton = ({
   onClick,
   filters,
   defaultFilters
@@ -17,10 +17,10 @@ export const ListExpirationButton = ({
   const classes = useStyles()
 
   const isActive =
-    defaultFilters.contexts.list_expiration?.date.from !==
-      filters.contexts.list_expiration?.date.from ||
-    defaultFilters.contexts.list_expiration?.date.to !==
-      filters.contexts.list_expiration?.date.to
+    defaultFilters.contexts.expiration_date?.date.from !==
+      filters.contexts.expiration_date?.date.from ||
+    defaultFilters.contexts.expiration_date?.date.to !==
+      filters.contexts.expiration_date?.date.to
 
   return (
     <Button
@@ -34,7 +34,7 @@ export const ListExpirationButton = ({
       })}
       startIcon={<SvgIcon path={mdiCalendarRemove} size={muiIconSizes.small} />}
     >
-      List Expiration
+      Expiration Date
     </Button>
   )
 }
