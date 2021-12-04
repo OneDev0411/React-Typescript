@@ -5,26 +5,26 @@ import { makeStyles } from '@material-ui/core'
 import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 
-import SuperCampaignScheduleButton from './SuperCampaignScheduleButton'
-import SuperCampaignScheduleChip from './SuperCampaignScheduleChip'
+import SuperCampaignDetailHeaderScheduleButton from './SuperCampaignDetailHeaderScheduleButton'
+import SuperCampaignDetailHeaderScheduleChip from './SuperCampaignDetailHeaderScheduleChip'
 
 const useStyles = makeStyles(
   theme => ({
     schedule: { marginLeft: theme.spacing(1) }
   }),
-  { name: 'SuperCampaignSchedule' }
+  { name: 'SuperCampaignDetailHeaderSchedule' }
 )
-export interface SuperCampaignScheduleProps {
+export interface SuperCampaignDetailHeaderScheduleProps {
   superCampaign: ISuperCampaign<'template_instance'>
   setSuperCampaign: Dispatch<
     SetStateAction<ISuperCampaign<'template_instance'>>
   >
 }
 
-function SuperCampaignSchedule({
+function SuperCampaignDetailHeaderSchedule({
   superCampaign,
   setSuperCampaign
-}: SuperCampaignScheduleProps) {
+}: SuperCampaignDetailHeaderScheduleProps) {
   const classes = useStyles()
 
   const isExecuted = useIsSuperCampaignReadOnly(superCampaign)
@@ -39,12 +39,12 @@ function SuperCampaignSchedule({
 
   return (
     <>
-      <SuperCampaignScheduleChip
+      <SuperCampaignDetailHeaderScheduleChip
         isExecuted={isExecuted}
         dueAt={superCampaign.due_at}
         isSaving={isSaving}
       />
-      <SuperCampaignScheduleButton
+      <SuperCampaignDetailHeaderScheduleButton
         className={classes.schedule}
         isExecuted={isExecuted}
         dueAt={superCampaign.due_at}
@@ -55,4 +55,4 @@ function SuperCampaignSchedule({
   )
 }
 
-export default SuperCampaignSchedule
+export default SuperCampaignDetailHeaderSchedule

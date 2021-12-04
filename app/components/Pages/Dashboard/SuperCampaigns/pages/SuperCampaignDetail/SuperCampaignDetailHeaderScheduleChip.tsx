@@ -5,17 +5,17 @@ import format from 'date-fns/format'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-interface SuperCampaignScheduleChipProps {
+interface SuperCampaignDetailHeaderScheduleChipProps {
   isExecuted: Boolean
   dueAt: Optional<number>
   isSaving: boolean
 }
 
-function SuperCampaignScheduleChip({
+function SuperCampaignDetailHeaderScheduleChip({
   isExecuted,
   dueAt,
   isSaving
-}: SuperCampaignScheduleChipProps) {
+}: SuperCampaignDetailHeaderScheduleChipProps) {
   const getLabelIcon = () => {
     if (!dueAt) {
       return {
@@ -59,4 +59,4 @@ function SuperCampaignScheduleChip({
   )
 }
 
-export default SuperCampaignScheduleChip
+export default SuperCampaignDetailHeaderScheduleChip

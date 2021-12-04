@@ -7,7 +7,7 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { convertDateToTimestamp, convertTimestampToDate } from '../../helpers'
 
-export interface SuperCampaignScheduleButtonProps {
+export interface SuperCampaignDetailHeaderScheduleButtonProps {
   className: string
   isExecuted: boolean
   dueAt: Optional<number>
@@ -15,13 +15,13 @@ export interface SuperCampaignScheduleButtonProps {
   isSaving: boolean
 }
 
-function SuperCampaignScheduleButton({
+function SuperCampaignDetailHeaderScheduleButton({
   className,
   isExecuted,
   dueAt,
   onDueAtChange,
   isSaving
-}: SuperCampaignScheduleButtonProps) {
+}: SuperCampaignDetailHeaderScheduleButtonProps) {
   if (isExecuted) {
     return null
   }
@@ -71,4 +71,4 @@ function SuperCampaignScheduleButton({
   )
 }
 
-export default SuperCampaignScheduleButton
+export default SuperCampaignDetailHeaderScheduleButton

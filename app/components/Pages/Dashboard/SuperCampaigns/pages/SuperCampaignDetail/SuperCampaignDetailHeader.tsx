@@ -1,12 +1,12 @@
 import { Box } from '@material-ui/core'
 
 import SuperCampaignCloseButton from './SuperCampaignCloseButton'
-import SuperCampaignSchedule, {
-  SuperCampaignScheduleProps
-} from './SuperCampaignSchedule'
+import SuperCampaignDetailHeaderSchedule, {
+  SuperCampaignDetailHeaderScheduleProps
+} from './SuperCampaignDetailHeaderSchedule'
 
 interface SuperCampaignDetailHeaderProps
-  extends Pick<SuperCampaignScheduleProps, 'setSuperCampaign'> {
+  extends Pick<SuperCampaignDetailHeaderScheduleProps, 'setSuperCampaign'> {
   superCampaign: Nullable<ISuperCampaign<'template_instance'>>
 }
 
@@ -17,7 +17,7 @@ function SuperCampaignDetailHeader({
   return (
     <Box display="flex" alignItems="center">
       {superCampaign && (
-        <SuperCampaignSchedule
+        <SuperCampaignDetailHeaderSchedule
           superCampaign={superCampaign}
           setSuperCampaign={setSuperCampaign}
         />
