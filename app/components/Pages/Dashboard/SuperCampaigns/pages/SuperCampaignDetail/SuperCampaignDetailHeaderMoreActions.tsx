@@ -44,7 +44,7 @@ function SuperCampaignDetailHeaderMoreActions({
     setSuperCampaign
   )
 
-  const handleOptOut = () => {
+  const handleSendNow = () => {
     confirmation.setConfirmationModal({
       message: 'Are you sure you want to send it now?',
       confirmLabel: 'Yes, I am',
@@ -80,7 +80,7 @@ function SuperCampaignDetailHeaderMoreActions({
       )}
       renderMenu={({ close }) => (
         <div onClick={close}>
-          <MenuItem onClick={handleOptOut}>
+          <MenuItem onClick={handleSendNow}>
             <Typography variant="body2">Send Now</Typography>
           </MenuItem>
         </div>
