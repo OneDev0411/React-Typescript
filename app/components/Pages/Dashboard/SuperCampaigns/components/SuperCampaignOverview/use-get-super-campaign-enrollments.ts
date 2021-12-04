@@ -1,4 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
+
+import { useDeepCompareEffect } from 'react-use'
 
 import useAsync from '@app/hooks/use-async'
 import getSuperCampaignEnrollments from '@app/models/super-campaign/get-super-campaign-enrollments'
@@ -31,7 +33,7 @@ export function useGetSuperCampaignEnrollments(
     status: 'pending'
   })
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     run(async () =>
       getSuperCampaignEnrollments(superCampaignId, includeCampaign)
     )
