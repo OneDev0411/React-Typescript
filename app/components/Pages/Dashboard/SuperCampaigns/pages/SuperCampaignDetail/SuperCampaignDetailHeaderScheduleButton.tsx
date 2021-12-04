@@ -35,7 +35,13 @@ function SuperCampaignDetailHeaderScheduleButton({
       return
     }
 
-    onDueAtChange(convertDateToTimestamp(date))
+    const newValue = convertDateToTimestamp(date)
+
+    if (newValue === dueAt) {
+      return
+    }
+
+    onDueAtChange(newValue)
   }
 
   return (
