@@ -26,32 +26,25 @@ const useStyles = makeStyles(
 
 interface Props {
   control: Control
-  list: string[]
 }
 
-export function Roles({ list, control }: Props) {
+export function Roles({ control }: Props) {
   const classes = useStyles()
   const theme = useTheme<Theme>()
   const { watch } = useFormContext()
-  const [rolesList, setRolesList] = useState(list)
-  const { dealRolesByName } = useDealsRolesContext()
+  const { dealRolesList } = useDealsRolesContext()
+  const [rolesList, setRolesList] =
+    useState<IDealRoleDefinition[]>(dealRolesList)
 
   const roles = watch('roles')
   const defaultRoles = getDefaultRoles(watch('is_lease'))
 
   const handleSearch = (value: string) => {
     const newList = value
-      ? matchSorter(
-          list.map(name => ({
-            value: name,
-            label: dealRolesByName[name]
-          })),
-          value,
-          {
-            keys: ['label', 'value']
-          }
-        ).map(item => item.value)
-      : list
+      ? matchSorter(rolesList, value, {
+          keys: ['role', 'title']
+        })
+      : dealRolesList
 
     setRolesList(newList)
   }
@@ -104,19 +97,19 @@ export function Roles({ list, control }: Props) {
           control={control}
           render={({ onChange }) => (
             <>
-              {rolesList.map(name => {
-                const { label, color } = getRoleProperties(name)
-                const disabled = defaultRoles[name] === true
+              {rolesList.map(definition => {
+                const { label, color } = getRoleProperties(definition.role)
+                const disabled = defaultRoles[definition.role] === true
 
                 return (
                   <Grid
-                    key={name}
+                    key={definition.role}
                     container
                     spacing={2}
                     className={classes.row}
                   >
                     <Grid xs={5}>
-                      <strong>{dealRolesByName[name]}</strong>
+                      <strong>{definition.title}</strong>
                     </Grid>
 
                     <Grid xs={2}>
@@ -130,7 +123,7 @@ export function Roles({ list, control }: Props) {
                         onClick={() =>
                           onChange({
                             ...roles,
-                            [name]: getNextState(name)
+                            [definition.role]: getNextState(definition.role)
                           })
                         }
                       >

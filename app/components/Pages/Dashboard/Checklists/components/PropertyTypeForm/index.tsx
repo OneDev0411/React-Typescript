@@ -26,8 +26,6 @@ import { updatePropertyType } from 'models/property-types/update-property-type'
 import { selectUser } from 'selectors/user'
 import { getActiveTeamId } from 'utils/user-teams'
 
-import { ROLE_NAMES } from '../../../Deals/utils/roles'
-
 import { getDefaultRoles } from './helpers/get-default-roles'
 import { pickRoles } from './helpers/pick-roles'
 import { rolesArrayToObject } from './helpers/roles-array-to-object'
@@ -186,7 +184,7 @@ export function PropertyTypeForm({
               </Grid>
             </Grid>
 
-            <Roles list={ROLE_NAMES} control={control} />
+            <Roles control={control} />
           </Grid>
         </DialogContent>
 

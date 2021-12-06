@@ -3,19 +3,23 @@ export function rolesArrayToObject(
   optionalRoles: IDealRoleDefinition[] = []
 ) {
   return {
-    ...requiredRoles.reduce(
-      (acc, { role }) => ({
-        ...acc,
-        [role]: true
-      }),
-      {}
-    ),
-    ...optionalRoles.reduce(
-      (acc, { role }) => ({
-        ...acc,
-        [role]: false
-      }),
-      {}
-    )
+    ...requiredRoles
+      .filter(definition => !!definition)
+      .reduce(
+        (acc, { role }) => ({
+          ...acc,
+          [role]: true
+        }),
+        {}
+      ),
+    ...optionalRoles
+      .filter(definition => !!definition)
+      .reduce(
+        (acc, { role }) => ({
+          ...acc,
+          [role]: false
+        }),
+        {}
+      )
   }
 }
