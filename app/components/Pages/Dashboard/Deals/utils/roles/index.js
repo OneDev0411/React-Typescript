@@ -10,32 +10,6 @@ import {
   selectDefinition
 } from 'reducers/contacts/attributeDefs'
 
-export const ROLE_NAMES = [
-  'BuyerAgent',
-  'BuyerReferral',
-  'CoBuyerAgent',
-  'SellerAgent',
-  'SellerReferral',
-  'CoSellerAgent',
-  'Buyer',
-  'BuyerPowerOfAttorney',
-  'Seller',
-  'SellerPowerOfAttorney',
-  'Title',
-  'BuyerLawyer',
-  'SellerLawyer',
-  'Lender',
-  'TeamLead',
-  'Appraiser',
-  'Inspector',
-  'Tenant',
-  'LandlordPowerOfAttorney',
-  'Landlord',
-  'TenantPowerOfAttorney',
-  'BuyerBroker',
-  'SellerBroker'
-]
-
 export const AGENT_ROLES = [
   'BuyerAgent',
   'CoBuyerAgent',

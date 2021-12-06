@@ -1,5 +1,3 @@
-import { ROLE_NAMES } from 'deals/utils/roles'
-
 import { isValidAddress } from './is-valid-address'
 import { isValidCommission } from './is-valid-commission'
 import { isValidEmail } from './is-valid-email'
@@ -10,10 +8,10 @@ import { isValidString } from './is-valid-string'
 /**
  * get form validators
  */
-export function getFormValidators(requiredFields) {
+export function getFormValidators(rolesDefinitions, requiredFields) {
   return {
     /* validate role */
-    role: role => ROLE_NAMES.includes(role),
+    role: role => rolesDefinitions.some(definition => definition.role === role),
 
     /* validate Current Address */
     current_address: value =>
