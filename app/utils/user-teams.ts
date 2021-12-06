@@ -237,9 +237,7 @@ export const getUserSettingsInActiveTeam = (user: IUser, key: string): any => {
   })(user)
 }
 
-export function getActiveTeamPalette(user: IUser): BrandMarketingPalette {
-  const team = getActiveTeam(user)
-
+export function getActiveTeamPalette(team: IUserTeam): BrandMarketingPalette {
   if (!team || !team.brand) {
     return DEFAULT_BRAND_PALETTE
   }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react'
+import { useState, useCallback, useContext } from 'react'
 
 import { Grid, Button, Divider, Box } from '@material-ui/core'
 import isEqual from 'lodash/isEqual'
@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { withRouter } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { selectUser } from '@app/selectors/user'
 import { getUserTeams } from 'actions/user/teams'
 import Acl from 'components/Acl'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -14,11 +15,11 @@ import PageLayout from 'components/GlobalPageLayout'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplatePreview from 'components/TemplatePreview'
 import { ACL } from 'constants/acl'
+import { useActiveTeamId, useActiveTeamPalette } from 'hooks/team'
 import { updatePalette } from 'models/brand/update-palette'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
 import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbnails'
 import { IAppState } from 'reducers'
-import { getActiveTeamPalette, getActiveTeamId } from 'utils/user-teams'
 
 import { TEMPLATE } from './constants'
 import {
@@ -30,15 +31,15 @@ import Sidebar from './Sidebar'
 
 export function BrandSettings() {
   const dispatch = useDispatch()
-  const user = useSelector<IAppState, IUser>(({ user }) => user!)
+  const user = useSelector<IAppState, IUser>(selectUser)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [listing, setListing] = useState<Nullable<IListing>>(null)
-  const activeBrand = getActiveTeamId(user) as UUID
+  const activeTeam = useActiveTeamId()
+  const activeTeamPalette = useActiveTeamPalette()
   const [defaultSettings, setDefaultSettings] =
     useState<Nullable<BrandMarketingPalette>>(null)
-  const [settings, setSettings] = useState<BrandMarketingPalette>(
-    getActiveTeamPalette(user)
-  )
+  const [settings, setSettings] =
+    useState<BrandMarketingPalette>(activeTeamPalette)
   const [preferredSideBarView, setPreferredSidebarView] = useState(
     getPreferredSidebarView(settings)
   )
@@ -87,8 +88,8 @@ Are you sure?`,
 
   const saveSettings = async () => {
     setIsLoading(true)
-    await updatePalette(activeBrand, settings)
-    await invalidateThumbnails(activeBrand)
+    await updatePalette(activeTeam, settings)
+    await invalidateThumbnails(activeTeam)
     setDefaultSettings(null)
     setIsLoading(false)
     dispatch(getUserTeams(user))
@@ -98,13 +99,13 @@ Are you sure?`,
     async (image: File) => {
       setIsLoading(true)
 
-      const brandAsset = await uploadBrandAsset(activeBrand, image)
+      const brandAsset = await uploadBrandAsset(activeTeam, image)
 
       setIsLoading(false)
 
       return brandAsset.file
     },
-    [activeBrand]
+    [activeTeam]
   )
 
   const sidebarSections =
