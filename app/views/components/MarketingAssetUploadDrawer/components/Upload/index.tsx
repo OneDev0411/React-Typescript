@@ -99,29 +99,35 @@ export default function Upload({
     [setValue, assets, defaultSelectedTemplateType, defaultSelectedMedium]
   )
 
-  const handleUpdateAsset = (updatedAsset: Asset) => {
-    const assetIndex = assets.findIndex(
-      asset => asset.file.url === updatedAsset.file.url
-    )
-    const oldAsset = assets[assetIndex]
-    const newAsset = {
-      ...oldAsset,
-      ...updatedAsset
-    }
+  const handleUpdateAsset = useCallback(
+    (updatedAsset: Asset) => {
+      const assetIndex = assets.findIndex(
+        asset => asset.file.url === updatedAsset.file.url
+      )
+      const oldAsset = assets[assetIndex]
+      const newAsset = {
+        ...oldAsset,
+        ...updatedAsset
+      }
 
-    setValue('assets', [
-      ...assets.slice(0, assetIndex),
-      newAsset,
-      ...assets.slice(assetIndex + 1)
-    ])
-  }
+      setValue('assets', [
+        ...assets.slice(0, assetIndex),
+        newAsset,
+        ...assets.slice(assetIndex + 1)
+      ])
+    },
+    [assets, setValue]
+  )
 
-  const handleDeleteAsset = (asset: Asset) => {
-    setValue(
-      'assets',
-      assets.filter(item => item.file.url !== asset.file.url)
-    )
-  }
+  const handleDeleteAsset = useCallback(
+    (asset: Asset) => {
+      setValue(
+        'assets',
+        assets.filter(item => item.file.url !== asset.file.url)
+      )
+    },
+    [assets, setValue]
+  )
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDrop,

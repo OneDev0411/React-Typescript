@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import {
   Grid,
   makeStyles,
@@ -39,11 +37,15 @@ const useStyles = makeStyles(
       borderRadius: theme.shape.borderRadius
     },
     thumbnailContainer: {
+      maxWidth: '100%',
       '& img': {
         width: '100%',
         objectFit: 'cover',
         height: theme.spacing(14),
         borderRadius: theme.shape.borderRadius
+      },
+      '& video, & canvas': {
+        display: 'none'
       }
     },
     clickToUpload: {
@@ -70,7 +72,7 @@ interface Props {
   onDeleteAsset: (asset: Asset) => void
 }
 
-export default memo(function AssetItem({
+export default function AssetItem({
   asset,
   uploadProgress,
   onUpdateAsset,
@@ -125,7 +127,7 @@ export default memo(function AssetItem({
                   id="asset-template-type"
                   labelId="asset-template-type-label"
                   label="Add To"
-                  value={asset.templateType}
+                  value={asset.templateType ?? ''}
                   onChange={event =>
                     onUpdateAsset({
                       ...asset,
@@ -150,7 +152,7 @@ export default memo(function AssetItem({
                   id="asset-medium"
                   labelId="asset-medium-label"
                   label="Medium"
-                  value={asset.medium}
+                  value={asset.medium ?? ''}
                   onChange={event =>
                     onUpdateAsset({
                       ...asset,
@@ -200,4 +202,4 @@ export default memo(function AssetItem({
         : renderUploadProgress()}
     </Grid>
   )
-})
+}
