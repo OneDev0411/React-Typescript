@@ -59,8 +59,6 @@ export const Filters = () => {
           status: pickBy(userFilters.status, v => v === true)
         }
 
-        console.log({ cleanedUserFilters, userFilters })
-
         const payload: DealsListPayload = {
           ...cleanedUserFilters,
           $order: sortOption,
