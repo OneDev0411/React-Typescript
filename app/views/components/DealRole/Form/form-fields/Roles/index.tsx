@@ -19,10 +19,10 @@ interface Props {
 
 export function Roles({ meta, input, isAllowedRole }: Props) {
   const role = input.value
-  const { dealRoleslist, dealRolesByName } = useDealsRolesContext()
+  const { dealRolesList, dealRolesByName } = useDealsRolesContext()
 
   const options = useMemo(() => {
-    let options: RoleOption[] = dealRoleslist
+    let options: RoleOption[] = dealRolesList
       .filter(item => isAllowedRole(item.role, role))
       .map(item => ({
         value: item.role,
@@ -49,7 +49,7 @@ export function Roles({ meta, input, isAllowedRole }: Props) {
     }
 
     return options
-  }, [isAllowedRole, role, dealRolesByName, dealRoleslist])
+  }, [isAllowedRole, role, dealRolesByName, dealRolesList])
 
   return (
     <FormControl variant="outlined" size="small" fullWidth>
