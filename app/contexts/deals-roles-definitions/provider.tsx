@@ -6,7 +6,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export function DealRoles({ children }: Props) {
+export function DealRolesProvider({ children }: Props) {
   const [roles] = useDealsRolesDefinitions()
 
   return (
