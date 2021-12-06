@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import {
   Grid,
@@ -8,13 +8,11 @@ import {
   Theme,
   makeStyles
 } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 
 import CardSkeleton from 'components/CardSkeleton'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import LinkSectionAction from '../LinkSectionAction'
@@ -48,14 +46,14 @@ const useStyles = makeStyles(
 
 export default function SomethingToShareSection() {
   const classes = useStyles()
-  const user = useSelector(selectUser)
-  const activeBrand = getActiveTeamId(user)
+  const activeTeamId = useActiveTeamId()
+
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
   const [isTemplateClicked, setIsTemplateClicked] = useState<boolean>(false)
 
   const { templates, isLoading } = useTemplates(
-    activeBrand,
+    activeTeamId,
     SOCIAL_TEMPLATE_MEDIUMS,
     BRANDING_TEMPLATE_TYPES
   )

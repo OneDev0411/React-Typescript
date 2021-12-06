@@ -15,13 +15,13 @@ import {
   upsertContexts
 } from 'actions/deals'
 import { QuestionWizard } from 'components/QuestionWizard'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { useReduxDispatch } from 'hooks/use-redux-dispatch'
 import Deal from 'models/Deal'
 import { getDefinitionId } from 'models/Deal/helpers/brand-context/get-definition-id'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { createAddressContext } from '../utils/create-address-context'
 
@@ -55,19 +55,18 @@ function CreateDeal({ router, route }: Props) {
 
   const classes = useStyles()
   const { control, watch } = useForm()
-
+  const activeTeamId = useActiveTeamId()
   const [dealId, setDealId] = useState<UUID | null>(null)
   const [isCreatingDeal, setIsCreatingDeal] = useState(false)
 
   const dispatch = useReduxDispatch()
-  const user = useSelector<IAppState, IUser>(state => selectUser(state))
+  const user = useSelector<IAppState, IUser>(selectUser)
   const deal = useSelector<IAppState, IDeal | null>(({ deals }) =>
     dealId ? deals.list[dealId] : null
   )
 
-  const { propertyTypes: brandPropertyTypes } = useBrandPropertyTypes(
-    getActiveTeamId(user)!
-  )
+  const { propertyTypes: brandPropertyTypes } =
+    useBrandPropertyTypes(activeTeamId)
 
   const dealSide = watch('deal_side') as IDealSide
   const dealType: IDealType = dealSide === 'Buying' ? 'Buying' : 'Selling'

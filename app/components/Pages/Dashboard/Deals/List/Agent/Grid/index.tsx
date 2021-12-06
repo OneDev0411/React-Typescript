@@ -19,6 +19,7 @@ import {
   isClosedDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
@@ -28,7 +29,6 @@ import {
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { sortDealsStatus } from 'utils/sort-deals-status'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import onDealOpened from '../../../utils/on-deal-opened'
 import { getPrimaryAgent, getPrimaryAgentName } from '../../../utils/roles'
@@ -69,16 +69,17 @@ const Filters = {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
+  const activeTeamId = useActiveTeamId()
 
+  const user = useSelector(selectUser)
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
-  const user = useSelector(selectUser)
-  const brandChecklists = useBrandChecklists(getActiveTeamId(user)!)
+  const brandChecklists = useBrandChecklists(activeTeamId)
 
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(activeTeamId)
 
   const columns = [
     {

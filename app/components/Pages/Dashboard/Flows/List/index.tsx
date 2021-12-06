@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import {
   Typography,
@@ -21,10 +21,10 @@ import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import { addNotification as notify } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
 import { goTo } from 'utils/go-to'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import CtaBar from '../../Account/components/CtaBar'
 import { LoadingComponent } from '../../Contacts/List/Table/components/LoadingComponent'
@@ -68,24 +68,20 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }))
 
-interface Props {
-  user: IUser
-}
-
-function List(props: Props & WithRouterProps) {
+function List(props: WithRouterProps) {
   const dispatch = useDispatch()
-  const brand = getActiveTeamId(props.user)
+  const activeTeamId = useActiveTeamId()
+
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
-  const { flows, reloadFlows, isFetching, error } = useGetBrandFlows(brand)
+  const { flows, reloadFlows, isFetching, error } =
+    useGetBrandFlows(activeTeamId)
   const confirmation = useContext(ConfirmationModalContext)
   const theme = useTheme<Theme>()
 
   async function newFlowSubmitHandler(flowData: IBrandFlowInput) {
     try {
-      const brandId = getActiveTeamId(props.user)
-
-      if (brandId === null) {
+      if (!activeTeamId) {
         dispatch(
           notify({
             message: 'You need to be in a team in order to create a flow',
@@ -96,7 +92,7 @@ function List(props: Props & WithRouterProps) {
         return
       }
 
-      await createFlow(brandId, flowData, selectedFlow, createdFlow => {
+      await createFlow(activeTeamId, flowData, selectedFlow, createdFlow => {
         goTo(
           getFlowEditUrl(createdFlow.id),
           null,
@@ -198,11 +194,11 @@ function List(props: Props & WithRouterProps) {
                             description: `This Flow will be deleted 
                             and you can not use it anymore. Are you sure?`,
                             onConfirm: async () => {
-                              if (!brand) {
+                              if (!activeTeamId) {
                                 return
                               }
 
-                              await deleteBrandFlow(brand, row.id)
+                              await deleteBrandFlow(activeTeamId, row.id)
                               await reloadFlows()
                               dispatch(
                                 notify({
@@ -288,6 +284,4 @@ function List(props: Props & WithRouterProps) {
   )
 }
 
-const mapStateToProps = ({ user }) => ({ user })
-
-export default connect(mapStateToProps)(withRouter(List))
+export default connect()(withRouter(List))

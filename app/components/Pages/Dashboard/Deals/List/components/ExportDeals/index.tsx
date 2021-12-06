@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import {
   makeStyles,
@@ -12,13 +12,10 @@ import {
 } from '@material-ui/core'
 import { mdiArrowDown } from '@mdi/js'
 import moment from 'moment'
-import { useSelector } from 'react-redux'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,14 +35,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export function ExportDeals(props) {
   const classes = useStyles()
-
-  const user = useSelector((state: IAppState) => selectUser(state))
+  const activeTeamId = useActiveTeamId()
 
   const items = useMemo(() => {
     return [
       {
         label: 'All Deals',
-        url: `/api/deals/export/${getActiveTeamId(user)}`
+        url: `/api/deals/export/${activeTeamId}`
       },
       {
         label: 'New Listings',
@@ -80,7 +76,7 @@ export function ExportDeals(props) {
             },
             order: 'list_date',
             title: 'New Listings',
-            brand: getActiveTeamId(user)
+            brand: activeTeamId
           })
         )}`
       },
@@ -119,12 +115,12 @@ export function ExportDeals(props) {
             },
             order: 'contract_date',
             title: 'New Offers',
-            brand: getActiveTeamId(user)
+            brand: activeTeamId
           })
         )}`
       }
     ]
-  }, [user])
+  }, [activeTeamId])
 
   return (
     <BaseDropdown

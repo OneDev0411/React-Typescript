@@ -1,12 +1,10 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
-import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
-import { selectUser } from '@app/selectors/user'
 import PageLayout from 'components/GlobalPageLayout'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
@@ -18,7 +16,6 @@ import { useSearchQuery } from './hooks/use-search-query'
 import { SearchQuery } from './types'
 
 interface StateProps {
-  user: IUser
   isFetchingDeals: boolean
   getDeals(user: IUser): void
   searchDeals(user: IUser, value: object | string): void
@@ -42,9 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BackofficeTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
-  const user = useSelector(selectUser)
+  const activeTeamId = useActiveTeamId()
 
-  const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
+  const [statuses] = useBrandStatuses(activeTeamId)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const searchQuery: SearchQuery = {
