@@ -1,11 +1,11 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { connect } from 'react-redux'
 
+import { selectActiveTeamId } from '@app/selectors/team'
 import { getContextsByBrand } from 'actions/deals/context'
 import { Checkbox } from 'components/Checkbox'
 import { selectBrandContexts } from 'reducers/deals/contexts'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import CategoryType from '../CategoryTypes'
 import { Section } from '../styled'
@@ -31,10 +31,10 @@ function getItems(items) {
 
 const taskTypes = getItems(defaultTaskTypes)
 
-class ICalAllTypes extends React.Component {
+class ICalAllTypes extends Component {
   componentDidMount() {
     if (!this.props.contexts) {
-      this.props.getContextsByBrand(getActiveTeamId(this.props.user))
+      this.props.getContextsByBrand(this.props.activeTeamId)
     }
   }
 
@@ -122,12 +122,13 @@ class ICalAllTypes extends React.Component {
   }
 }
 
-function mapToProps({ deals, contacts, user }) {
-  const brandId = getActiveTeamId(user)
+function mapToProps({ deals, contacts, user, ...state }) {
+  const activeTeamId = selectActiveTeamId(state)
 
   return {
     user,
-    contexts: selectBrandContexts(deals.contexts, brandId),
+    activeTeamId,
+    contexts: selectBrandContexts(deals.contexts, activeTeamId),
     contactsAttributesDefs: contacts.attributeDefs.byId
   }
 }
