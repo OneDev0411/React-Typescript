@@ -7,12 +7,13 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
+import { useUnsafeActiveTeamId } from 'hooks/team/use-unsafe-active-team-id'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { renderBrandedNunjucksTemplate } from 'utils/marketing-center/render-branded-nunjucks-template'
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { getTemplateType } from '../helpers'
 
@@ -78,7 +79,8 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
-  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
+  const activeBrand: Nullable<IBrand> = useUnsafeActiveBrand()
+  const activeTeamId: Nullable<UUID> = useUnsafeActiveTeamId()
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
@@ -86,7 +88,7 @@ export const TemplateSelector = ({
   const currentTemplate = selectedTemplate || currentValue?.campaign?.template
 
   const createTemplateInstance = async (template: IBrandMarketingTemplate) => {
-    if (!brand) {
+    if (!activeBrand) {
       return
     }
 
@@ -94,7 +96,7 @@ export const TemplateSelector = ({
       // render the nunjuks template
       const templateMarkup: string = await renderBrandedNunjucksTemplate(
         template,
-        brand,
+        activeBrand,
         { user }
       )
 
@@ -173,15 +175,13 @@ export const TemplateSelector = ({
   }
 
   useEffectOnce(() => {
-    const brandId = getActiveTeamId(user)
-
-    if (!brandId || disabled) {
+    if (!activeTeamId || disabled) {
       return
     }
 
     if (!selectedTemplate && !currentValue) {
       setIsLoading(true)
-      getTemplates(brandId, [getTemplateType(attributeName)], ['Email'])
+      getTemplates(activeTeamId, [getTemplateType(attributeName)], ['Email'])
         .then(templates => {
           if (templates.length) {
             handleSelectTemplate(templates[0])

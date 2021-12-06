@@ -3,16 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Box } from '@material-ui/core'
 import { DropResult } from 'react-beautiful-dnd'
 import { Helmet } from 'react-helmet'
-import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
 
 import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
-import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { ChecklistCreate } from './components/ChecklistCreate'
 import { ChecklistHeader } from './components/ChecklistHeader'
@@ -30,14 +28,10 @@ interface Props extends RouteComponentProps<any, {}> {
 export default function ChecklistsPage({ location }: Props) {
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
-
   const [isFormOpen, setIsFormOpen] = useState(false)
-
-  const user = useSelector(selectUser)
+  const activeTeamId = useActiveTeamId()
 
   const lastTaskNameEditorRef = useRef<any>(null)
-
-  const activeTeamId = getActiveTeamId(user)
 
   const {
     forms,

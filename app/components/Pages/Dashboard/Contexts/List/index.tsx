@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet'
 import { connect, useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
+import { selectActiveTeamId } from '@app/selectors/team'
 import { getContextsByBrand } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification as notify } from 'components/notification'
@@ -18,20 +19,19 @@ import deleteContext from 'models/Deal/context/delete-context'
 import editContext from 'models/Deal/context/edit-context'
 import { IAppState } from 'reducers'
 import { selectBrandContexts } from 'reducers/deals/contexts'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import CategoryItem from '../components/CategoryItem'
 import EmptyState from '../components/EmptyState'
 import NewCategoryModal from '../components/NewCategory'
 
 interface Props {
-  brandId: Nullable<UUID>
+  activeTeamId: UUID
   isFetching: boolean
   isEmpty: boolean
   list: Record<string, IDealBrandContext[]>
 }
 
-function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
+function DealContext({ activeTeamId, isFetching, isEmpty, list }: Props) {
   const dispatch = useDispatch()
   const theme = useTheme<Theme>()
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -40,13 +40,13 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
     useState<IDealBrandContext | null>(null)
 
   useEffectOnce(() => {
-    dispatch(getContextsByBrand(brandId))
+    dispatch(getContextsByBrand(activeTeamId))
   })
 
   const {
     propertyTypes: brandPropertyTypes,
     reload: reloadBrandPropertyTypes
-  } = useBrandPropertyTypes(brandId)
+  } = useBrandPropertyTypes(activeTeamId)
 
   async function contextFormHandler(
     contextData: IDealBrandContext & {
@@ -66,12 +66,12 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
         }))
 
       if (editMode) {
-        context = await editContext(brandId, contextId, {
+        context = await editContext(activeTeamId, contextId, {
           ...contextData,
           checklists
         })
       } else {
-        context = await createNewContext(brandId, {
+        context = await createNewContext(activeTeamId, {
           ...contextData,
           checklists
         })
@@ -84,7 +84,7 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
             status: 'success'
           })
         )
-        dispatch(getContextsByBrand(brandId))
+        dispatch(getContextsByBrand(activeTeamId))
         setIsModalOpen(false)
 
         if (editMode) {
@@ -117,7 +117,7 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
   }
   async function deleteContextHandler(contextId: UUID) {
     try {
-      const res = await deleteContext(brandId, contextId)
+      const res = await deleteContext(activeTeamId, contextId)
 
       if (res) {
         dispatch(
@@ -127,7 +127,7 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
           })
         )
 
-        dispatch(getContextsByBrand(brandId))
+        dispatch(getContextsByBrand(activeTeamId))
       }
     } catch (err) {
       console.error(err)
@@ -175,12 +175,12 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
           <PageHeader.Heading>Deal Context</PageHeader.Heading>
         </PageHeader.Title>
       </PageHeader>
-      {brandId && isModalOpen && (
+      {activeTeamId && isModalOpen && (
         <NewCategoryModal
           isOpen={isModalOpen}
           section={selectedSection}
           context={selectedContext}
-          brandId={brandId}
+          brandId={activeTeamId}
           brandPropertyTypes={brandPropertyTypes}
           onClose={() => {
             setIsModalOpen(false)
@@ -195,13 +195,13 @@ function DealContext({ brandId, isFetching, isEmpty, list }: Props) {
   )
 }
 
-const mapStateToProps = ({ deals, user }: IAppState) => {
-  const brandId = getActiveTeamId(user)!
-  const exactContexts = selectBrandContexts(deals.contexts, brandId)
+const mapStateToProps = (state: IAppState) => {
+  const activeTeamId = selectActiveTeamId(state)
+  const exactContexts = selectBrandContexts(state.deals.contexts, activeTeamId)
 
   return {
-    brandId,
-    isFetching: isEmpty(deals.contexts),
+    activeTeamId,
+    isFetching: isEmpty(state.deals.contexts),
     isEmpty: isEmpty(exactContexts),
     list: groupBy(exactContexts, 'section')
   }
