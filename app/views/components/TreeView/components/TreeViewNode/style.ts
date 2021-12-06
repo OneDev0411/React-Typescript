@@ -4,12 +4,14 @@ export const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
+      paddingLeft: theme.spacing(2),
       '&::before': {
         position: 'absolute',
         top: theme.spacing(2.25),
+        left: 0,
         content: "''",
         zIndex: 0,
-        width: '18px',
+        width: theme.spacing(2),
         height: '1px',
         borderBottom: `1px dashed ${theme.palette.action.disabledBackground}`
       }
@@ -17,8 +19,8 @@ export const useStyles = makeStyles(
     contentContainer: {
       display: 'flex',
       alignItems: 'center',
-      paddingLeft: theme.spacing(3),
-      marginLeft: theme.spacing(2),
+      // paddingLeft: theme.spacing(3),
+      // marginLeft: theme.spacing(2),
       ...theme.typography.body2
     },
     selectableContentContainer: {
@@ -27,7 +29,7 @@ export const useStyles = makeStyles(
       }
     },
     expandableContentContainer: {
-      marginLeft: 0
+      // marginLeft: 0
     },
     expandButton: {
       background: 'none',
@@ -36,7 +38,7 @@ export const useStyles = makeStyles(
       padding: 0,
       lineHeight: 0,
       border: 'none',
-      marginLeft: theme.spacing(-2),
+      // marginLeft: theme.spacing(-2),
       borderRadius: '100%',
       outline: 'none',
       color: theme.palette.grey[600],
@@ -54,11 +56,11 @@ export const useStyles = makeStyles(
       '&::before': {
         position: 'absolute',
         top: '50%',
-        left: '50%',
+        left: 0,
         content: "''",
         zIndex: 0,
         width: '1px',
-        height: '16px',
+        height: '1rem',
         borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
       }
     },
@@ -69,8 +71,8 @@ export const useStyles = makeStyles(
     },
     childrenContainer: {
       // background: 'red',
-      borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`,
-      marginLeft: theme.spacing(3)
+      borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
+      // marginLeft: theme.spacing(3)
     },
     content: {
       order: 0,

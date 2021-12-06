@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, memo } from 'react'
+import { useCallback, memo } from 'react'
 
 import { mdiChevronRight, mdiChevronDown } from '@mdi/js'
 import cn from 'classnames'
@@ -6,20 +6,12 @@ import cn from 'classnames'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
+import { BaseTreeViewProps } from '../../type'
+
 import { useStyles } from './style'
 
-export interface Props<NodeType> {
+export interface Props<NodeType> extends BaseTreeViewProps<NodeType> {
   node: NodeType
-
-  // adapter
-  renderNode: (node: NodeType) => ReactNode
-  getId: (node: NodeType) => string
-  getChildNodes: (node?: NodeType) => NodeType[]
-  //
-
-  expandedNodes: string[]
-  selectedNode?: string
-  selectable?: boolean
   onToggleExpanded: (node: NodeType) => any
 }
 
@@ -29,7 +21,7 @@ export const TreeViewNode = memo(function TreeViewNode<
   const classes = useStyles()
   const childNodes = props.getChildNodes(node) || []
 
-  const expanded = props.expandedNodes.indexOf(props.getId(node)) > -1
+  const expanded = props.expandedNodes.indexOf(props.getNodeId(node)) > -1
 
   const toggle = useCallback(
     () => onToggleExpanded(node),
@@ -66,7 +58,7 @@ export const TreeViewNode = memo(function TreeViewNode<
         <div className={classes.childrenContainer}>
           {childNodes.map(node => (
             <TreeViewNode
-              key={props.getId(node)}
+              key={props.getNodeId(node)}
               node={node}
               onToggleExpanded={onToggleExpanded}
               {...props}

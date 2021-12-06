@@ -1,11 +1,10 @@
-import { ReactNode, useCallback, useEffect, memo } from 'react'
+import { useCallback, useEffect, memo } from 'react'
 
 import { Typography, makeStyles, Theme } from '@material-ui/core'
 import { useControllableState } from 'react-use-controllable-state'
 
-import { TreeFn } from 'utils/tree-utils/types'
-
 import { TreeViewNode } from './components/TreeViewNode'
+import { BaseTreeViewProps } from './type'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -16,12 +15,11 @@ const useStyles = makeStyles(
   { name: 'TreeView' }
 )
 
-export interface TreeViewProps<NodeType> {
-  renderNode: (node: NodeType) => ReactNode
-  getNodeId?: (node: NodeType) => string
-  selectable: boolean
-  getChildNodes?: TreeFn<NodeType>
-  expandedNodes?: string[]
+export interface TreeViewProps<NodeType>
+  extends OptionalBy<
+    BaseTreeViewProps<NodeType>,
+    'getNodeId' | 'getChildNodes' | 'expandedNodes'
+  > {
   onExpandedNodesChanged?: (nodes: string[]) => void
   initialExpandedNodes?: string[]
 }
@@ -99,7 +97,7 @@ export default memo(function TreeView<NodeType = any>({
           key={getNodeId(node)}
           expandedNodes={expandedNodes}
           onToggleExpanded={onToggleExpanded}
-          getId={getNodeId}
+          getNodeId={getNodeId}
           getChildNodes={getChildNodes}
           selectable={props.selectable}
           renderNode={props.renderNode}
