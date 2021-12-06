@@ -13,7 +13,6 @@ import { ActionContextProvider } from '../contexts/actions-context/provider'
 import UploadPrompt from '../UploadManager/prompt'
 import { getDealTitle } from '../utils/get-deal-title'
 
-import { DealContextProviders } from './contexts'
 import { PageHeader } from './Header'
 import { DealContainer, PageWrapper, PageBody } from './styled'
 import TabSections from './Tabs'
@@ -55,42 +54,40 @@ function DealDetails(props) {
   }
 
   return (
-    <DealContextProviders>
-      <DealContainer>
-        <Helmet>
-          <title>{getPageTitle()}</title>
-        </Helmet>
+    <DealContainer>
+      <Helmet>
+        <title>{getPageTitle()}</title>
+      </Helmet>
 
-        <PageWrapper>
-          <ActionContextProvider>
-            <PageHeader deal={deal} isBackOffice={isBackOffice} />
+      <PageWrapper>
+        <ActionContextProvider>
+          <PageHeader deal={deal} isBackOffice={isBackOffice} />
 
-            <PageBody>
-              <TabSections
-                deal={deal}
-                user={user}
-                activeTab={activeTab}
-                onChangeTab={setActiveTab}
-                isBackOffice={isBackOffice}
-                isFetchingChecklists={isFetchingDeal}
-                isFetchingContexts={isFetchingBrandChecklists}
-              />
+          <PageBody>
+            <TabSections
+              deal={deal}
+              user={user}
+              activeTab={activeTab}
+              onChangeTab={setActiveTab}
+              isBackOffice={isBackOffice}
+              isFetchingChecklists={isFetchingDeal}
+              isFetchingContexts={isFetchingBrandChecklists}
+            />
 
-              <TaskActions deal={deal} />
-            </PageBody>
-          </ActionContextProvider>
+            <TaskActions deal={deal} />
+          </PageBody>
+        </ActionContextProvider>
 
-          <TaskView
-            deal={deal}
-            task={selectedTask}
-            isOpen={selectedTask !== null}
-            isBackOffice={isBackOffice}
-          />
-        </PageWrapper>
+        <TaskView
+          deal={deal}
+          task={selectedTask}
+          isOpen={selectedTask !== null}
+          isBackOffice={isBackOffice}
+        />
+      </PageWrapper>
 
-        <UploadPrompt deal={deal} />
-      </DealContainer>
-    </DealContextProviders>
+      <UploadPrompt deal={deal} />
+    </DealContainer>
   )
 }
 

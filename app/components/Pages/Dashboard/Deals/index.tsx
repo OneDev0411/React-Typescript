@@ -4,6 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { browserHistory } from 'react-router'
 import useEffectOnce from 'react-use/lib/useEffectOnce'
 
+import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { useQueryParam } from '@app/hooks/use-query-param'
 import { getDeals, searchDeals, getContextsByBrand } from 'actions/deals'
 import LoadingContainer from 'components/LoadingContainer'
@@ -81,7 +82,7 @@ function Container(props: Props) {
     )
   }
 
-  return <>{props.children}</>
+  return <DealRolesProvider>{props.children}</DealRolesProvider>
 }
 
 export default memo(Container)
