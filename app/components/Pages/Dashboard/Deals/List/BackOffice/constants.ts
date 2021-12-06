@@ -5,6 +5,8 @@ export const QUERY_ARRAY_PARAM_SPLITTER_CHAR = ','
 
 export const DEAL_TYPES: IDealType[] = ['Selling', 'Buying']
 
+export const DATE_FORMAT = 'MM-dd-yyyy'
+
 export const DEALS_STATUSES = {
   is_active: 'Active',
   is_closed: 'Closed',
