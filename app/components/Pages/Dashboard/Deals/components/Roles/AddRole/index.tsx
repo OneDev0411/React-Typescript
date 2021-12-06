@@ -10,14 +10,14 @@ import {
 } from '@material-ui/core'
 import { mdiAccountPlusOutline } from '@mdi/js'
 
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
 import { useBrandPropertyTypeRoles } from '@app/hooks/use-brand-property-type-roles'
 import { getField } from '@app/models/Deal/helpers/context'
-// import { Avatar } from '@app/views/components/Avatar'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { roleName, isPrimaryAgent } from '../../../utils/roles'
+import { isPrimaryAgent } from '../../../utils/roles'
 import RoleAgentIntegration from '../AgentIntegration'
 
 const useStyles = makeStyles(
@@ -73,6 +73,7 @@ export default function AddRoleForm({
   const [selectedRole, setSelectedRole] = useState<Nullable<string>>(null)
 
   const { roles } = useBrandPropertyTypeRoles(deal.property_type.label)
+  const { dealRolesByName } = useDealsRolesContext()
 
   const getAllowedRoles = () => {
     if (!selectedRole) {
@@ -85,12 +86,16 @@ export default function AddRoleForm({
   }
 
   const getRoleItems = () => {
-    const list = getAllowedRoles() || roles
+    const propertyRoles = (roles || [])
+      .filter(item => !!item)
+      .map(item => item.role)
+
+    const list = getAllowedRoles() ?? propertyRoles
 
     return list
       .filter(name => !isPrimaryAgent(name, deal.deal_type))
       .map(name => ({
-        label: roleName(name),
+        label: dealRolesByName[name]?.title,
         value: name
       }))
   }

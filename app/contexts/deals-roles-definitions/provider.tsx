@@ -12,7 +12,14 @@ export function DealRolesProvider({ children }: Props) {
   return (
     <Context.Provider
       value={{
-        roles
+        list: roles,
+        byName: roles.reduce(
+          (acc, item) => ({
+            ...acc,
+            [item.role]: item
+          }),
+          {}
+        )
       }}
     >
       {children}

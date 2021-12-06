@@ -1,9 +1,11 @@
 import { createContext } from 'react'
 
 interface IContext {
-  roles: IDealRoleDefinition[]
+  list: IDealRoleDefinition[]
+  byName: Record<string, IDealRoleDefinition>
 }
 
 export const Context = createContext<IContext>({
-  roles: []
+  list: [],
+  byName: {}
 })

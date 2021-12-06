@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Box } from '@material-ui/core'
 import { DropResult } from 'react-beautiful-dnd'
-import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 import { browserHistory, RouteComponentProps } from 'react-router'
+import { useTitle } from 'react-use'
 
+import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
@@ -28,6 +29,8 @@ interface Props extends RouteComponentProps<any, {}> {
 }
 
 export default function ChecklistsPage({ location }: Props) {
+  useTitle('Checklists')
+
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
 
@@ -98,101 +101,102 @@ export default function ChecklistsPage({ location }: Props) {
 
   return (
     <Acl.Admin fallbackUrl="/dashboard/mls">
-      <Helmet>
-        <title>Checklists</title>
-      </Helmet>
-      <Container isOpen>
-        <ChecklistsSidenav
-          propertyTypes={propertyTypes}
-          checklistType={checklistType}
-          onClickNewProperty={() => setIsFormOpen(true)}
-          onReorder={onReorderPropertyTypes}
-          onUpdate={updatePropertyType}
-        />
+      <DealRolesProvider>
+        <Container isOpen>
+          <ChecklistsSidenav
+            propertyTypes={propertyTypes}
+            checklistType={checklistType}
+            onClickNewProperty={() => setIsFormOpen(true)}
+            onReorder={onReorderPropertyTypes}
+            onUpdate={updatePropertyType}
+          />
 
-        <Content isSideMenuOpen>
-          <Box m={3}>
-            <PageTabs
-              defaultValue={checklistType || TabNames[0].type}
-              tabs={TabNames.map((tab, index) => (
-                <TabLink
-                  key={index}
-                  label={tab.title}
-                  value={tab.type}
-                  to={getChecklistPageLink(propertyTypeId, tab.type)}
-                />
-              ))}
-            />
+          <Content isSideMenuOpen>
+            <Box m={3}>
+              <PageTabs
+                defaultValue={checklistType || TabNames[0].type}
+                tabs={TabNames.map((tab, index) => (
+                  <TabLink
+                    key={index}
+                    label={tab.title}
+                    value={tab.type}
+                    to={getChecklistPageLink(propertyTypeId, tab.type)}
+                  />
+                ))}
+              />
 
-            {checklist ? (
-              <Box mb={5}>
-                <ChecklistHeader
-                  checklist={checklist}
-                  forms={forms}
-                  formsState={formsState}
-                  setTerminable={value =>
-                    updateChecklist({
-                      ...checklist,
-                      is_terminatable: value
-                    })
-                  }
-                  setDeactivatable={value =>
-                    updateChecklist({
-                      ...checklist,
-                      is_deactivatable: value
-                    })
-                  }
-                  addGenericTask={async (...args) => {
-                    await addGenericTask(...args)
-                    lastTaskNameEditorRef.current!.edit()
-                  }}
-                  addGeneralCommentTask={async (...args) => {
-                    await addGeneralCommentTask(...args)
-                    lastTaskNameEditorRef.current!.edit()
-                  }}
-                  addSplitterTask={async (...args) => {
-                    await addSplitterTask(...args)
-                    lastTaskNameEditorRef.current!.edit()
-                  }}
-                  addFormTask={addFormTask}
-                  renameChecklist={title =>
-                    updateChecklist({
-                      ...checklist,
-                      title
-                    })
-                  }
-                />
-                <Box mt={1}>
-                  <CheckListTable
-                    updateTask={updateTask}
-                    deleteTask={deleteTask}
+              {checklist ? (
+                <Box mb={5}>
+                  <ChecklistHeader
                     checklist={checklist}
-                    lastTaskNameEditorRef={lastTaskNameEditorRef}
-                    onReorderTasks={tasks => reorderTasks(checklist.id, tasks)}
+                    forms={forms}
+                    formsState={formsState}
+                    setTerminable={value =>
+                      updateChecklist({
+                        ...checklist,
+                        is_terminatable: value
+                      })
+                    }
+                    setDeactivatable={value =>
+                      updateChecklist({
+                        ...checklist,
+                        is_deactivatable: value
+                      })
+                    }
+                    addGenericTask={async (...args) => {
+                      await addGenericTask(...args)
+                      lastTaskNameEditorRef.current!.edit()
+                    }}
+                    addGeneralCommentTask={async (...args) => {
+                      await addGeneralCommentTask(...args)
+                      lastTaskNameEditorRef.current!.edit()
+                    }}
+                    addSplitterTask={async (...args) => {
+                      await addSplitterTask(...args)
+                      lastTaskNameEditorRef.current!.edit()
+                    }}
+                    addFormTask={addFormTask}
+                    renameChecklist={title =>
+                      updateChecklist({
+                        ...checklist,
+                        title
+                      })
+                    }
+                  />
+                  <Box mt={1}>
+                    <CheckListTable
+                      updateTask={updateTask}
+                      deleteTask={deleteTask}
+                      checklist={checklist}
+                      lastTaskNameEditorRef={lastTaskNameEditorRef}
+                      onReorderTasks={tasks =>
+                        reorderTasks(checklist.id, tasks)
+                      }
+                    />
+                  </Box>
+                </Box>
+              ) : (
+                <Box my={3}>
+                  <ChecklistCreate
+                    brandId={activeTeamId!}
+                    propertyTypeId={propertyTypeId}
+                    checklistType={checklistType}
+                    onCreateChecklist={checklist => addChecklists([checklist])}
                   />
                 </Box>
-              </Box>
-            ) : (
-              <Box my={3}>
-                <ChecklistCreate
-                  brandId={activeTeamId!}
-                  propertyTypeId={propertyTypeId}
-                  checklistType={checklistType}
-                  onCreateChecklist={checklist => addChecklists([checklist])}
-                />
-              </Box>
-            )}
-          </Box>
-        </Content>
+              )}
+            </Box>
+          </Content>
 
-        {isFormOpen && (
-          <PropertyTypeForm
-            isOpen
-            onSave={handleCreatePropertyType}
-            onClose={() => setIsFormOpen(false)}
-          />
-        )}
-      </Container>
+          {isFormOpen && (
+            <PropertyTypeForm
+              isOpen
+              onSave={handleCreatePropertyType}
+              onClose={() => setIsFormOpen(false)}
+            />
+          )}
+        </Container>
+      </DealRolesProvider>
     </Acl.Admin>
   )
 }

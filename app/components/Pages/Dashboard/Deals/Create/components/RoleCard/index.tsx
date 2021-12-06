@@ -13,7 +13,8 @@ import { mdiAccountEditOutline, mdiDeleteOutline } from '@mdi/js'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 
-import { getLegalFullName, roleName } from '../../../utils/roles'
+import { RoleName } from '../../../components/Roles/RoleName'
+import { getLegalFullName } from '../../../utils/roles'
 import type { IDealFormRole } from '../../types'
 
 const useStyles = makeStyles(
@@ -77,7 +78,7 @@ export function RoleCard({
         <Typography variant="body2">{getLegalFullName(role)}</Typography>
 
         <Typography variant="body2" className={classes.detail}>
-          {roleName(role.role)}
+          <RoleName name={role.role} />
         </Typography>
 
         {role.current_address && (

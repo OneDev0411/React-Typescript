@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Form } from 'react-final-form'
 import { connect } from 'react-redux'
 
+import { DealRolesProvider } from '@app/contexts/deals-roles-definitions/provider'
 import { confirmation } from 'actions/confirmation'
 import { createRoles, updateRole } from 'actions/deals'
 import { addNotification as notify } from 'components/notification'
@@ -440,49 +441,51 @@ export class DealRole extends React.Component {
     }
 
     return (
-      <Form
-        validate={this.validate}
-        onSubmit={this.onSubmit}
-        initialValues={this.getInitialValues()}
-        mutators={{
-          populateRole: this.populateRole
-        }}
-        render={formProps => {
-          const { visibleFields, requiredFields } = this.getFormProperties(
-            formProps.values
-          )
+      <DealRolesProvider>
+        <Form
+          validate={this.validate}
+          onSubmit={this.onSubmit}
+          initialValues={this.getInitialValues()}
+          mutators={{
+            populateRole: this.populateRole
+          }}
+          render={formProps => {
+            const { visibleFields, requiredFields } = this.getFormProperties(
+              formProps.values
+            )
 
-          const sharedProps = {
-            ...formProps,
-            title: this.props.title,
-            initialValues: this.formObject,
-            deal: this.props.deal,
-            compact: this.props.compact,
-            isSubmitting: this.state.isSaving,
-            onSubmit: this.handleSubmit,
-            onClose: this.handleClose
-          }
+            const sharedProps = {
+              ...formProps,
+              title: this.props.title,
+              initialValues: this.formObject,
+              deal: this.props.deal,
+              compact: this.props.compact,
+              isSubmitting: this.state.isSaving,
+              onSubmit: this.handleSubmit,
+              onClose: this.handleClose
+            }
 
-          return (
-            <>
-              {this.props.showBrokerageFields ? (
-                <OfficeForm {...sharedProps} />
-              ) : (
-                <RoleForm
-                  {...sharedProps}
-                  isNewRecord={this.isNewRecord}
-                  isRoleRemovable={this.props.isRoleRemovable}
-                  requiredFields={requiredFields}
-                  visibleFields={visibleFields}
-                  isAllowedRole={this.isAllowedRole}
-                  userEmail={this.props.user.email}
-                  onDeleteRole={this.handleDeleteRole}
-                />
-              )}
-            </>
-          )
-        }}
-      />
+            return (
+              <>
+                {this.props.showBrokerageFields ? (
+                  <OfficeForm {...sharedProps} />
+                ) : (
+                  <RoleForm
+                    {...sharedProps}
+                    isNewRecord={this.isNewRecord}
+                    isRoleRemovable={this.props.isRoleRemovable}
+                    requiredFields={requiredFields}
+                    visibleFields={visibleFields}
+                    isAllowedRole={this.isAllowedRole}
+                    userEmail={this.props.user.email}
+                    onDeleteRole={this.handleDeleteRole}
+                  />
+                )}
+              </>
+            )
+          }}
+        />
+      </DealRolesProvider>
     )
   }
 }

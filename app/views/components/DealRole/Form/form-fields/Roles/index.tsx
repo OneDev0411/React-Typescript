@@ -3,7 +3,8 @@ import { useMemo } from 'react'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
-import { roleName, ROLE_NAMES } from 'deals/utils/roles'
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
+import { ROLE_NAMES } from 'deals/utils/roles'
 
 interface RoleOption {
   value: string
@@ -19,20 +20,21 @@ interface Props {
 
 export function Roles({ meta, input, isAllowedRole }: Props) {
   const role = input.value
+  const { dealRolesByName } = useDealsRolesContext()
 
   const options = useMemo(() => {
     let options: RoleOption[] = ROLE_NAMES.filter(value =>
       isAllowedRole(value, role)
     ).map(value => ({
       value,
-      label: roleName(value)
+      label: dealRolesByName[value]?.title
     }))
 
     if (role && !options.length) {
       options = [
         {
           value: role,
-          label: roleName(role)
+          label: dealRolesByName[role]?.title
         }
       ]
     }
@@ -48,7 +50,7 @@ export function Roles({ meta, input, isAllowedRole }: Props) {
     }
 
     return options
-  }, [isAllowedRole, role])
+  }, [isAllowedRole, role, dealRolesByName])
 
   return (
     <FormControl variant="outlined" size="small" fullWidth>

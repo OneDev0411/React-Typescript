@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Context } from './context'
 
 export function useDealsRolesContext() {
-  const { roles } = useContext(Context)
+  const { list, byName } = useContext(Context)
 
-  return roles
+  return { dealRoleslist: list, dealRolesByName: byName }
 }

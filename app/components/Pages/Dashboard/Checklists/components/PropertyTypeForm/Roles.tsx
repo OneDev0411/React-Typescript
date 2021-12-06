@@ -4,7 +4,7 @@ import { Button, Grid, Theme, makeStyles, useTheme } from '@material-ui/core'
 import matchSorter from 'match-sorter'
 import { Control, Controller, useFormContext } from 'react-hook-form'
 
-import { roleName } from 'deals/utils/roles'
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/context'
 
 import { getDefaultRoles } from './helpers/get-default-roles'
 import { RoleSearch } from './RoleSearch'
@@ -34,6 +34,7 @@ export function Roles({ list, control }: Props) {
   const theme = useTheme<Theme>()
   const { watch } = useFormContext()
   const [rolesList, setRolesList] = useState(list)
+  const { dealRolesByName } = useDealsRolesContext()
 
   const roles = watch('roles')
   const defaultRoles = getDefaultRoles(watch('is_lease'))
@@ -43,7 +44,7 @@ export function Roles({ list, control }: Props) {
       ? matchSorter(
           list.map(name => ({
             value: name,
-            label: roleName(name)
+            label: dealRolesByName[name]
           })),
           value,
           {
@@ -115,7 +116,7 @@ export function Roles({ list, control }: Props) {
                     className={classes.row}
                   >
                     <Grid xs={5}>
-                      <strong>{roleName(name)}</strong>
+                      <strong>{dealRolesByName[name]}</strong>
                     </Grid>
 
                     <Grid xs={2}>
