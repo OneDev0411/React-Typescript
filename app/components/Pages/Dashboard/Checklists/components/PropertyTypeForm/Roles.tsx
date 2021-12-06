@@ -4,7 +4,7 @@ import { Button, Grid, Theme, makeStyles, useTheme } from '@material-ui/core'
 import matchSorter from 'match-sorter'
 import { Control, Controller, useFormContext } from 'react-hook-form'
 
-import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/context'
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
 
 import { getDefaultRoles } from './helpers/get-default-roles'
 import { RoleSearch } from './RoleSearch'
