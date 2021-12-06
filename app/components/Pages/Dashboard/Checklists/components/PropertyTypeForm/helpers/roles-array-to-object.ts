@@ -2,8 +2,6 @@ export function rolesArrayToObject(
   requiredRoles: IDealRoleDefinition[] = [],
   optionalRoles: IDealRoleDefinition[] = []
 ) {
-  console.log('!!!!', requiredRoles, optionalRoles)
-
   return {
     ...requiredRoles.reduce(
       (acc, { role }) => ({
