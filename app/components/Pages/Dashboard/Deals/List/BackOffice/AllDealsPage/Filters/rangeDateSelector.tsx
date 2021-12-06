@@ -128,7 +128,7 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
           <TextField
             ref={fromInputRef}
             size="small"
-            label="From Date"
+            label="From"
             variant="outlined"
             inputProps={{
               readOnly: true
@@ -148,7 +148,7 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
           <TextField
             ref={toInputRef}
             size="small"
-            label="To Date"
+            label="To"
             variant="outlined"
             value={formatInputDate(to)}
             onClick={() => {
