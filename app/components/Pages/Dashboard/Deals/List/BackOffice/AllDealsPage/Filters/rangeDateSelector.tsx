@@ -152,6 +152,7 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
         }}
       >
         <DayPicker
+          initialMonth={from}
           selectedDays={[from]}
           disabledDays={to ? { after: to } : undefined}
           onDayClick={handleChangeFrom}
@@ -178,6 +179,7 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
         }}
       >
         <DayPicker
+          initialMonth={to}
           selectedDays={[to]}
           disabledDays={from ? { before: from } : undefined}
           onDayClick={handleChangeTo}
