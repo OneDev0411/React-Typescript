@@ -1,10 +1,9 @@
 import { Box, Typography, Tooltip } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
-import { selectActiveBrand } from '@app/selectors/brand'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
+import { useActiveBrand } from 'hooks/brand/use-active-brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -46,7 +45,7 @@ interface Props {
 
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
-  const activeBrand = useSelector(selectActiveBrand)
+  const activeBrand = useActiveBrand()
   const { display_name } = props.user
 
   const tooltipTitle = `${display_name} ${

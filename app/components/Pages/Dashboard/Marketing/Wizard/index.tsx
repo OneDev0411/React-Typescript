@@ -25,6 +25,8 @@ import PageLayout from 'components/GlobalPageLayout'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import {
@@ -38,7 +40,6 @@ import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { selectUser } from 'selectors/user'
 import { convertUrlToImageFile } from 'utils/file-utils/convert-url-to-image-file'
 import renderBrandedTemplate from 'utils/marketing-center/render-branded-template'
-import { getActiveTeamId, getActiveBrand } from 'utils/user-teams'
 
 import { useTemplates } from '../hooks/use-templates'
 
@@ -99,8 +100,8 @@ function MarketingWizard(props: WithRouterProps) {
 
   const dispatch = useDispatch()
   const rawUser = useSelector(selectUser)
-  const activeBrand = getActiveTeamId(rawUser)
-  const brand = getActiveBrand(rawUser)
+  const activeTeamId = useActiveTeamId()
+  const activeBrand = useUnsafeActiveBrand()
 
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
@@ -124,7 +125,7 @@ function MarketingWizard(props: WithRouterProps) {
     templates,
     isLoading: isLoadingTemplates,
     error: errorTemplates
-  } = useTemplates(activeBrand, ['Social'], LISTING_TEMPLATE_TYPES)
+  } = useTemplates(activeTeamId, ['Social'], LISTING_TEMPLATE_TYPES)
 
   const {
     listing: rawListing,
@@ -221,12 +222,12 @@ function MarketingWizard(props: WithRouterProps) {
   }
 
   const handlePrepareClick = async (template: IBrandMarketingTemplate) => {
-    if (!listing || !brand) {
+    if (!listing || !activeBrand) {
       return
     }
 
     try {
-      const html = await renderBrandedTemplate(template, brand, {
+      const html = await renderBrandedTemplate(template, activeBrand, {
         listing
       })
 

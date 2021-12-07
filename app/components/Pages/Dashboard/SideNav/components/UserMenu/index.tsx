@@ -1,12 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 
 import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
+import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
+import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { IUserState } from 'reducers/user'
-
-import { getBrandChecklists } from '../../../../../../models/BrandConsole/Checklists'
-import { getActiveTeamId } from '../../../../../../utils/user-teams'
 
 import ToggleButton from './ToggleButton'
 import { UserMenuContent } from './UserMenuContent'
@@ -39,11 +38,13 @@ export function UserMenu({ user }: { user: IUserState }) {
    * the link which may be seen as a UX problem.
    */
   const classes = useStyles()
-  const teamId = useMemo(() => getActiveTeamId(user), [user])
+  const activeTeamId = useActiveTeamId()
 
   const [checklists] = usePromise(() => {
-    return (teamId && getBrandChecklists(teamId)) || Promise.reject()
-  }, [teamId])
+    return (
+      (activeTeamId && getBrandChecklists(activeTeamId)) || Promise.reject()
+    )
+  }, [activeTeamId])
 
   const [anchorEl, setAnchorEl] = useState(null)
 
