@@ -10,13 +10,13 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import AllDealsPage from './AllDealsPage'
+import AdvancedSearch from './AdvancedSearch'
 import TabFilters from './Filters'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 import { useStyles } from './styles'
 import { SearchQuery, StateProps } from './types'
 
-export function AllDealsTable(props: WithRouterProps & StateProps) {
+export function AdvancedSearchTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
@@ -51,7 +51,7 @@ export function AllDealsTable(props: WithRouterProps & StateProps) {
           />
         </div>
 
-        <AllDealsPage searchQuery={searchQuery} statuses={statuses} />
+        <AdvancedSearch searchQuery={searchQuery} statuses={statuses} />
       </PageLayout.Main>
     </PageLayout>
   )
