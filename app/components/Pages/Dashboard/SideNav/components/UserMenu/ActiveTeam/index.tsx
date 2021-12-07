@@ -2,16 +2,15 @@ import { useState } from 'react'
 
 import { Typography, Theme, makeStyles } from '@material-ui/core'
 import { mdiAccountGroupOutline } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
 import { switchActiveTeam } from '@app/models/user/switch-active-team'
-import { selectActiveTeamUnsafe } from '@app/selectors/team'
 import {
   NodeRenderer,
   BrandAvailableToUserSelectorDrawer
 } from '@app/views/components/BrandSelector'
 import Loading from '@app/views/components/SvgIcons/CircleSpinner/IconCircleSpinner'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 
 import { TeamSwitchBrandSelectorRenderer as Brand } from './components/TeamSwitchBrandSelectorRenderer'
 
@@ -50,7 +49,8 @@ const useStyles = makeStyles(
 
 export function ActiveTeam() {
   const classes = useStyles()
-  const activeTeam = useSelector(selectActiveTeamUnsafe)
+  const activeBrand = useUnsafeActiveBrand()
+
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useState<boolean>(false)
   const [isSwitchingActiveTeam, setIsSwitchingActiveTeam] =
     useState<boolean>(false)
@@ -73,13 +73,13 @@ export function ActiveTeam() {
     return (
       <Brand
         brand={brand}
-        isActive={brand.id === activeTeam?.brand.id}
+        isActive={brand.id === activeBrand?.id}
         onClick={() => handleOnClickBrand(brand)}
       />
     )
   }
 
-  if (!activeTeam) {
+  if (!activeBrand) {
     return (
       <div className={classes.container}>
         <Loading />
@@ -100,9 +100,7 @@ export function ActiveTeam() {
               className={classes.activeTeamIcon}
             />
 
-            <Typography variant="subtitle2">
-              {activeTeam?.brand.name}
-            </Typography>
+            <Typography variant="subtitle2">{activeBrand.name}</Typography>
           </div>
           <div
             className={classes.switchTeam}
