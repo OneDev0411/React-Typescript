@@ -126,7 +126,7 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
         </Grid>
         <Grid item container justifyContent="center" xs={2}>
           <Typography className={classes.to} variant="body1">
-            To
+            -
           </Typography>
         </Grid>
         <Grid item xs={5}>
