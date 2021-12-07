@@ -26,19 +26,6 @@ export const useStyles = makeStyles(
       '&:hover, &:focus': {
         backgroundColor: 'transparent'
       }
-    },
-    rangeDatePicker: {
-      '& .DayPicker-Day': {
-        borderRadius: '0 !important'
-      },
-      '& .DayPicker-Day--start': {
-        borderTopLeftRadius: '50% !important',
-        borderBottomLeftRadius: '50% !important'
-      },
-      '& .DayPicker-Day--end': {
-        borderTopRightRadius: '50% !important',
-        borderBottomRightRadius: '50% !important'
-      }
     }
   }),
   { name: 'RangeDateSelector' }
@@ -79,8 +66,6 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
 
   const to = value?.to ? new Date(value.to) : undefined
   const from = value?.from ? new Date(value.from) : undefined
-
-  const modifiers = { start: from, end: to }
 
   const handleChangeFrom = useCallback(
     (day: Date) => {
@@ -167,10 +152,8 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
         }}
       >
         <DayPicker
-          className={classes.rangeDatePicker}
-          selectedDays={[from, { from, to }]}
+          selectedDays={[from]}
           disabledDays={to ? { after: to } : undefined}
-          modifiers={modifiers}
           onDayClick={handleChangeFrom}
         />
         <Grid item xs={12}>
@@ -195,10 +178,8 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
         }}
       >
         <DayPicker
-          className={classes.rangeDatePicker}
-          selectedDays={[from, { from, to }]}
+          selectedDays={[to]}
           disabledDays={from ? { before: from } : undefined}
-          modifiers={modifiers}
           onDayClick={handleChangeTo}
         />
         <Grid item xs={12}>
