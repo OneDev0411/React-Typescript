@@ -15,7 +15,8 @@ import PageLayout from 'components/GlobalPageLayout'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import TemplatePreview from 'components/TemplatePreview'
 import { ACL } from 'constants/acl'
-import { useActiveTeamId, useActiveTeamPalette } from 'hooks/team'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useActiveTeamPalette } from 'hooks/team'
 import { updatePalette } from 'models/brand/update-palette'
 import { uploadBrandAsset } from 'models/brand/upload-asset'
 import { invalidateThumbnails } from 'models/instant-marketing/invalidate-thumbnails'
@@ -34,7 +35,7 @@ export function BrandSettings() {
   const user = useSelector<IAppState, IUser>(selectUser)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [listing, setListing] = useState<Nullable<IListing>>(null)
-  const activeTeam = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const activeTeamPalette = useActiveTeamPalette()
   const [defaultSettings, setDefaultSettings] =
     useState<Nullable<BrandMarketingPalette>>(null)
@@ -88,8 +89,8 @@ Are you sure?`,
 
   const saveSettings = async () => {
     setIsLoading(true)
-    await updatePalette(activeTeam, settings)
-    await invalidateThumbnails(activeTeam)
+    await updatePalette(activeBrandId, settings)
+    await invalidateThumbnails(activeBrandId)
     setDefaultSettings(null)
     setIsLoading(false)
     dispatch(getUserTeams(user))
@@ -99,13 +100,13 @@ Are you sure?`,
     async (image: File) => {
       setIsLoading(true)
 
-      const brandAsset = await uploadBrandAsset(activeTeam, image)
+      const brandAsset = await uploadBrandAsset(activeBrandId, image)
 
       setIsLoading(false)
 
       return brandAsset.file
     },
-    [activeTeam]
+    [activeBrandId]
   )
 
   const sidebarSections =

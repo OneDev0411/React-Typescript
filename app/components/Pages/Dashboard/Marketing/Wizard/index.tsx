@@ -25,8 +25,8 @@ import PageLayout from 'components/GlobalPageLayout'
 import { Thumbnail } from 'components/MarketingTemplateCard/Thumbnail'
 import { addNotification } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
 import { useGoogleMapsPlaces } from 'hooks/use-google-maps-places'
 import { useInfiniteScroll } from 'hooks/use-infinite-scroll'
 import {
@@ -100,7 +100,8 @@ function MarketingWizard(props: WithRouterProps) {
 
   const dispatch = useDispatch()
   const rawUser = useSelector(selectUser)
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
+
   const activeBrand = useUnsafeActiveBrand()
 
   const [selectedTemplate, setSelectedTemplate] =
@@ -125,7 +126,7 @@ function MarketingWizard(props: WithRouterProps) {
     templates,
     isLoading: isLoadingTemplates,
     error: errorTemplates
-  } = useTemplates(activeTeamId, ['Social'], LISTING_TEMPLATE_TYPES)
+  } = useTemplates(activeBrandId, ['Social'], LISTING_TEMPLATE_TYPES)
 
   const {
     listing: rawListing,

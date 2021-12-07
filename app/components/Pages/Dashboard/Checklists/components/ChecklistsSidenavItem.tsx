@@ -20,7 +20,7 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { confirmation } from 'actions/confirmation'
 import { addNotification as notify } from 'components/notification'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { deletePropertyType } from 'models/property-types/delete-property-type'
 
 import { getChecklistPageLink } from '../helpers/get-checklist-page-link'
@@ -79,11 +79,11 @@ export function ChecklistsSidenavItem({
 }: Props) {
   const classes = useStyles()
   const [isDeleted, setIsDeleted] = useState(false)
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const dispatch = useDispatch()
 
   const requestDelete = (propertyType: IDealPropertyType) => {
-    if (propertyType.brand !== activeTeamId) {
+    if (propertyType.brand !== activeBrandId) {
       dispatch(
         confirmation({
           description: `You can not delete this property type because 
@@ -110,7 +110,7 @@ export function ChecklistsSidenavItem({
   const handleDelete = async (id: UUID) => {
     try {
       setIsDeleted(true)
-      await deletePropertyType(activeTeamId, id)
+      await deletePropertyType(activeBrandId, id)
 
       browserHistory.push('/dashboard/checklists')
 

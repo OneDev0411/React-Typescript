@@ -20,7 +20,7 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import PageLayout from 'components/GlobalPageLayout'
 import LoadingContainer from 'components/LoadingContainer'
 import { addNotification as notify } from 'components/notification'
-import { useUnsafeActiveTeamId } from 'hooks/team/use-unsafe-active-team-id'
+import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
 import { createStep } from 'models/flows/create-step'
 import { deleteBrandFlowStep } from 'models/flows/delete-brand-flow-step'
 import { editBrandFlow } from 'models/flows/edit-brand-flow'
@@ -69,7 +69,7 @@ const useStyles = makeStyles(
 function Edit(props: WithRouterProps) {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const activeTeamId = useUnsafeActiveTeamId()
+  const activeBrandId = useUnsafeActiveBrandId()
 
   const [error, setError] = useState('')
   const [flow, setFlow] = useState<IBrandFlow | null>(null)
@@ -119,7 +119,7 @@ function Edit(props: WithRouterProps) {
 
   const loadFlowData = useCallback(
     async (reload = false) => {
-      if (!activeTeamId) {
+      if (!activeBrandId) {
         setError('You need to be in a team in order to get this Flow')
 
         return
@@ -127,7 +127,7 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(true)
 
-      const flowData = await getFlow(activeTeamId, props.params.id, reload)
+      const flowData = await getFlow(activeBrandId, props.params.id, reload)
 
       setFlow(flowData)
 
@@ -146,7 +146,7 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(false)
     },
-    [activeTeamId, getFlow, props.params.id]
+    [activeBrandId, getFlow, props.params.id]
   )
 
   useEffectOnce(() => {
@@ -155,20 +155,20 @@ function Edit(props: WithRouterProps) {
 
   const newStepSubmitHandler = useCallback(
     async (step: IBrandFlowStepInput) => {
-      if (!flow || !activeTeamId) {
+      if (!flow || !activeBrandId) {
         return
       }
 
-      await createStep(activeTeamId, flow.id, step)
+      await createStep(activeBrandId, flow.id, step)
 
       loadFlowData(true)
     },
-    [activeTeamId, flow, loadFlowData]
+    [activeBrandId, flow, loadFlowData]
   )
 
   const stepDeleteHandler = useCallback(
     async (step: IBrandFlowStep) => {
-      if (!flow || !activeTeamId) {
+      if (!flow || !activeBrandId) {
         return
       }
 
@@ -177,31 +177,31 @@ function Edit(props: WithRouterProps) {
         description: `Are you sure about deleting "${step.title}" step?`,
         confirmLabel: 'Yes, I am sure',
         onConfirm: async () => {
-          await deleteBrandFlowStep(activeTeamId, flow.id, step.id)
+          await deleteBrandFlowStep(activeBrandId, flow.id, step.id)
           loadFlowData(true)
         }
       })
     },
-    [activeTeamId, flow, loadFlowData, modal]
+    [activeBrandId, flow, loadFlowData, modal]
   )
 
   const stepUpdateHandler = useCallback(
     async (step: IBrandFlowStepInput, stepId: UUID) => {
-      if (!flow || !activeTeamId) {
+      if (!flow || !activeBrandId) {
         return
       }
 
-      await editBrandFlowStep(activeTeamId, flow.id, stepId, step)
+      await editBrandFlowStep(activeBrandId, flow.id, stepId, step)
 
       loadFlowData(true)
     },
-    [activeTeamId, flow, loadFlowData]
+    [activeBrandId, flow, loadFlowData]
   )
 
   const stepMoveHandler = useCallback(
     async (id: UUID, source: number, destination: number) => {
       if (
-        !activeTeamId ||
+        !activeBrandId ||
         !flow ||
         !id ||
         source === destination ||
@@ -217,16 +217,16 @@ function Edit(props: WithRouterProps) {
 
       setIsLoading(true)
 
-      await editBrandFlowStepOrder(activeTeamId, flow.id, id, nextDestination)
+      await editBrandFlowStepOrder(activeBrandId, flow.id, id, nextDestination)
 
       loadFlowData(true)
     },
-    [activeTeamId, flow, indexToOrderMap, loadFlowData]
+    [activeBrandId, flow, indexToOrderMap, loadFlowData]
   )
 
   const flowUpdateHandler = useCallback(
     async data => {
-      if (!activeTeamId || !flow) {
+      if (!activeBrandId || !flow) {
         return
       }
 
@@ -234,13 +234,13 @@ function Edit(props: WithRouterProps) {
       data.description =
         data.description === undefined ? flow.description : data.description
 
-      await editBrandFlow(activeTeamId, flow.id, data)
+      await editBrandFlow(activeBrandId, flow.id, data)
       setFlow({
         ...flow,
         ...data
       })
     },
-    [activeTeamId, flow]
+    [activeBrandId, flow]
   )
 
   const flowStopHandler = useCallback(
@@ -253,11 +253,11 @@ function Edit(props: WithRouterProps) {
 
   const duplicateFlowHandler = useCallback(
     async (flowData: IBrandFlowInput) => {
-      if (!activeTeamId || !flow) {
+      if (!activeBrandId || !flow) {
         return
       }
 
-      await createFlow(activeTeamId, flowData, flow, createdFlow => {
+      await createFlow(activeBrandId, flowData, flow, createdFlow => {
         setIsDuplicateModalOpen(false)
         goTo(
           getFlowEditUrl(createdFlow.id),
@@ -269,7 +269,7 @@ function Edit(props: WithRouterProps) {
         )
       })
     },
-    [activeTeamId, flow]
+    [activeBrandId, flow]
   )
 
   if (error) {

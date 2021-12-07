@@ -15,7 +15,7 @@ import moment from 'moment'
 
 import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,15 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export function ExportDeals(props) {
+export function ExportDeals() {
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
   const items = useMemo(() => {
     return [
       {
         label: 'All Deals',
-        url: `/api/deals/export/${activeTeamId}`
+        url: `/api/deals/export/${activeBrandId}`
       },
       {
         label: 'New Listings',
@@ -76,7 +76,7 @@ export function ExportDeals(props) {
             },
             order: 'list_date',
             title: 'New Listings',
-            brand: activeTeamId
+            brand: activeBrandId
           })
         )}`
       },
@@ -115,12 +115,12 @@ export function ExportDeals(props) {
             },
             order: 'contract_date',
             title: 'New Offers',
-            brand: activeTeamId
+            brand: activeBrandId
           })
         )}`
       }
     ]
-  }, [activeTeamId])
+  }, [activeBrandId])
 
   return (
     <BaseDropdown

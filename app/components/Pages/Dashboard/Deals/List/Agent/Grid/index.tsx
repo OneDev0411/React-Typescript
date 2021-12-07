@@ -19,7 +19,7 @@ import {
   isClosedDeal,
   isPendingDeal
 } from 'deals/List/helpers/statuses'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import {
   getStatus,
@@ -69,7 +69,7 @@ const Filters = {
 
 function AgentGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
   const user = useSelector(selectUser)
   const isFetchingDeals = useSelector(
@@ -77,9 +77,9 @@ function AgentGrid(props: Props & WithRouterProps) {
   )
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
-  const brandChecklists = useBrandChecklists(activeTeamId)
+  const brandChecklists = useBrandChecklists(activeBrandId)
 
-  const [statuses] = useBrandStatuses(activeTeamId)
+  const [statuses] = useBrandStatuses(activeBrandId)
 
   const columns = [
     {

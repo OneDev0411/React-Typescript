@@ -14,7 +14,7 @@ import { SimpleList } from 'components/Grid/Filters/FilterTypes/SimpleList'
 import SaveSegment from 'components/Grid/SavedSegments/Create'
 import { SELECTION__TOGGLE_ENTIRE_ROWS } from 'components/Grid/Table/context/constants'
 import { useGridContext } from 'components/Grid/Table/hooks/use-grid-context'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { selectDefinitionByName } from 'reducers/contacts/attributeDefs'
 import { selectTags } from 'reducers/contacts/tags'
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme =>
 function ContactFilters(props) {
   const [state, dispatch] = useGridContext()
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const {
     isAllRowsSelected,
     isEntireRowsSelected,
@@ -107,7 +107,7 @@ function ContactFilters(props) {
         id: FLOW_FILTER_ID,
         label: 'Flow',
         renderer: props => (
-          <SimpleList {...props} getOptions={() => getFlows(activeTeamId)} />
+          <SimpleList {...props} getOptions={() => getFlows(activeBrandId)} />
         ),
         tooltip: 'Contacts who are active in a specific Flow'
       },

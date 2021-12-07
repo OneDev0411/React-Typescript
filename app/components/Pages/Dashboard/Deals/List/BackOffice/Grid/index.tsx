@@ -12,7 +12,7 @@ import { TrProps } from '@app/views/components/Grid/Table/types'
 import Grid from 'components/Grid/Table'
 import { useGridStyles } from 'components/Grid/Table/styles'
 import { getGridSort } from 'deals/List/helpers/sorting'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import {
   getStatus,
   getFormattedPrice,
@@ -45,14 +45,14 @@ interface Props {
 
 function BackOfficeGrid(props: Props & WithRouterProps) {
   const gridClasses = useGridStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
   const deals = useSelector(({ deals }: IAppState) => deals.list)
   const roles = useSelector(({ deals }: IAppState) => deals.roles)
   const user = useSelector(selectUser)
-  const brandChecklists = useBrandChecklists(activeTeamId)
+  const brandChecklists = useBrandChecklists(activeBrandId)
 
   const getOffice = (deal: IDeal) => {
     let brand: IBrand | null = deal.brand

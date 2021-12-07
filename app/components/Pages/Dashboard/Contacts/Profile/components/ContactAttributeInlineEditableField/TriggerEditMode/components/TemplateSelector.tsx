@@ -8,7 +8,6 @@ import useEffectOnce from 'react-use/lib/useEffectOnce'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
-import { useUnsafeActiveTeamId } from 'hooks/team/use-unsafe-active-team-id'
 import { getTemplates } from 'models/instant-marketing/get-templates'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
@@ -80,7 +79,7 @@ export const TemplateSelector = ({
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
   const activeBrand: Nullable<IBrand> = useUnsafeActiveBrand()
-  const activeTeamId: Nullable<UUID> = useUnsafeActiveTeamId()
+  const activeBrandId: Nullable<UUID> = activeBrand?.id ?? null
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
@@ -175,13 +174,13 @@ export const TemplateSelector = ({
   }
 
   useEffectOnce(() => {
-    if (!activeTeamId || disabled) {
+    if (!activeBrandId || disabled) {
       return
     }
 
     if (!selectedTemplate && !currentValue) {
       setIsLoading(true)
-      getTemplates(activeTeamId, [getTemplateType(attributeName)], ['Email'])
+      getTemplates(activeBrandId, [getTemplateType(attributeName)], ['Email'])
         .then(templates => {
           if (templates.length) {
             handleSelectTemplate(templates[0])

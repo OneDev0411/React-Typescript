@@ -4,7 +4,7 @@ import { Popover, Theme, makeStyles } from '@material-ui/core'
 import usePromise from 'react-use-promise'
 
 import { getBrandChecklists } from '@app/models/BrandConsole/Checklists'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { IUserState } from 'reducers/user'
 
 import ToggleButton from './ToggleButton'
@@ -38,13 +38,13 @@ export function UserMenu({ user }: { user: IUserState }) {
    * the link which may be seen as a UX problem.
    */
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
   const [checklists] = usePromise(() => {
     return (
-      (activeTeamId && getBrandChecklists(activeTeamId)) || Promise.reject()
+      (activeBrandId && getBrandChecklists(activeBrandId)) || Promise.reject()
     )
-  }, [activeTeamId])
+  }, [activeBrandId])
 
   const [anchorEl, setAnchorEl] = useState(null)
 

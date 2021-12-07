@@ -12,7 +12,7 @@ import {
 import CardSkeleton from 'components/CardSkeleton'
 import MarketingTemplateCard from 'components/MarketingTemplateCard'
 import TemplateAction from 'components/TemplatesList/TemplateAction'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import { useTemplates } from '../../../hooks/use-templates'
 import SectionLayout from '../SectionLayout'
@@ -44,13 +44,13 @@ const useStyles = makeStyles(
 
 export default function WhatsNewInMCSection() {
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const [selectedTemplate, setSelectedTemplate] =
     useState<Nullable<IBrandMarketingTemplate>>(null)
   const [isTemplateClicked, setIsTemplateClicked] = useState<boolean>(false)
 
   const { templates, isLoading } = useTemplates(
-    activeTeamId,
+    activeBrandId,
     SOCIAL_TEMPLATE_MEDIUMS
   )
 

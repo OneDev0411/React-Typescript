@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { useTheme, Theme } from '@material-ui/core'
 
 import { ShowMoreLess } from 'components/ShowMoreLess'
-import { useUnsafeActiveTeamId } from 'hooks/team/use-unsafe-active-team-id'
+import { useUnsafeActiveBrandId } from 'hooks/brand/use-unsafe-active-brand-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { sortDealsStatus } from 'utils/sort-deals-status'
 
@@ -16,8 +16,8 @@ interface Props {
 
 export function List({ deals, contact }: Props) {
   const theme: Theme = useTheme()
-  const activeTeamId = useUnsafeActiveTeamId()
-  const [statuses] = useBrandStatuses(activeTeamId || '')
+  const activeBrandId = useUnsafeActiveBrandId()
+  const [statuses] = useBrandStatuses(activeBrandId || '')
   const sortedDealsByStatus = useMemo(
     () => sortDealsStatus(deals, statuses),
     [deals, statuses]

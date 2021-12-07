@@ -101,3 +101,11 @@ export function selectActiveTeamRoles(state: IAppState): IBrandRole[] {
 export function selectActiveTeamAvailableMembers(state: IAppState): IUser[] {
   return getTeamAvailableMembers(selectActiveTeamUnsafe(state))
 }
+
+/**
+ * Returns the permission for the current active team
+ * @param state The app state
+ */
+export function selectActiveTeamACL(state: IAppState): IUserTeam['acl'] {
+  return selectActiveTeamUnsafe(state)?.acl ?? []
+}

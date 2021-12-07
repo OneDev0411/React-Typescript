@@ -3,7 +3,7 @@ import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
 import PageLayout from 'components/GlobalPageLayout'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 
 import { ExportDeals } from '../components/ExportDeals'
@@ -39,9 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BackofficeTable(props: WithRouterProps & StateProps) {
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
-  const [statuses] = useBrandStatuses(activeTeamId)
+  const [statuses] = useBrandStatuses(activeBrandId)
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const searchQuery: SearchQuery = {

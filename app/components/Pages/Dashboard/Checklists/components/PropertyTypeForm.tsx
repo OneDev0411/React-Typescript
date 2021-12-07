@@ -17,7 +17,7 @@ import { mdiClose } from '@mdi/js'
 import { useForm, Controller } from 'react-hook-form'
 
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import {
   createPropertyType,
   PropertyTypeData
@@ -30,7 +30,7 @@ interface Props {
 }
 
 export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
   const [isSaving, setIsSaving] = useState(false)
 
   const {
@@ -49,7 +49,7 @@ export function PropertyTypeForm({ isOpen, onClose, onCreate }: Props) {
 
     try {
       const propertyType = await createPropertyType(
-        activeTeamId,
+        activeBrandId,
         control.getValues() as PropertyTypeData
       )
 

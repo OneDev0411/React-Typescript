@@ -9,7 +9,7 @@ import { reorder } from '@app/utils/dnd-reorder'
 import Acl from 'components/Acl'
 import { PageTabs, TabLink } from 'components/PageTabs'
 import { Container, Content } from 'components/SlideMenu'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 import { ChecklistCreate } from './components/ChecklistCreate'
@@ -29,7 +29,7 @@ export default function ChecklistsPage({ location }: Props) {
   const propertyTypeId = location.query.property
   const checklistType = location.query.checklist_type
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
   const lastTaskNameEditorRef = useRef<any>(null)
 
@@ -46,14 +46,14 @@ export default function ChecklistsPage({ location }: Props) {
     addFormTask,
     deleteTask,
     reorderTasks
-  } = useChecklistsPage(activeTeamId)
+  } = useChecklistsPage(activeBrandId)
 
   const { propertyTypes, addPropertyTypes, reorderPropertyTypes } =
-    useBrandPropertyTypes(activeTeamId!)
+    useBrandPropertyTypes(activeBrandId)
 
   const checklist = checklists?.find(
     checklist =>
-      checklist.brand === activeTeamId &&
+      checklist.brand === activeBrandId &&
       checklist.property_type === propertyTypeId &&
       checklist.checklist_type === checklistType
   )
@@ -164,7 +164,7 @@ export default function ChecklistsPage({ location }: Props) {
             ) : (
               <Box my={3}>
                 <ChecklistCreate
-                  brandId={activeTeamId!}
+                  brandId={activeBrandId!}
                   propertyTypeId={propertyTypeId}
                   checklistType={checklistType}
                   onCreateChecklist={checklist => addChecklists([checklist])}

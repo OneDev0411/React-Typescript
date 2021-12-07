@@ -6,7 +6,7 @@ import { updatePropertyType } from 'actions/deals'
 import { BaseDropdown } from 'components/BaseDropdown'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 
 import { ItemValue } from '../../Factsheet/styled'
@@ -31,9 +31,9 @@ interface Props {
 export function PropertyType(props: Props) {
   const dispatch = useDispatch()
   const classes = useStyles()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
-  const { propertyTypes } = useBrandPropertyTypes(activeTeamId)
+  const { propertyTypes } = useBrandPropertyTypes(activeBrandId)
 
   const handleChange = async (value: string) => {
     try {

@@ -21,7 +21,7 @@ import Table from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 import { addNotification as notify } from 'components/notification'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
-import { useActiveTeamId } from 'hooks/team/use-active-team-id'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useGetBrandFlows } from 'hooks/use-get-brand-flows'
 import { deleteBrandFlow } from 'models/flows/delete-brand-flow'
 import { goTo } from 'utils/go-to'
@@ -70,18 +70,18 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 function List(props: WithRouterProps) {
   const dispatch = useDispatch()
-  const activeTeamId = useActiveTeamId()
+  const activeBrandId = useActiveBrandId()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedFlow, setSelectedFlow] = useState<IBrandFlow | null>(null)
   const { flows, reloadFlows, isFetching, error } =
-    useGetBrandFlows(activeTeamId)
+    useGetBrandFlows(activeBrandId)
   const confirmation = useContext(ConfirmationModalContext)
   const theme = useTheme<Theme>()
 
   async function newFlowSubmitHandler(flowData: IBrandFlowInput) {
     try {
-      if (!activeTeamId) {
+      if (!activeBrandId) {
         dispatch(
           notify({
             message: 'You need to be in a team in order to create a flow',
@@ -92,7 +92,7 @@ function List(props: WithRouterProps) {
         return
       }
 
-      await createFlow(activeTeamId, flowData, selectedFlow, createdFlow => {
+      await createFlow(activeBrandId, flowData, selectedFlow, createdFlow => {
         goTo(
           getFlowEditUrl(createdFlow.id),
           null,
@@ -194,11 +194,11 @@ function List(props: WithRouterProps) {
                             description: `This Flow will be deleted 
                             and you can not use it anymore. Are you sure?`,
                             onConfirm: async () => {
-                              if (!activeTeamId) {
+                              if (!activeBrandId) {
                                 return
                               }
 
-                              await deleteBrandFlow(activeTeamId, row.id)
+                              await deleteBrandFlow(activeBrandId, row.id)
                               await reloadFlows()
                               dispatch(
                                 notify({
