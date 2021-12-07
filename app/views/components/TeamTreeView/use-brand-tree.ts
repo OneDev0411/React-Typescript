@@ -2,12 +2,13 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 
 import { useSelector } from 'react-redux'
 
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { getBrands } from 'models/BrandConsole/Brands'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 export function useBrandTree() {
   const user = useSelector(selectUser)
+  const activeBrandId = useActiveBrandId()
 
   const [rootTeam, setRootTeam] = useState<IBrand | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -20,10 +21,8 @@ export function useBrandTree() {
   useEffect(() => {
     setIsLoading(true)
 
-    const activeTeamId = getActiveTeamId(user)
-
-    if (activeTeamId) {
-      getBrands(activeTeamId)
+    if (activeBrandId) {
+      getBrands(activeBrandId)
         .then(({ data }) => {
           const tree = {
             ...data,
@@ -37,7 +36,7 @@ export function useBrandTree() {
           setIsLoading(false)
         })
     }
-  }, [user])
+  }, [activeBrandId, user])
 
   const initialExpandedNodes = useMemo(
     () =>

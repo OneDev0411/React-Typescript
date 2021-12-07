@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
 
 import { TextField } from 'final-form-material-ui'
 import { Field } from 'react-final-form'
@@ -12,8 +12,7 @@ import { updateEmailTemplate } from 'actions/email-templates/update-email-templa
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { addNotification } from 'components/notification'
 import { useEditorState } from 'components/TextEditor/hooks/use-editor-state'
-import { IAppState } from 'reducers'
-import { getActiveTeamId } from 'utils/user-teams'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import EmailBody from '../EmailCompose/components/EmailBody'
 import { FinalFormDrawer } from '../FinalFormDrawer'
@@ -23,7 +22,6 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   submitCallback?: (emailTemplate: IBrandEmailTemplate) => void
-  activeTeamId: string
   /**
    * If null or not provided, It is in "Add" mode.
    */
@@ -38,9 +36,9 @@ export function AddOrEditEmailTemplateDrawer({
   submitCallback,
   emailTemplate,
   updateEmailTemplate,
-  createEmailTemplate,
-  activeTeamId
+  createEmailTemplate
 }: Props) {
+  const activeBrandId = useActiveBrandId()
   const [formData, setFormData] = useState<
     Omit<IBrandEmailTemplateInput, 'body'>
   >({
@@ -101,7 +99,7 @@ export function AddOrEditEmailTemplateDrawer({
             emailTemplate.id,
             enhancedValues
           )
-        : await createEmailTemplate(activeTeamId, enhancedValues)
+        : await createEmailTemplate(activeBrandId, enhancedValues)
 
       if (submitCallback) {
         submitCallback(resultEmailTemplate)
@@ -203,12 +201,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
   }
 }
 
-export default connect(
-  (state: IAppState) => ({
-    activeTeamId: getActiveTeamId(state.user)
-  }),
-  mapDispatchToProps
-)(AddOrEditEmailTemplateDrawer)
+export default connect(null, mapDispatchToProps)(AddOrEditEmailTemplateDrawer)
 
 // TODO: EDITOR ERROR
 // FieldProps={{

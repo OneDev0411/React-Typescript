@@ -18,10 +18,11 @@ import LoadingContainer from 'components/LoadingContainer'
 import { OpenHouseDrawer } from 'components/open-house/OpenHouseDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { ACL } from 'constants/acl'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useFilterCRMTasks } from 'hooks/use-filter-crm-tasks'
 import { ZeroState } from 'partials/ZeroState'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId, getActiveTeamSettings } from 'utils/user-teams'
+import { getActiveTeamSettings } from 'utils/user-teams'
 
 import Actions from './columns/Actions'
 import Avatar from './columns/Avatar'
@@ -70,7 +71,7 @@ function OpenHousesList() {
   )
 
   const user = useSelector(selectUser)
-  const activeBrandId = getActiveTeamId(user) || ''
+  const activeBrandId = useActiveBrandId()
   const activeBrandSettings = getActiveTeamSettings(user, true)
   const { enable_open_house_requests: showNotifyOfficeBanner } =
     activeBrandSettings

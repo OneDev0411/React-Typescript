@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import { PLACEHOLDER_IMAGE_URL } from 'components/InstantMarketing/constants'
@@ -17,7 +18,6 @@ import { createTemplateInstance } from 'models/instant-marketing/create-template
 import { getBrandListings } from 'models/listings/search/get-brand-listings'
 import { selectContact } from 'reducers/contacts/list'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getMlsDrawerInitialDeals } from '../../helpers/get-mls-drawer-initial-deals'
@@ -126,10 +126,10 @@ class SendMlsListingCard extends React.Component {
     }
 
     if (!this.props.isEdit) {
-      const brand = getActiveTeamId(this.props.user)
-
       try {
-        const listingDrawerListings = await getBrandListings(brand)
+        const listingDrawerListings = await getBrandListings(
+          this.props.activeBrandId
+        )
 
         this.setState({ listingDrawerListings })
       } catch (e) {
@@ -471,12 +471,13 @@ class SendMlsListingCard extends React.Component {
 SendMlsListingCard.propTypes = propTypes
 SendMlsListingCard.defaultProps = defaultProps
 
-function mapStateToProps({ contacts, deals, user }) {
+function mapStateToProps({ contacts, deals, user, ...state }) {
   return {
+    user,
     contacts: contacts.list,
     deals: deals.list,
     attributeDefs: contacts.attributeDefs,
-    user
+    activeBrandId: selectActiveBrandIdUnsafe(state) ?? ''
   }
 }
 

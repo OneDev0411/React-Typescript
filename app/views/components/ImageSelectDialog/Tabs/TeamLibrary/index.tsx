@@ -17,8 +17,8 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import { confirmation } from 'actions/confirmation'
 import Masonry from 'components/Masonry'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamId } from 'utils/user-teams'
 
 import { isGifImage } from '../../helpers'
 import ImageThumbnail from '../../ImageThumbnail'
@@ -65,7 +65,7 @@ function TeamLibrary({
   const classes = useStyles()
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
-  const activeBrandId = getActiveTeamId(user) as UUID
+  const activeBrandId = useActiveBrandId()
   const {
     results,
     labels,
