@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 
 import { Grid, Box, Divider, Typography, useTheme } from '@material-ui/core'
 import { mdiAccountGroupOutline, mdiWeb } from '@mdi/js'
-import { useSelector } from 'react-redux'
 
 import { useTemplates } from '@app/components/Pages/Dashboard/Marketing/hooks/use-templates'
 import {
@@ -14,7 +13,6 @@ import useNotify from '@app/hooks/use-notify'
 import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
 import { useUniqueTemplateTypes } from '@app/hooks/use-unique-template-types'
 import getListing from '@app/models/listings/listing/get-listing'
-import { selectActiveTeamId } from '@app/selectors/team'
 import { getArrayWithFallbackAccessor } from '@app/utils/get-array-with-fallback-accessor'
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { useAcl } from '@app/views/components/Acl/use-acl'
@@ -25,6 +23,7 @@ import LoadingContainer from '@app/views/components/LoadingContainer'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { meetingRoomOutlined } from '@app/views/components/SvgIcons/icons'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 
 import { OpenHouseDrawer } from '../open-house/OpenHouseDrawer'
 
@@ -56,7 +55,7 @@ export default function ListingMarketing({
   onChangeMedium
 }: Props) {
   const theme = useTheme()
-  const activeTeamId = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
   const notify = useNotify()
 
   const shouldShowAgentNetworkButton = useAcl('AgentNetwork')
@@ -78,7 +77,7 @@ export default function ListingMarketing({
   const [isLoadingListing] = useLoadingEntities(listing)
 
   const { templates, isLoading: isLoadingTemplates } = useTemplates(
-    activeTeamId,
+    activeBrandId,
     undefined,
     LISTING_TEMPLATE_TYPES
   )

@@ -5,7 +5,7 @@ import fecha from 'fecha'
 import { connect } from 'react-redux'
 import Flex from 'styled-flex-component'
 
-import { selectActiveTeamId } from '@app/selectors/team'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import { BasicDropdown } from 'components/BasicDropdown'
 import LinkButton from 'components/Button/LinkButton'
 import { addNotification as notify } from 'components/notification'
@@ -37,10 +37,10 @@ class EventsList extends Component {
     }
   ]
 
-  activeTeamId = this.props.activeTeamId
+  activeBrandId = this.props.activeBrandId
 
   getRegisterLink = event =>
-    `/openhouse/${event.id}/${this.activeTeamId}/register`
+    `/openhouse/${event.id}/${this.activeBrandId}/register`
 
   onEditEvent = event => this.props.onEditEvent(event)
 
@@ -128,7 +128,7 @@ class EventsList extends Component {
 
 function mapStateToProps(state) {
   return {
-    activeTeamId: selectActiveTeamId(state)
+    activeBrandId: selectActiveBrandId(state)
   }
 }
 

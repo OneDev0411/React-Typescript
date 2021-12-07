@@ -4,7 +4,7 @@ import fileSaver from 'file-saver'
 import { connect } from 'react-redux'
 import superagent from 'superagent'
 
-import { selectActiveTeamId } from '@app/selectors/team'
+import { selectActiveBrandId } from '@app/selectors/brand'
 import removeSpecialCharacters from 'utils/remove-special-characters'
 
 import { ExportButton } from './ExportButton'
@@ -13,7 +13,7 @@ class ExportContacts extends React.Component {
   sendDownloadReuqest = async exportType => {
     const {
       conditionOperator: filter_type,
-      activeTeamId,
+      activeBrandId,
       excludedRows,
       searchText,
       exportIds,
@@ -23,7 +23,7 @@ class ExportContacts extends React.Component {
       flows,
       users
     } = this.props
-    const url = `/api/contacts/export/outlook/${activeTeamId}`
+    const url = `/api/contacts/export/outlook/${activeBrandId}`
 
     const params = {
       type: exportType
@@ -87,7 +87,7 @@ class ExportContacts extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { activeTeamId: selectActiveTeamId(state) }
+  return { activeBrandId: selectActiveBrandId(state) }
 }
 
 export default connect(mapStateToProps)(ExportContacts)

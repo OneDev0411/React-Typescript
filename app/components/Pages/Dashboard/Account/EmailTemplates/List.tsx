@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { selectActiveTeamIdUnsafe } from '@app/selectors/team'
+import { selectActiveBrandIdUnsafe } from '@app/selectors/brand'
 import { deleteEmailTemplate } from 'actions/email-templates/delete-email-template'
 import { fetchEmailTemplates } from 'actions/email-templates/fetch-email-templates'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 interface Props {
-  activeTeamId: UUID
+  activeBrandId: UUID
   isFetching: boolean
   templates: IBrandEmailTemplate[]
   onItemClick: (item: IBrandEmailTemplate) => void
@@ -85,7 +85,7 @@ interface Props {
 }
 
 function EmailTemplatesList({
-  activeTeamId,
+  activeBrandId,
   isFetching,
   templates,
   onItemClick,
@@ -105,7 +105,7 @@ function EmailTemplatesList({
   const handleDelete = async (id: UUID): Promise<void> => {
     try {
       addToDeletingItems(id)
-      await deleteEmailTemplate(activeTeamId, id)
+      await deleteEmailTemplate(activeBrandId, id)
       removeFromDeletingItems(id)
     } catch (error) {
       removeFromDeletingItems(id)
@@ -113,8 +113,8 @@ function EmailTemplatesList({
   }
 
   useEffect(() => {
-    fetchEmailTemplates(activeTeamId)
-  }, [activeTeamId, fetchEmailTemplates])
+    fetchEmailTemplates(activeBrandId)
+  }, [activeBrandId, fetchEmailTemplates])
 
   const columns: TableColumn<IBrandEmailTemplate>[] = [
     {
@@ -210,14 +210,14 @@ function EmailTemplatesList({
 }
 
 const mapStateToProps = (state: IAppState) => {
-  const activeTeamId = selectActiveTeamIdUnsafe(state) || ''
+  const activeBrandId = selectActiveBrandIdUnsafe(state) || ''
 
   return {
-    activeTeamId,
-    templates: selectEmailTemplates(state.emailTemplates, activeTeamId),
+    activeBrandId,
+    templates: selectEmailTemplates(state.emailTemplates, activeBrandId),
     isFetching: selectEmailTemplatesIsFetching(
       state.emailTemplates,
-      activeTeamId
+      activeBrandId
     )
   }
 }

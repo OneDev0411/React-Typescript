@@ -12,7 +12,7 @@ export function selectActiveBrandUnsafe(state: IAppState): Nullable<IBrand> {
 }
 
 /**
- * Returns the active brand or throws and error if it does not exist
+ * Returns the active brand or throws an error if it does not exist
  * @param state The app state
  * @returns The active brand for current user
  */
@@ -27,10 +27,25 @@ export function selectActiveBrand(state: IAppState): IBrand {
 }
 
 /**
- * Returns the active brand id for current user
+ * Returns the active brand id for the current user if exists
+ * @param state The app state
+ * @returns The active brand id
+ */
+export function selectActiveBrandIdUnsafe(state: IAppState): Nullable<UUID> {
+  return selectActiveBrandUnsafe(state)?.id ?? null
+}
+
+/**
+ * Returns the active brand id for current user or throws an error if it does not exist
  * @param state The app state
  * @returns The active brand id
  */
 export function selectActiveBrandId(state: IAppState): UUID {
-  return selectActiveBrand(state).id
+  const activeBrandId = selectActiveBrandIdUnsafe(state)
+
+  if (!activeBrandId) {
+    throw new Error('The current user does not have an active brand')
+  }
+
+  return activeBrandId
 }

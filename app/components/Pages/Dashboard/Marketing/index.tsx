@@ -7,13 +7,13 @@ import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
-import { selectActiveTeamId } from '@app/selectors/team'
 import MarketingSearchInput, {
   TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
 import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
 import { selectUser } from 'selectors/user'
@@ -57,7 +57,7 @@ export function MarketingLayout({
     { templateId?: UUID }
   >) {
   const classes = useStyles()
-  const activeBrand = useSelector(selectActiveTeamId)
+  const activeBrandId = useActiveBrandId()
   const user = useSelector(selectUser)
 
   const { params, router, location } = props
@@ -65,7 +65,7 @@ export function MarketingLayout({
 
   const templateTypes = params.types
 
-  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrand)
+  const { templates, isLoading, deleteTemplate } = useTemplates(activeBrandId)
   const mediums = useMarketingCenterMediums(templates)
 
   const templateTypesWithMediums =
