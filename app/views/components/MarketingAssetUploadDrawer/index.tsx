@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useMemo, useContext } from 'react'
 
 import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
@@ -34,6 +34,7 @@ export default function MarketingAssetUploadDrawer({
     shouldUnregister: false
   })
   const brands = formMethods.watch('brands')
+  const assets = formMethods.watch('assets')
 
   const handleUploadAssets = async (data: AssetsUploadFormData) => {
     setUploadProgress(data.assets.map(() => 0))
@@ -92,6 +93,14 @@ export default function MarketingAssetUploadDrawer({
   const goToUploadStep = () => {
     setActiveStep('upload')
   }
+
+  const isValid = useMemo(() => {
+    if (assets.length === 0) {
+      return false
+    }
+
+    return assets.every(asset => asset.templateType && asset.medium)
+  }, [assets])
 
   const isUploadingFiles = uploadProgress.length > 0
 
@@ -165,9 +174,9 @@ export default function MarketingAssetUploadDrawer({
             Back
           </Button>
           <Button
-            disabled={isWorking}
             variant="contained"
             color="primary"
+            disabled={isWorking || !isValid}
             onClick={formMethods.handleSubmit(data => onSubmit(data))}
           >
             Upload Files
