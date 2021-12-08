@@ -1,18 +1,14 @@
-import React, { useState, useMemo, ReactNode, CSSProperties } from 'react'
+import { useState, useMemo, ReactNode, CSSProperties, MouseEvent } from 'react'
 
 import { Avatar, Popover, makeStyles, Tooltip, Theme } from '@material-ui/core'
 import AvatarGroup from '@material-ui/lab/AvatarGroup'
 import { useSelector } from 'react-redux'
 
+import { useUnsafeActiveTeam, useActiveTeamAvailableMembers } from 'hooks/team'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
 
-import {
-  viewAs,
-  isBackOffice,
-  getActiveTeam,
-  getTeamAvailableMembers
-} from '../../../utils/user-teams'
+import { viewAs, isBackOffice } from '../../../utils/user-teams'
 
 import { MemberList } from './components/List'
 
@@ -37,8 +33,8 @@ interface Props {
 export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
   const user: IUser = useSelector(selectUser)
-  const team: IUserTeam | null = getActiveTeam(user)
-  const teamMembers: IUser[] = getTeamAvailableMembers(team)
+  const team: Nullable<IUserTeam> = useUnsafeActiveTeam()
+  const teamMembers: IUser[] = useActiveTeamAvailableMembers()
   const initialSelectedMembers: UUID[] = useMemo(
     () => viewAs(user, true, team),
     [team, user]
@@ -72,7 +68,7 @@ export const ViewAs = ({ containerStyle }: Props) => {
     )
   }, [classes.tooltip, selectedMembers, teamMembers])
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
