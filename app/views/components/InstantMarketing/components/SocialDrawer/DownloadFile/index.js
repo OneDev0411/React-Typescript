@@ -32,7 +32,7 @@ export default class DownloadFile extends React.Component {
     })
 
     const data = await agent
-      .get(this.props.instance.file.url)
+      .get(`/api/utils/cors/${btoa(this.props.instance.file.url)}`)
       .responseType('blob')
 
     FileSaver.saveAs(data.body, this.FileName)
