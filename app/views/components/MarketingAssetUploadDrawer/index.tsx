@@ -74,15 +74,21 @@ export default function MarketingAssetUploadDrawer({
     onClose(uploadedAssets)
   }
 
-  const onSubmit = (data: AssetsUploadFormData) => {
-    confirmation.setConfirmationModal({
-      message: `You are going to add ${pluralize(
-        'asset',
-        data.assets.length,
-        true
-      )} to ${pluralize('team', data.brands.length, true)}. Are you sure?`,
-      confirmLabel: 'Yes, I am sure',
-      onConfirm: () => handleUploadAssets(data)
+  const onSubmit = (data: AssetsUploadFormData): Promise<void> => {
+    return new Promise(resolve => {
+      confirmation.setConfirmationModal({
+        message: `You are going to add ${pluralize(
+          'asset',
+          data.assets.length,
+          true
+        )} to ${pluralize('team', data.brands.length, true)}. Are you sure?`,
+        confirmLabel: 'Yes, I am sure',
+        onCancel: resolve,
+        onConfirm: async () => {
+          await handleUploadAssets(data)
+          resolve()
+        }
+      })
     })
   }
 

@@ -16,10 +16,10 @@ import ZeroState from '../ZeroState'
 const useStyles = makeStyles(
   theme => ({
     wrapper: {
-      height: '100%'
+      height: '100%',
+      paddingTop: theme.spacing(3)
     },
     uploadContainer: {
-      marginTop: theme.spacing(3),
       marginBottom: theme.spacing(2),
       padding: theme.spacing(1.5, 2, 2),
       height: theme.spacing(7),
@@ -58,7 +58,8 @@ export default function Upload({
   uploadProgress
 }: Props) {
   const classes = useStyles()
-  const { setValue, watch, control } = useFormContext<AssetsUploadFormData>()
+  const { setValue, watch, formState, control } =
+    useFormContext<AssetsUploadFormData>()
 
   const assets = watch('assets')
 
@@ -142,31 +143,40 @@ export default function Upload({
 
   return (
     <div className={classes.wrapper} {...getRootProps()}>
-      <input {...getInputProps()} />
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        className={classes.uploadContainer}
-      >
-        <Grid item>
-          <Box mr={1} pt={0.5}>
-            <SvgIcon path={mdiImageMultipleOutline} size={muiIconSizes.small} />
-          </Box>
-        </Grid>
-        <Grid item>
-          <Typography variant="body2" color="textSecondary" onClick={open}>
-            {isDragActive ? (
-              'Drop your files to upload'
-            ) : (
-              <>
-                Drag more files here or{' '}
-                <span className={classes.clickToUpload}>click to upload</span>
-              </>
-            )}
-          </Typography>
-        </Grid>
-      </Grid>
+      {!formState.isSubmitting && (
+        <>
+          <input {...getInputProps()} />
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            className={classes.uploadContainer}
+          >
+            <Grid item>
+              <Box mr={1} pt={0.5}>
+                <SvgIcon
+                  path={mdiImageMultipleOutline}
+                  size={muiIconSizes.small}
+                />
+              </Box>
+            </Grid>
+            <Grid item>
+              <Typography variant="body2" color="textSecondary" onClick={open}>
+                {isDragActive ? (
+                  'Drop your files to upload'
+                ) : (
+                  <>
+                    Drag more files here or{' '}
+                    <span className={classes.clickToUpload}>
+                      click to upload
+                    </span>
+                  </>
+                )}
+              </Typography>
+            </Grid>
+          </Grid>
+        </>
+      )}
       <Grid container direction="column" spacing={4}>
         <Controller
           control={control}
