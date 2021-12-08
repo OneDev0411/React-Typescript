@@ -18,7 +18,7 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { VideoThumbnail } from '@app/views/components/VideoThumbnail'
 
-import { TEMPLATE_TYPES, MEDIUMS } from '../../constants'
+import { SORTED_TEMPLATE_TYPES_BY_LABEL, MEDIUMS } from '../../constants'
 import { Asset } from '../../types'
 
 import { isImage, isPdf, isVideo } from './helpers'
@@ -122,7 +122,7 @@ export default function AssetItem({
                     })
                   }
                 >
-                  {TEMPLATE_TYPES.map(type => (
+                  {SORTED_TEMPLATE_TYPES_BY_LABEL.map(type => (
                     <MenuItem key={type} value={type}>
                       {getTemplateTypeLabel(type)}
                     </MenuItem>

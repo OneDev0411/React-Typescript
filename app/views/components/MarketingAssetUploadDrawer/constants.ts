@@ -1,3 +1,5 @@
+import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
+
 export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'AsSeenIn',
   'BackToSchool',
@@ -53,6 +55,11 @@ export const TEMPLATE_TYPES: IMarketingTemplateType[] = [
   'WeddingAnniversary',
   'WomansDay'
 ]
+
+export const SORTED_TEMPLATE_TYPES_BY_LABEL: IMarketingTemplateType[] =
+  TEMPLATE_TYPES.sort((a, b) =>
+    getTemplateTypeLabel(a).localeCompare(getTemplateTypeLabel(b))
+  )
 
 export const MEDIUMS: IMarketingTemplateMedium[] = [
   'Email',
