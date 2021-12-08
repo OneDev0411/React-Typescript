@@ -54,7 +54,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
   return (
     <PageTabs
-      value={props.location.query.type === 'query' ? 'search' : null}
+      value={props.params.filter}
       defaultValue={props.params.filter}
       tabs={[
         ...inboxTabs
