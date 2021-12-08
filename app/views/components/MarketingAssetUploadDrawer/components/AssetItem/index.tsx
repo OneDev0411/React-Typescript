@@ -25,32 +25,19 @@ import { isImage, isPdf, isVideo } from './helpers'
 
 const useStyles = makeStyles(
   theme => ({
-    wrapper: {
-      height: '100%'
-    },
-    uploadContainer: {
-      marginTop: theme.spacing(3),
-      marginBottom: theme.spacing(2),
-      padding: theme.spacing(1.5, 2, 2),
-      height: theme.spacing(7),
-      border: `1px dashed ${theme.palette.divider}`,
-      borderRadius: theme.shape.borderRadius
-    },
     thumbnailContainer: {
       maxWidth: '100%',
       '& img': {
+        pointerEvents: 'none',
         width: '100%',
         objectFit: 'cover',
         height: theme.spacing(14),
         borderRadius: theme.shape.borderRadius
       },
       '& video, & canvas': {
+        pointerEvents: 'none',
         display: 'none'
       }
-    },
-    clickToUpload: {
-      color: theme.palette.primary.main,
-      cursor: 'pointer'
     },
     deleteContainer: {
       flexGrow: 1,

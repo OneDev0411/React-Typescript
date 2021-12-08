@@ -26,19 +26,9 @@ const useStyles = makeStyles(
       border: `1px dashed ${theme.palette.divider}`,
       borderRadius: theme.shape.borderRadius
     },
-    image: {
-      width: theme.spacing(8),
-      height: theme.spacing(14),
-      objectFit: 'cover',
-      borderRadius: theme.shape.borderRadius
-    },
     clickToUpload: {
       color: theme.palette.primary.main,
       cursor: 'pointer'
-    },
-    deleteContainer: {
-      flexGrow: 1,
-      textAlign: 'right'
     }
   }),
   {
