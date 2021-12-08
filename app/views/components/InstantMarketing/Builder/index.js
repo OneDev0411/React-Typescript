@@ -6,6 +6,10 @@ import juice from 'juice'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import {
+  selectActiveBrand,
+  selectActiveBrandSettings
+} from '@app/selectors/brand'
 import SearchArticleDrawer from '@app/views/components/SearchArticleDrawer'
 import SearchVideoDrawer from '@app/views/components/SearchVideoDrawer'
 import CarouselDrawer from 'components/CarouselDrawer'
@@ -26,12 +30,7 @@ import { uploadAsset } from 'models/instant-marketing/upload-asset'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
-import {
-  isAdmin,
-  getBrandByType,
-  getActiveTeamSettings,
-  getActiveBrand
-} from 'utils/user-teams'
+import { isAdmin, getBrandByType } from 'utils/user-teams'
 
 import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
@@ -524,7 +523,7 @@ class Builder extends React.Component {
       }
     }
 
-    const activeTeamSettings = getActiveTeamSettings(this.props.user, true)
+    const activeTeamSettings = this.props.activeBrandSetting
 
     const { enable_liveby: shouldShowNeighborhoodsBlocks } = activeTeamSettings
 
@@ -966,7 +965,7 @@ class Builder extends React.Component {
   }
 
   generateBrandedTemplate = (templateMarkup, data) => {
-    const activeBrand = getActiveBrand(this.props.user)
+    const activeBrand = this.props.activeBrand
     const brand = getBrandByType(this.props.user, 'Brokerage')
     const renderData = getTemplateRenderData(brand)
 
@@ -1620,9 +1619,11 @@ Builder.defaultProps = {
   onBuilderLoad: () => null
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ user, ...state }) {
   return {
-    user
+    user,
+    activeBrand: selectActiveBrand(state),
+    activeBrandSetting: selectActiveBrandSettings(state, true)
   }
 }
 

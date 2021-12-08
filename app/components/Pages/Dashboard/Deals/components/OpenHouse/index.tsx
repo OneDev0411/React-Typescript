@@ -13,10 +13,10 @@ import {
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
 import { createTaskComment } from 'deals/utils/create-task-comment'
+import { useActiveBrandSettings } from 'hooks/brand/use-active-brand-settings'
 import { IAppState } from 'reducers'
 import { getDealChecklists } from 'reducers/deals/checklists'
 import { selectUser } from 'selectors/user'
-import { getActiveTeamSettings } from 'utils/user-teams'
 
 import Form from './Form'
 import List from './List'
@@ -41,7 +41,7 @@ function OpenHouses({
     getDealChecklists(deal, deals.checklists)
   )
 
-  const activeBrandSettings = getActiveTeamSettings(user, true)
+  const activeBrandSettings = useActiveBrandSettings(true)
   const { enable_open_house_requests: showOpenHouse } = activeBrandSettings
 
   const confirmation = useContext(ConfirmationModalContext)

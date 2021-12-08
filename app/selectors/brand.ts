@@ -1,4 +1,5 @@
 import { IAppState } from 'reducers'
+import flattenBrand from 'utils/flatten-brand'
 
 import { selectActiveTeamUnsafe } from './team'
 
@@ -48,4 +49,31 @@ export function selectActiveBrandId(state: IAppState): UUID {
   }
 
   return activeBrandId
+}
+
+/**
+ * Returns the active brand setting for current user
+ * @param state The app state
+ * @param includesParents indicate that parent setting should be include or not
+ * @returns The active brand setting
+ */
+export function selectActiveBrandSettings(
+  state: IAppState,
+  includesParents: boolean = false
+): StringMap<any> {
+  const activeBrand = selectActiveBrandUnsafe(state)
+
+  if (!activeBrand) {
+    return {}
+  }
+
+  let settings: StringMap<any> | null | undefined = activeBrand.settings
+
+  if (includesParents) {
+    let brand = flattenBrand(activeBrand)
+
+    settings = brand?.settings
+  }
+
+  return settings || {}
 }
