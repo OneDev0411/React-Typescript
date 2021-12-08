@@ -10,13 +10,13 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import AdvancedSearch from './AdvancedSearch'
 import TabFilters from './Filters'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
+import SearchTable from './SearchTable'
 import { useStyles } from './styles'
 import { SearchQuery, StateProps } from './types'
 
-export function AdvancedSearchTable(props: WithRouterProps & StateProps) {
+export function SearchPage(props: WithRouterProps & StateProps) {
   const classes = useStyles()
   const user = useSelector(selectUser)
 
@@ -31,7 +31,7 @@ export function AdvancedSearchTable(props: WithRouterProps & StateProps) {
 
   return (
     <PageLayout>
-      <PageLayout.Header title="Deals Admin">
+      <PageLayout.Header title="Search Deals">
         <div className={classes.headerContainer}>
           <DebouncedSearchInput
             placeholder="Search deals by address, MLS# or agent name..."
@@ -51,7 +51,7 @@ export function AdvancedSearchTable(props: WithRouterProps & StateProps) {
           />
         </div>
 
-        <AdvancedSearch searchQuery={searchQuery} statuses={statuses} />
+        <SearchTable searchQuery={searchQuery} statuses={statuses} />
       </PageLayout.Main>
     </PageLayout>
   )

@@ -8,7 +8,7 @@ interface Props {
   statuses: IDealStatus[]
 }
 
-function AdvancedSearch({ searchQuery, statuses }: Props) {
+function SearchTable({ searchQuery, statuses }: Props) {
   return (
     <>
       <Filters />
@@ -17,4 +17,4 @@ function AdvancedSearch({ searchQuery, statuses }: Props) {
   )
 }
 
-export default AdvancedSearch
+export default SearchTable
