@@ -10,13 +10,13 @@ import {
   LinearProgress
 } from '@material-ui/core'
 import { mdiDeleteOutline } from '@mdi/js'
-import VideoImageThumbnail from 'react-video-thumbnail-image'
 
 import { getTemplateMediumLabel } from '@app/utils/marketing-center/get-template-medium-label'
 import { getTemplateTypeLabel } from '@app/utils/marketing-center/get-template-type-label'
 import { PdfThumbnail } from '@app/views/components/PdfThumbnail'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { VideoThumbnail } from '@app/views/components/VideoThumbnail'
 
 import { TEMPLATE_TYPES, MEDIUMS } from '../../constants'
 import { Asset } from '../../types'
@@ -193,9 +193,7 @@ export default function AssetItem({
         {isImage(asset.file.object) && (
           <img src={asset.file.url} alt={asset.label} />
         )}
-        {isVideo(asset.file.object) && (
-          <VideoImageThumbnail videoUrl={asset.file.url} alt={asset.label} />
-        )}
+        {isVideo(asset.file.object) && <VideoThumbnail url={asset.file.url} />}
       </Grid>
       {uploadProgress === undefined
         ? renderUploadForm()
