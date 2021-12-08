@@ -4,7 +4,7 @@ import Fetch from '../../../services/fetch'
 
 function sanitizeSettingValue(value: any): any {
   // isEmpty always returns true for boolean and number type so we need to handle it
-  if (typeof value == 'boolean' || typeof value == 'number') {
+  if (typeof value === 'boolean' || typeof value === 'number') {
     return value
   }
 
@@ -30,7 +30,7 @@ export async function putUserSetting(key: string, value: any, brand?: UUID) {
   try {
     const request = new Fetch()
       .put(`/users/self/settings/${key}`)
-      .send({ value: sanitizeSettingValue(value) ? null : value })
+      .send({ value: sanitizeSettingValue(value) })
 
     if (brand) {
       request.set({ 'X-RECHAT-BRAND': brand })
