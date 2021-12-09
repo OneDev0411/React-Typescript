@@ -10,6 +10,8 @@ import useDebouncedCallback from 'use-debounce/lib/callback'
 import { noop } from '@app/utils/helpers'
 import { SearchInput } from 'components/GlobalHeaderWithSearch'
 
+import { SEARCH_INPUT_DEBOUNCE_MS } from '../../BackOffice/constants'
+
 interface Props {
   placeholder: string
   value: string | null
@@ -30,7 +32,10 @@ export function DebouncedSearchInput({
   onClick,
   autoFocus
 }: Props) {
-  const [debouncedOnChange] = useDebouncedCallback(onChange, 500)
+  const [debouncedOnChange] = useDebouncedCallback(
+    onChange,
+    SEARCH_INPUT_DEBOUNCE_MS
+  )
   const ref = useRef<HTMLInputElement>(null)
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
