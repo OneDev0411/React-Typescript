@@ -5,9 +5,9 @@ import { withRouter, WithRouterProps } from 'react-router'
 import { getUserTeams } from 'actions/user/teams'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
+import { useActiveBrand } from 'hooks/brand/use-active-brand'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import { getGridSortLabel, getActiveSort } from '../../helpers/sorting'
@@ -50,6 +50,8 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
+  const activeBrand = useActiveBrand()
+
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
   const handleChangeSort = async (column: SortableColumn) => {
@@ -64,8 +66,6 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     await putUserSetting(SORT_FIELD_SETTING_KEY, fieldValue)
     dispatch(getUserTeams(user))
   }
-
-  const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
@@ -86,7 +86,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         })
       ]}
       actions={[
-        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
+        <AnalyticsDropdownTab key={0} brandType={activeBrand.brand_type} />,
         <Tab
           key={1}
           label={

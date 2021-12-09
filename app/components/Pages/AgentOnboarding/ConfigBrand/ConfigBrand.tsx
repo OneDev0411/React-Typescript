@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import { Box } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -10,12 +10,12 @@ import { browserHistory } from 'react-router'
 import { updateUser } from 'actions/user'
 import { MUITextInput } from 'components/Forms/MUITextInput'
 import CircleSpinner from 'components/SvgIcons/CircleSpinner/IconCircleSpinner'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 import { addBrand } from 'models/BrandConsole/Brands'
 import { getTeams } from 'models/user/get-teams'
 import { putUserSetting } from 'models/user/put-user-setting'
 import getVerificationCode from 'models/verify/request'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import { useCommonStyles } from '../common-styles'
 import Container from '../Container'
@@ -33,7 +33,7 @@ export function ConfigBrand() {
   const dispatch = useDispatch()
   const commonClasses = useCommonStyles()
   const user = useSelector(selectUser)
-  const activeBrand = getActiveBrand(user)
+  const activeBrand = useUnsafeActiveBrand()
 
   const getNextStep = useCallback(() => {
     let nextStepUrl = 'oauth-accounts'

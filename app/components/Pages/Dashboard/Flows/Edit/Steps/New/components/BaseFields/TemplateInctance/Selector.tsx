@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 
 import { Box, makeStyles, Theme, Button, Grid } from '@material-ui/core'
 import cn from 'classnames'
@@ -6,10 +6,10 @@ import { useSelector } from 'react-redux'
 
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import { MarketingEmailFormData } from '../../../types'
 
@@ -131,7 +131,8 @@ export const TemplateSelector = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector<IAppState, IUser>(selectUser)
-  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
+  const activeBrand: Nullable<IBrand> = useUnsafeActiveBrand()
+
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
@@ -153,7 +154,7 @@ export const TemplateSelector = ({
       setIsTemplatePickerOpen(false)
       setIsLoading(true)
 
-      if (!brand) {
+      if (!activeBrand) {
         return
       }
 

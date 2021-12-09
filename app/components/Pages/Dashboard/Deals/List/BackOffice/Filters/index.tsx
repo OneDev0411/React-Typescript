@@ -6,9 +6,9 @@ import { getUserTeams } from 'actions/user/teams'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 import { getActiveSort, getGridSortLabel } from 'deals/List/helpers/sorting'
+import { useActiveBrand } from 'hooks/brand/use-active-brand'
 import { putUserSetting } from 'models/user/put-user-setting'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
 import {
@@ -28,6 +28,7 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
+  const activeBrand = useActiveBrand()
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
   const inboxTabs = useInboxTabs()
@@ -55,8 +56,6 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     props.location.query.type === 'query' && props.params.filter !== 'closings'
       ? `All ${props.params.filter} deals`
       : 'All Deals'
-
-  const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
@@ -129,7 +128,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
         />
       ]}
       actions={[
-        <AnalyticsDropdownTab key={0} brandType={activeBrand?.brand_type!} />,
+        <AnalyticsDropdownTab key={0} brandType={activeBrand.brand_type} />,
         <Tab
           key={1}
           label={
