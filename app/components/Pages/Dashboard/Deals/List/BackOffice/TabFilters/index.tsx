@@ -77,7 +77,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           key="search"
           value="search"
           label={<span>Search</span>}
-          to="/dashboard/deals/filter/search?type=query&dealType=Selling,Buying"
+          to="/dashboard/deals/filter/search?type=query"
         />
       ]}
       actions={[
