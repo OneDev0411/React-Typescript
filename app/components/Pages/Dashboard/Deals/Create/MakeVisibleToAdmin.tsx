@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 import {
   Box,
@@ -15,6 +15,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTitle } from 'react-use'
 
+import { useBrandPropertyTypeRoles } from '@app/hooks/use-brand-property-type-roles'
 import { selectDealById } from '@app/reducers/deals/list'
 import { Callout } from '@app/views/components/Callout'
 import {
@@ -41,19 +42,17 @@ import { selectUser } from 'selectors/user'
 
 import { Context } from './context'
 import { DealAddress, PropertyAddress } from './form/DealAddress'
-import { DealClient } from './form/DealClient'
 import { DealContext } from './form/DealContext'
+import { DealRequiredRole } from './form/DealRequiredRole'
 import { DealStatus } from './form/DealStatus'
 import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
-import { BUYER_ROLES, SELLER_ROLES } from './helpers/roles'
 import { showStatusQuestion } from './helpers/show-status-question'
 import { useStatusList } from './hooks/use-brand-status-list'
 import { useStyles } from './hooks/use-styles'
 
 type FormValues = {
-  buying_clients: IDealRole[]
-  selling_clients: IDealRole[]
+  roles: IDealRole[]
   address: PropertyAddress
 } & Record<string, unknown>
 
@@ -83,6 +82,9 @@ export default function MakeVisibleToAdmin({
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, dealId)
   )
+  const dealRoles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
+    selectDealRoles(deals.roles, deal)
+  )
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -99,8 +101,16 @@ export default function MakeVisibleToAdmin({
   const isStatusVisible =
     deal && showStatusQuestion(deal, brandChecklists, statusContextKey)
 
-  const propertyType = deal?.property_type
   const hasAddress = deal?.listing || getField(deal, 'full_address')
+
+  /* extract required roles from property type's roles */
+  const requiredRoles = useBrandPropertyTypeRoles(
+    deal.property_type.label
+  ).requiredRoles.filter(
+    requiredRole =>
+      requiredRole.checklist_types.includes(deal.deal_type) &&
+      dealRoles.some(dealRole => dealRole.role === requiredRole.role) === false
+  )
 
   const requiredContexts = useSelector<
     IAppState,
@@ -120,29 +130,13 @@ export default function MakeVisibleToAdmin({
       : []
   })
 
-  const roles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
-    selectDealRoles(deals.roles, deal)
-  )
-
-  const sellerRoles = useMemo(
-    () => (roles ? roles.filter(item => SELLER_ROLES.includes(item.role)) : []),
-    [roles]
-  )
-
-  const buyerRoles = useMemo(
-    () => (roles ? roles.filter(item => BUYER_ROLES.includes(item.role)) : []),
-    [roles]
-  )
-
   const validate = useCallback(() => {
-    const errors: Record<keyof FormValues, string> = {}
+    const errors: Record<keyof FormValues, object | string> = {}
 
     if (!deal) {
       return errors
     }
 
-    const buyingClients = watch('buying_clients') || buyerRoles
-    const sellingClients = watch('selling_clients') || sellerRoles
     const address =
       watch('address') || deal?.listing || getField(deal, 'full_address')
     const status =
@@ -152,16 +146,18 @@ export default function MakeVisibleToAdmin({
       errors.address = 'Address is required'
     }
 
-    if (
-      deal.deal_type === 'Buying' &&
-      (!buyingClients || buyingClients.length === 0)
-    ) {
-      errors.buying_clients = 'Buyer Legal Names is required'
-    }
+    requiredRoles.forEach(requiredRole => {
+      const isCreated = (watch('roles') || []).some(
+        role => role.role === requiredRole.role
+      )
 
-    if (!sellingClients || sellingClients.length === 0) {
-      errors.selling_clients = 'Seller Legal Names is required'
-    }
+      if (!isCreated) {
+        errors.roles = {
+          ...((errors.roles as object) || {}),
+          [requiredRole.role]: `${requiredRole.title} is required`
+        }
+      }
+    })
 
     if (isStatusVisible && statusList.length > 0 && !status) {
       errors.status = 'Status is required'
@@ -180,12 +176,11 @@ export default function MakeVisibleToAdmin({
     return errors
   }, [
     deal,
-    buyerRoles,
-    sellerRoles,
     isStatusVisible,
     requiredContexts,
     statusContextKey,
     statusList.length,
+    requiredRoles,
     watch
   ])
 
@@ -359,65 +354,26 @@ export default function MakeVisibleToAdmin({
                   />
                 )}
 
-                {deal.deal_type === 'Buying' && buyerRoles.length === 0 && (
-                  <Controller
-                    key="buyers"
-                    name="buying_clients"
-                    control={control}
-                    render={({ value = [], onChange }) => (
-                      <DealClient
-                        concurrentMode
-                        error={errors.buying_clients}
-                        side="Buying"
-                        propertyType={deal.property_type}
-                        title={
-                          <div>
-                            What's the{' '}
-                            <span className={classes.brandedTitle}>
-                              {propertyType?.is_lease ? 'Tenant' : 'Buyer'}
-                              's Legal Name
-                            </span>
-                            ?
-                          </div>
-                        }
-                        roles={value}
-                        onChange={(role, type) =>
-                          onChange(getChangedRoles(value, role, type))
-                        }
-                      />
-                    )}
-                  />
-                )}
-
-                {sellerRoles.length === 0 && (
-                  <Controller
-                    key="sellers"
-                    name="selling_clients"
-                    control={control}
-                    render={({ value = [], onChange }) => (
-                      <DealClient
-                        concurrentMode
-                        side="Selling"
-                        error={errors.selling_clients}
-                        propertyType={deal.property_type}
-                        title={
-                          <div>
-                            What's the{' '}
-                            <span className={classes.brandedTitle}>
-                              {propertyType?.is_lease ? 'Landlord' : 'Seller'}
-                              's Legal Name
-                            </span>
-                            ?
-                          </div>
-                        }
-                        roles={value}
-                        onChange={(role, type) =>
-                          onChange(getChangedRoles(value, role, type))
-                        }
-                      />
-                    )}
-                  />
-                )}
+                <Controller
+                  name="roles"
+                  control={control}
+                  render={({ value = [], onChange }) => (
+                    <>
+                      {requiredRoles.map(role => (
+                        <DealRequiredRole
+                          key={role.role}
+                          role={role}
+                          error={errors.roles?.[role.role]}
+                          rolesList={value}
+                          dealSide={deal.deal_type}
+                          onChange={(role, type) =>
+                            onChange(getChangedRoles(value, role, type))
+                          }
+                        />
+                      ))}
+                    </>
+                  )}
+                />
 
                 {isStatusVisible &&
                   !getStatus(deal) &&
