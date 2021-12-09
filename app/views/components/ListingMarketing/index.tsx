@@ -8,6 +8,7 @@ import {
   ALL_MEDIUMS,
   LISTING_TEMPLATE_TYPES
 } from '@app/components/Pages/Dashboard/Marketing/Wizard/constants'
+import { ACL } from '@app/constants/acl'
 import { useLoadingEntities } from '@app/hooks/use-loading'
 import useNotify from '@app/hooks/use-notify'
 import { useUniqueMediums } from '@app/hooks/use-unique-mediums'
@@ -58,10 +59,10 @@ export default function ListingMarketing({
   const activeBrandId = useActiveBrandId()
   const notify = useNotify()
 
-  const shouldShowAgentNetworkButton = useAcl('AgentNetwork')
-  const hasMarketingAccess = useAcl('Marketing')
-  const shouldShowOpenHouseButton = useAcl('CRM') && hasMarketingAccess
-  const shouldShowWebsitesButton = useAcl('Websites')
+  const shouldShowAgentNetworkButton = useAcl(ACL.AGENT_NETWORK)
+  const hasMarketingAccess = useAcl(ACL.MARKETING)
+  const shouldShowOpenHouseButton = useAcl(ACL.CRM) && hasMarketingAccess
+  const shouldShowWebsitesButton = useAcl(ACL.WEBSITES)
   const shouldShowMarketingButtons =
     shouldShowAgentNetworkButton ||
     shouldShowOpenHouseButton ||

@@ -8,10 +8,6 @@ declare type IBrandType =
 
 declare type IBrandRoleType = 'Admin' | 'Agent' | 'Other'
 
-declare type IAccessControlPolicy =
-  | 'ActiveTeam'
-  | 'ActiveTeamAndParents'
-  | 'Root'
 declare type IPermission =
   | 'Deals'
   | 'BackOffice'

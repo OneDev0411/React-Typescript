@@ -1,8 +1,6 @@
 import idx from 'idx'
 import { flatMap, identity, uniqBy } from 'lodash'
 
-import { ACL } from '../constants/acl'
-
 import { DEFAULT_BRAND_PALETTE } from './constants'
 import flattenBrand from './flatten-brand'
 import { notDeleted } from './not-deleted'
@@ -67,87 +65,6 @@ export function isSoloActiveTeam(user: IUser | null): boolean {
   const team = getActiveTeam(user)
 
   return !!(team && team.brand && team.brand.member_count === 1)
-}
-
-export function hasUserAccess(
-  user: IUser | null,
-  access: IPermission,
-  accessControlPolicy: IAccessControlPolicy = 'ActiveTeam'
-): boolean {
-  if (user == null) {
-    return false
-  }
-
-  const team = getActiveTeam(user)
-
-  let brand: IBrand | null = team && team.brand
-
-  while (brand) {
-    const brandId = brand.id
-    const userTeam = (user.teams || []).find(team => team.brand.id === brandId)
-
-    if (
-      // If policy is Root, we only accept access if we have reached the root brand
-      (accessControlPolicy !== 'Root' || !brand.parent) &&
-      userTeam &&
-      (userTeam.acl || []).includes(access)
-    ) {
-      return true
-    }
-
-    // If policy is ActiveTeam, don't need to traverse the tree up
-    if (accessControlPolicy === 'ActiveTeam') {
-      break
-    }
-
-    brand = brand.parent
-  }
-
-  return false
-}
-
-export function hasUserAccessToDeals(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.DEALS) || isBackOffice(user)
-}
-
-export function hasUserAccessToCrm(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.CRM)
-}
-
-export function hasUserAccessToMarketingCenter(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.MARKETING)
-}
-
-export function hasUserAccessToAgentNetwork(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.AGENT_NETWORK)
-}
-
-export function hasUserAccessToWebsites(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.WEBSITES)
-}
-
-export function hasUserAccessToShowings(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.SHOWINGS)
-}
-
-export function isBackOffice(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.BACK_OFFICE)
-}
-
-export function isAdmin(user: IUser | null): boolean {
-  return hasUserAccess(user, ACL.ADMIN)
-}
-
-export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
-  const brand = getActiveBrand(user)
-
-  // Only brokerages should have brand settings
-  if (!brand || brand.brand_type !== 'Brokerage') {
-    return false
-  }
-
-  // User should be an admin and should have access to MC
-  return isAdmin(user) && hasUserAccessToMarketingCenter(user)
 }
 
 export function isActiveTeamTraining(user: IUser | null): boolean {
