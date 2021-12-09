@@ -129,7 +129,7 @@ export default function MakeVisibleToAdmin({
   })
 
   const validate = useCallback(() => {
-    const errors: Record<keyof FormValues, object | string> = {}
+    const errors: Record<keyof FormValues, any> = {}
 
     if (!deal) {
       return errors
@@ -151,7 +151,7 @@ export default function MakeVisibleToAdmin({
 
       if (!isCreated) {
         errors.roles = {
-          ...((errors.roles as object) || {}),
+          ...(errors.roles || {}),
           [requiredRole.role]: `${requiredRole.title} is required`
         }
       }
@@ -341,7 +341,7 @@ export default function MakeVisibleToAdmin({
                     render={({ onChange }) => (
                       <DealAddress
                         concurrentMode
-                        error={errors.address as string}
+                        error={errors.address}
                         skippable={false}
                         onChange={onChange}
                       />
@@ -399,7 +399,7 @@ export default function MakeVisibleToAdmin({
                       render={({ onChange }) => (
                         <DealContext
                           concurrentMode
-                          error={errors[context.key] as string}
+                          error={errors[context.key]}
                           context={context}
                           onChange={onChange}
                         />
