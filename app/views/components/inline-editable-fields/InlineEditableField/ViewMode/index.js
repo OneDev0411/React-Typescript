@@ -65,7 +65,7 @@ const useStyles = makeStyles(
 ViewMode.propTypes = {
   label: PropTypes.string,
   showAdd: PropTypes.bool,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   style: PropTypes.shape(),
   showEdit: PropTypes.bool,
   isPartner: PropTypes.bool,
@@ -248,7 +248,7 @@ export function ViewMode({
     if (showAdd) {
       actions.push(
         <div
-          key={`showEdit-${value}`}
+          key={`showAdd-${value}`}
           onClick={handleAddNew}
           className={classes.action}
         >
