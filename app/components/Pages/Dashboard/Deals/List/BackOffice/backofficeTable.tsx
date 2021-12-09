@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux'
 import { WithRouterProps } from 'react-router'
 
-import { useQueryParam } from '@app/hooks/use-query-param'
 import { selectUser } from '@app/selectors/user'
+import { goTo } from '@app/utils/go-to'
 import PageLayout from 'components/GlobalPageLayout'
 import { useBrandStatuses } from 'hooks/use-brand-statuses'
 import { getActiveTeamId } from 'utils/user-teams'
@@ -10,11 +10,10 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import TabFilters from './Filters'
 import Grid from './Grid'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
-import { useSearchQuery } from './hooks/use-search-query'
 import { useStyles } from './styles'
+import TabFilters from './TabFilters'
 import { SearchQuery, StateProps } from './types'
 
 export function BackofficeTable(props: WithRouterProps & StateProps) {
@@ -22,26 +21,33 @@ export function BackofficeTable(props: WithRouterProps & StateProps) {
   const user = useSelector(selectUser)
 
   const [statuses] = useBrandStatuses(getActiveTeamId(user)!)
-  const [searchCriteria, setSearchCriteria] = useQueryParam('q')
 
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
-    term: searchCriteria || ''
+    term: ''
   }
 
-  useSearchQuery(searchQuery, statuses)
+  // Redirect to Search tab onClick on the search box
+  const redirectToSearchTab = () => {
+    goTo('/dashboard/deals/filter/search?type=query')
+  }
 
   return (
     <PageLayout>
       <PageLayout.Header title="Deals Admin">
         <div className={classes.headerContainer}>
+          {
+            // The search box on this page is readonly and does not work actually.
+            // We redirect to the Search tab when users click the search box,
+            // so users can see the results in an appropriate tab
+          }
           <DebouncedSearchInput
+            onClick={redirectToSearchTab}
             placeholder="Search deals by address, MLS# or agent name..."
-            value={searchCriteria}
-            onChange={setSearchCriteria}
+            value=""
+            InputProps={{ readOnly: true }}
           />
-
           <ExportDeals />
         </div>
       </PageLayout.Header>

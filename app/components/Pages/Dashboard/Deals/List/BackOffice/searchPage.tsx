@@ -10,10 +10,10 @@ import { getActiveTeamId } from 'utils/user-teams'
 import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
-import TabFilters from './Filters'
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 import SearchTable from './SearchTable'
 import { useStyles } from './styles'
+import TabFilters from './TabFilters'
 import { SearchQuery, StateProps } from './types'
 
 export function SearchPage(props: WithRouterProps & StateProps) {
@@ -37,8 +37,8 @@ export function SearchPage(props: WithRouterProps & StateProps) {
             placeholder="Search deals by address, MLS# or agent name..."
             value={searchCriteria}
             onChange={setSearchCriteria}
+            autoFocus
           />
-
           <ExportDeals />
         </div>
       </PageLayout.Header>
