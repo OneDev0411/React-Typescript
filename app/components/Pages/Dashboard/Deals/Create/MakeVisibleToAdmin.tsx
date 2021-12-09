@@ -37,7 +37,6 @@ import {
   getBrandChecklistsById
 } from 'reducers/deals/brand-checklists'
 import { getDealChecklists } from 'reducers/deals/checklists'
-import { selectDealRoles } from 'reducers/deals/roles'
 import { selectUser } from 'selectors/user'
 
 import { Context } from './context'
@@ -49,6 +48,7 @@ import { getChangedRoles } from './helpers/get-changed-roles'
 import { getFormContexts } from './helpers/get-form-contexts'
 import { showStatusQuestion } from './helpers/show-status-question'
 import { useStatusList } from './hooks/use-brand-status-list'
+import { useDealRoles } from './hooks/use-deal-roles'
 import { useStyles } from './hooks/use-styles'
 
 type FormValues = {
@@ -82,9 +82,7 @@ export default function MakeVisibleToAdmin({
   const deal = useSelector<IAppState, IDeal>(({ deals }) =>
     selectDealById(deals.list, dealId)
   )
-  const dealRoles = useSelector<IAppState, IDealRole[]>(({ deals }) =>
-    selectDealRoles(deals.roles, deal)
-  )
+  const dealRoles = useDealRoles(deal)
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -187,10 +185,7 @@ export default function MakeVisibleToAdmin({
   const saveForm = async (values = control.getValues() as FormValues) => {
     setIsAutoPublishingDisabled(true)
 
-    const roles = ([] as IDealRole[]).concat(
-      values.selling_clients || [],
-      values.buying_clients || []
-    )
+    const { roles } = values
 
     try {
       setIsPublishing(true)
@@ -346,7 +341,7 @@ export default function MakeVisibleToAdmin({
                     render={({ onChange }) => (
                       <DealAddress
                         concurrentMode
-                        error={errors.address}
+                        error={errors.address as string}
                         skippable={false}
                         onChange={onChange}
                       />
@@ -362,6 +357,7 @@ export default function MakeVisibleToAdmin({
                       {requiredRoles.map(role => (
                         <DealRequiredRole
                           key={role.role}
+                          concurrentMode
                           role={role}
                           error={errors.roles?.[role.role]}
                           rolesList={value}
@@ -403,7 +399,7 @@ export default function MakeVisibleToAdmin({
                       render={({ onChange }) => (
                         <DealContext
                           concurrentMode
-                          error={errors[context.key]}
+                          error={errors[context.key] as string}
                           context={context}
                           onChange={onChange}
                         />

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { withRouter, Route, InjectedRouter } from 'react-router'
 import { useTitle } from 'react-use'
 
+import { useBrandPropertyTypeRoles } from '@app/hooks/use-brand-property-type-roles'
 import { createOffer, createRoles, upsertContexts } from 'actions/deals'
 import { normalizeForm as normalizeRole } from 'components/DealRole/helpers/normalize-form'
 import { QuestionWizard } from 'components/QuestionWizard'
@@ -24,10 +25,9 @@ import { goTo } from 'utils/go-to'
 
 import { Header } from './components/Header'
 import { Context } from './context'
-import { DealClient } from './form/DealClient'
-import { DealCoAgent } from './form/DealCoAgent'
 import { DealContext } from './form/DealContext'
 import { DealPrimaryAgent } from './form/DealPrimaryAgent'
+import { DealRequiredRole } from './form/DealRequiredRole'
 import { DealStatus } from './form/DealStatus'
 import { OfferEnderType } from './form/OfferEnderType'
 import { getChangedRoles } from './helpers/get-changed-roles'
@@ -63,22 +63,17 @@ function CreateOffer({ router, route, params }: Props) {
 
   const statusList = useDealStatuses(deal, 'Offer')
 
-  useEffect(() => {
-    router.setRouteLeaveHook(route, () => {
-      if (!isOfferCreated) {
-        return 'By canceling you will lose your work. Continue?'
-      }
-    })
-  }, [isOfferCreated, router, route])
-
-  useEffect(() => {
-    deal?.has_active_offer &&
-      !isCreatingOffer &&
-      goTo(`/dashboard/deals/${deal.id}`)
-  }, [deal?.has_active_offer, deal?.id, isCreatingOffer])
-
   const propertyType = deal?.property_type
   const roles = useDealRoles(deal)
+
+  /* extract required roles from property type's roles */
+  const requiredRoles = useBrandPropertyTypeRoles(
+    deal.property_type.label
+  ).requiredRoles.filter(
+    requiredRole =>
+      requiredRole.checklist_types.includes('Offer') &&
+      roles.some(dealRole => dealRole.role === requiredRole.role) === false
+  )
 
   const { checklists, brandChecklists } = useSelector(
     ({ deals }: IAppState) => ({
@@ -107,6 +102,20 @@ function CreateOffer({ router, route, params }: Props) {
       : []
   })
 
+  useEffect(() => {
+    router.setRouteLeaveHook(route, () => {
+      if (!isOfferCreated) {
+        return 'By canceling you will lose your work. Continue?'
+      }
+    })
+  }, [isOfferCreated, router, route])
+
+  useEffect(() => {
+    deal?.has_active_offer &&
+      !isCreatingOffer &&
+      goTo(`/dashboard/deals/${deal.id}`)
+  }, [deal?.has_active_offer, deal?.id, isCreatingOffer])
+
   const isAgentDoubleEnded = watch('context:ender_type') === 'AgentDoubleEnder'
   const isOfficeDoubleEnded =
     watch('context:ender_type') === 'OfficeDoubleEnder'
@@ -117,20 +126,23 @@ function CreateOffer({ router, route, params }: Props) {
   const createOfferChecklist = async () => {
     const values = control.getValues()
 
-    const clients = values.clients as IDealRole[]
-    const agents = [].concat(
-      values.primary_agent || [],
-      values.co_agents || []
-    ) as IDealRole[]
+    const rolesList: IDealRole[] = Object.values(
+      values.roles as Record<string, IDealRole>
+    )
+      .flat()
+      .filter(role => !!role)
 
     if (values['context:ender_type'] === 'AgentDoubleEnder') {
-      agents.push({
+      rolesList.push({
         ...(normalizeRole(sellerAgent!) as IDealRole),
         role: 'BuyerAgent'
       })
     }
 
-    const checklistName = clients.map(role => getLegalFullName(role)).join(', ')
+    const checklistName = rolesList
+      .filter(({ role }) => role === 'Buyer')
+      .map(role => getLegalFullName(role))
+      .join(', ')
 
     try {
       setIsCreatingOffer(true)
@@ -145,7 +157,7 @@ function CreateOffer({ router, route, params }: Props) {
 
       setIsOfferCreated(true)
 
-      const roles = agents.concat(clients).map(role => ({
+      const roles = rolesList.map(role => ({
         ...role,
         id: undefined,
         contact: undefined,
@@ -222,30 +234,38 @@ function CreateOffer({ router, route, params }: Props) {
           }}
           onFinish={createOfferChecklist}
         >
-          <Controller
-            name="clients"
-            control={control}
-            render={({ value = [], onChange }) => (
-              <DealClient
-                side="Buying"
-                propertyType={deal.property_type}
-                title={
-                  <div>
-                    Enter{' '}
-                    <span className={classes.brandedTitle}>
-                      {propertyType?.is_lease ? 'Tenant' : 'Buyer'}
-                    </span>{' '}
-                    information as shown on offer
-                  </div>
-                }
-                predefinedRoles={roles}
-                roles={value}
-                onChange={(role, type) =>
-                  onChange(getChangedRoles(value, role, type))
-                }
+          {requiredRoles.map(role => {
+            if (role.role === 'BuyerAgent') {
+              return null
+            }
+
+            return (
+              <Controller
+                key={role.role}
+                name={`roles[${role.role}]`}
+                control={control}
+                render={({ value = [], onChange }) => (
+                  <DealRequiredRole
+                    role={role}
+                    rolesList={value}
+                    dealSide={deal.deal_type}
+                    title={
+                      <>
+                        Enter{' '}
+                        <span className={classes.brandedTitle}>
+                          {role.title}s
+                        </span>{' '}
+                        information as shown on offer
+                      </>
+                    }
+                    onChange={(role, type) =>
+                      onChange(getChangedRoles(value, role, type))
+                    }
+                  />
+                )}
               />
-            )}
-          />
+            )
+          })}
 
           <Controller
             name="context:ender_type"
@@ -255,57 +275,34 @@ function CreateOffer({ router, route, params }: Props) {
             )}
           />
 
-          {!isAgentDoubleEnded && (
-            <Controller
-              name="primary_agent"
-              control={control}
-              render={({ value = [], onChange }) => (
-                <DealPrimaryAgent
-                  side="Buying"
-                  shouldPickRoleFromContacts={!isDoubleEnded}
-                  isCommissionRequired={isOfficeDoubleEnded}
-                  isOfficeDoubleEnded={isOfficeDoubleEnded}
-                  title={
-                    <div>
-                      Who is the{' '}
-                      <span className={classes.brandedTitle}>
-                        {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
-                      </span>
-                      ?
-                    </div>
-                  }
-                  roles={roles.concat(value)}
-                  onChange={(role, type) =>
-                    onChange(getChangedRoles(value, role, type))
-                  }
-                />
-              )}
-            />
-          )}
-
-          <Controller
-            name="co_agents"
-            control={control}
-            render={({ value = [], onChange }) => (
-              <DealCoAgent
-                side="Buying"
-                isCommissionRequired={isDoubleEnded}
-                title={
-                  <div>
-                    Who is the{' '}
-                    <span className={classes.brandedTitle}>
-                      Co {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
-                    </span>
-                    ?
-                  </div>
-                }
-                roles={roles.concat(value)}
-                onChange={(role, type) =>
-                  onChange(getChangedRoles(value, role, type))
-                }
+          {!isAgentDoubleEnded &&
+            requiredRoles.some(({ role }) => role === 'BuyerAgent') && (
+              <Controller
+                name="roles.BuyerAgent"
+                control={control}
+                render={({ value = [], onChange }) => (
+                  <DealPrimaryAgent
+                    side="Buying"
+                    shouldPickRoleFromContacts={!isDoubleEnded}
+                    isCommissionRequired={isOfficeDoubleEnded}
+                    isOfficeDoubleEnded={isOfficeDoubleEnded}
+                    title={
+                      <div>
+                        Who is the{' '}
+                        <span className={classes.brandedTitle}>
+                          {propertyType?.is_lease ? 'Tenant' : 'Buyer'} Agent
+                        </span>
+                        ?
+                      </div>
+                    }
+                    roles={roles.concat(value)}
+                    onChange={(role, type) =>
+                      onChange(getChangedRoles(value, role, type))
+                    }
+                  />
+                )}
               />
             )}
-          />
 
           {showStatusQuestion(deal, brandChecklists, 'contract_status') && (
             <Controller

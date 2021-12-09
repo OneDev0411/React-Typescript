@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Box } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 import DealRoleForm from 'components/DealRole/Form'
 import {
@@ -19,8 +19,10 @@ import { useStyles } from '../../hooks/use-styles'
 import type { IDealFormRole } from '../../types'
 
 interface Props {
+  concurrentMode?: boolean
   dealSide: IDeal['deal_type']
-  error: string
+  error?: string
+  title?: string | React.ReactNode
   role: IDealRoleDefinition
   rolesList: IDealRole[]
   onChange?: (role: IDealRole, type: 'create' | 'update' | 'delete') => void
@@ -29,8 +31,10 @@ interface Props {
 export function DealRequiredRole({
   role,
   error,
+  title,
   rolesList,
   dealSide,
+  concurrentMode = false,
   onChange
 }: Props) {
   const classes = useStyles()
@@ -41,7 +45,6 @@ export function DealRequiredRole({
   const [selectedRole, setSelectedRole] =
     useState<Nullable<Partial<IDealFormRole>>>(null)
 
-  const isPrimaryAgentRole = ['SellerAgent', 'BuyerAgent'].includes(role.role)
   const isCoAgentRole = ['CoSellerAgent', 'CoBuyerAgent'].includes(role.role)
 
   const handleUpsertRole = (role: IDealRole, type: 'create' | 'update') => {
@@ -54,6 +57,12 @@ export function DealRequiredRole({
     onChange?.(role, type)
   }
 
+  const handleNext = () => {
+    if (wizard.currentStep === step) {
+      wizard.next()
+    }
+  }
+
   const handleDeleteRole = (role: IDealRole) => {
     onChange?.(role, 'delete')
   }
@@ -61,8 +70,14 @@ export function DealRequiredRole({
   return (
     <QuestionSection error={error}>
       <QuestionTitle>
-        What's the{' '}
-        <span className={classes.brandedTitle}>{role.title}'s Legal Name</span>
+        {title || (
+          <>
+            What's the{' '}
+            <span className={classes.brandedTitle}>
+              {role.title}'s Legal Name
+            </span>
+          </>
+        )}
       </QuestionTitle>
 
       <QuestionForm>
@@ -109,13 +124,31 @@ export function DealRequiredRole({
             />
           )}
 
-          {!isPrimaryAgentRole && !isCoAgentRole && (
+          {!isCoAgentRole && (
             <ContactRoles
               placeholder={`Type ${role.title}`}
               onSelectRole={setSelectedRole}
             />
           )}
         </Box>
+
+        {!concurrentMode && !selectedRole && (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="flex-end"
+            mt={4}
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              disabled={rolesList.length === 0}
+              onClick={handleNext}
+            >
+              Continue
+            </Button>
+          </Box>
+        )}
       </QuestionForm>
     </QuestionSection>
   )
