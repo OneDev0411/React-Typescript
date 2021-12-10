@@ -18,6 +18,8 @@ import { DealsListFilters, DealsListPayload, DealsOrder } from '../../types'
 
 import { ClosingDateEditor } from './closingDateEditor'
 import { ClosingDateButton } from './closingDateEditor/button'
+import { ExecutedDateEditor } from './executedDate'
+import { ExecutedDateButton } from './executedDate/button'
 import { ExpirationDateEditor } from './expirationDateEditor'
 import { ExpirationDateButton } from './expirationDateEditor/button'
 import { ListDateEditor } from './listDateEditor'
@@ -127,6 +129,24 @@ export const Filters = () => {
               )}
             />
 
+            {/* contract date Filter  */}
+            <FilterButton
+              renderButton={({ onClick }) => (
+                <ExecutedDateButton
+                  filters={currentFilters}
+                  defaultFilters={systemDefaultFilters}
+                  onClick={onClick}
+                />
+              )}
+              renderDropdown={() => (
+                <ExecutedDateEditor
+                  filters={currentFilters}
+                  updateFilters={updateFilters}
+                  defaultFilters={systemDefaultFilters}
+                />
+              )}
+            />
+
             {/* Closing date Filter  */}
             <FilterButton
               renderButton={({ onClick }) => (
@@ -180,6 +200,7 @@ export const Filters = () => {
                 />
               )}
             />
+
             {/* Reset button  */}
             <Button
               className={classes.resetButton}

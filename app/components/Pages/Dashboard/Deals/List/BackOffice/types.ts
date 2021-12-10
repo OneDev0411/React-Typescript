@@ -18,6 +18,7 @@ export interface DealsListFilters {
     closing_date?: DealsListContext
     list_date?: DealsListContext
     expiration_date?: DealsListContext
+    contract_date?: DealsListContext
   }
 }
 
