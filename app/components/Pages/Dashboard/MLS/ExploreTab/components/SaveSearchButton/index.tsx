@@ -69,7 +69,7 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
 
   const onClickGotIt = () => {
     if (dontShow) {
-      dispatch(setUserSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, true))
+      dispatch(setUserSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1'))
     }
 
     setIsOpenHint(false)

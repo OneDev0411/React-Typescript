@@ -834,11 +834,10 @@ class Builder extends React.Component {
       return
     }
 
-    ev.preventDefault()
-
-    const text = ev.clipboardData.getData('text')
+    const text = ev.clipboardData.getData('text/plain')
 
     ev.target.ownerDocument.execCommand('insertText', false, text)
+    ev.preventDefault()
   }
 
   setTraits = model => {
