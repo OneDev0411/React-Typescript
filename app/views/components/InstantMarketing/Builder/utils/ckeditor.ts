@@ -228,9 +228,9 @@ export async function attachCKEditor(
       // @ts-ignore
       rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
 
-      // Paste plain text
+      // We should disable CKEditor's paste to prevent duplication of content
       rte.on('paste', e => {
-        e.data.dataValue = e.data.dataValue.replace(/<[^>]*>/g, '')
+        e.data.dataValue = ''
       })
 
       // Make click event propagate
