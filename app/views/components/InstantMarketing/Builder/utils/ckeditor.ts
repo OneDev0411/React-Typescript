@@ -186,7 +186,7 @@ export async function attachCKEditor(
 
   editor.setCustomRte({
     enable(el, rte) {
-      // If already exists we need to destory it
+      // If already exists we need to destroy it
       // Not doing this causes some errors in CKEditor emoji and table plugins
       if (rte && rte.status !== 'destroyed') {
         rte.destroy()
@@ -227,6 +227,11 @@ export async function attachCKEditor(
       // Init CKEditor
       // @ts-ignore
       rte = CKEDITOR.inline(el, { ...c.options, ...dynamicOptions })
+
+      // Paste plain text
+      rte.on('paste', e => {
+        e.data.dataValue = e.data.dataValue.replace(/<[^>]*>/g, '')
+      })
 
       // Make click event propagate
       rte.on('contentDom', () => {

@@ -210,12 +210,6 @@ class Builder extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.editor) {
-      const iframe = this.editor.Canvas.getBody()
-
-      iframe.removeEventListener('paste', this.iframePasteHandler)
-    }
-
     unloadJS('ckeditor')
   }
 
@@ -476,7 +470,6 @@ class Builder extends React.Component {
     this.setupFixToolbarPosition()
     this.disableAssetManager()
     this.makeTemplateCentered()
-    this.removeTextStylesOnPaste()
     this.disableDefaultDeviceManager()
     this.scrollSidebarToTopOnComponentSelect()
 
@@ -821,24 +814,6 @@ class Builder extends React.Component {
     }
 
     iframe.contentDocument.head.appendChild(style)
-  }
-
-  removeTextStylesOnPaste = () => {
-    const iframe = this.editor.Canvas.getBody()
-
-    iframe.addEventListener('paste', this.iframePasteHandler)
-  }
-
-  iframePasteHandler = ev => {
-    if (!ev.target.contentEditable) {
-      return
-    }
-
-    ev.preventDefault()
-
-    const text = ev.clipboardData.getData('text')
-
-    ev.target.ownerDocument.execCommand('insertText', false, text)
   }
 
   setTraits = model => {
