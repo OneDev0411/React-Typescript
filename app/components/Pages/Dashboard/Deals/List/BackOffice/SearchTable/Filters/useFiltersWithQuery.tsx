@@ -36,6 +36,11 @@ export const UseFiltersWithQuery = (): [
     setExpirationDateParamValue,
     removeExpirationDateParamValue
   ] = useReplaceQueryParam('expirationDate')
+  const [
+    contractDateParamValue,
+    setContractDateParamValue,
+    removeContractDateParamValue
+  ] = useReplaceQueryParam('contractDate')
 
   const [userFilters, setUserFilters] = useState<DealsListFilters>({
     ...DEALS_LIST_DEFAULT_FILTERS,
@@ -63,6 +68,11 @@ export const UseFiltersWithQuery = (): [
             expiration_date: parseRangeDateFilterString(
               expirationDateParamValue
             )
+          }
+        : {}),
+      ...(contractDateParamValue
+        ? {
+            contract_date: parseRangeDateFilterString(contractDateParamValue)
           }
         : {})
     }
@@ -110,6 +120,8 @@ export const UseFiltersWithQuery = (): [
   }, [userFilters.contexts.list_date])
 
   useEffect(() => {
+    console.log(userFilters.contexts.expiration_date)
+
     if (userFilters.contexts.expiration_date?.date) {
       setExpirationDateParamValue(
         stringifyRangeDateFilter(userFilters.contexts.expiration_date)
@@ -119,6 +131,19 @@ export const UseFiltersWithQuery = (): [
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userFilters.contexts.expiration_date])
+
+  useEffect(() => {
+    console.log(userFilters.contexts.contract_date)
+
+    if (userFilters.contexts.contract_date?.date) {
+      setContractDateParamValue(
+        stringifyRangeDateFilter(userFilters.contexts.contract_date)
+      )
+    } else {
+      removeContractDateParamValue()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userFilters.contexts.contract_date])
 
   return [userFilters, setUserFilters]
 }
