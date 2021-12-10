@@ -1,6 +1,8 @@
 // Widgets/Listings/index.js
 import React, { Component } from 'react'
 
+import { ZeroState } from 'partials/ZeroState'
+
 import ListingSection from './Partials/ListingSection'
 
 class ListingsWidget extends Component {
@@ -9,6 +11,16 @@ class ListingsWidget extends Component {
     listingsCount: {
       active: 0,
       sold: 0
+    },
+    noOptionProvided:
+      !this.props.location.query.brokerage &&
+      !this.props.location.query.agent &&
+      !this.props.location.query.brand
+  }
+
+  componentDidMount = () => {
+    if (this.state.noOptionProvided) {
+      console.error('Please provide either brokerage, agent or brand')
     }
   }
 
@@ -72,19 +84,29 @@ class ListingsWidget extends Component {
   render() {
     return (
       <div ref={ref => (this.parentDiv = ref)}>
-        <ListingSection
-          title="Exclusive Listings"
-          type="active"
-          updateHeight={this.updateHeight}
-          updateListingsCount={this.updateListingsCount}
-        />
-        <div className="clearfix" />
-        <ListingSection
-          title="Sold"
-          type="sold"
-          updateHeight={this.updateHeight}
-          updateListingsCount={this.updateListingsCount}
-        />
+        {this.state.noOptionProvided ? (
+          <ZeroState
+            imageUrl="/static/images/zero-state/agents-network.png"
+            title="An unexpected error happened!"
+            subTitle="For more information, contact the administrator."
+          />
+        ) : (
+          <>
+            <ListingSection
+              title="Exclusive Listings"
+              type="active"
+              updateHeight={this.updateHeight}
+              updateListingsCount={this.updateListingsCount}
+            />
+            <div className="clearfix" />
+            <ListingSection
+              title="Sold"
+              type="sold"
+              updateHeight={this.updateHeight}
+              updateListingsCount={this.updateListingsCount}
+            />
+          </>
+        )}
       </div>
     )
   }
