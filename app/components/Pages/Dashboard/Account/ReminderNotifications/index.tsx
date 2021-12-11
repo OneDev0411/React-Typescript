@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
 import { addNotification } from 'components/notification'
+import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { forcePushReminderNotificationSettings } from 'models/reminder-notifications/force-push-reminder-notification-settings'
 import {
   ReminderNotificationSetting,
@@ -16,12 +18,7 @@ import {
 import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectBrandContexts } from 'reducers/deals/contexts'
-import { selectUser } from 'selectors/user'
-import {
-  getActiveTeamId,
-  hasUserAccessToCrm,
-  hasUserAccessToDeals
-} from 'utils/user-teams'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 
 import Column from './components/Column'
 import { RENDER_FORCE_PUSH_BUTTON } from './constants'
@@ -33,8 +30,9 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 import { ColumnState } from './types'
 
 export default function ReminderNotifications() {
-  const store = useStore<IAppState>()
-  const user = useSelector(selectUser)
+  const activeBrandId = useActiveBrandId()
+  const activeTeam = useUnsafeActiveTeam()
+  const deals = useSelector((state: IAppState) => state.deals)
   const contactsAttributeDefs = useSelector(
     ({ contacts }: IAppState) => contacts.attributeDefs
   )
@@ -95,38 +93,29 @@ export default function ReminderNotifications() {
       const settings = await getSettings()
       const columns: ColumnState[] = []
 
-      if (hasUserAccessToDeals(user)) {
+      if (hasUserAccessToDeals(activeTeam)) {
         const dealContexts = await getDealContexts()
 
         columns.push(getDealColumn(dealContexts, settings))
       }
 
-      if (hasUserAccessToCrm(user)) {
+      if (hasUserAccessToCrm(activeTeam)) {
         columns.push(getContactColumn(contactsAttributeDefs, settings))
       }
 
       return columns
 
       async function getDealContexts(): Promise<readonly IDealBrandContext[]> {
-        const dealContexts = getDealContextsFromStore()
+        // const dealContexts = getDealContextsFromStore()
+        const dealContexts = selectBrandContexts(deals.contexts, activeBrandId)
 
         if (dealContexts) {
           return dealContexts
         }
 
-        const brandId = getActiveTeamId(user)
+        await dispatch(getContextsByBrand(activeBrandId))
 
-        await dispatch(getContextsByBrand(brandId))
-
-        return getDealContextsFromStore() ?? []
-
-        function getDealContextsFromStore():
-          | readonly IDealBrandContext[]
-          | undefined {
-          const { deals } = store.getState()
-
-          return selectBrandContexts(deals.contexts, getActiveTeamId(user))
-        }
+        return dealContexts ?? []
       }
     }
   })
