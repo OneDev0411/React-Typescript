@@ -2,10 +2,10 @@
 /* eslint-disable max-len */
 const path = require('path')
 
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const Webpackbar = require('webpackbar')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 const env = process.env.NODE_ENV || 'development'
 const __DEV__ = env === 'development'

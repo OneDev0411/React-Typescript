@@ -1,18 +1,20 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { PageTabs, TabLink } from 'components/PageTabs'
-import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/user-teams'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
+import { hasUserAccessToCrm, hasUserAccessToDeals } from 'utils/acl'
 
+type IsHiddenType = { team: Nullable<IUserTeam>; user?: IUser }
 interface ItemsShape {
   label: string
   to: string
-  isHidden?: (user: IUser) => boolean
-  component?: React.ReactNode
+  isHidden?: (param: IsHiddenType) => boolean
+  component?: ReactNode
 }
 
-const hasNotAccessToCRM = user => !hasUserAccessToCrm(user)
+const hasNotAccessToCRM = ({ team }: IsHiddenType) => !hasUserAccessToCrm(team)
 
 const tabs: ItemsShape[] = [
   {
@@ -22,7 +24,7 @@ const tabs: ItemsShape[] = [
   {
     label: 'Upgrade to agent',
     to: '/dashboard/account/upgrade',
-    isHidden: user => user.user_type === 'Agent'
+    isHidden: ({ user }) => user?.user_type === 'Agent'
   },
   {
     label: 'Manage Tags',
@@ -47,7 +49,8 @@ const tabs: ItemsShape[] = [
   {
     label: 'Reminder Notifications',
     to: '/dashboard/account/reminder-notifications',
-    isHidden: user => !hasUserAccessToDeals(user) || hasNotAccessToCRM(user)
+    isHidden: ({ team }: IsHiddenType) =>
+      !hasUserAccessToDeals(team) || hasNotAccessToCRM({ team })
   },
   {
     label: 'Calendar Export',
@@ -61,6 +64,7 @@ interface Props {
 }
 
 export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
+  const activeTeam = useUnsafeActiveTeam()
   const currentUrl = location.pathname
   const matchingTabs = tabs.filter(({ to }) => currentUrl.startsWith(to))
   const matchingTab = matchingTabs.sort((a, b) => b.to.length - a.to.length)[0]
@@ -69,7 +73,9 @@ export const SettingsTabs = ({ user, location }: Props & WithRouterProps) => {
     <PageTabs
       defaultValue={matchingTab.to}
       tabs={tabs
-        .filter(({ isHidden }) => !isHidden || !isHidden(user))
+        .filter(
+          ({ isHidden }) => !isHidden || !isHidden({ team: activeTeam, user })
+        )
         .map(({ label, to }, i) => (
           <TabLink key={i} label={label} to={to} value={to} />
         ))}
