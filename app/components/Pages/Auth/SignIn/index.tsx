@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import * as Sentry from '@sentry/react'
 import { Location } from 'history'
 import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
+
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import * as actionsType from '../../../../constants/auth/signin'
 import signin from '../../../../models/auth/signin'
@@ -24,6 +26,7 @@ interface Props {
 
 export default function Signin(props: Props) {
   const dispatch = useDispatch()
+  const activeTeam = useUnsafeActiveTeam()
   const brand = useSelector((state: IAppState) => state.brand)
 
   const [username, setUsername] = useState<string>(
@@ -112,7 +115,7 @@ export default function Signin(props: Props) {
         })
       })
 
-      const defaultHomePage = getUserDefaultHomepage(user)
+      const defaultHomePage = getUserDefaultHomepage(activeTeam)
 
       if (redirectTo && redirectTo.includes('http')) {
         browserHistory.push('/branch?waitingForRedirect')
