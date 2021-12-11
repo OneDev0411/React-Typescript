@@ -17,9 +17,7 @@ import Menu from './components/Menu'
 import { useGlobalActionContext } from './hooks/use-global-action-context'
 import { Item, ItemType } from './types'
 
-interface Props {}
-
-export const GlobalActions = (props: Props) => {
+export const GlobalActions = () => {
   const activeTeam = useUnsafeActiveTeam()
   const user = useSelector(selectUserUnsafe)
   const [state] = useGlobalActionContext()
