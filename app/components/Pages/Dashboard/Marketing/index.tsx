@@ -3,7 +3,6 @@ import { useMemo, memo } from 'react'
 import { Tooltip, IconButton, makeStyles } from '@material-ui/core'
 import { mdiCogOutline } from '@mdi/js'
 import { Helmet } from 'react-helmet'
-import { useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
 import { useMarketingTemplateTypesWithMediums } from '@app/hooks/use-marketing-template-types-with-mediums'
@@ -14,12 +13,12 @@ import Acl from 'components/Acl'
 import PageLayout from 'components/GlobalPageLayout'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { useActiveBrandId } from 'hooks/brand/use-active-brand-id'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { useMarketingCenterMediums } from 'hooks/use-marketing-center-mediums'
 import { useMarketingCenterSections } from 'hooks/use-marketing-center-sections'
-import { selectUser } from 'selectors/user'
+import { hasUserAccessToBrandSettings } from 'utils/acl'
 import { goTo } from 'utils/go-to'
 import { isTemplateInstance } from 'utils/marketing-center/helpers'
-import { hasUserAccessToBrandSettings } from 'utils/user-teams'
 
 import { useTemplates } from './hooks/use-templates'
 import Tabs from './Tabs'
@@ -57,8 +56,8 @@ export function MarketingLayout({
     { templateId?: UUID }
   >) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
   const activeBrandId = useActiveBrandId()
-  const user = useSelector(selectUser)
 
   const { params, router, location } = props
   const sections = useMarketingCenterSections(params)
@@ -88,7 +87,7 @@ export function MarketingLayout({
     })
   }, [currentMedium, templateTypes, templates])
 
-  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
 
   const onSelectTemplate = (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance

@@ -11,9 +11,10 @@ import {
 import { mdiLogoutVariant, mdiCogOutline } from '@mdi/js'
 import { browserHistory } from 'react-router'
 
-import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
+import { hasUserAccessToBrandSettings } from '@app/utils/acl'
 import Acl from '@app/views/components/Acl'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { noop } from 'utils/helpers'
 
 import { ActiveTeam } from './ActiveTeam'
@@ -49,18 +50,15 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  user: IUser
   onClose?: () => void
   showChecklists: boolean
 }
 
-export function UserMenuContent({
-  user,
-  showChecklists,
-  onClose = noop
-}: Props) {
+export function UserMenuContent({ showChecklists, onClose = noop }: Props) {
   const classes = useStyles()
-  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
+  const activeTeam = useUnsafeActiveTeam()
+
+  const hasAccessToBrandSettings = hasUserAccessToBrandSettings(activeTeam)
 
   const onClick = (path: string) => {
     onClose()
@@ -73,7 +71,7 @@ export function UserMenuContent({
 
       <List disablePadding>
         <Acl.Admin>
-          {user.teams && user.teams.length > 1 && (
+          {activeTeam && (
             <ListSubheader className={classes.ListSubheader}>
               Team Settings
             </ListSubheader>

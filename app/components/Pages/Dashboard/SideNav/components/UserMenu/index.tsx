@@ -84,7 +84,6 @@ export function UserMenu({ user }: { user: IUserState }) {
         }}
       >
         <UserMenuContent
-          user={user}
           onClose={handleClose}
           showChecklists={checklists ? checklists.length > 0 : false}
         />
