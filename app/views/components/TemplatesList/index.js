@@ -299,21 +299,23 @@ function TemplatesList(props) {
         }}
       />
 
-      <TemplateAction
-        type={props.type}
-        medium={props.medium}
-        isEdit={isEditActionTriggered}
-        isTriggered={isActionTriggered}
-        setTriggered={value => {
-          setActionTriggered(value)
-          setSelectedTemplate(null)
+      {selectedTemplate && !isBrandAsset(selectedTemplate) && (
+        <TemplateAction
+          type={props.type}
+          medium={props.medium}
+          isEdit={isEditActionTriggered}
+          isTriggered={isActionTriggered}
+          setTriggered={value => {
+            setActionTriggered(value)
+            setSelectedTemplate(null)
 
-          setPreviewModalOpen(false)
-          props.onSelect && props.onSelect(null)
-        }}
-        setEditActionTriggered={setEditActionTriggered}
-        selectedTemplate={selectedTemplate}
-      />
+            setPreviewModalOpen(false)
+            props.onSelect && props.onSelect(null)
+          }}
+          setEditActionTriggered={setEditActionTriggered}
+          selectedTemplate={selectedTemplate}
+        />
+      )}
     </div>
   )
 }
