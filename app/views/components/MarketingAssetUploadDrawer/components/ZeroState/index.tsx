@@ -13,7 +13,7 @@ import {
   mdiFileImageOutline,
   mdiFileDocumentOutline
 } from '@mdi/js'
-import { useDropzone } from 'dropzone'
+import { useDropzone, FileRejection } from 'dropzone'
 
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -41,19 +41,15 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  onUpload: (files: File[]) => Promise<void>
+  onUpload: (files: File[], rejections: FileRejection[]) => Promise<void>
 }
 
 export default function ZeroState({ onUpload }: Props) {
   const classes = useStyles()
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length === 0) {
-        return
-      }
-
-      onUpload(acceptedFiles)
+    (acceptedFiles: File[], rejections: FileRejection[]) => {
+      onUpload(acceptedFiles, rejections)
     },
     [onUpload]
   )

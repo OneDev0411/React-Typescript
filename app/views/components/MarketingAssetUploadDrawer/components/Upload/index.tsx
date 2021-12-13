@@ -2,9 +2,11 @@ import { useCallback } from 'react'
 
 import { Grid, Box, Typography, makeStyles } from '@material-ui/core'
 import { mdiImageMultipleOutline } from '@mdi/js'
-import { useDropzone } from 'dropzone'
+import { useDropzone, FileRejection } from 'dropzone'
+import pluralize from 'pluralize'
 import { useFormContext, Controller } from 'react-hook-form'
 
+import useNotify from '@app/hooks/use-notify'
 import { readFileAsDataUrl } from '@app/utils/file-utils/read-file-as-data-url'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
@@ -48,15 +50,34 @@ export default function Upload({
   uploadProgress
 }: Props) {
   const classes = useStyles()
+  const notify = useNotify()
   const { setValue, watch, formState, control } =
     useFormContext<AssetsUploadFormData>()
 
   const assets = watch('assets')
 
   const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      if (acceptedFiles.length === 0) {
+    async (acceptedFiles: File[], rejections: FileRejection[]) => {
+      // All files are invalid
+      if (acceptedFiles.length === 0 && rejections.length > 0) {
+        notify({
+          status: 'error',
+          message: 'Only images, videos, and PDFs are allowed.'
+        })
+
         return
+      }
+
+      // Some files are invalid
+      if (rejections.length > 0) {
+        notify({
+          status: 'warning',
+          message: `${pluralize(
+            'file',
+            rejections.length,
+            true
+          )} rejected. Only images, videos, and PDFs are allowed.`
+        })
       }
 
       const preSelectedTemplateType =
@@ -87,7 +108,13 @@ export default function Upload({
 
       setValue('assets', newAssets)
     },
-    [setValue, assets, defaultSelectedTemplateType, defaultSelectedMedium]
+    [
+      setValue,
+      assets,
+      notify,
+      defaultSelectedTemplateType,
+      defaultSelectedMedium
+    ]
   )
 
   const handleUpdateAsset = useCallback(
