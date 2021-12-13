@@ -7,7 +7,9 @@ import Fetch from '../../../services/fetch'
 */
 export async function getActiveTeam(): Promise<IUserTeam> {
   try {
-    const response = await new Fetch().get('/users/self/active-role')
+    const response = await new Fetch().get('/users/self/active-role').query({
+      associations: ['brand.roles']
+    })
 
     return response.body.data
   } catch (e) {
