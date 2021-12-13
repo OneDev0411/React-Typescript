@@ -8,9 +8,7 @@ import { BaseTreeViewProps } from './type'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
-    }
+    container: {}
   }),
   { name: 'TreeView' }
 )

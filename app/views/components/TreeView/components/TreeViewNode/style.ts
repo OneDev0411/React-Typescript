@@ -2,25 +2,11 @@ import { makeStyles, Theme } from '@material-ui/core'
 
 export const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {
-      position: 'relative',
-      paddingLeft: theme.spacing(2),
-      '&::before': {
-        position: 'absolute',
-        top: theme.spacing(2.25),
-        left: 0,
-        content: "''",
-        zIndex: 0,
-        width: theme.spacing(2),
-        height: '1px',
-        borderBottom: `1px dashed ${theme.palette.action.disabledBackground}`
-      }
-    },
+    container: {},
     contentContainer: {
       display: 'flex',
       alignItems: 'center',
-      // paddingLeft: theme.spacing(3),
-      // marginLeft: theme.spacing(2),
+      padding: theme.spacing(0, 1),
       ...theme.typography.body2
     },
     selectableContentContainer: {
@@ -51,18 +37,17 @@ export const useStyles = makeStyles(
       }
     },
     isExpanded: {
-      position: 'relative',
-
-      '&::before': {
-        position: 'absolute',
-        top: '50%',
-        left: 0,
-        content: "''",
-        zIndex: 0,
-        width: '1px',
-        height: '1rem',
-        borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
-      }
+      // position: 'relative',
+      // '&::before': {
+      //   position: 'absolute',
+      //   top: '50%',
+      //   left: 0,
+      //   content: "''",
+      //   zIndex: 0,
+      //   width: '1px',
+      //   height: '1rem',
+      //   borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
+      // }
     },
     expandArrow: {
       fill: 'currentColor',
@@ -71,8 +56,8 @@ export const useStyles = makeStyles(
     },
     childrenContainer: {
       // background: 'red',
-      borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
-      // marginLeft: theme.spacing(3)
+      borderLeft: `1px solid ${theme.palette.action.disabledBackground}`,
+      marginLeft: theme.spacing(3)
     },
     content: {
       order: 0,
