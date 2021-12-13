@@ -87,6 +87,14 @@ function TemplateAction(props) {
   if (
     props.selectedTemplate &&
     isBrandAsset(props.selectedTemplate) &&
+    !props.isTriggered
+  ) {
+    return null
+  }
+
+  if (
+    props.selectedTemplate &&
+    isBrandAsset(props.selectedTemplate) &&
     props.isTriggered
   ) {
     return (
