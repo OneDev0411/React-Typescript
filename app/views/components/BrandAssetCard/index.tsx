@@ -65,6 +65,10 @@ const useStyles = makeStyles(
     imageThumbnail: {
       width: '100%',
       objectFit: 'cover'
+    },
+    videoThumbnail: {
+      width: '100%',
+      zIndex: 2
     }
   }),
   {
@@ -87,7 +91,12 @@ export default function BrandAssetCard({ asset, actions, onClick }: Props) {
     }
 
     if (asset.file.url.endsWith('.mp4')) {
-      return <VideoThumbnail url={asset.file.url} />
+      return (
+        <VideoThumbnail
+          url={asset.file.url}
+          className={classes.videoThumbnail}
+        />
+      )
     }
 
     return (
