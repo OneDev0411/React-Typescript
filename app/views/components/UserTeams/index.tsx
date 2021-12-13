@@ -5,8 +5,10 @@ import pluralize from 'pluralize'
 
 import Drawer from 'components/OverlayDrawer'
 import { SearchContext } from 'components/TextWithHighlights'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { getAgents } from 'models/Deal/agent'
-import { getBrandUsers, isBackOffice, getActiveTeam } from 'utils/user-teams'
+import { isBackOffice } from 'utils/acl'
+import { getBrandUsers } from 'utils/user-teams'
 
 import Search from './Search'
 import Team from './Team'
@@ -35,28 +37,21 @@ export default function UserTeams({
   const [filteredBrandsWithMembers, setFilteredBrandsWithMembers] = useState<
     BrandWithMembers[]
   >([])
+  const activeTeam = useUnsafeActiveTeam()
   const [selectedBrands, setSelectedBrands] = useState<UUID[]>([])
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     async function fetchBrandsWithMembers() {
-      if (!user.teams) {
+      if (!activeTeam || !user.teams) {
         setBrandsWithMembers([])
 
         return
       }
 
       // We should send a req and get all child brands if the user is BO
-      if (isBackOffice(user)) {
-        const activeTeam = getActiveTeam(user)
-
-        if (!activeTeam) {
-          setBrandsWithMembers([])
-
-          return
-        }
-
+      if (isBackOffice(activeTeam)) {
         const allAccessibleBrands: IBrand[] = await getAgents(
           activeTeam.brand.id
         )
@@ -86,7 +81,7 @@ export default function UserTeams({
     }
 
     fetchBrandsWithMembers()
-  }, [user, user.teams])
+  }, [activeTeam, user, user.teams])
 
   useEffect(() => {
     if (!searchQuery) {

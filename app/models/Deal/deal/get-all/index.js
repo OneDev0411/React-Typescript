@@ -1,3 +1,5 @@
+import { ACL } from '@app/constants/acl'
+
 import Fetch from '../../../../services/fetch'
 import { getActiveTeamId, getActiveTeamACL } from '../../../../utils/user-teams'
 
@@ -8,8 +10,8 @@ export async function getAll(user) {
   const { access_token } = user
   const brandId = getActiveTeamId(user)
   const acl = getActiveTeamACL(user)
-  const isBackOffice = acl.includes('BackOffice')
-  const isAgent = acl.includes('Deals')
+  const isBackOffice = acl.includes(ACL.BACK_OFFICE)
+  const isAgent = acl.includes(ACL.DEALS)
 
   const hasAccess = isAgent || isBackOffice
 

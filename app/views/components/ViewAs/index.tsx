@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux'
 import { useUnsafeActiveTeam, useActiveTeamAvailableMembers } from 'hooks/team'
 import { getContactNameInitials } from 'models/contacts/helpers'
 import { selectUser } from 'selectors/user'
-
-import { viewAs, isBackOffice } from '../../../utils/user-teams'
+import { isBackOffice } from 'utils/acl'
+import { viewAs } from 'utils/user-teams'
 
 import { MemberList } from './components/List'
 
@@ -33,11 +33,11 @@ interface Props {
 export const ViewAs = ({ containerStyle }: Props) => {
   const classes = useStyles()
   const user: IUser = useSelector(selectUser)
-  const team: Nullable<IUserTeam> = useUnsafeActiveTeam()
+  const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
   const teamMembers: IUser[] = useActiveTeamAvailableMembers()
   const initialSelectedMembers: UUID[] = useMemo(
-    () => viewAs(user, true, team),
-    [team, user]
+    () => viewAs(user, true, activeTeam),
+    [activeTeam, user]
   )
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
     initialSelectedMembers
@@ -91,7 +91,7 @@ export const ViewAs = ({ containerStyle }: Props) => {
     })
   }
 
-  if (isBackOffice(user) || teamMembers.length === 1) {
+  if (isBackOffice(activeTeam) || teamMembers.length === 1) {
     return null
   }
 
