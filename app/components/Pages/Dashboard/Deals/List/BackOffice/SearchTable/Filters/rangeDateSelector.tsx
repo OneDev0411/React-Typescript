@@ -15,6 +15,12 @@ import DayPicker from 'react-day-picker/DayPicker'
 import { DATE_FORMAT } from '../../constants'
 import { TDateRange } from '../../types'
 
+import {
+  getUtcFirstMomentOfDay,
+  getUtcLastMomentOfDay,
+  utcToDate
+} from './utils'
+
 export const useStyles = makeStyles(
   theme => ({
     to: {
@@ -64,8 +70,8 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
   const fromInputRef = useRef<HTMLInputElement>(null)
   const toInputRef = useRef<HTMLInputElement>(null)
 
-  const to = value?.to ? new Date(value.to) : undefined
-  const from = value?.from ? new Date(value.from) : undefined
+  const to = value?.to ? utcToDate(value.to) : undefined
+  const from = value?.from ? utcToDate(value.from) : undefined
 
   const handleChangeFrom = useCallback(
     (day: Date) => {
@@ -73,15 +79,16 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
       setIsToDialogOpen(true)
 
       // Set time of from date to 00:00:00:0000
-      const firstMomentOfFromDay = day
-        ? new Date(day.setHours(0, 0, 0, 0))
-        : undefined
+      const firstMomentOfFromDay = day ? getUtcFirstMomentOfDay(day) : undefined
+
+      // Set time of to date to 23:59:59:999
+      const lastMomentOfToDay = to ? getUtcLastMomentOfDay(to) : undefined
+
+      console.log({ firstMomentOfFromDay, lastMomentOfToDay })
 
       onChange({
-        from: firstMomentOfFromDay
-          ? firstMomentOfFromDay.toISOString()
-          : undefined,
-        to: to ? to.toISOString() : undefined
+        from: firstMomentOfFromDay,
+        to: lastMomentOfToDay
       })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,13 +100,18 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
       setIsToDialogOpen(false)
 
       // Set time of to date to 23:59:59:999
-      const lastMomentOfToDay = day
-        ? new Date(day.setHours(23, 59, 59, 999))
+      const lastMomentOfToDay = day ? getUtcLastMomentOfDay(day) : undefined
+
+      // Set time of from date to 00:00:00:0000
+      const firstMomentOfFromDay = from
+        ? getUtcFirstMomentOfDay(from)
         : undefined
 
+      console.log({ firstMomentOfFromDay, lastMomentOfToDay })
+
       onChange({
-        from: from ? from.toISOString() : undefined,
-        to: lastMomentOfToDay ? lastMomentOfToDay.toISOString() : undefined
+        from: firstMomentOfFromDay,
+        to: lastMomentOfToDay
       })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

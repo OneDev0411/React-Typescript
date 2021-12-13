@@ -120,8 +120,6 @@ export const UseFiltersWithQuery = (): [
   }, [userFilters.contexts.list_date])
 
   useEffect(() => {
-    console.log(userFilters.contexts.expiration_date)
-
     if (userFilters.contexts.expiration_date?.date) {
       setExpirationDateParamValue(
         stringifyRangeDateFilter(userFilters.contexts.expiration_date)
@@ -133,8 +131,6 @@ export const UseFiltersWithQuery = (): [
   }, [userFilters.contexts.expiration_date])
 
   useEffect(() => {
-    console.log(userFilters.contexts.contract_date)
-
     if (userFilters.contexts.contract_date?.date) {
       setContractDateParamValue(
         stringifyRangeDateFilter(userFilters.contexts.contract_date)
