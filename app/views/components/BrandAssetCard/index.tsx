@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 
 import { makeStyles } from '@material-ui/core'
-import VideoImageThumbnail from 'react-video-thumbnail-image'
 
 import { PdfThumbnail } from '../PdfThumbnail'
+import { VideoThumbnail } from '../VideoThumbnail'
 
 const useStyles = makeStyles(
   theme => ({
@@ -87,7 +87,7 @@ export default function BrandAssetCard({ asset, actions, onClick }: Props) {
     }
 
     if (asset.file.url.endsWith('.mp4')) {
-      return <VideoImageThumbnail videoUrl={asset.file.url} alt={asset.label} />
+      return <VideoThumbnail url={asset.file.url} />
     }
 
     return (

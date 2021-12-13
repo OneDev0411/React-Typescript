@@ -1,11 +1,11 @@
-import { memo } from 'react'
-
-import VideoImageThumbnail from 'react-video-thumbnail-image'
-
 interface Props {
   url: string
 }
 
-export const VideoThumbnail = memo(({ url }: Props) => {
-  return <VideoImageThumbnail videoUrl={url} />
-})
+export function VideoThumbnail({ url }: Props) {
+  return (
+    <video autoPlay muted controls={false}>
+      <source src={url} />
+    </video>
+  )
+}

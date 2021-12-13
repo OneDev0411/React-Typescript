@@ -27,16 +27,12 @@ const useStyles = makeStyles(
   theme => ({
     thumbnailContainer: {
       maxWidth: '100%',
-      '& img': {
+      '& img, & video': {
         pointerEvents: 'none',
         width: '100%',
         objectFit: 'cover',
         height: theme.spacing(14),
         borderRadius: theme.shape.borderRadius
-      },
-      '& video, & canvas': {
-        pointerEvents: 'none',
-        display: 'none'
       }
     },
     deleteContainer: {
