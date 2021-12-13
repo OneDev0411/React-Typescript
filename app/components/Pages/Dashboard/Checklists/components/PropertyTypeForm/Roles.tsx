@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button, Grid, Theme, makeStyles, useTheme } from '@material-ui/core'
 import matchSorter from 'match-sorter'
@@ -37,7 +37,16 @@ export function Roles({ control }: Props) {
     useState<IDealRoleDefinition[]>(dealRolesList)
 
   const roles = watch('roles')
-  const defaultRoles = getDefaultRoles(watch('is_lease'))
+  const isLease = watch('is_lease')
+  const defaultRoles = getDefaultRoles(isLease)
+
+  useEffect(() => {
+    setRolesList(
+      dealRolesList.filter(role =>
+        role.transaction_type.includes(isLease ? 'Lease' : 'Sale')
+      )
+    )
+  }, [isLease, dealRolesList])
 
   const handleSearch = (value: string) => {
     const newList = value
