@@ -4,7 +4,7 @@ import { selectUser } from '@app/selectors/user'
 import { useBrandPropertyTypes } from 'hooks/use-get-brand-property-types'
 import { getActiveTeamId } from 'utils/user-teams'
 
-export function useBrandPropertyTypeRoles(propertyType: IDealPropertyTypes) {
+export function useBrandPropertyTypeRoles(propertyType?: IDealPropertyTypes) {
   const user = useSelector(selectUser)
   const activeTeamId = getActiveTeamId(user)
   const { propertyTypes } = useBrandPropertyTypes(activeTeamId)

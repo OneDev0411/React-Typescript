@@ -22,7 +22,7 @@ interface Props {
 export function Roles({ meta, input, deal, isAllowedRole }: Props) {
   const role = input.value
   const { dealRolesByName } = useDealsRolesContext()
-  const { roles } = useBrandPropertyTypeRoles(deal.property_type.label)
+  const { roles } = useBrandPropertyTypeRoles(deal?.property_type?.label)
 
   const options = useMemo(() => {
     let options: RoleOption[] = roles
