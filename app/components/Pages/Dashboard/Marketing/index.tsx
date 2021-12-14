@@ -97,10 +97,6 @@ export function MarketingLayout({
     isLoading: isLoadingTemplates,
     deleteTemplate
   } = useTemplates(activeBrand)
-  const mediums = useMarketingCenterMediums(templates)
-
-  const templateTypesWithMediums =
-    useMarketingTemplateTypesWithMediums(templates)
 
   const currentMedium = params.medium
   const {
@@ -115,6 +111,10 @@ export function MarketingLayout({
       : [],
     mediums: [currentMedium]
   })
+  const mediums = useMarketingCenterMediums(templates, assets)
+
+  const templateTypesWithMediums =
+    useMarketingTemplateTypesWithMediums(templates)
 
   const isLoading = isLoadingTemplates || isLoadingBrandAssets
 
