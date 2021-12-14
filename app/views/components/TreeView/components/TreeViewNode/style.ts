@@ -29,11 +29,7 @@ export const useStyles = makeStyles(
       borderRadius: '100%',
       outline: 'none',
       color: theme.palette.grey[600],
-      '&:hover': {
-        color: theme.palette.primary.main,
-        background: theme.palette.grey[300]
-      },
-      '&:focus': {
+      '&:hover, &:focus': {
         color: theme.palette.primary.main
       }
     },

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import { Component, Fragment } from 'react'
 
 import { connect } from 'react-redux'
 
@@ -7,11 +7,11 @@ import { BulkEmailComposeDrawer } from 'components/EmailCompose'
 import InstantMarketing from 'components/InstantMarketing'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
 import getTemplateInstancePreviewImage from 'components/InstantMarketing/helpers/get-template-preview-image'
-import hasMarketingAccess from 'components/InstantMarketing/helpers/has-marketing-access'
 import { attachDealDataToListing } from 'components/SearchListingDrawer/helpers/attach-deal-to-listing'
 import getMockListing from 'components/SearchListingDrawer/helpers/get-mock-listing'
 import { createTemplateInstance } from 'models/instant-marketing/create-template-instance'
 import Listing from 'models/listings/listing'
+import { hasUserAccessToMarketingCenter } from 'utils/acl'
 
 import SocialDrawer from '../../components/SocialDrawer'
 import { getTemplateTypes } from '../../helpers/get-template-types'
@@ -28,7 +28,7 @@ const initialState = {
   isGettingTemplateInstance: false
 }
 
-class SendDealPromotion extends React.Component {
+class SendDealPromotion extends Component {
   state = {
     ...initialState,
     owner: this.props.user
@@ -171,9 +171,9 @@ class SendDealPromotion extends React.Component {
 
   render() {
     const { listing } = this.state
-    const { user } = this.props
+    const { user, activeTeam } = this.props
 
-    if (hasMarketingAccess(user) === false) {
+    if (!hasUserAccessToMarketingCenter(activeTeam)) {
       return null
     }
 
@@ -227,9 +227,10 @@ class SendDealPromotion extends React.Component {
   }
 }
 
-function mapStateToProps({ user }) {
+function mapStateToProps({ user, activeTeam = null }) {
   return {
-    user
+    user,
+    activeTeam
   }
 }
 
