@@ -4,6 +4,7 @@ import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import useNotify from '@app/hooks/use-notify'
 import { uploadBrandAsset } from '@app/models/brand/upload-asset'
 import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
@@ -24,6 +25,7 @@ export default function MarketingAssetUploadDrawer({
   onClose
 }: Props) {
   const confirmation = useContext(ConfirmationModalContext)
+  const notify = useNotify()
   const [activeStep, setActiveStep] = useState<DrawerStep>('teams')
   const [uploadProgress, setUploadProgress] = useState<number[]>([])
   const formMethods = useForm<AssetsUploadFormData>({
@@ -39,39 +41,48 @@ export default function MarketingAssetUploadDrawer({
   const handleUploadAssets = async (data: AssetsUploadFormData) => {
     setUploadProgress(data.assets.map(() => 0))
 
-    const uploadedAssets = await Promise.all(
-      data.assets.map((asset, index) => {
-        return uploadBrandAsset(
-          data.brands,
-          asset.file.object,
-          {
-            label: asset.label,
-            template_type: asset.templateType,
-            medium: asset.medium
-          },
-          progressEvent => {
-            if (
-              progressEvent.direction !== 'upload' ||
-              !progressEvent.percent
-            ) {
-              return
-            }
+    try {
+      const uploadedAssets = await Promise.all(
+        data.assets.map((asset, index) => {
+          return uploadBrandAsset(
+            data.brands,
+            asset.file.object,
+            {
+              label: asset.label,
+              template_type: asset.templateType,
+              medium: asset.medium
+            },
+            progressEvent => {
+              if (
+                progressEvent.direction !== 'upload' ||
+                !progressEvent.percent
+              ) {
+                return
+              }
 
-            setUploadProgress(uploadProgress => {
-              return [
-                ...uploadProgress.slice(0, index),
-                progressEvent.percent!,
-                ...uploadProgress.slice(index + 1)
-              ]
-            })
-          }
-        )
+              setUploadProgress(uploadProgress => {
+                return [
+                  ...uploadProgress.slice(0, index),
+                  progressEvent.percent!,
+                  ...uploadProgress.slice(index + 1)
+                ]
+              })
+            }
+          )
+        })
+      )
+
+      onClose(uploadedAssets)
+    } catch (error) {
+      console.error(error)
+      notify({
+        status: 'error',
+        message:
+          'Something went wrong while uploading your assets. Please try again.'
       })
-    )
+    }
 
     setUploadProgress([])
-
-    onClose(uploadedAssets)
   }
 
   const onSubmit = (data: AssetsUploadFormData): Promise<void> => {
