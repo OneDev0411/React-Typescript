@@ -44,8 +44,8 @@ const useStyles = makeStyles(
       '&:hover .icon-button': {
         visibility: 'visible'
       },
-      '& .active': {
-        backgroundColor: theme.palette.success.light
+      '&.active': {
+        backgroundColor: theme.palette.info.light
       }
     },
     dragHandler: {
@@ -72,6 +72,7 @@ const useStyles = makeStyles(
 
 interface Props {
   index: number
+  isSelected: boolean
   checklistType: IDealChecklistType
   propertyType: IDealPropertyType
   onUpdate: (propertyType: IDealPropertyType) => void
@@ -79,6 +80,7 @@ interface Props {
 
 export function ChecklistsSidenavItem({
   index,
+  isSelected,
   checklistType,
   propertyType,
   onUpdate
@@ -148,7 +150,11 @@ export function ChecklistsSidenavItem({
     <Draggable draggableId={propertyType.id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
         <div ref={provided.innerRef} {...provided.draggableProps}>
-          <div className={classes.root}>
+          <div
+            className={cn(classes.root, {
+              active: isSelected
+            })}
+          >
             <Box display="flex" alignItems="center">
               <div
                 {...provided.dragHandleProps}

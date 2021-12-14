@@ -13,6 +13,7 @@ import SideNavSection from '../../../../../views/components/PageSideNav/SideNavS
 import { ChecklistsSidenavItem } from './ChecklistsSidenavItem'
 
 interface Props {
+  selectedPropertyType: UUID
   propertyTypes: IDealPropertyType[]
   checklistType: IDealChecklistType
   onClickNewProperty: () => void
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export function ChecklistsSidenav({
+  selectedPropertyType,
   propertyTypes,
   checklistType,
   onReorder,
@@ -39,6 +41,7 @@ export function ChecklistsSidenav({
                   {propertyTypes.map((propertyType, index) => (
                     <ChecklistsSidenavItem
                       key={propertyType.id}
+                      isSelected={propertyType.id === selectedPropertyType}
                       index={index}
                       checklistType={checklistType}
                       propertyType={propertyType}

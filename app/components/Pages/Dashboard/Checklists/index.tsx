@@ -104,6 +104,7 @@ export default function ChecklistsPage({ location }: Props) {
       <DealRolesProvider>
         <Container isOpen>
           <ChecklistsSidenav
+            selectedPropertyType={propertyTypeId}
             propertyTypes={propertyTypes}
             checklistType={checklistType}
             onClickNewProperty={() => setIsFormOpen(true)}
