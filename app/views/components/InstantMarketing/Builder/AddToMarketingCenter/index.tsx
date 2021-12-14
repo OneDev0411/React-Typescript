@@ -17,7 +17,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { addNotification, Notification } from 'components/notification'
 import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
-import { createTemplate } from 'models/instant-marketing/create-template'
+import {
+  createTemplate,
+  CreateTemplateOptions
+} from 'models/instant-marketing/create-template'
 
 import { SAVED_TEMPLATE_VARIANT } from './constants'
 
@@ -44,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   medium: string
   mjml: boolean
+  originalTemplateId?: UUID
   getTemplateMarkup: () => string
   disabled?: boolean
 }
@@ -55,6 +59,7 @@ interface ConnectedProps {
 export function AddToMarketingCenter({
   medium,
   mjml,
+  originalTemplateId,
   getTemplateMarkup,
   notify,
   disabled = false
@@ -92,14 +97,15 @@ export function AddToMarketingCenter({
     const html = getTemplateMarkup()
 
     try {
-      const templateData = {
+      const templateData: CreateTemplateOptions = {
         name,
         variant,
         templateType: selectedTemplateType,
         medium,
         html,
         brands: [team.id],
-        mjml
+        mjml,
+        originalTemplateId
       }
 
       await createTemplate(templateData)
