@@ -128,7 +128,7 @@ function CreateOffer({ router, route, params }: Props) {
     const values = control.getValues()
 
     const rolesList: IDealRole[] = Object.values(
-      values.roles as Record<string, IDealRole>
+      (values.roles ?? {}) as Record<string, IDealRole>
     )
       .flat()
       .filter(role => !!role)
