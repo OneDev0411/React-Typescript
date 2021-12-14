@@ -27,10 +27,11 @@ import SearchListingDrawer from 'components/SearchListingDrawer'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { TeamAgentsDrawer } from 'components/TeamAgentsDrawer'
 import { uploadAsset } from 'models/instant-marketing/upload-asset'
+import { isAdmin } from 'utils/acl'
 import { getArrayWithFallbackAccessor } from 'utils/get-array-with-fallback-accessor'
 import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
-import { isAdmin, getBrandByType } from 'utils/user-teams'
+import { getBrandByType } from 'utils/user-teams'
 
 import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
@@ -1222,9 +1223,12 @@ class Builder extends React.Component {
     }
 
     // Only admin users should see this for now
-    const isAdminUser = isAdmin(this.props.user)
 
-    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+    return (
+      this.props.isAdminUser &&
+      this.state.selectedTemplate &&
+      !this.isOpenHouseMedium
+    )
   }
 
   isTemplatesListEnabled = () => {
@@ -1621,6 +1625,7 @@ Builder.defaultProps = {
 function mapStateToProps({ user, ...state }) {
   return {
     user,
+    isAdminUser: isAdmin(state.activeTeam ?? null),
     activeBrand: selectActiveBrand(state),
     activeBrandSetting: selectActiveBrandSettings(state, true)
   }
