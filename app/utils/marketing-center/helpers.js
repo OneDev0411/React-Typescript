@@ -6,6 +6,12 @@ export function getTemplateImage(
   template,
   fallbackImage = 'https://i.ibb.co/ZhVwVzy/template-placeholder.png'
 ) {
+  if (template.type === 'brand_asset' && template.file.url.endsWith('.mp4')) {
+    return {
+      original: template.file.url
+    }
+  }
+
   if (
     template.type === 'template_instance' ||
     template.type === 'template' ||

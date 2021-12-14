@@ -17,12 +17,12 @@ export function VideoThumbnail({ url, ...otherProps }: Props) {
   return (
     // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
     <video
-      {...otherProps}
       muted
       loop
       onMouseOut={handleMouseOut}
       onMouseEnter={handleMouseEnter}
       controls={false}
+      {...otherProps}
     >
       <source src={url} />
     </video>

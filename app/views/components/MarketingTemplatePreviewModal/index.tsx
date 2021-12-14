@@ -1,6 +1,6 @@
 import React, { ComponentProps } from 'react'
 
-import { ImagePreviewModal } from 'components/ImagePreviewModal'
+import { ImageOrVideoPreviewModal } from 'components/ImageOrVideoPreviewModal'
 import { PdfViewerModal } from 'components/PdfViewer/Modal'
 import { getFileType } from 'utils/file-utils/get-file-type'
 import {
@@ -40,7 +40,7 @@ function PreviewModal(props: Props) {
   const { thumbnail: imgSrcTiny, original: imgSrc } =
     getTemplateImage(selectedTemplate)
 
-  let modalProps: ComponentProps<typeof ImagePreviewModal> = {
+  let modalProps: ComponentProps<typeof ImageOrVideoPreviewModal> = {
     isOpen: props.isOpen,
     handleClose: () => props.onClose && props.onClose(),
     menuRenderer: () => props.actions
@@ -116,7 +116,7 @@ function PreviewModal(props: Props) {
     )
   }
 
-  return <ImagePreviewModal {...modalProps} />
+  return <ImageOrVideoPreviewModal {...modalProps} />
 }
 
 export default PreviewModal

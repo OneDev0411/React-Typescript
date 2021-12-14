@@ -62,7 +62,7 @@ export default function Upload({
       if (acceptedFiles.length === 0 && rejections.length > 0) {
         notify({
           status: 'error',
-          message: 'Only images, videos, and PDFs are allowed.'
+          message: 'Only images, mp4 videos, and PDFs are allowed.'
         })
 
         return
@@ -76,7 +76,7 @@ export default function Upload({
             'file',
             rejections.length,
             true
-          )} rejected. Only images, videos, and PDFs are allowed.`
+          )} rejected. Only images, mp4 videos, and PDFs are allowed.`
         })
       }
 
@@ -151,7 +151,7 @@ export default function Upload({
     onDrop,
     multiple: true,
     noClick: true,
-    accept: ['image/*', 'video/*', 'application/pdf']
+    accept: ['image/*', 'video/mp4', 'application/pdf']
   })
 
   if (assets.length === 0) {

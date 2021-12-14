@@ -58,7 +58,7 @@ export default function ZeroState({ onUpload }: Props) {
     onDrop,
     multiple: true,
     noClick: true,
-    accept: ['image/*', 'video/*', 'application/pdf']
+    accept: ['image/*', 'video/mp4', 'application/pdf']
   })
 
   return (
