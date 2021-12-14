@@ -88,7 +88,11 @@ function BackOfficeGrid(props: Props & WithRouterProps) {
       width: '25%',
       accessor: (deal: IDeal) => deal.title,
       render: ({ row: deal }) => (
-        <Address deal={deal} notificationsCount={deal.attention_requests} />
+        <Address
+          originQueryParam={originQueryParam}
+          deal={deal}
+          notificationsCount={deal.attention_requests}
+        />
       )
     },
     {
