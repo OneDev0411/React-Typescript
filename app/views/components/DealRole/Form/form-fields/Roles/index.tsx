@@ -4,6 +4,7 @@ import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import { FieldInputProps, FieldMetaState } from 'react-final-form'
 
 import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
+import { useBrandPropertyTypeRoles } from '@app/hooks/use-brand-property-type-roles'
 
 interface RoleOption {
   value: string
@@ -13,16 +14,18 @@ interface RoleOption {
 interface Props {
   meta: FieldMetaState<any>
   input: FieldInputProps<any, HTMLElement>
+  deal: IDeal
   isAllowedRole: (value: string, role: string) => boolean
   isRequired: boolean
 }
 
-export function Roles({ meta, input, isAllowedRole }: Props) {
+export function Roles({ meta, input, deal, isAllowedRole }: Props) {
   const role = input.value
-  const { dealRolesList, dealRolesByName } = useDealsRolesContext()
+  const { dealRolesByName } = useDealsRolesContext()
+  const { roles } = useBrandPropertyTypeRoles(deal.property_type.label)
 
   const options = useMemo(() => {
-    let options: RoleOption[] = dealRolesList
+    let options: RoleOption[] = roles
       .filter(item => isAllowedRole(item.role, role))
       .map(item => ({
         value: item.role,
@@ -49,7 +52,7 @@ export function Roles({ meta, input, isAllowedRole }: Props) {
     }
 
     return options
-  }, [isAllowedRole, role, dealRolesByName, dealRolesList])
+  }, [isAllowedRole, role, dealRolesByName, roles])
 
   return (
     <FormControl variant="outlined" size="small" fullWidth>
