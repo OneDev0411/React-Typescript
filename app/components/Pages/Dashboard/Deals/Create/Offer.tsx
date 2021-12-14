@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { Box, CircularProgress, Typography } from '@material-ui/core'
+import { sortBy } from 'lodash'
 import { useForm, Controller } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { withRouter, Route, InjectedRouter } from 'react-router'
@@ -234,7 +235,11 @@ function CreateOffer({ router, route, params }: Props) {
           }}
           onFinish={createOfferChecklist}
         >
-          {requiredRoles.map(role => {
+          {sortBy(requiredRoles, item => {
+            return item.role === 'Buyer'
+              ? 0
+              : requiredRoles.findIndex(({ role }) => item.role === role) + 1
+          }).map(role => {
             if (role.role === 'BuyerAgent') {
               return null
             }
