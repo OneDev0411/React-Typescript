@@ -194,7 +194,7 @@ export default function MakeVisibleToAdmin({
         await savePropertyAddress(deal, values.address)
       }
 
-      if (roles.length > 0) {
+      if (roles?.length > 0) {
         await dispatch(createRoles(deal.id, roles))
       }
 
