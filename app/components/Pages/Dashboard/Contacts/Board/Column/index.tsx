@@ -23,6 +23,7 @@ import { viewAs } from 'utils/user-teams'
 
 import { Tags } from '../constants'
 import { useColumnList } from '../hooks/use-column-list'
+import { FilterCriteria } from '../types'
 
 import { CardItem } from './Card/CardItem'
 import { DraggableCardItem } from './Card/DraggableCardItem'
@@ -83,11 +84,7 @@ interface Props {
   id: string
   title: string
   tag?: string
-  criteria: {
-    searchTerm: string
-    filters: IContactFilter[]
-    conditionOperator: TContactFilterType
-  }
+  criteria: FilterCriteria
   onReachStart?: () => void
   onReachEnd?: () => void
 }
@@ -127,10 +124,7 @@ export const BoardColumn = memo(function BoardColumn({
 
   useDeepCompareEffect(() => {
     const fetch = async () => {
-      const isCriteriaChanged =
-        equal(criteria.filters, currentCriteria.filters) === false ||
-        criteria.searchTerm !== currentCriteria.searchTerm ||
-        criteria.conditionOperator !== currentCriteria.conditionOperator
+      const isCriteriaChanged = equal(criteria, currentCriteria) === false
 
       if (isLoading || (!isCriteriaChanged && isReachedEnd)) {
         return
@@ -168,7 +162,9 @@ export const BoardColumn = memo(function BoardColumn({
           limit: loadingLimit,
           filter_type: criteria.conditionOperator
         },
-        viewAs(user)
+        viewAs(user),
+        criteria.flows,
+        criteria.crmTasks
       )
 
       setLoadingState(null)

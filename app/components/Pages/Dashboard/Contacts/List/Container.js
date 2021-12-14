@@ -973,6 +973,8 @@ class ContactsList extends React.Component {
                       criteria={{
                         searchTerm: state.searchInputValue,
                         filters: props.filters,
+                        flows: props.flows,
+                        crmTasks: props.crmTasks,
                         conditionOperator: props.conditionOperator
                       }}
                     />

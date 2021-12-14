@@ -12,6 +12,7 @@ import { bulkTag } from 'models/contacts/bulk-tag'
 import { BoardColumn } from './Column'
 import { Columns } from './constants'
 import { BoardContext } from './context'
+import { FilterCriteria } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -35,11 +36,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  criteria: {
-    searchTerm: string
-    filters: IContactFilter[]
-    conditionOperator: TContactFilterType
-  }
+  criteria: FilterCriteria
 }
 
 export const Board = memo(({ criteria }: Props) => {
