@@ -8,7 +8,7 @@ const useStyles = makeStyles(
     name: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(1, 0),
+      // padding: theme.spacing(1, 0),
       cursor: 'pointer'
     },
     active: {

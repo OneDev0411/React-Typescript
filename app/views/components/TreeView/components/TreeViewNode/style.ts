@@ -6,7 +6,9 @@ export const useStyles = makeStyles(
     contentContainer: {
       display: 'flex',
       alignItems: 'center',
-      padding: theme.spacing(0, 1),
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+      paddingLeft: theme.spacing(4),
       ...theme.typography.body2
     },
     selectableContentContainer: {
@@ -16,15 +18,14 @@ export const useStyles = makeStyles(
     },
     expandableContentContainer: {
       // marginLeft: 0
+      paddingLeft: 0
     },
     expandButton: {
-      background: 'none',
-      width: '2rem',
-      height: '2rem',
       padding: 0,
+      margin: theme.spacing(0, 1),
+      background: 'none',
       lineHeight: 0,
       border: 'none',
-      // marginLeft: theme.spacing(-2),
       borderRadius: '100%',
       outline: 'none',
       color: theme.palette.grey[600],
@@ -57,7 +58,7 @@ export const useStyles = makeStyles(
     childrenContainer: {
       // background: 'red',
       borderLeft: `1px solid ${theme.palette.action.disabledBackground}`,
-      marginLeft: theme.spacing(3)
+      marginLeft: theme.spacing(2)
     },
     content: {
       order: 0,
