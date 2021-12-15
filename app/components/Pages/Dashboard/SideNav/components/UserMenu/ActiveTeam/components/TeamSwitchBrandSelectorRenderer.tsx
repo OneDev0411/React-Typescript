@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { Typography, Chip, Theme, makeStyles } from '@material-ui/core'
+import { Chip, Theme, makeStyles } from '@material-ui/core'
 import cn from 'classnames'
 
 const useStyles = makeStyles(
@@ -8,11 +8,9 @@ const useStyles = makeStyles(
     name: {
       display: 'flex',
       alignItems: 'center',
-      // padding: theme.spacing(1, 0),
       cursor: 'pointer'
     },
     active: {
-      color: theme.palette.primary.main,
       cursor: 'not-allowed'
     },
     activeIndicator: {
@@ -44,7 +42,7 @@ function Brand({ brand, isActive, onClick }: Props) {
       className={cn(classes.name, { [classes.active]: isActive })}
       onClick={handleOnClick}
     >
-      <Typography variant="body2">{brand.name}</Typography>
+      {brand.name}
       {isActive && (
         <Chip
           size="small"

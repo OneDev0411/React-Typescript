@@ -9,6 +9,7 @@ export const useStyles = makeStyles(
       paddingTop: theme.spacing(1),
       paddingBottom: theme.spacing(1),
       paddingLeft: theme.spacing(4),
+      color: theme.palette.grey[700],
       ...theme.typography.body2
     },
     selectableContentContainer: {
@@ -16,8 +17,11 @@ export const useStyles = makeStyles(
         background: theme.palette.grey[200]
       }
     },
+    isContentContainerExpanded: {
+      color: theme.palette.common.black,
+      ...theme.typography.subtitle2
+    },
     expandableContentContainer: {
-      // marginLeft: 0
       paddingLeft: 0
     },
     expandButton: {
@@ -28,23 +32,13 @@ export const useStyles = makeStyles(
       border: 'none',
       borderRadius: '100%',
       outline: 'none',
-      color: theme.palette.grey[600],
+      color: theme.palette.grey[700],
       '&:hover, &:focus': {
         color: theme.palette.primary.main
       }
     },
     isExpanded: {
-      // position: 'relative',
-      // '&::before': {
-      //   position: 'absolute',
-      //   top: '50%',
-      //   left: 0,
-      //   content: "''",
-      //   zIndex: 0,
-      //   width: '1px',
-      //   height: '1rem',
-      //   borderLeft: `1px dashed ${theme.palette.action.disabledBackground}`
-      // }
+      color: theme.palette.common.black
     },
     expandArrow: {
       fill: 'currentColor',
@@ -52,9 +46,20 @@ export const useStyles = makeStyles(
       flexShrink: 0
     },
     childrenContainer: {
-      // background: 'red',
-      borderLeft: `1px solid ${theme.palette.action.disabledBackground}`,
-      marginLeft: theme.spacing(2)
+      position: 'relative',
+      borderLeft: `1px solid ${theme.palette.grey[100]}`,
+      marginLeft: theme.spacing(2),
+
+      '&::before': {
+        position: 'absolute',
+        top: theme.spacing(-0.75),
+        left: '-1px',
+        content: "''",
+        zIndex: 0,
+        width: '1px',
+        height: theme.spacing(0.75),
+        borderLeft: `1px solid ${theme.palette.grey[100]}`
+      }
     },
     content: {
       order: 0,
