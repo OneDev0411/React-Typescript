@@ -140,8 +140,9 @@ function CreateOffer({ router, route, params }: Props) {
       })
     }
 
+    const clientRoleType = propertyType?.is_lease ? 'Tenant' : 'Buyer'
     const checklistName = rolesList
-      .filter(({ role }) => role === 'Buyer')
+      .filter(({ role }) => role === clientRoleType)
       .map(role => getLegalFullName(role))
       .join(', ')
 
