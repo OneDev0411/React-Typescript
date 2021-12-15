@@ -18,15 +18,23 @@ export const useStyles = makeStyles(
       borderColor: theme.palette.primary.main,
       boxShadow: `0px 0px 6px 0px ${alpha(theme.palette.primary.main, 0.3)}`
     },
+    listingCardMediaWrapper: {
+      height: '100%'
+    },
+    tagsContainer: {
+      // We have to absolutely position the tags container because of slider buttons propagation
+      position: 'absolute',
+      bottom: 95,
+      left: 0,
+      zIndex: 10
+    },
     labelChip: {
-      backgroundColor: theme.palette.common.white,
-      marginLeft: theme.spacing(0.5)
-    },
-    labelChipLabel: {
-      lineHeight: theme.spacing(1)
-    },
-    statusChip: {
-      display: 'flex'
+      backgroundColor: `${alpha(theme.palette.common.black, 0.4)}`,
+      border: 'none',
+      color: theme.palette.common.white,
+      borderRadius: theme.spacing(0, 0.5, 0, 0),
+      paddingLeft: theme.spacing(0.5),
+      height: theme.spacing(3.5)
     },
     statusDot: ({ listing }: ListingCardProps) => ({
       backgroundColor: `#${getStatusColor(listing.status)}`,
@@ -98,8 +106,10 @@ export const useStyles = makeStyles(
     selectedCheckboxContainer: {
       backgroundColor: theme.palette.common.white
     },
-    chipsContainer: {
-      margin: theme.spacing(1)
+    statusChip: {
+      backgroundColor: `${alpha(theme.palette.grey[100], 0.8)}`,
+      borderRadius: theme.spacing(0.5),
+      border: 'none'
     },
     statusContainer: {
       margin: theme.spacing(1),

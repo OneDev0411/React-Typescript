@@ -196,27 +196,36 @@ export default function ListingCard({
                 )}
               </Grid>
             </Grid>
-            {tags && (
-              <Grid item>
-                <Grid className={classes.chipsContainer}>
-                  {tags.map(tag => (
-                    <Chip
-                      key={tag}
-                      label={tag}
-                      size="small"
-                      variant="outlined"
-                      classes={{
-                        root: classes.labelChip,
-                        label: classes.labelChipLabel
-                      }}
-                    />
-                  ))}
-                </Grid>
-              </Grid>
-            )}
+            <Grid className={classes.statusContainer}>
+              <Chip
+                label={listing.status}
+                size="small"
+                variant="default"
+                classes={{
+                  root: classes.statusChip,
+                  iconSmall: classes.iconSmall
+                }}
+                icon={<Grid className={classes.statusDot} />}
+              />
+            </Grid>
           </Grid>
         </ListingCardMedia>
+
         <CardContent className={classes.cardContent}>
+          {tags && (
+            <Grid item className={classes.tagsContainer}>
+              <Grid>
+                {tags.map(tag => (
+                  <Chip
+                    key={tag}
+                    label={tag}
+                    size="small"
+                    className={classes.labelChip}
+                  />
+                ))}
+              </Grid>
+            </Grid>
+          )}
           <Grid container direction="column" spacing={1}>
             <Grid
               container
@@ -230,19 +239,7 @@ export default function ListingCard({
                   {isLeaseProperty(listing) ? '/mo' : ''}
                 </Typography>
               </Grid>
-              <Grid item>
-                <Grid className={classes.statusContainer}>
-                  <Chip
-                    label={listing.status}
-                    size="small"
-                    variant="outlined"
-                    classes={{
-                      iconSmall: classes.iconSmall
-                    }}
-                    icon={<Grid className={classes.statusDot} />}
-                  />
-                </Grid>
-              </Grid>
+              <Grid item>{/* // TODO: Add listing MLS name */}</Grid>
             </Grid>
             {shouldRenderListingFeaturesRow && (
               <Grid container item alignItems="flex-end">
