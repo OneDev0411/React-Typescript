@@ -39,17 +39,13 @@ const OPTIONS: GetBrandListingsOptions = {
 
 interface ListingsListProps
   extends Pick<ListingsListColumnActionsProps, 'hasActions'> {
-  brandId: UUID
   searchTerm: string
 }
 
-function ListingsList({ brandId, hasActions, searchTerm }: ListingsListProps) {
+function ListingsList({ hasActions, searchTerm }: ListingsListProps) {
   const classes = useStyles()
   const gridClasses = useGridStyles()
-  const { listings: rows, isLoading } = useBrandAndDealsListings(
-    brandId,
-    OPTIONS
-  )
+  const { listings: rows, isLoading } = useBrandAndDealsListings(OPTIONS)
 
   const resultRows = useListingsSearchRows(rows, searchTerm)
   const sortedRows = useListingsListSort(resultRows)

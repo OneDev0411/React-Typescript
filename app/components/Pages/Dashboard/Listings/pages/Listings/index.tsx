@@ -36,7 +36,6 @@ function Listings({ params }: ListingsProps) {
             <ListingsOpenHouseProvider>
               <ListingsList
                 key={tab.value}
-                brandId={tab.value}
                 hasActions={tab.hasActions}
                 searchTerm={searchTerm}
               />
