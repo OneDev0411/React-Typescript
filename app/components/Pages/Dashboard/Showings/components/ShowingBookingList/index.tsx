@@ -205,9 +205,7 @@ function ShowingBookingList({
 
     const time = new Date().toISOString()
 
-    return rows
-      .filter(row => row.time >= time)
-      .sort((a, b) => Date.parse(a.time) - Date.parse(b.time))
+    return rows.filter(row => row.time >= time)
   }, [hasPastBookingsFilter, rows, showPastBookings])
 
   const hasAnyPastRows = useMemo<boolean>(() => {
