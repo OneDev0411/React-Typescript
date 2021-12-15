@@ -1,6 +1,16 @@
 import { ACL } from '../constants/acl'
 
 /**
+ * Return the given team's acl
+ * @param team The team
+ * @returns list of acl
+ */
+
+export function getTeamACL(team: Nullable<IUserTeam>): string[] {
+  return team?.acl ?? []
+}
+
+/**
  * Indicate that user has access to the given permission or not
  * @param team The active team
  * @param access The permission should be check
@@ -14,7 +24,7 @@ export function hasUserAccess(
     return false
   }
 
-  return (team.acl || []).includes(access)
+  return getTeamACL(team).includes(access)
 }
 
 /**

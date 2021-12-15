@@ -9,8 +9,8 @@ import { useQueryParam } from '@app/hooks/use-query-param'
 import { searchDeals, getDeals } from 'actions/deals'
 import { setUserSetting } from 'actions/user/set-setting'
 import PageLayout from 'components/GlobalPageLayout'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { IAppState } from 'reducers'
-import { selectUser } from 'selectors/user'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../constants/settings'
 import { ExportDeals } from '../components/ExportDeals'
@@ -35,9 +35,10 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
-
+// Hamed
 export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
+  const activeTeam = useUnsafeActiveTeam()
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
   const dispatch = useDispatch()
 
@@ -45,12 +46,11 @@ export default function AgentTable(props: WithRouterProps) {
   const isFetchingDeals = useSelector(
     ({ deals }: IAppState) => deals.properties.isFetchingDeals
   )
-  const user = useSelector(selectUser)
 
   const fetch = useCallback(
-    (user: IUser, searchCriteria: string) => {
+    (team: Nullable<IUserTeam>, searchCriteria: string) => {
       dispatch(
-        searchCriteria ? searchDeals(user, searchCriteria) : getDeals(user)
+        searchCriteria ? searchDeals(team, searchCriteria) : getDeals(team)
       )
     },
     [dispatch]
@@ -58,7 +58,7 @@ export default function AgentTable(props: WithRouterProps) {
 
   useEffectOnce(() => {
     if (searchCriteria.length > 0 && !isFetchingDeals) {
-      fetch(user, searchCriteria)
+      fetch(activeTeam, searchCriteria)
     }
   })
 
@@ -76,7 +76,7 @@ export default function AgentTable(props: WithRouterProps) {
     }
 
     setSearchCriteria(value)
-    fetch(user, value)
+    fetch(activeTeam, value)
   }
 
   return (

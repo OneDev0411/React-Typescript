@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
-import { selectUser } from '@app/selectors/user'
 import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { searchDeals, getDeals } from 'actions/deals'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
 import { DEAL_GRID_FILTER_SETTING_KEY } from '../../../constants/settings'
 import { getClosingsFilterQuery } from '../../helpers/closings'
@@ -15,7 +15,7 @@ export function useSearchQuery(
   statuses: IDealStatus[]
 ) {
   const dispatch = useDispatch()
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
 
   /**
    * The inbox tabs call /brands/${brandId}/deals/inbox API then
@@ -31,15 +31,18 @@ export function useSearchQuery(
       ? searchQuery.type
       : [searchQuery.type, searchQuery.filter].join('-')
 
+  // Hamed
   useDeepCompareEffect(() => {
     const { type, term, filter } = searchQuery
 
     if (type === 'query' && filter === 'closings') {
-      dispatch(searchDeals(user, getClosingsFilterQuery(searchQuery.term)))
+      dispatch(
+        searchDeals(activeTeam, getClosingsFilterQuery(searchQuery.term))
+      )
     } else if (searchQuery.type === 'query' && statuses.length > 0) {
-      dispatch(searchDeals(user, getStaticFilterQuery(searchQuery)))
+      dispatch(searchDeals(activeTeam, getStaticFilterQuery(searchQuery)))
     } else if (type === 'inbox') {
-      dispatch(term ? searchDeals(user, term) : getDeals(user))
+      dispatch(term ? searchDeals(activeTeam, term) : getDeals(activeTeam))
     }
 
     dispatch(setUserSetting(DEAL_GRID_FILTER_SETTING_KEY, searchQuery))

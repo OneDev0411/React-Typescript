@@ -88,13 +88,14 @@ class Dashboard extends Component {
         this.props.location.pathname.startsWith('/dashboard/deals') &&
         new URLSearchParams(this.props.location.search).get('q')
 
+      // Hamed
       if ((isBackOffice || viewAsEveryoneOnTeam(user)) && !searchParamValue) {
-        dispatch(getDeals(user))
+        dispatch(getDeals(activeTeam))
       } else {
         dispatch(
           searchParamValue
-            ? searchDeals(user, decodeURIComponent(searchParamValue))
-            : getDeals(user)
+            ? searchDeals(activeTeam, decodeURIComponent(searchParamValue))
+            : getDeals(activeTeam)
         )
       }
     }

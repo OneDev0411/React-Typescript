@@ -11,7 +11,7 @@ import * as schema from '../../schema'
 import { setTasks } from '../../task'
 import { setDeals } from '../set-deals'
 
-export function searchDeals(user, value) {
+export function searchDeals(team, value) {
   return async dispatch => {
     try {
       batch(() => {
@@ -24,7 +24,7 @@ export function searchDeals(user, value) {
         })
       })
 
-      const data = await Deal.searchDeals(user, value)
+      const data = await Deal.searchDeals(team, value)
 
       if (data.length === 0) {
         return dispatch({ type: actionTypes.NO_DEAL })

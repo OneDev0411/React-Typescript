@@ -27,14 +27,14 @@ interface Props {
   }
   children: ReactElement<any>
 }
-
+// Hamed
 function Container(props: Props) {
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')
 
   const {
     user,
-    activeTeam,
+    activeTeam = null,
     dealsCount,
     brandContexts,
     isFetchingDeals,
@@ -68,10 +68,12 @@ function Container(props: Props) {
         (hasBackOfficeAccess || viewAsEveryoneOnTeam(user)) &&
         !queryParamValue
       ) {
-        dispatch(getDeals(user))
+        dispatch(getDeals(activeTeam))
       } else {
         dispatch(
-          queryParamValue ? searchDeals(user, queryParamValue) : getDeals(user)
+          queryParamValue
+            ? searchDeals(activeTeam, queryParamValue)
+            : getDeals(activeTeam)
         )
       }
     }
