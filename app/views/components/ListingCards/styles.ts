@@ -24,7 +24,8 @@ export const useStyles = makeStyles(
     tagsContainer: {
       // We have to absolutely position the tags container because of slider buttons propagation
       position: 'absolute',
-      bottom: 95,
+      transform: 'translateY(-100%)',
+      top: 0,
       left: 0,
       zIndex: 10
     },
@@ -33,20 +34,8 @@ export const useStyles = makeStyles(
       border: 'none',
       color: theme.palette.common.white,
       borderRadius: theme.spacing(0, 0.5, 0, 0),
-      paddingLeft: theme.spacing(0.5),
+      padding: theme.spacing(0, 0.5),
       height: theme.spacing(3.5)
-    },
-    statusDot: ({ listing }: ListingCardProps) => ({
-      backgroundColor: `#${getStatusColor(listing.status)}`,
-      width: theme.spacing(1),
-      height: theme.spacing(1),
-      borderRadius: '50%',
-      display: 'inline-block'
-    }),
-    iconSmall: {
-      // TODO: there should be better ways to handling this.
-      // https://stackoverflow.com/questions/63880835
-      marginLeft: `${theme.spacing(1)}px !important`
     },
     cardMediaActionContainer: {
       display: 'flex',
@@ -85,7 +74,8 @@ export const useStyles = makeStyles(
       color: theme.palette.primary.main
     },
     cardContent: {
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
+      position: 'relative'
     },
     listingFeature: {
       ...theme.typography.subtitle3,
@@ -98,7 +88,15 @@ export const useStyles = makeStyles(
       maxWidth: '100%'
     },
     address: {
-      ...theme.typography.body3
+      ...theme.typography.body3,
+      color: theme.palette.grey[500],
+      display: 'flex',
+      alignItems: 'center'
+    },
+    addressIcon: {
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(1)
     },
     selectionContainer: {
       margin: theme.spacing(1.5)
@@ -106,9 +104,25 @@ export const useStyles = makeStyles(
     selectedCheckboxContainer: {
       backgroundColor: theme.palette.common.white
     },
+    statusDot: ({ listing }: ListingCardProps) => ({
+      backgroundColor: `#${getStatusColor(listing.status)}`,
+      width: theme.spacing(1),
+      height: theme.spacing(1),
+      borderRadius: '50%',
+      display: 'inline-block'
+    }),
+    iconSmall: {
+      // TODO: there should be better ways to handling this.
+      // https://stackoverflow.com/questions/63880835
+      marginLeft: `${theme.spacing(1)}px !important`
+    },
     statusChip: {
       backgroundColor: `${alpha(theme.palette.grey[100], 0.8)}`,
       borderRadius: theme.spacing(0.5),
+      filter: `drop-shadow(0px 0.3px 0.5px ${alpha(
+        theme.palette.common.black,
+        0.1
+      )}) drop-shadow(0px 2px 4px ${alpha(theme.palette.common.black, 0.2)})`,
       border: 'none'
     },
     statusContainer: {
@@ -119,6 +133,35 @@ export const useStyles = makeStyles(
       display: 'flex',
       alignItems: 'center',
       marginRight: theme.spacing(2)
+    },
+    details: {
+      margin: theme.spacing(1, 1, 0)
+    },
+    detailItem: {
+      ...theme.typography.body3,
+      display: 'flex',
+      alignItems: 'center',
+      '&:not(:last-child)': {
+        paddingRight: theme.spacing(2),
+        borderRight: '1px solid #ccc',
+        marginRight: theme.spacing(2)
+      }
+    },
+    detailItemIcon: {
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(1)
+    },
+    mlsSource: {
+      ...theme.typography.body3,
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700]
+    },
+    mlsSourceIcon: {
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(0.5)
     }
   }),
   {

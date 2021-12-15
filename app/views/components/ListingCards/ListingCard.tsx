@@ -10,7 +10,15 @@ import {
   Grid,
   Chip
 } from '@material-ui/core'
-import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import {
+  mdiShower,
+  mdiBedKingOutline,
+  mdiVectorSquare,
+  mdiMapMarkerOutline,
+  mdiHeartOutline,
+  mdiDatabaseOutline,
+  mdiHeart
+} from '@mdi/js'
 import cn from 'classnames'
 import { noop } from 'lodash'
 import pluralize from 'pluralize'
@@ -214,19 +222,17 @@ export default function ListingCard({
         <CardContent className={classes.cardContent}>
           {tags && (
             <Grid item className={classes.tagsContainer}>
-              <Grid>
-                {tags.map(tag => (
-                  <Chip
-                    key={tag}
-                    label={tag}
-                    size="small"
-                    className={classes.labelChip}
-                  />
-                ))}
-              </Grid>
+              {tags.map(tag => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  className={classes.labelChip}
+                />
+              ))}
             </Grid>
           )}
-          <Grid container direction="column" spacing={1}>
+          <Grid container direction="column" spacing={2}>
             <Grid
               container
               item
@@ -239,71 +245,77 @@ export default function ListingCard({
                   {isLeaseProperty(listing) ? '/mo' : ''}
                 </Typography>
               </Grid>
-              <Grid item>{/* // TODO: Add listing MLS name */}</Grid>
+              <Grid item>
+                <Grid
+                  className={classes.mlsSource}
+                  item
+                  title="Listing Provider (MLS) Source"
+                >
+                  <SvgIcon
+                    path={mdiDatabaseOutline}
+                    className={classes.mlsSourceIcon}
+                  />
+                  {listing.mls_display_name}
+                </Grid>
+              </Grid>
             </Grid>
             {shouldRenderListingFeaturesRow && (
-              <Grid container item alignItems="flex-end">
+              <Grid className={classes.details} container>
                 {listingFeatures.bedroomCount ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.bedroomCount}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        {pluralize('bed', listingFeatures.bedroomCount)}
-                      </Typography>
-                    </Grid>
+                  <Grid
+                    className={classes.detailItem}
+                    item
+                    title={pluralize('bed', listingFeatures.bedroomCount)}
+                  >
+                    <SvgIcon
+                      path={mdiBedKingOutline}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.bedroomCount}
                   </Grid>
                 ) : null}
                 {listingFeatures.bathroomCount ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.bathroomCount}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        {pluralize('bath', listingFeatures.bathroomCount)}
-                      </Typography>
-                    </Grid>
+                  <Grid
+                    className={classes.detailItem}
+                    item
+                    title={pluralize('bath', listingFeatures.bathroomCount)}
+                  >
+                    <SvgIcon
+                      path={mdiShower}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.bathroomCount}
                   </Grid>
                 ) : null}
                 {listingFeatures.areaSqft && !shouldShowAcres ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.areaSqft.toLocaleString()}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        ft<sup>2</sup>
-                      </Typography>
-                    </Grid>
+                  <Grid className={classes.detailItem} item title="area">
+                    <SvgIcon
+                      path={mdiVectorSquare}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.areaSqft.toLocaleString()} ft
+                    <sup>2</sup>
                   </Grid>
                 ) : null}
                 {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography
-                        variant="subtitle2"
-                        className={classes.listingFeature}
-                      >
-                        {listingFeatures.lotSizeAreaAcre.toLocaleString()}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        acres
-                      </Typography>
-                    </Grid>
+                  <Grid className={classes.detailItem} item title="acres">
+                    <SvgIcon
+                      path={mdiVectorSquare}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.lotSizeAreaAcre.toLocaleString()} acres
                   </Grid>
                 ) : null}
               </Grid>
             )}
             {address && (
-              <Grid container item alignItems="center">
+              <Grid container item alignItems="center" title="Address">
                 <Grid item className={classes.addressContainer}>
-                  <Typography
-                    noWrap
-                    variant="body2"
-                    className={classes.address}
-                  >
+                  <Typography variant="body2" className={classes.address}>
+                    <SvgIcon
+                      path={mdiMapMarkerOutline}
+                      className={classes.addressIcon}
+                    />
                     {address}
                   </Typography>
                 </Grid>
