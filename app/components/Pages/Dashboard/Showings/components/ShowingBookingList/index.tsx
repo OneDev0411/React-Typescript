@@ -199,17 +199,17 @@ function ShowingBookingList({
   }
 
   const visibleRows = useMemo<IShowingAppointment<'showing'>[]>(() => {
-    const sortedRows = [...rows].sort(
-      (a, b) => Date.parse(a.time) - Date.parse(b.time)
-    )
+    const time = new Date().toISOString()
+    const pastBookings = rows.filter(row => row.time < time)
+    const upcomingBookings = rows
+      .filter(row => row.time >= time)
+      .sort((a, b) => Date.parse(a.time) - Date.parse(b.time))
 
     if (!hasPastBookingsFilter || showPastBookings) {
-      return sortedRows
+      return [...upcomingBookings, ...pastBookings]
     }
 
-    const time = new Date().toISOString()
-
-    return sortedRows.filter(row => row.time >= time)
+    return upcomingBookings
   }, [hasPastBookingsFilter, rows, showPastBookings])
 
   const hasAnyPastRows = useMemo<boolean>(() => {
