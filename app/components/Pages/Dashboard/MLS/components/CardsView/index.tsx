@@ -30,7 +30,7 @@ interface Props {
 
   // TODO: remove this after refactoring fav/saved tab
   // related to https://gitlab.com/rechat/web/-/issues/4864
-  unselectOnToggleFavorite: boolean
+  unselectOnToggleFavorite?: boolean
   onToggleLike?: (id: UUID) => void
   onChangeHoverState?: (id: UUID, hover: boolean) => void
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
