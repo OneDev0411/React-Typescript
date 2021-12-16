@@ -27,7 +27,6 @@ interface Props {
   }
   children: ReactElement<any>
 }
-// Hamed
 function Container(props: Props) {
   const dispatch = useDispatch()
   const [queryParamValue] = useQueryParam('q')

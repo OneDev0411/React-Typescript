@@ -47,17 +47,16 @@ export const useStyles = makeStyles(
     },
     childrenContainer: {
       position: 'relative',
-      borderLeft: `1px solid ${theme.palette.grey[100]}`,
       marginLeft: theme.spacing(2),
 
       '&::before': {
         position: 'absolute',
-        top: theme.spacing(-0.75),
-        left: '-1px',
+        top: theme.spacing(-1),
+        left: 0,
         content: "''",
         zIndex: 0,
-        width: '1px',
-        height: theme.spacing(0.75),
+        width: 0,
+        height: `calc(100% - ${theme.spacing(1)}px)`,
         borderLeft: `1px solid ${theme.palette.grey[100]}`
       }
     },

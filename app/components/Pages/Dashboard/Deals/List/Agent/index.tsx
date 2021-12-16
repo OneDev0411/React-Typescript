@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 )
-// Hamed
+
 export default function AgentTable(props: WithRouterProps) {
   const classes = useStyles()
   const activeTeam = useUnsafeActiveTeam()

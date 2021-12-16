@@ -31,7 +31,6 @@ export function useSearchQuery(
       ? searchQuery.type
       : [searchQuery.type, searchQuery.filter].join('-')
 
-  // Hamed
   useDeepCompareEffect(() => {
     const { type, term, filter } = searchQuery
 
