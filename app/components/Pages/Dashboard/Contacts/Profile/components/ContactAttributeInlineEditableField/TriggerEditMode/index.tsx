@@ -14,10 +14,9 @@ import {
 } from '@material-ui/core'
 import cn from 'classnames'
 import pluralize from 'pluralize'
-import { useSelector } from 'react-redux'
 
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
-import { selectUser } from 'selectors/user'
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { isSoloActiveTeam } from 'utils/user-teams'
 
 import { TemplateSelector } from './components/TemplateSelector'
@@ -105,7 +104,7 @@ const TriggerEditModeComponent = ({
   onChangeTemplate
 }: Props) => {
   const classes = useStyles()
-  const user = useSelector(selectUser)
+  const activeTeam = useUnsafeActiveTeam()
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
   const [isActive, setIsActive] = useState<boolean>(isActiveProp)
@@ -160,7 +159,7 @@ const TriggerEditModeComponent = ({
   }
 
   const renderSenderSwitcher = () => {
-    if (user && isSoloActiveTeam(user)) {
+    if (isSoloActiveTeam(activeTeam)) {
       return null
     }
 

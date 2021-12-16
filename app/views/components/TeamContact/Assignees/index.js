@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'react'
 
 import { Button } from '@material-ui/core'
 import uniqBy from 'lodash/uniqBy'
@@ -19,7 +19,7 @@ const propTypes = {
   owner: PropTypes.PropTypes.shape().isRequired
 }
 
-export class Assignees extends React.Component {
+export class Assignees extends Component {
   constructor(props) {
     super(props)
 

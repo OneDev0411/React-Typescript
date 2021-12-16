@@ -51,10 +51,12 @@ export function getActiveTeamACL(user: IUser | null): string[] {
   return team && team.acl ? team.acl : []
 }
 
-export function isSoloActiveTeam(user: IUser | null): boolean {
-  const team = getActiveTeam(user)
+export function isSoloActiveTeam(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
+    return false
+  }
 
-  return !!(team && team.brand && team.brand.member_count === 1)
+  return !!(team.brand && team.brand.member_count === 1)
 }
 
 export function isActiveTeamTraining(user: IUser | null): boolean {
