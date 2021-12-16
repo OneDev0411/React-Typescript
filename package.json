@@ -101,6 +101,7 @@
     "d3-time-format": "2.2.3",
     "date-fns": "^2.23.0",
     "debounce": "^1.2.1",
+    "dequal": "^2.0.2",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",
     "draft-js-alignment-plugin": "^2.0.5",

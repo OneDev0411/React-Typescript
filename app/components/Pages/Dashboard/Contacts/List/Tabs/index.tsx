@@ -136,34 +136,30 @@ export const ContactsTabs = ({
               <span onClick={() => clickHandler('default')}>All Contacts</span>
             }
           />,
-          ...(viewMode === 'table'
-            ? [
-                <Tab
-                  key="saved-list"
-                  value="saved-list"
-                  data-tour-id="saved-list"
-                  label={<SavedSegments {...savedListProps} />}
-                />,
-                <Tab
-                  key="tag-list"
-                  value="tag-list"
-                  data-tour-id="tags-list"
-                  label={<TagsList onFilterChange={tagListProps.onClick} />}
-                />
-              ]
-            : [])
+          <Tab
+            key="saved-list"
+            value="saved-list"
+            data-tour-id="saved-list"
+            label={<SavedSegments {...savedListProps} />}
+          />,
+          <Tab
+            key="tag-list"
+            value="tag-list"
+            data-tour-id="tags-list"
+            label={<TagsList onFilterChange={tagListProps.onClick} />}
+          />
         ]}
         actions={actions}
       />
-      {viewMode === 'table' && (
-        <ContactFilters
-          show={filter?.show}
-          contactCount={contactCount}
-          activeSegment={activeSegment}
-          onFilterChange={() => handleFilterChange({}, true)}
-          users={users}
-        />
-      )}
+
+      <ContactFilters
+        show={filter?.show}
+        contactCount={contactCount}
+        activeSegment={activeSegment}
+        onFilterChange={() => handleFilterChange({}, true)}
+        viewMode={viewMode}
+        users={users}
+      />
     </>
   )
 }

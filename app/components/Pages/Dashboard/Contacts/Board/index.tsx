@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core'
 import uniq from 'lodash/uniq'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
+import { useDebounce } from 'react-use'
 
 import { updateContactTags } from 'actions/contacts/update-contact-tags'
 import { bulkTag } from 'models/contacts/bulk-tag'
@@ -11,6 +12,7 @@ import { bulkTag } from 'models/contacts/bulk-tag'
 import { BoardColumn } from './Column'
 import { Columns } from './constants'
 import { BoardContext } from './context'
+import { FilterCriteria } from './types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -34,13 +36,31 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  isActive: boolean
-  searchTerm: string
+  criteria: FilterCriteria
 }
 
-export const Board = memo(({ searchTerm }: Props) => {
+export const Board = memo(({ criteria }: Props) => {
   const classes = useStyles()
   const [list, setList] = useState<Record<string, IContact[]>>({})
+  const [debouncedCriteria, setDebouncedCriteria] =
+    useState<Props['criteria']>(criteria)
+
+  /**
+   * why debouncing?
+   *
+   * this file:
+   * "app/components/Pages/Dashboard/Contacts/List/TagsList/index.tsx#L76"
+   * resets all filters first and then create new filters and changing that
+   * was introducing new problems so I had to use deboucing when tags change
+   */
+  useDebounce(
+    () => {
+      setDebouncedCriteria(criteria)
+    },
+    500,
+    [criteria]
+  )
+
   const dispatch = useDispatch()
 
   const onDragEnd = (result: DropResult) => {
@@ -107,7 +127,7 @@ export const Board = memo(({ searchTerm }: Props) => {
                 id={tag || '-1'}
                 title={title}
                 tag={tag}
-                searchTerm={searchTerm}
+                criteria={debouncedCriteria}
               />
             ))}
           </div>

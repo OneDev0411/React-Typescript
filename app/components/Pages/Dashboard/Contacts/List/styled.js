@@ -15,7 +15,7 @@ export const ViewMode = styled.div`
   */
   @media not all and (min-resolution: 0.001dpcm) {
     @media {
-      height: calc(100vh - 190px);
+      height: calc(100vh - 235px);
     }
   }
 `
