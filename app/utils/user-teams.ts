@@ -45,12 +45,6 @@ export function getActiveTeamId(user: IUser | null): UUID | null {
   return activeTeam.brand.id
 }
 
-export function getActiveTeamACL(user: IUser | null): string[] {
-  const team = getActiveTeam(user)
-
-  return team && team.acl ? team.acl : []
-}
-
 export function isSoloActiveTeam(team: Nullable<IUserTeam>): boolean {
   if (!team) {
     return false
@@ -59,14 +53,12 @@ export function isSoloActiveTeam(team: Nullable<IUserTeam>): boolean {
   return !!(team.brand && team.brand.member_count === 1)
 }
 
-export function isActiveTeamTraining(user: IUser | null): boolean {
-  const activeTeam: IUserTeam | null = getActiveTeam(user)
-
-  if (!activeTeam) {
+export function isActiveTeamTraining(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
     return false
   }
 
-  let current: IBrand = activeTeam.brand
+  let current: IBrand = team.brand
 
   do {
     if (current.training) {

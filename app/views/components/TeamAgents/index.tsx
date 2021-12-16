@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 
-import { useSelector } from 'react-redux'
-
+import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import { getAgents } from 'models/Deal/agent'
-import { IAppState } from 'reducers'
 
 import { getBrand } from './helpers/get-brand'
 import type { NormalizedBrand } from './types'
@@ -18,7 +16,7 @@ interface Props {
   isPrimaryAgent: boolean
   flattenTeams?: boolean
   criteria?: string
-  children: (props: RenderProps) => React.ReactNode
+  children: (props: RenderProps) => ReactNode
 }
 
 export default function TeamAgents({
@@ -29,15 +27,14 @@ export default function TeamAgents({
 }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [teamAgents, setTeamAgents] = useState<IBrand[]>([])
-
-  const user = useSelector<IAppState, IUser>(({ user }) => user!)
+  const activeTeam = useUnsafeActiveTeam()
 
   useEffect(() => {
     const getTeamAgents = async () => {
       try {
         setIsLoading(true)
 
-        const agents = await getAgents(getBrand(user, isPrimaryAgent))
+        const agents = await getAgents(getBrand(activeTeam, isPrimaryAgent))
 
         setTeamAgents(agents || [])
       } catch (e) {
@@ -49,7 +46,7 @@ export default function TeamAgents({
     }
 
     getTeamAgents()
-  }, [isPrimaryAgent, user])
+  }, [isPrimaryAgent, activeTeam])
 
   const isEmptyState = !isLoading && teamAgents.length === 0
   const teams = useTeamAgentsSearch(teamAgents, criteria, flattenTeams)
