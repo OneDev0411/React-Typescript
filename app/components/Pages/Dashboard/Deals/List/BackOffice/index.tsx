@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Theme } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core'
 import { WithRouterProps } from 'react-router'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
@@ -15,14 +15,8 @@ import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
 import { useSearchQuery } from './hooks/use-search-query'
 import { SearchQuery } from './types'
 
-interface StateProps {
-  isFetchingDeals: boolean
-  getDeals(user: IUser): void
-  searchDeals(user: IUser, value: object | string): void
-}
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles(
+  (theme: Theme) => ({
     container: {
       margin: theme.spacing(5)
     },
@@ -34,10 +28,11 @@ const useStyles = makeStyles((theme: Theme) =>
     filtersContainer: {
       margin: theme.spacing(5, 0)
     }
-  })
+  }),
+  { name: 'BackofficeTable' }
 )
 
-export default function BackofficeTable(props: WithRouterProps & StateProps) {
+export default function BackofficeTable(props: WithRouterProps) {
   const classes = useStyles()
   const activeBrandId = useActiveBrandId()
 

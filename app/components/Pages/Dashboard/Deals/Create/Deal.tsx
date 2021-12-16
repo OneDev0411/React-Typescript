@@ -115,7 +115,7 @@ function CreateDeal({ router, route }: Props) {
 
     setIsCreatingDeal(true)
 
-    const newDeal: IDeal = await Deal.create(user, {
+    const newDeal: IDeal = await Deal.create({
       brand: agent!.brand,
       property_type: propertyType?.id,
       deal_type: dealType,
