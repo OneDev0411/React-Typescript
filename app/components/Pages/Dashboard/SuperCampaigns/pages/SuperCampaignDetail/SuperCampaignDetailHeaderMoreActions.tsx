@@ -4,7 +4,6 @@ import {
   IconButton,
   MenuItem,
   Typography,
-  makeStyles,
   CircularProgress
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
@@ -17,14 +16,8 @@ import { convertDateToTimestamp } from '../../helpers'
 import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 
-const useStyles = makeStyles(
-  theme => ({
-    more: { marginLeft: theme.spacing(1) }
-  }),
-  { name: 'SuperCampaignDetailHeaderMoreActions' }
-)
-
 interface SuperCampaignDetailHeaderMoreActionsProps {
+  className: string
   superCampaign: ISuperCampaign<'template_instance'>
   setSuperCampaign: Dispatch<
     SetStateAction<ISuperCampaign<'template_instance'>>
@@ -32,10 +25,10 @@ interface SuperCampaignDetailHeaderMoreActionsProps {
 }
 
 function SuperCampaignDetailHeaderMoreActions({
+  className,
   superCampaign,
   setSuperCampaign
 }: SuperCampaignDetailHeaderMoreActionsProps) {
-  const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
   const isExecuted = useIsSuperCampaignReadOnly(superCampaign)
 
@@ -68,7 +61,7 @@ function SuperCampaignDetailHeaderMoreActions({
         <IconButton
           {...buttonProps}
           size="small"
-          className={classes.more}
+          className={className}
           disabled={isSaving}
         >
           {isSaving ? (

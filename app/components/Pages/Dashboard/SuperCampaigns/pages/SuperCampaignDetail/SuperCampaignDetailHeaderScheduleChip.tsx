@@ -6,12 +6,14 @@ import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 interface SuperCampaignDetailHeaderScheduleChipProps {
+  className: string
   isExecuted: Boolean
   dueAt: Optional<number>
   isSaving: boolean
 }
 
 function SuperCampaignDetailHeaderScheduleChip({
+  className,
   isExecuted,
   dueAt,
   isSaving
@@ -46,6 +48,7 @@ function SuperCampaignDetailHeaderScheduleChip({
 
   return (
     <Chip
+      className={className}
       label={label}
       size="small"
       icon={
