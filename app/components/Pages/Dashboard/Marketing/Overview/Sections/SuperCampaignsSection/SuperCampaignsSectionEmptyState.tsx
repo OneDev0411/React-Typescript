@@ -4,7 +4,7 @@ function SuperCampaignsSectionEmptyState() {
   return (
     <Grid item xs={12}>
       <Typography variant="body1" color="textSecondary">
-        There are no super campaigns.
+        There are no campaigns.
       </Typography>
     </Grid>
   )

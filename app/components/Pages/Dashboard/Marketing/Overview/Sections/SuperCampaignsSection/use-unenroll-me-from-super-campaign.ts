@@ -24,7 +24,7 @@ export function useUnenrollMeFromSuperCampaign(
     } catch (_) {
       notify({
         status: 'error',
-        message: 'Something went wrong while unenrolling the super campaign'
+        message: 'Something went wrong while unenrolling the campaign'
       })
     }
 

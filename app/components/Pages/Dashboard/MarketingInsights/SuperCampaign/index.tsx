@@ -7,7 +7,7 @@ import SuperCampaignGridView from '@app/components/Pages/Dashboard/SuperCampaign
 import Layout from '../List/Layout'
 
 function SuperCampaignList(props) {
-  useTitle('Super Campaign List | Rechat')
+  useTitle('Campaign List | Rechat')
 
   const renderContent = props => <SuperCampaignGridView {...props} />
 
