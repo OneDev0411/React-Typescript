@@ -168,12 +168,15 @@ class Filters extends React.Component {
           {this.props.disableConditionOperators || (
             <>
               {activeFiltersList.length >= 2 && (
-                <ConditionOperators
-                  selectedItem={this.props.conditionOperator}
-                  onChange={this.onConditionChange}
-                />
+                <>
+                  <ConditionOperators
+                    selectedItem={this.props.conditionOperator}
+                    onChange={this.onConditionChange}
+                  />
+
+                  <span className="spacer" />
+                </>
               )}
-              <span className="spacer" />
             </>
           )}
         </FiltersOptions>
