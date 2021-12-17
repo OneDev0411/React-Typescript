@@ -8,7 +8,6 @@ import { TableColumn } from 'components/Grid/Table/types'
 
 import { useIsSuperCampaignDueAtTimeout } from '../../hooks/use-is-super-campaign-due-at-timeout'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
-import SuperCampaignEnrollManuallyButton from '../SuperCampaignEnrollManuallyButton'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
@@ -16,7 +15,6 @@ import SuperCampaignEnrollmentListColumnActions from './SuperCampaignEnrollmentL
 import SuperCampaignEnrollmentListColumnTags from './SuperCampaignEnrollmentListColumnTags'
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
-import { useAddSuperCampaignEnrollment } from './use-add-super-campaign-enrollment'
 import { useDeleteSuperCampaignEnrollment } from './use-delete-super-campaign-enrollment'
 import { useSuperCampaignListStyles } from './use-super-campaign-list-styles'
 import { useUpdateSuperCampaignEnrollmentTags } from './use-update-super-campaign-enrollment-tags'
@@ -66,11 +64,6 @@ function SuperCampaignEnrollmentList({
   const deleteSuperCampaignEnrollment = useDeleteSuperCampaignEnrollment(
     superCampaign.id,
     superCampaignEnrollments,
-    setSuperCampaignEnrollments
-  )
-
-  const addSuperCampaignEnrollment = useAddSuperCampaignEnrollment(
-    superCampaign.id,
     setSuperCampaignEnrollments
   )
 
@@ -125,11 +118,6 @@ function SuperCampaignEnrollmentList({
 
   return (
     <>
-      <SuperCampaignEnrollManuallyButton
-        superCampaignId={superCampaign.id}
-        superCampaignTags={superCampaign.tags}
-        onEnroll={addSuperCampaignEnrollment}
-      />
       <Table
         columns={columns}
         rows={superCampaignEnrollments}

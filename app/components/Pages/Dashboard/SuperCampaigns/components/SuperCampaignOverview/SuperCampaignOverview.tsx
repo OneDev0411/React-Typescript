@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core'
 
-import SuperCampaignEligibleParticipants from './SuperCampaignEligibleParticipants'
-import SuperCampaignEnrolledParticipants from './SuperCampaignEnrolledParticipants'
+import SuperCampaignEligibleCard from './SuperCampaignEligibleCard'
+import SuperCampaignEnrollmentsCard from './SuperCampaignEnrollmentsCard'
 import SuperCampaignOverviewDetail from './SuperCampaignOverviewDetail'
 
 function SuperCampaignOverview() {
@@ -11,8 +11,8 @@ function SuperCampaignOverview() {
         <SuperCampaignOverviewDetail />
       </Box>
       <Box flex="1" ml={2}>
-        <SuperCampaignEligibleParticipants gutterBottom />
-        <SuperCampaignEnrolledParticipants />
+        <SuperCampaignEligibleCard gutterBottom />
+        <SuperCampaignEnrollmentsCard />
       </Box>
     </Box>
   )
