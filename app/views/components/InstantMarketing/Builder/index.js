@@ -1279,15 +1279,15 @@ class Builder extends React.Component {
   }
 
   get templateInstanceData() {
-    const listingsFromListing = this.props.templateData.listing
-      ? [this.props.templateData.listing.id]
-      : undefined
+    const listingsArray = this.props.templateData.listing
+      ? [this.props.templateData.listing]
+      : this.props.templateData.listings
 
     return {
       contacts: this.props.templateData.contacts?.map(contact => contact.id),
-      listings:
-        this.props.templateData.listings?.map(listing => listing.id) ??
-        listingsFromListing,
+      listings: listingsArray
+        ?.filter(listing => !listing.isMock) // Remove mock listings
+        ?.map(listing => listing.id), // Collect all listing ids
       deals: this.props.templateData.deals?.map(deal => deal.id)
     }
   }

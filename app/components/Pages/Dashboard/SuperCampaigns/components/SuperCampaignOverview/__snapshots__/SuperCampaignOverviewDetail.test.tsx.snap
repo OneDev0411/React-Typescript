@@ -31,35 +31,7 @@ exports[`Super Campaign/Overview/Detail When not executed renders empty when dra
     <span
       class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-9 MuiTypography-caption"
     >
-      Email Subject
-    </span>
-    <p
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-10 MuiTypography-body2"
-    >
-      -
-    </p>
-  </div>
-  <div
-    class="SuperCampaignOverviewDetail-labelValue-2"
-  >
-    <span
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-9 MuiTypography-caption"
-    >
       Description
-    </span>
-    <p
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-10 MuiTypography-body2"
-    >
-      -
-    </p>
-  </div>
-  <div
-    class="SuperCampaignOverviewDetail-labelValue-2"
-  >
-    <span
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-9 MuiTypography-caption"
-    >
-      Scheduled for
     </span>
     <p
       class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-10 MuiTypography-body2"
@@ -112,40 +84,12 @@ exports[`Super Campaign/Overview/Detail When not executed renders template when 
     <span
       class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-45 MuiTypography-caption"
     >
-      Email Subject
-    </span>
-    <p
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-46 MuiTypography-body2"
-    >
-      Market Report Q3
-    </p>
-  </div>
-  <div
-    class="SuperCampaignOverviewDetail-labelValue-38"
-  >
-    <span
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-45 MuiTypography-caption"
-    >
       Description
     </span>
     <p
       class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-46 MuiTypography-body2"
     >
       This is a monthly newsletter that is sent out to Newsletter tag
-    </p>
-  </div>
-  <div
-    class="SuperCampaignOverviewDetail-labelValue-38"
-  >
-    <span
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-label-45 MuiTypography-caption"
-    >
-      Scheduled for
-    </span>
-    <p
-      class="MuiTypography-root SuperCampaignOverviewDetailLabelValue-value-46 MuiTypography-body2"
-    >
-      Wednesday, November 17, 2021 at 09:30pm
     </p>
   </div>
 </div>

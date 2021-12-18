@@ -9,7 +9,7 @@ import PageLayout from 'components/GlobalPageLayout'
 import { SuperCampaignDetailProvider } from '../../components/SuperCampaignDetailProvider'
 import SuperCampaignOverview from '../../components/SuperCampaignOverview'
 
-import SuperCampaignCloseButton from './SuperCampaignCloseButton'
+import SuperCampaignDetailHeader from './SuperCampaignDetailHeader'
 import SuperCampaignDetailLoading from './SuperCampaignDetailLoading'
 import { useGetSuperCampaign } from './use-get-super-campaign'
 
@@ -49,7 +49,10 @@ function SuperCampaignDetail({ params }: SuperCampaignDetailProps) {
         <PageLayout.Header
           title={isLoading ? '' : superCampaign?.subject || 'Untitled Campaign'}
         >
-          <SuperCampaignCloseButton />
+          <SuperCampaignDetailHeader
+            superCampaign={superCampaign}
+            setSuperCampaign={setSuperCampaign}
+          />
         </PageLayout.Header>
       </div>
       <PageLayout.Main mt={0} pt={2} pb={4} className={classes.body}>

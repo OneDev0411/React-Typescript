@@ -11,14 +11,10 @@ import {
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OverlayDrawer from 'components/OverlayDrawer'
 
+import { convertDateToTimestamp, convertTimestampToDate } from '../../helpers'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import {
-  convertDateToTimestamp,
-  convertTimestampToDate,
-  futureTimeValidator,
-  requiredTextValidator
-} from './helpers'
+import { futureTimeValidator, requiredTextValidator } from './helpers'
 import {
   SuperCampaignFormInternalValues,
   SuperCampaignFormValues

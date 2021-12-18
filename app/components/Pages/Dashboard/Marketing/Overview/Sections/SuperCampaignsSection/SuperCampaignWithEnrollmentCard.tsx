@@ -54,6 +54,7 @@ function SuperCampaignWithEnrollmentCard({
         onClose={closePreviewDrawer}
         superCampaign={superCampaign}
         hasUnenroll={!!enrollment}
+        initialSelectedTags={enrollment?.tags}
         {...otherProps}
       />
     </>

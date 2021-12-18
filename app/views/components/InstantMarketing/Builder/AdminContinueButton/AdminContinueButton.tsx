@@ -70,7 +70,7 @@ function AdminContinueButton({
       notify({
         status: 'error',
         message:
-          'Something went wrong while saving the template or creating a super campaign. Please try again.'
+          'Something went wrong while saving the template or creating a campaign. Please try again.'
       })
     }
 
