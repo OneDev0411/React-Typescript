@@ -118,20 +118,6 @@ export const getSettingsFromActiveTeam =
     return getSettings(team, includesParents)
   }
 
-export const getActiveTeamSettings = getSettingsFromActiveTeam(
-  (team, includesParents) => {
-    let settings: StringMap<any> | null | undefined = team.brand.settings
-
-    if (includesParents) {
-      let brand = flattenBrand(team.brand)
-
-      settings = brand?.settings
-    }
-
-    return settings || {}
-  }
-)
-
 export const getUserSettingsInActiveTeam = (user: IUser, key: string): any => {
   return getSettingsFromActiveTeam(team => {
     return team?.settings?.[key]
