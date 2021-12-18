@@ -3,16 +3,3 @@ export function isSuperCampaignEnrollmentOptedOut(
 ): boolean {
   return !!enrollment.deleted_at
 }
-
-export function getSuperCampaignResultPercentage(
-  value: number,
-  total: number
-): string {
-  if (!total) {
-    return ''
-  }
-
-  const percentage = Math.round((value / total) * 100)
-
-  return `(${percentage}%)`
-}

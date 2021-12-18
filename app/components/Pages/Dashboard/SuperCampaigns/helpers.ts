@@ -18,3 +18,39 @@ export function convertTimestampToDate(timestamp: number): Date {
 export function convertDateToTimestamp(date: Date): number {
   return date.getTime() / 1000
 }
+
+function calcPercentage(value: number, total: number): string {
+  if (!total) {
+    return ''
+  }
+
+  const percentage = Math.round((value / total) * 100)
+
+  return `(${percentage}%)`
+}
+
+export interface GetSuperCampaignStatsLabelsInput {
+  sent: number
+  delivered: number
+  opened: number
+  clicked: number
+}
+
+interface GetSuperCampaignStatsLabels {
+  deliveredLabel: string
+  openedLabel: string
+  clickedLabel: string
+}
+
+export function getSuperCampaignStatsLabels({
+  sent,
+  delivered,
+  opened,
+  clicked
+}: GetSuperCampaignStatsLabelsInput): GetSuperCampaignStatsLabels {
+  return {
+    deliveredLabel: `${delivered} ${calcPercentage(delivered, sent)}`,
+    openedLabel: `${opened} ${calcPercentage(opened, delivered)}`,
+    clickedLabel: `${clicked} ${calcPercentage(clicked, delivered)}`
+  }
+}
