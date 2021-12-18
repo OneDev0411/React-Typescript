@@ -146,26 +146,29 @@ function ContactFilters(props) {
 
   return (
     <Box display="flex" alignItems="center">
-      <div className={classes.infoContainer}>
-        <Tooltip title={tooltipTitle}>
-          <Checkbox
-            disableRipple
-            className={classes.toggleAll}
-            disabled={isSelectAllDisable}
-            checked={defaultSelectAllValue}
-            indeterminate={isSomeRowsSelected}
-            onChange={toggleAll}
-            data-tour-id="select-deselect-checkbox"
-          />
-        </Tooltip>
-        <span
-          className={cn(classes.totalRow, {
-            [classes.totalRowDisable]: isSelectAllDisable
-          })}
-        >
-          {getSummeryInfo()}
-        </span>
-      </div>
+      {props.viewMode === 'table' && (
+        <div className={classes.infoContainer}>
+          <Tooltip title={tooltipTitle}>
+            <Checkbox
+              disableRipple
+              className={classes.toggleAll}
+              disabled={isSelectAllDisable}
+              checked={defaultSelectAllValue}
+              indeterminate={isSomeRowsSelected}
+              onChange={toggleAll}
+              data-tour-id="select-deselect-checkbox"
+            />
+          </Tooltip>
+          <span
+            className={cn(classes.totalRow, {
+              [classes.totalRowDisable]: isSelectAllDisable
+            })}
+          >
+            {getSummeryInfo()}
+          </span>
+        </div>
+      )}
+
       {props?.show && (
         <Filters
           name="contacts"
