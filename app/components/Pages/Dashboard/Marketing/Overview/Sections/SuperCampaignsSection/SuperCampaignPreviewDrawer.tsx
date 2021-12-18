@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Box, Button, TextField } from '@material-ui/core'
 
@@ -17,7 +17,10 @@ export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
   onEnroll: (enrollment: ISuperCampaignEnrollment) => void
   onUnenroll: () => void
   hasUnenroll: boolean
+  initialSelectedTags?: string[]
 }
+
+const DEFAULT_SELECTED_TAGS: string[] = []
 
 function SuperCampaignPreviewDrawer({
   open,
@@ -25,19 +28,25 @@ function SuperCampaignPreviewDrawer({
   superCampaign,
   onEnroll,
   onUnenroll,
-  hasUnenroll
+  hasUnenroll,
+  initialSelectedTags
 }: SuperCampaignPreviewDrawerProps) {
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    superCampaign.tags ?? []
-  )
+  const initialTags =
+    initialSelectedTags ?? superCampaign.tags ?? DEFAULT_SELECTED_TAGS
+
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags)
+
+  useEffect(() => {
+    if (!open) {
+      setSelectedTags(initialTags)
+    }
+  }, [open, initialTags])
 
   const { isUpdating, updateMySuperCampaignEnrollment } =
     useUpdateMySuperCampaignEnrollment(superCampaign.id, onEnroll)
 
   const { isDeleting, unenrollMeFromSuperCampaign } =
     useUnenrollMeFromSuperCampaign(superCampaign.id, onUnenroll)
-
-  const isWorking = isUpdating || isDeleting
 
   const handleSave = async () => {
     await updateMySuperCampaignEnrollment(selectedTags)
@@ -49,10 +58,12 @@ function SuperCampaignPreviewDrawer({
     onClose({}, 'closeButtonClick')
   }
 
+  const isWorking = isUpdating || isDeleting
+
   const hasError = selectedTags.length === 0
 
   return (
-    <OverlayDrawer open={open} onClose={onClose} width="600px" keepMounted>
+    <OverlayDrawer open={open} onClose={onClose} width="600px">
       <OverlayDrawer.Header
         title="Campaign Preview"
         closeButtonDisabled={isWorking}
