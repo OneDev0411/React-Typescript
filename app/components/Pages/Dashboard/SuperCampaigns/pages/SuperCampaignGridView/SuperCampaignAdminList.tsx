@@ -8,6 +8,8 @@ import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import { noop } from 'utils/helpers'
 
+import SuperCampaignAdminListColumnStats from './SuperCampaignAdminListColumnStats'
+import SuperCampaignAdminListColumnUserCount from './SuperCampaignAdminListColumnUserCount'
 import SuperCampaignListColumnSubject from './SuperCampaignListColumnSubject'
 import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
 import { useGetAdminSuperCampaigns } from './use-get-admin-super-campaigns'
@@ -29,12 +31,26 @@ function SuperCampaignAdminList() {
       )
     },
     {
-      id: 'tags',
-      width: '55%',
+      id: 'userCount',
+      width: '20%',
       render: ({ row }) => (
-        // TODO: Implement the results component and display it here when the API provides the enrollments data
-        <SuperCampaignListColumnTags label="Tags" tags={row.tags ?? []} />
+        <SuperCampaignAdminListColumnUserCount value={row.enrollments_count} />
       )
+    },
+    {
+      id: 'tags',
+      width: '40%',
+      render: ({ row }) =>
+        row.executed_at ? (
+          <SuperCampaignAdminListColumnStats
+            sent={row.enrollments_count}
+            delivered={row.delivered}
+            opened={row.opened}
+            clicked={row.clicked}
+          />
+        ) : (
+          <SuperCampaignListColumnTags label="Tags" tags={row.tags ?? []} />
+        )
     },
     {
       id: 'actions',
