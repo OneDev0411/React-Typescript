@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
@@ -10,6 +10,7 @@ import getAllSuperCampaign, {
 interface UseGetSuperCampaign {
   isLoading: boolean
   superCampaigns: ISuperCampaign[]
+  setSuperCampaigns: Dispatch<SetStateAction<ISuperCampaign[]>>
   loadMore: () => void
 }
 
@@ -23,6 +24,7 @@ export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
   const {
     run,
     data: superCampaigns,
+    setData: setSuperCampaigns,
     isLoading
   } = useAsync<ISuperCampaign[]>({
     data: [],
@@ -51,5 +53,5 @@ export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
     run(async () => getAllSuperCampaign(range))
   })
 
-  return { isLoading, superCampaigns, loadMore }
+  return { isLoading, superCampaigns, setSuperCampaigns, loadMore }
 }
