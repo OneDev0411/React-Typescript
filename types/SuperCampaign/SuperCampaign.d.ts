@@ -20,4 +20,9 @@ declare interface ISuperCampaign<A extends ISuperCampaignAssociations = ''>
     : UUID
   tags: Nullable<string[]>
   eligible_brands: Nullable<UUID[]>
+  enrollments_count: number
+  delivered: number
+  opened: number
+  clicked: number
+  unsubscribed: number
 }
