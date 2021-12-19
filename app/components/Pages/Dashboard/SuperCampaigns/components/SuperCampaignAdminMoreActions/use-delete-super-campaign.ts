@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import useSafeState from '@app/hooks/use-safe-state'
+import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import deleteSuperCampaignModel from '@app/models/super-campaign/delete-super-campaign'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
@@ -9,7 +9,7 @@ export function useDeleteSuperCampaign(
   onDelete: () => void
 ) {
   const confirmation = useContext(ConfirmationModalContext)
-  const [isDeleting, setIsDeleting] = useSafeState(false)
+  const { isRunning, runActionThenNotify } = useRunActionThenNotify()
 
   const deleteSuperCampaign = () => {
     confirmation.setConfirmationModal({
@@ -18,16 +18,20 @@ export function useDeleteSuperCampaign(
       }"?`,
       confirmLabel: 'Yes, I am',
       onConfirm: async () => {
-        setIsDeleting(true)
-        await deleteSuperCampaignModel(superCampaign.id)
-        setIsDeleting(false)
-        onDelete()
+        runActionThenNotify(
+          async () => {
+            await deleteSuperCampaignModel(superCampaign.id)
+            onDelete()
+          },
+          'The campaign was deleted',
+          'Something went wrong while deleting the campaign. Please try again.'
+        )
       }
     })
   }
 
   return {
-    isDeleting,
+    isDeleting: isRunning,
     deleteSuperCampaign
   }
 }
