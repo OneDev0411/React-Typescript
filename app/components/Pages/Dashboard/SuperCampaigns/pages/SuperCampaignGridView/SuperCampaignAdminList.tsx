@@ -11,12 +11,13 @@ import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
 import { noop } from 'utils/helpers'
 
-import SuperCampaignAdminListColumnActions from './SuperCampaignAdminListColumnActions'
+import SuperCampaignAdminMoreActions from '../../components/SuperCampaignAdminMoreActions'
+import { isSuperCampaignReadOnly } from '../../helpers'
+
 import SuperCampaignAdminListColumnStats from './SuperCampaignAdminListColumnStats'
 import SuperCampaignAdminListColumnUserCount from './SuperCampaignAdminListColumnUserCount'
 import SuperCampaignListColumnSubject from './SuperCampaignListColumnSubject'
 import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
-import { useDeleteAdminSuperCampaigns } from './use-delete-admin-super-campaigns'
 import { useGetAdminSuperCampaigns } from './use-get-admin-super-campaigns'
 
 const useStyles = makeStyles(
@@ -32,8 +33,26 @@ function SuperCampaignAdminList() {
   const { isLoading, superCampaigns, setSuperCampaigns, loadMore } =
     useGetAdminSuperCampaigns()
 
-  const deleteAdminSuperCampaigns =
-    useDeleteAdminSuperCampaigns(setSuperCampaigns)
+  const handleSendNow = (newSuperCampaign: ISuperCampaign) =>
+    setSuperCampaigns(superCampaigns =>
+      superCampaigns.map(superCampaign => {
+        if (newSuperCampaign.id !== superCampaign.id) {
+          return superCampaign
+        }
+
+        return newSuperCampaign
+      })
+    )
+
+  const handleDelete = (superCampaignId: UUID) =>
+    setSuperCampaigns(superCampaigns =>
+      superCampaigns.filter(
+        superCampaign => superCampaign.id !== superCampaignId
+      )
+    )
+
+  const handleDuplicate = (newSuperCampaign: ISuperCampaign) =>
+    setSuperCampaigns(superCampaigns => [newSuperCampaign, ...superCampaigns])
 
   const columns: TableColumn<ISuperCampaign>[] = [
     {
@@ -58,7 +77,7 @@ function SuperCampaignAdminList() {
       id: 'tags',
       width: '40%',
       render: ({ row }) =>
-        row.executed_at ? (
+        isSuperCampaignReadOnly(row) ? (
           <SuperCampaignAdminListColumnStats
             sent={row.enrollments_count}
             delivered={row.delivered}
@@ -73,9 +92,15 @@ function SuperCampaignAdminList() {
       id: 'actions',
       align: 'right',
       render: ({ row }) => (
-        <SuperCampaignAdminListColumnActions
+        <SuperCampaignAdminMoreActions
           superCampaign={row}
-          onDelete={() => deleteAdminSuperCampaigns(row.id)}
+          onSendNow={handleSendNow}
+          onDelete={() => handleDelete(row.id)}
+          onDuplicate={handleDuplicate}
+          // TODO: The sent item needs to display the real campaign stats when it is executed. This means
+          // we need to have a socket or pulling mechanism to get the stats and update the list.
+          // I hid the send now option temporarily because of my limited time but I'll enable it soon.
+          displaySendNow={false}
         />
       )
     }

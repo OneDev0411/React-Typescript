@@ -21,6 +21,7 @@ interface SuperCampaignAdminMoreActionsProps {
   onSendNow: (superCampaign: ISuperCampaign) => void
   onDelete: () => void
   onDuplicate: (superCampaign: ISuperCampaign) => void
+  displaySendNow?: boolean
 }
 
 function SuperCampaignAdminMoreActions({
@@ -28,7 +29,8 @@ function SuperCampaignAdminMoreActions({
   superCampaign,
   onDelete,
   onDuplicate,
-  onSendNow
+  onSendNow,
+  displaySendNow = true
 }: SuperCampaignAdminMoreActionsProps) {
   const { deleteSuperCampaign, isDeleting } = useDeleteSuperCampaign(
     superCampaign,
@@ -68,7 +70,7 @@ function SuperCampaignAdminMoreActions({
       )}
       renderMenu={({ close }) => (
         <div onClick={close}>
-          {!isExecuted && (
+          {!isExecuted && displaySendNow && (
             <MenuItem onClick={sendSuperCampaign}>
               <Typography variant="body2">Send Now</Typography>
             </MenuItem>
