@@ -83,7 +83,7 @@ function SuperCampaignAgentList() {
         <SuperCampaignAgentListColumnActions
           superCampaign={row}
           onParticipateClick={() => setSelectedSuperCampaign(row)}
-          onNotify={() => console.log('onNotify')}
+          onNotify={() => console.log('onNotify')} // TODO: implement this when the API is ready
           onDuplicate={() => console.log('onDuplicate')}
           onUnenroll={() => unenrollFromSuperCampaign(row.id)}
         />

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 import {
   Button,
@@ -11,9 +11,10 @@ import { mdiDotsVertical } from '@mdi/js'
 
 import { useUnenrollMeFromSuperCampaign } from '@app/hooks/use-unenroll-me-from-super-campaign'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
+import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
+import MarketingEmailTemplateEditor from '../../components/MarketingEmailTemplateEditor'
 import { isSuperCampaignReadOnly } from '../../helpers'
 
 const useStyles = makeStyles(
@@ -35,7 +36,8 @@ interface SuperCampaignAgentListColumnActionsProps {
 function SuperCampaignAgentListColumnActions({
   superCampaign,
   onParticipateClick,
-  onUnenroll
+  onUnenroll,
+  onDuplicate
 }: SuperCampaignAgentListColumnActionsProps) {
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
@@ -51,10 +53,22 @@ function SuperCampaignAgentListColumnActions({
   //   onNotify()
   // }
 
-  // const handleDuplicate = () => {
-  //   // TODO: Implement notify logic
-  //   onDuplicate()
-  // }
+  // const { handleDuplicate, editor } = useAgentDuplicateSuperCampaign(
+  //   superCampaign.template_instance
+  // )
+
+  const [isEditorOpen, setIsEditorOpen] = useState(false)
+
+  const openEditor = () => setIsEditorOpen(true)
+
+  const closeEditor = () => setIsEditorOpen(false)
+
+  const handleDuplicate = () => {
+    // TODO: Implement notify logic
+    // console.log('handleDuplicate')
+    // onDuplicate()
+    openEditor()
+  }
 
   const handleOptOut = () => {
     confirmation.setConfirmationModal({
@@ -64,25 +78,19 @@ function SuperCampaignAgentListColumnActions({
     })
   }
 
-  // TODO: Uncomment this when the duplicate logic was implemented
-  // const handleOptOutAndDuplicate = () => {
-  //   confirmation.setConfirmationModal({
-  //     message:
-  //       'Are you sure about opting out of the campaign and duplicating it?',
-  //     confirmLabel: 'Yes, I am',
-  //     onConfirm: async () => {
-  //       await Promise.all([unenrollMeFromSuperCampaign(), handleDuplicate()])
-  //     }
-  //   })
-  // }
+  const handleOptOutAndDuplicate = () => {
+    confirmation.setConfirmationModal({
+      message:
+        'Are you sure about opting out of the campaign and duplicating it?',
+      confirmLabel: 'Yes, I am',
+      onConfirm: async () => {
+        await Promise.all([unenrollMeFromSuperCampaign(), handleDuplicate()])
+      }
+    })
+  }
 
   // TODO: Add isDuplicating and isNotifying when they are ready
   const isWorking = isDeleting
-
-  // TODO: We need this because there are no options on more button when the campaign is executed.
-  if (isExecuted) {
-    return null
-  }
 
   return (
     <div className={classes.root}>
@@ -98,8 +106,7 @@ function SuperCampaignAgentListColumnActions({
         </Button>
       )}
 
-      {/* TODO: Remove the below condition when there are more options than opt-out */}
-      {isEnrolled && (
+      {
         <BaseDropdown
           PopperProps={{
             placement: 'bottom-end'
@@ -132,20 +139,20 @@ function SuperCampaignAgentListColumnActions({
                 <Divider />
               </>
             ) */}
-              {/* TODO: Uncomment this when the duplicate logic was implemented */}
-              {/* (isExecuted || !isEnrolled) && (
-              <MenuItem onClick={handleDuplicate}>
-                <Typography variant="body2">Duplicate this campaign</Typography>
-              </MenuItem>
-            ) */}
+              {(isExecuted || !isEnrolled) && (
+                <MenuItem onClick={handleDuplicate}>
+                  <Typography variant="body2">
+                    Duplicate this campaign
+                  </Typography>
+                </MenuItem>
+              )}
               {!isExecuted && isEnrolled && (
                 <>
-                  {/* TODO: Uncomment this when the duplicate logic was implemented */}
-                  {/* <MenuItem onClick={handleOptOutAndDuplicate}>
-                  <Typography variant="body2">
-                    Opt-out and duplicate this campaign
-                  </Typography>
-                </MenuItem> */}
+                  <MenuItem onClick={handleOptOutAndDuplicate}>
+                    <Typography variant="body2">
+                      Opt-out and duplicate this campaign
+                    </Typography>
+                  </MenuItem>
                   <MenuItem onClick={handleOptOut}>
                     <Typography variant="body2">Opt-out</Typography>
                   </MenuItem>
@@ -153,6 +160,15 @@ function SuperCampaignAgentListColumnActions({
               )}
             </div>
           )}
+        />
+      }
+      {superCampaign.template_instance && isEditorOpen && (
+        <MarketingEmailTemplateEditor
+          template={superCampaign.template_instance}
+          onClose={closeEditor}
+          initialSubject={superCampaign.subject}
+          // TODO: Find all the related tags according to the campaign tags
+          // initialBCC={[{ recipient_type: 'Tag', tag: ''}]}
         />
       )}
     </div>
