@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 import { BaseTagSelector } from '@app/views/components/TagSelector'
 import { SelectorOption } from '@app/views/components/TagSelector/type'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
@@ -32,7 +32,7 @@ function SuperCampaignEligibleCardTags({
     setSuperCampaign
   )
 
-  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
+  const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
   const stringValue =
     superCampaign.tags?.map(tag => ({ title: tag, value: tag })) ?? []
@@ -42,21 +42,17 @@ function SuperCampaignEligibleCardTags({
 
   return (
     <BaseTagSelector
-      className={isSuperCampaignReadOnly ? classes.readOnly : undefined}
+      className={isReadOnly ? classes.readOnly : undefined}
       value={stringValue}
       onChange={handleChange}
       chipProps={{
         size: 'small',
         classes: {
-          deleteIcon: isSuperCampaignReadOnly
-            ? classes.chipDeleteIcon
-            : undefined
+          deleteIcon: isReadOnly ? classes.chipDeleteIcon : undefined
         }
       }}
       textFieldProps={{
-        placeholder: !isSuperCampaignReadOnly
-          ? 'Search or create tags...'
-          : undefined
+        placeholder: !isReadOnly ? 'Search or create tags...' : undefined
       }}
       disabled={isSaving}
     />

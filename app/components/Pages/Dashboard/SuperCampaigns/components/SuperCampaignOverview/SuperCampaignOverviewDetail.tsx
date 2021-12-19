@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 import { useReplaceQueryParam } from '@app/hooks/use-query-param'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
@@ -38,7 +38,7 @@ function SuperCampaignOverviewDetail() {
   const [editDrawerParam, setEditDrawerParam, deleteEditDrawerParam] =
     useReplaceQueryParam('edit-drawer')
 
-  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
+  const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
   const openDrawer = () => setEditDrawerParam('open')
 
@@ -60,7 +60,7 @@ function SuperCampaignOverviewDetail() {
         <SuperCampaignCardHeader
           className={classes.title}
           title="Details"
-          actionLabel={!isSuperCampaignReadOnly ? 'Edit' : undefined}
+          actionLabel={!isReadOnly ? 'Edit' : undefined}
           onActionClick={openDrawer}
         />
         <SuperCampaignOverviewDetailLabelValue
@@ -75,11 +75,11 @@ function SuperCampaignOverviewDetail() {
           titleVariant="body1"
           template={superCampaign.template_instance}
           onTemplateChange={handleTemplateChange}
-          readOnly={isSuperCampaignReadOnly}
+          readOnly={isReadOnly}
         />
       )}
       <SuperCampaignDrawer
-        isOpen={!!editDrawerParam && !isSuperCampaignReadOnly}
+        isOpen={!!editDrawerParam && !isReadOnly}
         onClose={closeDrawer}
         formInitialValues={superCampaign}
         onConfirm={handleSuperCampaignConfirm}

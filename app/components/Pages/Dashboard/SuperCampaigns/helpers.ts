@@ -54,3 +54,27 @@ export function getSuperCampaignStatsLabels({
     clickedLabel: `${clicked} ${calcPercentage(clicked, delivered)}`
   }
 }
+
+export function isSuperCampaignExecuted(
+  superCampaign: Pick<ISuperCampaign, 'executed_at'>
+): boolean {
+  return !!superCampaign.executed_at
+}
+
+export function isSuperCampaignDueAtTimeout(
+  superCampaign: Pick<ISuperCampaign, 'due_at'>
+): boolean {
+  return (
+    !!superCampaign.due_at &&
+    getSuperCampaignDueAtRemainingTimeInMilliSeconds(superCampaign.due_at) < 0
+  )
+}
+
+export function isSuperCampaignReadOnly(
+  superCampaign: Pick<ISuperCampaign, 'executed_at' | 'due_at'>
+): boolean {
+  const isExecuted = isSuperCampaignExecuted(superCampaign)
+  const isDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
+
+  return isExecuted || isDueAtTimeout
+}

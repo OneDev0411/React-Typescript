@@ -14,7 +14,7 @@ import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -41,7 +41,7 @@ function SuperCampaignAgentListColumnActions({
   const confirmation = useContext(ConfirmationModalContext)
 
   const isEnrolled = !!superCampaign.enrollment
-  const isExecuted = useIsSuperCampaignReadOnly(superCampaign)
+  const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
   const { unenrollMeFromSuperCampaign, isDeleting } =
     useUnenrollMeFromSuperCampaign(superCampaign.id, onUnenroll)

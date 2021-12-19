@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core'
 import useSafeState from '@app/hooks/use-safe-state'
 import { MultiSelectionBrandSelectorDrawer } from '@app/views/components/BrandSelector'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import { useUpdateSuperCampaignEligibility } from './use-update-super-campaign-eligibility'
@@ -12,7 +12,7 @@ function SuperCampaignEligibleCardBrands() {
   const [isBrandSelectorOpen, setIsBrandSelectorOpen] = useSafeState(false)
 
   const { superCampaign, setSuperCampaign } = useSuperCampaignDetail()
-  const isSuperCampaignReadOnly = useIsSuperCampaignReadOnly(superCampaign)
+  const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
   const updateSuperCampaignEligibility = useUpdateSuperCampaignEligibility(
     superCampaign,
@@ -35,7 +35,7 @@ function SuperCampaignEligibleCardBrands() {
       <Button
         color="primary"
         size="small"
-        disabled={isSuperCampaignReadOnly}
+        disabled={isReadOnly}
         onClick={openBrandSelector}
       >
         {eligibleBrands.length !== 1
@@ -47,7 +47,7 @@ function SuperCampaignEligibleCardBrands() {
         <MultiSelectionBrandSelectorDrawer
           open
           width="43rem"
-          disabled={isSuperCampaignReadOnly}
+          disabled={isReadOnly}
           selectedBrands={eligibleBrands}
           onClose={closeBrandSelector}
           onSave={handleSelectedBrandSave}

@@ -9,7 +9,7 @@ import { mdiDotsVertical } from '@mdi/js'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 
 import { useDeleteSuperCampaign } from './use-delete-super-campaign'
 import { useDuplicateSuperCampaign } from './use-duplicate-super-campaign'
@@ -43,7 +43,7 @@ function SuperCampaignAdminMoreActions({
     onSendNow
   )
 
-  const isExecuted = useIsSuperCampaignReadOnly(superCampaign)
+  const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
   const isWorking = isDeleting || isDuplicating || isSending
 

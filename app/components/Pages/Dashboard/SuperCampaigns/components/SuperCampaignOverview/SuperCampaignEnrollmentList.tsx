@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
-import { useIsSuperCampaignDueAtTimeout } from '../../hooks/use-is-super-campaign-due-at-timeout'
+import { isSuperCampaignDueAtTimeout } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
@@ -49,7 +49,7 @@ function SuperCampaignEnrollmentList({
   setSuperCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
   const { superCampaign } = useSuperCampaignDetail()
-  const isCampaignDueAtTimeout = useIsSuperCampaignDueAtTimeout(superCampaign)
+  const isCampaignDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   const classes = useStyles()
   const listClasses = useSuperCampaignListStyles()

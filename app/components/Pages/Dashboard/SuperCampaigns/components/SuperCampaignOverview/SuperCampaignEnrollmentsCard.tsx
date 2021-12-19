@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import pluralize from 'pluralize'
 
-import { useIsSuperCampaignExecuted } from '../../hooks/use-is-super-campaign-executed'
+import { isSuperCampaignExecuted } from '../../helpers'
 import SuperCampaignCard from '../SuperCampaignCard'
 import SuperCampaignCardHeader from '../SuperCampaignCardHeader'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
@@ -24,7 +24,7 @@ function SuperCampaignEnrollmentsCard() {
   const classes = useStyles()
   const { superCampaign } = useSuperCampaignDetail()
 
-  const isSuperCampaignExecuted = useIsSuperCampaignExecuted(superCampaign)
+  const isExecuted = isSuperCampaignExecuted(superCampaign)
 
   const {
     superCampaignEnrollments,
@@ -34,7 +34,7 @@ function SuperCampaignEnrollmentsCard() {
   } = useGetSuperCampaignEnrollments(
     superCampaign.id,
     superCampaign.tags,
-    isSuperCampaignExecuted
+    isExecuted
   )
 
   const addSuperCampaignEnrollment = useAddSuperCampaignEnrollment(
@@ -44,7 +44,7 @@ function SuperCampaignEnrollmentsCard() {
 
   return (
     <SuperCampaignCard>
-      {isSuperCampaignExecuted ? (
+      {isExecuted ? (
         <SuperCampaignResultList
           isLoading={isLoading}
           superCampaignResults={
