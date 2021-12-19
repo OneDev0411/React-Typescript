@@ -121,6 +121,7 @@ function SuperCampaignAgentList() {
           onEnroll={handleEnroll}
           onUnenroll={handleUnenroll}
           hasUnenroll={!!selectedSuperCampaign?.enrollment}
+          initialSelectedTags={selectedSuperCampaign?.enrollment?.tags}
         />
       )}
     </>

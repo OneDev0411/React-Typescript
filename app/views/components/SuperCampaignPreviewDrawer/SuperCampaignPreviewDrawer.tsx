@@ -17,7 +17,7 @@ export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
   onEnroll: (enrollment: ISuperCampaignEnrollment) => void
   onUnenroll: () => void
   hasUnenroll: boolean
-  initialSelectedTags?: string[]
+  initialSelectedTags: Optional<string[]>
 }
 
 const DEFAULT_SELECTED_TAGS: string[] = []
