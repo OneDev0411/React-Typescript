@@ -1,4 +1,4 @@
-import useNotify from '@app/hooks/use-notify'
+import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import deleteSuperCampaignEnrollmentModel from '@app/models/super-campaign/delete-super-campaign-enrollment'
 
 type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
@@ -10,40 +10,38 @@ export function useDeleteSuperCampaignEnrollment(
     superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
   ) => void
 ): UseDeleteSuperCampaignEnrollment {
-  const notify = useNotify()
+  const { runActionThenNotify } = useRunActionThenNotify()
 
-  const deleteSuperCampaignEnrollment = async (enrollmentId: UUID) => {
-    try {
-      const enrollmentIndex = superCampaignEnrollments.findIndex(
-        enrollment => enrollment.id === enrollmentId
-      )
+  const deleteSuperCampaignEnrollment = async (enrollmentId: UUID) =>
+    runActionThenNotify(
+      async () => {
+        const enrollmentIndex = superCampaignEnrollments.findIndex(
+          enrollment => enrollment.id === enrollmentId
+        )
 
-      if (enrollmentIndex === -1) {
-        return
-      }
+        if (enrollmentIndex === -1) {
+          return
+        }
 
-      const enrollment = superCampaignEnrollments[enrollmentIndex]
+        const enrollment = superCampaignEnrollments[enrollmentIndex]
 
-      await deleteSuperCampaignEnrollmentModel(superCampaignId, {
-        user: enrollment.user.id,
-        brand: enrollment.brand.id
-      })
+        await deleteSuperCampaignEnrollmentModel(superCampaignId, {
+          user: enrollment.user.id,
+          brand: enrollment.brand.id
+        })
 
-      const newSuperCampaignEnrollments = [...superCampaignEnrollments]
+        const newSuperCampaignEnrollments = [...superCampaignEnrollments]
 
-      newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {
-        ...enrollment,
-        deleted_at: new Date().getTime() / 1000
-      })
+        newSuperCampaignEnrollments.splice(enrollmentIndex, 1, {
+          ...enrollment,
+          deleted_at: new Date().getTime() / 1000
+        })
 
-      setSuperCampaignEnrollments(newSuperCampaignEnrollments)
-    } catch (_) {
-      notify({
-        status: 'error',
-        message: 'Something went wrong while deleting the enrollment'
-      })
-    }
-  }
+        setSuperCampaignEnrollments(newSuperCampaignEnrollments)
+      },
+      'The enrollment was deleted',
+      'Something went wrong while deleting the enrollment'
+    )
 
   return deleteSuperCampaignEnrollment
 }
