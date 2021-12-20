@@ -22,9 +22,7 @@ export async function getBrandAssets(
     query['mediums[]'] = options.mediums
   }
 
-  const response = await new Fetch()
-    .get(`/brands/${brand}/assets`)
-    .query(query ?? {})
+  const response = await new Fetch().get(`/brands/${brand}/assets`).query(query)
 
   const allAssets: IBrandAsset[] = response.body.data
 

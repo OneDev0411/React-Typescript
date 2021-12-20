@@ -19,7 +19,7 @@ export async function uploadBrandAsset(
   const request = new Fetch({ progress: progressCallback })
     .upload('/brands/assets')
     .attach('file', file)
-    .field({ ...options, brands } as any)
+    .field({ ...options, brands })
 
   const response = await request
 
