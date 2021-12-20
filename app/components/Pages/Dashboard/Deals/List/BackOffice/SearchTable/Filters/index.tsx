@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Button, Grid } from '@material-ui/core'
 import { mdiFileDownloadOutline } from '@mdi/js'
@@ -54,8 +54,13 @@ export const Filters = ({ searchQuery }: Props) => {
   const isFirstMount = useFirstMountState()
 
   const [queryParamValue] = useQueryParam('q')
-  const [sortByParamValue] = useQueryParam('sortBy')
-  const [sortTypeParamValue] = useQueryParam('sortType')
+
+  // TODO: we should replace the order
+  const sortOption: DealsOrder = DEALS_LIST_DEFUALT_ORDER
+  // const [sortByParamValue] = useQueryParam('sortBy')
+  // const [sortTypeParamValue] = useQueryParam('sortType')
+
+  const [isExporting, setIsExporting] = useState(false)
 
   const user = useSelector(selectUser)
   const activeBrand = useSelector(selectActiveBrand)
@@ -71,22 +76,24 @@ export const Filters = ({ searchQuery }: Props) => {
     // TODO: export list
 
     const payload = {
-      $order: ['deals.created_at', 'DESC'],
+      $order: sortOption,
       brand: activeBrand.id,
       query: searchQuery?.term || '',
       ...userFilters
     }
+
+    setIsExporting(true)
+
     const response = await exportFilter(payload)
 
+    setIsExporting(false)
+
     saveAs(response.body, 'deals.xlsx')
-  }, [userFilters, activeBrand, searchQuery])
+  }, [sortOption, activeBrand.id, searchQuery?.term, userFilters])
 
   useDebounce(
     () => {
       if (!isFirstMount) {
-        // TODO: we should replace the order
-        const sortOption: DealsOrder = DEALS_LIST_DEFUALT_ORDER
-
         // remove false statuses from the user filters
         const cleanedUserFilters: DealsListFilters = {
           ...userFilters,
@@ -103,13 +110,7 @@ export const Filters = ({ searchQuery }: Props) => {
       }
     },
     CHANGE_FILTERS_DEBOUNCE_MS,
-    [
-      userFilters,
-      isFirstMount,
-      queryParamValue,
-      sortByParamValue,
-      sortTypeParamValue
-    ]
+    [userFilters, isFirstMount, queryParamValue]
   )
 
   return (
@@ -243,6 +244,7 @@ export const Filters = ({ searchQuery }: Props) => {
                 onClick={onExportList}
                 color="primary"
                 size="medium"
+                disabled={isExporting}
                 startIcon={
                   <SvgIcon
                     path={mdiFileDownloadOutline}
@@ -250,7 +252,7 @@ export const Filters = ({ searchQuery }: Props) => {
                   />
                 }
               >
-                Export List
+                {isExporting ? 'Exporting...' : ' Export List'}
               </Button>
               {/* Reset button  */}
               <Button
