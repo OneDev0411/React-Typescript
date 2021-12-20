@@ -113,42 +113,45 @@ export function hasInvalidTimeRange(
   )
 }
 
-export function sortAppointments(
-  appointments: IShowingAppointment<'showing'>[]
-): IShowingAppointment<'showing'>[] {
-  return [...appointments].sort((a, b) => {
-    const time1 = new Date(a.time)
-    const time2 = new Date(b.time)
+function compareDate(
+  date1: Date,
+  date2: Date,
+  sortDirection: string = 'DESC'
+): number {
+  if (sortDirection === 'ASC') {
+    return date1.getTime() - date2.getTime()
+  }
 
-    if (time1 > time2) {
-      return -1
-    }
-
-    if (time1 < time2) {
-      return 1
-    }
-
-    return 0
-  })
+  return date2.getTime() - date1.getTime()
 }
 
-export function sortAppointmentsAsc(
-  appointments: IShowingAppointment<'showing'>[]
+export function sortAppointments(
+  appointments: IShowingAppointment<'showing'>[],
+  sortDirection: string
 ): IShowingAppointment<'showing'>[] {
-  return [...appointments].sort((a, b) => {
+  const sortedAppointmentsByTime = [...appointments].sort((a, b) => {
     const time1 = new Date(a.time)
     const time2 = new Date(b.time)
 
-    if (time1 < time2) {
-      return -1
-    }
-
-    if (time1 > time2) {
-      return 1
-    }
-
-    return 0
+    return compareDate(time1, time2, sortDirection)
   })
+
+  const pastAppointments: IShowingAppointment<'showing'>[] = []
+  const upcomingAppointments: IShowingAppointment<'showing'>[] = []
+
+  const currentTime = new Date()
+
+  sortedAppointmentsByTime.forEach(appointment => {
+    if (
+      compareDate(new Date(appointment.time), currentTime, sortDirection) >= 0
+    ) {
+      upcomingAppointments.push(appointment)
+    } else {
+      pastAppointments.unshift(appointment)
+    }
+  })
+
+  return [...upcomingAppointments, ...pastAppointments]
 }
 
 export function getShowingRoleLabel(role: IDealRoleType): string {

@@ -13,7 +13,7 @@ import {
   getAppointmentDateLabel,
   getAppointmentTimeLabel,
   getAppointmentTitle,
-  sortAppointmentsAsc
+  sortAppointments
 } from '../../helpers'
 import ShowingColumnContactActions from '../ShowingColumnContactActions'
 import ShowingColumnProperty from '../ShowingColumnProperty'
@@ -200,15 +200,15 @@ function ShowingBookingList({
   }
 
   const visibleRows = useMemo<IShowingAppointment<'showing'>[]>(() => {
-    const time = new Date().toISOString()
-    const pastBookings = rows.filter(row => row.time < time)
-    const upcomingBookings = sortAppointmentsAsc(
-      rows.filter(row => row.time >= time)
-    )
-
     if (!hasPastBookingsFilter || showPastBookings) {
-      return [...upcomingBookings, ...pastBookings]
+      return sortAppointments(rows, 'ASC')
     }
+
+    const currentTime = new Date().toISOString()
+    const upcomingBookings = sortAppointments(
+      rows.filter(row => row.time >= currentTime),
+      'ASC'
+    )
 
     return upcomingBookings
   }, [hasPastBookingsFilter, rows, showPastBookings])
@@ -218,10 +218,10 @@ function ShowingBookingList({
       return false
     }
 
-    const time = new Date().toISOString()
+    const currentTime = new Date().toISOString()
 
     // This works because the appointment list is sorted by time
-    return rows[rows.length - 1].time < time
+    return rows[0].time < currentTime
   }, [rows])
 
   const hiddenRowCount = rows.length - visibleRows.length
