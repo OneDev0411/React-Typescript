@@ -11,7 +11,7 @@ interface Props {
 function SearchTable({ searchQuery, statuses }: Props) {
   return (
     <>
-      <Filters />
+      <Filters searchQuery={searchQuery} />
       <Grid searchQuery={searchQuery} statuses={statuses} />
     </>
   )

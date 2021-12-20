@@ -3,16 +3,35 @@ import { makeStyles } from '@material-ui/core'
 export const useStyles = makeStyles(
   theme => ({
     root: {
-      marginTop: theme.spacing(-3),
-      marginBottom: theme.spacing(3)
+      display: 'flex',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      marginTop: theme.spacing(-5),
+      marginBottom: theme.spacing(1)
+    },
+    filtersWrapper: {
+      marginLeft: theme.spacing(1, -0.5),
+      justifyContent: 'flex-start'
+    },
+    actionsWrapper: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      marginRight: theme.spacing(-0.5),
+      marginLeft: 'auto',
+      alignItems: 'stretch'
     },
     button: {
       padding: theme.spacing(1, 2),
-      margin: theme.spacing(0, 0.5)
+      margin: theme.spacing(0.5, 0.5)
     },
     resetButton: {
       padding: theme.spacing(1, 2),
-      margin: theme.spacing(0, 1, 0, 1.5)
+      margin: theme.spacing(0.5, 0.5)
+    },
+    exportButton: {
+      padding: theme.spacing(1, 2),
+      margin: theme.spacing(0.5, 0.5)
     },
     filterButton: {
       minWidth: 170

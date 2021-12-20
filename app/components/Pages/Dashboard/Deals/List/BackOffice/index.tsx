@@ -4,7 +4,6 @@ import { useQueryParam } from '@app/hooks/use-query-param'
 import { goTo } from '@app/utils/go-to'
 import PageLayout from 'components/GlobalPageLayout'
 
-import { ExportDeals } from '../components/ExportDeals'
 import { DebouncedSearchInput } from '../components/SearchInput'
 
 import { SORTABLE_COLUMNS } from './helpers/backoffice-sorting'
@@ -57,8 +56,6 @@ export default function BackofficeWraperPage(
               InputProps={{ readOnly: true }}
             />
           )}
-
-          <ExportDeals />
         </div>
       </PageLayout.Header>
       <PageLayout.Main>

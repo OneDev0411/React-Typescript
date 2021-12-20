@@ -1,12 +1,20 @@
+import { useCallback } from 'react'
+
 import { Button, Grid } from '@material-ui/core'
+import { mdiFileDownloadOutline } from '@mdi/js'
+import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { useDebounce, useFirstMountState } from 'react-use'
 
 import { useQueryParam } from '@app/hooks/use-query-param'
+import { exportFilter } from '@app/models/Deal/deal'
+import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
 import FilterButton from '@app/views/components/Filters/FilterButton'
+import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
+import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { searchDeals } from 'actions/deals'
 
 import {
@@ -14,7 +22,12 @@ import {
   DEALS_LIST_DEFAULT_FILTERS,
   DEALS_LIST_DEFUALT_ORDER
 } from '../../constants'
-import { DealsListFilters, DealsListPayload, DealsOrder } from '../../types'
+import {
+  DealsListFilters,
+  DealsListPayload,
+  DealsOrder,
+  SearchQuery
+} from '../../types'
 
 import { ClosingDateEditor } from './closingDateEditor'
 import { ClosingDateButton } from './closingDateEditor/button'
@@ -31,7 +44,11 @@ import { TypeEditor } from './typeEditor'
 import { TypeButton } from './typeEditor/button'
 import { UseFiltersWithQuery } from './useFiltersWithQuery'
 
-export const Filters = () => {
+interface Props {
+  searchQuery: SearchQuery
+}
+
+export const Filters = ({ searchQuery }: Props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const isFirstMount = useFirstMountState()
@@ -41,6 +58,7 @@ export const Filters = () => {
   const [sortTypeParamValue] = useQueryParam('sortType')
 
   const user = useSelector(selectUser)
+  const activeBrand = useSelector(selectActiveBrand)
 
   // TODO: create a utils for this
   const [userFilters, setUserFilters] = UseFiltersWithQuery()
@@ -48,6 +66,40 @@ export const Filters = () => {
   const onFiltersChange = (changedFilters: Partial<DealsListFilters>) => {
     setUserFilters(oldFilters => ({ ...oldFilters, ...changedFilters }))
   }
+
+  const onExportList = useCallback(async () => {
+    // TODO: export list
+
+    const payload = {
+      $order: ['deals.created_at', 'DESC'],
+      brand: activeBrand.id,
+      query: searchQuery?.term || '',
+      ...userFilters
+    }
+    const response = await exportFilter(payload)
+
+    console.log({ payload, response })
+
+    const blob = new Blob([response.text])
+
+    saveAs(blob, 'deals.xlsx')
+
+    // const blob = new Blob([response.text], { type: response.type })
+
+    // // Create a link element, hide it, direct
+    // // it towards the blob, and then 'click' it programatically
+    // const a = document.createElement('a')
+
+    // a.style.display = 'none'
+    // document.body.appendChild(a)
+
+    // let url = window.URL.createObjectURL(blob)
+
+    // a.href = url
+    // a.download = 'deals.xlsx'
+    // a.click()
+    // window.URL.revokeObjectURL(url)
+  }, [userFilters, activeBrand, searchQuery])
 
   useDebounce(
     () => {
@@ -81,7 +133,7 @@ export const Filters = () => {
   )
 
   return (
-    <Grid className={classes.root} container justifyContent="flex-end">
+    <Grid container className={classes.root}>
       <BaseFilters<DealsListFilters>
         systemDefaultFilters={DEALS_LIST_DEFAULT_FILTERS}
         userFilters={userFilters}
@@ -94,123 +146,143 @@ export const Filters = () => {
           systemDefaultFilters
         ) => (
           <>
-            {/* Deals Type Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <TypeButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <TypeEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
-            {/* Deals Status Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <StatusButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <StatusEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
+            <Grid className={classes.filtersWrapper}>
+              {/* Deals Type Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <TypeButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <TypeEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
+              {/* Deals Status Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <StatusButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <StatusEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
 
-            {/* contract date Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <ExecutedDateButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <ExecutedDateEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
+              {/* contract date Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <ExecutedDateButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <ExecutedDateEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
 
-            {/* Closing date Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <ClosingDateButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <ClosingDateEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
+              {/* Closing date Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <ClosingDateButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <ClosingDateEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
 
-            {/* List date Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <ListDateButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <ListDateEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
+              {/* List date Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <ListDateButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <ListDateEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
 
-            {/* List expiration Filter  */}
-            <FilterButton
-              renderButton={({ onClick }) => (
-                <ExpirationDateButton
-                  filters={currentFilters}
-                  defaultFilters={systemDefaultFilters}
-                  onClick={onClick}
-                />
-              )}
-              renderDropdown={() => (
-                <ExpirationDateEditor
-                  filters={currentFilters}
-                  updateFilters={updateFilters}
-                  defaultFilters={systemDefaultFilters}
-                />
-              )}
-            />
+              {/* List expiration Filter  */}
+              <FilterButton
+                renderButton={({ onClick }) => (
+                  <ExpirationDateButton
+                    filters={currentFilters}
+                    defaultFilters={systemDefaultFilters}
+                    onClick={onClick}
+                  />
+                )}
+                renderDropdown={() => (
+                  <ExpirationDateEditor
+                    filters={currentFilters}
+                    updateFilters={updateFilters}
+                    defaultFilters={systemDefaultFilters}
+                  />
+                )}
+              />
+            </Grid>
 
-            {/* Reset button  */}
-            <Button
-              className={classes.resetButton}
-              variant="outlined"
-              onClick={resetFilters}
-              disabled={isEqual(currentFilters, systemDefaultFilters)}
-              size="medium"
-            >
-              Reset Search
-            </Button>
+            <Grid className={classes.actionsWrapper}>
+              {/* Export button  */}
+              <Button
+                className={classes.exportButton}
+                variant="contained"
+                onClick={onExportList}
+                color="primary"
+                size="medium"
+                startIcon={
+                  <SvgIcon
+                    path={mdiFileDownloadOutline}
+                    size={muiIconSizes.small}
+                  />
+                }
+              >
+                Export List
+              </Button>
+              {/* Reset button  */}
+              <Button
+                className={classes.resetButton}
+                variant="outlined"
+                onClick={resetFilters}
+                disabled={isEqual(currentFilters, systemDefaultFilters)}
+                size="medium"
+              >
+                Reset Search
+              </Button>
+            </Grid>
           </>
         )}
       </BaseFilters>
