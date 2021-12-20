@@ -164,12 +164,12 @@ export function getRoleUsers(role: IBrandRole, includeDeletedUsers = false) {
 }
 
 export function getBrandUsers(
-  team: IBrand,
+  brand: IBrand,
   includeDeletedUsers = false
 ): IUser[] {
   return uniqBy(
     flatMap(
-      (team.roles || [])
+      (brand.roles || [])
         .filter(notDeleted)
         .map(role => getRoleUsers(role, includeDeletedUsers))
     ),

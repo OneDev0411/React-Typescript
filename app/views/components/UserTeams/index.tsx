@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { Button } from '@material-ui/core'
 import pluralize from 'pluralize'
 
+import { getTeams } from '@app/models/user/get-teams'
 import Drawer from 'components/OverlayDrawer'
 import { SearchContext } from 'components/TextWithHighlights'
 import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
@@ -44,7 +45,7 @@ export default function UserTeams({
 
   useEffect(() => {
     async function fetchBrandsWithMembers() {
-      if (!activeTeam || !user.teams) {
+      if (!activeTeam) {
         setBrandsWithMembers([])
 
         return
@@ -68,8 +69,10 @@ export default function UserTeams({
         return
       }
 
+      const availableTeamToUser = await getTeams(user)
+
       setBrandsWithMembers(
-        user.teams.map(team => {
+        availableTeamToUser.map(team => {
           const brand = team.brand
 
           return {
@@ -81,7 +84,7 @@ export default function UserTeams({
     }
 
     fetchBrandsWithMembers()
-  }, [activeTeam, user, user.teams])
+  }, [activeTeam, user])
 
   useEffect(() => {
     if (!searchQuery) {
