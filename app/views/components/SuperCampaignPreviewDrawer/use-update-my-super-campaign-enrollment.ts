@@ -8,6 +8,7 @@ type UseUpdateMySuperCampaignEnrollment = {
 
 export function useUpdateMySuperCampaignEnrollment(
   superCampaignId: UUID,
+  hasUnenroll: boolean,
   onUpdated: (enrollment: ISuperCampaignEnrollment) => void
 ): UseUpdateMySuperCampaignEnrollment {
   const { isRunning, runActionThenNotify } = useRunActionThenNotify()
@@ -22,7 +23,9 @@ export function useUpdateMySuperCampaignEnrollment(
 
         onUpdated(enrollment)
       },
-      'You have been participated in the campaign',
+      hasUnenroll
+        ? 'Your enrollment has been updated'
+        : 'You have been participated in the campaign',
       'Something went wrong while updating the enrollment'
     )
 

@@ -44,7 +44,7 @@ function SuperCampaignPreviewDrawer({
   }, [open, initialTags])
 
   const { isUpdating, updateMySuperCampaignEnrollment } =
-    useUpdateMySuperCampaignEnrollment(superCampaign.id, onEnroll)
+    useUpdateMySuperCampaignEnrollment(superCampaign.id, hasUnenroll, onEnroll)
 
   const handleCopy = () => {
     openEmailTemplateEditor()
