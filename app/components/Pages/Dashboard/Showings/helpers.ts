@@ -113,27 +113,18 @@ export function hasInvalidTimeRange(
   )
 }
 
-function compareDate(
-  date1: Date,
-  date2: Date,
-  sortDirection: string = 'DESC'
-): number {
-  if (sortDirection === 'ASC') {
-    return date1.getTime() - date2.getTime()
-  }
-
+function compareDateDESC(date1: Date, date2: Date): number {
   return date2.getTime() - date1.getTime()
 }
 
 export function sortAppointments(
-  appointments: IShowingAppointment<'showing'>[],
-  sortDirection?: string
+  appointments: IShowingAppointment<'showing'>[]
 ): IShowingAppointment<'showing'>[] {
   const sortedAppointmentsByTime = [...appointments].sort((a, b) => {
     const time1 = new Date(a.time)
     const time2 = new Date(b.time)
 
-    return compareDate(time1, time2, sortDirection)
+    return compareDateDESC(time1, time2)
   })
 
   const pastAppointments: IShowingAppointment<'showing'>[] = []
@@ -142,12 +133,11 @@ export function sortAppointments(
   const currentTime = new Date()
 
   sortedAppointmentsByTime.forEach(appointment => {
-    if (
-      compareDate(new Date(appointment.time), currentTime, sortDirection) >= 0
-    ) {
-      upcomingAppointments.push(appointment)
+    if (compareDateDESC(new Date(appointment.time), currentTime) <= 0) {
+      // Upcoming appointments should sort ASC, so I use unshift instead of push
+      upcomingAppointments.unshift(appointment)
     } else {
-      pastAppointments.unshift(appointment)
+      pastAppointments.push(appointment)
     }
   })
 
