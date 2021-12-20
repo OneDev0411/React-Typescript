@@ -1,16 +1,14 @@
 import { memo, useMemo, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-import { useEffectOnce } from 'react-use'
-
 import { LoadingComponent } from '@app/components/Pages/Dashboard/Contacts/List/Table/components/LoadingComponent'
 import { EmailInsightsZeroState } from '@app/components/Pages/Dashboard/MarketingInsights/List/ZeroState'
 import { useGetMySuperCampaignsWithEnrollment } from '@app/hooks/use-get-my-super-campaigns-with-enrollment'
 import Table from '@app/views/components/Grid/Table'
 import { useGridStyles } from '@app/views/components/Grid/Table/styles'
 import { TableColumn } from '@app/views/components/Grid/Table/types'
-import SuperCampaignPreviewDrawer from '@app/views/components/SuperCampaignPreviewDrawer'
-import { getContactsTags } from 'actions/contacts/get-contacts-tags'
+import SuperCampaignPreviewDrawer, {
+  useLoadExistingTags
+} from '@app/views/components/SuperCampaignPreviewDrawer'
 
 import SuperCampaignAgentListColumnActions from './SuperCampaignAgentListColumnActions'
 import SuperCampaignAgentListColumnCreatedBy from './SuperCampaignAgentListColumnCreatedBy'
@@ -19,12 +17,10 @@ import SuperCampaignListColumnTags from './SuperCampaignListColumnTags'
 
 function SuperCampaignAgentList() {
   const gridClasses = useGridStyles()
-  const dispatch = useDispatch()
 
-  // Load existing tags because the actions component needs it
-  useEffectOnce(() => {
-    dispatch(getContactsTags())
-  })
+  // Load existing tags because useGetSuperCampaignInitialEmailTo which is called by
+  // actions column needs it
+  useLoadExistingTags()
 
   const {
     superCampaignsWithEnrollment,
