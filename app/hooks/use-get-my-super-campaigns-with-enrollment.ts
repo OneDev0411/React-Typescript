@@ -15,6 +15,10 @@ interface UseGetMySuperCampaignsWithEnrollment {
     enrollment: ISuperCampaignEnrollment
   ) => void
   unenrollFromSuperCampaign: (superCampaignId: UUID) => void
+  setEnrollmentNotificationsEnabled: (
+    superCampaignId: UUID,
+    enabled: boolean
+  ) => void
 }
 
 // eslint-disable-next-line max-len
@@ -57,58 +61,47 @@ export function useGetMySuperCampaignsWithEnrollment(
     })
   }, [run, limit])
 
+  const updateSuperCampaignEnrollment = (
+    superCampaignId: UUID,
+    modifier: (
+      enrollment: Optional<ISuperCampaignEnrollment>
+    ) => Optional<ISuperCampaignEnrollment>
+  ) =>
+    setSuperCampaignsWithEnrollment(superCampaignsWithEnrollment =>
+      superCampaignsWithEnrollment.map(superCampaignWithEnrollment => {
+        if (superCampaignWithEnrollment.id !== superCampaignId) {
+          return superCampaignWithEnrollment
+        }
+
+        return {
+          ...superCampaignWithEnrollment,
+          enrollment: modifier(superCampaignWithEnrollment.enrollment)
+        }
+      })
+    )
+
   const enrollToSuperCampaign = (
     superCampaignId: UUID,
     enrollment: ISuperCampaignEnrollment
-  ) =>
-    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
-      const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
-        superCampaign => superCampaign.id === superCampaignId
-      )
-
-      if (superCampaignIndex === -1) {
-        return prevSuperCampaignsWithEnrollment
-      }
-
-      const newSuperCampaignsWithEnrollment = [
-        ...prevSuperCampaignsWithEnrollment
-      ]
-
-      newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
-        ...superCampaignsWithEnrollment[superCampaignIndex],
-        enrollment
-      })
-
-      return newSuperCampaignsWithEnrollment
-    })
+  ) => updateSuperCampaignEnrollment(superCampaignId, () => enrollment)
 
   const unenrollFromSuperCampaign = (superCampaignId: UUID) =>
-    setSuperCampaignsWithEnrollment(prevSuperCampaignsWithEnrollment => {
-      const superCampaignIndex = superCampaignsWithEnrollment.findIndex(
-        superCampaign => superCampaign.id === superCampaignId
-      )
+    updateSuperCampaignEnrollment(superCampaignId, () => undefined)
 
-      if (superCampaignIndex === -1) {
-        return prevSuperCampaignsWithEnrollment
-      }
-
-      const newSuperCampaignsWithEnrollment = [
-        ...prevSuperCampaignsWithEnrollment
-      ]
-
-      newSuperCampaignsWithEnrollment.splice(superCampaignIndex, 1, {
-        ...superCampaignsWithEnrollment[superCampaignIndex],
-        enrollment: undefined
-      })
-
-      return newSuperCampaignsWithEnrollment
-    })
+  const setEnrollmentNotificationsEnabled = (
+    superCampaignId: UUID,
+    enabled: boolean
+  ) =>
+    updateSuperCampaignEnrollment(superCampaignId, enrollment =>
+      enrollment ? { ...enrollment, notifications_enabled: enabled } : undefined
+    )
 
   return {
     isLoading,
     superCampaignsWithEnrollment,
     setSuperCampaignsWithEnrollment,
     enrollToSuperCampaign,
-    unenrollFromSuperCampaign
+    unenrollFromSuperCampaign,
+    setEnrollmentNotificationsEnabled
   }
 }
