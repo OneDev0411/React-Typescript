@@ -5,7 +5,9 @@ import {
   IconButton,
   MenuItem,
   Typography,
-  makeStyles
+  makeStyles,
+  Switch,
+  Divider
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
@@ -15,7 +17,8 @@ import ConfirmationModalContext from '@app/views/components/ConfirmationModal/co
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import MarketingEmailTemplateEditor from '../../components/MarketingEmailTemplateEditor'
-import { isSuperCampaignReadOnly } from '../../helpers'
+import { convertTimestampToDate, isSuperCampaignReadOnly } from '../../helpers'
+import { useGetSuperCampaignInitialEmailTo } from '../../hooks/use-get-super-campaign-initial-email-to'
 
 const useStyles = makeStyles(
   theme => ({
@@ -29,7 +32,7 @@ interface SuperCampaignAgentListColumnActionsProps {
   superCampaign: ISuperCampaignWithEnrollment
   onParticipateClick: () => void
   onNotify: () => void
-  onDuplicate: () => void
+  onCopy: () => void
   onUnenroll: () => void
 }
 
@@ -37,7 +40,7 @@ function SuperCampaignAgentListColumnActions({
   superCampaign,
   onParticipateClick,
   onUnenroll,
-  onDuplicate
+  onCopy
 }: SuperCampaignAgentListColumnActionsProps) {
   const classes = useStyles()
   const confirmation = useContext(ConfirmationModalContext)
@@ -48,14 +51,10 @@ function SuperCampaignAgentListColumnActions({
   const { unenrollMeFromSuperCampaign, isDeleting } =
     useUnenrollMeFromSuperCampaign(superCampaign.id, onUnenroll)
 
-  // const handleNotify = () => {
-  //   // TODO: Implement notify logic
-  //   onNotify()
-  // }
-
-  // const { handleDuplicate, editor } = useAgentDuplicateSuperCampaign(
-  //   superCampaign.template_instance
-  // )
+  const handleNotify = () => {
+    // TODO: Implement notify logic
+    // onNotify()
+  }
 
   const [isEditorOpen, setIsEditorOpen] = useState(false)
 
@@ -63,10 +62,10 @@ function SuperCampaignAgentListColumnActions({
 
   const closeEditor = () => setIsEditorOpen(false)
 
-  const handleDuplicate = () => {
+  const handleCopy = () => {
     // TODO: Implement notify logic
-    // console.log('handleDuplicate')
-    // onDuplicate()
+    // console.log('handleCopy')
+    // onCopy()
     openEditor()
   }
 
@@ -78,19 +77,23 @@ function SuperCampaignAgentListColumnActions({
     })
   }
 
-  const handleOptOutAndDuplicate = () => {
+  const handleOptOutAndCopy = () => {
     confirmation.setConfirmationModal({
       message:
         'Are you sure about opting out of the campaign and duplicating it?',
       confirmLabel: 'Yes, I am',
       onConfirm: async () => {
-        await Promise.all([unenrollMeFromSuperCampaign(), handleDuplicate()])
+        await Promise.all([unenrollMeFromSuperCampaign(), handleCopy()])
       }
     })
   }
 
-  // TODO: Add isDuplicating and isNotifying when they are ready
-  const isWorking = isDeleting
+  // TODO: Implement this
+  const isNotifying = false
+
+  const isWorking = isDeleting || isNotifying
+
+  const initialEmailTo = useGetSuperCampaignInitialEmailTo(superCampaign.tags)
 
   return (
     <div className={classes.root}>
@@ -106,25 +109,23 @@ function SuperCampaignAgentListColumnActions({
         </Button>
       )}
 
-      {
-        <BaseDropdown
-          PopperProps={{
-            placement: 'bottom-end'
-          }}
-          renderDropdownButton={({ isActive, ...buttonProps }) => (
-            <IconButton
-              {...buttonProps}
-              size="small"
-              className={classes.more}
-              disabled={isWorking}
-            >
-              <SvgIcon path={mdiDotsVertical} />
-            </IconButton>
-          )}
-          renderMenu={({ close }) => (
-            <div onClick={close}>
-              {/* TODO: Uncomment this when notify logic was ready */}
-              {/* (isExecuted || isEnrolled) && (
+      <BaseDropdown
+        PopperProps={{
+          placement: 'bottom-end'
+        }}
+        renderDropdownButton={({ isActive, ...buttonProps }) => (
+          <IconButton
+            {...buttonProps}
+            size="small"
+            className={classes.more}
+            disabled={isWorking}
+          >
+            <SvgIcon path={mdiDotsVertical} />
+          </IconButton>
+        )}
+        renderMenu={({ close }) => (
+          <div onClick={close}>
+            {(isExecuted || isEnrolled) && (
               <>
                 <MenuItem onClick={handleNotify}>
                   <Typography variant="body2">
@@ -133,42 +134,46 @@ function SuperCampaignAgentListColumnActions({
                   <Switch
                     color="primary"
                     size="small"
-                    defaultChecked // TODO: Set the correct value here
+                    disabled={isNotifying}
+                    defaultChecked={
+                      superCampaign.enrollment?.notifications_enabled
+                    }
                   />
                 </MenuItem>
                 <Divider />
               </>
-            ) */}
-              {(isExecuted || !isEnrolled) && (
-                <MenuItem onClick={handleDuplicate}>
+            )}
+            {(isExecuted || !isEnrolled) && (
+              <MenuItem onClick={handleCopy}>
+                <Typography variant="body2">Copy this campaign</Typography>
+              </MenuItem>
+            )}
+            {!isExecuted && isEnrolled && (
+              <>
+                <MenuItem onClick={handleOptOutAndCopy}>
                   <Typography variant="body2">
-                    Duplicate this campaign
+                    Opt-out and copy this campaign
                   </Typography>
                 </MenuItem>
-              )}
-              {!isExecuted && isEnrolled && (
-                <>
-                  <MenuItem onClick={handleOptOutAndDuplicate}>
-                    <Typography variant="body2">
-                      Opt-out and duplicate this campaign
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleOptOut}>
-                    <Typography variant="body2">Opt-out</Typography>
-                  </MenuItem>
-                </>
-              )}
-            </div>
-          )}
-        />
-      }
+                <MenuItem onClick={handleOptOut}>
+                  <Typography variant="body2">Opt-out</Typography>
+                </MenuItem>
+              </>
+            )}
+          </div>
+        )}
+      />
       {superCampaign.template_instance && isEditorOpen && (
         <MarketingEmailTemplateEditor
           template={superCampaign.template_instance}
           onClose={closeEditor}
-          initialSubject={superCampaign.subject}
-          // TODO: Find all the related tags according to the campaign tags
-          // initialBCC={[{ recipient_type: 'Tag', tag: ''}]}
+          initialEmailTo={initialEmailTo}
+          initialEmailSubject={superCampaign.subject}
+          initialEmailDueAt={
+            superCampaign.due_at
+              ? convertTimestampToDate(superCampaign.due_at)
+              : undefined
+          }
         />
       )}
     </div>
