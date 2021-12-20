@@ -1,8 +1,4 @@
-import { useContext, MouseEvent } from 'react'
-
 import { Button, ButtonProps, makeStyles } from '@material-ui/core'
-
-import ConfirmationModalContext from 'components/ConfirmationModal/context'
 
 const useStyles = makeStyles(
   theme => ({
@@ -11,38 +7,34 @@ const useStyles = makeStyles(
   { name: 'SuperCampaignPreviewDrawerOptOutButton' }
 )
 
-type SuperCampaignPreviewDrawerOptOutButtonProps = Omit<
-  ButtonProps,
-  'className' | 'color' | 'variant'
->
+interface SuperCampaignPreviewDrawerOptOutButtonProps
+  extends Omit<ButtonProps, 'className' | 'color' | 'variant' | 'onClick'> {
+  onOptOut: () => void
+  onOptOutAndCopy: () => void
+}
 
 function SuperCampaignPreviewDrawerOptOutButton({
-  onClick,
+  onOptOut,
+  onOptOutAndCopy,
   ...otherProps
 }: SuperCampaignPreviewDrawerOptOutButtonProps) {
   const classes = useStyles()
-  const confirmation = useContext(ConfirmationModalContext)
-
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    confirmation.setConfirmationModal({
-      message: 'Are you sure about opting out of the campaign?',
-      confirmLabel: 'Yes, I am',
-      onConfirm: () => {
-        onClick?.(event)
-      }
-    })
-  }
 
   return (
-    <Button
-      {...otherProps}
-      className={classes.root}
-      color="inherit"
-      variant="outlined"
-      onClick={handleClick}
-    >
-      Opt-Out
-    </Button>
+    <>
+      <Button
+        {...otherProps}
+        className={classes.root}
+        color="inherit"
+        variant="outlined"
+        onClick={onOptOut}
+      >
+        Opt-Out
+      </Button>
+      <button type="button" onClick={onOptOutAndCopy}>
+        Opt-Out and Copy
+      </button>
+    </>
   )
 }
 
