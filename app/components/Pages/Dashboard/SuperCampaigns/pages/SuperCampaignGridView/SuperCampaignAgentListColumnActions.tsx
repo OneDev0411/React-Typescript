@@ -5,7 +5,8 @@ import {
   Typography,
   makeStyles,
   Switch,
-  Divider
+  Divider,
+  CircularProgress
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
@@ -18,6 +19,8 @@ import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { isSuperCampaignReadOnly } from '../../helpers'
 
+import { useToggleEnrollmentNotificationsEnabled } from './use-toggle-enrollment-notifications-enabled'
+
 const useStyles = makeStyles(
   theme => ({
     root: { paddingRight: theme.spacing(1) },
@@ -29,14 +32,15 @@ const useStyles = makeStyles(
 interface SuperCampaignAgentListColumnActionsProps {
   superCampaign: ISuperCampaignWithEnrollment
   onParticipateClick: () => void
-  onNotify: () => void
+  onNotificationsEnabledChange: (enabled: boolean) => void
   onUnenroll: () => void
 }
 
 function SuperCampaignAgentListColumnActions({
   superCampaign,
   onParticipateClick,
-  onUnenroll
+  onUnenroll,
+  onNotificationsEnabledChange
 }: SuperCampaignAgentListColumnActionsProps) {
   const classes = useStyles()
 
@@ -45,11 +49,6 @@ function SuperCampaignAgentListColumnActions({
 
   const { marketingEmailTemplateEditor, openEmailTemplateEditor } =
     useMarketingEmailTemplateEditor(superCampaign)
-
-  const handleNotify = () => {
-    // TODO: Implement notify logic
-    // onNotify()
-  }
 
   const handleCopy = () => {
     openEmailTemplateEditor()
@@ -63,10 +62,13 @@ function SuperCampaignAgentListColumnActions({
       handleCopy
     )
 
-  // TODO: Implement this
-  const isNotifying = false
+  const { isToggling, toggleEnrollmentNotificationsEnabled } =
+    useToggleEnrollmentNotificationsEnabled(
+      superCampaign,
+      onNotificationsEnabledChange
+    )
 
-  const isWorking = isDeleting || isNotifying
+  const isWorking = isDeleting || isToggling
 
   return (
     <div className={classes.root}>
@@ -92,24 +94,26 @@ function SuperCampaignAgentListColumnActions({
             className={classes.more}
             disabled={isWorking}
           >
-            <SvgIcon path={mdiDotsVertical} />
+            {isWorking ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <SvgIcon path={mdiDotsVertical} />
+            )}
           </IconButton>
         )}
         renderMenu={({ close }) => (
           <div onClick={close}>
             {(isExecuted || isEnrolled) && (
               <>
-                <MenuItem onClick={handleNotify}>
+                <MenuItem onClick={toggleEnrollmentNotificationsEnabled}>
                   <Typography variant="body2">
                     Notify when opened or clicked
                   </Typography>
                   <Switch
                     color="primary"
                     size="small"
-                    disabled={isNotifying}
-                    defaultChecked={
-                      superCampaign.enrollment?.notifications_enabled
-                    }
+                    disabled={isToggling}
+                    checked={!!superCampaign.enrollment?.notifications_enabled}
                   />
                 </MenuItem>
                 <Divider />

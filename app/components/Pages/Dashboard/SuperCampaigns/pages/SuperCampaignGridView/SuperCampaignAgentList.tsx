@@ -26,7 +26,8 @@ function SuperCampaignAgentList() {
     superCampaignsWithEnrollment,
     isLoading,
     enrollToSuperCampaign,
-    unenrollFromSuperCampaign
+    unenrollFromSuperCampaign,
+    setEnrollmentNotificationsEnabled
   } = useGetMySuperCampaignsWithEnrollment()
 
   const [selectedSuperCampaignId, setSelectedSuperCampaignId] =
@@ -103,7 +104,9 @@ function SuperCampaignAgentList() {
         <SuperCampaignAgentListColumnActions
           superCampaign={row}
           onParticipateClick={() => setSelectedSuperCampaignId(row.id)}
-          onNotify={() => console.log('onNotify')} // TODO: implement this when the API is ready
+          onNotificationsEnabledChange={checked =>
+            setEnrollmentNotificationsEnabled(row.id, checked)
+          }
           onUnenroll={() => unenrollFromSuperCampaign(row.id)}
         />
       )
