@@ -93,8 +93,7 @@ export function ConfigBrand() {
         updateUser({
           ...user,
           active_brand: personalTeam.brand.id,
-          brand: personalTeam.brand.id,
-          teams
+          brand: personalTeam.brand.id
         })
       )
 

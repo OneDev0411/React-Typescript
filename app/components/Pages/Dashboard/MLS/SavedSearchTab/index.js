@@ -9,10 +9,9 @@ import { connect } from 'react-redux'
 import { browserHistory, withRouter } from 'react-router'
 
 import { getSavedSearchListings } from '@app/models/listings/alerts/get-alert-listings'
-import { putUserSetting } from '@app/models/user/put-user-setting'
 import { selectAlert } from '@app/reducers/listings/alerts/list'
 import getAlerts from '@app/store_actions/listings/alerts/get-alerts'
-import { getUserTeams } from '@app/store_actions/user/teams'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { normalizeListingLocation } from '@app/utils/map'
 import Avatars from '@app/views/components/Avatars'
 import GlobalPageLayout from '@app/views/components/GlobalPageLayout'
@@ -154,8 +153,7 @@ class SavedSearch extends React.Component {
         ascending
       }
     })
-    await putUserSetting(SORT_FIELD_SETTING_KEY, sort)
-    this.props.dispatch(getUserTeams(this.props.user))
+    this.props.dispatch(setUserSetting(SORT_FIELD_SETTING_KEY, sort))
   }
 
   sortListings = memoize(

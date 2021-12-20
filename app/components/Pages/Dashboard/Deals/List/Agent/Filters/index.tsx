@@ -2,11 +2,10 @@ import { MenuItem } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { getUserTeams } from 'actions/user/teams'
+import { setUserSetting } from '@app/store_actions/user/set-setting'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 import { useActiveBrand } from 'hooks/brand/use-active-brand'
-import { putUserSetting } from 'models/user/put-user-setting'
 import { selectUser } from 'selectors/user'
 
 import AnalyticsDropdownTab from '../../../Analytics/DropdownTab'
@@ -63,8 +62,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
 
-    await putUserSetting(SORT_FIELD_SETTING_KEY, fieldValue)
-    dispatch(getUserTeams(user))
+    dispatch(setUserSetting(SORT_FIELD_SETTING_KEY, fieldValue))
   }
 
   return (
