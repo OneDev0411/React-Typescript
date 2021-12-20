@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 
 import { useDeepCompareEffect } from 'react-use'
 
@@ -11,7 +11,6 @@ interface Options {
 }
 
 interface UseBrandAssets {
-  search: (query: string) => void
   delete: (asset: IBrandAsset) => Promise<void>
   refetch: () => void
   hasDeleteAccess: (asset: IBrandAsset) => boolean
@@ -24,7 +23,6 @@ export function useBrandAssets(
   options: Options
 ): UseBrandAssets {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [allAssets, setAllAssets] = useState<IBrandAsset[]>([])
   const [assets, setAssets] = useState<IBrandAsset[]>([])
 
   const fetchAssets = async () => {
@@ -32,7 +30,6 @@ export function useBrandAssets(
 
     const fetchedAssets = await getBrandAssets(brandId, options)
 
-    setAllAssets(fetchedAssets)
     setAssets(fetchedAssets)
     setIsLoading(false)
   }
@@ -57,7 +54,6 @@ export function useBrandAssets(
     }
 
     await deleteBrandAsset(asset.brand, asset.id)
-    setAllAssets(items => items.filter(item => item.id !== asset.id))
     setAssets(items => items.filter(item => item.id !== asset.id))
   }
 
@@ -65,19 +61,7 @@ export function useBrandAssets(
     fetchAssets()
   }, [brandId, options])
 
-  const search = useCallback(
-    (query: string) => {
-      const searchResult = allAssets.filter(item =>
-        item.label.toLowerCase().includes(query.toLowerCase())
-      )
-
-      setAssets(searchResult)
-    },
-    [allAssets]
-  )
-
   return {
-    search,
     delete: deleteAsset,
     refetch: fetchAssets,
     hasDeleteAccess,
