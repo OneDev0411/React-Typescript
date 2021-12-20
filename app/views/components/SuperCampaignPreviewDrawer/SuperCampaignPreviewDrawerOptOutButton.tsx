@@ -1,16 +1,21 @@
-import { Button, ButtonProps, makeStyles } from '@material-ui/core'
+import { List, ListItem, makeStyles, Typography } from '@material-ui/core'
+
+import SplitButton from '../SplitButton'
 
 const useStyles = makeStyles(
   theme => ({
-    root: { color: theme.palette.error.main }
+    root: {
+      color: theme.palette.error.main,
+      whiteSpace: 'nowrap'
+    }
   }),
   { name: 'SuperCampaignPreviewDrawerOptOutButton' }
 )
 
-interface SuperCampaignPreviewDrawerOptOutButtonProps
-  extends Omit<ButtonProps, 'className' | 'color' | 'variant' | 'onClick'> {
+interface SuperCampaignPreviewDrawerOptOutButtonProps {
   onOptOut: () => void
   onOptOutAndCopy: () => void
+  disabled?: boolean
 }
 
 function SuperCampaignPreviewDrawerOptOutButton({
@@ -22,18 +27,29 @@ function SuperCampaignPreviewDrawerOptOutButton({
 
   return (
     <>
-      <Button
+      <SplitButton
         {...otherProps}
         className={classes.root}
         color="inherit"
         variant="outlined"
         onClick={onOptOut}
+        size="small"
+        RenderMenu={({ closeMenu }) => (
+          <List dense onClick={closeMenu}>
+            <ListItem
+              // className={classes.splitMenuItem}
+              button
+              onClick={onOptOutAndCopy}
+            >
+              <Typography variant="body2">
+                Opt-Out and Copy this campaign
+              </Typography>
+            </ListItem>
+          </List>
+        )}
       >
         Opt-Out
-      </Button>
-      <button type="button" onClick={onOptOutAndCopy}>
-        Opt-Out and Copy
-      </button>
+      </SplitButton>
     </>
   )
 }
