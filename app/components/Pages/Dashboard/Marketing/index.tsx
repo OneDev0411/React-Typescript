@@ -27,7 +27,6 @@ import MarketingAssetUploadDrawer from '@app/views/components/MarketingAssetUplo
 import MarketingSearchInput, {
   TemplateTypeWithMedium
 } from '@app/views/components/MarketingSearchInput'
-import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
 import { useTemplates } from './hooks/use-templates'
@@ -236,8 +235,8 @@ export function MarketingLayout({
                   variant="contained"
                   color="primary"
                   onClick={handleUploadAssetClick}
+                  startIcon={<SvgIcon path={mdiPlus} />}
                 >
-                  <SvgIcon path={mdiPlus} size={muiIconSizes.xsmall} />
                   Add
                 </Button>
               </Tooltip>
