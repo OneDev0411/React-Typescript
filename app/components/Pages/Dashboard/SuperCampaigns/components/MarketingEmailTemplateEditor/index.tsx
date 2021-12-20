@@ -14,15 +14,17 @@ import MarketingTemplateEditor from '@app/views/components/MarketingTemplateEdit
 interface MarketingEmailTemplateEditorProps {
   template: IMarketingTemplateInstance
   onClose: () => void
-  initialSubject?: string
-  initialBCC?: IDenormalizedEmailRecipientTagInput[]
+  initialEmailTo?: IDenormalizedEmailRecipientTagInput[]
+  initialEmailSubject?: string
+  initialEmailDueAt?: Date
 }
 
 function MarketingEmailTemplateEditor({
   template,
   onClose,
-  initialSubject,
-  initialBCC
+  initialEmailTo,
+  initialEmailSubject,
+  initialEmailDueAt
 }: MarketingEmailTemplateEditorProps) {
   const [isComposeEmailOpen, setIsComposeEmailOpen] = useState(false)
 
@@ -104,7 +106,6 @@ function MarketingEmailTemplateEditor({
         saveButtonText="Continue"
         assets={listingAssets}
         template={template}
-        // TODO: Ask MaMal about the templateTypes mediums
       />
 
       {isComposeEmailOpen && (
@@ -113,8 +114,9 @@ function MarketingEmailTemplateEditor({
           hasStaticBody
           initialValues={{
             from: user,
-            bcc: initialBCC,
-            subject: initialSubject,
+            to: initialEmailTo,
+            subject: initialEmailSubject,
+            due_at: initialEmailDueAt,
             body: emailInfo?.emailBody
           }}
           onClose={closeComposeEmail}
