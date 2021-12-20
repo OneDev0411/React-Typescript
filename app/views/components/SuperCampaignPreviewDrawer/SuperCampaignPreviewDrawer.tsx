@@ -10,6 +10,7 @@ import SuperCampaignPreviewDrawerOptOutButton from './SuperCampaignPreviewDrawer
 import SuperCampaignPreviewDrawerScheduledFor from './SuperCampaignPreviewDrawerScheduledFor'
 import SuperCampaignTagsField from './SuperCampaignTagsField'
 import { useHandleSuperCampaignOptOutAndCopy } from './use-handle-super-campaign-opt-out-and-copy'
+import { useLoadExistingTags } from './use-load-existing-tags'
 import { useMarketingEmailTemplateEditor } from './use-marketing-email-template-editor'
 import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
 
@@ -42,6 +43,9 @@ function SuperCampaignPreviewDrawer({
       setSelectedTags(initialTags)
     }
   }, [open, initialTags])
+
+  // Load existing tags because it is needed by useGetSuperCampaignInitialEmailTo
+  useLoadExistingTags()
 
   const { isUpdating, updateMySuperCampaignEnrollment } =
     useUpdateMySuperCampaignEnrollment(superCampaign.id, hasUnenroll, onEnroll)
