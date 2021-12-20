@@ -1,5 +1,3 @@
-import { useContext, useState } from 'react'
-
 import {
   Button,
   IconButton,
@@ -11,14 +9,14 @@ import {
 } from '@material-ui/core'
 import { mdiDotsVertical } from '@mdi/js'
 
-import { useUnenrollMeFromSuperCampaign } from '@app/hooks/use-unenroll-me-from-super-campaign'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
-import ConfirmationModalContext from '@app/views/components/ConfirmationModal/context'
+import {
+  useHandleSuperCampaignOptOutAndCopy,
+  useMarketingEmailTemplateEditor
+} from '@app/views/components/SuperCampaignPreviewDrawer'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import MarketingEmailTemplateEditor from '../../components/MarketingEmailTemplateEditor'
-import { convertTimestampToDate, isSuperCampaignReadOnly } from '../../helpers'
-import { useGetSuperCampaignInitialEmailTo } from '../../hooks/use-get-super-campaign-initial-email-to'
+import { isSuperCampaignReadOnly } from '../../helpers'
 
 const useStyles = makeStyles(
   theme => ({
@@ -32,68 +30,43 @@ interface SuperCampaignAgentListColumnActionsProps {
   superCampaign: ISuperCampaignWithEnrollment
   onParticipateClick: () => void
   onNotify: () => void
-  onCopy: () => void
   onUnenroll: () => void
 }
 
 function SuperCampaignAgentListColumnActions({
   superCampaign,
   onParticipateClick,
-  onUnenroll,
-  onCopy
+  onUnenroll
 }: SuperCampaignAgentListColumnActionsProps) {
   const classes = useStyles()
-  const confirmation = useContext(ConfirmationModalContext)
 
   const isEnrolled = !!superCampaign.enrollment
   const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
-  const { unenrollMeFromSuperCampaign, isDeleting } =
-    useUnenrollMeFromSuperCampaign(superCampaign.id, onUnenroll)
+  const { marketingEmailTemplateEditor, openEmailTemplateEditor } =
+    useMarketingEmailTemplateEditor(superCampaign)
 
   const handleNotify = () => {
     // TODO: Implement notify logic
     // onNotify()
   }
 
-  const [isEditorOpen, setIsEditorOpen] = useState(false)
-
-  const openEditor = () => setIsEditorOpen(true)
-
-  const closeEditor = () => setIsEditorOpen(false)
-
   const handleCopy = () => {
-    // TODO: Implement notify logic
-    // console.log('handleCopy')
-    // onCopy()
-    openEditor()
+    openEmailTemplateEditor()
   }
 
-  const handleOptOut = () => {
-    confirmation.setConfirmationModal({
-      message: 'Are you sure about opting out of the campaign?',
-      confirmLabel: 'Yes, I am',
-      onConfirm: unenrollMeFromSuperCampaign
-    })
-  }
-
-  const handleOptOutAndCopy = () => {
-    confirmation.setConfirmationModal({
-      message:
-        'Are you sure about opting out of the campaign and duplicating it?',
-      confirmLabel: 'Yes, I am',
-      onConfirm: async () => {
-        await Promise.all([unenrollMeFromSuperCampaign(), handleCopy()])
-      }
-    })
-  }
+  const { isDeleting, handleOptOut, handleOptOutAndCopy } =
+    useHandleSuperCampaignOptOutAndCopy(
+      superCampaign.id,
+      onUnenroll,
+      undefined,
+      handleCopy
+    )
 
   // TODO: Implement this
   const isNotifying = false
 
   const isWorking = isDeleting || isNotifying
-
-  const initialEmailTo = useGetSuperCampaignInitialEmailTo(superCampaign.tags)
 
   return (
     <div className={classes.root}>
@@ -108,7 +81,6 @@ function SuperCampaignAgentListColumnActions({
           Participate to This Campaign
         </Button>
       )}
-
       <BaseDropdown
         PopperProps={{
           placement: 'bottom-end'
@@ -163,19 +135,7 @@ function SuperCampaignAgentListColumnActions({
           </div>
         )}
       />
-      {superCampaign.template_instance && isEditorOpen && (
-        <MarketingEmailTemplateEditor
-          template={superCampaign.template_instance}
-          onClose={closeEditor}
-          initialEmailTo={initialEmailTo}
-          initialEmailSubject={superCampaign.subject}
-          initialEmailDueAt={
-            superCampaign.due_at
-              ? convertTimestampToDate(superCampaign.due_at)
-              : undefined
-          }
-        />
-      )}
+      {marketingEmailTemplateEditor}
     </div>
   )
 }
