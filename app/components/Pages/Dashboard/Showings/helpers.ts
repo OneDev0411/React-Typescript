@@ -132,6 +132,25 @@ export function sortAppointments(
   })
 }
 
+export function sortAppointmentsAsc(
+  appointments: IShowingAppointment<'showing'>[]
+): IShowingAppointment<'showing'>[] {
+  return [...appointments].sort((a, b) => {
+    const time1 = new Date(a.time)
+    const time2 = new Date(b.time)
+
+    if (time1 < time2) {
+      return -1
+    }
+
+    if (time1 > time2) {
+      return 1
+    }
+
+    return 0
+  })
+}
+
 export function getShowingRoleLabel(role: IDealRoleType): string {
   switch (role) {
     case 'SellerAgent':
