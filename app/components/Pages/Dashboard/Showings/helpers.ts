@@ -127,7 +127,7 @@ function compareDate(
 
 export function sortAppointments(
   appointments: IShowingAppointment<'showing'>[],
-  sortDirection: string
+  sortDirection?: string
 ): IShowingAppointment<'showing'>[] {
   const sortedAppointmentsByTime = [...appointments].sort((a, b) => {
     const time1 = new Date(a.time)
