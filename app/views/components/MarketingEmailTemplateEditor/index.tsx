@@ -17,6 +17,7 @@ interface MarketingEmailTemplateEditorProps {
   initialEmailTo?: IDenormalizedEmailRecipientTagInput[]
   initialEmailSubject?: string
   initialEmailDueAt?: Date
+  onEmailSent?: () => void
 }
 
 function MarketingEmailTemplateEditor({
@@ -24,7 +25,8 @@ function MarketingEmailTemplateEditor({
   onClose,
   initialEmailTo,
   initialEmailSubject,
-  initialEmailDueAt
+  initialEmailDueAt,
+  onEmailSent
 }: MarketingEmailTemplateEditorProps) {
   const [isComposeEmailOpen, setIsComposeEmailOpen] = useState(false)
 
@@ -74,6 +76,11 @@ function MarketingEmailTemplateEditor({
     onClose()
   }
 
+  const handleEmailSent = () => {
+    closeBuilder()
+    onEmailSent?.()
+  }
+
   const getEmail = (email: IIndividualEmailCampaignInput) => {
     const templateInstance = emailInfo?.templateInstance
 
@@ -120,7 +127,7 @@ function MarketingEmailTemplateEditor({
             body: emailInfo?.emailBody
           }}
           onClose={closeComposeEmail}
-          onSent={closeBuilder}
+          onSent={handleEmailSent}
           getEmail={getEmail}
           isSubmitDisabled={isGettingTemplateInstance}
         />
