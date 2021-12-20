@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { getUserTeams } from 'actions/user/teams'
 import { SIGNIN_SUCCESS } from 'constants/auth/signin'
 import { selectUserUnsafe } from 'selectors/user'
 import Fetch from 'services/fetch'
@@ -31,10 +30,7 @@ export function useLoadUser() {
         } = await new Fetch().get('/api/users/profile')
 
         dispatch({
-          user: {
-            ...user,
-            teams: await dispatch(getUserTeams(user))
-          },
+          user,
           type: SIGNIN_SUCCESS
         })
       } catch (e) {

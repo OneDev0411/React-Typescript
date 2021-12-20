@@ -10,7 +10,6 @@ import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 import * as actionsType from '../../../../constants/auth/signin'
 import signin from '../../../../models/auth/signin'
 import signup from '../../../../models/auth/signup'
-import { getTeams } from '../../../../models/user/get-teams'
 import { lookUpUserByEmail } from '../../../../models/user/lookup-user-by-email'
 import { IAppState } from '../../../../reducers'
 import { getUserDefaultHomepage } from '../../../../utils/get-default-home-page'
@@ -88,16 +87,7 @@ export default function Signin(props: Props) {
       setIsLogging(true)
       setSignInFormSubmitMsg(null)
 
-      let user: IUser = await signin({ ...values, username })
-
-      if (!user.teams) {
-        const teams = await getTeams(user)
-
-        user = {
-          ...user,
-          teams
-        }
-      }
+      const user: IUser = await signin({ ...values, username })
 
       dispatch({
         user,
