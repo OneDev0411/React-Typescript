@@ -2,9 +2,8 @@ import { useContext } from 'react'
 
 import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import updateSuperCampaign from '@app/models/super-campaign/update-super-campaign'
+import { convertDateToTimestamp } from '@app/utils/date-utils'
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
-
-import { convertDateToTimestamp } from '../../helpers'
 
 export function useSendSuperCampaign(
   superCampaign: ISuperCampaign,
