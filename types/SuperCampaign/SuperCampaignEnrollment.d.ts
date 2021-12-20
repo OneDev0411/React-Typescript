@@ -22,4 +22,5 @@ declare interface ISuperCampaignEnrollment<
     ? IEmailCampaign
     : never
   tags: string[]
+  notifications_enabled: boolean
 }
