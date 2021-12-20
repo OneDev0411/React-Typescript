@@ -1,5 +1,4 @@
-import useNotify from '@app/hooks/use-notify'
-import useSafeState from '@app/hooks/use-safe-state'
+import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import updateMySuperCampaignEnrollmentModel from '@app/models/super-campaign/update-my-super-campaign-enrollment'
 
 type UseUpdateMySuperCampaignEnrollment = {
@@ -11,28 +10,21 @@ export function useUpdateMySuperCampaignEnrollment(
   superCampaignId: UUID,
   onUpdated: (enrollment: ISuperCampaignEnrollment) => void
 ): UseUpdateMySuperCampaignEnrollment {
-  const notify = useNotify()
-  const [isUpdating, setIsUpdating] = useSafeState(false)
+  const { isRunning, runActionThenNotify } = useRunActionThenNotify()
 
-  const updateMySuperCampaignEnrollment = async (tags: string[]) => {
-    setIsUpdating(true)
+  const updateMySuperCampaignEnrollment = (tags: string[]) =>
+    runActionThenNotify(
+      async () => {
+        const enrollment = await updateMySuperCampaignEnrollmentModel(
+          superCampaignId,
+          tags
+        )
 
-    try {
-      const enrollment = await updateMySuperCampaignEnrollmentModel(
-        superCampaignId,
-        tags
-      )
+        onUpdated(enrollment)
+      },
+      'You have been participated in the campaign',
+      'Something went wrong while updating the enrollment'
+    )
 
-      onUpdated(enrollment)
-    } catch (_) {
-      notify({
-        status: 'error',
-        message: 'Something went wrong while updating the enrollment'
-      })
-    }
-
-    setIsUpdating(false)
-  }
-
-  return { isUpdating, updateMySuperCampaignEnrollment }
+  return { isUpdating: isRunning, updateMySuperCampaignEnrollment }
 }
