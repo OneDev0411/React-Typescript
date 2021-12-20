@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 import { useEffectOnce } from 'react-use'
@@ -33,28 +33,41 @@ function SuperCampaignAgentList() {
     unenrollFromSuperCampaign
   } = useGetMySuperCampaignsWithEnrollment()
 
-  const [selectedSuperCampaign, setSelectedSuperCampaign] =
-    useState<Nullable<ISuperCampaignWithEnrollment>>(null)
+  const [selectedSuperCampaignId, setSelectedSuperCampaignId] =
+    useState<Nullable<UUID>>(null)
 
-  const openPreviewDrawer = (superCampaign: ISuperCampaignWithEnrollment) =>
-    setSelectedSuperCampaign(superCampaign)
-
-  const closePreviewDrawer = () => setSelectedSuperCampaign(null)
-
-  const handleEnroll = (enrollment: ISuperCampaignEnrollment) => {
-    if (!selectedSuperCampaign) {
+  const selectedSuperCampaign = useMemo<
+    Optional<ISuperCampaignWithEnrollment>
+  >(() => {
+    if (!selectedSuperCampaignId) {
       return
     }
 
-    enrollToSuperCampaign(selectedSuperCampaign.id, enrollment)
+    return superCampaignsWithEnrollment.find(
+      superCampaignWithEnrollment =>
+        superCampaignWithEnrollment.id === selectedSuperCampaignId
+    )
+  }, [selectedSuperCampaignId, superCampaignsWithEnrollment])
+
+  const openPreviewDrawer = (superCampaign: ISuperCampaignWithEnrollment) =>
+    setSelectedSuperCampaignId(superCampaign.id)
+
+  const closePreviewDrawer = () => setSelectedSuperCampaignId(null)
+
+  const handleEnroll = (enrollment: ISuperCampaignEnrollment) => {
+    if (!selectedSuperCampaignId) {
+      return
+    }
+
+    enrollToSuperCampaign(selectedSuperCampaignId, enrollment)
   }
 
   const handleUnenroll = () => {
-    if (!selectedSuperCampaign) {
+    if (!selectedSuperCampaignId) {
       return
     }
 
-    unenrollFromSuperCampaign(selectedSuperCampaign.id)
+    unenrollFromSuperCampaign(selectedSuperCampaignId)
   }
 
   const columns: TableColumn<ISuperCampaignWithEnrollment>[] = [
@@ -93,9 +106,8 @@ function SuperCampaignAgentList() {
       render: ({ row }) => (
         <SuperCampaignAgentListColumnActions
           superCampaign={row}
-          onParticipateClick={() => setSelectedSuperCampaign(row)}
+          onParticipateClick={() => setSelectedSuperCampaignId(row.id)}
           onNotify={() => console.log('onNotify')} // TODO: implement this when the API is ready
-          onCopy={() => console.log('onCopy')}
           onUnenroll={() => unenrollFromSuperCampaign(row.id)}
         />
       )
@@ -131,8 +143,8 @@ function SuperCampaignAgentList() {
           superCampaign={selectedSuperCampaign}
           onEnroll={handleEnroll}
           onUnenroll={handleUnenroll}
-          hasUnenroll={!!selectedSuperCampaign?.enrollment}
-          initialSelectedTags={selectedSuperCampaign?.enrollment?.tags}
+          hasUnenroll={!!selectedSuperCampaign.enrollment}
+          initialSelectedTags={selectedSuperCampaign.enrollment?.tags}
         />
       )}
     </>
