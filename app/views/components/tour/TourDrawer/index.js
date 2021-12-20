@@ -351,8 +351,8 @@ class TourDrawerRaw extends Component {
   }
 }
 
-TourDrawer.propTypes = propTypes
-TourDrawer.defaultProps = defaultProps
+TourDrawerRaw.propTypes = propTypes
+TourDrawerRaw.defaultProps = defaultProps
 
 export const TourDrawer = connect(({ activeTeam = null }) => ({ activeTeam }))(
   TourDrawerRaw
