@@ -5,7 +5,10 @@ import Fetch from '../../../../services/fetch'
  */
 export async function exportFilter(data: object) {
   try {
-    const response = await new Fetch().post('/deals/filter.xlsx').send(data)
+    const response = await new Fetch()
+      .post('/deals/filter.xlsx')
+      .send(data)
+      .responseType('blob')
 
     return response
   } catch (e) {

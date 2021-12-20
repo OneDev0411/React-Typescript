@@ -24,7 +24,7 @@ export default function BackofficeWraperPage(
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
-    term: isSearchTab || !searchCriteria ? '' : searchCriteria
+    term: !isSearchTab || !searchCriteria ? '' : searchCriteria
   }
 
   // Redirect to Search tab onClick on the search box on other tabs

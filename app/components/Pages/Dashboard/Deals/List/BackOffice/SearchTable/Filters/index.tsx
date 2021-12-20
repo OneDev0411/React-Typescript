@@ -78,27 +78,7 @@ export const Filters = ({ searchQuery }: Props) => {
     }
     const response = await exportFilter(payload)
 
-    console.log({ payload, response })
-
-    const blob = new Blob([response.text])
-
-    saveAs(blob, 'deals.xlsx')
-
-    // const blob = new Blob([response.text], { type: response.type })
-
-    // // Create a link element, hide it, direct
-    // // it towards the blob, and then 'click' it programatically
-    // const a = document.createElement('a')
-
-    // a.style.display = 'none'
-    // document.body.appendChild(a)
-
-    // let url = window.URL.createObjectURL(blob)
-
-    // a.href = url
-    // a.download = 'deals.xlsx'
-    // a.click()
-    // window.URL.revokeObjectURL(url)
+    saveAs(response.body, 'deals.xlsx')
   }, [userFilters, activeBrand, searchQuery])
 
   useDebounce(
