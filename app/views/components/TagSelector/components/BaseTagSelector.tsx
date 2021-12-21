@@ -142,35 +142,37 @@ export const BaseTagSelector = ({
             title: tagValue.trim()
           }
 
-          if (normalizedLastValue.value) {
-            if (
-              /*
-               we're doing ts-ignore because the type of event is set to
-               ChangeEvent which keyCode doesn't exist there so
-               it cause error but if user press some key like
-               enter the keyCode value would be there in
-               event object so we need for checking it
-              */
-              // @ts-ignore
-              event.keyCode === 13 && // avoid set tag on enter if tag exist
-              normalizedLastValue.value &&
-              selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
-            ) {
-              return
-            }
-
-            if (hasNewTag && normalizedLastValue.value) {
-              setAvailableTagKeys([
-                ...availableTagKeys,
-                normalizedLastValue.value.toLowerCase()
-              ])
-            }
-
-            newValues = [
-              ...newValues.splice(0, newValues.length - 1),
-              normalizedLastValue
-            ]
+          // Avoid processing an empty tag
+          if (!normalizedLastValue.value) {
+            return
           }
+
+          if (
+            /*
+             we're doing ts-ignore because the type of event is set to
+             ChangeEvent which keyCode doesn't exist there so
+             it cause error but if user press some key like
+             enter the keyCode value would be there in
+             event object so we need for checking it
+            */
+            // @ts-ignore
+            event.keyCode === 13 && // avoid set tag on enter if tag exist
+            selectedTagKeys.includes(normalizedLastValue.value.toLowerCase())
+          ) {
+            return
+          }
+
+          if (hasNewTag) {
+            setAvailableTagKeys([
+              ...availableTagKeys,
+              normalizedLastValue.value.toLowerCase()
+            ])
+          }
+
+          newValues = [
+            ...newValues.splice(0, newValues.length - 1),
+            normalizedLastValue
+          ]
         }
 
         setSelectedTags(newValues)
