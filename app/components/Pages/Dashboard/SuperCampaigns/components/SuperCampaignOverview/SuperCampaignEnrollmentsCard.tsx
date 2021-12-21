@@ -48,7 +48,9 @@ function SuperCampaignEnrollmentsCard() {
         <SuperCampaignResultList
           isLoading={isLoading}
           superCampaignResults={
-            superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+            superCampaignEnrollments as ISuperCampaignEnrollment<
+              'user' | 'brand' | 'campaign'
+            >[]
           }
         />
       ) : (
@@ -71,7 +73,9 @@ function SuperCampaignEnrollmentsCard() {
           <SuperCampaignEnrollmentList
             isLoading={isLoading}
             superCampaignEnrollments={
-              superCampaignEnrollments as ISuperCampaignEnrollment<'user_and_brand'>[]
+              superCampaignEnrollments as ISuperCampaignEnrollment<
+                'user' | 'brand'
+              >[]
             }
             setSuperCampaignEnrollments={setSuperCampaignEnrollments}
           />

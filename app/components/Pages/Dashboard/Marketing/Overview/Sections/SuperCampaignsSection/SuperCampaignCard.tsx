@@ -7,7 +7,7 @@ import SuperCampaignCardDays from './SuperCampaignCardDays'
 
 export interface SuperCampaignCardProps
   extends Omit<SuperCampaignBaseCardProps, 'image'> {
-  superCampaign: ISuperCampaign<'template_instance_and_created_by'>
+  superCampaign: ISuperCampaign<'template_instance' | 'created_by'>
   descriptionLineCount: number
 }
 

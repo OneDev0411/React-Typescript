@@ -2,8 +2,6 @@ declare type ISuperCampaignEnrollmentAssociations =
   | 'user'
   | 'brand'
   | 'campaign'
-  | 'user_and_brand'
-  | 'user_and_brand_and_campaign'
 
 declare interface ISuperCampaignEnrollment<
   A extends ISuperCampaignEnrollmentAssociations = ''
@@ -12,15 +10,9 @@ declare interface ISuperCampaignEnrollment<
     'id' | 'created_at' | 'updated_at' | 'deleted_at'
   > {
   super_campaign: UUID
-  brand: A extends 'brand' | 'user_and_brand' | 'user_and_brand_and_campaign'
-    ? IBrand
-    : never
-  user: A extends 'user' | 'user_and_brand' | 'user_and_brand_and_campaign'
-    ? IUser
-    : never
-  campaign: A extends 'campaign' | 'user_and_brand_and_campaign'
-    ? IEmailCampaign
-    : never
+  brand: 'brand' extends A ? IBrand : never
+  user: 'user' extends A ? IUser : never
+  campaign: 'campaign' extends A ? IEmailCampaign : never
   tags: string[]
   notifications_enabled: boolean
 }

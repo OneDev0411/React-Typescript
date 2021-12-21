@@ -5,9 +5,9 @@ type UseDeleteSuperCampaignEnrollment = (enrollmentId: UUID) => Promise<void>
 
 export function useDeleteSuperCampaignEnrollment(
   superCampaignId: UUID,
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[],
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[],
   setSuperCampaignEnrollments: (
-    superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+    superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
   ) => void
 ): UseDeleteSuperCampaignEnrollment {
   const { runActionThenNotify } = useRunActionThenNotify()

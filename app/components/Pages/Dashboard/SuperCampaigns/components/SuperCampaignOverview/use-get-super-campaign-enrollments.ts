@@ -6,8 +6,8 @@ import useAsync from '@app/hooks/use-async'
 import getSuperCampaignEnrollments from '@app/models/super-campaign/get-super-campaign-enrollments'
 
 export type SuperCampaignEnrollmentItem =
-  | ISuperCampaignEnrollment<'user_and_brand'>
-  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>
+  | ISuperCampaignEnrollment<'user' | 'brand'>
+  | ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>
 
 interface UseGetSuperCampaignEnrollments {
   isLoading: boolean

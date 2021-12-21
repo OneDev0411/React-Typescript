@@ -37,9 +37,9 @@ const useStyles = makeStyles(
 
 interface SuperCampaignEnrollmentListProps {
   isLoading: boolean
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
   setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
+    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
   >
 }
 
@@ -67,7 +67,7 @@ function SuperCampaignEnrollmentList({
     setSuperCampaignEnrollments
   )
 
-  const columns: TableColumn<ISuperCampaignEnrollment<'user_and_brand'>>[] = [
+  const columns: TableColumn<ISuperCampaignEnrollment<'user' | 'brand'>>[] = [
     {
       id: 'person',
       width: '35%',

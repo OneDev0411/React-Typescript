@@ -16,7 +16,9 @@ import { useSuperCampaignResultStats } from './use-super-campaign-result-stats'
 
 interface SuperCampaignResultListProps {
   isLoading: boolean
-  superCampaignResults: ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+  superCampaignResults: ISuperCampaignEnrollment<
+    'user' | 'brand' | 'campaign'
+  >[]
 }
 
 function SuperCampaignResultList({
@@ -29,7 +31,7 @@ function SuperCampaignResultList({
     useSuperCampaignResultStats(superCampaignResults)
 
   const columns: TableColumn<
-    ISuperCampaignEnrollment<'user_and_brand_and_campaign'>
+    ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>
   >[] = [
     {
       id: 'person',

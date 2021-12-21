@@ -10,7 +10,7 @@ type UseAddSuperCampaignEnrollment = (
 export function useAddSuperCampaignEnrollment(
   superCampaignId: UUID,
   setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
+    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
   >
 ): UseAddSuperCampaignEnrollment {
   const { runActionThenNotify } = useRunActionThenNotify()

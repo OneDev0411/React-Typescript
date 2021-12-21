@@ -15,7 +15,7 @@ import { useMarketingEmailTemplateEditor } from './use-marketing-email-template-
 import { useUpdateMySuperCampaignEnrollment } from './use-update-my-super-campaign-enrollment'
 
 export interface SuperCampaignPreviewDrawerProps extends OverlayDrawerProps {
-  superCampaign: ISuperCampaign<'template_instance_and_created_by'>
+  superCampaign: ISuperCampaign<'template_instance' | 'created_by'>
   onEnroll: (enrollment: ISuperCampaignEnrollment) => void
   onUnenroll: () => void
   hasUnenroll: boolean

@@ -1,5 +1,5 @@
 export function isSuperCampaignEnrollmentOptedOut(
-  enrollment: ISuperCampaignEnrollment<'user_and_brand'>
+  enrollment: ISuperCampaignEnrollment<'user' | 'brand'>
 ): boolean {
   return !!enrollment.deleted_at
 }

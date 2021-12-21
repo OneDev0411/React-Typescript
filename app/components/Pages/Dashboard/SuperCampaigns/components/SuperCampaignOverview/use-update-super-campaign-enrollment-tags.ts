@@ -8,9 +8,9 @@ type UseUpdateSuperCampaignEnrollmentTags = (
 
 export function useUpdateSuperCampaignEnrollmentTags(
   superCampaignId: UUID,
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[],
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[],
   setSuperCampaignEnrollments: (
-    superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+    superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
   ) => void
 ): UseUpdateSuperCampaignEnrollmentTags {
   const { runActionThenNotify } = useRunActionThenNotify()
