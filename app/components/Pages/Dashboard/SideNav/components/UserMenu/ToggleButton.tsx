@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles'
 import { mdiDotsVertical } from '@mdi/js'
 
 import { DropdownToggleButton } from 'components/DropdownToggleButton'
-import { useActiveBrand } from 'hooks/brand/use-active-brand'
+import { useUnsafeActiveBrand } from 'hooks/brand/use-unsafe-active-brand'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -45,11 +45,11 @@ interface Props {
 
 export default function ToggleButton(props: Props) {
   const classes = useStyles()
-  const activeBrand = useActiveBrand()
+  const activeBrand = useUnsafeActiveBrand()
   const { display_name } = props.user
 
   const tooltipTitle = `${display_name} ${
-    activeBrand.name ? `(${activeBrand.name})` : ''
+    activeBrand?.name ? `(${activeBrand.name})` : ''
   }`
 
   return (
@@ -72,7 +72,7 @@ export default function ToggleButton(props: Props) {
               variant="body1"
               className={classes.userDisplayName}
             >
-              {activeBrand.name}
+              {display_name ?? activeBrand?.name ?? 'Loading...'}
             </Typography>
           </div>
         </Box>
