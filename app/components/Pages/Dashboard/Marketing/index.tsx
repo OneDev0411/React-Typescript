@@ -107,13 +107,14 @@ export function MarketingLayout({
   } = useBrandAssets(activeBrand, {
     templateTypes: templateTypes
       ? (templateTypes.split(',') as IMarketingTemplateType[])
-      : [],
-    mediums: [currentMedium]
+      : []
   })
   const mediums = useMarketingCenterMediums(templates, assets)
 
-  const templateTypesWithMediums =
-    useMarketingTemplateTypesWithMediums(templates)
+  const templateTypesWithMediums = useMarketingTemplateTypesWithMediums(
+    templates,
+    assets
+  )
 
   const isLoading = isLoadingTemplates || isLoadingBrandAssets
 
@@ -132,9 +133,17 @@ export function MarketingLayout({
       return mediumMatches && typeMatches
     })
 
+    const currentPageAssets = assets.filter(item => {
+      return currentMedium ? item.medium === currentMedium : !!item.medium
+    })
+
     const currentPageTemplatesAndAssets: Array<
       IBrandMarketingTemplate | IBrandAsset
-    > = orderBy([...currentPageTemplates, ...assets], ['created_at'], 'desc')
+    > = orderBy(
+      [...currentPageTemplates, ...currentPageAssets],
+      ['created_at'],
+      'desc'
+    )
 
     return currentPageTemplatesAndAssets
   }, [currentMedium, templateTypes, templates, assets])
