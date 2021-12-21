@@ -36,11 +36,7 @@ function SuperCampaignPreviewDrawerOptOutButton({
         size="small"
         RenderMenu={({ closeMenu }) => (
           <List dense onClick={closeMenu}>
-            <ListItem
-              // className={classes.splitMenuItem}
-              button
-              onClick={onOptOutAndCopy}
-            >
+            <ListItem button onClick={onOptOutAndCopy}>
               <Typography variant="body2">
                 Opt-Out and Copy this campaign
               </Typography>
