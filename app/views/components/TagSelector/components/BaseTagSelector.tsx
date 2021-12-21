@@ -134,12 +134,12 @@ export const BaseTagSelector = ({
                 ? availableTags[originalTitle].value!
                 : baseValue
           } else if (lastValue && lastValue.value) {
-            tagValue = lastValue.value.trim()
+            tagValue = lastValue.value
           }
 
           let normalizedLastValue: SelectorOption = {
-            value: tagValue,
-            title: tagValue
+            value: tagValue.trim(),
+            title: tagValue.trim()
           }
 
           if (normalizedLastValue) {
@@ -182,13 +182,15 @@ export const BaseTagSelector = ({
         const allTagKeys = [...availableTagKeys, ...selectedTagKeys]
 
         // Suggest the creation of a new value
+        const sanitizedValue = params.inputValue.trim()
+
         if (
-          params.inputValue !== '' &&
-          !allTagKeys.includes(params.inputValue.trim().toLowerCase())
+          sanitizedValue !== '' &&
+          !allTagKeys.includes(sanitizedValue.trim().toLowerCase())
         ) {
           filtered.push({
-            value: params.inputValue,
-            title: `Add "${params.inputValue}"`,
+            value: sanitizedValue,
+            title: `Add "${sanitizedValue}"`,
             isNewTag: true
           })
         }
