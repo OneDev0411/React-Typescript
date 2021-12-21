@@ -188,7 +188,7 @@ export const BaseTagSelector = ({
 
         if (
           sanitizedValue !== '' &&
-          !allTagKeys.includes(sanitizedValue.trim().toLowerCase())
+          !allTagKeys.includes(sanitizedValue.toLowerCase())
         ) {
           filtered.push({
             value: sanitizedValue,
