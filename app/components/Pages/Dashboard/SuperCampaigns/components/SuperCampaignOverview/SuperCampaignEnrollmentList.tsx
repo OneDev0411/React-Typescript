@@ -120,8 +120,8 @@ function SuperCampaignEnrollmentList({
     <>
       <Table
         columns={columns}
-        rows={superCampaignEnrollments}
-        totalRows={superCampaignEnrollments.length}
+        rows={!isLoading ? superCampaignEnrollments : []}
+        totalRows={!isLoading ? superCampaignEnrollments.length : 0}
         rowSize={5}
         getTrProps={() => ({
           className: classNames(
@@ -130,13 +130,7 @@ function SuperCampaignEnrollmentList({
             listClasses.rowBorderTop
           )
         })}
-        loading={
-          isLoading
-            ? superCampaignEnrollments.length === 0
-              ? 'static'
-              : 'top'
-            : undefined
-        }
+        loading={isLoading ? 'static' : undefined}
         LoadingStateComponent={SuperCampaignListLoadingState}
         EmptyStateComponent={SuperCampaignListEmptyState}
       />
