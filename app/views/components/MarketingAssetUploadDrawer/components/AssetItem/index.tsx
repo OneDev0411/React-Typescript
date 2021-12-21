@@ -163,14 +163,7 @@ export default function AssetItem({
   }
 
   return (
-    <Grid
-      container
-      item
-      alignItems="center"
-      direction="row"
-      spacing={2}
-      key={asset.label}
-    >
+    <Grid container item alignItems="center" direction="row" spacing={2}>
       <Grid item xs={2} className={classes.thumbnailContainer}>
         {isPdf(asset.file.object) && <PdfThumbnail url={asset.file.url} />}
         {isImage(asset.file.object) && (
