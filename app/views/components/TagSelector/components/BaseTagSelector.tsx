@@ -142,7 +142,7 @@ export const BaseTagSelector = ({
             title: tagValue.trim()
           }
 
-          if (normalizedLastValue) {
+          if (normalizedLastValue.value) {
             if (
               /*
                we're doing ts-ignore because the type of event is set to
