@@ -98,7 +98,7 @@ Are you sure?`,
     async (image: File) => {
       setIsLoading(true)
 
-      const brandAsset = await uploadBrandAsset(activeBrand, image)
+      const brandAsset = await uploadBrandAsset([activeBrand], image)
 
       setIsLoading(false)
 

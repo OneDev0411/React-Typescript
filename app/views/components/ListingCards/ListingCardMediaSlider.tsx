@@ -1,6 +1,6 @@
 import React, { CSSProperties, memo } from 'react'
 
-import { makeStyles, Theme } from '@material-ui/core'
+import { alpha, makeStyles, Theme } from '@material-ui/core'
 import cn from 'classnames'
 import { Navigation, Lazy } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -38,11 +38,21 @@ const useStyles = makeStyles(
         '-webkit-backface-visibility': 'hidden'
       },
       '--swiper-navigation-color': '#fff',
+      '--swiper-navigation-size': theme.spacing(2),
       // Had to add more clickable area
       // For `.swiper-button-prev` and `.swiper-button-next`
       '& > div[class^="swiper-button"]': {
-        top: `calc(50% - ${theme.spacing(2)}px)`,
-        padding: theme.spacing(4, 3)
+        top: `calc(50% - ${theme.spacing(3)}px)`,
+        filter: `drop-shadow(0px 0.3px 0.5px ${alpha(
+          theme.palette.common.black,
+          0.1
+        )}) drop-shadow(0px 2px 4px ${alpha(theme.palette.common.black, 0.3)})`
+      },
+      '& > .swiper-button-prev': {
+        padding: theme.spacing(4, 3, 4, 1)
+      },
+      '& > .swiper-button-next': {
+        padding: theme.spacing(4, 1, 4, 3)
       }
     }
   }),

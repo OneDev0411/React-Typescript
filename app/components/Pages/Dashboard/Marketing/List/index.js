@@ -34,11 +34,15 @@ export const MarketingList = () => {
           medium,
           onSelectTemplate,
           defaultSelectedTemplate,
-          onDeleteTemplate
+          onDeleteTemplate,
+          onDeleteBrandAsset,
+          hasDeleteAccessOnBrandAsset
         }) => {
           return (
             <>
-              {isGeneratingThumbnails(items) && (
+              {isGeneratingThumbnails(
+                items.filter(item => item.type !== 'brand_asset')
+              ) && (
                 <Box mt={1.5}>
                   <Alert severity="info">
                     <Box>
@@ -57,6 +61,8 @@ export const MarketingList = () => {
                 onSelect={onSelectTemplate}
                 defaultSelected={defaultSelectedTemplate}
                 onDelete={onDeleteTemplate}
+                onDeleteBrandAsset={onDeleteBrandAsset}
+                hasDeleteAccessOnBrandAsset={hasDeleteAccessOnBrandAsset}
               />
             </>
           )
