@@ -8,12 +8,17 @@ import {
   Checkbox,
   Button,
   Grid,
-  Chip,
-  alpha,
-  Theme,
-  makeStyles
+  Chip
 } from '@material-ui/core'
-import { mdiHeartOutline, mdiHeart } from '@mdi/js'
+import {
+  mdiShower,
+  mdiBedKingOutline,
+  mdiVectorSquare,
+  mdiMapMarkerOutline,
+  mdiHeartOutline,
+  mdiDatabaseOutline,
+  mdiHeart
+} from '@mdi/js'
 import cn from 'classnames'
 import { noop } from 'lodash'
 import pluralize from 'pluralize'
@@ -21,112 +26,10 @@ import pluralize from 'pluralize'
 import { muiIconSizes } from 'components/SvgIcons/icon-sizes'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import { getFormattedPrice } from 'models/Deal/helpers/context'
-import {
-  getListingFeatures,
-  getStatusColor,
-  isLeaseProperty
-} from 'utils/listing'
+import { getListingFeatures, isLeaseProperty } from 'utils/listing'
 
 import ListingCardMedia from './ListingCardMedia'
-
-const useStyles = makeStyles(
-  (theme: Theme) => ({
-    card: {
-      width: '100%'
-    },
-    labelChip: {
-      backgroundColor: theme.palette.common.white,
-      marginLeft: theme.spacing(0.5)
-    },
-    labelChipLabel: {
-      lineHeight: theme.spacing(1)
-    },
-    statusChip: {
-      display: 'flex'
-    },
-    statusDot: ({ listing }: ListingCardProps) => ({
-      backgroundColor: `#${getStatusColor(listing.status)}`,
-      width: theme.spacing(1),
-      height: theme.spacing(1),
-      borderRadius: '50%',
-      display: 'inline-block'
-    }),
-    iconSmall: {
-      // TODO: there should be better ways to handling this.
-      // https://stackoverflow.com/questions/63880835
-      marginLeft: `${theme.spacing(1)}px !important`
-    },
-    cardMediaActionContainer: {
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: alpha(theme.palette.common.white, 0.7),
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 24,
-      height: 24
-    },
-    selectionCheckbox: {
-      padding: theme.spacing(0.5)
-    },
-    likeButton: {
-      minWidth: 'auto',
-      padding: 0
-    },
-    cardContent: {
-      padding: theme.spacing(1)
-    },
-    cardHighlightRoot: {
-      opacity: 0,
-      willChange: 'opacity',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      overflow: 'hidden',
-      position: 'absolute',
-      transition: 'opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-      borderRadius: 'inherit',
-      pointerEvents: 'none',
-      backgroundColor: 'currentcolor'
-    },
-    cardHighlightActive: {
-      opacity: 0.1
-    },
-    listingFeature: {
-      ...theme.typography.subtitle3,
-      marginRight: theme.spacing(0.5)
-    },
-    listingFeatureValue: {
-      ...theme.typography.body3
-    },
-    addressContainer: {
-      maxWidth: '100%'
-    },
-    address: {
-      ...theme.typography.body3
-    },
-    selectionContainer: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-      marginLeft: theme.spacing(1)
-    },
-    chipsContainer: {
-      margin: theme.spacing(1)
-    },
-    statusContainer: {
-      margin: theme.spacing(1),
-      textAlign: 'center'
-    },
-    listingFeatureContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      marginRight: theme.spacing(2)
-    }
-  }),
-  {
-    name: 'ListingCard'
-  }
-)
+import { useStyles } from './styles'
 
 export interface ListingCardProps {
   /**
@@ -246,7 +149,10 @@ export default function ListingCard({
     <Card
       data-test="card"
       variant="outlined"
-      className={classes.card}
+      className={cn({
+        [classes.card]: true,
+        [classes.cardHighlight]: shouldHighlightCard
+      })}
       onClick={onClick}
     >
       <CardActionArea component="div">
@@ -254,19 +160,6 @@ export default function ListingCard({
           <Grid container justifyContent="space-between">
             <Grid item>
               <Grid container item>
-                {selected !== undefined && (
-                  <Grid className={classes.selectionContainer}>
-                    <div className={classes.cardMediaActionContainer}>
-                      <Checkbox
-                        size="small"
-                        checked={selected}
-                        className={classes.selectionCheckbox}
-                        onChange={handleToggleSelection}
-                        onClick={stopPropagation}
-                      />
-                    </div>
-                  </Grid>
-                )}
                 {liked !== undefined && (
                   <Grid className={classes.selectionContainer}>
                     <div className={classes.cardMediaActionContainer}>
@@ -276,38 +169,70 @@ export default function ListingCard({
                         onClick={handleLikeClick}
                       >
                         <SvgIcon
-                          color="red"
-                          size={muiIconSizes.small}
+                          className={cn({
+                            [classes.likeButtonIcon]: true,
+                            [classes.likeButtonIconLiked]: liked
+                          })}
+                          size={muiIconSizes.medium}
                           path={liked ? mdiHeart : mdiHeartOutline}
                         />
                       </Button>
                     </div>
                   </Grid>
                 )}
+                {selected !== undefined && (
+                  <Grid
+                    className={cn({
+                      [classes.selectionContainer]: true,
+                      [classes.selectedCheckboxContainer]: selected
+                    })}
+                  >
+                    <div className={classes.cardMediaActionContainer}>
+                      <Checkbox
+                        size="medium"
+                        checked={selected}
+                        color="default"
+                        classes={{
+                          root: classes.checkboxRoot,
+                          checked: classes.checkboxChecked
+                        }}
+                        onChange={handleToggleSelection}
+                        onClick={stopPropagation}
+                      />
+                    </div>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
-            {tags && (
-              <Grid item>
-                <Grid className={classes.chipsContainer}>
-                  {tags.map(tag => (
-                    <Chip
-                      key={tag}
-                      label={tag}
-                      size="small"
-                      variant="outlined"
-                      classes={{
-                        root: classes.labelChip,
-                        label: classes.labelChipLabel
-                      }}
-                    />
-                  ))}
-                </Grid>
-              </Grid>
-            )}
+            <Grid className={classes.statusContainer}>
+              <Chip
+                label={listing.status}
+                size="small"
+                variant="default"
+                classes={{
+                  root: classes.statusChip,
+                  iconSmall: classes.iconSmall
+                }}
+                icon={<Grid className={classes.statusDot} />}
+              />
+            </Grid>
           </Grid>
         </ListingCardMedia>
+
         <CardContent className={classes.cardContent}>
-          <Grid container direction="column" spacing={1}>
+          {tags && (
+            <Grid item className={classes.tagsContainer}>
+              {tags.map(tag => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  className={classes.labelChip}
+                />
+              ))}
+            </Grid>
+          )}
+          <Grid container direction="column" spacing={2}>
             <Grid
               container
               item
@@ -321,82 +246,76 @@ export default function ListingCard({
                 </Typography>
               </Grid>
               <Grid item>
-                <Grid className={classes.statusContainer}>
-                  <Chip
-                    label={listing.status}
-                    size="small"
-                    variant="outlined"
-                    classes={{
-                      iconSmall: classes.iconSmall
-                    }}
-                    icon={<Grid className={classes.statusDot} />}
+                <Grid
+                  className={classes.mlsSource}
+                  item
+                  title="Listing Provider (MLS) Source"
+                >
+                  <SvgIcon
+                    path={mdiDatabaseOutline}
+                    className={classes.mlsSourceIcon}
                   />
+                  {listing.mls_display_name}
                 </Grid>
               </Grid>
             </Grid>
             {shouldRenderListingFeaturesRow && (
-              <Grid container item alignItems="flex-end">
+              <Grid className={classes.details} container>
                 {listingFeatures.bedroomCount ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.bedroomCount}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        {pluralize('bed', listingFeatures.bedroomCount)}
-                      </Typography>
-                    </Grid>
+                  <Grid
+                    className={classes.detailItem}
+                    item
+                    title={pluralize('bed', listingFeatures.bedroomCount)}
+                  >
+                    <SvgIcon
+                      path={mdiBedKingOutline}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.bedroomCount}
                   </Grid>
                 ) : null}
                 {listingFeatures.bathroomCount ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.bathroomCount}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        {pluralize('bath', listingFeatures.bathroomCount)}
-                      </Typography>
-                    </Grid>
+                  <Grid
+                    className={classes.detailItem}
+                    item
+                    title={pluralize('bath', listingFeatures.bathroomCount)}
+                  >
+                    <SvgIcon
+                      path={mdiShower}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.bathroomCount}
                   </Grid>
                 ) : null}
                 {listingFeatures.areaSqft && !shouldShowAcres ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography className={classes.listingFeature}>
-                        {listingFeatures.areaSqft.toLocaleString()}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        ft<sup>2</sup>
-                      </Typography>
-                    </Grid>
+                  <Grid className={classes.detailItem} item title="area">
+                    <SvgIcon
+                      path={mdiVectorSquare}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.areaSqft.toLocaleString()} ft
+                    <sup>2</sup>
                   </Grid>
                 ) : null}
                 {listingFeatures.lotSizeAreaAcre && shouldShowAcres ? (
-                  <Grid item>
-                    <Grid className={classes.listingFeatureContainer}>
-                      <Typography
-                        variant="subtitle2"
-                        className={classes.listingFeature}
-                      >
-                        {listingFeatures.lotSizeAreaAcre.toLocaleString()}{' '}
-                      </Typography>
-                      <Typography className={classes.listingFeatureValue}>
-                        acres
-                      </Typography>
-                    </Grid>
+                  <Grid className={classes.detailItem} item title="acres">
+                    <SvgIcon
+                      path={mdiVectorSquare}
+                      className={classes.detailItemIcon}
+                    />
+                    {listingFeatures.lotSizeAreaAcre.toLocaleString()} acres
                   </Grid>
                 ) : null}
               </Grid>
             )}
             {address && (
-              <Grid container item alignItems="center">
+              <Grid container item alignItems="center" title="Address">
                 <Grid item className={classes.addressContainer}>
-                  <Typography
-                    noWrap
-                    variant="body2"
-                    className={classes.address}
-                  >
+                  <Typography variant="body2" className={classes.address}>
+                    <SvgIcon
+                      path={mdiMapMarkerOutline}
+                      className={classes.addressIcon}
+                    />
                     {address}
                   </Typography>
                 </Grid>
@@ -404,12 +323,6 @@ export default function ListingCard({
             )}
           </Grid>
         </CardContent>
-        <span
-          className={cn({
-            [classes.cardHighlightRoot]: true,
-            [classes.cardHighlightActive]: shouldHighlightCard
-          })}
-        />
       </CardActionArea>
     </Card>
   )

@@ -16,6 +16,9 @@ interface Props
   hover?: boolean
   isWidget?: boolean
   reduxToggleFavorite?: boolean // TODO: remove this after refactoring fav/saved tab
+  // TODO: remove this after refactoring fav/saved tab
+  // related to https://gitlab.com/rechat/web/-/issues/4864
+  unselectOnToggleFavorite?: boolean
   onToggleListingModal?: (id: UUID, isOpen: boolean) => void
   onToggleLike?: (
     listing: IListing | ICompactListing,
@@ -32,6 +35,7 @@ const ListingCardWithFavorite = ({
   selected = undefined,
   onToggleSelection = noop,
   reduxToggleFavorite = true,
+  unselectOnToggleFavorite = false,
   onToggleLike = noop,
   onClick,
   onToggleListingModal = noop
@@ -72,13 +76,26 @@ const ListingCardWithFavorite = ({
     onToggleSelection(listing)
   }, [onToggleSelection, listing])
 
+  // TODO: After refactoring fav/saved tab, Change it to:
   const handleLikeClick = useCallback(() => {
-    if (selected) {
+    if (selected && unselectOnToggleFavorite) {
       onToggleSelection(listing)
     }
 
-    dispatch(toggleFavorite(listing))
-  }, [dispatch, listing, selected, onToggleSelection])
+    if (reduxToggleFavorite) {
+      dispatch(toggleFavorite(listing))
+    } else {
+      onToggleLike(listing, true)
+    }
+  }, [
+    selected,
+    unselectOnToggleFavorite,
+    reduxToggleFavorite,
+    onToggleSelection,
+    listing,
+    onToggleLike,
+    dispatch
+  ])
 
   return (
     <>
@@ -92,7 +109,7 @@ const ListingCardWithFavorite = ({
         onClick={handleClick}
         // TODO: After refactoring fav/saved tab, Change it to:
         // onLikeClick={onToggleLike}
-        onLikeClick={reduxToggleFavorite ? handleLikeClick : onToggleLike}
+        onLikeClick={handleLikeClick}
         onToggleSelection={handleToggleSelection}
       />
 

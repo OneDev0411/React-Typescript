@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
 import {
+  Grid,
   TextField,
   Button,
   Avatar,
   Typography,
   CircularProgress
 } from '@material-ui/core'
-import { mdiMapMarker, mdiHome } from '@mdi/js'
+import { mdiMapMarker, mdiHome, mdiDatabaseOutline } from '@mdi/js'
 import { useDebounce } from 'react-use'
 import Flex from 'styled-flex-component'
 
@@ -306,15 +307,30 @@ export function DealAddress({
                       {listing.address.state}, {listing.mls_number}
                     </Typography>
 
-                    <Typography
-                      variant="caption"
-                      className={classes.status}
-                      style={{
-                        backgroundColor: getStatusColorClass(listing.status)
-                      }}
-                    >
-                      {listing.status}
-                    </Typography>
+                    <Grid container justifyContent="space-between">
+                      <Grid item>
+                        <Typography
+                          variant="caption"
+                          className={classes.status}
+                          style={{
+                            backgroundColor: getStatusColorClass(listing.status)
+                          }}
+                        >
+                          {listing.status}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        className={classes.mlsSource}
+                        item
+                        title="Listing Provider (MLS) Source"
+                      >
+                        <SvgIcon
+                          path={mdiDatabaseOutline}
+                          className={classes.mlsSourceIcon}
+                        />
+                        {listing.mls_display_name}
+                      </Grid>
+                    </Grid>
                   </div>
                 </Flex>
               ))}

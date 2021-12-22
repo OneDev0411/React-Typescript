@@ -16,7 +16,12 @@ import {
 import Autocomplete, {
   AutocompleteRenderInputParams
 } from '@material-ui/lab/Autocomplete'
-import { mdiMapMarkerOutline, mdiMagnify, mdiHomeOutline } from '@mdi/js'
+import {
+  mdiMapMarkerOutline,
+  mdiMagnify,
+  mdiHomeOutline,
+  mdiDatabaseOutline
+} from '@mdi/js'
 import { merge } from 'lodash'
 import { useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
@@ -47,6 +52,17 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
     listingStatus: {
       width: 'fit-content',
       marginBottom: theme.spacing(1)
+    },
+    mlsSource: {
+      ...theme.typography.body3,
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700]
+    },
+    mlsSourceIcon: {
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(0.5)
     }
   }),
   {
@@ -216,8 +232,14 @@ export default function DealsAndListingsAndPlacesSearchInput({
                 listing={listing}
                 className={classes.listingStatus}
               />
-              <Typography component="p" variant="caption" color="textSecondary">
-                Listed by: {listing.mls_display_name}
+              <Typography
+                component="p"
+                variant="caption"
+                color="textSecondary"
+                title="Listing Provider (MLS) Source"
+                className={classes.mlsSource}
+              >
+                <SvgIcon path={mdiDatabaseOutline} /> {listing.mls_display_name}
               </Typography>
             </div>
           </ListItemAvatar>
