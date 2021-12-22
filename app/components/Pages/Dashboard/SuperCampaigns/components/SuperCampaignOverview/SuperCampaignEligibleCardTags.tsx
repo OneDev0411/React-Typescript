@@ -53,11 +53,12 @@ function SuperCampaignEligibleCardTags({
             : undefined
         }
       }}
-      textFieldProps={{
+      textFieldProps={params => ({
+        ...params,
         placeholder: !isSuperCampaignReadOnly
           ? 'Search or create tags...'
           : undefined
-      }}
+      })}
       disabled={isSaving}
     />
   )
