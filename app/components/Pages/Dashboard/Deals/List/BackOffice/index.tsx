@@ -21,6 +21,8 @@ export default function BackofficeWraperPage(
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
   const isSearchTab = props.params.filter === 'search'
 
+  console.log({ isSearchTab })
+
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
@@ -49,12 +51,14 @@ export default function BackofficeWraperPage(
               autoFocus
             />
           ) : (
-            <DebouncedSearchInput
-              onClick={redirectToSearchTab}
-              placeholder="Search deals by address, MLS# or agent name..."
-              value=""
-              InputProps={{ readOnly: true }}
-            />
+            <div>
+              <DebouncedSearchInput
+                onClick={redirectToSearchTab}
+                placeholder="Search deals by address, MLS# or agent name..."
+                value=""
+                InputProps={{ readOnly: true }}
+              />
+            </div>
           )}
         </div>
       </PageLayout.Header>
