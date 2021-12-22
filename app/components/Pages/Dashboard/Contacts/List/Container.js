@@ -258,7 +258,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  async fetchContactsAndJumpToSelected(sortOrder = '-last_touch') {
+  async fetchContactsAndJumpToSelected(sortOrder) {
     this.setState({
       isFetchingMoreContacts: true
     })
@@ -337,7 +337,7 @@ class ContactsList extends React.Component {
     start = 0,
     loadMoreBefore = false,
     resetLoadedRanges = false,
-    sortOrder = '-last_touch'
+    sortOrder
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
