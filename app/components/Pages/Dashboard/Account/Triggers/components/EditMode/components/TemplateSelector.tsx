@@ -74,7 +74,7 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.error.main}`
     }
   }),
-  { name: 'FlowTemplateSelector' }
+  { name: 'GlobalTriggerTemplateSelector' }
 )
 
 interface Props {
