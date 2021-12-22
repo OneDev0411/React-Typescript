@@ -1,6 +1,6 @@
 import { SuperAgentRequest } from 'superagent'
 
-import Fetch from '../../services/fetch'
+import Fetch from '@app/services/fetch'
 
 export function deleteBrandAsset(
   brandId: UUID,

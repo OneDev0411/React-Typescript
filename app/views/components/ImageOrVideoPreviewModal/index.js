@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { Tooltip } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import ProgressiveImage from 'react-progressive-image'
 
-import { ModalHeader } from 'components/ModalHeader'
-
-import BareModal from '../BareModal'
+import BareModal from '@app/views/components/BareModal'
+import { ModalHeader } from '@app/views/components/ModalHeader'
 
 import {
   Container,
@@ -16,7 +15,7 @@ import {
   Image
 } from './styled'
 
-export class ImagePreviewModal extends Component {
+export class ImageOrVideoPreviewModal extends Component {
   static propTypes = {
     imgSrc: PropTypes.string.isRequired,
     imgSrcTiny: PropTypes.string,
@@ -96,6 +95,13 @@ export class ImagePreviewModal extends Component {
             >
               {src => <Image alt={title} src={src} />}
             </ProgressiveImage>
+          ) : this.props.imgSrc.endsWith('.mp4') ? (
+            <video
+              controls
+              loop
+              src={this.props.imgSrc}
+              style={{ maxWidth: '70%' }}
+            />
           ) : (
             <Image alt={title} src={this.props.imgSrc} />
           )}
