@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, Typography } from '@material-ui/core'
 import { Field } from 'react-final-form'
 
@@ -13,7 +11,6 @@ interface Props {
 
 export const TemplateInctance = ({
   disabled = false,
-  currentBrandTemplate = null,
   currentTemplateInstance = null
 }: Props) => {
   const handleValidation = value => {
@@ -36,8 +33,8 @@ export const TemplateInctance = ({
           <>
             <TemplateSelector
               disabled={disabled}
+              templateType={['Birthday']}
               hasError={showError}
-              currentBrandTemplate={currentBrandTemplate}
               currentTemplateInstance={currentTemplateInstance}
               onChange={onChange}
             />
