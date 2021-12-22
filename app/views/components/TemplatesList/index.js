@@ -306,7 +306,6 @@ function TemplatesList(props) {
         isTriggered={isActionTriggered}
         setTriggered={value => {
           setActionTriggered(value)
-          setSelectedTemplate(null)
 
           setPreviewModalOpen(false)
           props.onSelect && props.onSelect(null)
