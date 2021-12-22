@@ -5,7 +5,7 @@ import { ViewType } from './types'
 
 export const PROPERTIES_FILTERS_STORAGE_KEY = 'mls-v.2.1-filters'
 export const SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY =
-  'mls-saved-search-hint-dismissed'
+  'mls_saved_search_hint_dismissed'
 
 export const LISTING_HOVER_DEBOUNCE_TIME_MS = 150
 export const DEFAULT_VIEW: ViewType = 'cards'
