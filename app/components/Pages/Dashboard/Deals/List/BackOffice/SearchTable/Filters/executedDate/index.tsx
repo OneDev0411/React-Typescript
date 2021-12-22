@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 
 import { Grid, Typography } from '@material-ui/core'
 import { mdiCalendarCursor } from '@mdi/js'
+import { omit } from 'lodash'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -37,6 +38,18 @@ export const ExecutedDateEditor = ({
     [filters.contexts]
   )
 
+  const onReset = useCallback(
+    () => {
+      updateFilters({
+        contexts: {
+          ...omit(filters.contexts, 'contract_date')
+        }
+      })
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filters.contexts]
+  )
+
   return (
     <Grid className={classes.editorRoot}>
       <Grid container alignItems="center" className={classes.header}>
@@ -56,9 +69,7 @@ export const ExecutedDateEditor = ({
           filters.contexts.contract_date?.date.to ===
             defaultFilters.contexts.contract_date?.date.to
         }
-        onClickReset={() => {
-          onChange({ from: undefined, to: undefined })
-        }}
+        onClickReset={onReset}
       />
     </Grid>
   )
