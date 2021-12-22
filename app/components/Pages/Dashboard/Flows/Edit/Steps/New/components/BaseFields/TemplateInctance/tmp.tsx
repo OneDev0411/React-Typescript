@@ -1,17 +1,9 @@
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 
-import {
-  Box,
-  Typography,
-  makeStyles,
-  Theme,
-  Button,
-  Grid
-} from '@material-ui/core'
+import { Box, makeStyles, Theme, Button, Grid } from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
-import useNotify from '@app/hooks/use-notify'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
@@ -19,11 +11,64 @@ import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
 import { getActiveBrand } from 'utils/user-teams'
 
+import { MarketingEmailFormData } from '../../../types'
+
+interface Props {
+  disabled?: boolean
+  hasError?: boolean
+  currentBrandTemplate?: Nullable<IBrandMarketingTemplate>
+  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
+  onChange: (value: MarketingEmailFormData['template']) => void
+}
+
+const allMarketingTemplateType: IMarketingTemplateType[] = [
+  'BackToSchool',
+  'Birthday',
+  'Blank',
+  'Blog',
+  'Brand',
+  'ChineseNewYear',
+  'Christmas',
+  'ColumbusDay',
+  'DaylightSaving',
+  'Diwali',
+  'Easter',
+  'Event',
+  'FathersDay',
+  'FourthOfJuly',
+  'Halloween',
+  'Hanukkah',
+  'HomeAnniversary',
+  'Kwanzaa',
+  'LaborDay',
+  'Layout',
+  'MarketReport',
+  'MemorialDay',
+  'MLKDay',
+  'MothersDay',
+  'NewAgent',
+  'News',
+  'Newsletter',
+  'NewYear',
+  'OtherHoliday',
+  'Passover',
+  'PatriotsDay',
+  'Recruitment',
+  'RoshHashanah',
+  'September11',
+  'StPatrick',
+  'Thanksgiving',
+  'Valentines',
+  'VeteransDay',
+  'WeddingAnniversary',
+  'WomansDay'
+]
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     container: {
       position: 'relative',
-      height: '445px', // From figma
+      height: '560px', // From figma
       background: theme.palette.grey[100],
       borderRadius: theme.shape.borderRadius,
       textAlign: 'center',
@@ -62,7 +107,7 @@ const useStyles = makeStyles(
     },
     templatePreviewPlaceholder: {
       display: 'block',
-      lineHeight: '445px' // From figma
+      lineHeight: '550px' // From figma
     },
     disabled: {
       opacity: 0.4,
@@ -74,57 +119,32 @@ const useStyles = makeStyles(
       border: `1px solid ${theme.palette.error.main}`
     }
   }),
-  { name: 'GlobalTriggerTemplateSelector' }
+  { name: 'FlowTemplateSelector' }
 )
-
-interface Props {
-  disabled?: boolean
-  hasError?: boolean
-  error?: Nullable<string>
-  templateType: IMarketingTemplateType[]
-  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
-  onChange: (value: IGlobalTriggerFormData['template']) => void
-}
 
 export const TemplateSelector = ({
   disabled = false,
   hasError = false,
-  error = null,
-  templateType,
+  currentBrandTemplate = null,
   currentTemplateInstance = null,
   onChange
 }: Props) => {
   const classes = useStyles()
-  const notify = useNotify()
   const user = useSelector<IAppState, IUser>(selectUser)
+  const [brand] = useState<Nullable<IBrand>>(getActiveBrand(user))
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
   const [isBuilderOpen, setIsBuilderOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  // Current Selected Template
-  const initialSelectedTemplate = () => currentTemplateInstance ?? null
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>
-  >(initialSelectedTemplate)
-
-  const brand: Nullable<IBrand> = useMemo(() => getActiveBrand(user), [user])
-
-  const templatePreviewUrl: Nullable<string> = useMemo(() => {
-    if (!selectedTemplate) {
-      return null
-    }
-
-    if (selectedTemplate.type === 'template_instance') {
-      return selectedTemplate.file.preview_url
-    }
-
-    if (selectedTemplate.type === 'brand_template') {
-      return selectedTemplate.preview.preview_url
-    }
-
-    return null
-  }, [selectedTemplate])
+  const [selectedBrandTemplate, setSelectedBrandTemplate] =
+    useState<Nullable<IBrandMarketingTemplate>>(currentBrandTemplate)
+  const [selectedTemplateInstance, setSelectedTemplateInstace] = useState<
+    Nullable<IMarketingTemplateInstance>
+  >(currentTemplateInstance)
+  const currentTemplate = useMemo(
+    () => selectedBrandTemplate || selectedTemplateInstance,
+    [selectedBrandTemplate, selectedTemplateInstance]
+  )
 
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
@@ -134,19 +154,28 @@ export const TemplateSelector = ({
       setIsLoading(true)
 
       if (!brand) {
-        return notify({
-          status: 'warning',
-          message: 'Brand is not available.'
-        })
+        return
       }
 
       const isTemplateInstance = template.type === 'template_instance'
 
-      setSelectedTemplate(template)
+      if (isTemplateInstance) {
+        if (selectedBrandTemplate) {
+          setSelectedBrandTemplate(null)
+        }
+
+        setSelectedTemplateInstace(template as IMarketingTemplateInstance)
+      } else {
+        if (selectedTemplateInstance) {
+          setSelectedTemplateInstace(null)
+        }
+
+        setSelectedBrandTemplate(template as IBrandMarketingTemplate)
+      }
 
       onChange({
         isInstance: isTemplateInstance,
-        data: template
+        id: template.id
       })
     } catch (error) {
       console.error(error)
@@ -157,7 +186,9 @@ export const TemplateSelector = ({
 
   const handleEditTemplate = async (markup: string) => {
     try {
-      const templateId = selectedTemplate?.template.id
+      const templateId = selectedBrandTemplate
+        ? selectedBrandTemplate.template?.id
+        : selectedTemplateInstance?.template?.id
 
       if (!templateId) {
         return
@@ -168,10 +199,10 @@ export const TemplateSelector = ({
 
       const templateInstance = await getTemplateInstance(templateId, markup)
 
-      setSelectedTemplate(templateInstance)
+      setSelectedTemplateInstace(templateInstance)
       onChange({
         isInstance: true,
-        data: templateInstance
+        id: templateInstance.id
       })
     } catch (error) {
       console.error(error)
@@ -203,7 +234,7 @@ export const TemplateSelector = ({
       )
     }
 
-    if (!selectedTemplate) {
+    if (!currentTemplate) {
       return (
         <span className={classes.templatePreviewPlaceholder}>
           Select a template
@@ -211,10 +242,20 @@ export const TemplateSelector = ({
       )
     }
 
-    if (templatePreviewUrl) {
+    if (selectedTemplateInstance) {
       return (
         <img
-          src={templatePreviewUrl}
+          src={selectedTemplateInstance.file.preview_url}
+          alt="Selected Template"
+          className={classes.templateImage}
+        />
+      )
+    }
+
+    if (selectedBrandTemplate) {
+      return (
+        <img
+          src={selectedBrandTemplate.preview.preview_url}
           alt="Selected Template"
           className={classes.templateImage}
         />
@@ -239,10 +280,10 @@ export const TemplateSelector = ({
         <Box
           className={classes.container}
           onClick={() =>
-            !selectedTemplate && !disabled && handleShowTemplatePicker(true)
+            !currentTemplate && !disabled && handleShowTemplatePicker(true)
           }
         >
-          {!isLoading && selectedTemplate && !disabled && (
+          {!isLoading && currentTemplate && !disabled && (
             <Box className={classes.containerPreview}>
               <Grid
                 container
@@ -276,26 +317,19 @@ export const TemplateSelector = ({
           {renderPreview()}
         </Box>
       </Box>
-      {error && (
-        <Box mt={0.5}>
-          <Typography variant="body2" color="error">
-            {error}
-          </Typography>
-        </Box>
-      )}
       {isTemplatePickerOpen && (
         <MarketingTemplateAndTemplateInstancePickerModal
           title="Select Template"
           user={user}
           mediums={['Email']}
-          templateTypes={templateType}
+          templateTypes={allMarketingTemplateType}
           onSelect={handleSelectTemplate}
           onClose={() => handleShowTemplatePicker(false)}
         />
       )}
-      {isBuilderOpen && selectedTemplate && (
+      {isBuilderOpen && currentTemplate && (
         <MarketingTemplateEditor
-          template={selectedTemplate}
+          template={currentTemplate}
           templateData={{ user }}
           onSave={handleEditTemplate}
           onClose={() => handleShowBuilder(false)}

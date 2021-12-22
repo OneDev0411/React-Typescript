@@ -100,7 +100,6 @@ export const TemplateSelector = ({
 
     return null
   }, [selectedTemplate])
-  // const currentTemplate = selectedTemplate || currentValue?.campaign?.template
 
   const handleCreateTemplateInstance = async (
     template: IBrandMarketingTemplate
