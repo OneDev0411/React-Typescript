@@ -243,7 +243,7 @@ export const Filters = ({ searchQuery }: Props) => {
                 variant="contained"
                 onClick={onExportList}
                 color="primary"
-                size="medium"
+                size="small"
                 disabled={isExporting}
                 startIcon={
                   <SvgIcon
@@ -252,7 +252,7 @@ export const Filters = ({ searchQuery }: Props) => {
                   />
                 }
               >
-                {isExporting ? 'Exporting...' : ' Export List'}
+                {isExporting ? 'Exporting...' : ' Export'}
               </Button>
               {/* Reset button  */}
               <Button
@@ -260,7 +260,7 @@ export const Filters = ({ searchQuery }: Props) => {
                 variant="outlined"
                 onClick={resetFilters}
                 disabled={isEqual(currentFilters, systemDefaultFilters)}
-                size="medium"
+                size="small"
               >
                 Reset Search
               </Button>

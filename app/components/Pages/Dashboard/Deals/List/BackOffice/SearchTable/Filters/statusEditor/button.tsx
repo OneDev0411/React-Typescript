@@ -35,14 +35,14 @@ export const StatusButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       className={cn({
         [classes.button]: true,
         active: true
       })}
       startIcon={<SvgIcon path={mdiListStatus} size={muiIconSizes.small} />}
     >
-      Deals Status
+      Status
     </Button>
   )
 }
