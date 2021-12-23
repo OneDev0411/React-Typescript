@@ -336,3 +336,10 @@ declare interface IContactFilter {
   invert: boolean
   value: unknown
 }
+
+declare interface IContactActiveFilters {
+  id: UUID
+  isActive: boolean
+  operator?: TContactFilterOperator
+  values: { label: string; value: string }[]
+}

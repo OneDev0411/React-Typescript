@@ -1,18 +1,18 @@
-import React from 'react'
-
 import { withRouter } from 'react-router'
 
+import {
+  isBrandAsset,
+  convertToTemplate,
+  getMedium,
+  getTemplateType
+} from '@app/utils/marketing-center/helpers'
+import SocialDrawer from '@app/views/components/InstantMarketing/components/SocialDrawer'
 import GeneralFlow from 'components/InstantMarketing/adapters/General'
 import PublishWebsiteFlow from 'components/InstantMarketing/adapters/PublishWebsite'
 import ContactFlow from 'components/InstantMarketing/adapters/SendContactCard'
 import ListingFlow from 'components/InstantMarketing/adapters/SendMlsListingCard'
 import ShareInstance from 'components/InstantMarketing/adapters/ShareInstance'
 import getTemplateObject from 'components/InstantMarketing/helpers/get-template-object'
-import {
-  convertToTemplate,
-  getMedium,
-  getTemplateType
-} from 'utils/marketing-center/helpers'
 
 import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
 
@@ -82,6 +82,27 @@ function TemplateAction(props) {
 
   if (isEdit && !props.isTriggered) {
     return null
+  }
+
+  if (
+    props.selectedTemplate &&
+    isBrandAsset(props.selectedTemplate) &&
+    !props.isTriggered
+  ) {
+    return null
+  }
+
+  if (
+    props.selectedTemplate &&
+    isBrandAsset(props.selectedTemplate) &&
+    props.isTriggered
+  ) {
+    return (
+      <SocialDrawer
+        brandAsset={props.selectedTemplate}
+        onClose={sharedProps.handleTrigger}
+      />
+    )
   }
 
   if (!isEdit && props.type === 'history') {

@@ -1,6 +1,6 @@
 import type { ProgressEvent } from 'superagent'
 
-type Progress = (event: ProgressEvent) => void
+export type Progress = (event: ProgressEvent) => void
 
 export interface IOptions {
   proxy?: boolean
