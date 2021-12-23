@@ -22,6 +22,7 @@ export const useStyles = makeStyles(
       }
     },
     resultItemContent: {
+      width: '100%',
       paddingLeft: theme.spacing(2)
     },
     lightText: {
@@ -52,6 +53,17 @@ export const useStyles = makeStyles(
     skipContainer: {
       marginTop: theme.spacing(2),
       textAlign: 'right'
+    },
+    mlsSource: {
+      ...theme.typography.body3,
+      display: 'flex',
+      alignItems: 'center',
+      color: theme.palette.grey[700]
+    },
+    mlsSourceIcon: {
+      maxWidth: 16,
+      maxHeight: 16,
+      marginRight: theme.spacing(0.5)
     }
   }),
   {

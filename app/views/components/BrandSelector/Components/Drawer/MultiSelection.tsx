@@ -7,11 +7,12 @@ import Drawer from '@app/views/components/OverlayDrawer'
 import { BaseBrandSelector } from '../Base'
 
 import { useStyles } from './styles'
-import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
+import { MultiSelectionBrandSelectorDrawer as Props } from './type'
 
 export function MultiSelectionBrandSelectorDrawer({
   disabled = false,
-  drawerTitle = 'Select Brands',
+  drawerTitle = 'Select Agents',
+  saveButtonText = 'Save',
   brandSelectorProps = {},
   selectedBrands: currentBrands = [],
   onSave,
@@ -71,10 +72,10 @@ export function MultiSelectionBrandSelectorDrawer({
           <Button
             variant="contained"
             color="primary"
-            disabled={disabled || isSaving}
+            disabled={disabled || isSaving || selectedBrands.length === 0}
             onClick={handleClick}
           >
-            {isSaving ? 'Saving...' : 'Save'}
+            {isSaving ? 'Saving...' : saveButtonText}
           </Button>
         </Drawer.Footer>
       </Drawer>

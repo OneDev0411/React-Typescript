@@ -1,8 +1,6 @@
 import { differenceInDays } from 'date-fns'
 
 import { ACL } from '@app/constants/acl'
-import { OAuthProvider } from 'constants/contacts'
-import { getOAuthAccounts } from 'models/o-auth-accounts/get-o-auth-accounts'
 
 import { AppcuesUserInfo, AppcuesUserAccessList } from './types'
 
@@ -48,12 +46,9 @@ export function createAppcuesUserData(
 export async function prepareAndSendUserData(
   accessList: IPermission[],
   userId: string,
-  userInfo: AppcuesUserInfo
+  userInfo: AppcuesUserInfo,
+  gmailOrOutlookSynced: boolean
 ) {
-  const google = await getOAuthAccounts(OAuthProvider.Google)
-  const outlook = await getOAuthAccounts(OAuthProvider.Outlook)
-  const gmailOrOutlookSynced = Boolean(google.length || outlook.length)
-
   const appcuesAccessList = createAppcuesAccessList(
     accessList,
     DEFAULT_APPCUES_USER_ACL

@@ -17,7 +17,10 @@ import { v4 as uuidv4 } from 'uuid'
 import useNotify from '@app/hooks/use-notify'
 import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
-import { createTemplate } from 'models/instant-marketing/create-template'
+import {
+  createTemplate,
+  CreateTemplateOptions
+} from 'models/instant-marketing/create-template'
 
 import { SAVED_TEMPLATE_VARIANT } from './constants'
 
@@ -45,12 +48,14 @@ interface Props
   extends Pick<ButtonProps, 'disabled' | 'variant' | 'color' | 'children'> {
   medium: string
   mjml: boolean
+  originalTemplateId?: UUID
   getTemplateMarkup: () => string
 }
 
 export function AddToMarketingCenterButton({
   medium,
   mjml,
+  originalTemplateId,
   getTemplateMarkup,
   ...otherProps
 }: Props) {
@@ -89,14 +94,15 @@ export function AddToMarketingCenterButton({
     const html = getTemplateMarkup()
 
     try {
-      const templateData = {
+      const templateData: CreateTemplateOptions = {
         name,
         variant: templateVariant,
         templateType: selectedTemplateType,
         medium,
         html,
         brands: [team.id],
-        mjml
+        mjml,
+        originalTemplateId
       }
 
       await createTemplate(templateData)

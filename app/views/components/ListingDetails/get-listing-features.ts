@@ -124,6 +124,10 @@ export function getListingFeatures(listing: IListing): Feature[] {
           value: valueToString(property.heating)
         },
         {
+          label: 'Pets',
+          value: valueToString(property.pets_policy)
+        },
+        {
           label: 'Others',
           value: valueToString([
             ...(property.utilities ?? []),

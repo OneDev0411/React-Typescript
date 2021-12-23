@@ -1,14 +1,14 @@
-import _ from 'underscore'
+import { isEmpty } from 'lodash'
 
 import Fetch from '../../../services/fetch'
 
 function sanitizeSettingValue(value: any): any {
-  // _.isEmpty always returns true for boolean type so we need to handle it
-  if (typeof value == 'boolean') {
+  // isEmpty always returns true for boolean and number type so we need to handle it
+  if (typeof value === 'boolean' || typeof value === 'number') {
     return value
   }
 
-  if (_.isEmpty(value)) {
+  if (isEmpty(value)) {
     return null
   }
 
@@ -28,9 +28,9 @@ export async function putUserSetting(key: string, value: any, brand?: UUID) {
   }
 
   try {
-    const request = new Fetch().put(`/users/self/settings/${key}`).send({
-      value: sanitizeSettingValue(value)
-    })
+    const request = new Fetch()
+      .put(`/users/self/settings/${key}`)
+      .send({ value: sanitizeSettingValue(value) })
 
     if (brand) {
       request.set({ 'X-RECHAT-BRAND': brand })
