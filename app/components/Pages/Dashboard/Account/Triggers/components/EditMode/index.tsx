@@ -18,13 +18,13 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getTemplateType } from '@app/components/Pages/Dashboard/Contacts/Profile/components/ContactAttributeInlineEditableField/TriggerEditMode/helpers'
+import { TemplateSelector } from '@app/components/Pages/Dashboard/Flows/Edit/Steps/New/components/BaseFields/TemplateInctance/Selector'
 import { createTrigger } from '@app/models/instant-marketing/global-triggers'
 import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 import { setGlobalTrigger } from '@app/store_actions/global-triggers'
 import { IAppState } from 'reducers'
 
-import { TemplateSelector } from './components/TemplateSelector'
 import { generateInitialValues, generatePayload } from './helpers'
 
 const useStyles = makeStyles(
@@ -257,11 +257,12 @@ export function TriggerEditMode({
                   return (
                     <TemplateSelector
                       disabled={isSubmitting}
+                      templateType={[templatesType]}
                       hasError={!!error}
                       error={error}
-                      templateType={[templatesType]}
-                      currentBrandTemplate={trigger?.template}
-                      currentTemplateInstance={trigger?.template_instance}
+                      currentTemplate={
+                        trigger?.template_instance ?? trigger?.template ?? null
+                      }
                       onChange={onChange}
                     />
                   )

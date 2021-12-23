@@ -2,22 +2,20 @@ import { useState, useMemo } from 'react'
 
 import {
   Box,
-  Typography,
-  makeStyles,
+  Grid,
   Theme,
   Button,
-  Grid
+  makeStyles,
+  Typography
 } from '@material-ui/core'
 import cn from 'classnames'
 import { useSelector } from 'react-redux'
 
-import useNotify from '@app/hooks/use-notify'
 import MarketingTemplateEditor from 'components/MarketingTemplateEditor'
 import MarketingTemplateAndTemplateInstancePickerModal from 'components/MarketingTemplatePickers/MarketingTemplateAndTemplateInstancePickerModal'
 import { getTemplateInstance } from 'models/instant-marketing/triggers/helpers/get-template-instance'
 import { IAppState } from 'reducers'
 import { selectUser } from 'selectors/user'
-import { getActiveBrand } from 'utils/user-teams'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -82,8 +80,12 @@ interface Props {
   hasError?: boolean
   error?: Nullable<string>
   templateType: IMarketingTemplateType[]
-  currentTemplateInstance?: Nullable<IMarketingTemplateInstance>
-  onChange: (value: IGlobalTriggerFormData['template']) => void
+  currentTemplate?: Nullable<
+    IMarketingTemplateInstance | IBrandMarketingTemplate
+  >
+  onChange: (
+    value: IMarketingTemplateInstance | IBrandMarketingTemplate
+  ) => void
 }
 
 export const TemplateSelector = ({
@@ -91,11 +93,10 @@ export const TemplateSelector = ({
   hasError = false,
   error = null,
   templateType,
-  currentTemplateInstance = null,
+  currentTemplate = null,
   onChange
 }: Props) => {
   const classes = useStyles()
-  const notify = useNotify()
   const user = useSelector<IAppState, IUser>(selectUser)
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] =
     useState<boolean>(false)
@@ -103,12 +104,10 @@ export const TemplateSelector = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   // Current Selected Template
-  const initialSelectedTemplate = () => currentTemplateInstance ?? null
+  const initialSelectedTemplate = () => currentTemplate ?? null
   const [selectedTemplate, setSelectedTemplate] = useState<
     Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>
   >(initialSelectedTemplate)
-
-  const brand: Nullable<IBrand> = useMemo(() => getActiveBrand(user), [user])
 
   const templatePreviewUrl: Nullable<string> = useMemo(() => {
     if (!selectedTemplate) {
@@ -129,30 +128,9 @@ export const TemplateSelector = ({
   const handleSelectTemplate = async (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance
   ) => {
-    try {
-      setIsTemplatePickerOpen(false)
-      setIsLoading(true)
-
-      if (!brand) {
-        return notify({
-          status: 'warning',
-          message: 'Brand is not available.'
-        })
-      }
-
-      const isTemplateInstance = template.type === 'template_instance'
-
-      setSelectedTemplate(template)
-
-      onChange({
-        isInstance: isTemplateInstance,
-        data: template
-      })
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
-    }
+    setIsTemplatePickerOpen(false)
+    setSelectedTemplate(template)
+    onChange(template)
   }
 
   const handleEditTemplate = async (markup: string) => {
@@ -169,10 +147,7 @@ export const TemplateSelector = ({
       const templateInstance = await getTemplateInstance(templateId, markup)
 
       setSelectedTemplate(templateInstance)
-      onChange({
-        isInstance: true,
-        data: templateInstance
-      })
+      onChange(templateInstance)
     } catch (error) {
       console.error(error)
     } finally {
