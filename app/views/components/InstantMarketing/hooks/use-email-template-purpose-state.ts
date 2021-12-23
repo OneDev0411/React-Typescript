@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { ACL } from '@app/constants/acl'
+import { TemplateData } from '@app/utils/marketing-center/render-branded-template'
 import { useAcl } from '@app/views/components/Acl/use-acl'
 
 import getTemplateObject from '../helpers/get-template-object'
@@ -11,10 +12,27 @@ interface UseEmailTemplatePurposeState {
   closeEmailPurposeDrawer: () => void
   emailTemplatePurpose: Nullable<EmailTemplatePurpose>
   setEmailTemplatePurpose: (emailTemplatePurpose: EmailTemplatePurpose) => void
+  correctedTemplateData: TemplateData
+}
+
+function getUserWithVariableFields(user: IUser): IUser {
+  return {
+    ...user,
+    profile_image_url: '{{user.profile_image_url}}',
+    display_name: '{{user.display_name}}',
+    phone_number: '{{user.phone_number}}',
+    email: '{{user.email}}',
+    facebook: '{{user.facebook}}',
+    twitter: '{{user.twitter}}',
+    linkedin: '{{user.linkedin}}',
+    youtube: '{{user.youtube}}',
+    instagram: '{{user.instagram}}'
+  }
 }
 
 export function useEmailTemplatePurposeState(
-  template: Nullable<IBrandMarketingTemplate>
+  template: Nullable<IBrandMarketingTemplate>,
+  templateData: TemplateData
 ): UseEmailTemplatePurposeState {
   const isAdmin = useAcl(ACL.ADMIN)
 
@@ -30,10 +48,19 @@ export function useEmailTemplatePurposeState(
 
   const closeEmailPurposeDrawer = () => setIsDrawerOpen(false)
 
+  const correctedTemplateData: TemplateData =
+    emailTemplatePurpose === 'ForOtherAgents' && templateData.user
+      ? {
+          ...templateData,
+          user: getUserWithVariableFields(templateData.user)
+        }
+      : templateData
+
   return {
     isEmailPurposeDrawerOpen,
     closeEmailPurposeDrawer,
     emailTemplatePurpose,
-    setEmailTemplatePurpose
+    setEmailTemplatePurpose,
+    correctedTemplateData
   }
 }

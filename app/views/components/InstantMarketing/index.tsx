@@ -102,8 +102,9 @@ export default function InstantMarketing({
     isEmailPurposeDrawerOpen,
     closeEmailPurposeDrawer,
     emailTemplatePurpose,
-    setEmailTemplatePurpose
-  } = useEmailTemplatePurposeState(defaultTemplate)
+    setEmailTemplatePurpose,
+    correctedTemplateData
+  } = useEmailTemplatePurposeState(defaultTemplate, templateData)
 
   return (
     <>
@@ -115,7 +116,7 @@ export default function InstantMarketing({
       {!isEmailPurposeDrawerOpen && (
         <Builder
           hideTemplatesColumn={hideTemplatesColumn}
-          templateData={templateData}
+          templateData={correctedTemplateData}
           templateTypes={templateTypes}
           mediums={mediums}
           assets={assets}
