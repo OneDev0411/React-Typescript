@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { Theme, makeStyles, Grid } from '@material-ui/core'
 import { uniq } from 'lodash'
@@ -25,6 +25,7 @@ interface Props {
 
 export default function Column({ title, items, onChange, onChangeAll }: Props) {
   const classes = useStyles()
+  const [shouldRerenderItems, setShouldRerenderItems] = useState(true)
 
   const allSelected = useMemo(
     () =>
@@ -45,7 +46,8 @@ export default function Column({ title, items, onChange, onChangeAll }: Props) {
           label="All"
           selected={allSelected}
           reminderSeconds={allReminderSeconds}
-          onChange={(selected, reminderSeconds) =>
+          onChange={(selected, reminderSeconds) => {
+            setShouldRerenderItems(!shouldRerenderItems)
             onChangeAll(
               items.map(item => ({
                 ...item,
@@ -53,7 +55,7 @@ export default function Column({ title, items, onChange, onChangeAll }: Props) {
                 reminderSeconds
               }))
             )
-          }
+          }}
         />
       </Grid>
 
@@ -61,7 +63,7 @@ export default function Column({ title, items, onChange, onChangeAll }: Props) {
         <Grid item key={item.eventType}>
           <Item
             // I have to use key prop here to reset internal state
-            key={allSelected ? 'allChecked' : 'allUnchecked'}
+            key={shouldRerenderItems ? 'allChecked' : 'allUnchecked'}
             label={item.label}
             selected={item.selected}
             reminderSeconds={item.reminderSeconds}
