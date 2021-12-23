@@ -37,8 +37,8 @@ import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
 import Templates from '../Templates'
 
-import { AddToMarketingCenter } from './AddToMarketingCenter'
-import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenter/constants'
+import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
+import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
 import AdminContinueButton from './AdminContinueButton'
 import { registerEmailBlocks } from './Blocks/Email'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
@@ -1204,6 +1204,18 @@ class Builder extends React.Component {
     }))
   }
 
+  get isEmailTemplateForOtherAgents() {
+    return (
+      this.isEmailMedium && this.props.emailTemplatePurpose === 'ForOtherAgents'
+    )
+  }
+
+  get isEmailTemplateForCampaigns() {
+    return (
+      this.isEmailMedium && this.props.emailTemplatePurpose === 'ForCampaigns'
+    )
+  }
+
   get shouldShowSaveAsTemplateButton() {
     if (this.isBareMode) {
       return false
@@ -1532,25 +1544,40 @@ class Builder extends React.Component {
             <Actions>
               {this.props.customActions}
 
-              {this.shouldShowSaveAsTemplateButton && (
-                <AddToMarketingCenter
-                  medium={this.selectedTemplate.medium}
-                  inputs={this.selectedTemplate.inputs}
-                  mjml={this.selectedTemplate.mjml}
-                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
-                  disabled={this.props.actionButtonsDisabled}
-                />
-              )}
+              {this.shouldShowSaveAsTemplateButton &&
+                !this.isEmailTemplateForCampaigns && (
+                  <AddToMarketingCenterButton
+                    medium={this.selectedTemplate.medium}
+                    inputs={this.selectedTemplate.inputs}
+                    mjml={this.selectedTemplate.mjml}
+                    getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                    disabled={this.props.actionButtonsDisabled}
+                    variant={
+                      this.isEmailTemplateForOtherAgents
+                        ? 'contained'
+                        : 'outlined'
+                    }
+                    color={
+                      this.isEmailTemplateForOtherAgents ? 'primary' : 'default'
+                    }
+                  >
+                    {this.isEmailTemplateForOtherAgents
+                      ? 'Continue'
+                      : 'Add To Marketing Center'}
+                  </AddToMarketingCenterButton>
+                )}
 
-              {this.shouldShowAdminContinueButton && (
-                <AdminContinueButton
-                  onClick={this.handleSave}
-                  disabled={this.props.actionButtonsDisabled}
-                  template={this.selectedTemplate}
-                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
-                  templateInstanceData={this.templateInstanceData}
-                />
-              )}
+              {this.shouldShowAdminContinueButton &&
+                !this.isEmailTemplateForOtherAgents && (
+                  <AdminContinueButton
+                    onClick={this.handleSave}
+                    disabled={this.props.actionButtonsDisabled}
+                    template={this.selectedTemplate}
+                    getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                    templateInstanceData={this.templateInstanceData}
+                    emailTemplatePurpose={this.props.emailTemplatePurpose}
+                  />
+                )}
 
               {!this.shouldShowAdminContinueButton &&
                 (this.shouldShowPrintableActions ||
@@ -1640,7 +1667,8 @@ Builder.propTypes = {
   onPrintableSharing: PropTypes.func,
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
-  saveButtonWrapper: PropTypes.func
+  saveButtonWrapper: PropTypes.func,
+  emailTemplatePurpose: PropTypes.string
 }
 
 Builder.defaultProps = {
