@@ -7,7 +7,7 @@ import Drawer from '@app/views/components/OverlayDrawer'
 import { BaseBrandSelector } from '../Base'
 
 import { useStyles } from './styles'
-import { MultiSelectionBrandSelectoeDrawer as Props } from './type'
+import { MultiSelectionBrandSelectorDrawer as Props } from './type'
 
 export function MultiSelectionBrandSelectorDrawer({
   drawerTitle = 'Select Agents',

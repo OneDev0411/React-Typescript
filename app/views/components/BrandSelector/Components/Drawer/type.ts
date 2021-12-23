@@ -9,7 +9,7 @@ interface BaseDrawerProps extends OverlayDrawerProps {
 export interface BaseSelectorDrawer extends BaseDrawerProps {
   brandSelectorProps?: BaseBrandSelectorProps
 }
-export interface MultiSelectionBrandSelectoeDrawer extends BaseDrawerProps {
+export interface MultiSelectionBrandSelectorDrawer extends BaseDrawerProps {
   brandSelectorProps?: Omit<BaseBrandSelectorProps, 'nodeRenderer'>
   selectedBrands?: UUID[]
   saveButtonText?: string

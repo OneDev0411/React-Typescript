@@ -102,7 +102,7 @@ Are you sure?`,
 
       setIsLoading(false)
 
-      return brandAsset.file
+      return brandAsset[0]!.file
     },
     [activeBrand]
   )
