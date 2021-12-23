@@ -60,6 +60,8 @@ export default function Column({ title, items, onChange, onChangeAll }: Props) {
       {items.map(item => (
         <Grid item key={item.eventType}>
           <Item
+            // I have to use key prop here to reset internal state
+            key={allSelected ? 'allChecked' : 'allUnchecked'}
             label={item.label}
             selected={item.selected}
             reminderSeconds={item.reminderSeconds}
