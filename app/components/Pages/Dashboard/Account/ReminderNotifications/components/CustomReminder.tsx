@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 import {
   makeStyles,
@@ -49,27 +49,25 @@ interface Props {
 }
 
 export default function CustomReminder({ seconds, onChange }: Props) {
-  const { initialOption, initialValue } = useMemo(() => {
+  const { selectedOption, fieldValue } = useMemo(() => {
     const initiallyInWeeks = doSecondsRepresentWeeks(seconds)
-    const initialOption = initiallyInWeeks ? weeksOption : daysOption
-    const initialValue = initiallyInWeeks
+    const selectedOption = initiallyInWeeks ? weeksOption : daysOption
+    const fieldValue = initiallyInWeeks
       ? getWeeksFromSeconds(seconds)
       : getDaysFromSeconds(seconds)
 
-    return { initialOption, initialValue }
+    return { selectedOption, fieldValue }
   }, [seconds])
 
-  const getSeconds = useCallback<
-    (anotherOption?: typeof options[number], anotherValue?: number) => number
-  >(
-    (anotherOption, anotherValue) => {
-      const selectedOption = anotherOption ?? initialOption
-      const selectedValue = anotherValue ?? initialValue
+  const getSeconds = (
+    anotherOption?: typeof options[number],
+    anotherValue?: number
+  ) => {
+    const option = anotherOption ?? selectedOption
+    const value = anotherValue ?? fieldValue
 
-      return selectedValue * selectedOption.value
-    },
-    [initialOption, initialValue]
-  )
+    return value * option.value
+  }
 
   const classes = useStyles()
 
@@ -77,13 +75,13 @@ export default function CustomReminder({ seconds, onChange }: Props) {
     <Grid container className={classes.root}>
       <Grid item className={classes.inputContainer}>
         <TextField
-          value={String(initialValue)}
+          value={String(fieldValue)}
           variant="outlined"
           onChange={({ target: { value } }) => {
             const isValid = /^\d{0,3}$/.test(value)
 
             if (isValid) {
-              onChange(getSeconds(initialOption, Number(value)))
+              onChange(getSeconds(selectedOption, Number(value)))
             }
           }}
           inputProps={{ className: classes.input }}
@@ -93,7 +91,7 @@ export default function CustomReminder({ seconds, onChange }: Props) {
         <Select
           variant="outlined"
           fullWidth
-          value={initialOption.value}
+          value={selectedOption.value}
           onChange={({ target: { value } }) => {
             const option = options.find(option => option.value === value)!
 
