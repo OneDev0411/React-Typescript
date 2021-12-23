@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import {
   makeStyles,
@@ -59,27 +59,17 @@ export default function CustomReminder({ seconds, onChange }: Props) {
     return { initialOption, initialValue }
   }, [seconds])
 
-  const [option, setOption] = useState(initialOption)
-  const [value, setValue] = useState(initialValue)
-
   const getSeconds = useCallback<
-    (anotherOption?: typeof options[number]) => number
+    (anotherOption?: typeof options[number], anotherValue?: number) => number
   >(
-    anotherOption => {
-      const selectedOption = anotherOption ?? option
+    (anotherOption, anotherValue) => {
+      const selectedOption = anotherOption ?? initialOption
+      const selectedValue = anotherValue ?? initialValue
 
-      return value * selectedOption.value
+      return selectedValue * selectedOption.value
     },
-    [option, value]
+    [initialOption, initialValue]
   )
-
-  useEffect(() => {
-    if (seconds !== getSeconds()) {
-      setOption(initialOption)
-      setValue(initialValue)
-    }
-    // eslint-disable-next-line
-  }, [seconds, initialOption, initialValue]) // if add getSeconds to the dependency list, it does not allow us to change day in Custom mode
 
   const classes = useStyles()
 
@@ -87,16 +77,15 @@ export default function CustomReminder({ seconds, onChange }: Props) {
     <Grid container className={classes.root}>
       <Grid item className={classes.inputContainer}>
         <TextField
-          value={String(value)}
+          value={String(initialValue)}
           variant="outlined"
           onChange={({ target: { value } }) => {
             const isValid = /^\d{0,3}$/.test(value)
 
             if (isValid) {
-              setValue(Number(value))
+              onChange(getSeconds(initialOption, Number(value)))
             }
           }}
-          onBlur={() => onChange(getSeconds())}
           inputProps={{ className: classes.input }}
         />
       </Grid>
@@ -104,11 +93,10 @@ export default function CustomReminder({ seconds, onChange }: Props) {
         <Select
           variant="outlined"
           fullWidth
-          value={option.value}
+          value={initialOption.value}
           onChange={({ target: { value } }) => {
             const option = options.find(option => option.value === value)!
 
-            setOption(option)
             onChange(getSeconds(option))
           }}
         >
