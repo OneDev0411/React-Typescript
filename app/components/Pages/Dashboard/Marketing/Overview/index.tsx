@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Box, Grid } from '@material-ui/core'
 import { useTitle } from 'react-use'
 
@@ -14,7 +12,7 @@ export default function MarketingOverview() {
 
   return (
     <Layout
-      render={({ items, isLoading, types, medium, onDeleteTemplate }) => {
+      render={({ isLoading }) => {
         if (isLoading) {
           return <LoadingContainer noPaddings />
         }

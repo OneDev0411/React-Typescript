@@ -1,28 +1,29 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useEffectOnce } from 'react-use'
 
-import { addNotification as notify } from 'components/notification'
-import { shareInstance } from 'models/instant-marketing/instance-share'
+import useNotify from '@app/hooks/use-notify'
+import { shareBrandAsset } from '@app/models/brand/share-brand-asset'
+import { shareInstance } from '@app/models/instant-marketing/instance-share'
 import {
   selectUserDisplayName,
   selectUserFormattedPhoneNumber
-} from 'selectors/user'
-import { isValidPhoneNumber } from 'utils/helpers'
+} from '@app/selectors/user'
+import { isValidPhoneNumber } from '@app/utils/helpers'
 
 import { Section } from '../components/Section'
 
 interface SendSMSProps {
-  instance: IMarketingTemplateInstance
+  instance: IMarketingTemplateInstance | IBrandAsset
 }
 
 function SendSMS({ instance }: SendSMSProps) {
+  const notify = useNotify()
   const phoneNumber = useSelector(selectUserFormattedPhoneNumber)
   const displayName = useSelector(selectUserDisplayName)
-  const dispatch = useDispatch()
-  const [isSending, setIsSending] = useState(false)
-  const [isValidPhone, setIsValidPhone] = useState(false)
+  const [isSending, setIsSending] = useState<boolean>(false)
+  const [isValidPhone, setIsValidPhone] = useState<boolean>(false)
 
   useEffectOnce(() => {
     async function initValidPhoneValue() {
@@ -49,19 +50,29 @@ function SendSMS({ instance }: SendSMSProps) {
     setIsSending(true)
 
     try {
-      await shareInstance(
-        instance.id,
-        [phone],
-        // eslint-disable-next-line max-len
-        `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
-      )
+      if (instance.type === 'template_instance') {
+        await shareInstance(
+          instance.id,
+          [phone],
+          `${displayName} sent you this image! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
+        )
+      }
 
-      dispatch(
-        notify({
-          message: 'Image link sent to the phone number.',
-          status: 'success'
-        })
-      )
+      if (instance.type === 'brand_asset') {
+        await shareBrandAsset(
+          instance.brand,
+          instance.id,
+          [phone],
+          `${displayName} sent you this file! Tap on the link and press share on Instagram, Facebook, or LinkedIn.`
+        )
+      }
+
+      notify({
+        message: `${
+          instance.type === 'brand_asset' ? 'Asset' : 'Image'
+        } link sent to the phone number.`,
+        status: 'success'
+      })
     } catch (e) {
       console.error(e)
     } finally {

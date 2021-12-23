@@ -62,7 +62,7 @@ export const Status = styled.span`
   border-radius: 3px;
   font-weight: 500;
   width: fit-content;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 `
 
 export const AddressContainer = styled.div`
@@ -71,6 +71,7 @@ export const AddressContainer = styled.div`
 `
 
 export const Address = styled.div`
+  margin-top: 0.25rem;
   font-size: 0.75rem;
 `
 

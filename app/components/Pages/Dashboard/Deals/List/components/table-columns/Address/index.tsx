@@ -2,6 +2,7 @@ import React from 'react'
 
 import { makeStyles, Theme, Typography } from '@material-ui/core'
 import { mdiHomeOutline } from '@mdi/js'
+import { Link } from 'react-router'
 
 import { Avatar } from 'components/Avatar'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
@@ -49,6 +50,7 @@ interface Props {
   rowIndex?: number
   totalRows?: number
   notificationsCount: number
+  originQueryParam?: string
 }
 
 export function Address({
@@ -56,13 +58,19 @@ export function Address({
   roles,
   rowIndex,
   totalRows,
-  notificationsCount
+  notificationsCount,
+  originQueryParam = ''
 }: Props) {
   const classes = useStyles()
   const photo = getField(deal, 'photo')
 
   return (
-    <div className={classes.container}>
+    <Link
+      to={`/dashboard/deals/${deal.id}${
+        originQueryParam ? `?${originQueryParam}` : ''
+      }`}
+      className={classes.container}
+    >
       <div className={classes.photoContainer}>
         {notificationsCount > 0 && <Notification count={notificationsCount} />}
         <Avatar url={photo}>
@@ -95,6 +103,6 @@ export function Address({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

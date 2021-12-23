@@ -1,6 +1,6 @@
 {
   "name": "rechat",
-  "version": "86.4.2",
+  "version": "87.0.0",
   "main": "app.js",
   "repository": "git@gitlab.com:rechat/web.git",
   "scripts": {
@@ -101,6 +101,7 @@
     "d3-time-format": "2.2.3",
     "date-fns": "^2.23.0",
     "debounce": "^1.2.1",
+    "dequal": "^2.0.2",
     "downshift": "^1.31.16",
     "draft-js": "^0.10.5",
     "draft-js-alignment-plugin": "^2.0.5",
@@ -195,7 +196,7 @@
     "react-final-form-listeners": "^1.0.2",
     "react-ga": "^2.5.3",
     "react-helmet": "^6.0.0-beta",
-    "react-hook-form": "^6.15.5",
+    "react-hook-form": "^6.15.8",
     "react-hook-thunk-reducer": "^0.2.1",
     "react-image-gallery": "^1.0.9",
     "react-images": "^0.5.11",

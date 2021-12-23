@@ -1,3 +1,5 @@
+import { getActiveTeamId } from '@app/utils/user-teams'
+
 import { SET_USER_SETTING } from '../../constants/user'
 import { getTeams } from '../../models/user/get-teams'
 import { putUserSetting } from '../../models/user/put-user-setting'
@@ -18,14 +20,15 @@ export function setUserSetting(key: string, value: any, brand?: UUID) {
       const res = await putUserSetting(key, value, brand)
 
       if (Array.isArray(res.body) && res.body[0]) {
-        const currentTeamId: string = `${res.body[0].user}_${res.body[0].brand}`
+        const brandId = `${user.id}_${getActiveTeamId(user)}`
+
         let payload: IUser = user
 
         if (user.teams) {
           payload = {
             ...user,
             teams: user.teams.map(team => {
-              if (currentTeamId === team.id) {
+              if (brandId === team.id) {
                 const currentSettings = team.settings || {}
 
                 return {
