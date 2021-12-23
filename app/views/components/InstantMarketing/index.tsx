@@ -1,9 +1,11 @@
-import React, { useContext, ReactNode } from 'react'
+import { useContext, ReactNode } from 'react'
 
 import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
+import EmailTemplatePurposeDrawer from './components/EmailTemplatePurposeDrawer'
+import { useEmailTemplatePurposeState } from './hooks/use-email-template-purpose-state'
 
 export interface IBrandMarketingTemplateWithResult
   extends IBrandMarketingTemplate {
@@ -96,26 +98,43 @@ export default function InstantMarketing({
     onClose()
   }
 
+  const {
+    isEmailPurposeDrawerOpen,
+    closeEmailPurposeDrawer,
+    emailTemplatePurpose,
+    setEmailTemplatePurpose
+  } = useEmailTemplatePurposeState(defaultTemplate)
+
   return (
-    <Builder
-      hideTemplatesColumn={hideTemplatesColumn}
-      templateData={templateData}
-      templateTypes={templateTypes}
-      mediums={mediums}
-      assets={assets}
-      defaultTemplate={defaultTemplate}
-      containerStyle={containerStyle}
-      isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
-      bareMode={bareMode}
-      saveButtonText={saveButtonText}
-      saveButtonStartIcon={saveButtonStartIcon}
-      onClose={handleClose}
-      onSave={handleSave}
-      onSocialSharing={handleSocialSharing}
-      onPrintableSharing={handleSocialSharing}
-      actionButtonsDisabled={actionButtonsDisabled}
-      customActions={customActions}
-      saveButtonWrapper={saveButtonWrapper}
-    />
+    <>
+      <EmailTemplatePurposeDrawer
+        open={isEmailPurposeDrawerOpen}
+        onPurposeSelect={setEmailTemplatePurpose}
+        onClose={closeEmailPurposeDrawer}
+      />
+      {!isEmailPurposeDrawerOpen && (
+        <Builder
+          hideTemplatesColumn={hideTemplatesColumn}
+          templateData={templateData}
+          templateTypes={templateTypes}
+          mediums={mediums}
+          assets={assets}
+          defaultTemplate={defaultTemplate}
+          containerStyle={containerStyle}
+          isTemplatesColumnHiddenDefault={isTemplatesColumnHiddenDefault}
+          bareMode={bareMode}
+          saveButtonText={saveButtonText}
+          saveButtonStartIcon={saveButtonStartIcon}
+          onClose={handleClose}
+          onSave={handleSave}
+          onSocialSharing={handleSocialSharing}
+          onPrintableSharing={handleSocialSharing}
+          actionButtonsDisabled={actionButtonsDisabled}
+          customActions={customActions}
+          saveButtonWrapper={saveButtonWrapper}
+          emailTemplatePurpose={emailTemplatePurpose}
+        />
+      )}
+    </>
   )
 }
