@@ -14,7 +14,7 @@ import {
   getTemplateType
 } from 'utils/marketing-center/helpers'
 
-import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenter/constants'
+import { SAVED_TEMPLATE_VARIANT } from '../InstantMarketing/Builder/AddToMarketingCenterButton/constants'
 
 const HOLIDAY_TYPES = [
   'BackToSchool',

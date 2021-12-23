@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
   Popover,
   Button,
+  ButtonProps,
   Box,
   Typography,
   Divider,
@@ -11,10 +12,9 @@ import {
   ListItemText
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { connect } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 
-import { addNotification, Notification } from 'components/notification'
+import useNotify from '@app/hooks/use-notify'
 import TeamTreeViewDrawer from 'components/TeamTreeView/Drawer'
 import { useMarketingCenterCategories } from 'hooks/use-marketing-center-categories'
 import { createTemplate } from 'models/instant-marketing/create-template'
@@ -41,24 +41,21 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface Props {
+interface Props
+  extends Pick<ButtonProps, 'disabled' | 'variant' | 'color' | 'children'> {
   medium: string
   mjml: boolean
   getTemplateMarkup: () => string
-  disabled?: boolean
 }
 
-interface ConnectedProps {
-  notify: (notification: Notification) => any
-}
-
-export function AddToMarketingCenter({
+export function AddToMarketingCenterButton({
   medium,
   mjml,
   getTemplateMarkup,
-  notify,
-  disabled = false
-}: Props & ConnectedProps) {
+  ...otherProps
+}: Props) {
+  const notify = useNotify()
+
   const [selectedTemplateType, setSelectedTemplateType] =
     useState<Optional<IMarketingTemplateType>>(undefined)
   const [isTeamsSelectorDrawerOpen, setIsTeamsSelectorDrawerOpen] =
@@ -68,7 +65,7 @@ export function AddToMarketingCenter({
   const classes = useStyles()
   const name = uuidv4()
 
-  const variant = SAVED_TEMPLATE_VARIANT
+  const templateVariant = SAVED_TEMPLATE_VARIANT
 
   const handleClickButton = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -94,7 +91,7 @@ export function AddToMarketingCenter({
     try {
       const templateData = {
         name,
-        variant,
+        variant: templateVariant,
         templateType: selectedTemplateType,
         medium,
         html,
@@ -135,13 +132,7 @@ export function AddToMarketingCenter({
         />
       )}
       <div className={classes.container}>
-        <Button
-          variant="outlined"
-          onClick={handleClickButton}
-          disabled={disabled}
-        >
-          Add To Marketing Center
-        </Button>
+        <Button {...otherProps} onClick={handleClickButton} />
         <Popover
           open={open}
           anchorEl={anchorEl}
@@ -185,4 +176,4 @@ export function AddToMarketingCenter({
   )
 }
 
-export default connect(null, { notify: addNotification })(AddToMarketingCenter)
+export default AddToMarketingCenterButton
