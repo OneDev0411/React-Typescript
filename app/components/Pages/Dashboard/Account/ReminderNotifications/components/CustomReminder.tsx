@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 
 import {
   makeStyles,
@@ -72,6 +72,14 @@ export default function CustomReminder({ seconds, onChange }: Props) {
     },
     [option, value]
   )
+
+  useEffect(() => {
+    if (seconds !== getSeconds()) {
+      setOption(initialOption)
+      setValue(initialValue)
+    }
+    // eslint-disable-next-line
+  }, [seconds, initialOption, initialValue]) // if add getSeconds to the dependency list, it does not allow us to change day in Custom mode
 
   const classes = useStyles()
 
