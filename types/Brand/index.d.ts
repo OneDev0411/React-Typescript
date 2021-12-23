@@ -12,6 +12,7 @@ declare type IAccessControlPolicy =
   | 'ActiveTeam'
   | 'ActiveTeamAndParents'
   | 'Root'
+
 declare type IPermission =
   | 'Deals'
   | 'BackOffice'
@@ -72,9 +73,10 @@ declare type BrandMarketingPaletteKey =
   | 'inverted-container-bg-color'
   | 'inverted-container-text-color'
   | 'website'
+  | 'phone_number'
   | 'name'
 
-declare type BrandMarketingPalette = Record<BrandMarketingPalette, string>
+declare type BrandMarketingPalette = Record<BrandMarketingPaletteKey, string>
 
 declare interface IBrand extends IModel<'brand'> {
   assets: any | null
