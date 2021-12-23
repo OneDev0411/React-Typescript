@@ -31,7 +31,7 @@ function SuperCampaignEligibleCardTags() {
     <Typography variant="body2" component="div">
       <SuperCampaignDisplayTags
         tags={superCampaign.tags ?? []}
-        visibleCount={Number.POSITIVE_INFINITY}
+        chipVariant="default"
       />
       {!isReadOnly && (
         <SuperCampaignTagsPopover
