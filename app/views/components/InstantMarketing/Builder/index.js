@@ -1229,7 +1229,7 @@ class Builder extends React.Component {
 
   get shouldHavePlaceholderSenderBlocks() {
     // Only admin users on email templates should have the option
-    return isAdmin(this.props.user) && this.isEmailMedium
+    return isAdmin(this.props.user) && this.isEmailTemplateForCampaigns
   }
 
   get shouldShowAdminContinueButton() {
