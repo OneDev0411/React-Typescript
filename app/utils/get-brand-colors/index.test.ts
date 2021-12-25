@@ -1,5 +1,5 @@
-import { DEFAULT_BRAND_PALETTE } from 'utils/constants'
-import { getBrandColors } from 'utils/get-brand-colors'
+import { DEFAULT_BRAND_PALETTE } from '@app/utils/constants'
+import { getBrandColors } from '@app/utils/get-brand-colors'
 
 const MOCK_BRAND_1: DeepPartial<IBrand> = {
   settings: {
@@ -13,8 +13,8 @@ const MOCK_BRAND_2: DeepPartial<IBrand> = {
   settings: {
     marketing_palette: {
       ...DEFAULT_BRAND_PALETTE,
-      "body-bg-color": '#ff0000',
-      "container-bg-color": '#00ff00'
+      'body-bg-color': '#ff0000',
+      'container-bg-color': '#00ff00'
     }
   }
 }
@@ -23,10 +23,11 @@ describe('getBrandColors', () => {
   it('should return the accumulated value of the whole brand tree colors', () => {
     const brandWithParent: IBrand = {
       ...MOCK_BRAND_1,
-      parent: {...MOCK_BRAND_2}
+      parent: { ...MOCK_BRAND_2 }
     } as IBrand
 
     const colors = getBrandColors(brandWithParent)
+
     expect(colors).toContain('#ff0000')
     expect(colors).toContain('#00ff00')
   })
@@ -36,14 +37,15 @@ describe('getBrandColors', () => {
       ...MOCK_BRAND_1,
       settings: {
         marketing_palette: {
-          "body-bg-color": '#ff0000',
-          "container-bg-color": '#00ff00'
+          'body-bg-color': '#ff0000',
+          'container-bg-color': '#00ff00'
         }
       },
-      parent: {...MOCK_BRAND_2}
+      parent: { ...MOCK_BRAND_2 }
     } as IBrand
 
     const colors = getBrandColors(brandWithParent)
+
     expect(colors).toContain('#ff0000')
     expect(colors).toContain('#00ff00')
     colors.forEach(item => {
