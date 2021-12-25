@@ -13,7 +13,7 @@ export const getBrandTheme = (brand: IBrand): Nullable<IBrandTheme> => {
     return null
   }
 
-  return brand.settings.theme
+  return brand.settings?.theme ?? null
 }
 
 export const getBrandHelpCenterURL = (brand: IBrand): string => {
