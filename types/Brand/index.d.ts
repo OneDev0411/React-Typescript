@@ -85,7 +85,7 @@ declare interface IBrand extends IModel<'brand'> {
   hostnames: string[] | null
   member_count: number
   messages: Nullable<IBrandMessage>
-  settings: Nullable<IBrandSetting>
+  settings: Nullable<IBrandSettings>
   name: string
   offices: string[]
   parent: IBrand | null
@@ -103,9 +103,7 @@ declare interface IBrandSettings extends IModel<'brand_settings'> {
   enable_open_house_requests: boolean | null
   enable_yard_sign: boolean | null
   enable_liveby: boolean | null
-  marketing_palette: {
-    BrandMarketingPalette
-  } | null
+  marketing_palette: BrandMarketingPalette | null
   theme: IBrandTheme | null
   help_center
 }
