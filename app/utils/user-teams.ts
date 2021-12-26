@@ -139,6 +139,13 @@ export function isAdmin(user: IUser | null): boolean {
 }
 
 export function hasUserAccessToBrandSettings(user: IUser | null): boolean {
+  const brand = getActiveBrand(user)
+
+  // Only brokerages should have brand settings
+  if (!brand || brand.brand_type !== 'Brokerage') {
+    return false
+  }
+
   // User should be an admin and should have access to MC
   return isAdmin(user) && hasUserAccessToMarketingCenter(user)
 }
