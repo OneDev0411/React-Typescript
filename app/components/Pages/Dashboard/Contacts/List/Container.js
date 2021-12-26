@@ -258,7 +258,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  async fetchContactsAndJumpToSelected(sortOrder) {
+  async fetchContactsAndJumpToSelected(sortOrder = '-last_touch') {
     this.setState({
       isFetchingMoreContacts: true
     })
@@ -337,7 +337,7 @@ class ContactsList extends React.Component {
     start = 0,
     loadMoreBefore = false,
     resetLoadedRanges = false,
-    sortOrder
+    sortOrder = '-last_touch'
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -516,9 +516,14 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContacts: true })
 
-    await this.fetchList(start)
+    const sortOrder = getUserSettingsInActiveTeam(
+      this.props.user,
+      SORT_FIELD_SETTING_KEY
+    )
 
-    this.setState({ isFetchingMoreContacts: false })
+    await this.fetchList(start, false, false, sortOrder)
+
+    this.setState({ isFetchingMoreContacts: false, sortOrder })
   }
 
   handleLoadMoreBefore = async () => {
@@ -545,9 +550,14 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContactsBefore: true })
 
-    await this.fetchList(start, true)
+    const sortOrder = getUserSettingsInActiveTeam(
+      this.props.user,
+      SORT_FIELD_SETTING_KEY
+    )
 
-    this.setState({ isFetchingMoreContactsBefore: false })
+    await this.fetchList(start, true, false, sortOrder)
+
+    this.setState({ isFetchingMoreContactsBefore: false, sortOrder })
   }
 
   handleOnDelete = (e, options) => {
