@@ -10,7 +10,7 @@ import { EmailTemplatePurpose } from '../types'
 interface UseEmailTemplatePurposeState {
   isEmailPurposeDrawerOpen: boolean
   closeEmailPurposeDrawer: () => void
-  emailTemplatePurpose: Nullable<EmailTemplatePurpose>
+  emailTemplatePurpose: Optional<EmailTemplatePurpose>
   setEmailTemplatePurpose: (emailTemplatePurpose: EmailTemplatePurpose) => void
   correctedTemplateData: TemplateData
 }
@@ -32,7 +32,8 @@ function getUserWithVariableFields(user: IUser): IUser {
 
 export function useEmailTemplatePurposeState(
   template: Nullable<IBrandMarketingTemplate>,
-  templateData: TemplateData
+  templateData: TemplateData,
+  initialEmailTemplatePurpose: Optional<EmailTemplatePurpose>
 ): UseEmailTemplatePurposeState {
   const isAdmin = useAcl(ACL.ADMIN)
 
@@ -40,16 +41,19 @@ export function useEmailTemplatePurposeState(
     !!template && getTemplateObject(template).medium === 'Email'
 
   const [isEmailPurposeDrawerOpen, setIsDrawerOpen] = useState<boolean>(
-    isAdmin && isEmailTemplate
+    isAdmin && isEmailTemplate && !initialEmailTemplatePurpose
   )
 
-  const [emailTemplatePurpose, setEmailTemplatePurpose] =
-    useState<Nullable<EmailTemplatePurpose>>(null)
+  const [emailTemplatePurpose, setEmailTemplatePurpose] = useState<
+    Optional<EmailTemplatePurpose>
+  >(initialEmailTemplatePurpose)
 
   const closeEmailPurposeDrawer = () => setIsDrawerOpen(false)
 
   const correctedTemplateData: TemplateData =
-    emailTemplatePurpose === 'ForOtherAgents' && templateData.user
+    templateData.user &&
+    emailTemplatePurpose &&
+    ['ForOtherAgents', 'ForCampaigns'].includes(emailTemplatePurpose)
       ? {
           ...templateData,
           user: getUserWithVariableFields(templateData.user)

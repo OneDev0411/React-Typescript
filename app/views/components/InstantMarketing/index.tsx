@@ -6,6 +6,7 @@ import { TemplateData } from 'utils/marketing-center/render-branded-template'
 import Builder from './Builder'
 import EmailTemplatePurposeDrawer from './components/EmailTemplatePurposeDrawer'
 import { useEmailTemplatePurposeState } from './hooks/use-email-template-purpose-state'
+import { EmailTemplatePurpose } from './types'
 
 export interface IBrandMarketingTemplateWithResult
   extends IBrandMarketingTemplate {
@@ -60,6 +61,7 @@ export interface InstantMarketingProps {
   actionButtonsDisabled?: boolean
   customActions?: ReactNode
   saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
+  emailTemplatePurpose?: EmailTemplatePurpose
 }
 
 export default function InstantMarketing({
@@ -80,7 +82,8 @@ export default function InstantMarketing({
   onClose,
   actionButtonsDisabled = false,
   customActions,
-  saveButtonWrapper
+  saveButtonWrapper,
+  emailTemplatePurpose: initialEmailTemplatePurpose
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -104,7 +107,11 @@ export default function InstantMarketing({
     emailTemplatePurpose,
     setEmailTemplatePurpose,
     correctedTemplateData
-  } = useEmailTemplatePurposeState(defaultTemplate, templateData)
+  } = useEmailTemplatePurposeState(
+    defaultTemplate,
+    templateData,
+    initialEmailTemplatePurpose
+  )
 
   return (
     <>
