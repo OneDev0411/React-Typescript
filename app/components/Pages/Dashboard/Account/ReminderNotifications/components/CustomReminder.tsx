@@ -75,7 +75,7 @@ export default function CustomReminder({ seconds, onChange }: Props) {
     <Grid container className={classes.root}>
       <Grid item className={classes.inputContainer}>
         <TextField
-          value={String(fieldValue)}
+          defaultValue={String(fieldValue)}
           variant="outlined"
           onChange={({ target: { value } }) => {
             const isValid = /^\d{0,3}$/.test(value)
@@ -91,7 +91,7 @@ export default function CustomReminder({ seconds, onChange }: Props) {
         <Select
           variant="outlined"
           fullWidth
-          value={selectedOption.value}
+          defaultValue={selectedOption.value}
           onChange={({ target: { value } }) => {
             const option = options.find(option => option.value === value)!
 
