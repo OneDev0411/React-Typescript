@@ -11,7 +11,8 @@ export const useStyles = makeStyles(
       marginBottom: theme.spacing(1)
     },
     filtersWrapper: {
-      marginLeft: theme.spacing(1, -0.5),
+      display: 'flex',
+      marginLeft: theme.spacing(-0.5),
       justifyContent: 'flex-start'
     },
     actionsWrapper: {
@@ -24,6 +25,23 @@ export const useStyles = makeStyles(
     button: {
       padding: theme.spacing(1, 2),
       margin: theme.spacing(0.5, 0.5)
+    },
+    buttonGroup: {
+      '& > $button': {
+        margin: theme.spacing(0.5, 0)
+      },
+      '& > $button:not(:last-of-type)': {
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        borderRight: 'none'
+      },
+      '& > $button:not(:first-of-type)': {
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0
+      },
+      display: 'inline-flex',
+      justifyContent: 'center',
+      margin: theme.spacing(0, 0.5)
     },
     resetButton: {
       padding: theme.spacing(1, 2),

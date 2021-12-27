@@ -163,77 +163,81 @@ export const Filters = ({ searchQuery }: Props) => {
                 )}
               />
 
-              {/* contract date Filter  */}
-              <FilterButton
-                renderButton={({ onClick }) => (
-                  <ExecutedDateButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
-                    onClick={onClick}
-                  />
-                )}
-                renderDropdown={() => (
-                  <ExecutedDateEditor
-                    filters={currentFilters}
-                    updateFilters={updateFilters}
-                    defaultFilters={systemDefaultFilters}
-                  />
-                )}
-              />
+              <div className={classes.buttonGroup}>
+                {/* contract date Filter  */}
+                <FilterButton
+                  renderButton={({ onClick }) => (
+                    <ExecutedDateButton
+                      filters={currentFilters}
+                      defaultFilters={systemDefaultFilters}
+                      onClick={onClick}
+                    />
+                  )}
+                  renderDropdown={() => (
+                    <ExecutedDateEditor
+                      filters={currentFilters}
+                      updateFilters={updateFilters}
+                      defaultFilters={systemDefaultFilters}
+                    />
+                  )}
+                />
 
-              {/* Closing date Filter  */}
-              <FilterButton
-                renderButton={({ onClick }) => (
-                  <ClosingDateButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
-                    onClick={onClick}
-                  />
-                )}
-                renderDropdown={() => (
-                  <ClosingDateEditor
-                    filters={currentFilters}
-                    updateFilters={updateFilters}
-                    defaultFilters={systemDefaultFilters}
-                  />
-                )}
-              />
+                {/* Closing date Filter  */}
+                <FilterButton
+                  renderButton={({ onClick }) => (
+                    <ClosingDateButton
+                      filters={currentFilters}
+                      defaultFilters={systemDefaultFilters}
+                      onClick={onClick}
+                    />
+                  )}
+                  renderDropdown={() => (
+                    <ClosingDateEditor
+                      filters={currentFilters}
+                      updateFilters={updateFilters}
+                      defaultFilters={systemDefaultFilters}
+                    />
+                  )}
+                />
+              </div>
 
-              {/* List date Filter  */}
-              <FilterButton
-                renderButton={({ onClick }) => (
-                  <ListDateButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
-                    onClick={onClick}
-                  />
-                )}
-                renderDropdown={() => (
-                  <ListDateEditor
-                    filters={currentFilters}
-                    updateFilters={updateFilters}
-                    defaultFilters={systemDefaultFilters}
-                  />
-                )}
-              />
+              <div className={classes.buttonGroup}>
+                {/* List date Filter  */}
+                <FilterButton
+                  renderButton={({ onClick }) => (
+                    <ListDateButton
+                      filters={currentFilters}
+                      defaultFilters={systemDefaultFilters}
+                      onClick={onClick}
+                    />
+                  )}
+                  renderDropdown={() => (
+                    <ListDateEditor
+                      filters={currentFilters}
+                      updateFilters={updateFilters}
+                      defaultFilters={systemDefaultFilters}
+                    />
+                  )}
+                />
 
-              {/* List expiration Filter  */}
-              <FilterButton
-                renderButton={({ onClick }) => (
-                  <ExpirationDateButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
-                    onClick={onClick}
-                  />
-                )}
-                renderDropdown={() => (
-                  <ExpirationDateEditor
-                    filters={currentFilters}
-                    updateFilters={updateFilters}
-                    defaultFilters={systemDefaultFilters}
-                  />
-                )}
-              />
+                {/* List expiration Filter  */}
+                <FilterButton
+                  renderButton={({ onClick }) => (
+                    <ExpirationDateButton
+                      filters={currentFilters}
+                      defaultFilters={systemDefaultFilters}
+                      onClick={onClick}
+                    />
+                  )}
+                  renderDropdown={() => (
+                    <ExpirationDateEditor
+                      filters={currentFilters}
+                      updateFilters={updateFilters}
+                      defaultFilters={systemDefaultFilters}
+                    />
+                  )}
+                />
+              </div>
             </Grid>
 
             <Grid className={classes.actionsWrapper}>
