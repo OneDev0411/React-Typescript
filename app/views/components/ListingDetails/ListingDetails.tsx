@@ -191,15 +191,15 @@ function ListingDetails({
   return (
     <>
       <Helmet>
-        <meta property="og:title" content={ogTitle} />
-        <meta property="twitter:title" content={ogTitle} />
-        <meta property="og:type" content="og:product" />
-        <meta property="og:description" content={subtitle2} />
-        <meta property="twitter:card" content={subtitle2} />
-        <meta property="og:product:price:amount" content={price} />
-        <meta property="product:price:currency" content="USD" />
-        {images.length && <meta property="og:image" content={images[0]} />}
-        {images.length && <meta property="twitter:image" content={images[0]} />}
+        <meta name="og:title" content={ogTitle} />
+        <meta name="twitter:title" content={ogTitle} />
+        <meta name="og:type" content="og:product" />
+        <meta name="og:description" content={subtitle2} />
+        <meta name="twitter:card" content={subtitle2} />
+        <meta name="og:product:price:amount" content={price} />
+        <meta name="product:price:currency" content="USD" />
+        {images.length && <meta name="og:image" content={images[0]} />}
+        {images.length && <meta name="twitter:image" content={images[0]} />}
       </Helmet>
 
       <Container maxWidth="xl" disableGutters>
