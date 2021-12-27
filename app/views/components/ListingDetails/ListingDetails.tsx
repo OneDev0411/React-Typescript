@@ -21,6 +21,7 @@ import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
 import listingUtils from 'utils/listing'
 
+import config from '../../../../config/public'
 import ShareModal from '../../../components/Pages/Dashboard/MLS/components/modals/ShareListingModal.js'
 
 import AgentInfo from './AgentInfo'
@@ -191,15 +192,29 @@ function ListingDetails({
   return (
     <>
       <Helmet>
-        <meta name="og:title" content={ogTitle} />
-        <meta name="twitter:title" content={ogTitle} />
-        <meta name="og:type" content="og:product" />
-        <meta name="og:description" content={subtitle2} />
-        <meta name="twitter:card" content={subtitle2} />
-        <meta name="og:product:price:amount" content={price} />
-        <meta name="product:price:currency" content="USD" />
-        {images.length && <meta name="og:image" content={images[0]} />}
-        {images.length && <meta name="twitter:image" content={images[0]} />}
+        <meta
+          name="og:url"
+          property="og:url"
+          content={`${config.app.url}/dashboard/mls/${listing.id}`}
+        />
+        <meta name="og:title" property="og:title" content={ogTitle} />
+        <meta name="twitter:title" property="twitter:title" content={ogTitle} />
+        <meta
+          name="og:description"
+          property="og:description"
+          content={subtitle2}
+        />
+        <meta name="twitter:card" property="twitter:card" content={subtitle2} />
+        {images.length && (
+          <meta name="og:image" property="og:image" content={images[0]} />
+        )}
+        {images.length && (
+          <meta
+            name="twitter:image"
+            property="twitter:image"
+            content={images[0]}
+          />
+        )}
       </Helmet>
 
       <Container maxWidth="xl" disableGutters>
