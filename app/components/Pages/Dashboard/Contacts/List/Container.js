@@ -97,7 +97,7 @@ class ContactsList extends React.Component {
     const { parkedContactsCount } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    this.loadTableData()
+    this.fetchContactsAndJumpToSelected()
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -157,27 +157,6 @@ class ContactsList extends React.Component {
     }
 
     setContactsListTextFilter(this.state.searchInputValue)
-  }
-
-  loadTableData = () => {
-    const { searchInputValue } = this.state
-    const { user } = this.props
-
-    // load previous sorting settings from active team
-    const sortFieldSetting = getUserSettingsInActiveTeam(
-      user,
-      SORT_FIELD_SETTING_KEY
-    )
-
-    const relevanceSortKey = '-last_touch_rank'
-    const sortOrder = searchInputValue
-      ? relevanceSortKey
-      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
-      ? sortFieldSetting
-      : '-last_touch'
-
-    this.fetchContactsAndJumpToSelected(sortOrder)
-    this.setState({ sortOrder })
   }
 
   setSelectedShortcutFilter = () => {
@@ -258,7 +237,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  async fetchContactsAndJumpToSelected(sortOrder = '-last_touch') {
+  async fetchContactsAndJumpToSelected() {
     this.setState({
       isFetchingMoreContacts: true
     })
@@ -268,7 +247,7 @@ class ContactsList extends React.Component {
 
     this.scrollToSelector(idSelector)
 
-    await this.fetchList(start, false, false, sortOrder)
+    await this.fetchList(start, false, false)
 
     this.setState({
       isFetchingMoreContacts: false
@@ -333,11 +312,32 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
+  fetchTeamSortOrderSetting = () => {
+    const { searchInputValue } = this.state
+    const { user } = this.props
+
+    // load previous sorting settings from active team
+    const sortFieldSetting = getUserSettingsInActiveTeam(
+      user,
+      SORT_FIELD_SETTING_KEY
+    )
+
+    const relevanceSortKey = '-last_touch_rank'
+    const sortOrder = searchInputValue
+      ? relevanceSortKey
+      : sortFieldSetting && sortFieldSetting !== relevanceSortKey
+      ? sortFieldSetting
+      : '-last_touch'
+
+    this.setState({ sortOrder })
+
+    return sortOrder
+  }
+
   fetchList = async (
     start = 0,
     loadMoreBefore = false,
-    resetLoadedRanges = false,
-    sortOrder = '-last_touch'
+    resetLoadedRanges = false
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -345,6 +345,8 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
+        const sortOrder = this.fetchTeamSortOrderSetting()
+
         await this.handleFilterChange(
           {
             start,
@@ -487,8 +489,8 @@ class ContactsList extends React.Component {
 
     setUserSetting(SORT_FIELD_SETTING_KEY, sortOrder)
     this.setState({ sortOrder })
-    this.handleFilterChange({}, true, sortOrder)
 
+    this.handleFilterChange({}, true, sortOrder)
     getUserTeams(user)
   }
 
@@ -516,14 +518,9 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContacts: true })
 
-    const sortOrder = getUserSettingsInActiveTeam(
-      this.props.user,
-      SORT_FIELD_SETTING_KEY
-    )
+    await this.fetchList(start)
 
-    await this.fetchList(start, false, false, sortOrder)
-
-    this.setState({ isFetchingMoreContacts: false, sortOrder })
+    this.setState({ isFetchingMoreContacts: false })
   }
 
   handleLoadMoreBefore = async () => {
@@ -550,14 +547,9 @@ class ContactsList extends React.Component {
 
     this.setState({ isFetchingMoreContactsBefore: true })
 
-    const sortOrder = getUserSettingsInActiveTeam(
-      this.props.user,
-      SORT_FIELD_SETTING_KEY
-    )
+    await this.fetchList(start, true, false)
 
-    await this.fetchList(start, true, false, sortOrder)
-
-    this.setState({ isFetchingMoreContactsBefore: false, sortOrder })
+    this.setState({ isFetchingMoreContactsBefore: false })
   }
 
   handleOnDelete = (e, options) => {
