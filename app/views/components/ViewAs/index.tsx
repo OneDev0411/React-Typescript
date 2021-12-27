@@ -36,8 +36,8 @@ export const ViewAs = ({ containerStyle }: Props) => {
   const activeTeam: Nullable<IUserTeam> = useUnsafeActiveTeam()
   const teamMembers: IUser[] = useActiveTeamAvailableMembers()
   const initialSelectedMembers: UUID[] = useMemo(
-    () => viewAs(user, true, activeTeam),
-    [activeTeam, user]
+    () => viewAs(activeTeam, true),
+    [activeTeam]
   )
   const [selectedMembers, setSelectedMembers] = useState<UUID[]>(
     initialSelectedMembers

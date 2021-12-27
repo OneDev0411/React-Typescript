@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
 
 import { IAppState } from 'reducers'
-import { getTeamAvailableMembers } from 'utils/user-teams'
 
 /**
  * Returns the active team for the current user if exists
@@ -92,14 +91,6 @@ export function selectActiveTeamRoles(state: IAppState): IBrandRole[] {
   }
 
   return activeTeamRoles
-}
-
-/**
- * Returns the available members for the current active team
- * @param state The app state
- */
-export function selectActiveTeamAvailableMembers(state: IAppState): IUser[] {
-  return getTeamAvailableMembers(selectActiveTeamUnsafe(state))
 }
 
 /**

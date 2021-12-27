@@ -1,11 +1,13 @@
-import { useSelector } from 'react-redux'
+import { getTeamAvailableMembers } from 'utils/user-teams'
 
-import { selectActiveTeamAvailableMembers } from '@app/selectors/team'
+import { useUnsafeActiveTeam } from './use-unsafe-active-team'
 
-export function useActiveTeamAvailableMembers(): ReturnType<
-  typeof selectActiveTeamAvailableMembers
-> {
-  const members = useSelector(selectActiveTeamAvailableMembers)
+/**
+ * Returns the available members for the current active team
+ */
 
-  return members
+export function useActiveTeamAvailableMembers(): IUser[] {
+  const activeTeam = useUnsafeActiveTeam()
+
+  return getTeamAvailableMembers(activeTeam)
 }

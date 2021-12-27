@@ -72,9 +72,8 @@ export function isActiveTeamTraining(team: Nullable<IUserTeam>): boolean {
 }
 
 export function viewAs(
-  user: IUser | null,
-  shouldReturnAll: boolean = false,
-  team: IUserTeam | null = getActiveTeam(user)
+  team: Nullable<IUserTeam>,
+  shouldReturnAll: boolean = false
 ): UUID[] {
   if (!team) {
     return []
@@ -138,23 +137,23 @@ export function getActiveTeamPalette(team: IUserTeam): BrandMarketingPalette {
   return brand.settings.marketing_palette
 }
 
-export function viewAsEveryoneOnTeam(user: IUser | null): boolean {
-  if (user == null) {
+export function viewAsEveryoneOnTeam(team: Nullable<IUserTeam>): boolean {
+  if (!team) {
     return false
   }
 
-  const users = viewAs(user, true)
+  const users = viewAs(team, true)
 
   return (
     // It means all members of the team
     users == null ||
     users.length === 0 ||
-    getTeamAvailableMembers(getActiveTeam(user)).length === users.length
+    getTeamAvailableMembers(team).length === users.length
   )
 }
 
-export function getTeamAvailableMembers(team: IUserTeam | null) {
-  return team && team.brand ? getBrandUsers(team.brand) : []
+export function getTeamAvailableMembers(team: Nullable<IUserTeam>) {
+  return team?.brand ? getBrandUsers(team.brand) : []
 }
 
 export function getRoleUsers(role: IBrandRole, includeDeletedUsers = false) {
