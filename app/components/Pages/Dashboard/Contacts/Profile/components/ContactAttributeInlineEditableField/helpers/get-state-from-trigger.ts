@@ -27,6 +27,8 @@ export function getStateFromTrigger(
   contact: IContact,
   attribute: IContactAttribute
 ): TriggerState {
+  console.log('getStateFromTrigger', { trigger, globalTrigger })
+
   const attributeName = (attribute.attribute_def.name ??
     '') as TriggerContactEventTypes
 

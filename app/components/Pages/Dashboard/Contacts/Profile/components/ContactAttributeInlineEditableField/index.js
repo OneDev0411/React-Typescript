@@ -106,7 +106,8 @@ class MasterField extends Component {
         props.attribute?.updated_at &&
         props.attribute?.updated_at > state.updated_at) ||
       props.contact?.email !== state.contact?.email ||
-      (!props.trigger && state.currentTrigger)
+      (!props.trigger && state.currentTrigger) ||
+      (!state.currentTrigger && props.trigger)
     ) {
       return getInitialState(props)
     }
@@ -449,7 +450,12 @@ class MasterField extends Component {
   }
 
   renderEditMode = props => {
-    const { trigger: triggerFromParent, contact, attribute } = this.props
+    const {
+      trigger: triggerFromParent,
+      attributeGlobalTrigger,
+      attribute,
+      contact
+    } = this.props
     const {
       triggerSender,
       currentTrigger,
@@ -482,6 +488,7 @@ class MasterField extends Component {
         <TriggerEditMode
           renderAttributeFields={() => baseEditMode}
           attributeName={this.attribute_def.name || ''}
+          attributeGlobalTrigger={attributeGlobalTrigger}
           currentValue={trigger}
           isActive={isTriggerActive}
           isSaving={isTriggerSaving}

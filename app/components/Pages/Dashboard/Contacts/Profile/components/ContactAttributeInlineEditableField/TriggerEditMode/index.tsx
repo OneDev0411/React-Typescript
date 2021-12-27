@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, useMemo, memo } from 'react'
+import React, { ReactNode, useState, memo } from 'react'
 
 import {
   FormControl,
@@ -21,7 +21,6 @@ import { useSelector } from 'react-redux'
 
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { TeamContactSelect } from '@app/views/components/TeamContact/TeamContactSelect'
-import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
 import { selectUser } from 'selectors/user'
 import { goTo } from 'utils/go-to'
 import { isSoloActiveTeam } from 'utils/user-teams'
@@ -90,6 +89,7 @@ interface Props {
   disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
+  attributeGlobalTrigger?: IGlobalTrigger
   isActive: boolean
   isSaving?: boolean
   subject: string
@@ -109,6 +109,7 @@ const TriggerEditModeComponent = ({
   isSaving = false,
   attributeName,
   renderAttributeFields,
+  attributeGlobalTrigger,
   isActive: isActiveProp = false,
   sendBefore: sendBeforeProp = 0,
   sender: senderProp,
@@ -122,7 +123,6 @@ const TriggerEditModeComponent = ({
 }: Props) => {
   const classes = useStyles()
   const user = useSelector(selectUser)
-  const globalTriggers = useSelector(selectGlobalTriggersAttributes)
   // Fields
   const [sender, setSender] = useState<IUser>(senderProp)
   const [subject, setSubject] = useState<string>(subjectProp)
@@ -134,13 +134,6 @@ const TriggerEditModeComponent = ({
     useState<Nullable<IMarketingTemplateInstance | IBrandMarketingTemplate>>(
       selectedTemplateProp
     )
-
-  const attributeGlobalTrigger = useMemo(
-    () => globalTriggers[attributeName],
-    [attributeName, globalTriggers]
-  )
-
-  console.log({ attributeGlobalTrigger })
 
   // Show global trigger feature banner
   const [isGlobalTriggerInfoOpen, setIsGlobalTriggerInfoOpen] =
