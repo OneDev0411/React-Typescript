@@ -43,8 +43,8 @@ export default function MarketingAssetUploadDrawer({
 
     try {
       const uploadedAssets = await Promise.all(
-        data.assets.map((asset, index) => {
-          return uploadBrandAsset(
+        data.assets.map(async (asset, index) => {
+          const newUploadedAssets = await uploadBrandAsset(
             data.brands,
             asset.file.object,
             {
@@ -69,6 +69,8 @@ export default function MarketingAssetUploadDrawer({
               })
             }
           )
+
+          return newUploadedAssets[0]
         })
       )
 

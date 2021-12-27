@@ -64,7 +64,9 @@ export function useTeamLibrary(
 
     const currentBrandAssets = brandAssets ?? []
 
-    const newUploadedAsset = await uploadBrandAsset([brandId], file, { label })
+    const newUploadedAsset = await uploadBrandAsset([brandId], file, {
+      label
+    })[0]
 
     setBrandAssets([newUploadedAsset, ...currentBrandAssets])
 

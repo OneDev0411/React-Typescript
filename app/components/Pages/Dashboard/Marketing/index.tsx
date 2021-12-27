@@ -20,7 +20,10 @@ import {
   isBrandAsset,
   isTemplateInstance
 } from '@app/utils/marketing-center/helpers'
-import { hasUserAccessToBrandSettings } from '@app/utils/user-teams'
+import {
+  hasUserAccessToBrandSettings,
+  hasUserAccessToUploadBrandAssets
+} from '@app/utils/user-teams'
 import Acl from '@app/views/components/Acl'
 import PageLayout from '@app/views/components/GlobalPageLayout'
 import MarketingAssetUploadDrawer from '@app/views/components/MarketingAssetUploadDrawer'
@@ -149,6 +152,7 @@ export function MarketingLayout({
   }, [currentMedium, templateTypes, templates, assets])
 
   const hasAccessToBrandSettings = hasUserAccessToBrandSettings(user)
+  const hasAccessToUploadBrandAssets = hasUserAccessToUploadBrandAssets(user)
 
   const onSelectTemplate = (
     template: IBrandMarketingTemplate | IMarketingTemplateInstance | IBrandAsset
@@ -238,18 +242,20 @@ export function MarketingLayout({
                 </Tooltip>
               </div>
             )}
-            <div className={classes.uploadAssetButtonContainer}>
-              <Tooltip title="Upload Asset">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleUploadAssetClick}
-                  startIcon={<SvgIcon path={mdiPlus} />}
-                >
-                  Add
-                </Button>
-              </Tooltip>
-            </div>
+            {hasAccessToUploadBrandAssets && (
+              <div className={classes.uploadAssetButtonContainer}>
+                <Tooltip title="Upload Asset">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleUploadAssetClick}
+                    startIcon={<SvgIcon path={mdiPlus} />}
+                  >
+                    Add
+                  </Button>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </PageLayout.Header>
         <PageLayout.Main minHeight="100vh">

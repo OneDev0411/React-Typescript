@@ -15,7 +15,7 @@ export async function uploadBrandAsset(
   file: File,
   options: OptionsWithLabel | OptionsWithTemplateTypeAndMedium = {},
   progressCallback?: Progress
-): Promise<IBrandAsset> {
+): Promise<IBrandAsset[]> {
   const request = new Fetch({ progress: progressCallback })
     .upload('/brands/assets')
     .attach('file', file)

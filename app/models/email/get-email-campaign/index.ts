@@ -44,15 +44,19 @@ export async function getEmailCampaign<
     limit
   } = associations
 
-  const contactIdValue = contactId ? { contact: contactId } : {}
-  const limitValue = limit ? { limit } : {}
-  const associationCondition =
-    contactId || limit
-      ? { 'email_campaign.emails': { ...contactIdValue, ...limitValue } }
-      : {}
+  const conditionArgs = {}
+
+  if (limit) {
+    conditionArgs['association_condition[email_campaign.emails][limit]'] = limit
+  }
+
+  if (contactId) {
+    conditionArgs['association_condition[email_campaign.emails][contact]'] =
+      contactId
+  }
 
   const response = await new Fetch().get(`/emails/${id}`).query({
-    associations: [
+    'associations[]': [
       ...emailCampaignAssociations.map(toEntityAssociation('email_campaign')),
       ...emailRecipientsAssociations.map(
         toEntityAssociation('email_campaign_recipient')
@@ -61,8 +65,8 @@ export async function getEmailCampaign<
         toEntityAssociation('email_campaign_email')
       )
     ],
-    select: emailFields.map(toEntityAssociation('email')),
-    association_condition: associationCondition
+    'select[]': emailFields.map(toEntityAssociation('email')),
+    ...conditionArgs
   })
 
   return response.body.data
