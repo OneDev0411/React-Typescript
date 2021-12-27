@@ -1043,7 +1043,7 @@ function mapStateToProps({ user, contacts, ...restOfState }) {
   const openHouseFilters = activeFilters.filter(
     filter => filter.id === OPEN_HOUSE_FILTER_ID
   )
-  const viewAsUsers = viewAs(user)
+  const viewAsUsers = viewAs(restOfState.activeTeam ?? null)
 
   return {
     tags: tags.byId,

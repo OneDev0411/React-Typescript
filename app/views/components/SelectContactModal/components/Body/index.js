@@ -146,4 +146,6 @@ class Body extends Component {
 Body.propTypes = propTypes
 Body.defaultProps = defaultProps
 
-export default connect(({ user }) => ({ viewAsUsers: viewAs(user) }))(Body)
+export default connect(({ activeTeam }) => ({
+  viewAsUsers: viewAs(activeTeam)
+}))(Body)
