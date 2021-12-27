@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
 
+import { prerenderMiddleware } from './app/middlewares/pre-render'
 import branchLinkRoute from './app/routes/branch-link'
 import contactsExportOutlookRoute from './app/routes/contacts/export-outlook'
 import corsRoute from './app/routes/cors'
@@ -105,5 +106,12 @@ router.post('/api/pdf/get-size', requestLimit, getPdfSizeRoute)
 router.post('/api/utils/render-mjml', requestLimit, renderMjmlRoute)
 router.post('/api/utils/get-url-metadata', requestLimit, urlMetadataRoute)
 router.post('/api/utils/rss-feeds', requestLimit, rssFeedsRoute)
+
+/**
+ * pre render routes
+ */
+const prerenderedRoutes = ['/dashboard/mls/:id']
+
+prerenderMiddleware(router, prerenderedRoutes)
 
 export default router

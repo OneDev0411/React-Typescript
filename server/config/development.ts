@@ -13,5 +13,7 @@ export default {
   live_by_api_client_id: pv.live_by.api_client_id,
   live_by_api_key: pv.live_by.api_key,
   my_marketing_matters_duns: pv.my_marketing_matters.duns,
-  my_marketing_matters_shared_secret: pv.my_marketing_matters.shared_secret
+  my_marketing_matters_shared_secret: pv.my_marketing_matters.shared_secret,
+  prerender_token: pv.prerender.token,
+  prerender_service_url: pv.prerender.service_url
 }

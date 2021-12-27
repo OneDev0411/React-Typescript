@@ -11,6 +11,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@material-ui/core'
+import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 
 import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
@@ -177,7 +178,7 @@ function ListingDetails({
   }
 
   const agent = getAgentInfo(listing)
-  const title = getPrice(listing)
+  const price = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = [
     listingUtils.getListingAddressLine2(listing),
@@ -185,124 +186,140 @@ function ListingDetails({
   ].join(' | ')
   const images = listing.gallery_image_urls || []
 
+  const ogTitle = `Rechat listing || ${subtitle1}`
+
   return (
-    <Container maxWidth="xl" disableGutters>
-      <div className={classes.header}>
-        <Header
-          isWidget={isWidget}
-          listing={listing}
-          handleShare={openShareModal}
-          handleClose={onClose}
-          onToggleFavorite={onToggleFavorite}
-        />
-      </div>
-      <Box className={classes.heroWrapper}>
-        <Grid container className={classes.heroContainer}>
-          <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
-            <Gallery images={images} />
+    <>
+      <Helmet>
+        <meta property="og:title" content={ogTitle} />
+        <meta property="twitter:title" content={ogTitle} />
+        <meta property="og:type" content="og:product" />
+        <meta property="og:description" content={subtitle2} />
+        <meta property="twitter:card" content={subtitle2} />
+        <meta property="og:product:price:amount" content={price} />
+        <meta property="product:price:currency" content="USD" />
+        {images.length && <meta property="og:image" content={images[0]} />}
+        {images.length && <meta property="twitter:image" content={images[0]} />}
+      </Helmet>
+
+      <Container maxWidth="xl" disableGutters>
+        <div className={classes.header}>
+          <Header
+            isWidget={isWidget}
+            listing={listing}
+            handleShare={openShareModal}
+            handleClose={onClose}
+            onToggleFavorite={onToggleFavorite}
+          />
+        </div>
+        <Box className={classes.heroWrapper}>
+          <Grid container className={classes.heroContainer}>
+            <Grid item xs={12} lg={7} className={classes.galleryWrapper}>
+              <Gallery images={images} />
+            </Grid>
+            <Grid item xs={12} lg={5}>
+              <Box className={classes.heroLeftSideWrapper}>
+                <Box className={classes.titleWrapper}>
+                  <Title
+                    title={price}
+                    subtitle1={subtitle1}
+                    subtitle2={subtitle2}
+                  />
+                </Box>
+                <Box mb={5}>
+                  <Status status={listing.status} />
+                </Box>
+                <Box className={classes.mainFeaturesAndShowOnMapBtnWrapper}>
+                  <Grid container>
+                    <Grid item xs={12} lg={9}>
+                      <Box mb={4}>
+                        <MainFeatures listing={listing} />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} lg={9}>
+                      <Button
+                        color="primary"
+                        fullWidth
+                        size="large"
+                        variant="contained"
+                        className={classes.showOnMapButton}
+                        onClick={scrollToMap}
+                      >
+                        Show on Map
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Box>
+            </Grid>
           </Grid>
-          <Grid item xs={12} lg={5}>
-            <Box className={classes.heroLeftSideWrapper}>
-              <Box className={classes.titleWrapper}>
-                <Title
-                  title={title}
-                  subtitle1={subtitle1}
-                  subtitle2={subtitle2}
+        </Box>
+        <Grid container className={classes.agentAreaWrapper}>
+          <Grid
+            item
+            xs={12}
+            lg={agent ? 8 : 12}
+            className={classes.featuredImageWrapper}
+          >
+            <FeaturedImages images={images} serie={1} />
+          </Grid>
+          {agent && (
+            <Grid item xs={12} lg={4}>
+              <Container maxWidth="xs" disableGutters>
+                <AgentInfo
+                  name={agent.name}
+                  email={agent.email}
+                  image={agent.image}
+                  tel={agent.tel}
+                  company={agent.brokrageName}
                 />
-              </Box>
-              <Box mb={5}>
-                <Status status={listing.status} />
-              </Box>
-              <Box className={classes.mainFeaturesAndShowOnMapBtnWrapper}>
-                <Grid container>
-                  <Grid item xs={12} lg={9}>
-                    <Box mb={4}>
-                      <MainFeatures listing={listing} />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={9}>
-                    <Button
-                      color="primary"
-                      fullWidth
-                      size="large"
-                      variant="contained"
-                      className={classes.showOnMapButton}
-                      onClick={scrollToMap}
-                    >
-                      Show on Map
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
+              </Container>
+            </Grid>
+          )}
+        </Grid>
+        {isDesktop && (
+          <Box px={6} mb={20}>
+            <FeatureList listing={listing} />
+          </Box>
+        )}
+        <Grid container className={classes.descriptionAreaWrapper}>
+          <Grid item xs={12} lg={4}>
+            <Box className={classes.descriptionWrapper}>
+              <Description
+                address={subtitle1}
+                description={listing.property.description}
+                officeName={listing.list_office_name}
+              />
             </Box>
           </Grid>
-        </Grid>
-      </Box>
-      <Grid container className={classes.agentAreaWrapper}>
-        <Grid
-          item
-          xs={12}
-          lg={agent ? 8 : 12}
-          className={classes.featuredImageWrapper}
-        >
-          <FeaturedImages images={images} serie={1} />
-        </Grid>
-        {agent && (
-          <Grid item xs={12} lg={4}>
-            <Container maxWidth="xs" disableGutters>
-              <AgentInfo
-                name={agent.name}
-                email={agent.email}
-                image={agent.image}
-                tel={agent.tel}
-                company={agent.brokrageName}
-              />
-            </Container>
+          <Grid item xs={12} lg={8}>
+            <FeaturedImages images={images} serie={2} />
           </Grid>
-        )}
-      </Grid>
-      {isDesktop && (
-        <Box px={6} mb={20}>
-          <FeatureList listing={listing} />
-        </Box>
-      )}
-      <Grid container className={classes.descriptionAreaWrapper}>
-        <Grid item xs={12} lg={4}>
-          <Box className={classes.descriptionWrapper}>
-            <Description
-              address={subtitle1}
-              description={listing.property.description}
-              officeName={listing.list_office_name}
-            />
+        </Grid>
+        {!isDesktop && (
+          <Box mb={9} px={3}>
+            <FeatureList listing={listing} />
           </Box>
-        </Grid>
-        <Grid item xs={12} lg={8}>
-          <FeaturedImages images={images} serie={2} />
-        </Grid>
-      </Grid>
-      {!isDesktop && (
-        <Box mb={9} px={3}>
-          <FeatureList listing={listing} />
+        )}
+        <Box px={3} mb={5}>
+          <RootRef rootRef={mapSection}>
+            <Map location={listing.property.address.location} />
+          </RootRef>
         </Box>
-      )}
-      <Box px={3} mb={5}>
-        <RootRef rootRef={mapSection}>
-          <Map location={listing.property.address.location} />
-        </RootRef>
-      </Box>
-      <Box p={3}>
-        <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
-      </Box>
+        <Box p={3}>
+          <MLSNote mls={listing.mls} mlsName={listing.mls_name} />
+        </Box>
 
-      <ShareModal
-        listing={listing}
-        user={user}
-        isActive={isShareModalOpen}
-        onHide={closeShareModal}
-      />
+        <ShareModal
+          listing={listing}
+          user={user}
+          isActive={isShareModalOpen}
+          onHide={closeShareModal}
+        />
 
-      <ClaimAccountBanner />
-    </Container>
+        <ClaimAccountBanner />
+      </Container>
+    </>
   )
 }
 
