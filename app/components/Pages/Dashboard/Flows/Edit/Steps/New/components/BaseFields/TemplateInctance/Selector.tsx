@@ -79,7 +79,7 @@ interface Props {
   disabled?: boolean
   hasError?: boolean
   error?: Nullable<string>
-  templateType: IMarketingTemplateType[]
+  templateTypes: IMarketingTemplateType[]
   currentTemplate?: Nullable<
     IMarketingTemplateInstance | IBrandMarketingTemplate
   >
@@ -92,7 +92,7 @@ export const TemplateSelector = ({
   disabled = false,
   hasError = false,
   error = null,
-  templateType,
+  templateTypes,
   currentTemplate = null,
   onChange
 }: Props) => {
@@ -263,7 +263,7 @@ export const TemplateSelector = ({
           title="Select Template"
           user={user}
           mediums={['Email']}
-          templateTypes={templateType}
+          templateTypes={templateTypes}
           onSelect={handleSelectTemplate}
           onClose={() => handleShowTemplatePicker(false)}
         />

@@ -73,7 +73,7 @@ export const TemplateInctance = ({
         return (
           <TemplateSelector
             disabled={disabled}
-            templateType={allMarketingTemplateType}
+            templateTypes={allMarketingTemplateType}
             hasError={showError}
             error={meta.error}
             currentTemplate={currentTemplate}

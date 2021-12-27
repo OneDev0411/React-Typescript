@@ -41,10 +41,7 @@ declare type IGlobalTriggerRaw = Omit<
 
 declare interface IGlobalTriggerFormData
   extends Omit<IGlobalTriggerRaw, 'brand' | 'event_type'> {
-  template?: {
-    isInstance: boolean
-    data: IBrandMarketingTemplate | IMarketingTemplateInstance
-  }
+  template: Nullable<IBrandMarketingTemplate | IMarketingTemplateInstance>
 }
 
 declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {

@@ -12,20 +12,10 @@ export const generateInitialValues = (
   eventType: TriggerContactEventTypes | undefined
 ): IGlobalTriggerFormData => {
   if (trigger) {
-    const template: IGlobalTriggerFormData['template'] = trigger.template
-      ? {
-          isInstance: false,
-          data: trigger.template as IBrandMarketingTemplate
-        }
-      : {
-          isInstance: true,
-          data: trigger.template_instance as IMarketingTemplateInstance
-        }
-
     return {
       subject: trigger.subject,
-      wait_for: convertSecondsToDay(trigger.wait_for),
-      template
+      template: trigger.template_instance ?? trigger.template,
+      wait_for: convertSecondsToDay(trigger.wait_for)
     }
   }
 
@@ -33,7 +23,8 @@ export const generateInitialValues = (
     subject: eventType
       ? `Happy ${getAttributeName(eventType)}`
       : 'Celebration!',
-    wait_for: 0
+    wait_for: 0,
+    template: null
   }
 }
 
@@ -57,13 +48,10 @@ export const generatePayload = async (
     and creating an instance in selecting a brand template,
     but due to some caution I don't change the base code of it.
   */
-  const templateInstance = template?.isInstance
-    ? template.data
-    : await createTemplateInstance(
-        template?.data as IBrandMarketingTemplate,
-        brand,
-        { user }
-      )
+  const templateInstance =
+    template?.type === 'template_instance'
+      ? template
+      : await createTemplateInstance(template!, brand, { user })
 
   // -86400 number of millisecond of a day
   const waitFor = Math.abs(Number(wait_for)) * -86400

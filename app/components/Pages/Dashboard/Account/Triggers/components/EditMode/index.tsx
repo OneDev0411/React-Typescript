@@ -245,7 +245,7 @@ export function TriggerEditMode({
                 defaultValue={initialValue.template}
                 rules={{
                   validate: (template: IGlobalTriggerFormData['template']) => {
-                    if (!template || !template.data) {
+                    if (!template) {
                       return 'This field is required.'
                     }
                   }
@@ -257,7 +257,7 @@ export function TriggerEditMode({
                   return (
                     <TemplateSelector
                       disabled={isSubmitting}
-                      templateType={[templatesType]}
+                      templateTypes={[templatesType]}
                       hasError={!!error}
                       error={error}
                       currentTemplate={
