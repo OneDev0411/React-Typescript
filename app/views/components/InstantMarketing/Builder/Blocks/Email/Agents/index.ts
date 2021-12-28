@@ -24,6 +24,8 @@ export const agentMultiBlockName = 'rechat-agent-multi'
 
 export interface Options {
   onDrop: (model: Model) => void
+  shouldUseDefaultAgents: boolean
+  defaultAgents: Agent[]
 }
 
 interface AgentBlock {
@@ -34,8 +36,8 @@ export default function registerAgentBlocks(
   editor: Editor,
   renderData: TemplateRenderData,
   templateBlockOptions: TemplateBlockOptions,
-  { onDrop }: Options
-): AgentBlock {
+  { onDrop, shouldUseDefaultAgents, defaultAgents }: Options
+): AgentBlock | void {
   const agentBlocks = {
     [agentLeftBlockName]:
       templateBlockOptions.blocks[agentLeftBlockName]?.template || Left,
@@ -87,6 +89,13 @@ export default function registerAgentBlocks(
     agentBlocks,
     templateBlockOptions.blocks
   )
+
+  if (shouldUseDefaultAgents) {
+    return handleBlockDragStopEvent(editor, allBlocks, {
+      ...renderData,
+      users: defaultAgents.map(item => item.agent)
+    })
+  }
 
   return handleBlockDragStopEvent(
     editor,

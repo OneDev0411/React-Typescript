@@ -508,7 +508,14 @@ class Builder extends React.Component {
       agent: {
         onDrop: () => {
           this.setState({ isAgentDrawerOpen: true })
-        }
+        },
+        shouldUseDefaultAgents: this.isEmailTemplateForCampaigns,
+        defaultAgents: [
+          {
+            agent: this.props.user,
+            contacts: []
+          }
+        ]
       },
       image: {
         onDrop: () => {
@@ -522,9 +529,6 @@ class Builder extends React.Component {
         onDrop: () => {
           this.setState({ isArticleDrawerOpen: true })
         }
-      },
-      placeholder: {
-        hasSenderBlocks: this.shouldHavePlaceholderSenderBlocks
       }
     }
 
@@ -1238,11 +1242,6 @@ class Builder extends React.Component {
     const isAdminUser = isAdmin(this.props.user)
 
     return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
-  }
-
-  get shouldHavePlaceholderSenderBlocks() {
-    // Only admin users on email templates should have the option
-    return isAdmin(this.props.user) && this.isEmailTemplateForCampaigns
   }
 
   get shouldShowAdminContinueButton() {
