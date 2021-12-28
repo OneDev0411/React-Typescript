@@ -7,12 +7,13 @@ export interface PropertyTypeData {
   optional_roles: string[]
 }
 
-export async function createPropertyType(
+export async function updatePropertyType(
+  id: UUID,
   brandId: UUID,
   data: PropertyTypeData
 ): Promise<IDealPropertyType> {
   const response = await new Fetch()
-    .post(`/brands/${brandId}/deals/property_types`)
+    .put(`/brands/${brandId}/deals/property_types/${id}`)
     .send(data)
 
   return response.body.data

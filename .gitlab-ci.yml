@@ -14,7 +14,7 @@ test_unit:
     - npm ci
     - npm run lint:ci
     - npm run types:check
-    - npm run test:ci -- --coverage
+    - npm run test:ci
   needs: []
   coverage: '/Lines\s+:\s([\d\.]+)/'
   artifacts:

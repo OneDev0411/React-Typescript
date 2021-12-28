@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState } from 'react'
 
 import {
   makeStyles,
@@ -14,15 +14,20 @@ import { doSecondsRepresentWeeks } from '../helpers/do-seconds-represent-weeks'
 import { getDaysFromSeconds } from '../helpers/get-days-from-seconds'
 import { getWeeksFromSeconds } from '../helpers/get-weeks-from-seconds'
 
-const daysOption = {
+interface SelectOption {
+  label: string
+  value: number
+}
+
+const daysOption: SelectOption = {
   label: 'Days',
   value: ONE_DAY_IN_SECONDS
-} as const
-const weeksOption = {
+}
+const weeksOption: SelectOption = {
   label: 'Weeks',
   value: ONE_WEEK_IN_SECONDS
-} as const
-const options = [daysOption, weeksOption] as const
+}
+const options: SelectOption[] = [daysOption, weeksOption]
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -49,53 +54,46 @@ interface Props {
 }
 
 export default function CustomReminder({ seconds, onChange }: Props) {
-  const { initialOption, initialValue } = useMemo(() => {
+  const classes = useStyles()
+
+  // The seconds prop does not include enough data to decide about display mode (days/weeks).
+  // We should decide about its initial state when the component is mounted based on input seconds
+  // and then update the state on the select input changes.
+  const [displayMode, setDisplayMode] = useState<SelectOption>(() => {
     const initiallyInWeeks = doSecondsRepresentWeeks(seconds)
-    const initialOption = initiallyInWeeks ? weeksOption : daysOption
-    const initialValue = initiallyInWeeks
+    const displayMode = initiallyInWeeks ? weeksOption : daysOption
+
+    return displayMode
+  })
+
+  const fieldValue =
+    displayMode.label === 'Weeks'
       ? getWeeksFromSeconds(seconds)
       : getDaysFromSeconds(seconds)
 
-    return { initialOption, initialValue }
-  }, [seconds])
+  const getSeconds = (
+    anotherOption?: typeof options[number],
+    anotherValue?: number
+  ) => {
+    const option = anotherOption ?? displayMode
+    const value = anotherValue ?? fieldValue
 
-  const [option, setOption] = useState(initialOption)
-  const [value, setValue] = useState(initialValue)
-
-  const getSeconds = useCallback<
-    (anotherOption?: typeof options[number]) => number
-  >(
-    anotherOption => {
-      const selectedOption = anotherOption ?? option
-
-      return value * selectedOption.value
-    },
-    [option, value]
-  )
-
-  useEffect(() => {
-    if (seconds !== getSeconds()) {
-      setOption(initialOption)
-      setValue(initialValue)
-    }
-  }, [seconds, initialOption, initialValue, getSeconds])
-
-  const classes = useStyles()
+    return value * option.value
+  }
 
   return (
     <Grid container className={classes.root}>
       <Grid item className={classes.inputContainer}>
         <TextField
-          value={String(value)}
+          value={String(fieldValue)}
           variant="outlined"
           onChange={({ target: { value } }) => {
             const isValid = /^\d{0,3}$/.test(value)
 
             if (isValid) {
-              setValue(Number(value))
+              onChange(getSeconds(displayMode, Number(value)))
             }
           }}
-          onBlur={() => onChange(getSeconds())}
           inputProps={{ className: classes.input }}
         />
       </Grid>
@@ -103,11 +101,11 @@ export default function CustomReminder({ seconds, onChange }: Props) {
         <Select
           variant="outlined"
           fullWidth
-          value={option.value}
+          value={displayMode.value}
           onChange={({ target: { value } }) => {
             const option = options.find(option => option.value === value)!
 
-            setOption(option)
+            setDisplayMode(option)
             onChange(getSeconds(option))
           }}
         >

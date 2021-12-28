@@ -15,6 +15,8 @@ import {
   viewAsEveryoneOnTeam
 } from 'utils/user-teams'
 
+import { DealContextProviders } from './contexts'
+
 interface StateProps {
   user: IUser | null
   dealsCount: number
@@ -81,7 +83,7 @@ function Container(props: Props) {
     )
   }
 
-  return <>{props.children}</>
+  return <DealContextProviders>{props.children}</DealContextProviders>
 }
 
 export default memo(Container)

@@ -24,7 +24,9 @@ import { BaseDropdown } from 'components/BaseDropdown'
 import { SvgIcon } from 'components/SvgIcons/SvgIcon'
 import type { ISignatureRecipient } from 'deals/Signature/types'
 import { getAvatarTitle } from 'deals/utils/get-avatar-title'
-import { roleName, getLegalFullName } from 'deals/utils/roles'
+import { getLegalFullName } from 'deals/utils/roles'
+
+import { RoleName } from '../../../../../components/Roles/RoleName'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -156,7 +158,7 @@ export function RecipientsList() {
                         </Typography>
 
                         <Typography variant="caption">
-                          {roleName(recipient.role)}
+                          <RoleName name={recipient.role} />
                         </Typography>
                       </div>
                     </Box>

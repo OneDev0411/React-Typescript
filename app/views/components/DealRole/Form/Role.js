@@ -11,7 +11,8 @@ import {
 import { styled } from '@material-ui/core/styles'
 import { spacing } from '@material-ui/system'
 
-import { roleName } from 'deals/utils/roles'
+import { RoleName } from '@app/components/Pages/Dashboard/Deals/components/Roles/RoleName'
+import { useDealsRolesContext } from '@app/contexts/deals-roles-definitions/use-deals-roles-context'
 
 import Field from '../components/CustomField'
 import DeleteRole from '../components/DeleteRole'
@@ -33,6 +34,7 @@ const Button = styled(MuiButton)(spacing)
 const Grid = styled(MuiGrid)(spacing)
 
 export function RoleForm(props) {
+  const { dealRolesByName } = useDealsRolesContext()
   const [showNameDetails, setShowNameDetails] = useState(
     props.values.legal_prefix || props.values.legal_middle_name
   )
@@ -73,7 +75,12 @@ export function RoleForm(props) {
       <Grid item xs={12}>
         <Typography variant="h6">
           {props.title || (
-            <>Add {selectedRole ? roleName(selectedRole) : ' New Role'}</>
+            <>
+              Add{' '}
+              {selectedRole
+                ? dealRolesByName[selectedRole]?.title
+                : ' New Role'}
+            </>
           )}
         </Typography>
       </Grid>
@@ -115,6 +122,7 @@ export function RoleForm(props) {
           <Field
             name="role"
             label="Role"
+            deal={props.deal}
             isRequired={isRequired('role')}
             isAllowedRole={props.isAllowedRole}
             component={Roles}
@@ -258,7 +266,8 @@ export function RoleForm(props) {
           <Box mt={2}>
             {selectedRole && (
               <Typography variant="h6">
-                {roleName(selectedRole)}'s Commission
+                <RoleName name={selectedRole} />
+                's Commission
               </Typography>
             )}
           </Box>

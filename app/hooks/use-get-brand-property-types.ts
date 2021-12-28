@@ -41,9 +41,18 @@ export function useBrandPropertyTypes(brandId: Nullable<UUID>) {
     )
   }
 
+  const updatePropertyType = (propertyType: IDealPropertyType): void => {
+    setPropertyTypes(
+      propertyTypes.map(item =>
+        item.id === propertyType.id ? propertyType : item
+      )
+    )
+  }
+
   return {
     propertyTypes,
     addPropertyTypes,
+    updatePropertyType,
     reorderPropertyTypes,
     reload: load
   }
