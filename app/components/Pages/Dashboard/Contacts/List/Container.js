@@ -97,7 +97,9 @@ class ContactsList extends React.Component {
     const { parkedContactsCount } = this.state
     const { user, fetchTags, getContactsTags } = this.props
 
-    this.fetchContactsAndJumpToSelected()
+    const sortOrder = this.getTeamSortOrder()
+
+    this.fetchContactsAndJumpToSelected(sortOrder)
 
     if (!parkedContactsCount) {
       this.getParkedContactCount()
@@ -113,7 +115,7 @@ class ContactsList extends React.Component {
     const viewMode =
       getUserSettingsInActiveTeam(user, VIEW_MODE_FIELD_SETTING_KEY) || 'table'
 
-    this.setState({ viewMode })
+    this.setState({ viewMode, sortOrder })
 
     if (globalButtonDispatch) {
       globalButtonDispatch({
@@ -237,7 +239,7 @@ class ContactsList extends React.Component {
     }
   }
 
-  async fetchContactsAndJumpToSelected() {
+  async fetchContactsAndJumpToSelected(sortOrder = '-last_touch') {
     this.setState({
       isFetchingMoreContacts: true
     })
@@ -247,7 +249,7 @@ class ContactsList extends React.Component {
 
     this.scrollToSelector(idSelector)
 
-    await this.fetchList(start, false, false)
+    await this.fetchList(start, false, false, sortOrder)
 
     this.setState({
       isFetchingMoreContacts: false
@@ -335,7 +337,8 @@ class ContactsList extends React.Component {
   fetchList = async (
     start = 0,
     loadMoreBefore = false,
-    resetLoadedRanges = false
+    resetLoadedRanges = false,
+    sortOrder = null
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -343,7 +346,7 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        const sortOrder = this.getTeamSortOrder()
+        sortOrder = sortOrder || this.getTeamSortOrder()
 
         await this.handleFilterChange(
           {
