@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useState } from 'react'
 
 import {
   makeStyles,
@@ -14,15 +14,20 @@ import { doSecondsRepresentWeeks } from '../helpers/do-seconds-represent-weeks'
 import { getDaysFromSeconds } from '../helpers/get-days-from-seconds'
 import { getWeeksFromSeconds } from '../helpers/get-weeks-from-seconds'
 
-const daysOption = {
+interface SelectOption {
+  label: string
+  value: number
+}
+
+const daysOption: SelectOption = {
   label: 'Days',
   value: ONE_DAY_IN_SECONDS
-} as const
-const weeksOption = {
+}
+const weeksOption: SelectOption = {
   label: 'Weeks',
   value: ONE_WEEK_IN_SECONDS
-} as const
-const options = [daysOption, weeksOption] as const
+}
+const options: SelectOption[] = [daysOption, weeksOption]
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -49,27 +54,32 @@ interface Props {
 }
 
 export default function CustomReminder({ seconds, onChange }: Props) {
-  const { selectedOption, fieldValue } = useMemo(() => {
+  const classes = useStyles()
+
+  // The seconds prop does not include enough data to decide about display mode (days/weeks).
+  // We should decide about its initial state when the component is mounted based on input seconds
+  // and then update the state on the select input changes.
+  const [displayMode, setDisplayMode] = useState<SelectOption>(() => {
     const initiallyInWeeks = doSecondsRepresentWeeks(seconds)
-    const selectedOption = initiallyInWeeks ? weeksOption : daysOption
-    const fieldValue = initiallyInWeeks
+    const displayMode = initiallyInWeeks ? weeksOption : daysOption
+
+    return displayMode
+  })
+
+  const fieldValue =
+    displayMode.label === 'Weeks'
       ? getWeeksFromSeconds(seconds)
       : getDaysFromSeconds(seconds)
-
-    return { selectedOption, fieldValue }
-  }, [seconds])
 
   const getSeconds = (
     anotherOption?: typeof options[number],
     anotherValue?: number
   ) => {
-    const option = anotherOption ?? selectedOption
+    const option = anotherOption ?? displayMode
     const value = anotherValue ?? fieldValue
 
     return value * option.value
   }
-
-  const classes = useStyles()
 
   return (
     <Grid container className={classes.root}>
@@ -81,7 +91,7 @@ export default function CustomReminder({ seconds, onChange }: Props) {
             const isValid = /^\d{0,3}$/.test(value)
 
             if (isValid) {
-              onChange(getSeconds(selectedOption, Number(value)))
+              onChange(getSeconds(displayMode, Number(value)))
             }
           }}
           inputProps={{ className: classes.input }}
@@ -91,10 +101,11 @@ export default function CustomReminder({ seconds, onChange }: Props) {
         <Select
           variant="outlined"
           fullWidth
-          value={selectedOption.value}
+          value={displayMode.value}
           onChange={({ target: { value } }) => {
             const option = options.find(option => option.value === value)!
 
+            setDisplayMode(option)
             onChange(getSeconds(option))
           }}
         >
