@@ -15,13 +15,14 @@ interface Props {
   data: {
     rows: IContact[]
     columnId: string
+    onChangeTags: (contact: IContact, tags: string[]) => void
   }
 }
 
 export const DraggableCardItem = React.memo(function DraggableCardItem({
   style,
   index,
-  data: { rows, columnId }
+  data: { rows, columnId, onChangeTags }
 }: Props) {
   const contact = rows[index]
 
@@ -41,6 +42,7 @@ export const DraggableCardItem = React.memo(function DraggableCardItem({
           contact={contact}
           style={style}
           isDragging={snapshot.isDragging}
+          onChangeTags={onChangeTags}
         />
       )}
     </Draggable>

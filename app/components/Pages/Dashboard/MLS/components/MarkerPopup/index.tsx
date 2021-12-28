@@ -4,7 +4,7 @@ import { Chip, Grid, makeStyles, Typography } from '@material-ui/core'
 import {
   mdiShower,
   mdiBedKingOutline,
-  mdiFullscreen,
+  mdiVectorSquare,
   mdiMapMarkerOutline
 } from '@mdi/js'
 import { useSelector } from 'react-redux'
@@ -156,7 +156,7 @@ const MarkerPopup = ({
               {baths}
             </Grid>
             <Grid className={classes.detailItem} item>
-              <SvgIcon path={mdiFullscreen} className={classes.icon} />
+              <SvgIcon path={mdiVectorSquare} className={classes.icon} />
               {squareFeet} ft
               <sup>2</sup>
             </Grid>

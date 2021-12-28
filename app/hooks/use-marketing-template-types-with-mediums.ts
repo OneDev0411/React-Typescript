@@ -9,7 +9,8 @@ interface TypeWithMedium {
 }
 
 export function useMarketingTemplateTypesWithMediums(
-  templates: IBrandMarketingTemplate[]
+  templates: IBrandMarketingTemplate[],
+  assets: IBrandAsset[] = []
 ): TypeWithMedium[] {
   const categories = useMarketingCenterCategories()
 
@@ -23,7 +24,7 @@ export function useMarketingTemplateTypesWithMediums(
     )
   }, [categories])
 
-  const mediums = useMarketingCenterMediums(templates)
+  const mediums = useMarketingCenterMediums(templates, assets)
 
   return useMemo(
     () =>

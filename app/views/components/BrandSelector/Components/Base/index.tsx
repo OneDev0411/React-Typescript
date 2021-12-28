@@ -84,7 +84,7 @@ export function BaseBrandSelector({
     if (error) {
       return (
         <Typography variant="body1" color="textSecondary">
-          Somthing Went Wrong!
+          Something went wrong!
         </Typography>
       )
     }
