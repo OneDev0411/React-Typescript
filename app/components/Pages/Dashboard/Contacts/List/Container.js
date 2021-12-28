@@ -338,7 +338,7 @@ class ContactsList extends React.Component {
     start = 0,
     loadMoreBefore = false,
     resetLoadedRanges = false,
-    sortOrder = null
+    sortOrder = undefined
   ) => {
     if (start === 0 && !loadMoreBefore) {
       this.resetSelectedRows()
@@ -346,15 +346,13 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        sortOrder = sortOrder || this.getTeamSortOrder()
-
         await this.handleFilterChange(
           {
             start,
             prependResult: loadMoreBefore
           },
           resetLoadedRanges,
-          sortOrder
+          sortOrder || this.getTeamSortOrder()
         )
       } else {
         this.addLoadedRange(start)
