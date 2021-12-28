@@ -173,6 +173,8 @@ export const TemplateSelector = ({
           return
         }
 
+        setIsLoading(true)
+
         const templates = await getTemplates(
           brand.id,
           [getTemplateType(attributeName)],

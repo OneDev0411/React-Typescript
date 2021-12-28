@@ -304,8 +304,6 @@ class MasterField extends Component {
     if (!isTriggerActive) {
       if (trigger) {
         await removeTrigger(trigger.id)
-
-        return
       }
 
       if (attributeGlobalTrigger) {
@@ -314,9 +312,9 @@ class MasterField extends Component {
           this.attribute_def.name,
           brand?.id
         )
-
-        return
       }
+
+      return
     }
 
     /*
