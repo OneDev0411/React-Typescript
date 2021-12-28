@@ -48,6 +48,7 @@ export default function getVisibleFields(args) {
       'Buyer',
       'Landlord',
       'Tenant',
+      'Title',
       'BuyerLawyer',
       'SellerLawyer',
       'BuyerPowerOfAttorney',

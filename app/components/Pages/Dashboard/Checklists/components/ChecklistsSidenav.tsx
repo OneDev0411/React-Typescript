@@ -3,7 +3,6 @@ import {
   DragDropContext,
   Droppable,
   DroppableProvided,
-  DroppableStateSnapshot,
   DropResult,
   ResponderProvided
 } from 'react-beautiful-dnd'
@@ -14,16 +13,20 @@ import SideNavSection from '../../../../../views/components/PageSideNav/SideNavS
 import { ChecklistsSidenavItem } from './ChecklistsSidenavItem'
 
 interface Props {
+  selectedPropertyType: UUID
   propertyTypes: IDealPropertyType[]
   checklistType: IDealChecklistType
   onClickNewProperty: () => void
+  onUpdate: (propertyType: IDealPropertyType) => void
   onReorder: (result: DropResult, provided: ResponderProvided) => void
 }
 
 export function ChecklistsSidenav({
+  selectedPropertyType,
   propertyTypes,
   checklistType,
   onReorder,
+  onUpdate,
   onClickNewProperty
 }: Props) {
   return (
@@ -33,17 +36,16 @@ export function ChecklistsSidenav({
         <SideNavSection>
           <DragDropContext onDragEnd={onReorder}>
             <Droppable droppableId="list" type="column" direction="vertical">
-              {(
-                provided: DroppableProvided,
-                snapshot: DroppableStateSnapshot
-              ) => (
+              {(provided: DroppableProvided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {propertyTypes.map((propertyType, index) => (
                     <ChecklistsSidenavItem
                       key={propertyType.id}
+                      isSelected={propertyType.id === selectedPropertyType}
                       index={index}
                       checklistType={checklistType}
                       propertyType={propertyType}
+                      onUpdate={onUpdate}
                     />
                   ))}
 
