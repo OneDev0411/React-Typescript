@@ -12,7 +12,7 @@ export default function MarketingOverview() {
 
   return (
     <Layout
-      render={({ items, isLoading, types, medium, onDeleteTemplate }) => {
+      render={({ isLoading }) => {
         if (isLoading) {
           return <LoadingContainer noPaddings />
         }

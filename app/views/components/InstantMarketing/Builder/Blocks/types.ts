@@ -25,6 +25,7 @@ export interface TemplateOptions {
   disableDefault?: string[] | true
   textEditor?: {
     extraFonts?: string[]
+    extraColors?: string[]
   }
 }
 

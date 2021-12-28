@@ -82,7 +82,7 @@ export function Dates({ contact, submitCallback }: Props) {
             <Loading />
           </Box>
         ) : (
-          <Box>
+          <>
             {otherFields.map(field => (
               <DealContextField
                 deal={field.deal || ''}
@@ -92,7 +92,7 @@ export function Dates({ contact, submitCallback }: Props) {
                 isAllDay={field.all_day}
               />
             ))}
-          </Box>
+          </>
         )}
       </SectionWithFields>
     </>

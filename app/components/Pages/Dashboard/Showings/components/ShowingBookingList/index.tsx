@@ -203,9 +203,10 @@ function ShowingBookingList({
       return rows
     }
 
-    const time = new Date().toISOString()
+    const currentTime = new Date().toISOString()
+    const upcomingBookings = rows.filter(row => row.time >= currentTime)
 
-    return rows.filter(row => row.time >= time)
+    return upcomingBookings
   }, [hasPastBookingsFilter, rows, showPastBookings])
 
   const hasAnyPastRows = useMemo<boolean>(() => {
@@ -213,10 +214,10 @@ function ShowingBookingList({
       return false
     }
 
-    const time = new Date().toISOString()
+    const currentTime = new Date().toISOString()
 
     // This works because the appointment list is sorted by time
-    return rows[rows.length - 1].time < time
+    return rows[rows.length - 1].time < currentTime
   }, [rows])
 
   const hiddenRowCount = rows.length - visibleRows.length
