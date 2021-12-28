@@ -374,11 +374,11 @@ const AsyncContactProfile = withAcl.crm(
   })
 )
 
-const AsyncContactsImportCsv = withAcl.crm(
+const AsyncContactsCsvImport = withAcl.crm(
   Load({
     loader: () =>
       import(
-        '../components/Pages/Dashboard/Contacts/ImportCsv' /* webpackChunkName: "contact_csv" */
+        '../components/Pages/Dashboard/Contacts/CsvImport' /* webpackChunkName: "contact_csv" */
       )
   })
 )
@@ -916,7 +916,7 @@ export default (
         <Route path="contacts" component={AsyncContacts} />
         <Route path="contacts/duplicates" component={AsyncDuplicateContacts} />
         <Route path="contacts/:id" component={AsyncContactProfile} />
-        <Route path="contacts/import/csv" component={AsyncContactsImportCsv} />
+        <Route path="contacts/import/csv" component={AsyncContactsCsvImport} />
 
         <Route path="marketing" component={AsyncMarketingOverview} />
         <Route path="marketing/designs" component={AsyncMarketingHistory} />
