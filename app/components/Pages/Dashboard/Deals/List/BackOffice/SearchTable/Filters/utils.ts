@@ -4,7 +4,11 @@ import {
   DEALS_STATUSES,
   QUERY_ARRAY_PARAM_SPLITTER_CHAR
 } from '../../constants'
-import { DealsListContext, TDealsStatusList } from '../../types'
+import {
+  DealsListContext,
+  DealsListFilters,
+  TDealsStatusList
+} from '../../types'
 
 // Convert status filter to query string
 export const stringifyStatusFilter = (filters: TDealsStatusList): string => {
@@ -98,4 +102,17 @@ export const utcToDate = (utc: string) => {
   const day = Number(utc.substring(8, 10))
 
   return new Date(year, month, day)
+}
+
+export function isStatusFilterChanged(
+  defaults: DealsListFilters,
+  current: DealsListFilters
+) {
+  return (
+    !!current.status.is_active !== !!defaults.status.is_active ||
+    !!current.status.is_archived !== !!defaults.status.is_archived ||
+    !!current.status.is_closed !== !!defaults.status.is_closed ||
+    !!current.status.is_null !== !!defaults.status.is_null ||
+    !!current.status.is_pending !== !!defaults.status.is_pending
+  )
 }

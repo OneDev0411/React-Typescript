@@ -5,13 +5,10 @@ import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterBu
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 
-import { DEALS_STATUSES } from '../../../constants'
-import {
-  DealsListFilters,
-  TDealsStatus,
-  TDealsStatusList
-} from '../../../types'
-import { useStyles } from '../styles'
+import { DEALS_STATUSES } from '../../constants'
+import { DealsListFilters, TDealsStatus, TDealsStatusList } from '../../types'
+
+import { useStyles } from './styles'
 
 export const StatusEditor = ({
   filters,

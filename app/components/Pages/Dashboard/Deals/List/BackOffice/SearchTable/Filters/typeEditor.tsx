@@ -3,9 +3,10 @@ import { isEqual } from 'underscore'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 
-import { DealsListFilters } from '../../../types'
-import { FilterEditorFooter } from '../filterEditorFooter'
-import { useStyles } from '../styles'
+import { DealsListFilters } from '../../types'
+
+import { FilterEditorFooter } from './filterEditorFooter'
+import { useStyles } from './styles'
 
 export const DEAL_TYPES_ITEMS: Record<IDealType, string> = {
   Selling: 'Listings',

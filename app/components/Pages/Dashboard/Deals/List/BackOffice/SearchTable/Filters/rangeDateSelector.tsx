@@ -84,8 +84,6 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
       // Set time of to date to 23:59:59:999
       const lastMomentOfToDay = to ? getUtcLastMomentOfDay(to) : undefined
 
-      console.log({ firstMomentOfFromDay, lastMomentOfToDay })
-
       onChange({
         from: firstMomentOfFromDay,
         to: lastMomentOfToDay
@@ -106,8 +104,6 @@ export const RangeDateSelector = ({ value, onChange }: Props) => {
       const firstMomentOfFromDay = from
         ? getUtcFirstMomentOfDay(from)
         : undefined
-
-      console.log({ firstMomentOfFromDay, lastMomentOfToDay })
 
       onChange({
         from: firstMomentOfFromDay,

@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react'
 
 import { Button, Grid } from '@material-ui/core'
-import { mdiFileDownloadOutline } from '@mdi/js'
+import {
+  mdiFileDownloadOutline,
+  mdiListStatus,
+  mdiCalendarCursor,
+  mdiCalendarCheckOutline,
+  mdiCalendarPlus,
+  mdiCalendarRemove
+} from '@mdi/js'
 import { saveAs } from 'file-saver'
 import { isEqual, pickBy } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +19,7 @@ import { exportFilter } from '@app/models/Deal/deal'
 import { selectActiveBrand } from '@app/selectors/brand'
 import { selectUser } from '@app/selectors/user'
 import { Filters as BaseFilters } from '@app/views/components/Filters'
-import FilterButton from '@app/views/components/Filters/FilterButton'
+import BaseFilterButton from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import { searchDeals } from 'actions/deals'
@@ -20,7 +27,8 @@ import { searchDeals } from 'actions/deals'
 import {
   CHANGE_FILTERS_DEBOUNCE_MS,
   DEALS_LIST_DEFAULT_FILTERS,
-  DEALS_LIST_DEFUALT_ORDER
+  DEALS_LIST_DEFUALT_ORDER,
+  DEAL_TYPES
 } from '../../constants'
 import {
   DealsListFilters,
@@ -29,20 +37,13 @@ import {
   SearchQuery
 } from '../../types'
 
-import { ClosingDateEditor } from './closingDateEditor'
-import { ClosingDateButton } from './closingDateEditor/button'
-import { ExecutedDateEditor } from './executedDate'
-import { ExecutedDateButton } from './executedDate/button'
-import { ExpirationDateEditor } from './expirationDateEditor'
-import { ExpirationDateButton } from './expirationDateEditor/button'
-import { ListDateEditor } from './listDateEditor'
-import { ListDateButton } from './listDateEditor/button'
+import { DateFilterEditor } from './dateFilterEditor'
+import { FilterButton } from './filterButton'
 import { StatusEditor } from './statusEditor'
-import { StatusButton } from './statusEditor/button'
 import { useStyles } from './styles'
-import { TypeEditor } from './typeEditor'
-import { TypeButton } from './typeEditor/button'
+import { DEAL_TYPES_ITEMS, TypeEditor } from './typeEditor'
 import { UseFiltersWithQuery } from './useFiltersWithQuery'
+import { isStatusFilterChanged } from './utils'
 
 interface Props {
   searchQuery: SearchQuery
@@ -55,17 +56,15 @@ export const Filters = ({ searchQuery }: Props) => {
 
   const [queryParamValue] = useQueryParam('q')
 
-  // TODO: we should replace the order
+  // TODO: We should refactor the whole mechanism for ordering deals lists.
+  // just a reminder that this part of the code needs to be changed after refactoring
   const sortOption: DealsOrder = DEALS_LIST_DEFUALT_ORDER
-  // const [sortByParamValue] = useQueryParam('sortBy')
-  // const [sortTypeParamValue] = useQueryParam('sortType')
 
   const [isExporting, setIsExporting] = useState(false)
 
   const user = useSelector(selectUser)
   const activeBrand = useSelector(selectActiveBrand)
 
-  // TODO: create a utils for this
   const [userFilters, setUserFilters] = UseFiltersWithQuery()
 
   const onFiltersChange = (changedFilters: Partial<DealsListFilters>) => {
@@ -73,8 +72,6 @@ export const Filters = ({ searchQuery }: Props) => {
   }
 
   const onExportList = useCallback(async () => {
-    // TODO: export list
-
     const payload = {
       $order: sortOption,
       brand: activeBrand.id,
@@ -129,12 +126,22 @@ export const Filters = ({ searchQuery }: Props) => {
           <>
             <Grid className={classes.filtersWrapper}>
               {/* Deals Type Filter  */}
-              <FilterButton
+              <BaseFilterButton
                 renderButton={({ onClick }) => (
-                  <TypeButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
+                  <FilterButton
                     onClick={onClick}
+                    title={
+                      currentFilters.deal_type &&
+                      currentFilters.deal_type.length !== DEAL_TYPES.length
+                        ? DEAL_TYPES_ITEMS[currentFilters.deal_type[0]]
+                        : 'Listings & Contracts'
+                    }
+                    isActive={
+                      !isEqual(
+                        currentFilters.deal_type?.sort(),
+                        systemDefaultFilters.deal_type?.sort()
+                      )
+                    }
                   />
                 )}
                 renderDropdown={() => (
@@ -146,12 +153,16 @@ export const Filters = ({ searchQuery }: Props) => {
                 )}
               />
               {/* Deals Status Filter  */}
-              <FilterButton
+              <BaseFilterButton
                 renderButton={({ onClick }) => (
-                  <StatusButton
-                    filters={currentFilters}
-                    defaultFilters={systemDefaultFilters}
+                  <FilterButton
                     onClick={onClick}
+                    title="Status"
+                    startIconPath={mdiListStatus}
+                    isActive={isStatusFilterChanged(
+                      systemDefaultFilters,
+                      currentFilters
+                    )}
                   />
                 )}
                 renderDropdown={() => (
@@ -165,16 +176,25 @@ export const Filters = ({ searchQuery }: Props) => {
 
               <div className={classes.buttonGroup}>
                 {/* contract date Filter  */}
-                <FilterButton
+                <BaseFilterButton
                   renderButton={({ onClick }) => (
-                    <ExecutedDateButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
+                    <FilterButton
                       onClick={onClick}
+                      title="Executed Date"
+                      startIconPath={mdiCalendarCursor}
+                      isActive={
+                        !isEqual(
+                          systemDefaultFilters.contexts.contract_date?.date,
+                          currentFilters.contexts.contract_date?.date
+                        )
+                      }
                     />
                   )}
                   renderDropdown={() => (
-                    <ExecutedDateEditor
+                    <DateFilterEditor
+                      id="contract_date"
+                      title="Executed Date"
+                      iconPath={mdiCalendarCursor}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}
@@ -183,16 +203,25 @@ export const Filters = ({ searchQuery }: Props) => {
                 />
 
                 {/* Closing date Filter  */}
-                <FilterButton
+                <BaseFilterButton
                   renderButton={({ onClick }) => (
-                    <ClosingDateButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
+                    <FilterButton
                       onClick={onClick}
+                      title="Closing Date"
+                      startIconPath={mdiCalendarCheckOutline}
+                      isActive={
+                        !isEqual(
+                          systemDefaultFilters.contexts.closing_date?.date,
+                          currentFilters.contexts.closing_date?.date
+                        )
+                      }
                     />
                   )}
                   renderDropdown={() => (
-                    <ClosingDateEditor
+                    <DateFilterEditor
+                      id="closing_date"
+                      title="Closing Date"
+                      iconPath={mdiCalendarCheckOutline}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}
@@ -203,16 +232,25 @@ export const Filters = ({ searchQuery }: Props) => {
 
               <div className={classes.buttonGroup}>
                 {/* List date Filter  */}
-                <FilterButton
+                <BaseFilterButton
                   renderButton={({ onClick }) => (
-                    <ListDateButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
+                    <FilterButton
                       onClick={onClick}
+                      title="Listing Date"
+                      startIconPath={mdiCalendarPlus}
+                      isActive={
+                        !isEqual(
+                          systemDefaultFilters.contexts.list_date?.date,
+                          currentFilters.contexts.list_date?.date
+                        )
+                      }
                     />
                   )}
                   renderDropdown={() => (
-                    <ListDateEditor
+                    <DateFilterEditor
+                      id="list_date"
+                      title="Listing Date"
+                      iconPath={mdiCalendarPlus}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}
@@ -221,16 +259,25 @@ export const Filters = ({ searchQuery }: Props) => {
                 />
 
                 {/* List expiration Filter  */}
-                <FilterButton
+                <BaseFilterButton
                   renderButton={({ onClick }) => (
-                    <ExpirationDateButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
+                    <FilterButton
                       onClick={onClick}
+                      title="Listing Expiration"
+                      startIconPath={mdiCalendarRemove}
+                      isActive={
+                        !isEqual(
+                          systemDefaultFilters.contexts.expiration_date?.date,
+                          currentFilters.contexts.expiration_date?.date
+                        )
+                      }
                     />
                   )}
                   renderDropdown={() => (
-                    <ExpirationDateEditor
+                    <DateFilterEditor
+                      id="expiration_date"
+                      title="Listing Expiration"
+                      iconPath={mdiCalendarRemove}
                       filters={currentFilters}
                       updateFilters={updateFilters}
                       defaultFilters={systemDefaultFilters}

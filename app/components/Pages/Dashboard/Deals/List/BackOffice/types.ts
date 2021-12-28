@@ -11,15 +11,16 @@ export type TDealsStatus = keyof typeof DEALS_STATUSES
 export type TDateRange = { from: string; to: string }
 export type DealsListContext = { date: Partial<TDateRange> }
 export type TDealsStatusList = Partial<Record<TDealsStatus, boolean>>
+export type TDealsContexts = {
+  closing_date?: DealsListContext
+  list_date?: DealsListContext
+  expiration_date?: DealsListContext
+  contract_date?: DealsListContext
+}
 export interface DealsListFilters {
   deal_type?: IDealType[]
   status: TDealsStatusList
-  contexts: {
-    closing_date?: DealsListContext
-    list_date?: DealsListContext
-    expiration_date?: DealsListContext
-    contract_date?: DealsListContext
-  }
+  contexts: TDealsContexts
 }
 
 export type DealsOrder = [string, 'ASC' | 'DESC']

@@ -8,12 +8,12 @@ import {
 } from '../../constants'
 import { DealsListFilters } from '../../types'
 
-import { isStatusFilterChanged } from './statusEditor/button'
 import {
   parseStatusFilterString,
   parseRangeDateFilterString,
   stringifyRangeDateFilter,
-  stringifyStatusFilter
+  stringifyStatusFilter,
+  isStatusFilterChanged
 } from './utils'
 
 export const UseFiltersWithQuery = (): [

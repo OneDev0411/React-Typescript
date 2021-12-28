@@ -21,8 +21,6 @@ export default function BackofficeWraperPage(
   const [searchCriteria, setSearchCriteria] = useQueryParam('q')
   const isSearchTab = props.params.filter === 'search'
 
-  console.log({ isSearchTab })
-
   const searchQuery: SearchQuery = {
     filter: props.params.filter,
     type: props.location.query.type || 'inbox',
