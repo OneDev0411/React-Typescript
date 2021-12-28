@@ -8,7 +8,9 @@ interface UseSuperCampaignResultStats {
 }
 
 export function useSuperCampaignResultStats(
-  superCampaignResults: ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+  superCampaignResults: ISuperCampaignEnrollment<
+    'user' | 'brand' | 'campaign'
+  >[]
 ): UseSuperCampaignResultStats {
   return useMemo<UseSuperCampaignResultStats>(
     () =>

@@ -1,7 +1,8 @@
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
-import { getSuperCampaignResultPercentage } from './helpers'
+import { getSuperCampaignStatsLabels } from '../../helpers'
+
 import SuperCampaignColumnPerson from './SuperCampaignColumnPerson'
 import SuperCampaignListEmptyState from './SuperCampaignListEmptyState'
 import SuperCampaignListLoadingState from './SuperCampaignListLoadingState'
@@ -15,7 +16,9 @@ import { useSuperCampaignResultStats } from './use-super-campaign-result-stats'
 
 interface SuperCampaignResultListProps {
   isLoading: boolean
-  superCampaignResults: ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+  superCampaignResults: ISuperCampaignEnrollment<
+    'user' | 'brand' | 'campaign'
+  >[]
 }
 
 function SuperCampaignResultList({
@@ -28,7 +31,7 @@ function SuperCampaignResultList({
     useSuperCampaignResultStats(superCampaignResults)
 
   const columns: TableColumn<
-    ISuperCampaignEnrollment<'user_and_brand_and_campaign'>
+    ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>
   >[] = [
     {
       id: 'person',
@@ -56,10 +59,7 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={`${row.campaign.delivered} ${getSuperCampaignResultPercentage(
-            row.campaign.delivered,
-            row.campaign.sent
-          )}`}
+          value={getSuperCampaignStatsLabels(row.campaign).deliveredLabel}
         />
       )
     },
@@ -70,10 +70,7 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={`${row.campaign.opened} ${getSuperCampaignResultPercentage(
-            row.campaign.opened,
-            row.campaign.delivered
-          )}`}
+          value={getSuperCampaignStatsLabels(row.campaign).openedLabel}
         />
       )
     },
@@ -84,14 +81,19 @@ function SuperCampaignResultList({
       align: 'right',
       render: ({ row }) => (
         <SuperCampaignResultListColumn
-          value={`${row.campaign.clicked} ${getSuperCampaignResultPercentage(
-            row.campaign.clicked,
-            row.campaign.delivered
-          )}`}
+          value={getSuperCampaignStatsLabels(row.campaign).clickedLabel}
         />
       )
     }
   ]
+
+  const { deliveredLabel, openedLabel, clickedLabel } =
+    getSuperCampaignStatsLabels({
+      sent: totalSent,
+      delivered: totalDelivered,
+      opened: totalOpened,
+      clicked: totalClicked
+    })
 
   const headers: ListHeader[] = [
     {
@@ -110,33 +112,18 @@ function SuperCampaignResultList({
       header: (
         <SuperCampaignResultListColumn
           label="Delivered"
-          value={`${totalDelivered} ${getSuperCampaignResultPercentage(
-            totalDelivered,
-            totalSent
-          )}`}
+          value={deliveredLabel}
         />
       )
     },
     {
       header: (
-        <SuperCampaignResultListColumn
-          label="Opened"
-          value={`${totalOpened} ${getSuperCampaignResultPercentage(
-            totalOpened,
-            totalDelivered
-          )}`}
-        />
+        <SuperCampaignResultListColumn label="Opened" value={openedLabel} />
       )
     },
     {
       header: (
-        <SuperCampaignResultListColumn
-          label="Clicked"
-          value={`${totalClicked} ${getSuperCampaignResultPercentage(
-            totalClicked,
-            totalDelivered
-          )}`}
-        />
+        <SuperCampaignResultListColumn label="Clicked" value={clickedLabel} />
       )
     }
   ]

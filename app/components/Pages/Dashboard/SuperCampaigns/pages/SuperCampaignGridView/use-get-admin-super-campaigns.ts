@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import { useEffectOnce } from 'react-use'
 
@@ -9,13 +9,14 @@ import getAllSuperCampaign, {
 
 interface UseGetSuperCampaign {
   isLoading: boolean
-  superCampaigns: Nullable<ISuperCampaign<'template_instance'>[]>
+  superCampaigns: ISuperCampaign[]
+  setSuperCampaigns: Dispatch<SetStateAction<ISuperCampaign[]>>
   loadMore: () => void
 }
 
 const numberOfLoadSuperCampaignInRequest: number = 50
 
-export function useGetAllSuperCampaign(): UseGetSuperCampaign {
+export function useGetAdminSuperCampaigns(): UseGetSuperCampaign {
   const [range, setRange] = useState<FetchRange>({
     start: 0,
     limit: numberOfLoadSuperCampaignInRequest
@@ -23,9 +24,10 @@ export function useGetAllSuperCampaign(): UseGetSuperCampaign {
   const {
     run,
     data: superCampaigns,
+    setData: setSuperCampaigns,
     isLoading
-  } = useAsync<Nullable<ISuperCampaign<'template_instance'>[]>>({
-    data: null,
+  } = useAsync<ISuperCampaign[]>({
+    data: [],
     status: 'pending'
   })
 
@@ -51,5 +53,5 @@ export function useGetAllSuperCampaign(): UseGetSuperCampaign {
     run(async () => getAllSuperCampaign(range))
   })
 
-  return { isLoading, superCampaigns, loadMore }
+  return { isLoading, superCampaigns, setSuperCampaigns, loadMore }
 }

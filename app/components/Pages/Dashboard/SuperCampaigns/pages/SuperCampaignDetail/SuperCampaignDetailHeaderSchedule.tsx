@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSaveSuperCampaign } from '../../hooks/use-save-super-campaign'
 
 import SuperCampaignDetailHeaderScheduleButton from './SuperCampaignDetailHeaderScheduleButton'
@@ -19,7 +19,7 @@ function SuperCampaignDetailHeaderSchedule({
   superCampaign,
   setSuperCampaign
 }: SuperCampaignDetailHeaderScheduleProps) {
-  const isExecuted = useIsSuperCampaignReadOnly(superCampaign)
+  const isExecuted = isSuperCampaignReadOnly(superCampaign)
 
   const { saveSuperCampaign, isSaving } = useSaveSuperCampaign(
     superCampaign,
