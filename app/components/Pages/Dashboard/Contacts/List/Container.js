@@ -312,7 +312,7 @@ class ContactsList extends React.Component {
   hasSearchState = () =>
     this.props.filters || this.state.searchInputValue || this.state.sortOrder
 
-  fetchTeamSortOrderSetting = () => {
+  getTeamSortOrder = () => {
     const { searchInputValue } = this.state
     const { user } = this.props
 
@@ -329,8 +329,6 @@ class ContactsList extends React.Component {
       ? sortFieldSetting
       : '-last_touch'
 
-    this.setState({ sortOrder })
-
     return sortOrder
   }
 
@@ -345,7 +343,7 @@ class ContactsList extends React.Component {
 
     try {
       if (this.hasSearchState()) {
-        const sortOrder = this.fetchTeamSortOrderSetting()
+        const sortOrder = this.getTeamSortOrder()
 
         await this.handleFilterChange(
           {
