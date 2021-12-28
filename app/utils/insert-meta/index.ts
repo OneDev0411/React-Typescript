@@ -37,7 +37,7 @@ export function insertMeta({
   }
 
   if (property) {
-    meta.setAttribute('value', property)
+    meta.setAttribute('property', property)
   }
 
   meta.setAttribute('content', content)
