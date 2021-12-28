@@ -7,28 +7,27 @@ import {
 
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
-import { EmailTemplatePurpose } from '../../types'
-
-import EmailTemplatePurposeOption from './EmailTemplatePurposeOption'
+import MarketingTemplatePurposeOption from './MarketingTemplatePurposeOption'
 
 const useStyles = makeStyles(
   theme => ({
     body: { padding: theme.spacing(3) },
     grey: { color: theme.palette.grey[600] }
   }),
-  { name: 'EmailTemplatePurposeDrawer' }
+  { name: 'MarketingTemplatePurposeDrawer' }
 )
 
-export interface EmailTemplatePurposeDrawerProps
+export interface MarketingTemplatePurposeDrawerProps
   extends Omit<OverlayDrawerProps, 'children'> {
-  onPurposeSelect: (emailTemplatePurpose: EmailTemplatePurpose) => void
+  // purposeOptions TODO:
+  onPurposeSelect: (emailTemplatePurpose: IMarketingTemplatePurpose) => void
 }
 
-function EmailTemplatePurposeDrawer({
+function MarketingTemplatePurposeDrawer({
   onPurposeSelect,
   onClose,
   ...otherProps
-}: EmailTemplatePurposeDrawerProps) {
+}: MarketingTemplatePurposeDrawerProps) {
   const classes = useStyles()
 
   const handleMenuItemClick = () => onClose({}, 'closeButtonClick')
@@ -42,19 +41,19 @@ function EmailTemplatePurposeDrawer({
       <OverlayDrawer.Body className={classes.body}>
         <Box>
           <MenuList onClick={handleMenuItemClick} disablePadding>
-            <EmailTemplatePurposeOption
+            <MarketingTemplatePurposeOption
               onClick={() => onPurposeSelect('ForMySelf')}
               icon={mdiAccountOutline}
               title="Create for myself"
               description="Only you will be able to edit or use this template."
             />
-            <EmailTemplatePurposeOption
+            <MarketingTemplatePurposeOption
               onClick={() => onPurposeSelect('ForOtherAgents')}
               icon={mdiAccountGroupOutline}
               title="Create for other agents"
               description="Agents of your team will be able to edit or use this template."
             />
-            <EmailTemplatePurposeOption
+            <MarketingTemplatePurposeOption
               onClick={() => onPurposeSelect('ForCampaigns')}
               icon={mdiNewspaperVariantMultipleOutline}
               title="Create for campaigns"
@@ -68,4 +67,4 @@ function EmailTemplatePurposeDrawer({
   )
 }
 
-export default EmailTemplatePurposeDrawer
+export default MarketingTemplatePurposeDrawer

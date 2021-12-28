@@ -24,23 +24,23 @@ const useStyles = makeStyles(
     },
     helpText: { color: theme.palette.grey[600] }
   }),
-  { name: 'EmailTemplatePurposeOption' }
+  { name: 'MarketingTemplatePurposeOption' }
 )
 
-interface EmailTemplatePurposeOptionProps
+interface MarketingTemplatePurposeOptionProps
   extends Omit<MenuItemProps, 'children'> {
   icon: string
   title: string
   description: string
 }
 
-function EmailTemplatePurposeOption({
+function MarketingTemplatePurposeOption({
   icon,
   title,
   description,
   className,
   ...otherProps
-}: EmailTemplatePurposeOptionProps) {
+}: MarketingTemplatePurposeOptionProps) {
   const classes = useStyles()
 
   return (
@@ -60,4 +60,4 @@ function EmailTemplatePurposeOption({
   )
 }
 
-export default EmailTemplatePurposeOption
+export default MarketingTemplatePurposeOption
