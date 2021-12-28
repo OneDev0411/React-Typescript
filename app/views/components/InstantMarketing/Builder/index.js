@@ -1222,15 +1222,11 @@ class Builder extends React.Component {
   }
 
   get isEmailTemplateForOtherAgents() {
-    return (
-      this.isEmailMedium && this.props.emailTemplatePurpose === 'ForOtherAgents'
-    )
+    return this.isEmailMedium && this.props.templatePurpose === 'ForOtherAgents'
   }
 
   get isEmailTemplateForCampaigns() {
-    return (
-      this.isEmailMedium && this.props.emailTemplatePurpose === 'ForCampaigns'
-    )
+    return this.isEmailMedium && this.props.templatePurpose === 'ForCampaigns'
   }
 
   get shouldShowSaveAsTemplateButton() {
@@ -1593,7 +1589,7 @@ class Builder extends React.Component {
                     template={this.selectedTemplate}
                     getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                     templateInstanceData={this.templateInstanceData}
-                    emailTemplatePurpose={this.props.emailTemplatePurpose}
+                    templatePurpose={this.props.templatePurpose}
                   />
                 )}
 
@@ -1686,7 +1682,7 @@ Builder.propTypes = {
   actionButtonsDisabled: PropTypes.bool,
   customActions: PropTypes.node,
   saveButtonWrapper: PropTypes.func,
-  emailTemplatePurpose: PropTypes.string
+  templatePurpose: PropTypes.string
 }
 
 Builder.defaultProps = {

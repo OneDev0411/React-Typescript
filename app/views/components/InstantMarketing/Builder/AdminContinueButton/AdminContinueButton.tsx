@@ -7,8 +7,6 @@ import {
   TemplateInstanceInputData
 } from 'models/instant-marketing/create-template-instance'
 
-import { EmailTemplatePurpose } from '../../types'
-
 import { useCreateSuperCampaign } from './use-create-super-campaign'
 
 interface AdminContinueButtonProps
@@ -20,7 +18,7 @@ interface AdminContinueButtonProps
   template: Nullable<IMarketingTemplate>
   templateInstanceData: Omit<TemplateInstanceInputData, 'html'>
   getTemplateMarkup: () => string
-  emailTemplatePurpose: Optional<EmailTemplatePurpose>
+  templatePurpose: Optional<IMarketingTemplatePurpose>
 }
 
 function AdminContinueButton({
@@ -29,7 +27,7 @@ function AdminContinueButton({
   template,
   getTemplateMarkup,
   templateInstanceData,
-  emailTemplatePurpose,
+  templatePurpose,
   ...otherProps
 }: AdminContinueButtonProps) {
   const { isRunning: isCreatingSuperCampaign, runActionThenNotify } =
@@ -65,7 +63,7 @@ function AdminContinueButton({
     )
 
   const handleClick = () => {
-    switch (emailTemplatePurpose) {
+    switch (templatePurpose) {
       case 'ForMySelf':
         onClick()
         break

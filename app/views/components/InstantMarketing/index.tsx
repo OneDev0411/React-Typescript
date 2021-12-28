@@ -4,9 +4,8 @@ import ConfirmationModalContext from 'components/ConfirmationModal/context'
 import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
-import EmailTemplatePurposeDrawer from './components/EmailTemplatePurposeDrawer'
-import { useEmailTemplatePurposeState } from './hooks/use-email-template-purpose-state'
-import { EmailTemplatePurpose } from './types'
+import MarketingTemplatePurposeDrawer from './components/MarketingTemplatePurposeDrawer'
+import { useMarketingTemplatePurposeState } from './hooks/use-marketing-template-purpose-state'
 
 export interface IBrandMarketingTemplateWithResult
   extends IBrandMarketingTemplate {
@@ -61,7 +60,7 @@ export interface InstantMarketingProps {
   actionButtonsDisabled?: boolean
   customActions?: ReactNode
   saveButtonWrapper?: (saveButton: ReactNode) => ReactNode
-  emailTemplatePurpose?: EmailTemplatePurpose
+  templatePurpose?: IMarketingTemplatePurpose
 }
 
 export default function InstantMarketing({
@@ -83,7 +82,7 @@ export default function InstantMarketing({
   actionButtonsDisabled = false,
   customActions,
   saveButtonWrapper,
-  emailTemplatePurpose: initialEmailTemplatePurpose
+  templatePurpose: initialTemplatePurpose
 }: InstantMarketingProps) {
   const confirmation = useContext(ConfirmationModalContext)
 
@@ -102,25 +101,25 @@ export default function InstantMarketing({
   }
 
   const {
-    isEmailPurposeDrawerOpen,
-    closeEmailPurposeDrawer,
-    emailTemplatePurpose,
-    setEmailTemplatePurpose,
+    isPurposeDrawerOpen,
+    closePurposeDrawer,
+    templatePurpose,
+    setTemplatePurpose,
     correctedTemplateData
-  } = useEmailTemplatePurposeState(
+  } = useMarketingTemplatePurposeState(
     defaultTemplate,
     templateData,
-    initialEmailTemplatePurpose
+    initialTemplatePurpose
   )
 
   return (
     <>
-      <EmailTemplatePurposeDrawer
-        open={isEmailPurposeDrawerOpen}
-        onPurposeSelect={setEmailTemplatePurpose}
-        onClose={closeEmailPurposeDrawer}
+      <MarketingTemplatePurposeDrawer
+        open={isPurposeDrawerOpen}
+        onPurposeSelect={setTemplatePurpose}
+        onClose={closePurposeDrawer}
       />
-      {!isEmailPurposeDrawerOpen && (
+      {!isPurposeDrawerOpen && (
         <Builder
           hideTemplatesColumn={hideTemplatesColumn}
           templateData={correctedTemplateData}
@@ -140,7 +139,7 @@ export default function InstantMarketing({
           actionButtonsDisabled={actionButtonsDisabled}
           customActions={customActions}
           saveButtonWrapper={saveButtonWrapper}
-          emailTemplatePurpose={emailTemplatePurpose}
+          templatePurpose={templatePurpose}
         />
       )}
     </>

@@ -9,10 +9,7 @@ import { TemplateData } from 'utils/marketing-center/render-branded-template'
 export interface MarketingTemplateEditorProps
   extends Pick<
     InstantMarketingProps,
-    | 'actionButtonsDisabled'
-    | 'customActions'
-    | 'assets'
-    | 'emailTemplatePurpose'
+    'actionButtonsDisabled' | 'customActions' | 'assets' | 'templatePurpose'
   > {
   /**
    * The marketing template or template instance to render inside the template editor
@@ -69,7 +66,7 @@ export default function MarketingTemplateEditor({
   customActions,
   saveButtonWrapper,
   assets = [],
-  emailTemplatePurpose
+  templatePurpose
 }: MarketingTemplateEditorProps) {
   // We need to convert template instance to a brand marketing template
   // Our MC editor is dumb and it only works with brand marketing templates
@@ -96,7 +93,7 @@ export default function MarketingTemplateEditor({
       actionButtonsDisabled={actionButtonsDisabled}
       customActions={customActions}
       saveButtonWrapper={saveButtonWrapper}
-      emailTemplatePurpose={emailTemplatePurpose}
+      templatePurpose={templatePurpose}
     />
   )
 }
