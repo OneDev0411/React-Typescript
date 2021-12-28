@@ -9,27 +9,23 @@ import {
 
 import { useCreateSuperCampaign } from './use-create-super-campaign'
 
-interface AdminContinueButtonProps
+interface CreateSuperCampaignButtonProps
   extends Omit<
     ButtonProps,
     'variant' | 'color' | 'onClick' | 'children' | 'startIcon'
   > {
-  onClick: () => void
   template: Nullable<IMarketingTemplate>
   templateInstanceData: Omit<TemplateInstanceInputData, 'html'>
   getTemplateMarkup: () => string
-  templatePurpose: Optional<IMarketingTemplatePurpose>
 }
 
-function AdminContinueButton({
-  onClick,
+function CreateSuperCampaignButton({
   disabled,
   template,
   getTemplateMarkup,
   templateInstanceData,
-  templatePurpose,
   ...otherProps
-}: AdminContinueButtonProps) {
+}: CreateSuperCampaignButtonProps) {
   const { isRunning: isCreatingSuperCampaign, runActionThenNotify } =
     useRunActionThenNotify()
 
@@ -62,25 +58,13 @@ function AdminContinueButton({
       'Something went wrong while saving the template or creating a campaign. Please try again.'
     )
 
-  const handleClick = () => {
-    switch (templatePurpose) {
-      case 'ForMySelf':
-        onClick()
-        break
-      case 'ForCampaigns':
-        createSuperCampaignAndRedirect()
-        break
-      default:
-    }
-  }
-
   return (
     <>
       <Button
         {...otherProps}
         variant="contained"
         color="primary"
-        onClick={handleClick}
+        onClick={createSuperCampaignAndRedirect}
         disabled={disabled || isCreatingSuperCampaign}
         startIcon={
           isCreatingSuperCampaign && (
@@ -94,4 +78,4 @@ function AdminContinueButton({
   )
 }
 
-export default AdminContinueButton
+export default CreateSuperCampaignButton

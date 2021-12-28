@@ -39,7 +39,6 @@ import Templates from '../Templates'
 
 import { AddToMarketingCenterButton } from './AddToMarketingCenterButton'
 import { SAVED_TEMPLATE_VARIANT } from './AddToMarketingCenterButton/constants'
-import AdminContinueButton from './AdminContinueButton'
 import { registerEmailBlocks } from './Blocks/Email'
 import { removeUnusedBlocks } from './Blocks/Email/utils'
 import { registerSocialBlocks } from './Blocks/Social'
@@ -50,6 +49,7 @@ import {
 import { registerWebsiteBlocks, websiteBlocksTraits } from './Blocks/Website'
 import { registerCommands } from './commands'
 import { BASICS_BLOCK_CATEGORY } from './constants'
+import CreateSuperCampaignButton from './CreateSuperCampaignButton'
 import DeviceManager from './DeviceManager'
 import {
   Container,
@@ -1582,13 +1582,11 @@ class Builder extends React.Component {
 
               {this.shouldShowAdminContinueButton &&
                 !this.isEmailTemplateForOtherAgents && (
-                  <AdminContinueButton
-                    onClick={this.handleSave}
+                  <CreateSuperCampaignButton
                     disabled={this.props.actionButtonsDisabled}
                     template={this.selectedTemplate}
                     getTemplateMarkup={this.getTemplateMarkup.bind(this)}
                     templateInstanceData={this.templateInstanceData}
-                    templatePurpose={this.props.templatePurpose}
                   />
                 )}
 
