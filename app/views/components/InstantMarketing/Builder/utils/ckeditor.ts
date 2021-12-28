@@ -74,20 +74,12 @@ export async function attachCKEditor(
           'JustifyRight',
           'JustifyBlock',
           'Link',
-          'Unlink',
-          'Table'
+          'Unlink'
         ],
         '/',
-        [
-          'Font',
-          'FontSize',
-          'lineheight',
-          'TextColor',
-          'BGColor',
-          'EmojiPanel'
-        ],
+        ['Font', 'FontSize', 'lineheight', 'TextColor', 'BGColor'],
         '/',
-        ['CreatePlaceholder']
+        ['EmojiPanel', 'Table', 'CreatePlaceholder']
       ],
       placeholder: {
         items: [
