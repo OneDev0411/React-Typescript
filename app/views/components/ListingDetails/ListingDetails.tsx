@@ -11,11 +11,11 @@ import {
   useTheme,
   useMediaQuery
 } from '@material-ui/core'
-import { Helmet } from 'react-helmet'
 import { useSelector } from 'react-redux'
 
 import { useGetListing, UseGetListing } from '@app/hooks/use-get-listing'
 import { noop } from '@app/utils/helpers.js'
+import { insertMeta } from '@app/utils/insert-meta'
 import LoadingContainer from 'components/LoadingContainer'
 import { useLogUserActivity } from 'hooks/use-log-user-activity'
 import { selectUserUnsafe } from 'selectors/user'
@@ -188,35 +188,52 @@ function ListingDetails({
   const images = listing.gallery_image_urls || []
 
   const ogTitle = `Rechat listing || ${subtitle1}`
+  const ogImage = images[0] || '/static/images/favicons/apple-touch-icon.png'
+
+  const ogMetaTags = [
+    {
+      id: 'og:url',
+      property: 'og:url',
+      content: `${config.siteUrl}/listings/${listing.id}`
+    },
+    {
+      id: 'og:title',
+      property: 'og:title',
+      content: ogTitle
+    },
+    {
+      id: 'og:description',
+      property: 'og:description',
+      content: subtitle2
+    },
+    {
+      id: 'twitter:card',
+      property: 'twitter:card',
+      content: subtitle2
+    },
+    {
+      id: 'og:image',
+      property: 'og:image',
+      content: ogImage
+    },
+    {
+      id: 'twitter:image',
+      property: 'twitter:image',
+      content: ogImage
+    }
+  ]
+
+  /* 
+     In order for Facebook and Twitter crawlers to find our open graph meta tags, 
+     We need to place them on the top 1M of our page
+     Hemlet does not currently support placement, see:
+     https://developers.facebook.com/docs/sharing/webmasters/crawler/
+     https://github.com/jimmay5469/react-helmet  
+  */
+  ogMetaTags.forEach(meta => insertMeta({ ...meta, placement: 'top' }))
 
   return (
     <>
-      <Helmet>
-        <meta
-          name="og:url"
-          property="og:url"
-          content={`${config.app.url}/dashboard/mls/${listing.id}`}
-        />
-        <meta name="og:title" property="og:title" content={ogTitle} />
-        <meta name="twitter:title" property="twitter:title" content={ogTitle} />
-        <meta
-          name="og:description"
-          property="og:description"
-          content={subtitle2}
-        />
-        <meta name="twitter:card" property="twitter:card" content={subtitle2} />
-        {images.length && (
-          <meta name="og:image" property="og:image" content={images[0]} />
-        )}
-        {images.length && (
-          <meta
-            name="twitter:image"
-            property="twitter:image"
-            content={images[0]}
-          />
-        )}
-      </Helmet>
-
       <Container maxWidth="xl" disableGutters>
         <div className={classes.header}>
           <Header
