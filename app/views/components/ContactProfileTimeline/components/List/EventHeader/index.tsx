@@ -8,12 +8,18 @@ interface Props {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: ({ today }: { today: boolean }) => ({
+  root: ({ today, isPast }: { today: boolean; isPast: boolean }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: theme.spacing(8),
-    color: today ? theme.palette.secondary.main : theme.palette.grey['900'],
+    letterSpacing: '0.4px',
+    minHeight: theme.spacing(8),
+    textTransform: 'uppercase',
+    color: today
+      ? theme.palette.secondary.main
+      : isPast
+      ? theme.palette.grey['500']
+      : theme.palette.grey['900'],
     ...theme.typography.caption
   })
 }))
@@ -23,22 +29,24 @@ const useStyles = makeStyles((theme: Theme) => ({
  * @param props
  */
 export function EventHeader({ item }: Props) {
-  const classes = useStyles({
-    today: item.isToday
-  })
-
+  const today = new Date()
   const date = useMemo(() => new Date(item.date), [item.date])
   const isCurrentYear = useMemo(
     () => fecha.format(date, 'YYYY') === fecha.format(new Date(), 'YYYY'),
     [date]
   )
 
+  //----
+
+  const classes = useStyles({
+    today: item.isToday,
+    isPast: date < today
+  })
+
   return (
     <div className={classes.root}>
-      <>
-        {item.isToday && <div>Today</div>}
-        {item.isTomorrow && <div>Tomorrow</div>}
-      </>
+      {item.isToday && <div>Today</div>}
+      {item.isTomorrow && <div>Tomorrow</div>}
 
       <div>
         {isCurrentYear

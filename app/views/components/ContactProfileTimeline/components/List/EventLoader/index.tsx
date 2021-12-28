@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   makeStyles,
+  useTheme,
   Theme,
   CircularProgress
 } from '@material-ui/core'
@@ -14,21 +15,24 @@ import { EventHeader } from '../EventHeader'
 const useStyles = makeStyles(
   (theme: Theme) => ({
     eventHeaderContainer: {
-      width: theme.spacing(12)
+      minWidth: theme.spacing(12),
+      maxWidth: theme.spacing(13.5)
     },
     eventsSectionContainer: {
       display: 'flex',
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
+      letterSpacing: '0.15px',
       paddingLeft: theme.spacing(2)
     },
     eventsListContainer: {
-      '& $event:nth-child(even)': {
-        backgroundColor: theme.palette.grey['50']
-      }
+      width: '100%'
     },
     eventContainer: {
-      flexGrow: 1,
+      width: '100%',
+      flex: '1 1 auto',
       backgroundColor: '#fff',
+      '&:nth-child(even)': {
+        backgroundColor: theme.palette.grey['50']
+      },
       '&:hover': {
         backgroundColor: theme.palette.grey['100']
       }
@@ -45,8 +49,7 @@ const useStyles = makeStyles(
       top: 0,
       left: 0,
       right: 0,
-      bottom: 0,
-      padding: theme.spacing(2, 1)
+      bottom: 0
     },
     progressLoaderContainer: {
       position: 'absolute',
@@ -87,7 +90,8 @@ export function EventLoader({
   handleEventChange,
   onLoadNextEvents
 }: Props) {
-  const classes = useStyles()
+  const classes = useStyles({ isToday: true })
+  const theme = useTheme()
 
   const Loader = () =>
     isLoading && (
@@ -124,6 +128,13 @@ export function EventLoader({
             <Box
               className={classes.eventsSectionContainer}
               key={`${section.header.date}-${index}`}
+              style={{
+                borderBottom: `1px solid ${
+                  section.header.isToday
+                    ? theme.palette.error.main
+                    : theme.palette.action.disabledBackground
+                }`
+              }}
             >
               <Box className={classes.eventHeaderContainer}>
                 <EventHeader item={section.header} />
