@@ -107,3 +107,8 @@ declare type IMarketingTemplateType =
   | 'VeteransDay'
   | 'WeddingAnniversary'
   | 'WomansDay'
+
+declare type IMarketingTemplatePurpose =
+  | 'ForMySelf'
+  | 'ForOtherAgents'
+  | 'ForCampaigns'
