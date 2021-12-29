@@ -16,7 +16,7 @@ import { InlineEditableField } from 'components/inline-editable-fields/InlineEdi
 import { selectGlobalTriggersAttributes } from 'selectors/globalTriggers'
 import { noop } from 'utils/helpers'
 
-import { TRIGGERABLE_ATTRIBUTES } from './constants'
+import { TRIGGERABLE_ATTRIBUTES, TRIGGERING_TIME } from './constants'
 import { EditMode } from './EditMode'
 import {
   getTitle,
@@ -335,7 +335,7 @@ class MasterField extends Component {
       template,
       {
         recurring: true,
-        time: '08:00:00', // it's hard coded base api team comment
+        time: TRIGGERING_TIME, // it's hard coded base api team comment
         sender: triggerSender,
         subject: triggerSubject,
         wait_for: triggerSendBefore,
