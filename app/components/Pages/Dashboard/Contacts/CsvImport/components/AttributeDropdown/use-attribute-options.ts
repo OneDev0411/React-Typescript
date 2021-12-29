@@ -6,7 +6,7 @@ import { isAttributesEqual } from '../../helpers/is-attributes-equal'
 import { useAddressAttributes } from '../../hooks/use-address-attributes'
 import { useAttributeDefs } from '../../hooks/use-attribute-defs'
 import { useAttributes } from '../../hooks/use-attributes'
-import { IAttribute } from '../../types'
+import { IAttribute, AttributeOption } from '../../types'
 
 export function useOptions(
   fields: Record<string, IAttribute>,
@@ -14,7 +14,7 @@ export function useOptions(
 ) {
   const attributes = useAttributes()
   const { byId: attributeDefsById } = useAttributeDefs()
-  const { getAddressAttributes, isAddressAttribute } = useAddressAttributes()
+  const { isAddressAttribute } = useAddressAttributes()
 
   const isAttributeDisabled = useCallback(
     (attribute: IAttribute) => {
@@ -48,7 +48,7 @@ export function useOptions(
     [attributeDefsById, isAddressAttribute, fields]
   )
 
-  const getOptions = useCallback(() => {
+  const getOptions = useCallback((): AttributeOption[] => {
     const list = attributes
       .filter(attribute => {
         if (attribute.type === 'attribute_type') {
@@ -62,8 +62,11 @@ export function useOptions(
       .map(attribute => {
         if (attribute.type === 'attribute_type') {
           return {
-            ...attribute,
-            disabled: false
+            type: attribute.type,
+            attribute,
+            disabled: false,
+            label: attribute.label,
+            index: 0
           }
         }
 
@@ -72,8 +75,8 @@ export function useOptions(
         return {
           index: attribute.index,
           disabled: isAttributeDisabled(attribute),
-          type: 'attribute_def',
-          attribute_def: attribute.attribute_def,
+          type: attribute.type,
+          attribute,
           label:
             (attribute.index || 0) > 0
               ? `${definition.label} ${attribute.index}`

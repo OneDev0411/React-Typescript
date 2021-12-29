@@ -6,6 +6,7 @@ import { LabelDropdown } from '../../components/LabelDropdown'
 import { getCsvColumns } from '../../helpers/get-csv-columns'
 import { useAutoMapFields } from '../../hooks/use-auto-map'
 import { useImportCsv } from '../../hooks/use-import-csv'
+import { AttributeOption } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -24,7 +25,14 @@ const useStyles = makeStyles(
 export function MapFields() {
   const classes = useStyles()
   const { csv } = useImportCsv()
-  const [fields] = useAutoMapFields(csv)
+  const [fields, setFields] = useAutoMapFields(csv)
+
+  const handleSelect = (column: string, option: AttributeOption) => {
+    setFields(state => ({
+      ...state,
+      [column]: option.attribute
+    }))
+  }
 
   return (
     <>
@@ -49,11 +57,15 @@ export function MapFields() {
           </Grid>
 
           <Grid item xs={4}>
-            <AttributeDropdown fields={fields} />
+            <AttributeDropdown
+              fields={fields}
+              column={column}
+              onSelect={option => handleSelect(column, option)}
+            />
           </Grid>
 
           <Grid item xs={4}>
-            <LabelDropdown />
+            <LabelDropdown fields={fields} column={column} />
           </Grid>
         </Grid>
       ))}

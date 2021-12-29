@@ -16,7 +16,9 @@ interface CompareMatches {
   rate: number
 }
 
-export function useAutoMapFields(csv: Nullable<ParseResult<unknown>>) {
+export function useAutoMapFields(
+  csv: Nullable<ParseResult<unknown>>
+): [Record<string, IAttribute>, typeof setList, Nullable<'doing' | 'done'>] {
   const attributes = useAttributes()
   const getAttributeLabel = useAttributeLabel()
   const [list, setList] = useState<Record<string, IAttribute>>({})

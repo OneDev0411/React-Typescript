@@ -9,6 +9,10 @@ export function useAttributeLabel() {
 
   const getAttributeLabel = useCallback(
     (attribute: IAttribute) => {
+      if (!attribute) {
+        return
+      }
+
       if (attribute.type === 'attribute_type') {
         return attribute.label
       }

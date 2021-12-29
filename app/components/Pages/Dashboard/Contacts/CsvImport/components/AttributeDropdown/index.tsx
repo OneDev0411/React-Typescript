@@ -11,9 +11,10 @@ import {
 
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
-import type { IAttribute } from '../../types'
+import { useAttributeLabel } from '../../hooks/use-attribute-label'
+import type { AttributeOption, IAttribute } from '../../types'
 
-import { useOptions } from './use-options'
+import { useOptions } from './use-attribute-options'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -41,18 +42,25 @@ const useStyles = makeStyles(
 
 interface Props {
   fields: Record<string, IAttribute>
+  column: string
+  onSelect: (attribute: AttributeOption) => void
 }
 
-export function AttributeDropdown({ fields }: Props) {
+export function AttributeDropdown({ fields, column, onSelect }: Props) {
   const classes = useStyles()
+  const getAttributeLabel = useAttributeLabel()
 
   const [searchTerm, setSearchTerm] = useState('')
   const options = useOptions(fields, searchTerm)
 
+  const field = fields[column]
+
   return (
     <BaseDropdown
-      renderDropdownButton={buttonProps => <div {...buttonProps}>+++</div>}
-      renderMenu={() => (
+      renderDropdownButton={buttonProps => (
+        <div {...buttonProps}>{getAttributeLabel(field)}</div>
+      )}
+      renderMenu={({ close }) => (
         <Box
           display="flex"
           flexDirection="column"
@@ -70,7 +78,14 @@ export function AttributeDropdown({ fields }: Props) {
 
           <Box className={classes.body} flexGrow={1}>
             {options.map((item, key) => (
-              <ListItem key={key} button>
+              <ListItem
+                key={key}
+                button
+                onClick={() => {
+                  close()
+                  onSelect(item)
+                }}
+              >
                 {item.label}
               </ListItem>
             ))}
