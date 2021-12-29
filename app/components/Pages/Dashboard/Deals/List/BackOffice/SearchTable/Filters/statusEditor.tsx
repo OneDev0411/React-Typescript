@@ -1,5 +1,6 @@
 import { FormControlLabel, Grid, Switch, Typography } from '@material-ui/core'
 import { mdiListStatus } from '@mdi/js'
+import { omit } from 'lodash'
 
 import { FilterButtonDropDownProp } from '@app/views/components/Filters/FilterButton'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
@@ -12,20 +13,23 @@ import { useStyles } from './styles'
 
 export const StatusEditor = ({
   filters,
-  defaultFilters,
   updateFilters
 }: FilterButtonDropDownProp<DealsListFilters>) => {
   const classes = useStyles()
 
   const toggleValue = (
     currentStatuses: TDealsStatusList = {} as TDealsStatusList,
-    changedStatus: TDealsStatus
+    changedStatusKey: TDealsStatus
   ) => {
+    const newStatuses = currentStatuses[changedStatusKey]
+      ? omit(currentStatuses, changedStatusKey)
+      : {
+          ...currentStatuses,
+          [changedStatusKey]: true
+        }
+
     updateFilters({
-      status: {
-        ...currentStatuses,
-        [changedStatus]: !currentStatuses[changedStatus]
-      }
+      status: newStatuses
     })
   }
 
