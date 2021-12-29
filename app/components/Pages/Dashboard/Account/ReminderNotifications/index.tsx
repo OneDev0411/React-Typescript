@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useStore, useSelector } from 'react-redux'
-import { useEffectOnce } from 'react-use'
 
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
@@ -70,7 +69,7 @@ export default function ReminderNotifications() {
     setColumns(newColumns)
   }
 
-  useEffectOnce(() => {
+  useEffect(() => {
     initializeColumns()
 
     async function initializeColumns(): Promise<void> {
@@ -129,7 +128,7 @@ export default function ReminderNotifications() {
         }
       }
     }
-  })
+  }, [contactsAttributeDefs, dispatch, store, user])
 
   return (
     <>
