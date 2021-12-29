@@ -11,7 +11,9 @@ import type {
 const AttributeTypes: CsvImportAttributeType[] = [
   {
     type: 'attribute_type',
-    attribute_type: 'full_address'
+    attribute_type: 'full_address',
+    label: 'Full Address',
+    section: 'Addresses'
   }
 ]
 
@@ -26,5 +28,5 @@ export function useAttributes(): IAttribute[] {
     }))
   )
 
-  return [...attributeDefinitions, ...AttributeTypes] as IAttributes[]
+  return [...attributeDefinitions, ...AttributeTypes] as IAttribute[]
 }
