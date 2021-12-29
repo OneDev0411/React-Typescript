@@ -14,7 +14,6 @@ import { viewAsEveryoneOnTeam } from 'utils/user-teams'
 
 interface StateProps {
   activeTeam: Nullable<IUserTeam>
-  user: Nullable<IUser>
   dealsCount: number
   brandContexts: IDealBrandContext[]
   isFetchingDeals: boolean
@@ -32,7 +31,6 @@ function Container(props: Props) {
   const [queryParamValue] = useQueryParam('q')
 
   const {
-    user,
     activeTeam = null,
     dealsCount,
     brandContexts,
@@ -64,7 +62,7 @@ function Container(props: Props) {
 
     if (dealsCount === 0 && !isFetchingDeals) {
       if (
-        (hasBackOfficeAccess || viewAsEveryoneOnTeam(user)) &&
+        (hasBackOfficeAccess || viewAsEveryoneOnTeam(activeTeam)) &&
         !queryParamValue
       ) {
         dispatch(getDeals(activeTeam))
