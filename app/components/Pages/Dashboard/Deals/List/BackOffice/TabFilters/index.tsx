@@ -50,22 +50,11 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
     dispatch(getUserTeams(user))
   }
 
-  // The closings filter uses query type but it is not included in the static filters.
-  const staticFiltersTitle =
-    props.location.query.type === 'query' && props.params.filter !== 'closings'
-      ? `All ${props.params.filter} deals`
-      : 'All Deals'
-
   const activeBrand = getActiveBrand(user)
 
   return (
     <PageTabs
-      value={
-        props.location.query.type === 'query' &&
-        ['listing', 'contract'].includes(props.params.filter)
-          ? 'all-deals'
-          : null
-      }
+      value={props.params.filter}
       defaultValue={props.params.filter}
       tabs={[
         ...inboxTabs
@@ -84,48 +73,11 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
           label={<span>Upcoming Closings</span>}
           to="/dashboard/deals/filter/closings?type=query"
         />,
-        <Tab
-          key={inboxTabs.length + 1}
-          value="all-deals"
-          label={
-            <DropdownTab component="div" title={staticFiltersTitle}>
-              {({ toggleMenu }) => (
-                <>
-                  <MenuItem
-                    key={0}
-                    selected={
-                      props.params.filter === 'listing' &&
-                      props.location.query.type === 'query'
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/filter/listing?type=query'
-                      )
-                    }}
-                  >
-                    All Listings Deals
-                  </MenuItem>
-
-                  <MenuItem
-                    key={1}
-                    selected={
-                      props.params.filter === 'contract' &&
-                      props.location.query.type === 'query'
-                    }
-                    onClick={() => {
-                      toggleMenu()
-                      props.router.push(
-                        '/dashboard/deals/filter/contract?type=query'
-                      )
-                    }}
-                  >
-                    All Contract Deals
-                  </MenuItem>
-                </>
-              )}
-            </DropdownTab>
-          }
+        <TabLink
+          key="search"
+          value="search"
+          label={<span>Search</span>}
+          to="/dashboard/deals/filter/search?type=query"
         />
       ]}
       actions={[
