@@ -26,7 +26,7 @@ export function Roles({ meta, input, deal, isAllowedRole }: Props) {
 
   const options = useMemo(() => {
     let options: RoleOption[] = roles
-      .filter(item => isAllowedRole(item.role, role))
+      .filter(item => isAllowedRole(item?.role, role))
       .map(item => ({
         value: item.role,
         label: item.title
