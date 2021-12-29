@@ -7,7 +7,10 @@ import type {
 import * as actionType from 'constants/global-triggers'
 
 export interface IGlobalTriggerState {
-  attrs: Record<TriggerContactEventTypes, IGlobalTrigger>
+  attrs: Record<
+    TriggerContactEventTypes,
+    IGlobalTrigger<'template' | 'template_instance'>
+  >
   isLoading: boolean
 }
 

@@ -23,7 +23,7 @@ interface TriggerState {
 
 export function getStateFromTrigger(
   trigger: ITrigger,
-  globalTrigger: Nullable<IGlobalTrigger>,
+  globalTrigger: Nullable<IGlobalTrigger<'template' | 'template_instance'>>,
   contact: IContact,
   attribute: IContactAttribute
 ): TriggerState {

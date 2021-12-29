@@ -7,7 +7,7 @@ import { DEFAULT_QUERY } from './helpers/constant'
 export async function getTriggers(
   brandId: UUID,
   query: object = DEFAULT_QUERY
-): Promise<IGlobalTrigger[]> {
+): Promise<IGlobalTrigger<'template' | 'template_instance'>[]> {
   try {
     const response: Response = await new Fetch()
       .get(`/brands/${brandId}/triggers`)

@@ -70,8 +70,8 @@ interface Props {
   containerRef?: Nullable<HTMLDivElement>
 
   eventType?: TriggerContactEventTypes
-  trigger?: IGlobalTrigger
-  callback?: (trigger: IGlobalTrigger) => void
+  trigger?: IGlobalTrigger<'template' | 'template_instance'>
+  callback?: (trigger: IGlobalTrigger<'template' | 'template_instance'>) => void
   handleClose: () => void
 }
 

@@ -5,7 +5,7 @@ import { DEFAULT_QUERY } from './helpers/constant'
 export async function createTrigger(
   payload: IGlobalTriggerInput,
   query: object = DEFAULT_QUERY
-): Promise<ApiResponseBody<IGlobalTrigger>> {
+): Promise<ApiResponseBody<IGlobalTrigger<'template' | 'template_instance'>>> {
   try {
     if (!payload.brand) {
       throw new Error('Brand not provided')

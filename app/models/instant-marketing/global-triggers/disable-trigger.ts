@@ -6,7 +6,7 @@ export async function disableTrigger(
   triggerId: UUID,
   brandId: UUID,
   query: object = DEFAULT_QUERY
-): Promise<IGlobalTrigger> {
+): Promise<IGlobalTrigger<'template' | 'template_instance'>> {
   try {
     const response = await new Fetch()
       .patch(`/brands/${brandId}/triggers/${triggerId}/disable`)

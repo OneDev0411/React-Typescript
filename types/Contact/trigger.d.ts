@@ -1,5 +1,4 @@
 interface ITriggerBase {
-  created_by: UUID
   brand: UUID
   user: UUID
   wait_for: number
@@ -44,12 +43,18 @@ declare interface IGlobalTriggerFormData
   template: Nullable<IBrandMarketingTemplate | IMarketingTemplateInstance>
 }
 
-declare interface IGlobalTriggerInput extends IGlobalTriggerRaw {
-  template?: UUID
-  template_instance?: UUID
+declare type IGlobalTriggerAssociations = 'template' | 'template_instance'
+
+declare interface IGlobalTrigger<A extends IGlobalTriggerAssociations = ''>
+  extends IModel<'trigger'>,
+    IGlobalTriggerRaw {
+  template: Nullable<'template' extends A ? IBrandMarketingTemplate : UUID>
+  template_instance: Nullable<
+    'template_instance' extends A ? IMarketingTemplateInstance : UUID
+  >
 }
 
-declare interface IGlobalTrigger extends IModel<'trigger'>, IGlobalTriggerRaw {
-  template: Nullable<IBrandMarketingTemplate>
-  template_instance: Nullable<IMarketingTemplateInstance>
-}
+declare type IGlobalTriggerInput = Omit<
+  IGlobalTrigger,
+  'id' | 'template' | 'type' | 'created_at' | 'updated_at'
+>

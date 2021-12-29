@@ -8,7 +8,7 @@ import { getAttributeName } from '../../Items/components/helpers'
  * @param {IGlobalTrigger} trigger - current trigger
  */
 export const generateInitialValues = (
-  trigger: IGlobalTrigger | undefined,
+  trigger: IGlobalTrigger<'template' | 'template_instance'> | undefined,
   eventType: TriggerContactEventTypes | undefined
 ): IGlobalTriggerFormData => {
   if (trigger) {

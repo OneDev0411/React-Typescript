@@ -36,7 +36,9 @@ const setGlobalTriggers = (triggers: IGlobalTriggerState['attrs']) =>
 
 export type SetGlobalTriggersAction = ReturnType<typeof setGlobalTriggers>
 
-export const setGlobalTrigger = (trigger: IGlobalTrigger) =>
+export const setGlobalTrigger = (
+  trigger: IGlobalTrigger<'template' | 'template_instance'>
+) =>
   ({
     type: SET_GLOBAL_TRIGGER,
     payload: trigger
@@ -48,7 +50,8 @@ export const fetchGlobalTriggers =
   (brandId: UUID) => async (dispatch: Dispatch) => {
     dispatch(requestGlobalTriggers())
 
-    const triggers: IGlobalTrigger[] = await getTriggers(brandId)
+    const triggers: IGlobalTrigger<'template' | 'template_instance'>[] =
+      await getTriggers(brandId)
 
     if (triggers.length > 0) {
       const attributes = {} as IGlobalTriggerState['attrs']

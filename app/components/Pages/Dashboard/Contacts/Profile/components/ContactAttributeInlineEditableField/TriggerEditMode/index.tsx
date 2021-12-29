@@ -89,7 +89,7 @@ interface Props {
   disabled?: boolean
   renderAttributeFields: () => ReactNode
   attributeName: TriggerContactEventTypes
-  attributeGlobalTrigger?: IGlobalTrigger
+  attributeGlobalTrigger?: IGlobalTrigger<'template' | 'template_instance'>
   isActive: boolean
   isSaving?: boolean
   subject: string

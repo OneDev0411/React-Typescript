@@ -68,7 +68,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  trigger: IGlobalTrigger
+  trigger: IGlobalTrigger<'template' | 'template_instance'>
 }
 
 export function Item({ trigger }: Props) {
@@ -123,9 +123,10 @@ export function Item({ trigger }: Props) {
     try {
       setIsLoading(true)
 
-      const trigger: IGlobalTrigger = isEnabling
-        ? await enableTrigger(id, brand)
-        : await disableTrigger(id, brand)
+      const trigger: IGlobalTrigger<'template' | 'template_instance'> =
+        isEnabling
+          ? await enableTrigger(id, brand)
+          : await disableTrigger(id, brand)
 
       dispatch(toggleGlobalTrigger(trigger))
     } catch (error) {
