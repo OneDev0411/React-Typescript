@@ -8,8 +8,8 @@ import { getAttributeName } from '../../Items/components/helpers'
  * @param {IGlobalTrigger} trigger - current trigger
  */
 export const generateInitialValues = (
-  trigger: IGlobalTrigger<'template' | 'template_instance'> | undefined,
-  eventType: TriggerContactEventTypes | undefined
+  trigger: Optional<IGlobalTrigger<'template' | 'template_instance'>>,
+  eventType: Optional<TriggerContactEventTypes>
 ): IGlobalTriggerFormData => {
   if (trigger) {
     return {

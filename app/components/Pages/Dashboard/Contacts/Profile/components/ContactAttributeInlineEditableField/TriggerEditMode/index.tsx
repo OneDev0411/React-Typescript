@@ -30,7 +30,6 @@ import { convertSecondsToDay } from './helpers'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
-    container: {},
     fieldsContainer: {
       display: 'flex',
       alignItems: 'flex-start'
@@ -227,7 +226,7 @@ const TriggerEditModeComponent = ({
   }
 
   return (
-    <div className={classes.container}>
+    <>
       {isGlobalTriggerInfoOpen && (
         <Alert
           severity="success"
@@ -336,7 +335,7 @@ const TriggerEditModeComponent = ({
           />
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

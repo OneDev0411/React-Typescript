@@ -40,7 +40,6 @@ const useStyles = makeStyles(
       width: '305px',
       padding: theme.spacing(0, 1)
     },
-    triggerFields: {},
     titleContainer: {
       marginBottom: theme.spacing(1)
     },
@@ -153,7 +152,7 @@ export function TriggerEditMode({
         <div className={classes.container}>
           <div className={classes.fieldsContainer}>
             <div className={classes.fieldsColumn}>
-              <div className={classes.triggerFields}>
+              <div>
                 <div className={classes.titleContainer}>
                   <Typography component="span" variant="subtitle2">
                     Automate Email
