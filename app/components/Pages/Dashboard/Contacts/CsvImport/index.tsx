@@ -6,7 +6,6 @@ import { CloseButton } from '@app/views/components/Button/CloseButton'
 import PageLayout from 'components/GlobalPageLayout'
 
 import { Context } from './context'
-import { useAttributes } from './hooks/use-attributes'
 import { useParseCsv } from './hooks/use-parse-csv'
 import { MapFields } from './steps/MapFields'
 import { SelectFile } from './steps/SelectFile'
@@ -33,7 +32,6 @@ const useStyles = makeStyles(
 
 export default function CsvImport() {
   const classes = useStyles()
-  const attributes = useAttributes()
   const [file, setFile] = useState<Nullable<File>>(null)
   const parsedCsv = useParseCsv(file)
 
@@ -47,7 +45,6 @@ export default function CsvImport() {
         <Context.Provider
           value={{
             file,
-            attributes,
             csv: parsedCsv
           }}
         >
@@ -56,18 +53,20 @@ export default function CsvImport() {
               {!file && <SelectFile onSelectFile={setFile} />}
               {file && <MapFields />}
             </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-              className={classes.footer}
-            >
-              <Button variant="outlined">Cancel</Button>
 
-              <Button variant="contained" color="primary">
-                Next
-              </Button>
-            </Box>
+            {file && (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+                className={classes.footer}
+              >
+                <Button onClick={() => setFile(null)}>Change File</Button>
+                <Button variant="contained" color="primary">
+                  Upload Contacts
+                </Button>
+              </Box>
+            )}
           </Box>
         </Context.Provider>
       </PageLayout.Main>
