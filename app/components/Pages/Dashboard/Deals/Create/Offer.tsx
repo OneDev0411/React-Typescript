@@ -69,7 +69,7 @@ function CreateOffer({ router, route, params }: Props) {
 
   /* extract required roles from property type's roles */
   const requiredRoles = useBrandPropertyTypeRoles(
-    deal.property_type.label
+    deal?.property_type?.label
   ).requiredRoles.filter(requiredRole =>
     requiredRole.checklist_types.includes('Offer')
   )
