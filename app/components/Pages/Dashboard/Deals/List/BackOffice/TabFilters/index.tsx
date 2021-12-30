@@ -28,6 +28,7 @@ interface Props {
 const TabFilters = withRouter((props: Props & WithRouterProps) => {
   const dispatch = useDispatch()
   const user = useSelector(selectUser)
+
   const activeSort = getActiveSort(user, props.location, SORT_FIELD_SETTING_KEY)
 
   const inboxTabs = useInboxTabs()
@@ -37,10 +38,14 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
   useDefaultTab(props.params || {}, defaultTab)
 
   const handleChangeSort = async (column: SortableColumn) => {
+    const newQuery = {
+      ...props.location.query,
+      sortBy: column.value,
+      sortType: column.ascending ? 'asc' : 'desc'
+    }
+
     props.router.push(
-      `${props.location.pathname}?type=${props.searchQuery.type}&sortBy=${
-        column.value
-      }&sortType=${column.ascending ? 'asc' : 'desc'}`
+      `${props.location.pathname}?${new URLSearchParams(newQuery).toString()}`
     )
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
