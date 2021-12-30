@@ -30,8 +30,7 @@ export default {
     shared_secret: process.env.MY_MARKETING_MATTERS_SHARED_SECRET
   },
   prerender: {
-    shared_secret: process.env.PRERENDER_TOKEN,
-    service_url: process.env.PRERENDER_SERVICE_URL
+    shared_secret: process.env.PRERENDER_TOKEN
   },
   live_by: {
     api_url: process.env.LIVE_BY_API_URL,

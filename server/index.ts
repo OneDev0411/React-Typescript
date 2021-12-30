@@ -7,7 +7,6 @@ import timeout from 'connect-timeout'
 import cookieSession from 'cookie-session'
 import express, { Request, Response, NextFunction } from 'express'
 import enforce from 'express-sslify'
-import prerender from 'prerender-node'
 import serveStatic from 'serve-static'
 import throng from 'throng'
 import webpack from 'webpack'
@@ -41,6 +40,17 @@ app.use(
  * the /unsupported page
  */
 app.use(checkBrowser)
+
+/**
+ * caches properties liting urls in order to provide open graph for social networks
+ */
+if (isProduction) {
+  app.use(
+    require('prerender-node')
+      .whitelisted('/dashboard/mls/.*')
+      .set('prerenderToken', appConfig.prerender_token)
+  )
+}
 
 // setup routes
 app.use('/', routes)
@@ -77,13 +87,6 @@ if (isProduction) {
   app.set('trust proxy', 1)
   app.disable('x-powered-by')
   app.use(enforce.HTTPS())
-
-  app.use(
-    prerender
-      .whitelisted('^/dashboard/mls/.*')
-      .set('prerenderServiceUrl', appConfig.prerender_service_url ?? null)
-      .set('prerenderToken', appConfig.prerender_token)
-  )
 
   const setHeaders = (res: Response, path: string) => {
     // prevent caching of index.html

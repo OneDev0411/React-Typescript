@@ -12,6 +12,5 @@ export default {
   my_marketing_matters_duns: process.env.MY_MARKETING_MATTERS_DUNS!,
   my_marketing_matters_shared_secret:
     process.env.MY_MARKETING_MATTERS_SHARED_SECRET!,
-  prerender_token: process.env.PRERENDER_TOKEN!,
-  prerender_service_url: process.env.PRERENDER_SERVICE_URL!
+  prerender_token: process.env.PRERENDER_TOKEN!
 }
