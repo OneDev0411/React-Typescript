@@ -80,8 +80,8 @@ if (isProduction) {
 
   app.use(
     prerender
-      .whitelisted('/dashboard/mls/.*')
-      .set('prerenderServiceUrl', appConfig.prerender_service_url || null)
+      .whitelisted('^/dashboard/mls/.*')
+      .set('prerenderServiceUrl', appConfig.prerender_service_url ?? null)
       .set('prerenderToken', appConfig.prerender_token)
   )
 
