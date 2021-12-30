@@ -21,7 +21,7 @@ export function useOgMetaTags(listing: IListing<'proposed_agent'> | null) {
       ].join(' | ')
       const images = listing.gallery_image_urls || []
 
-      const ogTitle = `Rechat listing || ${subtitle1}`
+      const ogTitle = subtitle1
       const ogImage =
         images[0] || '/static/images/favicons/apple-touch-icon.png'
 
@@ -29,7 +29,7 @@ export function useOgMetaTags(listing: IListing<'proposed_agent'> | null) {
         {
           id: 'og:url',
           property: 'og:url',
-          content: `${config.siteUrl}/listings/${listing.id}`
+          content: `${config.app.url}/listings/${listing.id}`
         },
         {
           id: 'og:title',
