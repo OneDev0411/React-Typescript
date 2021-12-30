@@ -7,12 +7,14 @@ import timeout from 'connect-timeout'
 import cookieSession from 'cookie-session'
 import express, { Request, Response, NextFunction } from 'express'
 import enforce from 'express-sslify'
+import prerender from 'prerender-node'
 import serveStatic from 'serve-static'
 import throng from 'throng'
 import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
+import appConfig from './config'
 import routes from './routes'
 
 const port = process.env.PORT || 8080
@@ -75,6 +77,13 @@ if (isProduction) {
   app.set('trust proxy', 1)
   app.disable('x-powered-by')
   app.use(enforce.HTTPS())
+
+  app.use(
+    prerender
+      .whitelisted('/dashboard/mls/.*')
+      .set('prerenderServiceUrl', appConfig.prerender_service_url || null)
+      .set('prerenderToken', appConfig.prerender_token)
+  )
 
   const setHeaders = (res: Response, path: string) => {
     // prevent caching of index.html
