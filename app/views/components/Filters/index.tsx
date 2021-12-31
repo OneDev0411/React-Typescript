@@ -14,11 +14,11 @@ interface Props<T> {
     handleUpdateFilters: (filters: Partial<T>) => void,
     handleResetFilters: () => void,
     systemDefaultFilters: T,
-    resultsCount: number
+    resultsCount?: number
   ) => React.ReactNode
   systemDefaultFilters: T
   userFilters: Partial<T>
-  resultsCount: number
+  resultsCount?: number
   onChange: (filters: T) => void
 }
 
@@ -43,6 +43,7 @@ export function Filters<T>({
 
   const handleResetFilters = () => {
     dispatch(resetFiltersAction(systemDefaultFilters))
+    onChange({ ...systemDefaultFilters })
   }
 
   const handleUpdateFilters = (newFilters: Partial<T>) => {

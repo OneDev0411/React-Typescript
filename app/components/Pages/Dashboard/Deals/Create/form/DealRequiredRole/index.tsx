@@ -64,6 +64,10 @@ export function DealRequiredRole({
   }
 
   const handleDeleteRole = (role: IDealRole) => {
+    if (rolesList.filter(item => item.role === role.role).length === 1) {
+      wizard.setStep(step)
+    }
+
     onChange?.(role, 'delete')
   }
 
