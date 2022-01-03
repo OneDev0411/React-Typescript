@@ -17,7 +17,7 @@ export type FilterButtonDropDownProp<T> = {
   filters: T
   updateFilters: (newFilters: Partial<T>) => void
   defaultFilters: T
-  resultsCount: number
+  resultsCount?: number
 }
 
 export type FilterButtonToggler<T> = {

@@ -11,6 +11,7 @@ import contacts from './contacts'
 import data from './data'
 import deals from './deals'
 import { emailTemplates } from './email-templates'
+import globalTriggers, { IGlobalTriggerState } from './global-triggers'
 import { inbox } from './inbox'
 import { intercom } from './intercom'
 import alerts from './listings/alerts'
@@ -53,6 +54,9 @@ const appReducer = combineReducers({
   /* showings reducers */
   showings,
 
+  /* global-triggers reducer */
+  globalTriggers,
+
   /* third party reducers */
   notifications: notificationsReducer(),
   form: reduxFormReducer,
@@ -65,7 +69,7 @@ const appReducer = combineReducers({
 // export type IAppState = ReturnType<typeof appReducer>
 type IAppReducer = Omit<
   ReturnType<typeof appReducer>,
-  'user' | 'globalNotifications' | 'showings'
+  'user' | 'globalNotifications' | 'showings' | 'globalTriggers'
 >
 
 // You have to explicit the reducer types because the above ReturnType can not
@@ -74,6 +78,7 @@ export interface IAppState extends IAppReducer {
   user: IUserState
   globalNotifications: INotificationState
   showings: IShowingsState
+  globalTriggers: IGlobalTriggerState
 }
 
 export default (state, action) => {

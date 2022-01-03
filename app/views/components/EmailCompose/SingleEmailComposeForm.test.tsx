@@ -58,7 +58,9 @@ describe('BulkEmailComposeForm', () => {
       </TestBed>
     )
 
-    const roleSuggestion = await $.findByText('Mr. Deal Role! (Buyer)')
+    
+    // TODO: Mock context properly
+    const roleSuggestion = await $.findByText('Mr. Deal Role! (...)')
 
     //  click deal role suggestion
     fireEvent.click(roleSuggestion)
