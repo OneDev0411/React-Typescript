@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { TemplateData } from '@app/utils/marketing-center/render-branded-template'
 
-import getTemplateObject from '../helpers/get-template-object'
+import type { UseMarketingBuilderActions } from './use-marketing-builder-actions'
 
 interface UseMarketingTemplatePurposeState {
   isPurposeDrawerOpen: boolean
@@ -12,7 +12,7 @@ interface UseMarketingTemplatePurposeState {
   correctedTemplateData: TemplateData
 }
 
-// TODO: Check this with Emil and talk over XSS vulnerabilities here
+// TODO: Check this with Emil and ask about XSS vulnerabilities on this logic
 function getUserWithVariableFields(user: IUser): IUser {
   return {
     ...user,
@@ -29,16 +29,31 @@ function getUserWithVariableFields(user: IUser): IUser {
 }
 
 export function useMarketingTemplatePurposeState(
-  template: Nullable<IBrandMarketingTemplate>,
+  builderActions: UseMarketingBuilderActions,
   templateData: TemplateData,
   initialTemplatePurpose: Optional<IMarketingTemplatePurpose>
 ): UseMarketingTemplatePurposeState {
-  const isWebsiteTemplate =
-    !!template && getTemplateObject(template).medium === 'Website' // All types except website types
+  const [isPurposeDrawerOpen, setIsDrawerOpen] = useState<boolean>(() => {
+    // Do not ask the question if the programmes has already set the answer
+    if (initialTemplatePurpose) {
+      return false
+    }
 
-  const [isPurposeDrawerOpen, setIsDrawerOpen] = useState<boolean>(
-    !isWebsiteTemplate && !initialTemplatePurpose
-  )
+    // Do not ask the question for website medium
+    if (builderActions.isWebsiteMedium) {
+      return false
+    }
+
+    // Ask the question if there are more than one answer
+    if (
+      !builderActions.shouldShowCreateSuperCampaignButton &&
+      !builderActions.shouldShowSaveAsTemplateButton
+    ) {
+      return false
+    }
+
+    return true
+  })
 
   const [templatePurpose, setTemplatePurpose] = useState<
     Optional<IMarketingTemplatePurpose>
