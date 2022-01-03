@@ -5,6 +5,7 @@ import { TemplateData } from 'utils/marketing-center/render-branded-template'
 
 import Builder from './Builder'
 import MarketingTemplatePurposeDrawer from './components/MarketingTemplatePurposeDrawer'
+import { useMarketingBuilderActions } from './hooks/use-marketing-builder-actions'
 import { useMarketingTemplatePurposeState } from './hooks/use-marketing-template-purpose-state'
 
 export interface IBrandMarketingTemplateWithResult
@@ -100,6 +101,12 @@ export default function InstantMarketing({
     onClose()
   }
 
+  const builderActions = useMarketingBuilderActions(
+    defaultTemplate,
+    templateTypes,
+    bareMode
+  )
+
   const {
     isPurposeDrawerOpen,
     closePurposeDrawer,
@@ -107,7 +114,7 @@ export default function InstantMarketing({
     setTemplatePurpose,
     correctedTemplateData
   } = useMarketingTemplatePurposeState(
-    defaultTemplate,
+    builderActions,
     templateData,
     initialTemplatePurpose
   )
@@ -116,6 +123,7 @@ export default function InstantMarketing({
     <>
       <MarketingTemplatePurposeDrawer
         open={isPurposeDrawerOpen}
+        builderActions={builderActions}
         onPurposeSelect={setTemplatePurpose}
         onClose={closePurposeDrawer}
       />

@@ -7,6 +7,8 @@ import {
 
 import OverlayDrawer, { OverlayDrawerProps } from 'components/OverlayDrawer'
 
+import { UseMarketingBuilderActions } from '../../hooks/use-marketing-builder-actions'
+
 import MarketingTemplatePurposeOption from './MarketingTemplatePurposeOption'
 
 const useStyles = makeStyles(
@@ -19,13 +21,14 @@ const useStyles = makeStyles(
 
 export interface MarketingTemplatePurposeDrawerProps
   extends Omit<OverlayDrawerProps, 'children'> {
-  // purposeOptions TODO:
+  builderActions: UseMarketingBuilderActions
   onPurposeSelect: (emailTemplatePurpose: IMarketingTemplatePurpose) => void
 }
 
 function MarketingTemplatePurposeDrawer({
   onPurposeSelect,
   onClose,
+  builderActions,
   ...otherProps
 }: MarketingTemplatePurposeDrawerProps) {
   const classes = useStyles()
@@ -47,19 +50,23 @@ function MarketingTemplatePurposeDrawer({
               title="Create for myself"
               description="Only you will be able to edit or use this template."
             />
-            <MarketingTemplatePurposeOption
-              onClick={() => onPurposeSelect('ForOtherAgents')}
-              icon={mdiAccountGroupOutline}
-              title="Create for other agents"
-              description="Agents of your team will be able to edit or use this template."
-            />
-            <MarketingTemplatePurposeOption
-              onClick={() => onPurposeSelect('ForCampaigns')}
-              icon={mdiNewspaperVariantMultipleOutline}
-              title="Create for campaigns"
-              description="You can send it on behalf of other agents. This template can be
-              copied by agents of your team."
-            />
+            {builderActions.shouldShowSaveAsTemplateButton && (
+              <MarketingTemplatePurposeOption
+                onClick={() => onPurposeSelect('ForOtherAgents')}
+                icon={mdiAccountGroupOutline}
+                title="Create for other agents"
+                description="Agents of your team will be able to edit or use this template."
+              />
+            )}
+            {builderActions.shouldShowCreateSuperCampaignButton && (
+              <MarketingTemplatePurposeOption
+                onClick={() => onPurposeSelect('ForCampaigns')}
+                icon={mdiNewspaperVariantMultipleOutline}
+                title="Create for campaigns"
+                description="You can send it on behalf of other agents. This template can be
+                copied by agents of your team."
+              />
+            )}
           </MenuList>
         </Box>
       </OverlayDrawer.Body>
