@@ -55,7 +55,7 @@ export const useStyles = makeStyles(
       textAlign: 'right'
     },
     mlsSource: {
-      ...theme.typography.body3,
+      ...theme.typography.caption,
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700]

@@ -153,7 +153,7 @@ export const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     mlsSource: {
-      ...theme.typography.body3,
+      ...theme.typography.caption,
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700]

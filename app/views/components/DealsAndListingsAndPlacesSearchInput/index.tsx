@@ -54,7 +54,7 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
       marginBottom: theme.spacing(1)
     },
     mlsSource: {
-      ...theme.typography.body3,
+      ...theme.typography.caption,
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700]

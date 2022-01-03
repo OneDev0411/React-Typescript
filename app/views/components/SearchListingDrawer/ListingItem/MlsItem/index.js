@@ -27,7 +27,7 @@ import {
 export const useStyles = makeStyles(
   theme => ({
     mlsSource: {
-      fontSize: 10,
+      ...theme.typography.caption,
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700]
