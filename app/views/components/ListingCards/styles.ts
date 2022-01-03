@@ -153,14 +153,14 @@ export const useStyles = makeStyles(
       marginRight: theme.spacing(1)
     },
     mlsSource: {
-      ...theme.typography.caption,
+      ...theme.typography.body3,
       display: 'flex',
       alignItems: 'center',
       color: theme.palette.grey[700]
     },
     mlsSourceIcon: {
-      maxWidth: 16,
-      maxHeight: 16,
+      maxWidth: theme.spacing(2),
+      maxHeight: theme.spacing(2),
       marginRight: theme.spacing(0.5)
     }
   }),

@@ -29,10 +29,12 @@ export const useStyles = makeStyles(
       color: theme.palette.grey[500]
     },
     subtitle: {
+      ...theme.typography.caption,
       margin: theme.spacing(2, 1),
       color: theme.palette.grey[500]
     },
     place: {
+      ...theme.typography.caption,
       border: `1px solid ${theme.palette.divider}`,
       padding: theme.spacing(1),
       borderRadius: theme.shape.borderRadius
@@ -61,8 +63,8 @@ export const useStyles = makeStyles(
       color: theme.palette.grey[700]
     },
     mlsSourceIcon: {
-      maxWidth: 16,
-      maxHeight: 16,
+      maxWidth: theme.spacing(1.75), // From figma
+      maxHeight: theme.spacing(1.75), // From figma
       marginRight: theme.spacing(0.5)
     }
   }),

@@ -60,8 +60,8 @@ const useStyles = makeStyles<Theme, { inputValue: string }>(
       color: theme.palette.grey[700]
     },
     mlsSourceIcon: {
-      maxWidth: 16,
-      maxHeight: 16,
+      maxWidth: theme.spacing(1.75), // From figma
+      maxHeight: theme.spacing(1.75), // From figma
       marginRight: theme.spacing(0.5)
     }
   }),
@@ -232,6 +232,7 @@ export default function DealsAndListingsAndPlacesSearchInput({
                 listing={listing}
                 className={classes.listingStatus}
               />
+
               <Typography
                 component="p"
                 variant="caption"
@@ -239,7 +240,11 @@ export default function DealsAndListingsAndPlacesSearchInput({
                 title="Listing Provider (MLS) Source"
                 className={classes.mlsSource}
               >
-                <SvgIcon path={mdiDatabaseOutline} /> {listing.mls_display_name}
+                <SvgIcon
+                  className={classes.mlsSourceIcon}
+                  path={mdiDatabaseOutline}
+                />
+                {listing.mls_display_name}
               </Typography>
             </div>
           </ListItemAvatar>

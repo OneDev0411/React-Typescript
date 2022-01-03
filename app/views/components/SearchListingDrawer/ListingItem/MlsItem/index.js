@@ -33,8 +33,8 @@ export const useStyles = makeStyles(
       color: theme.palette.grey[700]
     },
     mlsSourceIcon: {
-      maxWidth: 14,
-      maxHeight: 14,
+      maxWidth: theme.spacing(1.75), // From figma
+      maxHeight: theme.spacing(1.75), // From figma
       marginRight: theme.spacing(0.5)
     }
   }),
