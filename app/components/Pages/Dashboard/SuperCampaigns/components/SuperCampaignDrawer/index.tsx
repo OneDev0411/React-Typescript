@@ -5,13 +5,16 @@ import { mdiCalendarBlank } from '@mdi/js'
 import { Form, Field } from 'react-final-form'
 
 import {
+  convertDateToTimestamp,
+  convertTimestampToDate
+} from '@app/utils/date-utils'
+import {
   DateTimeField,
   FormTextField
 } from '@app/views/components/final-form-fields'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OverlayDrawer from 'components/OverlayDrawer'
 
-import { convertDateToTimestamp, convertTimestampToDate } from '../../helpers'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
 import { futureTimeValidator, requiredTextValidator } from './helpers'

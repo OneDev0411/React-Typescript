@@ -1,0 +1,1 @@
+export const SUPER_CAMPAIGN_CARDS_COUNT = 4

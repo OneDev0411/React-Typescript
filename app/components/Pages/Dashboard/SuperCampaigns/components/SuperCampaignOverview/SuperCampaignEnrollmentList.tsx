@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { Table } from 'components/Grid/Table'
 import { TableColumn } from 'components/Grid/Table/types'
 
-import { useIsSuperCampaignDueAtTimeout } from '../../hooks/use-is-super-campaign-due-at-timeout'
+import { isSuperCampaignDueAtTimeout } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import { isSuperCampaignEnrollmentOptedOut } from './helpers'
@@ -37,9 +37,9 @@ const useStyles = makeStyles(
 
 interface SuperCampaignEnrollmentListProps {
   isLoading: boolean
-  superCampaignEnrollments: ISuperCampaignEnrollment<'user_and_brand'>[]
+  superCampaignEnrollments: ISuperCampaignEnrollment<'user' | 'brand'>[]
   setSuperCampaignEnrollments: Dispatch<
-    SetStateAction<ISuperCampaignEnrollment<'user_and_brand'>[]>
+    SetStateAction<ISuperCampaignEnrollment<'user' | 'brand'>[]>
   >
 }
 
@@ -49,7 +49,7 @@ function SuperCampaignEnrollmentList({
   setSuperCampaignEnrollments
 }: SuperCampaignEnrollmentListProps) {
   const { superCampaign } = useSuperCampaignDetail()
-  const isCampaignDueAtTimeout = useIsSuperCampaignDueAtTimeout(superCampaign)
+  const isCampaignDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   const classes = useStyles()
   const listClasses = useSuperCampaignListStyles()
@@ -67,7 +67,7 @@ function SuperCampaignEnrollmentList({
     setSuperCampaignEnrollments
   )
 
-  const columns: TableColumn<ISuperCampaignEnrollment<'user_and_brand'>>[] = [
+  const columns: TableColumn<ISuperCampaignEnrollment<'user' | 'brand'>>[] = [
     {
       id: 'person',
       width: '35%',
@@ -120,8 +120,8 @@ function SuperCampaignEnrollmentList({
     <>
       <Table
         columns={columns}
-        rows={superCampaignEnrollments}
-        totalRows={superCampaignEnrollments.length}
+        rows={!isLoading ? superCampaignEnrollments : []}
+        totalRows={!isLoading ? superCampaignEnrollments.length : 0}
         rowSize={5}
         getTrProps={() => ({
           className: classNames(
@@ -130,13 +130,7 @@ function SuperCampaignEnrollmentList({
             listClasses.rowBorderTop
           )
         })}
-        loading={
-          isLoading
-            ? superCampaignEnrollments.length === 0
-              ? 'static'
-              : 'top'
-            : undefined
-        }
+        loading={isLoading ? 'static' : undefined}
         LoadingStateComponent={SuperCampaignListLoadingState}
         EmptyStateComponent={SuperCampaignListEmptyState}
       />

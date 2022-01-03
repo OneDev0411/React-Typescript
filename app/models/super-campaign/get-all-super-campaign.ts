@@ -7,7 +7,7 @@ export type FetchRange = {
 
 async function getAllSuperCampaign(
   range: FetchRange
-): Promise<ISuperCampaign<'template_instance'>[]> {
+): Promise<ISuperCampaign[]> {
   const response = await new Fetch()
     .post('/email/super-campaigns/filter')
     .send({ ...range })
