@@ -44,8 +44,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-interface Props
-  extends Pick<ButtonProps, 'disabled' | 'variant' | 'color' | 'children'> {
+interface Props extends Pick<ButtonProps, 'disabled'> {
   medium: string
   mjml: boolean
   originalTemplateId?: UUID
@@ -138,7 +137,14 @@ export function AddToMarketingCenterButton({
         />
       )}
       <div className={classes.container}>
-        <Button {...otherProps} onClick={handleClickButton} />
+        <Button
+          {...otherProps}
+          onClick={handleClickButton}
+          color="primary"
+          variant="contained"
+        >
+          Continue
+        </Button>
         <Popover
           open={open}
           anchorEl={anchorEl}

@@ -33,6 +33,10 @@ import {
   getActiveBrand
 } from 'utils/user-teams'
 
+import {
+  hasCreateSuperCampaignButton,
+  hasSaveAsTemplateButton
+} from '../helpers/builder-actions'
 import getTemplateObject from '../helpers/get-template-object'
 import nunjucks from '../helpers/nunjucks'
 import Templates from '../Templates'
@@ -1130,7 +1134,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowEmailActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1157,7 +1165,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowSocialShareActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1173,7 +1185,11 @@ class Builder extends React.Component {
   }
 
   get shouldShowPrintableActions() {
-    if (this.isBareMode) {
+    if (
+      this.isBareMode ||
+      this.shouldShowSaveAsTemplateButton ||
+      this.shouldShowCreateSuperCampaignButton
+    ) {
       return false
     }
 
@@ -1225,8 +1241,8 @@ class Builder extends React.Component {
     }))
   }
 
-  get isEmailTemplateForOtherAgents() {
-    return this.isEmailMedium && this.props.templatePurpose === 'ForOtherAgents'
+  get isTemplateForOtherAgents() {
+    return this.props.templatePurpose === 'ForOtherAgents'
   }
 
   get isEmailTemplateForCampaigns() {
@@ -1234,25 +1250,35 @@ class Builder extends React.Component {
   }
 
   get shouldShowSaveAsTemplateButton() {
-    if (this.isBareMode) {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isTemplateForOtherAgents) {
       return false
     }
 
-    // Only admin users should see this for now
     const isAdminUser = isAdmin(this.props.user)
 
-    return isAdminUser && this.state.selectedTemplate && !this.isOpenHouseMedium
+    return hasSaveAsTemplateButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      isAdminUser,
+      this.isOpenHouseMedium
+    )
   }
 
-  get shouldShowAdminContinueButton() {
-    if (this.isBareMode) {
+  get shouldShowCreateSuperCampaignButton() {
+    // We need this because we should respect the user answer on the purpose drawer
+    if (!this.isEmailTemplateForCampaigns) {
       return false
     }
 
-    // Only admin users should see this for now
     const isAdminUser = isAdmin(this.props.user)
 
-    return isAdminUser && this.state.selectedTemplate && this.isEmailMedium
+    return hasCreateSuperCampaignButton(
+      this.isBareMode,
+      !!this.state.selectedTemplate,
+      isAdminUser,
+      this.isEmailMedium
+    )
   }
 
   isTemplatesListEnabled = () => {
@@ -1556,60 +1582,44 @@ class Builder extends React.Component {
             <Actions>
               {this.props.customActions}
 
-              {this.shouldShowSaveAsTemplateButton &&
-                !this.isEmailTemplateForCampaigns && (
-                  <AddToMarketingCenterButton
-                    medium={this.selectedTemplate.medium}
-                    inputs={this.selectedTemplate.inputs}
-                    originalTemplateId={this.selectedTemplate.id}
-                    mjml={this.selectedTemplate.mjml}
-                    getTemplateMarkup={this.getTemplateMarkup.bind(this)}
-                    disabled={this.props.actionButtonsDisabled}
-                    variant={
-                      this.isEmailTemplateForOtherAgents
-                        ? 'contained'
-                        : 'outlined'
-                    }
-                    color={
-                      this.isEmailTemplateForOtherAgents ? 'primary' : 'default'
-                    }
-                  >
-                    {this.isEmailTemplateForOtherAgents
-                      ? 'Continue'
-                      : 'Add To Marketing Center'}
-                  </AddToMarketingCenterButton>
-                )}
+              {this.shouldShowSaveAsTemplateButton && (
+                <AddToMarketingCenterButton
+                  medium={this.selectedTemplate.medium}
+                  inputs={this.selectedTemplate.inputs}
+                  originalTemplateId={this.selectedTemplate.id}
+                  mjml={this.selectedTemplate.mjml}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  disabled={this.props.actionButtonsDisabled}
+                />
+              )}
 
-              {this.shouldShowAdminContinueButton &&
-                !this.isEmailTemplateForOtherAgents && (
-                  <CreateSuperCampaignButton
-                    disabled={this.props.actionButtonsDisabled}
-                    template={this.selectedTemplate}
-                    getTemplateMarkup={this.getTemplateMarkup.bind(this)}
-                    templateInstanceData={this.templateInstanceData}
-                  />
-                )}
+              {this.shouldShowCreateSuperCampaignButton && (
+                <CreateSuperCampaignButton
+                  disabled={this.props.actionButtonsDisabled}
+                  template={this.selectedTemplate}
+                  getTemplateMarkup={this.getTemplateMarkup.bind(this)}
+                  templateInstanceData={this.templateInstanceData}
+                />
+              )}
 
-              {!this.shouldShowAdminContinueButton &&
-                (this.shouldShowPrintableActions ||
-                  this.shouldShowSocialShareActions) && (
-                  <Button
-                    style={{
-                      marginLeft: '0.5rem'
-                    }}
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleSocialSharing}
-                    disabled={this.props.actionButtonsDisabled}
-                  >
-                    Continue
-                  </Button>
-                )}
+              {(this.shouldShowPrintableActions ||
+                this.shouldShowSocialShareActions) && (
+                <Button
+                  style={{
+                    marginLeft: '0.5rem'
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSocialSharing}
+                  disabled={this.props.actionButtonsDisabled}
+                >
+                  Continue
+                </Button>
+              )}
 
-              {!this.shouldShowAdminContinueButton &&
-                (this.isOpenHouseMedium ||
-                  this.shouldShowEmailActions ||
-                  this.isBareMode) &&
+              {(this.isOpenHouseMedium ||
+                this.shouldShowEmailActions ||
+                this.isBareMode) &&
                 this.getSaveButton()}
 
               <IconButton
