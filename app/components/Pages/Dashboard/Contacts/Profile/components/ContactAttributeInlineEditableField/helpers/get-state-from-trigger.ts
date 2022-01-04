@@ -32,15 +32,20 @@ export function getStateFromTrigger(
 
   // we're checking if date value is already exist
   // disable the trigger unless enable it
-  let isActive = true
+  let isActive = !!TRIGGERABLE_ATTRIBUTES.includes(attributeName)
 
-  if (attribute && TRIGGERABLE_ATTRIBUTES.includes(attributeName) && !trigger) {
+  if (attribute) {
     const attributeValue = getValue(attribute)
-
-    if (
+    const isDateAlreadySet = !!(
       typeof attributeValue === 'object' &&
       (attributeValue.month?.value || attributeValue.day?.value)
-    ) {
+    )
+
+    if (!isDateAlreadySet && trigger) {
+      isActive = false
+    }
+
+    if (isDateAlreadySet && !trigger) {
       isActive = false
     }
   }
