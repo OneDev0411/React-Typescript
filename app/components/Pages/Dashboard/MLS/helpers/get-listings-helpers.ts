@@ -36,7 +36,6 @@ export function createValertQueryString(
 
 export function createValertOptions(
   search: ListingSearchOptions,
-  postalCodes: Nullable<string[]>,
   limit: number
 ) {
   const points =
@@ -48,7 +47,6 @@ export function createValertOptions(
     ...pickBy(search.filters), // TO remove null values
     points,
     ...(search.office ? { offices: [search.office] } : {}),
-    postal_codes: postalCodes,
     limit
   }
 }

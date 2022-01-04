@@ -1,5 +1,7 @@
 import { isEqual } from 'lodash'
 
+import { ZipcodeOption } from './zipcodeGroup'
+
 export function createYearArray({
   start = new Date().getFullYear(),
   end = 1990,
@@ -68,4 +70,17 @@ export const preventNonNumbricOnKeyDown = (
   ) {
     e.preventDefault()
   }
+}
+
+export const mapPostcodesToOptions = (
+  postcodes: OptionalNullable<string[]>
+): ZipcodeOption[] => {
+  if (!postcodes) {
+    return []
+  }
+
+  return postcodes.map(postcode => ({
+    id: postcode,
+    title: postcode
+  }))
 }

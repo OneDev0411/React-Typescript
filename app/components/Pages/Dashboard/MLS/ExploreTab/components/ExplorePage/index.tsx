@@ -404,7 +404,7 @@ export function ExplorePage({ user, isWidget, onClickLocate }: Props) {
         onHide={onCloseAlertModal}
         isActive={isShowAlertModal}
         alertProposedTitle={state.result.info?.proposed_title}
-        searchOptions={createValertOptions(state.search, null, QUERY_LIMIT)}
+        searchOptions={createValertOptions(state.search, QUERY_LIMIT)}
         drawingPoints={state.search.drawing.map(coordToPoint)}
       />
     </>
