@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { Grid, Theme, useTheme } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { useDispatch, useStore, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { getContextsByBrand } from 'actions/deals'
 import ActionButton from 'components/Button/ActionButton'
@@ -15,6 +15,7 @@ import {
 import Loading from 'partials/Loading'
 import { IAppState } from 'reducers'
 import { selectBrandContexts } from 'reducers/deals/contexts'
+import { selectDeals } from 'selectors/deals'
 import { selectUser } from 'selectors/user'
 import {
   getActiveTeamId,
@@ -32,8 +33,8 @@ import { updateNewColumnInColumns } from './helpers/update-new-column-in-columns
 import { ColumnState } from './types'
 
 export default function ReminderNotifications() {
-  const store = useStore<IAppState>()
   const user = useSelector(selectUser)
+  const deals = useSelector(selectDeals)
   const contactsAttributeDefs = useSelector(
     ({ contacts }: IAppState) => contacts.attributeDefs
   )
@@ -107,28 +108,19 @@ export default function ReminderNotifications() {
       return columns
 
       async function getDealContexts(): Promise<readonly IDealBrandContext[]> {
-        const dealContexts = getDealContextsFromStore()
+        const brandId = getActiveTeamId(user)
+        const dealContexts = selectBrandContexts(deals.contexts, brandId)
 
         if (dealContexts) {
           return dealContexts
         }
 
-        const brandId = getActiveTeamId(user)
-
         await dispatch(getContextsByBrand(brandId))
 
-        return getDealContextsFromStore() ?? []
-
-        function getDealContextsFromStore():
-          | readonly IDealBrandContext[]
-          | undefined {
-          const { deals } = store.getState()
-
-          return selectBrandContexts(deals.contexts, getActiveTeamId(user))
-        }
+        return dealContexts ?? []
       }
     }
-  }, [contactsAttributeDefs, dispatch, store, user])
+  }, [contactsAttributeDefs, deals, dispatch, user])
 
   return (
     <>
