@@ -11,10 +11,62 @@ export function getSuperCampaignDueAtRemainingTimeInMilliSeconds(
   return dueAt * 1000 - currentTime
 }
 
-export function convertTimestampToDate(timestamp: number): Date {
-  return new Date(timestamp * 1000)
+function calcPercentage(value: number, total: number): string {
+  if (!total) {
+    return ''
+  }
+
+  const percentage = Math.round((value / total) * 100)
+
+  return `(${percentage}%)`
 }
 
-export function convertDateToTimestamp(date: Date): number {
-  return date.getTime() / 1000
+export interface GetSuperCampaignStatsLabelsInput {
+  sent: number
+  delivered: number
+  opened: number
+  clicked: number
+}
+
+interface GetSuperCampaignStatsLabels {
+  deliveredLabel: string
+  openedLabel: string
+  clickedLabel: string
+}
+
+export function getSuperCampaignStatsLabels({
+  sent,
+  delivered,
+  opened,
+  clicked
+}: GetSuperCampaignStatsLabelsInput): GetSuperCampaignStatsLabels {
+  return {
+    deliveredLabel: `${delivered} ${calcPercentage(delivered, sent)}`,
+    openedLabel: `${opened} ${calcPercentage(opened, delivered)}`,
+    clickedLabel: `${clicked} ${calcPercentage(clicked, delivered)}`
+  }
+}
+
+export function isSuperCampaignExecuted(
+  superCampaign: Pick<ISuperCampaign, 'executed_at'>
+): boolean {
+  return !!superCampaign.executed_at
+}
+
+export function isSuperCampaignDueAtTimeout(
+  superCampaign: Pick<ISuperCampaign, 'due_at'>
+): boolean {
+  return (
+    !!superCampaign.due_at &&
+    getSuperCampaignDueAtRemainingTimeInMilliSeconds(superCampaign.due_at) < 0
+  )
+}
+
+export function isSuperCampaignReadOnly(
+  superCampaign: Pick<ISuperCampaign, 'executed_at' | 'due_at'>
+): boolean {
+  const isExecuted = isSuperCampaignExecuted(superCampaign)
+  const isDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
+
+  return isExecuted || isDueAtTimeout
 }

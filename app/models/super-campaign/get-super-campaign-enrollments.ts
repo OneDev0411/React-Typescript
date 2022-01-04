@@ -7,24 +7,24 @@ export const defaultAssociations = [
 
 async function getSuperCampaignEnrollments(
   superCampaignId: UUID
-): Promise<ISuperCampaignEnrollment<'user_and_brand'>[]>
+): Promise<ISuperCampaignEnrollment<'user' | 'brand'>[]>
 async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: true
-): Promise<ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]>
+): Promise<ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>[]>
 async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: boolean
 ): Promise<
-  | ISuperCampaignEnrollment<'user_and_brand'>[]
-  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+  | ISuperCampaignEnrollment<'user' | 'brand'>[]
+  | ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>[]
 >
 async function getSuperCampaignEnrollments(
   superCampaignId: UUID,
   includeCampaign: boolean = false
 ): Promise<
-  | ISuperCampaignEnrollment<'user_and_brand'>[]
-  | ISuperCampaignEnrollment<'user_and_brand_and_campaign'>[]
+  | ISuperCampaignEnrollment<'user' | 'brand'>[]
+  | ISuperCampaignEnrollment<'user' | 'brand' | 'campaign'>[]
 > {
   const associations = [...defaultAssociations]
 

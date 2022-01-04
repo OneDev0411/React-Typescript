@@ -1,18 +1,18 @@
 import { useState } from 'react'
 
-import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignPreviewDrawer, {
   SuperCampaignPreviewDrawerProps
-} from './SuperCampaignPreviewDrawer'
+} from '@app/views/components/SuperCampaignPreviewDrawer'
+
+import SuperCampaignCard from './SuperCampaignCard'
 import SuperCampaignWithEnrollmentCardEnrolledFooter from './SuperCampaignWithEnrollmentCardEnrolledFooter'
 import SuperCampaignWithEnrollmentCardManagementFooter from './SuperCampaignWithEnrollmentCardManagementFooter'
 import SuperCampaignWithEnrollmentCardParticipateFooter from './SuperCampaignWithEnrollmentCardParticipateFooter'
-import { SuperCampaignWithEnrollment } from './types'
 import { useHasSuperCampaignManageAccess } from './use-has-super-campaign-manage-access'
 
 interface SuperCampaignWithEnrollmentCardProps
   extends Pick<SuperCampaignPreviewDrawerProps, 'onEnroll' | 'onUnenroll'> {
-  superCampaignWithEnrollment: SuperCampaignWithEnrollment
+  superCampaignWithEnrollment: ISuperCampaignWithEnrollment
 }
 
 function SuperCampaignWithEnrollmentCard({

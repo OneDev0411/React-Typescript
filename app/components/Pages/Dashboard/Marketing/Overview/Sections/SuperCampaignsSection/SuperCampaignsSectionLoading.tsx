@@ -1,8 +1,9 @@
 import { Grid } from '@material-ui/core'
 
+import { SUPER_CAMPAIGN_CARDS_COUNT } from './constants'
 import SuperCampaignWithEnrollmentSkeletonCard from './SuperCampaignWithEnrollmentSkeletonCard'
 
-const EMPTY_CARDS = new Array(4).fill(null)
+const EMPTY_CARDS = new Array(SUPER_CAMPAIGN_CARDS_COUNT).fill(null)
 
 function SuperCampaignsSectionLoading() {
   return (

@@ -1,19 +1,17 @@
-import { makeStyles, Tooltip, Typography } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import classNames from 'classnames'
-import { differenceInDays, format } from 'date-fns'
 
-import { RelativeTime } from '@app/views/components/RelativeTime'
+import SuperCampaignSendTime from '@app/views/components/SuperCampaignSendTime'
 
 const useStyles = makeStyles(
   theme => ({
-    root: { color: theme.palette.grey[500] },
-    red: { color: theme.palette.error.main }
+    root: { color: theme.palette.grey[500] }
   }),
   { name: 'SuperCampaignCardDays' }
 )
 
 interface SuperCampaignCardDaysProps {
-  className: string
+  className?: string
   time: number
 }
 
@@ -23,27 +21,12 @@ function SuperCampaignCardDays({
 }: SuperCampaignCardDaysProps) {
   const classes = useStyles()
 
-  const needsMoreAttention =
-    differenceInDays(time * 1000, new Date().getTime()) <= 3
-
-  const timeInMilliseconds = time * 1000
-
-  const tooltipTitle = format(timeInMilliseconds, "LLLL dd, yyyy 'at' hh:mmaaa")
-
   return (
     <Typography
-      className={classNames(
-        classes.root,
-        needsMoreAttention && classes.red,
-        className
-      )}
+      className={classNames(classes.root, className)}
       variant="caption"
     >
-      <Tooltip title={tooltipTitle}>
-        <span>
-          <RelativeTime time={timeInMilliseconds} />
-        </span>
-      </Tooltip>
+      <SuperCampaignSendTime time={time} hasTooltip />
     </Typography>
   )
 }

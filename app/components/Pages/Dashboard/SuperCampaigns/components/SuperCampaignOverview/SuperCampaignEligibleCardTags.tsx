@@ -3,7 +3,7 @@ import { Button, Typography, makeStyles } from '@material-ui/core'
 import SuperCampaignDisplayTags from '@app/views/components/SuperCampaignDisplayTags'
 import SuperCampaignTagsPopover from '@app/views/components/SuperCampaignTagsPopover'
 
-import { useIsSuperCampaignReadOnly } from '../../hooks/use-is-super-campaign-read-only'
+import { isSuperCampaignReadOnly } from '../../helpers'
 import { useSuperCampaignDetail } from '../SuperCampaignDetailProvider'
 
 import { useUpdateSuperCampaignTags } from './use-update-super-campaign-tags'
@@ -25,7 +25,7 @@ function SuperCampaignEligibleCardTags() {
     setSuperCampaign
   )
 
-  const isReadOnly = useIsSuperCampaignReadOnly(superCampaign)
+  const isReadOnly = isSuperCampaignReadOnly(superCampaign)
 
   return (
     <Typography variant="body2" component="div">

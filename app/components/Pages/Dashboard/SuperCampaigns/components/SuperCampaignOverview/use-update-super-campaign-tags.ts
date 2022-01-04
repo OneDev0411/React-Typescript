@@ -1,5 +1,4 @@
-import useNotify from '@app/hooks/use-notify'
-import useSafeState from '@app/hooks/use-safe-state'
+import { useRunActionThenNotify } from '@app/hooks/use-run-action-then-notify'
 import updateSuperCampaignTagsModel from '@app/models/super-campaign/update-super-campaign-tags'
 
 interface UseUpdateSuperCampaignTags {
@@ -11,36 +10,24 @@ export function useUpdateSuperCampaignTags(
   superCampaign: ISuperCampaign<'template_instance'>,
   setSuperCampaign: (superCampaign: ISuperCampaign<'template_instance'>) => void
 ): UseUpdateSuperCampaignTags {
-  const notify = useNotify()
-  const [isSaving, setIsSaving] = useSafeState(false)
+  const { isRunning, runActionThenNotify } = useRunActionThenNotify()
 
-  const updateSuperCampaignTags = async (tags: string[]) => {
-    setIsSaving(true)
+  const updateSuperCampaignTags = async (tags: string[]) =>
+    runActionThenNotify(
+      async () => {
+        const updatedSuperCampaign = await updateSuperCampaignTagsModel(
+          superCampaign.id,
+          tags
+        )
 
-    try {
-      const updatedSuperCampaign = await updateSuperCampaignTagsModel(
-        superCampaign.id,
-        tags
-      )
+        setSuperCampaign({
+          ...updatedSuperCampaign,
+          template_instance: superCampaign.template_instance
+        })
+      },
+      'The tags were updated',
+      'Something went wrong while saving the tags. Please try again.'
+    )
 
-      setSuperCampaign({
-        ...updatedSuperCampaign,
-        template_instance: superCampaign.template_instance
-      })
-
-      notify({
-        status: 'success',
-        message: 'The tags were updated'
-      })
-    } catch (_) {
-      notify({
-        status: 'error',
-        message: 'Something went wrong while saving the tags. Please try again.'
-      })
-    }
-
-    setIsSaving(false)
-  }
-
-  return { isSaving, updateSuperCampaignTags }
+  return { isSaving: isRunning, updateSuperCampaignTags }
 }

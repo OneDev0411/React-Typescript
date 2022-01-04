@@ -1,11 +1,13 @@
 import { Button } from '@material-ui/core'
 import { mdiClockOutline } from '@mdi/js'
 
+import {
+  convertDateToTimestamp,
+  convertTimestampToDate
+} from '@app/utils/date-utils'
 import { DateTimePicker } from '@app/views/components/DateTimePicker'
 import { muiIconSizes } from '@app/views/components/SvgIcons/icon-sizes'
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
-
-import { convertDateToTimestamp, convertTimestampToDate } from '../../helpers'
 
 export interface SuperCampaignDetailHeaderScheduleButtonProps {
   className: string

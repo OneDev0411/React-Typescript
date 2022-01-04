@@ -1,5 +1,7 @@
-import { makeStyles, Typography, Chip, Tooltip } from '@material-ui/core'
+import { makeStyles, Typography, Tooltip } from '@material-ui/core'
 import classNames from 'classnames'
+
+import SuperCampaignDisplayTags from '@app/views/components/SuperCampaignDisplayTags'
 
 const useStyles = makeStyles(
   theme => ({
@@ -15,8 +17,6 @@ const useStyles = makeStyles(
       display: 'inline-flex'
     },
     tag: {
-      backgroundColor: theme.palette.common.white,
-      marginRight: theme.spacing(0.5),
       overflow: 'hidden',
       minWidth: theme.spacing(6)
     },
@@ -39,28 +39,25 @@ function SuperCampaignWithEnrollmentCardTags({
   tags
 }: SuperCampaignWithEnrollmentCardTagsProps) {
   const classes = useStyles()
-  const moreCount = tags.length - 2
 
   return (
     <div className={classNames(classes.root, className)}>
-      <div className={classes.tags}>
-        {tags.slice(0, 2).map(tag => (
-          <Chip
-            key={tag}
-            label={tag}
-            size="small"
-            variant="outlined"
-            className={classes.tag}
-          />
-        ))}
-      </div>
-      {moreCount > 0 && (
-        <Tooltip title="Click to view and edit the tags">
-          <Typography className={classes.more} variant="caption">
-            + {moreCount}more
-          </Typography>
-        </Tooltip>
-      )}
+      <SuperCampaignDisplayTags
+        tags={tags}
+        visibleCount={2}
+        renderTags={tags => <div className={classes.tags}>{tags}</div>}
+        renderMore={more => (
+          <Tooltip title="Click to view and edit the tags">
+            <Typography className={classes.more} variant="caption">
+              {more}
+            </Typography>
+          </Tooltip>
+        )}
+        renderNoTags={noTags => (
+          <Typography variant="caption">{noTags}</Typography>
+        )}
+        classes={{ tag: classes.tag }}
+      />
     </div>
   )
 }
