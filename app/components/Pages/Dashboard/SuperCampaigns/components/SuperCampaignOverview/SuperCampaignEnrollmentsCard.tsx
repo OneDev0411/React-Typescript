@@ -60,6 +60,12 @@ function SuperCampaignEnrollmentsCard() {
             superCampaignId={superCampaign.id}
             superCampaignTags={superCampaign.tags}
             onEnroll={addSuperCampaignEnrollment}
+            // I used Number.POSITIVE_INFINITY to make sure the manual button does not calculate the available
+            // agent count if the enrolledAgentCount is not ready
+            enrolledAgentCount={
+              isLoading ? Number.POSITIVE_INFINITY : enrolledAgentCount
+            }
+            eligibleBrands={superCampaign.eligible_brands}
           />
           <SuperCampaignCardHeader
             className={classes.title}
