@@ -44,7 +44,7 @@ export function DateTimeField({
             onChange={fieldProps.input.onChange}
             selectedDate={selectedDate}
             showTimePicker={showTimePicker}
-            defaultlSelectedDate={selectedDate}
+            defaultSelectedDate={selectedDate}
             datePickerModifiers={datePickerModifiers}
           >
             {children

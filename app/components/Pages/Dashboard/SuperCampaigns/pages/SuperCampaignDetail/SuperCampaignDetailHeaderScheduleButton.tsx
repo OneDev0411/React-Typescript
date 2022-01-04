@@ -51,7 +51,7 @@ function SuperCampaignDetailHeaderScheduleButton({
       onClose={handleChange}
       selectedDate={selectedDate}
       showTimePicker
-      defaultlSelectedDate={selectedDate}
+      defaultSelectedDate={selectedDate}
       datePickerModifiers={{
         disabled: {
           before: new Date()

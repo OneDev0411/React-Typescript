@@ -22,7 +22,7 @@ interface RenderProps {
 interface Props {
   style?: React.CSSProperties
   datePickerModifiers?: object
-  defaultlSelectedDate?: Date
+  defaultSelectedDate?: Date
   selectedDate?: Date
   showTimePicker?: boolean
   saveCaption?: string
@@ -36,7 +36,7 @@ export function DateTimePicker({
   style,
   showTimePicker = true,
   datePickerModifiers = {},
-  defaultlSelectedDate = new Date(),
+  defaultSelectedDate = new Date(),
   selectedDate = new Date(),
   children,
   defaultAnchorElement = null,
@@ -44,8 +44,8 @@ export function DateTimePicker({
   onChange = () => {},
   onClose = () => {}
 }: Props) {
-  const [date, setDate] = useState<Date>(defaultlSelectedDate)
-  const initialSelectedDate = useRef<Date>(defaultlSelectedDate)
+  const [date, setDate] = useState<Date>(defaultSelectedDate)
+  const initialSelectedDate = useRef<Date>(defaultSelectedDate)
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(
     defaultAnchorElement
   )
