@@ -85,7 +85,7 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
         <>
           <Button
             className={classes.saveButton}
-            size="medium"
+            size="small"
             variant="contained"
             color="primary"
             disabled={isLoading}

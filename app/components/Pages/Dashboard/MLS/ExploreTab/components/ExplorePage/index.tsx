@@ -74,10 +74,11 @@ const useStyles = makeStyles(
       marginBottom: theme.spacing(1)
     },
     searchBarFilterItem: {
+      display: 'flex',
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
       marginLeft: 'auto',
-      alignItems: 'stretch'
+      alignItems: 'center'
     },
     main: {
       flexGrow: 1,
