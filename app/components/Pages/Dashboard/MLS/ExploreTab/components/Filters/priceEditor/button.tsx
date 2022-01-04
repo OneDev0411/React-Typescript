@@ -26,7 +26,7 @@ export const PriceButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       startIcon={<SvgIcon path={mdiCurrencyUsd} size={muiIconSizes.small} />}
     >
       {isActive ? (

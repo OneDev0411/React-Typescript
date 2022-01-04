@@ -110,52 +110,50 @@ export const Filters = () => {
                 )}
               />
 
-              {/* Beds Filter  */}
-              {/* Not showing on Lots & Acreage/Commercial  */}
-              {!['Lots & Acreage', 'Commercial'].includes(
-                currentFilters.property_types[0]
-              ) && (
-                <FilterButton
-                  renderButton={({ onClick }) => (
-                    <BedsButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
-                      onClick={onClick}
-                    />
-                  )}
-                  renderDropdown={() => (
-                    <BedsEditor
-                      filters={currentFilters}
-                      updateFilters={updateFilters}
-                      defaultFilters={systemDefaultFilters}
-                      resultsCount={resultsCount}
-                    />
-                  )}
-                />
-              )}
+              {/* Not showing beds and bath filters on Lots & Acreage/Commercial  */}
 
-              {/* Bath Filter  */}
-              {/* Not showing on Lots & Acreage/Commercial  */}
+              {/* Beds Filter  */}
               {!['Lots & Acreage', 'Commercial'].includes(
                 currentFilters.property_types[0]
               ) && (
-                <FilterButton
-                  renderButton={({ onClick }) => (
-                    <BathsButton
-                      filters={currentFilters}
-                      defaultFilters={systemDefaultFilters}
-                      onClick={onClick}
-                    />
-                  )}
-                  renderDropdown={() => (
-                    <BathsEditor
-                      filters={currentFilters}
-                      updateFilters={updateFilters}
-                      defaultFilters={systemDefaultFilters}
-                      resultsCount={resultsCount}
-                    />
-                  )}
-                />
+                <div className={classes.buttonGroup}>
+                  <FilterButton
+                    renderButton={({ onClick }) => (
+                      <BedsButton
+                        filters={currentFilters}
+                        defaultFilters={systemDefaultFilters}
+                        onClick={onClick}
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <BedsEditor
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                        resultsCount={resultsCount}
+                      />
+                    )}
+                  />
+
+                  {/* Bath Filter  */}
+                  <FilterButton
+                    renderButton={({ onClick }) => (
+                      <BathsButton
+                        filters={currentFilters}
+                        defaultFilters={systemDefaultFilters}
+                        onClick={onClick}
+                      />
+                    )}
+                    renderDropdown={() => (
+                      <BathsEditor
+                        filters={currentFilters}
+                        updateFilters={updateFilters}
+                        defaultFilters={systemDefaultFilters}
+                        resultsCount={resultsCount}
+                      />
+                    )}
+                  />
+                </div>
               )}
 
               {/* Other Filter  */}
@@ -189,9 +187,9 @@ export const Filters = () => {
                   isEqual(currentFilters, systemDefaultFilters) &&
                   currentFilters.property_types[0] === 'Residential'
                 }
-                size="medium"
+                size="small"
               >
-                Reset Search
+                Reset
               </Button>
             </>
           )}

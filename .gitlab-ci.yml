@@ -7,8 +7,6 @@ stages:
 
 test_unit:
   stage: test
-  only:
-    - merge_requests
   script:
     - npm install -g npm@8
     - npm ci
@@ -29,7 +27,7 @@ deploy_beta:
   before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
-    - gem install dpl
+    - gem install dpl -v 1.8.0
   script:
     - dpl --provider=heroku --app=rechat-irish --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:
@@ -44,7 +42,7 @@ deploy_production:
   before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
-    - gem install dpl
+    - gem install dpl -v 1.8.0
   script:
     - dpl --provider=heroku --app=rechat-web --strategy=git --api-key=$HEROKU_API_KEY --username=$HEROKU_USERNAME --password=$HEROKU_PASSWORD
   environment:

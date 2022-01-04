@@ -10,57 +10,12 @@ import {
   selectDefinition
 } from 'reducers/contacts/attributeDefs'
 
-export const ROLE_NAMES = [
-  'BuyerAgent',
-  'BuyerReferral',
-  'CoBuyerAgent',
-  'SellerAgent',
-  'SellerReferral',
-  'CoSellerAgent',
-  'Buyer',
-  'BuyerPowerOfAttorney',
-  'Seller',
-  'SellerPowerOfAttorney',
-  'Title',
-  'BuyerLawyer',
-  'SellerLawyer',
-  'Lender',
-  'TeamLead',
-  'Appraiser',
-  'Inspector',
-  'Tenant',
-  'LandlordPowerOfAttorney',
-  'Landlord',
-  'TenantPowerOfAttorney',
-  'BuyerBroker',
-  'SellerBroker'
-]
-
 export const AGENT_ROLES = [
   'BuyerAgent',
   'CoBuyerAgent',
   'SellerAgent',
   'CoSellerAgent'
 ]
-
-const aliases = {
-  Title: 'Escrow Officer',
-  Lender: 'Lending Agent',
-  BuyerPowerOfAttorney: 'Power of Attorney - Buyer',
-  SellerPowerOfAttorney: 'Power of Attorney - Seller',
-  LandlordPowerOfAttorney: 'Power of Attorney - Landlord',
-  TenantPowerOfAttorney: 'Power of Attorney - Tenant'
-}
-
-/**
- * returns a human readable role name
- * @param {string} role - server role name
- */
-export function roleName(role) {
-  const name = aliases[role] || role
-
-  return name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/Co\s/g, 'Co-')
-}
 
 /**
  * returns user legal name based on given fields
