@@ -15,9 +15,10 @@ import {
 import { SvgIcon } from '@app/views/components/SvgIcons/SvgIcon'
 import OverlayDrawer from 'components/OverlayDrawer'
 
+import { futureTimeValidator } from '../../helpers'
 import SuperCampaignTemplate from '../SuperCampaignTemplate'
 
-import { futureTimeValidator, requiredTextValidator } from './helpers'
+import { requiredTextValidator } from './helpers'
 import {
   SuperCampaignFormInternalValues,
   SuperCampaignFormValues

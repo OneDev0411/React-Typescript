@@ -1,3 +1,5 @@
+import { isAfter } from 'date-fns'
+
 /**
  * A helper function to calc the time difference between due at and current time
  * @param dueAt
@@ -69,4 +71,12 @@ export function isSuperCampaignReadOnly(
   const isDueAtTimeout = isSuperCampaignDueAtTimeout(superCampaign)
 
   return isExecuted || isDueAtTimeout
+}
+
+export function futureTimeValidator(value: Optional<Date>): Optional<string> {
+  if (!value) {
+    return
+  }
+
+  return isAfter(new Date(), value) ? 'Time must be in the future' : undefined
 }
