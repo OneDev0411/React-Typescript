@@ -12,7 +12,6 @@ interface UseMarketingTemplatePurposeState {
   correctedTemplateData: TemplateData
 }
 
-// TODO: Check this with Emil and ask about XSS vulnerabilities on this logic
 function getUserWithVariableFields(user: IUser): IUser {
   return {
     ...user,
@@ -34,7 +33,7 @@ export function useMarketingTemplatePurposeState(
   initialTemplatePurpose: Optional<IMarketingTemplatePurpose>
 ): UseMarketingTemplatePurposeState {
   const [isPurposeDrawerOpen, setIsDrawerOpen] = useState<boolean>(() => {
-    // Do not ask the question if the programmes has already set the answer
+    // Do not ask the question if the user has already set the answer
     if (initialTemplatePurpose) {
       return false
     }
