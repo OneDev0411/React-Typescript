@@ -550,8 +550,8 @@ class Builder extends React.Component {
 
     this.emailBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     removeUnusedBlocks(this.editor)
 
@@ -574,8 +574,8 @@ class Builder extends React.Component {
   }
 
   async registerSocialBlocks() {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     const templateBlockOptions = await getTemplateBlockOptions(
       this.selectedTemplate,
@@ -601,8 +601,8 @@ class Builder extends React.Component {
 
     this.websiteBlocksRegistered = true
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const activeBrand = getActiveBrand(this.props.user)
+    const renderData = getTemplateRenderData(activeBrand)
 
     const dynamicBlocksOptions = this.getBlocksOptions()
     const blocksOptions = {
@@ -966,8 +966,7 @@ class Builder extends React.Component {
 
   generateBrandedTemplate = (templateMarkup, data) => {
     const activeBrand = getActiveBrand(this.props.user)
-    const brand = getBrandByType(this.props.user, 'Brokerage')
-    const renderData = getTemplateRenderData(brand)
+    const renderData = getTemplateRenderData(activeBrand)
 
     return nunjucks.renderString(templateMarkup, {
       ...data,
