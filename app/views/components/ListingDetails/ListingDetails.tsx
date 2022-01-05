@@ -36,6 +36,7 @@ import Map from './Map'
 import MLSNote from './MLSNote'
 import Status from './Status'
 import Title from './Title'
+import { useOgMetaTags } from './use-og-meta-tags'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -158,6 +159,15 @@ function ListingDetails({
   const { listing, status, error }: UseGetListing = useGetListing(id)
   const mapSection = useRef<HTMLDivElement>(null)
 
+  /* 
+     In order for Facebook and Twitter crawlers to find our open graph meta tags, 
+     We need to place them on the top 1M of our page
+     Hemlet does not currently support placement, see:
+     https://developers.facebook.com/docs/sharing/webmasters/crawler/
+     https://github.com/jimmay5469/react-helmet  
+  */
+  useOgMetaTags(listing)
+
   const scrollToMap = () => {
     mapSection.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -177,7 +187,7 @@ function ListingDetails({
   }
 
   const agent = getAgentInfo(listing)
-  const title = getPrice(listing)
+  const price = getPrice(listing)
   const subtitle1 = listingUtils.addressTitle(listing.property.address)
   const subtitle2 = [
     listingUtils.getListingAddressLine2(listing),
@@ -205,7 +215,7 @@ function ListingDetails({
             <Box className={classes.heroLeftSideWrapper}>
               <Box className={classes.titleWrapper}>
                 <Title
-                  title={title}
+                  title={price}
                   subtitle1={subtitle1}
                   subtitle2={subtitle2}
                 />

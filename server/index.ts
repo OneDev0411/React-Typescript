@@ -13,6 +13,7 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import { checkBrowser } from './app/middlewares/check-browser'
+import appConfig from './config'
 import routes from './routes'
 
 const port = process.env.PORT || 8080
@@ -39,6 +40,17 @@ app.use(
  * the /unsupported page
  */
 app.use(checkBrowser)
+
+/**
+ * caches properties liting urls in order to provide open graph for social networks
+ */
+if (isProduction) {
+  app.use(
+    require('prerender-node')
+      .whitelisted('/dashboard/mls/.*')
+      .set('prerenderToken', appConfig.prerender_token)
+  )
+}
 
 // setup routes
 app.use('/', routes)
