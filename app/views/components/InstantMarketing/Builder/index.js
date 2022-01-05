@@ -28,7 +28,6 @@ import { getBrandColors } from 'utils/get-brand-colors'
 import { loadJS, unloadJS } from 'utils/load-js'
 import {
   isAdmin,
-  getBrandByType,
   getActiveTeamSettings,
   getActiveBrand
 } from 'utils/user-teams'
@@ -175,11 +174,11 @@ class Builder extends React.Component {
     const { load: loadAssetManagerPlugin } = await import('./AssetManager')
     const { load: loadStyleManagerPlugin } = await import('./StyleManager')
 
-    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const activeBrand = getActiveBrand(this.props.user)
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
-        : getBrandColors(brand)
+        : getBrandColors(activeBrand)
 
     await Promise.all([
       loadAssetManagerPlugin(),
@@ -324,11 +323,11 @@ class Builder extends React.Component {
   }
 
   loadCKEditorRTE = async () => {
-    const brand = getBrandByType(this.props.user, 'Brokerage')
+    const activeBrand = getActiveBrand(this.props.user)
     const colors =
       this.selectedTemplateColors.length > 0
         ? this.selectedTemplateColors
-        : getBrandColors(brand)
+        : getBrandColors(activeBrand)
 
     return attachCKEditor(this.editor, [], colors, undefined, () => {
       const templateFonts = this.selectedTemplateFonts
