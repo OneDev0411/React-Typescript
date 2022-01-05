@@ -27,8 +27,7 @@ export const CHANGE_VIEW_AS_FILTER_FAILURE = 'CHANGE_VIEW_AS_FILTER_FAILURE'
 
 export const DISCONNECT_DOCUSIGN = 'DISCONNECT_DOCUSIGN'
 
-export const SET_USER_SETTING = 'SET_USER_SETTING'
-
 // these are related to the getting active user role (aka team in web)
+export const UPDATE_ACTIVE_TEAM_SETTING = 'UPDATE_ACTIVE_TEAM_SETTING'
 export const ACTIVE_TEAM_REQUEST = 'ACTIVE_TEAM_REQUEST'
 export const SET_ACTIVE_TEAM = 'SET_ACTIVE_TEAM'

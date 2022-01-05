@@ -9,12 +9,6 @@ const userReducer = (state: IUserState = null, action) => {
     case SIGNIN_SUCCESS:
       return action.user
 
-    case actionTypes.SET_USER_SETTING:
-      return {
-        ...state,
-        teams: action.user.teams
-      }
-
     case actionTypes.FETCH_USER_TEAMS_SUCCESS:
       return {
         ...state,

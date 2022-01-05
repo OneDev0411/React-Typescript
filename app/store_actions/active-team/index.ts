@@ -1,7 +1,12 @@
 import { Dispatch } from 'redux'
 
 import { getActiveTeam } from '@app/models/user/get-active-team'
-import { ACTIVE_TEAM_REQUEST, SET_ACTIVE_TEAM } from 'constants/user'
+import { putUserSetting } from '@app/models/user/put-user-setting'
+import {
+  UPDATE_ACTIVE_TEAM_SETTING,
+  ACTIVE_TEAM_REQUEST,
+  SET_ACTIVE_TEAM
+} from 'constants/user'
 
 const requestActiveTeam = () =>
   ({
@@ -18,6 +23,23 @@ const setActiveTeam = (team: IUserTeam) =>
 
 export type SetActiveTeamAction = ReturnType<typeof setActiveTeam>
 
+const updateActiveTeamSetting = (key: string, value: any) =>
+  ({
+    type: UPDATE_ACTIVE_TEAM_SETTING,
+    payload: {
+      key,
+      value
+    }
+  } as const)
+
+export type UpdateActiveTeamSettinngAction = ReturnType<
+  typeof updateActiveTeamSetting
+>
+
+/**
+ * Fetch active team and set on Redux
+ */
+
 export const fetchActiveTeam = () => async (dispatch: Dispatch) => {
   try {
     const activeTeam = await getActiveTeam()
@@ -27,3 +49,21 @@ export const fetchActiveTeam = () => async (dispatch: Dispatch) => {
     console.error(error)
   }
 }
+
+/**
+ * Put a key-value data on the active team settings
+ * @param {string} key The setting key
+ * @param {any} value The setting value
+ * @param {UUID} [brand] The active brand id
+ */
+
+export const setActiveTeamSetting =
+  (key: string, value: any, brand?: UUID) => async (dispatch: Dispatch) => {
+    try {
+      await putUserSetting(key, value, brand)
+
+      dispatch(updateActiveTeamSetting(key, value))
+    } catch (error) {
+      console.error(error)
+    }
+  }
