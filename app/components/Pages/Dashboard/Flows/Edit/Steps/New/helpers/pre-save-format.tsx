@@ -1,3 +1,5 @@
+import { createTemplateInstance } from '@app/models/instant-marketing/triggers/helpers'
+
 import { convertToServerInput } from '../components/BaseFields/WaitFor/helpers'
 import {
   BaseFormData,
@@ -56,19 +58,26 @@ export const eventFormPreSaveFormat = (
  * @param {EventFormData} data - current data
  * @param {IBrandFlowStep} step - current step
  */
-export const marketingEmailFormPreSaveFormat = (
+export const marketingEmailFormPreSaveFormat = async (
   order: number,
   data: MarketingEmailFormData,
-  step?: Nullable<IBrandFlowStep>
-): IBrandFlowStepInput => {
+  step: Nullable<IBrandFlowStep>,
+  options: {
+    user: IUser
+    brand: IBrand
+  }
+): Promise<IBrandFlowStepInput> => {
   const baseData = basicPreSaveFormat(order, data, step)
-  const template = data.template?.isInstance
-    ? { template_instance: data.template?.id }
-    : { template: data.template?.id }
+  const selectedTemplate =
+    data.template?.type === 'template_instance'
+      ? data.template
+      : await createTemplateInstance(data.template!, options.brand, {
+          user: options.user
+        })
 
   return {
     ...baseData,
-    ...template
+    template_instance: selectedTemplate.id
   }
 }
 

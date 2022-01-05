@@ -29,6 +29,9 @@ export default {
     duns: process.env.MY_MARKETING_MATTERS_DUNS,
     shared_secret: process.env.MY_MARKETING_MATTERS_SHARED_SECRET
   },
+  prerender: {
+    shared_secret: process.env.PRERENDER_TOKEN
+  },
   live_by: {
     api_url: process.env.LIVE_BY_API_URL,
     api_client_id: process.env.LIVE_BY_API_CLIENT_ID,

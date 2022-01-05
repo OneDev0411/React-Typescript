@@ -12,7 +12,7 @@ import List from './List/List'
 interface Props {
   addCallback: () => void
   contactId: UUID
-  flows: TBrandFlow<'steps'>[] | null
+  flows: Nullable<TBrandFlow<'steps'>[]>
   onStop: (flowId: UUID) => Promise<void>
 }
 

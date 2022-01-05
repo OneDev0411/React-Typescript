@@ -301,6 +301,7 @@ export const Map = memo(
                     bedroomCount={listing.compact_property.bedroom_count}
                     coverImageUrl={listing.cover_image_url}
                     propertyType={listing.compact_property.property_type}
+                    mlsSource={listing.mls_display_name}
                     zoom={mapPosition.zoom}
                   />
                 )

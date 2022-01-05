@@ -62,7 +62,7 @@ export const OtherButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       startIcon={<SvgIcon path={mdiTune} size={muiIconSizes.small} />}
     >
       More Filters{' '}
