@@ -7,6 +7,7 @@ import timeout from 'connect-timeout'
 import cookieSession from 'cookie-session'
 import express, { Request, Response, NextFunction } from 'express'
 import enforce from 'express-sslify'
+import morgan from 'morgan'
 import serveStatic from 'serve-static'
 import throng from 'throng'
 import webpack from 'webpack'
@@ -34,6 +35,8 @@ app.use(
     secure: isProduction
   })
 )
+
+app.use(morgan('combined'))
 
 /**
  * Checks user-agent and navigates old browsers to
