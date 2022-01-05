@@ -10,6 +10,7 @@ export function usePartnerOptions(): AttributeOption[] {
     const definition = byId[byName[name]]
 
     return {
+      index: 0,
       type: 'attribute_def',
       attributeDefId: definition.id,
       isPartner: true,

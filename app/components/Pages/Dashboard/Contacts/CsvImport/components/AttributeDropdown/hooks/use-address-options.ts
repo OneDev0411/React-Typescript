@@ -17,9 +17,9 @@ export function useAddressOptions(
       return 0
     }
 
-    const attribute = maxBy(addressFields, attribute => attribute.index ?? 0)
+    const attribute = maxBy(addressFields, attribute => attribute.index ?? 0)!
 
-    return parseInt(attribute.index ?? 0, 10) + 1
+    return Number(attribute.index ?? 0) + 1
   }
 
   const last = getLastAddressIndex()
@@ -33,11 +33,12 @@ export function useAddressOptions(
       const definition = getAttributeDefinition(attribute)
 
       return {
-        index: 0,
         ...attribute,
+        index: index + 1,
         isPartner: false,
         disabled: false,
-        label: definition.label
+        label:
+          index >= 0 ? `${definition.label} ${index + 1}` : definition.label
       } as AttributeOption
     })
   )

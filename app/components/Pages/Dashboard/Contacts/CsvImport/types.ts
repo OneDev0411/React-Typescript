@@ -23,7 +23,7 @@ export type IAttribute = CsvImportAttributeDefinition | CsvImportAttributeType
 
 interface BaseAttributeOption {
   label: string
-  index?: number
+  index: number
   disabled: boolean
   isPartner?: boolean
 }

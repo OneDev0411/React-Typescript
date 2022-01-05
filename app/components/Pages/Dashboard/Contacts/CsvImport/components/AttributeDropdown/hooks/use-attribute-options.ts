@@ -23,7 +23,7 @@ export function useOptions(
   const { isAddressAttribute } = useAddressAttributes()
 
   const isAttributeDisabled = useCallback(
-    (attribute: IAttribute) => {
+    (attribute: IAttribute, index: number) => {
       const isSingular = (attribute: IAttribute) =>
         getAttributeDefinition(attribute).singular
 
@@ -41,13 +41,13 @@ export function useOptions(
           return true
         }
 
-        return isEqual && field.index === attribute.index
+        return isEqual && field.index === index
       })
     },
     [getAttributeDefinition, isAddressAttribute, fields]
   )
 
-  const getBaseOptions = useCallback((): AttributeOption[] => {
+  const getOptions = useCallback((): AttributeOption[] => {
     const list = attributes
       .filter(attribute => {
         const definition = getAttributeDefinition(attribute)
@@ -58,17 +58,36 @@ export function useOptions(
         const definition = getAttributeDefinition(attribute)
 
         return {
-          disabled: isAttributeDisabled(attribute),
+          index: 0,
+          disabled: false,
           label: definition.label,
           ...attribute
         }
       })
 
-    return list as AttributeOption[]
-  }, [attributes, getAttributeDefinition, isAttributeDisabled])
+    return [...list, ...addressOptions, ...partnerOptions].map(option => {
+      const attribute = {
+        type: option.type,
+        attributeTypeName:
+          option.type === 'attribute_type' && option.attributeTypeName,
+        attributeDefId: option.type === 'attribute_def' && option.attributeDefId
+      } as IAttribute
+
+      return {
+        ...option,
+        disabled: isAttributeDisabled(attribute, option.index)
+      }
+    }) as AttributeOption[]
+  }, [
+    attributes,
+    getAttributeDefinition,
+    isAttributeDisabled,
+    addressOptions,
+    partnerOptions
+  ])
 
   return useMemo(() => {
-    const list = [...getBaseOptions(), ...addressOptions, ...partnerOptions]
+    const list = getOptions()
 
     return searchTerm
       ? new Fuse(list, {
@@ -77,5 +96,5 @@ export function useOptions(
           keys: ['label']
         }).search(searchTerm)
       : list
-  }, [searchTerm, getBaseOptions, addressOptions, partnerOptions])
+  }, [searchTerm, getOptions])
 }

@@ -10,15 +10,13 @@ export function useAddressAttributes() {
   const getAttributeDefinition = useAttributeDefinition()
 
   const getAddressAttributes = (): IAttribute[] => {
-    // return attributes.filter(attribute => isAddressAttribute(attribute))
-    return []
+    return attributes.filter(attribute => isAddressAttribute(attribute))
   }
 
   const isAddressAttribute = (attribute: IAttribute) => {
-    // const definition = getAttributeDefinition(attribute)
+    const definition = getAttributeDefinition(attribute)
 
-    // return definition.section === AddressSectionName
-    return false
+    return definition.section === AddressSectionName
   }
 
   return { getAddressAttributes, isAddressAttribute }
