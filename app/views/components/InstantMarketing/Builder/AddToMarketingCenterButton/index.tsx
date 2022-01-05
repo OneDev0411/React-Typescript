@@ -56,7 +56,7 @@ export function AddToMarketingCenterButton({
   mjml,
   originalTemplateId,
   getTemplateMarkup,
-  ...otherProps
+  ...buttonProps
 }: Props) {
   const notify = useNotify()
 
@@ -138,7 +138,7 @@ export function AddToMarketingCenterButton({
       )}
       <div className={classes.container}>
         <Button
-          {...otherProps}
+          {...buttonProps}
           onClick={handleClickButton}
           color="primary"
           variant="contained"
