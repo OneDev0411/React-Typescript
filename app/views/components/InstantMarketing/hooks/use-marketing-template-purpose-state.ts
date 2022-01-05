@@ -6,9 +6,10 @@ import type { UseMarketingBuilderActions } from './use-marketing-builder-actions
 
 interface UseMarketingTemplatePurposeState {
   isPurposeDrawerOpen: boolean
-  closePurposeDrawer: () => void
   templatePurpose: Optional<IMarketingTemplatePurpose>
-  setTemplatePurpose: (templatePurpose: IMarketingTemplatePurpose) => void
+  handleTemplatePurposeSelect: (
+    templatePurpose: IMarketingTemplatePurpose
+  ) => void
   correctedTemplateData: TemplateData
 }
 
@@ -60,6 +61,13 @@ export function useMarketingTemplatePurposeState(
 
   const closePurposeDrawer = () => setIsDrawerOpen(false)
 
+  const handleTemplatePurposeSelect = (
+    templatePurpose: IMarketingTemplatePurpose
+  ) => {
+    setTemplatePurpose(templatePurpose)
+    closePurposeDrawer()
+  }
+
   const correctedTemplateData: TemplateData =
     templateData.user &&
     templatePurpose &&
@@ -72,9 +80,8 @@ export function useMarketingTemplatePurposeState(
 
   return {
     isPurposeDrawerOpen,
-    closePurposeDrawer,
     templatePurpose,
-    setTemplatePurpose,
+    handleTemplatePurposeSelect,
     correctedTemplateData
   }
 }

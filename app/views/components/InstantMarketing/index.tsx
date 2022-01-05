@@ -109,9 +109,8 @@ export default function InstantMarketing({
 
   const {
     isPurposeDrawerOpen,
-    closePurposeDrawer,
     templatePurpose,
-    setTemplatePurpose,
+    handleTemplatePurposeSelect,
     correctedTemplateData
   } = useMarketingTemplatePurposeState(
     builderActions,
@@ -124,8 +123,8 @@ export default function InstantMarketing({
       <MarketingTemplatePurposeDrawer
         open={isPurposeDrawerOpen}
         builderActions={builderActions}
-        onPurposeSelect={setTemplatePurpose}
-        onClose={closePurposeDrawer}
+        onPurposeSelect={handleTemplatePurposeSelect}
+        onClose={onClose}
       />
       {!isPurposeDrawerOpen && (
         <Builder

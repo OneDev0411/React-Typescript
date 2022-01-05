@@ -33,17 +33,12 @@ function MarketingTemplatePurposeDrawer({
 }: MarketingTemplatePurposeDrawerProps) {
   const classes = useStyles()
 
-  const handleMenuItemClick = () => onClose({}, 'closeButtonClick')
-
   return (
     <OverlayDrawer {...otherProps} onClose={onClose}>
-      <OverlayDrawer.Header
-        title="What do you want to do?"
-        closeButtonDisabled
-      />
+      <OverlayDrawer.Header title="What do you want to do?" />
       <OverlayDrawer.Body className={classes.body}>
         <Box>
-          <MenuList onClick={handleMenuItemClick} disablePadding>
+          <MenuList disablePadding>
             <MarketingTemplatePurposeOption
               onClick={() => onPurposeSelect('ForMySelf')}
               icon={mdiAccountOutline}
