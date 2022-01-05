@@ -24,7 +24,7 @@ export const TypeButton = ({
       onClick={onClick}
       color={isActive ? 'primary' : undefined}
       variant="outlined"
-      size="medium"
+      size="small"
       className={cn({
         [classes.button]: true,
         active: true

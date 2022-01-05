@@ -6,6 +6,23 @@ export const useStyles = makeStyles(
       padding: theme.spacing(1, 2),
       margin: theme.spacing(0, 0.5)
     },
+    buttonGroup: {
+      '& > $button': {
+        margin: theme.spacing(0.5, 0)
+      },
+      '& > $button:not(:last-of-type)': {
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+        borderRight: 'none'
+      },
+      '& > $button:not(:first-of-type)': {
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0
+      },
+      display: 'inline-flex',
+      justifyContent: 'center',
+      margin: theme.spacing(0, 0.5)
+    },
     resetButton: {
       padding: theme.spacing(1, 2),
       margin: theme.spacing(0, 1, 0, 1.5)

@@ -313,7 +313,7 @@ export const Filters = ({ searchQuery }: Props) => {
                 disabled={isEqual(currentFilters, systemDefaultFilters)}
                 size="small"
               >
-                Reset Search
+                Reset
               </Button>
             </Grid>
           </>
