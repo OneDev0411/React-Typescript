@@ -31,7 +31,7 @@ function SuperCampaignWithEnrollmentCard({
     <>
       <SuperCampaignCard
         superCampaign={superCampaign}
-        descriptionLineCount={enrollment || hasManageAccess ? 3 : 4}
+        descriptionLineCount={enrollment || hasManageAccess ? 3 : 6}
         to={
           hasManageAccess
             ? `/dashboard/insights/super-campaign/${superCampaign.id}/detail?backUrl=/dashboard/marketing`
