@@ -2,8 +2,6 @@ import { useEffect } from 'react'
 
 import listingUtils from 'utils/listing'
 
-import config from '../../../../config/public'
-
 /* 
     In order for Facebook and Twitter crawlers to find our open graph meta tags, 
     We need to place them on the top 1M of our page
@@ -26,11 +24,6 @@ export function useOgMetaTags(listing: IListing<'proposed_agent'> | null) {
         images[0] || '/static/images/favicons/apple-touch-icon.png'
 
       const ogMetaTagsInfo = [
-        {
-          id: 'og:url',
-          property: 'og:url',
-          content: `${config.app.url}/listings/${listing.id}`
-        },
         {
           id: 'og:title',
           property: 'og:title',
