@@ -6,7 +6,7 @@ import { LabelDropdown } from '../../components/LabelDropdown'
 import { getCsvColumns } from '../../helpers/get-csv-columns'
 import { useAutoMapFields } from '../../hooks/use-auto-map'
 import { useImportCsv } from '../../hooks/use-import-csv'
-import { AttributeOption } from '../../types'
+import { AttributeOption, MappedField } from '../../types'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -30,9 +30,17 @@ export function MapFields() {
   const handleSelect = (column: string, option: AttributeOption) => {
     setFields(state => ({
       ...state,
-      [column]: option.attribute
+      [column]: {
+        index: option.index,
+        type: option.type,
+        attributeTypeName:
+          option.type === 'attribute_type' && option.attributeTypeName,
+        attributeDefId: option.type === 'attribute_def' && option.attributeDefId
+      }
     }))
   }
+
+  console.log('>> MAPPED: ', fields)
 
   return (
     <>
@@ -65,7 +73,11 @@ export function MapFields() {
           </Grid>
 
           <Grid item xs={4}>
-            <LabelDropdown fields={fields} column={column} />
+            <LabelDropdown
+              fields={fields}
+              column={column}
+              onSelect={() => {}}
+            />
           </Grid>
         </Grid>
       ))}

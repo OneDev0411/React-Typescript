@@ -3,12 +3,12 @@ import { Box, ListItem } from '@material-ui/core'
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { useAttributeDefs } from '../../hooks/use-attribute-defs'
-import type { IAttribute } from '../../types'
+import type { IAttribute, MappedField } from '../../types'
 
 import { useLabelOptions } from './use-label-options'
 
 interface Props {
-  fields: Record<string, IAttribute>
+  fields: Record<string, MappedField>
   column: string
   onSelect: (label: Nullable<string>) => void
 }
@@ -24,7 +24,7 @@ export function LabelDropdown({ fields, column, onSelect }: Props) {
       return false
     }
 
-    return byId[attribute.attribute_def].has_label
+    return byId[attribute.attributeDefId].has_label
   }
 
   if (!field || !hasLabel(field)) {
@@ -33,7 +33,9 @@ export function LabelDropdown({ fields, column, onSelect }: Props) {
 
   return (
     <BaseDropdown
-      renderDropdownButton={buttonProps => <div {...buttonProps}>+++</div>}
+      renderDropdownButton={buttonProps => (
+        <div {...buttonProps}>Select Label</div>
+      )}
       renderMenu={({ close }) => (
         <Box>
           {options.map((label, key) => (

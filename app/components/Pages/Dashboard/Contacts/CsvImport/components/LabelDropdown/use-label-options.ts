@@ -8,5 +8,5 @@ export function useLabelOptions(attribute: IAttribute) {
     return []
   }
 
-  return byId[attribute.attribute_def].labels ?? []
+  return byId[attribute.attributeDefId].labels ?? []
 }

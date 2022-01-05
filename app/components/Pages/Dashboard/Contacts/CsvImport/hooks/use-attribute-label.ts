@@ -2,29 +2,19 @@ import { useCallback } from 'react'
 
 import { IAttribute } from '../types'
 
-import { useAttributeDefs } from './use-attribute-defs'
+import { useAttributeDefinition } from './use-attribute-definition'
 
 export function useAttributeLabel() {
-  const { byId } = useAttributeDefs()
+  const getAttributeDefinition = useAttributeDefinition()
 
-  const getAttributeLabel = useCallback(
+  return useCallback(
     (attribute: IAttribute) => {
       if (!attribute) {
-        return
+        return ''
       }
 
-      if (attribute.type === 'attribute_type') {
-        return attribute.label
-      }
-
-      if (attribute.type === 'attribute_def') {
-        return byId[attribute.attribute_def].label
-      }
-
-      return ''
+      return getAttributeDefinition(attribute).label
     },
-    [byId]
+    [getAttributeDefinition]
   )
-
-  return getAttributeLabel
 }

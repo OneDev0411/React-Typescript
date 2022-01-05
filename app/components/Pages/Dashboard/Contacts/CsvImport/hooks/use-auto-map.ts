@@ -6,7 +6,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect'
 import { compareTwoStrings } from 'utils/dice-coefficient'
 
 import { getCsvColumns } from '../helpers/get-csv-columns'
-import type { IAttribute } from '../types'
+import type { IAttribute, MappedField } from '../types'
 
 import { useAttributeLabel } from './use-attribute-label'
 import { useAttributes } from './use-attributes'
@@ -18,10 +18,10 @@ interface CompareMatches {
 
 export function useAutoMapFields(
   csv: Nullable<ParseResult<unknown>>
-): [Record<string, IAttribute>, typeof setList, Nullable<'doing' | 'done'>] {
+): [Record<string, MappedField>, typeof setList, Nullable<'doing' | 'done'>] {
   const attributes = useAttributes()
   const getAttributeLabel = useAttributeLabel()
-  const [list, setList] = useState<Record<string, IAttribute>>({})
+  const [list, setList] = useState<Record<string, MappedField>>({})
   const [status, setStatus] = useState<Nullable<'doing' | 'done'>>(null)
 
   const findRelatedAttribute = useCallback(
@@ -71,16 +71,24 @@ export function useAutoMapFields(
 
     setStatus('doing')
 
-    const list = getCsvColumns(csv).reduce((list, column) => {
-      const match = findRelatedAttribute(column)
+    const list = getCsvColumns(csv).reduce<Record<string, MappedField>>(
+      (list, column) => {
+        const match = findRelatedAttribute(column)
 
-      return match
-        ? {
-            ...list,
-            [column]: match.attribute
+        if (!match) {
+          return list
+        }
+
+        return {
+          ...list,
+          [column]: {
+            index: 0,
+            ...match.attribute
           }
-        : list
-    }, {})
+        }
+      },
+      {}
+    )
 
     setStatus('done')
     setList(list)

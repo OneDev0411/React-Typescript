@@ -12,9 +12,9 @@ import {
 import { BaseDropdown } from '@app/views/components/BaseDropdown'
 
 import { useAttributeLabel } from '../../hooks/use-attribute-label'
-import type { AttributeOption, IAttribute } from '../../types'
+import type { AttributeOption, IAttribute, MappedField } from '../../types'
 
-import { useOptions } from './use-attribute-options'
+import { useOptions } from './hooks/use-attribute-options'
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -41,7 +41,7 @@ const useStyles = makeStyles(
 )
 
 interface Props {
-  fields: Record<string, IAttribute>
+  fields: Record<string, MappedField>
   column: string
   onSelect: (attribute: AttributeOption) => void
 }
@@ -51,7 +51,7 @@ export function AttributeDropdown({ fields, column, onSelect }: Props) {
   const getAttributeLabel = useAttributeLabel()
 
   const [searchTerm, setSearchTerm] = useState('')
-  const options = useOptions(fields, searchTerm)
+  const options: AttributeOption[] = useOptions(fields, searchTerm)
 
   const field = fields[column]
 
@@ -69,6 +69,7 @@ export function AttributeDropdown({ fields, column, onSelect }: Props) {
           <Box className={classes.header}>
             <TextField
               fullWidth
+              defaultValue={searchTerm}
               size="small"
               placeholder="Search a property title..."
               variant="outlined"
@@ -81,6 +82,7 @@ export function AttributeDropdown({ fields, column, onSelect }: Props) {
               <ListItem
                 key={key}
                 button
+                disabled={item.disabled}
                 onClick={() => {
                   close()
                   onSelect(item)
