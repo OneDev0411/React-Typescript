@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { useEffectOnce } from 'react-use'
 
-import { setUserSetting } from 'actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import PageLayout from 'components/GlobalPageLayout'
 import { PageTabs, Tab, TabLink } from 'components/PageTabs'
 import { selectUser } from 'selectors/user'
@@ -64,7 +64,7 @@ function InsightsLayout({
   })
 
   const handleSortChange = async item => {
-    dispatch(setUserSetting(SORT_FIELD_INSIGHT_KEY, item))
+    dispatch(setActiveTeamSetting(SORT_FIELD_INSIGHT_KEY, item))
     setSortField(item)
   }
 

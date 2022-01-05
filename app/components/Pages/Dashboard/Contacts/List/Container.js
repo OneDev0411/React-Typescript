@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import _ from 'underscore'
 
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { confirmation } from 'actions/confirmation'
 import { deleteContacts, getContacts, searchContacts } from 'actions/contacts'
 import { getContactsTags } from 'actions/contacts/get-contacts-tags'
@@ -13,7 +14,6 @@ import { setContactsListTextFilter } from 'actions/contacts/set-contacts-list-te
 import { updateFilterSegment } from 'actions/filter-segments'
 import { resetActiveFilters } from 'actions/filter-segments/active-filters'
 import { changeActiveFilterSegment } from 'actions/filter-segments/change-active-segment'
-import { setUserSetting } from 'actions/user/set-setting'
 import { getUserTeams } from 'actions/user/teams'
 import { Callout } from 'components/Callout'
 import { DispatchContext as GlobalButtonDispatch } from 'components/GlobalActionsButton/context'
@@ -483,9 +483,9 @@ class ContactsList extends React.Component {
       return
     }
 
-    const { user, getUserTeams, setUserSetting } = this.props
+    const { user, getUserTeams, setActiveTeamSetting } = this.props
 
-    setUserSetting(SORT_FIELD_SETTING_KEY, sortOrder)
+    setActiveTeamSetting(SORT_FIELD_SETTING_KEY, sortOrder)
     this.setState({ sortOrder })
     this.handleFilterChange({}, true, sortOrder)
 
@@ -791,7 +791,7 @@ class ContactsList extends React.Component {
       viewMode
     })
 
-    this.props.setUserSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
+    this.props.setActiveTeamSetting(VIEW_MODE_FIELD_SETTING_KEY, viewMode)
 
     this.reloadContacts()
   }
@@ -1081,7 +1081,7 @@ export default withRouter(
     getUserTeams,
     resetActiveFilters,
     changeActiveFilterSegment,
-    setUserSetting,
+    setActiveTeamSetting,
     updateSegment: updateFilterSegment
   })(ContactsList)
 )

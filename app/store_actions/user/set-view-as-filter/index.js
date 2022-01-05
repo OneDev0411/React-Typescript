@@ -1,4 +1,4 @@
-import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 
 import {
   CHANGE_VIEW_AS_FILTER_REQUEST,
@@ -6,14 +6,14 @@ import {
   CHANGE_VIEW_AS_FILTER_FAILURE
 } from '../../../constants/user'
 
-export function setViewAsFilter(user, value) {
+export function setViewAsFilter(value) {
   return async dispatch => {
     try {
       dispatch({
         type: CHANGE_VIEW_AS_FILTER_REQUEST,
         status: true
       })
-      dispatch(setUserSetting('user_filter', value))
+      dispatch(setActiveTeamSetting('user_filter', value))
 
       dispatch({
         type: CHANGE_VIEW_AS_FILTER_SUCCESS

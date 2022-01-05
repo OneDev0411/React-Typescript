@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 import { selectUserUnsafe } from '@app/selectors/user'
-import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { getUserSettingsInActiveTeam } from '@app/utils/user-teams'
 
 import { SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY } from '../../../constants'
@@ -69,7 +69,9 @@ export function SaveSearchButton({ isLoading, onClick }: Props) {
 
   const onClickGotIt = () => {
     if (dontShow) {
-      dispatch(setUserSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1'))
+      dispatch(
+        setActiveTeamSetting(SAVED_SEARCH_HINT_DISMISSED_SETTINGS_KEY, '1')
+      )
     }
 
     setIsOpenHint(false)

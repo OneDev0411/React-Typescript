@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useDeepCompareEffect } from 'react-use'
 
-import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { searchDeals, getDeals } from 'actions/deals'
 import { useUnsafeActiveTeam } from 'hooks/team/use-unsafe-active-team'
 
@@ -44,6 +44,6 @@ export function useSearchQuery(
       dispatch(term ? searchDeals(activeTeam, term) : getDeals(activeTeam))
     }
 
-    dispatch(setUserSetting(DEAL_GRID_FILTER_SETTING_KEY, searchQuery))
+    dispatch(setActiveTeamSetting(DEAL_GRID_FILTER_SETTING_KEY, searchQuery))
   }, [listKey, searchQuery.term, statuses])
 }

@@ -2,7 +2,7 @@ import { MenuItem } from '@material-ui/core'
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter, WithRouterProps } from 'react-router'
 
-import { setUserSetting } from '@app/store_actions/user/set-setting'
+import { setActiveTeamSetting } from '@app/store_actions/active-team'
 import { SortableColumn } from 'components/Grid/Table/types'
 import { PageTabs, Tab, TabLink, DropdownTab } from 'components/PageTabs'
 import { getActiveSort, getGridSortLabel } from 'deals/List/helpers/sorting'
@@ -45,7 +45,7 @@ const TabFilters = withRouter((props: Props & WithRouterProps) => {
 
     const fieldValue = column.ascending ? column.value : `-${column.value}`
 
-    dispatch(setUserSetting(SORT_FIELD_SETTING_KEY, fieldValue))
+    dispatch(setActiveTeamSetting(SORT_FIELD_SETTING_KEY, fieldValue))
   }
 
   // The closings filter uses query type but it is not included in the static filters.
