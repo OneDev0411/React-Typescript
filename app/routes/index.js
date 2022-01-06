@@ -645,6 +645,13 @@ const AsyncUpgradeToAgent = Load({
     )
 })
 
+const AsyncCampaigns = Load({
+  loader: () =>
+    import(
+      '../components/Pages/Dashboard/Account/Campaigns' /* webpackChunkName: "campaigns" */
+    )
+})
+
 // const AsyncCSS = Load({
 //   loader: () =>
 //     import(
@@ -1033,6 +1040,7 @@ export default (
             path="connected-accounts"
             component={ConnectedAccountsSetting}
           />
+          <Route path="campaigns" component={AsyncCampaigns} />
           {/* <Route path="css" component={AsyncCSS} /> */}
         </Route>
 
