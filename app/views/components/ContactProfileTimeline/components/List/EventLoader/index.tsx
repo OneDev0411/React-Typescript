@@ -2,10 +2,10 @@ import {
   Box,
   Button,
   makeStyles,
-  useTheme,
   Theme,
   CircularProgress
 } from '@material-ui/core'
+import cn from 'classnames'
 
 import { CrmEventType } from '../../../types'
 import { EmptyState } from '../EmptyState'
@@ -21,7 +21,11 @@ const useStyles = makeStyles(
     eventsSectionContainer: {
       display: 'flex',
       letterSpacing: '0.15px',
-      paddingLeft: theme.spacing(2)
+      paddingLeft: theme.spacing(2),
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
+    },
+    isToday: {
+      borderBottom: `1px solid ${theme.palette.error.main}`
     },
     eventsListContainer: {
       width: '100%'
@@ -90,8 +94,7 @@ export function EventLoader({
   handleEventChange,
   onLoadNextEvents
 }: Props) {
-  const classes = useStyles({ isToday: true })
-  const theme = useTheme()
+  const classes = useStyles()
 
   const Loader = () =>
     isLoading && (
@@ -126,15 +129,10 @@ export function EventLoader({
         <Box>
           {rows.map((section, index) => (
             <Box
-              className={classes.eventsSectionContainer}
+              className={cn(classes.eventsSectionContainer, {
+                isToday: section.header.isToday
+              })}
               key={`${section.header.date}-${index}`}
-              style={{
-                borderBottom: `1px solid ${
-                  section.header.isToday
-                    ? theme.palette.error.main
-                    : theme.palette.action.disabledBackground
-                }`
-              }}
             >
               <Box className={classes.eventHeaderContainer}>
                 <EventHeader item={section.header} />
