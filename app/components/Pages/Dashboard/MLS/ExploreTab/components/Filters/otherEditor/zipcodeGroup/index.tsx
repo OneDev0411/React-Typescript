@@ -59,15 +59,15 @@ export const ZipcodeGroup = ({
         }}
         getOptionLabel={option => option.title}
         onChange={onZipcodeChange}
-        noOptionsText="Type in a zipcode"
+        noOptionsText="Type in a ZIP code"
         freeSolo
         renderInput={params => (
           <TextField
             {...params}
             variant="outlined"
             label=""
-            placeholder="Type in a zipcode ..."
-            helperText="Depending on how you want to select an area, you can either select zipcodes or draw an area on the map"
+            placeholder="Type in a ZIP code ..."
+            helperText="You can search in an area by either selecting the ZIP codes or drawing on the map, clear one to enable the other."
             InputProps={{
               ...params.InputProps,
               autoComplete: 'new-password' // disable autocomplete and autofill
