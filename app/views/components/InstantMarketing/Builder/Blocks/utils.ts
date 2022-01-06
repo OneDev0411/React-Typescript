@@ -89,6 +89,12 @@ export function handleBlockDragStopEvent<TSelectedItem, TCustomRenderData = {}>(
     model.remove()
   }
 
+  function isRenderDataFunc(
+    renderData
+  ): renderData is TemplateRenderDataFunc<TSelectedItem, TCustomRenderData> {
+    return typeof renderData === 'function'
+  }
+
   let modelHandle: Nullable<Model> = null
 
   const selectHandler = (selectedItem?: TSelectedItem) => {
@@ -99,10 +105,12 @@ export function handleBlockDragStopEvent<TSelectedItem, TCustomRenderData = {}>(
     if (selectedItem) {
       appendBlock(
         modelHandle,
-        typeof renderData === 'function'
+        // We have to use the type guard to avoid TS error. Because this expression does not
+        // work: typeof renderData === 'function'
+        isRenderDataFunc(renderData)
           ? renderData(
               selectedItem,
-              modelHandle.attributes.attributes['data-block']
+              modelHandle.attributes.attributes['data-block'] as string
             )
           : renderData
       )
