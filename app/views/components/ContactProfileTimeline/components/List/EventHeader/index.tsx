@@ -8,14 +8,14 @@ interface Props {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: ({ today, isPast }: { today: boolean; isPast: boolean }) => ({
+  root: ({ isToday, isPast }: { isToday: boolean; isPast: boolean }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     letterSpacing: '0.4px',
     minHeight: theme.spacing(8),
     textTransform: 'uppercase',
-    color: today
+    color: isToday
       ? theme.palette.secondary.main
       : isPast
       ? theme.palette.grey['500']
@@ -39,7 +39,7 @@ export function EventHeader({ item }: Props) {
   //----
 
   const classes = useStyles({
-    today: item.isToday,
+    isToday: item.isToday,
     isPast: date < today
   })
 

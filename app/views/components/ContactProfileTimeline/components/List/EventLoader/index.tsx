@@ -22,10 +22,10 @@ const useStyles = makeStyles(
       display: 'flex',
       letterSpacing: '0.15px',
       paddingLeft: theme.spacing(2),
-      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`
-    },
-    isToday: {
-      borderBottom: `1px solid ${theme.palette.error.main}`
+      borderBottom: `1px solid ${theme.palette.action.disabledBackground}`,
+      '&.isToday': {
+        borderBottom: `1px solid ${theme.palette.error.main}`
+      }
     },
     eventsListContainer: {
       width: '100%'
