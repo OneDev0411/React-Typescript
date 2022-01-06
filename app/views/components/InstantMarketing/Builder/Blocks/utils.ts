@@ -9,7 +9,7 @@ import {
   BlockTemplates,
   TemplateRenderDataFunc,
   BlockOnDropFunc,
-  BlockDragStopEventReturn,
+  RegisterBlockSelectHandler,
   TemplateBlockOptions
 } from './types'
 
@@ -26,25 +26,29 @@ export function collapseBlockCategories(editor: Editor) {
   })
 }
 
-export function handleBlockDragStopEvent(
+export function handleBlockDragStopEvent<TCustomRenderData = {}>(
   editor: Editor,
   templates: BlockTemplates,
-  renderData: TemplateRenderData
+  renderData: TemplateRenderData<TCustomRenderData>
 ): void
 
-export function handleBlockDragStopEvent<T>(
+export function handleBlockDragStopEvent<TSelectedItem, TCustomRenderData = {}>(
   editor: Editor,
   templates: BlockTemplates,
-  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
+  renderData:
+    | TemplateRenderData<TCustomRenderData>
+    | TemplateRenderDataFunc<TSelectedItem, TCustomRenderData>,
   onDrop: BlockOnDropFunc
-): BlockDragStopEventReturn<T>
+): RegisterBlockSelectHandler<TSelectedItem>
 
-export function handleBlockDragStopEvent<T>(
+export function handleBlockDragStopEvent<TSelectedItem, TCustomRenderData = {}>(
   editor: Editor,
   templates: BlockTemplates,
-  renderData: TemplateRenderData | TemplateRenderDataFunc<T>,
+  renderData:
+    | TemplateRenderData<TCustomRenderData>
+    | TemplateRenderDataFunc<TSelectedItem, TCustomRenderData>,
   onDrop?: BlockOnDropFunc
-): BlockDragStopEventReturn<T> {
+): RegisterBlockSelectHandler<TSelectedItem> {
   function adaptTemplateIfNeeded(
     template: string,
     blockId: string,
@@ -57,7 +61,10 @@ export function handleBlockDragStopEvent<T>(
       : template
   }
 
-  function appendBlock(model: Model, renderData: TemplateRenderData) {
+  function appendBlock(
+    model: Model,
+    renderData: TemplateRenderData<TCustomRenderData>
+  ) {
     const parent = model.parent()
 
     if (!parent) {
@@ -82,9 +89,9 @@ export function handleBlockDragStopEvent<T>(
     model.remove()
   }
 
-  let modelHandle: any
+  let modelHandle: Nullable<Model> = null
 
-  const selectHandler = (selectedItem?: T) => {
+  const selectHandler = (selectedItem?: TSelectedItem) => {
     if (!modelHandle) {
       return false
     }
@@ -108,7 +115,7 @@ export function handleBlockDragStopEvent<T>(
     return true
   }
 
-  editor.on('block:drag:stop', (model: Model, block: any) => {
+  editor.on('block:drag:stop', (model: Model, block: Model) => {
     if (!model || !templates[block.id]) {
       return
     }
@@ -132,7 +139,7 @@ export function reorderBlocks(editor: Editor, blockNames: string[]) {
 
     if (block) {
       editor.BlockManager.remove(blockName)
-      editor.BlockManager.add(blockName, block.clone() as any)
+      editor.BlockManager.add(blockName, block.clone())
     }
   })
 }

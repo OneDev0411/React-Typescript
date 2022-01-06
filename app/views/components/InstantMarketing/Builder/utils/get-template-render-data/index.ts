@@ -1,10 +1,9 @@
 import { getListingUrl, get } from '../../../helpers/nunjucks-functions'
 
-export interface TemplateRenderData {
+export type TemplateRenderData<TCustomRenderData = {}> = {
   getListingUrl: (listing: IListing) => string
   get: (name: BrandMarketingPaletteKey) => string
-  [key: string]: unknown
-}
+} & TCustomRenderData
 
 export function getTemplateRenderData(brand: IBrand): TemplateRenderData {
   return {
